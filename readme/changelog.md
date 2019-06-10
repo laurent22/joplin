@@ -1,5 +1,42 @@
 # Joplin changelog
 
+## [v1.0.159](https://github.com/laurent22/joplin/releases/tag/v1.0.159) - 2019-06-08T00:00:19Z
+
+- New: Added option to open development tools, to make it easier to create custom CSS
+- Improved: Improved tag dialog to make it easier to add and remove tags ([#1589](https://github.com/laurent22/joplin/issues/1589))
+- Improved: Speed up synchronisation by allowing multiple connections when downloading items ([#1633](https://github.com/laurent22/joplin/issues/1633))
+- Improved: Better handling of items that cannot be decrypted, including those that cause crashes
+- Improved: Upgrade TOC plugin version to 4.0.0 to fix various issues ([#1603](https://github.com/laurent22/joplin/issues/1603))
+- Improved: Improve how font size is applied ([#1601](https://github.com/laurent22/joplin/issues/1601))
+- Improved: Improved workflow of downloading and decrypting data during sync
+- Fixed: Fix icon path and directory in Linux install script ([#1612](https://github.com/laurent22/joplin/issues/1612))
+- Fixed: Handle multiple lines in attributes when importing Enex files ([#1583](https://github.com/laurent22/joplin/issues/1583))
+- Fixed: Fix issue with revisions being needlessly created when decrypting notes
+
+## [v1.0.158](https://github.com/laurent22/joplin/releases/tag/v1.0.158) - 2019-05-27T19:01:18Z
+
+- Improved: Enable more options on multimd-table plugin ([#1586](https://github.com/laurent22/joplin/issues/1586))
+- Improved: Improved config screen with dark theme
+- Improved: Make bold text more visible ([#1575](https://github.com/laurent22/joplin/issues/1575))
+- Fixed: Fix internal note links ([#1587](https://github.com/laurent22/joplin/issues/1587))
+- Fixed: Fixed empty separators in menu
+
+## [v1.0.157](https://github.com/laurent22/joplin/releases/tag/v1.0.157) - 2019-05-26T17:55:53Z
+
+- New: Added Persian translation ([#1539](https://github.com/laurent22/joplin/issues/1539))
+- New: Allow downloading attachments on demand or automatically ([#1527](https://github.com/laurent22/joplin/issues/1527)) ([#1481](https://github.com/laurent22/joplin/issues/1481))
+- Improved: Make bold text more visible ([#1575](https://github.com/laurent22/joplin/issues/1575))
+- Improved: Add number of characters removed and added in revision list
+- Improved: Remove tags from Welcome item due to issue with cleaning them up afterwards
+- Improved: Handle missing resource blob when setting resource size
+- Improved: Gray out checkboxes that have been ticked inside notes
+- Improved: Put back "Fetched items" message during sync
+- Improved: When opening a note using Goto Anything, open all its parent notebooks too
+- Fixed: Clears search when clicking on a notebook. ([#1504](https://github.com/laurent22/joplin/issues/1504)) ([#1186](https://github.com/laurent22/joplin/issues/1186))
+- Fixed: Default sort order for notebooks should be title and ascending ([#1541](https://github.com/laurent22/joplin/issues/1541))
+- Fixed: Added backticks to auto-wrapping quotes. ([#1534](https://github.com/laurent22/joplin/issues/1534)) ([#1426](https://github.com/laurent22/joplin/issues/1426))
+- Fixed: Prevent app from trying to upload resource it has not downloaded yet
+
 ## [v1.0.153](https://github.com/laurent22/joplin/releases/tag/v1.0.153) - 2019-05-15T06:27:29Z
 
 This release only adds additional logging for the note history feature.
@@ -251,7 +288,7 @@ This big release aims at improving the overall usability of the application and 
 
 Important: This release might be slow on startup due to the need to index all the notes, especially if you have many of them with lots of content. The best is simply to wait for it even if it takes several minutes. This is just a one off and afterwards startup time will be the same as before.
 
-- New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See https://joplinapp.org/#searching for more info.
+- New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See https://joplin.cozic.net/#searching for more info.
 - New: Search within current note (Ctrl+F).
 - New: Add separate editor font size option ([#1027](https://github.com/laurent22/joplin/issues/1027))
 - Changed: Changed global search shortcut to F6.
@@ -265,7 +302,7 @@ Important: This release might be slow on startup due to the need to index all th
 
 Important: This release might be slow on startup due to the need to index all the notes, especially if you have many of them with lots of content. The best is simply to wait for it even if it takes several minutes. This is just a one off and afterwards startup time will be the same as before.
 
-- New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See https://joplinapp.org/#searching for more info.
+- New: Fast full text search engine. Works with multiple terms, support for prefixes, can restrict search to either note title or body. See https://joplin.cozic.net/#searching for more info.
 - New: Search within current note (Ctrl+F).
 - New: Add separate editor font size option ([#1027](https://github.com/laurent22/joplin/issues/1027))
 - Changed: Changed global search shortcut to F6.
@@ -479,7 +516,7 @@ This release is mainly to fix various issues with the recently released Web Clip
 
 ## [v1.0.93](https://github.com/laurent22/joplin/releases/tag/v1.0.93) - 2018-05-14T11:36:01Z
 
-- New: A portable version is now available. To install it simply copy the file "JoplinPortable.exe" to your USB device. See the documentation for more information - https://joplinapp.org/#desktop-applications
+- New: A portable version is now available. To install it simply copy the file "JoplinPortable.exe" to your USB device. See the documentation for more information - https://joplin.cozic.net/#desktop-applications
 - Improved: Made import of ENEX files more robust and accurate
 - Improved: Auto-update process should be more reliable.
 - Fixed: Made sync-after-save interval longer to made synchronisations less frequent.
@@ -497,7 +534,7 @@ Same as v1.0.90 but with a fix for [#510](https://github.com/laurent22/joplin/is
 
 ## [v1.0.89](https://github.com/laurent22/joplin/releases/tag/v1.0.89) - 2018-05-09T13:05:05Z
 
-- New: Resolves [#122](https://github.com/laurent22/joplin/issues/122): Added support for sub-notebooks. Please see doc for more info: https://joplinapp.org/#sub-notebooks
+- New: Resolves [#122](https://github.com/laurent22/joplin/issues/122): Added support for sub-notebooks. Please see doc for more info: https://joplin.cozic.net/#sub-notebooks
 - Improved: Export/Import links to notes
 - Fixes [#480](https://github.com/laurent22/joplin/issues/480): Ignore invalid flag automatically passed by macOS
 - Fixes [#61](https://github.com/laurent22/joplin/issues/61): Handle path that ends with slash for file system sync
