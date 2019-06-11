@@ -19,7 +19,7 @@
 		const protocol = url.toLowerCase().split(':')[0];
 		if (['http', 'https', 'file'].indexOf(protocol) >= 0) return url;
 
-		if (url.indexOf('//')) {
+		if (url.indexOf('//') === 0) {
 			return location.protocol + url;
 		} else if (url[0] === '/') {
 			return location.protocol + '//' + location.host + url;
@@ -34,8 +34,20 @@
 		return document.title.trim();
 	}
 
+	function pageLocationOrigin() {
+		// location.origin normally returns the protocol + domain + port (eg. https://example.com:8080)
+		// but for file:// protocol this is browser dependant and in particular Firefox returns "null"
+		// in this case.
+
+		if (location.protocol === 'file:') {
+			return 'file://';
+		} else {
+			return location.origin;
+		}
+	}
+
 	function baseUrl() {
-		let output = location.origin + location.pathname;
+		let output = pageLocationOrigin() + location.pathname;
 		if (output[output.length - 1] !== '/') {
 			output = output.split('/');
 			output.pop();
@@ -123,7 +135,7 @@
 				title: title,
 				html: html,
 				base_url: baseUrl(),
-				url: location.origin + location.pathname + location.search,
+				url: pageLocationOrigin() + location.pathname + location.search,
 				parent_id: command.parent_id,
 				tags: command.tags || '',
 				image_sizes: imageSizes,
@@ -265,7 +277,7 @@
 					const content = {
 						title: pageTitle(),
 						crop_rect: selectionArea,
-						url: location.origin + location.pathname,
+						url: pageLocationOrigin() + location.pathname,
 						parent_id: command.parent_id,
 						tags: command.tags,
 					};
@@ -286,7 +298,7 @@
 
 		} else if (command.name === "pageUrl") {
 
-			let url = location.origin + location.pathname + location.search;
+			let url = pageLocationOrigin() + location.pathname + location.search;
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
 
 		} else {

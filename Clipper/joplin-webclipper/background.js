@@ -23,11 +23,12 @@ window.joplinEnv = function() {
 	return env_;
 }
 
-async function browserCaptureVisibleTabs(windowId, options) {
-	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, { format: 'jpeg' });
+async function browserCaptureVisibleTabs(windowId) {
+	const options = { format: 'jpeg' };
+	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, options);
 
 	return new Promise((resolve, reject) => {
-		browser_.tabs.captureVisibleTab(windowId, { format: 'jpeg' }, (image) => {
+		browser_.tabs.captureVisibleTab(windowId, options, (image) => {
 			resolve(image);
 		});
 	});
@@ -56,7 +57,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 
 		const zoom = await browserGetZoom();
 
-		const imageDataUrl = await browserCaptureVisibleTabs(null, { format: 'jpeg' });
+		const imageDataUrl = await browserCaptureVisibleTabs(null);
 		content = Object.assign({}, command.content);
 		content.image_data_url = imageDataUrl;
 
