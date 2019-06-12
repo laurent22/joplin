@@ -973,6 +973,38 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	async loadTemplates(filePath) {
+		let templates = [];
+		let filenames = [];
+
+		if (await fs.pathExists(filePath)) {
+			try {
+				filenames = fs.readdirSync(filePath);
+			} catch (error) {
+				let msg = error.message ? error.message : '';
+				msg = 'Could not read template names from ' + filePath + '\n' + msg;
+				error.message = msg;
+				throw error;
+			}
+
+			filenames.forEach(filename => {
+				if (filename.endsWith('.md')) {
+					try {
+						let fileString = fs.readFileSync(filePath + '/' + filename, 'utf-8');
+						templates.push({label: filename, value: fileString});
+					} catch (error) {
+						let msg = error.message ? error.message : '';
+						msg = 'Could not load template ' + filename + '\n' + msg;
+						error.message = msg;
+						throw error;
+					}
+				}
+			});
+		}
+
+		return templates;
+	}
+
 	async start(argv) {
 		const electronIsDev = require('electron-is-dev');
 
@@ -1035,6 +1067,13 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',
 			css: cssString
+		});
+
+		const templates = await this.loadTemplates(Setting.value('profileDir') + '/templates');
+
+		this.store().dispatch({
+			type: 'LOAD_TEMPLATES',
+			templates: templates
 		});
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update

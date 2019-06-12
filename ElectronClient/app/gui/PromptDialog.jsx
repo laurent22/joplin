@@ -6,6 +6,7 @@ const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
 const CreatableSelect = require('react-select/lib/Creatable').default;
+const Select = require('react-select').default;
 const makeAnimated = require('react-select/lib/animated').default;
 
 class PromptDialog extends React.Component {
@@ -101,7 +102,7 @@ class PromptDialog extends React.Component {
 			borderColor: theme.dividerColor,
 		};
 
-		this.styles_.tagList = {
+		this.styles_.select = {
 			control: (provided) => (Object.assign(provided, {
 				minWidth: width * 0.2,
 				maxWidth: width * 0.5,
@@ -115,6 +116,10 @@ class PromptDialog extends React.Component {
 				fontFamily: theme.fontFamily,
 				backgroundColor: theme.backgroundColor,
 			})),
+			option: (provided) => (Object.assign(provided, {
+				color: theme.color,
+				fontFamily: theme.fontFamily,
+			})),
 			multiValueLabel: (provided) => (Object.assign(provided, {
 				fontFamily: theme.fontFamily,
 			})),
@@ -123,14 +128,22 @@ class PromptDialog extends React.Component {
 			})),
 		};
 
-		this.styles_.tagListTheme = (tagTheme) => (Object.assign(tagTheme, {
+		this.styles_.selectTheme = (tagTheme) => (Object.assign(tagTheme, {
 			borderRadius: 2,
 			colors: Object.assign(tagTheme.colors, {
 				primary: theme.raisedBackgroundColor,
 				primary25: theme.raisedBackgroundColor,
 				neutral0: theme.backgroundColor,
+				neutral5: theme.backgroundColor,
 				neutral10: theme.raisedBackgroundColor,
+				neutral20: theme.raisedBackgroundColor,
+				neutral30: theme.raisedBackgroundColor,
+				neutral40: theme.color,
+				neutral50: theme.color,
+				neutral60: theme.color,
+				neutral70: theme.color,
 				neutral80: theme.color,
+				neutral90: theme.color,
 				danger: theme.backgroundColor,
 				dangerLight: theme.colorError2,
 			}),
@@ -179,8 +192,8 @@ class PromptDialog extends React.Component {
 			this.setState({ answer: momentObject });
 		}
 
-		const onTagsChange = (newTags) => {
-			this.setState({ answer: newTags });
+		const onSelectChange = (newValue) => {
+			this.setState({ answer: newValue });
 			this.focusInput_ = true;
 		}
 
@@ -206,8 +219,8 @@ class PromptDialog extends React.Component {
 			/>
 		} else if (this.props.inputType === 'tags') {
 			inputComp = <CreatableSelect
-				styles={styles.tagList}
-				theme={styles.tagListTheme}
+				styles={styles.select}
+				theme={styles.selectTheme}
 				ref={this.answerInput_}
 				value={this.state.answer}
 				placeholder={this.props.label ? this.props.label.replace(':', '') : ''}
@@ -216,7 +229,20 @@ class PromptDialog extends React.Component {
 				isClearable={false}
 				backspaceRemovesValue={true}
 				options={this.props.autocomplete}
-				onChange={onTagsChange}
+				onChange={onSelectChange}
+				onKeyDown={(event) => onKeyDown(event)}
+			/>
+		} else if (this.props.inputType === 'dropdown') {
+			inputComp = <Select
+				styles={styles.select}
+				theme={styles.selectTheme}
+				ref={this.answerInput_}
+				components={makeAnimated()}
+				defaultValue={this.props.defaultValue}
+				value={this.props.answer}
+				isClearable={true}
+				options={this.props.autocomplete}
+				onChange={onSelectChange}
 				onKeyDown={(event) => onKeyDown(event)}
 			/>
 		} else {

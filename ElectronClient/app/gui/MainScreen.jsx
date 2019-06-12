@@ -74,18 +74,38 @@ class MainScreenComponent extends React.Component {
 	async doCommand(command) {
 		if (!command) return;
 
-		const createNewNote = async (title, isTodo) => {
+		const createNewNote = async (title, body, isTodo) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
 			const newNote = {
 				parent_id: folderId,
+				body: body ? body: '',
 				is_todo: isTodo ? 1 : 0,
 			};
 
 			this.props.dispatch({
 				type: 'NOTE_SET_NEW_ONE',
 				item: newNote,
+			});
+		}
+		const selectTemplate = async () => {
+			this.setState({
+				promptOptions: {
+					label: _('Template file:'),
+					inputType: 'dropdown',
+					value: this.props.templates[0],
+					autocomplete: this.props.templates,
+					onClose: async (answer) => {
+						if (answer) {
+							await createNewNote(null, answer.value, false);
+						} else {
+							await createNewNote(null, null, false);
+						}
+
+						this.setState({ promptOptions: null });
+					}
+				},
 			});
 		}
 
@@ -97,14 +117,25 @@ class MainScreenComponent extends React.Component {
 				return;
 			}
 
-			await createNewNote(null, false);
+			if (this.props.templates.length === 0) {
+				await createNewNote(null, null, false);
+			}
+			else {
+				await selectTemplate();
+			}
+
 		} else if (command.name === 'newTodo') {
 			if (!this.props.folders.length) {
 				bridge().showErrorMessageBox(_('Please create a notebook first'));
 				return;
 			}
 
-			await createNewNote(null, true);
+			if (this.props.templates.length === 0) {
+				await createNewNote(null, null, true);
+			}
+			else {
+				await selectTemplate();
+			}
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {
@@ -525,6 +556,7 @@ const mapStateToProps = (state) => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
 		noteDevToolsVisible: state.noteDevToolsVisible,
+		templates: state.templates,
 	};
 };
 
