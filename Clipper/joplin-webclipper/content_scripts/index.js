@@ -72,6 +72,20 @@
 		return output;
 	}
 
+	function getAnchorNames(element) {
+		const anchors = element.getElementsByTagName('a');
+		const output = [];
+		for (let i = 0; i < anchors.length; i++) {
+			const anchor = anchors[i];
+			if (anchor.id) {
+				output.push(anchor.id);
+			} else if (anchor.name) {
+				output.push(anchor.name);
+			}
+		}
+		return output;
+	}
+
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
 	function cleanUpElement(element, imageSizes) {
 		const childNodes = element.childNodes;
@@ -129,7 +143,7 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
-		const clippedContentResponse = (title, html, imageSizes) => {
+		const clippedContentResponse = (title, html, imageSizes, anchorNames) => {
 			return {
 				name: 'clippedContent',
 				title: title,
@@ -139,6 +153,7 @@
 				parent_id: command.parent_id,
 				tags: command.tags || '',
 				image_sizes: imageSizes,
+				anchor_names: anchorNames,
 			};			
 		}
 
@@ -155,7 +170,7 @@
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
-			return clippedContentResponse(article.title, article.body, getImageSizes(document));
+			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === "isProbablyReaderable") {
 
@@ -168,14 +183,14 @@
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			cleanUpElement(cleanDocument, imageSizes);
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document));
 
 		} else if (command.name === "selectedHtml") {
 
 		    const range = window.getSelection().getRangeAt(0);
 		    const container = document.createElement('div');
 		    container.appendChild(range.cloneContents());
-		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document));
+		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
 
@@ -299,7 +314,7 @@
 		} else if (command.name === "pageUrl") {
 
 			let url = pageLocationOrigin() + location.pathname + location.search;
-			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
+			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {
 			throw new Error('Unknown command: ' + JSON.stringify(command));

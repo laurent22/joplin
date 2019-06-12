@@ -366,7 +366,7 @@ class Api {
 
 			const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
-			let note = await this.requestNoteToNote(requestNote);
+			let note = await this.requestNoteToNote_(requestNote);
 
 			const imageUrls = markdownUtils.extractImageUrls(note.body);
 
@@ -416,7 +416,7 @@ class Api {
 		return this.htmlToMdParser_;
 	}
 
-	async requestNoteToNote(requestNote) {
+	async requestNoteToNote_(requestNote) {
 		const output = {
 			title: requestNote.title ? requestNote.title : '',
 			body: requestNote.body ? requestNote.body : '',
@@ -430,6 +430,7 @@ class Api {
 			// rendering but it makes sure everything will be parsed.
 			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
 				baseUrl: requestNote.base_url ? requestNote.base_url : '',
+				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 			});
 		}
 
