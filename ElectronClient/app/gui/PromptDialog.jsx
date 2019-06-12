@@ -239,6 +239,7 @@ class PromptDialog extends React.Component {
 				ref={this.answerInput_}
 				components={makeAnimated()}
 				value={this.props.answer}
+				placeholder={_('Empty note...')}
 				isClearable={true}
 				options={this.props.autocomplete}
 				onChange={onSelectChange}
