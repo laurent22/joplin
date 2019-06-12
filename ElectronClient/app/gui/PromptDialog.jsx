@@ -238,7 +238,6 @@ class PromptDialog extends React.Component {
 				theme={styles.selectTheme}
 				ref={this.answerInput_}
 				components={makeAnimated()}
-				defaultValue={this.props.defaultValue}
 				value={this.props.answer}
 				isClearable={true}
 				options={this.props.autocomplete}

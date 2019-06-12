@@ -94,7 +94,6 @@ class MainScreenComponent extends React.Component {
 				promptOptions: {
 					label: _('Template file:'),
 					inputType: 'dropdown',
-					value: this.props.templates[0],
 					autocomplete: this.props.templates,
 					onClose: async (answer) => {
 						if (answer) {
