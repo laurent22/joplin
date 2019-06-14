@@ -139,9 +139,14 @@ android {
 			}
 		}
 	}
+	packagingOptions {
+		pickFirst '**/libjsc.so'
+		pickFirst '**/libc++_shared.so'
+	}
 }
 
 dependencies {
+	implementation "org.webkit:android-jsc:r241213"
     implementation project(':react-native-webview')
     compile project(':react-native-push-notification')
     implementation (project(':react-native-camera')) {
