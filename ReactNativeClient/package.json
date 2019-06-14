@@ -58,7 +58,7 @@
     "react-native-securerandom": "^0.1.1",
     "react-native-share-extension": "^1.2.1",
     "react-native-side-menu": "^1.1.3",
-    "react-native-sqlite-storage": "3.3.*",
+    "react-native-sqlite-storage": "^3.3.10",
     "react-native-vector-icons": "^4.4.2",
     "react-native-version-info": "^0.5.1",
     "react-native-webview": "^5.12.0",
