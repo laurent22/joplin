@@ -398,7 +398,7 @@ class NoteTextComponent extends React.Component {
 		return this.webviewRef_.current.wrappedInstance;
 	}
 
-	async saveIfNeeded(saveIfNewNote = false) {
+	async saveIfNeeded(saveIfNewNote = false, options = {}) {
 		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
 
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
@@ -406,7 +406,7 @@ class NoteTextComponent extends React.Component {
 		if (!forceSave) {
 			if (!shared.isModified(this)) return;
 		}
-		await shared.saveNoteButton_press(this);
+		await shared.saveNoteButton_press(this, null, options);
 
 		ExternalEditWatcher.instance().updateNoteFile(this.state.note);
 	}
@@ -1172,6 +1172,9 @@ class NoteTextComponent extends React.Component {
 
 	async commandStartExternalEditing() {
 		try {
+			await this.saveIfNeeded(true, {
+				autoTitle: false,
+			});
 			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
 		} catch (error) {
 			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
