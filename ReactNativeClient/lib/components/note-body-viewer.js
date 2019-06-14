@@ -168,13 +168,11 @@ class NoteBodyViewer extends Component {
 		// https://github.com/react-native-community/react-native-webview/issues/376
 		// However, if we add the <meta> tag as described there, it is no longer necessary and WebKit can be used!
 		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-501991406
-		// TODO: remove no longer used scalesPageToFit
 
 		return (
 			<View style={style}>
 				<WebView
 					useWebKit={true}
-					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}
 					injectedJavaScript={injectedJs.join('\n')}

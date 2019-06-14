@@ -45,7 +45,7 @@
     "react-native-camera": "^2.10.2",
     "react-native-datepicker": "^1.6.0",
     "react-native-dialogbox": "^0.6.10",
-    "react-native-document-picker": "^2.1.0",
+    "react-native-document-picker": "^2.3.0",
     "react-native-dropdownalert": "^3.1.2",
     "react-native-file-viewer": "^1.0.5",
     "react-native-fs": "^2.11.17",
