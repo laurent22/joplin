@@ -1,5 +1,6 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, WebView, View } = require('react-native');
+const { Platform, View } = require('react-native');
+const { WebView } =  require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
@@ -99,6 +100,7 @@ class NoteBodyViewer extends Component {
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources,//await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
+			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
 
 		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
@@ -108,7 +110,7 @@ class NoteBodyViewer extends Component {
 
 		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
 		injectedJs.push(shim.injectedJs('webviewLib'));
-		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return postMessage(msg); } });');
+		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {
 			    if (document.readyState === "complete") {
@@ -162,9 +164,13 @@ class NoteBodyViewer extends Component {
 			baseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		};
 
+		// Note: useWebKit={false} is needed to go around this bug:
+		// https://github.com/react-native-community/react-native-webview/issues/376
+
 		return (
 			<View style={style}>
 				<WebView
+					useWebKit={false}
 					scalesPageToFit={Platform.OS !== 'ios'}
 					style={webViewStyle}
 					source={source}

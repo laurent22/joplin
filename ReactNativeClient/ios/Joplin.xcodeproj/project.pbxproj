@@ -48,6 +48,7 @@
 		EC11356C90E9419799A2626F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51BCEC3BC28046C8BB19531F /* EvilIcons.ttf */; };
 		F3D0BB525E6C490294D73075 /* libRNSecureRandom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22647ACF9A4C45918C44C599 /* libRNSecureRandom.a */; };
 		FBF57CE2F0F448FA9A8985E2 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB8BCAEA9AA41CAAE460443 /* libsqlite3.0.tbd */; };
+		45E8D3F9FBA0410E82E28A0D /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7A5EE79128470A920D4971 /* libRNCWebView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -468,6 +469,8 @@
 		FC908F114F494130A324B402 /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		FD370E24D76E461D960DD85D /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		FF411B45E68B4A8CBCC35777 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		DECA9B559982480BBD8F9E84 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		4C7A5EE79128470A920D4971 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -503,6 +506,7 @@
 				F3D0BB525E6C490294D73075 /* libRNSecureRandom.a in Frameworks */,
 				82C61D3DAE0A4666883001E9 /* libRNFileViewer.a in Frameworks */,
 				12AE298E1C0E445682922DAB /* libRNCamera.a in Frameworks */,
+				45E8D3F9FBA0410E82E28A0D /* libRNCWebView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -797,6 +801,7 @@
 				252BD7B86BF7435B960DA901 /* RNSecureRandom.xcodeproj */,
 				59F5448FAF7345F8B568BD00 /* RNFileViewer.xcodeproj */,
 				FC908F114F494130A324B402 /* RNCamera.xcodeproj */,
+				DECA9B559982480BBD8F9E84 /* RNCWebView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1450,11 +1455,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-securerandomios",
 					"$(SRCROOT)..\node_modules\neact-native-file-viewerios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
@@ -1494,11 +1501,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-securerandomios",
 					"$(SRCROOT)..\node_modules\neact-native-file-viewerios",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",
 					"\"$(SRCROOT)/Joplin\"",

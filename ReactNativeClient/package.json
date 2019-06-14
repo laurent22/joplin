@@ -59,6 +59,7 @@
     "react-native-sqlite-storage": "3.3.*",
     "react-native-vector-icons": "^4.4.2",
     "react-native-version-info": "^0.5.1",
+    "react-native-webview": "^5.12.0",
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "5.0.7",
     "redux": "4.0.0",

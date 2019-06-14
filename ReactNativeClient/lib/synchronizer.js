@@ -155,7 +155,7 @@ class Synchronizer {
 
 		// Stop queue but don't set it to null as it may be used to
 		// retrieve the last few downloads.
-		this.downloadQueue_.stop();
+		if (this.downloadQueue_) this.downloadQueue_.stop();
 
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;

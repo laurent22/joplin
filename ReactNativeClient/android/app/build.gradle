@@ -141,6 +141,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-webview')
     compile project(':react-native-push-notification')
     implementation (project(':react-native-camera')) {
     	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
