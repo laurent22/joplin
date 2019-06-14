@@ -7,6 +7,7 @@ class HtmlToMd {
 		const turndownPluginGfm = require('joplin-turndown-plugin-gfm').gfm
 		const turndown = new TurndownService({
 			headingStyle: 'atx',
+			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
 		})
 		turndown.use(turndownPluginGfm)
 		turndown.remove('script');

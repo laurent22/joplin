@@ -82,6 +82,7 @@ const lightStyle = {
 	urlColor: '#155BDA',
 
 	backgroundColor2: "#162B3D",
+	depthColor: 'rgb(100, 182, 253, OPACITY)',
 	color2: "#f5f5f5",
 	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
@@ -119,8 +120,9 @@ const darkStyle = {
 	urlColor: '#4E87EE',
 
 	backgroundColor2: "#181A1D",
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
 	color2: "#ffffff",
-	selectedColor2: "#333333",
+	selectedColor2: "#013F74",
 	colorError2: "#ff6c6c",
 
 	raisedBackgroundColor: "#474747",

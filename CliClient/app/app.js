@@ -378,8 +378,6 @@ class Application extends BaseApplication {
 			return this.stdout(object);
 		});
 
-		await WelcomeUtils.install(this.dispatch.bind(this));
-
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {

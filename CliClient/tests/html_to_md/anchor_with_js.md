@@ -1,1 +1,1 @@
-[Some text]()
+Some text
