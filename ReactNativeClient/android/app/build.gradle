@@ -96,6 +96,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
 		versionCode 2097497
 		versionName "1.0.261"
+		missingDimensionStrategy 'react-native-camera', 'general'
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}

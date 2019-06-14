@@ -40,7 +40,7 @@
     "react": "^16.8.3",
     "react-native": "^0.59.9",
     "react-native-action-button": "^2.6.9",
-    "react-native-camera": "^1.3.0",
+    "react-native-camera": "^2.10.2",
     "react-native-datepicker": "^1.6.0",
     "react-native-dialogbox": "^0.6.6",
     "react-native-document-picker": "^2.1.0",
