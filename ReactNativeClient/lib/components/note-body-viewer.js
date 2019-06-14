@@ -1,5 +1,6 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, WebView, View } = require('react-native');
+const { Platform, View } = require('react-native');
+const { WebView } =  require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
@@ -99,6 +100,7 @@ class NoteBodyViewer extends Component {
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources,//await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
+			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
 
 		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
@@ -108,7 +110,7 @@ class NoteBodyViewer extends Component {
 
 		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
 		injectedJs.push(shim.injectedJs('webviewLib'));
-		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return postMessage(msg); } });');
+		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
 		injectedJs.push(`
 			const readyStateCheckInterval = setInterval(function() {
 			    if (document.readyState === "complete") {
@@ -122,7 +124,7 @@ class NoteBodyViewer extends Component {
 			<!DOCTYPE html>
 			<html>
 				<head>
-					
+					<meta name="viewport" content="width=device-width, initial-scale=1">
 				</head>
 				<body>
 					` + html + `
@@ -162,10 +164,15 @@ class NoteBodyViewer extends Component {
 			baseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		};
 
+		// Note: useWebKit={false} is needed to go around this bug:
+		// https://github.com/react-native-community/react-native-webview/issues/376
+		// However, if we add the <meta> tag as described there, it is no longer necessary and WebKit can be used!
+		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-501991406
+
 		return (
 			<View style={style}>
 				<WebView
-					scalesPageToFit={Platform.OS !== 'ios'}
+					useWebKit={true}
 					style={webViewStyle}
 					source={source}
 					injectedJavaScript={injectedJs.join('\n')}
@@ -175,7 +182,8 @@ class NoteBodyViewer extends Component {
 					onLoadEnd={() => this.onLoadEnd()}
 					onError={() => reg.logger().error('WebView error') }
 					onMessage={(event) => {
-						let msg = event.nativeEvent.data;
+						// Since RN 58 (or 59) messages are now escaped twice???
+						let msg = unescape(unescape(event.nativeEvent.data));
 
 						console.info('Got IPC message: ', msg);
 

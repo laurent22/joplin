@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, Text, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
@@ -157,7 +157,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
 				} else {
-					Linking.openURL(msg);
+					if (msg.indexOf('file://') === 0) {
+						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
+					} else {
+						Linking.openURL(msg);
+					}
 				}
 			} catch (error) {
 				dialogs.error(this, error.message);

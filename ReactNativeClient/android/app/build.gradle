@@ -84,7 +84,11 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    
+    compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
 
 	defaultConfig {
 		applicationId "net.cozic.joplin"
@@ -95,13 +99,14 @@ android {
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
+		missingDimensionStrategy 'react-native-camera', 'general'
 	}
 	splits {
 		abi {
 			reset()
 			enable enableSeparateBuildPerCPUArchitecture
 			universalApk false  // If true, also generate a universal APK
-			include "armeabi-v7a", "x86"
+			include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		}
 	}
 	signingConfigs {
@@ -126,7 +131,7 @@ android {
 		variant.outputs.each { output ->
 			// For each separate APK per architecture, set a unique version code as described here:
 			// http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-			def versionCodes = ["armeabi-v7a":1, "x86":2]
+			def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
 			def abi = output.getFilter(OutputFile.ABI)
 			if (abi != null) {  // null for the universal-debug, universal-release variants
 				output.versionCodeOverride =
@@ -134,21 +139,28 @@ android {
 			}
 		}
 	}
+	packagingOptions {
+		pickFirst '**/libjsc.so'
+		pickFirst '**/libc++_shared.so'
+	}
 }
 
 dependencies {
+    implementation project(':@react-native-community_slider')
+	implementation "org.webkit:android-jsc:r241213"
+    implementation project(':react-native-webview')
     compile project(':react-native-push-notification')
-    implementation (project(':react-native-camera')) {
-    	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
-    	// while react-native-camera requires v15.x, which results in broken dependencies with
-    	// this error message:
-    	// 
-    	// The library com.google.android.gms:play-services-base is being requested by various other libraries at [[15.0.1,15.0.1]], but resolves to 16.0.1
-    	//
-    	// For the record: found solution by removing all Firebase stuff here and running "gradlew.bat :app:dependencies"
-    	// That shows that react-native-camera was the one requiring v15.0.1.
-        exclude group: "com.google.android.gms"
-    }
+    // implementation (project(':react-native-camera')) {
+    // 	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
+    // 	// while react-native-camera requires v15.x, which results in broken dependencies with
+    // 	// this error message:
+    // 	// 
+    // 	// The library com.google.android.gms:play-services-base is being requested by various other libraries at [[15.0.1,15.0.1]], but resolves to 16.0.1
+    // 	//
+    // 	// For the record: found solution by removing all Firebase stuff here and running "gradlew.bat :app:dependencies"
+    // 	// That shows that react-native-camera was the one requiring v15.0.1.
+    //     exclude group: "com.google.android.gms"
+    // }
 	implementation project(':react-native-file-viewer')
 	implementation project(':react-native-securerandom')
 	implementation project(':react-native-fs')
@@ -164,6 +176,7 @@ dependencies {
 	implementation project(':react-native-image-resizer')
 	implementation project(':react-native-share-extension')
 	implementation project(':react-native-version-info')
+	implementation project(':react-native-camera')
 	implementation "com.facebook.react:react-native:+"
 
 	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase

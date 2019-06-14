@@ -2,18 +2,18 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "27.0.3"
+        buildToolsVersion = "28.0.3"
         minSdkVersion = 16
-        compileSdkVersion = 27
-        targetSdkVersion = 26
-        supportLibVersion = "27.1.1"
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+        supportLibVersion = "28.0.0"
     }
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0' // Upgraded from 3.1.4 to 3.2.0 for Firebase
+        classpath("com.android.tools.build:gradle:3.4.0")
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -25,6 +25,7 @@ allprojects {
         mavenLocal()
         google()
         jcenter() // Was added by me - still needed?
+        maven { url "https://jitpack.io" }
         maven {
             url "https://maven.google.com"
         }
@@ -32,23 +33,22 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-    }
-}
-
-
-subprojects {
-    afterEvaluate {project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 26
-                buildToolsVersion "27.0.3"
-            }
+        maven {
+            url "$rootDir/../node_modules/jsc-android/dist"
         }
     }
 }
 
+// TODO: Maybe remove this (forgot why it was needed - probably to make some module work)
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-    distributionUrl = distributionUrl.replace("bin", "all")
-}
+// subprojects {
+//     afterEvaluate {project ->
+//         if (project.hasProperty("android")) {
+//             android {
+//                 compileSdkVersion 28
+//                 buildToolsVersion "28.0.3"
+//             }
+//         }
+//     }
+// }
+
