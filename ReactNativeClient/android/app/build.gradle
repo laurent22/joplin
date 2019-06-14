@@ -146,6 +146,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_slider')
 	implementation "org.webkit:android-jsc:r241213"
     implementation project(':react-native-webview')
     compile project(':react-native-push-notification')

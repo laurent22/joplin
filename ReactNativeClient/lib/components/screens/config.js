@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -11,6 +11,8 @@ const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
 const VersionInfo = require('react-native-version-info').default;
+
+import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 

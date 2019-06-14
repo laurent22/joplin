@@ -9,6 +9,7 @@
     "postinstall": "node ../Tools/copycss.js && node ../Tools/buildReactNativeInjectedJs.js"
   },
   "dependencies": {
+    "@react-native-community/slider": "^1.1.3",
     "async-mutex": "^0.1.3",
     "base-64": "^0.1.0",
     "buffer": "^5.0.8",
