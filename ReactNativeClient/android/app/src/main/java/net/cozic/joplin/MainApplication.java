@@ -19,6 +19,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
+import org.reactnative.camera.RNCameraPackage;
 
 import com.alinz.parkerdan.shareextension.SharePackage;
 
@@ -51,6 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
 				new SharePackage(),
+				new RNCameraPackage(),
 				new RNVersionInfoPackage()
 			);
 		}

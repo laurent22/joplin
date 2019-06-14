@@ -99,6 +99,7 @@ android {
 		ndk {
 			abiFilters "armeabi-v7a", "x86"
 		}
+		missingDimensionStrategy 'react-native-camera', 'general'
 	}
 	splits {
 		abi {
@@ -174,6 +175,7 @@ dependencies {
 	implementation project(':react-native-image-resizer')
 	implementation project(':react-native-share-extension')
 	implementation project(':react-native-version-info')
+	implementation project(':react-native-camera')
 	implementation "com.facebook.react:react-native:+"
 
 	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
