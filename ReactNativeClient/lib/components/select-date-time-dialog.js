@@ -85,6 +85,14 @@ class SelectDateTimeDialog extends Component {
 						cancelBtnText={_('Cancel')}
 						onDateChange={(date) => { this.setState({ date: this.stringToDate(date) }); }}
 						style={{width:300}}
+						customStyles={{
+							btnConfirm: {
+								paddingVertical: 0,
+							},
+							btnCancel: {
+								paddingVertical: 0,
+							},
+						}}
 					/>
 				</View>
 			</PopupDialog>
