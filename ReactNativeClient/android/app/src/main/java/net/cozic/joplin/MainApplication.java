@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import org.reactnative.camera.RNCameraPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -43,7 +42,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNCWebViewPackage(),
             new ReactNativePushNotificationPackage(),
 				new ImageResizerPackage(),
-				new RNCameraPackage(),
 				new RNFileViewerPackage(),
 				new RNSecureRandomPackage(),
 				new ImagePickerPackage(),
