@@ -6,6 +6,9 @@ const path = require('path')
 const urlUtils = require('lib/urlUtils.js');
 const { dirname, basename } = require('lib/path-utils');
 const fs = require('fs-extra');
+const { bridge } = require('bridge.js');
+const Setting = require('lib/models/Setting.js');
+
 
 class ElectronAppWrapper {
 
@@ -100,6 +103,14 @@ class ElectronAppWrapper {
 				}
 			} else {
 				if (this.trayShown() && !this.willQuitApp_) {
+					if ( Setting.value('showTrayIconMinimisedMessage') ) {
+						showMessageInTheFuture = bridge().showConfirmMessageBox(
+							"Joplin is going to be minimised to its tray icon and will still be running. You may change this behaviour in the Configuration screen.",
+							{ buttons: [_('OK'), _("Don't remind me")] }
+						);
+						Setting.setValue('showTrayIconMinimisedMessage', showMessageInTheFuture);
+					}
+
 					event.preventDefault();
 					this.win_.hide();
 				} else {
