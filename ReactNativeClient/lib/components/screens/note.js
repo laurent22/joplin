@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, Text, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
