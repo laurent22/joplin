@@ -198,7 +198,7 @@ function shimInit() {
 				filePathEncode = filePathEncode.replace(/\\/g, '%5C'); // replace backslash with unicode on linux and MacOS
 			}
 			let filename = markdownUtils.escapeLinkText(path.basename(filePath)); // to get same filename as standard drag and drop
-			let fileURL = "[" + filename + "](file://" + (filePathEncode) +")" // encodeURIComponent
+			let fileURL = "[" + filename + "](file://" + encodeURI(filePathEncode) +")"
 			newBody.push(fileURL);
 		}
 
