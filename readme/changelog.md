@@ -1,5 +1,12 @@
 # Joplin changelog
 
+## [v1.0.160](https://github.com/laurent22/joplin/releases/tag/v1.0.160) - 2019-06-15T00:21:40Z
+
+- New: Highlight notebooks based on depth ([#1634](https://github.com/laurent22/joplin/issues/1634))
+- New: Added menu item to format inline code ([#1641](https://github.com/laurent22/joplin/issues/1641))
+- Improved: Added shortcut for tags (`Cmd+Opt+T` / `Ctrl+Alt+T`) ([#1638](https://github.com/laurent22/joplin/issues/1638))
+- Fixed: Allow opening external editor on new notes ([#1443](https://github.com/laurent22/joplin/issues/1443))
+
 ## [v1.0.159](https://github.com/laurent22/joplin/releases/tag/v1.0.159) - 2019-06-08T00:00:19Z
 
 - New: Added option to open development tools, to make it easier to create custom CSS
