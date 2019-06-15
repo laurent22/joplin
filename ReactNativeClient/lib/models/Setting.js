@@ -164,7 +164,7 @@ class Setting extends BaseModel {
 
 			'startMinimized': { value: false, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
 
-			'showTrayIconMinimisedMessage': {value: true, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Remind that the application is being minimised to the tray icon and not actually closed') },
+			'showTrayIconMinimizedMessage': {value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 
 			'collapsedFolderIds': { value: [], type: Setting.TYPE_ARRAY, public: false },
 
