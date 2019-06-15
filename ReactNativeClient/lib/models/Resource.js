@@ -32,6 +32,11 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
+	static fetchStatuses(resourceIds) {
+		if (!resourceIds.length) return [];
+		return this.db().selectAll('SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("' + resourceIds.join('","') + '")');
+	}
+
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
 		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {

@@ -75,11 +75,19 @@ class ResourceFetcher extends BaseService {
 	async markForDownload(resourceIds) {
 		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
 
-		for (const id of resourceIds) {
+		const fetchStatuses = await Resource.fetchStatuses(resourceIds);
+
+		const idsToKeep = [];
+		for (const status of fetchStatuses) {
+			if (status.fetch_status !== Resource.FETCH_STATUS_IDLE) continue;
+			idsToKeep.push(status.resource_id);
+		}
+
+		for (const id of idsToKeep) {
 			await Resource.markForDownload(id);
 		}
 
-		for (const id of resourceIds) {
+		for (const id of idsToKeep) {
 			this.queueDownload_(id, 'high');
 		}
 	}
