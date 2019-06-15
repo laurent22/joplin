@@ -47,7 +47,7 @@
     "react-native-dialogbox": "^0.6.10",
     "react-native-document-picker": "^2.3.0",
     "react-native-dropdownalert": "^3.1.2",
-    "react-native-file-viewer": "^1.0.5",
+    "react-native-file-viewer": "^1.0.15",
     "react-native-fs": "^2.11.17",
     "react-native-image-picker": "^0.26.7",
     "react-native-image-resizer": "^1.0.0",

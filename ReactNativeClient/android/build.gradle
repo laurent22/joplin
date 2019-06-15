@@ -41,14 +41,14 @@ allprojects {
 
 // TODO: Maybe remove this (forgot why it was needed - probably to make some module work)
 
-// subprojects {
-//     afterEvaluate {project ->
-//         if (project.hasProperty("android")) {
-//             android {
-//                 compileSdkVersion 28
-//                 buildToolsVersion "28.0.3"
-//             }
-//         }
-//     }
-// }
+subprojects {
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 28
+                buildToolsVersion "28.0.3"
+            }
+        }
+    }
+}
 

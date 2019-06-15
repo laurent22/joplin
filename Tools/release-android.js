@@ -64,19 +64,19 @@ async function main() {
 	console.info('Building APK file v' + version + '...');
 
 	let restoreDir = null;
-	let apkBuildCmd = 'assembleRelease -PbuildDir=build'; //  --console plain
-	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
-		apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
-	} else {
-		process.chdir(rnDir + '/android');
-		apkBuildCmd = './gradlew ' + apkBuildCmd;
-		restoreDir = rootDir;
-	}
+	// let apkBuildCmd = 'assembleRelease -PbuildDir=build'; //  --console plain
+	// if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
+	// 	apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
+	// } else {
+	// 	process.chdir(rnDir + '/android');
+	// 	apkBuildCmd = './gradlew ' + apkBuildCmd;
+	// 	restoreDir = rootDir;
+	// }
 
-	// const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
-	console.info(apkBuildCmd);
-	const output = await execCommand(apkBuildCmd);
-	console.info(output);
+	// // const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
+	// console.info(apkBuildCmd);
+	// const output = await execCommand(apkBuildCmd);
+	// console.info(output);
 
 	if (restoreDir) process.chdir(restoreDir);
 
