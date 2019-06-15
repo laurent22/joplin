@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, isWindows, fileExists } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken, isWindows, fileExists, readline } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -7,6 +7,17 @@ const uriTemplate = require('uri-template');
 const rnDir = __dirname + '/../ReactNativeClient';
 const rootDir = path.dirname(__dirname);
 const releaseDir = rootDir + '/_releases';
+
+function wslToWinPath(wslPath) {
+	const s = wslPath.split('/');
+	if (s.length < 3) return s.join('\\');
+	s.splice(0, 1);
+	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
+	s.splice(0, 1);
+	s[0] = s[0].toUpperCase() + ':';
+	while (s.length && !s[s.length - 1]) s.pop();
+	return s.join('\\');
+}
 
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode, c) {
@@ -64,19 +75,38 @@ async function main() {
 	console.info('Building APK file v' + version + '...');
 
 	let restoreDir = null;
-	let apkBuildCmd = 'assembleRelease -PbuildDir=build'; //  --console plain
+	let apkBuildCmd = 'assembleRelease -PbuildDir=build';
 	if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
-		apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
+		// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
+
+		//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\android && gradlew.bat assembleRelease -PbuildDir=build"
+
+		//     FAILURE: Build failed with an exception.
+
+		//     * What went wrong:
+		//     Could not determine if Stdout is a console: could not get handle file information (errno 1)
+
+		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
+
+		console.info('Run this command from DOS:');
+		console.info('');
+		console.info('cd "' + wslToWinPath(rootDir) + '\\ReactNativeClient\\android" && gradlew.bat ' + apkBuildCmd + '"');
+		console.info('');
+		readline('Press Enter when done:');
+		apkBuildCmd = ''; // Clear the command because we've already ran it
+		
+		// apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
 	} else {
 		process.chdir(rnDir + '/android');
 		apkBuildCmd = './gradlew ' + apkBuildCmd;
 		restoreDir = rootDir;
 	}
 
-	// const output = await execCommand('/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat assembleRelease -PbuildDir=build --console plain"');
-	console.info(apkBuildCmd);
-	const output = await execCommand(apkBuildCmd);
-	console.info(output);
+	if (apkBuildCmd) {
+		console.info(apkBuildCmd);
+		const output = await execCommand(apkBuildCmd);
+		console.info(output);
+	}
 
 	if (restoreDir) process.chdir(restoreDir);
 
