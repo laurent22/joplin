@@ -446,13 +446,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
-		await Resource.save(resource, { isNew: true });
+		resource = await Resource.save(resource, { isNew: true });
 
 		const resourceTag = Resource.markdownTag(resource);
 
 		const newNote = Object.assign({}, this.state.note);
 		newNote.body += "\n" + resourceTag;
 		this.setState({ note: newNote });
+
+		this.refreshResource(resource);
 	}
 
 	async attachPhoto_onPress() {
