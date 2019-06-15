@@ -98,19 +98,26 @@ class ElectronAppWrapper {
 				if (this.willQuitApp_) {
 					this.win_ = null;
 				} else {
-					event.preventDefault();
-					this.hide();
-				}
-			} else {
-				if (this.trayShown() && !this.willQuitApp_) {
 					if ( Setting.value('showTrayIconMinimisedMessage') ) {
-						showMessageInTheFuture = bridge().showConfirmMessageBox(
+						let showMessageInTheFuture = bridge().showConfirmMessageBox(
 							"Joplin is going to be minimised to its tray icon and will still be running. You may change this behaviour in the Configuration screen.",
 							{ buttons: [_('OK'), _("Don't remind me")] }
 						);
 						Setting.setValue('showTrayIconMinimisedMessage', showMessageInTheFuture);
 					}
-
+					event.preventDefault();
+					this.hide();
+				}
+			
+			} else {
+				if (this.trayShown() && !this.willQuitApp_) {
+					if ( Setting.value('showTrayIconMinimisedMessage') ) {
+						let showMessageInTheFuture = bridge().showConfirmMessageBox(
+							"Joplin is going to be minimised to its tray icon and will still be running. You may change this behaviour in the Configuration screen.",
+							{ buttons: [_('OK'), _("Don't remind me")] }
+						);
+						Setting.setValue('showTrayIconMinimisedMessage', showMessageInTheFuture);
+					}
 					event.preventDefault();
 					this.win_.hide();
 				} else {
