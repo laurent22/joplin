@@ -87,6 +87,14 @@ class ExternalEditWatcher {
 					this.logger().error(error)
 				}
 			});
+			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
+			// taken from https://github.com/paulmillr/chokidar/issues/591
+			this.watcher_.on('raw', async (event, path, {watchedPath}) => {
+				if (event === 'rename') {
+					this.watcher_.unwatch(watchedPath);
+					this.watcher_.add(watchedPath);
+				}
+			});
 		} else {
 			this.watcher_.add(fileToWatch);
 		}
