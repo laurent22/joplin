@@ -19,6 +19,8 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
+const { time } = require('lib/time-utils.js');
+const Mustache = require('mustache');
 
 class MainScreenComponent extends React.Component {
 
@@ -78,9 +80,26 @@ class MainScreenComponent extends React.Component {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
+			// Mustache escapes strings (including /) with the html code by default
+			// This isn't useful for markdown so it's disabled
+			Mustache.escape = function(text) { return text; }
+
+			// new template variables can be added here
+			// If there are too many, this should be moved to a new file
+			const view = {
+				date: time.formatMsToLocal(new Date().getTime(), time.dateFormat()),
+				time: time.formatMsToLocal(new Date().getTime(), time.timeFormat()),
+				datetime: time.formatMsToLocal(new Date().getTime()),
+				custom_datetime: function()  { return function(text, render) {
+					return render(time.formatMsToLocal(new Date().getTime(), text));
+				}},
+			}
+
+			let templateBody = Mustache.render(body, view);
+
 			const newNote = {
 				parent_id: folderId,
-				body: body ? body: '',
+				body: body ? templateBody: '',
 				is_todo: isTodo ? 1 : 0,
 			};
 
