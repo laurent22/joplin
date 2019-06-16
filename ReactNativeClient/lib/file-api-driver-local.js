@@ -16,9 +16,10 @@ const { basicDelta } = require('lib/file-api');
 
 class FileApiDriverLocal {
 
-	fsErrorToJsError_(error, path = null) {
+	fsErrorToJsError_(error, path = null, comment = null) {
 		let msg = error.toString();
 		if (path !== null) msg += '. Path: ' + path;
+		if (comment !== null) msg += `. ${comment}`;
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -151,7 +152,8 @@ class FileApiDriverLocal {
 		
 			await this.fsDriver().writeFile(path, content, 'utf8');
 		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
+			const comment = error.code === 'ENOENT' ? 'Please check application permissions.' : null;
+			throw this.fsErrorToJsError_(error, path, comment);
 		}
 
 		// if (!options) options = {};
