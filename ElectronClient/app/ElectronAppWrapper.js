@@ -98,14 +98,14 @@ class ElectronAppWrapper {
 				if (this.willQuitApp_) {
 					this.win_ = null;
 				} else {
-					trayShowMinimizedMessage();
+					this.trayShowMinimizedMessage();
 					event.preventDefault();
 					this.hide();
 				}
 			
 			} else {
 				if (this.trayShown() && !this.willQuitApp_) {
-					trayShowMinimizedMessage();
+					this.trayShowMinimizedMessage();
 					event.preventDefault();
 					this.win_.hide();
 				} else {
