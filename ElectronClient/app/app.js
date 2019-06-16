@@ -712,6 +712,7 @@ class Application extends BaseApplication {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
+							noteId: this.store().getState().selectedNoteIds[0]
 						});
 					},
 				}, {
