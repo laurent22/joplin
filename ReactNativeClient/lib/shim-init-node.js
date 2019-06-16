@@ -187,18 +187,19 @@ function shimInit() {
 		if (createFileURL == false) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
-			let filePathEncode = filePath.replace(/\+/g, '%2B'); // escape '+' with unicode
-			filePathEncode = filePathEncode.replace(/ /g, '+'); // escape ' ' with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
-			filePathEncode = filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
+			let filePathEncode = filePath;
 			const platform = process.platform;
 			if (platform == 'win32') {
 				filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
 				filePathEncode = "/" + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
-			} else {
-				filePathEncode = filePathEncode.replace(/\\/g, '%5C'); // replace backslash with unicode on linux and MacOS
 			}
+			filePathEncode = encodeURI(filePathEncode);
+			filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
+			filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
+			filePathEncode = filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
+			
 			let filename = markdownUtils.escapeLinkText(path.basename(filePath)); // to get same filename as standard drag and drop
-			let fileURL = "[" + filename + "](file://" + encodeURI(filePathEncode) +")"
+			let fileURL = "[" + filename + "](file://" + filePathEncode +")"
 			newBody.push(fileURL);
 		}
 
