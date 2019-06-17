@@ -709,11 +709,13 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+Alt+T',
 					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'setTags',
-							noteId: this.store().getState().selectedNoteIds[0]
-						});
+						if (this.store().getState().selectedNoteIds.length === 1) {
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'setTags',
+								noteId: this.store().getState().selectedNoteIds[0]
+							});
+						}
 					},
 				}, {
 					type: 'separator',
