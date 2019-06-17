@@ -699,10 +699,12 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+E',
 					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'commandStartExternalEditing',
-						});
+						if (this.store().getState().selectedNoteIds.length === 1) {
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'commandStartExternalEditing',
+							});
+						}
 					},
 				}, {
 					label: _('Tags'),
