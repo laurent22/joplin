@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -12,6 +12,7 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
 const VersionInfo = require('react-native-version-info').default;
 
+import { PermissionsAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -30,9 +31,46 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			await shared.checkSyncConfig(this, this.state.settings);
 		}
 
-		this.saveButton_press = () => {
+		this.saveButton_press = async () => {
+			if (
+				this.state.changedSettingKeys.includes('sync.target')
+				&& this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')
+				&& !await this.checkFilesystemPermission()
+			) {
+				Alert.alert(
+					_('Permission error'),
+					_(
+						'Filesystem permission denied. ' +
+						'Please choose another synchronization target.'
+					));
+				return false;
+			}
 			return shared.saveSettings(this);
 		};
+	}
+
+	async checkFilesystemPermission() {
+		if (Platform.OS !== 'android') {
+			// Not implemented yet
+			return true;
+		}
+		const hasPermission = await PermissionsAndroid.check(
+			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+		if (hasPermission) {
+			return true;
+		}
+		const requestResult = await PermissionsAndroid.request(
+			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+			{
+				title: _('Permission to write to external storage'),
+				message: _(
+					'In order to use file system synchronization your ' +
+					'permission to write to external storage is required.'
+				),
+				buttonPositive: _('OK'),
+			},
+		);
+		return (requestResult === PermissionsAndroid.RESULTS.GRANTED);
 	}
 
 	UNSAFE_componentWillMount() {
