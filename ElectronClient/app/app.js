@@ -783,10 +783,14 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+Alt+I',
 					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'commandNoteProperties',
-						});
+						if (this.store().getState().selectedNoteIds.length === 1) {
+							this.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'commandNoteProperties',
+								noteId: this.store().getState().selectedNoteIds[0],
+								onRevisionLinkClick: () => { this.setState({ showRevisions: true}) },
+							});
+						}
 					},
 				}],
 			},

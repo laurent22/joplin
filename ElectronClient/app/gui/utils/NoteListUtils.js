@@ -86,6 +86,7 @@ class NoteListUtils {
 					type: 'WINDOW_COMMAND',
 					name: 'commandNoteProperties',
 					noteId: noteIds[0],
+					onRevisionLinkClick: () => { this.setState({ showRevisions: true}) },
 				});
 			}}));
 
