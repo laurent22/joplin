@@ -684,11 +684,17 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr ""
 
 msgid "Edit in external editor"
 msgstr ""
+
+msgid "Tags"
+msgstr "Etiquetas"
 
 msgid "Search in all the notes"
 msgstr "Buscar en todas as notas"
@@ -1069,9 +1075,6 @@ msgstr ""
 msgid "Attach file"
 msgstr "Anexar un ficheiro"
 
-msgid "Tags"
-msgstr "Etiquetas"
-
 msgid "Set alarm"
 msgstr "Estabelecer alarma"
 
@@ -1080,9 +1083,6 @@ msgid "In: %s"
 msgstr "%s: %s"
 
 msgid "Hyperlink"
-msgstr ""
-
-msgid "Code"
 msgstr ""
 
 msgid "Numbered List"
@@ -1934,6 +1934,10 @@ msgstr ""
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
 #, javascript-format

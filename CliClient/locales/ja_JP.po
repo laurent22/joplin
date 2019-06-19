@@ -678,11 +678,17 @@ msgstr "斜体"
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr "コード"
+
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
 msgid "Edit in external editor"
 msgstr "外部エディターで編集"
+
+msgid "Tags"
+msgstr "タグ"
 
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
@@ -1069,9 +1075,6 @@ msgstr "ハイパーリンクの挿入"
 msgid "Attach file"
 msgstr "ファイルを添付する"
 
-msgid "Tags"
-msgstr "タグ"
-
 msgid "Set alarm"
 msgstr "アラームをセット"
 
@@ -1081,9 +1084,6 @@ msgstr "内: %s"
 
 msgid "Hyperlink"
 msgstr "ハイパーリンク"
-
-msgid "Code"
-msgstr "コード"
 
 msgid "Numbered List"
 msgstr "番号つきリスト"
@@ -1937,6 +1937,10 @@ msgstr "ID %s のアイテムはありません"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"
