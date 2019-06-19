@@ -694,6 +694,11 @@ class BaseItem extends BaseModel {
 		}
 	}
 
+	static async clearLocalSyncState(syncTarget) {
+		await this.db().exec('DELETE FROM sync_items WHERE sync_target = ?', [syncTarget]);
+		await this.db().exec('DELETE FROM deleted_items WHERE sync_target = ?', [syncTarget]);
+	}
+
 	static async forceSync(itemId) {
 		await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id = ?', [itemId]);
 	}
