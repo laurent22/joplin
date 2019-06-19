@@ -670,11 +670,17 @@ msgstr "مائل"
 msgid "Link"
 msgstr "رابط"
 
+msgid "Code"
+msgstr "رمز"
+
 msgid "Insert Date Time"
 msgstr "إدراج التاريخ والوقت"
 
 msgid "Edit in external editor"
 msgstr "التحرير في محرر خارجي"
+
+msgid "Tags"
+msgstr "وسوم"
 
 msgid "Search in all the notes"
 msgstr "البحث في كل الملاحظات"
@@ -1053,9 +1059,6 @@ msgstr "إدراج ارتباط تشعبي"
 msgid "Attach file"
 msgstr "إرفاق ملف"
 
-msgid "Tags"
-msgstr "وسوم"
-
 msgid "Set alarm"
 msgstr "ضبط منبّه"
 
@@ -1065,9 +1068,6 @@ msgstr "في: %s"
 
 msgid "Hyperlink"
 msgstr "ارتباط تشعبي"
-
-msgid "Code"
-msgstr "رمز"
 
 msgid "Numbered List"
 msgstr "قائمة مرقّمة"
@@ -1911,6 +1911,10 @@ msgstr "لا يوجد عنصر بالمعرّف %s"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "تطبيق Joplin على الهاتف الجوال لا يدعم حالياً هذا النوع من الربط : %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

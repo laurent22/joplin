@@ -649,11 +649,17 @@ msgstr "斜体"
 msgid "Link"
 msgstr "链接"
 
+msgid "Code"
+msgstr "代码"
+
 msgid "Insert Date Time"
 msgstr "插入时间"
 
 msgid "Edit in external editor"
 msgstr "在外部编辑器中打开"
+
+msgid "Tags"
+msgstr "标签"
 
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
@@ -1022,9 +1028,6 @@ msgstr "插入超链接"
 msgid "Attach file"
 msgstr "附加文件"
 
-msgid "Tags"
-msgstr "标签"
-
 msgid "Set alarm"
 msgstr "设置提醒"
 
@@ -1034,9 +1037,6 @@ msgstr "在: %s"
 
 msgid "Hyperlink"
 msgstr "超链接"
-
-msgid "Code"
-msgstr "代码"
 
 msgid "Numbered List"
 msgstr "有序列表"
@@ -1872,6 +1872,10 @@ msgstr "没有 ID 为 %s 的项"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

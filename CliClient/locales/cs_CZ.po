@@ -679,11 +679,17 @@ msgstr "Kurzíva"
 msgid "Link"
 msgstr "Odkaz"
 
+msgid "Code"
+msgstr "Kód"
+
 msgid "Insert Date Time"
 msgstr "Vložit datum a čas"
 
 msgid "Edit in external editor"
 msgstr "Upravit externím editorem"
+
+msgid "Tags"
+msgstr "Tagy"
 
 msgid "Search in all the notes"
 msgstr "Hledat ve všech poznámkách"
@@ -1067,9 +1073,6 @@ msgstr "Vložit odkaz"
 msgid "Attach file"
 msgstr "Přiložit soubor"
 
-msgid "Tags"
-msgstr "Tagy"
-
 msgid "Set alarm"
 msgstr "Nastavit alarm"
 
@@ -1079,9 +1082,6 @@ msgstr "%s: %s"
 
 msgid "Hyperlink"
 msgstr "Odkaz"
-
-msgid "Code"
-msgstr "Kód"
 
 msgid "Numbered List"
 msgstr "Číslovanáý seznam"
@@ -1934,6 +1934,10 @@ msgstr "Nenalezena položka s ID %s"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu:% s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"
