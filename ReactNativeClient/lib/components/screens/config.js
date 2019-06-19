@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -7,7 +7,6 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
-const BaseItem = require('lib/models/BaseItem.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
@@ -33,35 +32,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.saveButton_press = () => {
 			return shared.saveSettings(this);
-		};
-
-		this.clearSyncStateButton_click = () => {
-			Alert.alert(
-				'',
-				_('WARNING: This will clear the local synchronisation state. It means the entire data will be synced again with the sync target. DO NOT USE if you have not been advised to do so, or if you do not understand the consequences.'),
-				[
-					{
-						text: _('Help'),
-						onPress: () => {
-							Linking.openURL('https://joplinapp.org/faq/#how-to-clear-local-sync-data');
-						},
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => {},
-						style: 'cancel',
-					},
-					{
-						text: _('OK'),
-						onPress: async () => {
-							const syncTarget = this.props.settings['sync.target'];
-							await BaseItem.clearLocalSyncState(syncTarget);
-							alert(_('The local sync data has been cleared.'));
-						},
-					},
-				],
-				{ cancelable: false },
-			);
 		};
 	}
 
@@ -302,18 +272,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const settings = this.state.settings;
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
-
-		settingComps.push(this.renderHeader('advanced', _('Advanced')));
-
-		settingComps.push(
-			<View key="advanced_clear_sync_state" style={this.styles().settingContainer}>
-				<View style={{flex:1, flexDirection: 'column'}}>
-					<View style={{flex:1}}>
-						<Button title={_('Clear synchronisation state')} onPress={this.clearSyncStateButton_click}/>
-					</View>
-				</View>
-			</View>
-		);
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 
