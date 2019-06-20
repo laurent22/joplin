@@ -38,12 +38,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				&& !await this.checkFilesystemPermission()
 			) {
 				Alert.alert(
-					_('Permission error'),
+					_('Warning'),
 					_(
-						'Filesystem permission denied. ' +
-						'Please choose another synchronization target.'
+						'Joplin does not have permission to access "%s". ' +
+						'Either choose a different sync target, ' +
+						'or give Joplin the "Storage" permission.',
+						this.state.settings['sync.2.path'],
 					));
-				return false;
+				// Save settings anyway, even if permission has not been granted
 			}
 			return shared.saveSettings(this);
 		};
