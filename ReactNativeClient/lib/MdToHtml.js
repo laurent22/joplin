@@ -22,7 +22,7 @@ const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
-  mark: {module: require('markdown-it-mark')},
+	mark: {module: require('markdown-it-mark')},
 	footnote: {module: require('markdown-it-footnote')},
 	sub: {module: require('markdown-it-sub')},
 	sup: {module: require('markdown-it-sup')},
@@ -43,6 +43,9 @@ class MdToHtml {
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
 
 		this.cachedOutputs_ = {};
+
+		this.lastCodeHighlightCacheKey_ = null;
+		this.cachedHighlightedCode_ = {};
 	}
 
 	render(body, style, options = null) {
@@ -50,6 +53,15 @@ class MdToHtml {
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
+
+		// The "codeHighlightCacheKey" option indicates what set of cached object should be
+		// associated with this particular Markdown body. It is only used to allow us to
+		// clear the cache whenever switching to a different note.
+		// If "codeHighlightCacheKey" is not specified, code highlighting won't be cached.
+		if (options.codeHighlightCacheKey !== this.lastCodeHighlightCacheKey_ || !options.codeHighlightCacheKey) {
+			this.cachedHighlightedCode_ = {};
+			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
+		}
 
 		const breaks_ = Setting.value('markdown.softbreaks') ? false : true;
 
@@ -67,14 +79,21 @@ class MdToHtml {
 			breaks: breaks_,
 			linkify: true,
 			html: true,
-			highlight: function(str, lang) {
+			highlight: (str, lang) => {
 				try {
 					let hlCode = '';
-					
-					if (lang && hljs.getLanguage(lang)) {
-						hlCode = hljs.highlight(lang, str, true).value;
+
+					const cacheKey = md5(str + '_' + lang);
+
+					if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
+						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
-						hlCode = hljs.highlightAuto(str).value;
+						if (lang && hljs.getLanguage(lang)) {
+							hlCode = hljs.highlight(lang, str, true).value;
+						} else {
+							hlCode = hljs.highlightAuto(str).value;
+						}
+						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
 
 					if (shim.isReactNative()) {
@@ -124,15 +143,13 @@ class MdToHtml {
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_image(context, ruleOptions));
-		if (Setting.value('markdown.plugin.katex'))
-			markdownIt.use(rules.katex(context, ruleOptions));
+		if (Setting.value('markdown.plugin.katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor)
 
 		for (let key in plugins) {
-			if (Setting.value('markdown.plugin.' + key))
-				markdownIt.use(plugins[key].module, plugins[key].options);
+			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);
 		}
 
 		setupLinkify(markdownIt);

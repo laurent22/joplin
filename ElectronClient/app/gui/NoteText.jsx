@@ -954,6 +954,7 @@ class NoteTextComponent extends React.Component {
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(bodyToRender),
+			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
 		let bodyHtml = '';
