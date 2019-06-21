@@ -19,8 +19,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
-const { time } = require('lib/time-utils.js');
-const Mustache = require('mustache');
 
 class MainScreenComponent extends React.Component {
 
@@ -76,54 +74,19 @@ class MainScreenComponent extends React.Component {
 	async doCommand(command) {
 		if (!command) return;
 
-		const createNewNote = async (title, body, isTodo) => {
+		const createNewNote = async (title,  isTodo) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
-			// Mustache escapes strings (including /) with the html code by default
-			// This isn't useful for markdown so it's disabled
-			Mustache.escape = function(text) { return text; }
-
-			// new template variables can be added here
-			// If there are too many, this should be moved to a new file
-			const view = {
-				date: time.formatMsToLocal(new Date().getTime(), time.dateFormat()),
-				time: time.formatMsToLocal(new Date().getTime(), time.timeFormat()),
-				datetime: time.formatMsToLocal(new Date().getTime()),
-				custom_datetime: function()  { return function(text, render) {
-					return render(time.formatMsToLocal(new Date().getTime(), text));
-				}},
-			}
-
-			let templateBody = Mustache.render(body, view);
-
 			const newNote = {
 				parent_id: folderId,
-				body: body ? templateBody: '',
+				body: body ? body: '',
 				is_todo: isTodo ? 1 : 0,
 			};
 
 			this.props.dispatch({
 				type: 'NOTE_SET_NEW_ONE',
 				item: newNote,
-			});
-		}
-		const selectTemplate = async () => {
-			this.setState({
-				promptOptions: {
-					label: _('Template file:'),
-					inputType: 'dropdown',
-					autocomplete: this.props.templates,
-					onClose: async (answer) => {
-						if (answer) {
-							await createNewNote(null, answer.value, false);
-						} else {
-							await createNewNote(null, null, false);
-						}
-
-						this.setState({ promptOptions: null });
-					}
-				},
 			});
 		}
 
@@ -135,25 +98,33 @@ class MainScreenComponent extends React.Component {
 				return;
 			}
 
-			if (this.props.templates.length === 0) {
-				await createNewNote(null, null, false);
-			}
-			else {
-				await selectTemplate();
-			}
-
+			await createNewNote(null, false);
 		} else if (command.name === 'newTodo') {
 			if (!this.props.folders.length) {
 				bridge().showErrorMessageBox(_('Please create a notebook first'));
 				return;
 			}
 
-			if (this.props.templates.length === 0) {
-				await createNewNote(null, null, true);
-			}
-			else {
-				await selectTemplate();
-			}
+			await createNewNote(null, true);
+		} else if (command.name === 'newTemplate') {
+			this.setState({
+				promptOptions: {
+					label: _('Template file:'),
+					inputType: 'dropdown',
+					autocomplete: this.props.templates,
+					onClose: async (answer) => {
+						if (answer) {
+							this.props.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'insertTemplate',
+								value: answer.value,
+							});
+						}
+
+						this.setState({ promptOptions: null });
+					}
+				},
+			});
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {

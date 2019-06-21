@@ -695,7 +695,7 @@ const reducer = (state = defaultState, action) => {
 				newState.customCss = action.css;
 				break;
 
-			case 'LOAD_TEMPLATES':
+			case 'TEMPLATE_UPDATE_ALL':
 
 				newState = Object.assign({}, state);
 				newState.templates = action.templates;

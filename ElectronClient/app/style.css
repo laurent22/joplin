@@ -47,6 +47,18 @@ table td, table th {
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(100, 100, 100, 0.7); 
 }
+
+.fade_out {
+	-webkit-transition: 0.15s;
+	transition: 0.15s;
+	opacity: 0;
+}
+
+.fade_in {
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	opacity: 1;
+}
 /* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
    as red boxes, but since those are actually valid characters and common in imported
    Evernote data, we hide them here. */

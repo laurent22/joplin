@@ -324,6 +324,7 @@ class Application extends BaseApplication {
 		const exportItems = [];
 		const preferencesItems = [];
 		const toolsItemsFirst = [];
+    const templateItems = [];
 		const ioService = new InteropService();
 		const ioModules = ioService.modules();
 		for (let i = 0; i < ioModules.length; i++) {
@@ -500,6 +501,25 @@ class Application extends BaseApplication {
 			screens: ['Main'],
 		});
 
+		templateItems.push({
+			label: _('Create note from template'),
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+				});
+			}
+		}, {
+			label: _('Insert template'),
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newTemplate',
+				});
+			}
+		}, {
+			label: _('Open template directory'),
+		});
+
 		const toolsItems = toolsItemsFirst.concat(preferencesItems);
 
 		function _checkForUpdates(ctx) {
@@ -552,6 +572,13 @@ class Application extends BaseApplication {
 				type: 'separator',
 				visible: shim.isMac() ? false : true
 			}, {
+				label: _('Templates'),
+				visible: shim.isMac() ? false : true,
+				submenu: templateItems,
+			}, {
+				type: 'separator',
+				visible: shim.isMac() ? false : true
+			}, {
 				label: _('Import'),
 				visible: shim.isMac() ? false : true,
 				submenu: importItems,
@@ -601,6 +628,11 @@ class Application extends BaseApplication {
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
 					selector: 'performClose:',
+				},  {
+					type: 'separator',
+				}, {
+					label: _('Templates'),
+					submenu: templateItems,
 				}, {
 					type: 'separator',
 				}, {
@@ -1072,7 +1104,7 @@ class Application extends BaseApplication {
 		const templates = await this.loadTemplates(Setting.value('profileDir') + '/templates');
 
 		this.store().dispatch({
-			type: 'LOAD_TEMPLATES',
+			type: 'TEMPLATE_UPDATE_ALL',
 			templates: templates
 		});
 

@@ -40,6 +40,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
+const TemplateUtils = require('lib/TemplateUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -454,6 +455,7 @@ class NoteTextComponent extends React.Component {
 		const stateNoteId = this.state.note ? this.state.note.id : null;
 		let noteId = null;
 		let note = null;
+		let newNote = null;
 		let loadingNewNote = true;
 		let parentFolder = null;
 		let noteTags = [];
@@ -1021,6 +1023,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
 				fn = this.commandTextCode;
+			} else if (command.name === 'insertTemplate') {
+				fn = () => { return this.commandTemplate(command.value); };
 			}
 		}
 
@@ -1353,6 +1357,10 @@ class NoteTextComponent extends React.Component {
 
 	commandTextCode() {
 		this.wrapSelectionWithStrings('`', '`');
+	}
+
+	commandTemplate(value) {
+		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
 	addListItem(string1, string2 = '', defaultText = '') {
@@ -1719,6 +1727,15 @@ class NoteTextComponent extends React.Component {
 		}
 
 		bottomRowHeight -= searchBarHeight;
+
+		const templateStyle = Object.assign({
+			position: 'relative',
+			display: 'inline-block',
+			height: 0,
+			paddingLeft: 7,
+			zIndex: 10, // Needs to be in front of the editor
+			fontSize: theme.editorFontSize,
+		}, theme.textStyle);
 		
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -1835,6 +1852,13 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
+		const templatePrompt = <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try using a ")}
+				<a onClick={() => { this.props.dispatch({type: 'WINDOW_COMMAND', name: 'newTemplate',}); }} href="#">{_("template")}</a>
+			</span>
+
+		// const showTemplates = body === '';
+		const showTemplates = true;
+
 		const viewer = <NoteTextViewer
 			ref={this.webviewRef_}
 			viewerStyle={viewerStyle}
@@ -1893,6 +1917,9 @@ class NoteTextComponent extends React.Component {
 					{ false ? titleBarMenuButton : null }
 				</div>
 				{ toolbar }
+				<div style={{height: 0}}>
+					{ showTemplates ? templatePrompt : null }
+				</div>
 				{ tagList }
 				{ editor }
 				{ viewer }
@@ -1925,6 +1952,7 @@ const mapStateToProps = (state) => {
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		historyNotes: state.historyNotes,
+		templates: state.templates,
 	};
 };
 
