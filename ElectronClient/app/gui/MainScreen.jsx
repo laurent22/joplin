@@ -18,6 +18,7 @@ const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
+const { noteFromTemplate } = require('lib/Templates.js');
 
 class MainScreenComponent extends React.Component {
 
@@ -104,6 +105,16 @@ class MainScreenComponent extends React.Component {
 			}
 
 			await createNewNote(null, true);
+		} else if (command.name === 'fromTemplate') {
+			if (!this.props.folders.length) {
+				bridge().showErrorMessageBox(_('Please create a notebook first'));
+				return;
+			}
+			let newNote = await noteFromTemplate(command.template);
+			this.props.dispatch({
+				type: 'NOTE_SELECT',
+				id : newNote.id,
+			});
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {
@@ -397,6 +408,20 @@ class MainScreenComponent extends React.Component {
 			iconName: 'fa-check-square-o',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => { this.doCommand({ name: 'newTodo' }) },
+		});
+
+		headerItems.push({
+			title: _('New anger'),
+			iconName: 'fa-frown-o',
+			enabled: !!folders.length && !onConflictFolder,
+			onClick: () => { this.doCommand({ name: 'fromTemplate', 'template': 'anger' }) },
+		});
+
+		headerItems.push({
+			title: _('Daily'),
+			iconName: 'fa-check-square-o',
+			enabled: !!folders.length && !onConflictFolder,
+			onClick: () => { this.doCommand({ name: 'fromTemplate', 'template': 'daily' }) },
 		});
 
 		headerItems.push({
