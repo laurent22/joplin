@@ -430,8 +430,34 @@ function enexXmlToMdArray(stream, resources) {
 		  //reject(e);
 		})
 
+		const unwrapInnerText = text => {
+			const lines = text.split('\n');
+
+			let output = '';
+
+			for (let i = 0; i < lines.length; i++) {
+				const line = lines[i];
+				const nextLine = i < lines.length - 1 ? lines[i+1] : '';
+
+				if (!line) {
+					output += '\n';
+					continue;
+				}
+
+				if (nextLine) {
+					output += line + ' ';
+				} else {
+					output += line;
+				}
+			}
+
+			return output;
+		}
+
 		saxStream.on('text', function(text) {
 			if (['table', 'tr', 'tbody'].indexOf(section.type) >= 0) return;
+
+			text = !state.inPre ? unwrapInnerText(text) : text;
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		})
 
