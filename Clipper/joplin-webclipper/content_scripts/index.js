@@ -114,6 +114,21 @@
 		}
 	}
 
+	// This sets the PRE elements computed style to the style attribute, so that
+	// the info can be exported and later processed by the htmlToMd converter
+	// to detect code blocks.
+	function hardcodePreStyles(doc) {
+		const preElements = doc.getElementsByTagName('pre');
+
+		for (const preElement of preElements) {
+			const fontFamily = getComputedStyle(preElement).getPropertyValue('font-family');
+			const fontFamilyArray = fontFamily.split(',').map(f => f.toLowerCase().trim());
+			if (fontFamilyArray.indexOf('monospace') >= 0) {
+				preElement.style.fontFamily = fontFamily;
+			}
+		}
+	}
+
 	function documentForReadability() {
 		// Readability directly change the passed document so clone it so as
 		// to preserve the original web page.
@@ -180,6 +195,7 @@
 
 		} else if (command.name === "completePageHtml") {
 
+			hardcodePreStyles(document);
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			cleanUpElement(cleanDocument, imageSizes);
@@ -187,6 +203,7 @@
 
 		} else if (command.name === "selectedHtml") {
 
+			hardcodePreStyles(document);
 		    const range = window.getSelection().getRangeAt(0);
 		    const container = document.createElement('div');
 		    container.appendChild(range.cloneContents());
