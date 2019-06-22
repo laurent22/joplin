@@ -512,12 +512,20 @@ class Application extends BaseApplication {
 
 		function _showAbout() {
 			const p = packageInfo;
+			let gitInfo = '';
+			if (("git" in p) && ("tag" in p['git'] === false || !p.git.tag.includes(p.version))) {
+				gitInfo = "\n" + p.git.branch + ' (' + p.git.hash + ')';
+			}
 			let message = [
 				p.description,
 				'',
 				'Copyright © 2016-2019 Laurent Cozic',
 				_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
+				gitInfo
 			];
+			if ("git" in p) {
+				console.info( "Git Info: " + p.git.branch + ' (' + p.git.hash + ')');
+			}
 			bridge().showInfoMessageBox(message.join('\n'), {
 				icon: bridge().electronApp().buildDir() + '/icons/32x32.png',
 			});
