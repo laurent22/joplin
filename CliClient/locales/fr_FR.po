@@ -1439,9 +1439,9 @@ msgid ""
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
 "En mode \"manuel\", les ressources sont téléchargées uniquement lorsque vous "
-"cliquez dessus. En mode \"auto\", elle sont téléchargée lorsque vous ouvrez "
-"la note. En mode \"toujours\", toutes les ressources sont téléchargées, que "
-"vous ayez ouvert la note ou pas."
+"cliquez dessus. En mode \"auto\", elles sont téléchargées lorsque vous "
+"ouvrez la note. En mode \"toujours\", toutes les ressources sont "
+"téléchargées, que vous ayez ouvert la note ou pas."
 
 msgid "Always"
 msgstr "Toujours"
@@ -1963,7 +1963,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Le schéma d'URI \"%s\" n'est pas supporté"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
