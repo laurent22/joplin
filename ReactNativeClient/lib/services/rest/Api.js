@@ -1,4 +1,5 @@
 const { ltrimSlashes } = require('lib/path-utils.js');
+const { Database } = require('lib/database.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
@@ -383,6 +384,11 @@ class Api {
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
 			const saveOptions = this.defaultSaveOptions_(note, 'POST');
+			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
+			const timestamp = Date.now();
+			note.updated_time = timestamp;
+			note.created_time = timestamp;
+
 			note = await Note.save(note, saveOptions);
 
 			if (requestNote.tags) {
@@ -442,8 +448,10 @@ class Api {
 			output.parent_id = folder.id;
 		}
 
-		if (requestNote.source_url) output.source_url = requestNote.source_url;
-		if (requestNote.author) output.author = requestNote.author;
+		if ('source_url' in requestNote) output.source_url = requestNote.source_url;
+		if ('author' in requestNote) output.author = requestNote.author;
+		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
+		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 
 		return output;
 	}
