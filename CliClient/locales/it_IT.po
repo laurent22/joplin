@@ -735,7 +735,7 @@ msgid "Make a donation"
 msgstr "Fai una donazione"
 
 msgid "Toggle development tools"
-msgstr ""
+msgstr "Attiva / disattiva strumenti di sviluppo"
 
 #, javascript-format
 msgid "Open %s"
@@ -755,7 +755,7 @@ msgstr "La versione attuale è aggiornata."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (pre-rilascio)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "È disponibile un aggiornamento, vuoi scaricarlo ora?"
@@ -991,9 +991,8 @@ msgstr "Alcuni elementi non possono essere sincronizzati."
 msgid "View them now"
 msgstr "Mostrali ora"
 
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "Inserisci password principale:"
+msgstr "Una o più chiavi master necessitano di una password."
 
 msgid "Set the password"
 msgstr "Imposta la password"
@@ -1185,18 +1184,19 @@ msgstr "Taccuini"
 msgid "Decrypting items: %d/%d"
 msgstr "Decrittografia Elementi: %d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Risorse: %d/%d"
+msgstr "Recupero risorse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
+"Prego selezionare dove lo stato della sincronizzazione deve essere esportato"
 
 msgid "Retry"
-msgstr ""
+msgstr "Riprova"
 
 msgid "Add or remove tags"
-msgstr "Aggiungi o rimuovi etichetta"
+msgstr "Aggiungi o rimuovi etichette"
 
 msgid "Duplicate"
 msgstr "Duplicare"
@@ -1229,9 +1229,11 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"Scrivi il titolo di una nota per saltare ad essa. Oppure digita # seguito "
+"dal nome di una etichetta, oppure @ seguito dal nome di un taccuino."
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "Vai a..."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1348,6 +1350,8 @@ msgstr "La sincronizzazione è già in corso. Stato: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Tipo elemento scaricato sconosciuto - prego aggiornare Joplin all’ultima "
+"versione"
 
 msgid "Encrypted"
 msgstr "Crittografato"
@@ -1391,6 +1395,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Attenzione: se si cambia questa posizione, accertarsi di copiare tutto il "
+"contenuto prima di sincronizzare, altrimenti tutti i file saranno rimossi! "
+"Vedi le FAQ per maggiori dettagli: %s"
 
 msgid "Synchronisation target"
 msgstr "Destinazione di sincronizzazione"
@@ -1424,13 +1431,16 @@ msgid "WebDAV password"
 msgstr "Password WebDAV"
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Comportamento scaricamento allegati"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"In modalità \"Manuale\", gli allegati sono scaricati solo quando si clicca su "
+"di essi. In \"Auto\" sono scaricati quando si apre la nota. In \"Sempre\" tutti "
+"gli allegati sono scaricati sia che si apra o no la nota."
 
 msgid "Always"
 msgstr "Sempre"
@@ -1442,7 +1452,7 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Massimo numero di connessioni concorrenti"
 
 msgid "Language"
 msgstr "Linguaggio"
@@ -1499,7 +1509,7 @@ msgid "Enable math expressions"
 msgstr "Attiva espressioni matematiche"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Attiva sintassi ==mark=="
 
 msgid "Enable footnotes"
 msgstr "Attiva note a piè pagina"
@@ -1508,10 +1518,10 @@ msgid "Enable table of contents extension"
 msgstr ""
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Attiva sintassi ~sub~"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Attiva sintassi ^sup^"
 
 msgid "Enable deflist syntax"
 msgstr ""
@@ -1523,7 +1533,7 @@ msgid "Enable markdown emoji"
 msgstr ""
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "Attiva sintassi ++insert++"
 
 msgid "Enable multimarkdown table extension"
 msgstr ""
@@ -1544,7 +1554,7 @@ msgstr ""
 "costantemente le tue note e quindi ridurre il numero di conflitti."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "Avvia applicazione minimizzata nell’icona del vassoio"
 
 msgid "Global zoom percentage"
 msgstr "Percentuale di zoom globale"
@@ -1567,11 +1577,11 @@ msgid "Automatically update the application"
 msgstr "Aggiorna automaticamente l'applicazione"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "Ottieni pre-rilasci durante controllo aggiornamenti"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "Vedi la pagina di pre-rilascio per maggiori dettagli: %s"
 
 msgid "Synchronisation interval"
 msgstr "Intervallo di sincronizzazione"
@@ -1631,7 +1641,7 @@ msgid "%d days"
 msgstr "%d giorni"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Mantieni cronologia nota per"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1650,7 +1660,7 @@ msgid "Note"
 msgstr "Nota"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 msgid "Application"
 msgstr "Applicazione"
@@ -1725,15 +1735,17 @@ msgstr "%s (%s) non può essere caricato: %s"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Elemento \"%s\" non può essere scaricato: %s"
 
-#, fuzzy
 msgid "Items that cannot be decrypted"
-msgstr "Elementi che non possono essere sincronizzati"
+msgstr "Elementi che non possono essere decriptati"
 
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
+"Joplin ha fallito la decriptazione di questi elementi più volte, forse "
+"perché sono corrotti o troppo grandi. Questi elementi rimarranno sul "
+"dispositivo, ma Joplin non proverà più a decriptarli."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Stato di sincronizzazione (Elementi sincronizzati / Elementi totali)"
@@ -1828,6 +1840,9 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"Errore. Prego controllare che URL, nome utente, password, etc. siano corretti "
+"e che la destinazione di sincronizzazione sia accessibile. L’errore "
+"riportato era:"
 
 msgid "The application has been authorised!"
 msgstr "L'applicazione è stata autorizzata con successo!"
@@ -1840,6 +1855,11 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"Non è stato possibile autorizzare l’applicazione:\n"
+"\n"
+"%s\n"
+"\n"
+"Riprovare prego."
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1851,9 +1871,8 @@ msgstr "Nuovi tag:"
 msgid "Type new tags or select from list"
 msgstr "Digita nuovi tag o seleziona dalla lista"
 
-#, fuzzy
 msgid "More information"
-msgstr "Configurazione"
+msgstr "Maggiori informazioni"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1946,7 +1965,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Collegamenti con protocollo \"%s\" non sono supportati"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
