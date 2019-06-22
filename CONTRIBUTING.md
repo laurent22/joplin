@@ -16,9 +16,11 @@ File bugs in the [Github Issue Tracker](https://github.com/laurent22/joplin/issu
 
 Please check that your request has not already been posted in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). If it has, **up-voting the issue** increases the chances it'll be noticed and implemented in the future. "+1" comments are not tracked.
 
-As a general rule, suggestions to _improve Joplin_ should be posted first in the [Joplin Forum](https://discourse.joplinapp.org/) for discussion.
+As a general rule, suggestions to *improve Joplin* should be posted first in the [Joplin Forum](https://discourse.joplinapp.org/) for discussion.
 
 Avoid listing multiple requests in one report in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). One issue per request makes it easier to track and discuss it.
+
+Finally, when submitting a pull request, don't forget to [test your code](#unit-tests).
 
 # Contribute to the project
 
@@ -42,3 +44,20 @@ There are only two rules, but not following them means the pull request will not
 
 - **Please use tabs, NOT spaces.**
 - **Please do not add or remove optional characters, such as spaces or colons.** Please setup your editor so that it only changes what you are working on and is not making automated changes elsewhere. The reason for this is that small white space changes make diff hard to read and can cause needless conflicts.
+
+## Unit tests
+
+When submitting a pull request for a new feature or bug fix, please add unit tests for your code. Unit testing GUI changes is not always possible so it is not required, but any change in a file under /lib for example should be unit tested.
+
+The tests are under CliClient/tests. To get them running, you first need to build the CLI app:
+
+    cd CliClient
+    npm i
+
+Then to run all the test units:
+
+    ./run_test.sh
+
+To run just one particular file:
+
+    ./run_test.sh markdownUtils # Don't add the .js extension
