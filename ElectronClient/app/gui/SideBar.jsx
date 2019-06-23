@@ -693,6 +693,12 @@ class SideBarComponent extends React.Component {
 				{folderItems}</div>);
 		}
 
+		items.push(this.makeHeader("starredHeader", _("Starred"), "fa-star", {
+			onDrop: this.onFolderDrop_,
+			folderid: '',
+			toggleblock: 1
+		}));
+
 		items.push(this.makeHeader("tagHeader", _("Tags"), "fa-tags", {
 			toggleblock: 1
 		}));
