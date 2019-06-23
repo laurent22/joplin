@@ -26,11 +26,13 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
+const { shell } = require('electron');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
+const TemplateUtils = require('lib/TemplateUtils');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -503,21 +505,41 @@ class Application extends BaseApplication {
 
 		templateItems.push({
 			label: _('Create note from template'),
+			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
 			click: () => {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
+					name: 'selectTemplate',
+					noteType: 'note',
+				});
+			}
+		}, {
+			label: _('Create to-do from template'),
+			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'selectTemplate',
+					noteType: 'todo',
 				});
 			}
 		}, {
 			label: _('Insert template'),
+			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
+			accelerator: 'CommandOrControl+Alt+I',
 			click: () => {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
-					name: 'newTemplate',
+					name: 'selectTemplate',
 				});
 			}
 		}, {
 			label: _('Open template directory'),
+			click: () => {
+				const templatePath = Setting.value('profileDir') + '/templates';
+				if (!fs.pathExistsSync(templatePath)) fs.mkdir(templatePath);
+				shell.openItem(templatePath);
+			}
 		});
 
 		const toolsItems = toolsItemsFirst.concat(preferencesItems);
@@ -1005,38 +1027,6 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
-	async loadTemplates(filePath) {
-		let templates = [];
-		let filenames = [];
-
-		if (await fs.pathExists(filePath)) {
-			try {
-				filenames = fs.readdirSync(filePath);
-			} catch (error) {
-				let msg = error.message ? error.message : '';
-				msg = 'Could not read template names from ' + filePath + '\n' + msg;
-				error.message = msg;
-				throw error;
-			}
-
-			filenames.forEach(filename => {
-				if (filename.endsWith('.md')) {
-					try {
-						let fileString = fs.readFileSync(filePath + '/' + filename, 'utf-8');
-						templates.push({label: filename, value: fileString});
-					} catch (error) {
-						let msg = error.message ? error.message : '';
-						msg = 'Could not load template ' + filename + '\n' + msg;
-						error.message = msg;
-						throw error;
-					}
-				}
-			});
-		}
-
-		return templates;
-	}
-
 	async start(argv) {
 		const electronIsDev = require('electron-is-dev');
 
@@ -1101,7 +1091,7 @@ class Application extends BaseApplication {
 			css: cssString
 		});
 
-		const templates = await this.loadTemplates(Setting.value('profileDir') + '/templates');
+		const templates = await TemplateUtils.loadTemplates(Setting.value('profileDir') + '/templates');
 
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',

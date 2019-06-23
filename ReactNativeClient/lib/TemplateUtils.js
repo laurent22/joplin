@@ -1,3 +1,4 @@
+const fs = require('fs-extra');
 const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');
 
@@ -21,5 +22,37 @@ Mustache.escape = (text) => { return text; }
 TemplateUtils.render = function(input) {
 	return Mustache.render(input, view);
 }
+
+TemplateUtils.loadTemplates = async function(filePath) {
+		let templates = [];
+		let filenames = [];
+
+		if (await fs.pathExists(filePath)) {
+			try {
+				filenames = fs.readdirSync(filePath);
+			} catch (error) {
+				let msg = error.message ? error.message : '';
+				msg = 'Could not read template names from ' + filePath + '\n' + msg;
+				error.message = msg;
+				throw error;
+			}
+
+			filenames.forEach(filename => {
+				if (filename.endsWith('.md')) {
+					try {
+						let fileString = fs.readFileSync(filePath + '/' + filename, 'utf-8');
+						templates.push({label: filename, value: fileString});
+					} catch (error) {
+						let msg = error.message ? error.message : '';
+						msg = 'Could not load template ' + filename + '\n' + msg;
+						error.message = msg;
+						throw error;
+					}
+				}
+			});
+		}
+
+		return templates;
+	}
 
 module.exports = TemplateUtils;

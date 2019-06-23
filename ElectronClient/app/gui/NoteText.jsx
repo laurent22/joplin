@@ -462,8 +462,11 @@ class NoteTextComponent extends React.Component {
 		let scrollPercent = 0;
 
 		if (props.newNote) {
-			note = Object.assign({}, props.newNote);
+			// assign new note and prevent body from being null
+			note = Object.assign(props.newNote, {body: ''});
 			this.lastLoadedNoteId_ = null;
+			if (note.template)
+				note.body = TemplateUtils.render(note.template);
 		} else {
 			noteId = props.noteId;
 
@@ -1852,12 +1855,11 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const templatePrompt = <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try using a ")}
-				<a onClick={() => { this.props.dispatch({type: 'WINDOW_COMMAND', name: 'newTemplate',}); }} href="#">{_("template")}</a>
+		const templatePrompt = <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try inserting a ")}
+				<a onClick={() => { this.props.dispatch({type: 'WINDOW_COMMAND', name: 'selectTemplate',}); }} href="#">{_("template")}</a>
 			</span>
 
-		// const showTemplates = body === '';
-		const showTemplates = true;
+		const showTemplates = this.props.templates.length > 0;
 
 		const viewer = <NoteTextViewer
 			ref={this.webviewRef_}

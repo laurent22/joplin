@@ -198,8 +198,13 @@ class PromptDialog extends React.Component {
 		}
 
 		const onKeyDown = (event) => {
-			if (event.key === 'Enter' && this.props.inputType !== 'tags') {
-				onClose(true);
+			if (event.key === 'Enter') {
+				if (this.props.inputType !== 'tags' && this.props.inputType !== 'dropdown') {
+					onClose(true);
+				} else if (this.answerInput_.current && !this.answerInput_.current.state.menuIsOpen) {
+					// The menu will be open if the user is selecting a new item
+					onClose(true);
+				}
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}
@@ -239,8 +244,8 @@ class PromptDialog extends React.Component {
 				ref={this.answerInput_}
 				components={makeAnimated()}
 				value={this.props.answer}
-				placeholder={_('Empty note...')}
-				isClearable={true}
+				defaultValue={this.props.defaultValue}
+				isClearable={false}
 				options={this.props.autocomplete}
 				onChange={onSelectChange}
 				onKeyDown={(event) => onKeyDown(event)}

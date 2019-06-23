@@ -321,7 +321,7 @@ Hours:
 Details:
 ```
 
-When creating a new note you will now have the option to create it with the above autofilled (and {{date}} replaced with today's date).
+When creating a new note you will now be prompted to insert a template that contains the above text (and {{date}} replaced with today's date). Templates can also be inserted from the menu (File->Templates).
 
 The currently supported template variables are:
 | Variable | Description | Example |
