@@ -94,6 +94,7 @@
 
 		for (let i = childNodes.length - 1; i >= 0; i--) {
 			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
 
 			const isHidden = node && node.classList && node.classList.contains('joplin-clipper-hidden');
 
@@ -101,7 +102,16 @@
 				element.removeChild(node);
 			} else {
 
-				if (node.nodeName.toLowerCase() === 'img') {
+				// If the data-joplin-clipper-value has been set earlier, create a new DIV element
+				// to replace the input or text area, so that it can be exported.
+				if (node.getAttribute && node.getAttribute('data-joplin-clipper-value')) {
+					const div = document.createElement('div');
+					div.innerText = node.getAttribute('data-joplin-clipper-value');
+					node.parentNode.insertBefore(div, node.nextSibling);
+					element.removeChild(node);
+				}
+
+				if (nodeName === 'img') {
 					node.src = absoluteUrl(node.src);
 					const imageSize = imageSizes[node.src];
 					if (imageSize) {
@@ -119,19 +129,29 @@
 	// JavaScript, in particular whether an element was hidden or not. This function pre-process the document by
 	// adding a "joplin-clipper-hidden" class to all currently hidden elements in the current document.
 	// This class is then used in cleanUpElement() on the cloned document to find an element should be visible or not.
-	function hardcodeDisplayStyles(element) {
+	function preProcessDocument(element) {
 		const childNodes = element.childNodes;
 
 		for (let i = 0; i < childNodes.length; i++) {
 			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
 
 			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
-			if (isVisible && ['input', 'textarea', 'script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
+			if (isVisible && ['script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(nodeName) >= 0) isVisible = false;
+
+			// If it's a text input or a textarea and it has a value, save
+			// that value to data-joplin-clipper-value. This is then used
+			// when cleaning up the document to export the value.
+			if (['input', 'textarea'].indexOf(nodeName) >= 0) {
+				isVisible = !!node.value;
+				if (nodeName === 'input' && node.getAttribute('type') !== 'text') isVisible = false;
+				if (isVisible) node.setAttribute('data-joplin-clipper-value', node.value);
+			}
 
 			if (!isVisible) {
 				node.classList.add('joplin-clipper-hidden');
 			} else {
-				hardcodeDisplayStyles(node);
+				preProcessDocument(node);
 			}
 		}
 	}
@@ -218,7 +238,7 @@
 		} else if (command.name === "completePageHtml") {
 
 			hardcodePreStyles(document);
-			hardcodeDisplayStyles(document);
+			preProcessDocument(document);
 			// Because cleanUpElement is going to modify the DOM and remove elements we don't want to work
 			// directly on the document, so we make a copy of it first.
 			const cleanDocument = document.body.cloneNode(true);
