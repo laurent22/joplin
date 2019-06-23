@@ -506,7 +506,7 @@ class Api {
 
 				// If we could not find the file extension from the URL, try to get it
 				// now based on the Content-Type header.
-				if (!fileExt) imagePath = this.tryToGuessImageExtFromMimeType_(response, imagePath);
+				if (!fileExt) imagePath = await this.tryToGuessImageExtFromMimeType_(response, imagePath);
 			}
 			return imagePath;
 		} catch (error) {
