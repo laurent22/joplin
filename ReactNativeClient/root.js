@@ -22,9 +22,12 @@ const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
+const Revision = require('lib/models/Revision.js');
 const BaseModel = require('lib/BaseModel.js');
 const BaseService = require('lib/services/BaseService.js');
 const ResourceService = require('lib/services/ResourceService');
+const RevisionService = require('lib/services/RevisionService');
+const KvStore = require('lib/services/KvStore');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { Database } = require('lib/database.js');
 const { NotesScreen } = require('lib/components/screens/notes.js');
@@ -74,6 +77,7 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
+const MigrationService = require('lib/services/MigrationService');
 
 let storeDispatch = function(action) {};
 
@@ -83,7 +87,7 @@ const logReducerAction = function(action) {
 	let msg = [action.type];
 	if (action.routeName) msg.push(action.routeName);
 
-	reg.logger().info('Reducer action', msg.join(', '));
+	// reg.logger().debug('Reducer action', msg.join(', '));
 }
 
 const generalMiddleware = store => next => async (action) => {
@@ -143,7 +147,7 @@ const generalMiddleware = store => next => async (action) => {
 	}
 
 	if (action.type === 'SYNC_CREATED_RESOURCE') {
-		ResourceFetcher.instance().queueDownload(action.id);
+		ResourceFetcher.instance().autoAddResources();
 	}
 
   	return result;
@@ -330,23 +334,18 @@ const appReducer = (state = appDefaultState, action) => {
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
-// function blobTest() {
-// 	const contentType = 'text/plain';
-// 	var blob = new Blob(['aaaaaaaaaaa'], { type: contentType });
-
-// 	const fileTest = new File([blob], '/storage/emulated/0/Download/test.txt', { type: contentType, lastModified: Date.now() });
-// 	console.info('FFFFFFFFFFFFFFFFFFFFF', fileTest);
-// }
+function resourceFetcher_downloadComplete(event) {
+	if (event.encrypted) {
+		DecryptionWorker.instance().scheduleStart();
+	}
+}
 
 async function initialize(dispatch) {
 	shimInit();
 
-	// blobTest();
-
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 	Setting.setConstant('appType', 'mobile');
-	//Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
 	Setting.setConstant('resourceDir', RNFetchBlob.fs.dirs.DocumentDir);
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());
@@ -390,12 +389,15 @@ async function initialize(dispatch) {
 	NavService.dispatch = dispatch;
 	BaseModel.db_ = db;
 
+	KvStore.instance().setDb(reg.db());
+
 	BaseItem.loadClass('Note', Note);
 	BaseItem.loadClass('Folder', Folder);
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
+	BaseItem.loadClass('Revision', Revision);
 
 	const fsDriver = new FsDriverRN();
 
@@ -409,7 +411,9 @@ async function initialize(dispatch) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' })
 		} else {
-			await db.open({ name: 'joplin-68.sqlite' })
+			await db.open({ name: 'joplin-68.sqlite' });
+
+			// await db.clearForTesting();
 		}
 
 		reg.logger().info('Database is ready.');
@@ -430,6 +434,12 @@ async function initialize(dispatch) {
 			reg.logger().info('db.ftsEnabled = ', Setting.value('db.ftsEnabled'));
 		}
 
+		if (Setting.value('env') === 'dev') {
+			Setting.setValue('welcome.enabled', false);
+		}		
+
+		BaseItem.revisionService_ = RevisionService.instance();
+
 		// Note: for now we hard-code the folder sort order as we need to 
 		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
 		Setting.setValue('folders.sortOrder.field', 'title');
@@ -448,6 +458,7 @@ async function initialize(dispatch) {
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
+		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 
@@ -510,11 +521,15 @@ async function initialize(dispatch) {
 
 	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 	ResourceFetcher.instance().setLogger(reg.logger());
+	ResourceFetcher.instance().dispatch = dispatch;
+	ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 	ResourceFetcher.instance().start();
 
 	SearchEngine.instance().setDb(reg.db());
 	SearchEngine.instance().setLogger(reg.logger());
 	SearchEngine.instance().scheduleSyncTables();
+
+	await MigrationService.instance().run();
 
 	reg.scheduleSync().then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
@@ -525,6 +540,10 @@ async function initialize(dispatch) {
 	});
 
 	await WelcomeUtils.install(dispatch);
+
+	// Collect revisions more frequently on mobile because it doesn't auto-save
+	// and it cannot collect anything when the app is not active.
+	RevisionService.instance().runInBackground(1000 * 30);
 
 	reg.logger().info('Application initialized');
 }

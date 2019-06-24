@@ -35,9 +35,12 @@ const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const RevisionService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
+const KvStore = require('lib/services/KvStore');
+const MigrationService = require('lib/services/MigrationService');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -57,6 +60,8 @@ class BaseApplication {
 		// be derived from the state and not set directly since that would make the
 		// state and UI out of sync.
 		this.currentFolder_ = null;
+
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
 	logger() {
@@ -107,6 +112,12 @@ class BaseApplication {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
 				matched.profileDir = nextArg;
 				argv.splice(0, 2);
+				continue;
+			}
+
+			if (arg == '--no-welcome') {
+				matched.welcomeDisabled = true;
+				argv.splice(0, 1);
 				continue;
 			}
 
@@ -271,6 +282,25 @@ class BaseApplication {
 		}
 	}
 
+	resourceFetcher_downloadComplete(event) {
+		if (event.encrypted) {
+			DecryptionWorker.instance().scheduleStart();
+		}
+	}
+
+	async decryptionWorker_resourceMetadataButNotBlobDecrypted(event) {
+		this.scheduleAutoAddResources();
+	}
+
+	scheduleAutoAddResources() {
+		if (this.scheduleAutoAddResourcesIID_) return;
+
+		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
+			this.scheduleAutoAddResourcesIID_ = null;
+			ResourceFetcher.instance().autoAddResources();
+		}, 1000);
+	}
+
 	reducerActionToString(action) {
 		let o = [action.type];
 		if ('id' in action) o.push(action.id);
@@ -300,7 +330,7 @@ class BaseApplication {
 	}
 
 	async generalMiddleware(store, next, action) {
-		this.logger().debug('Reducer action', this.reducerActionToString(action));
+		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
 		const newState = store.getState();
@@ -418,7 +448,7 @@ class BaseApplication {
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
-			ResourceFetcher.instance().queueDownload(action.id);
+			ResourceFetcher.instance().autoAddResources();
 		}
 
 		if (refreshFolders) {
@@ -510,11 +540,13 @@ class BaseApplication {
 		Setting.setConstant('appName', appName);
 
 		const profileDir = this.determineProfileDir(initArgs);
-		const resourceDir = profileDir + '/resources';
+		const resourceDirName = 'resources';
+		const resourceDir = profileDir + '/' + resourceDirName;
 		const tempDir = profileDir + '/tmp';
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
+		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
@@ -524,11 +556,14 @@ class BaseApplication {
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
 
+		// Clean up any remaining watched files (they start with "edit-")
+		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
+
 		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
-		// if (Setting.value('env') === 'dev') this.logger_.addTarget('console');
+		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -547,6 +582,8 @@ class BaseApplication {
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
+
+		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
@@ -568,6 +605,8 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+
 		if (!Setting.value('api.token')) {
 			EncryptionService.instance().randomHexString(64).then((token) => {
 				Setting.setValue('api.token', token);
@@ -577,15 +616,22 @@ class BaseApplication {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
 
+		BaseItem.revisionService_ = RevisionService.instance();
+
+		KvStore.instance().setDb(reg.db());
+
 		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
+		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
 		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 		ResourceFetcher.instance().start();
 
 		SearchEngine.instance().setDb(reg.db());
@@ -597,6 +643,8 @@ class BaseApplication {
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
+
+		await MigrationService.instance().run();
 
 		return argv;
 	}

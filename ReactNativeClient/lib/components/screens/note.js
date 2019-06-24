@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, WebView, Text, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Clipboard, Keyboard, BackHandler, View, Button, TextInput, Text, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
@@ -157,17 +157,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
 				} else {
-					Linking.openURL(msg);
+					if (msg.indexOf('file://') === 0) {
+						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
+					} else {
+						Linking.openURL(msg);
+					}
 				}
 			} catch (error) {
 				dialogs.error(this, error.message);
 			}
 		}
 
-		this.resourceFetcher_downloadComplete = async (resource) => {
+		this.refreshResource = async (resource) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
+				shared.clearResourceCache();
 				const attachedResources = await shared.attachedResources(this.state.note.body);
 				this.setState({ noteResources: attachedResources }, () => {
 					this.refs.noteBodyViewer.rebuildMd();
@@ -178,6 +183,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
+		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 	}
 
 	styles() {
@@ -235,11 +241,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
 
-		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.clearResourceCache();
+		shared.installResourceHandling(this.refreshResource);
 
 		await shared.initState(this);
 
+		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+			await ResourceFetcher.instance().markForDownload(resourceIds);
+		}
+
 		this.refreshNoteMetadata();
+	}
+
+	onMarkForDownload(event) {
+		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
 	refreshNoteMetadata(force = null) {
@@ -250,7 +266,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
-		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.uninstallResourceHandling(this.refreshResource);
 
 		if (Platform.OS !== 'ios' && this.state.fromShare) {
 			ShareExtension.close();
@@ -424,13 +440,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		await Resource.save(resource, { isNew: true });
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
+
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
+		resource = await Resource.save(resource, { isNew: true });
 
 		const resourceTag = Resource.markdownTag(resource);
 
 		const newNote = Object.assign({}, this.state.note);
 		newNote.body += "\n" + resourceTag;
 		this.setState({ note: newNote });
+
+		this.refreshResource(resource);
 	}
 
 	async attachPhoto_onPress() {
@@ -620,6 +644,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				highlightedKeywords={keywords}
 				theme={this.props.theme}
 				onCheckboxChange={(newBody) => { onCheckboxChange(newBody) }}
+				onMarkForDownload={this.onMarkForDownload}
 				onLoadEnd={() => {
 					setTimeout(() => {
 						this.setState({ HACK_webviewLoadingState: 1 });

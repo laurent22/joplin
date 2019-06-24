@@ -101,8 +101,13 @@ class Logger {
 		return [];
 	}
 
+	targetLevel(target) {
+		if ('level' in target) return target.level;
+		return this.level(); 
+	}
+
 	log(level, ...object) {
-		if (this.level() < level || !this.targets_.length) return;
+		if (!this.targets_.length) return;
 
 		let levelString = '';
 		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
@@ -112,6 +117,9 @@ class Logger {
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
+			
+			if (this.targetLevel(target) < level) continue;
+
 			if (target.type == 'console') {
 				let fn = 'log';
 				if (level == Logger.LEVEL_ERROR) fn = 'error';

@@ -7,6 +7,39 @@ import led_orange from './led_orange.png';
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
 
+class PreviewComponent extends React.PureComponent {
+
+	constructor() {
+		super();
+
+		this.bodyRef = React.createRef();
+	}
+
+	componentDidMount() {
+		// Because the text size is made twice smaller with CSS, we need
+		// to also reduce the size of the images
+		const imgs = this.bodyRef.current.getElementsByTagName('img');
+		for (const img of imgs) {
+			img.width /= 2;
+			img.height /= 2;
+		}
+	}
+
+	render() {
+		return (
+			<div className="Preview">
+				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
+				<h2>Preview:</h2>
+				<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
+				<div className={"BodyWrapper"}>
+					<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
+				</div>
+			</div>
+		);
+	}
+
+}
+
 class AppComponent extends Component {
 
 	constructor() {
@@ -15,6 +48,7 @@ class AppComponent extends Component {
 		this.state = ({
 			contentScriptLoaded: false,
 			selectedTags: [],
+			contentScriptError: '',
 		});
 
 		this.confirm_click = () => {
@@ -73,7 +107,7 @@ class AppComponent extends Component {
 		}
 
 		this.clipperServerHelpLink_click = () => {
-			bridge().tabsCreate({ url: 'https://joplin.cozic.net/clipper' });
+			bridge().tabsCreate({ url: 'https://joplinapp.org/clipper/' });
 		}
 
 		this.folderSelect_change = (event) => {
@@ -122,11 +156,19 @@ class AppComponent extends Component {
 	async loadContentScripts() {
 		await bridge().tabsExecuteScript({file: "/content_scripts/JSDOMParser.js"});
 		await bridge().tabsExecuteScript({file: "/content_scripts/Readability.js"});
+		await bridge().tabsExecuteScript({file: "/content_scripts/Readability-readerable.js"});
 		await bridge().tabsExecuteScript({file: "/content_scripts/index.js"});
 	}
 
 	async componentDidMount() {
-		await this.loadContentScripts();
+		try {
+			await this.loadContentScripts();
+		} catch (error) {
+			console.error('Could not load content scripts', error);
+			this.setState({ contentScriptError: error.message });
+			return;
+		}
+
 		this.setState({
 			contentScriptLoaded: true,
 		});
@@ -150,6 +192,8 @@ class AppComponent extends Component {
 				id: newFolderId,
 			});
 		}
+
+		bridge().sendCommandToActiveTab({ name: 'isProbablyReaderable' });
 	}
 
 	componentDidUpdate() {
@@ -166,7 +210,11 @@ class AppComponent extends Component {
 	}
 
 	render() {
-		if (!this.state.contentScriptLoaded) return 'Loading...';
+		if (!this.state.contentScriptLoaded) {
+			let msg = 'Loading...';
+			if (this.state.contentScriptError) msg = 'The Joplin extension is not available on this tab due to: ' + this.state.contentScriptError;
+			return <div style={{padding: 10, fontSize: 12, maxWidth: 200}}>{msg}</div>;
+		}
 
 		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>
 
@@ -196,16 +244,12 @@ class AppComponent extends Component {
 				</div>
 			);
 		} else if (hasContent) {
-			previewComponent = (
-				<div className="Preview">
-					<h2>Preview:</h2>
-					<input className={"Title"} value={content.title} onChange={this.contentTitle_change}/>
-					<div className={"BodyWrapper"}>
-						<div className={"Body"} dangerouslySetInnerHTML={{__html: content.body_html}}></div>
-					</div>
-					<a className={"Confirm Button"} onClick={this.confirm_click}>Confirm</a>
-				</div>
-			);
+			previewComponent = <PreviewComponent
+				onConfirmClick={this.confirm_click}
+				title={content.title}
+				body_html={content.body_html}
+				onTitleChange={this.contentTitle_change}
+			/>
 		}
 
 		const clipperStatusComp = () => {
@@ -266,11 +310,10 @@ class AppComponent extends Component {
 		const tagsComp = () => {
 			const comps = [];
 			for (let i = 0; i < this.state.selectedTags.length; i++) {
-				comps.push(<div>
+				comps.push(<div key={i}>
 					<input
 						ref={'tagSelector' + i}
 						data-index={i}
-						key={i}
 						type="text"
 						list="tags"
 						value={this.state.selectedTags[i]}
@@ -294,11 +337,18 @@ class AppComponent extends Component {
 			tagDataListOptions.push(<option key={tag.id}>{tag.title}</option>);
 		}
 
+		let simplifiedPageButtonLabel = 'Clip simplified page';
+		let simplifiedPageButtonTooltip = '';
+		if (!this.props.isProbablyReaderable) {
+			simplifiedPageButtonLabel += ' ⚠️';
+			simplifiedPageButtonTooltip = 'It might not be possible to create a good simplified version of this page.\nYou may want to clip the complete page instead.';
+		}
+
 		return (
 			<div className="App">
 				<div className="Controls">			
 					<ul>
-						<li><a className="Button" onClick={this.clipSimplified_click}>Clip simplified page</a></li>
+						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
 						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
@@ -331,6 +381,7 @@ const mapStateToProps = (state) => {
 		folders: state.folders,
 		tags: state.tags,
 		selectedFolderId: state.selectedFolderId,
+		isProbablyReaderable: state.isProbablyReaderable,
 	};
 };
 

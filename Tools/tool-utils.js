@@ -123,6 +123,22 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 	return responseJson;
 }
 
+toolUtils.readline = question => {
+	return new Promise((resolve, reject) => {
+		const readline = require('readline');
+
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout
+		});
+
+		rl.question(question + ' ', answer => {
+			resolve(answer);
+			rl.close();
+		});
+	});
+}
+
 toolUtils.isLinux = () => {
 	return process && process.platform === 'linux';
 }

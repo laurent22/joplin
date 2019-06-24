@@ -593,9 +593,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "PDF ファイル"
 
-#, fuzzy
-msgid "&File"
-msgstr "ファイル"
+msgid "Synchronisation status"
+msgstr "同期状況"
 
 msgid "New note"
 msgstr "新しいノート"
@@ -606,6 +605,35 @@ msgstr "新しいToDo"
 msgid "New notebook"
 msgstr "新しいノートブック"
 
+msgid "Print"
+msgstr "印刷"
+
+msgid "General Options"
+msgstr "全般のオプション"
+
+msgid "Encryption options"
+msgstr "暗号化のオプション"
+
+msgid "Web clipper options"
+msgstr "Webクリッパーのオプション"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "ファイル"
+
+msgid "About Joplin"
+msgstr "Joplinについて"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "アップデートのチェック..."
+
 msgid "Import"
 msgstr "インポート"
 
@@ -615,15 +643,15 @@ msgstr "エクスポート"
 msgid "Synchronise"
 msgstr "同期"
 
-msgid "Print"
-msgstr "印刷"
-
 #, javascript-format
 msgid "Hide %s"
 msgstr "%s を隠す"
 
 msgid "Quit"
 msgstr "終了"
+
+msgid "Close Window"
+msgstr ""
 
 #, fuzzy
 msgid "&Edit"
@@ -650,11 +678,17 @@ msgstr "斜体"
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr "コード"
+
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
 msgid "Edit in external editor"
 msgstr "外部エディターで編集"
+
+msgid "Tags"
+msgstr "タグ"
 
 msgid "Search in all the notes"
 msgstr "すべてのノートを検索"
@@ -680,18 +714,6 @@ msgstr "本文にフォーカス"
 msgid "&Tools"
 msgstr "ツール"
 
-msgid "Synchronisation status"
-msgstr "同期状況"
-
-msgid "Web clipper options"
-msgstr "Webクリッパーのオプション"
-
-msgid "Encryption options"
-msgstr "暗号化のオプション"
-
-msgid "General Options"
-msgstr "全般のオプション"
-
 #, fuzzy
 msgid "&Help"
 msgstr "ヘルプ"
@@ -702,15 +724,8 @@ msgstr "Webサイトとドキュメント"
 msgid "Make a donation"
 msgstr "寄付する"
 
-msgid "Check for updates..."
-msgstr "アップデートのチェック..."
-
-msgid "About Joplin"
-msgstr "Joplinについて"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "Toggle development tools"
+msgstr ""
 
 #, javascript-format
 msgid "Open %s"
@@ -820,11 +835,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
 
-msgid "Browse..."
-msgstr ""
-
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr "適用"
@@ -943,9 +958,6 @@ msgstr "ノートブックの題名："
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
-msgid "Separate each tag by a comma."
-msgstr "それぞれのタグをカンマ(,)で区切ってください。"
-
 msgid "Rename notebook:"
 msgstr "ノートブックの名前を変更："
 
@@ -967,8 +979,9 @@ msgstr "いくつかの項目は同期されませんでした。"
 msgid "View them now"
 msgstr "今すぐ表示"
 
-msgid "Some items cannot be decrypted."
-msgstr "いくつかの項目は復号されませんでした。"
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "マスターパスワードを入力してください:"
 
 msgid "Set the password"
 msgstr "パスワードの設定"
@@ -986,8 +999,32 @@ msgstr "場所"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "ノートブック"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "ノートのプロパティ"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "ノートは変更されています："
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "開く..."
@@ -1038,9 +1075,6 @@ msgstr "ハイパーリンクの挿入"
 msgid "Attach file"
 msgstr "ファイルを添付する"
 
-msgid "Tags"
-msgstr "タグ"
-
 msgid "Set alarm"
 msgstr "アラームをセット"
 
@@ -1050,9 +1084,6 @@ msgstr "内: %s"
 
 msgid "Hyperlink"
 msgstr "ハイパーリンク"
-
-msgid "Code"
-msgstr "コード"
 
 msgid "Numbered List"
 msgstr "番号つきリスト"
@@ -1139,13 +1170,13 @@ msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "取得中のリソース: %d"
+msgid "Fetching resources: %d/%d"
+msgstr "取得中のリソース: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
-msgid "Table of contents"
+msgid "Retry"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1177,6 +1208,14 @@ msgstr "ノートを削除しますか？"
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "ノートを削除しますか？"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1290,6 +1329,10 @@ msgstr "実行中"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同期作業はすでに実行中です。状態: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "暗号化済"
 
@@ -1327,6 +1370,68 @@ msgstr "ノートをノートブック \"%s\" にコピーできません"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
+"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
+"次のFAQをご覧ください: %s"
+
+msgid "Synchronisation target"
+msgstr "同期先"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
+"持つことができるでしょう（すべてのドキュメントは下にあります）。"
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "同期先のディレクトリ(絶対パス)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud ユーザー名"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud パスワード"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV ユーザー名"
+
+msgid "WebDAV password"
+msgstr "WevDAV パスワード"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
 
 msgid "Language"
 msgstr "言語"
@@ -1376,6 +1481,43 @@ msgstr "本文にフォーカス"
 
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
+
+msgid "Enable soft breaks"
+msgstr ""
+
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "暗号化を有効にする"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
 
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
@@ -1448,54 +1590,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "詳細な設定の表示"
 
-msgid "Synchronisation target"
-msgstr "同期先"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
-"持つことができるでしょう（すべてのドキュメントは下にあります）。"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "同期先のディレクトリ(絶対パス)"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にしてく"
-"ださい。"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
-"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
-"次のFAQをご覧ください: %s"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud ユーザー名"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud パスワード"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV ユーザー名"
-
-msgid "WebDAV password"
-msgstr "WevDAV パスワード"
-
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
 
@@ -1512,6 +1606,20 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
+
+#, fuzzy
+msgid "Enable note history"
+msgstr "暗号化を有効にする"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1531,6 +1639,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "ノートブック"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"
@@ -1583,12 +1694,11 @@ msgstr "エクスポートするデータがありません。"
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "ノートをどのノートブックにインポートするのか指定してください。"
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "同期ができなかったアイテム"
-
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1598,6 +1708,24 @@ msgstr ""
 "これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そ"
 "のようなアイテムを探すには、タイトルまたはID(上記の括弧内に表示されている)で"
 "検索してください。"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "次のファイルは開くことができません：%s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "次のファイルは開くことができません：%s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "同期ができなかったアイテム"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
@@ -1721,6 +1849,10 @@ msgstr "新しいタグ:"
 msgid "Type new tags or select from list"
 msgstr "新しいタグを入力するか、リストから選択してください"
 
+#, fuzzy
+msgid "More information"
+msgstr "設定"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1807,6 +1939,10 @@ msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
 
 #, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
 
@@ -1866,6 +2002,22 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "ようこそ"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "それぞれのタグをカンマ(,)で区切ってください。"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "いくつかの項目は復号されませんでした。"
+
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にし"
+#~ "てください。"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

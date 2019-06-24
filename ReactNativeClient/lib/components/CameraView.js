@@ -48,8 +48,13 @@ class CameraView extends Component {
 					style={{flex:1}}
 					ref={ref => { this.camera = ref; }}
 					type={RNCamera.Constants.Type.back}
-					permissionDialogTitle={_('Permission to use camera')}
-					permissionDialogMessage={_('Your permission to use your camera is required.')}
+					captureAudio={false}
+					androidCameraPermissionOptions={{
+						title: _('Permission to use camera'),
+						message: _('Your permission to use your camera is required.'),
+						buttonPositive: _('OK'),
+						buttonNegative: _('Cancel'),
+					}}
 				>
 					<View style={{flex:1, justifyContent:'space-between', flexDirection:'column'}}>
 						<View style={{flex:1, justifyContent:'flex-start'}}>

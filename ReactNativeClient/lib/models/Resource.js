@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
+const { shim } = require('lib/shim');
 const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
@@ -31,15 +32,19 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
-	static needToBeFetched(limit = null) {
-		let sql = 'SELECT * FROM resources WHERE id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?) ORDER BY updated_time DESC';
-		if (limit !== null) sql += ' LIMIT ' + limit;
-		return this.modelSelectAll(sql, [Resource.FETCH_STATUS_IDLE]);
+	static fetchStatuses(resourceIds) {
+		if (!resourceIds.length) return [];
+		return this.db().selectAll('SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("' + resourceIds.join('","') + '")');
 	}
 
-	static async needToBeFetchedCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE]);
-		return r ? r['total'] : 0;
+	static needToBeFetched(resourceDownloadMode = null, limit = null) {
+		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		if (resourceDownloadMode !== 'always') {
+			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
+		}
+		sql.push('ORDER BY updated_time DESC');
+		if (limit !== null) sql.push('LIMIT ' + limit);
+		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
 	static async resetStartedFetchStatus() {
@@ -49,13 +54,6 @@ class Resource extends BaseItem {
 	static fsDriver() {
 		if (!Resource.fsDriver_) Resource.fsDriver_ = new FsDriverDummy();
 		return Resource.fsDriver_;
-	}
-
-	static filename(resource, encryptedBlob = false) {
-		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
-		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? ('.' + extension) : '';
-		return resource.id + extension;
 	}
 
 	static friendlyFilename(resource) {
@@ -69,6 +67,21 @@ class Resource extends BaseItem {
 
 	static baseDirectoryPath() {
 		return Setting.value('resourceDir');
+	}
+
+	static baseRelativeDirectoryPath() {
+		return Setting.value('resourceDirName');
+	}
+
+	static filename(resource, encryptedBlob = false) {
+		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
+		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
+		extension = extension ? ('.' + extension) : '';
+		return resource.id + extension;
+	}
+
+	static relativePath(resource, encryptedBlob = false) {
+		return Setting.value('resourceDirName') + '/' + this.filename(resource, encryptedBlob);
 	}
 
 	static fullPath(resource, encryptedBlob = false) {
@@ -87,6 +100,13 @@ class Resource extends BaseItem {
 		const decryptedItem = item.encryption_cipher_text ? await super.decrypt(item) : Object.assign({}, item);
 		if (!decryptedItem.encryption_blob_encrypted) return decryptedItem;
 
+		const localState = await this.localState(item);
+		if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
+			// Not an error - it means the blob has not been downloaded yet.
+			// It will be decrypted later on, once downloaded.
+			return decryptedItem;
+		}
+
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
 		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
@@ -100,12 +120,7 @@ class Resource extends BaseItem {
 		}
 
 		try {
-			// const stat = await this.fsDriver().stat(encryptedPath);
-			await this.encryptionService().decryptFile(encryptedPath, plainTextPath, {
-				// onProgress: (progress) => {
-				// 	console.info('Decryption: ', progress.doneSize / stat.size);
-				// },
-			});
+			await this.encryptionService().decryptFile(encryptedPath, plainTextPath);
 		} catch (error) {
 			if (error.code === 'invalidIdentifier') {
 				// As the identifier is invalid it most likely means that this is not encrypted data
@@ -140,12 +155,7 @@ class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
-			// const stat = await this.fsDriver().stat(plainTextPath);
-			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
-				// onProgress: (progress) => {
-				// 	console.info(progress.doneSize / stat.size);
-				// },
-			});
+			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 		} catch (error) {
 			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
 			throw error;
@@ -206,6 +216,17 @@ class Resource extends BaseItem {
 		await ResourceLocalState.save(Object.assign({}, state, { resource_id: id }));
 	}
 
+	static async needFileSizeSet() {
+		return this.modelSelectAll('SELECT * FROM resources WHERE `size` < 0 AND encryption_blob_encrypted = 0');
+	}
+
+	// Only set the `size` field and nothing else, not even the update_time
+	// This is because it's only necessary to do it once after migration 20
+	// and each client does it so there's no need to sync the resource.
+	static async setFileSizeOnly(resourceId, fileSize) {
+		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
+	}
+
 	static async batchDelete(ids, options = null) {
 		// For resources, there's not really batch deleting since there's the file data to delete
 		// too, so each is processed one by one with the item being deleted last (since the db
@@ -222,6 +243,20 @@ class Resource extends BaseItem {
 		}
 
 		await ResourceLocalState.batchDelete(ids);
+	}
+
+	static async markForDownload(resourceId) {
+		// Insert the row only if it's not already there
+		const t = Date.now();
+		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
+	}
+
+	static async downloadedButEncryptedBlobCount() {
+		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [
+			Resource.FETCH_STATUS_DONE,
+		]);
+
+		return r ? r.total : 0;
 	}
 
 }

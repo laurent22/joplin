@@ -14,6 +14,7 @@ urlUtils.urlWithoutPath = function(url) {
 }
 
 urlUtils.urlProtocol = function(url) {
+	if (!url) return '';
 	const parsed = require('url').parse(url, true);
 	return parsed.protocol;
 }
@@ -24,6 +25,7 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 
 	if (!url) url = '';
 	if (!baseUrl) return url;
+	if (url.indexOf('#') === 0) return url; // Don't prepend if it's a local anchor
 	if (urlUtils.urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
 
 	if (url.length >= 2 && url.indexOf('//') === 0) { // If it starts with // it's a protcol-relative URL

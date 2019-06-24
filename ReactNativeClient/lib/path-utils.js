@@ -37,9 +37,10 @@ function isHidden(path) {
 	return b[0] === '.';
 }
 
-function safeFileExtension(e) {
+function safeFileExtension(e, maxLength = null) {
+	if (maxLength === null) maxLength = 8;
 	if (!e || !e.replace) return '';
-	return e.replace(/[^a-zA-Z0-9]/g, '')
+	return e.replace(/[^a-zA-Z0-9]/g, '').substr(0, maxLength);
 }
 
 function safeFilename(e, maxLength = null, allowSpaces = false) {
@@ -100,6 +101,11 @@ function friendlySafeFilename(e, maxLength = null) {
 	return output.substr(0, maxLength);
 }
 
+function toFileProtocolPath(path) {
+	const output = path.replace(/\\/g, "/");
+	return 'file://' + escape(output);
+}
+
 function toSystemSlashes(path, os = null) {
 	if (os === null) os = process.platform;
 	if (os === 'win32') return path.replace(/\//g, "\\");
@@ -153,4 +159,4 @@ function extractExecutablePath(cmd) {
 	return output;
 }
 
-module.exports = { extractExecutablePath, basename, dirname, filename, isHidden, fileExtension, safeFilename, friendlySafeFilename, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes, quotePath, unquotePath };
+module.exports = { toFileProtocolPath, extractExecutablePath, basename, dirname, filename, isHidden, fileExtension, safeFilename, friendlySafeFilename, safeFileExtension, toSystemSlashes, rtrimSlashes, ltrimSlashes, quotePath, unquotePath };

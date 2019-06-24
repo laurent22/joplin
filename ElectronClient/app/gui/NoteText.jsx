@@ -36,8 +36,10 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { toSystemSlashes, safeFilename } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
+const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -70,6 +72,7 @@ class NoteTextComponent extends React.Component {
 			editorScrollTop: 0,
 			newNote: null,
 			noteTags: [],
+			showRevisions: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -224,14 +227,13 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		this.resourceFetcher_downloadComplete = async (resource) => {
+		this.refreshResource = async (event) => {
 			if (!this.state.note || !this.state.note.body) return;
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0) {
-				// this.mdToHtml().clearCache();
+			if (resourceIds.indexOf(event.id) >= 0) {
+				shared.clearResourceCache();
 				this.lastSetHtml_ = '';
 				this.scheduleHtmlUpdate();
-				//this.updateHtml(this.state.note.body);
 			}
 		}
 
@@ -268,6 +270,7 @@ class NoteTextComponent extends React.Component {
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_domReady = this.webview_domReady.bind(this);
+		this.noteRevisionViewer_onBack = this.noteRevisionViewer_onBack.bind(this);
 	}
 
 	// Note:
@@ -360,7 +363,8 @@ class NoteTextComponent extends React.Component {
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.on('todoToggle', this.onTodoToggle_);
 
-		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.installResourceHandling(this.refreshResource);
+
 		ExternalEditWatcher.instance().on('noteChange', this.externalEditWatcher_noteChange);
 	}
 
@@ -373,11 +377,28 @@ class NoteTextComponent extends React.Component {
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
 		eventManager.removeListener('todoToggle', this.onTodoToggle_);
 
-		ResourceFetcher.instance().off('downloadComplete', this.resourceFetcher_downloadComplete);
+		shared.uninstallResourceHandling(this.refreshResource);
+
 		ExternalEditWatcher.instance().off('noteChange', this.externalEditWatcher_noteChange);
 	}
 
-	async saveIfNeeded(saveIfNewNote = false) {
+	componentDidUpdate(prevProps) {
+		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
+			if (this.props.noteDevToolsVisible) {
+				this.webviewRef().openDevTools();
+			} else {
+				this.webviewRef().closeDevTools();
+			}
+		}
+	}
+
+	webviewRef() {
+		if (!this.webviewRef_.current || !this.webviewRef_.current.wrappedInstance) return null;
+		if (!this.webviewRef_.current.wrappedInstance.domReady()) return null;
+		return this.webviewRef_.current.wrappedInstance;
+	}
+
+	async saveIfNeeded(saveIfNewNote = false, options = {}) {
 		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
 
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
@@ -385,7 +406,7 @@ class NoteTextComponent extends React.Component {
 		if (!forceSave) {
 			if (!shared.isModified(this)) return;
 		}
-		await shared.saveNoteButton_press(this);
+		await shared.saveNoteButton_press(this, null, options);
 
 		ExternalEditWatcher.instance().updateNoteFile(this.state.note);
 	}
@@ -471,6 +492,8 @@ class NoteTextComponent extends React.Component {
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
+			shared.clearResourceCache();
+			
 			this.editorMaxScrollTop_ = 0;
 
 			// HACK: To go around a bug in Ace editor, we first set the scroll position to 1
@@ -501,7 +524,7 @@ class NoteTextComponent extends React.Component {
 				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
 				// Note: calling undoManager.reset() doesn't work
 				try {
-					this.editor_.editor.getSession().setValue(note ? note.body : '');
+					this.editor_.editor.getSession().setValue(note && note.body? note.body : '');
 				} catch (error) {
 					if (error.message === "Cannot read property 'match' of undefined") {
 						// The internals of Ace Editor throws an exception when creating a new note,
@@ -518,6 +541,11 @@ class NoteTextComponent extends React.Component {
 					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
 				}, 10);
 			}
+
+			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+				const resourceIds = await Note.linkedResourceIds(note.body);
+				await ResourceFetcher.instance().markForDownload(resourceIds);
+			}
 		}
 
 		if (note) {
@@ -530,7 +558,8 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
-			noteTags: noteTags
+			noteTags: noteTags,
+			showRevisions: false,
 		};
 
 		if (!note) {
@@ -619,6 +648,13 @@ class NoteTextComponent extends React.Component {
 		return shared.refreshNoteMetadata(this, force);
 	}
 
+	async noteRevisionViewer_onBack() {
+		this.setState({ showRevisions: false });
+
+		this.lastSetHtml_ = '';
+		this.scheduleReloadNote(this.props);
+	}
+
 	title_changeText(event) {
 		shared.noteComponent_change(this, 'title', event.target.value);
 		this.setState({ newAndNoTitleChangeNoteId: null });
@@ -636,7 +672,7 @@ class NoteTextComponent extends React.Component {
 
 	async webview_ipcMessage(event) {
 		const msg = event.channel ? event.channel : '';
-		const args = event.args;
+		const args = event.args;		
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
@@ -651,10 +687,18 @@ class NoteTextComponent extends React.Component {
 
 			const newBody = shared.toggleCheckbox(msg, this.state.note.body);
 			this.saveOneProperty('body', newBody);
+		} else if (msg.indexOf('error:') === 0) {
+			const s = msg.split(':');
+			s.splice(0, 1);
+			reg.logger().error(s.join(':'));
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;
 			this.setState({ localSearch: ls });
+		} else if (msg.indexOf('markForDownload:') === 0) {
+			const s = msg.split(':');
+			if (s.length < 2) throw new Error('Invalid message: ' + msg);
+			ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
 			this.setEditorPercentScroll(arg0);
@@ -729,7 +773,6 @@ class NoteTextComponent extends React.Component {
 				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
 				require('electron').shell.openExternal(urlDecode(msg));
 			} else {
-				console.info('OPEN URL');
 				require('electron').shell.openExternal(msg);
 			}
 		} else if (msg.indexOf('#') === 0) {
@@ -800,7 +843,7 @@ class NoteTextComponent extends React.Component {
 		});
 
 		if (Setting.value('env') === 'dev') {
-			this.webviewRef_.current.wrappedInstance.openDevTools();
+			// this.webviewRef_.current.wrappedInstance.openDevTools();
 		}
 	}
 
@@ -820,7 +863,7 @@ class NoteTextComponent extends React.Component {
 			this.editor_.editor.renderer.on('afterRender', this.onAfterEditorRender_);
 
 			const cancelledKeys = [];
-			const letters = ['F', 'T', 'P', 'Q', 'L', ','];
+			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G'];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
 				cancelledKeys.push('Ctrl+' + l);
@@ -911,6 +954,7 @@ class NoteTextComponent extends React.Component {
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(bodyToRender),
+			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
 		let bodyHtml = '';
@@ -976,6 +1020,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandStartExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
+			} else if (command.name === 'textCode') {
+				fn = this.commandTextCode;
 			}
 		}
 
@@ -1127,6 +1173,9 @@ class NoteTextComponent extends React.Component {
 
 	async commandStartExternalEditing() {
 		try {
+			await this.saveIfNeeded(true, {
+				autoTitle: false,
+			});
 			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
 		} catch (error) {
 			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
@@ -1529,6 +1578,7 @@ class NoteTextComponent extends React.Component {
 					type: 'WINDOW_COMMAND',
 					name: 'commandNoteProperties',
 					noteId: n.id,
+					onRevisionLinkClick: () => { this.setState({ showRevisions: true}) },
 				});
 			},
 		});
@@ -1609,6 +1659,18 @@ class NoteTextComponent extends React.Component {
 		}, style);
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;
+
+		if (this.state.showRevisions && note && note.id) {
+			rootStyle.paddingRight = rootStyle.paddingLeft;
+			rootStyle.paddingTop = rootStyle.paddingLeft;
+			rootStyle.paddingBottom = rootStyle.paddingLeft;
+			rootStyle.display = 'inline-flex';
+			return (
+				<div style={rootStyle}>
+					<NoteRevisionViewer noteId={note.id} customCss={this.props.customCss} onBack={this.noteRevisionViewer_onBack}/>
+				</div>
+			);
+		}
 
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
@@ -1710,13 +1772,14 @@ class NoteTextComponent extends React.Component {
 			viewerStyle.borderLeft = 'none';
 		}
 
-		if (this.state.webviewReady) {
+		if (this.state.webviewReady && this.webviewRef_.current) {
 			let html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			 if (htmlHasChanged) {
 				let options = {
 					cssFiles: this.state.lastRenderCssFiles,
+					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
@@ -1809,7 +1872,7 @@ class NoteTextComponent extends React.Component {
 			// Disable warning: "Automatically scrolling cursor into view after
 			// selection change this will be disabled in the next version set
 			// editor.$blockScrolling = Infinity to disable this message"
-			editorProps={{$blockScrolling: true}}
+			editorProps={{$blockScrolling: Infinity}}
 
 			// This is buggy (gets outside the container)
 			highlightActiveLine={false}

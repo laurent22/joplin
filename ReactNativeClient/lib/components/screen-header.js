@@ -364,7 +364,9 @@ class ScreenHeaderComponent extends Component {
 
 				const addFolderChildren = (folders, pickerItems, indent) => {
 					folders.sort((a, b) => {
-						return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+						const aTitle = a && a.title ? a.title : '';
+						const bTitle = b && b.title ? b.title : '';
+						return aTitle.toLowerCase() < bTitle.toLowerCase() ? -1 : +1;
 					});
 
 					for (let i = 0; i < folders.length; i++) {

@@ -47,7 +47,7 @@ msgid "y"
 msgstr "是"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "正在取消后台同步... 请稍候。"
+msgstr "正在取消后台同步……请稍候。"
 
 #, javascript-format
 msgid "No such command: %s"
@@ -566,8 +566,8 @@ msgstr "从 \"%s\" 导入，导入格式为 \"%s\" 。请稍等…"
 msgid "PDF File"
 msgstr "PDF 文件"
 
-msgid "&File"
-msgstr "文件 (&F)"
+msgid "Synchronisation status"
+msgstr "同步状态"
 
 msgid "New note"
 msgstr "新建笔记"
@@ -578,6 +578,34 @@ msgstr "新建待办事项"
 msgid "New notebook"
 msgstr "新建笔记本"
 
+msgid "Print"
+msgstr "打印"
+
+msgid "General Options"
+msgstr "通用选项"
+
+msgid "Encryption options"
+msgstr "加密选项"
+
+msgid "Web clipper options"
+msgstr "网页剪辑选项"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "&File"
+msgstr "文件 (&F)"
+
+msgid "About Joplin"
+msgstr "关于 Joplin"
+
+msgid "Preferences..."
+msgstr "偏好……"
+
+msgid "Check for updates..."
+msgstr "检查更新..."
+
 msgid "Import"
 msgstr "导入"
 
@@ -587,15 +615,15 @@ msgstr "导出"
 msgid "Synchronise"
 msgstr "同步"
 
-msgid "Print"
-msgstr "打印"
-
 #, javascript-format
 msgid "Hide %s"
 msgstr "隐藏 %s"
 
 msgid "Quit"
 msgstr "退出"
+
+msgid "Close Window"
+msgstr "关闭窗口"
 
 msgid "&Edit"
 msgstr "编辑 (&E)"
@@ -621,11 +649,17 @@ msgstr "斜体"
 msgid "Link"
 msgstr "链接"
 
+msgid "Code"
+msgstr "代码"
+
 msgid "Insert Date Time"
 msgstr "插入时间"
 
 msgid "Edit in external editor"
 msgstr "在外部编辑器中打开"
+
+msgid "Tags"
+msgstr "标签"
 
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
@@ -648,18 +682,6 @@ msgstr "聚焦于"
 msgid "&Tools"
 msgstr "工具 (&T)"
 
-msgid "Synchronisation status"
-msgstr "同步状态"
-
-msgid "Web clipper options"
-msgstr "网页剪辑选项"
-
-msgid "Encryption options"
-msgstr "加密选项"
-
-msgid "General Options"
-msgstr "通用选项"
-
 msgid "&Help"
 msgstr "帮助 (&H)"
 
@@ -669,15 +691,8 @@ msgstr "网站与文档"
 msgid "Make a donation"
 msgstr "捐赠"
 
-msgid "Check for updates..."
-msgstr "检查更新..."
-
-msgid "About Joplin"
-msgstr "关于 Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "Toggle development tools"
+msgstr ""
 
 #, javascript-format
 msgid "Open %s"
@@ -782,11 +797,11 @@ msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存在：%s"
 
-msgid "Browse..."
-msgstr "浏览..."
-
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
+
+msgid "Browse..."
+msgstr "浏览..."
 
 msgid "Apply"
 msgstr "应用"
@@ -898,9 +913,6 @@ msgstr "笔记本标题："
 msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
-msgid "Separate each tag by a comma."
-msgstr "用半角逗号“,”分开每个标签。"
-
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
@@ -922,8 +934,9 @@ msgstr "一些项目无法被同步。"
 msgid "View them now"
 msgstr "立刻查看"
 
-msgid "Some items cannot be decrypted."
-msgstr "一些项目无法被解密。"
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "输入主密码："
 
 msgid "Set the password"
 msgstr "设置密码"
@@ -941,8 +954,32 @@ msgstr "位置"
 msgid "URL"
 msgstr "URL"
 
+msgid "Note History"
+msgstr "笔记历史"
+
+msgid "Previous versions of this note"
+msgstr "此笔记的早期版本"
+
 msgid "Note properties"
 msgstr "笔记属性"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "笔记\"%s\"已成功恢复到笔记本\"%s\"中。"
+
+msgid "This note has no history"
+msgstr "此笔记没有历史记录"
+
+msgid "Restore"
+msgstr "恢复"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"单击 \"%s\" 以恢复笔记。它将会被复制到名为 \"%s\" 的笔记本中。笔记的当前版本"
+"不会被替换或修改。"
 
 msgid "Open..."
 msgstr "打开…"
@@ -991,9 +1028,6 @@ msgstr "插入超链接"
 msgid "Attach file"
 msgstr "附加文件"
 
-msgid "Tags"
-msgstr "标签"
-
 msgid "Set alarm"
 msgstr "设置提醒"
 
@@ -1003,9 +1037,6 @@ msgstr "在: %s"
 
 msgid "Hyperlink"
 msgstr "超链接"
-
-msgid "Code"
-msgstr "代码"
 
 msgid "Numbered List"
 msgstr "有序列表"
@@ -1093,14 +1124,14 @@ msgid "Decrypting items: %d/%d"
 msgstr "正在解密项目：%d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "正在获取资源：%d"
+msgid "Fetching resources: %d/%d"
+msgstr "正在获取资源：%d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
-msgid "Table of contents"
-msgstr "目录"
+msgid "Retry"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
@@ -1131,6 +1162,16 @@ msgstr "是否删除笔记“%s”？"
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "是否删除这 %d 条笔记？"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
+"记本名字。"
+
+msgid "Goto Anything..."
+msgstr "转到某处……"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1241,6 +1282,10 @@ msgstr "正在进行"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "已经在同步。状态：%s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
+
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -1276,6 +1321,66 @@ msgstr "无法复制笔记到笔记本“%s”"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "无法移动笔记到笔记本“%s”"
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
+"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
+
+msgid "Synchronisation target"
+msgstr "同步目标"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "待同步的目录（绝对路径）。"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud 用户名"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud 密码"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV 用户名"
+
+msgid "WebDAV password"
+msgstr "WebDAV 密码"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
 
 msgid "Language"
 msgstr "语言"
@@ -1324,6 +1429,42 @@ msgstr "聚焦正文"
 
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
+
+msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable math expressions"
+msgstr "启用数学表达式"
+
+msgid "Enable ==mark== syntax"
+msgstr "启用 ==mark== 句法"
+
+msgid "Enable footnotes"
+msgstr "启用脚注"
+
+msgid "Enable table of contents extension"
+msgstr "启用目录扩展"
+
+msgid "Enable ~sub~ syntax"
+msgstr "启用 ~sub~ 句法"
+
+msgid "Enable ^sup^ syntax"
+msgstr "启用 ^sup^ 句法"
+
+msgid "Enable deflist syntax"
+msgstr "启用术语表句法"
+
+msgid "Enable abbreviation syntax"
+msgstr "启用缩写句法"
+
+msgid "Enable markdown emoji"
+msgstr "启用 markdown emoji"
+
+msgid "Enable ++insert++ syntax"
+msgstr "启用 ++insert++ 句法"
+
+msgid "Enable multimarkdown table extension"
+msgstr "启用 multimarkdown 表格扩展"
 
 msgid "Show tray icon"
 msgstr "显示托盘图标"
@@ -1396,50 +1537,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "显示高级选项"
 
-msgid "Synchronisation target"
-msgstr "同步目标"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "待同步的目录（绝对路径）。"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
-"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud 用户名"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud 密码"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV 用户名"
-
-msgid "WebDAV password"
-msgstr "WebDAV 密码"
-
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
@@ -1456,6 +1553,19 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
+msgid "Enable note history"
+msgstr "启用笔记历史"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值：\"%s\"。可用值有：%s。"
@@ -1471,6 +1581,9 @@ msgstr "外观"
 
 msgid "Note"
 msgstr "笔记"
+
+msgid "Plugins"
+msgstr "插件"
 
 msgid "Application"
 msgstr "应用程序"
@@ -1520,12 +1633,11 @@ msgstr "没有可导出的数据。"
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "请指定导入笔记的目标笔记本。"
 
+msgid "Restored Notes"
+msgstr "已恢复的笔记"
+
 msgid "Items that cannot be synchronised"
 msgstr "无法同步项目"
-
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1534,6 +1646,24 @@ msgid ""
 msgstr ""
 "这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标题"
 "或 ID（显示在上方括号中）。"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) 无法上传到：%s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "项目 \"%s\" 无法从 %s 中下载"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "无法同步项目"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
@@ -1657,6 +1787,10 @@ msgstr "新建标签："
 msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
 
+#, fuzzy
+msgid "More information"
+msgstr "配置"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1740,6 +1874,10 @@ msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
 
 #, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
@@ -1795,6 +1933,23 @@ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
 
 msgid "Welcome"
 msgstr "欢迎"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "用半角逗号“,”分开每个标签。"
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "一些项目无法被解密。"
+
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
+
+#~ msgid "Table of contents"
+#~ msgstr "目录"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
 
 #~ msgid "Joplin v%s"
 #~ msgstr "Joplin v%s"

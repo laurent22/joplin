@@ -1,6 +1,6 @@
-# Clicking 'Edit in External Editor' does nothing! / I want to change the editor!
+# How can I edit my note in an external text editor?
 
-The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in Settings -> Text editor command.
+The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
 
 Some example configurations are: (comments after #)
 
@@ -45,23 +45,25 @@ When changing the WebDAV URL, make sure that the new location has the same exact
 
 # How can I easily enter Markdown tags in Android?
 
-You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplin.cozic.net/t/android-create-new-list-item-with-enter/585/2?u=laurent).
+You may use a special keyboard such as [Multiling O Keyboard](https://play.google.com/store/apps/details?id=kl.ime.oh&hl=en), which has shortcuts to create Markdown tags. [More information in this post](https://discourse.joplinapp.org/t/android-create-new-list-item-with-enter/585/2?u=laurent).
 
 # The initial sync is very slow, how can I speed it up?
 
-Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplin.cozic.net/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
+Whenever importing a large number of notes, for example from Evernote, it may take a very long time for the first sync to complete. There are various techniques to speed thing up (if you don't want to simply wait for the sync to complete), which are outlined in [this post](https://discourse.joplinapp.org/t/workaround-for-slow-initial-bulk-sync-after-evernote-import/746?u=laurent).
 
 # Is it possible to use real file and folder names in the sync target?
 
 Unfortunately it is not possible. Joplin synchronises with file systems using an open format however it does not mean the sync files are meant to be user-editable. The format is designed to be performant and reliable, not user friendly (it cannot be both), and that cannot be changed. Joplin sync directory is basically just a database.
 
-# Could there be a PIN or password to restrict access to Joplin?
+# Could there be a password to restrict access to Joplin?
 
-Short answer: no. The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
+The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
 
 On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted Truecrypt drive for instance.
 
-If someone that you don't trust has access to the computer, they can put a keylogger anyway so any local encryption or PIN access would not be useful.
+For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
+
+There is however an issue open about it, so pull requests are welcome: https://github.com/laurent22/joplin/issues/289
 
 # WebDAV synchronisation is not working
 
@@ -84,10 +86,11 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 - Check your username and password. **Type it manually** (without copying and pasting it) and try again.
 - Check the WebDAV URL - to get the correct URL, go to Nextcloud and, in the left sidebar, click on "Settings" and copy the WebDAV URL from there. **Do not forget to add the folder you've created to that URL**. For example, if the base the WebDAV URL is "https://example.com/nextcloud/remote.php/webdav/" and you want the notes to be synced in the "Joplin" directory, you need to give the URL "https://example.com/nextcloud/remote.php/webdav/Joplin" **and you need to create the "Joplin" directory yourself**.
+- Did you enable **2FA** (Multi-factor authentication) on Nextcloud? In that case, you need to [create a one-time password for Joplin on the Nextcloud admin interface](https://github.com/laurent22/joplin/issues/1453#issuecomment-486640902).
 
-# Could you publish Joplin on F-droid?
+# How can I use self-signed SSL certificates on Android?
 
-Joplin relies on Firebase to enable reliable notifications on Android. Since F-Droid [do not accept applications that depend on this package](https://gitlab.com/fdroid/rfp/issues/434#note_55239154), it is not currently possible to have Joplin in that repository. To avoid using Google Play, you have the option to directly download the Joplin APK file.
+If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for it's simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
 
 # Why is it named Joplin?
 

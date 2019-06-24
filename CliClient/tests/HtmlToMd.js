@@ -37,12 +37,22 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'picture.html') continue;
+			// if (htmlFilename !== 'anchor_local.html') continue;
+
+			const htmlToMdOptions = {}
+
+			if (htmlFilename === 'anchor_local.html') {
+				// Normally the list of anchor names in the document are retrieved from the HTML code
+				// This is straightforward when the document is still in DOM format, as with the clipper,
+				// but otherwise it would need to be somehow parsed out from the HTML. Here we just
+				// hard code the anchors that we know are in the file.
+				htmlToMdOptions.anchorNames = ['first', 'second']
+			}
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			let actualMd = await htmlToMd.parse('<div>' + html + '</div>', []);
+			let actualMd = await htmlToMd.parse('<div>' + html + '</div>', htmlToMdOptions);
 
 			if (os.EOL === '\r\n') {
 				expectedMd = expectedMd.replace(/\r\n/g, '\n')

@@ -3,8 +3,9 @@ package net.cozic.joplin;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.slider.ReactSliderPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import org.reactnative.camera.RNCameraPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -19,6 +20,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
+import org.reactnative.camera.RNCameraPackage;
 
 import com.alinz.parkerdan.shareextension.SharePackage;
 
@@ -39,9 +41,10 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
 				new MainReactPackage(),
+            new ReactSliderPackage(),
+            new RNCWebViewPackage(),
             new ReactNativePushNotificationPackage(),
 				new ImageResizerPackage(),
-				new RNCameraPackage(),
 				new RNFileViewerPackage(),
 				new RNSecureRandomPackage(),
 				new ImagePickerPackage(),
@@ -51,6 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
 				new SharePackage(),
+				new RNCameraPackage(),
 				new RNVersionInfoPackage()
 			);
 		}

@@ -14,14 +14,40 @@
 		browserSupportsPromises_ = false;
 	}
 
+	function absoluteUrl(url) {
+		if (!url) return url;
+		const protocol = url.toLowerCase().split(':')[0];
+		if (['http', 'https', 'file'].indexOf(protocol) >= 0) return url;
+
+		if (url.indexOf('//') === 0) {
+			return location.protocol + url;
+		} else if (url[0] === '/') {
+			return location.protocol + '//' + location.host + url;
+		} else {
+			return baseUrl() + '/' + url;
+		}
+	}
+
 	function pageTitle() {
 		const titleElements = document.getElementsByTagName("title");
 		if (titleElements.length) return titleElements[0].text.trim();
 		return document.title.trim();
 	}
 
+	function pageLocationOrigin() {
+		// location.origin normally returns the protocol + domain + port (eg. https://example.com:8080)
+		// but for file:// protocol this is browser dependant and in particular Firefox returns "null"
+		// in this case.
+
+		if (location.protocol === 'file:') {
+			return 'file://';
+		} else {
+			return location.origin;
+		}
+	}
+
 	function baseUrl() {
-		let output = location.origin + location.pathname;
+		let output = pageLocationOrigin() + location.pathname;
 		if (output[output.length - 1] !== '/') {
 			output = output.split('/');
 			output.pop();
@@ -30,12 +56,13 @@
 		return output;
 	}
 
-	function getImageSizes(element) {
+	function getImageSizes(element, forceAbsoluteUrls = false) {
 		const images = element.getElementsByTagName('img');
 		const output = {};
 		for (let i = 0; i < images.length; i++) {
 			const img = images[i];
-			output[img.src] = {
+			const src = forceAbsoluteUrls ? absoluteUrl(img.src) : img.src;
+			output[src] = {
 				width: img.width,
 				height: img.height,
 				naturalWidth: img.naturalWidth,
@@ -45,8 +72,22 @@
 		return output;
 	}
 
+	function getAnchorNames(element) {
+		const anchors = element.getElementsByTagName('a');
+		const output = [];
+		for (let i = 0; i < anchors.length; i++) {
+			const anchor = anchors[i];
+			if (anchor.id) {
+				output.push(anchor.id);
+			} else if (anchor.name) {
+				output.push(anchor.name);
+			}
+		}
+		return output;
+	}
+
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
-	function cleanUpElement(element) {
+	function cleanUpElement(element, imageSizes) {
 		const childNodes = element.childNodes;
 
 		for (let i = 0; i < childNodes.length; i++) {
@@ -58,9 +99,25 @@
 			if (!isVisible) {
 				element.removeChild(node);
 			} else {
-				cleanUpElement(node);
+
+				if (node.nodeName.toLowerCase() === 'img') {
+					node.src = absoluteUrl(node.src);
+					const imageSize = imageSizes[node.src];
+					if (imageSize) {
+						node.width = imageSize.width;
+						node.height = imageSize.height;
+					}
+				}
+
+				cleanUpElement(node, imageSizes);
 			}
 		}
+	}
+
+	function documentForReadability() {
+		// Readability directly change the passed document so clone it so as
+		// to preserve the original web page.
+		return document.cloneNode(true);
 	}
 
 	function readabilityProcess() {
@@ -72,10 +129,7 @@
 			pathBase: location.protocol + "//" + location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
 		};
 
-		// Readability directly change the passed document so clone it so as
-		// to preserve the original web page.
-		const documentClone = document.cloneNode(true);
-		const readability = new Readability(documentClone); // new window.Readability(uri, documentClone);
+		const readability = new Readability(documentForReadability());
 		const article = readability.parse();
 
 		if (!article) throw new Error('Could not parse HTML document with Readability');
@@ -89,16 +143,17 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
-		const clippedContentResponse = (title, html, imageSizes) => {
+		const clippedContentResponse = (title, html, imageSizes, anchorNames) => {
 			return {
 				name: 'clippedContent',
 				title: title,
 				html: html,
 				base_url: baseUrl(),
-				url: location.origin + location.pathname + location.search,
+				url: pageLocationOrigin() + location.pathname + location.search,
 				parent_id: command.parent_id,
 				tags: command.tags || '',
 				image_sizes: imageSizes,
+				anchor_names: anchorNames,
 			};			
 		}
 
@@ -115,20 +170,27 @@
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
-			return clippedContentResponse(article.title, article.body, getImageSizes(document));
+			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
+
+		} else if (command.name === "isProbablyReaderable") {
+
+			const ok = isProbablyReaderable(documentForReadability());
+			console.info('isProbablyReaderable', ok);
+			return { name: 'isProbablyReaderable', value: ok };
 
 		} else if (command.name === "completePageHtml") {
 
 			const cleanDocument = document.body.cloneNode(true);
-			cleanUpElement(cleanDocument);
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, getImageSizes(document));
+			const imageSizes = getImageSizes(document, true);
+			cleanUpElement(cleanDocument, imageSizes);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document));
 
 		} else if (command.name === "selectedHtml") {
 
 		    const range = window.getSelection().getRangeAt(0);
 		    const container = document.createElement('div');
 		    container.appendChild(range.cloneContents());
-		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document));
+		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
 
@@ -230,7 +292,7 @@
 					const content = {
 						title: pageTitle(),
 						crop_rect: selectionArea,
-						url: location.origin + location.pathname,
+						url: pageLocationOrigin() + location.pathname,
 						parent_id: command.parent_id,
 						tags: command.tags,
 					};
@@ -250,8 +312,9 @@
 			return {};
 
 		} else if (command.name === "pageUrl") {
-			let url = location.origin + location.pathname + location.search;
-			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
+
+			let url = pageLocationOrigin() + location.pathname + location.search;
+			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {
 			throw new Error('Unknown command: ' + JSON.stringify(command));

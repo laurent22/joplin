@@ -162,6 +162,42 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
+	async clearForTesting() {
+		const tableNames = [
+			'notes',
+			'folders',
+			'resources',
+			'tags',
+			'note_tags',
+			// 'master_keys',
+			'item_changes',
+			'note_resources',
+			// 'settings',
+			'deleted_items',
+			'sync_items',
+			'notes_normalized',
+			'revisions',
+			'resources_to_download',
+			'key_values',
+		];
+
+		const queries = [];
+		for (const n of tableNames) {
+			queries.push('DELETE FROM ' + n);
+			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+		}
+
+		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.2.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.3.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.4.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.6.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
+
+		await this.transactionExecBatch(queries);
+	}
+
 	createDefaultRow(tableName) {
 		const row = {};
 		const fields = this.tableFields('resource_local_states');
@@ -263,13 +299,13 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.');
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 
@@ -513,6 +549,85 @@ class JoplinDatabase extends Database {
 					CREATE TRIGGER notes_after_insert AFTER INSERT ON notes_normalized BEGIN
 						INSERT INTO notes_fts(docid, id, title, body) SELECT rowid, id, title, body FROM notes_normalized WHERE new.rowid = notes_normalized.rowid;
 					END;`);
+			}
+
+			if (targetVersion == 19) {
+				const newTableSql = `
+					CREATE TABLE revisions (
+						id TEXT PRIMARY KEY,
+						parent_id TEXT NOT NULL DEFAULT "",
+						item_type INT NOT NULL,
+						item_id TEXT NOT NULL,
+						item_updated_time INT NOT NULL,
+						title_diff TEXT NOT NULL DEFAULT "",
+						body_diff TEXT NOT NULL DEFAULT "",
+						metadata_diff TEXT NOT NULL DEFAULT "",
+						encryption_cipher_text TEXT NOT NULL DEFAULT "",
+						encryption_applied INT NOT NULL DEFAULT 0,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX revisions_parent_id ON revisions (parent_id)');
+				queries.push('CREATE INDEX revisions_item_type ON revisions (item_type)');
+				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
+				queries.push('CREATE INDEX revisions_item_updated_time ON revisions (item_updated_time)');
+				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
+
+				queries.push('ALTER TABLE item_changes ADD COLUMN source INT NOT NULL DEFAULT 1');
+				queries.push('ALTER TABLE item_changes ADD COLUMN before_change_item TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 20) {
+				const newTableSql = `
+					CREATE TABLE migrations (
+						id INTEGER PRIMARY KEY,
+						number INTEGER NOT NULL,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				const timestamp = Date.now();
+				queries.push('ALTER TABLE resources ADD COLUMN `size` INT NOT NULL DEFAULT -1');
+				queries.push({ sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (20, ?, ?)', params: [timestamp, timestamp] });
+			}
+
+			if (targetVersion == 21) {
+				queries.push('ALTER TABLE sync_items ADD COLUMN item_location INT NOT NULL DEFAULT 1');
+			}
+
+			if (targetVersion == 22) {
+				const newTableSql = `
+					CREATE TABLE resources_to_download (
+						id INTEGER PRIMARY KEY,
+						resource_id TEXT NOT NULL,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX resources_to_download_resource_id ON resources_to_download (resource_id)');
+				queries.push('CREATE INDEX resources_to_download_updated_time ON resources_to_download (updated_time)');
+			}
+
+			if (targetVersion == 23) {
+				const newTableSql = `
+					CREATE TABLE key_values (
+						id INTEGER PRIMARY KEY,
+						\`key\` TEXT NOT NULL,
+						\`value\` TEXT NOT NULL,
+						\`type\` INT NOT NULL,
+						updated_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE UNIQUE INDEX key_values_key ON key_values (key)');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

@@ -90,9 +90,19 @@ class Tag extends BaseItem {
 		return !!r;
 	}
 
+	static tagsWithNotesSql_() {
+		return 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
+	}
+
 	static async allWithNotes() {
-		const tagIdSql = 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
-		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (' + tagIdSql + ')');
+		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (' + this.tagsWithNotesSql_() + ')');
+	}
+
+	static async searchAllWithNotes(options) {
+		if (!options) options = {};
+		if (!options.conditions) options.conditions = [];
+		options.conditions.push('id IN (' + this.tagsWithNotesSql_() + ')');
+		return this.search(options);
 	}
 
 	static async tagsByNoteId(noteId) {

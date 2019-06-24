@@ -542,9 +542,8 @@ msgstr ""
 msgid "PDF File"
 msgstr "Fișier PDF"
 
-#, fuzzy
-msgid "&File"
-msgstr "Fișier"
+msgid "Synchronisation status"
+msgstr "Statusul sincronizării"
 
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
@@ -555,6 +554,35 @@ msgstr "Adăugați o nouă sarcină"
 msgid "New notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
+msgid "Print"
+msgstr "Printați"
+
+msgid "General Options"
+msgstr "Opțiuni Generale"
+
+msgid "Encryption options"
+msgstr "Opțiuni de criptare"
+
+msgid "Web clipper options"
+msgstr ""
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "Fișier"
+
+msgid "About Joplin"
+msgstr "Despre Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Verificați actualizările..."
+
 msgid "Import"
 msgstr "Importați"
 
@@ -564,15 +592,15 @@ msgstr "Exportați"
 msgid "Synchronise"
 msgstr "Sincronizați"
 
-msgid "Print"
-msgstr "Printați"
-
 #, javascript-format
 msgid "Hide %s"
 msgstr "Ascundeți %s"
 
 msgid "Quit"
 msgstr "Ieșiți"
+
+msgid "Close Window"
+msgstr ""
 
 #, fuzzy
 msgid "&Edit"
@@ -600,11 +628,17 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr "Cod"
+
 msgid "Insert Date Time"
 msgstr ""
 
 msgid "Edit in external editor"
 msgstr "Editați într-un editor extern"
+
+msgid "Tags"
+msgstr "Etichete"
 
 msgid "Search in all the notes"
 msgstr "Căutați în toate notițele"
@@ -630,18 +664,6 @@ msgstr ""
 msgid "&Tools"
 msgstr "Unelte"
 
-msgid "Synchronisation status"
-msgstr "Statusul sincronizării"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Encryption options"
-msgstr "Opțiuni de criptare"
-
-msgid "General Options"
-msgstr "Opțiuni Generale"
-
 #, fuzzy
 msgid "&Help"
 msgstr "Ajutor"
@@ -652,15 +674,8 @@ msgstr "Website și documentație"
 msgid "Make a donation"
 msgstr "Faceți o donație"
 
-msgid "Check for updates..."
-msgstr "Verificați actualizările..."
-
-msgid "About Joplin"
-msgstr "Despre Joplin"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "Toggle development tools"
+msgstr ""
 
 #, javascript-format
 msgid "Open %s"
@@ -764,10 +779,10 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-msgid "Browse..."
+msgid "Check synchronisation configuration"
 msgstr ""
 
-msgid "Check synchronisation configuration"
+msgid "Browse..."
 msgstr ""
 
 msgid "Apply"
@@ -872,9 +887,6 @@ msgstr "Titlul caietului de notițe:"
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
-msgid "Separate each tag by a comma."
-msgstr "Separați fiecare etichetă printr-o virgulă."
-
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
@@ -896,8 +908,8 @@ msgstr "Câțiva itemi nu pot fi sincronizați."
 msgid "View them now"
 msgstr "Vizualizați-le acum"
 
-msgid "Some items cannot be decrypted."
-msgstr "Câțiva itemi nu pot fi descriptați."
+msgid "One or more master keys need a password."
+msgstr ""
 
 msgid "Set the password"
 msgstr "Setați parola"
@@ -915,7 +927,31 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#, fuzzy
+msgid "Note History"
+msgstr "Caiete de notițe"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
+msgstr ""
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "Această notiță a fost modificată:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
 msgid "Open..."
@@ -965,9 +1001,6 @@ msgstr "Introduceți hyperlink"
 msgid "Attach file"
 msgstr "Atașați fișier"
 
-msgid "Tags"
-msgstr "Etichete"
-
 msgid "Set alarm"
 msgstr "Setați alarma"
 
@@ -977,9 +1010,6 @@ msgstr "În: %s"
 
 msgid "Hyperlink"
 msgstr "Hyperlink"
-
-msgid "Code"
-msgstr "Cod"
 
 msgid "Numbered List"
 msgstr "Listă numerotată"
@@ -1064,13 +1094,13 @@ msgid "Decrypting items: %d/%d"
 msgstr "Se decriptează itemi: %d/%d"
 
 #, fuzzy, javascript-format
-msgid "Fetching resources: %d"
-msgstr "Resurse: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "Resurse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-msgid "Table of contents"
+msgid "Retry"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1105,6 +1135,14 @@ msgstr "Ștergeți notițele?"
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste notițe?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1210,6 +1248,10 @@ msgstr "În progres"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "Criptat"
 
@@ -1245,6 +1287,63 @@ msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
+msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+msgid "Nextcloud WebDAV URL"
+msgstr "URL NextCloud WebDAV"
+
+msgid "Nextcloud username"
+msgstr "Nume utilizator Nextcloud"
+
+msgid "Nextcloud password"
+msgstr "Parolă Nextcloud"
+
+msgid "WebDAV URL"
+msgstr "URL-ul WebDAV"
+
+msgid "WebDAV username"
+msgstr "Nume utilizator WebDAV"
+
+msgid "WebDAV password"
+msgstr "Parolă WebDAV"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
 
 msgid "Language"
 msgstr "Limbă"
@@ -1294,6 +1393,43 @@ msgstr ""
 
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
+
+msgid "Enable soft breaks"
+msgstr ""
+
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "Activați criptarea"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
 
 msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
@@ -1361,47 +1497,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "Afișați opțiunile avansate"
 
-msgid "Synchronisation target"
-msgstr ""
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr ""
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-
-msgid "Nextcloud WebDAV URL"
-msgstr "URL NextCloud WebDAV"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-
-msgid "Nextcloud username"
-msgstr "Nume utilizator Nextcloud"
-
-msgid "Nextcloud password"
-msgstr "Parolă Nextcloud"
-
-msgid "WebDAV URL"
-msgstr "URL-ul WebDAV"
-
-msgid "WebDAV username"
-msgstr "Nume utilizator WebDAV"
-
-msgid "WebDAV password"
-msgstr "Parolă WebDAV"
-
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
@@ -1414,6 +1509,20 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
+
+#, fuzzy
+msgid "Enable note history"
+msgstr "Activați criptarea"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1433,6 +1542,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "Caiete de notițe"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"
@@ -1483,17 +1595,34 @@ msgstr "Nu există date de exportat."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "Itemii nu pot fi sincronizați"
-
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Acest fișier nu a putut fi deschis: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Acest fișier nu a putut fi deschis: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Itemii nu pot fi sincronizați"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
 
 msgid "Sync status (synced items / total items)"
@@ -1613,6 +1742,10 @@ msgstr "Etichete noi:"
 msgid "Type new tags or select from list"
 msgstr ""
 
+#, fuzzy
+msgid "More information"
+msgstr "Configurare"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1694,6 +1827,10 @@ msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
 #, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#, javascript-format
 msgid "Unsupported image type: %s"
 msgstr ""
 
@@ -1753,6 +1890,15 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separați fiecare etichetă printr-o virgulă."
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Câțiva itemi nu pot fi descriptați."
+
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
 
 #, fuzzy
 #~ msgid "Joplin v%s"

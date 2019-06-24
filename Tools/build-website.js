@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
-const marked = require('marked');
 const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
@@ -10,10 +9,10 @@ const headerHtml = `<!doctype html>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://joplin.cozic.net/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplin.cozic.net/css/fontawesome-all.min.css"> 
-	<script src="https://joplin.cozic.net/js/jquery-3.2.1.slim.min.js"></script>
+	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
 		background-color: #F1F1F1;
@@ -185,6 +184,24 @@ const headerHtml = `<!doctype html>
 		color: gray;
 		font-size: .9em;
 	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: -1.3em;
+		line-height: 1em;
+		text-decoration: none;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -202,7 +219,7 @@ const headerHtml = `<!doctype html>
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<a href="https://joplin.cozic.net"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
+	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
 	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
@@ -210,13 +227,13 @@ const headerHtml = `<!doctype html>
 	<div class="nav">
 		<ul>
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li><a href="https://discourse.joplin.cozic.net" title="Forum">Forum</a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplin.cozic.net" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
 			-->
 			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
 		</div>
@@ -305,15 +322,107 @@ const scriptHtml = `
 const rootDir = dirname(__dirname);
 
 function markdownToHtml(md) {
-	const renderer = new marked.Renderer();
+	const MarkdownIt = require('markdown-it');
 
-	let output = marked(md, {
-		gfm: true,
-		break: true,
-		renderer: renderer,
+	const markdownIt = new MarkdownIt({
+		breaks: true,
+		linkify: true,
+		html: true,
 	});
 
-	return headerHtml + output + scriptHtml + footerHtml;
+	markdownIt.core.ruler.push('checkbox', state => {
+		const tokens = state.tokens;
+		const Token = state.Token;
+		const doneNames = [];
+
+		const headingTextToAnchorName = (text, doneNames) => {
+			const allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			let lastWasDash = true;
+			let output = '';
+			for (let i = 0; i < text.length; i++) {
+				const c = text[i];
+				if (allowed.indexOf(c) < 0) {
+					if (lastWasDash) continue;
+					lastWasDash = true;
+					output += '-';
+				} else {
+					lastWasDash = false;
+					output += c;
+				}
+			}
+
+			output = output.toLowerCase();
+
+			while (output.length && output[output.length - 1] === '-') {
+				output = output.substr(0, output.length - 1);
+			}
+
+			let temp = output;
+			let index = 1;
+			while (doneNames.indexOf(temp) >= 0) {
+				temp = output + '-' + index;
+				index++;
+			}
+			output = temp;
+
+			return output;
+		}
+
+		const createAnchorTokens = anchorName => {
+			const output = [];
+
+			{
+				const token = new Token('heading_anchor_open', 'a', 1);
+				token.attrs = [
+					['name', anchorName],
+					['href', '#' + anchorName],
+					['class', 'heading-anchor'],
+				];
+				output.push(token);
+			}
+
+			{
+				const token = new Token('text', '', 0);
+				token.content = '🔗';
+				output.push(token);
+			}
+
+			{
+				const token = new Token('heading_anchor_close', 'a', -1);
+				output.push(token);
+			}
+
+			return output;
+		}
+
+		let insideHeading = false;
+		let processedFirstInline = false;
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i];
+
+			if (token.type === 'heading_open') {
+				insideHeading = true;
+				processedFirstInline = false;
+				continue;
+			}
+
+			if (token.type === 'heading_close') {
+				insideHeading = false;
+				processedFirstInline = false;
+				continue;
+			}
+
+			if (insideHeading && token.type === 'inline') {
+				processedFirstInline = true;
+				const anchorName = headingTextToAnchorName(token.content, doneNames);
+				doneNames.push(anchorName);
+				const anchorTokens = createAnchorTokens(anchorName);
+				token.children = anchorTokens.concat(token.children);
+			}
+		}
+	});
+
+	return headerHtml + markdownIt.render(md) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
@@ -333,7 +442,7 @@ function tocHtml() {
 	const markdownIt = new MarkdownIt();
 	let md = tocMd();
 	md = md.replace(/# Table of contents/, '');
-	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplin.cozic.net/$1');
+	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplinapp.org/$1');
 	tocHtml_ = markdownIt.render(md);
 	tocHtml_ = '<div id="toc">' + tocHtml_ + '</div>';
 	return tocHtml_;
@@ -343,7 +452,7 @@ function renderMdToHtml(md, targetPath, params) {
 	// Remove the header because it's going to be added back as HTML
 	md = md.replace(/# Joplin\n/, '');
 
-	params.baseUrl = 'https://joplin.cozic.net';
+	params.baseUrl = 'https://joplinapp.org';
 	params.imageBaseUrl = params.baseUrl + '/images';
 	params.tocHtml = tocHtml();
 
@@ -377,7 +486,8 @@ async function main() {
 
 	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
 
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog' });
+	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog (Desktop App)' });
+	renderFileToHtml(rootDir + '/readme/changelog_cli.md', rootDir + '/docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' });
 	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', { title: 'Web Clipper' });
 	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', { title: 'Debugging' });
 	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', { title: 'Desktop Application' });

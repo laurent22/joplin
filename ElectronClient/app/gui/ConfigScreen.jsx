@@ -76,6 +76,26 @@ class ConfigScreenComponent extends React.Component {
 			</div>
 		);
 
+		if (section.name === 'sync') {
+			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+
+			if (syncTargetMd.supportsConfigCheck) {
+				const messages = shared.checkSyncConfigMessages(this);
+				const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
+				const statusComp = !messages.length ? null : (
+					<div style={statusStyle}>
+						{messages[0]}
+						{messages.length >= 1 ? (<p>{messages[1]}</p>) : null}
+					</div>);
+
+				settingComps.push(
+					<div key="check_sync_config_button" style={this.rowStyle_}>
+						<button disabled={this.state.checkSyncConfigResult === 'checking'} style={theme.buttonStyle} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
+						{ statusComp }
+					</div>);
+			}
+		}
+
 		return (
 			<div key={key} style={sectionStyle}>
 				<h2 style={headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
@@ -265,9 +285,12 @@ class ConfigScreenComponent extends React.Component {
 				updateSettingValue(key, event.target.value);
 			};
 
+			const label = [md.label()];
+			if (md.unitLabel) label.push('(' + md.unitLabel() + ')');
+
 			return (
 				<div key={key} style={rowStyle}>
-					<div style={labelStyle}><label>{md.label()}</label></div>
+					<div style={labelStyle}><label>{label.join(' ')}</label></div>
 					<input type="number" style={controlStyle} value={this.state.settings[key]} onChange={(event) => {onNumChange(event)}} min={md.minimum} max={md.maximum} step={md.step}/>
 					{ descriptionComp }
 				</div>
@@ -319,24 +342,6 @@ class ConfigScreenComponent extends React.Component {
 		});
 
 		const settingComps = shared.settingsToComponents2(this, 'desktop', settings);
-
-		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
-
-		if (syncTargetMd.supportsConfigCheck) {
-			const messages = shared.checkSyncConfigMessages(this);
-			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
-			const statusComp = !messages.length ? null : (
-				<div style={statusStyle}>
-					{messages[0]}
-					{messages.length >= 1 ? (<p>{messages[1]}</p>) : null}
-				</div>);
-
-			settingComps.push(
-				<div key="check_sync_config_button" style={this.rowStyle_}>
-					<button disabled={this.state.checkSyncConfigResult === 'checking'} style={buttonStyle} onClick={this.checkSyncConfig_}>{_('Check synchronisation configuration')}</button>
-					{ statusComp }
-				</div>);
-		}
 
 		const buttonBarStyle = {
 			display: 'flex',

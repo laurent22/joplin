@@ -127,7 +127,11 @@ class NoteListUtils {
 			msg = _('Delete these %d notes?', noteIds.length);
 		}
 
-		const ok = bridge().showConfirmMessageBox(msg);
+		const ok = bridge().showConfirmMessageBox(msg, {
+			buttons: [_('Delete'), _('Cancel')],
+			defaultId: 1,
+		});
+
 		if (!ok) return;
 		await Note.batchDelete(noteIds);
 	}

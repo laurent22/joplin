@@ -1,3 +1,5 @@
+// https://github.com/mozilla/readability/tree/814f0a3884350b6f1adfdebb79ca3599e9806605
+
 /*eslint-env es6:false*/
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
@@ -496,17 +498,9 @@
     },
     setValue: function(newValue) {
       this._value = newValue;
-      delete this._decodedValue;
     },
-    setDecodedValue: function(newValue) {
-      this._value = encodeHTML(newValue);
-      this._decodedValue = newValue;
-    },
-    getDecodedValue: function() {
-      if (typeof this._decodedValue === "undefined") {
-        this._decodedValue = (this._value && decodeHTML(this._value)) || "";
-      }
-      return this._decodedValue;
+    getEncodedValue: function() {
+      return encodeHTML(this._value);
     },
   };
 
@@ -611,6 +605,13 @@
   };
 
   var Element = function (tag) {
+    // We use this to find the closing tag.
+    this._matchingTag = tag;
+    // We're explicitly a non-namespace aware parser, we just pretend it's all HTML.
+    var lastColonIndex = tag.lastIndexOf(":");
+    if (lastColonIndex != -1) {
+      tag = tag.substring(lastColonIndex + 1);
+    }
     this.attributes = [];
     this.childNodes = [];
     this.children = [];
@@ -659,6 +660,14 @@
       this.setAttribute("src", str);
     },
 
+    get srcset() {
+      return this.getAttribute("srcset") || "";
+    },
+
+    set srcset(str) {
+      this.setAttribute("srcset", str);
+    },
+
     get nodeName() {
       return this.tagName;
     },
@@ -675,9 +684,9 @@
             for (var j = 0; j < child.attributes.length; j++) {
               var attr = child.attributes[j];
               // the attribute value will be HTML escaped.
-              var val = attr.value;
+              var val = attr.getEncodedValue();
               var quote = (val.indexOf('"') === -1 ? '"' : "'");
-              arr.push(" " + attr.name + '=' + quote + val + quote);
+              arr.push(" " + attr.name + "=" + quote + val + quote);
             }
 
             if (child.localName in voidElems && !child.childNodes.length) {
@@ -753,8 +762,9 @@
     getAttribute: function (name) {
       for (var i = this.attributes.length; --i >= 0;) {
         var attr = this.attributes[i];
-        if (attr.name === name)
-          return attr.getDecodedValue();
+        if (attr.name === name) {
+          return attr.value;
+        }
       }
       return undefined;
     },
@@ -763,11 +773,11 @@
       for (var i = this.attributes.length; --i >= 0;) {
         var attr = this.attributes[i];
         if (attr.name === name) {
-          attr.setDecodedValue(value);
+          attr.setValue(value);
           return;
         }
       }
-      this.attributes.push(new Attribute(name, encodeHTML(value)));
+      this.attributes.push(new Attribute(name, value));
     },
 
     removeAttribute: function (name) {
@@ -778,7 +788,13 @@
           break;
         }
       }
-    }
+    },
+
+    hasAttribute: function (name) {
+      return this.attributes.some(function (attr) {
+        return attr.name == name;
+      });
+    },
   };
 
   var Style = function (node) {
@@ -925,7 +941,7 @@
       // Read the attribute value (and consume the matching quote)
       var value = this.readString(c);
 
-      node.attributes.push(new Attribute(name, value));
+      node.attributes.push(new Attribute(name, decodeHTML(value)));
 
       return;
     },
@@ -950,7 +966,7 @@
         strBuf.push(c);
         c = this.nextChar();
       }
-      var tag = strBuf.join('');
+      var tag = strBuf.join("");
 
       if (!tag)
         return false;
@@ -961,7 +977,9 @@
       while (c !== "/" && c !== ">") {
         if (c === undefined)
           return false;
-        while (whitespace.indexOf(this.html[this.currentChar++]) != -1);
+        while (whitespace.indexOf(this.html[this.currentChar++]) != -1) {
+          // Advance cursor to first non-whitespace char.
+        }
         this.currentChar--;
         c = this.nextChar();
         if (c !== "/" && c !== ">") {
@@ -1055,9 +1073,10 @@
         return null;
 
       // Read any text as Text node
+      var textNode;
       if (c !== "<") {
         --this.currentChar;
-        var textNode = new Text();
+        textNode = new Text();
         var n = this.html.indexOf("<", this.currentChar);
         if (n === -1) {
           textNode.innerHTML = this.html.substring(this.currentChar, this.html.length);
@@ -1066,6 +1085,18 @@
           textNode.innerHTML = this.html.substring(this.currentChar, n);
           this.currentChar = n;
         }
+        return textNode;
+      }
+
+      if (this.match("![CDATA[")) {
+        var endChar = this.html.indexOf("]]>", this.currentChar);
+        if (endChar === -1) {
+          this.error("unclosed CDATA section");
+          return null;
+        }
+        textNode = new Text();
+        textNode.textContent = this.html.substring(this.currentChar, endChar);
+        this.currentChar = endChar + ("]]>").length;
         return textNode;
       }
 
@@ -1100,7 +1131,7 @@
       // If this isn't a void Element, read its child nodes
       if (!closed) {
         this.readChildren(node);
-        var closingTag = "</" + localName + ">";
+        var closingTag = "</" + node._matchingTag + ">";
         if (!this.match(closingTag)) {
           this.error("expected '" + closingTag + "' and got " + this.html.substr(this.currentChar, closingTag.length));
           return null;

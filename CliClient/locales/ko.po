@@ -590,9 +590,8 @@ msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 �
 msgid "PDF File"
 msgstr "PDF 파일"
 
-#, fuzzy
-msgid "&File"
-msgstr "파일"
+msgid "Synchronisation status"
+msgstr "동기화 상태"
 
 msgid "New note"
 msgstr "새 노트"
@@ -603,6 +602,35 @@ msgstr "새 '할 일'"
 msgid "New notebook"
 msgstr "새 노트북"
 
+msgid "Print"
+msgstr "인쇄"
+
+msgid "General Options"
+msgstr "일반 옵션"
+
+msgid "Encryption options"
+msgstr "암호화 옵션"
+
+msgid "Web clipper options"
+msgstr "웹 수집기 옵션"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+msgid "&File"
+msgstr "파일"
+
+msgid "About Joplin"
+msgstr "조플린이란?"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "업데이트 확인..."
+
 msgid "Import"
 msgstr "가져오기"
 
@@ -612,15 +640,15 @@ msgstr "내보내기"
 msgid "Synchronise"
 msgstr "동기화"
 
-msgid "Print"
-msgstr "인쇄"
-
 #, javascript-format
 msgid "Hide %s"
 msgstr "%s 숨기기"
 
 msgid "Quit"
 msgstr "종료"
+
+msgid "Close Window"
+msgstr ""
 
 #, fuzzy
 msgid "&Edit"
@@ -647,11 +675,17 @@ msgstr "기울임"
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr "코드"
+
 msgid "Insert Date Time"
 msgstr "날짜와 시간 입력"
 
 msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
+
+msgid "Tags"
+msgstr "태그"
 
 msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
@@ -677,18 +711,6 @@ msgstr "내용에 포커스"
 msgid "&Tools"
 msgstr "도구"
 
-msgid "Synchronisation status"
-msgstr "동기화 상태"
-
-msgid "Web clipper options"
-msgstr "웹 수집기 옵션"
-
-msgid "Encryption options"
-msgstr "암호화 옵션"
-
-msgid "General Options"
-msgstr "일반 옵션"
-
 #, fuzzy
 msgid "&Help"
 msgstr "도움말"
@@ -699,15 +721,8 @@ msgstr "웹사이트 및 각종 문서"
 msgid "Make a donation"
 msgstr "기부하기"
 
-msgid "Check for updates..."
-msgstr "업데이트 확인..."
-
-msgid "About Joplin"
-msgstr "조플린이란?"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "Toggle development tools"
+msgstr ""
 
 #, javascript-format
 msgid "Open %s"
@@ -816,11 +831,11 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
 
-msgid "Browse..."
-msgstr ""
-
 msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"
+
+msgid "Browse..."
+msgstr ""
 
 msgid "Apply"
 msgstr "적용"
@@ -937,9 +952,6 @@ msgstr "노트북 제목:"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-msgid "Separate each tag by a comma."
-msgstr "각각의 태그를 쉼표로 구분합니다."
-
 msgid "Rename notebook:"
 msgstr "노트북 이름 바꾸기:"
 
@@ -961,8 +973,9 @@ msgstr "일부 항목들은 동기화할 수 없습니다."
 msgid "View them now"
 msgstr "지금 보여주기"
 
-msgid "Some items cannot be decrypted."
-msgstr "일부 항목들은 암호화할 수 없습니다."
+#, fuzzy
+msgid "One or more master keys need a password."
+msgstr "관리자 비밀번호를 입력하세요:"
 
 msgid "Set the password"
 msgstr "암호 설정"
@@ -980,8 +993,32 @@ msgstr "위치"
 msgid "URL"
 msgstr "URL"
 
+#, fuzzy
+msgid "Note History"
+msgstr "노트북"
+
+msgid "Previous versions of this note"
+msgstr ""
+
 msgid "Note properties"
 msgstr "노트 속성"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#, fuzzy
+msgid "This note has no history"
+msgstr "노트가 변경되었습니다:"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
 
 msgid "Open..."
 msgstr "열기..."
@@ -1032,9 +1069,6 @@ msgstr "하이퍼링크 삽입"
 msgid "Attach file"
 msgstr "파일 첨부"
 
-msgid "Tags"
-msgstr "태그"
-
 msgid "Set alarm"
 msgstr "알람 설정"
 
@@ -1044,9 +1078,6 @@ msgstr "내부: %s"
 
 msgid "Hyperlink"
 msgstr "하이퍼링크"
-
-msgid "Code"
-msgstr "코드"
 
 msgid "Numbered List"
 msgstr "숫자가 매겨진 목록"
@@ -1133,13 +1164,13 @@ msgid "Decrypting items: %d/%d"
 msgstr "복호화 항목: %d/%d"
 
 #, javascript-format
-msgid "Fetching resources: %d"
-msgstr "리소스 가져오는 중: %d."
+msgid "Fetching resources: %d/%d"
+msgstr "리소스 가져오는 중: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
-msgid "Table of contents"
+msgid "Retry"
 msgstr ""
 
 msgid "Add or remove tags"
@@ -1171,6 +1202,14 @@ msgstr "노트를 삭제할까요?"
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "노트를 삭제할까요?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1284,6 +1323,10 @@ msgstr "진행 중"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
 msgid "Encrypted"
 msgstr "암호화됨"
 
@@ -1319,6 +1362,67 @@ msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "노트를 \"%s\" 노트북으로 옮길 수 없습니다"
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세"
+"요, 그렇지 않으면 모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
+
+msgid "Synchronisation target"
+msgstr "동기화 대상"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
+"된 추가적인 매개 변수를 포함할 수 있습니다(아래에 문서화되어 있습니다)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "동기화를 할 폴더 (절대적 경로)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud 사용자 이름"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud 암호"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV 사용자 이름"
+
+msgid "WebDAV password"
+msgstr "WebDAV 암호"
+
+msgid "Attachment download behaviour"
+msgstr ""
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Max concurrent connections"
+msgstr ""
 
 msgid "Language"
 msgstr "언어"
@@ -1368,6 +1472,43 @@ msgstr "내용에 포커스"
 
 msgid "When creating a new note:"
 msgstr "새 노트를 만들 때:"
+
+msgid "Enable soft breaks"
+msgstr ""
+
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "암호화 사용"
+
+msgid "Enable ==mark== syntax"
+msgstr ""
+
+msgid "Enable footnotes"
+msgstr ""
+
+msgid "Enable table of contents extension"
+msgstr ""
+
+msgid "Enable ~sub~ syntax"
+msgstr ""
+
+msgid "Enable ^sup^ syntax"
+msgstr ""
+
+msgid "Enable deflist syntax"
+msgstr ""
+
+msgid "Enable abbreviation syntax"
+msgstr ""
+
+msgid "Enable markdown emoji"
+msgstr ""
+
+msgid "Enable ++insert++ syntax"
+msgstr ""
+
+msgid "Enable multimarkdown table extension"
+msgstr ""
 
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
@@ -1441,53 +1582,6 @@ msgstr ""
 msgid "Show advanced options"
 msgstr "고급 옵션"
 
-msgid "Synchronisation target"
-msgstr "동기화 대상"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
-"된 추가적인 매개 변수를 포함할 수 있습니다(아래에 문서화되어 있습니다)."
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "동기화를 할 폴더 (절대적 경로)"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`를 "
-"참조하세요."
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"주의: 이 위치를 변경하시려면, 동기화 전에 모든 컨텐트를 복사했는지 확인하세"
-"요, 그렇지 않으면 모든 파일이 삭제됩니다! 자세한 정보는 FAQ를 참조하세요: %s"
-
-msgid "Nextcloud username"
-msgstr "Nextcloud 사용자 이름"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud 암호"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV 사용자 이름"
-
-msgid "WebDAV password"
-msgstr "WebDAV 암호"
-
 msgid "Custom TLS certificates"
 msgstr "임의의 TLS 인증서"
 
@@ -1504,6 +1598,20 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
+
+#, fuzzy
+msgid "Enable note history"
+msgstr "암호화 사용"
+
+msgid "days"
+msgstr ""
+
+#, javascript-format
+msgid "%d days"
+msgstr ""
+
+msgid "Keep note history for"
+msgstr ""
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1523,6 +1631,9 @@ msgstr ""
 #, fuzzy
 msgid "Note"
 msgstr "노트북"
+
+msgid "Plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Application"
@@ -1575,12 +1686,11 @@ msgstr "내보낼 데이터가 없습니다."
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "노트를 가져와서 저장할 노트북을 지정하세요."
 
+msgid "Restored Notes"
+msgstr ""
+
 msgid "Items that cannot be synchronised"
 msgstr "동기화를 할 수 없는 항목"
-
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1590,6 +1700,24 @@ msgstr ""
 "해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이"
 "런 항목을 찾으려면 제목 또는 ID로 검색하세요. (상단에 괄호 안에 표시되어 있습"
 "니다)"
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "다음 파일을 열 수 없습니다: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "동기화를 할 수 없는 항목"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
 
 msgid "Sync status (synced items / total items)"
 msgstr "동기화 상태 (동기화 완료 항목 / 전체 항목)"
@@ -1713,6 +1841,10 @@ msgstr "새 태그:"
 msgid "Type new tags or select from list"
 msgstr "새 태그를 입력하거나 목록에서 선택하세요"
 
+#, fuzzy
+msgid "More information"
+msgstr "설정"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -1798,6 +1930,10 @@ msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하지 않습니다: %s"
 
 #, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
+
+#, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
@@ -1855,6 +1991,22 @@ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 msgid "Welcome"
 msgstr "환영합니다"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "각각의 태그를 쉼표로 구분합니다."
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "일부 항목들은 암호화할 수 없습니다."
+
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`"
+#~ "를 참조하세요."
 
 #~ msgid "Joplin v%s"
 #~ msgstr "조플린 v%s"

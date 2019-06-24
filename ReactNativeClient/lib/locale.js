@@ -175,6 +175,8 @@ let codeToCountry_ = {};
 codeToCountry_["BR"] = "Brasil";
 codeToCountry_["CR"] = "Costa Rica";
 codeToCountry_["CN"] = "中国";
+codeToCountry_["GB"] = "UK";
+codeToCountry_["US"] = "US";
 
 let supportedLocales_ = null;
 

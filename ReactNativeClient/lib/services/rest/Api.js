@@ -11,9 +11,13 @@ const { Logger } = require('lib/logger.js');
 const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
+const urlUtils = require('lib/urlUtils.js');
+const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const uri2path = require('file-uri-to-path');
 
 class ApiError extends Error {
 
@@ -37,6 +41,7 @@ class Api {
 
 	constructor(token = null) {
 		this.token_ = token;
+		this.knownNounces_ = {};
 		this.logger_ = new Logger();
 	}
 
@@ -59,9 +64,18 @@ class Api {
 
 	async route(method, path, query = null, body = null, files = null) {
 		if (!files) files = [];
+		if (!query) query = {};
 
 		const parsedPath = this.parsePath(path);
 		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
+
+		if (query && query.nounce) {
+			const requestMd5 = md5(JSON.stringify([method, path, body, query, files.length]));
+			if (this.knownNounces_[query.nounce] === requestMd5) {
+				throw new ErrorBadRequest('Duplicate Nounce');
+			}
+			this.knownNounces_[query.nounce] = requestMd5;
+		}
 
 		const request = {
 			method: method,
@@ -221,7 +235,9 @@ class Api {
 
 	async action_folders(request, id = null, link = null) {
 		if (request.method === 'GET' && !id) {
-			return await Folder.allAsTree({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+			const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
+			const output = await Folder.allAsTree(folders);
+			return output;
 		}
 
 		if (request.method === 'GET' && id) {
@@ -346,15 +362,17 @@ class Api {
 			const requestId = Date.now();
 			const requestNote = JSON.parse(request.body);
 
+			const allowFileProtocolImages = urlUtils.urlProtocol(requestNote.base_url).toLowerCase() === 'file:';
+
 			const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
-			let note = await this.requestNoteToNote(requestNote);
+			let note = await this.requestNoteToNote_(requestNote);
 
 			const imageUrls = markdownUtils.extractImageUrls(note.body);
 
 			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
 
-			let result = await this.downloadImages_(imageUrls);
+			let result = await this.downloadImages_(imageUrls, allowFileProtocolImages);
 
 			this.logger().info('Request (' + requestId + '): Creating resources from paths: ' + Object.getOwnPropertyNames(result).length);
 
@@ -398,7 +416,7 @@ class Api {
 		return this.htmlToMdParser_;
 	}
 
-	async requestNoteToNote(requestNote) {
+	async requestNoteToNote_(requestNote) {
 		const output = {
 			title: requestNote.title ? requestNote.title : '',
 			body: requestNote.body ? requestNote.body : '',
@@ -412,6 +430,7 @@ class Api {
 			// rendering but it makes sure everything will be parsed.
 			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
 				baseUrl: requestNote.base_url ? requestNote.base_url : '',
+				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 			});
 		}
 
@@ -445,13 +464,26 @@ class Api {
 		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
-	async downloadImage_(url) {
+	async tryToGuessImageExtFromMimeType_(response, imagePath) {
+		const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+		if (!mimeType) return imagePath;
+
+		const newExt = mimeUtils.toFileExtension(mimeType);
+		if (!newExt) return imagePath;
+
+		const newImagePath = imagePath + '.' + newExt;
+		await shim.fsDriver().move(imagePath, newImagePath);
+		return newImagePath;
+	}
+
+	async downloadImage_(url, allowFileProtocolImages) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
 
 		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
+		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = '.' + fileExt;
 		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
 		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
@@ -459,8 +491,17 @@ class Api {
 		try {
 			if (isDataUrl) {
 				await shim.imageFromDataUrl(url, imagePath);
+			} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
+				// Can't think of any reason to disallow this at this point
+				// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
+				const localPath = uri2path(url);
+				await shim.fsDriver().copy(localPath, imagePath);
 			} else {
-				await shim.fetchBlob(url, { path: imagePath });
+				const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });
+
+				// If we could not find the file extension from the URL, try to get it
+				// now based on the Content-Type header.
+				if (!fileExt) imagePath = this.tryToGuessImageExtFromMimeType_(response, imagePath);
 			}
 			return imagePath;
 		} catch (error) {
@@ -469,7 +510,7 @@ class Api {
 		}
 	}
 
-	async downloadImages_(urls) {
+	async downloadImages_(urls, allowFileProtocolImages) {
 		const PromisePool = require('es6-promise-pool')
 
 		const output = {};
@@ -481,7 +522,7 @@ class Api {
 			const url = urls[urlIndex++];
 
 			return new Promise(async (resolve, reject) => {
-				const imagePath = await this.downloadImage_(url);
+				const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
 				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 				resolve();
 			});
