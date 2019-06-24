@@ -8,7 +8,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing) into 
 
 The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also work on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
+The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -84,6 +84,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
+- Goto Anything feature.
 - Sort notes by multiple criteria - title, updated time, etc.
 - Support for alarms (notifications) in mobile and desktop applications.
 - Offline first, so the entire data is always available on the device even without an internet connection.
@@ -329,6 +330,10 @@ Field restricted | Add either `title:` or `body:` before a note to restrict your
 
 Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.
 
+# Goto Anything
+
+In the desktop application, press Ctrl+G or Cmd+G and type the title of a note to jump directly to it. You can also type `#` followed by a tag or `@` followed by a notebook title.
+
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
@@ -376,9 +381,9 @@ Current translations:
 ![](https://joplinapp.org/images/flags/country-4x3/gb.png)  |  English (UK)  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
 ![](https://joplinapp.org/images/flags/country-4x3/us.png)  |  English (US)  |  [en_US](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_US.po)  |    |  100%
 ![](https://joplinapp.org/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Andros Fenollosa (andros@fenollosa.email)  |  97%
-![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  99%
+![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
 ![](https://joplinapp.org/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  65%
-![](https://joplinapp.org/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  92%
+![](https://joplinapp.org/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  98%
 ![](https://joplinapp.org/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  51%
 ![](https://joplinapp.org/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  79%
 ![](https://joplinapp.org/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (code@mxe.no)  |  91%

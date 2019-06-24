@@ -87,20 +87,31 @@
 	}
 
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
+	// And hard-code the image dimensions so that the information can be used by the clipper server to
+	// display them at the right sizes in the notes.
 	function cleanUpElement(element, imageSizes) {
 		const childNodes = element.childNodes;
 
-		for (let i = 0; i < childNodes.length; i++) {
+		for (let i = childNodes.length - 1; i >= 0; i--) {
 			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
 
-			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
-			if (isVisible && ['input', 'textarea', 'script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
+			const isHidden = node && node.classList && node.classList.contains('joplin-clipper-hidden');
 
-			if (!isVisible) {
+			if (isHidden) {
 				element.removeChild(node);
 			} else {
 
-				if (node.nodeName.toLowerCase() === 'img') {
+				// If the data-joplin-clipper-value has been set earlier, create a new DIV element
+				// to replace the input or text area, so that it can be exported.
+				if (node.getAttribute && node.getAttribute('data-joplin-clipper-value')) {
+					const div = document.createElement('div');
+					div.innerText = node.getAttribute('data-joplin-clipper-value');
+					node.parentNode.insertBefore(div, node.nextSibling);
+					element.removeChild(node);
+				}
+
+				if (nodeName === 'img') {
 					node.src = absoluteUrl(node.src);
 					const imageSize = imageSizes[node.src];
 					if (imageSize) {
@@ -110,6 +121,52 @@
 				}
 
 				cleanUpElement(node, imageSizes);
+			}
+		}
+	}
+
+	// When we clone the document before cleaning it, we lose some of the information that might have been set via CSS or
+	// JavaScript, in particular whether an element was hidden or not. This function pre-process the document by
+	// adding a "joplin-clipper-hidden" class to all currently hidden elements in the current document.
+	// This class is then used in cleanUpElement() on the cloned document to find an element should be visible or not.
+	function preProcessDocument(element) {
+		const childNodes = element.childNodes;
+
+		for (let i = 0; i < childNodes.length; i++) {
+			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
+
+			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
+			if (isVisible && ['script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(nodeName) >= 0) isVisible = false;
+
+			// If it's a text input or a textarea and it has a value, save
+			// that value to data-joplin-clipper-value. This is then used
+			// when cleaning up the document to export the value.
+			if (['input', 'textarea'].indexOf(nodeName) >= 0) {
+				isVisible = !!node.value;
+				if (nodeName === 'input' && node.getAttribute('type') !== 'text') isVisible = false;
+				if (isVisible) node.setAttribute('data-joplin-clipper-value', node.value);
+			}
+
+			if (!isVisible) {
+				node.classList.add('joplin-clipper-hidden');
+			} else {
+				preProcessDocument(node);
+			}
+		}
+	}
+
+	// This sets the PRE elements computed style to the style attribute, so that
+	// the info can be exported and later processed by the htmlToMd converter
+	// to detect code blocks.
+	function hardcodePreStyles(doc) {
+		const preElements = doc.getElementsByTagName('pre');
+
+		for (const preElement of preElements) {
+			const fontFamily = getComputedStyle(preElement).getPropertyValue('font-family');
+			const fontFamilyArray = fontFamily.split(',').map(f => f.toLowerCase().trim());
+			if (fontFamilyArray.indexOf('monospace') >= 0) {
+				preElement.style.fontFamily = fontFamily;
 			}
 		}
 	}
@@ -180,6 +237,10 @@
 
 		} else if (command.name === "completePageHtml") {
 
+			hardcodePreStyles(document);
+			preProcessDocument(document);
+			// Because cleanUpElement is going to modify the DOM and remove elements we don't want to work
+			// directly on the document, so we make a copy of it first.
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			cleanUpElement(cleanDocument, imageSizes);
@@ -187,6 +248,7 @@
 
 		} else if (command.name === "selectedHtml") {
 
+			hardcodePreStyles(document);
 		    const range = window.getSelection().getRangeAt(0);
 		    const container = document.createElement('div');
 		    container.appendChild(range.cloneContents());
