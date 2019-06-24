@@ -62,7 +62,6 @@ class Api {
 
 		const parsedPath = this.parsePath(path);
 		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
-		
 
 		const request = {
 			method: method,
@@ -161,7 +160,6 @@ class Api {
 
 		const getOneModel = async () => {
 			const model = await ModelClass.load(id);
-			if (!model) throw new ErrorNotFound();			
 			if (!model) throw new ErrorNotFound();
 			return model;
 		}
@@ -290,7 +288,6 @@ class Api {
 
 				const filePath = Resource.fullPath(resource);
 				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
-				
 
 				const response = new ApiResponse();
 				response.type = 'attachment';
@@ -328,9 +325,9 @@ class Api {
 
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
-		
+
 		if (request.method === 'GET') {
-			
+
 			if (link && link === 'tags') {
 				return Tag.tagsByNoteId(id);
 			} else if (link) {
@@ -428,6 +425,8 @@ class Api {
 
 		if (requestNote.source_url) output.source_url = requestNote.source_url;
 		if (requestNote.author) output.author = requestNote.author;
+		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
+		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 		if (requestNote.is_todo) output.is_todo = requestNote.is_todo;
 
 		return output;
@@ -541,4 +540,4 @@ class Api {
 
 }
 
-module.exports = Api;module.exports = Api;
+module.exports = Api;
