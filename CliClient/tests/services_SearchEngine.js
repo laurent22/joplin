@@ -256,6 +256,23 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('말')).length).toBe(1);
 	}));
 
+	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: "你好", body: "我是法国人" });
+
+		await engine.syncTables();
+
+		expect((await engine.search('title:你好*')).length).toBe(1);
+		expect((await engine.search('body:你好')).length).toBe(0);
+		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
+		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
+		expect((await engine.search('title:你好 我是')).length).toBe(1);
+		expect((await engine.search('title:bla 我是')).length).toBe(0);
+
+		// For non-alpha char, only the first field is looked at, the following ones are ignored
+		expect((await engine.search('title:你好 title:hello')).length).toBe(1);
+	}));
+
 	it('should parse normal query strings', asyncTest(async () => {
 		let rows;
 
@@ -265,6 +282,7 @@ describe('services_SearchEngine', function() {
 			['title:abcd efgh', { _: ['efgh'], title: ['abcd'] }],
 			['title:abcd', { title: ['abcd'] }],
 			['"abcd efgh"', { _: ['abcd efgh'] }],
+			['title:abcd title:efgh', { title: ['abcd', 'efgh'] }],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -282,33 +300,6 @@ describe('services_SearchEngine', function() {
 			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), 'Test case (body) ' + i);
 		}
 	}));
-
-	// it('should parse query strings with wildcards', asyncTest(async () => {
-	// 	let rows;
-
-	// 	const testCases = [
-	// 		['do*', ['do', 'dog', 'domino'], [] ],
-	// 		// "*" is a wildcard only when used at the end (to search for documents with the specified prefix)
-	// 		// If it's at the beginning, it's ignored, if it's in the middle, it's treated as a litteral "*".
-	// 		['*an*', ['an', 'anneau'], ['piano', 'plan'] ],
-	// 		['no*no', ['no*no'], ['nonono'] ],
-	// 	];
-
-	// 	for (let i = 0; i < testCases.length; i++) {
-	// 		const t = testCases[i];
-	// 		const input = t[0];
-	// 		const shouldMatch = t[1];
-	// 		const shouldNotMatch = t[2];
-	// 		const regex = new RegExp(engine.parseQuery(input).terms._[0].value, 'gmi');
-
-	// 		for (let j = 0; j < shouldMatch.length; j++) {
-	// 			const r = shouldMatch[j].match(regex);
-	// 			expect(!!r).toBe(true, '"' + input + '" should match "' + shouldMatch[j] + '"');
-	// 		}
-	// 	}
-
-	// 	expect(engine.parseQuery('*').termCount).toBe(0);
-	// }));
 
 	it('should handle queries with special characters', asyncTest(async () => {
 		let rows;

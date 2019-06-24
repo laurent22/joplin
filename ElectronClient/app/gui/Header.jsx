@@ -35,8 +35,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		this.search_onClear = (event) => {
-			this.setState({ searchQuery: '' });
-			triggerOnQuery('');
+			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
 		}
 
@@ -56,9 +55,20 @@ class HeaderComponent extends React.Component {
 				this.setState({ showSearchUsageLink: false });
 			}, 5000);
 		}
+		
+		this.search_keyDown = event => {
+			if (event.keyCode === 27) { // ESCAPE
+				this.resetSearch();
+			}
+		}
+		
+		this.resetSearch = () => {
+			this.setState({ searchQuery: '' });
+			triggerOnQuery('');
+		}
 
 		this.searchUsageLink_click = event => {
-			bridge().openExternal('https://joplin.cozic.net/#searching');
+			bridge().openExternal('https://joplinapp.org/#searching');
 		}
 	}
 
@@ -68,6 +78,12 @@ class HeaderComponent extends React.Component {
 		}
 	}
 
+	componentDidUpdate(prevProps) {
+		if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
+			this.resetSearch();
+		}
+	}
+	
 	componentWillUnmount() {
 		if (this.hideSearchUsageLinkIID_) {
 			clearTimeout(this.hideSearchUsageLinkIID_);
@@ -80,7 +96,7 @@ class HeaderComponent extends React.Component {
 
 		let commandProcessed = true;
 
-		if (command.name === 'focus_search' && this.searchElement_) {
+		if (command.name === 'focusSearch' && this.searchElement_) {
 			this.searchElement_.focus();
 		} else {
 			commandProcessed = false;
@@ -102,11 +118,14 @@ class HeaderComponent extends React.Component {
 		let icon = null;
 		if (options.iconName) {
 			const iconStyle = {
-				fontSize: Math.round(style.fontSize * 1.4),
+				fontSize: Math.round(style.fontSize * 1.1),
 				color: style.color,
 			};
 			if (options.title) iconStyle.marginRight = 5;
-			if (options.iconRotation) iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
+			if("undefined" != typeof(options.iconRotation)) {
+				iconStyle.transition = "transform 0.15s ease-in-out";
+				iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
+			}
 			icon = <i style={iconStyle} className={"fa " + options.iconName}></i>
 		}
 
@@ -135,8 +154,11 @@ class HeaderComponent extends React.Component {
 		const inputStyle = {
 			display: 'flex',
 			flex: 1,
-			paddingLeft: 4,
-			paddingRight: 4,
+			paddingLeft: 6,
+			paddingRight: 6,
+			paddingTop: 1,  // vertical alignment with buttons
+			paddingBottom: 0,  // vertical alignment with buttons
+			height: style.fontSize * 2,
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
@@ -184,6 +206,7 @@ class HeaderComponent extends React.Component {
 					ref={elem => this.searchElement_ = elem}
 					onFocus={this.search_onFocus}
 					onBlur={this.search_onBlur}
+					onKeyDown={this.search_keyDown}
 				/>
 				<a
 					href="#"
@@ -251,6 +274,7 @@ const mapStateToProps = (state) => {
 	return {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,
+		notesParentType: state.notesParentType,
 	};
 };
 

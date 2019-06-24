@@ -77,13 +77,16 @@ class Bridge {
 		});
 	}
 
-	showConfirmMessageBox(message) {
-		const result = this.showMessageBox_(this.window(), {
+	showConfirmMessageBox(message, options = null) {
+		if (options === null) options = {};
+
+		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'question',
 			message: message,
 			cancelId: 1,
 			buttons: [_('OK'), _('Cancel')],
-		});
+		}, options));
+
 		return result === 0;
 	}
 

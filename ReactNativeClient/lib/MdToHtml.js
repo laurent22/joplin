@@ -7,18 +7,32 @@ const { _ } = require('lib/locale');
 const md5 = require('md5');
 const StringUtils = require('lib/string-utils.js');
 const noteStyle = require('./MdToHtml/noteStyle');
+const Setting = require('./models/Setting.js');
 const rules = {
 	image: require('./MdToHtml/rules/image'),
 	checkbox: require('./MdToHtml/rules/checkbox'),
 	katex: require('./MdToHtml/rules/katex'),
 	link_open: require('./MdToHtml/rules/link_open'),
-	html_block: require('./MdToHtml/rules/html_block'),
-	html_inline: require('./MdToHtml/rules/html_inline'),
+	html_image: require('./MdToHtml/rules/html_image'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
+const markdownItAnchor = require('markdown-it-anchor');
+// The keys must match the corresponding entry in Setting.js
+const plugins = {
+	mark: {module: require('markdown-it-mark')},
+	footnote: {module: require('markdown-it-footnote')},
+	sub: {module: require('markdown-it-sub')},
+	sup: {module: require('markdown-it-sup')},
+	deflist: {module: require('markdown-it-deflist')},
+	abbr: {module: require('markdown-it-abbr')},
+	emoji: {module: require('markdown-it-emoji')},
+	insert: {module: require('markdown-it-ins')},
+	multitable: {module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true }},
+	toc: {module: require('markdown-it-toc-done-right'), options: { listType: 'ul' }},
+};
 
 class MdToHtml {
 
@@ -29,6 +43,9 @@ class MdToHtml {
 		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
 
 		this.cachedOutputs_ = {};
+
+		this.lastCodeHighlightCacheKey_ = null;
+		this.cachedHighlightedCode_ = {};
 	}
 
 	render(body, style, options = null) {
@@ -36,6 +53,17 @@ class MdToHtml {
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
+
+		// The "codeHighlightCacheKey" option indicates what set of cached object should be
+		// associated with this particular Markdown body. It is only used to allow us to
+		// clear the cache whenever switching to a different note.
+		// If "codeHighlightCacheKey" is not specified, code highlighting won't be cached.
+		if (options.codeHighlightCacheKey !== this.lastCodeHighlightCacheKey_ || !options.codeHighlightCacheKey) {
+			this.cachedHighlightedCode_ = {};
+			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
+		}
+
+		const breaks_ = Setting.value('markdown.softbreaks') ? false : true;
 
 		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(style)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
@@ -48,17 +76,24 @@ class MdToHtml {
 		};
 
 		const markdownIt = new MarkdownIt({
-			breaks: true,
+			breaks: breaks_,
 			linkify: true,
 			html: true,
-			highlight: function(str, lang) {
+			highlight: (str, lang) => {
 				try {
 					let hlCode = '';
-					
-					if (lang && hljs.getLanguage(lang)) {
-						hlCode = hljs.highlight(lang, str, true).value;
+
+					const cacheKey = md5(str + '_' + lang);
+
+					if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
+						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
-						hlCode = hljs.highlightAuto(str).value;
+						if (lang && hljs.getLanguage(lang)) {
+							hlCode = hljs.highlight(lang, str, true).value;
+						} else {
+							hlCode = hljs.highlightAuto(str).value;
+						}
+						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
 
 					if (shim.isReactNative()) {
@@ -76,14 +111,25 @@ class MdToHtml {
 
 		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
 
-		// To add a plugin, there are two options:
+		// To add a plugin, there are three options:
 		//
 		// 1. If the plugin does not need any application specific data, use the standard way:
 		//
 		//    const someMarkdownPlugin = require('someMarkdownPlugin');
 		//    markdownIt.use(someMarkdownPlugin);
 		//
-		// 2. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
+		// 2. If the plugin does not need any application specific data, and you want the user 
+		//    to be able to toggle the plugin:
+		//
+		//    Add the plugin to the plugins object
+		//    const plugins = {
+		//      plugin: require('someMarkdownPlugin'),
+		//    }
+		//
+		//    And add a corresponding entry into Setting.js
+		//    'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
+		//
+		// 3. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
 		//    to the application (using the context object), use the application-specific way:
 		//
 		//    const imagePlugin = require('./MdToHtml/rules/image');
@@ -96,10 +142,15 @@ class MdToHtml {
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
-		markdownIt.use(rules.html_block(context, ruleOptions));
-		markdownIt.use(rules.katex(context, ruleOptions));
+		markdownIt.use(rules.html_image(context, ruleOptions));
+		if (Setting.value('markdown.plugin.katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
+		markdownIt.use(markdownItAnchor)
+
+		for (let key in plugins) {
+			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);
+		}
 
 		setupLinkify(markdownIt);
 

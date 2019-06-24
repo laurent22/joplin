@@ -4,7 +4,7 @@ const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
-const { fileExtension } = require('lib/path-utils');
+const { fileExtension, basename } = require('lib/path-utils');
 const spawn	= require('child_process').spawn;
 const chokidar = require('chokidar');
 
@@ -25,6 +25,10 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
+	tempDir() {
+		return Setting.value('profileDir');
+	}
+
 	on(eventName, callback) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
@@ -40,17 +44,6 @@ class ExternalEditWatcher {
 	logger() {
 		return this.logger_;
 	}
-
-	// async preload() {
-	// 	// Chokidar is extremely slow to load since Electron 4 - it takes over 4 seconds
-	// 	// on my computer. So load it in the background.
-	// 	setTimeout(() => {
-	// 		if (this.chokidar_) return;
-	// 		const startTime = Date.now();
-	// 		this.chokidar_ = require('chokidar');
-	// 		console.info('Chokidar load time:', Date.now() - startTime);
-	// 	}, 1000);
-	// }
 
 	watch(fileToWatch) {
 		if (!this.chokidar_) return;
@@ -69,7 +62,7 @@ class ExternalEditWatcher {
 					
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					const id = Note.pathToId(path);
+					const id = this.noteFilePathToId_(path);
 
 					if (!this.skipNextChangeEvent_[id]) {
 						const note = await Note.load(id);
@@ -94,6 +87,14 @@ class ExternalEditWatcher {
 					this.logger().error(error)
 				}
 			});
+			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
+			// taken from https://github.com/paulmillr/chokidar/issues/591
+			this.watcher_.on('raw', async (event, path, {watchedPath}) => {
+				if (event === 'rename') {
+					this.watcher_.unwatch(watchedPath);
+					this.watcher_.add(watchedPath);
+				}
+			});
 		} else {
 			this.watcher_.add(fileToWatch);
 		}
@@ -107,8 +108,18 @@ class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	noteFilePath(noteId) {
-		return Setting.value('tempDir') + '/' + noteId + '.md';
+	noteIdToFilePath_(noteId) {
+		return this.tempDir() + '/edit-' + noteId + '.md';
+	}
+
+	noteFilePathToId_(path) {
+		let id = path.split('/');
+		if (!id.length) throw new Error('Invalid path: ' + path);
+		id = id[id.length - 1];
+		id = id.split('.');
+		id.pop();
+		id = id[0].split('-');
+		return id[1];
 	}
 
 	watchedFiles() {
@@ -122,7 +133,7 @@ class ExternalEditWatcher {
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
 				const f = watchedPaths[dirName][i];
-				output.push(Setting.value('tempDir') + '/' + f);
+				output.push(this.tempDir() + '/' + f);
 			}
 		}
 
@@ -132,7 +143,7 @@ class ExternalEditWatcher {
 	noteIsWatched(note) {
 		if (!this.watcher_) return false;
 
-		const noteFilename = Note.systemPath(note);
+		const noteFilename = basename(this.noteIdToFilePath_(note.id));
 
 		const watchedPaths = this.watcher_.getWatched();
 
@@ -239,7 +250,7 @@ class ExternalEditWatcher {
 	async stopWatching(noteId) {
 		if (!noteId) return;
 
-		const filePath = this.noteFilePath(noteId);
+		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
 		this.dispatch({
@@ -286,7 +297,7 @@ class ExternalEditWatcher {
 			return;
 		}		
 
-		const filePath = this.noteFilePath(note.id);
+		const filePath = this.noteIdToFilePath_(note.id);
 		const noteContent = await Note.serializeForEdit(note);
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
 		return filePath;

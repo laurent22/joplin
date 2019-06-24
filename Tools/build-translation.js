@@ -1,5 +1,10 @@
 "use strict"
 
+// Dependencies:
+//
+// sudo apt install gettext
+// sudo apt install translate-toolkit
+
 require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 const rootDir = __dirname + '/..';
@@ -156,14 +161,20 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
 
+	let isAlways100 = false;
+	if (poFile.endsWith("en_US.po")) {
+		isAlways100 = true;
+	}
+
 	return {
-		percentDone: isDefault ? 100 : percentDone,
+		percentDone: isDefault || isAlways100 ? 100 : percentDone,
 		translatorName: translatorName,
 	};
 }
 
 function flagImageUrl(locale) {
-	const baseUrl = 'https://joplin.cozic.net/images/flags';
+	const baseUrl = 'https://joplinapp.org/images/flags';
+	if (locale === 'ar') return baseUrl + '/country-4x3/arableague.png';
 	if (locale === 'eu') return baseUrl + '/es/basque_country.png';
 	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
 	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
@@ -171,6 +182,7 @@ function flagImageUrl(locale) {
 	if (locale === 'sv') return baseUrl + '/country-4x3/se.png';
 	if (locale === 'nb_NO') return baseUrl + '/country-4x3/no.png';
 	if (locale === 'ro') return baseUrl + '/country-4x3/ro.png';
+	if (locale === 'fa') return baseUrl + '/country-4x3/ir.png';
 	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
 }
 
@@ -214,6 +226,7 @@ async function main() {
 		electronDir + '/*.js',
 		electronDir + '/gui/*.js',
 		electronDir + '/gui/utils/*.js',
+		electronDir + '/plugins/*.js',
 		rnDir + '/lib/*.js',
 		rnDir + '/lib/models/*.js',
 		rnDir + '/lib/services/*.js',

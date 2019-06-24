@@ -23,6 +23,7 @@ const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
 const WelcomeUtils = require('lib/WelcomeUtils');
+const RevisionService = require('lib/services/RevisionService');
 
 class Application extends BaseApplication {
 
@@ -377,8 +378,6 @@ class Application extends BaseApplication {
 			return this.stdout(object);
 		});
 
-		await WelcomeUtils.install(this.dispatch.bind(this));
-
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {
@@ -422,6 +421,8 @@ class Application extends BaseApplication {
 			const tags = await Tag.allWithNotes();
 
 			ResourceService.runInBackground();
+			
+			RevisionService.instance().runInBackground();
 
 			this.dispatch({
 				type: 'TAG_UPDATE_ALL',

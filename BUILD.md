@@ -1,7 +1,8 @@
+ [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
+
 # General information
 
 - All the applications share the same library, which, for historical reasons, is in ReactNativeClient/lib. This library is copied to the relevant directories when building each app.
-- The translations are built by running CliClient/build-translation.sh. You normally don't need to run this if you haven't updated the translation since the compiled files are on the repository.
 
 ## macOS dependencies
 
@@ -57,6 +58,8 @@ yarn dist
 If node-gyp does not works (MSBUILD: error MSB3428: Could not load the Visual C++ component "VCBuild.exe"), you might need to install the `windows-build-tools` using `npm install --global windows-build-tools`.
 
 If `yarn dist` fails, it may need administrative rights.
+
+If you get an `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info).
 
 The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might be helpful.
 

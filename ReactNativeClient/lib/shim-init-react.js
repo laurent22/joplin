@@ -166,9 +166,13 @@ function shimInit() {
 			resource = Object.assign({}, resource, defaultProps);
 		}
 
-		resource = await Resource.save(resource, { isNew: true });
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
 
-		console.info(resource);
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
+		resource = await Resource.save(resource, { isNew: true });
 
 		return resource;
 	}

@@ -119,8 +119,8 @@ describe('models_Folder', function() {
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 		expect(folders.length).toBe(4);
-		expect(folders[0].id).toBe(f4.id);
-		expect(folders[1].id).toBe(f1.id);
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f4.id);
 		expect(folders[2].id).toBe(f3.id);
 		expect(folders[3].id).toBe(f2.id);
 	}));

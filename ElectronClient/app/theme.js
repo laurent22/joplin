@@ -34,6 +34,9 @@ globalStyle.icon = {
 
 globalStyle.lineInput = {
 	fontFamily: globalStyle.fontFamily,
+	maxHeight: 22,
+	height: 22,
+	paddingLeft: 5,
 };
 
 globalStyle.headerStyle = {
@@ -42,6 +45,11 @@ globalStyle.headerStyle = {
 
 globalStyle.inputStyle = {
 	border: '1px solid',
+	height: 24,
+	maxHeight: 24,
+	paddingLeft: 5,
+	paddingRight: 5,
+	boxSizing: 'border-box',
 };
 
 globalStyle.containerStyle = {
@@ -50,13 +58,14 @@ globalStyle.containerStyle = {
 };
 
 globalStyle.buttonStyle = {
-	marginRight: 10,
+	// marginRight: 10,
 	border: '1px solid',
-	minHeight: 30,
+	minHeight: 26,
 	minWidth: 80,
 	maxWidth: 160,
 	paddingLeft: 12,
 	paddingRight: 12,
+	boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
 };
 
 const lightStyle = {
@@ -67,12 +76,14 @@ const lightStyle = {
 	colorError: "red",
 	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
+	colorBright: "#000000", // For important text
 	dividerColor: "#dddddd",
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
 
 	backgroundColor2: "#162B3D",
-	color2: "#ffffff",
+	depthColor: 'rgb(100, 182, 253, OPACITY)',
+	color2: "#f5f5f5",
 	selectedColor2: "#0269C2",
 	colorError2: "#ff6c6c",
 
@@ -103,13 +114,15 @@ const darkStyle = {
 	colorError: "red",
 	colorWarn: "#9A5B00",
 	colorFaded: "#777777", // For less important text
+	colorBright: "#ffffff", // For important text
 	dividerColor: '#555555',
 	selectedColor: '#333333',
 	urlColor: '#4E87EE',
 
 	backgroundColor2: "#181A1D",
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
 	color2: "#ffffff",
-	selectedColor2: "#333333",
+	selectedColor2: "#013F74",
 	colorError2: "#ff6c6c",
 
 	raisedBackgroundColor: "#474747",
@@ -198,6 +211,30 @@ function addExtraStyles(style) {
 		}
 	);
 
+	style.dialogModalLayer = {
+		zIndex: 9999,
+		display: 'flex',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		backgroundColor: 'rgba(0,0,0,0.6)',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+	};
+
+	style.dialogBox = {
+		backgroundColor: style.backgroundColor,
+		padding: 16,
+		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
+		marginTop: 20,
+	}
+
+	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
+
+	style.dropdownList = Object.assign({}, style.inputStyle);
+
 	return style;
 }
 
@@ -212,10 +249,13 @@ function themeStyle(theme) {
 	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
+	// Font size are not theme specific, but they must be referenced
+	// and computed here to allow them to respond to settings changes
+	// without the need to restart
 	let fontSizes = {
-		fontSize: Math.round(12 * zoomRatio),
+		fontSize: Math.round(globalStyle.fontSize * zoomRatio),
 		editorFontSize: editorFontSize,
-		textAreaLineHeight: Math.round(17 * editorFontSize / 12),
+		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 
 		// For WebView - must correspond to the properties above
 		htmlFontSize: Math.round(15 * zoomRatio) + 'px',

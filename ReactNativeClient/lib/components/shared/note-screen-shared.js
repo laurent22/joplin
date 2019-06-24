@@ -3,6 +3,8 @@ const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -17,7 +19,11 @@ shared.noteExists = async function(noteId) {
 	return !!existingNote;
 }
 
-shared.saveNoteButton_press = async function(comp, folderId = null) {
+shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
+	options = Object.assign({}, {
+		autoTitle: true,
+	}, options);
+
 	const releaseMutex = await saveNoteMutex_.acquire();
 
 	let note = Object.assign({}, comp.state.note);
@@ -38,18 +44,18 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	let isNew = !note.id;
 
-	let options = { userSideValidation: true };
+	let saveOptions = { userSideValidation: true };
 	if (!isNew) {
-		options.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
+		saveOptions.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
 	}
 
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
-	if (hasAutoTitle) {
+	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note);
-		if (options.fields && options.fields.indexOf('title') < 0) options.fields.push('title');
+		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
-	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
+	const savedNote = ('fields' in saveOptions) && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
 
 	const stateNote = comp.state.note;
 
@@ -77,6 +83,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 	};
 
 	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
+
+	if (!options.autoTitle) newState.newAndNoTitleChangeNoteId = null;
 
 	comp.setState(newState);
 
@@ -154,7 +162,11 @@ shared.noteComponent_change = function(comp, propName, propValue) {
 	comp.setState(newState);
 }
 
-const resourceCache_ = {};
+let resourceCache_ = {};
+
+shared.clearResourceCache = function() {
+	resourceCache_ = {};
+}
 
 shared.attachedResources = async function(noteBody) {
 	if (!noteBody) return {};
@@ -163,14 +175,20 @@ shared.attachedResources = async function(noteBody) {
 	const output = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
+		
 		if (resourceCache_[id]) {
 			output[id] = resourceCache_[id];
 		} else {
 			const resource = await Resource.load(id);
-			const isReady = await Resource.isReady(resource);
-			if (!isReady) continue;
-			resourceCache_[id] = resource;
-			output[id] = resource;
+			const localState = await Resource.localState(resource);
+
+			const o = {
+				item: resource,
+				localState: localState,
+			};
+
+			resourceCache_[id] = o;
+			output[id] = o;
 		}
 	}
 
@@ -236,23 +254,49 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
 	if (lineIndex >= newBody.length) {
-		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage, args);
+		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage);
 		return newBody.join('\n');
 	}
 
 	let line = newBody[lineIndex];
 
-	if (line.trim().indexOf('- [ ] ') === 0) {
-		line = line.replace(/- \[ \] /, '- [x] ');
-	} else if (line.trim().indexOf('- [x] ') === 0 || line.trim().indexOf('- [X] ') === 0) {  
-		line = line.replace(/- \[x\] /i, '- [ ] ');
-	} else {
-		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage, args);
+	const noCrossIndex = line.trim().indexOf('- [ ] ');
+	let crossIndex = line.trim().indexOf('- [x] ');
+	if (crossIndex < 0) crossIndex = line.trim().indexOf('- [X] ');
+
+	if (noCrossIndex < 0 && crossIndex < 0) {
+		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage);
 		return newBody.join('\n');
+	}
+
+	let isCrossLine = false;
+
+	if (noCrossIndex >= 0 && crossIndex >= 0) {
+		isCrossLine = crossIndex < noCrossIndex;
+	} else {
+		isCrossLine = crossIndex >= 0;
+	}
+
+	if (!isCrossLine) {
+		line = line.replace(/- \[ \] /, '- [x] ');
+	} else {  
+		line = line.replace(/- \[x\] /i, '- [ ] ');
 	}
 
 	newBody[lineIndex] = line;
 	return newBody.join('\n')
+}
+
+shared.installResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
+}
+
+shared.uninstallResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 }
 
 module.exports = shared;

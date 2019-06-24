@@ -25,11 +25,57 @@ class Setting extends BaseModel {
 
 		const platform = shim.platformName();
 
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		this.metadata_ = {
+			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, section:'sync', label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
+				return SyncTargetRegistry.idAndLabelPlainObject();
+			}},
+
+			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {
+				try {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')
+				} catch (error) {
+					return false;
+				}
+			}, filter: (value) => {
+				return value ? rtrimSlashes(value) : '';
+			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: () => emptyDirWarning },
+
+			'sync.5.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL'), description: () => emptyDirWarning },
+			'sync.5.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud username') },
+			'sync.5.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud password'), secure: true },
+
+			'sync.6.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL'), description: () => emptyDirWarning },
+			'sync.6.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV username') },
+			'sync.6.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV password'), secure: true },
+
+			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+
+			'sync.resourceDownloadMode': { value: 'always', type: Setting.TYPE_STRING, section: 'sync', public: true, isEnum: true, appTypes: ['mobile', 'desktop'], label: () => _('Attachment download behaviour'), description: () => _('In "Manual" mode, attachments are downloaded only when you click on them. In "Auto", they are downloaded when you open the note. In "Always", all the attachments are downloaded whether you open the note or not.'), options: () => {
+				return {
+					'always': _('Always'),
+					'manual': _('Manual'),
+					'auto': _('Auto'),
+				};
+			}},
+
+			'sync.maxConcurrentConnections': {value: 5, type: Setting.TYPE_INT, public: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1},
+
+
 			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
@@ -80,7 +126,7 @@ class Setting extends BaseModel {
 				}
 				return options;
 			}},
-			'folders.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'trackLocation': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 			'newTodoFocus': { value: 'title', type: Setting.TYPE_STRING, section: 'note', isEnum: true, public: true, appTypes: ['desktop'], label: () => _('When creating a new to-do:'), options: () => {
 				return {
@@ -94,6 +140,19 @@ class Setting extends BaseModel {
 					'body': _('Focus body'),
 				};
 			}},
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
+			'markdown.plugin.katex': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions')},
+			'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
+			'markdown.plugin.footnote': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes')},
+			'markdown.plugin.toc': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension')},
+			'markdown.plugin.sub': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax')},
+			'markdown.plugin.sup': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax')},
+			'markdown.plugin.deflist': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable deflist syntax')},
+			'markdown.plugin.abbr': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable abbreviation syntax')},
+			'markdown.plugin.emoji': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji')},
+			'markdown.plugin.insert': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax')},
+			'markdown.plugin.multitable': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension')},
+
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -117,7 +176,7 @@ class Setting extends BaseModel {
 			'style.sidebar.width': {value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': {value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'autoUpdateEnabled': { value: true, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
-			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplin.cozic.net/prereleases') },
+			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section:'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'sync.interval': { value: 300, type: Setting.TYPE_INT, section:'sync', isEnum: true, public: true, label: () => _('Synchronisation interval'), options: () => {
 				return {
@@ -136,38 +195,6 @@ class Setting extends BaseModel {
 			'folderHeaderIsExpanded': { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			'editor': { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 			'showAdvancedOptions': { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['mobile' ], label: () => _('Show advanced options') },
-			'sync.target': { value: SyncTargetRegistry.nameToId('dropbox'), type: Setting.TYPE_INT, isEnum: true, public: true, section:'sync', label: () => _('Synchronisation target'), description: (appType) => { return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).') }, options: () => {
-				return SyncTargetRegistry.idAndLabelPlainObject();
-			}},
-
-			'sync.2.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => {
-				try {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('filesystem')
-				} catch (error) {
-					return false;
-				}
-			}, filter: (value) => {
-				return value ? rtrimSlashes(value) : '';
-			}, public: true, label: () => _('Directory to synchronise with (absolute path)'), description: (appType) => { return appType !== 'cli' ? null : _('The path to synchronise with when file system synchronisation is enabled. See `sync.target`.'); } },
-
-			'sync.5.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud WebDAV URL'), description: () => _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplin.cozic.net/faq/') },
-			'sync.5.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud username') },
-			'sync.5.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud') }, public: true, label: () => _('Nextcloud password'), secure: true },
-
-			'sync.6.path': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV URL'), description: () => _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplin.cozic.net/faq/') },
-			'sync.6.username': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV username') },
-			'sync.6.password': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav') }, public: true, label: () => _('WebDAV password'), secure: true },
-
-			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.4.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
-			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
 			'net.customCertificates': { value: '', type: Setting.TYPE_STRING, section:'sync', show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Custom TLS certificates'), description: () => _('Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on "Check synchronisation configuration".') },
 			'net.ignoreTlsErrors': { value: false, type: Setting.TYPE_BOOL, section:'sync', show: (settings) => { return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0 }, public: true, appTypes: ['desktop', 'cli'], label: () => _('Ignore TLS certificate errors') },
@@ -176,8 +203,17 @@ class Setting extends BaseModel {
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			'revisionService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
+			
 			'searchEngine.initialIndexingDone': { value: false, type: Setting.TYPE_BOOL, public: false },
+
+			'revisionService.enabled': { section: 'revisionService', value: true, type: Setting.TYPE_BOOL, public: true, label: () => _('Enable note history') },
+			'revisionService.ttlDays': { section: 'revisionService', value: 90, type: Setting.TYPE_INT, public: true, minimum: 1, maximum: 365 * 2, step: 1, unitLabel: (value = null) => { return value === null ? _('days') : _('%d days', value) }, label: () => _('Keep note history for') },
+			'revisionService.intervalBetweenRevisions': { section: 'revisionService', value: 1000 * 60 * 10, type: Setting.TYPE_INT, public: false },
+			'revisionService.oldNoteInterval': { section: 'revisionService', value: 1000 * 60 * 60 * 24 * 7, type: Setting.TYPE_INT, public: false },
+
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
+			'welcome.enabled': { value: true, type: Setting.TYPE_BOOL, public: false },
 		};
 
 		return this.metadata_;
@@ -569,7 +605,9 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
+		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
+		if (name === 'revisionService') return _('Note History');
 		return name;
 	}
 
@@ -608,6 +646,7 @@ Setting.constants_ = {
 	appName: 'joplin',
 	appId: 'SET_ME', // Each app should set this identifier
 	appType: 'SET_ME', // 'cli' or 'mobile'
+	resourceDirName: '',
 	resourceDir: '',
 	profileDir: '',
 	tempDir: '',

@@ -59,12 +59,13 @@ function shimInit() {
 	}
 
 	const resizeImage_ = async function(filePath, targetPath, mime) {
+		const maxDim = Resource.IMAGE_MAX_DIMENSION;
+
 		if (shim.isElectron()) { // For Electron
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error('Image is invalid or does not exist: ' + filePath);
 
-			const maxDim = Resource.IMAGE_MAX_DIMENSION;
 			const size = image.getSize();
 
 			if (size.width <= maxDim && size.height <= maxDim) {
@@ -85,12 +86,19 @@ function shimInit() {
 		} else { // For the CLI tool
 			const sharp = require('sharp');
 
+			const image = sharp(filePath);
+			const md = await image.metadata();
+
+			if (md.width <= maxDim && md.height <= maxDim) {
+				shim.fsDriver().copy(filePath, targetPath);
+				return;
+			}
+
 			return new Promise((resolve, reject) => {
-				sharp(filePath)
-				.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
-				.max()
-				.withoutEnlargement()
-				.toFile(targetPath, (err, info) => {
+				image.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION, {
+					fit: 'inside',
+					withoutEnlargement: true,
+				}).toFile(targetPath, (err, info) => {
 					if (err) {
 						reject(err);
 					} else {
@@ -141,8 +149,8 @@ function shimInit() {
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
 			const result = await resizeImage_(filePath, targetPath, resource.mime);
 		} else {
-			const stat = await shim.fsDriver().stat(filePath);
-			if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+			// const stat = await shim.fsDriver().stat(filePath);
+			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 
 			await fs.copy(filePath, targetPath, { overwrite: true });
 		}
@@ -150,6 +158,12 @@ function shimInit() {
 		if (defaultProps) {
 			resource = Object.assign({}, resource, defaultProps);
 		}
+
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
+
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
 
 		return await Resource.save(resource, { isNew: true });
 	}

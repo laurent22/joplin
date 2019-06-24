@@ -18,6 +18,7 @@ const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
+const PluginManager = require('lib/services/PluginManager');
 
 class MainScreenComponent extends React.Component {
 
@@ -131,16 +132,19 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.tagsByNoteId(command.noteId);
-			const tagTitles = tags.map((a) => { return a.title }).sort();
+			const noteTags = tags.map((a) => { return {value: a.id, label: a.title } }).sort((a, b) => { return a.label.localeCompare(b.label); });
+			const allTags = await Tag.allWithNotes();
+			const tagSuggestions = allTags.map((a) => { return {value: a.id, label: a.title } });
 
 			this.setState({
 				promptOptions: {
 					label: _('Add or remove tags:'),
-					description: _('Separate each tag by a comma.'),
-					value: tagTitles.join(', '),
+					inputType: 'tags',
+					value: noteTags,
+					autocomplete: tagSuggestions,
 					onClose: async (answer) => {
 						if (answer !== null) {
-							const tagTitles = answer.split(',').map((a) => { return a.trim() });
+							const tagTitles = answer.map((a) => { return a.label.trim() });
 							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
 						}
 						this.setState({ promptOptions: null });
@@ -226,6 +230,7 @@ class MainScreenComponent extends React.Component {
 				notePropertiesDialogOptions: {
 					noteId: command.noteId,
 					visible: true,
+					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
 		} else if (command.name === 'toggleVisiblePanes') {
@@ -446,7 +451,7 @@ class MainScreenComponent extends React.Component {
 			if (this.props.hasDisabledSyncItems) {
 				msg = <span>{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a></span>
 			} else if (this.props.showMissingMasterKeyMessage) {
-				msg = <span>{_('Some items cannot be decrypted.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
+				msg = <span>{_('One or more master keys need a password.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
 			}
 
 			messageComp = (
@@ -457,6 +462,9 @@ class MainScreenComponent extends React.Component {
 				</div>
 			);
 		}
+
+		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.plugins);
+		const pluginDialog = !dialogInfo ? null :  <dialogInfo.Dialog {...dialogInfo.props}/>;
 
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
@@ -470,6 +478,7 @@ class MainScreenComponent extends React.Component {
 					theme={this.props.theme}
 					noteId={notePropertiesDialogOptions.noteId}
 					onClose={this.notePropertiesDialog_close}
+					onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick}
 				/> }
 
 				<PromptDialog
@@ -490,7 +499,9 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag}/>
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag}/>
-				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} />
+				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible}/>
+
+				{pluginDialog}	
 			</div>
 		);
 	}
@@ -512,6 +523,8 @@ const mapStateToProps = (state) => {
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		plugins: state.plugins,
+		noteDevToolsVisible: state.noteDevToolsVisible,
 	};
 };
 

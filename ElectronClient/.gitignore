@@ -3,4 +3,5 @@ app/packageInfo.js
 dist/
 app/lib/
 app/gui/*.min.js
+app/plugins/*.min.js
 .DS_Store

@@ -60,6 +60,11 @@ class WelcomeUtils {
 	}
 
 	static async install(dispatch) {
+		if (!Setting.value('welcome.enabled')) {
+			Setting.setValue('welcome.wasBuilt', true);
+			return;
+		}
+
 		if (!Setting.value('welcome.wasBuilt')) {
 			const result = await WelcomeUtils.createWelcomeItems();
 			Setting.setValue('welcome.wasBuilt', true);

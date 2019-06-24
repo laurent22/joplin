@@ -103,7 +103,7 @@ class SideBarComponent extends React.Component {
 		};
 	}
 
-	style() {
+	style(depth) {
 		const theme = themeStyle(this.props.theme);
 
 		const itemHeight = 25;
@@ -118,6 +118,8 @@ class SideBarComponent extends React.Component {
 				// paddingLeft: 14,
 				display: "flex",
 				alignItems: "stretch",
+				// Allow 3 levels of color depth
+				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
@@ -152,7 +154,7 @@ class SideBarComponent extends React.Component {
 			header: {
 				height: itemHeight * 1.8,
 				fontFamily: theme.fontFamily,
-				fontSize: theme.fontSize * 1.3,
+				fontSize: theme.fontSize * 1.16,
 				textDecoration: "none",
 				boxSizing: "border-box",
 				color: theme.color2,
@@ -221,7 +223,7 @@ class SideBarComponent extends React.Component {
 				}
 			}
 		} else if (command.name === 'synchronize') {
-			this.sync_click();
+			if (!this.props.syncStarted) this.sync_click();
 		} else {
 			commandProcessed = false;
 		}
@@ -417,7 +419,7 @@ class SideBarComponent extends React.Component {
 
 		const itemTitle = Folder.displayTitle(folder);
 
-		let containerStyle = Object.assign({}, this.style().listItemContainer);
+		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
@@ -509,7 +511,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }} className={"fa " + iconName} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = "pointer";
@@ -642,9 +644,15 @@ class SideBarComponent extends React.Component {
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = type === "sync" ? "fa-refresh" : "fa-times";
+		const iconName = "fa-refresh";
 		const label = type === "sync" ? _("Synchronise") : _("Cancel");
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
+		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
+
+		if(type !== 'sync'){
+			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
+		}
+
+		const icon = <i style={iconStyle} className={"fa " + iconName} />;
 		return (
 			<a
 				className="synchronize-button"
@@ -708,7 +716,7 @@ class SideBarComponent extends React.Component {
 
 		let resourceFetcherText = '';
 		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
-			resourceFetcherText = _('Fetching resources: %d', this.props.resourceFetcher.toFetchCount);
+			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
 		}
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
@@ -738,8 +746,8 @@ class SideBarComponent extends React.Component {
 					{items}
 				</div>
 				<div style={{flex:0}}>
+					{syncReportComp}
 					{syncButton}
-				 	{syncReportComp}
 				</div>
 			</div>
 		);

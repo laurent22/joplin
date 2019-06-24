@@ -8,6 +8,7 @@ const ItemChange = require('lib/models/ItemChange.js');
 const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const Revision = require('lib/models/Revision.js');
 const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
@@ -30,13 +31,19 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
+const ResourceService = require('lib/services/ResourceService.js');
+const RevisionService = require('lib/services/RevisionService.js');
+const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 
 let databases_ = [];
 let synchronizers_ = [];
 let encryptionServices_ = [];
+let revisionServices_ = [];
 let decryptionWorkers_ = [];
+let resourceServices_ = [];
+let kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -69,6 +76,11 @@ const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1
 
 console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
 
+const dbLogger = new Logger();
+dbLogger.addTarget('console');
+dbLogger.addTarget('file', { path: logDir + '/log.txt' });
+dbLogger.setLevel(Logger.LEVEL_WARN);
+
 const logger = new Logger();
 logger.addTarget('console');
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -80,6 +92,7 @@ BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
+BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
 Setting.setConstant('appType', 'cli');
@@ -102,6 +115,8 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
+	if (!databases_[id]) throw new Error('Call setupDatabaseAndSynchronizer(' + id + ') first!!');
+
 	await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
 	await Setting.saveAll();
 
@@ -111,9 +126,11 @@ async function switchClient(id) {
 	Note.db_ = databases_[id];
 	BaseItem.db_ = databases_[id];
 	Setting.db_ = databases_[id];
+	Resource.db_ = databases_[id];
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
+	BaseItem.revisionService_ = revisionServices_[id];
 
 	Setting.setConstant('resourceDir', resourceDir(id));
 
@@ -125,20 +142,28 @@ async function clearDatabase(id = null) {
 
 	await ItemChange.waitForAllSaved();
 
-	let queries = [
-		'DELETE FROM notes',
-		'DELETE FROM folders',
-		'DELETE FROM resources',
-		'DELETE FROM tags',
-		'DELETE FROM note_tags',
-		'DELETE FROM master_keys',
-		'DELETE FROM item_changes',
-		'DELETE FROM note_resources',
-		'DELETE FROM settings',		
-		'DELETE FROM deleted_items',
-		'DELETE FROM sync_items',
-		'DELETE FROM notes_normalized',
+	const tableNames = [
+		'notes',
+		'folders',
+		'resources',
+		'tags',
+		'note_tags',
+		'master_keys',
+		'item_changes',
+		'note_resources',
+		'settings',		
+		'deleted_items',
+		'sync_items',
+		'notes_normalized',
+		'revisions',
+		'key_values',
 	];
+
+	const queries = [];
+	for (const n of tableNames) {
+		queries.push('DELETE FROM ' + n);
+		queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+	}
 
 	await databases_[id].transactionExecBatch(queries);
 }
@@ -164,6 +189,7 @@ async function setupDatabase(id = null) {
 	};
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
+	databases_[id].setLogger(dbLogger);
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.db_ = databases_[id];
@@ -196,8 +222,11 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	}
 
 	encryptionServices_[id] = new EncryptionService();
+	revisionServices_[id] = new RevisionService();
 	decryptionWorkers_[id] = new DecryptionWorker();
 	decryptionWorkers_[id].setEncryptionService(encryptionServices_[id]);
+	resourceServices_[id] = new ResourceService();
+	kvStores_[id] = new KvStore();
 
 	await fileApi().clearRoot();
 }
@@ -217,9 +246,28 @@ function encryptionService(id = null) {
 	return encryptionServices_[id];
 }
 
+function kvStore(id = null) {
+	if (id === null) id = currentClient_;
+	const o = kvStores_[id];
+	o.setDb(db(id));
+	return o;
+}
+
+function revisionService(id = null) {
+	if (id === null) id = currentClient_;
+	return revisionServices_[id];
+}
+
 function decryptionWorker(id = null) {
 	if (id === null) id = currentClient_;
-	return decryptionWorkers_[id];
+	const o = decryptionWorkers_[id];
+	o.setKvStore(kvStore(id));
+	return o;
+}
+
+function resourceService(id = null) {
+	if (id === null) id = currentClient_;
+	return resourceServices_[id];
 }
 
 async function loadEncryptionMasterKey(id = null, useExisting = false) {
@@ -314,4 +362,34 @@ function asyncTest(callback) {
 	}
 }
 
-module.exports = { setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+async function allSyncTargetItemsEncrypted() {
+	const list = await fileApi().list();
+	const files = list.items;
+
+	let totalCount = 0;
+	let encryptedCount = 0;
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+		const remoteContentString = await fileApi().get(file.path);
+		const remoteContent = await BaseItem.unserialize(remoteContentString);
+		const ItemClass = BaseItem.itemClass(remoteContent);
+
+		if (!ItemClass.encryptionSupported()) continue;
+
+		totalCount++;
+
+		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
+			const content = await fileApi().get('.resource/' + remoteContent.id);
+			totalCount++;
+			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
+		}
+
+		if (!!remoteContent.encryption_applied) encryptedCount++;
+	}
+
+	if (!totalCount) throw new Error('No encryptable item on sync target');
+
+	return totalCount === encryptedCount;
+}
+
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };

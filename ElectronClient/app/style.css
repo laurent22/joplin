@@ -100,10 +100,25 @@ table td, table th {
 	border-radius: 5px;
 }
 
+@keyframes icon-infinite-rotation{
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .smalltalk {
 	font-family: sans-serif;
 }
 
 .note-property-box .rdt {
 	display: inline-block;
+}
+
+.help-tooltip {
+	font-family: sans-serif;
+	max-width: 200px;
+}
+
+:disabled {
+	opacity: 0.6;
 }

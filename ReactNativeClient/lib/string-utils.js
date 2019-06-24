@@ -267,8 +267,10 @@ const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u
 const REGEX_KOREAN = /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/;
 
 function scriptType(s) {
-	if (REGEX_JAPANESE.test(s)) return 'ja';
+	// A string entirely with Chinese character will be detected as Japanese too
+	// so Chinese detection must go first.
 	if (REGEX_CHINESE.test(s)) return 'zh';
+	if (REGEX_JAPANESE.test(s)) return 'ja';
 	if (REGEX_KOREAN.test(s)) return 'ko';
 	return 'en';
 }

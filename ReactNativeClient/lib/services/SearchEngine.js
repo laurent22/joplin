@@ -267,7 +267,7 @@ class SearchEngine {
 
 			if (c === ':' && !inQuote) {
 				currentCol = currentTerm;
-				terms[currentCol] = [];
+				if (!terms[currentCol]) terms[currentCol] = [];
 				currentTerm = '';
 				continue;
 			}
@@ -344,17 +344,18 @@ class SearchEngine {
 	}
 
 	async basicSearch(query) {
-		let p = query.split(' ');
-		let temp = [];
-		for (let i = 0; i < p.length; i++) {
-			let t = p[i].trim();
-			if (!t) continue;
-			temp.push(t);
+		query = query.replace(/\*/, '');
+		const parsedQuery = this.parseQuery(query);
+		const searchOptions = {};
+
+		for (const key of parsedQuery.keys) {
+			const term = parsedQuery.terms[key][0].value;
+			if (key === '_') searchOptions.anywherePattern = '*' + term + '*';
+			if (key === 'title') searchOptions.titlePattern = '*' + term + '*';
+			if (key === 'body') searchOptions.bodyPattern = '*' + term + '*';
 		}
 
-		return await Note.previews(null, {
-			anywherePattern: '*' + temp.join('*') + '*',
-		});
+		return Note.previews(null, searchOptions);
 	}
 
 	async search(query) {
@@ -368,7 +369,7 @@ class SearchEngine {
 			return this.basicSearch(query);
 		} else {
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT notes_fts.id, notes_fts.title, offsets(notes_fts) AS offsets, notes.user_updated_time, notes.is_todo, notes.todo_completed FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
+			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.orderResults_(rows, parsedQuery);

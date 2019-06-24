@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -10,7 +10,9 @@ const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
-import VersionInfo from 'react-native-version-info';
+const VersionInfo = require('react-native-version-info').default;
+
+import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 
@@ -62,15 +64,27 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				paddingRight: theme.marginRight,
 			},
 			settingText: {
-				fontWeight: 'bold',
 				color: theme.color,
 				fontSize: theme.fontSize,
 				flex: 1,
+				paddingRight: 5,
 			},
 			descriptionText: {
 				color: theme.color,
 				fontSize: theme.fontSize,
 				flex: 1,
+			},
+			sliderUnits: {
+				color: theme.color,
+				fontSize: theme.fontSize,
+			},
+			settingDescriptionText: {
+				color: theme.color,
+				fontSize: theme.fontSize,
+				flex: 1,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingBottom: theme.marginBottom,
 			},
 			permissionText: {
 				color: theme.color,
@@ -84,10 +98,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			},
 		}
 
-		// if (Platform.OS === 'ios') {
-			styles.settingControl.borderBottomWidth = 1;
-			styles.settingControl.borderBottomColor = theme.strongDividerColor;
-		// }
+		styles.settingContainerNoBottomBorder = Object.assign({}, styles.settingContainer, {
+			borderBottomWidth: 0,
+			paddingBottom: theme.marginBottom / 2,
+		});
+
+		styles.settingControl.borderBottomWidth = 1;
+		styles.settingControl.borderBottomColor = theme.strongDividerColor;
 
 		styles.switchSettingText = Object.assign({}, styles.settingText);
 		styles.switchSettingText.width = '80%';
@@ -102,6 +119,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		styles.linkText.flex = 0;
 		styles.linkText.fontWeight = 'normal';
 
+		styles.headerWrapperStyle = Object.assign({}, styles.settingContainer, theme.headerWrapperStyle)
+
 		styles.switchSettingControl = Object.assign({}, styles.settingControl);
 		delete styles.switchSettingControl.color;
 		//styles.switchSettingControl.width = '20%';
@@ -109,6 +128,61 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.styles_[themeId] = StyleSheet.create(styles);
 		return this.styles_[themeId];
+	}
+
+	renderHeader(key, title) {
+		const theme = themeStyle(this.props.theme);
+		return (
+			<View key={key} style={this.styles().headerWrapperStyle}>
+				<Text style={theme.headerStyle}>{title}</Text>
+			</View>
+		);
+	}
+
+	sectionToComponent(key, section, settings) {
+		const theme = themeStyle(this.props.theme);
+		const settingComps = [];
+
+		for (let i = 0; i < section.metadatas.length; i++) {
+			const md = section.metadatas[i];
+
+			if (section.name === 'sync' && md.key === 'sync.resourceDownloadMode') {
+				const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+
+				if (syncTargetMd.supportsConfigCheck) {
+					const messages = shared.checkSyncConfigMessages(this);
+					const statusComp = !messages.length ? null : (
+						<View style={{flex:1, marginTop: 10}}>
+							<Text style={this.styles().descriptionText}>{messages[0]}</Text>
+							{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
+						</View>);
+
+					settingComps.push(
+						<View key="check_sync_config_button" style={this.styles().settingContainer}>
+							<View style={{flex:1, flexDirection: 'column'}}>
+								<View style={{flex:1}}>
+									<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
+								</View>
+								{ statusComp }
+							</View>
+						</View>);
+				}
+			}
+
+			const settingComp = this.settingToComponent(md.key, settings[md.key]);
+			settingComps.push(settingComp);
+		}
+
+		const headerWrapperStyle = this.styles().headerWrapperStyle;
+
+		return (
+			<View key={key}>
+				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}
+				<View>
+					{settingComps}
+				</View>
+			</View>
+		);
 	}
 
 	settingToComponent(key, value) {
@@ -121,6 +195,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		const md = Setting.settingMetadata(key);
+		const settingDescription = md.description ? md.description() : '';
 
 		if (md.isEnum) {
 			value = value.toString();
@@ -132,27 +207,33 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
 
+			const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>
+			const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+
 			return (
-				<View key={key} style={this.styles().settingContainer}>
-					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<Dropdown
-						key="control"
-						style={this.styles().settingControl}
-						items={items}
-						selectedValue={value}
-						itemListStyle={{
-							backgroundColor: theme.backgroundColor,
-						}}
-						headerStyle={{
-							color: theme.color,
-							fontSize: theme.fontSize,
-						}}
-						itemStyle={{
-							color: theme.color,
-							fontSize: theme.fontSize,
-						}}
-						onValueChange={(itemValue, itemIndex) => { updateSettingValue(key, itemValue); }}
-					/>
+				<View key={key} style={{flexDirection:'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor}}>
+					<View style={containerStyle}>
+						<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
+						<Dropdown
+							key="control"
+							style={this.styles().settingControl}
+							items={items}
+							selectedValue={value}
+							itemListStyle={{
+								backgroundColor: theme.backgroundColor,
+							}}
+							headerStyle={{
+								color: theme.color,
+								fontSize: theme.fontSize,
+							}}
+							itemStyle={{
+								color: theme.color,
+								fontSize: theme.fontSize,
+							}}
+							onValueChange={(itemValue, itemIndex) => { updateSettingValue(key, itemValue); }}
+						/>
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
@@ -163,17 +244,21 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
+			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<Slider key="control" style={this.styles().settingControl} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+					<View style={{display:'flex', flexDirection: 'column', alignItems: 'center', flex:1}}>
+						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{width:'100%'}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
+					</View>
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_STRING) {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value) => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -186,32 +271,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	render() {
 		const settings = this.state.settings;
 
-		const settingComps = shared.settingsToComponents(this, 'mobile', settings);
+		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
-		const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
-
-		if (syncTargetMd.supportsConfigCheck) {
-			const messages = shared.checkSyncConfigMessages(this);
-			const statusComp = !messages.length ? null : (
-				<View style={{flex:1, marginTop: 10}}>
-					<Text style={this.styles().descriptionText}>{messages[0]}</Text>
-					{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
-				</View>);
-
-			settingComps.push(
-				<View key="check_sync_config_button" style={this.styles().settingContainer}>
-					<View style={{flex:1, flexDirection: 'column'}}>
-						<View style={{flex:1}}>
-							<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
-						</View>
-						{ statusComp }
-					</View>
-				</View>);
-		}
+		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 
 		if (Platform.OS === 'android' && Platform.Version >= 23) {
 			// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
 			// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
+
 			settingComps.push(
 				<View key="permission_info" style={this.styles().settingContainer}>
 					<View key="permission_info_wrapper">
@@ -226,7 +293,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="donate_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/donate/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplinapp.org/donate/') }}>
 					<Text key="label" style={this.styles().linkText}>{_('Make a donation')}</Text>
 				</TouchableOpacity>
 			</View>
@@ -234,7 +301,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="website_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplinapp.org/') }}>
 					<Text key="label" style={this.styles().linkText}>{_('Joplin website')}</Text>
 				</TouchableOpacity>
 			</View>
@@ -242,7 +309,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="privacy_link" style={this.styles().settingContainer}>
-				<TouchableOpacity onPress={() => { Linking.openURL('https://joplin.cozic.net/privacy/') }}>
+				<TouchableOpacity onPress={() => { Linking.openURL('https://joplinapp.org/privacy/') }}>
 					<Text key="label" style={this.styles().linkText}>Privacy Policy</Text>
 				</TouchableOpacity>
 			</View>

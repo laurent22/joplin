@@ -35,7 +35,7 @@ describe('EnexToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'text2.html') continue;
+			// if (htmlFilename !== 'list5.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
