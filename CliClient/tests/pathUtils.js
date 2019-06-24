@@ -1,6 +1,6 @@
 require('app-module-path').addPath(__dirname);
 
-const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename } = require('lib/path-utils.js');
+const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath} = require('lib/path-utils.js');
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -68,6 +68,33 @@ describe('pathUtils', function() {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 			expect(extractExecutablePath(t[0])).toBe(t[1]);
+		} 
+
+		done();
+	});
+
+	it('should create correct fileURL syntax', async (done) => {
+		const platform = process.platform;
+		let testCases = [];
+
+		if (platform == 'win32') {
+			testCases = [
+				['C:\\handle\\space test', 'file:///C:/handle/space+test'],
+				['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
+				['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],				
+			];
+		} else {
+			testCases = [
+				['/handle/space test', 'file:///handle/space+test'],
+				['/escapeplus/+', 'file:///escapeplus/%2B'],
+				['/handle/single quote\'', 'file:///handle/single+quote%27'],
+			];
+		}
+
+
+		for (let i = 0; i < testCases.length; i++) {
+			const t = testCases[i];
+			expect(toFileProtocolPath(t[0])).toBe(t[1]);
 		} 
 
 		done();

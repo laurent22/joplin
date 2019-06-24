@@ -9,8 +9,7 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
-const path = require('path');
-const markdownUtils = require('lib/markdownUtils');
+
 
 function shimInit() {
 	shim.fsDriver = () => { throw new Error('Not implemented') }
@@ -170,7 +169,12 @@ function shimInit() {
 		return await Resource.save(resource, { isNew: true });
 	}
 
-	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL) {
+	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL = false) {
+
+		const { basename } = require('path');
+		const { escapeLinkText } = require('lib/markdownUtils');
+		const { toFileProtocolPath } = require('lib/path-utils');
+
 		let resource = [];
 		if (createFileURL == false) {
 			resource = await shim.createResourceFromPath(filePath);
@@ -187,19 +191,8 @@ function shimInit() {
 		if (createFileURL == false) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
-			let filePathEncode = filePath;
-			const platform = process.platform;
-			if (platform == 'win32') {
-				filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
-				filePathEncode = "/" + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
-			}
-			filePathEncode = encodeURI(filePathEncode);
-			filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
-			filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
-			filePathEncode = filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
-			
-			let filename = markdownUtils.escapeLinkText(path.basename(filePath)); // to get same filename as standard drag and drop
-			let fileURL = "[" + filename + "](file://" + filePathEncode +")"
+			let filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			let fileURL = "[" + filename + "]("+ toFileProtocolPath(filePath) +")"
 			newBody.push(fileURL);
 		}
 
