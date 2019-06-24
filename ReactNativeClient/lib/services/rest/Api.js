@@ -63,6 +63,7 @@ class Api {
 		const parsedPath = this.parsePath(path);
 		if (!parsedPath.callName) throw new ErrorNotFound(); // Nothing at the root yet
 		
+
 		const request = {
 			method: method,
 			path: ltrimSlashes(path),
@@ -161,6 +162,7 @@ class Api {
 		const getOneModel = async () => {
 			const model = await ModelClass.load(id);
 			if (!model) throw new ErrorNotFound();			
+			if (!model) throw new ErrorNotFound();
 			return model;
 		}
 
@@ -289,6 +291,7 @@ class Api {
 				const filePath = Resource.fullPath(resource);
 				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
 				
+
 				const response = new ApiResponse();
 				response.type = 'attachment';
 				response.body = buffer;
@@ -425,6 +428,7 @@ class Api {
 
 		if (requestNote.source_url) output.source_url = requestNote.source_url;
 		if (requestNote.author) output.author = requestNote.author;
+		if (requestNote.is_todo) output.is_todo = requestNote.is_todo;
 
 		return output;
 	}
@@ -537,4 +541,4 @@ class Api {
 
 }
 
-module.exports = Api;
+module.exports = Api;module.exports = Api;
