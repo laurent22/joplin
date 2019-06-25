@@ -171,6 +171,24 @@
 		}
 	}
 
+	// Given a document, return a <style> tag that contains all the styles
+	// required to render the page. Not currently used but could be as an 
+	// option to clip pages as HTML.
+	function getStyleTag(doc) {
+		const styleText = [];
+		for (var i=0; i<doc.styleSheets.length; i++) {
+			try {
+				var sheet = doc.styleSheets[i];
+				for (const cssRule of sheet.cssRules) {
+					styleText.push(cssRule.cssText);
+				}
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+		return '<style>' + styleText.join('\n') + '</style>';
+	}
+
 	function documentForReadability() {
 		// Readability directly change the passed document so clone it so as
 		// to preserve the original web page.
@@ -249,10 +267,13 @@
 		} else if (command.name === "selectedHtml") {
 
 			hardcodePreStyles(document);
-		    const range = window.getSelection().getRangeAt(0);
-		    const container = document.createElement('div');
-		    container.appendChild(range.cloneContents());
-		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
+			preProcessDocument(document);
+			const range = window.getSelection().getRangeAt(0);
+			const container = document.createElement('div');
+			container.appendChild(range.cloneContents());
+			const imageSizes = getImageSizes(document, true);
+			cleanUpElement(container, imageSizes);
+			return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
 

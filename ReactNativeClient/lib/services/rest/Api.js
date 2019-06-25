@@ -438,6 +438,10 @@ class Api {
 				baseUrl: requestNote.base_url ? requestNote.base_url : '',
 				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 			});
+
+			// Note: to save the note as HTML, use the code below:
+			// const minify = require('html-minifier').minify;
+			// output.body = minify(requestNote.body_html, { collapseWhitespace: true });
 		}
 
 		if (requestNote.parent_id) {
