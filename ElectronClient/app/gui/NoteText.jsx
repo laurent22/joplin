@@ -1795,6 +1795,7 @@ class NoteTextComponent extends React.Component {
 					accuracy: 'partially',
 				}]
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
+				markerOptions.separateWordSearch = false;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (search) {
