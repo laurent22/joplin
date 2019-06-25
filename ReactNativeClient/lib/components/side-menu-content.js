@@ -8,10 +8,12 @@ const Folder = require('lib/models/Folder.js');
 const Setting = require('lib/models/Setting.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Synchronizer } = require('lib/synchronizer.js');
+const NavService = require('lib/services/NavService.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
+const { ActionButton } = require('lib/components/action-button.js');
 
 class SideMenuContentComponent extends Component {
 
@@ -176,6 +178,26 @@ class SideMenuContentComponent extends Component {
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
 	}
 
+	renderConfigButton() {
+		const buttons = [];
+
+		buttons.push({
+			icon: 'md-settings',
+			onPress: () => {
+				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				NavService.go('Config');
+			},
+		});
+
+		return (
+			<ActionButton
+				buttons={buttons}
+				buttonIndex={0}
+				multiStates={true}
+			/>
+		);
+	}
+
 	render() {
 		let items = [];
 
@@ -237,6 +259,7 @@ class SideMenuContentComponent extends Component {
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
 						{ items }
 					</ScrollView>
+					{ this.renderConfigButton() }
 				</View>
 			</View>
 		);

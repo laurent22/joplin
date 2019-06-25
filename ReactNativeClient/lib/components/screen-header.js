@@ -190,10 +190,6 @@ class ScreenHeaderComponent extends Component {
 		NavService.go('Status');
 	}
 
-	config_press() {
-		NavService.go('Config');
-	}
-
 	warningBox_press() {
 		NavService.go('EncryptionConfig');
 	}
@@ -284,11 +280,6 @@ class ScreenHeaderComponent extends Component {
 			if (menuOptionComponents.length) {
 				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
 			}
-
-			menuOptionComponents.push(
-				<MenuOption value={() => this.config_press()} key={'menuOption_config'} style={this.styles().contextMenuItem}>
-					<Text style={this.styles().contextMenuItemText}>{_('Configuration')}</Text>
-				</MenuOption>);
 		} else {
 			menuOptionComponents.push(
 				<MenuOption value={() => this.deleteButton_press()} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
