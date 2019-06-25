@@ -1919,7 +1919,6 @@ const mapStateToProps = (state) => {
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		theme: state.settings.theme,
-		showAdvancedOptions: state.settings.showAdvancedOptions,
 		syncStarted: state.syncStarted,
 		newNote: state.newNote,
 		windowCommand: state.windowCommand,

@@ -4,7 +4,6 @@ const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, Scrol
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
-const { ReportService } = require('lib/services/report.js');
 const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
@@ -195,38 +194,8 @@ class ScreenHeaderComponent extends Component {
 		NavService.go('Config');
 	}
 
-	encryptionConfig_press() {
-		NavService.go('EncryptionConfig');
-	}
-
 	warningBox_press() {
 		NavService.go('EncryptionConfig');
-	}
-
-	async debugReport_press() {
-		const service = new ReportService();
-
-		const logItems = await reg.logger().lastEntries(null);
-		const logItemRows = [
-			['Date','Level','Message']
-		];
-		for (let i = 0; i < logItems.length; i++) {
-			const item = logItems[i];
-			logItemRows.push([
-				time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
-				item.level,
-				item.message
-			]);
-		}
-		const logItemCsv = service.csvCreate(logItemRows);
-
-		const itemListCsv = await service.basicItemList({ format: 'csv' });
-		const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
-
-		const finalText = [logItemCsv, itemListCsv].join("\n================================================================================\n");
-
-		await RNFS.writeFile(filePath, finalText);
-		alert('Debug report exported to ' + filePath);
 	}
 
 	render() {
@@ -312,37 +281,9 @@ class ScreenHeaderComponent extends Component {
 				}
 			}
 
-			if (this.props.showAdvancedOptions) {
-				if (menuOptionComponents.length) {
-					menuOptionComponents.push(<View key={'menuOption_showAdvancedOptions'} style={this.styles().divider}/>);
-				}
-
-				menuOptionComponents.push(
-					<MenuOption value={() => this.log_press()} key={'menuOption_log'} style={this.styles().contextMenuItem}>
-						<Text style={this.styles().contextMenuItemText}>{_('Log')}</Text>
-					</MenuOption>);
-
-				menuOptionComponents.push(
-					<MenuOption value={() => this.status_press()} key={'menuOption_status'} style={this.styles().contextMenuItem}>
-						<Text style={this.styles().contextMenuItemText}>{_('Status')}</Text>
-					</MenuOption>);
-
-				if (Platform.OS === 'android') {
-					menuOptionComponents.push(
-						<MenuOption value={() => this.debugReport_press()} key={'menuOption_debugReport'} style={this.styles().contextMenuItem}>
-							<Text style={this.styles().contextMenuItemText}>{_('Export Debug Report')}</Text>
-						</MenuOption>);
-				} 
-			}
-
 			if (menuOptionComponents.length) {
 				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
 			}
-
-			menuOptionComponents.push(
-				<MenuOption value={() => this.encryptionConfig_press()} key={'menuOption_encryptionConfig'} style={this.styles().contextMenuItem}>
-					<Text style={this.styles().contextMenuItemText}>{_('Encryption Config')}</Text>
-				</MenuOption>);
 
 			menuOptionComponents.push(
 				<MenuOption value={() => this.config_press()} key={'menuOption_config'} style={this.styles().contextMenuItem}>
@@ -497,7 +438,6 @@ const ScreenHeader = connect(
 			locale: state.settings.locale,
 			folders: state.folders,
 			theme: state.settings.theme,
-			showAdvancedOptions: state.settings.showAdvancedOptions,
 			noteSelectionEnabled: state.noteSelectionEnabled,
 			selectedNoteIds: state.selectedNoteIds,
 			showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,

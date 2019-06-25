@@ -10,7 +10,11 @@ const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
+const NavService = require('lib/services/NavService.js');
 const VersionInfo = require('react-native-version-info').default;
+const { ReportService } = require('lib/services/report.js');
+const { time } = require('lib/time-utils');
+const RNFS = require('react-native-fs');
 
 import Slider from '@react-native-community/slider';
 
@@ -24,15 +28,59 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		super();
 		this.styles_ = {};
 
+		this.state = {
+			creatingReport: false,
+		};
+
 		shared.init(this);
 
 		this.checkSyncConfig_ = async () => {
 			await shared.checkSyncConfig(this, this.state.settings);
 		}
 
+		this.e2eeConfig_ = () => {
+			NavService.go('EncryptionConfig');
+		}
+
 		this.saveButton_press = () => {
 			return shared.saveSettings(this);
 		};
+
+		this.syncStatusButtonPress_ = () => {
+			NavService.go('Status');
+		}
+
+		this.exportDebugButtonPress_ = async () => {
+			this.setState({ creatingReport: true });
+			const service = new ReportService();
+
+			const logItems = await reg.logger().lastEntries(null);
+			const logItemRows = [
+				['Date','Level','Message']
+			];
+			for (let i = 0; i < logItems.length; i++) {
+				const item = logItems[i];
+				logItemRows.push([
+					time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
+					item.level,
+					item.message
+				]);
+			}
+			const logItemCsv = service.csvCreate(logItemRows);
+
+			const itemListCsv = await service.basicItemList({ format: 'csv' });
+			const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
+
+			const finalText = [logItemCsv, itemListCsv].join("\n================================================================================\n");
+
+			await RNFS.writeFile(filePath, finalText);
+			alert('Debug report exported to ' + filePath);
+			this.setState({ creatingReport: false });
+		}
+
+		this.logButtonPress_ = () => {
+			NavService.go('Log');
+		}
 	}
 
 	UNSAFE_componentWillMount() {
@@ -139,6 +187,21 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
+	renderButton(key, title, clickHandler, options = null) {
+		if (!options) options = {};
+
+		return (
+			<View key={key} style={this.styles().settingContainer}>
+				<View style={{flex:1, flexDirection: 'column'}}>
+					<View style={{flex:1}}>
+						<Button title={title} onPress={clickHandler} disabled={!!options.disabled}/>
+					</View>
+					{ options.statusComp }
+				</View>
+			</View>
+		);
+	}
+
 	sectionToComponent(key, section, settings) {
 		const theme = themeStyle(this.props.theme);
 		const settingComps = [];
@@ -157,20 +220,16 @@ class ConfigScreenComponent extends BaseScreenComponent {
 							{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
 						</View>);
 
-					settingComps.push(
-						<View key="check_sync_config_button" style={this.styles().settingContainer}>
-							<View style={{flex:1, flexDirection: 'column'}}>
-								<View style={{flex:1}}>
-									<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
-								</View>
-								{ statusComp }
-							</View>
-						</View>);
+					settingComps.push(this.renderButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp }));
 				}
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
 			settingComps.push(settingComp);
+		}
+
+		if (section.name === 'sync') {
+			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config') + ' ▶', this.e2eeConfig_));
 		}
 
 		const headerWrapperStyle = this.styles().headerWrapperStyle;
@@ -272,6 +331,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const settings = this.state.settings;
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
+
+		settingComps.push(this.renderHeader('moreInfo', _('Tools')));
+
+		settingComps.push(this.renderButton('status_button', _('Sync Status') + ' ▶', this.syncStatusButtonPress_));
+		settingComps.push(this.renderButton('log_button', _('Log') + ' ▶', this.logButtonPress_));
+		settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 
