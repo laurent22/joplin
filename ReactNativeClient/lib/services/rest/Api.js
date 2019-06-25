@@ -452,7 +452,9 @@ class Api {
 		if (requestNote.author) output.author = requestNote.author;
 		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
 		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
-		if (requestNote.is_todo) output.is_todo = requestNote.is_todo;
+		if ('is_todo' in requestNote && requestNote['is_todo'] == 1) {
+					output.is_todo = requestNote.is_todo;
+		}
 
 		return output;
 	}

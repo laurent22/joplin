@@ -162,7 +162,7 @@ describe('services_rest_Api', function() {
 
 		const updatedTime = Date.now() - 1000;
 		const createdTime = Date.now() - 10000;
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			parent_id: f.id,
 			user_updated_time: updatedTime,
@@ -211,6 +211,22 @@ describe('services_rest_Api', function() {
 		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBeUndefined();
 
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 3',
+			parent_id: f.id,
+		}));
+		expect(response.title).toBe('testing 3');
+		expect(!!response.id).toBe(true);
+		expect(response.is_todo).toBeUndefined();
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 4',
+			parent_id: f.id,
+			is_todo: '1'
+		}));
+		expect(response.title).toBe('testing 4');
+		expect(!!response.id).toBe(true);
+		expect(response.is_todo).toBe(1);
 		done();
 	});
 
