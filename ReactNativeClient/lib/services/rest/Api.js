@@ -1,4 +1,5 @@
 const { ltrimSlashes } = require('lib/path-utils.js');
+const { Database } = require('lib/database.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
@@ -383,6 +384,11 @@ class Api {
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
 			const saveOptions = this.defaultSaveOptions_(note, 'POST');
+			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
+			const timestamp = Date.now();
+			note.updated_time = timestamp;
+			note.created_time = timestamp;
+
 			note = await Note.save(note, saveOptions);
 
 			if (requestNote.tags) {
@@ -501,7 +507,7 @@ class Api {
 
 				// If we could not find the file extension from the URL, try to get it
 				// now based on the Content-Type header.
-				if (!fileExt) imagePath = this.tryToGuessImageExtFromMimeType_(response, imagePath);
+				if (!fileExt) imagePath = await this.tryToGuessImageExtFromMimeType_(response, imagePath);
 			}
 			return imagePath;
 		} catch (error) {

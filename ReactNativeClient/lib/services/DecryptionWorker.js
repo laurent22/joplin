@@ -102,7 +102,7 @@ class DecryptionWorker {
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
 
 		if (this.state_ !== 'idle') {
-			this.logger().info('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
+			this.logger().debug('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
 			return;
 		}
 
