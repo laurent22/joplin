@@ -125,6 +125,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			sliderUnits: {
 				color: theme.color,
 				fontSize: theme.fontSize,
+				marginRight: 10,
 			},
 			settingDescriptionText: {
 				color: theme.color,
@@ -307,9 +308,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<View style={{display:'flex', flexDirection: 'column', alignItems: 'center', flex:1}}>
-						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{width:'100%'}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+					<View style={{display:'flex', flexDirection: 'row', alignItems: 'center', flex:1}}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
+						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{flex:1}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
