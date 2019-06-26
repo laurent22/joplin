@@ -82,7 +82,11 @@ class SearchEngine {
 		if (this.scheduleSyncTablesIID_) return;
 
 		this.scheduleSyncTablesIID_ = setTimeout(async () => {
-			await this.syncTables();
+			try {
+				await this.syncTables();
+			} catch (error) {
+				this.logger().error('SearchEngine::scheduleSyncTables: Error while syncing tables:', error);
+			}
 			this.scheduleSyncTablesIID_ = null;
 		}, 10000);
 	}
@@ -107,44 +111,48 @@ class SearchEngine {
 
 		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
 
-		while (true) {
-			const changes = await ItemChange.modelSelectAll(`
-				SELECT id, item_id, type
-				FROM item_changes
-				WHERE item_type = ?
-				AND id > ?
-				ORDER BY id ASC
-				LIMIT 100
-			`, [BaseModel.TYPE_NOTE, lastChangeId]);
+		try {
+			while (true) {
+				const changes = await ItemChange.modelSelectAll(`
+					SELECT id, item_id, type
+					FROM item_changes
+					WHERE item_type = ?
+					AND id > ?
+					ORDER BY id ASC
+					LIMIT 100
+				`, [BaseModel.TYPE_NOTE, lastChangeId]);
 
-			if (!changes.length) break;
+				if (!changes.length) break;
 
-			const noteIds = changes.map(a => a.item_id);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
-			const queries = [];
+				const noteIds = changes.map(a => a.item_id);
+				const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
+				const queries = [];
 
-			for (let i = 0; i < changes.length; i++) {
-				const change = changes[i];
+				for (let i = 0; i < changes.length; i++) {
+					const change = changes[i];
 
-				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
-					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
-					const note = this.noteById_(notes, change.item_id);
-					if (note) {
-						const n = this.normalizeNote_(note);
-						queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+					if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
+						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+						const note = this.noteById_(notes, change.item_id);
+						if (note) {
+							const n = this.normalizeNote_(note);
+							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+						}
+					} else if (change.type === ItemChange.TYPE_DELETE) {
+						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+					} else {
+						throw new Error('Invalid change type: ' + change.type);
 					}
-				} else if (change.type === ItemChange.TYPE_DELETE) {
-					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
-				} else {
-					throw new Error('Invalid change type: ' + change.type);
+
+					lastChangeId = change.id;
 				}
 
-				lastChangeId = change.id;
+				await this.db().transactionExecBatch(queries);
+				Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
+				await Setting.saveAll();
 			}
-
-			await this.db().transactionExecBatch(queries);
-			Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
-			await Setting.saveAll();
+		} catch (error) {
+			this.logger().error('SearchEngine: Error while processing changes:', error);
 		}
 
 		await ItemChangeUtils.deleteProcessedChanges();
