@@ -209,7 +209,7 @@ describe('services_rest_Api', function() {
 		}));
 		expect(response.title).toBe('testing 2');
 		expect(!!response.id).toBe(true);
-		expect(response.is_todo).toBeUndefined();
+		expect(response.is_todo).toBe(0);
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing 3',
