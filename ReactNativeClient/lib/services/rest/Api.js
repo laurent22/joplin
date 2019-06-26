@@ -438,6 +438,10 @@ class Api {
 				baseUrl: requestNote.base_url ? requestNote.base_url : '',
 				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 			});
+
+			// Note: to save the note as HTML, use the code below:
+			// const minify = require('html-minifier').minify;
+			// output.body = minify(requestNote.body_html, { collapseWhitespace: true });
 		}
 
 		if (requestNote.parent_id) {
@@ -453,8 +457,7 @@ class Api {
 		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
 		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
-
-
+		
 		return output;
 	}
 
@@ -587,5 +590,3 @@ class Api {
 
 
 }
-
-module.exports = Api;
