@@ -26,6 +26,8 @@ class SideMenuContentComponent extends Component {
 
 		this.tagButton_press = this.tagButton_press.bind(this);
 		this.newFolderButton_press = this.newFolderButton_press.bind(this);
+		this.synchronize_press = this.synchronize_press.bind(this);
+		this.configButton_press = this.configButton_press.bind(this);
 	}
 
 	styles() {
@@ -58,6 +60,7 @@ class SideMenuContentComponent extends Component {
 				paddingRight: theme.marginRight,
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeSmaller,
+				flex: 0,
 			},
 			sidebarIcon: {
 				fontSize: 22,
@@ -74,7 +77,7 @@ class SideMenuContentComponent extends Component {
 		styles.folderIcon.color = theme.colorFaded;//'#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
-		styles.sideButton = Object.assign({}, styles.button);
+		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
@@ -105,6 +108,11 @@ class SideMenuContentComponent extends Component {
 			type: 'NAV_GO',
 			routeName: 'Tags',
 		});
+	}
+
+	configButton_press() {
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		NavService.go('Config');
 	}
 
 	newFolderButton_press() {
@@ -160,22 +168,6 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
-	synchronizeButton(state) {
-		const theme = themeStyle(this.props.theme);
-		
-		const title = state == 'sync' ? _('Synchronise') : _('Cancel synchronisation');
-		const iconComp = state == 'sync' ? <Icon name='md-sync' style={this.styles().sidebarIcon} /> : <Icon name='md-close' style={this.styles().sidebarIcon} />;
-
-		return (
-			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>
-				<View style={this.styles().sideButton}>
-					{ iconComp }
-					<Text style={this.styles().sideButtonText}>{title}</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	}
-
 	renderSideBarButton(key, title, iconName, onPressHandler) {
 		const theme = themeStyle(this.props.theme);
 
@@ -193,23 +185,52 @@ class SideMenuContentComponent extends Component {
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
 	}
 
-	renderConfigButton() {
-		const buttons = [];
+	renderBottomPanel() {
+		const theme = themeStyle(this.props.theme);
 
-		buttons.push({
-			icon: 'md-settings',
-			onPress: () => {
-				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-				NavService.go('Config');
-			},
-		});
+		const items = [];
+
+		items.push(this.makeDivider('divider_1'));
+
+		items.push(this.renderSideBarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
+
+		items.push(this.renderSideBarButton('tag_button', _('Tags'), 'md-pricetag', this.tagButton_press));
+
+		items.push(this.renderSideBarButton('config_button', _('Configuration'), 'md-settings', this.configButton_press));
+
+		items.push(this.makeDivider('divider_2'));
+
+		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		const syncReportText = lines.join("\n");
+
+		let decryptionReportText = '';
+		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
+			decryptionReportText = _('Decrypting items: %d/%d', this.props.decryptionWorker.itemIndex + 1, this.props.decryptionWorker.itemCount);
+		}
+
+		let resourceFetcherText = '';
+		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
+			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
+		}
+
+		let fullReport = [];
+		if (syncReportText) fullReport.push(syncReportText);
+		if (resourceFetcherText) fullReport.push(resourceFetcherText);
+		if (decryptionReportText) fullReport.push(decryptionReportText);
+
+		items.push(this.renderSideBarButton(
+			'synchronize_button',
+			!this.props.syncStarted ? _('Synchronise') : _('Cancel synchronisation'),
+			!this.props.syncStarted ? 'md-sync' : 'md-close',
+			this.synchronize_press
+		));
+
+		if (fullReport.length) items.push(<Text key='sync_report' style={this.styles().syncStatus}>{fullReport.join('\n')}</Text>);
 
 		return (
-			<ActionButton
-				buttons={buttons}
-				buttonIndex={0}
-				multiStates={true}
-			/>
+			<View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>
+				{ items }
+			</View>
 		);
 	}
 
@@ -228,39 +249,6 @@ class SideMenuContentComponent extends Component {
 			items = items.concat(folderItems);
 		}
 
-		items.push(this.makeDivider('divider_1'));
-
-		items.push(this.renderSideBarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
-
-		items.push(this.renderSideBarButton('tag_button', _('Tags'), 'md-pricetag', this.tagButton_press));
-
-		let lines = Synchronizer.reportToLines(this.props.syncReport);
-		const syncReportText = lines.join("\n");
-
-		let decryptionReportText = '';
-		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
-			decryptionReportText = _('Decrypting items: %d/%d', this.props.decryptionWorker.itemIndex + 1, this.props.decryptionWorker.itemCount);
-		}
-
-		let resourceFetcherText = '';
-		if (this.props.resourceFetcher && this.props.resourceFetcher.toFetchCount) {
-			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
-		}
-
-		let fullReport = [];
-		if (syncReportText) fullReport.push(syncReportText);
-		// if (fullReport.length) fullReport.push('');
-		if (resourceFetcherText) fullReport.push(resourceFetcherText);
-		if (decryptionReportText) fullReport.push(decryptionReportText);
-
-		while (fullReport.length < 12) fullReport.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
-
-		items.push(this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync'));
-
-		items.push(<Text key='sync_report' style={this.styles().syncStatus}>{fullReport.join('\n')}</Text>);
-
-		items.push(<View style={{ height: globalStyle.marginBottom }} key='bottom_padding_hack'/>);
-
 		let style = {
 			flex:1,
 			borderRightWidth: 1,
@@ -274,7 +262,7 @@ class SideMenuContentComponent extends Component {
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
 						{ items }
 					</ScrollView>
-					{ this.renderConfigButton() }
+					{ this.renderBottomPanel() }
 				</View>
 			</View>
 		);

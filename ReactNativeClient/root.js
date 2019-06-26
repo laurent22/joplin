@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { AppState, Keyboard, NativeModules, BackHandler, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, View, Animated } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -552,6 +552,11 @@ class AppComponent extends React.Component {
 
 	constructor() {
 		super();
+
+		this.state = {
+			sideMenuContentOpacity: new Animated.Value(0),
+		};
+
 		this.lastSyncStarted_ = defaultState.syncStarted;
 
 		this.backButtonHandler_ = () => {
@@ -630,6 +635,15 @@ class AppComponent extends React.Component {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.showSideMenu !== prevProps.showSideMenu) {
+			Animated.timing(this.state.sideMenuContentOpacity, {
+				toValue: this.props.showSideMenu ? 0.5 : 0,
+				duration: 600,
+			}).start();
+		}
+	}
+
 	async backButtonHandler() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -704,6 +718,7 @@ class AppComponent extends React.Component {
 						<AppNav screens={appNavInit} />
 					</SafeAreaView>
 					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+					<Animated.View pointerEvents='none' style={{position:'absolute', backgroundColor:'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%'}}/>
 				</MenuContext>
 			</SideMenu>
 		);
