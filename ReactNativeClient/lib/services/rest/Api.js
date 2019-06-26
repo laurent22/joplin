@@ -77,7 +77,7 @@ class Api {
 			}
 			this.knownNounces_[query.nounce] = requestMd5;
 		}
-
+		
 		const request = {
 			method: method,
 			path: ltrimSlashes(path),
@@ -175,7 +175,7 @@ class Api {
 
 		const getOneModel = async () => {
 			const model = await ModelClass.load(id);
-			if (!model) throw new ErrorNotFound();
+			if (!model) throw new ErrorNotFound();			
 			return model;
 		}
 
@@ -305,7 +305,7 @@ class Api {
 
 				const filePath = Resource.fullPath(resource);
 				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
-
+				
 				const response = new ApiResponse();
 				response.type = 'attachment';
 				response.body = buffer;
@@ -342,9 +342,9 @@ class Api {
 
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
-
+		
 		if (request.method === 'GET') {
-
+			
 			if (link && link === 'tags') {
 				return Tag.tagsByNoteId(id);
 			} else if (link) {
