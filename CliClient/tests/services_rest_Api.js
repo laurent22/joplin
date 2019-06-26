@@ -64,7 +64,6 @@ describe('services_rest_Api', function() {
 
 		let f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);
-
 		done();
 	});
 
@@ -78,7 +77,6 @@ describe('services_rest_Api', function() {
 		let f = await Folder.all();
 		expect(f.length).toBe(1);
 		expect(f[0].title).toBe('from api');
-
 		done();
 	});
 
@@ -120,7 +118,6 @@ describe('services_rest_Api', function() {
 		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
 		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
 		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
-
 		response = await api.route('GET', 'notes');
 		expect(response.length).toBe(3);
 
@@ -138,7 +135,6 @@ describe('services_rest_Api', function() {
 	it('should create notes', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: "mon carnet" });
-
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing',
 			parent_id: f.id,
@@ -162,7 +158,6 @@ describe('services_rest_Api', function() {
 
 		const updatedTime = Date.now() - 1000;
 		const createdTime = Date.now() - 10000;
-
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			parent_id: f.id,
 			user_updated_time: updatedTime,
@@ -178,7 +173,6 @@ describe('services_rest_Api', function() {
 	it('should create notes with supplied ID', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: "mon carnet" });
-
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			id: '12345678123456781234567812345678',
 			title: 'testing',
