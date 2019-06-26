@@ -229,7 +229,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		if (section.name === 'sync') {
-			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config') + ' ▶', this.e2eeConfig_));
+			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
 		}
 
 		const headerWrapperStyle = this.styles().headerWrapperStyle;
@@ -332,10 +332,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
-		settingComps.push(this.renderHeader('moreInfo', _('Tools')));
+		settingComps.push(this.renderHeader('tools', _('Tools')));
 
-		settingComps.push(this.renderButton('status_button', _('Sync Status') + ' ▶', this.syncStatusButtonPress_));
-		settingComps.push(this.renderButton('log_button', _('Log') + ' ▶', this.logButtonPress_));
+		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
+		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
 		settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
