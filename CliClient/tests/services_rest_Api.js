@@ -198,7 +198,6 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: 1
 		}));
-		expect(response.title).toBe('testing');
 		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(1);
 
@@ -207,7 +206,6 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: 0
 		}));
-		expect(response.title).toBe('testing 2');
 		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(0);
 
@@ -215,7 +213,6 @@ describe('services_rest_Api', function() {
 			title: 'testing 3',
 			parent_id: f.id,
 		}));
-		expect(response.title).toBe('testing 3');
 		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBeUndefined();
 
@@ -224,7 +221,6 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: '1'
 		}));
-		expect(response.title).toBe('testing 4');
 		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(1);
 		done();
