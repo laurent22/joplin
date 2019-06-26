@@ -457,7 +457,7 @@ class Api {
 		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
 		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
-		
+
 		return output;
 	}
 
@@ -590,3 +590,4 @@ class Api {
 
 
 }
+module.exports = Api;
