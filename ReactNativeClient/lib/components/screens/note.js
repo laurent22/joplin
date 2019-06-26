@@ -655,7 +655,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				}}
 			/>
 		} else {
-			const focusBody = !isNew && !!note.title;
+			const focusBody = !note.is_todo;//!isNew && !!note.title;
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
@@ -669,6 +669,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onChangeText={(text) => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
+					placeholder={_('Add body')}
 				/>
 			);
 		}
@@ -739,6 +740,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					value={note.title}
 					onChangeText={(text) => this.title_changeText(text)}
 					selectionColor={theme.textSelectionColor}
+					placeholder={_('Add title')}
 				/>
 			</View>
 		);
