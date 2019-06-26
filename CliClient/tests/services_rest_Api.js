@@ -156,6 +156,25 @@ describe('services_rest_Api', function() {
 		done();
 	});
 
+	it('should preserve user timestamps when creating notes', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "mon carnet" });
+
+		const updatedTime = Date.now() - 1000;
+		const createdTime = Date.now() - 10000;
+		
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			parent_id: f.id,
+			user_updated_time: updatedTime,
+			user_created_time: createdTime,
+		}));
+
+		expect(response.user_updated_time).toBe(updatedTime);
+		expect(response.user_created_time).toBe(createdTime);
+
+		done();
+	});
+
 	it('should create notes with supplied ID', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: "mon carnet" });

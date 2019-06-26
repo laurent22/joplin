@@ -96,7 +96,7 @@ class HeaderComponent extends React.Component {
 
 		let commandProcessed = true;
 
-		if (command.name === 'focus_search' && this.searchElement_) {
+		if (command.name === 'focusSearch' && this.searchElement_) {
 			this.searchElement_.focus();
 		} else {
 			commandProcessed = false;

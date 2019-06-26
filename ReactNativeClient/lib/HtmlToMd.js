@@ -8,6 +8,7 @@ class HtmlToMd {
 		const turndown = new TurndownService({
 			headingStyle: 'atx',
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
+			codeBlockStyle: 'fenced',
 		})
 		turndown.use(turndownPluginGfm)
 		turndown.remove('script');

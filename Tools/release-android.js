@@ -92,7 +92,7 @@ async function main() {
 		console.info('');
 		console.info('cd "' + wslToWinPath(rootDir) + '\\ReactNativeClient\\android" && gradlew.bat ' + apkBuildCmd + '"');
 		console.info('');
-		readline('Press Enter when done:');
+		await readline('Press Enter when done:');
 		apkBuildCmd = ''; // Clear the command because we've already ran it
 		
 		// apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';

@@ -580,7 +580,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		if (isSaved) output.push({ title: _('Copy Markdown link'), onPress: () => { this.copyMarkdownLink_onPress(); } });
 		output.push({ isDivider: true });
-		if (this.props.showAdvancedOptions) output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
+		output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
 		if (hasSource) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
 		output.push({ isDivider: true });
@@ -805,7 +805,6 @@ const NoteScreen = connect(
 			theme: state.settings.theme,
 			ftsEnabled: state.settings['db.ftsEnabled'],
 			sharedData: state.sharedData,
-			showAdvancedOptions: state.settings.showAdvancedOptions,
 		};
 	}
 )(NoteScreenComponent)

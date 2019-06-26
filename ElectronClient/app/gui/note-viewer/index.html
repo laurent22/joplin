@@ -205,15 +205,19 @@
 				elementIndex++;
 			}
 
+			const markKeywordOptions = {
+				each: onEachElement,
+			};
+
+			if ('separateWordSearch' in options) markKeywordOptions.separateWordSearch = options.separateWordSearch;
+
 			for (let i = 0; i < keywords.length; i++) {
 				let keyword = keywords[i];
 
 				markJsUtils.markKeyword(mark_, keyword, {
 					pregQuote: pregQuote,
 					replaceRegexDiacritics: replaceRegexDiacritics,
-				}, {
-					each: onEachElement,				
-				});
+				}, markKeywordOptions);
 			}
 
 			ipcProxySendToHost('setMarkerCount', elementIndex);

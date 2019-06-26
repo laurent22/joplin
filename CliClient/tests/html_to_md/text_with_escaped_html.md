@@ -6,4 +6,6 @@ Some text, not an image, so it should remain escaped:
 
 But this is code so it can be unescaped:
 
-    <img src="http://test.com/image.png" />
+```
+<img src="http://test.com/image.png" />
+```

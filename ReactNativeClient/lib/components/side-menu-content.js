@@ -8,21 +8,24 @@ const Folder = require('lib/models/Folder.js');
 const Setting = require('lib/models/Setting.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Synchronizer } = require('lib/synchronizer.js');
+const NavService = require('lib/services/NavService.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
+const { ActionButton } = require('lib/components/action-button.js');
 
 class SideMenuContentComponent extends Component {
 
 	constructor() {
 		super();
-		this.state = { syncReportText: '',
-			//width: 0,
+		this.state = {
+			syncReportText: '',
 		};
 		this.styles_ = {};
 
 		this.tagButton_press = this.tagButton_press.bind(this);
+		this.newFolderButton_press = this.newFolderButton_press.bind(this);
 	}
 
 	styles() {
@@ -55,6 +58,10 @@ class SideMenuContentComponent extends Component {
 				paddingRight: theme.marginRight,
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeSmaller,
+			},
+			sidebarIcon: {
+				fontSize: 22,
+				color: theme.color,
 			},
 		};
 
@@ -97,6 +104,16 @@ class SideMenuContentComponent extends Component {
 		this.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Tags',
+		});
+	}
+
+	newFolderButton_press() {
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Folder',
+			folderId: null,
 		});
 	}
 
@@ -147,7 +164,7 @@ class SideMenuContentComponent extends Component {
 		const theme = themeStyle(this.props.theme);
 		
 		const title = state == 'sync' ? _('Synchronise') : _('Cancel synchronisation');
-		const iconComp = state == 'sync' ? <Icon name='md-sync' style={theme.icon} /> : <Icon name='md-close' style={theme.icon} />;
+		const iconComp = state == 'sync' ? <Icon name='md-sync' style={this.styles().sidebarIcon} /> : <Icon name='md-close' style={this.styles().sidebarIcon} />;
 
 		return (
 			<TouchableOpacity key={'synchronize_button'} onPress={() => { this.synchronize_press() }}>
@@ -159,14 +176,14 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
-	tagButton() {
+	renderSideBarButton(key, title, iconName, onPressHandler) {
 		const theme = themeStyle(this.props.theme);
 
 		return (
-			<TouchableOpacity key={'tag_button'} onPress={this.tagButton_press}>
+			<TouchableOpacity key={key} onPress={onPressHandler}>
 				<View style={this.styles().sideButton}>
-					<Icon name='md-pricetag' style={theme.icon} />
-					<Text style={this.styles().sideButtonText}>Tags</Text>
+					<Icon name={iconName} style={this.styles().sidebarIcon} />
+					<Text style={this.styles().sideButtonText}>{title}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -174,6 +191,26 @@ class SideMenuContentComponent extends Component {
 
 	makeDivider(key) {
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
+	}
+
+	renderConfigButton() {
+		const buttons = [];
+
+		buttons.push({
+			icon: 'md-settings',
+			onPress: () => {
+				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				NavService.go('Config');
+			},
+		});
+
+		return (
+			<ActionButton
+				buttons={buttons}
+				buttonIndex={0}
+				multiStates={true}
+			/>
+		);
 	}
 
 	render() {
@@ -192,10 +229,10 @@ class SideMenuContentComponent extends Component {
 		}
 
 		items.push(this.makeDivider('divider_1'));
-		
-		items.push(this.tagButton());
 
-		items.push(this.makeDivider('divider_tag_bottom'));
+		items.push(this.renderSideBarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
+
+		items.push(this.renderSideBarButton('tag_button', _('Tags'), 'md-pricetag', this.tagButton_press));
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join("\n");
@@ -237,6 +274,7 @@ class SideMenuContentComponent extends Component {
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
 						{ items }
 					</ScrollView>
+					{ this.renderConfigButton() }
 				</View>
 			</View>
 		);

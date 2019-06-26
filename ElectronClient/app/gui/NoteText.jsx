@@ -954,6 +954,7 @@ class NoteTextComponent extends React.Component {
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(bodyToRender),
+			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
 		let bodyHtml = '';
@@ -1794,6 +1795,7 @@ class NoteTextComponent extends React.Component {
 					accuracy: 'partially',
 				}]
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
+				markerOptions.separateWordSearch = false;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (search) {
@@ -1917,7 +1919,6 @@ const mapStateToProps = (state) => {
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		theme: state.settings.theme,
-		showAdvancedOptions: state.settings.showAdvancedOptions,
 		syncStarted: state.syncStarted,
 		newNote: state.newNote,
 		windowCommand: state.windowCommand,
