@@ -75,6 +75,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			HACK_webviewLoadingState: 0,
 		};
 
+		this.doFocusUpdate_ = false;
+
 		// iOS doesn't support multiline text fields properly so disable it
 		this.enableMultilineTitle_ = Platform.OS !== 'ios';
 
@@ -252,6 +254,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.refreshNoteMetadata();
+
+		this.focusUpdate();
 	}
 
 	onMarkForDownload(event) {
@@ -260,6 +264,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	refreshNoteMetadata(force = null) {
 		return shared.refreshNoteMetadata(this, force);
+	}
+
+	componentDidUpdate() {
+		if (this.doFocusUpdate_) {
+			this.doFocusUpdate_ = false;
+			this.focusUpdate();
+		}
 	}
 
 	componentWillUnmount() {
@@ -600,6 +611,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ titleTextInputHeight: height });
 	}
 
+	focusUpdate() {
+		this.scheduleFocusUpdateIID_ = null;
+		if (!this.state.note) return;
+		let fieldToFocus = !!this.state.note.is_todo ? 'title' : 'body';
+		if (this.state.mode === 'view') fieldToFocus = '';
+
+		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
+		if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
+	}
+
 	render() {
 		if (this.state.isLoading) {
 			return (
@@ -655,15 +676,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 				}}
 			/>
 		} else {
-			const focusBody = !note.is_todo;//!isNew && !!note.title;
+			// autoFocus={fieldToFocus === 'body'}
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 			bodyComponent = (
 				<TextInput
-					autoCapitalize="sentences"
-					autoFocus={focusBody}
+					autoCapitalize="sentences"		
 					style={this.styles().bodyTextInput}
+					ref="noteBodyTextField"
 					multiline={true}
 					value={note.body}
 					onChangeText={(text) => this.body_changeText(text)}
@@ -682,6 +703,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				icon: 'md-create',
 				onPress: () => {
 					this.setState({ mode: 'edit' });
+
+					this.doFocusUpdate_ = true;
 				},
 			});
 
@@ -732,8 +755,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ isTodo && <Checkbox style={checkboxStyle} checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }
 				<TextInput
 					onContentSizeChange={(event) => this.titleTextInput_contentSizeChange(event)}
-					autoFocus={isNew}
 					multiline={this.enableMultilineTitle_}
+					ref="titleTextField"
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
 					style={titleTextInputStyle}
