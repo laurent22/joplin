@@ -773,6 +773,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					showSaveButton={showSaveButton}
 					saveButtonDisabled={saveButtonDisabled}
 					onSaveButtonPress={() => this.saveNoteButton_press()}
+					showSideMenuButton={false}
+					showSearchButton={false}
 				/>
 				{ titleComp }
 				{ bodyComponent }
