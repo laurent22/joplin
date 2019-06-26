@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View } = require('react-native');
+const { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const Tag = require('lib/models/Tag.js');
@@ -28,6 +28,7 @@ class SideMenuContentComponent extends Component {
 		this.newFolderButton_press = this.newFolderButton_press.bind(this);
 		this.synchronize_press = this.synchronize_press.bind(this);
 		this.configButton_press = this.configButton_press.bind(this);
+		this.renderFolderItem = this.renderFolderItem.bind(this);
 	}
 
 	styles() {
@@ -94,6 +95,59 @@ class SideMenuContentComponent extends Component {
 		});
 	}
 
+	async folder_longPress(folder) {
+		const buttons = [];
+
+		Alert.alert(
+			'',
+			_('Notebook: %s', folder.title), [
+				{
+					text: _('Rename'),
+					onPress: () => {
+						if (folder.encryption_applied) {
+							alert(_('Encrypted notebooks cannot be renamed'));
+							return;
+						}
+
+						this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Folder',
+							folderId: folder.id,
+						});
+					}
+				},
+				{
+					text: _('Delete'),
+					onPress: () => {
+						Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
+							{
+								text: _('OK'),
+								onPress: () => {
+									Folder.delete(folder.id);
+								},
+							},
+							{
+								text: _('Cancel'),
+								onPress: () => {},
+								style: 'cancel',
+							},
+						]);
+					},
+					style: 'destructive',
+				},
+				{
+					text: _('Cancel'),
+					onPress: () => {},
+					style: 'cancel',
+				}
+			], {
+				cancelable: false
+			}
+		);
+	}
+
 	folder_togglePress(folder) {
 		this.props.dispatch({
 			type: 'FOLDER_TOGGLE',
@@ -130,7 +184,7 @@ class SideMenuContentComponent extends Component {
 		if (actionDone === 'auth') this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 	}
 
-	folderItem(folder, selected, hasChildren, depth) {
+	renderFolderItem(folder, selected, hasChildren, depth) {
 		const theme = themeStyle(this.props.theme);
 
 		const folderButtonStyle = {
@@ -158,7 +212,7 @@ class SideMenuContentComponent extends Component {
 
 		return (
 			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
-				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }}>
+				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }} onLongPress={() => { this.folder_longPress(folder) }}>
 					<View style={folderButtonStyle}>
 						<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
 					</View>
@@ -244,7 +298,7 @@ class SideMenuContentComponent extends Component {
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
 
 		if (this.props.folders.length) {
-			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
+			const result = shared.renderFolders(this.props, this.renderFolderItem);
 			const folderItems = result.items;
 			items = items.concat(folderItems);
 		}

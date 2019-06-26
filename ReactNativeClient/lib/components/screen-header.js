@@ -385,7 +385,7 @@ class ScreenHeaderComponent extends Component {
 		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
-		const menuComp = !showContextMenuButton ? null : (
+		const menuComp = !menuOptionComponents.length || !showContextMenuButton ? null : (
 			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
 				<MenuTrigger style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}>
 					<Icon name='md-more' style={this.styles().contextMenuTrigger} />

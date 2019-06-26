@@ -155,8 +155,8 @@ class NotesScreenComponent extends BaseScreenComponent {
 			if (!folder) return [];
 
 			let output = [];
-			if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
-			output.push({ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } });
+			// if (!folder.encryption_applied) output.push({ title: _('Edit notebook'), onPress: () => { this.editFolder_onPress(this.props.selectedFolderId); } });
+			// output.push({ title: _('Delete notebook'), onPress: () => { this.deleteFolder_onPress(this.props.selectedFolderId); } });
 
 			return output;
 		} else {
