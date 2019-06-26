@@ -287,10 +287,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 	title_changeText(text) {
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
+		this.scheduleSave();
 	}
 
 	body_changeText(text) {
 		shared.noteComponent_change(this, 'body', text);
+		this.scheduleSave();
+	}
+
+	scheduleSave() {
+		if (this.scheduleSaveIID_) {
+			clearTimeout(this.scheduleSaveIID_);
+			this.scheduleSaveIID_ = null;
+		}
+
+		this.scheduleSaveIID_ = setTimeout(async () => {
+			await shared.saveNoteButton_press(this);
+		}, 1000);
 	}
 
 	async saveNoteButton_press(folderId = null) {
