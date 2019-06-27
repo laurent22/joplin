@@ -514,7 +514,7 @@ class Application extends BaseApplication {
 			const p = packageInfo;
 			let gitInfo = '';
 			if ("git" in p) {
-				gitInfo = _('Revision') + ": " + p.git.hash + ' (' + p.git.branch + ')';
+				gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
 			}
 			let message = [
 				p.description,
