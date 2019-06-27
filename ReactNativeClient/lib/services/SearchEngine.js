@@ -7,6 +7,7 @@ const BaseModel = require('lib/BaseModel.js');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
+const { sprintf } = require('sprintf-js');
 
 class SearchEngine {
 
@@ -91,6 +92,12 @@ class SearchEngine {
 		}, 10000);
 	}
 
+	async rebuildIndex() {
+		Setting.setValue('searchEngine.lastProcessedChangeId', 0)
+		Setting.setValue('searchEngine.initialIndexingDone', false);
+		return this.syncTables();
+	}
+
 	async syncTables() {
 		if (this.isIndexing_) return;
 
@@ -109,6 +116,11 @@ class SearchEngine {
 
 		const startTime = Date.now();
 
+		const report = {
+			inserted: 0,
+			deleted: 0,			
+		};
+
 		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
 
 		try {
@@ -121,6 +133,8 @@ class SearchEngine {
 					ORDER BY id ASC
 					LIMIT 100
 				`, [BaseModel.TYPE_NOTE, lastChangeId]);
+
+				const maxRow = await ItemChange.db().selectOne('SELECT max(id) FROM item_changes');
 
 				if (!changes.length) break;
 
@@ -137,9 +151,11 @@ class SearchEngine {
 						if (note) {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
 						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+						report.deleted++;
 					} else {
 						throw new Error('Invalid change type: ' + change.type);
 					}
@@ -157,7 +173,7 @@ class SearchEngine {
 
 		await ItemChangeUtils.deleteProcessedChanges();
 
-		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
+		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 
 		this.isIndexing_ = false;
 	}
