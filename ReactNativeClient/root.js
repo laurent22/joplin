@@ -249,6 +249,11 @@ const appReducer = (state = appDefaultState, action) => {
 					newState.notesParentType = 'Tag';
 				}
 
+				if ('smartFilterId' in action) {
+					newState.smartFilterId = action.smartFilterId;
+					newState.notesParentType = 'SmartFilter';
+				}
+
 				if ('itemType' in action) {
 					newState.selectedItemType = action.itemType;
 				}

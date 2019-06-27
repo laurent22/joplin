@@ -166,6 +166,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 						enabled: this.props.noteSelectionEnabled,
 						mustSelect: true,
 					}}
+					showSideMenuButton={false}
+					showSearchButton={false}
 				/>
 				<View style={this.styles().body}>
 					<View style={this.styles().searchContainer}>

@@ -124,7 +124,7 @@ class ScreenHeaderComponent extends Component {
 			titleText: {
 				flex: 1,
 				textAlignVertical: 'center',
-				marginLeft: 0,
+				marginLeft: 10,
 				color: theme.raisedHighlightedColor,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
@@ -376,10 +376,11 @@ class ScreenHeaderComponent extends Component {
 		const showSideMenuButton = this.props.showSideMenuButton !== false && !this.props.noteSelectionEnabled;
 		const showSearchButton = this.props.showSearchButton !== false && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
+		const showBackButton = this.props.showBackButton !== false;
 
 		const titleComp = createTitleComponent();
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
-		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
+		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
 		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;

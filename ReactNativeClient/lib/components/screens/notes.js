@@ -85,6 +85,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (newProps.notesOrder !== this.props.notesOrder ||
 		    newProps.selectedFolderId != this.props.selectedFolderId ||
 		    newProps.selectedTagId != this.props.selectedTagId ||
+		    newProps.selectedSmartFilterId != this.props.selectedSmartFilterId ||
 		    newProps.notesParentType != this.props.notesParentType) {
 			await this.refreshNotes(newProps);
 		}
@@ -111,10 +112,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (source == props.notesSource) return;
 
 		let notes = [];
-		if (props.notesParentType == 'Folder') {
+		if (props.notesParentType === 'Folder') {
 			notes = await Note.previews(props.selectedFolderId, options);
-		} else {
+		} else if (props.notesParentType === 'Tag') {
 			notes = await Tag.notes(props.selectedTagId, options);
+		} else if (props.notesParentType === 'SmartFilter') {
+			notes = await Note.previews(null, options);
 		}
 
 		this.props.dispatch({
@@ -172,6 +175,8 @@ class NotesScreenComponent extends BaseScreenComponent {
 			output = Folder.byId(props.folders, props.selectedFolderId);
 		} else if (props.notesParentType == 'Tag') {
 			output = Tag.byId(props.tags, props.selectedTagId);
+		} else if (props.notesParentType == 'SmartFilter') {
+			output = { id: this.props.selectedSmartFilterId, title: _('All notes') };
 		} else {
 			return null;
 			throw new Error('Invalid parent type: ' + props.notesParentType);
@@ -209,6 +214,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			<View style={rootStyle}>
 				<ScreenHeader
 					title={title}
+					showBackButton={false}
 					menuOptions={this.menuOptions()}
 					parentComponent={thisComp}
 					sortButton_press={this.sortButton_press}
@@ -233,6 +239,7 @@ const NotesScreen = connect(
 			selectedFolderId: state.selectedFolderId,
 			selectedNoteIds: state.selectedNoteIds,
 			selectedTagId: state.selectedTagId,
+			selectedSmartFilterId: state.selectedSmartFilterId,
 			notesParentType: state.notesParentType,
 			notes: state.notes,
 			notesSource: state.notesSource,

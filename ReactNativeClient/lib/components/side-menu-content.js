@@ -86,16 +86,28 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folder_press(folder) {
-		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		if (folder === 'all') {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Notes',
-			folderId: folder.id,
-		});
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				smartFilterId: 'c3176726992c11e9ac940492261af972',
+			});
+		} else {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: folder.id,
+			});
+		}
 	}
 
 	async folder_longPress(folder) {
+		if (folder === 'all') return;
+
 		const buttons = [];
 
 		Alert.alert(
@@ -201,20 +213,24 @@ class SideMenuContentComponent extends Component {
 		const iconWrapperStyle = { paddingLeft: 10, paddingRight: 10 };
 		if (selected) iconWrapperStyle.backgroundColor = theme.selectedColor;
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
-		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
+		let iconWrapper = null;
 
-		const iconWrapper = !hasChildren ? null : (
-			<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
-				{ iconComp }
-			</TouchableOpacity>
-		);
+		if (folder !== 'all') {
+			const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
+			const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
+
+			iconWrapper = !hasChildren ? null : (
+				<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
+					{ iconComp }
+				</TouchableOpacity>
+			);
+		}
 
 		return (
-			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
+			<View key={folder === 'all' ? folder : folder.id} style={{ flex: 1, flexDirection: 'row' }}>
 				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }} onLongPress={() => { this.folder_longPress(folder) }}>
 					<View style={folderButtonStyle}>
-						<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
+						<Text numberOfLines={1} style={this.styles().folderButtonText}>{folder === 'all' ? _('All notes') : Folder.displayTitle(folder)}</Text>
 					</View>
 				</TouchableOpacity>
 				{ iconWrapper }
@@ -296,6 +312,10 @@ class SideMenuContentComponent extends Component {
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
+
+		items.push(this.renderFolderItem('all', this.props.notesParentType === 'SmartFilter', false, 0));
+
+		items.push(this.makeDivider('divider_all'));
 
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.renderFolderItem);
