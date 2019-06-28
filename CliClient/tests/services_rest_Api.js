@@ -198,7 +198,6 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: 1
 		}));
-		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(1);
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
@@ -206,14 +205,12 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: 0
 		}));
-		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(0);
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing 3',
 			parent_id: f.id,
 		}));
-		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBeUndefined();
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
@@ -221,7 +218,6 @@ describe('services_rest_Api', function() {
 			parent_id: f.id,
 			is_todo: '1'
 		}));
-		expect(!!response.id).toBe(true);
 		expect(response.is_todo).toBe(1);
 		done();
 	});
