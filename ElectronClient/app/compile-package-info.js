@@ -20,7 +20,7 @@ packageInfo.build = { appId: appId };
 let branch;
 let hash;
 try {
-	branch = execSync('git branch --show-current').toString().trim();
+	branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 	hash   = execSync('git log --pretty="%h" -1').toString().trim();
 }
 catch(err) {
