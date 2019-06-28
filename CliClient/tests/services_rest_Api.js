@@ -189,6 +189,39 @@ describe('services_rest_Api', function() {
 		done();
 	});
 
+	it('should create todos', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "stuff to do" });
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing',
+			parent_id: f.id,
+			is_todo: 1
+		}));
+		expect(response.is_todo).toBe(1);
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 2',
+			parent_id: f.id,
+			is_todo: 0
+		}));
+		expect(response.is_todo).toBe(0);
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 3',
+			parent_id: f.id,
+		}));
+		expect(response.is_todo).toBeUndefined();
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 4',
+			parent_id: f.id,
+			is_todo: '1'
+		}));
+		expect(response.is_todo).toBe(1);
+		done();
+	});
+
 	it('should create folders with supplied ID', async (done) => {
 		const response = await api.route('POST', 'folders', null, JSON.stringify({
 			id: '12345678123456781234567812345678',
