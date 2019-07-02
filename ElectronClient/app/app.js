@@ -1080,6 +1080,13 @@ class Application extends BaseApplication {
 			css: cssString
 		});
 
+		const printCssString = await this.loadCustomCss(Setting.value('profileDir') + '/printstyle.css');
+
+		this.store().dispatch({
+			type: 'LOAD_PRINT_CSS',
+			printCss: printCssString
+		});
+
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {

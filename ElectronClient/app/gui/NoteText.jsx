@@ -943,16 +943,25 @@ class NoteTextComponent extends React.Component {
 	async updateHtml(body = null, options = null) {
 		if (!options) options = {};
 		if (!('useCustomCss' in options)) options.useCustomCss = true;
+		if (!('usePrintCss' in options)) options.usePrintCss = false;
 
 		let bodyToRender = body;
 		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
 
 		const theme = themeStyle(this.props.theme);
 
+		let userCss_ = '';
+
+		if (options.useCustomCss) {
+			userCss_ = this.props.customCss;
+		} else if (options.usePrintCss) {
+			userCss_ = this.props.printCss;
+		}
+
 		const mdOptions = {
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'ipcProxySendToHost',
-			userCss: options.useCustomCss ? this.props.customCss : '',
+			userCss: userCss_,
 			resources: await shared.attachedResources(bodyToRender),
 			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
@@ -1118,7 +1127,7 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		await this.updateHtml(tempBody, { useCustomCss: false });
+		await this.updateHtml(tempBody, { useCustomCss: false, usePrintCss: true });
 		this.forceUpdate();
 
 		const restoreSettings = async () => {
@@ -1927,6 +1936,7 @@ const mapStateToProps = (state) => {
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
+		printCss: state.printCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		historyNotes: state.historyNotes,
 	};

@@ -33,6 +33,7 @@ const defaultState = {
 	hasDisabledSyncItems: false,
 	newNote: null,
 	customCss: '',
+	printCss: '',
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -692,6 +693,12 @@ const reducer = (state = defaultState, action) => {
 
 				newState = Object.assign({}, state);
 				newState.customCss = action.css;
+				break;
+
+			case 'LOAD_PRINT_CSS':
+
+				newState = Object.assign({}, state);
+				newState.printCss = action.printCss;
 				break;
         
 			case 'SET_NOTE_TAGS':
