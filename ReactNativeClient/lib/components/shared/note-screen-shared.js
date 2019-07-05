@@ -7,6 +7,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
+const Tag = require('lib/models/Tag.js');
 
 const shared = {};
 
@@ -196,7 +197,10 @@ shared.attachedResources = async function(noteBody) {
 }
 
 shared.refreshNoteMetadata = async function(comp, force = null) {
-	if (force !== true && !comp.state.showNoteMetadata) return;
+if (comp.state.note.pendingTag) {
+	await Tag.setNoteTagsByIds(comp.state.note.id, [comp.state.note.pendingTag]);
+}
+if (force !== true && !comp.state.showNoteMetadata) return;
 
 	let noteMetadata = await Note.serializeAllProps(comp.state.note);
 	comp.setState({ noteMetadata: noteMetadata });

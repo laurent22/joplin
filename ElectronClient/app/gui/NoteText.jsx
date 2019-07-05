@@ -1193,6 +1193,7 @@ class NoteTextComponent extends React.Component {
 			type: 'WINDOW_COMMAND',
 			name: 'setTags',
 			noteId: this.state.note.id,
+			pendingTag: this.state.note.pendingTag || []
 		});
 	}
 

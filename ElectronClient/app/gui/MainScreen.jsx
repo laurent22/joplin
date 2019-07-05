@@ -89,6 +89,24 @@ class MainScreenComponent extends React.Component {
 			});
 		}
 
+		const createPending = async (tagId, isTodo) =>{
+
+		 	let folderId = Setting.value('activeFolderId');
+
+		 	if (!folderId) return;
+
+		 	let note = {
+				parent_id: folderId,
+				is_todo: isTodo ? 1 : 0,
+				pendingTag: tagId
+			};
+
+		 	this.props.dispatch({
+				type: 'NOTE_SET_NEW_ONE',
+				item : note,
+			});
+		}
+
 		let commandProcessed = true;
 
 		if (command.name === 'newNote') {
@@ -105,6 +123,13 @@ class MainScreenComponent extends React.Component {
 			}
 
 			await createNewNote(null, true);
+		} else if (command.name === 'newTagged') {
+			if (!this.props.folders.length) {
+				bridge().showErrorMessageBox(_('Please create a notebook first'));
+				return;
+			}
+
+			await createPending(command.id, command.is_todo);
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {
@@ -131,7 +156,10 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'setTags') {
-			const tags = await Tag.tagsByNoteId(command.noteId);
+			let tags = await Tag.tagsByNoteId(command.noteId);
+			if (tags.length == 0 && command.pendingTag){
+				tags = [await Tag.load(command.pendingTag)];
+			}
 			const noteTags = tags.map((a) => { return {value: a.id, label: a.title } }).sort((a, b) => { return a.label.localeCompare(b.label); });
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags.map((a) => { return {value: a.id, label: a.title } });

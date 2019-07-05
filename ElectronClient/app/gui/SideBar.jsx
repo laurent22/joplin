@@ -374,6 +374,32 @@ class SideBarComponent extends React.Component {
 					},
 				})
 			);
+			menu.append(
+				new MenuItem({
+					label: _('New Todo'),
+					click: async () => {
+						this.props.dispatch({
+							type: "WINDOW_COMMAND",
+							name: "newTagged",
+							id: itemId,
+							is_todo: true
+						});
+					},
+				})
+			);
+			menu.append(
+				new MenuItem({
+					label: _('New Note'),
+					click: async () => {
+						this.props.dispatch({
+							type: "WINDOW_COMMAND",
+							name: "newTagged",
+							id: itemId,
+							is_todo: false
+						});
+					},
+				})
+			);
 		}
 
 		menu.popup(bridge().window());
