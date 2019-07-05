@@ -633,9 +633,8 @@ msgstr "Webclipper-opties"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-# Where to leave the ampersand?
 msgid "&File"
-msgstr "Bestand"
+msgstr "&Bestand"
 
 msgid "About Joplin"
 msgstr "Over Joplin"
@@ -665,10 +664,8 @@ msgstr "Afsluiten"
 msgid "Close Window"
 msgstr "Venster afsluiten"
 
-# Where to leave the ampersand?
-#, fuzzy
 msgid "&Edit"
-msgstr "Bewerken"
+msgstr "Be&werken"
 
 msgid "Copy"
 msgstr "Kopiëren"
@@ -709,10 +706,8 @@ msgstr "Alle notities doorzoeken"
 msgid "Search in current note"
 msgstr "Huidige notitie doorzoeken"
 
-# Where to leave the ampersand?
-#, fuzzy
 msgid "&View"
-msgstr "Beeld"
+msgstr "Beel&d"
 
 msgid "Toggle sidebar"
 msgstr "Zijbalk tonen/verbergen"
@@ -723,15 +718,11 @@ msgstr "Bewerkindeling tonen/verbergen"
 msgid "Focus"
 msgstr "Focus"
 
-# Where to leave the ampersand?
-#, fuzzy
 msgid "&Tools"
-msgstr "Hulpmiddelen"
+msgstr "E&xtra"
 
-# Where to leave the ampersand?
-#, fuzzy
 msgid "&Help"
-msgstr "Hulp"
+msgstr "&Help"
 
 msgid "Website and documentation"
 msgstr "Website en documentatie"
@@ -1242,9 +1233,8 @@ msgstr ""
 "Typ de titel van een notitie om er naartoe te springen. Of typ # gevolgd "
 "door de naam van een label, of @ gevolgd door de naam van een notitieboek."
 
-#, fuzzy
 msgid "Goto Anything..."
-msgstr "Ga naar iets…"
+msgstr "Ga naar alles…"
 
 #, javascript-format
 msgid "Usage: %s"
