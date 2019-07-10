@@ -478,6 +478,11 @@ function renderFileToHtml(sourcePath, targetPath, params) {
 function makeHomePageMd() {
 	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
 	md = md.replace(tocRegex_, '');
+
+	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
+	// while MarkdownIt doesn't and will in fact display the \. So we remove it here.
+	md = md.replace(/\\\| bash/g, '| bash');
+
 	return md;
 }
 
