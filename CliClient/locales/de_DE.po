@@ -597,7 +597,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Exportiere „%s“ ins „%s“ Format. Bitte warten..."
+msgstr "Exportiere „%s“ ins „%s“-Format. Bitte warten..."
 
 msgid "Sidebar"
 msgstr "Seitenleiste"
@@ -606,14 +606,14 @@ msgid "Note list"
 msgstr "Notizen-Liste"
 
 msgid "Note title"
-msgstr "Notiz Titel"
+msgstr "Notiz-Titel"
 
 msgid "Note body"
-msgstr "Notiz Text"
+msgstr "Notiz-Text"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importiere „%s“ ins „%s“ Format. Bitte warten..."
+msgstr "Importiere „%s“ als „%s“-Format. Bitte warten..."
 
 msgid "PDF File"
 msgstr "PDF-Datei"

@@ -37,7 +37,6 @@ const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
-const { WelcomeScreen } = require('lib/components/screens/welcome.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
@@ -167,13 +166,15 @@ function historyCanGoBackTo(route, nextRoute) {
 	return true;
 }
 
+const DEFAULT_ROUTE = {
+	type: 'NAV_GO',
+	routeName: 'Notes',
+	smartFilterId: 'c3176726992c11e9ac940492261af972',
+};
+
 const appDefaultState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
-	route: {
-		type: 'NAV_GO',
-		routeName: 'Welcome',
-		params: {},
-	},
+	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 });
 
@@ -228,8 +229,6 @@ const appReducer = (state = appDefaultState, action) => {
 						navHistory[i] = Object.assign({}, action);
 					}
 				}
-
-				if (action.routeName == 'Welcome') navHistory = [];
 
 				//reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
@@ -500,10 +499,7 @@ async function initialize(dispatch) {
 		});
 
 		if (!folder) {
-			dispatch({
-				type: 'NAV_GO',
-				routeName: 'Welcome',
-			});
+			dispatch(DEFAULT_ROUTE);
 		} else {
 			dispatch({
 				type: 'NAV_GO',
@@ -692,7 +688,6 @@ class AppComponent extends React.Component {
 		const sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
 
 		const appNavInit = {
-			Welcome: { screen: WelcomeScreen },
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
 			Tags: { screen: TagsScreen },

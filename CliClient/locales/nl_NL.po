@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -127,13 +129,12 @@ msgstr "Markeert een taak als afgerond."
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notitie is geen taak: \"%s\""
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, "
-"`decrypt`, `status` en `target-status`."
+"`decrypt`, `status`, `decrypt-file` en `target-status`."
 
 msgid "Enter master password:"
 msgstr "Voer het hoofdwachtwoord in:"
@@ -260,13 +261,13 @@ msgid "To enter command line mode, press \":\""
 msgstr "Druk op \":\" om de opdrachtregelmodus te starten."
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Druk op Esc om de opdrachtregelmodus af te sluiten."
+msgstr "Druk op Esc om de opdrachtregelmodus af te sluiten"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Typ `help keymap` om de lijst met sneltoetsen en configuratie-opties te "
-"bekijken."
+"bekijken"
 
 msgid "Imports data into Joplin."
 msgstr "Importeert gegeven naar Joplin."
@@ -459,21 +460,20 @@ msgid "Starting synchronisation..."
 msgstr "Bezig met starten van synchronisatie..."
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Resources downloaden…"
 
 msgid "Cancelling... Please wait."
 msgstr "Bezig met annuleren... Even geduld."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> kan zijn \"add\", \"remove\" of \"list\" om [tag] toe te "
+"<tag-command> kan \"add\", \"remove\" of \"list\" zijn om [tag] toe te "
 "wijzen aan of te verwijderen uit [note] of om de met [tag] geassocieerde "
 "notities op te sommen. De opdracht `tag list` kan worden gebruikt om alle "
-"labels op te sommen."
+"labels op te sommen (gebruik “-l” voor “long” optie)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -587,18 +587,16 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Bezig met exporteren van \"%s\" in het formaat \"%s\". Even geduld..."
 
 msgid "Sidebar"
-msgstr ""
+msgstr "Zijbalk"
 
 msgid "Note list"
-msgstr ""
+msgstr "Notitielijst"
 
-#, fuzzy
 msgid "Note title"
-msgstr "Titel van notitieboek:"
+msgstr "Titel van notitie"
 
-#, fuzzy
 msgid "Note body"
-msgstr "Notitieboeken"
+msgstr "Inhoud van notitie"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -635,15 +633,14 @@ msgstr "Webclipper-opties"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#, fuzzy
 msgid "&File"
-msgstr "Bestand"
+msgstr "&Bestand"
 
 msgid "About Joplin"
 msgstr "Over Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "Voorkeuren…"
 
 msgid "Check for updates..."
 msgstr "Controleren op updates..."
@@ -665,11 +662,10 @@ msgid "Quit"
 msgstr "Afsluiten"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Venster afsluiten"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Bewerken"
+msgstr "Be&werken"
 
 msgid "Copy"
 msgstr "Kopiëren"
@@ -680,9 +676,8 @@ msgstr "Knippen"
 msgid "Paste"
 msgstr "Plakken"
 
-#, fuzzy
 msgid "Select all"
-msgstr "Datum kiezen"
+msgstr "Alles selecteren"
 
 msgid "Bold"
 msgstr "Vetgedrukt"
@@ -691,7 +686,7 @@ msgid "Italic"
 msgstr "Cursief"
 
 msgid "Link"
-msgstr ""
+msgstr "Koppeling"
 
 msgid "Code"
 msgstr "Code"
@@ -708,13 +703,11 @@ msgstr "Labels"
 msgid "Search in all the notes"
 msgstr "Alle notities doorzoeken"
 
-#, fuzzy
 msgid "Search in current note"
-msgstr "Alle notities doorzoeken"
+msgstr "Huidige notitie doorzoeken"
 
-#, fuzzy
 msgid "&View"
-msgstr "Beeld"
+msgstr "Beel&d"
 
 msgid "Toggle sidebar"
 msgstr "Zijbalk tonen/verbergen"
@@ -722,17 +715,14 @@ msgstr "Zijbalk tonen/verbergen"
 msgid "Toggle editor layout"
 msgstr "Bewerkindeling tonen/verbergen"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Inhoud focussen"
+msgstr "Focus"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Hulpmiddelen"
+msgstr "E&xtra"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Hulp"
+msgstr "&Help"
 
 msgid "Website and documentation"
 msgstr "Website en documentatie"
@@ -741,7 +731,7 @@ msgid "Make a donation"
 msgstr "Doneren"
 
 msgid "Toggle development tools"
-msgstr ""
+msgstr "Wissel ontwikkelhulpmiddelen"
 
 #, javascript-format
 msgid "Open %s"
@@ -761,18 +751,18 @@ msgstr "De huidige versie is up-to-date."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (pre-release)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Er is een update beschikbaar. Wil je deze nu downloaden?"
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr ""
+msgstr "Jouw versie: %s"
 
 #, javascript-format
 msgid "New version: %s"
-msgstr ""
+msgstr "Nieuwe versie: %s"
 
 msgid "Yes"
 msgstr "Ja"
@@ -781,7 +771,7 @@ msgid "No"
 msgstr "Nee"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Token is naar het klembord gekopieerd!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "De webclipper-dienst is ingeschakeld en wordt automatisch opgestart."
@@ -832,20 +822,21 @@ msgstr "Stap 2: Installeer de extensie"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Download en installeer de bijbehorende extensie in je browser:"
 
-#, fuzzy
 msgid "Advanced options"
-msgstr "Geavanceerde opties tonen"
+msgstr "Geavanceerde opties"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Autorisatie-token:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Kopieer token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"Dit autorisatie-token is alleen nodig om applicaties van derden toegang te "
+"geven tot Joplin."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -855,7 +846,7 @@ msgid "Check synchronisation configuration"
 msgstr "Synchronisatieconfiguratie controleren"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Bladeren…"
 
 msgid "Apply"
 msgstr "Toepassen"
@@ -951,9 +942,8 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Gebruikte versleuteling:"
 
-#, fuzzy
 msgid "Usage"
-msgstr "Gebruik: %s"
+msgstr "Gebruik"
 
 msgid "Back"
 msgstr "Terug"
@@ -998,9 +988,8 @@ msgstr "Sommige items kunnen niet worden gesynchroniseerd."
 msgid "View them now"
 msgstr "Items tonen"
 
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "Voer het hoofdwachtwoord in:"
+msgstr "Een of meer hoofdsleutels vereist een wachtwoord."
 
 msgid "Set the password"
 msgstr "Wachtwoord instellen"
@@ -1017,37 +1006,38 @@ msgstr ""
 "\"Nieuw notitieboek\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Locatie"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "Notitieboeken"
+msgstr "Notitiegeschiedenis"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Vorige versies van deze notitie"
 
 msgid "Note properties"
-msgstr ""
+msgstr "Eigenschappen van notitie"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "Deze notitie is bewerkt:"
+msgstr "Deze notitie heeft geen geschiedenis"
 
 msgid "Restore"
-msgstr ""
+msgstr "Herstel"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Klik “%s” om de notitie te herstellen. Het wordt gekopieerd naar het "
+"notitieboek genaamd “%s”. De huidige versie van de notitie wordt niet "
+"vervangen of aangepast."
 
 msgid "Open..."
 msgstr "Openen..."
@@ -1066,7 +1056,7 @@ msgid "Copy Link Address"
 msgstr "Linkadres kopiëren"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "Deze bijlage is niet gedownload of nog niet ontsleuteld."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1082,6 +1072,8 @@ msgstr ""
 
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
+"Slechts één notitie kan gelijktijdig worden afgedrukt of geëxporteerd naar "
+"PDF."
 
 msgid "strong text"
 msgstr "vetgedrukte tekst"
@@ -1163,21 +1155,23 @@ msgstr "Versleutelopties"
 msgid "Clipper Options"
 msgstr "Webclipperopties"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Notitieboek verwijderen? Alle notities en sub-notitieboeken worden eveneens "
+"Notitieboek “%s” verwijderen?\n"
+"\n"
+"Alle notities en sub-notitieboeken in dit notitieboek worden eveneens "
 "verwijderd."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Wil je dit label verwijderen van alle notities?"
+msgstr "Label “%s” verwijderen van alle notities?"
 
 msgid "Remove this search from the sidebar?"
-msgstr "Wil je deze zoekopdracht verwijderen uit de zijbalk?"
+msgstr "Deze zoekopdracht verwijderen uit de zijbalk?"
 
 msgid "Delete"
 msgstr "Verwijderen"
@@ -1192,15 +1186,15 @@ msgstr "Notitieboeken"
 msgid "Decrypting items: %d/%d"
 msgstr "Bezig met ontsleutelen van items: %d/%d"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Bronnen: %d/%d"
+msgstr "Bronnen ophalen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
 
 msgid "Retry"
-msgstr ""
+msgstr "Opnieuw proberen"
 
 msgid "Add or remove tags"
 msgstr "Labels toevoegen of verwijderen"
@@ -1215,32 +1209,32 @@ msgstr "%s - kopiëren"
 msgid "Switch between note and to-do type"
 msgstr "Schakelen tussen notitie en taak"
 
-#, fuzzy
 msgid "Switch to note type"
-msgstr "Schakelen tussen notitie en taak"
+msgstr "Overschakelen naar notitie-type"
 
-#, fuzzy
 msgid "Switch to to-do type"
-msgstr "Schakelen tussen notitie en taak"
+msgstr "Overschakelen naar todo-type"
 
 msgid "Copy Markdown link"
 msgstr "Markdownlink kopiëren"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Notities verwijderen?"
+msgstr "Notitie “%s” verwijderen?"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Deze notities verwijderen?"
+msgstr "Deze %d notities verwijderen?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"Typ de titel van een notitie om er naartoe te springen. Of typ # gevolgd "
+"door de naam van een label, of @ gevolgd door de naam van een notitieboek."
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "Ga naar alles…"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1357,6 +1351,7 @@ msgstr "De synchronisatie loopt al. Status: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
+"Onbekend type item gedownload - graag Joplin upgraden naar de laatste versie"
 
 msgid "Encrypted"
 msgstr "Versleuteld"
@@ -1400,6 +1395,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Let op: Als je deze locatie wijzigt, zorg dan dat je eerst alle inhoud hier "
+"naartoe kopieert voor synchronisatie. Anders worden alle bestanden "
+"verwijderd! Zie de FAQ voor meer details: %s"
 
 msgid "Synchronisation target"
 msgstr "Synchronisatiedoel"
@@ -1434,25 +1432,29 @@ msgid "WebDAV password"
 msgstr "WebDAV-wachtwoord"
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Gedrag bijlagen downloaden"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"In de mode “Handmatig” worden bijlagen alleen gedownload als je hen "
+"aanklikt. In “Auto” worden ze gedownload zodra je de notitie opent. In "
+"“Altijd” worden bijlagen altijd gedownload, of je de notitie nu opent of "
+"niet."
 
 msgid "Always"
-msgstr ""
+msgstr "Altijd"
 
 msgid "Manual"
-msgstr ""
+msgstr "Handmatig"
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Max gelijktijdige verbindingen"
 
 msgid "Language"
 msgstr "Taal"
@@ -1484,9 +1486,8 @@ msgstr "Notities sorteren op"
 msgid "Reverse sort order"
 msgstr "Sorteervolgorde omdraaien"
 
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "Notities sorteren op"
+msgstr "Notitieboeken sorteren op"
 
 msgid "Save geo-location with notes"
 msgstr "Locatie opslaan in notities"
@@ -1504,41 +1505,40 @@ msgid "When creating a new note:"
 msgstr "Bij het creëren van een nieuwe notitie:"
 
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Inschakelen zacht afbreken"
 
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "Versleuteling inschakelen"
+msgstr "Inschakelen wiskundige expressies"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Inschakelen ==mark== syntaxis"
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Inschakelen voetnoten"
 
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Inschakelen inhoudsopgave"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Inschakelen ~sub~ syntaxis"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Inschakelen ^sup^ syntaxis"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Inschakelen deflist syntaxis"
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "Inschakelen afkortingen syntaxis"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Inschakelen markdown emoji"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "Inschakelen ++insert++ syntaxis"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Inschakelen multimarkdown tabel extensie"
 
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
@@ -1551,16 +1551,18 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
+"Dit zal Joplin toestaan in de achtergrond te werken. Het is aanbevolen deze "
+"instelling in te schakelen, zodat je notities constant worden "
+"gesynchroniseerd, waardoor het aantal conflicten wordt beperkt."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "Start applicatie geminimaliseerd in het systeemvak"
 
 msgid "Global zoom percentage"
 msgstr "Globaal zoompercentage"
 
-#, fuzzy
 msgid "Editor font size"
-msgstr "Lettertype van bewerker"
+msgstr "Lettergrootte van bewerker"
 
 msgid "Editor font family"
 msgstr "Lettertype van bewerker"
@@ -1577,11 +1579,11 @@ msgid "Automatically update the application"
 msgstr "Applicatie automatisch bijwerken"
 
 msgid "Get pre-releases when checking for updates"
-msgstr ""
+msgstr "Verkrijg pre-releases bij controleren op updates"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr ""
+msgstr "Zie de pre-release pagina voor meer details: %s"
 
 msgid "Synchronisation interval"
 msgstr "Synchronisatietussenpoos"
@@ -1630,49 +1632,44 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "Versleuteling inschakelen"
+msgstr "Inschakelen geschiedenis van notities"
 
 msgid "days"
-msgstr ""
+msgstr "dagen"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d dagen"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Bewaar geschiedenis van notities voor"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
 
-#, fuzzy
 msgid "General"
-msgstr "Algemene opties"
+msgstr "Algemeen"
 
-#, fuzzy
 msgid "Synchronisation"
-msgstr "Synchronisatiestatus"
+msgstr "Synchronisatie"
 
 msgid "Appearance"
-msgstr ""
+msgstr "Verschijningsvorm"
 
-#, fuzzy
 msgid "Note"
-msgstr "Notitieboeken"
+msgstr "Notitie"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
-#, fuzzy
 msgid "Application"
-msgstr "Sluit de applicatie af."
+msgstr "Applicatie"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "Het label “%s” bestaat al. Kies een andere naam."
 
 msgid "Joplin Export File"
 msgstr "Joplin-exportbestand"
@@ -1686,9 +1683,8 @@ msgstr "Joplin-exportmap"
 msgid "Evernote Export File"
 msgstr "Evernote-exportbestand"
 
-#, fuzzy
 msgid "Json Export Directory"
-msgstr "Joplin-exportmap"
+msgstr "JSON-exportmap"
 
 msgid "File"
 msgstr "Bestand"
@@ -1720,7 +1716,7 @@ msgstr ""
 "Geef het notitieboek op waar de notities naar moeten worden geïmporteerd."
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Herstelde notities"
 
 msgid "Items that cannot be synchronised"
 msgstr "Items die niet kunnen worden gesynchroniseerd"
@@ -1734,23 +1730,25 @@ msgstr ""
 "synchronisatiedoel. Als je deze items wilt vinden, moet je zoeken naar de "
 "titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "Dit bestand kan niet worden geopend: %s"
+msgstr "%s (%s) kon niet worden geupload: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Dit bestand kan niet worden geopend: %s"
+msgstr "Item “%s” kan niet worden gedownload: %s"
 
-#, fuzzy
 msgid "Items that cannot be decrypted"
-msgstr "Items die niet kunnen worden gesynchroniseerd"
+msgstr "Items die niet kunnen worden ontsleuteld"
 
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
+"Joplin kon deze items meermaals niet ontsleutelen, mogelijk omdat ze "
+"beschadigd of te groot zijn. Deze items blijven op het apparaat, maar Joplin "
+"zal niet langer proberen ze te ontsleutelen."
 
 msgid "Sync status (synced items / total items)"
 msgstr ""
@@ -1787,10 +1785,10 @@ msgid "On %s: %s"
 msgstr "Op %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "Toestemming om de camera te gebruiken"
 
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "Je toestemming om de camera te gebruiken is vereist."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1822,12 +1820,11 @@ msgstr "%d notities verplaatsen naar notitieboek \"%s\"?"
 msgid "Press to set the decryption password."
 msgstr "Druk om het ontsleutelwachtwoord in te stellen."
 
-#, fuzzy
 msgid "Clear alarm"
-msgstr "Alarm instellen"
+msgstr "Alarm wissen"
 
 msgid "Save alarm"
-msgstr "Alarm opslaam"
+msgstr "Alarm opslaan"
 
 msgid "Select date"
 msgstr "Datum kiezen"
@@ -1838,22 +1835,21 @@ msgstr "Bevestigen"
 msgid "Cancel synchronisation"
 msgstr "Synchronisatie annuleren"
 
-#, fuzzy
 msgid "Checking... Please wait."
-msgstr "Bezig met annuleren... Even geduld."
+msgstr "Controleren… Even geduld."
 
-#, fuzzy
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Synchronisatieconfiguratie controleren"
+msgstr "Succes! Configuratie van synchronisatie lijkt correct te zijn."
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
+"Fout. Controleer of de URL, gebruikersnaam, wachtwoord, etc. kloppen en dat "
+"het synchronisatiedoel toegankelijk is. De gemelde fout :"
 
-#, fuzzy
 msgid "The application has been authorised!"
-msgstr "De applicatie is geautoriseerd."
+msgstr "De applicatie is geautoriseerd!"
 
 #, javascript-format
 msgid ""
@@ -1863,10 +1859,15 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
+"Kon applicatie niet autoriseren:\n"
+"\n"
+"%s\n"
+"\n"
+"Probeer opnieuw."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Bezig met ontsleutelen van items: %d/%d"
+msgstr "Ontsleutelde items: %s / %s"
 
 msgid "New tags:"
 msgstr "Nieuwe labels:"
@@ -1874,9 +1875,8 @@ msgstr "Nieuwe labels:"
 msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
 
-#, fuzzy
 msgid "More information"
-msgstr "Configuratie"
+msgstr "Meer informatie"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1904,17 +1904,17 @@ msgstr "Joplin-website"
 
 #, javascript-format
 msgid "Database v%s"
-msgstr ""
+msgstr "Database v%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "Te verwijderen: %d"
+msgstr "FTS ingeschakeld: %d"
 
 msgid "Login with Dropbox"
 msgstr "Inloggen met Dropbox"
 
 msgid "Enter code here"
-msgstr ""
+msgstr "Code hier invoeren"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -1965,15 +1965,14 @@ msgstr "De mobiele Joplin-app ondersteunt momenteel niet dit soort links: %s"
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Links met protocol “%s” worden niet ondersteund"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
-#, fuzzy
 msgid "Take photo"
-msgstr "Foto bijvoegen"
+msgstr "Foto maken"
 
 msgid "Attach photo"
 msgstr "Foto bijvoegen"
@@ -2000,7 +1999,7 @@ msgid "View on map"
 msgstr "Tonen op kaart"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "Ga naar bron-URL"
 
 msgid "Edit"
 msgstr "Bewerken"
