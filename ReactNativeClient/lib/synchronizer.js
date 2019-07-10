@@ -619,12 +619,10 @@ class Synchronizer {
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
 								this.logger().info("One master key was downloaded and none was previously available: automatically enabling encryption");
-								this.logger().info("Using master key: ", content);
+								this.logger().info("Using master key: ", content.id);
 								await this.encryptionService().enableEncryption(content);
 								await this.encryptionService().loadMasterKeysFromSettings();
-								this.logger().info(
-									"Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user."
-								);
+								this.logger().info("Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.");
 							}
 
 							if (!!content.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });
