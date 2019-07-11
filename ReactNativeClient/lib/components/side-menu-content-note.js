@@ -100,6 +100,7 @@ class SideMenuContentNoteComponent extends Component {
 			borderRightWidth: 1,
 			borderRightColor: globalStyle.dividerColor,
 			backgroundColor: theme.backgroundColor,
+			paddingTop: 10,
 		};
 
 		return (

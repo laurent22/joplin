@@ -28,6 +28,7 @@ class SideMenuContentComponent extends Component {
 		this.newFolderButton_press = this.newFolderButton_press.bind(this);
 		this.synchronize_press = this.synchronize_press.bind(this);
 		this.configButton_press = this.configButton_press.bind(this);
+		this.allNotesButton_press = this.allNotesButton_press.bind(this);
 		this.renderFolderItem = this.renderFolderItem.bind(this);
 	}
 
@@ -79,6 +80,7 @@ class SideMenuContentComponent extends Component {
 		styles.folderIcon.paddingTop = 3;
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
+		styles.sideButtonSelected = Object.assign({}, styles.sideButton, { backgroundColor: theme.selectedColor });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
@@ -86,23 +88,13 @@ class SideMenuContentComponent extends Component {
 	}
 
 	folder_press(folder) {
-		if (folder === 'all') {
-			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Notes',
-				smartFilterId: 'c3176726992c11e9ac940492261af972',
-			});
-		} else {
-			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Notes',
-				folderId: folder.id,
-			});
-		}
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			folderId: folder.id,
+		});
 	}
 
 	async folder_longPress(folder) {
@@ -181,6 +173,16 @@ class SideMenuContentComponent extends Component {
 		NavService.go('Config');
 	}
 
+	allNotesButton_press() {
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			smartFilterId: 'c3176726992c11e9ac940492261af972',
+		});
+	}
+
 	newFolderButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
@@ -215,22 +217,20 @@ class SideMenuContentComponent extends Component {
 
 		let iconWrapper = null;
 
-		if (folder !== 'all') {
-			const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
-			const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
+		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
 
-			iconWrapper = !hasChildren ? null : (
-				<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
-					{ iconComp }
-				</TouchableOpacity>
-			);
-		}
+		iconWrapper = !hasChildren ? null : (
+			<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
+				{ iconComp }
+			</TouchableOpacity>
+		);
 
 		return (
-			<View key={folder === 'all' ? folder : folder.id} style={{ flex: 1, flexDirection: 'row' }}>
+			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
 				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }} onLongPress={() => { this.folder_longPress(folder) }}>
 					<View style={folderButtonStyle}>
-						<Text numberOfLines={1} style={this.styles().folderButtonText}>{folder === 'all' ? _('All notes') : Folder.displayTitle(folder)}</Text>
+						<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
 					</View>
 				</TouchableOpacity>
 				{ iconWrapper }
@@ -238,15 +238,21 @@ class SideMenuContentComponent extends Component {
 		);
 	}
 
-	renderSideBarButton(key, title, iconName, onPressHandler) {
+	renderSideBarButton(key, title, iconName, onPressHandler = null, selected = false) {
 		const theme = themeStyle(this.props.theme);
+
+		const content = (
+			<View key={key} style={selected ? this.styles().sideButtonSelected : this.styles().sideButton}>
+				<Icon name={iconName} style={this.styles().sidebarIcon} />
+				<Text style={this.styles().sideButtonText}>{title}</Text>
+			</View>
+		);
+
+		if (!onPressHandler) return content;
 
 		return (
 			<TouchableOpacity key={key} onPress={onPressHandler}>
-				<View style={this.styles().sideButton}>
-					<Icon name={iconName} style={this.styles().sidebarIcon} />
-					<Text style={this.styles().sideButtonText}>{title}</Text>
-				</View>
+				{content}
 			</TouchableOpacity>
 		);
 	}
@@ -313,9 +319,11 @@ class SideMenuContentComponent extends Component {
 		// using padding. So instead creating blank elements for padding bottom and top.
 		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
 
-		items.push(this.renderFolderItem('all', this.props.notesParentType === 'SmartFilter', false, 0));
+		items.push(this.renderSideBarButton('all_notes', _('All notes'), 'md-document', this.allNotesButton_press, this.props.notesParentType === 'SmartFilter'));
 
 		items.push(this.makeDivider('divider_all'));
+
+		// items.push(this.renderSideBarButton('folder_header', _('Notebooks'), 'md-folder'));
 
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.renderFolderItem);
