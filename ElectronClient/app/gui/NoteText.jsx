@@ -463,7 +463,7 @@ class NoteTextComponent extends React.Component {
 
 		if (props.newNote) {
 			// assign new note and prevent body from being null
-			note = Object.assign(props.newNote, {body: ''});
+			note = Object.assign({}, props.newNote, {body: ''});
 			this.lastLoadedNoteId_ = null;
 			if (note.template)
 				note.body = TemplateUtils.render(note.template);
@@ -1027,7 +1027,7 @@ class NoteTextComponent extends React.Component {
 			} else if (command.name === 'textCode') {
 				fn = this.commandTextCode;
 			} else if (command.name === 'insertTemplate') {
-				fn = () => { return this.commandTemplate(command.value); };
+				fn = this.commandTemplate;
 			}
 		}
 
@@ -1054,7 +1054,7 @@ class NoteTextComponent extends React.Component {
 
 		requestAnimationFrame(() => {
 			fn = fn.bind(this);
-			fn();
+			fn(command.value);
 		});
 	}
 
@@ -1855,11 +1855,11 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const templatePrompt = <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try inserting a ")}
+		const templatePrompt = !this.props.templates.length ? null : (
+      <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try inserting a ")}
 				<a style={theme.urlStyle} onClick={() => { this.props.dispatch({type: 'WINDOW_COMMAND', name: 'selectTemplate',}); }} href="#">{_("template")}</a>
 			</span>
-
-		const showTemplates = this.props.templates.length > 0;
+    );
 
 		const viewer = <NoteTextViewer
 			ref={this.webviewRef_}
@@ -1920,7 +1920,7 @@ class NoteTextComponent extends React.Component {
 				</div>
 				{ toolbar }
 				<div style={{height: 0}}>
-					{ showTemplates ? templatePrompt : null }
+					{ templatePrompt }
 				</div>
 				{ tagList }
 				{ editor }

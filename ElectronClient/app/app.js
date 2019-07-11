@@ -244,7 +244,7 @@ class Application extends BaseApplication {
 		return result;
 	}
 
-	refreshMenu() {
+	async refreshMenu() {
 		const screen = this.lastMenuScreen_;
 		this.lastMenuScreen_ = null;
 		this.updateMenu(screen);
@@ -258,7 +258,7 @@ class Application extends BaseApplication {
 		});
 	}
 
-	updateMenu(screen) {
+	async updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const sortNoteFolderItems = (type) => {
@@ -503,9 +503,11 @@ class Application extends BaseApplication {
 			screens: ['Main'],
 		});
 
+		const templateDirExists = await shim.fsDriver().exists(Setting.value('templateDir'));
+
 		templateItems.push({
 			label: _('Create note from template'),
-			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
+			visible: templateDirExists,
 			click: () => {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
@@ -515,7 +517,7 @@ class Application extends BaseApplication {
 			}
 		}, {
 			label: _('Create to-do from template'),
-			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
+			visible: templateDirExists,
 			click: () => {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
@@ -525,7 +527,7 @@ class Application extends BaseApplication {
 			}
 		}, {
 			label: _('Insert template'),
-			visible: fs.pathExistsSync(Setting.value('profileDir') + '/templates'),
+			visible: templateDirExists,
 			accelerator: 'CommandOrControl+Alt+I',
 			click: () => {
 				this.dispatch({
@@ -536,9 +538,19 @@ class Application extends BaseApplication {
 		}, {
 			label: _('Open template directory'),
 			click: () => {
-				const templatePath = Setting.value('profileDir') + '/templates';
-				if (!fs.pathExistsSync(templatePath)) fs.mkdir(templatePath);
-				shell.openItem(templatePath);
+				const templateDir = Setting.value('templateDir');
+				if (!templateDirExists) shim.fsDriver().mkdir(templateDir);
+				shell.openItem(templateDir);
+			}
+		}, {
+			label: _('Refresh templates'),
+			click: async () => {
+				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
+
+				this.store().dispatch({
+					type: 'TEMPLATE_UPDATE_ALL',
+					templates: templates
+				});
 			}
 		});
 
@@ -1091,7 +1103,7 @@ class Application extends BaseApplication {
 			css: cssString
 		});
 
-		const templates = await TemplateUtils.loadTemplates(Setting.value('profileDir') + '/templates');
+		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
 
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',

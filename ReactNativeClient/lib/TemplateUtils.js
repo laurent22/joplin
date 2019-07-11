@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');
 
@@ -25,11 +26,11 @@ TemplateUtils.render = function(input) {
 
 TemplateUtils.loadTemplates = async function(filePath) {
 		let templates = [];
-		let filenames = [];
+		let files = [];
 
-		if (await fs.pathExists(filePath)) {
+		if (await shim.fsDriver().exists(filePath)) {
 			try {
-				filenames = fs.readdirSync(filePath);
+				files = await shim.fsDriver().readDirStats(filePath);
 			} catch (error) {
 				let msg = error.message ? error.message : '';
 				msg = 'Could not read template names from ' + filePath + '\n' + msg;
@@ -37,14 +38,14 @@ TemplateUtils.loadTemplates = async function(filePath) {
 				throw error;
 			}
 
-			filenames.forEach(filename => {
-				if (filename.endsWith('.md')) {
+			files.forEach(async (file) => {
+				if (file.path.endsWith('.md')) {
 					try {
-						let fileString = fs.readFileSync(filePath + '/' + filename, 'utf-8');
-						templates.push({label: filename, value: fileString});
+						let fileString = await shim.fsDriver().readFile(filePath + '/' + file.path, 'utf-8');
+						templates.push({label: file.path, value: fileString});
 					} catch (error) {
 						let msg = error.message ? error.message : '';
-						msg = 'Could not load template ' + filename + '\n' + msg;
+						msg = 'Could not load template ' + file.path + '\n' + msg;
 						error.message = msg;
 						throw error;
 					}
