@@ -45,6 +45,7 @@ const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
 const { SideMenuContent } = require('lib/components/side-menu-content.js');
+const { SideMenuContentNote } = require('lib/components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
 const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
@@ -176,6 +177,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
+	noteSideMenuOptions: null,
 });
 
 const appReducer = (state = appDefaultState, action) => {
@@ -325,6 +327,11 @@ const appReducer = (state = appDefaultState, action) => {
 				newState.selectedNoteIds = [];
 				break;
 
+			case 'NOTE_SIDE_MENU_OPTIONS_SET':
+
+				newState = Object.assign({}, state);
+				newState.noteSideMenuOptions = action.options;
+				break;
 
 		}
 	} catch (error) {
@@ -685,7 +692,15 @@ class AppComponent extends React.Component {
 		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.theme);
 
-		const sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+		let sideMenuContent = null;
+		let menuPosition = 'left';
+
+		if (this.props.routeName === 'Note') {
+			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			menuPosition = 'right';
+		} else {
+			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+		}
 
 		const appNavInit = {
 			Notes: { screen: NotesScreen },
@@ -704,6 +719,7 @@ class AppComponent extends React.Component {
 		return (
 			<SideMenu
 				menu={sideMenuContent}
+				menuPosition={menuPosition}
 				onChange={(isOpen) => this.sideMenu_change(isOpen)}
 				onSliding={(percent) => {
 					this.props.dispatch({
@@ -733,7 +749,9 @@ const mapStateToProps = (state) => {
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
-		theme: state.settings.theme
+		routeName: state.route.routeName,
+		theme: state.settings.theme,
+		noteSideMenuOptions: state.noteSideMenuOptions,
 	};
 };
 

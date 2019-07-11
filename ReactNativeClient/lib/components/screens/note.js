@@ -186,6 +186,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
+		this.menuOptions = this.menuOptions.bind(this);
 	}
 
 	styles() {
@@ -271,6 +272,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
 		}
+	}
+
+	componentDidMount() {
+		this.props.dispatch({
+			type: 'NOTE_SIDE_MENU_OPTIONS_SET',
+			options: this.menuOptions,
+		});
 	}
 
 	componentWillUnmount() {
