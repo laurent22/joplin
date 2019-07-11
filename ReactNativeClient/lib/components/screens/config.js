@@ -422,6 +422,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				<ScreenHeader
 					title={_('Configuration')}
 					showSaveButton={true}
+					showSearchButton={false}
+					showSideMenuButton={false}
 					saveButtonDisabled={!this.state.changedSettingKeys.length}
 					onSaveButtonPress={this.saveButton_press}
 				/>
