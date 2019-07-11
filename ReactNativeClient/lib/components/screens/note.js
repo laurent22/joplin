@@ -479,6 +479,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ note: newNote });
 
 		this.refreshResource(resource);
+
+		this.scheduleSave();
 	}
 
 	async attachPhoto_onPress() {
@@ -589,10 +591,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
-			output.push({ title: _('Take photo'), onPress: () => { this.takePhoto_onPress(); } });
-			output.push({ title: _('Attach photo'), onPress: () => { this.attachPhoto_onPress(); } });
-			output.push({ title: _('Attach any file'), onPress: () => { this.attachFile_onPress(); } });
-			output.push({ isDivider: true });
+			output.push({ title: _('Attach...'), onPress: async () => {
+				const buttonId = await dialogs.pop(this, _('Choose an option'), [
+					{ text: _('Take photo'), id: 'takePhoto' },
+					{ text: _('Attach photo'), id: 'attachPhoto' },
+					{ text: _('Attach any file'), id: 'attachFile' },
+				]);
+
+				if (buttonId === 'takePhoto') this.takePhoto_onPress();
+				if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
+				if (buttonId === 'attachFile') this.attachFile_onPress();
+			}});
 		}
 
 		if (isTodo) {
@@ -603,11 +612,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		if (isSaved) output.push({ title: _('Copy Markdown link'), onPress: () => { this.copyMarkdownLink_onPress(); } });
-		output.push({ isDivider: true });
 		output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
 		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
 		if (hasSource) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
-		output.push({ isDivider: true });
 		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
 		return output;
