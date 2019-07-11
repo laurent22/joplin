@@ -52,8 +52,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.state = {
 			note: Note.new(),
 			mode: 'view',
-			noteMetadata: '',
-			showNoteMetadata: false,
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
@@ -185,8 +183,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
+		this.properties_onPress = this.properties_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
-		this.menuOptions = this.menuOptions.bind(this);
+		this.sideMenuOptions = this.sideMenuOptions.bind(this);
 	}
 
 	styles() {
@@ -212,11 +211,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingRight: theme.marginRight,
 				paddingTop: theme.marginTop,
 				paddingBottom: theme.marginBottom,
-			},
-			metadata: {
-				paddingLeft: globalStyle.marginLeft,
-				paddingRight: globalStyle.marginRight,
-				color: theme.color,
 			},
 		};
 
@@ -254,8 +248,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			await ResourceFetcher.instance().markForDownload(resourceIds);
 		}
 
-		this.refreshNoteMetadata();
-
 		this.focusUpdate();
 	}
 
@@ -263,22 +255,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	refreshNoteMetadata(force = null) {
-		return shared.refreshNoteMetadata(this, force);
-	}
-
 	componentDidUpdate() {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
 		}
-	}
-
-	componentDidMount() {
-		this.props.dispatch({
-			type: 'NOTE_SIDE_MENU_OPTIONS_SET',
-			options: this.menuOptions,
-		});
 	}
 
 	componentWillUnmount() {
@@ -537,6 +518,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	properties_onPress() {
+		this.props.dispatch({
+			type: 'NOTE_SIDE_MENU_OPTIONS_SET',
+			options: this.sideMenuOptions(),
+		});
+
+		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
+	}
+
 	setAlarm_onPress() {
 		this.setState({ alarmDialogShown: true });
 	}
@@ -552,10 +542,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	onAlarmDialogReject() {
 		this.setState({ alarmDialogShown: false });
-	}
-
-	showMetadata_onPress() {
-		shared.showMetadata_onPress(this);
 	}
 
 	async showOnMap_onPress() {
@@ -586,11 +572,29 @@ class NoteScreenComponent extends BaseScreenComponent {
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
+	sideMenuOptions() {
+		const note = this.state.note;
+		if (!note) return [];
+
+		const output = [];
+
+		const createdDateString = time.unixMsToLocalDateTime(note.user_created_time);
+		const updatedDateString = time.unixMsToLocalDateTime(note.user_updated_time);
+
+		output.push({ title: _('Created: %s', createdDateString) });
+		output.push({ title: _('Updated: %s', updatedDateString) });
+		output.push({ isDivider: true });
+
+		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
+		if (!!note.source_url) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
+
+		return output;
+	}
+
 	menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
-		const hasSource = note && note.source_url;
 
 		let output = [];
 
@@ -620,9 +624,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (isSaved) output.push({ title: _('Tags'), onPress: () => { this.tags_onPress(); } });
 		output.push({ title: isTodo ? _('Convert to note') : _('Convert to todo'), onPress: () => { this.toggleIsTodo_onPress(); } });
 		if (isSaved) output.push({ title: _('Copy Markdown link'), onPress: () => { this.copyMarkdownLink_onPress(); } });
-		output.push({ title: this.state.showNoteMetadata ? _('Hide metadata') : _('Show metadata'), onPress: () => { this.showMetadata_onPress(); } });
-		output.push({ title: _('View on map'), onPress: () => { this.showOnMap_onPress(); } });
-		if (hasSource) output.push({ title: _('Go to source URL'), onPress: () => { this.showSource_onPress(); } });
+		output.push({ title: _('Properties'), onPress: () => { this.properties_onPress(); } });
 		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
 		return output;
@@ -832,7 +834,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{ titleComp }
 				{ bodyComponent }
 				{ actionButtonComp }
-				{ this.state.showNoteMetadata && <Text style={this.styles().metadata}>{this.state.noteMetadata}</Text> }
 
 				<SelectDateTimeDialog
 					shown={this.state.alarmDialogShown}

@@ -49,25 +49,32 @@ class SideMenuContentNoteComponent extends Component {
 		};
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
+		styles.sideButtonDisabled = Object.assign({}, styles.sideButton, { opacity: 0.6 });
 		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
 		return this.styles_[this.props.theme];
 	}
 
-	makeDivider(key) {
+	renderDivider(key) {
 		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
 	}
 
 	renderSideBarButton(key, title, iconName, onPressHandler) {
 		const theme = themeStyle(this.props.theme);
 
+		const content = (
+			<View key={key} style={onPressHandler ? this.styles().sideButton : this.styles().sideButtonDisabled}>
+				{ !iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} /> }
+				<Text style={this.styles().sideButtonText}>{title}</Text>
+			</View>
+		);
+
+		if (!onPressHandler) return content;
+
 		return (
 			<TouchableOpacity key={key} onPress={onPressHandler}>
-				<View style={this.styles().sideButton}>
-					{ !iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} /> }
-					<Text style={this.styles().sideButtonText}>{title}</Text>
-				</View>
+				{content}
 			</TouchableOpacity>
 		);
 	}
@@ -77,10 +84,15 @@ class SideMenuContentNoteComponent extends Component {
 
 		let items = [];
 
-		const options = this.props.options ? this.props.options() : [];
+		const options = this.props.options ? this.props.options : [];
+		let dividerIndex = 0;
 
 		for (const option of options) {
-			items.push(this.renderSideBarButton(option.title, option.title, null, option.onPress));
+			if (option.isDivider) {
+				items.push(this.renderDivider('divider_' + dividerIndex++));
+			} else {
+				items.push(this.renderSideBarButton(option.title, option.title, null, option.onPress));
+			}
 		}
 
 		let style = {

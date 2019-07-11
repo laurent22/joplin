@@ -109,11 +109,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
-			comp.refreshNoteMetadata();
 		});
 	}
-
-	comp.refreshNoteMetadata();
 
 	if (isNew) {
 		// Clear the newNote item now that the note has been saved, and
@@ -195,13 +192,6 @@ shared.attachedResources = async function(noteBody) {
 	return output;
 }
 
-shared.refreshNoteMetadata = async function(comp, force = null) {
-	if (force !== true && !comp.state.showNoteMetadata) return;
-
-	let noteMetadata = await Note.serializeAllProps(comp.state.note);
-	comp.setState({ noteMetadata: noteMetadata });
-}
-
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
@@ -236,11 +226,6 @@ shared.initState = async function(comp) {
 	}
 
 	comp.lastLoadedNoteId_ = note ? note.id : null;
-}
-
-shared.showMetadata_onPress = function(comp) {
-	comp.setState({ showNoteMetadata: !comp.state.showNoteMetadata });
-	comp.refreshNoteMetadata(true);
 }
 
 shared.toggleIsTodo_onPress = function(comp) {
