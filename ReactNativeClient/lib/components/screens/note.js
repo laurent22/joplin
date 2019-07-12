@@ -4,10 +4,12 @@ const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
+const ObjectUtils = require('lib/ObjectUtils.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
+const md5 = require('md5');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -186,6 +188,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.properties_onPress = this.properties_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
+		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
+		this.saveNoteButton_press = this.saveNoteButton_press.bind(this);
 	}
 
 	styles() {
@@ -596,6 +600,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
 
+		const cacheKey = md5([isTodo, isSaved].join('_'));
+		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
+
+		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
+
 		let output = [];
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
@@ -627,6 +636,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 		output.push({ title: _('Properties'), onPress: () => { this.properties_onPress(); } });
 		output.push({ title: _('Delete'), onPress: () => { this.deleteNote_onPress(); } });
 
+		this.menuOptionsCache_ = {};
+		this.menuOptionsCache_[cacheKey] = output;
+
 		return output;
 	}
 
@@ -649,6 +661,39 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
 		if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
+	}
+
+	async folderPickerOptions_valueChanged(itemValue, itemIndex) {
+		const note = this.state.note;
+
+		if (!note.id) {
+			await this.saveNoteButton_press(itemValue);
+		} else {
+			await Note.moveToFolder(note.id, itemValue);
+		}
+
+		note.parent_id = itemValue;
+
+		const folder = await Folder.load(note.parent_id);
+
+		this.setState({
+			lastSavedNote: Object.assign({}, note),
+			note: note,
+			folder: folder,
+		});
+	}
+
+	folderPickerOptions() {
+		const options = {
+			enabled: true,
+			selectedFolderId: this.state.folder ? this.state.folder.id : null,
+			onValueChange: this.folderPickerOptions_valueChanged,
+		};
+
+		if (this.folderPickerOptions_ && options.selectedFolderId === this.folderPickerOptions_.selectedFolderId) return this.folderPickerOptions_;
+
+		this.folderPickerOptions_ = options;
+		return this.folderPickerOptions_;
 	}
 
 	render() {
@@ -803,31 +848,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader
-					folderPickerOptions={{
-						enabled: true,
-						selectedFolderId: folder ? folder.id : null,
-						onValueChange: async (itemValue, itemIndex) => {
-							if (!note.id) {
-								await this.saveNoteButton_press(itemValue);
-							} else {
-								await Note.moveToFolder(note.id, itemValue);
-							}
-
-							note.parent_id = itemValue;
-
-							const folder = await Folder.load(note.parent_id);
-
-							this.setState({
-								lastSavedNote: Object.assign({}, note),
-								note: note,
-								folder: folder,
-							});
-						},
-					}}
+					folderPickerOptions={this.folderPickerOptions()}
 					menuOptions={this.menuOptions()}
 					showSaveButton={showSaveButton}
 					saveButtonDisabled={saveButtonDisabled}
-					onSaveButtonPress={() => this.saveNoteButton_press()}
+					onSaveButtonPress={this.saveNoteButton_press}
 					showSideMenuButton={false}
 					showSearchButton={false}
 				/>

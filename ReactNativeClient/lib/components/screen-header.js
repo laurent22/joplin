@@ -26,7 +26,7 @@ const DialogBox = require('react-native-dialogbox').default;
 // default height.
 const PADDING_V = 10;
 
-class ScreenHeaderComponent extends Component {
+class ScreenHeaderComponent extends React.PureComponent {
 
 	constructor() {
 		super();
@@ -311,9 +311,10 @@ class ScreenHeaderComponent extends Component {
 				}
 
 				const titlePickerItems = (mustSelect) => {
+					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
-					const folderTree = Folder.buildTree(this.props.folders);
+					const folderTree = Folder.buildTree(folders);
 					output = addFolderChildren(folderTree, output, 0);
 					return output;
 				}
