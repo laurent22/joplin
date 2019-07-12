@@ -603,6 +603,17 @@ class Note extends BaseItem {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
 	}
 
+	static dueDateObject(note) {
+		if (!!note.is_todo && note.todo_due) {
+			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
+			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
+			this.dueDateObjects_[note.todo_due] = new Date(note.todo_due);
+			return this.dueDateObjects_[note.todo_due];
+		}
+
+		return null;
+	}
+
 	// Tells whether the conflict between the local and remote note can be ignored.
 	static mustHandleConflict(localNote, remoteNote) {
 		// That shouldn't happen so throw an exception

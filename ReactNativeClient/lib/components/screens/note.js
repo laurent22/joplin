@@ -190,13 +190,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
 		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
 		this.saveNoteButton_press = this.saveNoteButton_press.bind(this);
+		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
+		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
+		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
+		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
+		this.title_changeText = this.title_changeText.bind(this);
 	}
 
 	styles() {
 		const themeId = this.props.theme;
 		const theme = themeStyle(themeId);
 
-		if (this.styles_[themeId]) return this.styles_[themeId];
+		const cacheKey = [themeId, this.state.titleTextInputHeight, this.state.HACK_webviewLoadingState].join('_');
+
+		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
 		let styles = {
@@ -216,6 +223,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingTop: theme.marginTop,
 				paddingBottom: theme.marginBottom,
 			},
+			checkbox: {
+				color: theme.color,
+				paddingRight: 10,
+				paddingLeft: theme.marginLeft,
+				paddingTop: 10, // Added for iOS (Not needed for Android??)
+				paddingBottom: 10, // Added for iOS (Not needed for Android??)
+			},
 		};
 
 		styles.titleContainer = {
@@ -230,8 +244,23 @@ class NoteScreenComponent extends BaseScreenComponent {
 		styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
 		styles.titleContainerTodo.paddingLeft = 0;
 
-		this.styles_[themeId] = StyleSheet.create(styles);
-		return this.styles_[themeId];
+		styles.titleTextInput = {
+			flex: 1,
+			marginTop: 0,
+			paddingLeft: 0,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			fontWeight: 'bold',
+			fontSize: theme.fontSize,
+			paddingTop: 10, // Added for iOS (Not needed for Android??)
+			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		};
+
+		if (this.enableMultilineTitle_) styles.titleTextInput.height = this.state.titleTextInputHeight;
+		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
+
+		this.styles_[cacheKey] = StyleSheet.create(styles);
+		return this.styles_[cacheKey];
 	}
 
 	isModified() {
@@ -783,7 +812,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
-			if (this.state.mode == 'edit') return null;//<ActionButton style={{display:'none'}}/>;
+			if (this.state.mode == 'edit') return null;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />
 		}
@@ -797,46 +826,20 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
-		let titleTextInputStyle = {
-			flex: 1,
-			marginTop: 0,
-			paddingLeft: 0,
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-			fontWeight: 'bold',
-			fontSize: theme.fontSize,
-			paddingTop: 10, // Added for iOS (Not needed for Android??)
-			paddingBottom: 10, // Added for iOS (Not needed for Android??)
-		};
-
-		if (this.enableMultilineTitle_) titleTextInputStyle.height = this.state.titleTextInputHeight;
-
-		let checkboxStyle = {
-			color: theme.color,
-			paddingRight: 10,
-			paddingLeft: theme.marginLeft,
-			paddingTop: 10, // Added for iOS (Not needed for Android??)
-			paddingBottom: 10, // Added for iOS (Not needed for Android??)
-		}
-
-		if (this.state.HACK_webviewLoadingState === 1) {
-			titleTextInputStyle.marginTop = 1;
-		}
-
-		const dueDate = isTodo && note.todo_due ? new Date(note.todo_due) : null;
+		const dueDate = Note.dueDateObject(note);
 
 		const titleComp = (
 			<View style={titleContainerStyle}>
-				{ isTodo && <Checkbox style={checkboxStyle} checked={!!Number(note.todo_completed)} onChange={(checked) => { this.todoCheckbox_change(checked) }} /> }
+				{ isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} /> }
 				<TextInput
-					onContentSizeChange={(event) => this.titleTextInput_contentSizeChange(event)}
+					onContentSizeChange={this.titleTextInput_contentSizeChange}
 					multiline={this.enableMultilineTitle_}
 					ref="titleTextField"
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
-					style={titleTextInputStyle}
+					style={this.styles().titleTextInput}
 					value={note.title}
-					onChangeText={(text) => this.title_changeText(text)}
+					onChangeText={this.title_changeText}
 					selectionColor={theme.textSelectionColor}
 					placeholder={_('Add title')}
 				/>
@@ -863,8 +866,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<SelectDateTimeDialog
 					shown={this.state.alarmDialogShown}
 					date={dueDate}
-					onAccept={(date) => this.onAlarmDialogAccept(date) }
-					onReject={() => this.onAlarmDialogReject() }
+					onAccept={this.onAlarmDialogAccept}
+					onReject={this.onAlarmDialogReject}
 				/>
 
 				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>

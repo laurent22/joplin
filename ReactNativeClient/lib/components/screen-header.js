@@ -158,7 +158,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	async backButton_press() {
-		await BackButtonService.back();
+		if (this.props.noteSelectionEnabled) {
+			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+		} else { 
+			await BackButtonService.back();
+		}	
 	}
 
 	searchButton_press() {
@@ -374,22 +378,30 @@ class ScreenHeaderComponent extends React.PureComponent {
 			</TouchableOpacity>
 		) : null;
 
-		const showSideMenuButton = this.props.showSideMenuButton !== false && !this.props.noteSelectionEnabled;
-		const showSearchButton = this.props.showSearchButton !== false && !this.props.noteSelectionEnabled;
+		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
+		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
-		const showBackButton = this.props.showBackButton !== false;
+		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
+
+		let backButtonDisabled = !this.props.historyCanGoBack;
+		if (!!this.props.noteSelectionEnabled) backButtonDisabled = false;
 
 		const titleComp = createTitleComponent();
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
-		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
+		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
-		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
+
+		const contextMenuStyle = { paddingTop: PADDING_V, paddingBottom: PADDING_V };
+		
+		// HACK: if this button is removed during selection mode, the header layout is broken, so for now just make it 1 pixel large (normally it should be hidden)
+		if (!!this.props.noteSelectionEnabled) contextMenuStyle.width = 1;
 
 		const menuComp = !menuOptionComponents.length || !showContextMenuButton ? null : (
 			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
-				<MenuTrigger style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}>
+				<MenuTrigger style={contextMenuStyle}>
 					<Icon name='md-more' style={this.styles().contextMenuTrigger} />
 				</MenuTrigger>
 				<MenuOptions>

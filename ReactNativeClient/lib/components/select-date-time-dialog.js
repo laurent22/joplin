@@ -5,13 +5,15 @@ import DatePicker from 'react-native-datepicker'
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
 
-class SelectDateTimeDialog extends Component {
+class SelectDateTimeDialog extends React.PureComponent {
 
 	constructor() {
 		super();
 		this.dialog_ = null;
 		this.shown_ = false;
 		this.state = { date: null };
+
+		this.onReject = this.onReject.bind(this);
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps) {
@@ -72,6 +74,7 @@ class SelectDateTimeDialog extends Component {
 				ref={(dialog) => { this.dialog_ = dialog; }}
 				dialogTitle={<DialogTitle title={_('Set alarm')} />}
 				actions={popupActions}
+				dismissOnTouchOutside={false}
 				width={0.9}
 				height={350}
 				>
