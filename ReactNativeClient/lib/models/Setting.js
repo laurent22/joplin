@@ -145,6 +145,8 @@ class Setting extends BaseModel {
 			'markdown.plugin.mark': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax')},
 			'markdown.plugin.footnote': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes')},
 			'markdown.plugin.toc': {value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension')},
+			'markdown.plugin.toc.depth.enabled': {value: false, type: Setting.TYPE_BOOL, public: true, show: (settings) => {return settings['markdown.plugin.toc']}, section: 'plugins', label: () => _('Enable specific TOC depth') },
+			'markdown.plugin.toc.depth': {value: 3, type: Setting.TYPE_INT, public: true, show: (settings) => {return settings['markdown.plugin.toc']}, section: 'plugins', label: () => _('Max TOC levels'), minimum: 1, maximum: 10, step: 1},
 			'markdown.plugin.sub': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax')},
 			'markdown.plugin.sup': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax')},
 			'markdown.plugin.deflist': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable deflist syntax')},
@@ -152,7 +154,6 @@ class Setting extends BaseModel {
 			'markdown.plugin.emoji': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji')},
 			'markdown.plugin.insert': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax')},
 			'markdown.plugin.multitable': {value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension')},
-
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html

@@ -21,7 +21,7 @@ const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 // The keys must match the corresponding entry in Setting.js
-const plugins = {
+let plugins = {
 	mark: {module: require('markdown-it-mark')},
 	footnote: {module: require('markdown-it-footnote')},
 	sub: {module: require('markdown-it-sub')},
@@ -147,6 +147,13 @@ class MdToHtml {
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor)
+
+		if (Setting.value('markdown.plugin.toc.depth.enabled')) {
+			const levels = [...Array(Setting.value('markdown.plugin.toc.depth'))].map((_, i) => i + 1);
+			plugins['toc'].options.level = levels;
+		} else {
+			delete plugins['toc'].options.level;
+		}
 
 		for (let key in plugins) {
 			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);
