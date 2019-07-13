@@ -216,8 +216,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				while (notes.length) {
 					let note = notes.shift();
-					const body = await enexXmlToMd(note.bodyXml, note.resources);
-					delete note.bodyXml;
+					const body = note.bodyXml; // await enexXmlToMd(note.bodyXml, note.resources);
+					// delete note.bodyXml;
 
 					// console.info('*************************************************************************');
 					// console.info(body);
