@@ -947,6 +947,9 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		expect((await remoteNotesFoldersResources()).length).toBe(2);
 
+		const remoteBlob = await fileApi().stat('.resource/' + resource1.id);
+		expect(!remoteBlob).toBe(true);
+
 		await switchClient(1);
 
 		expect(await shim.fsDriver().exists(resourcePath1)).toBe(true);

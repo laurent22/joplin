@@ -223,6 +223,10 @@ class Synchronizer {
 			this.dispatch({ type: "SYNC_HAS_DISABLED_SYNC_ITEMS" });
 		}
 
+		const resourceRemotePath = resourceId => {
+			return this.resourceDirName_ + "/" + resourceId;
+		}
+
 		try {
 			await this.api().mkdir(this.syncDirName_);
 			this.api().setTempDirName(this.syncDirName_);
@@ -330,7 +334,7 @@ class Synchronizer {
 								action = null;
 							} else {
 								try {
-									const remoteContentPath = this.resourceDirName_ + "/" + local.id;
+									const remoteContentPath = resourceRemotePath(local.id);
 									const result = await Resource.fullPathForSyncUpload(local);
 									local = result.resource;
 									const localResourceContentPath = result.path;
@@ -461,6 +465,12 @@ class Synchronizer {
 					let path = BaseItem.systemPath(item.item_id);
 					this.logSyncOperation("deleteRemote", null, { id: item.item_id }, "local has been deleted");
 					await this.api().delete(path);
+
+					if (item.item_type === BaseModel.TYPE_RESOURCE) {
+						const remoteContentPath = resourceRemotePath(item.item_id);
+						await this.api().delete(remoteContentPath);
+					}
+
 					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
 				}
 			} // DELETE_REMOTE STEP
