@@ -406,6 +406,7 @@ const reducer = (state = defaultState, action) => {
 					return false;
 				}
 
+				let movedNotePreviousIndex = 0;
 				let noteFolderHasChanged = false;
 				let newNotes = state.notes.slice();
 				var found = false;
@@ -427,6 +428,7 @@ const reducer = (state = defaultState, action) => {
 						} else { // Note has moved to a different folder
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
+							movedNotePreviousIndex = i;
 						}
 						found = true;
 						break;
@@ -447,7 +449,10 @@ const reducer = (state = defaultState, action) => {
 				newState.notes = newNotes;
 
 				if (noteFolderHasChanged) {
-					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : [];
+					let newIndex = movedNotePreviousIndex;
+					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1; 
+					if (!newNotes.length) newIndex = -1;
+					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 				break;
 
