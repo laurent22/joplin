@@ -53,18 +53,30 @@ const defaultState = {
 
 const stateUtils = {};
 
+const derivedStateCache_ = {};
+
+// Allows, for a given state, to return the same derived
+// objects, to prevent unecessary updates on calling components.
+const cacheEnabledOutput = (key, output) => {
+	key = key + '_' + JSON.stringify(output);
+	if (derivedStateCache_[key]) return derivedStateCache_[key];
+
+	derivedStateCache_[key] = output;
+	return derivedStateCache_[key];
+}
+
 stateUtils.notesOrder = function(stateSettings) {
-	return [{
+	return cacheEnabledOutput('notesOrder', [{
 		by: stateSettings['notes.sortOrder.field'],
 		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
-	}];
+	}]);
 }
 
 stateUtils.foldersOrder = function(stateSettings) {
-	return [{
+	return cacheEnabledOutput('foldersOrder', [{
 		by: stateSettings['folders.sortOrder.field'],
 		dir: stateSettings['folders.sortOrder.reverse'] ? 'DESC' : 'ASC',
-	}];
+	}]);
 }
 
 stateUtils.parentItem = function(state) {

@@ -100,15 +100,15 @@ class NotesScreenComponent extends BaseScreenComponent {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
-	async UNSAFE_componentWillReceiveProps(newProps) {
-		if (newProps.notesOrder !== this.props.notesOrder ||
-		    newProps.selectedFolderId != this.props.selectedFolderId ||
-		    newProps.selectedTagId != this.props.selectedTagId ||
-		    newProps.selectedSmartFilterId != this.props.selectedSmartFilterId ||
-		    newProps.notesParentType != this.props.notesParentType) {
-			await this.refreshNotes(newProps);
+		async componentDidUpdate(prevProps) {
+			if (prevProps.notesOrder !== this.props.notesOrder ||
+				prevProps.selectedFolderId != this.props.selectedFolderId ||
+				prevProps.selectedTagId != this.props.selectedTagId ||
+				prevProps.selectedSmartFilterId != this.props.selectedSmartFilterId ||
+				prevProps.notesParentType != this.props.notesParentType) {
+					await this.refreshNotes(this.props);
+			}
 		}
-	}
 
 	async refreshNotes(props = null) {
 		if (props === null) props = this.props;
@@ -144,6 +144,8 @@ class NotesScreenComponent extends BaseScreenComponent {
 			notes: notes,
 			notesSource: source,
 		});
+
+		console.info('Done', Date.now() - startTime);
 	}
 
 	deleteFolder_onPress(folderId) {
