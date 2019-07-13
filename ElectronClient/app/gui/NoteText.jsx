@@ -853,7 +853,7 @@ class NoteTextComponent extends React.Component {
 			this.editor_.editor.renderer.on('afterRender', this.onAfterEditorRender_);
 
 			const cancelledKeys = [];
-			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G'];
+			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
 				cancelledKeys.push('Ctrl+' + l);
