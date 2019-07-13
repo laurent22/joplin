@@ -94,17 +94,15 @@ class MainScreenComponent extends React.Component {
 		if (command.name === 'newNote') {
 			if (!this.props.folders.length) {
 				bridge().showErrorMessageBox(_('Please create a notebook first.'));
-				return;
+			} else {
+				await createNewNote(null, false);
 			}
-
-			await createNewNote(null, false);
 		} else if (command.name === 'newTodo') {
 			if (!this.props.folders.length) {
 				bridge().showErrorMessageBox(_('Please create a notebook first'));
-				return;
+			} else {
+				await createNewNote(null, true);
 			}
-
-			await createNewNote(null, true);
 		} else if (command.name === 'newNotebook') {
 			this.setState({
 				promptOptions: {
@@ -153,47 +151,47 @@ class MainScreenComponent extends React.Component {
 			});
 		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
-			if (!folder) return;
-
-			this.setState({
-				promptOptions: {
-					label: _('Rename notebook:'),
-					value: folder.title,
-					onClose: async (answer) => {
-						if (answer !== null) {
-							try {
-								folder.title = answer;
-								await Folder.save(folder, { fields: ['title'], userSideValidation: true });
-							} catch (error) {
-								bridge().showErrorMessageBox(error.message);
+			
+			if (folder) {
+				this.setState({
+					promptOptions: {
+						label: _('Rename notebook:'),
+						value: folder.title,
+						onClose: async (answer) => {
+							if (answer !== null) {
+								try {
+									folder.title = answer;
+									await Folder.save(folder, { fields: ['title'], userSideValidation: true });
+								} catch (error) {
+									bridge().showErrorMessageBox(error.message);
+								}
 							}
+							this.setState({ promptOptions: null });
 						}
-						this.setState({ promptOptions: null });
-					}
-				},
-			});
+					},
+				});
+			}
 		} else if (command.name === 'renameTag') {
 			const tag = await Tag.load(command.id);
-			if(!tag) return;
-
-			this.setState({
-				promptOptions: {
-					label: _('Rename tag:'),
-					value: tag.title,
-					onClose: async (answer) => {
-						if (answer !== null) {
-							try {
-								tag.title = answer;
-								await Tag.save(tag, { fields: ['title'], userSideValidation: true });
-							} catch (error) {
-								bridge().showErrorMessageBox(error.message);
+			if (tag) {
+				this.setState({
+					promptOptions: {
+						label: _('Rename tag:'),
+						value: tag.title,
+						onClose: async (answer) => {
+							if (answer !== null) {
+								try {
+									tag.title = answer;
+									await Tag.save(tag, { fields: ['title'], userSideValidation: true });
+								} catch (error) {
+									bridge().showErrorMessageBox(error.message);
+								}
 							}
+							this.setState({promptOptions: null });
 						}
-						this.setState({promptOptions: null });
 					}
-				}
-			})
-
+				})
+			}
 		} else if (command.name === 'search') {
 
 			if (!this.searchId_) this.searchId_ = uuid.create();
