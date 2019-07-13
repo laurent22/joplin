@@ -321,16 +321,18 @@ function tagAttributeToMdText(attr) {
 function addResourceTag(lines, resource, alt = "") {
 	// Note: refactor to use Resource.markdownTag
 
-	let tagAlt = alt == "" ? resource.alt : alt;
-	if (!tagAlt) tagAlt = '';
-	tagAlt = tagAttributeToMdText(tagAlt);
+	if (!alt) alt = resource.title;
+	if (!alt) alt = resource.filename;
+	if (!alt) alt = '';
+
+	alt = tagAttributeToMdText(alt);
 	if (isImageMimeType(resource.mime)) {
 		lines.push("![");
-		lines.push(tagAlt);
+		lines.push(alt);
 		lines.push("](:/" + resource.id + ")");
 	} else {
 		lines.push("[");
-		lines.push(tagAlt);
+		lines.push(alt);
 		lines.push("](:/" + resource.id + ")");
 	}
 
