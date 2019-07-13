@@ -366,7 +366,10 @@ const reducer = (state = defaultState, action) => {
 						historyNotes.pop();
 					}
 					newState.historyNotes = historyNotes;
-				} else {
+				} else if (newState !== state) {
+					// Clear the note history if folder and selected note have actually been changed. For example
+					// they won't change if they are already selected. That way, the "Back" button to go to the
+					// previous note wll stay.
 					newState.historyNotes = [];
 				}
 				
