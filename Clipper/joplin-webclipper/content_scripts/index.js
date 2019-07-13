@@ -148,6 +148,11 @@
 				if (isVisible) node.setAttribute('data-joplin-clipper-value', node.value);
 			}
 
+			if (nodeName === 'script') {
+				const a = node.getAttribute('type');
+				if (a && a.toLowerCase().indexOf('math/tex') >= 0) isVisible = true;
+			}
+
 			if (!isVisible) {
 				node.classList.add('joplin-clipper-hidden');
 			} else {

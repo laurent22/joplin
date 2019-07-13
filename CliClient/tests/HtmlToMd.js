@@ -37,7 +37,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'anchor_local.html') continue;
+			// if (htmlFilename !== 'mathjax_block.html') continue;
 
 			const htmlToMdOptions = {}
 
