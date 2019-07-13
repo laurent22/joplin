@@ -137,14 +137,17 @@ class HeaderComponent extends React.Component {
 			opacity: isEnabled ? 1 : 0.4,
 		});
 
+		const title = options.title ? options.title : '';
+
 		return <a
 			className={classes.join(' ')}
 			style={finalStyle}
 			key={key}
 			href="#"
+			title={title}
 			onClick={() => { if (isEnabled) options.onClick() }}
 		>
-			{icon}{options.title ? options.title : ''}
+			{icon}<span className="title">{title}</span>
 		</a>
 	}
 

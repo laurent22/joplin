@@ -122,3 +122,9 @@ table td, table th {
 :disabled {
 	opacity: 0.6;
 }
+
+@media screen and (max-width:550px){    
+	.header .title {
+		display: none;
+	}
+}
