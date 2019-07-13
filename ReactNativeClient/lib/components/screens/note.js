@@ -536,6 +536,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
+
+		this.scheduleSave();
 	}
 
 	tags_onPress() {
