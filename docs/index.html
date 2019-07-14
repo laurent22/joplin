@@ -273,10 +273,10 @@
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p>The application is available for Windows, Linux, macOS, Android and iOS. A <a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">Web Clipper</a>, to save web pages and screenshots from your browser, is also available for <a href="https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB">Chrome</a>.</p>
+<p>The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A <a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">Web Clipper</a>, to save web pages and screenshots from your browser, is also available for <a href="https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB">Chrome</a>.</p>
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 <h1><a name="installation" href="#installation" class="heading-anchor">🔗</a>Installation</h1>
-<p>Three types of applications are available: for the <strong>desktop</strong> (Windows, macOS and Linux), for <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each other.</p>
+<p>Three types of applications are available: for the <strong>desktop</strong> (Windows, macOS and Linux), for <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS, Linux and FreeBSD). All applications have similar user interfaces and can synchronise with each other.</p>
 <h2><a name="desktop-applications" href="#desktop-applications" class="heading-anchor">🔗</a>Desktop applications</h2>
 <table>
 <thead>
@@ -289,18 +289,18 @@
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.159/Joplin-Setup-1.0.159.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
-<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.159/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-Setup-1.0.160.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
+<td>Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/JoplinPortable.exe'>Portable version</a><br><br>The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.159/Joplin-1.0.159.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-1.0.160.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
 <td>You can also use Homebrew: <code>brew cask install joplin</code></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.159/Joplin-1.0.159-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
-<td>An Arch Linux package <a href="#terminal-application">is also available</a>.<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash</code></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-1.0.160-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
+<td>An Arch Linux package <a href="#terminal-application">is also available</a>.<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> <code>wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash</code></td>
 </tr>
 </tbody>
 </table>
@@ -317,7 +317,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.261/joplin-v1.0.261.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.277/joplin-v1.0.277.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -363,6 +363,7 @@
 <li>Import Enex files (Evernote export format) and Markdown files.</li>
 <li>Export JEX files (Joplin Export format) and raw files.</li>
 <li>Support notes, to-dos, tags and notebooks.</li>
+<li>Goto Anything feature.</li>
 <li>Sort notes by multiple criteria - title, updated time, etc.</li>
 <li>Support for alarms (notifications) in mobile and desktop applications.</li>
 <li>Offline first, so the entire data is always available on the device even without an internet connection.</li>
@@ -450,11 +451,13 @@
 <p>More information about this feature in the <a href="https://www.patreon.com/posts/note-history-now-27083082">announcement post</a>.</p>
 <h1><a name="external-text-editor" href="#external-text-editor" class="heading-anchor">🔗</a>External text editor</h1>
 <p>Joplin notes can be opened and edited using an external editor of your choice. It can be a simple text editor like Notepad++ or Sublime Text or an actual Markdown editor like Typora. In that case, images will also be displayed within the editor. To open the note in an external editor, click on the icon in the toolbar or press Ctrl+E (or Cmd+E). Your default text editor will be used to open the note. If needed, you can also specify the editor directly in the General Options, under &quot;Text editor command&quot;.</p>
-<h1><a name="attachments-resources" href="#attachments-resources" class="heading-anchor">🔗</a>Attachments / Resources</h1>
-<p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the resource. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
+<h1><a name="attachments" href="#attachments" class="heading-anchor">🔗</a>Attachments</h1>
+<p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the attachment. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
 <p>On the <strong>desktop application</strong>, images can be attached either by clicking on &quot;Attach file&quot; or by pasting (with Ctrl+V) an image directly in the editor, or by drag and dropping an image.</p>
 <p>Resources that are not attached to any note will be automatically deleted after 10 days (see <a href="https://github.com/laurent22/joplin/issues/154#issuecomment-356582366">rationale</a>).</p>
 <p><strong>Important:</strong> Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.</p>
+<h2><a name="downloading-attachments" href="#downloading-attachments" class="heading-anchor">🔗</a>Downloading attachments</h2>
+<p>The way the attachments are downloaded during synchronisation can be customised in the Configuration screen, under &quot;Attachment download behaviour&quot;. The default option (&quot;Always&quot;) is to download all the attachments, all the time, so that the data is available even when the device is offline. There is also the option to download the attachments manually (option &quot;Manual&quot;), by clicking on it, or automatically (Option &quot;Auto&quot;), in which case the attachments are downloaded only when a note is opened. These options should help saving disk space and network bandwidth, especially on mobile.</p>
 <h1><a name="notifications" href="#notifications" class="heading-anchor">🔗</a>Notifications</h1>
 <p>On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:</p>
 <ul>
@@ -627,6 +630,8 @@ $$
 </tbody>
 </table>
 <p>Notes are sorted by &quot;relevance&quot;. Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matter how close to each others are the terms. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as much details as possible to replicate the issue.</p>
+<h1><a name="goto-anything" href="#goto-anything" class="heading-anchor">🔗</a>Goto Anything</h1>
+<p>In the desktop application, press Ctrl+G or Cmd+G and type the title of a note to jump directly to it. You can also type <code>#</code> followed by a tag or <code>@</code> followed by a notebook title.</p>
 <h1><a name="donations" href="#donations" class="heading-anchor">🔗</a>Donations</h1>
 <p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
 <p>Please see the <a href="https://joplinapp.org/donate/">donation page</a> for information on how to support the development of Joplin.</p>
@@ -636,7 +641,7 @@ $$
 <li>Also see here for information about <a href="https://discourse.joplinapp.org/c/news">the latest releases and general news</a>.</li>
 <li>For bug reports and feature requests, go to the <a href="https://github.com/laurent22/joplin/issues">GitHub Issue Tracker</a>.</li>
 <li>The latest news are posted <a href="https://www.patreon.com/joplin">on the Patreon page</a>.</li>
-<li>You can also follow us on <a href="https://twitter.com/joplinapp">the Twitter feed</a>.</li>
+<li>You can also follow us on <a rel="me" href="https://mastodon.social/@joplinapp">the Mastodon feed</a> or <a href="https://twitter.com/joplinapp">the Twitter feed</a>.</li>
 </ul>
 <h1><a name="contributing" href="#contributing" class="heading-anchor">🔗</a>Contributing</h1>
 <p>Please see the guide for information on how to contribute to the development of Joplin: <a href="https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md">https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md</a></p>
@@ -646,7 +651,7 @@ $$
 <li><a href="https://poedit.net/">Download Poedit</a>, the translation editor, and install it.</li>
 <li><a href="https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot">Download the file to be translated</a>.</li>
 <li>In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change &quot;Country&quot; and &quot;Language&quot; to your own country and language.</li>
-<li>From then you can translate the file. Once it is done, please either <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> or send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png">this address</a>.</li>
+<li>From then you can translate the file. Once it is done, please either <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> or send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseTranslation.png">this address</a>.</li>
 </ul>
 <p>This translation will apply to the three applications - desktop, mobile and terminal.</p>
 <p>To <strong>update a translation</strong>, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.</p>
@@ -668,7 +673,7 @@ $$
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
 <td>عبد الناصر سعيد (<a href="mailto:as@althobaity.com">as@althobaity.com</a>)</td>
-<td>91%</td>
+<td>90%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
@@ -676,6 +681,13 @@ $$
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
 <td>51%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
+<td>Bulgarian</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po">bg_BG</a></td>
+<td></td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
@@ -710,7 +722,7 @@ $$
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (<a href="mailto:ms@editorei.de">ms@editorei.de</a>)</td>
-<td>98%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -731,7 +743,7 @@ $$
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Andros Fenollosa (andros@fenollosa.email)</td>
-<td>98%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
@@ -752,14 +764,14 @@ $$
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>92%</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>52%</td>
+<td>51%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>

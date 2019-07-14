@@ -72,21 +72,46 @@
 		return output;
 	}
 
+	function getAnchorNames(element) {
+		const anchors = element.getElementsByTagName('a');
+		const output = [];
+		for (let i = 0; i < anchors.length; i++) {
+			const anchor = anchors[i];
+			if (anchor.id) {
+				output.push(anchor.id);
+			} else if (anchor.name) {
+				output.push(anchor.name);
+			}
+		}
+		return output;
+	}
+
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
+	// And hard-code the image dimensions so that the information can be used by the clipper server to
+	// display them at the right sizes in the notes.
 	function cleanUpElement(element, imageSizes) {
 		const childNodes = element.childNodes;
 
-		for (let i = 0; i < childNodes.length; i++) {
+		for (let i = childNodes.length - 1; i >= 0; i--) {
 			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
 
-			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
-			if (isVisible && ['input', 'textarea', 'script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(node.nodeName.toLowerCase()) >= 0) isVisible = false;
+			const isHidden = node && node.classList && node.classList.contains('joplin-clipper-hidden');
 
-			if (!isVisible) {
+			if (isHidden) {
 				element.removeChild(node);
 			} else {
 
-				if (node.nodeName.toLowerCase() === 'img') {
+				// If the data-joplin-clipper-value has been set earlier, create a new DIV element
+				// to replace the input or text area, so that it can be exported.
+				if (node.getAttribute && node.getAttribute('data-joplin-clipper-value')) {
+					const div = document.createElement('div');
+					div.innerText = node.getAttribute('data-joplin-clipper-value');
+					node.parentNode.insertBefore(div, node.nextSibling);
+					element.removeChild(node);
+				}
+
+				if (nodeName === 'img') {
 					node.src = absoluteUrl(node.src);
 					const imageSize = imageSizes[node.src];
 					if (imageSize) {
@@ -98,6 +123,75 @@
 				cleanUpElement(node, imageSizes);
 			}
 		}
+	}
+
+	// When we clone the document before cleaning it, we lose some of the information that might have been set via CSS or
+	// JavaScript, in particular whether an element was hidden or not. This function pre-process the document by
+	// adding a "joplin-clipper-hidden" class to all currently hidden elements in the current document.
+	// This class is then used in cleanUpElement() on the cloned document to find an element should be visible or not.
+	function preProcessDocument(element) {
+		const childNodes = element.childNodes;
+
+		for (let i = 0; i < childNodes.length; i++) {
+			const node = childNodes[i];
+			const nodeName = node.nodeName.toLowerCase();
+
+			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
+			if (isVisible && ['script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(nodeName) >= 0) isVisible = false;
+
+			// If it's a text input or a textarea and it has a value, save
+			// that value to data-joplin-clipper-value. This is then used
+			// when cleaning up the document to export the value.
+			if (['input', 'textarea'].indexOf(nodeName) >= 0) {
+				isVisible = !!node.value;
+				if (nodeName === 'input' && node.getAttribute('type') !== 'text') isVisible = false;
+				if (isVisible) node.setAttribute('data-joplin-clipper-value', node.value);
+			}
+
+			if (nodeName === 'script') {
+				const a = node.getAttribute('type');
+				if (a && a.toLowerCase().indexOf('math/tex') >= 0) isVisible = true;
+			}
+
+			if (!isVisible) {
+				node.classList.add('joplin-clipper-hidden');
+			} else {
+				preProcessDocument(node);
+			}
+		}
+	}
+
+	// This sets the PRE elements computed style to the style attribute, so that
+	// the info can be exported and later processed by the htmlToMd converter
+	// to detect code blocks.
+	function hardcodePreStyles(doc) {
+		const preElements = doc.getElementsByTagName('pre');
+
+		for (const preElement of preElements) {
+			const fontFamily = getComputedStyle(preElement).getPropertyValue('font-family');
+			const fontFamilyArray = fontFamily.split(',').map(f => f.toLowerCase().trim());
+			if (fontFamilyArray.indexOf('monospace') >= 0) {
+				preElement.style.fontFamily = fontFamily;
+			}
+		}
+	}
+
+	// Given a document, return a <style> tag that contains all the styles
+	// required to render the page. Not currently used but could be as an 
+	// option to clip pages as HTML.
+	function getStyleTag(doc) {
+		const styleText = [];
+		for (var i=0; i<doc.styleSheets.length; i++) {
+			try {
+				var sheet = doc.styleSheets[i];
+				for (const cssRule of sheet.cssRules) {
+					styleText.push(cssRule.cssText);
+				}
+			} catch (error) {
+				console.warn(error);
+			}
+		}
+		return '<style>' + styleText.join('\n') + '</style>';
 	}
 
 	function documentForReadability() {
@@ -129,7 +223,7 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
-		const clippedContentResponse = (title, html, imageSizes) => {
+		const clippedContentResponse = (title, html, imageSizes, anchorNames) => {
 			return {
 				name: 'clippedContent',
 				title: title,
@@ -139,6 +233,7 @@
 				parent_id: command.parent_id,
 				tags: command.tags || '',
 				image_sizes: imageSizes,
+				anchor_names: anchorNames,
 			};			
 		}
 
@@ -155,7 +250,7 @@
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
-			return clippedContentResponse(article.title, article.body, getImageSizes(document));
+			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === "isProbablyReaderable") {
 
@@ -165,17 +260,25 @@
 
 		} else if (command.name === "completePageHtml") {
 
+			hardcodePreStyles(document);
+			preProcessDocument(document);
+			// Because cleanUpElement is going to modify the DOM and remove elements we don't want to work
+			// directly on the document, so we make a copy of it first.
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			cleanUpElement(cleanDocument, imageSizes);
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document));
 
 		} else if (command.name === "selectedHtml") {
 
-		    const range = window.getSelection().getRangeAt(0);
-		    const container = document.createElement('div');
-		    container.appendChild(range.cloneContents());
-		    return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document));
+			hardcodePreStyles(document);
+			preProcessDocument(document);
+			const range = window.getSelection().getRangeAt(0);
+			const container = document.createElement('div');
+			container.appendChild(range.cloneContents());
+			const imageSizes = getImageSizes(document, true);
+			cleanUpElement(container, imageSizes);
+			return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
 
@@ -299,7 +402,7 @@
 		} else if (command.name === "pageUrl") {
 
 			let url = pageLocationOrigin() + location.pathname + location.search;
-			return clippedContentResponse(pageTitle(), url, getImageSizes(document));
+			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {
 			throw new Error('Unknown command: ' + JSON.stringify(command));

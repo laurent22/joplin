@@ -19,7 +19,11 @@ shared.noteExists = async function(noteId) {
 	return !!existingNote;
 }
 
-shared.saveNoteButton_press = async function(comp, folderId = null) {
+shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
+	options = Object.assign({}, {
+		autoTitle: true,
+	}, options);
+
 	const releaseMutex = await saveNoteMutex_.acquire();
 
 	let note = Object.assign({}, comp.state.note);
@@ -40,18 +44,18 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	let isNew = !note.id;
 
-	let options = { userSideValidation: true };
+	let saveOptions = { userSideValidation: true };
 	if (!isNew) {
-		options.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
+		saveOptions.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
 	}
 
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
-	if (hasAutoTitle) {
+	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note);
-		if (options.fields && options.fields.indexOf('title') < 0) options.fields.push('title');
+		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
-	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
+	const savedNote = ('fields' in saveOptions) && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
 
 	const stateNote = comp.state.note;
 
@@ -80,6 +84,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
 
+	if (!options.autoTitle) newState.newAndNoTitleChangeNoteId = null;
+
 	comp.setState(newState);
 
 	// await shared.refreshAttachedResources(comp, newState.note.body);
@@ -103,11 +109,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
-			comp.refreshNoteMetadata();
 		});
 	}
-
-	comp.refreshNoteMetadata();
 
 	if (isNew) {
 		// Clear the newNote item now that the note has been saved, and
@@ -189,13 +192,6 @@ shared.attachedResources = async function(noteBody) {
 	return output;
 }
 
-shared.refreshNoteMetadata = async function(comp, force = null) {
-	if (force !== true && !comp.state.showNoteMetadata) return;
-
-	let noteMetadata = await Note.serializeAllProps(comp.state.note);
-	comp.setState({ noteMetadata: noteMetadata });
-}
-
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
@@ -230,11 +226,6 @@ shared.initState = async function(comp) {
 	}
 
 	comp.lastLoadedNoteId_ = note ? note.id : null;
-}
-
-shared.showMetadata_onPress = function(comp) {
-	comp.setState({ showNoteMetadata: !comp.state.showNoteMetadata });
-	comp.refreshNoteMetadata(true);
 }
 
 shared.toggleIsTodo_onPress = function(comp) {

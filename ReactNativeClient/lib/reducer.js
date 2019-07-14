@@ -54,18 +54,30 @@ const defaultState = {
 
 const stateUtils = {};
 
+const derivedStateCache_ = {};
+
+// Allows, for a given state, to return the same derived
+// objects, to prevent unecessary updates on calling components.
+const cacheEnabledOutput = (key, output) => {
+	key = key + '_' + JSON.stringify(output);
+	if (derivedStateCache_[key]) return derivedStateCache_[key];
+
+	derivedStateCache_[key] = output;
+	return derivedStateCache_[key];
+}
+
 stateUtils.notesOrder = function(stateSettings) {
-	return [{
+	return cacheEnabledOutput('notesOrder', [{
 		by: stateSettings['notes.sortOrder.field'],
 		dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
-	}];
+	}]);
 }
 
 stateUtils.foldersOrder = function(stateSettings) {
-	return [{
+	return cacheEnabledOutput('foldersOrder', [{
 		by: stateSettings['folders.sortOrder.field'],
 		dir: stateSettings['folders.sortOrder.reverse'] ? 'DESC' : 'ASC',
-	}];
+	}]);
 }
 
 stateUtils.parentItem = function(state) {
@@ -367,7 +379,10 @@ const reducer = (state = defaultState, action) => {
 						historyNotes.pop();
 					}
 					newState.historyNotes = historyNotes;
-				} else {
+				} else if (newState !== state) {
+					// Clear the note history if folder and selected note have actually been changed. For example
+					// they won't change if they are already selected. That way, the "Back" button to go to the
+					// previous note wll stay.
 					newState.historyNotes = [];
 				}
 				
@@ -407,6 +422,7 @@ const reducer = (state = defaultState, action) => {
 					return false;
 				}
 
+				let movedNotePreviousIndex = 0;
 				let noteFolderHasChanged = false;
 				let newNotes = state.notes.slice();
 				var found = false;
@@ -428,6 +444,7 @@ const reducer = (state = defaultState, action) => {
 						} else { // Note has moved to a different folder
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
+							movedNotePreviousIndex = i;
 						}
 						found = true;
 						break;
@@ -448,7 +465,10 @@ const reducer = (state = defaultState, action) => {
 				newState.notes = newNotes;
 
 				if (noteFolderHasChanged) {
-					newState.selectedNoteIds = newNotes.length ? [newNotes[0].id] : [];
+					let newIndex = movedNotePreviousIndex;
+					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1; 
+					if (!newNotes.length) newIndex = -1;
+					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 				break;
 

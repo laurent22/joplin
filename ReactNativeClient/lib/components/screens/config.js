@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { Platform, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, TextInput } = require('react-native');
+const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _, setLocale } = require('lib/locale.js');
@@ -10,7 +10,15 @@ const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/config-shared.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const { reg } = require('lib/registry.js');
+const NavService = require('lib/services/NavService.js');
 const VersionInfo = require('react-native-version-info').default;
+const { ReportService } = require('lib/services/report.js');
+const { time } = require('lib/time-utils');
+const SearchEngine = require('lib/services/SearchEngine');
+const RNFS = require('react-native-fs');
+
+import { PermissionsAndroid } from 'react-native';
+import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
 
@@ -22,15 +30,104 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		super();
 		this.styles_ = {};
 
+		this.state = {
+			creatingReport: false,
+		};
+
 		shared.init(this);
 
 		this.checkSyncConfig_ = async () => {
 			await shared.checkSyncConfig(this, this.state.settings);
 		}
 
-		this.saveButton_press = () => {
+		this.e2eeConfig_ = () => {
+			NavService.go('EncryptionConfig');
+		}
+
+		this.saveButton_press = async () => {
+			if (
+				this.state.changedSettingKeys.includes('sync.target')
+				&& this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')
+				&& !await this.checkFilesystemPermission()
+			) {
+				Alert.alert(
+					_('Warning'),
+					_(
+						'Joplin does not have permission to access "%s". ' +
+						'Either choose a different sync target, ' +
+						'or give Joplin the "Storage" permission.',
+						this.state.settings['sync.2.path'],
+					));
+				// Save settings anyway, even if permission has not been granted
+			}
 			return shared.saveSettings(this);
 		};
+
+		this.syncStatusButtonPress_ = () => {
+			NavService.go('Status');
+		}
+
+		this.exportDebugButtonPress_ = async () => {
+			this.setState({ creatingReport: true });
+			const service = new ReportService();
+
+			const logItems = await reg.logger().lastEntries(null);
+			const logItemRows = [
+				['Date','Level','Message']
+			];
+			for (let i = 0; i < logItems.length; i++) {
+				const item = logItems[i];
+				logItemRows.push([
+					time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
+					item.level,
+					item.message
+				]);
+			}
+			const logItemCsv = service.csvCreate(logItemRows);
+
+			const itemListCsv = await service.basicItemList({ format: 'csv' });
+			const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
+
+			const finalText = [logItemCsv, itemListCsv].join("\n================================================================================\n");
+
+			await RNFS.writeFile(filePath, finalText);
+			alert('Debug report exported to ' + filePath);
+			this.setState({ creatingReport: false });
+		}
+
+		this.fixSearchEngineIndexButtonPress_ = async () => {
+			this.setState({ fixingSearchIndex: true });
+			await SearchEngine.instance().rebuildIndex();
+			this.setState({ fixingSearchIndex: false });
+		}
+
+		this.logButtonPress_ = () => {
+			NavService.go('Log');
+		}
+	}
+
+	async checkFilesystemPermission() {
+		if (Platform.OS !== 'android') {
+			// Not implemented yet
+			return true;
+		}
+		const hasPermission = await PermissionsAndroid.check(
+			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+		if (hasPermission) {
+			return true;
+		}
+		const requestResult = await PermissionsAndroid.request(
+			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+			{
+				title: _('Permission to write to external storage'),
+				message: _(
+					'In order to use file system synchronization your ' +
+					'permission to write to external storage is required.'
+				),
+				buttonPositive: _('OK'),
+			},
+		);
+		return (requestResult === PermissionsAndroid.RESULTS.GRANTED);
 	}
 
 	UNSAFE_componentWillMount() {
@@ -75,6 +172,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			sliderUnits: {
 				color: theme.color,
 				fontSize: theme.fontSize,
+				marginRight: 10,
 			},
 			settingDescriptionText: {
 				color: theme.color,
@@ -137,6 +235,31 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		);
 	}
 
+	renderButton(key, title, clickHandler, options = null) {
+		if (!options) options = {};
+
+		let descriptionComp = null;
+		if (options.description) {
+			descriptionComp = (
+				<View style={{flex:1, marginTop: 10}}>
+					<Text style={this.styles().descriptionText}>{options.description}</Text>
+				</View>
+			);
+		}
+
+		return (
+			<View key={key} style={this.styles().settingContainer}>
+				<View style={{flex:1, flexDirection: 'column'}}>
+					<View style={{flex:1}}>
+						<Button title={title} onPress={clickHandler} disabled={!!options.disabled}/>
+					</View>
+					{ options.statusComp }
+					{ descriptionComp }
+				</View>
+			</View>
+		);
+	}
+
 	sectionToComponent(key, section, settings) {
 		const theme = themeStyle(this.props.theme);
 		const settingComps = [];
@@ -155,20 +278,16 @@ class ConfigScreenComponent extends BaseScreenComponent {
 							{messages.length >= 1 ? (<View style={{marginTop:10}}><Text style={this.styles().descriptionText}>{messages[1]}</Text></View>) : null}
 						</View>);
 
-					settingComps.push(
-						<View key="check_sync_config_button" style={this.styles().settingContainer}>
-							<View style={{flex:1, flexDirection: 'column'}}>
-								<View style={{flex:1}}>
-									<Button title={_('Check synchronisation configuration')} onPress={this.checkSyncConfig_}/>
-								</View>
-								{ statusComp }
-							</View>
-						</View>);
+					settingComps.push(this.renderButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp }));
 				}
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
 			settingComps.push(settingComp);
+		}
+
+		if (section.name === 'sync') {
+			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
 		}
 
 		const headerWrapperStyle = this.styles().headerWrapperStyle;
@@ -246,9 +365,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>{md.label()}</Text>
-					<View style={{display:'flex', flexDirection: 'column', alignItems: 'center', flex:1}}>
-						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{width:'100%'}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
+					<View style={{display:'flex', flexDirection: 'row', alignItems: 'center', flex:1}}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
+						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{flex:1}} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={(value) => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
@@ -270,6 +389,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const settings = this.state.settings;
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
+
+		settingComps.push(this.renderHeader('tools', _('Tools')));
+
+		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
+		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
+		settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
+		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take some times depending on the number of notes.') }));
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 
@@ -336,6 +462,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				<ScreenHeader
 					title={_('Configuration')}
 					showSaveButton={true}
+					showSearchButton={false}
+					showSideMenuButton={false}
 					saveButtonDisabled={!this.state.changedSettingKeys.length}
 					onSaveButtonPress={this.saveButton_press}
 				/>

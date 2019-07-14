@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
@@ -616,10 +616,16 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
 msgid "Insert Date Time"
 msgstr ""
 
 msgid "Edit in external editor"
+msgstr ""
+
+msgid "Tags"
 msgstr ""
 
 msgid "Search in all the notes"
@@ -987,9 +993,6 @@ msgstr ""
 msgid "Attach file"
 msgstr ""
 
-msgid "Tags"
-msgstr ""
-
 msgid "Set alarm"
 msgstr ""
 
@@ -998,9 +1001,6 @@ msgid "In: %s"
 msgstr ""
 
 msgid "Hyperlink"
-msgstr ""
-
-msgid "Code"
 msgstr ""
 
 msgid "Numbered List"
@@ -1318,7 +1318,7 @@ msgid "WebDAV password"
 msgstr ""
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Attachment download behavior"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
@@ -1603,9 +1603,8 @@ msgstr ""
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Items that cannot be decrypted"
-msgstr "Items that cannot be synchronized"
+msgstr ""
 
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
@@ -1816,6 +1815,10 @@ msgstr ""
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
 #, javascript-format

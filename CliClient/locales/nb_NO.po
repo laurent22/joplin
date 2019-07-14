@@ -677,11 +677,17 @@ msgstr "Kursiv"
 msgid "Link"
 msgstr "Lenke"
 
+msgid "Code"
+msgstr "Kode"
+
 msgid "Insert Date Time"
 msgstr "Sett inn dato/tid"
 
 msgid "Edit in external editor"
 msgstr "Rediger i ekstern editor"
+
+msgid "Tags"
+msgstr "Merkelapper"
 
 msgid "Search in all the notes"
 msgstr "Søk i alle notater"
@@ -1066,9 +1072,6 @@ msgstr "Sett inn hyperlenke"
 msgid "Attach file"
 msgstr "Legg ved fil"
 
-msgid "Tags"
-msgstr "Merkelapper"
-
 msgid "Set alarm"
 msgstr "Angi alarm"
 
@@ -1078,9 +1081,6 @@ msgstr "I: %s"
 
 msgid "Hyperlink"
 msgstr "Hyperlenke"
-
-msgid "Code"
-msgstr "Kode"
 
 msgid "Numbered List"
 msgstr "Nummerert liste"
@@ -1933,6 +1933,10 @@ msgstr "Ingen elementer med ID %s"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplins mobilapp støtter for tiden ikke denne type linker: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

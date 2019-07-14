@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { AppState, Keyboard, NativeModules, BackHandler, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, View, Animated } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -37,7 +37,6 @@ const { ConfigScreen } = require('lib/components/screens/config.js');
 const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
-const { WelcomeScreen } = require('lib/components/screens/welcome.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
 const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
@@ -46,6 +45,7 @@ const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
 const { SideMenuContent } = require('lib/components/side-menu-content.js');
+const { SideMenuContentNote } = require('lib/components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
 const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
@@ -167,14 +167,17 @@ function historyCanGoBackTo(route, nextRoute) {
 	return true;
 }
 
+const DEFAULT_ROUTE = {
+	type: 'NAV_GO',
+	routeName: 'Notes',
+	smartFilterId: 'c3176726992c11e9ac940492261af972',
+};
+
 const appDefaultState = Object.assign({}, defaultState, {
 	sideMenuOpenPercent: 0,
-	route: {
-		type: 'NAV_GO',
-		routeName: 'Welcome',
-		params: {},
-	},
+	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
+	noteSideMenuOptions: null,
 });
 
 const appReducer = (state = appDefaultState, action) => {
@@ -229,8 +232,6 @@ const appReducer = (state = appDefaultState, action) => {
 					}
 				}
 
-				if (action.routeName == 'Welcome') navHistory = [];
-
 				//reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
 				newState = Object.assign({}, state);
@@ -247,6 +248,11 @@ const appReducer = (state = appDefaultState, action) => {
 				if ('tagId' in action) {
 					newState.selectedTagId = action.tagId;
 					newState.notesParentType = 'Tag';
+				}
+
+				if ('smartFilterId' in action) {
+					newState.smartFilterId = action.smartFilterId;
+					newState.notesParentType = 'SmartFilter';
 				}
 
 				if ('itemType' in action) {
@@ -321,6 +327,11 @@ const appReducer = (state = appDefaultState, action) => {
 				newState.selectedNoteIds = [];
 				break;
 
+			case 'NOTE_SIDE_MENU_OPTIONS_SET':
+
+				newState = Object.assign({}, state);
+				newState.noteSideMenuOptions = action.options;
+				break;
 
 		}
 	} catch (error) {
@@ -495,10 +506,7 @@ async function initialize(dispatch) {
 		});
 
 		if (!folder) {
-			dispatch({
-				type: 'NAV_GO',
-				routeName: 'Welcome',
-			});
+			dispatch(DEFAULT_ROUTE);
 		} else {
 			dispatch({
 				type: 'NAV_GO',
@@ -552,6 +560,11 @@ class AppComponent extends React.Component {
 
 	constructor() {
 		super();
+
+		this.state = {
+			sideMenuContentOpacity: new Animated.Value(0),
+		};
+
 		this.lastSyncStarted_ = defaultState.syncStarted;
 
 		this.backButtonHandler_ = () => {
@@ -630,6 +643,15 @@ class AppComponent extends React.Component {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.showSideMenu !== prevProps.showSideMenu) {
+			Animated.timing(this.state.sideMenuContentOpacity, {
+				toValue: this.props.showSideMenu ? 0.5 : 0,
+				duration: 600,
+			}).start();
+		}
+	}
+
 	async backButtonHandler() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -670,10 +692,17 @@ class AppComponent extends React.Component {
 		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.theme);
 
-		const sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+		let sideMenuContent = null;
+		let menuPosition = 'left';
+
+		if (this.props.routeName === 'Note') {
+			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			menuPosition = 'right';
+		} else {
+			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+		}
 
 		const appNavInit = {
-			Welcome: { screen: WelcomeScreen },
 			Notes: { screen: NotesScreen },
 			Note: { screen: NoteScreen },
 			Tags: { screen: TagsScreen },
@@ -690,6 +719,7 @@ class AppComponent extends React.Component {
 		return (
 			<SideMenu
 				menu={sideMenuContent}
+				menuPosition={menuPosition}
 				onChange={(isOpen) => this.sideMenu_change(isOpen)}
 				onSliding={(percent) => {
 					this.props.dispatch({
@@ -704,6 +734,7 @@ class AppComponent extends React.Component {
 						<AppNav screens={appNavInit} />
 					</SafeAreaView>
 					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+					<Animated.View pointerEvents='none' style={{position:'absolute', backgroundColor:'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%'}}/>
 				</MenuContext>
 			</SideMenu>
 		);
@@ -718,7 +749,9 @@ const mapStateToProps = (state) => {
 		appState: state.appState,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedFolderId: state.selectedFolderId,
-		theme: state.settings.theme
+		routeName: state.route.routeName,
+		theme: state.settings.theme,
+		noteSideMenuOptions: state.noteSideMenuOptions,
 	};
 };
 

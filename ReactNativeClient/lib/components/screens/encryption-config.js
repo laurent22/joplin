@@ -1,5 +1,5 @@
 const React = require('react'); const Component = React.Component;
-const { TextInput, TouchableOpacity, Linking, View, Switch, Slider, StyleSheet, Text, Button, ScrollView, Platform } = require('react-native');
+const { TextInput, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, Platform } = require('react-native');
 const EncryptionService = require('lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');

@@ -26,7 +26,7 @@ class ResourceService extends BaseService {
 				WHERE item_type = ?
 				AND id > ?
 				ORDER BY id ASC
-				LIMIT 100
+				LIMIT 10
 			`, [BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]);
 
 			if (!changes.length) break;

@@ -35,7 +35,8 @@ class FolderScreenComponent extends BaseScreenComponent {
 		let styles = {
 			textInput: {
 				color: theme.color,
-				paddingLeft: 10,
+				paddingLeft: theme.marginLeft,
+				marginTop: theme.marginTop,
 			},
 		};
 
@@ -112,8 +113,10 @@ class FolderScreenComponent extends BaseScreenComponent {
 					showSaveButton={true}
 					saveButtonDisabled={saveButtonDisabled}
 					onSaveButtonPress={() => this.saveFolderButton_press()}
+					showSideMenuButton={false}
+					showSearchButton={false}
 				/>
-				<TextInput underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
+				<TextInput placeholder={_('Enter notebook title')} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
 				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);

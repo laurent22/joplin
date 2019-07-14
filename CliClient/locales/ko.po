@@ -675,11 +675,17 @@ msgstr "기울임"
 msgid "Link"
 msgstr ""
 
+msgid "Code"
+msgstr "코드"
+
 msgid "Insert Date Time"
 msgstr "날짜와 시간 입력"
 
 msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
+
+msgid "Tags"
+msgstr "태그"
 
 msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
@@ -1063,9 +1069,6 @@ msgstr "하이퍼링크 삽입"
 msgid "Attach file"
 msgstr "파일 첨부"
 
-msgid "Tags"
-msgstr "태그"
-
 msgid "Set alarm"
 msgstr "알람 설정"
 
@@ -1075,9 +1078,6 @@ msgstr "내부: %s"
 
 msgid "Hyperlink"
 msgstr "하이퍼링크"
-
-msgid "Code"
-msgstr "코드"
 
 msgid "Numbered List"
 msgstr "숫자가 매겨진 목록"
@@ -1928,6 +1928,10 @@ msgstr "ID %s에 해당하는 항목이 없습니다"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

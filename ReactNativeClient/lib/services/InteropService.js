@@ -129,7 +129,7 @@ class InteropService {
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (type !== m.type) continue;
-			if (m.fileExtensions.indexOf(ext) >= 0) return m;
+			if (m.fileExtensions && m.fileExtensions.indexOf(ext) >= 0) return m;
 		}
 
 		return null;

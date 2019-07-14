@@ -155,7 +155,7 @@ class Synchronizer {
 
 		// Stop queue but don't set it to null as it may be used to
 		// retrieve the last few downloads.
-		this.downloadQueue_.stop();
+		if (this.downloadQueue_) this.downloadQueue_.stop();
 
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
@@ -221,6 +221,10 @@ class Synchronizer {
 		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 			this.dispatch({ type: "SYNC_HAS_DISABLED_SYNC_ITEMS" });
+		}
+
+		const resourceRemotePath = resourceId => {
+			return this.resourceDirName_ + "/" + resourceId;
 		}
 
 		try {
@@ -330,7 +334,7 @@ class Synchronizer {
 								action = null;
 							} else {
 								try {
-									const remoteContentPath = this.resourceDirName_ + "/" + local.id;
+									const remoteContentPath = resourceRemotePath(local.id);
 									const result = await Resource.fullPathForSyncUpload(local);
 									local = result.resource;
 									const localResourceContentPath = result.path;
@@ -461,6 +465,12 @@ class Synchronizer {
 					let path = BaseItem.systemPath(item.item_id);
 					this.logSyncOperation("deleteRemote", null, { id: item.item_id }, "local has been deleted");
 					await this.api().delete(path);
+
+					if (item.item_type === BaseModel.TYPE_RESOURCE) {
+						const remoteContentPath = resourceRemotePath(item.item_id);
+						await this.api().delete(remoteContentPath);
+					}
+
 					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
 				}
 			} // DELETE_REMOTE STEP
@@ -619,12 +629,10 @@ class Synchronizer {
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
 								this.logger().info("One master key was downloaded and none was previously available: automatically enabling encryption");
-								this.logger().info("Using master key: ", content);
+								this.logger().info("Using master key: ", content.id);
 								await this.encryptionService().enableEncryption(content);
 								await this.encryptionService().loadMasterKeysFromSettings();
-								this.logger().info(
-									"Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user."
-								);
+								this.logger().info("Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.");
 							}
 
 							if (!!content.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });

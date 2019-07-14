@@ -96,7 +96,7 @@ class HeaderComponent extends React.Component {
 
 		let commandProcessed = true;
 
-		if (command.name === 'focus_search' && this.searchElement_) {
+		if (command.name === 'focusSearch' && this.searchElement_) {
 			this.searchElement_.focus();
 		} else {
 			commandProcessed = false;
@@ -137,14 +137,17 @@ class HeaderComponent extends React.Component {
 			opacity: isEnabled ? 1 : 0.4,
 		});
 
+		const title = options.title ? options.title : '';
+
 		return <a
 			className={classes.join(' ')}
 			style={finalStyle}
 			key={key}
 			href="#"
+			title={title}
 			onClick={() => { if (isEnabled) options.onClick() }}
 		>
-			{icon}{options.title ? options.title : ''}
+			{icon}<span className="title">{title}</span>
 		</a>
 	}
 

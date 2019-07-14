@@ -37,7 +37,7 @@ Some crashes cannot be investigated using Joplin's own tools. In that case, it c
 
 For this, please follow these instructions:
 
-You can send it to this address https://raw.githubusercontent.com/laurent22/joplin/master/Assets/Adresse.png
+You can send it to this address https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseSupport.png
 
 https://developer.apple.com/library/content/qa/qa1747/_index.html
 

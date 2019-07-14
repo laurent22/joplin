@@ -63,8 +63,6 @@ class NoteTextComponent extends React.Component {
 
 		this.state = {
 			note: null,
-			noteMetadata: '',
-			showNoteMetadata: false,
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
@@ -399,7 +397,7 @@ class NoteTextComponent extends React.Component {
 		return this.webviewRef_.current.wrappedInstance;
 	}
 
-	async saveIfNeeded(saveIfNewNote = false) {
+	async saveIfNeeded(saveIfNewNote = false, options = {}) {
 		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
 
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
@@ -407,7 +405,7 @@ class NoteTextComponent extends React.Component {
 		if (!forceSave) {
 			if (!shared.isModified(this)) return;
 		}
-		await shared.saveNoteButton_press(this);
+		await shared.saveNoteButton_press(this, null, options);
 
 		ExternalEditWatcher.instance().updateNoteFile(this.state.note);
 	}
@@ -649,10 +647,6 @@ class NoteTextComponent extends React.Component {
 		return false;
 	}
 
-	refreshNoteMetadata(force = null) {
-		return shared.refreshNoteMetadata(this, force);
-	}
-
 	async noteRevisionViewer_onBack() {
 		this.setState({ showRevisions: false });
 
@@ -669,10 +663,6 @@ class NoteTextComponent extends React.Component {
 	toggleIsTodo_onPress() {
 		shared.toggleIsTodo_onPress(this);
 		this.scheduleSave();
-	}
-
-	showMetadata_onPress() {
-		shared.showMetadata_onPress(this);
 	}
 
 	async webview_ipcMessage(event) {
@@ -868,7 +858,7 @@ class NoteTextComponent extends React.Component {
 			this.editor_.editor.renderer.on('afterRender', this.onAfterEditorRender_);
 
 			const cancelledKeys = [];
-			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G'];
+			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
 				cancelledKeys.push('Ctrl+' + l);
@@ -959,6 +949,7 @@ class NoteTextComponent extends React.Component {
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(bodyToRender),
+			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
 		let bodyHtml = '';
@@ -1179,6 +1170,9 @@ class NoteTextComponent extends React.Component {
 
 	async commandStartExternalEditing() {
 		try {
+			await this.saveIfNeeded(true, {
+				autoTitle: false,
+			});
 			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
 		} catch (error) {
 			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
@@ -1709,6 +1703,7 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+			fontSize: theme.fontSize,
 		};
 
 		const toolbarStyle = {
@@ -1811,6 +1806,7 @@ class NoteTextComponent extends React.Component {
 					accuracy: 'partially',
 				}]
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
+				markerOptions.separateWordSearch = false;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (search) {
@@ -1943,7 +1939,6 @@ const mapStateToProps = (state) => {
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		theme: state.settings.theme,
-		showAdvancedOptions: state.settings.showAdvancedOptions,
 		syncStarted: state.syncStarted,
 		newNote: state.newNote,
 		windowCommand: state.windowCommand,

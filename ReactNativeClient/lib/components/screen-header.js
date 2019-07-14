@@ -4,7 +4,6 @@ const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, Scrol
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
-const { ReportService } = require('lib/services/report.js');
 const { Menu, MenuOptions, MenuOption, MenuTrigger } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
@@ -27,7 +26,7 @@ const DialogBox = require('react-native-dialogbox').default;
 // default height.
 const PADDING_V = 10;
 
-class ScreenHeaderComponent extends Component {
+class ScreenHeaderComponent extends React.PureComponent {
 
 	constructor() {
 		super();
@@ -125,7 +124,7 @@ class ScreenHeaderComponent extends Component {
 			titleText: {
 				flex: 1,
 				textAlignVertical: 'center',
-				marginLeft: 0,
+				marginLeft: 10,
 				color: theme.raisedHighlightedColor,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
@@ -159,7 +158,11 @@ class ScreenHeaderComponent extends Component {
 	}
 
 	async backButton_press() {
-		await BackButtonService.back();
+		if (this.props.noteSelectionEnabled) {
+			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+		} else { 
+			await BackButtonService.back();
+		}	
 	}
 
 	searchButton_press() {
@@ -191,42 +194,8 @@ class ScreenHeaderComponent extends Component {
 		NavService.go('Status');
 	}
 
-	config_press() {
-		NavService.go('Config');
-	}
-
-	encryptionConfig_press() {
-		NavService.go('EncryptionConfig');
-	}
-
 	warningBox_press() {
 		NavService.go('EncryptionConfig');
-	}
-
-	async debugReport_press() {
-		const service = new ReportService();
-
-		const logItems = await reg.logger().lastEntries(null);
-		const logItemRows = [
-			['Date','Level','Message']
-		];
-		for (let i = 0; i < logItems.length; i++) {
-			const item = logItems[i];
-			logItemRows.push([
-				time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
-				item.level,
-				item.message
-			]);
-		}
-		const logItemCsv = service.csvCreate(logItemRows);
-
-		const itemListCsv = await service.basicItemList({ format: 'csv' });
-		const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + (new Date()).getTime() + '.txt';
-
-		const finalText = [logItemCsv, itemListCsv].join("\n================================================================================\n");
-
-		await RNFS.writeFile(filePath, finalText);
-		alert('Debug report exported to ' + filePath);
 	}
 
 	render() {
@@ -312,42 +281,9 @@ class ScreenHeaderComponent extends Component {
 				}
 			}
 
-			if (this.props.showAdvancedOptions) {
-				if (menuOptionComponents.length) {
-					menuOptionComponents.push(<View key={'menuOption_showAdvancedOptions'} style={this.styles().divider}/>);
-				}
-
-				menuOptionComponents.push(
-					<MenuOption value={() => this.log_press()} key={'menuOption_log'} style={this.styles().contextMenuItem}>
-						<Text style={this.styles().contextMenuItemText}>{_('Log')}</Text>
-					</MenuOption>);
-
-				menuOptionComponents.push(
-					<MenuOption value={() => this.status_press()} key={'menuOption_status'} style={this.styles().contextMenuItem}>
-						<Text style={this.styles().contextMenuItemText}>{_('Status')}</Text>
-					</MenuOption>);
-
-				if (Platform.OS === 'android') {
-					menuOptionComponents.push(
-						<MenuOption value={() => this.debugReport_press()} key={'menuOption_debugReport'} style={this.styles().contextMenuItem}>
-							<Text style={this.styles().contextMenuItemText}>{_('Export Debug Report')}</Text>
-						</MenuOption>);
-				} 
-			}
-
 			if (menuOptionComponents.length) {
 				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
 			}
-
-			menuOptionComponents.push(
-				<MenuOption value={() => this.encryptionConfig_press()} key={'menuOption_encryptionConfig'} style={this.styles().contextMenuItem}>
-					<Text style={this.styles().contextMenuItemText}>{_('Encryption Config')}</Text>
-				</MenuOption>);
-
-			menuOptionComponents.push(
-				<MenuOption value={() => this.config_press()} key={'menuOption_config'} style={this.styles().contextMenuItem}>
-					<Text style={this.styles().contextMenuItemText}>{_('Configuration')}</Text>
-				</MenuOption>);
 		} else {
 			menuOptionComponents.push(
 				<MenuOption value={() => this.deleteButton_press()} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
@@ -364,7 +300,9 @@ class ScreenHeaderComponent extends Component {
 
 				const addFolderChildren = (folders, pickerItems, indent) => {
 					folders.sort((a, b) => {
-						return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+						const aTitle = a && a.title ? a.title : '';
+						const bTitle = b && b.title ? b.title : '';
+						return aTitle.toLowerCase() < bTitle.toLowerCase() ? -1 : +1;
 					});
 
 					for (let i = 0; i < folders.length; i++) {
@@ -377,9 +315,10 @@ class ScreenHeaderComponent extends Component {
 				}
 
 				const titlePickerItems = (mustSelect) => {
+					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
-					const folderTree = Folder.buildTree(this.props.folders);
+					const folderTree = Folder.buildTree(folders);
 					output = addFolderChildren(folderTree, output, 0);
 					return output;
 				}
@@ -439,21 +378,30 @@ class ScreenHeaderComponent extends Component {
 			</TouchableOpacity>
 		) : null;
 
-		const showSideMenuButton = this.props.showSideMenuButton !== false && !this.props.noteSelectionEnabled;
-		const showSearchButton = this.props.showSearchButton !== false && !this.props.noteSelectionEnabled;
+		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
+		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
+		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
+
+		let backButtonDisabled = !this.props.historyCanGoBack;
+		if (!!this.props.noteSelectionEnabled) backButtonDisabled = false;
 
 		const titleComp = createTitleComponent();
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
-		const backButtonComp = backButton(this.styles(), () => this.backButton_press(), !this.props.historyCanGoBack);
+		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
-		const sortButtonComp = this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
-		const menuComp = !showContextMenuButton ? null : (
+		const contextMenuStyle = { paddingTop: PADDING_V, paddingBottom: PADDING_V };
+		
+		// HACK: if this button is removed during selection mode, the header layout is broken, so for now just make it 1 pixel large (normally it should be hidden)
+		if (!!this.props.noteSelectionEnabled) contextMenuStyle.width = 1;
+
+		const menuComp = !menuOptionComponents.length || !showContextMenuButton ? null : (
 			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
-				<MenuTrigger style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}>
+				<MenuTrigger style={contextMenuStyle}>
 					<Icon name='md-more' style={this.styles().contextMenuTrigger} />
 				</MenuTrigger>
 				<MenuOptions>
@@ -495,7 +443,6 @@ const ScreenHeader = connect(
 			locale: state.settings.locale,
 			folders: state.folders,
 			theme: state.settings.theme,
-			showAdvancedOptions: state.settings.showAdvancedOptions,
 			noteSelectionEnabled: state.noteSelectionEnabled,
 			selectedNoteIds: state.selectedNoteIds,
 			showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,

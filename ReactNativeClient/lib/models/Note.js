@@ -250,7 +250,8 @@ class Note extends BaseItem {
 	}
 
 	static previewFields() {
-		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
 	static previewFieldsSql(fields = null) {
@@ -600,6 +601,17 @@ class Note extends BaseItem {
 
 	static needAlarm(note) {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
+	}
+
+	static dueDateObject(note) {
+		if (!!note.is_todo && note.todo_due) {
+			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
+			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
+			this.dueDateObjects_[note.todo_due] = new Date(note.todo_due);
+			return this.dueDateObjects_[note.todo_due];
+		}
+
+		return null;
 	}
 
 	// Tells whether the conflict between the local and remote note can be ignored.

@@ -52,14 +52,6 @@ class ActionButtonComponent extends React.Component {
 		});
 	}
 
-	newFolder_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Folder',
-			folderId: null,
-		});
-	}
-
 	render() {
 		let buttons = this.props.buttons ? this.props.buttons : [];
 
@@ -79,13 +71,6 @@ class ActionButtonComponent extends React.Component {
 					icon: 'md-document',
 				});
 			}
-
-			buttons.push({
-				title: _('New notebook'),
-				onPress: () => { this.newFolder_press() },
-				color: '#3498db',
-				icon: 'md-folder',
-			});
 		}
 
 		let buttonComps = [];

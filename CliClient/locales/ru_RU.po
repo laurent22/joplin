@@ -690,11 +690,17 @@ msgstr "Наклонный"
 msgid "Link"
 msgstr "Ссылка"
 
+msgid "Code"
+msgstr "Код"
+
 msgid "Insert Date Time"
 msgstr "Вставить дату и время"
 
 msgid "Edit in external editor"
 msgstr "Редактировать во внешнем редакторе"
+
+msgid "Tags"
+msgstr "Метки"
 
 msgid "Search in all the notes"
 msgstr "Поиск во всех заметках"
@@ -1080,9 +1086,6 @@ msgstr "Вставить гиперссылку"
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
-msgid "Tags"
-msgstr "Метки"
-
 msgid "Set alarm"
 msgstr "Установить напоминание"
 
@@ -1092,9 +1095,6 @@ msgstr "В: %s"
 
 msgid "Hyperlink"
 msgstr "Гиперссылка"
-
-msgid "Code"
-msgstr "Код"
 
 msgid "Numbered List"
 msgstr "Нумерованный список"
@@ -1952,6 +1952,10 @@ msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Мобильное приложение Joplin в настоящее время не поддерживает этот тип "
 "ссылки: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

@@ -194,6 +194,10 @@ class JoplinDatabase extends Database {
 		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
 		queries.push('DELETE FROM settings WHERE key="sync.6.context"');
 		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
+		
+		queries.push('DELETE FROM settings WHERE key="revisionService.lastProcessedChangeId"');
+		queries.push('DELETE FROM settings WHERE key="resourceService.lastProcessedChangeId"');
+		queries.push('DELETE FROM settings WHERE key="searchEngine.lastProcessedChangeId"');
 
 		await this.transactionExecBatch(queries);
 	}

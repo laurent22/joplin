@@ -1,4 +1,5 @@
 const { ltrimSlashes } = require('lib/path-utils.js');
+const { Database } = require('lib/database.js');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
@@ -12,6 +13,7 @@ const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
 const urlUtils = require('lib/urlUtils.js');
+const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
@@ -365,7 +367,7 @@ class Api {
 
 			const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};
 
-			let note = await this.requestNoteToNote(requestNote);
+			let note = await this.requestNoteToNote_(requestNote);
 
 			const imageUrls = markdownUtils.extractImageUrls(note.body);
 
@@ -382,6 +384,11 @@ class Api {
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
 			const saveOptions = this.defaultSaveOptions_(note, 'POST');
+			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
+			const timestamp = Date.now();
+			note.updated_time = timestamp;
+			note.created_time = timestamp;
+
 			note = await Note.save(note, saveOptions);
 
 			if (requestNote.tags) {
@@ -415,7 +422,7 @@ class Api {
 		return this.htmlToMdParser_;
 	}
 
-	async requestNoteToNote(requestNote) {
+	async requestNoteToNote_(requestNote) {
 		const output = {
 			title: requestNote.title ? requestNote.title : '',
 			body: requestNote.body ? requestNote.body : '',
@@ -429,7 +436,12 @@ class Api {
 			// rendering but it makes sure everything will be parsed.
 			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
 				baseUrl: requestNote.base_url ? requestNote.base_url : '',
+				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 			});
+
+			// Note: to save the note as HTML, use the code below:
+			// const minify = require('html-minifier').minify;
+			// output.body = minify(requestNote.body_html, { collapseWhitespace: true });
 		}
 
 		if (requestNote.parent_id) {
@@ -440,8 +452,11 @@ class Api {
 			output.parent_id = folder.id;
 		}
 
-		if (requestNote.source_url) output.source_url = requestNote.source_url;
-		if (requestNote.author) output.author = requestNote.author;
+		if ('source_url' in requestNote) output.source_url = requestNote.source_url;
+		if ('author' in requestNote) output.author = requestNote.author;
+		if ('user_updated_time' in requestNote) output.user_updated_time = Database.formatValue(Database.TYPE_INT, requestNote.user_updated_time);
+		if ('user_created_time' in requestNote) output.user_created_time = Database.formatValue(Database.TYPE_INT, requestNote.user_created_time);
+		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
 
 		return output;
 	}
@@ -459,6 +474,18 @@ class Api {
 		return await shim.attachFileToNote(note, tempFilePath);
 	}
 
+	async tryToGuessImageExtFromMimeType_(response, imagePath) {
+		const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+		if (!mimeType) return imagePath;
+
+		const newExt = mimeUtils.toFileExtension(mimeType);
+		if (!newExt) return imagePath;
+
+		const newImagePath = imagePath + '.' + newExt;
+		await shim.fsDriver().move(imagePath, newImagePath);
+		return newImagePath;
+	}
+
 	async downloadImage_(url, allowFileProtocolImages) {
 		const tempDir = Setting.value('tempDir');
 
@@ -466,6 +493,7 @@ class Api {
 
 		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
+		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = '.' + fileExt;
 		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
 		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
@@ -479,7 +507,11 @@ class Api {
 				const localPath = uri2path(url);
 				await shim.fsDriver().copy(localPath, imagePath);
 			} else {
-				await shim.fetchBlob(url, { path: imagePath });
+				const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });
+
+				// If we could not find the file extension from the URL, try to get it
+				// now based on the Content-Type header.
+				if (!fileExt) imagePath = await this.tryToGuessImageExtFromMimeType_(response, imagePath);
 			}
 			return imagePath;
 		} catch (error) {

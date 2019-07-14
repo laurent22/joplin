@@ -660,11 +660,17 @@ msgstr "İtalik"
 msgid "Link"
 msgstr "Bağlantı"
 
+msgid "Code"
+msgstr "Kod"
+
 msgid "Insert Date Time"
 msgstr "Tarih Ekle"
 
 msgid "Edit in external editor"
 msgstr "Başka editörde düzenle"
+
+msgid "Tags"
+msgstr "Etiketler"
 
 msgid "Search in all the notes"
 msgstr "Tüm notlarda ara"
@@ -1058,9 +1064,6 @@ msgstr "Köprü ekle"
 msgid "Attach file"
 msgstr "Dosya ekle"
 
-msgid "Tags"
-msgstr "Etiketler"
-
 msgid "Set alarm"
 msgstr "Alarm kur"
 
@@ -1070,9 +1073,6 @@ msgstr "İçinde: %s"
 
 msgid "Hyperlink"
 msgstr "Köprü"
-
-msgid "Code"
-msgstr "Kod"
 
 msgid "Numbered List"
 msgstr "Numaralı liste"
@@ -1925,6 +1925,10 @@ msgstr "Bu kimlikte öğe yok : %s"
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

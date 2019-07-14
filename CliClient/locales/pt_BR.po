@@ -684,11 +684,17 @@ msgstr "Itálico"
 msgid "Link"
 msgstr "Link"
 
+msgid "Code"
+msgstr "Código"
+
 msgid "Insert Date Time"
 msgstr "Inserir Data e Hora"
 
 msgid "Edit in external editor"
 msgstr "Editar com editor externo"
+
+msgid "Tags"
+msgstr "Tags"
 
 msgid "Search in all the notes"
 msgstr "Pesquisar em todas as notas"
@@ -1072,9 +1078,6 @@ msgstr "Inserir Hiperlink"
 msgid "Attach file"
 msgstr "Anexar arquivo"
 
-msgid "Tags"
-msgstr "Tags"
-
 msgid "Set alarm"
 msgstr "Definir alarme"
 
@@ -1084,9 +1087,6 @@ msgstr "Em: %s"
 
 msgid "Hyperlink"
 msgstr "Hiperlink"
-
-msgid "Code"
-msgstr "Código"
 
 msgid "Numbered List"
 msgstr "Lista numerada"
@@ -1946,6 +1946,10 @@ msgstr "Nenhum item com ID %s"
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "O app mobile do Joplin não suporta, atualmente, esse tipo de link: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"

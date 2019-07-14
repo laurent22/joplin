@@ -5,9 +5,10 @@ const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synch
 const markdownUtils = require('lib/markdownUtils.js');
 const Api = require('lib/services/rest/Api');
 const Folder = require('lib/models/Folder');
+const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
-const Resource = require('lib/models/Resource');
+const { shim } = require('lib/shim');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -156,6 +157,25 @@ describe('services_rest_Api', function() {
 		done();
 	});
 
+	it('should preserve user timestamps when creating notes', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "mon carnet" });
+
+		const updatedTime = Date.now() - 1000;
+		const createdTime = Date.now() - 10000;
+		
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			parent_id: f.id,
+			user_updated_time: updatedTime,
+			user_created_time: createdTime,
+		}));
+
+		expect(response.user_updated_time).toBe(updatedTime);
+		expect(response.user_created_time).toBe(createdTime);
+
+		done();
+	});
+
 	it('should create notes with supplied ID', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: "mon carnet" });
@@ -167,6 +187,39 @@ describe('services_rest_Api', function() {
 		}));
 		expect(response.id).toBe('12345678123456781234567812345678');
 
+		done();
+	});
+
+	it('should create todos', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "stuff to do" });
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing',
+			parent_id: f.id,
+			is_todo: 1
+		}));
+		expect(response.is_todo).toBe(1);
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 2',
+			parent_id: f.id,
+			is_todo: 0
+		}));
+		expect(response.is_todo).toBe(0);
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 3',
+			parent_id: f.id,
+		}));
+		expect(response.is_todo).toBeUndefined();
+
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing 4',
+			parent_id: f.id,
+			is_todo: '1'
+		}));
+		expect(response.is_todo).toBe(1);
 		done();
 	});
 
@@ -197,6 +250,28 @@ describe('services_rest_Api', function() {
 		const resource = resources[0];
 		expect(response.body.indexOf(resource.id) >= 0).toBe(true);
 
+		done();
+	});
+
+	it('should delete resources', async (done) => {
+		let response = null;
+		const f = await Folder.save({ title: "mon carnet" });
+		
+		response = await api.route('POST', 'notes', null, JSON.stringify({
+			title: 'testing image',
+			parent_id: f.id,
+			image_data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="
+		}));
+
+		const resource = (await Resource.all())[0];
+
+		const filePath = Resource.fullPath(resource);
+		expect(await shim.fsDriver().exists(filePath)).toBe(true);
+
+		await api.route('DELETE', 'resources/' + resource.id);
+		expect(await shim.fsDriver().exists(filePath)).toBe(false);
+		expect(!(await Resource.load(resource.id))).toBe(true);
+		
 		done();
 	});
 
