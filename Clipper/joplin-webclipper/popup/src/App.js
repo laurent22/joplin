@@ -16,6 +16,8 @@ class PreviewComponent extends React.PureComponent {
 	}
 
 	componentDidMount() {
+		if (!this.bodyRef.current) return;
+		
 		// Because the text size is made twice smaller with CSS, we need
 		// to also reduce the size of the images
 		const imgs = this.bodyRef.current.getElementsByTagName('img');
@@ -28,14 +30,22 @@ class PreviewComponent extends React.PureComponent {
 	render() {
 		return (
 			<div className="Preview">
-				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
-				<h2>Preview:</h2>
+				<h2>Title:</h2>
 				<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
-				<div className={"BodyWrapper"}>
-					<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
-				</div>
+				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
+
+		// return (
+		// 	<div className="Preview">
+		// 		<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
+		// 		<h2>Preview:</h2>
+		// 		<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
+		// 		<div className={"BodyWrapper"}>
+		// 			<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
+		// 		</div>
+		// 	</div>
+		// );
 	}
 
 }
