@@ -25,14 +25,7 @@ if [[ $EUID = 0 ]] ; then
   fi
 fi
 
-echo "Use --Kill-Joplin to kill Joplin before updateing or installing"
-echo "Use --auto-launch to automatically start Joplin after update or install"
-
-#-----------------------------------------------------
-# Download Joplin
-#-----------------------------------------------------
-
-kill(){
+Kill(){
 	echo "Closing Joplin If It's Currently Running."
 	hash grep 2>/dev/null || { echo >&2 "grep is not installed.  Aborting."; exit 1; }
 	command -v grep >/dev/null || { echo >&2 "grep is not installed.  Aborting."; exit 1; }
@@ -45,21 +38,58 @@ kill(){
 	do
   		kill $PID
 	done
+	Launch
 }
 
-launch(){
-	#echo "Starting Joplin"
+Launch(){
+	echo "Starting Joplin"
 	echo "This still needs to be added, for now please start Joplin manually, Pull requests are welcome"
 	#~/.joplin/Joplin.AppImage &
 }
 
-if [[ "$1" = --Kill-Joplin ]]; then
-   kill
-elif [[ "$2" = --Kill-Joplin ]]; then
-   kill
-else
-   echo "Unknown Parameter"
+Help(){
+	echo "Use --help or -h for help"
+	echo "Use --update to kill Joplin then update and then automatically start Joplin after the update"
+}
+
+for arg in "$@"; do
+  shift
+  case "$arg" in
+    "--help") set -- "$@" "-h" ;;
+    "--update") set -- "$@" "-u" ;;
+	*)        set -- "$@" "$arg"
+  esac
+done
+
+rest=false; ws=false
+
+OPTIND=1
+
+while getopts ':uhe' name;
+do
+        case $name in
+          u)one=1;;
+          h)two=1;;
+		  e)two=1;;
+          *)echo "Invalid argument";;
+        esac
+done
+
+if [[ ! -z $one ]]
+then
+    Kill
 fi
+
+if [[ ! -z $two ]]
+then
+    Help
+fi
+
+shift $(($OPTIND -1))
+
+#-----------------------------------------------------
+# Download Joplin
+#-----------------------------------------------------
 
 # Get the latest version to download
 version=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
@@ -130,11 +160,3 @@ else
 fi
 echo 'Bye!'
 unset version
-
-if [[ "$1" = --auto-launch ]]; then
-   launch
-elif [[ "$2" = --auto-launch ]]; then
-   launch
-else
-   echo "Unknown Parameter"
-fi
