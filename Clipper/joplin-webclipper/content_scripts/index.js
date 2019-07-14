@@ -61,7 +61,7 @@
 		const output = {};
 		for (let i = 0; i < images.length; i++) {
 			const img = images[i];
-			const src = forceAbsoluteUrls ? absoluteUrl(img.src) : img.src;
+			const src = forceAbsoluteUrls ? absoluteUrl(img.currentSrc) : img.currentSrc;
 			output[src] = {
 				width: img.width,
 				height: img.height,
@@ -112,7 +112,7 @@
 				}
 
 				if (nodeName === 'img') {
-					node.src = absoluteUrl(node.src);
+					node.src = absoluteUrl(node.currentSrc);
 					const imageSize = imageSizes[node.src];
 					if (imageSize) {
 						node.width = imageSize.width;
@@ -135,6 +135,8 @@
 		for (let i = 0; i < childNodes.length; i++) {
 			const node = childNodes[i];
 			const nodeName = node.nodeName.toLowerCase();
+			const nodeParent = node.parentNode;
+			const nodeParentName = nodeParent ? nodeParent.nodeName.toLowerCase() : '';
 
 			let isVisible = node.nodeType === 1 ? window.getComputedStyle(node).display !== 'none' : true;
 			if (isVisible && ['script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(nodeName) >= 0) isVisible = false;
@@ -151,6 +153,10 @@
 			if (nodeName === 'script') {
 				const a = node.getAttribute('type');
 				if (a && a.toLowerCase().indexOf('math/tex') >= 0) isVisible = true;
+			}
+
+			if (nodeName === 'source' && nodeParentName === 'picture') {
+				isVisible = false
 			}
 
 			if (!isVisible) {
@@ -179,19 +185,25 @@
 	// Given a document, return a <style> tag that contains all the styles
 	// required to render the page. Not currently used but could be as an 
 	// option to clip pages as HTML.
-	function getStyleTag(doc) {
-		const styleText = [];
+	function getStyleSheets(doc) {
+		const output = [];
 		for (var i=0; i<doc.styleSheets.length; i++) {
+			var sheet = doc.styleSheets[i];
 			try {
-				var sheet = doc.styleSheets[i];
 				for (const cssRule of sheet.cssRules) {
-					styleText.push(cssRule.cssText);
+					output.push({ type: 'text', value: cssRule.cssText });
 				}
 			} catch (error) {
-				console.warn(error);
+				// Calling sheet.cssRules will throw a CORS error on Chrome if the stylesheet is on a different domain.
+				// In that case, we skip it and add it to the list of stylesheet URLs. These URls will be downloaded
+				// by the desktop application, since it doesn't have CORS restrictions.
+				console.info('Could not retrieve stylesheet now:', sheet.href);
+				console.info('It will downloaded by the main application.');
+				console.info(error);
+				output.push({ type: 'url', value: sheet.href });
 			}
 		}
-		return '<style>' + styleText.join('\n') + '</style>';
+		return output;
 	}
 
 	function documentForReadability() {
@@ -223,7 +235,7 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
-		const clippedContentResponse = (title, html, imageSizes, anchorNames) => {
+		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
 				name: 'clippedContent',
 				title: title,
@@ -234,6 +246,9 @@
 				tags: command.tags || '',
 				image_sizes: imageSizes,
 				anchor_names: anchorNames,
+				source_command: Object.assign({}, command),
+				convert_to: command.preProcessFor ? command.preProcessFor : 'markdown',
+				stylesheets: stylesheets,
 			};			
 		}
 
@@ -255,7 +270,6 @@
 		} else if (command.name === "isProbablyReaderable") {
 
 			const ok = isProbablyReaderable(documentForReadability());
-			console.info('isProbablyReaderable', ok);
 			return { name: 'isProbablyReaderable', value: ok };
 
 		} else if (command.name === "completePageHtml") {
@@ -267,7 +281,9 @@
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			cleanUpElement(cleanDocument, imageSizes);
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document));
+
+			const stylesheets = command.preProcessFor === 'html' ? getStyleSheets(document) : null;
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document), stylesheets);
 
 		} else if (command.name === "selectedHtml") {
 

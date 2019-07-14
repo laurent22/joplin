@@ -45,6 +45,7 @@
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.17",
     "joplin-turndown-plugin-gfm": "^1.0.8",
+    "jsdom": "^15.1.1",
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.4",

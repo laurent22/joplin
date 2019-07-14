@@ -9,6 +9,9 @@
 		}
 
 		#content {
+			/* Needs this in case the content contains elements with absolute positioning */
+			/* Without this they would just stay at a fixed position when scrolling */
+			position: relative;
 			overflow-y: auto;
 			height: 100%;
 			padding-left: 10px;

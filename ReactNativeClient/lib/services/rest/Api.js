@@ -7,6 +7,8 @@ const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
 const Setting = require('lib/models/Setting');
 const markdownUtils = require('lib/markdownUtils');
+const htmlUtils = require('lib/htmlUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { Logger } = require('lib/logger.js');
 const md5 = require('md5');
@@ -369,7 +371,7 @@ class Api {
 
 			let note = await this.requestNoteToNote_(requestNote);
 
-			const imageUrls = markdownUtils.extractImageUrls(note.body);
+			const imageUrls = markupLanguageUtils.extractImageUrls(note.markup_language, note.body);
 
 			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
 
@@ -379,7 +381,7 @@ class Api {
 
 			result = await this.createResourcesFromPaths_(result);
 			await this.removeTempFiles_(result);
-			note.body = this.replaceImageUrlsByResources_(note.body, result, imageSizes);
+			note.body = this.replaceImageUrlsByResources_(note.markup_language, note.body, result, imageSizes);
 
 			this.logger().info('Request (' + requestId + '): Saving note...');
 
@@ -431,17 +433,30 @@ class Api {
 		if (requestNote.id) output.id = requestNote.id;
 
 		if (requestNote.body_html) {
-			// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
-			// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
-			// rendering but it makes sure everything will be parsed.
-			output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
-				baseUrl: requestNote.base_url ? requestNote.base_url : '',
-				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
-			});
+			if (requestNote.convert_to === 'html') {
+				const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
+				const styleTag = style.length ? '<style>' + style.join('\n') + '</style>' + '\n' : '';
 
-			// Note: to save the note as HTML, use the code below:
-			// const minify = require('html-minifier').minify;
-			// output.body = minify(requestNote.body_html, { collapseWhitespace: true });
+				const minify = require('html-minifier').minify;
+				output.body = minify(styleTag + requestNote.body_html, {
+					// Remove all spaces and, especially, newlines from tag attributes, as that would
+					// break the rendering.
+					customAttrCollapse: /.*/,
+					// Need to remove all whitespaces because whitespace at a beginning of a line
+					// means a code block in Markdown.
+					collapseWhitespace: true,
+				});
+				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
+			} else { // Convert to Markdown 
+				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
+				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
+				// rendering but it makes sure everything will be parsed.
+				output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
+					baseUrl: requestNote.base_url ? requestNote.base_url : '',
+					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
+				});
+				output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+			}
 		}
 
 		if (requestNote.parent_id) {
@@ -484,6 +499,32 @@ class Api {
 		const newImagePath = imagePath + '.' + newExt;
 		await shim.fsDriver().move(imagePath, newImagePath);
 		return newImagePath;
+	}
+
+	async buildNoteStyleSheet_(stylesheets) {
+		if (!stylesheets) return [];
+
+		const output = [];
+
+		for (const stylesheet of stylesheets) {
+			if (stylesheet.type === 'text') {
+				output.push(stylesheet.value);
+			} else if (stylesheet.type === 'url') {
+				try {
+					const tempPath = Setting.value('tempDir') + '/' + md5(Math.random() + '_' + Date.now()) + '.css';
+					await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
+					const text = await shim.fsDriver().readFile(tempPath);
+					output.push(text);
+					await shim.fsDriver().remove(tempPath);
+				} catch (error) {
+					this.logger().warn('Cannot download stylesheet at ' + stylesheet.value, error);
+				}
+			} else {
+				throw new Error('Invalid stylesheet type: ' + stylesheet.type);
+			}
+		}
+
+		return output;
 	}
 
 	async downloadImage_(url, allowFileProtocolImages) {
@@ -571,21 +612,29 @@ class Api {
 		}
 	}
 
-	replaceImageUrlsByResources_(md, urls, imageSizes) {
-		let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
-			const urlInfo = urls[imageUrl];
-			if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
-			const imageSize = imageSizes[urlInfo.originalUrl];
-			const resourceUrl = Resource.internalUrl(urlInfo.resource);
+	replaceImageUrlsByResources_(markupLanguage, md, urls, imageSizes) {
+		if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
+			return htmlUtils.replaceImageUrls(md, imageUrl => {
+				const urlInfo = urls[imageUrl];
+				if (!urlInfo || !urlInfo.resource) return imageUrl;
+				return Resource.internalUrl(urlInfo.resource);
+			}); 
+		} else { 
+			let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
+				const urlInfo = urls[imageUrl];
+				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
+				const imageSize = imageSizes[urlInfo.originalUrl];
+				const resourceUrl = Resource.internalUrl(urlInfo.resource);
 
-			if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
-				return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
-			} else {
-				return before + resourceUrl + after;
-			}
-		});
+				if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
+					return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
+				} else {
+					return before + resourceUrl + after;
+				}
+			});
 
-		return output;
+			return output;
+		}
 	}
 
 
