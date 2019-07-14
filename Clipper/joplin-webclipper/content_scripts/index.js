@@ -61,7 +61,8 @@
 		const output = {};
 		for (let i = 0; i < images.length; i++) {
 			const img = images[i];
-			const src = forceAbsoluteUrls ? absoluteUrl(img.currentSrc) : img.currentSrc;
+			let src = imageSrc(img);
+			src = forceAbsoluteUrls ? absoluteUrl(src) : src;
 			output[src] = {
 				width: img.width,
 				height: img.height,
@@ -84,6 +85,14 @@
 			}
 		}
 		return output;
+	}
+
+	// In general we should use currentSrc because that's the image that's currently displayed,
+	// especially within <picture> tags or with srcset. In these cases there can be multiple
+	// sources and the best one is probably the one being displayed, thus currentSrc.
+	function imageSrc(image) {
+		if (image.currentSrc) return image.currentSrc;
+		return image.src;
 	}
 
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
@@ -112,8 +121,9 @@
 				}
 
 				if (nodeName === 'img') {
-					node.src = absoluteUrl(node.currentSrc);
-					const imageSize = imageSizes[node.src];
+					const src = absoluteUrl(imageSrc(node));
+					node.setAttribute('src', src);
+					const imageSize = imageSizes[src];
 					if (imageSize) {
 						node.width = imageSize.width;
 						node.height = imageSize.height;
@@ -132,7 +142,7 @@
 	function preProcessDocument(element) {
 		const childNodes = element.childNodes;
 
-		for (let i = 0; i < childNodes.length; i++) {
+		for (let i = childNodes.length - 1; i >= 0; i--) {
 			const node = childNodes[i];
 			const nodeName = node.nodeName.toLowerCase();
 			const nodeParent = node.parentNode;
@@ -159,7 +169,9 @@
 				isVisible = false
 			}
 
-			if (!isVisible) {
+			if (node.nodeType === 8) { // Comments are just removed since we can't add a class
+				node.parentNode.removeChild(node);
+			} else if (!isVisible) {
 				node.classList.add('joplin-clipper-hidden');
 			} else {
 				preProcessDocument(node);
