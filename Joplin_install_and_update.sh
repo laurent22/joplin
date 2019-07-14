@@ -57,7 +57,7 @@ for arg in "$@"; do
   case "$arg" in
     "--help") set -- "$@" "-h" ;;
     "--update") set -- "$@" "-u" ;;
-	*)        set -- "$@" "$arg"
+    *)        set -- "$@" "$arg"
   esac
 done
 
@@ -70,7 +70,7 @@ do
         case $name in
           u)one=1;;
           h)two=1;;
-		  e)two=1;;
+	  e)two=1;;
           *)echo "Invalid argument";;
         esac
 done
