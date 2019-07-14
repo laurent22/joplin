@@ -211,7 +211,7 @@ class Application extends BaseApplication {
 			// The bridge runs within the main process, with its own instance of locale.js
 			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
-			this.refreshMenu();
+			await this.refreshMenu();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
@@ -251,7 +251,7 @@ class Application extends BaseApplication {
 	async refreshMenu() {
 		const screen = this.lastMenuScreen_;
 		this.lastMenuScreen_ = null;
-		this.updateMenu(screen);
+		await this.updateMenu(screen);
 	}
 
 	focusElement_(target) {

@@ -1018,7 +1018,7 @@ class NoteTextComponent extends React.Component {
 			} else if (command.name === 'textCode') {
 				fn = this.commandTextCode;
 			} else if (command.name === 'insertTemplate') {
-				fn = this.commandTemplate;
+				fn = () => { return this.commandTemplate(command.value); };
 			}
 		}
 
@@ -1045,7 +1045,7 @@ class NoteTextComponent extends React.Component {
 
 		requestAnimationFrame(() => {
 			fn = fn.bind(this);
-			fn(command.value);
+			fn();
 		});
 	}
 
@@ -1725,15 +1725,6 @@ class NoteTextComponent extends React.Component {
 		}
 
 		bottomRowHeight -= searchBarHeight;
-
-		const templateStyle = Object.assign({
-			position: 'relative',
-			display: 'inline-block',
-			height: 0,
-			paddingLeft: 7,
-			zIndex: 10, // Needs to be in front of the editor
-			fontSize: theme.editorFontSize,
-		}, theme.textStyle);
 		
 		const viewerStyle = {
 			width: Math.floor(innerWidth / 2),
@@ -1851,12 +1842,6 @@ class NoteTextComponent extends React.Component {
 
 		const titleBarDate = <span style={Object.assign({}, theme.textStyle, {color: theme.colorFaded})}>{time.formatMsToLocal(note.user_updated_time)}</span>
 
-		const templatePrompt = !this.props.templates.length ? null : (
-      <span className={body === '' ? 'fade_in' : 'fade_out'} style={templateStyle}>{_("Nothing here... try inserting a ")}
-				<a style={theme.urlStyle} onClick={() => { this.props.dispatch({type: 'WINDOW_COMMAND', name: 'selectTemplate',}); }} href="#">{_("template")}</a>
-			</span>
-    );
-
 		const viewer = <NoteTextViewer
 			ref={this.webviewRef_}
 			viewerStyle={viewerStyle}
@@ -1915,9 +1900,6 @@ class NoteTextComponent extends React.Component {
 					{ false ? titleBarMenuButton : null }
 				</div>
 				{ toolbar }
-				<div style={{height: 0}}>
-					{ templatePrompt }
-				</div>
 				{ tagList }
 				{ editor }
 				{ viewer }
