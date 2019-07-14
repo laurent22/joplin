@@ -432,6 +432,8 @@ class Api {
 
 		if (requestNote.id) output.id = requestNote.id;
 
+		const baseUrl = requestNote.base_url ? requestNote.base_url : '';
+
 		if (requestNote.body_html) {
 			if (requestNote.convert_to === 'html') {
 				const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
@@ -446,13 +448,14 @@ class Api {
 					// means a code block in Markdown.
 					collapseWhitespace: true,
 				});
+				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
 			} else { // Convert to Markdown 
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 				// rendering but it makes sure everything will be parsed.
 				output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
-					baseUrl: requestNote.base_url ? requestNote.base_url : '',
+					baseUrl: baseUrl,
 					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 				});
 				output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
