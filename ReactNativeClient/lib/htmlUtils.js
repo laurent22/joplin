@@ -52,6 +52,7 @@ const htmlUtils = {
 
 		for (const anchor of anchors) {
 			const href = anchor.getAttribute('href');
+			if (!href) continue;
 			const newHref = urlUtils.prependBaseUrl(href, baseUrl);
 			anchor.setAttribute('href', newHref);
 		}

@@ -437,9 +437,10 @@ class Api {
 		if (requestNote.body_html) {
 			if (requestNote.convert_to === 'html') {
 				const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
+				const minify = require('html-minifier').minify;
+
 				const styleTag = style.length ? '<style>' + style.join('\n') + '</style>' + '\n' : '';
 
-				const minify = require('html-minifier').minify;
 				output.body = minify(styleTag + requestNote.body_html, {
 					// Remove all spaces and, especially, newlines from tag attributes, as that would
 					// break the rendering.
@@ -447,6 +448,7 @@ class Api {
 					// Need to remove all whitespaces because whitespace at a beginning of a line
 					// means a code block in Markdown.
 					collapseWhitespace: true,
+					minifyCSS: true,
 				});
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
