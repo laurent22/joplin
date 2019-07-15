@@ -2,6 +2,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
 const utils = require('../utils');
+const htmlUtils = require('lib/htmlUtils.js');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
@@ -13,23 +14,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		if (!Resource.isResourceUrl(src)) return defaultRender(tokens, idx, options, env, self);
 
-		const resourceId = Resource.urlToId(src);
-		const result = ruleOptions.resources[resourceId];
-		const resource = result ? result.item : null;
-		const resourceStatus = utils.resourceStatus(result);
-
-		if (resourceStatus !== 'ready') {
-			const icon = utils.resourceStatusImage(resourceStatus);
-			return '<div class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>' + '</div>';
-		}
-
-		const mime = resource.mime ? resource.mime.toLowerCase() : '';
-		if (Resource.isSupportedImageMimeType(mime)) {
-			let realSrc = './' + Resource.filename(resource);
-			if (ruleOptions.resourceBaseUrl) realSrc = ruleOptions.resourceBaseUrl + realSrc;
-			let output = '<img data-from-md data-resource-id="' + resource.id + '" title="' + htmlentities(title) + '" src="' + realSrc + '"/>';
-			return output;
-		}
+		const r = utils.imageReplacement(src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
+		if (typeof r === 'string') return r;
+		if (r) return '<img data-from-md ' + htmlUtils.attributesHtml(Object.assign({}, r, { title: title })) + '/>';
 
 		return defaultRender(tokens, idx, options, env, self);
 	};

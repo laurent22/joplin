@@ -1,15 +1,17 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const urlUtils = require('lib/urlUtils.js');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = (new Entities()).encode;
 
-function headAndBodyHtml_(doc) {
-	const output = [];
-	if (doc.head) output.push(doc.head.innerHTML);
-	if (doc.body) output.push(doc.body.innerHTML);
-	return output.join('\n');
-}
+class HtmlUtils {
 
-const htmlUtils = {
+	headAndBodyHtml(doc) {
+		const output = [];
+		if (doc.head) output.push(doc.head.innerHTML);
+		if (doc.body) output.push(doc.body.innerHTML);
+		return output.join('\n');
+	}
 
 	extractImageUrls(html) {
 		if (!html) return [];
@@ -25,7 +27,7 @@ const htmlUtils = {
 		}
 
 		return output;
-	},
+	}
 
 	replaceImageUrls(html, callback) {
 		if (!html) return '';
@@ -42,8 +44,8 @@ const htmlUtils = {
 
 		// This function returns the head and body but without the <head> and <body>
 		// tag, which for our purpose are not needed and can cause issues when present.
-		return headAndBodyHtml_(doc);
-	},
+		return this.headAndBodyHtml(doc);
+	}
 
 	prependBaseUrl(html, baseUrl) {
 		const dom = new JSDOM(html);
@@ -57,9 +59,22 @@ const htmlUtils = {
 			anchor.setAttribute('href', newHref);
 		}
 
-		return headAndBodyHtml_(doc);
-	}, 
+		return this.headAndBodyHtml(doc);
+	}
 
-};
+	attributesHtml(attr) {
+		const output = [];
+
+		for (const n in attr) {
+			if (!attr.hasOwnProperty(n)) continue;
+			output.push(n + '="' + htmlentities(attr[n]) + '"');
+		}
+
+		return output.join(' ');
+	}
+
+}
+
+const htmlUtils = new HtmlUtils();
 
 module.exports = htmlUtils;

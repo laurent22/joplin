@@ -30,4 +30,19 @@ describe('htmlUtils', function() {
 		done();
 	});
 
+	it('should encode attributes', async (done) => {
+		const testCases = [
+			[{ a: 'one', b: 'two' }, 'a="one" b="two"'],
+			[{ a: 'one&two' }, 'a="one&amp;two"'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const attrs = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(htmlUtils.attributesHtml(attrs)).toBe(expected);
+		}
+
+		done();
+	});
+
 });

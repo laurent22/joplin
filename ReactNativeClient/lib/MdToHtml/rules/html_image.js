@@ -1,26 +1,13 @@
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
+const htmlUtils = require('lib/htmlUtils.js');
 const utils = require('../utils');
 
 function renderImageHtml(before, src, after, ruleOptions) {
-	const resourceId = Resource.urlToId(src);
-	const result = ruleOptions.resources[resourceId];
-	const resource = result ? result.item : null;
-	const resourceStatus = utils.resourceStatus(result);
-
-	if (resourceStatus !== 'ready') {
-		const icon = utils.resourceStatusImage(resourceStatus);
-		return '<div class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>' + '</div>';
-	}
-
-	const mime = resource.mime ? resource.mime.toLowerCase() : '';
-	if (Resource.isSupportedImageMimeType(mime)) {
-		let newSrc = './' + Resource.filename(resource);
-		if (ruleOptions.resourceBaseUrl) newSrc = ruleOptions.resourceBaseUrl + newSrc;
-		return '<img ' + before + ' data-resource-id="' + resource.id + '" src="' + newSrc + '" ' + after + '/>';
-	}
-
+	const r = utils.imageReplacement(src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
+	if (typeof r === 'string') return r;
+	if (r) return '<img ' + before + ' ' + htmlUtils.attributesHtml(r) + ' ' + after + '/>';
 	return '[Image: ' + htmlentities(resource.title) + ' (' + htmlentities(mime) + ')]';
 }
 
