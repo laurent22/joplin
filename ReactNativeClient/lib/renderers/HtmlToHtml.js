@@ -30,7 +30,7 @@ class HtmlToHtml {
 		}
 
 		// We need this extra style so that the images don't overflow
-		const extraStyle = '<style>img {max-width: 100%;height: auto;}</style>'
+		const extraStyle = ''; //<style>img {max-width: 100%;height: auto;}</style>'
 
 		return {
 			html: extraStyle + htmlUtils.headAndBodyHtml(dom.window.document),

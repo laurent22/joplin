@@ -15,6 +15,7 @@ const md5 = require('md5');
 const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
 const urlUtils = require('lib/urlUtils.js');
+const ArrayUtils = require('lib/ArrayUtils.js');
 const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
@@ -371,7 +372,7 @@ class Api {
 
 			let note = await this.requestNoteToNote_(requestNote);
 
-			const imageUrls = markupLanguageUtils.extractImageUrls(note.markup_language, note.body);
+			const imageUrls = ArrayUtils.unique(markupLanguageUtils.extractImageUrls(note.markup_language, note.body));
 
 			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
 
@@ -618,6 +619,8 @@ class Api {
 	}
 
 	replaceImageUrlsByResources_(markupLanguage, md, urls, imageSizes) {
+		const imageSizesIndexes = {};
+
 		if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
 			return htmlUtils.replaceImageUrls(md, imageUrl => {
 				const urlInfo = urls[imageUrl];
@@ -628,7 +631,9 @@ class Api {
 			let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
-				const imageSize = imageSizes[urlInfo.originalUrl];
+				if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
+				const imageSize = imageSizes[urlInfo.originalUrl][imageSizesIndexes[urlInfo.originalUrl]];
+				imageSizesIndexes[urlInfo.originalUrl]++;
 				const resourceUrl = Resource.internalUrl(urlInfo.resource);
 
 				if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
