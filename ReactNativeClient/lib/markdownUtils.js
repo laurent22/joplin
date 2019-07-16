@@ -1,7 +1,7 @@
 const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
-const setupLinkify = require('lib/MdToHtml/setupLinkify');
+const setupLinkify = require('lib/renderers/MdToHtml/setupLinkify');
 
 const markdownUtils = {
 

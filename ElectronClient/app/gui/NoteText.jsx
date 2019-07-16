@@ -12,7 +12,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml');
+const MarkupToHtml = require('lib/renderers/MarkupToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -325,12 +325,12 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	mdToHtml() {
-		if (this.mdToHtml_) return this.mdToHtml_;
-		this.mdToHtml_ = new MdToHtml({
+	markupToHtml() {
+		if (this.markupToHtml_) return this.markupToHtml_;
+		this.markupToHtml_ = new MarkupToHtml({
 			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		});
-		return this.mdToHtml_;
+		return this.markupToHtml_;
 	}
 
 	async componentWillMount() {
@@ -355,7 +355,7 @@ class NoteTextComponent extends React.Component {
 
 		this.lastLoadedNoteId_ = note ? note.id : null;
 
-		this.updateHtml(note && note.body ? note.body : '');
+		this.updateHtml(note ? note.markup_language : null, note && note.body ? note.body : '');
 
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
@@ -369,7 +369,7 @@ class NoteTextComponent extends React.Component {
 	componentWillUnmount() {
 		this.saveIfNeeded();
 
-		this.mdToHtml_ = null;
+		this.markupToHtml_ = null;
 
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
@@ -481,7 +481,7 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		this.mdToHtml_ = null;
+		this.markupToHtml_ = null;
 
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
@@ -595,7 +595,7 @@ class NoteTextComponent extends React.Component {
 
 		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
 
-		this.updateHtml(newState.note ? newState.note.body : '');
+		this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
 	}
 
 	async componentWillReceiveProps(nextProps) {
@@ -930,12 +930,20 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	async updateHtml(body = null, options = null) {
+	async updateHtml(markupLanguage = null, body = null, options = null) {
 		if (!options) options = {};
 		if (!('useCustomCss' in options)) options.useCustomCss = true;
 
 		let bodyToRender = body;
-		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+
+		if (bodyToRender === null) {
+			bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+			markupLanguage = this.state.note ? this.state.note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+		}
+
+		if (!markupLanguage) markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
+
+		const resources = await shared.attachedResources(bodyToRender);
 
 		const theme = themeStyle(this.props.theme);
 
@@ -943,7 +951,7 @@ class NoteTextComponent extends React.Component {
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
-			resources: await shared.attachedResources(bodyToRender),
+			resources: resources,
 			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
@@ -953,10 +961,10 @@ class NoteTextComponent extends React.Component {
 
 		if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
 			// Fixes https://github.com/laurent22/joplin/issues/217
-			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+			bodyToRender = '<i>' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '</i>';
 		}
 
-		const result = this.mdToHtml().render(bodyToRender, theme, mdOptions);
+		const result = this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
 
 		this.setState({
 			bodyHtml: result.html,
@@ -1079,7 +1087,7 @@ class NoteTextComponent extends React.Component {
 					lastSavedNote: Object.assign({}, note),
 				});
 
-				this.updateHtml(note.body);
+				this.updateHtml(note.markup_language, note.body);
 			} catch (error) {
 				reg.logger().error(error);
 				bridge().showErrorMessageBox(error.message);
@@ -1108,13 +1116,13 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		await this.updateHtml(tempBody, { useCustomCss: false });
+		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
 		const restoreSettings = async () => {
 			Setting.setValue('theme', previousTheme);
 			this.lastSetHtml_ = '';
-			await this.updateHtml(previousBody);
+			await this.updateHtml(this.state.note.markup_language, previousBody);
 			this.forceUpdate();
 		}
 

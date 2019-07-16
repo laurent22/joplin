@@ -2,7 +2,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 const Resource = require('lib/models/Resource.js');
 const htmlUtils = require('lib/htmlUtils.js');
-const utils = require('../utils');
+const utils = require('../../utils');
 
 function renderImageHtml(before, src, after, ruleOptions) {
 	const r = utils.imageReplacement(src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
