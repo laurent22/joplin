@@ -585,7 +585,7 @@ class Api {
 			});
 		}
 
-		const concurrency = 3
+		const concurrency = 10;
 		const pool = new PromisePool(promiseProducer, concurrency)
 		await pool.start()
 

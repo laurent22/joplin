@@ -1643,6 +1643,7 @@ class NoteTextComponent extends React.Component {
 		const style = this.props.style;
 		const note = this.state.note;
 		const body = note && note.body ? note.body : '';
+		const markupLanguage = note ? note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
@@ -1813,7 +1814,7 @@ class NoteTextComponent extends React.Component {
 
 		const toolbarItems = this.createToolbarItems(note);
 
-		const toolbar = <Toolbar
+		const toolbar = markupLanguage !== Note.MARKUP_LANGUAGE_MARKDOWN ? null : <Toolbar
 			style={toolbarStyle}
 			items={toolbarItems}
 		/>

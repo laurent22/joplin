@@ -92,6 +92,8 @@ utils.resourceStatus = function(resourceInfo) {
 }
 
 utils.imageReplacement = function(src, resources, resourceBaseUrl) {
+	if (!Resource.isResourceUrl(src)) return null;
+	
 	const resourceId = Resource.urlToId(src);
 	const result = resources[resourceId];
 	const resource = result ? result.item : null;

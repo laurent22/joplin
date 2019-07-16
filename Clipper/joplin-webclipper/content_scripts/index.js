@@ -103,7 +103,7 @@
 	// Cleans up element by removing all its invisible children (which we don't want to render as Markdown)
 	// And hard-code the image dimensions so that the information can be used by the clipper server to
 	// display them at the right sizes in the notes.
-	function cleanUpElement(element, imageSizes, imageIndexes) {
+	function cleanUpElement(convertToMarkup, element, imageSizes, imageIndexes) {
 		const childNodes = element.childNodes;
 		const hiddenNodes = [];
 
@@ -132,19 +132,19 @@
 					if (!(src in imageIndexes)) imageIndexes[src] = 0;
 					const imageSize = imageSizes[src][imageIndexes[src]];
 					imageIndexes[src]++;
-					if (imageSize) {
+					if (imageSize && convertToMarkup === 'markdown') {
 						node.width = imageSize.width;
 						node.height = imageSize.height;
 					}
 				}
 
-				cleanUpElement(node, imageSizes, imageIndexes);
+				cleanUpElement(convertToMarkup, node, imageSizes, imageIndexes);
 			}
 		}
 
 		for (const hiddenNode of hiddenNodes) {
 			if (!hiddenNode.parentNode) continue;
-			hiddenNode.parentNode.remove(hiddenNode);
+			hiddenNode.parentNode.removeChild(hiddenNode);
 		}
 	}
 
@@ -260,6 +260,8 @@
 	async function prepareCommandResponse(command) {
 		console.info('Got command: ' + command.name);
 
+		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
+
 		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
 				name: 'clippedContent',
@@ -272,7 +274,7 @@
 				image_sizes: imageSizes,
 				anchor_names: anchorNames,
 				source_command: Object.assign({}, command),
-				convert_to: command.preProcessFor ? command.preProcessFor : 'markdown',
+				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
 			};			
 		}
@@ -306,9 +308,9 @@
 			const cleanDocument = document.body.cloneNode(true);
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
-			cleanUpElement(cleanDocument, imageSizes, imageIndexes);
+			cleanUpElement(convertToMarkup, cleanDocument, imageSizes, imageIndexes);
 
-			const stylesheets = command.preProcessFor === 'html' ? getStyleSheets(document) : null;
+			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
 			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document), stylesheets);
 
 		} else if (command.name === "selectedHtml") {
@@ -320,7 +322,7 @@
 			container.appendChild(range.cloneContents());
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
-			cleanUpElement(container, imageSizes, imageIndexes);
+			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);
 			return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
