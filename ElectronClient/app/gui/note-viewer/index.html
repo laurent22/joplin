@@ -13,9 +13,11 @@
 			/* Without this they would just stay at a fixed position when scrolling */
 			position: relative;
 			overflow-y: auto;
-			height: 100%;
 			padding-left: 10px;
 			padding-right: 10px;
+
+			/* Note: the height is set via updateBodyHeight(). Setting it here to 100% */
+			/* won't work with some pages due to the position: relative */
 		}
 
 		mark {
@@ -256,6 +258,7 @@
 		// The body element needs to have a fixed height for the content to be scrollable
 		function updateBodyHeight() {
 			document.getElementById('body').style.height = window.innerHeight + 'px';
+			document.getElementById('content').style.height = window.innerHeight + 'px';
 		}
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {

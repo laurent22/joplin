@@ -572,17 +572,20 @@ class Api {
 
 		const output = {};
 
-		let urlIndex = 0;
-		const promiseProducer = () => {
-			if (urlIndex >= urls.length) return null;
-
-			const url = urls[urlIndex++];
-
+		const downloadOne = url => {
 			return new Promise(async (resolve, reject) => {
 				const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
 				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 				resolve();
 			});
+		}
+
+		let urlIndex = 0;
+		const promiseProducer = () => {
+			if (urlIndex >= urls.length) return null;
+
+			const url = urls[urlIndex++];
+			return downloadOne(url);
 		}
 
 		const concurrency = 10;
