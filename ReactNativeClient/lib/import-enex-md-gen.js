@@ -397,7 +397,6 @@ function attributeToLowerCase(node) {
 function isSpanWithStyle(attributes, state) {
 	if (attributes != undefined) {
 		if ('style' in attributes) {
-			state.spanAttributes.push(attributes);
 			return true;
 		} else {
 			return false;
@@ -705,7 +704,8 @@ function enexXmlToMdArray(stream, resources) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
 			} else if (n == "span") {
-				if (isSpanWithStyle(nodeAttributes, state)) {
+				if (isSpanWithStyle(nodeAttributes)) {
+					state.spanAttributes.push(nodeAttributes);
 					if (isSpanStyleBold(nodeAttributes)) {
 						//console.debug('Applying style found in span tag: bold')
 						section.lines.push("**");
@@ -894,7 +894,7 @@ function enexXmlToMdArray(stream, resources) {
 				// Skip
 			} else if (n == 'span') {
 				let attributes = state.spanAttributes.pop();
-				if (isSpanWithStyle(attributes, state)) {
+				if (isSpanWithStyle(attributes)) {
 					if (isSpanStyleBold(attributes)) {
 						//console.debug('Applying style found in span tag (closing): bold')
 						section.lines.push("**");
