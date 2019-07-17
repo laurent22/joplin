@@ -73,6 +73,8 @@ class ElectronAppWrapper {
 		});
 
 		this.win_ = new BrowserWindow(windowOptions)
+		
+		this.win_.setAutoHideMenuBar(true)
 
 		this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
