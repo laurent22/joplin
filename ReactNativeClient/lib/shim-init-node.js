@@ -176,7 +176,7 @@ function shimInit() {
 		const { toFileProtocolPath } = require('lib/path-utils');
 
 		let resource = [];
-		if (createFileURL == false) {
+		if (!createFileURL) {
 			resource = await shim.createResourceFromPath(filePath);
 		}
 
@@ -188,7 +188,7 @@ function shimInit() {
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
 
-		if (createFileURL == false) {
+		if (!createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
 			let filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop

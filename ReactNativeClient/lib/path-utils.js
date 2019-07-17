@@ -100,10 +100,10 @@ function friendlySafeFilename(e, maxLength = null) {
 	return output.substr(0, maxLength);
 }
 
-function toFileProtocolPath(filePathEncode) {
-	const platform = process.platform;
+function toFileProtocolPath(filePathEncode, os = null) {
+	if (os === null) os = process.platform;
 	
-	if (platform == 'win32') {
+	if (os === 'win32') {
 		filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
 		filePathEncode = "/" + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
 	}
