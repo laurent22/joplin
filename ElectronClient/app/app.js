@@ -954,16 +954,17 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
-	updateMenuItemStates() {
+	async updateMenuItemStates() {
 		if (!this.lastMenuScreen_) return;
 		if (!this.store()) return;
 
 		const selectedNoteIds = this.store().getState().selectedNoteIds;
+		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById('edit:' + itemId);
 			if (!menuItem) continue;
-			menuItem.enabled = selectedNoteIds.length === 1;
+			menuItem.enabled = !!note && note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN;
 		}
 	}
 
