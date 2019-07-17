@@ -150,6 +150,7 @@
     "syswide-cas": "^5.1.0",
     "tar": "^4.4.4",
     "tcp-port-used": "^0.1.2",
+    "uglifycss": "0.0.29",
     "url-parse": "^1.4.3",
     "uuid": "^3.2.1",
     "valid-url": "^1.0.9",

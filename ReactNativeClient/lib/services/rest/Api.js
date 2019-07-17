@@ -440,9 +440,7 @@ class Api {
 				const style = await this.buildNoteStyleSheet_(requestNote.stylesheets);
 				const minify = require('html-minifier').minify;
 
-				const styleTag = style.length ? '<style>' + style.join('\n') + '</style>' + '\n' : '';
-
-				output.body = minify(styleTag + requestNote.body_html, {
+				const minifyOptions = {
 					// Remove all spaces and, especially, newlines from tag attributes, as that would
 					// break the rendering.
 					customAttrCollapse: /.*/,
@@ -450,7 +448,18 @@ class Api {
 					// means a code block in Markdown.
 					collapseWhitespace: true,
 					minifyCSS: true,
+					maxLineLength: 300,
+				};
+
+				const uglifycss = require('uglifycss');
+				const styleString = uglifycss.processString(style.join('\n'), {
+					// Need to set a max length because Ace Editor takes forever
+					// to display notes with long lines.
+					maxLineLen: 200,
 				});
+
+				const styleTag = style.length ? '<style>' + styleString + '</style>' + '\n' : '';
+				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
 			} else { // Convert to Markdown 
