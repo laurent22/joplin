@@ -129,7 +129,7 @@ class Note extends BaseItem {
 		matches = matches.concat(matches2)
 
 		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/g
+		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/gi
 		const imgMatches = [];
 		while (true) {
 			const m = imgRegex.exec(body);
@@ -142,15 +142,8 @@ class Note extends BaseItem {
 
 	static async linkedItems(body) {
 		const itemIds = this.linkedItemIds(body);
-		const output = [];
-
-		for (let i = 0; i < itemIds.length; i++) {
-			const item = await BaseItem.loadItemById(itemIds[i]);
-			if (!item) continue;
-			output.push(item);
-		}
-
-		return output;
+		const r = await BaseItem.loadItemsByIds(itemIds);
+		return r;
 	}
 
 	static async linkedItemIdsByType(type, body) {
@@ -627,6 +620,12 @@ class Note extends BaseItem {
 		if (localNote.body !== remoteNote.body) return true;
 
 		return false;
+	}
+
+	static markupLanguageToLabel(markupLanguageId) {
+		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
+		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
+		throw new Error('Invalid markup language ID: ' + markupLanguageId);
 	}
 
 }
