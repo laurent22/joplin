@@ -36,7 +36,7 @@ function contributorTable(contributors) {
 	rows.push(row);
 	let x = 0;
 	let y = 0;
-	let rowLength = 7;
+	let rowLength = 5;
 	let contributorIndex = 0;
 	while (contributorIndex < contributors.length) {
 		const c = contributors[contributorIndex];
