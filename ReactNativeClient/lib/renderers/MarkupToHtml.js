@@ -26,6 +26,10 @@ class MarkupToHtml {
 		return this.renderers_[markupLanguage];
 	}
 
+	injectedJavaScript() {
+		return '';
+	}
+
 	render(markupLanguage, markup, theme, options) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
