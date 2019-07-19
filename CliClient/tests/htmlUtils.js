@@ -45,4 +45,14 @@ describe('htmlUtils', function() {
 		done();
 	});
 
+	it('should return the head and body HTML', async (done) => {
+		const html = '<html><head><style>h1 { font-weight: bold; }</style></head><body><h1>Bonjour</h1></body></html>';
+		const dom = htmlUtils.parse(html);
+		const resultHtml = htmlUtils.headAndBodyHtml(dom);
+
+		expect(resultHtml).toBe('<style>h1 { font-weight: bold; }</style>\n<h1>Bonjour</h1>');
+
+		done();
+	});
+
 });

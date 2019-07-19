@@ -15,7 +15,7 @@ class HtmlUtils {
 
 	extractImageUrls(html) {
 		if (!html) return [];
-		
+
 		const dom = new JSDOM(html);
 		const imgs = dom.window.document.getElementsByTagName('img');
 		const output = [];

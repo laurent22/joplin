@@ -670,7 +670,7 @@ class NoteTextComponent extends React.Component {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
-		console.info('Got ipc-message: ' + msg, args);
+		if (percentScroll !== 'percentScroll') console.info('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
