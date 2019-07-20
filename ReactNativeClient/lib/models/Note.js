@@ -129,7 +129,7 @@ class Note extends BaseItem {
 		matches = matches.concat(matches2)
 
 		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/gi
+		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi
 		const imgMatches = [];
 		while (true) {
 			const m = imgRegex.exec(body);
@@ -159,7 +159,7 @@ class Note extends BaseItem {
 	}
 
 	static async linkedResourceIds(body) {
-		return await this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
+		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
 	static async replaceResourceInternalToExternalLinks(body) {

@@ -1,4 +1,6 @@
 const Resource = require('lib/models/Resource.js');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = (new Entities()).encode;
 
 const utils = {};
 

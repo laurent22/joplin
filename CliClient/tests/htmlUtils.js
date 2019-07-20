@@ -18,6 +18,9 @@ describe('htmlUtils', function() {
 		const testCases = [
 			['<img src="http://test.com/img.png"/>', ['http://test.com/img.png']],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://test.com/img.png', 'http://test.com/img2.png']],
+			['<img src="http://test.com/img.png" alt="testing"  >', ['http://test.com/img.png']],
+			['nothing here', []],
+			['', []],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -25,6 +28,31 @@ describe('htmlUtils', function() {
 			const expected = testCases[i][1];
 
 			expect(htmlUtils.extractImageUrls(md).join(' ')).toBe(expected.join(' '));
+		}
+
+		done();
+	});
+
+	it('should replace image URLs', async (done) => {
+		const testCases = [
+			['<img src="http://test.com/img.png"/>', ['http://other.com/img2.png'], '<img src="http://other.com/img2.png"/>'],
+			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://other.com/img2.png', 'http://other.com/img3.png'], '<img src="http://other.com/img2.png"/> <img src="http://other.com/img3.png"/>'],
+			['<img src="http://test.com/img.png" alt="testing"  >', ['http://other.com/img.png'], '<img src="http://other.com/img.png" alt="testing"  >'],
+		];
+
+		const callback = (urls) => {
+			let i = -1;
+
+			return function(src) {
+				i++;
+				return urls[i];
+			}
+		}
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const r = htmlUtils.replaceImageUrls(md, callback(testCases[i][1]));
+			expect(r.trim()).toBe(testCases[i][2].trim());
 		}
 
 		done();
@@ -45,12 +73,31 @@ describe('htmlUtils', function() {
 		done();
 	});
 
-	it('should return the head and body HTML', async (done) => {
-		const html = '<html><head><style>h1 { font-weight: bold; }</style></head><body><h1>Bonjour</h1></body></html>';
-		const dom = htmlUtils.parse(html);
-		const resultHtml = htmlUtils.headAndBodyHtml(dom);
+	it('should prepend a base URL', async (done) => {
+		const testCases = [
+			[
+				'<a href="a.html">Something</a>',
+				'http://test.com',
+				'<a href="http://test.com/a.html">Something</a>',
+			],
+			[
+				'<a href="a.html">a</a> <a href="b.html">b</a>',
+				'http://test.com',
+				'<a href="http://test.com/a.html">a</a> <a href="http://test.com/b.html">b</a>',
+			],
+			[
+				'<a href="a.html">a</a> <a href="b.html">b</a>',
+				'http://test.com',
+				'<a href="http://test.com/a.html">a</a> <a href="http://test.com/b.html">b</a>',
+			],
+		];
 
-		expect(resultHtml).toBe('<style>h1 { font-weight: bold; }</style>\n<h1>Bonjour</h1>');
+		for (let i = 0; i < testCases.length; i++) {
+			const html = testCases[i][0];
+			const baseUrl = testCases[i][1];
+			const expected = testCases[i][2];
+			expect(htmlUtils.prependBaseUrl(html, baseUrl)).toBe(expected);
+		}
 
 		done();
 	});

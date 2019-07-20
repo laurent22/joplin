@@ -1,8 +1,11 @@
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
 const urlUtils = require('lib/urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
+
+// [\s\S] instead of . for multiline matching
+// https://stackoverflow.com/a/16119722/561309
+const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi
+const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi
 
 class HtmlUtils {
 
@@ -16,50 +19,59 @@ class HtmlUtils {
 	extractImageUrls(html) {
 		if (!html) return [];
 
-		const dom = new JSDOM(html);
-		const imgs = dom.window.document.getElementsByTagName('img');
 		const output = [];
-
-		for (const img of imgs) {
-			const src = img.getAttribute('src');
-			if (!src) continue;
-			output.push(src);
+		let matches;
+		while (matches = imageRegex.exec(html)) {
+			output.push(matches[2]);
 		}
 
 		return output;
 	}
 
 	replaceImageUrls(html, callback) {
+		return this.processImageTags(html, data => {
+			const newSrc = callback(data.src);
+			return {
+				type: 'replaceSource',
+				src: newSrc,
+			};
+		});
+	}
+
+	processImageTags(html, callback) {
 		if (!html) return '';
 
-		const dom = new JSDOM(html);
-		const doc = dom.window.document;
-		const imgs = doc.getElementsByTagName('img');
+		return html.replace(imageRegex, (v, before, src, after) => {
+			const action = callback({ src: src });
 
-		for (const img of imgs) {
-			const src = img.getAttribute('src');
-			const newSrc = callback(src);
-			img.setAttribute('src', newSrc);
-		}
+			console.info('src', src);
 
-		// This function returns the head and body but without the <head> and <body>
-		// tag, which for our purpose are not needed and can cause issues when present.
-		return this.headAndBodyHtml(doc);
+			if (!action) return '<img' + before + 'src="' + src + '"' + after + '>';
+
+			if (action.type === 'replaceElement') {
+				return action.html;
+			}
+
+			if (action.type === 'replaceSource') {
+				return '<img' + before + 'src="' + action.src + '"' + after + '>';
+			}
+
+			if (action.type === 'setAttributes') {
+				const attrHtml = this.attributesHtml(action.attrs);
+				return '<img' + before + attrHtml + after + '>';
+			}
+
+			throw new Error('Invalid action: ' + action.type);
+		});
 	}
 
 	prependBaseUrl(html, baseUrl) {
-		const dom = new JSDOM(html);
-		const doc = dom.window.document;
-		const anchors = doc.getElementsByTagName('a');
+		if (!html) return '';
 
-		for (const anchor of anchors) {
-			const href = anchor.getAttribute('href');
-			if (!href) continue;
+		return html.replace(anchorRegex, (v, before, href, after) => {
 			const newHref = urlUtils.prependBaseUrl(href, baseUrl);
-			anchor.setAttribute('href', newHref);
-		}
-
-		return this.headAndBodyHtml(doc);
+			return '<a' + before + 'href="' + newHref + '"' + after + '>';
+		});
 	}
 
 	attributesHtml(attr) {
