@@ -77,7 +77,7 @@ describe('pathUtils', function() {
 		const platform = process.platform;
 		let testCases = [];
 
-		if (platform == 'win32') {
+		if (platform === 'win32') {
 			testCases = [
 				['C:\\handle\\space test', 'file:///C:/handle/space+test'],
 				['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
@@ -94,7 +94,7 @@ describe('pathUtils', function() {
 
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
-			expect(toFileProtocolPath(t[0])).toBe(t[1]);
+			expect(toFileProtocolPath(t[0], platform)).toBe(t[1]);
 		} 
 
 		done();
