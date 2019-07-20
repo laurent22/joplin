@@ -40,6 +40,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const ModelCache = require('lib/services/ModelCache');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
+const TemplateUtils = require('lib/TemplateUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -452,14 +453,18 @@ class NoteTextComponent extends React.Component {
 		const stateNoteId = this.state.note ? this.state.note.id : null;
 		let noteId = null;
 		let note = null;
+		let newNote = null;
 		let loadingNewNote = true;
 		let parentFolder = null;
 		let noteTags = [];
 		let scrollPercent = 0;
 
 		if (props.newNote) {
-			note = Object.assign({}, props.newNote);
+			// assign new note and prevent body from being null
+			note = Object.assign({}, props.newNote, {body: ''});
 			this.lastLoadedNoteId_ = null;
+			if (note.template)
+				note.body = TemplateUtils.render(note.template);
 		} else {
 			noteId = props.noteId;
 
@@ -1012,6 +1017,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
 				fn = this.commandTextCode;
+			} else if (command.name === 'insertTemplate') {
+				fn = () => { return this.commandTemplate(command.value); };
 			}
 		}
 
@@ -1347,6 +1354,10 @@ class NoteTextComponent extends React.Component {
 
 	commandTextCode() {
 		this.wrapSelectionWithStrings('`', '`');
+	}
+
+	commandTemplate(value) {
+		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
 	addListItem(string1, string2 = '', defaultText = '') {
@@ -1920,6 +1931,7 @@ const mapStateToProps = (state) => {
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		historyNotes: state.historyNotes,
+		templates: state.templates,
 	};
 };
 

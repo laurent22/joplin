@@ -316,6 +316,25 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
 
+## New Note Templates
+
+Templates can be used for new notes by creating a templates folder in `~/.config/joplin-desktop/` and placing markdown template files into it. For example creating the file `hours.md` in the directory `~/.config/joplin-desktop/templates/` with the contents:
+
+```markdown
+Date: {{date}}
+Hours:
+Details:
+```
+
+When creating a new note you will now be prompted to insert a template that contains the above text (and {{date}} replaced with today's date). Templates can also be inserted from the menu (File->Templates).
+
+The currently supported template variables are:
+| Variable | Description | Example |
+| {{date}} | Today's date formatted based on the settings format | 2019-01-01 |
+| {{time}} | Current time formatted based on the settings format | 13:00 |
+| {{datetime}} | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
+| {{#custom_datetime}} | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | {{#custom_datetime}}M d{{/custom_datetime}} |
+
 # Searching
 
 Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
