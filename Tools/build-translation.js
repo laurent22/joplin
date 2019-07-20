@@ -22,7 +22,7 @@ const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
 const electronDir = rootDir + '/ElectronClient/app';
 
-const { execCommand, isMac } = require('./tool-utils.js');
+const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
 
 function parsePoFile(filePath) {
@@ -203,16 +203,12 @@ function translationStatusToMdTable(status) {
 }
 
 async function updateReadmeWithStats(stats) {
-	const mdTableMarkerOpen = '<!-- LOCALE-TABLE-AUTO-GENERATED -->\n';
-	const mdTableMarkerClose = '\n<!-- LOCALE-TABLE-AUTO-GENERATED -->';
-	let mdTable = translationStatusToMdTable(stats);
-	mdTable = mdTableMarkerOpen + mdTable + mdTableMarkerClose;
-
-	let content = await fs.readFile(rootDir + '/README.md', 'utf-8');
-	// [^]* matches any character including new lines
-	const regex = new RegExp(mdTableMarkerOpen + '[^]*?' + mdTableMarkerClose);
-	content = content.replace(regex, mdTable);
-	await fs.writeFile(rootDir + '/README.md', content);
+	await insertContentIntoFile(
+		rootDir + '/README.md',
+		'<!-- LOCALE-TABLE-AUTO-GENERATED -->\n',
+		'\n<!-- LOCALE-TABLE-AUTO-GENERATED -->',
+		translationStatusToMdTable(stats)
+	);
 }
 
 async function main() {

@@ -26,11 +26,13 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
+const { shell } = require('electron');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
+const TemplateUtils = require('lib/TemplateUtils');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -209,7 +211,7 @@ class Application extends BaseApplication {
 			// The bridge runs within the main process, with its own instance of locale.js
 			// so it needs to be set too here.
 			bridge().setLocale(Setting.value('locale'));
-			this.refreshMenu();
+			await this.refreshMenu();
 		}
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'showTrayIcon' || action.type == 'SETTING_UPDATE_ALL') {
@@ -246,10 +248,10 @@ class Application extends BaseApplication {
 		return result;
 	}
 
-	refreshMenu() {
+	async refreshMenu() {
 		const screen = this.lastMenuScreen_;
 		this.lastMenuScreen_ = null;
-		this.updateMenu(screen);
+		await this.updateMenu(screen);
 	}
 
 	focusElement_(target) {
@@ -260,7 +262,7 @@ class Application extends BaseApplication {
 		});
 	}
 
-	updateMenu(screen) {
+	async updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
 		const sortNoteFolderItems = (type) => {
@@ -328,6 +330,7 @@ class Application extends BaseApplication {
 		const exportItems = [];
 		const preferencesItems = [];
 		const toolsItemsFirst = [];
+    const templateItems = [];
 		const ioService = new InteropService();
 		const ioModules = ioService.modules();
 		for (let i = 0; i < ioModules.length; i++) {
@@ -504,6 +507,57 @@ class Application extends BaseApplication {
 			screens: ['Main'],
 		});
 
+		const templateDirExists = await shim.fsDriver().exists(Setting.value('templateDir'));
+
+		templateItems.push({
+			label: _('Create note from template'),
+			visible: templateDirExists,
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'selectTemplate',
+					noteType: 'note',
+				});
+			}
+		}, {
+			label: _('Create to-do from template'),
+			visible: templateDirExists,
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'selectTemplate',
+					noteType: 'todo',
+				});
+			}
+		}, {
+			label: _('Insert template'),
+			visible: templateDirExists,
+			accelerator: 'CommandOrControl+Alt+I',
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'selectTemplate',
+				});
+			}
+		}, {
+			label: _('Open template directory'),
+			click: () => {
+				const templateDir = Setting.value('templateDir');
+				if (!templateDirExists) shim.fsDriver().mkdir(templateDir);
+				shell.openItem(templateDir);
+			}
+		}, {
+			label: _('Refresh templates'),
+			click: async () => {
+				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
+
+				this.store().dispatch({
+					type: 'TEMPLATE_UPDATE_ALL',
+					templates: templates
+				});
+			}
+		});
+
 		const toolsItems = toolsItemsFirst.concat(preferencesItems);
 
 		function _checkForUpdates(ctx) {
@@ -564,6 +618,13 @@ class Application extends BaseApplication {
 				type: 'separator',
 				visible: shim.isMac() ? false : true
 			}, {
+				label: _('Templates'),
+				visible: shim.isMac() ? false : true,
+				submenu: templateItems,
+			}, {
+				type: 'separator',
+				visible: shim.isMac() ? false : true
+			}, {
 				label: _('Import'),
 				visible: shim.isMac() ? false : true,
 				submenu: importItems,
@@ -613,6 +674,11 @@ class Application extends BaseApplication {
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
 					selector: 'performClose:',
+				},  {
+					type: 'separator',
+				}, {
+					label: _('Templates'),
+					submenu: templateItems,
 				}, {
 					type: 'separator',
 				}, {
@@ -1079,6 +1145,13 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',
 			css: cssString
+		});
+
+		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
+
+		this.store().dispatch({
+			type: 'TEMPLATE_UPDATE_ALL',
+			templates: templates
 		});
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update

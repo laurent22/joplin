@@ -648,6 +648,7 @@ Setting.constants_ = {
 	resourceDirName: '',
 	resourceDir: '',
 	profileDir: '',
+	templateDir: '',
 	tempDir: '',
 	openDevTools: false,
 }

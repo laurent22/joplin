@@ -613,8 +613,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const output = [];
 
-		const createdDateString = time.unixMsToLocalDateTime(note.user_created_time);
-		const updatedDateString = time.unixMsToLocalDateTime(note.user_updated_time);
+		const createdDateString = time.formatMsToLocal(note.user_created_time);
+		const updatedDateString = time.formatMsToLocal(note.user_updated_time);
 
 		output.push({ title: _('Created: %s', createdDateString) });
 		output.push({ title: _('Updated: %s', updatedDateString) });
