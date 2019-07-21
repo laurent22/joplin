@@ -149,6 +149,18 @@ class BaseItem extends BaseModel {
 		return null;
 	}
 
+	static async loadItemsByIds(ids) {
+		const classes = this.syncItemClassNames();
+		let output = [];
+		for (let i = 0; i < classes.length; i++) {
+			const ItemClass = this.getClass(classes[i]);
+			const sql = 'SELECT * FROM ' + ItemClass.tableName() + ' WHERE id IN ("' + ids.join('","') + '")';
+			const models = await ItemClass.modelSelectAll(sql);
+			output = output.concat(models);
+		}
+		return output;
+	}
+
 	static loadItemByField(itemType, field, value) {
 		let ItemClass = this.itemClass(itemType);
 		return ItemClass.loadByField(field, value);

@@ -6,7 +6,7 @@ const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
-const MdToHtml = require('lib/MdToHtml.js');
+const MdToHtml = require('lib/renderers/MdToHtml.js');
 const shared = require('lib/components/shared/note-screen-shared.js');
 
 class NoteBodyViewer extends Component {

@@ -7,6 +7,20 @@ import led_orange from './led_orange.png';
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
 
+function commandUserString(command) {
+	const s = [];
+
+	if (command.name === 'simplifiedPageHtml') s.push('Simplified page');
+	if (command.name === 'completePageHtml') s.push('Complete page');
+	if (command.name === 'selectedHtml') s.push('Selection');
+	if (command.name === 'pageUrl') s.push('URL only');
+
+	const p = command.preProcessFor ? command.preProcessFor : 'markdown';
+	s.push('(' + p + ')');
+
+	return s.join(' ');
+}
+
 class PreviewComponent extends React.PureComponent {
 
 	constructor() {
@@ -17,7 +31,7 @@ class PreviewComponent extends React.PureComponent {
 
 	componentDidMount() {
 		if (!this.bodyRef.current) return;
-		
+
 		// Because the text size is made twice smaller with CSS, we need
 		// to also reduce the size of the images
 		const imgs = this.bodyRef.current.getElementsByTagName('img');
@@ -32,6 +46,7 @@ class PreviewComponent extends React.PureComponent {
 			<div className="Preview">
 				<h2>Title:</h2>
 				<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
+				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
 				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
@@ -84,6 +99,14 @@ class AppComponent extends Component {
 		this.clipComplete_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'completePageHtml',
+				preProcessFor: 'markdown',
+			});
+		}
+
+		this.clipCompleteHtml_click = () => {
+			bridge().sendCommandToActiveTab({
+				name: 'completePageHtml',
+				preProcessFor: 'html',
 			});
 		}
 
@@ -259,6 +282,7 @@ class AppComponent extends Component {
 				title={content.title}
 				body_html={content.body_html}
 				onTitleChange={this.contentTitle_change}
+				command={content.source_command}
 			/>
 		}
 
@@ -360,6 +384,7 @@ class AppComponent extends Component {
 					<ul>
 						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
+						<li><a className="Button" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
 						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
 						<li><a className="Button" onClick={this.clipUrl_click}>Clip URL</a></li>

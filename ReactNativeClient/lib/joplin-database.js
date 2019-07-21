@@ -303,7 +303,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -632,6 +632,10 @@ class JoplinDatabase extends Database {
 				queries.push(this.sqlStringToLines(newTableSql)[0]);
 
 				queries.push('CREATE UNIQUE INDEX key_values_key ON key_values (key)');
+			}
+
+			if (targetVersion == 24) {
+				queries.push('ALTER TABLE notes ADD COLUMN `markup_language` INT NOT NULL DEFAULT 1'); // 1: Markdown, 2: HTML
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

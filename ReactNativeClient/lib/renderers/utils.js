@@ -1,4 +1,6 @@
 const Resource = require('lib/models/Resource.js');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = (new Entities()).encode;
 
 const utils = {};
 
@@ -68,7 +70,7 @@ utils.resourceStatusFile = function(state) {
 	throw new Error('Unknown state: ' + state);
 }
 
-utils.resourceStatus = function(resourceInfo, localState) {
+utils.resourceStatus = function(resourceInfo) {
 	let resourceStatus = 'ready';
 
 	if (resourceInfo) {
@@ -89,6 +91,32 @@ utils.resourceStatus = function(resourceInfo, localState) {
 	}
 
 	return resourceStatus;
+}
+
+utils.imageReplacement = function(src, resources, resourceBaseUrl) {
+	if (!Resource.isResourceUrl(src)) return null;
+	
+	const resourceId = Resource.urlToId(src);
+	const result = resources[resourceId];
+	const resource = result ? result.item : null;
+	const resourceStatus = utils.resourceStatus(result);
+
+	if (resourceStatus !== 'ready') {
+		const icon = utils.resourceStatusImage(resourceStatus);
+		return '<div class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>' + '</div>';
+	}
+
+	const mime = resource.mime ? resource.mime.toLowerCase() : '';
+	if (Resource.isSupportedImageMimeType(mime)) {
+		let newSrc = './' + Resource.filename(resource);
+		if (resourceBaseUrl) newSrc = resourceBaseUrl + newSrc;
+		return {
+			'data-resource-id': resource.id,
+			'src': newSrc,
+		};
+	}
+
+	return null;
 }
 
 module.exports = utils;

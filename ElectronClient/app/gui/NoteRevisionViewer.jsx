@@ -9,7 +9,7 @@ const Revision = require('lib/models/Revision');
 const Setting = require('lib/models/Setting');
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
-const MdToHtml = require('lib/MdToHtml');
+const MarkupToHtml = require('lib/renderers/MarkupToHtml');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { substrWithEllipsis } = require('lib/string-utils');
@@ -92,6 +92,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 	async reloadNote() {
 		let noteBody = '';
+		let markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
 		if (!this.state.revisions.length || !this.state.currentRevId) {
 			noteBody = _('This note has no history');
 			this.setState({ note: null });
@@ -100,16 +101,17 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			const note = await RevisionService.instance().revisionNote(this.state.revisions, revIndex);
 			if (!note) return;
 			noteBody = note.body;
+			markupLanguage = note.markup_language;
 			this.setState({ note: note });
 		}
 
 		const theme = themeStyle(this.props.theme);
 
-		const mdToHtml = new MdToHtml({
+		const markupToHtml = new MarkupToHtml({
 			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		});
 
-		const result = mdToHtml.render(noteBody, theme, {
+		const result = markupToHtml.render(markupLanguage, noteBody, theme, {
 			codeTheme: theme.codeThemeCss,
 			userCss: this.props.customCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(noteBody),

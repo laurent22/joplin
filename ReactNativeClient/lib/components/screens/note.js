@@ -288,10 +288,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.focusUpdate();
+		}
+
+		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
+			this.props.dispatch({
+				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
+				options: this.sideMenuOptions(),
+			});
 		}
 	}
 
@@ -433,7 +440,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		const localFilePath = pickerResponse.uri;
+		const localFilePath = Platform.select({
+			android: pickerResponse.uri,
+			ios: decodeURI(pickerResponse.uri),
+		});
+		
 		let mimeType = pickerResponse.type;
 
 		if (!mimeType) {
@@ -554,11 +565,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	properties_onPress() {
-		this.props.dispatch({
-			type: 'NOTE_SIDE_MENU_OPTIONS_SET',
-			options: this.sideMenuOptions(),
-		});
-
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
@@ -891,6 +897,7 @@ const NoteScreen = connect(
 			theme: state.settings.theme,
 			ftsEnabled: state.settings['db.ftsEnabled'],
 			sharedData: state.sharedData,
+			showSideMenu: state.showSideMenu,
 		};
 	}
 )(NoteScreenComponent)
