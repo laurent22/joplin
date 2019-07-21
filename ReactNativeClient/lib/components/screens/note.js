@@ -440,7 +440,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			return;
 		}
 
-		const localFilePath = pickerResponse.uri;
+		const localFilePath = Platform.select({
+			android: pickerResponse.uri,
+			ios: decodeURI(pickerResponse.uri),
+		});
+		
 		let mimeType = pickerResponse.type;
 
 		if (!mimeType) {
