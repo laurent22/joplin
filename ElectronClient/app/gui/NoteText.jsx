@@ -46,6 +46,8 @@ require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
 // https://highlightjs.org/static/demo/
 require('brace/theme/chrome');
+require('brace/theme/solarized_light');
+require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;

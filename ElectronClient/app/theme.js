@@ -143,6 +143,79 @@ const darkStyle = {
 	codeThemeCss: "atom-one-dark-reasonable.css",
 };
 
+// Solarized Styles
+const solarizedLightStyle = {
+	backgroundColor: "#fdf6e3",
+	backgroundColorTransparent: "rgba(253, 246, 227, 0.9)",
+	oddBackgroundColor: "#eee8d5",
+	color: "#657b83", // For regular text
+	colorError: "#dc322f",
+	colorWarn: "#cb4b16",
+	colorFaded: "#839496", // For less important text;
+	colorBright: "#073642", // For important text;
+	dividerColor: "#eee8d5",
+	selectedColor: "#eee8d5",
+	urlColor: "#268bd2",
+
+	backgroundColor2: "#002b36",
+	color2: "#eee8d5",
+	selectedColor2: "#6c71c4",
+	colorError2: "#cb4b16",
+
+	raisedBackgroundColor: "#eee8d5",
+	raisedColor: "#073642",
+
+	warningBackgroundColor: "#b58900",
+
+	htmlColor: "#657b83",
+	htmlBackgroundColor: "#fdf6e3",
+	htmlDividerColor: "#eee8d5",
+	htmlLinkColor: "#268bd2",
+	htmlTableBackgroundColor: "#fdf6e3",
+	htmlCodeBackgroundColor: "#fdf6e3",
+	htmlCodeBorderColor: "#eee8d5",
+	htmlCodeColor: "#002b36",
+
+	editorTheme: "solarized_light",
+	codeThemeCss: "atom-one-light.css",
+};
+
+const solarizedDarkStyle = {
+	backgroundColor: "#002b36",
+	backgroundColorTransparent: "rgba(0, 43, 54, 0.9)",
+	oddBackgroundColor: "#073642",
+	color: "#93a1a1", // For regular text
+	colorError: "#dc322f",
+	colorWarn: "#cb4b16",
+	colorFaded: "#657b83", // For less important text;
+	colorBright: "#eee8d5", // For important text;
+	dividerColor: "#586e75",
+	selectedColor: "#073642",
+	urlColor: "#268bd2",
+
+	backgroundColor2: "#073642",
+	color2: "#eee8d5",
+	selectedColor2: "#6c71c4",
+	colorError2: "#cb4b16",
+
+	raisedBackgroundColor: "#073642",
+	raisedColor: "#839496",
+
+	warningBackgroundColor: "#b58900",
+
+	htmlColor: "#93a1a1",
+	htmlBackgroundColor: "#002b36",
+	htmlDividerColor: "#073642",
+	htmlLinkColor: "#268bd2",
+	htmlTableBackgroundColor: "#002b36",
+	htmlCodeBackgroundColor: "#002b36",
+	htmlCodeBorderColor: "#073642",
+	htmlCodeColor: "#fdf6e3",
+
+	editorTheme: 'solarized_dark',
+	codeThemeCss: "atom-one-dark-reasonable.css",
+};
+
 function addExtraStyles(style) {
 	style.tagStyle = {
 		fontSize: style.fontSize,
@@ -277,6 +350,12 @@ function themeStyle(theme) {
 	}
 	else if (theme == Setting.THEME_DARK) {
 		output = Object.assign({}, globalStyle, fontSizes, darkStyle);
+	}
+	else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
+		output = Object.assign({}, globalStyle, fontSizes, solarizedLightStyle);
+	}
+	else if (theme == Setting.THEME_SOLARIZED_DARK) {
+		output = Object.assign({}, globalStyle, fontSizes, solarizedDarkStyle);
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles
