@@ -232,8 +232,12 @@ class Note extends BaseItem {
 
 			for (let i = 0; i < orders.length; i++) {
 				const order = orders[i];
-				if (a[order.by] < b[order.by]) r = +1;
-				if (a[order.by] > b[order.by]) r = -1;
+				let aProp = a[order.by];
+				let bProp = b[order.by];
+				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
+				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
+				if (aProp < bProp) r = +1;
+				if (aProp > bProp) r = -1;
 				if (order.dir == 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
