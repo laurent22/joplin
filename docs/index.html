@@ -598,12 +598,38 @@ Hours:
 Details:
 </code></pre>
 <p>When creating a new note you will now be prompted to insert a template that contains the above text (and <code>{{date}}</code> replaced with today's date). Templates can also be inserted from the menu (File-&gt;Templates).</p>
-<p>The currently supported template variables are:<br>
-| Variable | Description | Example |<br>
-| <code>{{date}}</code> | Today's date formatted based on the settings format | 2019-01-01 |<br>
-| <code>{{time}}</code> | Current time formatted based on the settings format | 13:00 |<br>
-| <code>{{datetime}}</code> | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |<br>
-| <code>{{#custom_datetime}}</code> | Current date and/or time formatted based on a supplied string (using <a href="https://momentjs.com/">moment.js</a> formatting) | <code>{{#custom_datetime}}</code>M d<code>{{/custom_datetime}}</code> |</p>
+<p>The currently supported template variables are:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{date}}</code></td>
+<td>Today's date formatted based on the settings format</td>
+<td>2019-01-01</td>
+</tr>
+<tr>
+<td><code>{{time}}</code></td>
+<td>Current time formatted based on the settings format</td>
+<td>13:00</td>
+</tr>
+<tr>
+<td><code>{{datetime}}</code></td>
+<td>Current date and time formatted based on the settings format</td>
+<td>01/01/19 1:00 PM</td>
+</tr>
+<tr>
+<td><code>{{#custom_datetime}}</code></td>
+<td>Current date and/or time formatted based on a supplied string (using <a href="https://momentjs.com/">moment.js</a> formatting)</td>
+<td><code>{{#custom_datetime}}M d{{/custom_datetime}}</code></td>
+</tr>
+</tbody>
+</table>
 <h1><a name="searching" href="#searching" class="heading-anchor">🔗</a>Searching</h1>
 <p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
 <table>
