@@ -591,13 +591,13 @@ $$
 </code></pre>
 <h2><a name="custom-css" href="#custom-css" class="heading-anchor">🔗</a>Custom CSS</h2>
 <p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin <em><strong>must</strong></em> be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, <strong>not when printing or exporting to PDF</strong>. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.</p>
-<h2><a name="new-note-templates" href="#new-note-templates" class="heading-anchor">🔗</a>New Note Templates</h2>
-<p>Templates can be used for new notes by creating a templates folder in <code>~/.config/joplin-desktop/</code> and placing markdown template files into it. For example creating the file <code>hours.md</code> in the directory <code>~/.config/joplin-desktop/templates/</code> with the contents:</p>
+<h2><a name="note-templates" href="#note-templates" class="heading-anchor">🔗</a>Note templates</h2>
+<p>In the <strong>desktop app</strong>, templates can be used to create new notes or to insert into existing ones by creating a <code>templates</code> folder in Joplin's config folder and placing Markdown template files into it. For example creating the file <code>hours.md</code> in the <code>templates</code> directory with the contents:</p>
 <pre><code class="language-markdown">Date: {{date}}
 Hours:
 Details:
 </code></pre>
-<p>When creating a new note you will now be prompted to insert a template that contains the above text (and <code>{{date}}</code> replaced with today's date). Templates can also be inserted from the menu (File-&gt;Templates).</p>
+<p>Templates can then be inserted from the menu (File-&gt;Templates).</p>
 <p>The currently supported template variables are:</p>
 <table>
 <thead>

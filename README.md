@@ -316,9 +316,9 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
 
-## New Note Templates
+## Note templates
 
-Templates can be used for new notes by creating a templates folder in `~/.config/joplin-desktop/` and placing markdown template files into it. For example creating the file `hours.md` in the directory `~/.config/joplin-desktop/templates/` with the contents:
+In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
 
 ```markdown
 Date: {{date}}
@@ -326,7 +326,7 @@ Hours:
 Details:
 ```
 
-When creating a new note you will now be prompted to insert a template that contains the above text (and `{{date}}` replaced with today's date). Templates can also be inserted from the menu (File->Templates).
+Templates can then be inserted from the menu (File->Templates).
 
 The currently supported template variables are:
 
