@@ -12,7 +12,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MdToHtml = require('lib/MdToHtml');
+const MarkupToHtml = require('lib/renderers/MarkupToHtml');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -72,6 +72,7 @@ class NoteTextComponent extends React.Component {
 			newNote: null,
 			noteTags: [],
 			showRevisions: false,
+			loading: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -96,6 +97,7 @@ class NoteTextComponent extends React.Component {
 		this.lastSetMarkers_ = '';
 		this.lastSetMarkersOptions_ = {};
 		this.selectionRange_ = null;
+		this.lastComponentUpdateNoteId_ = null;
 		this.noteSearchBar_ = React.createRef();
 
 		// Complicated but reliable method to get editor content height
@@ -326,12 +328,12 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	mdToHtml() {
-		if (this.mdToHtml_) return this.mdToHtml_;
-		this.mdToHtml_ = new MdToHtml({
+	markupToHtml() {
+		if (this.markupToHtml_) return this.markupToHtml_;
+		this.markupToHtml_ = new MarkupToHtml({
 			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
 		});
-		return this.mdToHtml_;
+		return this.markupToHtml_;
 	}
 
 	async componentWillMount() {
@@ -356,7 +358,7 @@ class NoteTextComponent extends React.Component {
 
 		this.lastLoadedNoteId_ = note ? note.id : null;
 
-		this.updateHtml(note && note.body ? note.body : '');
+		this.updateHtml(note ? note.markup_language : null, note && note.body ? note.body : '');
 
 		eventManager.on('alarmChange', this.onAlarmChange_);
 		eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
@@ -370,7 +372,7 @@ class NoteTextComponent extends React.Component {
 	componentWillUnmount() {
 		this.saveIfNeeded();
 
-		this.mdToHtml_ = null;
+		this.markupToHtml_ = null;
 
 		eventManager.removeListener('alarmChange', this.onAlarmChange_);
 		eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
@@ -389,6 +391,14 @@ class NoteTextComponent extends React.Component {
 				this.webviewRef().closeDevTools();
 			}
 		}
+
+		const currentNoteId = this.state.note ? this.state.note.id : null;
+		if (this.lastComponentUpdateNoteId_ !== currentNoteId && this.editor_) {
+			const undoManager = this.editor_.editor.getSession().getUndoManager();
+			undoManager.reset();
+			this.editor_.editor.getSession().setUndoManager(undoManager);
+			this.lastComponentUpdateNoteId_ = currentNoteId;
+		}
 	}
 
 	webviewRef() {
@@ -398,6 +408,8 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async saveIfNeeded(saveIfNewNote = false, options = {}) {
+		if (this.state.loading) return;
+
 		const forceSave = saveIfNewNote && (this.state.note && !this.state.note.id);
 
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
@@ -448,6 +460,12 @@ class NoteTextComponent extends React.Component {
 
 		await this.saveIfNeeded();
 
+		const defer = () => {
+			this.setState({ loading: false });
+		}
+
+		this.setState({ loading: true });
+
 		const previousNote = this.state.note ? Object.assign({}, this.state.note) : null;
 
 		const stateNoteId = this.state.note ? this.state.note.id : null;
@@ -475,18 +493,18 @@ class NoteTextComponent extends React.Component {
 			noteTags = await Tag.tagsByNoteId(noteId);
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
-			if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
-			if (options.noReloadIfLocalChanges && this.isModified()) return;
+			if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
+			if (options.noReloadIfLocalChanges && this.isModified()) return defer();
 
 			// If the note hasn't been changed, exit now
 			if (this.state.note && note) {
 				let diff = Note.diffObjects(this.state.note, note);
 				delete diff.type_;
-				if (!Object.getOwnPropertyNames(diff).length) return;
+				if (!Object.getOwnPropertyNames(diff).length) return defer();
 			}
 		}
 
-		this.mdToHtml_ = null;
+		this.markupToHtml_ = null;
 
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
@@ -520,22 +538,6 @@ class NoteTextComponent extends React.Component {
 			}
 
 			if (this.editor_) {
-				// Calling setValue here does two things:
-				// 1. It sets the initial value as recorded by the undo manager. If we were to set it instead to "" and wait for the render
-				//    phase to set the value, the initial value would still be "", which means pressing "undo" on a note that has just loaded
-				//    would clear it.
-				// 2. It resets the undo manager - fixes https://github.com/laurent22/joplin/issues/355
-				// Note: calling undoManager.reset() doesn't work
-				try {
-					this.editor_.editor.getSession().setValue(note && note.body? note.body : '');
-				} catch (error) {
-					if (error.message === "Cannot read property 'match' of undefined") {
-						// The internals of Ace Editor throws an exception when creating a new note,
-						// but that can be ignored.
-					} else {
-						console.error(error);
-					}
-				}
 				this.editor_.editor.clearSelection();
 				this.editor_.editor.moveCursorTo(0,0);
 
@@ -600,7 +602,9 @@ class NoteTextComponent extends React.Component {
 
 		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
 
-		this.updateHtml(newState.note ? newState.note.body : '');
+		await this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
+
+		defer();
 	}
 
 	async componentWillReceiveProps(nextProps) {
@@ -671,7 +675,7 @@ class NoteTextComponent extends React.Component {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 		const arg1 = args && args.length >= 2 ? args[1] : null;
 
-		console.info('Got ipc-message: ' + msg, args);
+		if (msg !== 'percentScroll') console.info('Got ipc-message: ' + msg, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
@@ -935,12 +939,20 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
-	async updateHtml(body = null, options = null) {
+	async updateHtml(markupLanguage = null, body = null, options = null) {
 		if (!options) options = {};
 		if (!('useCustomCss' in options)) options.useCustomCss = true;
 
 		let bodyToRender = body;
-		if (bodyToRender === null) bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+
+		if (bodyToRender === null) {
+			bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
+			markupLanguage = this.state.note ? this.state.note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+		}
+
+		if (!markupLanguage) markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
+
+		const resources = await shared.attachedResources(bodyToRender);
 
 		const theme = themeStyle(this.props.theme);
 
@@ -948,7 +960,7 @@ class NoteTextComponent extends React.Component {
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'ipcProxySendToHost',
 			userCss: options.useCustomCss ? this.props.customCss : '',
-			resources: await shared.attachedResources(bodyToRender),
+			resources: resources,
 			codeHighlightCacheKey: this.state.note ? this.state.note.id : null,
 		};
 
@@ -958,10 +970,10 @@ class NoteTextComponent extends React.Component {
 
 		if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
 			// Fixes https://github.com/laurent22/joplin/issues/217
-			bodyToRender = '*' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '*';
+			bodyToRender = '<i>' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '</i>';
 		}
 
-		const result = this.mdToHtml().render(bodyToRender, theme, mdOptions);
+		const result = this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
 
 		this.setState({
 			bodyHtml: result.html,
@@ -1086,7 +1098,7 @@ class NoteTextComponent extends React.Component {
 					lastSavedNote: Object.assign({}, note),
 				});
 
-				this.updateHtml(note.body);
+				this.updateHtml(note.markup_language, note.body);
 			} catch (error) {
 				reg.logger().error(error);
 				bridge().showErrorMessageBox(error.message);
@@ -1115,13 +1127,13 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		await this.updateHtml(tempBody, { useCustomCss: false });
+		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: false });
 		this.forceUpdate();
 
 		const restoreSettings = async () => {
 			Setting.setValue('theme', previousTheme);
 			this.lastSetHtml_ = '';
-			await this.updateHtml(previousBody);
+			await this.updateHtml(this.state.note.markup_language, previousBody);
 			this.forceUpdate();
 		}
 
@@ -1419,6 +1431,8 @@ class NoteTextComponent extends React.Component {
 	}
 
 	createToolbarItems(note) {
+		const markupLanguage = note.markup_language;
+
 		const toolbarItems = [];
 		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
@@ -1431,7 +1445,6 @@ class NoteTextComponent extends React.Component {
 						noteId: note.id,
 					});
 				},
-				// enabled: false,
 			});
 		}
 
@@ -1454,83 +1467,85 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		toolbarItems.push({
-			tooltip: _('Bold'),
-			iconName: 'fa-bold',
-			onClick: () => { return this.commandTextBold(); },
-		});
+		if (note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN) {
+			toolbarItems.push({
+				tooltip: _('Bold'),
+				iconName: 'fa-bold',
+				onClick: () => { return this.commandTextBold(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Italic'),
-			iconName: 'fa-italic',
-			onClick: () => { return this.commandTextItalic(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Italic'),
+				iconName: 'fa-italic',
+				onClick: () => { return this.commandTextItalic(); },
+			});
 
-		toolbarItems.push({
-			type: 'separator',
-		});
+			toolbarItems.push({
+				type: 'separator',
+			});
 
-		toolbarItems.push({
-			tooltip: _('Hyperlink'),
-			iconName: 'fa-link',
-			onClick: () => { return this.commandTextLink(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Hyperlink'),
+				iconName: 'fa-link',
+				onClick: () => { return this.commandTextLink(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Code'),
-			iconName: 'fa-code',
-			onClick: () => { return this.commandTextCode(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Code'),
+				iconName: 'fa-code',
+				onClick: () => { return this.commandTextCode(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Attach file'),
-			iconName: 'fa-paperclip',
-			onClick: () => { return this.commandAttachFile(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Attach file'),
+				iconName: 'fa-paperclip',
+				onClick: () => { return this.commandAttachFile(); },
+			});
 
-		toolbarItems.push({
-			type: 'separator',
-		});
+			toolbarItems.push({
+				type: 'separator',
+			});
 
-		toolbarItems.push({
-			tooltip: _('Numbered List'),
-			iconName: 'fa-list-ol',
-			onClick: () => { return this.commandTextListOl(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Numbered List'),
+				iconName: 'fa-list-ol',
+				onClick: () => { return this.commandTextListOl(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Bulleted List'),
-			iconName: 'fa-list-ul',
-			onClick: () => { return this.commandTextListUl(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Bulleted List'),
+				iconName: 'fa-list-ul',
+				onClick: () => { return this.commandTextListUl(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Checkbox'),
-			iconName: 'fa-check-square',
-			onClick: () => { return this.commandTextCheckbox(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Checkbox'),
+				iconName: 'fa-check-square',
+				onClick: () => { return this.commandTextCheckbox(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Heading'),
-			iconName: 'fa-header',
-			onClick: () => { return this.commandTextHeading(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Heading'),
+				iconName: 'fa-header',
+				onClick: () => { return this.commandTextHeading(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Horizontal Rule'),
-			iconName: 'fa-ellipsis-h',
-			onClick: () => { return this.commandTextHorizontalRule(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Horizontal Rule'),
+				iconName: 'fa-ellipsis-h',
+				onClick: () => { return this.commandTextHorizontalRule(); },
+			});
 
-		toolbarItems.push({
-			tooltip: _('Insert Date Time'),
-			iconName: 'fa-calendar-plus-o',
-			onClick: () => { return this.commandDateTime(); },
-		});
+			toolbarItems.push({
+				tooltip: _('Insert Date Time'),
+				iconName: 'fa-calendar-plus-o',
+				onClick: () => { return this.commandDateTime(); },
+			});
 
-		toolbarItems.push({
-			type: 'separator',
-		});
+			toolbarItems.push({
+				type: 'separator',
+			});
+		}
 
 		if (note && this.props.watchedNoteFiles.indexOf(note.id) >= 0) {
 			toolbarItems.push({
@@ -1646,6 +1661,7 @@ class NoteTextComponent extends React.Component {
 		const style = this.props.style;
 		const note = this.state.note;
 		const body = note && note.body ? note.body : '';
+		const markupLanguage = note ? note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
@@ -1855,7 +1871,7 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.fontSize;
 		const editor =  <AceEditor
 			value={body}
-			mode="markdown"
+			mode={markupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 			theme={editorRootStyle.editorTheme}
 			style={editorRootStyle}
 			width={editorStyle.width + 'px'}

@@ -35,6 +35,9 @@ class Bridge {
 					tags: command.tags || '',
 					image_sizes: command.image_sizes || {},
 					anchor_names: command.anchor_names || [],
+					source_command: command.source_command,
+					convert_to: command.convert_to,
+					stylesheets: command.stylesheets,
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });

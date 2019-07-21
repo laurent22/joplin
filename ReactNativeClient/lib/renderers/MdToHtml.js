@@ -6,8 +6,8 @@ const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
 const md5 = require('md5');
 const StringUtils = require('lib/string-utils.js');
-const noteStyle = require('./MdToHtml/noteStyle');
-const Setting = require('./models/Setting.js');
+const noteStyle = require('./noteStyle');
+const Setting = require('lib/models/Setting.js');
 const rules = {
 	image: require('./MdToHtml/rules/image'),
 	checkbox: require('./MdToHtml/rules/checkbox'),
