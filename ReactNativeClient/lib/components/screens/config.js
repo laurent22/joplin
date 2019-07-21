@@ -52,12 +52,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			) {
 				Alert.alert(
 					_('Warning'),
-					_(
-						'Joplin does not have permission to access "%s". ' +
-						'Either choose a different sync target, ' +
-						'or give Joplin the "Storage" permission.',
-						this.state.settings['sync.2.path'],
-					));
+					_('In order to use file system synchronization your permission to write to external storage is required.')
+				);
 				// Save settings anyway, even if permission has not been granted
 			}
 			return shared.saveSettings(this);
@@ -119,11 +115,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const requestResult = await PermissionsAndroid.request(
 			PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
 			{
-				title: _('Permission to write to external storage'),
-				message: _(
-					'In order to use file system synchronization your ' +
-					'permission to write to external storage is required.'
-				),
+				title: _('Information'),
+				message: _('In order to use file system synchronization your permission to write to external storage is required.'),
 				buttonPositive: _('OK'),
 			},
 		);

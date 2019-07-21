@@ -632,6 +632,27 @@ msgstr "Krypteringsinställningar"
 msgid "Web clipper options"
 msgstr "Web clipper-inställningar"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Infoga datumtid"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin-exporteringskatalog"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -648,6 +669,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Sök efter uppdateringar..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Importera"
@@ -1610,9 +1634,6 @@ msgstr ""
 "anteckning. Om inget tillhandahålls försöker det automatiskt identifiera "
 "standardredigeraren."
 
-msgid "Show advanced options"
-msgstr "Visa avancerade inställningar"
-
 msgid "Custom TLS certificates"
 msgstr "Anpassade TLS-certifikat"
 
@@ -1795,18 +1816,6 @@ msgstr ""
 msgid "Delete these notes?"
 msgstr "Ta bort dessa anteckningar?"
 
-msgid "Log"
-msgstr "Logg"
-
-msgid "Export Debug Report"
-msgstr "Exportera felsökningsrapport"
-
-msgid "Encryption Config"
-msgstr "Kryptering-konfiguration"
-
-msgid "Configuration"
-msgstr "Konfiguration"
-
 msgid "Move to notebook..."
 msgstr "Flytta till anteckningsbok..."
 
@@ -1829,8 +1838,24 @@ msgstr "Välj datum"
 msgid "Confirm"
 msgstr "Bekräfta"
 
-msgid "Cancel synchronisation"
-msgstr "Avbryt synkronisering"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Anteckningsböcker"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Krypterade objekt kan inte ändras"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Ny anteckningsbok"
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#, fuzzy
+msgid "All notes"
+msgstr "anteckning"
 
 msgid "Checking... Please wait."
 msgstr "Kontrollerar... vänta."
@@ -1871,6 +1896,50 @@ msgstr "Nya taggar:"
 
 msgid "Type new tags or select from list"
 msgstr "Skriv nya taggar eller välj från listan"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Konfiguration"
+
+msgid "Encryption Config"
+msgstr "Kryptering-konfiguration"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Verktyg"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Tillstånd"
+
+msgid "Log"
+msgstr "Logg"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Skapar ny %s..."
+
+msgid "Export Debug Report"
+msgstr "Exportera felsökningsrapport"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1941,6 +2010,10 @@ msgstr "Anteckningsboken kunde inte sparas: %s"
 msgid "Edit notebook"
 msgstr "Redigera anteckningsbok"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Titel på anteckningsbok:"
+
 msgid "Show all"
 msgstr "Visa alla"
 
@@ -1973,6 +2046,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Bildstorlek som inte stöds: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Uppdaterad: %d."
+
+msgid "View on map"
+msgstr "Visa på karta"
+
+msgid "Go to source URL"
+msgstr "Gå till källans URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Sök..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Visa avancerade inställningar"
+
 msgid "Take photo"
 msgstr "Ta ett foto"
 
@@ -1991,23 +2082,19 @@ msgstr "Konvertera till anteckning"
 msgid "Convert to todo"
 msgstr "Konvertera till att-göra"
 
-msgid "Hide metadata"
-msgstr "Dölj metadata"
+#, fuzzy
+msgid "Properties"
+msgstr "Anteckningens egenskaper"
 
-msgid "Show metadata"
-msgstr "Visa metadata"
-
-msgid "View on map"
-msgstr "Visa på karta"
-
-msgid "Go to source URL"
-msgstr "Gå till källans URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Redigera"
 
-msgid "Delete notebook"
-msgstr "Ta bort anteckningsbok"
+#, fuzzy
+msgid "Add title"
+msgstr "titel"
 
 msgid "Login with OneDrive"
 msgstr "Logga in med OneDrive"
@@ -2015,21 +2102,38 @@ msgstr "Logga in med OneDrive"
 msgid "Search"
 msgstr "Sök"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Klicka på (+)-knappen för att skapa en ny anteckning eller anteckningsbok. "
-"Klicka på sidomenyn för att få tillgång till dina befintliga "
-"anteckningsböcker."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Tillåtelse att använda kameran"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Du har för närvarande ingen anteckningsbok. Skapa en genom att klicka på (+)-"
-"knappen."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Avbryt synkronisering"
 
-msgid "Welcome"
-msgstr "Välkommen"
+#~ msgid "Hide metadata"
+#~ msgstr "Dölj metadata"
+
+#~ msgid "Show metadata"
+#~ msgstr "Visa metadata"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Ta bort anteckningsbok"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Klicka på (+)-knappen för att skapa en ny anteckning eller "
+#~ "anteckningsbok. Klicka på sidomenyn för att få tillgång till dina "
+#~ "befintliga anteckningsböcker."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Du har för närvarande ingen anteckningsbok. Skapa en genom att klicka på "
+#~ "(+)-knappen."
+
+#~ msgid "Welcome"
+#~ msgstr "Välkommen"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Separera varje tagg med ett komma."

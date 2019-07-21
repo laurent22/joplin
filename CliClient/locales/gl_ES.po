@@ -622,6 +622,26 @@ msgstr "Opcións de cifrado"
 msgid "Web clipper options"
 msgstr ""
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+msgid "Insert template"
+msgstr ""
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Cartafol de exportación do Joplin"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -638,6 +658,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Buscar actualizacións…"
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Importar"
@@ -1594,9 +1617,6 @@ msgstr ""
 "Editor a usar para abrir unha nota. Se non se indica ningún tentará detectar "
 "automaticamente o editor predeterminado."
 
-msgid "Show advanced options"
-msgstr "Mostrar opcións avanzadas"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1776,18 +1796,6 @@ msgstr "Non ten notas actualmente. Cree unha premendo no botón (+)."
 msgid "Delete these notes?"
 msgstr "Desexa eliminar estas notas?"
 
-msgid "Log"
-msgstr "Rexistro"
-
-msgid "Export Debug Report"
-msgstr "Exportar informe de depuración"
-
-msgid "Encryption Config"
-msgstr "Configuración de cifrado"
-
-msgid "Configuration"
-msgstr "Configuración"
-
 msgid "Move to notebook..."
 msgstr "Mover para o caderno..."
 
@@ -1812,8 +1820,24 @@ msgstr "Seleccionar data"
 msgid "Confirm"
 msgstr "Confirmar"
 
-msgid "Cancel synchronisation"
-msgstr "Cancelar sincronización"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Cadernos"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Non é posíbel modificar elementos cifrados"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Novo caderno"
+
+msgid "Configuration"
+msgstr "Configuración"
+
+#, fuzzy
+msgid "All notes"
+msgstr "nota"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1850,6 +1874,50 @@ msgstr "Etiquetas novas:"
 
 msgid "Type new tags or select from list"
 msgstr "Escriba etiquetas novas ou seleccione da lista"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Configuración"
+
+msgid "Encryption Config"
+msgstr "Configuración de cifrado"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Ferramentas"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Estado"
+
+msgid "Log"
+msgstr "Rexistro"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Criando novo %s..."
+
+msgid "Export Debug Report"
+msgstr "Exportar informe de depuración"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1913,6 +1981,10 @@ msgstr "Non foi posíbel gardar o caderno: %s"
 msgid "Edit notebook"
 msgstr "Editar caderno"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Título do caderno:"
+
 msgid "Show all"
 msgstr "Mostrar todo"
 
@@ -1944,6 +2016,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imaxe incompatíbel: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Actualizado: %d."
+
+msgid "View on map"
+msgstr "Ver no mapa"
+
+msgid "Go to source URL"
+msgstr ""
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Buscar…"
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Mostrar opcións avanzadas"
+
 #, fuzzy
 msgid "Take photo"
 msgstr "Anexar foto"
@@ -1963,23 +2053,18 @@ msgstr "Converter para nota"
 msgid "Convert to todo"
 msgstr "Converter para tarefa"
 
-msgid "Hide metadata"
-msgstr "Ocultar metadados"
+msgid "Properties"
+msgstr ""
 
-msgid "Show metadata"
-msgstr "Mostrar metadatos"
-
-msgid "View on map"
-msgstr "Ver no mapa"
-
-msgid "Go to source URL"
+msgid "Add body"
 msgstr ""
 
 msgid "Edit"
 msgstr "Edtar"
 
-msgid "Delete notebook"
-msgstr "Eliminar caderno"
+#, fuzzy
+msgid "Add title"
+msgstr "Sen título"
 
 msgid "Login with OneDrive"
 msgstr "Acceder con OneDrive"
@@ -1987,18 +2072,31 @@ msgstr "Acceder con OneDrive"
 msgid "Search"
 msgstr "Buscar"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Prema no botón (+) para crear unha nota ou caderno. Prema no menú lateral "
-"para acceder aos cadernos existentes."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Cancelar sincronización"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
+#~ msgid "Hide metadata"
+#~ msgstr "Ocultar metadados"
 
-msgid "Welcome"
-msgstr "Benvido/a"
+#~ msgid "Show metadata"
+#~ msgstr "Mostrar metadatos"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Eliminar caderno"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Prema no botón (+) para crear unha nota ou caderno. Prema no menú lateral "
+#~ "para acceder aos cadernos existentes."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Non ten cadernos actualmente. Cree un premendo no botón (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Benvido/a"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Separar cada etiqueta por unha coma."

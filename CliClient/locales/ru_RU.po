@@ -631,6 +631,27 @@ msgstr "Настройки шифрования"
 msgid "Web clipper options"
 msgstr "Настройки веб-клиппера"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Вставить дату и время"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Каталог экспорта Joplin"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -646,6 +667,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Проверить обновления..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Импорт"
@@ -1601,9 +1625,6 @@ msgstr ""
 "Если не задан, будет произведена попытка автоматического определения "
 "редактора по умолчанию."
 
-msgid "Show advanced options"
-msgstr "Показывать расширенные настройки"
-
 msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
@@ -1784,18 +1805,6 @@ msgstr "Сейчас здесь нет заметок. Создайте нову
 msgid "Delete these notes?"
 msgstr "Удалить эти заметки?"
 
-msgid "Log"
-msgstr "Журнал"
-
-msgid "Export Debug Report"
-msgstr "Экспортировать отладочный отчет"
-
-msgid "Encryption Config"
-msgstr "Конфигурация шифрования"
-
-msgid "Configuration"
-msgstr "Конфигурация"
-
 msgid "Move to notebook..."
 msgstr "Переместить в блокнот..."
 
@@ -1818,8 +1827,24 @@ msgstr "Выбрать дату"
 msgid "Confirm"
 msgstr "Подтвердить"
 
-msgid "Cancel synchronisation"
-msgstr "Отменить синхронизацию"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Блокноты"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Зашифрованные элементы не могут быть изменены"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Новый блокнот"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#, fuzzy
+msgid "All notes"
+msgstr "заметка"
 
 msgid "Checking... Please wait."
 msgstr "Проверка... Пожалуйста, подождите."
@@ -1860,6 +1885,50 @@ msgstr "Новые метки:"
 
 msgid "Type new tags or select from list"
 msgstr "Введите новые метки или выберите из списка"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Конфигурация"
+
+msgid "Encryption Config"
+msgstr "Конфигурация шифрования"
+
+#, fuzzy
+msgid "Tools"
+msgstr "&Сервис"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Статус"
+
+msgid "Log"
+msgstr "Журнал"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Создание новой %s..."
+
+msgid "Export Debug Report"
+msgstr "Экспортировать отладочный отчет"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1928,6 +1997,10 @@ msgstr "Блокнот не может быть сохранен: %s"
 msgid "Edit notebook"
 msgstr "Редактировать блокнот"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Название блокнота:"
+
 msgid "Show all"
 msgstr "Показать все"
 
@@ -1961,6 +2034,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Неподдерживаемый формат изображения: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Обновлено: %d."
+
+msgid "View on map"
+msgstr "Посмотреть на карте"
+
+msgid "Go to source URL"
+msgstr "Перейти к исходному URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Поиск..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Показывать расширенные настройки"
+
 msgid "Take photo"
 msgstr "Сделать фото"
 
@@ -1979,23 +2070,19 @@ msgstr "Преобразовать в заметку"
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
-msgid "Hide metadata"
-msgstr "Скрыть метаданные"
+#, fuzzy
+msgid "Properties"
+msgstr "Свойства заметки"
 
-msgid "Show metadata"
-msgstr "Показать метаданные"
-
-msgid "View on map"
-msgstr "Посмотреть на карте"
-
-msgid "Go to source URL"
-msgstr "Перейти к исходному URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Правка"
 
-msgid "Delete notebook"
-msgstr "Удалить блокнот"
+#, fuzzy
+msgid "Add title"
+msgstr "заголовок"
 
 msgid "Login with OneDrive"
 msgstr "Войти с OneDrive"
@@ -2003,18 +2090,35 @@ msgstr "Войти с OneDrive"
 msgid "Search"
 msgstr "Поиск"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Нажмите на кнопку (+) для создания новой заметки или нового блокнота. "
-"Нажмите на боковое меню для доступа к вашим существующим блокнотам."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Разрешение на использование камеры"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "У вас сейчас нет блокнота. Создайте его нажатием на кнопку (+)."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Отменить синхронизацию"
 
-msgid "Welcome"
-msgstr "Добро пожаловать"
+#~ msgid "Hide metadata"
+#~ msgstr "Скрыть метаданные"
+
+#~ msgid "Show metadata"
+#~ msgstr "Показать метаданные"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Удалить блокнот"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Нажмите на кнопку (+) для создания новой заметки или нового блокнота. "
+#~ "Нажмите на боковое меню для доступа к вашим существующим блокнотам."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "У вас сейчас нет блокнота. Создайте его нажатием на кнопку (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Добро пожаловать"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Разделяйте каждую метку запятой."

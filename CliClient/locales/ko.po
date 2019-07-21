@@ -614,6 +614,27 @@ msgstr "암호화 옵션"
 msgid "Web clipper options"
 msgstr "웹 수집기 옵션"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "날짜와 시간 입력"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "조플린 내보내기 폴더"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -630,6 +651,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "업데이트 확인..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "가져오기"
@@ -1579,9 +1603,6 @@ msgstr ""
 "노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합"
 "니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 탐지할 것입니다."
 
-msgid "Show advanced options"
-msgstr "고급 옵션"
-
 msgid "Custom TLS certificates"
 msgstr "임의의 TLS 인증서"
 
@@ -1764,18 +1785,6 @@ msgstr "노트가 없습니다. (+) 버튼을 선택해 새로 만드세요."
 msgid "Delete these notes?"
 msgstr "노트를 삭제할까요?"
 
-msgid "Log"
-msgstr "로그"
-
-msgid "Export Debug Report"
-msgstr "디버그 보고서 내보내기"
-
-msgid "Encryption Config"
-msgstr "암호화 설정"
-
-msgid "Configuration"
-msgstr "설정"
-
 msgid "Move to notebook..."
 msgstr "노트북으로 옮기기..."
 
@@ -1798,8 +1807,24 @@ msgstr "날짜 선택"
 msgid "Confirm"
 msgstr "확인"
 
-msgid "Cancel synchronisation"
-msgstr "동기화 취소"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "노트북"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "암호화된 항목은 변경될 수 없습니다"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "새 노트북"
+
+msgid "Configuration"
+msgstr "설정"
+
+#, fuzzy
+msgid "All notes"
+msgstr "노트"
 
 msgid "Checking... Please wait."
 msgstr "확인 중입니다... 잠시만 기다리세요."
@@ -1840,6 +1865,50 @@ msgstr "새 태그:"
 
 msgid "Type new tags or select from list"
 msgstr "새 태그를 입력하거나 목록에서 선택하세요"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "설정"
+
+msgid "Encryption Config"
+msgstr "암호화 설정"
+
+#, fuzzy
+msgid "Tools"
+msgstr "도구"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "상태"
+
+msgid "Log"
+msgstr "로그"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "%s 새로 만들기..."
+
+msgid "Export Debug Report"
+msgstr "디버그 보고서 내보내기"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1906,6 +1975,10 @@ msgstr "노트북을 저장할 수 없습니다: %s"
 msgid "Edit notebook"
 msgstr "노트북 편집"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "노트북 제목:"
+
 msgid "Show all"
 msgstr "모두 표시"
 
@@ -1937,6 +2010,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "업데이트됨: %d."
+
+msgid "View on map"
+msgstr "지도에 표시"
+
+msgid "Go to source URL"
+msgstr "소스 URL로 이동"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "찾기..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "고급 옵션"
+
 msgid "Take photo"
 msgstr "사진 찍기"
 
@@ -1955,23 +2046,19 @@ msgstr "노트로 변환"
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
-msgid "Hide metadata"
-msgstr "메타데이터 숨김"
+#, fuzzy
+msgid "Properties"
+msgstr "노트 속성"
 
-msgid "Show metadata"
-msgstr "메타데이터 표시"
-
-msgid "View on map"
-msgstr "지도에 표시"
-
-msgid "Go to source URL"
-msgstr "소스 URL로 이동"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "편집"
 
-msgid "Delete notebook"
-msgstr "노트북 삭제"
+#, fuzzy
+msgid "Add title"
+msgstr "제목"
 
 msgid "Login with OneDrive"
 msgstr "OneDrive 로그인"
@@ -1979,18 +2066,35 @@ msgstr "OneDrive 로그인"
 msgid "Search"
 msgstr "검색"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트북"
-"을 관리하세요."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "카메라 사용 허가"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "동기화 취소"
 
-msgid "Welcome"
-msgstr "환영합니다"
+#~ msgid "Hide metadata"
+#~ msgstr "메타데이터 숨김"
+
+#~ msgid "Show metadata"
+#~ msgstr "메타데이터 표시"
+
+#~ msgid "Delete notebook"
+#~ msgstr "노트북 삭제"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트"
+#~ "북을 관리하세요."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
+
+#~ msgid "Welcome"
+#~ msgstr "환영합니다"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "각각의 태그를 쉼표로 구분합니다."

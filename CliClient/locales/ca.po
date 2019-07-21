@@ -635,6 +635,26 @@ msgstr "Opcions del xifratge"
 msgid "Web clipper options"
 msgstr "Opcions del desa-retalls de webs"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+msgid "Insert template"
+msgstr ""
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Directori d'exportació del Joplin"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -651,6 +671,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Comprova les actualitzacions..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Importació"
@@ -1612,9 +1635,6 @@ msgstr ""
 "L'editor que s'usarà per a obrir una nota. Si no s'indica cap, intentarà "
 "detectar automàticament l'editor predeterminat."
 
-msgid "Show advanced options"
-msgstr "Mostra les opcions avançades"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1794,18 +1814,6 @@ msgstr "Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
 msgid "Delete these notes?"
 msgstr "Voleu suprimir aquestes notes?"
 
-msgid "Log"
-msgstr "Registre"
-
-msgid "Export Debug Report"
-msgstr "Exporta l'informe de depuració"
-
-msgid "Encryption Config"
-msgstr "Configuració del xifratge"
-
-msgid "Configuration"
-msgstr "Configuració"
-
 msgid "Move to notebook..."
 msgstr "Mou al bloc de notes..."
 
@@ -1829,8 +1837,24 @@ msgstr "Seleccioneu una data"
 msgid "Confirm"
 msgstr "Confirmació"
 
-msgid "Cancel synchronisation"
-msgstr "Cancel·la la sincronització"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Blocs de notes"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Els elements xifrats no es poden modificar"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Bloc de notes nou"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+#, fuzzy
+msgid "All notes"
+msgstr "nota"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1867,6 +1891,50 @@ msgstr "Etiquetes noves:"
 
 msgid "Type new tags or select from list"
 msgstr "Escriviu etiquetes noves o seleccioneu-ne de la llista"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Configuració"
+
+msgid "Encryption Config"
+msgstr "Configuració del xifratge"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Eines"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Estat"
+
+msgid "Log"
+msgstr "Registre"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "S'està creant una %s..."
+
+msgid "Export Debug Report"
+msgstr "Exporta l'informe de depuració"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1936,6 +2004,10 @@ msgstr "No s'ha pogut desar el bloc de notes: %s"
 msgid "Edit notebook"
 msgstr "Edita el bloc de notes"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Títol del bloc de notes:"
+
 msgid "Show all"
 msgstr "Mostra-ho tot"
 
@@ -1968,6 +2040,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipus d'imatge no admesa: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Acualitzades: %d."
+
+msgid "View on map"
+msgstr "Mostra-ho al mapa"
+
+msgid "Go to source URL"
+msgstr ""
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Cerca..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Mostra les opcions avançades"
+
 #, fuzzy
 msgid "Take photo"
 msgstr "Adjunta una imatge"
@@ -1987,23 +2077,18 @@ msgstr "Converteix a nota"
 msgid "Convert to todo"
 msgstr "Converteix a llistat de tasques pendents"
 
-msgid "Hide metadata"
-msgstr "Amaga les metadades"
+msgid "Properties"
+msgstr ""
 
-msgid "Show metadata"
-msgstr "Mostra les metadades"
-
-msgid "View on map"
-msgstr "Mostra-ho al mapa"
-
-msgid "Go to source URL"
+msgid "Add body"
 msgstr ""
 
 msgid "Edit"
 msgstr "Edita"
 
-msgid "Delete notebook"
-msgstr "Suprimeix el bloc de notes"
+#, fuzzy
+msgid "Add title"
+msgstr "títol"
 
 msgid "Login with OneDrive"
 msgstr "Inicia sessió amb OneDrive"
@@ -2011,19 +2096,32 @@ msgstr "Inicia sessió amb OneDrive"
 msgid "Search"
 msgstr "Cerca"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Feu clic en el botó (+) per a crear una nota o bloc de notes. Feu clic en el "
-"menú lateral per a accedir als blocs de notes existents."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Cancel·la la sincronització"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Ara mateix no teniu cap bloc de notes. Creeu-ne un fent clic al botó (+)."
+#~ msgid "Hide metadata"
+#~ msgstr "Amaga les metadades"
 
-msgid "Welcome"
-msgstr "Benvingut"
+#~ msgid "Show metadata"
+#~ msgstr "Mostra les metadades"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Suprimeix el bloc de notes"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Feu clic en el botó (+) per a crear una nota o bloc de notes. Feu clic en "
+#~ "el menú lateral per a accedir als blocs de notes existents."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Ara mateix no teniu cap bloc de notes. Creeu-ne un fent clic al botó (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Benvingut"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Separeu les etiquetes amb comes."

@@ -628,6 +628,26 @@ msgstr "Možnosti enkripcije"
 msgid "Web clipper options"
 msgstr ""
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+msgid "Insert template"
+msgstr ""
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin izvozno mesto"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -644,6 +664,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Preverjanje za posodobitvami..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Uvozi"
@@ -1609,9 +1632,6 @@ msgstr ""
 "Urejevalnik, ki bo uporabljen za odpiranje zabeležk. Če noben ni izbran, bo "
 "avtomatsko zaznan privzeti urejevalnik."
 
-msgid "Show advanced options"
-msgstr "Pokaži napredne možnosti"
-
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -1791,18 +1811,6 @@ msgstr "Trenutno ni zabeležk. Ustvarite jo s klikom na (+) gumb."
 msgid "Delete these notes?"
 msgstr "Izbriši te zabeležke?"
 
-msgid "Log"
-msgstr "Dnevnik"
-
-msgid "Export Debug Report"
-msgstr "Izvozi poročilo o napakah"
-
-msgid "Encryption Config"
-msgstr "Nastavite enkripcije"
-
-msgid "Configuration"
-msgstr "Nastavitve"
-
 msgid "Move to notebook..."
 msgstr "Premakni v beležnico..."
 
@@ -1827,8 +1835,24 @@ msgstr "Izberi datum"
 msgid "Confirm"
 msgstr "Potrdi"
 
-msgid "Cancel synchronisation"
-msgstr "Prekliči sinhronizacijo"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Beležnice"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Nova beležnica"
+
+msgid "Configuration"
+msgstr "Nastavitve"
+
+#, fuzzy
+msgid "All notes"
+msgstr "zabeležka"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1864,6 +1888,50 @@ msgid "New tags:"
 msgstr ""
 
 msgid "Type new tags or select from list"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Nastavitve"
+
+msgid "Encryption Config"
+msgstr "Nastavite enkripcije"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Orodja"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+msgid "Log"
+msgstr "Dnevnik"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Ustvarjanje nove %s..."
+
+msgid "Export Debug Report"
+msgstr "Izvozi poročilo o napakah"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
 msgstr ""
 
 #, fuzzy
@@ -1928,6 +1996,10 @@ msgstr "Beležnica ne more biti shranjena: %s"
 msgid "Edit notebook"
 msgstr "Uredi beležnico"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Naslov beležnice:"
+
 msgid "Show all"
 msgstr "Prikaži vse"
 
@@ -1959,6 +2031,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodprt tip slike: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Posodobljeno: %d."
+
+msgid "View on map"
+msgstr "Prikaži na zemljevidu"
+
+msgid "Go to source URL"
+msgstr ""
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Išči"
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Pokaži napredne možnosti"
+
 #, fuzzy
 msgid "Take photo"
 msgstr "Pripni fotografijo"
@@ -1978,23 +2068,18 @@ msgstr "Pretvori v zabeležko"
 msgid "Convert to todo"
 msgstr "Pretvori v za narediti"
 
-msgid "Hide metadata"
-msgstr "Skrij meta podatke"
+msgid "Properties"
+msgstr ""
 
-msgid "Show metadata"
-msgstr "Prikaži meta podatke"
-
-msgid "View on map"
-msgstr "Prikaži na zemljevidu"
-
-msgid "Go to source URL"
+msgid "Add body"
 msgstr ""
 
 msgid "Edit"
 msgstr "Uredi"
 
-msgid "Delete notebook"
-msgstr "Izbriši beležnico"
+#, fuzzy
+msgid "Add title"
+msgstr "Neimenovano"
 
 msgid "Login with OneDrive"
 msgstr "Prijavi se z OneDrive"
@@ -2002,18 +2087,32 @@ msgstr "Prijavi se z OneDrive"
 msgid "Search"
 msgstr "Išči"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Kliknite na (+) gumb, da ustvarite novo zabeležko ali beležnico. Kliknite na "
-"stranski menu za dostop do obstoječih beležnic."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Prekliči sinhronizacijo"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
+#~ msgid "Hide metadata"
+#~ msgstr "Skrij meta podatke"
 
-msgid "Welcome"
-msgstr "Dobrodošli"
+#~ msgid "Show metadata"
+#~ msgstr "Prikaži meta podatke"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Izbriši beležnico"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Kliknite na (+) gumb, da ustvarite novo zabeležko ali beležnico. Kliknite "
+#~ "na stranski menu za dostop do obstoječih beležnic."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Trenutno nimate nobene beležnice. Ustvarite jo s klikom na (+) gumb."
+
+#~ msgid "Welcome"
+#~ msgstr "Dobrodošli"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Loči vsako oznako z vejico."

@@ -628,6 +628,27 @@ msgstr "Настройки за криптиране"
 msgid "Web clipper options"
 msgstr "Настройки на уеб клипера"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Постави датата и часа"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin експорт директория"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -643,6 +664,9 @@ msgstr "Настройки..."
 
 msgid "Check for updates..."
 msgstr "Провери за обновления..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Импортиране"
@@ -1607,9 +1631,6 @@ msgstr ""
 "опитва автоматично да засече кой е текстовия редактор по подразбиране на "
 "системата ви."
 
-msgid "Show advanced options"
-msgstr "Покажи настройките за напреднали"
-
 msgid "Custom TLS certificates"
 msgstr "Допълнителни TLS сертификати"
 
@@ -1792,18 +1813,6 @@ msgstr "В момента няма бележки. Натиснете бутон
 msgid "Delete these notes?"
 msgstr "Да изтрия ли тези бележки?"
 
-msgid "Log"
-msgstr "Лог"
-
-msgid "Export Debug Report"
-msgstr "Експортиране на доклад за откриване на грешки"
-
-msgid "Encryption Config"
-msgstr "Настройки за криптиране"
-
-msgid "Configuration"
-msgstr "Настройки"
-
 msgid "Move to notebook..."
 msgstr "Премести в тетрадка..."
 
@@ -1826,8 +1835,24 @@ msgstr "Избор на дата"
 msgid "Confirm"
 msgstr "Потвърди"
 
-msgid "Cancel synchronisation"
-msgstr "Отмени синхронизацията"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Тетрадки"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Криптирани обекти не могат да бъдат променяни"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Нова тетрадка"
+
+msgid "Configuration"
+msgstr "Настройки"
+
+#, fuzzy
+msgid "All notes"
+msgstr "бележка"
 
 msgid "Checking... Please wait."
 msgstr "Проверявам... Моля изчакайте."
@@ -1869,6 +1894,50 @@ msgstr "Нови тагове:"
 
 msgid "Type new tags or select from list"
 msgstr "Напишете нови тагове или изберете от списъка"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Още информация"
+
+msgid "Encryption Config"
+msgstr "Настройки за криптиране"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Инструменти (&T)"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Статус"
+
+msgid "Log"
+msgstr "Лог"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Създаване на нова %s..."
+
+msgid "Export Debug Report"
+msgstr "Експортиране на доклад за откриване на грешки"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 msgid "More information"
 msgstr "Още информация"
@@ -1936,6 +2005,10 @@ msgstr "Тетрадката не може да бъде запазена: %s"
 msgid "Edit notebook"
 msgstr "Редактиране на тетрадка"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Заглавие на тетрадка:"
+
 msgid "Show all"
 msgstr "Покажи всички"
 
@@ -1968,6 +2041,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Този тип изображения не се поддържа: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Обновени: %d."
+
+msgid "View on map"
+msgstr "Покажи на карта"
+
+msgid "Go to source URL"
+msgstr "Иди на уеб адреса (URL)"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Търсене..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Покажи настройките за напреднали"
+
 msgid "Take photo"
 msgstr "Снимане"
 
@@ -1986,23 +2077,19 @@ msgstr "Конвертиране към бележка"
 msgid "Convert to todo"
 msgstr "Конвертиране към задача"
 
-msgid "Hide metadata"
-msgstr "Скрий метаданни"
+#, fuzzy
+msgid "Properties"
+msgstr "Атрибути на бележката"
 
-msgid "Show metadata"
-msgstr "Покажи метаданни"
-
-msgid "View on map"
-msgstr "Покажи на карта"
-
-msgid "Go to source URL"
-msgstr "Иди на уеб адреса (URL)"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Редактиране"
 
-msgid "Delete notebook"
-msgstr "Изтрий тетрадка"
+#, fuzzy
+msgid "Add title"
+msgstr "заглавие"
 
 msgid "Login with OneDrive"
 msgstr "Вписване в OneDrive"
@@ -2010,16 +2097,33 @@ msgstr "Вписване в OneDrive"
 msgid "Search"
 msgstr "Търсене"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Натиснете бутона (+) за да създадете нова бележка или тетрадка. Натиснете "
-"страничното меню за да достъпите съществуваща тетрадка."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Разрешение за употреба на камерата"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"В момента нямате тетрадки. Натиснете бутон (+) за да създадете тетрадка."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Отмени синхронизацията"
 
-msgid "Welcome"
-msgstr "Добре дошли"
+#~ msgid "Hide metadata"
+#~ msgstr "Скрий метаданни"
+
+#~ msgid "Show metadata"
+#~ msgstr "Покажи метаданни"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Изтрий тетрадка"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Натиснете бутона (+) за да създадете нова бележка или тетрадка. Натиснете "
+#~ "страничното меню за да достъпите съществуваща тетрадка."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "В момента нямате тетрадки. Натиснете бутон (+) за да създадете тетрадка."
+
+#~ msgid "Welcome"
+#~ msgstr "Добре дошли"

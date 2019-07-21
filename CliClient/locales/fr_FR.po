@@ -627,6 +627,25 @@ msgstr "Options de chiffrement"
 msgid "Web clipper options"
 msgstr "Options du Web Clipper"
 
+msgid "Create note from template"
+msgstr "Créer une note à partir d'un modèle"
+
+msgid "Create to-do from template"
+msgstr "Créer une tâche à partir d'un modèle"
+
+msgid "Insert template"
+msgstr "Insérer un modèle"
+
+msgid "Open template directory"
+msgstr "Ouvrir le dossier des modèles"
+
+msgid "Refresh templates"
+msgstr "Rafraichir modèles"
+
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Révision : %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -642,6 +661,9 @@ msgstr "Préférences…"
 
 msgid "Check for updates..."
 msgstr "Vérifier les mises à jour..."
+
+msgid "Templates"
+msgstr "Modèles"
 
 msgid "Import"
 msgstr "Importer"
@@ -990,7 +1012,7 @@ msgid "View them now"
 msgstr "Les voir maintenant"
 
 msgid "One or more master keys need a password."
-msgstr "L'une des clefs maîtres requiert un mot de passe :"
+msgstr "L'une des clefs maîtres requiert un mot de passe."
 
 msgid "Set the password"
 msgstr "Définir le mot de passe"
@@ -1609,9 +1631,6 @@ msgstr ""
 "La commande de l'éditeur de texte (peut inclure des options) pour ouvrir et "
 "modifier les notes. Si non-spécifiée, elle sera détectée automatiquement."
 
-msgid "Show advanced options"
-msgstr "Montrer les options avancées"
-
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personnalisés"
 
@@ -1794,18 +1813,6 @@ msgstr ""
 msgid "Delete these notes?"
 msgstr "Supprimer ces notes ?"
 
-msgid "Log"
-msgstr "Journal"
-
-msgid "Export Debug Report"
-msgstr "Exporter rapport de débogage"
-
-msgid "Encryption Config"
-msgstr "Config chiffrement"
-
-msgid "Configuration"
-msgstr "Configuration"
-
 msgid "Move to notebook..."
 msgstr "Déplacer vers..."
 
@@ -1828,8 +1835,21 @@ msgstr "Sélectionner date"
 msgid "Confirm"
 msgstr "Confirmer"
 
-msgid "Cancel synchronisation"
-msgstr "Annuler synchronisation"
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Carnet : %s"
+
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Les carnets chiffrés ne peuvent être renommés"
+
+msgid "New Notebook"
+msgstr "Nouveau carnet"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "All notes"
+msgstr "Toutes les notes"
 
 msgid "Checking... Please wait."
 msgstr "Vérification... Veuillez attendre."
@@ -1870,6 +1890,50 @@ msgstr "Nouvelles étiquettes :"
 
 msgid "Type new tags or select from list"
 msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
+
+msgid "Warning"
+msgstr "Avertissement"
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+"Pour utiliser la synchronisation par système de fichiers, votre autorisation "
+"pour écrire sur le stockage externe est requise."
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Encryption Config"
+msgstr "Config chiffrement"
+
+msgid "Tools"
+msgstr "Outils"
+
+msgid "Sync Status"
+msgstr "État synchronisation"
+
+msgid "Log"
+msgstr "Journal"
+
+msgid "Creating report..."
+msgstr "Création du rapport..."
+
+msgid "Export Debug Report"
+msgstr "Exporter rapport de débogage"
+
+msgid "Fixing search index..."
+msgstr "Correction de l'index..."
+
+msgid "Fix search index"
+msgstr "Corriger index de recherche"
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
+"Utilisez ceci pour corriger l'index du moteur de recherche en cas de "
+"problème. Cela peut prendre assez longtemps selon le nombre de notes."
 
 msgid "More information"
 msgstr "Plus d'information"
@@ -1937,6 +2001,9 @@ msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 msgid "Edit notebook"
 msgstr "Éditer le carnet"
 
+msgid "Enter notebook title"
+msgstr "Entrez le titre du carnet"
+
 msgid "Show all"
 msgstr "Afficher tous"
 
@@ -1969,6 +2036,22 @@ msgstr "Le schéma d'URI \"%s\" n'est pas supporté"
 msgid "Unsupported image type: %s"
 msgstr "Type d'image non géré : %s"
 
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Mis à jour : %s"
+
+msgid "View on map"
+msgstr "Voir sur carte"
+
+msgid "Go to source URL"
+msgstr "Aller à l'URL source"
+
+msgid "Attach..."
+msgstr "Joindre..."
+
+msgid "Choose an option"
+msgstr "Choisissez une option"
+
 msgid "Take photo"
 msgstr "Prendre une photo"
 
@@ -1987,23 +2070,17 @@ msgstr "Convertir en note"
 msgid "Convert to todo"
 msgstr "Convertir en tâche"
 
-msgid "Hide metadata"
-msgstr "Cacher les métadonnées"
+msgid "Properties"
+msgstr "Propriétés"
 
-msgid "Show metadata"
-msgstr "Voir métadonnées"
-
-msgid "View on map"
-msgstr "Voir sur carte"
-
-msgid "Go to source URL"
-msgstr "Aller à l'URL source"
+msgid "Add body"
+msgstr "Ajoutez le contenu"
 
 msgid "Edit"
 msgstr "Édition"
 
-msgid "Delete notebook"
-msgstr "Supprimer le carnet"
+msgid "Add title"
+msgstr "Ajoutez le titre"
 
 msgid "Login with OneDrive"
 msgstr "Se connecter à OneDrive"
@@ -2011,20 +2088,43 @@ msgstr "Se connecter à OneDrive"
 msgid "Search"
 msgstr "Chercher"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Appuyez sur le bouton (+) pour créer une nouvelle note ou carnet. Ouvrez le "
-"menu latéral pour accéder à vos carnets."
+#~ msgid ""
+#~ "Joplin does not have permission to access \"%s\". Either choose a "
+#~ "different sync target, or give Joplin the \"Storage\" permission."
+#~ msgstr ""
+#~ "Joplin ne peut pas accéder au dossier \"%s\". Choisissez une autre cible "
+#~ "de synchronisation, ou donnez à Joplin l'autorisation \"Stockage\"."
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le bouton "
-"(+)."
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Autorisation d'écrire sur le stockage externe"
 
-msgid "Welcome"
-msgstr "Bienvenue"
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Annuler synchronisation"
+
+#~ msgid "Hide metadata"
+#~ msgstr "Cacher les métadonnées"
+
+#~ msgid "Show metadata"
+#~ msgstr "Voir métadonnées"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Supprimer le carnet"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Appuyez sur le bouton (+) pour créer une nouvelle note ou carnet. Ouvrez "
+#~ "le menu latéral pour accéder à vos carnets."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Vous n'avez pour l'instant pas de carnets. Créez-en un en pressant le "
+#~ "bouton (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Bienvenue"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Séparez chaque étiquette par une virgule."
@@ -2050,9 +2150,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Remove?"
 #~ msgstr "Supprimer ?"
-
-#~ msgid "Delete notes?"
-#~ msgstr "Supprimer les notes ?"
 
 #~ msgid "State: %s."
 #~ msgstr "État : %s."

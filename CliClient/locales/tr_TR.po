@@ -599,6 +599,27 @@ msgstr "Şifreleme seçenekleri"
 msgid "Web clipper options"
 msgstr "Web alıntılama ayarları"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Tarih Ekle"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin Dizin Dışa Aktarım"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -615,6 +636,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Güncellemeleri kontrol et..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "İçe aktar"
@@ -1577,9 +1601,6 @@ msgstr ""
 "Editör komutu (argüman içerebilir) not açmak için kullanılacaktır. Eğer "
 "sağlanmadıysa, varsayılan düzenleyiciyi otomatik olarak algılamaya çalışır."
 
-msgid "Show advanced options"
-msgstr "Gelişmiş ayarları göster"
-
 msgid "Custom TLS certificates"
 msgstr "Özel TLS sertifikaları"
 
@@ -1759,18 +1780,6 @@ msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
 msgid "Delete these notes?"
 msgstr "Bu notlar silinsin mi?"
 
-msgid "Log"
-msgstr "Log"
-
-msgid "Export Debug Report"
-msgstr "Hata Ayıklama Raporunu Dışa Aktar"
-
-msgid "Encryption Config"
-msgstr "Yapılandırmayı şifrele"
-
-msgid "Configuration"
-msgstr "Yapılandırma"
-
 msgid "Move to notebook..."
 msgstr "Not defterine taşı..."
 
@@ -1793,8 +1802,24 @@ msgstr "Tarih seç"
 msgid "Confirm"
 msgstr "Onayla"
 
-msgid "Cancel synchronisation"
-msgstr "Senkronizasyonu iptal et"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Not defterleri"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Şifrelenmiş öğeler değiştirilemez"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Yeni not defteri"
+
+msgid "Configuration"
+msgstr "Yapılandırma"
+
+#, fuzzy
+msgid "All notes"
+msgstr "not"
 
 msgid "Checking... Please wait."
 msgstr "Kontrol ediliyor... Lütfen bekleyin."
@@ -1835,6 +1860,50 @@ msgstr "Yeni etiketler:"
 
 msgid "Type new tags or select from list"
 msgstr "Yeni etiketler yazın veya listeden seçin"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Yapılandırma"
+
+msgid "Encryption Config"
+msgstr "Yapılandırmayı şifrele"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Araçlar"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Durum"
+
+msgid "Log"
+msgstr "Log"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Yeni %s oluşturuluyor..."
+
+msgid "Export Debug Report"
+msgstr "Hata Ayıklama Raporunu Dışa Aktar"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1902,6 +1971,10 @@ msgstr "Not defteri kaydedilemedi: %s"
 msgid "Edit notebook"
 msgstr "Not defterini düzenle"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Not defteri başlığı:"
+
 msgid "Show all"
 msgstr "Tümünü göster"
 
@@ -1934,6 +2007,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Desteklenmeyen resim türü: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Güncellenme: %d."
+
+msgid "View on map"
+msgstr "Haritada gör"
+
+msgid "Go to source URL"
+msgstr "URL kaynağına git"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Ara..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Gelişmiş ayarları göster"
+
 msgid "Take photo"
 msgstr "Fotoğraf çek"
 
@@ -1952,23 +2043,19 @@ msgstr "Nota çevir"
 msgid "Convert to todo"
 msgstr "Yapılacak olarak çevir"
 
-msgid "Hide metadata"
-msgstr "Metadata'yı gizle"
+#, fuzzy
+msgid "Properties"
+msgstr "Not özellikleri"
 
-msgid "Show metadata"
-msgstr "Metadata'yı göster"
-
-msgid "View on map"
-msgstr "Haritada gör"
-
-msgid "Go to source URL"
-msgstr "URL kaynağına git"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Düzenle"
 
-msgid "Delete notebook"
-msgstr "Not defterini sil"
+#, fuzzy
+msgid "Add title"
+msgstr "başlık"
 
 msgid "Login with OneDrive"
 msgstr "OneDrive ile giriş yapın"
@@ -1976,19 +2063,36 @@ msgstr "OneDrive ile giriş yapın"
 msgid "Search"
 msgstr "Arama"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Yeni bir not veya not defteri oluşturmak için (+) düğmesine tıklayın. Mevcut "
-"not defterlerinize erişmek için yandaki menüye tıklayın."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Kamera kullanımı için izin"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Şu anda not defteriniz yok. (+) butonuna tıklayarak bir tane oluşturun."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Senkronizasyonu iptal et"
 
-msgid "Welcome"
-msgstr "Hoşgeldiniz"
+#~ msgid "Hide metadata"
+#~ msgstr "Metadata'yı gizle"
+
+#~ msgid "Show metadata"
+#~ msgstr "Metadata'yı göster"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Not defterini sil"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Yeni bir not veya not defteri oluşturmak için (+) düğmesine tıklayın. "
+#~ "Mevcut not defterlerinize erişmek için yandaki menüye tıklayın."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Şu anda not defteriniz yok. (+) butonuna tıklayarak bir tane oluşturun."
+
+#~ msgid "Welcome"
+#~ msgstr "Hoşgeldiniz"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Her etiketi virgülle ayırın."

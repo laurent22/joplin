@@ -637,6 +637,27 @@ msgstr "Opcje szyfrowania"
 msgid "Web clipper options"
 msgstr "Opcje Web clipper"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Wstaw stempel czasowy"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Katalog Joplin Export"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -652,6 +673,9 @@ msgstr "Preferencje..."
 
 msgid "Check for updates..."
 msgstr "Sprawdź dostępność aktualizacji..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Zaimportuj"
@@ -1619,9 +1643,6 @@ msgstr ""
 "aby otwierać notatkę. Jeżeli nie zostanie podana, program spróbuje wykryć "
 "domyślny edytor."
 
-msgid "Show advanced options"
-msgstr "Wyświetl opcje zaawansowane"
-
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe ceryfikaty TLS"
 
@@ -1800,18 +1821,6 @@ msgstr "Brak notatek. Aby utworzyć, naciśnij przycisk (+)."
 msgid "Delete these notes?"
 msgstr "Usunąć notatki?"
 
-msgid "Log"
-msgstr "Dziennik"
-
-msgid "Export Debug Report"
-msgstr "Raport odpluskwiania eksportu"
-
-msgid "Encryption Config"
-msgstr "Konfiguracja szyfrowania"
-
-msgid "Configuration"
-msgstr "Konfiguracja"
-
 msgid "Move to notebook..."
 msgstr "Przenieś do notatnika..."
 
@@ -1834,8 +1843,24 @@ msgstr "Wybierz datę"
 msgid "Confirm"
 msgstr "Potwierdź"
 
-msgid "Cancel synchronisation"
-msgstr "Anuluj synchronizację"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Notatniki"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Zaszyfrowanie obiekty nie mogą być modyfikowane"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Nowy notatnik"
+
+msgid "Configuration"
+msgstr "Konfiguracja"
+
+#, fuzzy
+msgid "All notes"
+msgstr "notatka"
 
 msgid "Checking... Please wait."
 msgstr "Sprawdzanie... Proszę czekać."
@@ -1876,6 +1901,50 @@ msgstr "Nowe znaczniki:"
 
 msgid "Type new tags or select from list"
 msgstr "Wprowadź nowe znaczniki lub wybierz z listy"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Konfiguracja"
+
+msgid "Encryption Config"
+msgstr "Konfiguracja szyfrowania"
+
+#, fuzzy
+msgid "Tools"
+msgstr "&Narzędzia"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+msgid "Log"
+msgstr "Dziennik"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Tworzenie nowego %s..."
+
+msgid "Export Debug Report"
+msgstr "Raport odpluskwiania eksportu"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1946,6 +2015,10 @@ msgstr "Notatnik nie może zostać zapisany: %s"
 msgid "Edit notebook"
 msgstr "Edytuj notatnik"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Tytuł notatnika:"
+
 msgid "Show all"
 msgstr "Pokaż wszystko"
 
@@ -1978,6 +2051,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Niewspierany typ obrazu: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Zaaktualizowano: %d."
+
+msgid "View on map"
+msgstr "Pokaż na mapie"
+
+msgid "Go to source URL"
+msgstr "Idź do adresu źródłowego odnośnika"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Wyszukaj..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Wyświetl opcje zaawansowane"
+
 msgid "Take photo"
 msgstr "Wykonaj zdjęcie"
 
@@ -1996,23 +2087,19 @@ msgstr "Przekonwertuj do notatki"
 msgid "Convert to todo"
 msgstr "Przekonwertuj do zadania"
 
-msgid "Hide metadata"
-msgstr "Ukryj metadane"
+#, fuzzy
+msgid "Properties"
+msgstr "Właściwośći notatki"
 
-msgid "Show metadata"
-msgstr "Pokaż metadane"
-
-msgid "View on map"
-msgstr "Pokaż na mapie"
-
-msgid "Go to source URL"
-msgstr "Idź do adresu źródłowego odnośnika"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Edytuj"
 
-msgid "Delete notebook"
-msgstr "Usuń notatnik"
+#, fuzzy
+msgid "Add title"
+msgstr "tytuł"
 
 msgid "Login with OneDrive"
 msgstr "Zaloguj z OneDrive"
@@ -2020,18 +2107,35 @@ msgstr "Zaloguj z OneDrive"
 msgid "Search"
 msgstr "Wyszukaj"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Naciśnij przycisk (+) aby utworzyć nową notatkę lub notatnik. Naciśnij menu "
-"boczne, aby mieć dostęp do istniejących notatników."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Uprawenie do użytkowania kamery"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Brak notatników. Utwórz nowy naciskając przycisk (+)."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Anuluj synchronizację"
 
-msgid "Welcome"
-msgstr "Witaj"
+#~ msgid "Hide metadata"
+#~ msgstr "Ukryj metadane"
+
+#~ msgid "Show metadata"
+#~ msgstr "Pokaż metadane"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Usuń notatnik"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Naciśnij przycisk (+) aby utworzyć nową notatkę lub notatnik. Naciśnij "
+#~ "menu boczne, aby mieć dostęp do istniejących notatników."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Brak notatników. Utwórz nowy naciskając przycisk (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Witaj"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Oddziel każdy znacznik przecinkiem."

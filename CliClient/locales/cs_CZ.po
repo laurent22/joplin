@@ -618,6 +618,27 @@ msgstr "Nastavení šifrování"
 msgid "Web clipper options"
 msgstr "Web clipper volby"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Vložit datum a čas"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Složka pro export"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -634,6 +655,9 @@ msgstr "Nastavení..."
 
 msgid "Check for updates..."
 msgstr "Zkontrolovat updaty..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Import"
@@ -1587,9 +1611,6 @@ msgstr ""
 "Editor ve kterém budou otvírány poznámky. Pokud není specifikováno, aplikace "
 "se pokusí o autodetekci defaultního editoru."
 
-msgid "Show advanced options"
-msgstr "Ukázat pokročilé volby"
-
 msgid "Custom TLS certificates"
 msgstr "Vlastní TLS certifikát"
 
@@ -1768,18 +1789,6 @@ msgstr "Nemáte žádné poznámky. Vytvořte jednu kliknutím na tlačítko (+)
 msgid "Delete these notes?"
 msgstr "Smazat tyto poznámky?"
 
-msgid "Log"
-msgstr "Log"
-
-msgid "Export Debug Report"
-msgstr "Exportovat Debug Report"
-
-msgid "Encryption Config"
-msgstr "Nastavení šifrování"
-
-msgid "Configuration"
-msgstr "Nastavení"
-
 msgid "Move to notebook..."
 msgstr "Přesunout do zápisníku..."
 
@@ -1802,8 +1811,24 @@ msgstr "Vybrat datum"
 msgid "Confirm"
 msgstr "Potvrdit"
 
-msgid "Cancel synchronisation"
-msgstr "Zrušit synchronizaci"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Zápisníky"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Nelze editovat zašifrovanou položku"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Nový zápisník"
+
+msgid "Configuration"
+msgstr "Nastavení"
+
+#, fuzzy
+msgid "All notes"
+msgstr "poznámka"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1845,6 +1870,50 @@ msgstr "Nové tagy:"
 
 msgid "Type new tags or select from list"
 msgstr "Zadejte nové tagy, nebo vyberte existující ze seznamu"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Nastavení"
+
+msgid "Encryption Config"
+msgstr "Nastavení šifrování"
+
+#, fuzzy
+msgid "Tools"
+msgstr "Nástroje"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+msgid "Log"
+msgstr "Log"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Vytvářím %s..."
+
+msgid "Export Debug Report"
+msgstr "Exportovat Debug Report"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1912,6 +1981,10 @@ msgstr "Nebylo možné uložit zápisník: %s"
 msgid "Edit notebook"
 msgstr "Upravit zápisník"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Název zápisníku:"
+
 msgid "Show all"
 msgstr "Zobrazit vše"
 
@@ -1943,6 +2016,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný formát obrázku: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Upraveno: %d."
+
+msgid "View on map"
+msgstr "Zobrazit na map+"
+
+msgid "Go to source URL"
+msgstr "Jít na zdrojovou URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Hledat..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Ukázat pokročilé volby"
+
 msgid "Take photo"
 msgstr "Přiložit foto"
 
@@ -1961,23 +2052,19 @@ msgstr "Konvertovat na poznámku"
 msgid "Convert to todo"
 msgstr "Konvertovat na todo"
 
-msgid "Hide metadata"
-msgstr "Schovat metadata"
+#, fuzzy
+msgid "Properties"
+msgstr "Nastavení poznámek"
 
-msgid "Show metadata"
-msgstr "Zobrazit metadata"
-
-msgid "View on map"
-msgstr "Zobrazit na map+"
-
-msgid "Go to source URL"
-msgstr "Jít na zdrojovou URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Upravit"
 
-msgid "Delete notebook"
-msgstr "Smazat zápisník"
+#, fuzzy
+msgid "Add title"
+msgstr "bez názvu"
 
 msgid "Login with OneDrive"
 msgstr "Přihlásit se pomocí OneDrive"
@@ -1985,18 +2072,35 @@ msgstr "Přihlásit se pomocí OneDrive"
 msgid "Search"
 msgstr "Hledání"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Vytvořte novou poznámku či zápisník kliknutím na tlačítko (+). Pro přístup k "
-"existujícím zápisníkům použijte postranní menu."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Oprávnění použít kameru"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+)."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Zrušit synchronizaci"
 
-msgid "Welcome"
-msgstr "Vítejte"
+#~ msgid "Hide metadata"
+#~ msgstr "Schovat metadata"
+
+#~ msgid "Show metadata"
+#~ msgstr "Zobrazit metadata"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Smazat zápisník"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Vytvořte novou poznámku či zápisník kliknutím na tlačítko (+). Pro "
+#~ "přístup k existujícím zápisníkům použijte postranní menu."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na tlačítko (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Vítejte"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Tagy oddělujte čárkami."

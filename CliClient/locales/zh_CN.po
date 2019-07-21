@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -592,6 +590,27 @@ msgstr "加密选项"
 msgid "Web clipper options"
 msgstr "网页剪辑选项"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "插入时间"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin 导出目录"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -607,6 +626,9 @@ msgstr "偏好……"
 
 msgid "Check for updates..."
 msgstr "检查更新..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "导入"
@@ -1537,9 +1559,6 @@ msgstr ""
 "该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
 "认编辑器。"
 
-msgid "Show advanced options"
-msgstr "显示高级选项"
-
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
@@ -1714,18 +1733,6 @@ msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 msgid "Delete these notes?"
 msgstr "是否删除这些笔记？"
 
-msgid "Log"
-msgstr "日志"
-
-msgid "Export Debug Report"
-msgstr "导出调试报告"
-
-msgid "Encryption Config"
-msgstr "加密配置"
-
-msgid "Configuration"
-msgstr "配置"
-
 msgid "Move to notebook..."
 msgstr "移动到笔记本..."
 
@@ -1748,8 +1755,24 @@ msgstr "选择日期"
 msgid "Confirm"
 msgstr "确认"
 
-msgid "Cancel synchronisation"
-msgstr "取消同步"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "笔记本"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "无法修改已加密的项目"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "新建笔记本"
+
+msgid "Configuration"
+msgstr "配置"
+
+#, fuzzy
+msgid "All notes"
+msgstr "笔记"
 
 msgid "Checking... Please wait."
 msgstr "正在检查... 请稍候。"
@@ -1790,6 +1813,50 @@ msgstr "新建标签："
 
 msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "更多信息"
+
+msgid "Encryption Config"
+msgstr "加密配置"
+
+#, fuzzy
+msgid "Tools"
+msgstr "工具 (&T)"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "状态"
+
+msgid "Log"
+msgstr "日志"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "新建 %s…"
+
+msgid "Export Debug Report"
+msgstr "导出调试报告"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 msgid "More information"
 msgstr "更多信息"
@@ -1853,6 +1920,10 @@ msgstr "该笔记本无法保存：%s"
 msgid "Edit notebook"
 msgstr "编辑笔记本"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "笔记本标题："
+
 msgid "Show all"
 msgstr "显示全部"
 
@@ -1884,6 +1955,24 @@ msgstr "不支持“%s”协议链接"
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "已更新：%d条。"
+
+msgid "View on map"
+msgstr "查看地图"
+
+msgid "Go to source URL"
+msgstr "定位到源 URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "搜索..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "显示高级选项"
+
 msgid "Take photo"
 msgstr "拍照"
 
@@ -1902,23 +1991,19 @@ msgstr "转换为笔记"
 msgid "Convert to todo"
 msgstr "转换为待办事项"
 
-msgid "Hide metadata"
-msgstr "隐藏元数据"
+#, fuzzy
+msgid "Properties"
+msgstr "笔记属性"
 
-msgid "Show metadata"
-msgstr "显示元数据"
-
-msgid "View on map"
-msgstr "查看地图"
-
-msgid "Go to source URL"
-msgstr "定位到源 URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "编辑"
 
-msgid "Delete notebook"
-msgstr "删除笔记本"
+#, fuzzy
+msgid "Add title"
+msgstr "标题"
 
 msgid "Login with OneDrive"
 msgstr "通过 OneDrive 登录"
@@ -1926,16 +2011,33 @@ msgstr "通过 OneDrive 登录"
 msgid "Search"
 msgstr "搜索"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr "单击 (+) 按钮新建笔记或笔记本。单击切换侧边栏来访问现有的笔记本。"
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "使用摄像头的权限"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
+#~ msgid "Cancel synchronisation"
+#~ msgstr "取消同步"
 
-msgid "Welcome"
-msgstr "欢迎"
+#~ msgid "Hide metadata"
+#~ msgstr "隐藏元数据"
+
+#~ msgid "Show metadata"
+#~ msgstr "显示元数据"
+
+#~ msgid "Delete notebook"
+#~ msgstr "删除笔记本"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr "单击 (+) 按钮新建笔记或笔记本。单击切换侧边栏来访问现有的笔记本。"
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
+
+#~ msgid "Welcome"
+#~ msgstr "欢迎"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "用半角逗号“,”分开每个标签。"

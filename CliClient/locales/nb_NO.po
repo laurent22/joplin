@@ -618,6 +618,27 @@ msgstr "Krypteringsvalg"
 msgid "Web clipper options"
 msgstr "Web Clipper-innstillinger"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Sett inn dato/tid"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin-eksportert katalog"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -633,6 +654,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "Se etter oppdatering..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Importer"
@@ -1588,9 +1612,6 @@ msgstr ""
 "Teksteditor som skal brukes til å åpne et notat. Hvis det ikke er satt vil "
 "den prøve å automatisk velge standardprogram."
 
-msgid "Show advanced options"
-msgstr "Vis avanserte innstillinger"
-
 msgid "Custom TLS certificates"
 msgstr "Egendefinerte TLS-sertifikater"
 
@@ -1769,18 +1790,6 @@ msgstr "Det finnes enda ingen notater. Lag en ved å klikke på (+)-knappen."
 msgid "Delete these notes?"
 msgstr "Slett disse notatene?"
 
-msgid "Log"
-msgstr "Logg"
-
-msgid "Export Debug Report"
-msgstr "Eksporter feilsøkingsrapport"
-
-msgid "Encryption Config"
-msgstr "Krypteringsinnstillinger"
-
-msgid "Configuration"
-msgstr "Konfigurasjon"
-
 msgid "Move to notebook..."
 msgstr "Flytt til notatbok..."
 
@@ -1803,8 +1812,24 @@ msgstr "Velg dato"
 msgid "Confirm"
 msgstr "Bekreft"
 
-msgid "Cancel synchronisation"
-msgstr "Avbryt synkronisering"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Notatbøker"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Krypterte elementer kan ikke modifiseres"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Ny notatbok"
+
+msgid "Configuration"
+msgstr "Konfigurasjon"
+
+#, fuzzy
+msgid "All notes"
+msgstr "notat"
 
 msgid "Checking... Please wait."
 msgstr "Sjekker… Vennligst vent."
@@ -1845,6 +1870,50 @@ msgstr "Nye merkelapper:"
 
 msgid "Type new tags or select from list"
 msgstr "Skriv inn nye merkelapper eller velg fra listen"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Konfigurasjon"
+
+msgid "Encryption Config"
+msgstr "Krypteringsinnstillinger"
+
+#, fuzzy
+msgid "Tools"
+msgstr "&Verktøy"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+msgid "Log"
+msgstr "Logg"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Oppretter nytt %s..."
+
+msgid "Export Debug Report"
+msgstr "Eksporter feilsøkingsrapport"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1911,6 +1980,10 @@ msgstr "Denne notatboken kunne ikke lagres: %s"
 msgid "Edit notebook"
 msgstr "Rediger notatbok"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Tittel på notatbok:"
+
 msgid "Show all"
 msgstr "Vis alle"
 
@@ -1942,6 +2015,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Bildetypen er ikke støttet: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Oppdatert: %d."
+
+msgid "View on map"
+msgstr "Vis på kart"
+
+msgid "Go to source URL"
+msgstr "Gå til kilde-URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Søk..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Vis avanserte innstillinger"
+
 msgid "Take photo"
 msgstr "Ta bilde"
 
@@ -1960,23 +2051,19 @@ msgstr "Konverter til notat"
 msgid "Convert to todo"
 msgstr "Konverter til gjøremål"
 
-msgid "Hide metadata"
-msgstr "Skjul metadata"
+#, fuzzy
+msgid "Properties"
+msgstr "Notategenskaper"
 
-msgid "Show metadata"
-msgstr "Vis metadata"
-
-msgid "View on map"
-msgstr "Vis på kart"
-
-msgid "Go to source URL"
-msgstr "Gå til kilde-URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Rediger"
 
-msgid "Delete notebook"
-msgstr "Slett notatbok"
+#, fuzzy
+msgid "Add title"
+msgstr "tittel"
 
 msgid "Login with OneDrive"
 msgstr "Innlogging med OneDrive"
@@ -1984,18 +2071,35 @@ msgstr "Innlogging med OneDrive"
 msgid "Search"
 msgstr "Søk"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Klikk på (+)-knappen for å lage et nytt notat eller en ny notatbok. Klikk på "
-"sidepanelet for tilgang til dine eksisterende notatbøker."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Tillatelse til å bruke kamera"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Avbryt synkronisering"
 
-msgid "Welcome"
-msgstr "Velkommen"
+#~ msgid "Hide metadata"
+#~ msgstr "Skjul metadata"
+
+#~ msgid "Show metadata"
+#~ msgstr "Vis metadata"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Slett notatbok"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Klikk på (+)-knappen for å lage et nytt notat eller en ny notatbok. Klikk "
+#~ "på sidepanelet for tilgang til dine eksisterende notatbøker."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Du har enda ingen notatbok. Opprett en ved å klikke på (+)-knappen."
+
+#~ msgid "Welcome"
+#~ msgstr "Velkommen"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Separer hver merkelapp med komma."

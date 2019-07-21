@@ -611,6 +611,27 @@ msgstr "خيارات التشفير"
 msgid "Web clipper options"
 msgstr "خيارات Web clipper"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "إدراج التاريخ والوقت"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "دليل تصدير بيانات Joplin"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -626,6 +647,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "البحث جارٍ عن تحديثات..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "استيراد"
@@ -1569,9 +1593,6 @@ msgstr ""
 "أمر محرر النصوص (قد يتضمن معامِلات) الذي سيستخدم لفتح ملاحظة. إذا لم يجر "
 "التزويد بأي محرر فسيحاول التطبيق اكتشاف المحرِّر التلقائي آلياً."
 
-msgid "Show advanced options"
-msgstr "إظهار خيارات متقدمة"
-
 msgid "Custom TLS certificates"
 msgstr "شهادات TLS خاصة"
 
@@ -1750,18 +1771,6 @@ msgstr "لا توجد ملاحظات حالياً. أنشئ واحدة بالض�
 msgid "Delete these notes?"
 msgstr "حذف هذه الملاحظات؟"
 
-msgid "Log"
-msgstr "السجل"
-
-msgid "Export Debug Report"
-msgstr "تصدير تقرير إصلاح الأخطاء"
-
-msgid "Encryption Config"
-msgstr "ضبط التشفير"
-
-msgid "Configuration"
-msgstr "الضبط"
-
 msgid "Move to notebook..."
 msgstr "النقل إلى دفتر ملاحظات..."
 
@@ -1784,8 +1793,24 @@ msgstr "إختر التاريخ"
 msgid "Confirm"
 msgstr "تأكيد"
 
-msgid "Cancel synchronisation"
-msgstr "إلغاء المزامنة"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "دفاتر ملاحظات"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "لا يمكن تعديل العناصر المشفَّرة"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "دفتر ملاحظات جديد"
+
+msgid "Configuration"
+msgstr "الضبط"
+
+#, fuzzy
+msgid "All notes"
+msgstr "ملاحظة"
 
 msgid "Checking... Please wait."
 msgstr "التحقق جارٍ... فضلاً انتظر."
@@ -1824,6 +1849,50 @@ msgstr "وسوم جديدة:"
 
 msgid "Type new tags or select from list"
 msgstr "أكتب وسوماً جديدة أو اخترها من القائمة"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "الضبط"
+
+msgid "Encryption Config"
+msgstr "ضبط التشفير"
+
+#, fuzzy
+msgid "Tools"
+msgstr "&أدوات"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "الحالة"
+
+msgid "Log"
+msgstr "السجل"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "إنشاء %s جديد ..."
+
+msgid "Export Debug Report"
+msgstr "تصدير تقرير إصلاح الأخطاء"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1889,6 +1958,10 @@ msgstr "لم يتم حفظ دفتر الملاحظات: %s"
 msgid "Edit notebook"
 msgstr "تحرير دفتر الملاحظات"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "عنوان دفتر الملاحظات:"
+
 msgid "Show all"
 msgstr "إظهار الكل"
 
@@ -1920,6 +1993,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "نوع صورة غير مدعوم: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "تم تحديثها: %d."
+
+msgid "View on map"
+msgstr "عرض على الخريطة"
+
+msgid "Go to source URL"
+msgstr "الذهاب إلى عنوان URL المصدر"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "بحث..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "إظهار خيارات متقدمة"
+
 msgid "Take photo"
 msgstr "التقاط صورة"
 
@@ -1938,23 +2029,19 @@ msgstr "تحويل إلى ملاحظة"
 msgid "Convert to todo"
 msgstr "تحويل إلى قائمة مهام"
 
-msgid "Hide metadata"
-msgstr "إخفاء البيانات الوصفية"
+#, fuzzy
+msgid "Properties"
+msgstr "خصائص الملاحظة"
 
-msgid "Show metadata"
-msgstr "إظهار البيانات الوصفية"
-
-msgid "View on map"
-msgstr "عرض على الخريطة"
-
-msgid "Go to source URL"
-msgstr "الذهاب إلى عنوان URL المصدر"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "تحرير"
 
-msgid "Delete notebook"
-msgstr "حذف دفتر الملاحظات"
+#, fuzzy
+msgid "Add title"
+msgstr "العنوان"
 
 msgid "Login with OneDrive"
 msgstr "تسجيل الدخول عبر OneDrive"
@@ -1962,18 +2049,35 @@ msgstr "تسجيل الدخول عبر OneDrive"
 msgid "Search"
 msgstr "بحث"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة "
-"الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "الإذن باستخدام الكاميرا"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "إلغاء المزامنة"
 
-msgid "Welcome"
-msgstr "مرحباً"
+#~ msgid "Hide metadata"
+#~ msgstr "إخفاء البيانات الوصفية"
+
+#~ msgid "Show metadata"
+#~ msgstr "إظهار البيانات الوصفية"
+
+#~ msgid "Delete notebook"
+#~ msgstr "حذف دفتر الملاحظات"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة "
+#~ "الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "مرحباً"
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "لا يمكن فك تشفير بعض العناصر."

@@ -594,6 +594,27 @@ msgstr "加密選項"
 msgid "Web clipper options"
 msgstr "Web clipper 選項"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "插入日期時間"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin 匯出目錄"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -610,6 +631,9 @@ msgstr ""
 
 msgid "Check for updates..."
 msgstr "檢查更新..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "匯入"
@@ -1545,9 +1569,6 @@ msgstr ""
 "用於開啟筆記的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
 "的編輯器。"
 
-msgid "Show advanced options"
-msgstr "顯示進階選項"
-
 msgid "Custom TLS certificates"
 msgstr "自訂 TLS 證書"
 
@@ -1727,18 +1748,6 @@ msgstr "您當前沒有任何筆記。通過按一下 (+) 鍵去新增一則筆�
 msgid "Delete these notes?"
 msgstr "刪除這些記事？"
 
-msgid "Log"
-msgstr "日誌"
-
-msgid "Export Debug Report"
-msgstr "匯出除錯報告"
-
-msgid "Encryption Config"
-msgstr "加密設置"
-
-msgid "Configuration"
-msgstr "設置"
-
 msgid "Move to notebook..."
 msgstr "移動至記事本..."
 
@@ -1762,8 +1771,24 @@ msgstr "選擇日期"
 msgid "Confirm"
 msgstr "確認"
 
-msgid "Cancel synchronisation"
-msgstr "取消同步"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "記事本"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "無法修改已加密項目"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "新增記事本"
+
+msgid "Configuration"
+msgstr "設置"
+
+#, fuzzy
+msgid "All notes"
+msgstr "記事"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1800,6 +1825,50 @@ msgstr "新增標籤:"
 
 msgid "Type new tags or select from list"
 msgstr "輸入新標籤，或在清單中選擇"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "設置"
+
+msgid "Encryption Config"
+msgstr "加密設置"
+
+#, fuzzy
+msgid "Tools"
+msgstr "工具"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "狀態"
+
+msgid "Log"
+msgstr "日誌"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "建立新 %s..."
+
+msgid "Export Debug Report"
+msgstr "匯出除錯報告"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 #, fuzzy
 msgid "More information"
@@ -1864,6 +1933,10 @@ msgstr "無法儲存記事本: %s"
 msgid "Edit notebook"
 msgstr "編輯記事本"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "記事本標題:"
+
 msgid "Show all"
 msgstr "顯示全部"
 
@@ -1895,6 +1968,24 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "不支援的圖像類型: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "已更新: %d。"
+
+msgid "View on map"
+msgstr "在地圖上顯示"
+
+msgid "Go to source URL"
+msgstr ""
+
+#, fuzzy
+msgid "Attach..."
+msgstr "搜尋..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "顯示進階選項"
+
 #, fuzzy
 msgid "Take photo"
 msgstr "附加相片"
@@ -1914,23 +2005,18 @@ msgstr "轉換為記事"
 msgid "Convert to todo"
 msgstr "轉換為待辦事項"
 
-msgid "Hide metadata"
-msgstr "隱藏後設資料 (metadata)"
+msgid "Properties"
+msgstr ""
 
-msgid "Show metadata"
-msgstr "顯示後設資料 (metadata)"
-
-msgid "View on map"
-msgstr "在地圖上顯示"
-
-msgid "Go to source URL"
+msgid "Add body"
 msgstr ""
 
 msgid "Edit"
 msgstr "編輯"
 
-msgid "Delete notebook"
-msgstr "刪除記事本"
+#, fuzzy
+msgid "Add title"
+msgstr "標題"
 
 msgid "Login with OneDrive"
 msgstr "以 OneDrive 登錄"
@@ -1938,16 +2024,29 @@ msgstr "以 OneDrive 登錄"
 msgid "Search"
 msgstr "搜尋"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr "您可以點撃 (+) 鍵去新增記事或記事本。點撃側邊欄去檢視現有的記事本。"
+#~ msgid "Cancel synchronisation"
+#~ msgstr "取消同步"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本筆記。"
+#~ msgid "Hide metadata"
+#~ msgstr "隱藏後設資料 (metadata)"
 
-msgid "Welcome"
-msgstr "歡迎"
+#~ msgid "Show metadata"
+#~ msgstr "顯示後設資料 (metadata)"
+
+#~ msgid "Delete notebook"
+#~ msgstr "刪除記事本"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr "您可以點撃 (+) 鍵去新增記事或記事本。點撃側邊欄去檢視現有的記事本。"
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "您當前沒有任何筆記本。通過按一下 (+) 鍵去建立一本筆記。"
+
+#~ msgid "Welcome"
+#~ msgstr "歡迎"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "您可用逗號分隔每個標籤。"

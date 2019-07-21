@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -629,6 +627,27 @@ msgstr "Versleutelingsopties"
 msgid "Web clipper options"
 msgstr "Webclipper-opties"
 
+msgid "Create note from template"
+msgstr ""
+
+msgid "Create to-do from template"
+msgstr ""
+
+#, fuzzy
+msgid "Insert template"
+msgstr "Datum en tijd invoegen"
+
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin-exportmap"
+
+msgid "Refresh templates"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
@@ -644,6 +663,9 @@ msgstr "Voorkeuren…"
 
 msgid "Check for updates..."
 msgstr "Controleren op updates..."
+
+msgid "Templates"
+msgstr ""
 
 msgid "Import"
 msgstr "Importeren"
@@ -1611,9 +1633,6 @@ msgstr ""
 "gebruikt bij het openen van notities. Als er geen wordt opgegeven, dan wordt "
 "getracht de standaard bewerker te achterhalen."
 
-msgid "Show advanced options"
-msgstr "Geavanceerde opties tonen"
-
 msgid "Custom TLS certificates"
 msgstr "Aangepaste TLS-certificaten"
 
@@ -1798,18 +1817,6 @@ msgstr ""
 msgid "Delete these notes?"
 msgstr "Deze notities verwijderen?"
 
-msgid "Log"
-msgstr "Log"
-
-msgid "Export Debug Report"
-msgstr "Foutopsporingsrapportage exporteren"
-
-msgid "Encryption Config"
-msgstr "Versleutelconfiguratie"
-
-msgid "Configuration"
-msgstr "Configuratie"
-
 msgid "Move to notebook..."
 msgstr "Verplaatsen naar notitieboek..."
 
@@ -1832,8 +1839,24 @@ msgstr "Datum kiezen"
 msgid "Confirm"
 msgstr "Bevestigen"
 
-msgid "Cancel synchronisation"
-msgstr "Synchronisatie annuleren"
+#, fuzzy, javascript-format
+msgid "Notebook: %s"
+msgstr "Notitieboeken"
+
+#, fuzzy
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Versleutelde items kunnen niet worden bewerkt"
+
+#, fuzzy
+msgid "New Notebook"
+msgstr "Nieuw notitieboek"
+
+msgid "Configuration"
+msgstr "Configuratie"
+
+#, fuzzy
+msgid "All notes"
+msgstr "notitie"
 
 msgid "Checking... Please wait."
 msgstr "Controleren… Even geduld."
@@ -1874,6 +1897,50 @@ msgstr "Nieuwe labels:"
 
 msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"In order to use file system synchronization your permission to write to "
+"external storage is required."
+msgstr ""
+
+#, fuzzy
+msgid "Information"
+msgstr "Meer informatie"
+
+msgid "Encryption Config"
+msgstr "Versleutelconfiguratie"
+
+#, fuzzy
+msgid "Tools"
+msgstr "E&xtra"
+
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+msgid "Log"
+msgstr "Log"
+
+#, fuzzy
+msgid "Creating report..."
+msgstr "Bezig met creëren van nieuw(e) %s..."
+
+msgid "Export Debug Report"
+msgstr "Foutopsporingsrapportage exporteren"
+
+msgid "Fixing search index..."
+msgstr ""
+
+msgid "Fix search index"
+msgstr ""
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some times depending on the number of notes."
+msgstr ""
 
 msgid "More information"
 msgstr "Meer informatie"
@@ -1940,6 +2007,10 @@ msgstr "Het notitieboek kan niet worden opgeslagen: %s"
 msgid "Edit notebook"
 msgstr "Notitieboek bewerken"
 
+#, fuzzy
+msgid "Enter notebook title"
+msgstr "Titel van notitieboek:"
+
 msgid "Show all"
 msgstr "Alles tonen"
 
@@ -1971,6 +2042,24 @@ msgstr "Links met protocol “%s” worden niet ondersteund"
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "Bijgewerkt: %d."
+
+msgid "View on map"
+msgstr "Tonen op kaart"
+
+msgid "Go to source URL"
+msgstr "Ga naar bron-URL"
+
+#, fuzzy
+msgid "Attach..."
+msgstr "Zoeken..."
+
+#, fuzzy
+msgid "Choose an option"
+msgstr "Geavanceerde opties tonen"
+
 msgid "Take photo"
 msgstr "Foto maken"
 
@@ -1989,23 +2078,19 @@ msgstr "Omzetten naar notitie"
 msgid "Convert to todo"
 msgstr "Omzetten naar taak"
 
-msgid "Hide metadata"
-msgstr "Metagegevens verbergen"
+#, fuzzy
+msgid "Properties"
+msgstr "Eigenschappen van notitie"
 
-msgid "Show metadata"
-msgstr "Metagegevens tonen"
-
-msgid "View on map"
-msgstr "Tonen op kaart"
-
-msgid "Go to source URL"
-msgstr "Ga naar bron-URL"
+msgid "Add body"
+msgstr ""
 
 msgid "Edit"
 msgstr "Bewerken"
 
-msgid "Delete notebook"
-msgstr "Notitieboek verwijderen"
+#, fuzzy
+msgid "Add title"
+msgstr "titel"
 
 msgid "Login with OneDrive"
 msgstr "Inloggen met OneDrive"
@@ -2013,20 +2098,37 @@ msgstr "Inloggen met OneDrive"
 msgid "Search"
 msgstr "Zoeken"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"Druk op de knop (+) om een nieuwe notitie of notitieboek te creëren. Klik op "
-"het zijmenu om bestaande notitieboeken te openen."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Toestemming om de camera te gebruiken"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr ""
-"Je hebt momenteel geen notitieboek. Creëer een notitieboek door de drukken "
-"op de knop (+)."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Synchronisatie annuleren"
 
-msgid "Welcome"
-msgstr "Welkom"
+#~ msgid "Hide metadata"
+#~ msgstr "Metagegevens verbergen"
+
+#~ msgid "Show metadata"
+#~ msgstr "Metagegevens tonen"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Notitieboek verwijderen"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Druk op de knop (+) om een nieuwe notitie of notitieboek te creëren. Klik "
+#~ "op het zijmenu om bestaande notitieboeken te openen."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Je hebt momenteel geen notitieboek. Creëer een notitieboek door de "
+#~ "drukken op de knop (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Welkom"
 
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Scheidt elk label met een komma."
