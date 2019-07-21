@@ -321,7 +321,7 @@ const scriptHtml = `
 
 const rootDir = dirname(__dirname);
 
-function markdownToHtml(md) {
+function markdownToHtml(md, templateParams) {
 	const MarkdownIt = require('markdown-it');
 
 	const markdownIt = new MarkdownIt({
@@ -422,7 +422,7 @@ function markdownToHtml(md) {
 		}
 	});
 
-	return headerHtml + markdownIt.render(md) + scriptHtml + footerHtml;
+	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
@@ -448,31 +448,31 @@ function tocHtml() {
 	return tocHtml_;
 }
 
-function renderMdToHtml(md, targetPath, params) {
+function renderMdToHtml(md, targetPath, templateParams) {
 	// Remove the header because it's going to be added back as HTML
 	md = md.replace(/# Joplin\n/, '');
 
-	params.baseUrl = 'https://joplinapp.org';
-	params.imageBaseUrl = params.baseUrl + '/images';
-	params.tocHtml = tocHtml();
+	templateParams.baseUrl = 'https://joplinapp.org';
+	templateParams.imageBaseUrl = templateParams.baseUrl + '/images';
+	templateParams.tocHtml = tocHtml();
 
 	const title = [];
 
-	if (!params.title) {
+	if (!templateParams.title) {
 		title.push('Joplin - an open source note taking and to-do application with synchronisation capabilities');
 	} else {
-		title.push(params.title);
+		title.push(templateParams.title);
 		title.push('Joplin');
 	}
 
-	params.pageTitle = title.join(' | ');
-	const html = Mustache.render(markdownToHtml(md), params);
+	templateParams.pageTitle = title.join(' | ');
+	const html = markdownToHtml(md, templateParams);
 	fs.writeFileSync(targetPath, html);
 }
 
-function renderFileToHtml(sourcePath, targetPath, params) {
+function renderFileToHtml(sourcePath, targetPath, templateParams) {
 	const md = fs.readFileSync(sourcePath, 'utf8');
-	return renderMdToHtml(md, targetPath, params);
+	return renderMdToHtml(md, targetPath, templateParams);
 }
 
 function makeHomePageMd() {

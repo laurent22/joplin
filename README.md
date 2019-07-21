@@ -326,14 +326,14 @@ Hours:
 Details:
 ```
 
-When creating a new note you will now be prompted to insert a template that contains the above text (and {{date}} replaced with today's date). Templates can also be inserted from the menu (File->Templates).
+When creating a new note you will now be prompted to insert a template that contains the above text (and `{{date}}` replaced with today's date). Templates can also be inserted from the menu (File->Templates).
 
 The currently supported template variables are:
 | Variable | Description | Example |
-| {{date}} | Today's date formatted based on the settings format | 2019-01-01 |
-| {{time}} | Current time formatted based on the settings format | 13:00 |
-| {{datetime}} | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
-| {{#custom_datetime}} | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | {{#custom_datetime}}M d{{/custom_datetime}} |
+| `{{date}}` | Today's date formatted based on the settings format | 2019-01-01 |
+| `{{time}}` | Current time formatted based on the settings format | 13:00 |
+| `{{datetime}}` | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
+| `{{#custom_datetime}}` | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | `{{#custom_datetime}}`M d`{{/custom_datetime}}` |
 
 # Searching
 
