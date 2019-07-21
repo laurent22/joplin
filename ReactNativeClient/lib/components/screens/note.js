@@ -803,6 +803,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
 					placeholder={_('Add body')}
+					placeholderTextColor={theme.colorFaded}
 				/>
 			);
 		}
@@ -850,6 +851,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onChangeText={this.title_changeText}
 					selectionColor={theme.textSelectionColor}
 					placeholder={_('Add title')}
+					placeholderTextColor={theme.colorFaded}
 				/>
 			</View>
 		);
