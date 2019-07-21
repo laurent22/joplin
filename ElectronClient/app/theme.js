@@ -231,6 +231,11 @@ function addExtraStyles(style) {
 		marginTop: 20,
 	}
 
+	style.buttonIconStyle = {
+		color: style.color,
+		marginRight: 6,
+	}
+
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
 	style.dropdownList = Object.assign({}, style.inputStyle);

@@ -355,7 +355,7 @@ class ConfigScreenComponent extends React.Component {
 		return (
 			<div style={style}>
 				<div style={buttonBarStyle}>
-					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}>{'⬅ ' + _('Cancel')}</button>
+					<button onClick={() => {this.onCancelClick()}} style={buttonStyle}><i style={theme.buttonIconStyle} className={"fa fa-chevron-left"}></i>{_('Cancel')}</button>
 					<button disabled={!hasChanges} onClick={() => {this.onSaveClick()}} style={buttonStyleApprove}>{_('OK')}</button>
 					<button disabled={!hasChanges} onClick={() => {this.onApplyClick()}} style={buttonStyleApprove}>{_('Apply')}</button>
 				</div>
