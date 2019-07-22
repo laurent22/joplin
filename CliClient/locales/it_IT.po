@@ -375,7 +375,7 @@ msgid ""
 "be deleted."
 msgstr ""
 "Eliminare taccuino? Anche tutte le note e cartelle di questo taccuino "
-"saranno eliminati."
+"saranno eliminate."
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Elimina le note che corrispondono a <note-pattern>."
