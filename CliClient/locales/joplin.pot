@@ -470,6 +470,10 @@ msgstr ""
 msgid "Fatal error:"
 msgstr ""
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -894,6 +898,9 @@ msgstr ""
 msgid "Set alarm:"
 msgstr ""
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -926,6 +933,9 @@ msgid "URL"
 msgstr ""
 
 msgid "Note History"
+msgstr ""
+
+msgid "Markup"
 msgstr ""
 
 msgid "Previous versions of this note"
@@ -1080,17 +1090,6 @@ msgid "Delete"
 msgstr ""
 
 msgid "Rename"
-msgstr ""
-
-msgid "Notebooks"
-msgstr ""
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr ""
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
 msgstr ""
 
 msgid "Please select where the sync status should be exported to"
@@ -1354,6 +1353,12 @@ msgid "Light"
 msgstr ""
 
 msgid "Dark"
+msgstr ""
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1686,7 +1691,18 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr ""
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr ""
+
 msgid "All notes"
+msgstr ""
+
+msgid "Notebooks"
 msgstr ""
 
 msgid "Checking... Please wait."
@@ -1726,7 +1742,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1759,7 +1775,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 msgid "More information"

@@ -534,6 +534,10 @@ msgstr "Scrivi `joplin help` per informazioni sull'uso."
 msgid "Fatal error:"
 msgstr "Errore fatale:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -1003,6 +1007,9 @@ msgstr "Rinomina Tag:"
 msgid "Set alarm:"
 msgstr "Imposta allarme:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Disposizione"
 
@@ -1038,6 +1045,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "Cronologia nota"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Versione precedente di questa nota"
@@ -1200,17 +1210,6 @@ msgstr "Elimina"
 
 msgid "Rename"
 msgstr "Rinomina"
-
-msgid "Notebooks"
-msgstr "Taccuini"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Decrittografia Elementi: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Recupero risorse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1495,6 +1494,12 @@ msgstr "Chiaro"
 
 msgid "Dark"
 msgstr "Scuro"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Cose da fare incomplete in cima alla lista"
@@ -1850,9 +1855,20 @@ msgstr "Nuovo taccuino"
 msgid "Configuration"
 msgstr "Configurazione"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Decrittografia Elementi: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Recupero risorse: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "Eliminare le note?"
+
+msgid "Notebooks"
+msgstr "Taccuini"
 
 msgid "Checking... Please wait."
 msgstr "Controllo... Attendere per favore."
@@ -1900,7 +1916,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1937,7 +1953,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 msgid "More information"

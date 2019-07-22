@@ -501,6 +501,10 @@ msgstr "Kullanım bilgisi için `joplin help` yazın."
 msgid "Fatal error:"
 msgstr "Büyük hata:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -976,6 +980,9 @@ msgstr "Etiketi yeniden adlandır:"
 msgid "Set alarm:"
 msgstr "Alarm kur:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Düzen"
 
@@ -1013,6 +1020,9 @@ msgstr "URL"
 #, fuzzy
 msgid "Note History"
 msgstr "Not listesi"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1173,17 +1183,6 @@ msgstr "Sil"
 
 msgid "Rename"
 msgstr "Yeniden adlandır"
-
-msgid "Notebooks"
-msgstr "Not defterleri"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Şifresi çözülenler: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Kaynaklar alınıyor: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
@@ -1462,6 +1461,12 @@ msgstr "Aydınlık"
 
 msgid "Dark"
 msgstr "Karanlık"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tamamlanmamış yap-list yukarıda"
@@ -1817,9 +1822,20 @@ msgstr "Yeni not defteri"
 msgid "Configuration"
 msgstr "Yapılandırma"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Şifresi çözülenler: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Kaynaklar alınıyor: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "not"
+
+msgid "Notebooks"
+msgstr "Not defterleri"
 
 msgid "Checking... Please wait."
 msgstr "Kontrol ediliyor... Lütfen bekleyin."
@@ -1865,7 +1881,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1902,7 +1918,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

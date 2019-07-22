@@ -530,6 +530,12 @@ msgstr "Tapez `Joplin help` pour afficher l'aide."
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+"Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
+"sur %s"
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet."
@@ -999,6 +1005,10 @@ msgstr "Renommer étiquette :"
 msgid "Set alarm:"
 msgstr "Régler alarme :"
 
+#, fuzzy
+msgid "Template file:"
+msgstr "Modèles"
+
 msgid "Layout"
 msgstr "Disposition"
 
@@ -1035,6 +1045,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "Historique des notes"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Versions précédentes de cette note"
@@ -1199,17 +1212,6 @@ msgstr "Supprimer"
 
 msgid "Rename"
 msgstr "Renommer"
-
-msgid "Notebooks"
-msgstr "Carnets"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Déchiffrement des objets : %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Tél. ressources : %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1494,6 +1496,12 @@ msgstr "Clair"
 
 msgid "Dark"
 msgstr "Sombre"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
@@ -1848,8 +1856,19 @@ msgstr "Nouveau carnet"
 msgid "Configuration"
 msgstr "Configuration"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Déchiffrement des objets : %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Tél. ressources : %d/%d"
+
 msgid "All notes"
 msgstr "Toutes les notes"
+
+msgid "Notebooks"
+msgstr "Carnets"
 
 msgid "Checking... Please wait."
 msgstr "Vérification... Veuillez attendre."
@@ -1894,8 +1913,9 @@ msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
 msgid "Warning"
 msgstr "Avertissement"
 
+#, fuzzy
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 "Pour utiliser la synchronisation par système de fichiers, votre autorisation "
@@ -1928,9 +1948,10 @@ msgstr "Correction de l'index..."
 msgid "Fix search index"
 msgstr "Corriger index de recherche"
 
+#, fuzzy
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 "Utilisez ceci pour corriger l'index du moteur de recherche en cas de "
 "problème. Cela peut prendre assez longtemps selon le nombre de notes."
@@ -2428,11 +2449,6 @@ msgstr "Chercher"
 #, fuzzy
 #~ msgid "use <notebook>"
 #~ msgstr "Nouveau carnet"
-
-#~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr ""
-#~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
-#~ "sur %s"
 
 #~ msgid "Synchronizing with directory \"%s\""
 #~ msgstr "Synchronisation avec dossier \"%s\""

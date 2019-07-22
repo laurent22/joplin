@@ -476,6 +476,10 @@ msgstr "Tastați `joplin help` pentru informații de utilizare."
 msgid "Fatal error:"
 msgstr "Eroare fatală:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -918,6 +922,9 @@ msgstr "Redenumiți eticheta:"
 msgid "Set alarm:"
 msgstr "Setați alarma:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -952,6 +959,9 @@ msgstr ""
 #, fuzzy
 msgid "Note History"
 msgstr "Caiete de notițe"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1107,17 +1117,6 @@ msgstr "Ștergeți"
 
 msgid "Rename"
 msgstr "Redenumiți"
-
-msgid "Notebooks"
-msgstr "Caiete de notițe"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Se decriptează itemi: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Resurse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1384,6 +1383,12 @@ msgstr "Deschisă"
 
 msgid "Dark"
 msgstr "Închisă"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr ""
@@ -1727,9 +1732,20 @@ msgstr "Adăugați un nou caiet de notițe"
 msgid "Configuration"
 msgstr "Configurare"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Se decriptează itemi: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Resurse: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "notiță"
+
+msgid "Notebooks"
+msgstr "Caiete de notițe"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1769,7 +1785,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1806,7 +1822,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

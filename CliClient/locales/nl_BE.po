@@ -531,6 +531,10 @@ msgstr "Toont gebruiksinformatie."
 msgid "Fatal error:"
 msgstr "Fatale fout:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "De applicatie is geauthenticeerd - U kan deze tab sluiten."
@@ -1001,6 +1005,9 @@ msgstr "Hernoem"
 msgid "Set alarm:"
 msgstr "Stel melding in:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Layout"
 
@@ -1039,6 +1046,9 @@ msgstr ""
 #, fuzzy
 msgid "Note History"
 msgstr "Notitieboeken"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1201,17 +1211,6 @@ msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Hernoem"
-
-msgid "Notebooks"
-msgstr "Notitieboeken"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Opgehaalde items: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Middelen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Selecteer waar de synchronisatie status naar geëxporteerd moet worden"
@@ -1495,6 +1494,12 @@ msgstr "Licht"
 
 msgid "Dark"
 msgstr "Donker"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 #, fuzzy
 msgid "Uncompleted to-dos on top"
@@ -1857,9 +1862,20 @@ msgstr "Nieuw notitieboek"
 msgid "Configuration"
 msgstr "Configuratie"
 
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Opgehaalde items: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Middelen: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "Nieuwe notitie"
+
+msgid "Notebooks"
+msgstr "Notitieboeken"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1901,7 +1917,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1938,7 +1954,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

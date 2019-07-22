@@ -518,6 +518,10 @@ msgstr "사용법 정보를 알고 싶다면 `joplin help`를 입력하세요."
 msgid "Fatal error:"
 msgstr "치명적인 오류:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "애플리케이션이 허가되었습니다 - 브라우저 탭을 종료하셔도 됩니다."
@@ -985,6 +989,9 @@ msgstr "태그 이름 바꾸기:"
 msgid "Set alarm:"
 msgstr "알람 설정:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "배치"
 
@@ -1020,6 +1027,9 @@ msgstr "URL"
 #, fuzzy
 msgid "Note History"
 msgstr "노트북"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1179,17 +1189,6 @@ msgstr "삭제"
 
 msgid "Rename"
 msgstr "이름 바꾸기"
-
-msgid "Notebooks"
-msgstr "노트북"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "복호화 항목: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "리소스 가져오는 중: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
@@ -1465,6 +1464,12 @@ msgstr "밝음"
 
 msgid "Dark"
 msgstr "어두움"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "완료되지 않은 '할 일'을 맨 위에"
@@ -1822,9 +1827,20 @@ msgstr "새 노트북"
 msgid "Configuration"
 msgstr "설정"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "복호화 항목: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "리소스 가져오는 중: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "노트"
+
+msgid "Notebooks"
+msgstr "노트북"
 
 msgid "Checking... Please wait."
 msgstr "확인 중입니다... 잠시만 기다리세요."
@@ -1870,7 +1886,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1907,7 +1923,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

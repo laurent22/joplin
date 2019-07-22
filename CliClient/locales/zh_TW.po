@@ -501,6 +501,10 @@ msgstr "鍵入 `joplin help` 檢視使用說明。"
 msgid "Fatal error:"
 msgstr "嚴重錯誤:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "應用程式已取得權限 - 您現在可以關閉此瀏覽器分頁。"
@@ -960,6 +964,9 @@ msgstr "重新命名標籤:"
 msgid "Set alarm:"
 msgstr "設置提醒:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "頁面佈局"
 
@@ -995,6 +1002,9 @@ msgstr ""
 #, fuzzy
 msgid "Note History"
 msgstr "記事本"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1150,17 +1160,6 @@ msgstr "刪除"
 
 msgid "Rename"
 msgstr "重新命名"
-
-msgid "Notebooks"
-msgstr "記事本"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "正在解密項目: %d/%d 項"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "資源: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "請選擇將同步狀態導出到的位置"
@@ -1433,6 +1432,12 @@ msgstr "光亮"
 
 msgid "Dark"
 msgstr "暗黑"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "最上方顯示未完成的待辦事項"
@@ -1786,9 +1791,20 @@ msgstr "新增記事本"
 msgid "Configuration"
 msgstr "設置"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "正在解密項目: %d/%d 項"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "資源: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "記事"
+
+msgid "Notebooks"
+msgstr "記事本"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1830,7 +1846,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1867,7 +1883,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

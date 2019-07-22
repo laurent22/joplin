@@ -499,6 +499,10 @@ msgstr "输入 `joplin help` 获取用量信息。"
 msgid "Fatal error:"
 msgstr "严重错误："
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "授权成功 - 您可以关闭此页面了。"
@@ -946,6 +950,9 @@ msgstr "重命名标签："
 msgid "Set alarm:"
 msgstr "设置提醒："
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "布局"
 
@@ -979,6 +986,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "笔记历史"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "此笔记的早期版本"
@@ -1138,17 +1148,6 @@ msgstr "删除"
 
 msgid "Rename"
 msgstr "重命名"
-
-msgid "Notebooks"
-msgstr "笔记本"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "正在解密项目：%d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "正在获取资源：%d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
@@ -1424,6 +1423,12 @@ msgstr "明亮"
 
 msgid "Dark"
 msgstr "深邃"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "将未完成的待办事项置顶"
@@ -1770,9 +1775,20 @@ msgstr "新建笔记本"
 msgid "Configuration"
 msgstr "配置"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "正在解密项目：%d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "正在获取资源：%d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "笔记"
+
+msgid "Notebooks"
+msgstr "笔记本"
 
 msgid "Checking... Please wait."
 msgstr "正在检查... 请稍候。"
@@ -1818,7 +1834,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1855,7 +1871,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 msgid "More information"

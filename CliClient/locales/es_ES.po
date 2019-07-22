@@ -533,6 +533,10 @@ msgstr "Escriba `joplin help` para mostrar información de uso."
 msgid "Fatal error:"
 msgstr "Error fatal:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -1001,6 +1005,9 @@ msgstr "Renombrar etiqueta:"
 msgid "Set alarm:"
 msgstr "Ajustar alarma:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Diseño"
 
@@ -1037,6 +1044,9 @@ msgid "Note History"
 msgstr ""
 "Historial\n"
 " de notas"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Versiones anteriores de esta nota"
@@ -1198,17 +1208,6 @@ msgstr "Eliminar"
 
 msgid "Rename"
 msgstr "Renombrar"
-
-msgid "Notebooks"
-msgstr "Libretas"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Descifrando elementos: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Obteniendo refuersos: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione a dónde se debería exportar el estado de sincronización"
@@ -1495,6 +1494,12 @@ msgstr "Claro"
 
 msgid "Dark"
 msgstr "Oscuro"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tareas incompletas al inicio de las listas"
@@ -1848,9 +1853,20 @@ msgstr "Nueva libreta"
 msgid "Configuration"
 msgstr "Configuración"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Descifrando elementos: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Obteniendo refuersos: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "¿Desea eliminar notas?"
+
+msgid "Notebooks"
+msgstr "Libretas"
 
 msgid "Checking... Please wait."
 msgstr "Comprobando... Por favor espere."
@@ -1896,7 +1912,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1933,7 +1949,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

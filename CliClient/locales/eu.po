@@ -529,6 +529,10 @@ msgstr "Erakutsi erabilera datuak."
 msgid "Fatal error:"
 msgstr "Aio! Agur! :_( "
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Aplikazioak baimena hartu du - Orain fitxa hau zarratu dezakezu."
@@ -999,6 +1003,9 @@ msgstr "Berrizendatu"
 msgid "Set alarm:"
 msgstr "Ezarri alarma:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Diseinua"
 
@@ -1035,6 +1042,9 @@ msgstr ""
 #, fuzzy
 msgid "Note History"
 msgstr "Koadernoak"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr ""
@@ -1196,17 +1206,6 @@ msgstr "Ezabatu"
 
 msgid "Rename"
 msgstr "Berrizendatu"
-
-msgid "Notebooks"
-msgstr "Koadernoak"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Itemak eskuratuta: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Baliabideak: %d/%d"
 
 #, fuzzy
 msgid "Please select where the sync status should be exported to"
@@ -1494,6 +1493,12 @@ msgstr "Argia"
 
 msgid "Dark"
 msgstr "Iluna"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 #, fuzzy
 msgid "Uncompleted to-dos on top"
@@ -1854,9 +1859,20 @@ msgstr "Koaderno berria"
 msgid "Configuration"
 msgstr "Konfigurazioa"
 
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Itemak eskuratuta: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Baliabideak: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "Ohar berria"
+
+msgid "Notebooks"
+msgstr "Koadernoak"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1898,7 +1914,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1935,7 +1951,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

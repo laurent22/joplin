@@ -531,6 +531,10 @@ msgstr "Въведете `joplin help` за информация за употр
 msgid "Fatal error:"
 msgstr "Фатална грешка:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Приложението бе оторизирано - може да затворите таба в браузъра."
@@ -999,6 +1003,9 @@ msgstr "Преименуване на таг:"
 msgid "Set alarm:"
 msgstr "Задаване на аларма:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Разположеня"
 
@@ -1035,6 +1042,9 @@ msgstr "Уеб адрес (URL)"
 
 msgid "Note History"
 msgstr "История на бележката"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Предишни версии на бележката"
@@ -1199,17 +1209,6 @@ msgstr "Изтрий"
 
 msgid "Rename"
 msgstr "Преименувай"
-
-msgid "Notebooks"
-msgstr "Тетрадки"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Декриптиране на обекти: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Взимане на ресурси: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Моля изберете къде да бъде експортиран статуса на синхронизацията"
@@ -1492,6 +1491,12 @@ msgstr "Светла"
 
 msgid "Dark"
 msgstr "Тъмна"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Неизпълнените задачи най-отгоре"
@@ -1850,9 +1855,20 @@ msgstr "Нова тетрадка"
 msgid "Configuration"
 msgstr "Настройки"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Декриптиране на обекти: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Взимане на ресурси: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "бележка"
+
+msgid "Notebooks"
+msgstr "Тетрадки"
 
 msgid "Checking... Please wait."
 msgstr "Проверявам... Моля изчакайте."
@@ -1899,7 +1915,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1936,7 +1952,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 msgid "More information"

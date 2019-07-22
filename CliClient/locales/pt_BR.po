@@ -527,6 +527,10 @@ msgstr "Digite 'joplin help' para informações de uso."
 msgid "Fatal error:"
 msgstr "Erro fatal:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -994,6 +998,9 @@ msgstr "Renomear tag:"
 msgid "Set alarm:"
 msgstr "Definir alarme:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Layout"
 
@@ -1028,6 +1035,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "Histórico da Nota"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Versões anteriores desta nota"
@@ -1189,17 +1199,6 @@ msgstr "Excluir"
 
 msgid "Rename"
 msgstr "Renomear"
-
-msgid "Notebooks"
-msgstr "Cadernos"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Decriptando itens: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Buscando recursos: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1483,6 +1482,12 @@ msgstr "Light"
 
 msgid "Dark"
 msgstr "Dark"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tarefas incompletas no topo"
@@ -1836,9 +1841,20 @@ msgstr "Novo caderno"
 msgid "Configuration"
 msgstr "Configuração"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Decriptando itens: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Buscando recursos: %d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "Excluir notas?"
+
+msgid "Notebooks"
+msgstr "Cadernos"
 
 msgid "Checking... Please wait."
 msgstr "Verificando... Por favor aguarde."
@@ -1885,7 +1901,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1922,7 +1938,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 #, fuzzy

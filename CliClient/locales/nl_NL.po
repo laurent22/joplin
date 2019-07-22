@@ -529,6 +529,10 @@ msgstr "Typ `joplin help` voor meer informatie over het gebruik."
 msgid "Fatal error:"
 msgstr "Fatale fout:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -998,6 +1002,9 @@ msgstr "Labelnaam wijzigen:"
 msgid "Set alarm:"
 msgstr "Alarm instellen:"
 
+msgid "Template file:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Indeling"
 
@@ -1035,6 +1042,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "Notitiegeschiedenis"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Vorige versies van deze notitie"
@@ -1200,17 +1210,6 @@ msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Naam wijzigen"
-
-msgid "Notebooks"
-msgstr "Notitieboeken"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Bezig met ontsleutelen van items: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Bronnen ophalen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Kies waar de synchronisatiestatus naar moet worden geëxporteerd"
@@ -1495,6 +1494,12 @@ msgstr "Licht"
 
 msgid "Dark"
 msgstr "Donker"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
@@ -1854,9 +1859,20 @@ msgstr "Nieuw notitieboek"
 msgid "Configuration"
 msgstr "Configuratie"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Bezig met ontsleutelen van items: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Bronnen ophalen: %d/%d"
+
 #, fuzzy
 msgid "All notes"
 msgstr "notitie"
+
+msgid "Notebooks"
+msgstr "Notitieboeken"
 
 msgid "Checking... Please wait."
 msgstr "Controleren… Even geduld."
@@ -1902,7 +1918,7 @@ msgid "Warning"
 msgstr ""
 
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
@@ -1939,7 +1955,7 @@ msgstr ""
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 
 msgid "More information"

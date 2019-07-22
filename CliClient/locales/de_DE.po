@@ -544,6 +544,10 @@ msgstr "Gib `joplin help` ein um die Nutzungsstatistik anzuzeigen."
 msgid "Fatal error:"
 msgstr "Schwerwiegender Fehler:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -1014,6 +1018,10 @@ msgstr "Schlagwort umbenennen:"
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
 
+#, fuzzy
+msgid "Template file:"
+msgstr "Vorlagen"
+
 msgid "Layout"
 msgstr "Layout"
 
@@ -1051,6 +1059,9 @@ msgstr "URL"
 
 msgid "Note History"
 msgstr "Notizen-Verlauf"
+
+msgid "Markup"
+msgstr ""
 
 msgid "Previous versions of this note"
 msgstr "Vorherige Version von dieser Notiz"
@@ -1215,17 +1226,6 @@ msgstr "Löschen"
 
 msgid "Rename"
 msgstr "Umbenennen"
-
-msgid "Notebooks"
-msgstr "Notizbücher"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Entschlüsselte Objekte: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Ressourcen abrufen: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1511,6 +1511,12 @@ msgstr "Hell"
 
 msgid "Dark"
 msgstr "Dunkel"
+
+msgid "Solarized Light"
+msgstr ""
+
+msgid "Solarized Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"
@@ -1869,8 +1875,19 @@ msgstr "Neues Notizbuch"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Entschlüsselte Objekte: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Ressourcen abrufen: %d/%d"
+
 msgid "All notes"
 msgstr "Alle Notizen"
+
+msgid "Notebooks"
+msgstr "Notizbücher"
 
 msgid "Checking... Please wait."
 msgstr "Überprüfe… Bitte warten."
@@ -1916,8 +1933,9 @@ msgstr "Neues Schlagwort eingeben oder aus der Liste auswählen"
 msgid "Warning"
 msgstr "Warnung"
 
+#, fuzzy
 msgid ""
-"In order to use file system synchronization your permission to write to "
+"In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 "Deine Erlaubnis auf externen Speicher zu schreiben ist notwending um "
@@ -1950,9 +1968,10 @@ msgstr "Repariere Such-Index..."
 msgid "Fix search index"
 msgstr "Repariere Such-Index"
 
+#, fuzzy
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
-"may take some times depending on the number of notes."
+"may take a long time depending on the number of notes."
 msgstr ""
 "Verwende das um den Such-Index wiederherzustellen, wenn es ein Problem mit "
 "der Suche gibt. Je nachdem wieviele Notizen es gibt, kann dieser Prozess "
