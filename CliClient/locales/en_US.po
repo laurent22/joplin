@@ -1803,13 +1803,10 @@ msgstr ""
 msgid "Fix search index"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take some time depending on the number of notes."
 
 msgid "More information"
 msgstr ""
