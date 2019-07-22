@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "Per cancellare un'etichetta, togli l'etichetta associata alle note."
+msgstr "Per eliminare un'etichetta, togli l'etichetta dalle note a cui è associata."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Per favore seleziona la nota o il taccuino da eliminare."
@@ -49,7 +49,7 @@ msgid "y"
 msgstr "s"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Cancellazione della sincronizzazione in background... Attendere prego."
+msgstr "Annullamento della sincronizzazione in background... Attendere prego."
 
 #, javascript-format
 msgid "No such command: %s"
@@ -142,7 +142,7 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Avvio decrittazione ... Attendere prego, ci potrebbero volere diversi minuti "
+"Avvio decrittazione... Attendere prego, ci potrebbero volere diversi minuti "
 "per la decriptazione."
 
 msgid "Completed decryption."
@@ -191,7 +191,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Esporta i dati da Joplin nella directory selezionata. Come impostazione "
+"Esporta i dati da Joplin nella cartella selezionata. Come impostazione "
 "predefinita verrà esportato il database completo, inclusi i taccuini, note, "
 "etichette e risorse."
 
@@ -375,7 +375,7 @@ msgid ""
 "be deleted."
 msgstr ""
 "Eliminare taccuino? Anche tutte le note e cartelle di questo taccuino "
-"saranno cancellati."
+"saranno eliminate."
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Elimina le note che corrispondono a <note-pattern>."
@@ -466,7 +466,7 @@ msgid "Downloading resources..."
 msgstr "Scaricamento risorse…"
 
 msgid "Cancelling... Please wait."
-msgstr "Cancellazione... Attendere per favore."
+msgstr "Annullamento... Attendere per favore."
 
 #, fuzzy
 msgid ""
@@ -555,9 +555,9 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "Per favore apri il seguente URL nel tuo browser per autenticare "
-"l'applicazione. L'applicazione creerà una directory in \"Apps/Joplin\" e "
-"leggerà/scriverà file solo in questa directory. Non avrà accesso a nessun "
-"file all'esterno di questa directory o ad alcun dato personale. Nessun dato "
+"l'applicazione. L'applicazione creerà una cartella in \"Apps/Joplin\" e "
+"leggerà/scriverà file solo in questa cartella. Non avrà accesso a nessun "
+"file all'esterno di questa cartella o ad alcun dato personale. Nessun dato "
 "verrà condiviso con terze parti."
 
 msgid "Search:"
@@ -776,7 +776,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 msgid "Current version is up-to-date."
 msgstr "La versione attuale è aggiornata."
@@ -1196,7 +1196,7 @@ msgid ""
 msgstr ""
 "Eliminare taccuino \"%s\"?\n"
 "\n"
-"Anche tutte le note e cartelle di questo taccuino saranno cancellati."
+"Anche tutte le note e cartelle di questo taccuino saranno eliminati."
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
@@ -1246,7 +1246,7 @@ msgstr "Eliminare la nota \"%s\"?"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Cancellare queste %d note?"
+msgstr "Eliminare queste %d note?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
@@ -1350,7 +1350,7 @@ msgid "Fetched items: %d/%d."
 msgstr "Elementi recuperati: %d/%d."
 
 msgid "Cancelling..."
-msgstr "Cancellazione..."
+msgstr "Annullamento..."
 
 #, javascript-format
 msgid "Completed: %s"
@@ -1790,7 +1790,7 @@ msgstr "In conflitto: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr "Da cancellare: %d"
+msgstr "Da eliminare: %d"
 
 msgid "Folders"
 msgstr "Cartelle"
@@ -1816,7 +1816,7 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
 
 msgid "Delete these notes?"
-msgstr "Cancellare queste note?"
+msgstr "Eliminare queste note?"
 
 msgid "Move to notebook..."
 msgstr "Sposta sul Taccuino..."
@@ -2121,7 +2121,7 @@ msgstr "Cerca"
 #~ msgstr "Permesso di usare la fotocamera"
 
 #~ msgid "Cancel synchronisation"
-#~ msgstr "Cancella la sincronizzazione"
+#~ msgstr "Annulla la sincronizzazione"
 
 #~ msgid "Hide metadata"
 #~ msgstr "Nascondi i Metadati"
@@ -2130,7 +2130,7 @@ msgstr "Cerca"
 #~ msgstr "Mostra i metadati"
 
 #~ msgid "Delete notebook"
-#~ msgstr "Cancella Taccuino"
+#~ msgstr "Elimina Taccuino"
 
 #~ msgid ""
 #~ "Click on the (+) button to create a new note or notebook. Click on the "
@@ -2231,7 +2231,7 @@ msgstr "Cerca"
 #~ msgstr "Modifica la nota selezionata"
 
 #~ msgid "Cancel the current command."
-#~ msgstr "Cancella il comando corrente."
+#~ msgstr "Annulla il comando corrente."
 
 #~ msgid "Delete the currently selected note or notebook."
 #~ msgstr "Elimina la nota o il taccuino selezionato."
@@ -2280,4 +2280,4 @@ msgstr "Cerca"
 #~ msgstr "Eliminare il taccuino?"
 
 #~ msgid "File system synchronisation target directory"
-#~ msgstr "Directory di destinazione per la sincronizzazione nel file system"
+#~ msgstr "Cartella di destinazione per la sincronizzazione nel file system"
