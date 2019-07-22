@@ -74,27 +74,24 @@ describe('pathUtils', function() {
 	});
 
 	it('should create correct fileURL syntax', async (done) => {
-		const platform = process.platform;
-		let testCases = [];
+		const testCases_win32 = [
+			['C:\\handle\\space test', 'file:///C:/handle/space+test'],
+			['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
+			['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],				
+		];
+		const testCases_unixlike = [
+			['/handle/space test', 'file:///handle/space+test'],
+			['/escapeplus/+', 'file:///escapeplus/%2B'],
+			['/handle/single quote\'', 'file:///handle/single+quote%27'],
+		];
 
-		if (platform === 'win32') {
-			testCases = [
-				['C:\\handle\\space test', 'file:///C:/handle/space+test'],
-				['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
-				['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],				
-			];
-		} else {
-			testCases = [
-				['/handle/space test', 'file:///handle/space+test'],
-				['/escapeplus/+', 'file:///escapeplus/%2B'],
-				['/handle/single quote\'', 'file:///handle/single+quote%27'],
-			];
-		}
-
-
-		for (let i = 0; i < testCases.length; i++) {
-			const t = testCases[i];
-			expect(toFileProtocolPath(t[0], platform)).toBe(t[1]);
+		for (let i = 0; i < testCases_win32.length; i++) {
+			const t = testCases_win32[i];
+			expect(toFileProtocolPath(t[0], 'win32')).toBe(t[1]);
+		} 
+		for (let i = 0; i < testCases_unixlike.length; i++) {
+			const t = testCases_unixlike[i];
+			expect(toFileProtocolPath(t[0], 'linux')).toBe(t[1]);
 		} 
 
 		done();
