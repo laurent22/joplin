@@ -547,6 +547,8 @@ msgstr "Schwerwiegender Fehler:"
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Alle potentielle Port-Nummern sind in Verwendung - bitte melde dieses "
+"Problem auf %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -1018,9 +1020,8 @@ msgstr "Schlagwort umbenennen:"
 msgid "Set alarm:"
 msgstr "Alarm erstellen:"
 
-#, fuzzy
 msgid "Template file:"
-msgstr "Vorlagen"
+msgstr "Vorlagen-Datei:"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1061,7 +1062,7 @@ msgid "Note History"
 msgstr "Notizen-Verlauf"
 
 msgid "Markup"
-msgstr ""
+msgstr "Markup"
 
 msgid "Previous versions of this note"
 msgstr "Vorherige Version von dieser Notiz"
@@ -1513,10 +1514,10 @@ msgid "Dark"
 msgstr "Dunkel"
 
 msgid "Solarized Light"
-msgstr ""
+msgstr "Solarized Hell"
 
 msgid "Solarized Dark"
-msgstr ""
+msgstr "Solarized Dunkel"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"
@@ -1933,12 +1934,11 @@ msgstr "Neues Schlagwort eingeben oder aus der Liste auswählen"
 msgid "Warning"
 msgstr "Warnung"
 
-#, fuzzy
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Deine Erlaubnis auf externen Speicher zu schreiben ist notwending um "
+"Deine Erlaubnis auf externen Speicher zu schreiben ist notwendig um "
 "Synchronisation mit dem Dateisystem zu verwenden."
 
 msgid "Information"
@@ -1968,7 +1968,6 @@ msgstr "Repariere Such-Index..."
 msgid "Fix search index"
 msgstr "Repariere Such-Index"
 
-#, fuzzy
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
