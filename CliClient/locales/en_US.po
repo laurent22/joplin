@@ -1658,7 +1658,7 @@ msgid "%s: %d notes"
 msgstr ""
 
 msgid "Coming alarms"
-msgstr ""
+msgstr "Scheduled alarms"
 
 #, javascript-format
 msgid "On %s: %s"
@@ -1769,9 +1769,8 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "Synchronization Status"
+msgstr ""
 
 msgid "Log"
 msgstr ""
@@ -1792,6 +1791,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take some times depending on the number of notes."
 msgstr ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take some time depending on the number of notes."
 
 msgid "More information"
 msgstr ""
