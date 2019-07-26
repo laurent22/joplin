@@ -55,7 +55,7 @@ msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기�
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr "다음 명령어가 없습니다: %s"
+msgstr "다음과 같은 명령어가 없습니다: %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
@@ -80,14 +80,14 @@ msgid "Invalid answer: %s"
 msgstr "잘못된 답: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "파일을 노트에 추가합니다."
+msgstr "파일을 노트에 첨부합니다."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "다음을 찾을 수 없습니다: “%s”."
 
 msgid "Displays the given note."
-msgstr "제공된 노트를 표시합니다."
+msgstr "주어진 노트를 표시합니다."
 
 msgid "Displays the complete information about note."
 msgstr "노트와 관련된 모든 정보를 표시합니다."
@@ -97,9 +97,9 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"설정값을 얻거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 "
-"표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 표시"
-"할 것입니다."
+"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 "
+"값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
+"표시할 것입니다."
 
 msgid "Also displays unset and hidden config variables."
 msgstr "또한 설정하지 않았거나 숨겨진 설정 변수를 표시합니다."
@@ -239,7 +239,7 @@ msgstr ""
 "선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "한 패널에서 다른 패널으로 옮기려면 Tab키 또는 Shift+Tab 키를 누르세요."
+msgstr "한 패널에서 다른 패널로 옮기려면 Tab키 또는 Shift+Tab 키를 누르세요."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
@@ -762,7 +762,7 @@ msgid "Cancel"
 msgstr "취소"
 
 msgid "Current version is up-to-date."
-msgstr "현재 최신 버전을 사용중에 있습니다."
+msgstr "현재 최신 버전을 사용하고 있습니다."
 
 #, javascript-format
 msgid "%s (pre-release)"
@@ -793,14 +793,14 @@ msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도�
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "상태: %d 포트에서 시작됨"
+msgstr "상태: %d 포트 열림"
 
 #, javascript-format
 msgid "Status: %s"
 msgstr "상태: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr "웹 수집기 서비스 사용하지 않음"
+msgstr "웹 수집기 서비스 사용 안함"
 
 msgid "The web clipper service is not enabled."
 msgstr "웹 수집기 서비스가 비활성화 되었습니다."
@@ -819,7 +819,7 @@ msgid "In order to use the web clipper, you need to do the following:"
 msgstr "웹 수집기를 사용하려면 다음 절차를 따라주세요:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr "1단계: 웹 수집기 서비스를 활성화"
+msgstr "1단계: 웹 수집기 서비스 활성화"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -929,7 +929,7 @@ msgstr ""
 "있습니다."
 
 msgid "Missing Master Keys"
-msgstr "관리자 키를 찾을 수 없음"
+msgstr "마스터 키를 찾을 수 없음"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
@@ -1230,7 +1230,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Goto Anything..."
-msgstr "모든 곳으로 이동…"
+msgstr "가고 싶은 곳으로 이동…"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1270,8 +1270,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"토큰 새로고침 불가: 인증 데이터를 찾을 수 없습니다. 동기화를 다시 시도하면 문"
-"제가 해결될수도 있습니다."
+"인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
+"도하면 문제가 해결될 수 있습니다."
 
 msgid "Untitled"
 msgstr "제목 없음"
