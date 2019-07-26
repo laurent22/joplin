@@ -953,7 +953,7 @@ msgid "Encryption is:"
 msgstr "암호화는 다음과 같습니다:"
 
 msgid "Usage"
-msgstr "사용량"
+msgstr "사용 방법"
 
 msgid "Back"
 msgstr "뒤로 가기"
