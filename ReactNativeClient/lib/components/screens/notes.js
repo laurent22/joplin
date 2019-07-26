@@ -215,7 +215,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		if (!parent) {
 			return (
 				<View style={rootStyle}>
-					<ScreenHeader title={title} />
+					<ScreenHeader title={title} showSideMenuButton={true} showBackButton={false} />
 				</View>
 			)
 		}

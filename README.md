@@ -343,7 +343,7 @@ Joplin implements the SQLite Full Text Search (FTS4) extension. It means the con
 
 Search type | Description | Example
 ------------|-------------|---------
-Single word | Returns all the notes that contain this term. | `dog`, `cat`
+Single word | Returns all the notes that contain this term. | For example, searching for `cat` will return all the notes that contain this exact word. Note: it will not return the notes that contain the substring - thus, for "cat", notes that contain "cataclysmic" or "prevaricate" will **not** be returned.
 Multiples words | Returns all the notes that contain **all** these words, but not necessarily next to each other. | `dog cat` - will return any notes that contain the words "dog" and "cat" anywhere in the note, no necessarily in that order nor next to each others. It will **not** return results that contain "dog" or "cat" only.
 Phrase query | Add double quotes to return the notes that contain exactly this phrase. | `"shopping list"` - will return the notes that contain these **exact terms** next to each others and in this order. It will **not** return for example a note that contain "going shopping with my list".
 Prefix | Add a wildmark to return all the notes that contain a term with a specified prefix. | `swim*` - will return all the notes that contain eg. "swim", but also "swimming", "swimsuit", etc. IMPORTANT: The wildcard **can only be at the end** - it will be ignored at the beginning of a word (eg. `*swim`) and will be treated as a literal asterisk in the middle of a word (eg. `ast*rix`)
