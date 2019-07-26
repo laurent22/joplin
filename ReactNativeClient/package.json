@@ -40,7 +40,7 @@
     "punycode": "^2.1.1",
     "query-string": "4.3.4",
     "react": "^16.8.3",
-    "react-native": "^0.59.9",
+    "react-native": "^0.59.10",
     "react-native-action-button": "^2.6.9",
     "react-native-camera": "^2.10.2",
     "react-native-datepicker": "^1.6.0",
