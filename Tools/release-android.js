@@ -168,11 +168,11 @@ async function main() {
 	console.info('Creating GitHub release ' + tagName + '...');
 
 	const oauthToken = await githubOauthToken();
+	const release = await githubRelease(projectName, tagName);
+	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 
 	for (const releaseFilename in releaseFiles) {
 		const releaseFile = releaseFiles[releaseFilename];
-		const release = await githubRelease(projectName, tagName);
-		const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
 		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
