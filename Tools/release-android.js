@@ -4,6 +4,7 @@ const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
+const projectName = 'joplin-android';
 const rnDir = __dirname + '/../ReactNativeClient';
 const rootDir = path.dirname(__dirname);
 const releaseDir = rootDir + '/_releases';
@@ -57,14 +58,22 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function main() {
-	console.info('Updating version numbers in build.gradle...');
+async function createRelease(name, tagName, version) {
+	const originalContents = {};
+	const suffix = version + (name === 'main' ? '' : name);
 
-	const projectName = 'joplin-android';
-	const newContent = updateGradleConfig();
-	const version = gradleVersionName(newContent);
-	const tagName = 'android-v' + version;
-	const apkFilename = 'joplin-v' + version + '.apk';
+	console.info('Creating release: ' + suffix);
+
+	if (name === '32bit') {
+		let filename = rnDir + '/android/app/build.gradle';
+		let content = await fs.readFile(filename, 'utf8');
+		originalContents[filename] = content;
+		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"'); 
+		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"'); 
+		await fs.writeFile(filename, content);
+	}
+
+	const apkFilename = 'joplin-v' + suffix + '.apk';
 	const apkFilePath = releaseDir + '/' + apkFilename;
 	const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
 
@@ -72,7 +81,7 @@ async function main() {
 
 	console.info('Running from: ' + process.cwd());
 
-	console.info('Building APK file v' + version + '...');
+	console.info('Building APK file v' + suffix + '...');
 
 	let restoreDir = null;
 	let apkBuildCmd = 'assembleRelease -PbuildDir=build';
@@ -94,8 +103,6 @@ async function main() {
 		console.info('');
 		await readline('Press Enter when done:');
 		apkBuildCmd = ''; // Clear the command because we've already ran it
-		
-		// apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
 	} else {
 		process.chdir(rnDir + '/android');
 		apkBuildCmd = './gradlew ' + apkBuildCmd;
@@ -117,10 +124,83 @@ async function main() {
 	console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
 	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
 
+	for (let filename in originalContents) {
+		const content = originalContents[filename];
+		await fs.writeFile(filename, content);
+	}
+
+	return {
+		downloadUrl: downloadUrl,
+	};
+}
+
+async function main() {
+	console.info('Updating version numbers in build.gradle...');
+
+	const newContent = updateGradleConfig();
+	const version = gradleVersionName(newContent);
+	const tagName = 'android-v' + version;
+
+	const mainReleaseFile = await createRelease('main', tagName, version);
+	await createRelease('32bit', tagName, version);
+
+	// const apkFilename = 'joplin-v' + version + '.apk';
+	// const apkFilePath = releaseDir + '/' + apkFilename;
+	// const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
+
+	// process.chdir(rootDir);
+
+	// console.info('Running from: ' + process.cwd());
+
+	// console.info('Building APK file v' + version + '...');
+
+	// let restoreDir = null;
+	// let apkBuildCmd = 'assembleRelease -PbuildDir=build';
+	// if (await fileExists('/mnt/c/Windows/System32/cmd.exe')) {
+	// 	// In recent versions (of Gradle? React Native?), running gradlew.bat from WSL throws the following error:
+
+	// 	//     Error: Command failed: /mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\android && gradlew.bat assembleRelease -PbuildDir=build"
+
+	// 	//     FAILURE: Build failed with an exception.
+
+	// 	//     * What went wrong:
+	// 	//     Could not determine if Stdout is a console: could not get handle file information (errno 1)
+
+	// 	// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
+
+	// 	console.info('Run this command from DOS:');
+	// 	console.info('');
+	// 	console.info('cd "' + wslToWinPath(rootDir) + '\\ReactNativeClient\\android" && gradlew.bat ' + apkBuildCmd + '"');
+	// 	console.info('');
+	// 	await readline('Press Enter when done:');
+	// 	apkBuildCmd = ''; // Clear the command because we've already ran it
+		
+	// 	// apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
+	// } else {
+	// 	process.chdir(rnDir + '/android');
+	// 	apkBuildCmd = './gradlew ' + apkBuildCmd;
+	// 	restoreDir = rootDir;
+	// }
+
+	// if (apkBuildCmd) {
+	// 	console.info(apkBuildCmd);
+	// 	const output = await execCommand(apkBuildCmd);
+	// 	console.info(output);
+	// }
+
+	// if (restoreDir) process.chdir(restoreDir);
+
+	// await fs.mkdirp(releaseDir);
+
+	// console.info('Copying APK to ' + apkFilePath);
+	// await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
+	// console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
+	// await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
+
 	console.info('Updating Readme URL...');
 
 	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, downloadUrl);
+	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, mainReleaseFile.downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
 	console.info(await execCommand('git pull'));
