@@ -135,6 +135,7 @@ async function createRelease(name, tagName, version) {
 	return {
 		downloadUrl: downloadUrl,
 		apkFilename: apkFilename,
+		apkFilePath: apkFilePath,
 	};
 }
 
@@ -166,15 +167,15 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
+	const oauthToken = await githubOauthToken();
+
 	for (const releaseFilename in releaseFiles) {
 		const releaseFile = releaseFiles[releaseFilename];
 		const release = await githubRelease(projectName, tagName);
 		const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
 		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
-		const binaryBody = await fs.readFile(apkFilePath);
-
-		const oauthToken = await githubOauthToken();
+		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
 
 		console.info('Uploading ' + releaseFile.apkFilename + ' to ' + uploadUrl);
 
