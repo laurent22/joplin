@@ -54,7 +54,20 @@ The tests are under CliClient/tests. To get them running, you first need to buil
     cd CliClient
     npm i
 
-Then to run all the test units:
+To run the test units, you must have an instance of the cli app running. In a first window navigate into `CliClient` and run:
+
+```sh
+./run.sh
+```
+
+> If you get an error like `Error: Cannot find module '../locales/index.js'`, this means you must (a) rebuild translations or (b) take > them from one of the other apps. To do option b, you can run the following command to copy them from the `ReactNativeClient` directory:> 
+>
+> ```sh
+> cd .. # Return to the root of the project
+> rsync -aP ./ReactNativeClient/locales/ ./CliClient/build/locales/
+> ```
+
+Then run the tests in a second window. To run all the test units:
 
     ./run_test.sh
 
