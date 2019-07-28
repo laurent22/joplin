@@ -190,10 +190,11 @@ async function main() {
 		});
 
 		const uploadResponseText = await uploadResponse.text();
-		console.info(uploadResponseText);
+		const uploadResponseObject = JSON.parse(uploadResponseText);
+		if (!uploadResponseObject || !uploadResponseObject.browser_download_url) throw new Error('Could not upload file to GitHub');
 	}
 
-	console.info('Download URL: ' + releaseFiles['main'].downloadUrl);
+	console.info('Main download URL: ' + releaseFiles['main'].downloadUrl);
 }
 
 main().catch((error) => {
