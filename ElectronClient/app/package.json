@@ -74,7 +74,7 @@
     "babel-preset-react": "^6.24.1",
     "electron": "^4.1.4",
     "electron-builder": "20.38.5",
-    "electron-rebuild": "^1.8.4"
+    "electron-rebuild": "^1.8.5"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -107,7 +107,7 @@
     "jssha": "^2.3.1",
     "katex": "^0.10.0",
     "levenshtein": "^1.0.5",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.15",
     "mark.js": "^8.11.1",
     "markdown-it": "^8.4.1",
     "markdown-it-abbr": "^1.0.4",
