@@ -1378,10 +1378,10 @@ msgid "Dark"
 msgstr ""
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarized Light"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarized Dark"
 
 msgid "Uncompleted to-dos on top"
 msgstr ""
