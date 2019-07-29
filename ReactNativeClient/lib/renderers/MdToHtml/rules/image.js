@@ -1,5 +1,5 @@
 const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = (new Entities()).encode;
+const htmlentities = new Entities().encode;
 const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
 const htmlUtils = require('lib/htmlUtils.js');

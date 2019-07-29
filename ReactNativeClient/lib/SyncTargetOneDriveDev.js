@@ -9,7 +9,6 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
 class SyncTargetOneDriveDev extends SyncTargetOneDrive {
-
 	static id() {
 		return 4;
 	}
@@ -29,7 +28,6 @@ class SyncTargetOneDriveDev extends SyncTargetOneDrive {
 	oneDriveParameters() {
 		return parameters('dev').oneDrive;
 	}
-
 }
 
 const staticSelf = SyncTargetOneDriveDev;

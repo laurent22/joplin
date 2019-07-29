@@ -16,7 +16,6 @@ const { uuid } = require('lib/uuid.js');
 const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
-
 	constructor() {
 		this.modules_ = null;
 	}
@@ -30,17 +29,20 @@ class InteropService {
 				fileExtensions: ['jex'],
 				sources: ['file'],
 				description: _('Joplin Export File'),
-			}, {
+			},
+			{
 				format: 'md',
 				fileExtensions: ['md', 'markdown'],
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
-			}, {
+			},
+			{
 				format: 'raw',
 				sources: ['directory'],
 				description: _('Joplin Export Directory'),
-			}, {
+			},
+			{
 				format: 'enex',
 				fileExtensions: ['enex'],
 				sources: ['file'],
@@ -54,42 +56,53 @@ class InteropService {
 				fileExtensions: ['jex'],
 				target: 'file',
 				description: _('Joplin Export File'),
-			}, {
+			},
+			{
 				format: 'raw',
 				target: 'directory',
 				description: _('Joplin Export Directory'),
-			}, {
+			},
+			{
 				format: 'json',
 				target: 'directory',
 				description: _('Json Export Directory'),
-			}, {
+			},
+			{
 				format: 'md',
 				target: 'directory',
 				description: _('Markdown'),
 			},
 		];
 
-		importModules = importModules.map((a) => {
+		importModules = importModules.map(a => {
 			const className = 'InteropService_Importer_' + toTitleCase(a.format);
-			const output = Object.assign({}, {
-				type: 'importer',
-				path: 'lib/services/' + className,
-			}, a);
+			const output = Object.assign(
+				{},
+				{
+					type: 'importer',
+					path: 'lib/services/' + className,
+				},
+				a
+			);
 			if (!('isNoteArchive' in output)) output.isNoteArchive = true;
 			return output;
 		});
 
-		exportModules = exportModules.map((a) => {
+		exportModules = exportModules.map(a => {
 			const className = 'InteropService_Exporter_' + toTitleCase(a.format);
-			return Object.assign({}, {
-				type: 'exporter',
-				path: 'lib/services/' + className,
-			}, a);
+			return Object.assign(
+				{},
+				{
+					type: 'exporter',
+					path: 'lib/services/' + className,
+				},
+				a
+			);
 		});
 
 		this.modules_ = importModules.concat(exportModules);
 
-		this.modules_ = this.modules_.map((a) => {
+		this.modules_ = this.modules_.map(a => {
 			a.fullLabel = function(moduleSource = null) {
 				const label = [this.format.toUpperCase() + ' - ' + this.description];
 				if (moduleSource && this.sources.length > 1) {
@@ -136,13 +149,17 @@ class InteropService {
 	}
 
 	async import(options) {
-		if (!await shim.fsDriver().exists(options.path)) throw new Error(_('Cannot find "%s".', options.path));
+		if (!(await shim.fsDriver().exists(options.path))) throw new Error(_('Cannot find "%s".', options.path));
 
-		options = Object.assign({}, {
-			format: 'auto',
-			destinationFolderId: null,
-			destinationFolder: null,
-		}, options);
+		options = Object.assign(
+			{},
+			{
+				format: 'auto',
+				destinationFolderId: null,
+				destinationFolder: null,
+			},
+			options
+		);
 
 		if (options.format === 'auto') {
 			const module = this.moduleByFileExtension_('importer', fileExtension(options.path));
@@ -156,7 +173,7 @@ class InteropService {
 			options.destinationFolder = folder;
 		}
 
-		let result = { warnings: [] }
+		let result = { warnings: [] };
 
 		const importer = this.newModule_('importer', options.format);
 		await importer.init(options.path, options);
@@ -170,15 +187,15 @@ class InteropService {
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const exportFormat = options.format ? options.format : 'jex';
-		const result = { warnings: [] }
+		const result = { warnings: [] };
 		const itemsToExport = [];
 
 		const queueExportItem = (itemType, itemOrId) => {
 			itemsToExport.push({
 				type: itemType,
-				itemOrId: itemOrId
+				itemOrId: itemOrId,
 			});
-		}
+		};
 
 		let exportedNoteIds = [];
 		let resourceIds = [];
@@ -283,7 +300,6 @@ class InteropService {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService;

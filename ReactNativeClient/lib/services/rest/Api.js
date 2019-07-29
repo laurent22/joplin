@@ -24,7 +24,6 @@ const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 
 class ApiError extends Error {
-
 	constructor(message, httpCode = 400) {
 		super(message);
 		this.httpCode_ = httpCode;
@@ -33,16 +32,30 @@ class ApiError extends Error {
 	get httpCode() {
 		return this.httpCode_;
 	}
-
 }
 
-class ErrorMethodNotAllowed extends ApiError { constructor(message = 'Method Not Allowed') { super(message, 405); } }
-class ErrorNotFound extends ApiError { constructor(message = 'Not Found') { super(message, 404); } }
-class ErrorForbidden extends ApiError {	constructor(message = 'Forbidden') { super(message, 403); } }
-class ErrorBadRequest extends ApiError { constructor(message = 'Bad Request') { super(message, 400); } }
+class ErrorMethodNotAllowed extends ApiError {
+	constructor(message = 'Method Not Allowed') {
+		super(message, 405);
+	}
+}
+class ErrorNotFound extends ApiError {
+	constructor(message = 'Not Found') {
+		super(message, 404);
+	}
+}
+class ErrorForbidden extends ApiError {
+	constructor(message = 'Forbidden') {
+		super(message, 403);
+	}
+}
+class ErrorBadRequest extends ApiError {
+	constructor(message = 'Bad Request') {
+		super(message, 400);
+	}
+}
 
 class Api {
-
 	constructor(token = null) {
 		this.token_ = token;
 		this.knownNounces_ = {};
@@ -58,7 +71,7 @@ class Api {
 		if (!path) return { callName: '', params: [] };
 
 		const pathParts = path.split('/');
-		const callSuffix = pathParts.splice(0,1)[0];
+		const callSuffix = pathParts.splice(0, 1)[0];
 		let callName = 'action_' + callSuffix;
 		return {
 			callName: callName,
@@ -80,7 +93,7 @@ class Api {
 			}
 			this.knownNounces_[query.nounce] = requestMd5;
 		}
-		
+
 		const request = {
 			method: method,
 			path: ltrimSlashes(path),
@@ -102,7 +115,7 @@ class Api {
 				return this.bodyJson_;
 			},
 			files: files,
-		}
+		};
 
 		let id = null;
 		let link = null;
@@ -146,19 +159,17 @@ class Api {
 	fields_(request, defaultFields) {
 		const query = request.query;
 		if (!query || !query.fields) return defaultFields;
-		const fields = query.fields.split(',').map(f => f.trim()).filter(f => !!f);
+		const fields = query.fields
+			.split(',')
+			.map(f => f.trim())
+			.filter(f => !!f);
 		return fields.length ? fields : defaultFields;
 	}
 
 	checkToken_(request) {
 		// For now, whitelist some calls to allow the web clipper to work
 		// without an extra auth step
-		const whiteList = [
-			[ 'GET', 'ping' ],
-			[ 'GET', 'tags' ],
-			[ 'GET', 'folders' ],
-			[ 'POST', 'notes' ],
-		];
+		const whiteList = [['GET', 'ping'], ['GET', 'tags'], ['GET', 'folders'], ['POST', 'notes']];
 
 		for (let i = 0; i < whiteList.length; i++) {
 			if (whiteList[i][0] === request.method && whiteList[i][1] === request.path) return;
@@ -178,9 +189,9 @@ class Api {
 
 		const getOneModel = async () => {
 			const model = await ModelClass.load(id);
-			if (!model) throw new ErrorNotFound();			
+			if (!model) throw new ErrorNotFound();
 			return model;
-		}
+		};
 
 		if (request.method === 'GET') {
 			if (id) {
@@ -308,7 +319,7 @@ class Api {
 
 				const filePath = Resource.fullPath(resource);
 				const buffer = await shim.fsDriver().readFile(filePath, 'Buffer');
-				
+
 				const response = new ApiResponse();
 				response.type = 'attachment';
 				response.body = buffer;
@@ -345,9 +356,8 @@ class Api {
 
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
-		
+
 		if (request.method === 'GET') {
-			
 			if (link && link === 'tags') {
 				return Tag.tagsByNoteId(id);
 			} else if (link) {
@@ -411,10 +421,6 @@ class Api {
 		return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 	}
 
-
-
-
-
 	// ========================================================================================================================
 	// UTILIY FUNCTIONS
 	// ========================================================================================================================
@@ -462,7 +468,8 @@ class Api {
 				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
-			} else { // Convert to Markdown 
+			} else {
+				// Convert to Markdown
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 				// rendering but it makes sure everything will be parsed.
@@ -555,7 +562,7 @@ class Api {
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = '.' + fileExt;
 		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0,10) + fileExt;
+		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0, 10) + fileExt;
 
 		try {
 			if (isDataUrl) {
@@ -580,7 +587,7 @@ class Api {
 	}
 
 	async downloadImages_(urls, allowFileProtocolImages) {
-		const PromisePool = require('es6-promise-pool')
+		const PromisePool = require('es6-promise-pool');
 
 		const output = {};
 
@@ -590,7 +597,7 @@ class Api {
 				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 				resolve();
 			});
-		}
+		};
 
 		let urlIndex = 0;
 		const promiseProducer = () => {
@@ -598,11 +605,11 @@ class Api {
 
 			const url = urls[urlIndex++];
 			return downloadOne(url);
-		}
+		};
 
 		const concurrency = 10;
-		const pool = new PromisePool(promiseProducer, concurrency)
-		await pool.start()
+		const pool = new PromisePool(promiseProducer, concurrency);
+		await pool.start();
 
 		return output;
 	}
@@ -641,8 +648,8 @@ class Api {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return imageUrl;
 				return Resource.internalUrl(urlInfo.resource);
-			}); 
-		} else { 
+			});
+		} else {
 			let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
@@ -661,8 +668,6 @@ class Api {
 			return output;
 		}
 	}
-
-
 }
 
 module.exports = Api;

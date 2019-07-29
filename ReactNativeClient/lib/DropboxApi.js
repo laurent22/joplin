@@ -6,7 +6,6 @@ const { time } = require('lib/time-utils');
 const EventDispatcher = require('lib/EventDispatcher');
 
 class DropboxApi {
-
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
@@ -65,7 +64,7 @@ class DropboxApi {
 		if (options.body) output.push('--data ' + '"' + options.body + '"');
 		output.push(url);
 
-		return output.join(' ');		
+		return output.join(' ');
 	}
 
 	async execAuthToken(authCode) {
@@ -80,16 +79,16 @@ class DropboxApi {
 		for (var property in postData) {
 			var encodedKey = encodeURIComponent(property);
 			var encodedValue = encodeURIComponent(postData[property]);
-			formBody.push(encodedKey + "=" + encodedValue);
+			formBody.push(encodedKey + '=' + encodedValue);
 		}
-		formBody = formBody.join("&");
+		formBody = formBody.join('&');
 
 		const response = await shim.fetch('https://api.dropboxapi.com/oauth2/token', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+				'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 			},
-			body: formBody
+			body: formBody,
 		});
 
 		const responseText = await response.text();
@@ -145,13 +144,14 @@ class DropboxApi {
 					response = await shim.uploadBlob(url, fetchOptions);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, fetchOptions);
-				} else { // file
+				} else {
+					// file
 					response = await shim.fetchBlob(url, fetchOptions);
 				}
 
 				const responseText = await response.text();
 
-				// console.info('Response: ' + responseText); 
+				// console.info('Response: ' + responseText);
 
 				let responseJson_ = null;
 				const loadResponseJson = () => {
@@ -163,10 +163,10 @@ class DropboxApi {
 						return { error: responseText };
 					}
 					return responseJson_;
-				}
+				};
 
 				// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-				const newError = (message) => {
+				const newError = message => {
 					const json = loadResponseJson();
 					let code = '';
 					if (json && json.error_summary) {
@@ -179,7 +179,7 @@ class DropboxApi {
 					const error = new JoplinError(method + ' ' + path + ': ' + message + ' (' + response.status + '): ' + shortResponseText, code);
 					error.httpStatus = response.status;
 					return error;
-				}
+				};
 
 				if (!response.ok) {
 					const json = loadResponseJson();
@@ -210,7 +210,6 @@ class DropboxApi {
 			}
 		}
 	}
-
 }
 
 module.exports = DropboxApi;

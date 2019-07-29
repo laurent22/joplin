@@ -1,6 +1,7 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { Platform, View } = require('react-native');
-const { WebView } =  require('react-native-webview');
+const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
@@ -10,13 +11,12 @@ const MdToHtml = require('lib/renderers/MdToHtml.js');
 const shared = require('lib/components/shared/note-screen-shared.js');
 
 class NoteBodyViewer extends Component {
-
 	constructor() {
 		super();
 		this.state = {
 			resources: {},
 			webViewLoaded: false,
-		}
+		};
 
 		this.isMounted_ = false;
 	}
@@ -47,12 +47,11 @@ class NoteBodyViewer extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-
 		const safeGetNoteProp = (props, propName) => {
 			if (!props) return null;
 			if (!props.note) return null;
 			return props.note[propName];
-		}
+		};
 
 		// To address https://github.com/laurent22/joplin/issues/433
 		// If a checkbox in a note is ticked, the body changes, which normally would trigger a re-render
@@ -63,7 +62,7 @@ class NoteBodyViewer extends Component {
 		// will not be displayed immediately.
 		const currentNoteId = safeGetNoteProp(this.props, 'id');
 		const nextNoteId = safeGetNoteProp(nextProps, 'id');
-		
+
 		if (currentNoteId !== nextNoteId || nextState.webViewLoaded !== this.state.webViewLoaded) return true;
 
 		// If the length of the body has changed, then it's something other than a checkbox that has changed,
@@ -98,7 +97,7 @@ class NoteBodyViewer extends Component {
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
-			resources: this.props.noteResources,//await shared.attachedResources(bodyToRender),
+			resources: this.props.noteResources, //await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
@@ -120,19 +119,22 @@ class NoteBodyViewer extends Component {
 			}, 10);
 		`);
 
-		html = `
+		html =
+			`
 			<!DOCTYPE html>
 			<html>
 				<head>
 					<meta name="viewport" content="width=device-width, initial-scale=1">
 				</head>
 				<body>
-					` + html + `
+					` +
+			html +
+			`
 				</body>
 			</html>
 		`;
 
-		let webViewStyle = {'backgroundColor': this.props.webViewStyle.backgroundColor}
+		let webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).
@@ -183,8 +185,8 @@ class NoteBodyViewer extends Component {
 					mixedContentMode="always"
 					allowFileAccess={true}
 					onLoadEnd={() => this.onLoadEnd()}
-					onError={() => reg.logger().error('WebView error') }
-					onMessage={(event) => {
+					onError={() => reg.logger().error('WebView error')}
+					onMessage={event => {
 						// Since RN 58 (or 59) messages are now escaped twice???
 						let msg = unescape(unescape(event.nativeEvent.data));
 
@@ -196,7 +198,7 @@ class NoteBodyViewer extends Component {
 						} else if (msg.indexOf('markForDownload:') === 0) {
 							msg = msg.split(':');
 							const resourceId = msg[1];
-							if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });  
+							if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
 						} else {
 							this.props.onJoplinLinkClick(msg);
 						}
@@ -205,7 +207,6 @@ class NoteBodyViewer extends Component {
 			</View>
 		);
 	}
-
 }
 
 module.exports = { NoteBodyViewer };

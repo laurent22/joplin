@@ -1,5 +1,6 @@
-const React = require('react'); const Component = React.Component;
-const { TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View, Alert } = require('react-native');
+const React = require('react');
+const Component = React.Component;
+const { TouchableOpacity, Button, Text, Image, StyleSheet, ScrollView, View, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const Tag = require('lib/models/Tag.js');
@@ -16,7 +17,6 @@ const shared = require('lib/components/shared/side-menu-shared.js');
 const { ActionButton } = require('lib/components/action-button.js');
 
 class SideMenuContentNoteComponent extends Component {
-
 	constructor() {
 		super();
 
@@ -32,7 +32,7 @@ class SideMenuContentNoteComponent extends Component {
 		let styles = {
 			menu: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor
+				backgroundColor: theme.backgroundColor,
 			},
 			button: {
 				flex: 1,
@@ -57,7 +57,7 @@ class SideMenuContentNoteComponent extends Component {
 	}
 
 	renderDivider(key) {
-		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
+		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>;
 	}
 
 	renderSideBarButton(key, title, iconName, onPressHandler) {
@@ -65,7 +65,7 @@ class SideMenuContentNoteComponent extends Component {
 
 		const content = (
 			<View key={key} style={onPressHandler ? this.styles().sideButton : this.styles().sideButtonDisabled}>
-				{ !iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} /> }
+				{!iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} />}
 				<Text style={this.styles().sideButtonText}>{title}</Text>
 			</View>
 		);
@@ -96,7 +96,7 @@ class SideMenuContentNoteComponent extends Component {
 		}
 
 		let style = {
-			flex:1,
+			flex: 1,
 			borderRightWidth: 1,
 			borderRightColor: globalStyle.dividerColor,
 			backgroundColor: theme.backgroundColor,
@@ -105,22 +105,20 @@ class SideMenuContentNoteComponent extends Component {
 
 		return (
 			<View style={style}>
-				<View style={{flex:1, opacity: this.props.opacity}}>
+				<View style={{ flex: 1, opacity: this.props.opacity }}>
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
-						{ items }
+						{items}
 					</ScrollView>
 				</View>
 			</View>
 		);
 	}
-};
+}
 
-const SideMenuContentNote = connect(
-	(state) => {
-		return {
-			theme: state.settings.theme,
-		};
-	}
-)(SideMenuContentNoteComponent)
+const SideMenuContentNote = connect(state => {
+	return {
+		theme: state.settings.theme,
+	};
+})(SideMenuContentNoteComponent);
 
 module.exports = { SideMenuContentNote };

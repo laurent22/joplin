@@ -2,7 +2,6 @@ const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 
 class Alarm extends BaseModel {
-
 	static tableName() {
 		return 'alarms';
 	}
@@ -22,7 +21,9 @@ class Alarm extends BaseModel {
 	static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
 		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL');
-		return alarms.map((a) => { return a.id });
+		return alarms.map(a => {
+			return a.id;
+		});
 	}
 
 	static async makeNotification(alarm, note = null) {
@@ -37,18 +38,17 @@ class Alarm extends BaseModel {
 		const output = {
 			id: alarm.id,
 			date: new Date(note.todo_due),
-			title: note.title.substr(0,128),
+			title: note.title.substr(0, 128),
 		};
 
-		if (note.body) output.body = note.body.substr(0,512);
+		if (note.body) output.body = note.body.substr(0, 512);
 
-		return output;		
+		return output;
 	}
 
 	static async allDue() {
 		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
 	}
-
 }
 
 module.exports = Alarm;

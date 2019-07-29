@@ -16,14 +16,13 @@ const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
 
 class InteropService_Importer_Raw extends InteropService_Importer_Base {
-
 	async exec(result) {
 		const itemIdMap = {};
 		const createdResources = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
-		const replaceLinkedItemIds = async (noteBody) => {
+		const replaceLinkedItemIds = async noteBody => {
 			let output = noteBody;
 			const itemIds = Note.linkedItemIds(noteBody);
 
@@ -34,7 +33,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			}
 
 			return output;
-		}
+		};
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
@@ -46,7 +45,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				if (statId.toLowerCase() === folderId) return true;
 			}
 			return false;
-		}
+		};
 
 		let defaultFolder_ = null;
 		const defaultFolder = async () => {
@@ -54,9 +53,9 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
 			defaultFolder_ = await Folder.save({ title: folderTitle });
 			return defaultFolder_;
-		}
+		};
 
-		const setFolderToImportTo = async (itemParentId) => {
+		const setFolderToImportTo = async itemParentId => {
 			// Logic is a bit complex here:
 			// - If a destination folder was specified, move the note to it.
 			// - Otherwise, if the associated folder exists, use this.
@@ -73,7 +72,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 					itemIdMap[itemParentId] = uuid.create();
 				}
 			}
-		}
+		};
 
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
@@ -88,7 +87,6 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			delete item.type_;
 
 			if (itemType === BaseModel.TYPE_NOTE) {
-
 				await setFolderToImportTo(item.parent_id);
 
 				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
@@ -111,7 +109,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				item.id = itemIdMap[item.id];
 				createdResources[item.id] = item;
 			} else if (itemType === BaseModel.TYPE_TAG) {
-				const tag = await Tag.loadByTitle(item.title); 
+				const tag = await Tag.loadByTitle(item.title);
 				if (tag) {
 					itemIdMap[item.id] = tag.id;
 					continue;
@@ -170,7 +168,6 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService_Importer_Raw;

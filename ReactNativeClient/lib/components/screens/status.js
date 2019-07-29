@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { ListView, StyleSheet, View, Text, Button, FlatList } = require('react-native');
 const Setting = require('lib/models/Setting.js');
 const { connect } = require('react-redux');
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
 });
 
 class StatusScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -82,7 +82,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 							retryHandler = async () => {
 								await item.retryHandler();
 								this.resfreshScreen();
-							}
+							};
 						}
 						text = item.text;
 					} else {
@@ -95,55 +95,56 @@ class StatusScreenComponent extends BaseScreenComponent {
 				lines.push({ key: 'divider2_' + i, isDivider: true });
 			}
 
-			return (<FlatList
-				data={lines}
-				renderItem={({item}) => {
-					let style = Object.assign({}, baseStyle);
+			return (
+				<FlatList
+					data={lines}
+					renderItem={({ item }) => {
+						let style = Object.assign({}, baseStyle);
 
-					if (item.isSection === true) {
-						style.fontWeight = 'bold';
-						style.marginBottom = 5;
-					}
+						if (item.isSection === true) {
+							style.fontWeight = 'bold';
+							style.marginBottom = 5;
+						}
 
-					style.flex = 1;
+						style.flex = 1;
 
-					const retryButton = item.retryHandler ? <View style={{flex:0}}><Button title={_('Retry')} onPress={item.retryHandler}/></View> : null;
-
-					if (item.isDivider) {
-						return (<View style={{borderBottomWidth: 1, borderBottomColor: theme.dividerColor, marginTop: 20, marginBottom: 20}}/>);
-					} else {
-						return (
-							<View style={{flex:1, flexDirection:'row'}}>
-								<Text style={style}>{item.text}</Text>
-								{retryButton}
+						const retryButton = item.retryHandler ? (
+							<View style={{ flex: 0 }}>
+								<Button title={_('Retry')} onPress={item.retryHandler} />
 							</View>
-						);
-					}
-				}}
-			/>);
-		}
+						) : null;
+
+						if (item.isDivider) {
+							return <View style={{ borderBottomWidth: 1, borderBottomColor: theme.dividerColor, marginTop: 20, marginBottom: 20 }} />;
+						} else {
+							return (
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<Text style={style}>{item.text}</Text>
+									{retryButton}
+								</View>
+							);
+						}
+					}}
+				/>
+			);
+		};
 
 		let body = renderBody(this.state.report);
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader title={_('Status')}/>
-				<View style={styles.body}>
-					{ body }
-				</View>
-				<Button title={_("Refresh")} onPress={() => this.resfreshScreen()}/>
+				<ScreenHeader title={_('Status')} />
+				<View style={styles.body}>{body}</View>
+				<Button title={_('Refresh')} onPress={() => this.resfreshScreen()} />
 			</View>
 		);
 	}
-
 }
 
-const StatusScreen = connect(
-	(state) => {
-		return {
-			theme: state.settings.theme,
-		};
-	}
-)(StatusScreenComponent)
+const StatusScreen = connect(state => {
+	return {
+		theme: state.settings.theme,
+	};
+})(StatusScreenComponent);
 
 module.exports = { StatusScreen };

@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { View, Button, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
 const { ActionButton } = require('lib/components/action-button.js');
@@ -12,7 +13,6 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale.js');
 
 class FolderScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -52,7 +52,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 				lastSavedFolder: Object.assign({}, folder),
 			});
 		} else {
-			Folder.load(this.props.folderId).then((folder) => {
+			Folder.load(this.props.folderId).then(folder => {
 				this.setState({
 					folder: folder,
 					lastSavedFolder: Object.assign({}, folder),
@@ -72,7 +72,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		this.setState((prevState, props) => {
 			let folder = Object.assign({}, prevState.folder);
 			folder[propName] = propValue;
-			return { folder: folder }
+			return { folder: folder };
 		});
 	}
 
@@ -108,29 +108,23 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader
-					title={_('Edit notebook')}
-					showSaveButton={true}
-					saveButtonDisabled={saveButtonDisabled}
-					onSaveButtonPress={() => this.saveFolderButton_press()}
-					showSideMenuButton={false}
-					showSearchButton={false}
+				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
+				<TextInput placeholder={_('Enter notebook title')} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
+				<dialogs.DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
 				/>
-				<TextInput placeholder={_('Enter notebook title')} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={(text) => this.title_changeText(text)} />
-				<dialogs.DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 			</View>
 		);
 	}
-
 }
 
-const FolderScreen = connect(
-	(state) => {
-		return {
-			folderId: state.selectedFolderId,
-			theme: state.settings.theme,
-		};
-	}
-)(FolderScreenComponent)
+const FolderScreen = connect(state => {
+	return {
+		folderId: state.selectedFolderId,
+		theme: state.settings.theme,
+	};
+})(FolderScreenComponent);
 
 module.exports = { FolderScreen };

@@ -1,5 +1,4 @@
 class Cache {
-
 	async getItem(name) {
 		let output = null;
 		try {
@@ -22,7 +21,6 @@ class Cache {
 			// Defaults to not saving to cache
 		}
 	}
-
 }
 
 Cache.storage = async function() {
@@ -30,6 +28,6 @@ Cache.storage = async function() {
 	Cache.storage_ = require('node-persist');
 	await Cache.storage_.init({ dir: require('os').tmpdir() + '/joplin-cache', ttl: 1000 * 60 });
 	return Cache.storage_;
-}
+};
 
 module.exports = Cache;

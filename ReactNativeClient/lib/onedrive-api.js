@@ -4,7 +4,6 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 
 class OneDriveApi {
-
 	// `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
 	// apps are considered "public"), in which case the secret should not be sent to the API.
 	// In practice the React Native app is public, and the Node one is not because we
@@ -15,7 +14,7 @@ class OneDriveApi {
 		this.auth_ = null;
 		this.isPublic_ = isPublic;
 		this.listeners_ = {
-			'authRefreshed': [],
+			authRefreshed: [],
 		};
 		this.logger_ = new Logger();
 	}
@@ -98,7 +97,7 @@ class OneDriveApi {
 		const r = await shim.fetch(this.tokenBaseUrl(), {
 			method: 'POST',
 			body: body,
-		})
+		});
 
 		if (!r.ok) {
 			const text = await r.text();
@@ -125,7 +124,7 @@ class OneDriveApi {
 			if (e.code) output.code = e.code;
 			if (e.innerError) output.innerError = e.innerError;
 			return output;
-		} else { 
+		} else {
 			return new Error(JSON.stringify(errorResponse));
 		}
 	}
@@ -173,7 +172,8 @@ class OneDriveApi {
 					response = await shim.uploadBlob(url, options);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
-				} else { // file
+				} else {
+					// file
 					response = await shim.fetchBlob(url, options);
 				}
 			} catch (error) {
@@ -185,9 +185,9 @@ class OneDriveApi {
 				let errorResponseText = await response.text();
 				let errorResponse = null;
 				try {
-					errorResponse = JSON.parse(errorResponseText);//await response.json();
+					errorResponse = JSON.parse(errorResponseText); //await response.json();
 				} catch (error) {
-					error.message = 'OneDriveApi::exec: Cannot parse JSON error: ' + errorResponseText + " " + error.message;
+					error.message = 'OneDriveApi::exec: Cannot parse JSON error: ' + errorResponseText + ' ' + error.message;
 					throw error;
 				}
 
@@ -251,7 +251,7 @@ class OneDriveApi {
 			let output = JSON.parse(errorResponseText); //await response.json();
 			return output;
 		} catch (error) {
-			error.message = 'OneDriveApi::execJson: Cannot parse JSON: ' + errorResponseText + " " + error.message;
+			error.message = 'OneDriveApi::execJson: Cannot parse JSON: ' + errorResponseText + ' ' + error.message;
 			throw error;
 			//throw new Error('Cannot parse JSON: ' + text);
 		}
@@ -291,7 +291,6 @@ class OneDriveApi {
 		let auth = await response.json();
 		this.setAuth(auth);
 	}
-
 }
 
 module.exports = { OneDriveApi };

@@ -1,6 +1,6 @@
 const MarkdownIt = require('markdown-it');
 const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = (new Entities()).encode;
+const htmlentities = new Entities().encode;
 const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim.js');
 const { _ } = require('lib/locale');
@@ -22,25 +22,24 @@ const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
-	mark: {module: require('markdown-it-mark')},
-	footnote: {module: require('markdown-it-footnote')},
-	sub: {module: require('markdown-it-sub')},
-	sup: {module: require('markdown-it-sup')},
-	deflist: {module: require('markdown-it-deflist')},
-	abbr: {module: require('markdown-it-abbr')},
-	emoji: {module: require('markdown-it-emoji')},
-	insert: {module: require('markdown-it-ins')},
-	multitable: {module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true }},
-	toc: {module: require('markdown-it-toc-done-right'), options: { listType: 'ul' }},
+	mark: { module: require('markdown-it-mark') },
+	footnote: { module: require('markdown-it-footnote') },
+	sub: { module: require('markdown-it-sub') },
+	sup: { module: require('markdown-it-sup') },
+	deflist: { module: require('markdown-it-deflist') },
+	abbr: { module: require('markdown-it-abbr') },
+	emoji: { module: require('markdown-it-emoji') },
+	insert: { module: require('markdown-it-ins') },
+	multitable: { module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true } },
+	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul' } },
 };
 
 class MdToHtml {
-
 	constructor(options = null) {
 		if (!options) options = {};
 
 		// Must include last "/"
-		this.resourceBaseUrl_ = ('resourceBaseUrl' in options) ? options.resourceBaseUrl : null;
+		this.resourceBaseUrl_ = 'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
 
 		this.cachedOutputs_ = {};
 
@@ -106,7 +105,7 @@ class MdToHtml {
 				} catch (error) {
 					return '<pre class="hljs"><code>' + markdownIt.utils.escapeHtml(str) + '</code></pre>';
 				}
-			}
+			},
 		});
 
 		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
@@ -118,7 +117,7 @@ class MdToHtml {
 		//    const someMarkdownPlugin = require('someMarkdownPlugin');
 		//    markdownIt.use(someMarkdownPlugin);
 		//
-		// 2. If the plugin does not need any application specific data, and you want the user 
+		// 2. If the plugin does not need any application specific data, and you want the user
 		//    to be able to toggle the plugin:
 		//
 		//    Add the plugin to the plugins object
@@ -146,7 +145,7 @@ class MdToHtml {
 		if (Setting.value('markdown.plugin.katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
-		markdownIt.use(markdownItAnchor)
+		markdownIt.use(markdownItAnchor);
 
 		for (let key in plugins) {
 			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);
@@ -191,7 +190,6 @@ class MdToHtml {
 	injectedJavaScript() {
 		return '';
 	}
-
 }
 
 module.exports = MdToHtml;

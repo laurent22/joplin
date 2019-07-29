@@ -4,7 +4,6 @@ const { dirname, basename } = require('lib/path-utils.js');
 const { OneDriveApi } = require('lib/onedrive-api.js');
 
 class FileApiDriverOneDrive {
-
 	constructor(api) {
 		this.api_ = api;
 		this.pathCache_ = {};
@@ -17,7 +16,7 @@ class FileApiDriverOneDrive {
 	itemFilter_() {
 		return {
 			select: 'name,file,folder,fileSystemInfo,parentReference',
-		}
+		};
 	}
 
 	makePath_(path) {
@@ -35,7 +34,7 @@ class FileApiDriverOneDrive {
 	makeItem_(odItem) {
 		let output = {
 			path: odItem.name,
-			isDir: ('folder' in odItem),
+			isDir: 'folder' in odItem,
 		};
 
 		if ('deleted' in odItem) {
@@ -68,8 +67,12 @@ class FileApiDriverOneDrive {
 	async setTimestamp(path, timestamp) {
 		let body = {
 			fileSystemInfo: {
-				lastModifiedDateTime: moment.unix(timestamp / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z',
-			}
+				lastModifiedDateTime:
+					moment
+						.unix(timestamp / 1000)
+						.utc()
+						.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z',
+			},
 		};
 		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
 		return this.makeItem_(item);
@@ -89,8 +92,8 @@ class FileApiDriverOneDrive {
 		return {
 			hasMore: !!r['@odata.nextLink'],
 			items: this.makeItems_(r.value),
-			context: r["@odata.nextLink"],
-		}
+			context: r['@odata.nextLink'],
+		};
 	}
 
 	async get(path, options = null) {
@@ -165,7 +168,7 @@ class FileApiDriverOneDrive {
 		let newName = basename(newPath);
 
 		// We don't want the modification date to change when we move the file so retrieve it
-		// now set it in the PATCH operation.		
+		// now set it in the PATCH operation.
 
 		let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
 			name: newName,
@@ -205,10 +208,10 @@ class FileApiDriverOneDrive {
 			const query = this.itemFilter_();
 			query.select += ',deleted';
 			return { url: url, query: query };
-		}
+		};
 
 		const pathDetails = await this.pathDetails_(path);
-		const pathId = pathDetails.id;	
+		const pathId = pathDetails.id;
 
 		let context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
@@ -231,7 +234,7 @@ class FileApiDriverOneDrive {
 
 				// The delta token has expired or is invalid and so a full resync is required. This happens for example when all the items
 				// on the OneDrive App folder are manually deleted. In this case, instead of sending the list of deleted items in the delta
-				// call, OneDrive simply request the client to re-sync everything. 
+				// call, OneDrive simply request the client to re-sync everything.
 
 				// OneDrive provides a URL to resume syncing from but it does not appear to work so below we simply start over from
 				// the beginning. The synchronizer will ensure that no duplicate are created and conflicts will be resolved.
@@ -254,7 +257,7 @@ class FileApiDriverOneDrive {
 		// is special since it's managed directly by the clients and resources never change - only the
 		// associated .md file at the root is synced). So in the loop below we check that the parent is
 		// indeed the root, otherwise the item is skipped.
-		// (Not sure but it's possible the delta API also returns events for files that are copied outside 
+		// (Not sure but it's possible the delta API also returns events for files that are copied outside
 		//  of the app directory and later deleted or modified. We also don't want to deal with
 		//  these files during sync).
 
@@ -294,7 +297,6 @@ class FileApiDriverOneDrive {
 
 		return output;
 	}
-
 }
 
 module.exports = { FileApiDriverOneDrive };

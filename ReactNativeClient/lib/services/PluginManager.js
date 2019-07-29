@@ -1,9 +1,8 @@
 const { Logger } = require('lib/logger.js');
 
 class PluginManager {
-
 	constructor() {
-		this.plugins_ = {}; 
+		this.plugins_ = {};
 		this.logger_ = new Logger();
 	}
 
@@ -26,7 +25,7 @@ class PluginManager {
 
 		for (let i = 0; i < classes.length; i++) {
 			const PluginClass = classes[i];
-			
+
 			if (this.plugins_[PluginClass.manifest.name]) throw new Error('Already registered: ' + PluginClass.manifest.name);
 
 			this.plugins_[PluginClass.manifest.name] = {
@@ -40,7 +39,7 @@ class PluginManager {
 		const p = this.plugins_[name];
 		if (p.instance) return p.instance;
 		p.instance = new p.Class();
-		p.instance.dispatch = (action) => this.dispatch_(action);
+		p.instance.dispatch = action => this.dispatch_(action);
 		return p.instance;
 	}
 
@@ -66,7 +65,7 @@ class PluginManager {
 			return {
 				Dialog: Class.Dialog,
 				props: this.dialogProps_(name),
-			}
+			};
 		}
 
 		return null;
@@ -74,7 +73,7 @@ class PluginManager {
 
 	dialogProps_(name) {
 		return {
-			dispatch: (action) => this.dispatch_(action),
+			dispatch: action => this.dispatch_(action),
 			plugin: this.pluginInstance_(name),
 		};
 	}
@@ -91,7 +90,7 @@ class PluginManager {
 						pluginName: name,
 						itemName: item.name,
 					});
-				}
+				};
 			}
 
 			output = output.concat(menuItems);
@@ -99,7 +98,6 @@ class PluginManager {
 
 		return output;
 	}
-
 }
 
 module.exports = PluginManager;

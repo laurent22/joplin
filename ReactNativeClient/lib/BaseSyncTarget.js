@@ -1,7 +1,6 @@
 const EncryptionService = require('lib/services/EncryptionService.js');
 
 class BaseSyncTarget {
-
 	constructor(db, options = null) {
 		this.db_ = db;
 		this.synchronizer_ = null;
@@ -19,7 +18,7 @@ class BaseSyncTarget {
 	}
 
 	option(name, defaultValue = null) {
-		return this.options_ && (name in this.options_) ? this.options_[name] : defaultValue;
+		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}
 
 	logger() {
@@ -117,13 +116,12 @@ class BaseSyncTarget {
 
 	async syncStarted() {
 		if (!this.synchronizer_) return false;
-		if (!await this.isAuthenticated()) return false;
+		if (!(await this.isAuthenticated())) return false;
 		const sync = await this.synchronizer();
 		return sync.state() != 'idle';
 	}
-
 }
 
-BaseSyncTarget.dispatch = (action) => {};
+BaseSyncTarget.dispatch = action => {};
 
 module.exports = BaseSyncTarget;

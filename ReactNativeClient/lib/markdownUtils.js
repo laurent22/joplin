@@ -4,7 +4,6 @@ const MarkdownIt = require('markdown-it');
 const setupLinkify = require('lib/renderers/MdToHtml/setupLinkify');
 
 const markdownUtils = {
-
 	// Not really escaping because that's not supported by marked.js
 	escapeLinkText(text) {
 		return text.replace(/(\[|\]|\(|\))/g, '_');
@@ -30,7 +29,7 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output = [];
 
-		const searchUrls = (tokens) => {
+		const searchUrls = tokens => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 
@@ -42,12 +41,12 @@ const markdownUtils = {
 						}
 					}
 				}
-				
+
 				if (token.children && token.children.length) {
 					searchUrls(token.children);
 				}
 			}
-		}
+		};
 
 		searchUrls(tokens);
 
@@ -87,8 +86,6 @@ const markdownUtils = {
 
 		return output.join('\n');
 	},
-
-
 };
 
 module.exports = markdownUtils;

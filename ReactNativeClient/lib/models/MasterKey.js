@@ -2,7 +2,6 @@ const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
 
 class MasterKey extends BaseItem {
-
 	static tableName() {
 		return 'master_keys';
 	}
@@ -20,7 +19,7 @@ class MasterKey extends BaseItem {
 	}
 
 	static async save(o, options = null) {
-		return super.save(o, options).then((item) => {
+		return super.save(o, options).then(item => {
 			this.dispatch({
 				type: 'MASTERKEY_UPDATE_ONE',
 				item: item,
@@ -28,7 +27,6 @@ class MasterKey extends BaseItem {
 			return item;
 		});
 	}
-
 }
 
 module.exports = MasterKey;

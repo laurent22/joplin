@@ -8,7 +8,6 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
 class SyncTargetOneDrive extends BaseSyncTarget {
-
 	static id() {
 		return 3;
 	}
@@ -50,7 +49,7 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 		this.api_ = new OneDriveApi(this.oneDriveParameters().id, this.oneDriveParameters().secret, isPublic);
 		this.api_.setLogger(this.logger());
 
-		this.api_.on('authRefreshed', (a) => {
+		this.api_.on('authRefreshed', a => {
 			this.logger().info('Saving updated OneDrive auth.');
 			Setting.setValue('sync.' + this.syncTargetId() + '.auth', a ? JSON.stringify(a) : null);
 		});
@@ -67,7 +66,7 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 
 			this.api_.setAuth(auth);
 		}
-		
+
 		return this.api_;
 	}
 
@@ -80,10 +79,9 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async initSynchronizer() {
-		if (!await this.isAuthenticated()) throw new Error('User is not authentified');
+		if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
-
 }
 
 module.exports = SyncTargetOneDrive;

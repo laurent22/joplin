@@ -3,7 +3,6 @@ const htmlUtils = require('lib/htmlUtils');
 const utils = require('./utils');
 
 class HtmlToHtml {
-
 	constructor(options) {
 		this.resourceBaseUrl_ = 'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
 	}
@@ -31,9 +30,8 @@ class HtmlToHtml {
 		return {
 			html: html,
 			cssFiles: [],
-		}
+		};
 	}
-
 }
 
 module.exports = HtmlToHtml;

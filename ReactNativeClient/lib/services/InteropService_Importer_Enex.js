@@ -16,7 +16,6 @@ const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
 
 class InteropService_Importer_Enex extends InteropService_Importer_Base {
-
 	async exec(result) {
 		const { importEnex } = require('lib/import-enex');
 
@@ -31,7 +30,6 @@ class InteropService_Importer_Enex extends InteropService_Importer_Base {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService_Importer_Enex;

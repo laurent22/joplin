@@ -12,7 +12,6 @@ function hexPad(s, length) {
 }
 
 class EncryptionService {
-
 	constructor() {
 		// Note: 1 MB is very slow with Node and probably even worse on mobile.
 		//
@@ -35,10 +34,7 @@ class EncryptionService {
 
 		this.headerTemplates_ = {
 			1: {
-				fields: [
-					[ 'encryptionMethod', 2, 'int' ],
-					[ 'masterKeyId', 32, 'hex' ],
-				],
+				fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
 			},
 		};
 	}
@@ -71,8 +67,8 @@ class EncryptionService {
 
 		if (password) {
 			let passwordCache = Setting.value('encryption.passwordCache');
-			passwordCache[masterKey.id] = password;	
-			Setting.setValue('encryption.passwordCache', passwordCache);		
+			passwordCache[masterKey.id] = password;
+			Setting.setValue('encryption.passwordCache', passwordCache);
 		}
 
 		// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
@@ -88,7 +84,7 @@ class EncryptionService {
 
 		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
 		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
-		
+
 		Setting.setValue('encryption.enabled', false);
 		// The only way to make sure everything gets decrypted on the sync target is
 		// to re-sync everything.
@@ -195,7 +191,7 @@ class EncryptionService {
 
 	sha256(string) {
 		const sjcl = shim.sjclModule;
-		const bitArray = sjcl.hash.sha256.hash(string);  
+		const bitArray = sjcl.hash.sha256.hash(string);
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
 
@@ -207,20 +203,30 @@ class EncryptionService {
 		// we use shim.randomBytes directly to generate master keys.
 
 		const sjcl = shim.sjclModule;
-		const randomBytes = await shim.randomBytes(1024/8);
-		const hexBytes = randomBytes.map((a) => { return a.toString(16) });
+		const randomBytes = await shim.randomBytes(1024 / 8);
+		const hexBytes = randomBytes.map(a => {
+			return a.toString(16);
+		});
 		const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
 		sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
 	}
 
 	async randomHexString(byteCount) {
 		const bytes = await shim.randomBytes(byteCount);
-		return bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
+		return bytes
+			.map(a => {
+				return hexPad(a.toString(16), 2);
+			})
+			.join('');
 	}
 
 	async generateMasterKey(password) {
 		const bytes = await shim.randomBytes(256);
-		const hexaBytes = bytes.map((a) => { return hexPad(a.toString(16), 2); }).join('');
+		const hexaBytes = bytes
+			.map(a => {
+				return hexPad(a.toString(16), 2);
+			})
+			.join('');
 		const checksum = this.sha256(hexaBytes);
 		const encryptionMethod = EncryptionService.METHOD_SJCL_2;
 		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
@@ -267,9 +273,9 @@ class EncryptionService {
 					iter: 1000, // Defaults to 10000 in sjcl but since we're running this on mobile devices, use a lower value. Maybe review this after some time. https://security.stackexchange.com/questions/3959/recommended-of-iterations-when-using-pkbdf2-sha256
 					ks: 128, // Key size - "128 bits should be secure enough"
 					ts: 64, // ???
-					mode: "ocb2", //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented. 
+					mode: 'ocb2', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
 					//"adata":"", // Associated Data - not needed?
-					cipher: "aes"
+					cipher: 'aes',
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
@@ -285,8 +291,8 @@ class EncryptionService {
 					iter: 10000,
 					ks: 256,
 					ts: 64,
-					mode: "ocb2",
-					cipher: "aes"
+					mode: 'ocb2',
+					cipher: 'aes',
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
@@ -302,7 +308,7 @@ class EncryptionService {
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
-		
+
 		if (method === EncryptionService.METHOD_SJCL || method === EncryptionService.METHOD_SJCL_2) {
 			try {
 				return sjcl.json.decrypt(key, cipherText);
@@ -413,7 +419,7 @@ class EncryptionService {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
-			read: async (size) => {
+			read: async size => {
 				return this.fsDriver().readFileChunk(reader.handle, size, encoding);
 			},
 			close: async () => {
@@ -425,7 +431,7 @@ class EncryptionService {
 
 	async fileWriter_(path, encoding) {
 		return {
-			append: async (data) => {
+			append: async data => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
@@ -455,7 +461,7 @@ class EncryptionService {
 			if (destination) await destination.close();
 			source = null;
 			destination = null;
-		}
+		};
 
 		try {
 			await this.fsDriver().unlink(destPath);
@@ -478,7 +484,7 @@ class EncryptionService {
 			if (destination) await destination.close();
 			source = null;
 			destination = null;
-		}
+		};
 
 		try {
 			await this.fsDriver().unlink(destPath);
@@ -518,7 +524,7 @@ class EncryptionService {
 		const reader = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0,64));
+		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0, 64));
 		const template = this.headerTemplate(version);
 
 		const size = parseInt(reader.read(6), 16);
@@ -563,7 +569,6 @@ class EncryptionService {
 		await this.fsDriver().close(handle);
 		return this.isValidHeaderIdentifier(headerIdentifier);
 	}
-
 }
 
 EncryptionService.METHOD_SJCL = 1;

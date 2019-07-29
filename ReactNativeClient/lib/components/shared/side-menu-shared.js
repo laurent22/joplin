@@ -49,11 +49,13 @@ function renderFoldersRecursive_(props, renderItem, items, parentId, depth, orde
 
 shared.renderFolders = function(props, renderItem) {
 	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
-}
+};
 
 shared.renderTags = function(props, renderItem) {
 	let tags = props.tags.slice();
-	tags.sort((a, b) => { return a.title < b.title ? -1 : +1; });
+	tags.sort((a, b) => {
+		return a.title < b.title ? -1 : +1;
+	});
 	let tagItems = [];
 	const order = [];
 	for (let i = 0; i < tags.length; i++) {
@@ -65,7 +67,7 @@ shared.renderTags = function(props, renderItem) {
 		items: tagItems,
 		order: order,
 	};
-}
+};
 
 // shared.renderSearches = function(props, renderItem) {
 // 	let searches = props.searches.slice();
@@ -88,7 +90,7 @@ shared.synchronize_press = async function(comp) {
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 
-	if (!await reg.syncTarget().isAuthenticated()) {
+	if (!(await reg.syncTarget().isAuthenticated())) {
 		if (reg.syncTarget().authRouteName()) {
 			comp.props.dispatch({
 				type: 'NAV_GO',
@@ -117,6 +119,6 @@ shared.synchronize_press = async function(comp) {
 		reg.scheduleSync(0);
 		return 'sync';
 	}
-}
+};
 
 module.exports = shared;

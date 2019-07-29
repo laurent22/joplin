@@ -6,7 +6,6 @@ const Note = require('lib/models/Note');
 const { shim } = require('lib/shim');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
-
 	async init(destDir) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? destDir + '/_resources' : null;
@@ -75,7 +74,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	}
 
 	async close() {}
-
 }
 
 module.exports = InteropService_Exporter_Md;

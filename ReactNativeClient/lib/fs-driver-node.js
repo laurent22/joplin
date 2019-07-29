@@ -3,7 +3,6 @@ const { time } = require('lib/time-utils.js');
 const FsDriverBase = require('lib/fs-driver-base');
 
 class FsDriverNode extends FsDriverBase {
-
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += '. Path: ' + path;
@@ -183,7 +182,6 @@ class FsDriverNode extends FsDriverBase {
 		if (encoding === 'ascii') return buffer.toString('ascii');
 		throw new Error('Unsupported encoding: ' + encoding);
 	}
-
 }
 
 module.exports.FsDriverNode = FsDriverNode;

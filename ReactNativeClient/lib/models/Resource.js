@@ -13,7 +13,6 @@ const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
 
 class Resource extends BaseItem {
-
 	static tableName() {
 		return 'resources';
 	}
@@ -28,7 +27,7 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/svg+xml", "image/webp"];
+		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
@@ -61,7 +60,7 @@ class Resource extends BaseItem {
 		if (!output) output = resource.id;
 		let extension = resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? ('.' + extension) : '';
+		extension = extension ? '.' + extension : '';
 		return output + extension;
 	}
 
@@ -76,7 +75,7 @@ class Resource extends BaseItem {
 	static filename(resource, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? ('.' + extension) : '';
+		extension = extension ? '.' + extension : '';
 		return resource.id + extension;
 	}
 
@@ -126,7 +125,7 @@ class Resource extends BaseItem {
 				// As the identifier is invalid it most likely means that this is not encrypted data
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
-				this.logger().warn('Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ' + item.id)
+				this.logger().warn('Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ' + item.id);
 				this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
@@ -147,7 +146,7 @@ class Resource extends BaseItem {
 
 		if (!Setting.value('encryption.enabled')) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
-			if (!!resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
+			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
 		}
 
@@ -171,13 +170,13 @@ class Resource extends BaseItem {
 		if (!tagAlt) tagAlt = '';
 		let lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
-			lines.push("![");
+			lines.push('![');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push("](:/" + resource.id + ")");
+			lines.push('](:/' + resource.id + ')');
 		} else {
-			lines.push("[");
+			lines.push('[');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push("](:/" + resource.id + ")");
+			lines.push('](:/' + resource.id + ')');
 		}
 		return lines.join('');
 	}
@@ -252,13 +251,10 @@ class Resource extends BaseItem {
 	}
 
 	static async downloadedButEncryptedBlobCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [
-			Resource.FETCH_STATUS_DONE,
-		]);
+		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [Resource.FETCH_STATUS_DONE]);
 
 		return r ? r.total : 0;
 	}
-
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;

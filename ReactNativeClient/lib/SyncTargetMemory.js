@@ -6,7 +6,6 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 
 class SyncTargetMemory extends BaseSyncTarget {
-
 	static id() {
 		return 1;
 	}
@@ -33,7 +32,6 @@ class SyncTargetMemory extends BaseSyncTarget {
 	async initSynchronizer() {
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
-
 }
 
 module.exports = SyncTargetMemory;

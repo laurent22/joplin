@@ -11,7 +11,6 @@ const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav');
 
 class SyncTargetNextcloud extends BaseSyncTarget {
-
 	static id() {
 		return 5;
 	}
@@ -51,7 +50,6 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	async initSynchronizer() {
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
-
 }
 
 module.exports = SyncTargetNextcloud;

@@ -4,7 +4,6 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale');
 
 class ModalDialog extends React.Component {
-
 	constructor() {
 		super();
 		this.styles_ = {};
@@ -23,17 +22,17 @@ class ModalDialog extends React.Component {
 				justifyContent: 'center',
 			},
 			modalContentWrapper: {
-				flex:1,
+				flex: 1,
 				flexDirection: 'column',
 				backgroundColor: theme.backgroundColor,
 				borderWidth: 1,
-				borderColor:theme.dividerColor,
+				borderColor: theme.dividerColor,
 				margin: 20,
 				padding: 10,
 				borderRadius: 5,
 			},
 			modalContentWrapper2: {
-				flex:1,
+				flex: 1,
 			},
 			title: Object.assign({}, theme.normalText, {
 				borderBottomWidth: 1,
@@ -59,17 +58,15 @@ class ModalDialog extends React.Component {
 
 		return (
 			<View style={this.styles().modalWrapper}>
-				<Modal transparent={true} visible={true} onRequestClose={() => { }} >
+				<Modal transparent={true} visible={true} onRequestClose={() => {}}>
 					<View elevation={10} style={this.styles().modalContentWrapper}>
 						<Text style={this.styles().title}>{this.props.title}</Text>
-						<View style={this.styles().modalContentWrapper2}>
-							{ContentComponent}
-						</View>
+						<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
 						<View style={this.styles().buttonRow}>
-							<View style={{flex:1}}>
+							<View style={{ flex: 1 }}>
 								<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
 							</View>
-							<View style={{flex:1, marginLeft: 5}}>
+							<View style={{ flex: 1, marginLeft: 5 }}>
 								<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
 							</View>
 						</View>

@@ -1,5 +1,4 @@
 class InteropService_Exporter_Base {
-
 	async init(destDir) {}
 	async processItem(ItemClass, item) {}
 	async processResource(resource, filePath) {}
@@ -27,7 +26,6 @@ class InteropService_Exporter_Base {
 		if (createIt) await require('fs-extra').mkdirp(tempDir);
 		return tempDir;
 	}
-
 }
 
 module.exports = InteropService_Exporter_Base;

@@ -17,12 +17,16 @@ const saveNoteMutex_ = new Mutex();
 shared.noteExists = async function(noteId) {
 	const existingNote = await Note.load(noteId);
 	return !!existingNote;
-}
+};
 
 shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
-	options = Object.assign({}, {
-		autoTitle: true,
-	}, options);
+	options = Object.assign(
+		{},
+		{
+			autoTitle: true,
+		},
+		options
+	);
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
@@ -55,7 +59,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
-	const savedNote = ('fields' in saveOptions) && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
+	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
 
 	const stateNote = comp.state.note;
 
@@ -91,7 +95,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	// await shared.refreshAttachedResources(comp, newState.note.body);
 
 	if (isNew) {
-		Note.updateGeolocation(note.id).then((geoNote) => {
+		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
@@ -103,7 +107,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 				longitude: geoNote.longitude,
 				latitude: geoNote.latitude,
 				altitude: geoNote.altitude,
-			}
+			};
 
 			const modNote = Object.assign({}, stateNote, geoInfo);
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
@@ -122,7 +126,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	}
 
 	releaseMutex();
-}
+};
 
 shared.saveOneProperty = async function(comp, name, value) {
 	let note = Object.assign({}, comp.state.note);
@@ -145,25 +149,25 @@ shared.saveOneProperty = async function(comp, name, value) {
 		});
 	} else {
 		note[name] = value;
-		comp.setState({	note: note });
+		comp.setState({ note: note });
 	}
-}
+};
 
 shared.noteComponent_change = function(comp, propName, propValue) {
-	let newState = {}
+	let newState = {};
 
 	let note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
 	newState.note = note;
 
 	comp.setState(newState);
-}
+};
 
 let resourceCache_ = {};
 
 shared.clearResourceCache = function() {
 	resourceCache_ = {};
-}
+};
 
 shared.attachedResources = async function(noteBody) {
 	if (!noteBody) return {};
@@ -172,7 +176,7 @@ shared.attachedResources = async function(noteBody) {
 	const output = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
-		
+
 		if (resourceCache_[id]) {
 			output[id] = resourceCache_[id];
 		} else {
@@ -190,14 +194,14 @@ shared.attachedResources = async function(noteBody) {
 	}
 
 	return output;
-}
+};
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
-}
+};
 
 shared.initState = async function(comp) {
 	let note = null;
@@ -226,13 +230,13 @@ shared.initState = async function(comp) {
 	}
 
 	comp.lastLoadedNoteId_ = note ? note.id : null;
-}
+};
 
 shared.toggleIsTodo_onPress = function(comp) {
 	let newNote = Note.toggleIsTodo(comp.state.note);
 	let newState = { note: newNote };
 	comp.setState(newState);
-}
+};
 
 shared.toggleCheckbox = function(ipcMessage, noteBody) {
 	let newBody = noteBody.split('\n');
@@ -264,24 +268,24 @@ shared.toggleCheckbox = function(ipcMessage, noteBody) {
 
 	if (!isCrossLine) {
 		line = line.replace(/- \[ \] /, '- [x] ');
-	} else {  
+	} else {
 		line = line.replace(/- \[x\] /i, '- [ ] ');
 	}
 
 	newBody[lineIndex] = line;
-	return newBody.join('\n')
-}
+	return newBody.join('\n');
+};
 
 shared.installResourceHandling = function(refreshResourceHandler) {
 	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
 	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
-}
+};
 
 shared.uninstallResourceHandling = function(refreshResourceHandler) {
 	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
 	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
 	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
-}
+};
 
 module.exports = shared;

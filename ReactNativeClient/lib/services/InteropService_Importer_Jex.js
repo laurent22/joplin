@@ -18,7 +18,6 @@ const { uuid } = require('lib/uuid.js');
 const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Jex extends InteropService_Importer_Base {
-
 	async exec(result) {
 		const tempDir = await this.temporaryDirectory_(true);
 
@@ -46,7 +45,6 @@ class InteropService_Importer_Jex extends InteropService_Importer_Base {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService_Importer_Jex;

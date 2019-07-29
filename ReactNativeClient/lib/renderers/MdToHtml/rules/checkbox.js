@@ -1,5 +1,5 @@
 const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = (new Entities()).encode;
+const htmlentities = new Entities().encode;
 const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
 
@@ -44,20 +44,12 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	`;
 
 	token = new Token('checkbox_input', 'input', 0);
-	token.attrs = [
-		['type', 'checkbox'],
-		['id', id],
-		['onclick', js],
-	];
+	token.attrs = [['type', 'checkbox'], ['id', id], ['onclick', js]];
 	if (checked) token.attrs.push(['checked', 'true']);
 	tokens.push(token);
 
 	token = new Token('label_open', 'label', 1);
-	token.attrs = [
-		['id', labelId],
-		['for', id],
-		['class', 'checkbox-label-' + checkedString],
-	];
+	token.attrs = [['id', labelId], ['for', id], ['class', 'checkbox-label-' + checkedString]];
 	tokens.push(token);
 
 	if (label) {
@@ -78,7 +70,7 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 		const tokens = state.tokens;
 		const Token = state.Token;
 
-		const checkboxPattern = /^\[([x|X| ])\] (.*)$/
+		const checkboxPattern = /^\[([x|X| ])\] (.*)$/;
 		let currentListItem = null;
 		let processedFirstInline = false;
 		for (let i = 0; i < tokens.length; i++) {

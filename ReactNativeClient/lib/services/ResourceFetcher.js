@@ -8,11 +8,10 @@ const EventEmitter = require('events');
 const { shim } = require('lib/shim');
 
 class ResourceFetcher extends BaseService {
-
 	constructor(fileApi = null) {
 		super();
 
-		this.dispatch = (action) => {};
+		this.dispatch = action => {};
 
 		this.setFileApi(fileApi);
 		this.logger_ = new Logger();
@@ -47,7 +46,7 @@ class ResourceFetcher extends BaseService {
 	}
 
 	setFileApi(v) {
-		if (v !== null && typeof v !== 'function') throw new Error('fileApi must be a function that returns the API. Type is ' + (typeof v));
+		if (v !== null && typeof v !== 'function') throw new Error('fileApi must be a function that returns the API. Type is ' + typeof v);
 		this.fileApi_ = v;
 	}
 
@@ -123,7 +122,6 @@ class ResourceFetcher extends BaseService {
 		const localState = await Resource.localState(resource);
 
 		const completeDownload = async (emitDownloadComplete = true, localResourceContentPath = '') => {
-
 			// 2019-05-12: This is only necessary to set the file size of the resources that come via
 			// sync. The other ones have been done using migrations/20.js. This code can be removed
 			// after a few months.
@@ -141,7 +139,7 @@ class ResourceFetcher extends BaseService {
 			// encrypted it's not useful. Probably, the views should listen to DecryptionWorker events instead.
 			if (resource && emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id, encrypted: !!resource.encryption_blob_encrypted });
 			this.updateReport();
-		}
+		};
 
 		if (!resource) {
 			this.logger().info('ResourceFetcher: Attempting to download a resource that does not exist (has been deleted?): ' + resourceId);
@@ -159,7 +157,7 @@ class ResourceFetcher extends BaseService {
 		this.fetchingItems_[resourceId] = resource;
 
 		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
-		const remoteResourceContentPath = this.resourceDirName_ + "/" + resource.id;
+		const remoteResourceContentPath = this.resourceDirName_ + '/' + resource.id;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
 
@@ -167,17 +165,20 @@ class ResourceFetcher extends BaseService {
 
 		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
 
-		this.eventEmitter_.emit('downloadStarted', { id: resource.id })
+		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
-		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
-			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
-			this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
-			await completeDownload(true, localResourceContentPath);
-		}).catch(async (error) => {
-			this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
-			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
-			await completeDownload();
-		});
+		fileApi
+			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
+			.then(async () => {
+				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
+				this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
+				await completeDownload(true, localResourceContentPath);
+			})
+			.catch(async error => {
+				this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
+				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
+				await completeDownload();
+			});
 	}
 
 	processQueue_() {
@@ -243,7 +244,6 @@ class ResourceFetcher extends BaseService {
 		await Resource.resetStartedFetchStatus();
 		this.autoAddResources(null);
 	}
-
 }
 
 module.exports = ResourceFetcher;

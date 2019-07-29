@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { connect } = require('react-redux');
 const { Platform, View, Text, Button, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -27,7 +28,6 @@ const DialogBox = require('react-native-dialogbox').default;
 const PADDING_V = 10;
 
 class ScreenHeaderComponent extends React.PureComponent {
-
 	constructor() {
 		super();
 		this.styles_ = {};
@@ -52,7 +52,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			divider: {
 				borderBottomWidth: 1,
 				borderColor: theme.dividerColor,
-				backgroundColor: "#0000ff"
+				backgroundColor: '#0000ff',
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -132,7 +132,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				paddingBottom: 15,
 			},
 			warningBox: {
-				backgroundColor: "#ff9900",
+				backgroundColor: '#ff9900',
 				flexDirection: 'row',
 				padding: theme.marginLeft,
 			},
@@ -160,9 +160,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async backButton_press() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
-		} else { 
+		} else {
 			await BackButtonService.back();
-		}	
+		}
 	}
 
 	searchButton_press() {
@@ -181,7 +181,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	menu_select(value) {
-		if (typeof(value) == 'function') {
+		if (typeof value == 'function') {
 			value();
 		}
 	}
@@ -199,12 +199,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	render() {
-
 		function sideMenuButton(styles, onPress) {
 			return (
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.sideMenuButton}>
-						<Icon name='md-menu' style={styles.topIcon} />
+						<Icon name="md-menu" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -214,7 +213,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return (
 				<TouchableOpacity onPress={onPress} disabled={disabled}>
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
-						<Icon name='md-arrow-back' style={styles.topIcon} />
+						<Icon name="md-arrow-back" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -223,13 +222,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 		function saveButton(styles, onPress, disabled, show) {
 			if (!show) return null;
 
-			const icon = disabled ? <Icon name='md-checkmark' style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
+			const icon = disabled ? <Icon name="md-checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
 
 			return (
-				<TouchableOpacity onPress={onPress} disabled={disabled} style={{ padding:0 }}>
-					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>
-						{ icon }
-					</View>
+				<TouchableOpacity onPress={onPress} disabled={disabled} style={{ padding: 0 }}>
+					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
 				</TouchableOpacity>
 			);
 		}
@@ -238,7 +235,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return (
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.iconButton}>
-						<Icon name='md-search' style={styles.topIcon} />
+						<Icon name="md-search" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -248,7 +245,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return (
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.iconButton}>
-						<Icon name='md-trash' style={styles.topIcon} />
+						<Icon name="md-trash" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -258,7 +255,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			return (
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.iconButton}>
-						<Icon name='md-funnel' style={styles.topIcon} />
+						<Icon name="md-funnel" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -272,23 +269,25 @@ class ScreenHeaderComponent extends React.PureComponent {
 				let o = this.props.menuOptions[i];
 
 				if (o.isDivider) {
-					menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
+					menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
 				} else {
 					menuOptionComponents.push(
 						<MenuOption value={o.onPress} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
 							<Text style={this.styles().contextMenuItemText}>{o.title}</Text>
-						</MenuOption>);
+						</MenuOption>
+					);
 				}
 			}
 
 			if (menuOptionComponents.length) {
-				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider}/>);
+				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
 			}
 		} else {
 			menuOptionComponents.push(
 				<MenuOption value={() => this.deleteButton_press()} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Delete')}</Text>
-				</MenuOption>);
+				</MenuOption>
+			);
 		}
 
 		const createTitleComponent = () => {
@@ -297,7 +296,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 			const folderPickerOptions = this.props.folderPickerOptions;
 
 			if (folderPickerOptions && folderPickerOptions.enabled) {
-
 				const addFolderChildren = (folders, pickerItems, indent) => {
 					folders.sort((a, b) => {
 						const aTitle = a && a.title ? a.title : '';
@@ -312,23 +310,23 @@ class ScreenHeaderComponent extends React.PureComponent {
 					}
 
 					return pickerItems;
-				}
+				};
 
-				const titlePickerItems = (mustSelect) => {
+				const titlePickerItems = mustSelect => {
 					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
 					const folderTree = Folder.buildTree(folders);
 					output = addFolderChildren(folderTree, output, 0);
 					return output;
-				}
+				};
 
 				return (
 					<Dropdown
 						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
 						itemHeight={35}
 						labelTransform="trim"
-						selectedValue={('selectedFolderId' in folderPickerOptions) ? folderPickerOptions.selectedFolderId : null}
+						selectedValue={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
 						}}
@@ -368,13 +366,13 @@ class ScreenHeaderComponent extends React.PureComponent {
 				);
 			} else {
 				let title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
-				return <Text style={this.styles().titleText}>{title}</Text>
+				return <Text style={this.styles().titleText}>{title}</Text>;
 			}
-		}
+		};
 
 		const warningComp = this.props.showMissingMasterKeyMessage ? (
 			<TouchableOpacity style={this.styles().warningBox} onPress={() => this.warningBox_press()} activeOpacity={0.8}>
-				<Text style={{flex:1}}>{_('Press to set the decryption password.')}</Text>
+				<Text style={{ flex: 1 }}>{_('Press to set the decryption password.')}</Text>
 			</TouchableOpacity>
 		) : null;
 
@@ -384,7 +382,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
 
 		let backButtonDisabled = !this.props.historyCanGoBack;
-		if (!!this.props.noteSelectionEnabled) backButtonDisabled = false;
+		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
 
 		const titleComp = createTitleComponent();
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
@@ -395,59 +393,66 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const windowHeight = Dimensions.get('window').height - 50;
 
 		const contextMenuStyle = { paddingTop: PADDING_V, paddingBottom: PADDING_V };
-		
-		// HACK: if this button is removed during selection mode, the header layout is broken, so for now just make it 1 pixel large (normally it should be hidden)
-		if (!!this.props.noteSelectionEnabled) contextMenuStyle.width = 1;
 
-		const menuComp = !menuOptionComponents.length || !showContextMenuButton ? null : (
-			<Menu onSelect={(value) => this.menu_select(value)} style={this.styles().contextMenu}>
-				<MenuTrigger style={contextMenuStyle}>
-					<Icon name='md-more' style={this.styles().contextMenuTrigger} />
-				</MenuTrigger>
-				<MenuOptions>
-					<ScrollView style={{ maxHeight: windowHeight }}>
-						{ menuOptionComponents }
-					</ScrollView>
-				</MenuOptions>
-			</Menu>
-		);
+		// HACK: if this button is removed during selection mode, the header layout is broken, so for now just make it 1 pixel large (normally it should be hidden)
+		if (this.props.noteSelectionEnabled) contextMenuStyle.width = 1;
+
+		const menuComp =
+			!menuOptionComponents.length || !showContextMenuButton ? null : (
+				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
+					<MenuTrigger style={contextMenuStyle}>
+						<Icon name="md-more" style={this.styles().contextMenuTrigger} />
+					</MenuTrigger>
+					<MenuOptions>
+						<ScrollView style={{ maxHeight: windowHeight }}>{menuOptionComponents}</ScrollView>
+					</MenuOptions>
+				</Menu>
+			);
 
 		return (
-			<View style={this.styles().container} >
-				<View style={{flexDirection:'row', alignItems: 'center'}}>
-					{ sideMenuComp }
-					{ backButtonComp }
-					{ saveButton(this.styles(), () => { if (this.props.onSaveButtonPress) this.props.onSaveButtonPress() }, this.props.saveButtonDisabled === true, this.props.showSaveButton === true) }
-					{ titleComp }
-					{ searchButtonComp }
-					{ deleteButtonComp }
-					{ sortButtonComp }
-					{ menuComp }
+			<View style={this.styles().container}>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					{sideMenuComp}
+					{backButtonComp}
+					{saveButton(
+						this.styles(),
+						() => {
+							if (this.props.onSaveButtonPress) this.props.onSaveButtonPress();
+						},
+						this.props.saveButtonDisabled === true,
+						this.props.showSaveButton === true
+					)}
+					{titleComp}
+					{searchButtonComp}
+					{deleteButtonComp}
+					{sortButtonComp}
+					{menuComp}
 				</View>
-				{ warningComp }
-				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
+				{warningComp}
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
-
 }
 
 ScreenHeaderComponent.defaultProps = {
 	menuOptions: [],
 };
 
-const ScreenHeader = connect(
-	(state) => {
-		return {
-			historyCanGoBack: state.historyCanGoBack,
-			locale: state.settings.locale,
-			folders: state.folders,
-			theme: state.settings.theme,
-			noteSelectionEnabled: state.noteSelectionEnabled,
-			selectedNoteIds: state.selectedNoteIds,
-			showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
-		};
-	}
-)(ScreenHeaderComponent)
+const ScreenHeader = connect(state => {
+	return {
+		historyCanGoBack: state.historyCanGoBack,
+		locale: state.settings.locale,
+		folders: state.folders,
+		theme: state.settings.theme,
+		noteSelectionEnabled: state.noteSelectionEnabled,
+		selectedNoteIds: state.selectedNoteIds,
+		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+	};
+})(ScreenHeaderComponent);
 
 module.exports = { ScreenHeader };

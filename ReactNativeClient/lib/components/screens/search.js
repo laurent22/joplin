@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
@@ -13,7 +14,6 @@ const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -43,8 +43,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 				alignItems: 'center',
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
-			}
-		}
+			},
+		};
 
 		styles.searchTextInput = Object.assign({}, theme.lineInput);
 		styles.searchTextInput.paddingLeft = theme.marginLeft;
@@ -111,13 +111,12 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		query = query === null ? this.state.query.trim : query.trim();
 
-		let notes = []
+		let notes = [];
 
 		if (query) {
-
-			if (!!this.props.settings['db.ftsEnabled']) {
+			if (this.props.settings['db.ftsEnabled']) {
 				notes = await SearchEngineUtils.notesForQuery(query);
-			} else {			
+			} else {
 				let p = query.split(' ');
 				let temp = [];
 				for (let i = 0; i < p.length; i++) {
@@ -149,7 +148,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-		}
+		};
 
 		if (!this.props.visible) {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
@@ -174,39 +173,38 @@ class SearchScreenComponent extends BaseScreenComponent {
 						<TextInput
 							style={this.styles().searchTextInput}
 							autoFocus={this.props.visible}
-							underlineColorAndroid="#ffffff00" 
-							onSubmitEditing={() => { this.searchTextInput_submit() }}
-							onChangeText={(text) => this.searchTextInput_changeText(text) }
+							underlineColorAndroid="#ffffff00"
+							onSubmitEditing={() => {
+								this.searchTextInput_submit();
+							}}
+							onChangeText={text => this.searchTextInput_changeText(text)}
 							value={this.state.query}
 							selectionColor={theme.textSelectionColor}
 						/>
-						<TouchableHighlight onPress={() => this.clearButton_press() }>
-							<Icon name='md-close-circle' style={this.styles().clearIcon} />
+						<TouchableHighlight onPress={() => this.clearButton_press()}>
+							<Icon name="md-close-circle" style={this.styles().clearIcon} />
 						</TouchableHighlight>
 					</View>
 
-					<FlatList
-						data={this.state.notes}
-						keyExtractor={(item, index) => item.id}
-						renderItem={(event) => <NoteItem note={event.item}/>}
-					/>
+					<FlatList data={this.state.notes} keyExtractor={(item, index) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
-				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
-
 }
 
-const SearchScreen = connect(
-	(state) => {
-		return {
-			query: state.searchQuery,
-			theme: state.settings.theme,
-			settings: state.settings,
-			noteSelectionEnabled: state.noteSelectionEnabled,
-		};
-	}
-)(SearchScreenComponent)
+const SearchScreen = connect(state => {
+	return {
+		query: state.searchQuery,
+		theme: state.settings.theme,
+		settings: state.settings,
+		noteSelectionEnabled: state.noteSelectionEnabled,
+	};
+})(SearchScreenComponent);
 
 module.exports = { SearchScreen };

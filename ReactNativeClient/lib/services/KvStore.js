@@ -2,7 +2,6 @@ const BaseService = require('lib/services/BaseService.js');
 const Mutex = require('async-mutex').Mutex;
 
 class KvStore extends BaseService {
-
 	static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new KvStore();
@@ -26,7 +25,7 @@ class KvStore extends BaseService {
 	typeFromValue_(value) {
 		if (typeof value === 'string') return KvStore.TYPE_TEXT;
 		if (typeof value === 'number') return KvStore.TYPE_INT;
-		throw new Error('Unsupported value type: ' + (typeof value));
+		throw new Error('Unsupported value type: ' + typeof value);
 	}
 
 	formatValues_(kvs) {
@@ -81,7 +80,7 @@ class KvStore extends BaseService {
 		} catch (error) {
 			release();
 			throw error;
-		}		
+		}
 	}
 
 	async searchByPrefix(prefix) {
@@ -93,7 +92,6 @@ class KvStore extends BaseService {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM key_values');
 		return r.total ? r.total : 0;
 	}
-
 }
 
 KvStore.TYPE_INT = 1;

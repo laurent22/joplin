@@ -6,11 +6,10 @@ const Tag = require('lib/models/Tag');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
 const { uuid } = require('lib/uuid');
-const { fileExtension, basename} = require('lib/path-utils');
+const { fileExtension, basename } = require('lib/path-utils');
 const { pregQuote } = require('lib/string-utils');
 
 class WelcomeUtils {
-
 	static async createWelcomeItems() {
 		const output = {
 			defaultFolderId: null,
@@ -21,13 +20,13 @@ class WelcomeUtils {
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
-			const folder = await Folder.save({ title: folderAsset.title  + ' (' + Setting.appTypeToLabel(Setting.value('appType')) + ')'});
+			const folder = await Folder.save({ title: folderAsset.title + ' (' + Setting.appTypeToLabel(Setting.value('appType')) + ')' });
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
 
 		const noteAssets = welcomeAssets.notes;
 
-		for (let i =  noteAssets.length - 1; i >= 0; i--) {
+		for (let i = noteAssets.length - 1; i >= 0; i--) {
 			const noteAsset = noteAssets[i];
 
 			let noteBody = noteAsset.body;
@@ -44,7 +43,7 @@ class WelcomeUtils {
 				await shim.fsDriver().remove(tempFilePath);
 
 				const regex = new RegExp(pregQuote('(' + resourceUrl + ')'), 'g');
-				noteBody = noteBody.replace(regex, '(:/' + resource.id + ')');				
+				noteBody = noteBody.replace(regex, '(:/' + resource.id + ')');
 			}
 
 			const note = await Note.save({
@@ -77,7 +76,6 @@ class WelcomeUtils {
 			Setting.setValue('activeFolderId', result.defaultFolderId);
 		}
 	}
-
 }
 
 module.exports = WelcomeUtils;

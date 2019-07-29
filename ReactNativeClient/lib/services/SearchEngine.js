@@ -10,9 +10,8 @@ const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
 
 class SearchEngine {
-
 	constructor() {
-		this.dispatch = (action) => {};
+		this.dispatch = action => {};
 		this.logger_ = new Logger();
 		this.db_ = null;
 		this.isIndexing_ = false;
@@ -52,7 +51,6 @@ class SearchEngine {
 		return null;
 	}
 
-
 	async rebuildIndex_() {
 		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map(n => n.id);
@@ -64,7 +62,7 @@ class SearchEngine {
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + currentIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');			
+			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + currentIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -93,7 +91,7 @@ class SearchEngine {
 	}
 
 	async rebuildIndex() {
-		Setting.setValue('searchEngine.lastProcessedChangeId', 0)
+		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
 		Setting.setValue('searchEngine.initialIndexingDone', false);
 		return this.syncTables();
 	}
@@ -118,21 +116,24 @@ class SearchEngine {
 
 		const report = {
 			inserted: 0,
-			deleted: 0,			
+			deleted: 0,
 		};
 
 		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
 
 		try {
 			while (true) {
-				const changes = await ItemChange.modelSelectAll(`
+				const changes = await ItemChange.modelSelectAll(
+					`
 					SELECT id, item_id, type
 					FROM item_changes
 					WHERE item_type = ?
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-				`, [BaseModel.TYPE_NOTE, lastChangeId]);
+				`,
+					[BaseModel.TYPE_NOTE, lastChangeId]
+				);
 
 				const maxRow = await ItemChange.db().selectOne('SELECT max(id) FROM item_changes');
 
@@ -179,7 +180,7 @@ class SearchEngine {
 	}
 
 	async countRows() {
-		const sql = 'SELECT count(*) as total FROM notes_fts'
+		const sql = 'SELECT count(*) as total FROM notes_fts';
 		const row = await this.db().selectOne(sql);
 		return row && row['total'] ? row['total'] : 0;
 	}
@@ -202,7 +203,7 @@ class SearchEngine {
 		// - If there's only one term in the query string, the content with the most matches goes on top
 		// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
 		//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
-		
+
 		const occurenceCount = Math.floor(offsets.length / 4);
 
 		if (termCount === 1) return occurenceCount;
@@ -262,8 +263,8 @@ class SearchEngine {
 	}
 
 	parseQuery(query) {
-		const terms = {_:[]};
-		
+		const terms = { _: [] };
+
 		let inQuote = false;
 		let currentCol = '_';
 		let currentTerm = '';
@@ -362,7 +363,7 @@ class SearchEngine {
 
 	normalizeNote_(note) {
 		const n = Object.assign({}, note);
-		n.title = this.normalizeText_(n.title);		
+		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
 	}
@@ -393,7 +394,7 @@ class SearchEngine {
 			return this.basicSearch(query);
 		} else {
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?'
+			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.orderResults_(rows, parsedQuery);
@@ -404,7 +405,6 @@ class SearchEngine {
 			}
 		}
 	}
-	
 }
 
 module.exports = SearchEngine;

@@ -1,5 +1,4 @@
 class SyncTargetRegistry {
-
 	static classById(syncTargetId) {
 		const info = SyncTargetRegistry.reg_[syncTargetId];
 		if (!info) throw new Error('Invalid id: ' + syncTargetId);
@@ -44,7 +43,6 @@ class SyncTargetRegistry {
 		}
 		return output;
 	}
-
 }
 
 SyncTargetRegistry.reg_ = {};

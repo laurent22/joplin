@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
@@ -13,10 +14,9 @@ let styles = {
 	body: {
 		flex: 1,
 	},
-}
+};
 
 class TagScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -53,22 +53,23 @@ class TagScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader title={title} menuOptions={this.menuOptions()} />
-				<NoteList style={{flex: 1}}/>
-				<DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
+				<NoteList style={{ flex: 1 }} />
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
-
 }
 
-const TagScreen = connect(
-	(state) => {
-		return {
-			tag: tag,
-			notes: state.notes,
-			notesSource: state.notesSource,
-		};
-	}
-)(TagScreenComponent)
+const TagScreen = connect(state => {
+	return {
+		tag: tag,
+		notes: state.notes,
+		notesSource: state.notesSource,
+	};
+})(TagScreenComponent);
 
 module.exports = { TagScreen };

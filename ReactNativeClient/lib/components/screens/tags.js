@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { AppState, View, Button, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
 const { stateUtils } = require('lib/reducer.js');
 const { connect } = require('react-redux');
@@ -18,7 +19,6 @@ const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class TagsScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -74,8 +74,12 @@ class TagsScreenComponent extends BaseScreenComponent {
 	tagList_renderItem(event) {
 		const tag = event.item;
 		return (
-			<TouchableOpacity onPress={() => { this.tagItem_press({ id: tag.id }) }}>
-				<View style={ this.styles().listItem }>
+			<TouchableOpacity
+				onPress={() => {
+					this.tagItem_press({ id: tag.id });
+				}}
+			>
+				<View style={this.styles().listItem}>
 					<Text style={this.styles().listItemText}>{tag.title}</Text>
 				</View>
 			</TouchableOpacity>
@@ -100,31 +104,21 @@ class TagsScreenComponent extends BaseScreenComponent {
 		let rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-		}
+		};
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader
-					title={_('Tags')}
-					parentComponent={this}
-					showSearchButton={false}
-				/>
-				<FlatList style={{flex:1}}
-					data={this.state.tags}
-					renderItem={this.tagList_renderItem}
-					keyExtractor={this.tagList_keyExtractor}
-				/>
+				<ScreenHeader title={_('Tags')} parentComponent={this} showSearchButton={false} />
+				<FlatList style={{ flex: 1 }} data={this.state.tags} renderItem={this.tagList_renderItem} keyExtractor={this.tagList_keyExtractor} />
 			</View>
 		);
 	}
 }
 
-const TagsScreen = connect(
-	(state) => {
-		return {
-			theme: state.settings.theme,
-		};
-	}
-)(TagsScreenComponent)
+const TagsScreen = connect(state => {
+	return {
+		theme: state.settings.theme,
+	};
+})(TagsScreenComponent);
 
 module.exports = { TagsScreen };

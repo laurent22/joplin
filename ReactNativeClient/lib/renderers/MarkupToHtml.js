@@ -3,7 +3,6 @@ const HtmlToHtml = require('./HtmlToHtml');
 const Note = require('lib/models/Note');
 
 class MarkupToHtml {
-
 	constructor(options) {
 		this.options_ = options;
 		this.renderers_ = {};
@@ -33,7 +32,6 @@ class MarkupToHtml {
 	render(markupLanguage, markup, theme, options) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
-
 }
 
 module.exports = MarkupToHtml;

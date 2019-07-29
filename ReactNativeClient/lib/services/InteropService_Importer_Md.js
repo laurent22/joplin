@@ -17,7 +17,6 @@ const { uuid } = require('lib/uuid.js');
 const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
-
 	async exec(result) {
 		let parentFolderId = null;
 
@@ -36,7 +35,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			this.importDirectory(sourcePath, parentFolderId);
 		} else {
 			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
-			parentFolderId = this.options_.destinationFolder.id
+			parentFolderId = this.options_.destinationFolder.id;
 			filePaths.push(sourcePath);
 		}
 
@@ -81,7 +80,6 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		};
 		await Note.save(note, { autoTimestamp: false });
 	}
-
 }
 
 module.exports = InteropService_Importer_Md;

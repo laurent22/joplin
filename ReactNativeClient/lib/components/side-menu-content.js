@@ -1,5 +1,6 @@
-const React = require('react'); const Component = React.Component;
-const { Easing, Animated, TouchableOpacity , Button, Text, Image, StyleSheet, ScrollView, View, Alert } = require('react-native');
+const React = require('react');
+const Component = React.Component;
+const { Easing, Animated, TouchableOpacity, Button, Text, Image, StyleSheet, ScrollView, View, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const Tag = require('lib/models/Tag.js');
@@ -16,7 +17,6 @@ const shared = require('lib/components/shared/side-menu-shared.js');
 const { ActionButton } = require('lib/components/action-button.js');
 
 class SideMenuContentComponent extends Component {
-
 	constructor() {
 		super();
 		this.state = {
@@ -47,7 +47,7 @@ class SideMenuContentComponent extends Component {
 		let styles = {
 			menu: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor
+				backgroundColor: theme.backgroundColor,
 			},
 			button: {
 				flex: 1,
@@ -82,7 +82,7 @@ class SideMenuContentComponent extends Component {
 		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
 		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
 		styles.folderIcon = Object.assign({}, theme.icon);
-		styles.folderIcon.color = theme.colorFaded;//'#0072d5';
+		styles.folderIcon.color = theme.colorFaded; //'#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
@@ -96,18 +96,20 @@ class SideMenuContentComponent extends Component {
 	componentDidUpdate(prevProps) {
 		if (this.props.syncStarted !== prevProps.syncStarted) {
 			if (this.props.syncStarted) {
-				this.syncIconAnimation = Animated.loop(Animated.timing(this.syncIconRotationValue, {
-					toValue: 1,
-					duration: 3000,
-					easing: Easing.linear,
-				}));
+				this.syncIconAnimation = Animated.loop(
+					Animated.timing(this.syncIconRotationValue, {
+						toValue: 1,
+						duration: 3000,
+						easing: Easing.linear,
+					})
+				);
 
 				this.syncIconAnimation.start();
 			} else {
 				if (this.syncIconAnimation) this.syncIconAnimation.stop();
 				this.syncIconAnimation = null;
 			}
-		} 
+		}
 	}
 
 	folder_press(folder) {
@@ -127,7 +129,8 @@ class SideMenuContentComponent extends Component {
 
 		Alert.alert(
 			'',
-			_('Notebook: %s', folder.title), [
+			_('Notebook: %s', folder.title),
+			[
 				{
 					text: _('Rename'),
 					onPress: () => {
@@ -143,7 +146,7 @@ class SideMenuContentComponent extends Component {
 							routeName: 'Folder',
 							folderId: folder.id,
 						});
-					}
+					},
 				},
 				{
 					text: _('Delete'),
@@ -168,9 +171,10 @@ class SideMenuContentComponent extends Component {
 					text: _('Cancel'),
 					onPress: () => {},
 					style: 'cancel',
-				}
-			], {
-				cancelable: false
+				},
+			],
+			{
+				cancelable: false,
 			}
 		);
 	}
@@ -240,22 +244,38 @@ class SideMenuContentComponent extends Component {
 		let iconWrapper = null;
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'md-arrow-dropdown' : 'md-arrow-dropup';
-		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />
+		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />;
 
 		iconWrapper = !hasChildren ? null : (
-			<TouchableOpacity style={iconWrapperStyle} folderid={folder.id} onPress={() => { if (hasChildren) this.folder_togglePress(folder) }}>
-				{ iconComp }
+			<TouchableOpacity
+				style={iconWrapperStyle}
+				folderid={folder.id}
+				onPress={() => {
+					if (hasChildren) this.folder_togglePress(folder);
+				}}
+			>
+				{iconComp}
 			</TouchableOpacity>
 		);
 
 		return (
 			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
-				<TouchableOpacity style={{ flex: 1 }} onPress={() => { this.folder_press(folder) }} onLongPress={() => { this.folder_longPress(folder) }}>
+				<TouchableOpacity
+					style={{ flex: 1 }}
+					onPress={() => {
+						this.folder_press(folder);
+					}}
+					onLongPress={() => {
+						this.folder_longPress(folder);
+					}}
+				>
 					<View style={folderButtonStyle}>
-						<Text numberOfLines={1} style={this.styles().folderButtonText}>{Folder.displayTitle(folder)}</Text>
+						<Text numberOfLines={1} style={this.styles().folderButtonText}>
+							{Folder.displayTitle(folder)}
+						</Text>
 					</View>
 				</TouchableOpacity>
-				{ iconWrapper }
+				{iconWrapper}
 			</View>
 		);
 	}
@@ -263,14 +283,10 @@ class SideMenuContentComponent extends Component {
 	renderSideBarButton(key, title, iconName, onPressHandler = null, selected = false) {
 		const theme = themeStyle(this.props.theme);
 
-		let icon = <Icon name={iconName} style={this.styles().sidebarIcon} />
+		let icon = <Icon name={iconName} style={this.styles().sidebarIcon} />;
 
 		if (key === 'synchronize_button') {
-			icon = (
-				<Animated.View style={{transform: [{rotate: this.syncIconRotation}]}}>
-					{icon}
-				</Animated.View>
-			);
+			icon = <Animated.View style={{ transform: [{ rotate: this.syncIconRotation }] }}>{icon}</Animated.View>;
 		}
 
 		const content = (
@@ -290,7 +306,7 @@ class SideMenuContentComponent extends Component {
 	}
 
 	makeDivider(key) {
-		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>
+		return <View style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: globalStyle.dividerColor }} key={key}></View>;
 	}
 
 	renderBottomPanel() {
@@ -309,7 +325,7 @@ class SideMenuContentComponent extends Component {
 		items.push(this.makeDivider('divider_2'));
 
 		let lines = Synchronizer.reportToLines(this.props.syncReport);
-		const syncReportText = lines.join("\n");
+		const syncReportText = lines.join('\n');
 
 		let decryptionReportText = '';
 		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {
@@ -326,20 +342,16 @@ class SideMenuContentComponent extends Component {
 		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
 
-		items.push(this.renderSideBarButton(
-			'synchronize_button',
-			!this.props.syncStarted ? _('Synchronise') : _('Cancel'),
-			'md-sync',
-			this.synchronize_press
-		));
+		items.push(this.renderSideBarButton('synchronize_button', !this.props.syncStarted ? _('Synchronise') : _('Cancel'), 'md-sync', this.synchronize_press));
 
-		if (fullReport.length) items.push(<Text key='sync_report' style={this.styles().syncStatus}>{fullReport.join('\n')}</Text>);
+		if (fullReport.length)
+			items.push(
+				<Text key="sync_report" style={this.styles().syncStatus}>
+					{fullReport.join('\n')}
+				</Text>
+			);
 
-		return (
-			<View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>
-				{ items }
-			</View>
-		);
+		return <View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>{items}</View>;
 	}
 
 	render() {
@@ -349,7 +361,7 @@ class SideMenuContentComponent extends Component {
 
 		// HACK: inner height of ScrollView doesn't appear to be calculated correctly when
 		// using padding. So instead creating blank elements for padding bottom and top.
-		items.push(<View style={{ height: globalStyle.marginTop }} key='bottom_top_hack'/>);
+		items.push(<View style={{ height: globalStyle.marginTop }} key="bottom_top_hack" />);
 
 		items.push(this.renderSideBarButton('all_notes', _('All notes'), 'md-document', this.allNotesButton_press, this.props.notesParentType === 'SmartFilter'));
 
@@ -364,7 +376,7 @@ class SideMenuContentComponent extends Component {
 		}
 
 		let style = {
-			flex:1,
+			flex: 1,
 			borderRightWidth: 1,
 			borderRightColor: globalStyle.dividerColor,
 			backgroundColor: theme.backgroundColor,
@@ -372,35 +384,33 @@ class SideMenuContentComponent extends Component {
 
 		return (
 			<View style={style}>
-				<View style={{flex:1, opacity: this.props.opacity}}>
+				<View style={{ flex: 1, opacity: this.props.opacity }}>
 					<ScrollView scrollsToTop={false} style={this.styles().menu}>
-						{ items }
+						{items}
 					</ScrollView>
-					{ this.renderBottomPanel() }
+					{this.renderBottomPanel()}
 				</View>
 			</View>
 		);
 	}
-};
+}
 
-const SideMenuContent = connect(
-	(state) => {
-		return {
-			folders: state.folders,
-			syncStarted: state.syncStarted,
-			syncReport: state.syncReport,
-			selectedFolderId: state.selectedFolderId,
-			selectedTagId: state.selectedTagId,
-			notesParentType: state.notesParentType,
-			locale: state.settings.locale,
-			theme: state.settings.theme,
-			// Don't do the opacity animation as it means re-rendering the list multiple times
-			// opacity: state.sideMenuOpenPercent,
-			collapsedFolderIds: state.collapsedFolderIds,
-			decryptionWorker: state.decryptionWorker,
-			resourceFetcher: state.resourceFetcher,
-		};
-	}
-)(SideMenuContentComponent)
+const SideMenuContent = connect(state => {
+	return {
+		folders: state.folders,
+		syncStarted: state.syncStarted,
+		syncReport: state.syncReport,
+		selectedFolderId: state.selectedFolderId,
+		selectedTagId: state.selectedTagId,
+		notesParentType: state.notesParentType,
+		locale: state.settings.locale,
+		theme: state.settings.theme,
+		// Don't do the opacity animation as it means re-rendering the list multiple times
+		// opacity: state.sideMenuOpenPercent,
+		collapsedFolderIds: state.collapsedFolderIds,
+		decryptionWorker: state.decryptionWorker,
+		resourceFetcher: state.resourceFetcher,
+	};
+})(SideMenuContentComponent);
 
 module.exports = { SideMenuContent };

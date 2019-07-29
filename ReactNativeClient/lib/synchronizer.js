@@ -17,7 +17,6 @@ const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
 
 class Synchronizer {
-
 	constructor(db, api, appType) {
 		this.state_ = 'idle';
 		this.db_ = db;
@@ -76,17 +75,17 @@ class Synchronizer {
 
 	static reportToLines(report) {
 		let lines = [];
-		if (report.createLocal) lines.push(_("Created local items: %d.", report.createLocal));
-		if (report.updateLocal) lines.push(_("Updated local items: %d.", report.updateLocal));
-		if (report.createRemote) lines.push(_("Created remote items: %d.", report.createRemote));
-		if (report.updateRemote) lines.push(_("Updated remote items: %d.", report.updateRemote));
-		if (report.deleteLocal) lines.push(_("Deleted local items: %d.", report.deleteLocal));
-		if (report.deleteRemote) lines.push(_("Deleted remote items: %d.", report.deleteRemote));
-		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_("Fetched items: %d/%d.", report.fetchingProcessed, report.fetchingTotal));
+		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
+		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
+		if (report.createRemote) lines.push(_('Created remote items: %d.', report.createRemote));
+		if (report.updateRemote) lines.push(_('Updated remote items: %d.', report.updateRemote));
+		if (report.deleteLocal) lines.push(_('Deleted local items: %d.', report.deleteLocal));
+		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
+		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		// if (!report.completedTime && report.state) lines.push(_('State: %s.', Synchronizer.stateToLabel(report.state)));
-		if (report.cancelling && !report.completedTime) lines.push(_("Cancelling..."));
-		if (report.completedTime) lines.push(_("Completed: %s", time.formatMsToLocal(report.completedTime)));
-		if (report.errors && report.errors.length) lines.push(_("Last error: %s", report.errors[report.errors.length - 1].toString().substr(0, 500)));
+		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
+		if (report.completedTime) lines.push(_('Completed: %s', time.formatMsToLocal(report.completedTime)));
+		if (report.errors && report.errors.length) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
 	}
@@ -175,8 +174,8 @@ class Synchronizer {
 	}
 
 	static stateToLabel(state) {
-		if (state === "idle") return _("Idle");
-		if (state === "in_progress") return _("In progress");
+		if (state === 'idle') return _('Idle');
+		if (state === 'in_progress') return _('In progress');
 		return state;
 	}
 
@@ -201,7 +200,7 @@ class Synchronizer {
 
 		const lastContext = options.context ? options.context : {};
 
-		const syncSteps = options.syncSteps ? options.syncSteps : ["update_remote", "delete_remote", "delta"];
+		const syncSteps = options.syncSteps ? options.syncSteps : ['update_remote', 'delete_remote', 'delta'];
 
 		const syncTargetId = this.api().syncTargetId();
 
@@ -220,12 +219,12 @@ class Synchronizer {
 
 		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
-			this.dispatch({ type: "SYNC_HAS_DISABLED_SYNC_ITEMS" });
-		}
+			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
+		};
 
 		const resourceRemotePath = resourceId => {
-			return this.resourceDirName_ + "/" + resourceId;
-		}
+			return this.resourceDirName_ + '/' + resourceId;
+		};
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
@@ -239,12 +238,12 @@ class Synchronizer {
 			// last sync and apply the changes to remote.
 			// ========================================================================
 
-			if (syncSteps.indexOf("update_remote") >= 0) {
+			if (syncSteps.indexOf('update_remote') >= 0) {
 				let donePaths = [];
 
-				const completeItemProcessing = (path) => {
+				const completeItemProcessing = path => {
 					donePaths.push(path);
-				}
+				};
 
 				while (true) {
 					if (this.cancelling()) break;
@@ -266,23 +265,23 @@ class Synchronizer {
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf("Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?", path), 'processingPathTwice');
+						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
 						let remote = await this.api().stat(path);
 						let action = null;
 						let updateSyncTimeOnly = true;
-						let reason = "";
+						let reason = '';
 						let remoteContent = null;
 
 						if (!remote) {
 							if (!local.sync_time) {
-								action = "createRemote";
-								reason = "remote does not exist, and local is new and has never been synced";
+								action = 'createRemote';
+								reason = 'remote does not exist, and local is new and has never been synced';
 							} else {
 								// Note or item was modified after having been deleted remotely
 								// "itemConflict" is for all the items except the notes, which are dealt with in a special way
-								action = local.type_ == BaseModel.TYPE_NOTE ? "noteConflict" : "itemConflict";
-								reason = "remote has been deleted, but local has changes";
+								action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
+								reason = 'remote has been deleted, but local has changes';
 							}
 						} else {
 							// Note: in order to know the real updated_time value, we need to load the content. In theory we could
@@ -311,24 +310,24 @@ class Synchronizer {
 									throw error;
 								}
 							}
-							if (!remoteContent) throw new Error("Got metadata for path but could not fetch content: " + path);
+							if (!remoteContent) throw new Error('Got metadata for path but could not fetch content: ' + path);
 							remoteContent = await BaseItem.unserialize(remoteContent);
 
 							if (remoteContent.updated_time > local.sync_time) {
 								// Since, in this loop, we are only dealing with items that require sync, if the
 								// remote has been modified after the sync time, it means both items have been
 								// modified and so there's a conflict.
-								action = local.type_ == BaseModel.TYPE_NOTE ? "noteConflict" : "itemConflict";
-								reason = "both remote and local have changes";
+								action = local.type_ == BaseModel.TYPE_NOTE ? 'noteConflict' : 'itemConflict';
+								reason = 'both remote and local have changes';
 							} else {
-								action = "updateRemote";
-								reason = "local has changes";
+								action = 'updateRemote';
+								reason = 'local has changes';
 							}
 						}
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == "createRemote" || action === "updateRemote" || (action == "itemConflict" && remote))) {
+						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || action === 'updateRemote' || (action == 'itemConflict' && remote))) {
 							const localState = await Resource.localState(local.id);
 							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
 								action = null;
@@ -338,9 +337,9 @@ class Synchronizer {
 									const result = await Resource.fullPathForSyncUpload(local);
 									local = result.resource;
 									const localResourceContentPath = result.path;
-									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: "file" });
+									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 								} catch (error) {
-									if (error && ["rejectedByTarget", "fileNotFound"].indexOf(error.code) >= 0) {
+									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 										action = null;
 									} else {
@@ -350,14 +349,14 @@ class Synchronizer {
 							}
 						}
 
-						if (action == "createRemote" || action == "updateRemote") {
+						if (action == 'createRemote' || action == 'updateRemote') {
 							let canSync = true;
 							try {
-								if (this.testingHooks_.indexOf("notesRejectedByTarget") >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError("Testing rejectedByTarget", "rejectedByTarget");
+								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 								const content = await ItemClass.serializeForSync(local);
 								await this.api().put(path, content);
 							} catch (error) {
-								if (error && error.code === "rejectedByTarget") {
+								if (error && error.code === 'rejectedByTarget') {
 									await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);
 									canSync = false;
 								} else {
@@ -388,7 +387,7 @@ class Synchronizer {
 								// await this.api().setTimestamp(path, local.updated_time);
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 							}
-						} else if (action == "itemConflict") {
+						} else if (action == 'itemConflict') {
 							// ------------------------------------------------------------------------------
 							// For non-note conflicts, we take the remote version (i.e. the version that was
 							// synced first) and overwrite the local content.
@@ -402,7 +401,7 @@ class Synchronizer {
 							} else {
 								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
 							}
-						} else if (action == "noteConflict") {
+						} else if (action == 'noteConflict') {
 							// ------------------------------------------------------------------------------
 							// First find out if the conflict matters. For example, if the conflict is on the title or body
 							// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
@@ -436,7 +435,7 @@ class Synchronizer {
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
-								if (!!local.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });
+								if (local.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 							} else {
 								// Remote no longer exists (note deleted) so delete local one too
 								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
@@ -456,14 +455,14 @@ class Synchronizer {
 			// Delete the remote items that have been deleted locally.
 			// ========================================================================
 
-			if (syncSteps.indexOf("delete_remote") >= 0) {
+			if (syncSteps.indexOf('delete_remote') >= 0) {
 				let deletedItems = await BaseItem.deletedItems(syncTargetId);
 				for (let i = 0; i < deletedItems.length; i++) {
 					if (this.cancelling()) break;
 
 					let item = deletedItems[i];
 					let path = BaseItem.systemPath(item.item_id);
-					this.logSyncOperation("deleteRemote", null, { id: item.item_id }, "local has been deleted");
+					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 					await this.api().delete(path);
 
 					if (item.item_type === BaseModel.TYPE_RESOURCE) {
@@ -486,7 +485,7 @@ class Synchronizer {
 			this.downloadQueue_ = new TaskQueue('syncDownload');
 			this.downloadQueue_.logger_ = this.logger();
 
-			if (syncSteps.indexOf("delta") >= 0) {
+			if (syncSteps.indexOf('delta') >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
 				// or handled as conflicts, so no conflict is possible after this.
 
@@ -499,7 +498,7 @@ class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					let listResult = await this.api().delta("", {
+					let listResult = await this.api().delta('', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -514,7 +513,7 @@ class Synchronizer {
 
 					let remotes = listResult.items;
 
-					this.logSyncOperation("fetchingTotal", null, null, "Fetching delta items from sync target", remotes.length);
+					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
 
 					for (const remote of remotes) {
 						if (this.cancelling()) break;
@@ -525,12 +524,12 @@ class Synchronizer {
 					}
 
 					for (let i = 0; i < remotes.length; i++) {
-						if (this.cancelling() || this.testingHooks_.indexOf("cancelDeltaLoop2") >= 0) {
+						if (this.cancelling() || this.testingHooks_.indexOf('cancelDeltaLoop2') >= 0) {
 							hasCancelled = true;
 							break;
 						}
 
-						this.logSyncOperation("fetchingProcessed", null, null, "Processing fetched item");
+						this.logSyncOperation('fetchingProcessed', null, null, 'Processing fetched item');
 
 						let remote = remotes[i];
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
@@ -544,7 +543,7 @@ class Synchronizer {
 
 						let path = remote.path;
 						let action = null;
-						let reason = "";
+						let reason = '';
 						let local = await BaseItem.loadItemByPath(path);
 						let ItemClass = null;
 						let content = null;
@@ -552,8 +551,8 @@ class Synchronizer {
 						try {
 							if (!local) {
 								if (remote.isDeleted !== true) {
-									action = "createLocal";
-									reason = "remote exists but local does not";
+									action = 'createLocal';
+									reason = 'remote exists but local does not';
 									content = await loadContent();
 									ItemClass = content ? BaseItem.itemClass(content) : null;
 								}
@@ -561,13 +560,13 @@ class Synchronizer {
 								ItemClass = BaseItem.itemClass(local);
 								local = ItemClass.filter(local);
 								if (remote.isDeleted) {
-									action = "deleteLocal";
-									reason = "remote has been deleted";
+									action = 'deleteLocal';
+									reason = 'remote has been deleted';
 								} else {
 									content = await loadContent();
 									if (content && content.updated_time > local.updated_time) {
-										action = "updateLocal";
-										reason = "remote is more recent than local";
+										action = 'updateLocal';
+										reason = 'remote is more recent than local';
 									}
 								}
 							}
@@ -588,9 +587,9 @@ class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						if (action == "createLocal" || action == "updateLocal") {
+						if (action == 'createLocal' || action == 'updateLocal') {
 							if (content === null) {
-								this.logger().warn("Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: " + path);
+								this.logger().warn('Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ' + path);
 								continue;
 							}
 							content = ItemClass.filter(content);
@@ -608,10 +607,10 @@ class Synchronizer {
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
-							if (action == "createLocal") options.isNew = true;
-							if (action == "updateLocal") options.oldItem = local;
+							if (action == 'createLocal') options.isNew = true;
+							if (action == 'updateLocal') options.oldItem = local;
 
-							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == "createLocal";
+							const creatingNewResource = content.type_ == BaseModel.TYPE_RESOURCE && action == 'createLocal';
 
 							if (creatingNewResource) {
 								if (content.size >= this.maxResourceSize()) {
@@ -624,19 +623,19 @@ class Synchronizer {
 
 							await ItemClass.save(content, options);
 
-							if (creatingNewResource) this.dispatch({ type: "SYNC_CREATED_RESOURCE", id: content.id });
+							if (creatingNewResource) this.dispatch({ type: 'SYNC_CREATED_RESOURCE', id: content.id });
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
-								this.logger().info("One master key was downloaded and none was previously available: automatically enabling encryption");
-								this.logger().info("Using master key: ", content.id);
+								this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
+								this.logger().info('Using master key: ', content.id);
 								await this.encryptionService().enableEncryption(content);
 								await this.encryptionService().loadMasterKeysFromSettings();
-								this.logger().info("Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.");
+								this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
 							}
 
-							if (!!content.encryption_applied) this.dispatch({ type: "SYNC_GOT_ENCRYPTED_ITEM" });
-						} else if (action == "deleteLocal") {
+							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
+						} else if (action == 'deleteLocal') {
 							if (local.type_ == BaseModel.TYPE_FOLDER) {
 								localFoldersToDelete.push(local);
 								continue;
@@ -697,7 +696,7 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ["cannotEncryptEncrypted", "noActiveMasterKey", "processingPathTwice"].indexOf(error.code) >= 0) {
+			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
@@ -733,7 +732,6 @@ class Synchronizer {
 
 		return outputContext;
 	}
-
 }
 
 module.exports = { Synchronizer };

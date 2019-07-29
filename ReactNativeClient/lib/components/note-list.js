@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { connect } = require('react-redux');
 const { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } = require('react-native');
 const { _ } = require('lib/locale.js');
@@ -11,11 +12,12 @@ const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteListComponent extends Component {
-
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({
-			rowHasChanged: (r1, r2) => { return r1 !== r2; }
+			rowHasChanged: (r1, r2) => {
+				return r1 !== r2;
+			},
 		});
 		this.state = {
 			dataSource: ds,
@@ -91,30 +93,28 @@ class NoteListComponent extends Component {
 		if (this.state.dataSource.getRowCount()) {
 			return (
 				<ListView
-					ref={(ref) => this.rootRef_ = ref}
+					ref={ref => (this.rootRef_ = ref)}
 					dataSource={this.state.dataSource}
-					renderRow={(note) => {
-						return <NoteItem note={note}/>
+					renderRow={note => {
+						return <NoteItem note={note} />;
 					}}
 					enableEmptySections={true}
 				/>
 			);
 		} else {
 			const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-			return <Text style={this.styles().noItemMessage} >{noItemMessage}</Text>;
+			return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
 		}
 	}
 }
 
-const NoteList = connect(
-	(state) => {
-		return {
-			items: state.notes,
-			notesSource: state.notesSource,
-			theme: state.settings.theme,
-			noteSelectionEnabled: state.noteSelectionEnabled,
-		};
-	}
-)(NoteListComponent)
+const NoteList = connect(state => {
+	return {
+		items: state.notes,
+		notesSource: state.notesSource,
+		theme: state.settings.theme,
+		noteSelectionEnabled: state.noteSelectionEnabled,
+	};
+})(NoteListComponent);
 
 module.exports = { NoteList };

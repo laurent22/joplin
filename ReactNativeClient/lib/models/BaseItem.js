@@ -10,7 +10,6 @@ const moment = require('moment');
 const markdownUtils = require('lib/markdownUtils');
 
 class BaseItem extends BaseModel {
-
 	static useUuid() {
 		return true;
 	}
@@ -38,7 +37,7 @@ class BaseItem extends BaseModel {
 			if (!item) return titleToTry;
 			titleToTry = title + ' (' + counter + ')';
 			counter++;
-			if (counter >= 100) titleToTry = title + ' (' + ((new Date()).getTime()) + ')';
+			if (counter >= 100) titleToTry = title + ' (' + new Date().getTime() + ')';
 			if (counter >= 1000) throw new Error('Cannot find unique title');
 		}
 	}
@@ -72,18 +71,15 @@ class BaseItem extends BaseModel {
 		// The fact that we don't check if the item_id still exist in the corresponding item table, means
 		// that the returned number might be innaccurate (for example if a sync operation was cancelled)
 		const sql = 'SELECT count(*) as total FROM sync_items WHERE sync_target = ? AND item_type = ?';
-		const r = await this.db().selectOne(sql, [ syncTarget, itemType ]);
+		const r = await this.db().selectOne(sql, [syncTarget, itemType]);
 		return r.total;
 	}
 
 	static systemPath(itemOrId, extension = null) {
-		if (extension === null)
-			extension = 'md';
+		if (extension === null) extension = 'md';
 
-		if (typeof itemOrId === 'string')
-			return itemOrId + '.' + extension;
-		else
-			return itemOrId.id + '.' + extension;
+		if (typeof itemOrId === 'string') return itemOrId + '.' + extension;
+		else return itemOrId.id + '.' + extension;
 	}
 
 	static isSystemPath(path) {
@@ -190,7 +186,9 @@ class BaseItem extends BaseModel {
 		let conflictNoteIds = [];
 		if (this.modelType() == BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll('SELECT id FROM notes WHERE id IN ("' + ids.join('","') + '") AND is_conflict = 1');
-			conflictNoteIds = conflictNotes.map((n) => { return n.id });
+			conflictNoteIds = conflictNotes.map(n => {
+				return n.id;
+			});
 		}
 
 		await super.batchDelete(ids, options);
@@ -240,7 +238,11 @@ class BaseItem extends BaseModel {
 	static serialize_format(propName, propValue) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
-			propValue = moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+			propValue =
+				moment
+					.unix(propValue / 1000)
+					.utc()
+					.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
 		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.stringify(propValue);
@@ -307,11 +309,11 @@ class BaseItem extends BaseModel {
 
 		let temp = [];
 
-		if (typeof output.title === "string") temp.push(output.title);
+		if (typeof output.title === 'string') temp.push(output.title);
 		if (output.body) temp.push(output.body);
-		if (output.props.length) temp.push(output.props.join("\n"));
+		if (output.props.length) temp.push(output.props.join('\n'));
 
-		return temp.join("\n\n");
+		return temp.join('\n\n');
 	}
 
 	static encryptionService() {
@@ -333,11 +335,15 @@ class BaseItem extends BaseModel {
 
 		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
-			if (!!item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
+			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
 		}
 
-		if (!!item.encryption_applied) { const e = new Error('Trying to encrypt item that is already encrypted'); e.code = 'cannotEncryptEncrypted'; throw e; }
+		if (item.encryption_applied) {
+			const e = new Error('Trying to encrypt item that is already encrypted');
+			e.code = 'cannotEncryptEncrypted';
+			throw e;
+		}
 
 		const cipherText = await this.encryptionService().encryptString(serialized);
 
@@ -354,7 +360,7 @@ class BaseItem extends BaseModel {
 
 		reducedItem.encryption_applied = 1;
 		reducedItem.encryption_cipher_text = cipherText;
-		return ItemClass.serialize(reducedItem)
+		return ItemClass.serialize(reducedItem);
 	}
 
 	static async decrypt(item) {
@@ -372,7 +378,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static async unserialize(content) {
-		let lines = content.split("\n");
+		let lines = content.split('\n');
 		let output = {};
 		let state = 'readingProps';
 		let body = [];
@@ -389,7 +395,7 @@ class BaseItem extends BaseModel {
 				}
 
 				let p = line.indexOf(':');
-				if (p < 0) throw new Error('Invalid property format: ' + line + ": " + content);
+				if (p < 0) throw new Error('Invalid property format: ' + line + ': ' + content);
 				let key = line.substr(0, p).trim();
 				let value = line.substr(p + 1).trim();
 				output[key] = value;
@@ -397,7 +403,7 @@ class BaseItem extends BaseModel {
 				body.splice(0, 0, line);
 			}
 		}
-		
+
 		if (!output.type_) throw new Error('Missing required property: type_: ' + content);
 		output.type_ = Number(output.type_);
 
@@ -406,7 +412,7 @@ class BaseItem extends BaseModel {
 			output.title = title[0];
 		}
 
-		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join("\n");
+		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join('\n');
 
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
@@ -477,10 +483,11 @@ class BaseItem extends BaseModel {
 				const blobDownloadedButEncryptedSql = 'encryption_blob_encrypted = 1 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = 2))';
 				whereSql = ['(encryption_applied = 1 OR (' + blobDownloadedButEncryptedSql + ')'];
 			}
-				
+
 			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
 
-			const sql = sprintf(`
+			const sql = sprintf(
+				`
 				SELECT *
 				FROM %s
 				WHERE %s
@@ -509,7 +516,7 @@ class BaseItem extends BaseModel {
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
-			let fieldNames = ItemClass.fieldNames('items');			
+			let fieldNames = ItemClass.fieldNames('items');
 
 			// // NEVER SYNCED:
 			// 'SELECT * FROM [ITEMS] WHERE id NOT INT (SELECT item_id FROM sync_items WHERE sync_target = ?)'
@@ -526,7 +533,8 @@ class BaseItem extends BaseModel {
 
 			// First get all the items that have never been synced under this sync target
 
-			let sql = sprintf(`
+			let sql = sprintf(
+				`
 				SELECT %s
 				FROM %s items
 				WHERE id NOT IN (
@@ -535,11 +543,12 @@ class BaseItem extends BaseModel {
 				%s
 				LIMIT %d
 			`,
-			this.db().escapeFields(fieldNames),
-			this.db().escapeField(ItemClass.tableName()),
-			Number(syncTarget),
-			extraWhere,
-			limit);
+				this.db().escapeFields(fieldNames),
+				this.db().escapeField(ItemClass.tableName()),
+				Number(syncTarget),
+				extraWhere,
+				limit
+			);
 
 			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
 
@@ -552,7 +561,8 @@ class BaseItem extends BaseModel {
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
 
-				let sql = sprintf(`
+				let sql = sprintf(
+					`
 					SELECT %s FROM %s items
 					JOIN sync_items s ON s.item_id = items.id
 					WHERE sync_target = %d
@@ -561,11 +571,12 @@ class BaseItem extends BaseModel {
 					%s
 					LIMIT %d
 				`,
-				this.db().escapeFields(fieldNames),
-				this.db().escapeField(ItemClass.tableName()),
-				Number(syncTarget),
-				extraWhere,
-				newLimit);
+					this.db().escapeFields(fieldNames),
+					this.db().escapeField(ItemClass.tableName()),
+					Number(syncTarget),
+					extraWhere,
+					newLimit
+				);
 
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
@@ -583,7 +594,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static syncItemClassNames() {
-		return BaseItem.syncItemDefinitions_.map((def) => {
+		return BaseItem.syncItemDefinitions_.map(def => {
 			return def.className;
 		});
 	}
@@ -599,7 +610,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static syncItemTypes() {
-		return BaseItem.syncItemDefinitions_.map((def) => {
+		return BaseItem.syncItemDefinitions_.map(def => {
 			return def.type;
 		});
 	}
@@ -643,7 +654,7 @@ class BaseItem extends BaseModel {
 			{
 				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
 				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, syncDisabledReason + ''],
-			}
+			},
 		];
 	}
 
@@ -680,8 +691,8 @@ class BaseItem extends BaseModel {
 
 	static displayTitle(item) {
 		if (!item) return '';
-		if (!!item.encryption_applied) return '🔑 ' + _('Encrypted');
-		return !!item.title ? item.title : _('Untitled');
+		if (item.encryption_applied) return '🔑 ' + _('Encrypted');
+		return item.title ? item.title : _('Untitled');
 	}
 
 	static async markAllNonEncryptedForSync() {
@@ -691,7 +702,8 @@ class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			const sql = sprintf(`
+			const sql = sprintf(
+				`
 				SELECT id
 				FROM %s
 				WHERE encryption_applied = 0`,
@@ -699,7 +711,9 @@ class BaseItem extends BaseModel {
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
-			const ids = items.map((item) => {return item.id});
+			const ids = items.map(item => {
+				return item.id;
+			});
 			if (!ids.length) continue;
 
 			await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("' + ids.join('","') + '")');
@@ -718,17 +732,20 @@ class BaseItem extends BaseModel {
 		if (!options) options = {};
 
 		if (options.userSideValidation === true) {
-			if (!!o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
+			if (o.encryption_applied) throw new Error(_('Encrypted items cannot be modified'));
 		}
 
 		return super.save(o, options);
 	}
 
 	static markdownTag(itemOrId) {
-		const item = typeof itemOrId === 'object' ? itemOrId : {
-			id: itemOrId,
-			title: '',
-		}; 
+		const item =
+			typeof itemOrId === 'object'
+				? itemOrId
+				: {
+						id: itemOrId,
+						title: '',
+				  };
 
 		const output = [];
 		output.push('[');
@@ -737,7 +754,6 @@ class BaseItem extends BaseModel {
 		output.push('(:/' + item.id + ')');
 		return output.join('');
 	}
-
 }
 
 BaseItem.encryptionService_ = null;
@@ -747,15 +763,7 @@ BaseItem.revisionService_ = null;
 // - itemsThatNeedSync()
 // - syncedItems()
 
-BaseItem.syncItemDefinitions_ = [
-	{ type: BaseModel.TYPE_NOTE, className: 'Note' },
-	{ type: BaseModel.TYPE_FOLDER, className: 'Folder' },
-	{ type: BaseModel.TYPE_RESOURCE, className: 'Resource' },
-	{ type: BaseModel.TYPE_TAG, className: 'Tag' },
-	{ type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' },
-	{ type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' },
-	{ type: BaseModel.TYPE_REVISION, className: 'Revision' },
-];
+BaseItem.syncItemDefinitions_ = [{ type: BaseModel.TYPE_NOTE, className: 'Note' }, { type: BaseModel.TYPE_FOLDER, className: 'Folder' }, { type: BaseModel.TYPE_RESOURCE, className: 'Resource' }, { type: BaseModel.TYPE_TAG, className: 'Tag' }, { type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' }, { type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' }, { type: BaseModel.TYPE_REVISION, className: 'Revision' }];
 
 BaseItem.SYNC_ITEM_LOCATION_LOCAL = 1;
 BaseItem.SYNC_ITEM_LOCATION_REMOTE = 2;

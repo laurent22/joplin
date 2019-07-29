@@ -6,7 +6,6 @@ const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale');
 
 class Tag extends BaseItem {
-
 	static tableName() {
 		return 'tags';
 	}
@@ -30,9 +29,12 @@ class Tag extends BaseItem {
 		let noteIds = await this.noteIds(tagId);
 		if (!noteIds.length) return [];
 
-		return Note.previews(null, Object.assign({}, options, {
-			conditions: ['id IN ("' + noteIds.join('","') + '")'],
-		}));
+		return Note.previews(
+			null,
+			Object.assign({}, options, {
+				conditions: ['id IN ("' + noteIds.join('","') + '")'],
+			})
+		);
 	}
 
 	// Untag all the notes and delete tag
@@ -167,7 +169,7 @@ class Tag extends BaseItem {
 			}
 		}
 
-		return super.save(o, options).then((tag) => {
+		return super.save(o, options).then(tag => {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
 				item: tag,
@@ -175,7 +177,6 @@ class Tag extends BaseItem {
 			return tag;
 		});
 	}
-
 }
 
 module.exports = Tag;

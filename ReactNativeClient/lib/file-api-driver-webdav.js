@@ -3,13 +3,12 @@ const { time } = require('lib/time-utils.js');
 const { basicDelta } = require('lib/file-api');
 const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
 const Entities = require('html-entities').AllHtmlEntities;
-const html_entity_decode = (new Entities()).decode;
+const html_entity_decode = new Entities().decode;
 const { shim } = require('lib/shim');
 const { basename } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 
-class FileApiDriverWebDav { 
-
+class FileApiDriverWebDav {
 	constructor(api) {
 		this.api_ = api;
 	}
@@ -24,10 +23,7 @@ class FileApiDriverWebDav {
 
 	async stat(path) {
 		try {
-			const result = await this.api().execPropFind(path, 0, [
-				'd:getlastmodified',
-				'd:resourcetype',
-			]);
+			const result = await this.api().execPropFind(path, 0, ['d:getlastmodified', 'd:resourcetype']);
 
 			const resource = this.api().objectFromJson(result, ['d:multistatus', 'd:response', 0]);
 			return this.statFromResource_(resource, path);
@@ -80,7 +76,7 @@ class FileApiDriverWebDav {
 	}
 
 	async delta(path, options) {
-		const getDirStats = async (path) => {
+		const getDirStats = async path => {
 			const result = await this.list(path);
 			return result.items;
 		};
@@ -133,7 +129,7 @@ class FileApiDriverWebDav {
 		// 		let currentStat = null;
 		// 		let currentText = '';
 
-		// 		// When this is on, the tags from the bloated XML string are replaced by shorter ones, 
+		// 		// When this is on, the tags from the bloated XML string are replaced by shorter ones,
 		// 		// which makes parsing about 25% faster. However it's a bit of a hack so keep it as
 		// 		// an option so that it can be disabled if it causes problems.
 		// 		const optimizeXml = true;
@@ -163,7 +159,7 @@ class FileApiDriverWebDav {
 
 		// 		saxParser.onclosetag = function(tagName) {
 		// 			tagName = tagName.toLowerCase();
-					
+
 		// 			if (tagName === tagResponse) {
 		// 				if (currentStat.path) { // The list of resources includes the root dir too, which we don't want
 		// 					if (!currentStat.updated_time) throw new Error('Resource does not have a getlastmodified prop');
@@ -202,12 +198,12 @@ class FileApiDriverWebDav {
 		// 		};
 
 		// 		if (optimizeXml) {
-		// 			xmlString = xmlString.replace(/<d:status>HTTP\/1\.1 200 OK<\/d:status>/ig, ''); 
-		// 			xmlString = xmlString.replace(/<d:resourcetype\/>/ig, ''); 
-		// 			xmlString = xmlString.replace(/d:getlastmodified/ig, tagGetLastModified); 
-		// 			xmlString = xmlString.replace(/d:response/ig, tagResponse); 
-		// 			xmlString = xmlString.replace(/d:propstat/ig, tagPropStat); 
-		// 			if (replaceUrls) xmlString = xmlString.replace(new RegExp(relativeBaseUrl, 'gi'), ''); 
+		// 			xmlString = xmlString.replace(/<d:status>HTTP\/1\.1 200 OK<\/d:status>/ig, '');
+		// 			xmlString = xmlString.replace(/<d:resourcetype\/>/ig, '');
+		// 			xmlString = xmlString.replace(/d:getlastmodified/ig, tagGetLastModified);
+		// 			xmlString = xmlString.replace(/d:response/ig, tagResponse);
+		// 			xmlString = xmlString.replace(/d:propstat/ig, tagPropStat);
+		// 			if (replaceUrls) xmlString = xmlString.replace(new RegExp(relativeBaseUrl, 'gi'), '');
 		// 		}
 
 		// 		let idx = 0;
@@ -228,7 +224,7 @@ class FileApiDriverWebDav {
 
 		// For performance reasons, the response of the PROPFIND call is manually parsed with a regex below
 		// instead of being processed by xml2json like the other WebDAV responses. This is over 2 times faster
-		// and it means the mobile app does not freeze during sync. 
+		// and it means the mobile app does not freeze during sync.
 
 		// async function parsePropFindXml2(xmlString) {
 		// 	const regex = /<d:response>[\S\s]*?<d:href>([\S\s]*?)<\/d:href>[\S\s]*?<d:getlastmodified>(.*?)<\/d:getlastmodified>/g;
@@ -270,10 +266,7 @@ class FileApiDriverWebDav {
 		// 	context: null,
 		// };
 
-		const result = await this.api().execPropFind(path, 1, [
-			'd:getlastmodified',
-			'd:resourcetype',
-		]);
+		const result = await this.api().execPropFind(path, 1, ['d:getlastmodified', 'd:resourcetype']);
 
 		const resources = this.api().arrayFromJson(result, ['d:multistatus', 'd:response']);
 		const stats = this.statsFromResources_(resources);
@@ -320,7 +313,7 @@ class FileApiDriverWebDav {
 				const stat = await this.stat(path);
 				if (stat) return;
 			}
-			
+
 			throw error;
 		}
 	}
@@ -339,8 +332,8 @@ class FileApiDriverWebDav {
 
 	async move(oldPath, newPath) {
 		await this.api().exec('MOVE', oldPath, null, {
-			'Destination': this.api().baseUrl() + '/' + newPath,
-			'Overwrite': 'T',
+			Destination: this.api().baseUrl() + '/' + newPath,
+			Overwrite: 'T',
 		});
 	}
 
@@ -352,7 +345,6 @@ class FileApiDriverWebDav {
 		await this.delete('');
 		await this.mkdir('');
 	}
-
 }
 
 module.exports = { FileApiDriverWebDav };

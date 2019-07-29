@@ -2,7 +2,6 @@ const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
 
 class SearchEngineUtils {
-
 	static async notesForQuery(query, options = null) {
 		if (!options) options = {};
 
@@ -19,11 +18,15 @@ class SearchEngineUtils {
 			idWasAutoAdded = true;
 		}
 
-		const previewOptions = Object.assign({}, {
-			order: [],
-			fields: fields,
-			conditions: ['id IN ("' + noteIds.join('","') + '")'],
-		}, options);
+		const previewOptions = Object.assign(
+			{},
+			{
+				order: [],
+				fields: fields,
+				conditions: ['id IN ("' + noteIds.join('","') + '")'],
+			},
+			options
+		);
 
 		const notes = await Note.previews(null, previewOptions);
 
@@ -39,7 +42,6 @@ class SearchEngineUtils {
 
 		return sortedNotes;
 	}
-
 }
 
 module.exports = SearchEngineUtils;
