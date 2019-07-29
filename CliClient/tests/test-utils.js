@@ -1,3 +1,5 @@
+/* eslint-disable require-atomic-updates */
+
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
@@ -13,7 +15,6 @@ const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem.js');
-const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
@@ -279,9 +280,9 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 		masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 	} else { // Use the one already available
-		materKey = await MasterKey.all();
-		if (!materKey.length) throw new Error('No mater key available');
-		masterKey = materKey[0];
+		const masterKeys = await MasterKey.all();
+		if (!masterKeys.length) throw new Error('No mater key available');
+		masterKey = masterKeys[0];
 	}
 
 	await service.loadMasterKey(masterKey, '123456', true);
@@ -381,7 +382,7 @@ async function allSyncTargetItemsEncrypted() {
 		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
 			const content = await fileApi().get('.resource/' + remoteContent.id);
 			totalCount++;
-			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
+			if (content.substr(0, 5) === 'JED01') encryptedCount++;
 		}
 
 		if (remoteContent.encryption_applied) encryptedCount++;

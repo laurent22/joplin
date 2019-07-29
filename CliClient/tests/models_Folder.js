@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -100,7 +102,7 @@ describe('models_Folder', function() {
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
 
-		let n2 = await Note.save({ title: 'note2', parent_id: f2.id });
+		let n2 = await Note.save({ title: 'note2', parent_id: f2.id });
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 
 		expect(folders[0].id).toBe(f2.id);

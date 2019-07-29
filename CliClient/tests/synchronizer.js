@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -802,7 +804,7 @@ describe('Synchronizer', function() {
 
 		// Decrypt all the data. Now change the title and sync again - this time the changes should be transmitted
 		await decryptionWorker().start();
-		folder1_2 = await Folder.save({ id: folder1.id, title: 'change test' });
+		await Folder.save({ id: folder1.id, title: 'change test' });
 
 		// If we sync now, this time client 1 should get the changes we did earlier
 		await synchronizer().start();
@@ -1032,12 +1034,12 @@ describe('Synchronizer', function() {
 		await decryptionWorker().start();
 
 		// Try to disable encryption again
-		hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		const hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
 		expect(hasThrown).toBe(false);
 
 		// If we sync now the target should receive the decrypted items
 		await synchronizer().start();
-		allEncrypted = await allSyncTargetItemsEncrypted();
+		const allEncrypted = await allSyncTargetItemsEncrypted();
 		expect(allEncrypted).toBe(false);
 	}));
 
@@ -1074,7 +1076,6 @@ describe('Synchronizer', function() {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
-		let resource1 = (await Resource.all())[0];
 		await synchronizer().start();
 
 		expect(await allSyncTargetItemsEncrypted()).toBe(false);
@@ -1351,7 +1352,7 @@ describe('Synchronizer', function() {
 
 	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', asyncTest(async () => {
 		const note1 = await Note.save({ title: 'note' });
-	 	await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
@@ -1400,7 +1401,7 @@ describe('Synchronizer', function() {
 
 		const dateInPast = revisionService().oldNoteCutOffDate_() - 1000;
 
-		const note1 = await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
+		await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();

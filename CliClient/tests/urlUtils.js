@@ -1,7 +1,5 @@
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const urlUtils = require('lib/urlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {

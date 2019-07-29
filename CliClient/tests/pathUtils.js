@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath} = require('lib/path-utils.js');

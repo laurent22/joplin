@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -49,18 +51,18 @@ describe('models_BaseItem', function() {
 	}));
 	
 	it('should not modify title when unserializing', asyncTest(async () => {
-	  let folder1 = await Folder.save({ title: '' });
-	  let folder2 = await Folder.save({ title: 'folder1' });
-	  
-	  let serialized1 = await Folder.serialize(folder1);
-	  let unserialized1 = await Folder.unserialize(serialized1);
-	  
-	  expect(unserialized1.title).toBe(folder1.title);
-	  
-	  let serialized2 = await Folder.serialize(folder2);
-	  let unserialized2 = await Folder.unserialize(serialized2);
-	  
-	  expect(unserialized2.title).toBe(folder2.title);
+		let folder1 = await Folder.save({ title: '' });
+		let folder2 = await Folder.save({ title: 'folder1' });
+
+		let serialized1 = await Folder.serialize(folder1);
+		let unserialized1 = await Folder.unserialize(serialized1);
+
+		expect(unserialized1.title).toBe(folder1.title);
+
+		let serialized2 = await Folder.serialize(folder2);
+		let unserialized2 = await Folder.unserialize(serialized2);
+
+		expect(unserialized2.title).toBe(folder2.title);
 	}));
 
 });
