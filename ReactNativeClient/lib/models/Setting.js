@@ -103,8 +103,8 @@ class Setting extends BaseModel {
 				let output = {};
 				output[Setting.THEME_LIGHT] = _('Light');
 				output[Setting.THEME_DARK] = _('Dark');
-				output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarized Light');
-				output[Setting.THEME_SOLARIZED_DARK] = _('Solarized Dark');
+				output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+				output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 				return output;
 			}},
 			'uncompletedTodosOnTop': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
