@@ -1,6 +1,5 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
-const { Logger } = require('lib/logger.js');
 
 class Bridge {
 
@@ -65,7 +64,6 @@ class Bridge {
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
 	showMessageBox_(window, options) {
 		const {dialog} = require('electron');
-		const nativeImage = require('electron').nativeImage
 		if (!window) window = this.window();
 		return dialog.showMessageBox(window, options);
 	}
@@ -112,11 +110,11 @@ class Bridge {
 	}
 
 	openExternal(url) {
-		return require('electron').shell.openExternal(url)
+		return require('electron').shell.openExternal(url);
 	}
 
 	openItem(fullPath) {
-		return require('electron').shell.openItem(fullPath)
+		return require('electron').shell.openItem(fullPath);
 	}
 
 	checkForUpdates(inBackground, window, logFilePath, options) {
@@ -139,4 +137,4 @@ function bridge() {
 	return bridge_;
 }	
 
-module.exports = { bridge, initBridge }
+module.exports = { bridge, initBridge };

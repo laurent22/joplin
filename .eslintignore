@@ -4,3 +4,10 @@ Clipper/joplin-webclipper/content_scripts/Readability-readerable.js
 Clipper/joplin-webclipper/content_scripts/Readability.js
 highlight.pack.js
 ReactNativeClient/lib/vendor/
+ElectronClient/app/node_modules
+ElectronClient/app/dist
+ElectronClient/app/locales
+ElectronClient/app/lib
+ReactNativeClient/node_modules
+ElectronClient/app/lib/vendor/sjcl.js
+ElectronClient/app/lib/vendor/sjcl-rn.js
