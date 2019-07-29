@@ -158,6 +158,7 @@ const solarizedLightStyle = {
 	urlColor: "#268bd2",
 
 	backgroundColor2: "#002b36",
+	depthColor: 'rgb(100, 182, 253, OPACITY)',
 	color2: "#eee8d5",
 	selectedColor2: "#6c71c4",
 	colorError2: "#cb4b16",
@@ -194,6 +195,7 @@ const solarizedDarkStyle = {
 	urlColor: "#268bd2",
 
 	backgroundColor2: "#073642",
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
 	color2: "#eee8d5",
 	selectedColor2: "#6c71c4",
 	colorError2: "#cb4b16",
