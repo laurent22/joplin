@@ -1513,13 +1513,11 @@ msgstr "Hell"
 msgid "Dark"
 msgstr "Dunkel"
 
-#, fuzzy
 msgid "Solarised Light"
 msgstr "Solarized Hell"
 
-#, fuzzy
 msgid "Solarised Dark"
-msgstr "Solarized Dunkel"
+msgstr "Solarised Dark"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"
