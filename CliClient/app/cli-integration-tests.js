@@ -114,12 +114,12 @@ testUnits.testNotes = async () => {
 	notes = await Note.all();
 	assertEquals(2, notes.length);
 
-	await execCommand(client, "rm -f 'blabla*'");
+	await execCommand(client, 'rm -f \'blabla*\'');
 
 	notes = await Note.all();
 	assertEquals(2, notes.length);
 
-	await execCommand(client, "rm -f 'n*'");
+	await execCommand(client, 'rm -f \'n*\'');
 
 	notes = await Note.all();
 	assertEquals(0, notes.length);
@@ -203,7 +203,7 @@ testUnits.testMv = async () => {
 	await execCommand(client, 'mknote note2');
 	await execCommand(client, 'mknote note3');
 	await execCommand(client, 'mknote blabla');
-	await execCommand(client, "mv 'note*' nb2");
+	await execCommand(client, 'mv \'note*\' nb2');
 
 	notes1 = await Note.previews(f1.id);
 	notes2 = await Note.previews(f2.id);

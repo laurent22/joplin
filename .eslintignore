@@ -8,7 +8,7 @@ CliClient/tests/logs
 CliClient/tests/support
 CliClient/tests/sync
 CliClient/tests/tmp
-CliClient/tests_build
+CliClient/tests-build
 Clipper/joplin-webclipper/content_scripts/JSDOMParser.js
 Clipper/joplin-webclipper/content_scripts/Readability-readerable.js
 Clipper/joplin-webclipper/content_scripts/Readability.js

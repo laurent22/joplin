@@ -128,8 +128,8 @@ function toCommandLine(args) {
 		return args
 			.map(function(a) {
 				if (a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
-					return "'" + a + "'";
-				} else if (a.indexOf("'") !== -1) {
+					return '\'' + a + '\'';
+				} else if (a.indexOf('\'') !== -1) {
 					return '"' + a + '"';
 				} else {
 					return a;
@@ -138,8 +138,8 @@ function toCommandLine(args) {
 			.join(' ');
 	} else {
 		if (args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
-			return "'" + args + "' ";
-		} else if (args.indexOf("'") !== -1) {
+			return '\'' + args + '\' ';
+		} else if (args.indexOf('\'') !== -1) {
 			return '"' + args + '" ';
 		} else {
 			return args + ' ';
@@ -161,7 +161,7 @@ function getArguments(line) {
 				inDoubleQuotes = true;
 				//currentWord += '"';
 			}
-		} else if (line[i] === "'") {
+		} else if (line[i] === '\'') {
 			if (inSingleQuotes) {
 				inSingleQuotes = false;
 				//maybe push word to parsed?
