@@ -1,6 +1,6 @@
 const React = require('react');
 const Component = React.Component;
-const { StyleSheet, View, TouchableHighlight } = require('react-native');
+const { View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 const styles = {

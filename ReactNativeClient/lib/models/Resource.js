@@ -6,7 +6,6 @@ const Setting = require('lib/models/Setting.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
-const { shim } = require('lib/shim');
 const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');

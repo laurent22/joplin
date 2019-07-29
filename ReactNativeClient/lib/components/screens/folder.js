@@ -1,12 +1,10 @@
 const React = require('react');
-const Component = React.Component;
-const { View, Button, TextInput, StyleSheet } = require('react-native');
+
+const { View, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const { ActionButton } = require('lib/components/action-button.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { reg } = require('lib/registry.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { dialogs } = require('lib/dialogs.js');
 const { themeStyle } = require('lib/components/global-style.js');

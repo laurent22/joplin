@@ -1,7 +1,5 @@
 const moment = require('moment');
-const { time } = require('lib/time-utils.js');
 const { dirname, basename } = require('lib/path-utils.js');
-const { OneDriveApi } = require('lib/onedrive-api.js');
 
 class FileApiDriverOneDrive {
 	constructor(api) {

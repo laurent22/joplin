@@ -8,7 +8,6 @@ module.exports = function(style, options) {
 	`;
 
 	const fontFamily = "'Avenir', 'Arial', sans-serif";
-	const listMarginLeft = '1.7em';
 
 	const css =
 		`

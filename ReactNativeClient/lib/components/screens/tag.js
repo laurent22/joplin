@@ -1,14 +1,11 @@
 const React = require('react');
-const Component = React.Component;
-const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+
+const { View } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');
-const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { globalStyle } = require('lib/components/global-style.js');
 
 let styles = {
 	body: {
@@ -49,7 +46,7 @@ class TagScreenComponent extends BaseScreenComponent {
 	render() {
 		let title = tag ? tag.title : '';
 
-		const { navigate } = this.props.navigation;
+		const {} = this.props.navigation;
 		return (
 			<View style={this.styles().screen}>
 				<ScreenHeader title={title} menuOptions={this.menuOptions()} />

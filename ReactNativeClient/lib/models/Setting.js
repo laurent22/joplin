@@ -1,6 +1,5 @@
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
-const { Logger } = require('lib/logger.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');

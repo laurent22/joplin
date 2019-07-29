@@ -3,7 +3,7 @@ const { shim } = require('lib/shim.js');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
-const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however

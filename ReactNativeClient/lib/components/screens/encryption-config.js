@@ -1,12 +1,11 @@
 const React = require('react');
-const Component = React.Component;
-const { TextInput, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, Platform } = require('react-native');
+
+const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } = require('react-native');
 const EncryptionService = require('lib/services/EncryptionService');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { Dropdown } = require('lib/components/Dropdown.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');

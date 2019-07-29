@@ -1,13 +1,11 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { ListView, Text, TouchableOpacity, View, StyleSheet } = require('react-native');
-const { _ } = require('lib/locale.js');
+const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { Checkbox } = require('lib/components/checkbox.js');
-const { reg } = require('lib/registry.js');
 const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteItemComponent extends Component {
 	constructor() {
@@ -108,8 +106,7 @@ class NoteItemComponent extends Component {
 	render() {
 		const note = this.props.note ? this.props.note : {};
 		const isTodo = !!Number(note.is_todo);
-		const onPress = this.props.onPress;
-		const onCheckboxChange = this.props.onCheckboxChange;
+
 		const theme = themeStyle(this.props.theme);
 
 		// IOS: display: none crashes the app

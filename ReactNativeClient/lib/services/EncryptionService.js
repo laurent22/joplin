@@ -5,7 +5,6 @@ const Setting = require('lib/models/Setting.js');
 const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const JoplinError = require('lib/JoplinError');
-const { _ } = require('lib/locale.js');
 
 function hexPad(s, length) {
 	return padLeft(s, length, '0');

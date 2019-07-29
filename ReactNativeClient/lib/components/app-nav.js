@@ -4,7 +4,6 @@ const { connect } = require('react-redux');
 const { NotesScreen } = require('lib/components/screens/notes.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { KeyboardAvoidingView, Keyboard, Platform, View } = require('react-native');
-const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
 class AppNavComponent extends Component {

@@ -1,7 +1,6 @@
 const { time } = require('lib/time-utils.js');
 const { shim } = require('lib/shim');
 const JoplinError = require('lib/JoplinError');
-const { basicDelta } = require('lib/file-api');
 
 class FileApiDriverDropbox {
 	constructor(api) {

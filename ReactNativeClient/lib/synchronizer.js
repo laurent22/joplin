@@ -269,7 +269,7 @@ class Synchronizer {
 
 						let remote = await this.api().stat(path);
 						let action = null;
-						let updateSyncTimeOnly = true;
+
 						let reason = '';
 						let remoteContent = null;
 

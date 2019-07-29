@@ -78,7 +78,7 @@ class NoteBodyViewer extends Component {
 	render() {
 		const note = this.props.note;
 		const style = this.props.style;
-		const onCheckboxChange = this.props.onCheckboxChange;
+
 		const theme = themeStyle(this.props.theme);
 
 		const bodyToRender = note ? note.body : '';

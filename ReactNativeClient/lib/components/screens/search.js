@@ -1,6 +1,6 @@
 const React = require('react');
-const Component = React.Component;
-const { ListView, StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
+
+const { StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -9,7 +9,6 @@ const Note = require('lib/models/Note.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
-const { dialogs } = require('lib/dialogs.js');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 

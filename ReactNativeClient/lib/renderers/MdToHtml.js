@@ -3,7 +3,6 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim.js');
-const { _ } = require('lib/locale');
 const md5 = require('md5');
 const StringUtils = require('lib/string-utils.js');
 const noteStyle = require('./noteStyle');

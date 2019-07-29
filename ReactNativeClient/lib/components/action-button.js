@@ -1,10 +1,9 @@
 const React = require('react');
-const Component = React.Component;
-const { StyleSheet, Text } = require('react-native');
+
+const { StyleSheet } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
-const { globalStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale.js');
 
 const styles = StyleSheet.create({

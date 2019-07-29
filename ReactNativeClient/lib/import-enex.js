@@ -1,7 +1,5 @@
 const { uuid } = require('lib/uuid.js');
 const moment = require('moment');
-const { promiseChain } = require('lib/promise-utils.js');
-const { folderItemFilename } = require('lib/string-utils.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');

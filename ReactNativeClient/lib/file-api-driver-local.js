@@ -1,4 +1,3 @@
-const { time } = require('lib/time-utils.js');
 const { basicDelta } = require('lib/file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).

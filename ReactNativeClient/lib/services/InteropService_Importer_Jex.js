@@ -7,15 +7,9 @@ const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { basename, filename } = require('lib/path-utils.js');
+const { filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const md5 = require('md5');
-const { sprintf } = require('sprintf-js');
-const { shim } = require('lib/shim');
-const { _ } = require('lib/locale');
-const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Jex extends InteropService_Importer_Base {
 	async exec(result) {

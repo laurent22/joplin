@@ -108,7 +108,6 @@ class Logger {
 	log(level, ...object) {
 		if (!this.targets_.length) return;
 
-		let levelString = '';
 		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
 
 		if (level == Logger.LEVEL_WARN) levelString += '[warn] ';

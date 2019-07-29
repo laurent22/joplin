@@ -1,5 +1,4 @@
 const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');

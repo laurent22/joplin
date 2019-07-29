@@ -1,11 +1,9 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } = require('react-native');
+const { ListView, Text, StyleSheet } = require('react-native');
 const { _ } = require('lib/locale.js');
-const { Checkbox } = require('lib/components/checkbox.js');
 const { NoteItem } = require('lib/components/note-item.js');
-const { reg } = require('lib/registry.js');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');

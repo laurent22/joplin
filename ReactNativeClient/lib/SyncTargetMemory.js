@@ -1,5 +1,4 @@
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');

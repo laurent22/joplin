@@ -9,12 +9,9 @@ const Tag = require('lib/models/Tag.js');
 const { basename, filename, rtrimSlashes } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const md5 = require('md5');
-const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {

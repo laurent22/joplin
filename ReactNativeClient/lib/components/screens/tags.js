@@ -1,20 +1,14 @@
 const React = require('react');
-const Component = React.Component;
-const { AppState, View, Button, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
-const { stateUtils } = require('lib/reducer.js');
+
+const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
-const { NoteList } = require('lib/components/note-list.js');
 const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { MenuOption } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
-const { ActionButton } = require('lib/components/action-button.js');
-const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 

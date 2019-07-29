@@ -180,7 +180,6 @@ class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			const folder = folders[i];
 			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
 		}
 

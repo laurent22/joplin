@@ -1,5 +1,5 @@
 const React = require('react');
-const { Text, TouchableHighlight, View, StyleSheet, ScrollView } = require('react-native');
+const { View, ScrollView } = require('react-native');
 
 class ItemList extends React.Component {
 	constructor() {
@@ -66,7 +66,6 @@ class ItemList extends React.Component {
 
 	render() {
 		const style = this.props.style ? this.props.style : {};
-		const itemHeight = this.state.itemHeight;
 
 		//if (!this.props.itemHeight) throw new Error('itemHeight is required');
 

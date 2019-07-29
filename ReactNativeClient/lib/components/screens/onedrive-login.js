@@ -1,7 +1,7 @@
 const React = require('react');
-const Component = React.Component;
+
 const { View } = require('react-native');
-const { Button, Text } = require('react-native');
+const { Button } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');

@@ -2,7 +2,6 @@ const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
-const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale');
 
 class Tag extends BaseItem {

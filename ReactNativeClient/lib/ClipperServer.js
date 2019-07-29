@@ -1,4 +1,3 @@
-const { netUtils } = require('lib/net-utils');
 const urlParser = require('url');
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');

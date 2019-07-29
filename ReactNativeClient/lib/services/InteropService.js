@@ -5,14 +5,12 @@ const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { basename, filename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
 const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {

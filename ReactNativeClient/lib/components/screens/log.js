@@ -1,5 +1,5 @@
 const React = require('react');
-const Component = React.Component;
+
 const { ListView, View, Text, Button, StyleSheet, Platform } = require('react-native');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');

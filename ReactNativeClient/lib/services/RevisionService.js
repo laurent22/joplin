@@ -1,4 +1,3 @@
-const { Logger } = require('lib/logger.js');
 const ItemChange = require('lib/models/ItemChange');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
