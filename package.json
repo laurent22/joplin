@@ -9,6 +9,10 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.1.0",
-    "eslint-plugin-react": "^7.14.3"
-  }
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "1.18.2"
+  },
+  "dependencies": {}
 }

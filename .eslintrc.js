@@ -4,7 +4,7 @@ module.exports = {
 		'es6': true,
 		'node': true,
 	},
-	'extends': 'eslint:recommended',
+	'extends': ['eslint:recommended', 'prettier'],
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly'
@@ -16,22 +16,15 @@ module.exports = {
 	    },
 	},
 	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
-		'linebreak-style': [
-			'error',
-			'unix'
-		],
-		'quotes': [
-			'error',
-			'single'
-		],
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
+		"no-unused-vars": ["error", { "argsIgnorePattern": "event" }],
+		"no-constant-condition": 0,
+		"no-prototype-builtins": 0,
+		"prettier/prettier": "error",
 	},
 	"plugins": [
 		"react",
+		"prettier",
 	],
 };
