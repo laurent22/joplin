@@ -5,13 +5,12 @@ const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
-const { cliUtils } = require('./cli-utils.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');
 const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = (new Entities()).encode;
+const htmlentities = new Entities().encode;
 
 const chalk = require('chalk');
 const tk = require('terminal-kit');
@@ -20,12 +19,10 @@ const Renderer = require('tkwidgets/framework/Renderer.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
-const ListWidget = require('tkwidgets/ListWidget.js');
 const TextWidget = require('tkwidgets/TextWidget.js');
 const HLayoutWidget = require('tkwidgets/HLayoutWidget.js');
 const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
 const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
-const RootWidget = require('tkwidgets/RootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
@@ -37,7 +34,6 @@ const StatusBarWidget = require('./gui/StatusBarWidget.js');
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
 
 class AppGui {
-
 	constructor(app, store, keymap) {
 		try {
 			this.app_ = app;
@@ -50,12 +46,12 @@ class AppGui {
 			// Some keys are directly handled by the tkwidget framework
 			// so they need to be remapped in a different way.
 			this.tkWidgetKeys_ = {
-				'focus_next': 'TAB',
-				'focus_previous': 'SHIFT_TAB',
-				'move_up': 'UP',
-				'move_down': 'DOWN',
-				'page_down': 'PAGE_DOWN',
-				'page_up': 'PAGE_UP',
+				focus_next: 'TAB',
+				focus_previous: 'SHIFT_TAB',
+				move_up: 'UP',
+				move_down: 'DOWN',
+				page_down: 'PAGE_DOWN',
+				page_up: 'PAGE_UP',
 			};
 
 			this.renderer_ = null;
@@ -64,7 +60,7 @@ class AppGui {
 
 			this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
-			this.app_.on('modelAction', async (event) => {
+			this.app_.on('modelAction', async event => {
 				await this.handleModelAction(event.action);
 			});
 
@@ -134,7 +130,7 @@ class AppGui {
 		};
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
-		folderList.on('currentItemChange', async (event) => {
+		folderList.on('currentItemChange', async event => {
 			const item = folderList.currentItem;
 
 			if (item === '-') {
@@ -169,7 +165,7 @@ class AppGui {
 				});
 			}
 		});
-		this.rootWidget_.connect(folderList, (state) => {
+		this.rootWidget_.connect(folderList, state => {
 			return {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
@@ -196,7 +192,7 @@ class AppGui {
 				id: note ? note.id : null,
 			});
 		});
-		this.rootWidget_.connect(noteList, (state) => {
+		this.rootWidget_.connect(noteList, state => {
 			return {
 				selectedNoteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				items: state.notes,
@@ -210,7 +206,7 @@ class AppGui {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 		};
-		this.rootWidget_.connect(noteText, (state) => {
+		this.rootWidget_.connect(noteText, state => {
 			return {
 				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				notes: state.notes,
@@ -225,7 +221,7 @@ class AppGui {
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
 		};
-		this.rootWidget_.connect(noteMetadata, (state) => {
+		this.rootWidget_.connect(noteMetadata, state => {
 			return { noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null };
 		});
 		noteMetadata.hide();
@@ -292,7 +288,7 @@ class AppGui {
 		if (!cmd) return;
 		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
 		if (isConfigPassword) return;
-		this.stdout(chalk.cyan.bold('> ' + cmd));	
+		this.stdout(chalk.cyan.bold('> ' + cmd));
 	}
 
 	setupKeymap(keymap) {
@@ -408,7 +404,7 @@ class AppGui {
 	activeListItem() {
 		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
-		
+
 		if (widget.name == 'noteList' || widget.name == 'folderList') {
 			return widget.currentItem;
 		}
@@ -430,18 +426,14 @@ class AppGui {
 	}
 
 	async processFunctionCommand(cmd) {
-
 		if (cmd === 'activate') {
-
 			const w = this.widget('mainWindow').focusedWidget;
 			if (w.name === 'folderList') {
 				this.widget('noteList').focus();
 			} else if (w.name === 'noteList' || w.name === 'noteText') {
 				this.processPromptCommand('edit $n');
 			}
-
 		} else if (cmd === 'delete') {
-
 			if (this.widget('folderList').hasFocus) {
 				const item = this.widget('folderList').selectedJoplinItem;
 
@@ -462,9 +454,7 @@ class AppGui {
 			} else {
 				this.stdout(_('Please select the note or notebook to be deleted first.'));
 			}
-
 		} else if (cmd === 'toggle_console') {
-
 			if (!this.consoleIsShown()) {
 				this.showConsole();
 				this.minimizeConsole();
@@ -475,22 +465,15 @@ class AppGui {
 					this.maximizeConsole();
 				}
 			}
-
 		} else if (cmd === 'toggle_metadata') {
-
 			this.toggleNoteMetadata();
-
 		} else if (cmd === 'enter_command_line_mode') {
-
 			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;
 			this.addCommandToConsole(cmd);
-			await this.processPromptCommand(cmd);			
-
+			await this.processPromptCommand(cmd);
 		} else {
-
 			throw new Error('Unknown command: ' + cmd);
-
 		}
 	}
 
@@ -501,7 +484,7 @@ class AppGui {
 
 		// this.logger().debug('Got command: ' + cmd);
 
-		try {			
+		try {
 			let note = this.widget('noteList').currentItem;
 			let folder = this.widget('folderList').currentItem;
 			let args = splitCommandString(cmd);
@@ -511,7 +494,7 @@ class AppGui {
 					args[i] = note ? note.id : '';
 				} else if (args[i] == '$b') {
 					args[i] = folder ? folder.id : '';
-				} else  if (args[i] == '$c') {
+				} else if (args[i] == '$c') {
 					const item = this.activeListItem();
 					args[i] = item ? item.id : '';
 				}
@@ -523,7 +506,7 @@ class AppGui {
 		}
 
 		this.widget('console').scrollBottom();
-		
+
 		// Invalidate so that the screen is redrawn in case inputting a command has moved
 		// the GUI up (in particular due to autocompletion), it's moved back to the right position.
 		this.widget('root').invalidate();
@@ -603,7 +586,7 @@ class AppGui {
 	async setupResourceServer() {
 		const linkStyle = chalk.blue.underline;
 		const noteTextWidget = this.widget('noteText');
-		const resourceIdRegex = /^:\/[a-f0-9]+$/i
+		const resourceIdRegex = /^:\/[a-f0-9]+$/i;
 		const noteLinks = {};
 
 		const hasProtocol = function(s, protocols) {
@@ -613,7 +596,7 @@ class AppGui {
 				if (s.indexOf(protocols[i] + '://') === 0) return true;
 			}
 			return false;
-		}
+		};
 
 		// By default, before the server is started, only the regular
 		// URLs appear in blue.
@@ -637,7 +620,7 @@ class AppGui {
 			const link = noteLinks[path];
 
 			if (link.type === 'url') {
-				response.writeHead(302, { 'Location': link.url });
+				response.writeHead(302, { Location: link.url });
 				return true;
 			}
 
@@ -650,11 +633,13 @@ class AppGui {
 					if (item.mime) response.setHeader('Content-Type', item.mime);
 					response.write(await Resource.content(item));
 				} else if (item.type_ === BaseModel.TYPE_NOTE) {
-					const html = [`
+					const html = [
+						`
 						<!DOCTYPE html>
 						<html class="client-nojs" lang="en" dir="ltr">
 						<head><meta charset="UTF-8"/></head><body>
-					`];
+					`,
+					];
 					html.push('<pre>' + htmlentities(item.title) + '\n\n' + htmlentities(item.body) + '</pre>');
 					html.push('</body></html>');
 					response.write(html.join(''));
@@ -679,7 +664,7 @@ class AppGui {
 					noteLinks[index] = {
 						type: 'item',
 						id: url.substr(2),
-					};					
+					};
 				} else if (hasProtocol(url, ['http', 'https', 'file', 'ftp'])) {
 					noteLinks[index] = {
 						type: 'url',
@@ -711,7 +696,6 @@ class AppGui {
 			term.grabInput();
 
 			term.on('key', async (name, matches, data) => {
-
 				// -------------------------------------------------------------------------
 				// Handle special shortcuts
 				// -------------------------------------------------------------------------
@@ -729,13 +713,13 @@ class AppGui {
 					return;
 				}
 
-				if (name === 'CTRL_C' ) {
+				if (name === 'CTRL_C') {
 					const cmd = this.app().currentCommand();
 					if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
 						this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
 					} else {
 						this.commandCancelCalled_ = true;
-						await cmd.cancel()
+						await cmd.cancel();
 						this.commandCancelCalled_ = false;
 					}
 					return;
@@ -744,8 +728,8 @@ class AppGui {
 				// -------------------------------------------------------------------------
 				// Build up current shortcut
 				// -------------------------------------------------------------------------
-				
-				const now = (new Date()).getTime();
+
+				const now = new Date().getTime();
 
 				if (now - this.lastShortcutKeyTime_ > 800 || this.isSpecialKey(name)) {
 					this.currentShortcutKeys_ = [name];
@@ -813,7 +797,6 @@ class AppGui {
 			process.exit(1);
 		});
 	}
-
 }
 
 AppGui.INPUT_MODE_NORMAL = 1;

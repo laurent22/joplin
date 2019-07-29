@@ -1,19 +1,12 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
-const { cliUtils } = require('./cli-utils.js');
-const EncryptionService = require('lib/services/EncryptionService');
-const DecryptionWorker = require('lib/services/DecryptionWorker');
-const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
-const Setting = require('lib/models/Setting.js');
 const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const markdownUtils = require('lib/markdownUtils');
 const { Database } = require('lib/database.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'apidoc';
 	}
@@ -23,15 +16,19 @@ class Command extends BaseCommand {
 	}
 
 	createPropertiesTable(tableFields) {
-  		const headers = [
-  			{ name: 'name', label: 'Name' },
-  			{ name: 'type', label: 'Type', filter: (value) => {
-  				return Database.enumName('fieldType', value);
-  			}},
-  			{ name: 'description', label: 'Description' },
-  		];
-		
-		return markdownUtils.createMarkdownTable(headers, tableFields); 
+		const headers = [
+			{ name: 'name', label: 'Name' },
+			{
+				name: 'type',
+				label: 'Type',
+				filter: value => {
+					return Database.enumName('fieldType', value);
+				},
+			},
+			{ name: 'description', label: 'Description' },
+		];
+
+		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
 	async action(args) {
@@ -55,23 +52,23 @@ class Command extends BaseCommand {
 		lines.push('# Joplin API');
 		lines.push('');
 
-		lines.push('When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin\'s data and to create, modify or delete notes, notebooks, resources or tags.');
+		lines.push("When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.");
 		lines.push('');
-		lines.push('In order to use it, you\'ll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:');
+		lines.push("In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:");
 		lines.push('');
 		lines.push('```javascript');
 		lines.push('let port = null;');
 		lines.push('for (let portToTest = 41184; portToTest <= 41194; portToTest++) {');
 		lines.push('    const result = pingPort(portToTest); // Call GET /ping');
-		lines.push('    if (result == \'JoplinClipperServer\') {');
+		lines.push("    if (result == 'JoplinClipperServer') {");
 		lines.push('        port = portToTest; // Found the port');
 		lines.push('        break;');
 		lines.push('    }');
 		lines.push('}');
 		lines.push('```');
 		lines.push('');
-		
-		lines.push('# Authorisation')
+
+		lines.push('# Authorisation');
 		lines.push('');
 		lines.push('To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.');
 		lines.push('');
@@ -152,7 +149,7 @@ class Command extends BaseCommand {
 				tableFields.push({
 					name: 'base_url',
 					type: Database.enumId('fieldType', 'text'),
-					description: 'If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the \'?\'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.',
+					description: "If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.",
 				});
 				tableFields.push({
 					name: 'image_data_url',
@@ -293,7 +290,6 @@ class Command extends BaseCommand {
 
 		this.stdout(lines.join('\n'));
 	}
-
 }
 
 module.exports = Command;

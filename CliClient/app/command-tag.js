@@ -6,7 +6,6 @@ const BaseModel = require('lib/BaseModel.js');
 const { time } = require('lib/time-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'tag <tag-command> [tag] [note]';
 	}
@@ -16,9 +15,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [
-			['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')],
-		];
+		return [['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')]];
 	}
 
 	async action(args) {
@@ -50,7 +47,7 @@ class Command extends BaseCommand {
 		} else if (command == 'list') {
 			if (tag) {
 				let notes = await Tag.notes(tag.id);
-				notes.map((note) => {
+				notes.map(note => {
 					let line = '';
 					if (options.long) {
 						line += BaseModel.shortId(note.id);
@@ -61,7 +58,7 @@ class Command extends BaseCommand {
 					if (note.is_todo) {
 						line += '[';
 						if (note.todo_completed) {
-						   line += 'X';
+							line += 'X';
 						} else {
 							line += ' ';
 						}
@@ -74,13 +71,14 @@ class Command extends BaseCommand {
 				});
 			} else {
 				let tags = await Tag.all();
-				tags.map((tag) => { this.stdout(tag.title); });
+				tags.map(tag => {
+					this.stdout(tag.title);
+				});
 			}
 		} else {
 			throw new Error(_('Invalid command: "%s"', command));
 		}
 	}
-
 }
 
 module.exports = Command;

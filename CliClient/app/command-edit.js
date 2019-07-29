@@ -3,15 +3,11 @@ const { BaseCommand } = require('./base-command.js');
 const { uuid } = require('lib/uuid.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
-const { cliUtils } = require('./cli-utils.js');
-const { time } = require('lib/time-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'edit <note>';
 	}
@@ -21,20 +17,19 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let watcher = null;
 		let tempFilePath = null;
 
 		const onFinishedEditing = async () => {
 			if (tempFilePath) fs.removeSync(tempFilePath);
-		}
+		};
 
 		const textEditorPath = () => {
 			if (Setting.value('editor')) return Setting.value('editor');
 			if (process.env.EDITOR) return process.env.EDITOR;
 			throw new Error(_('No text editor is defined. Please set it using `config editor <editor-path>`'));
-		}
+		};
 
-		try {		
+		try {
 			// -------------------------------------------------------------------------
 			// Load note or create it if it doesn't exist
 			// -------------------------------------------------------------------------
@@ -76,18 +71,30 @@ class Command extends BaseCommand {
 
 			this.logger().info('Disabling fullscreen...');
 
-			app().gui().showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
-			await app().gui().forceRender();
-			const termState = app().gui().termSaveState();
+			app()
+				.gui()
+				.showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
+			await app()
+				.gui()
+				.forceRender();
+			const termState = app()
+				.gui()
+				.termSaveState();
 
-			const spawnSync	= require('child_process').spawnSync;
+			const spawnSync = require('child_process').spawnSync;
 			const result = spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
 			if (result.error) this.stdout(_('Error opening note in editor: %s', result.error.message));
 
-			app().gui().termRestoreState(termState);
-			app().gui().hideModalOverlay();
-			app().gui().forceRender();
+			app()
+				.gui()
+				.termRestoreState(termState);
+			app()
+				.gui()
+				.hideModalOverlay();
+			app()
+				.gui()
+				.forceRender();
 
 			// -------------------------------------------------------------------------
 			// Save the note and clean up
@@ -107,13 +114,11 @@ class Command extends BaseCommand {
 			});
 
 			await onFinishedEditing();
-
-		} catch(error) {
+		} catch (error) {
 			await onFinishedEditing();
 			throw error;
 		}
 	}
-
 }
 
 module.exports = Command;
