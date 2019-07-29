@@ -345,17 +345,17 @@ function themeStyle(theme) {
 	let output = {};
 	output.zoomRatio = zoomRatio;
 	output.editorFontSize = editorFontSize;
-	if (theme == Setting.THEME_LIGHT) {
-		output = Object.assign({}, globalStyle, fontSizes, lightStyle);
-	}
-	else if (theme == Setting.THEME_DARK) {
-		output = Object.assign({}, globalStyle, fontSizes, darkStyle);
-	}
-	else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
-		output = Object.assign({}, globalStyle, fontSizes, solarizedLightStyle);
-	}
-	else if (theme == Setting.THEME_SOLARIZED_DARK) {
-		output = Object.assign({}, globalStyle, fontSizes, solarizedDarkStyle);
+
+	// All theme are based on the light style, and just override the
+	// relevant properties
+	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
+
+	if (theme == Setting.THEME_DARK) {
+		output = Object.assign({}, output, darkStyle);
+	} else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
+		output = Object.assign({}, output, solarizedLightStyle);
+	} else if (theme == Setting.THEME_SOLARIZED_DARK) {
+		output = Object.assign({}, output, solarizedDarkStyle);
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles

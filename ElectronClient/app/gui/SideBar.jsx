@@ -119,7 +119,7 @@ class SideBarComponent extends React.Component {
 				display: "flex",
 				alignItems: "stretch",
 				// Allow 3 levels of color depth
-				backgroundColor: !theme.depthColor ? '#00000000' : theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
+				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
