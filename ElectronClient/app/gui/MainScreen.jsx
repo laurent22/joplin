@@ -14,7 +14,6 @@ const { uuid } = require('lib/uuid.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
-const layoutUtils = require('lib/layout-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
@@ -217,7 +216,7 @@ class MainScreenComponent extends React.Component {
 				const note = await Note.load(this.props.selectedNoteId);
 				if (note) {
 					this.props.dispatch({
-						type: "FOLDER_AND_NOTE_SELECT",
+						type: 'FOLDER_AND_NOTE_SELECT',
 						folderId: note.parent_id,
 						noteId: note.id,
 					});
@@ -349,7 +348,7 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
-   		};
+		};
 
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
@@ -401,7 +400,6 @@ class MainScreenComponent extends React.Component {
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, this.props.sidebarWidth, this.props.noteListWidth);
-		const selectedFolderId = this.props.selectedFolderId;
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
@@ -542,7 +540,6 @@ const mapStateToProps = (state) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
 		selectedFolderId: state.selectedFolderId,
-		sidebarVisibility: state.sidebarVisibility,
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
