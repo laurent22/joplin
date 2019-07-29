@@ -18,6 +18,11 @@ module.exports = {
 
 		// React Native variables
 		'__DEV__': 'readonly',
+
+		// Clipper variables
+		'browserSupportsPromises_': true,
+		'chrome': 'readonly',
+		'browser': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
