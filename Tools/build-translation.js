@@ -37,12 +37,16 @@ function serializeTranslation(translation) {
 		if (!translations.hasOwnProperty(n)) continue;
 		if (n == '') continue;
 		const t = translations[n];
+		let translated = '';
 		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
-			output[n] = t['msgid'];
-		} else {		
-			output[n] = t['msgstr'][0];
+			// Don't include fuzzy translations
+		} else {
+			translated = t['msgstr'][0];
 		}
+
+		if (translated) output[n] = translated;
 	}
+
 	return JSON.stringify(output);
 }
 
@@ -99,14 +103,26 @@ async function mergePotToPo(potFilePath, poFilePath) {
 	await removePoHeaderDate(poFilePath);
 }
 
-function buildIndex(locales) {
+function buildIndex(locales, stats) {
 	let output = [];
 	output.push('var locales = {};');
+	output.push('var stats = {};');
+
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 		output.push("locales['" + locale + "'] = require('./" + locale + ".json');");
 	}
-	output.push('module.exports = { locales: locales };');
+
+	for (let i = 0; i < stats.length; i++) {
+		const stat = Object.assign({}, stats[i]);
+		const locale = stat.locale;
+		delete stat.locale;
+		delete stat.translatorName;
+		delete stat.languageName;
+		output.push("stats['" + locale + "'] = " + JSON.stringify(stat) + ";");
+	}
+
+	output.push('module.exports = { locales: locales, stats: stats };');
 	return output.join("\n");
 }
 
@@ -256,7 +272,7 @@ async function main() {
 
 	stats.sort((a, b) => a.languageName < b.languageName ? -1 : +1);
 
-	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
+	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales, stats));
 
 	const rnJsonLocaleDir = rnDir + '/locales';
 	await execCommand('rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"');

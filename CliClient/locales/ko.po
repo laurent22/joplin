@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -1468,10 +1466,12 @@ msgstr "밝음"
 msgid "Dark"
 msgstr "어두움"
 
-msgid "Solarized Light"
+#, fuzzy
+msgid "Solarised Light"
 msgstr "Solarized Light"
 
-msgid "Solarized Dark"
+#, fuzzy
+msgid "Solarised Dark"
 msgstr "Solarized Dark"
 
 msgid "Uncompleted to-dos on top"

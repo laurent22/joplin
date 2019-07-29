@@ -1462,10 +1462,10 @@ msgstr "Aydınlık"
 msgid "Dark"
 msgstr "Karanlık"
 
-msgid "Solarized Light"
+msgid "Solarised Light"
 msgstr ""
 
-msgid "Solarized Dark"
+msgid "Solarised Dark"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

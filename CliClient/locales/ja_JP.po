@@ -1473,11 +1473,11 @@ msgstr "明るい"
 msgid "Dark"
 msgstr "暗い"
 
-msgid "Solarized Light"
-msgstr "Solarized Light"
+msgid "Solarised Light"
+msgstr ""
 
-msgid "Solarized Dark"
-msgstr "Solarized Dark"
+msgid "Solarised Dark"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
