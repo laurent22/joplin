@@ -104,12 +104,20 @@ shim.fetchRequestCanBeRetried = function(error) {
 	return false;
 };
 
+shim.fetchMaxRetry_ = 5;
+
+shim.fetchMaxRetrySet = v => {
+	const previous = shim.fetchMaxRetry_;
+	shim.fetchMaxRetry_ = v;
+	return previous;
+}
+
 shim.fetchWithRetry = async function(fetchFn, options = null) {
 	const { time } = require('lib/time-utils.js');
 
 	if (!options) options = {};
 	if (!options.timeout) options.timeout = 1000 * 120; // ms
-	if (!('maxRetry' in options)) options.maxRetry = 5;
+	if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
 
 	let retryCount = 0;
 	while (true) {

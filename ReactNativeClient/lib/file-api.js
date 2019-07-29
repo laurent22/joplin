@@ -17,17 +17,27 @@ function requestCanBeRepeated(error) {
 async function tryAndRepeat(fn, count) {
 	let retryCount = 0;
 
+	// Don't use internal fetch retry mechanim since we
+	// are already retrying here.
+	const shimFetchMaxRetryPrevious = shim.fetchMaxRetrySet(0);
+	const defer = () => {
+		shim.fetchMaxRetrySet(shimFetchMaxRetryPrevious);
+	}
+
 	while (true) {
 		try {
 			const result = await fn();
+			defer();
 			return result;
 		} catch (error) {
-			if (retryCount >= count) throw error;
-			if (!requestCanBeRepeated(error)) throw error;
+			if (retryCount >= count || !requestCanBeRepeated(error)) {
+				defer();
+				throw error;
+			}
 			retryCount++;
 			await time.sleep(1 + retryCount * 3);
 		}
-	}
+	}	
 }
 
 class FileApi {
