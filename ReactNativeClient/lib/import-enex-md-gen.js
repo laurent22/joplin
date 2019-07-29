@@ -361,7 +361,7 @@ function isAnchor(n) {
 }
 
 function isIgnoredEndTag(n) {
-	return ["en-note", "en-todo", "span", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0;
+	return ["en-note", "en-todo", "body", "html", "font", "br", 'hr', 'tbody', 'sup', 'img', 'abbr', 'cite', 'thead', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0;
 }
 
 function isListTag(n) {
@@ -396,6 +396,29 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
+function isSpanWithStyle(attributes, state) {
+	if (attributes != undefined) {
+		if ('style' in attributes) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+function isSpanStyleBold(attributes) {
+	let style = attributes.style;
+	if (style.includes('font-weight: bold;')) {
+		return true;
+	} else if (style.search( /font-family:.*,Bold.*;/ ) != -1) {
+		//console.debug('font-family regex matched');
+		return true;
+	} else {
+		//console.debug('Found unsupported style(s) in span tag: %s', style);
+		return false;
+	}
+}
+
 function enexXmlToMdArray(stream, resources) {
 	let remainingResources = resources.slice();
 
@@ -415,6 +438,7 @@ function enexXmlToMdArray(stream, resources) {
 			inQuote: false,
 			lists: [],
 			anchorAttributes: [],
+			spanAttributes: [],
 		};
 
 		let options = {};
@@ -681,7 +705,15 @@ function enexXmlToMdArray(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
-			} else if (["span", "font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
+			} else if (n == "span") {
+				if (isSpanWithStyle(nodeAttributes)) {
+					state.spanAttributes.push(nodeAttributes);
+					if (isSpanStyleBold(nodeAttributes)) {
+						//console.debug('Applying style found in span tag: bold')
+						section.lines.push("**");
+					}
+				}
+			} else if (["font", 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
 				// Inline tags that can be ignored in Markdown
 			} else {
 				console.warn("Unsupported start tag: " + n);
@@ -862,6 +894,14 @@ function enexXmlToMdArray(stream, resources) {
 				state.lists.pop();
 			} else if (n == "en-media") {
 				// Skip
+			} else if (n == 'span') {
+				let attributes = state.spanAttributes.pop();
+				if (isSpanWithStyle(attributes)) {
+					if (isSpanStyleBold(attributes)) {
+						//console.debug('Applying style found in span tag (closing): bold')
+						section.lines.push("**");
+					}
+				}
 			} else if (isIgnoredEndTag(n)) {
 				// Skip
 			} else {
