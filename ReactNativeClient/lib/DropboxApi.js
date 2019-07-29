@@ -57,7 +57,7 @@ class DropboxApi {
 		if (options.headers) {
 			for (let n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push('-H ' + "'" + n + ': ' + options.headers[n] + "'");
+				output.push('-H ' + '\'' + n + ': ' + options.headers[n] + '\'');
 			}
 		}
 		if (options.body) output.push('--data ' + '"' + options.body + '"');

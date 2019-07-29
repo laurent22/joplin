@@ -320,406 +320,406 @@ const reducer = (state = defaultState, action) => {
 
 	try {
 		switch (action.type) {
-			case 'NOTE_SELECT':
-			case 'NOTE_SELECT_ADD':
-			case 'NOTE_SELECT_REMOVE':
-			case 'NOTE_SELECT_TOGGLE':
-				newState = changeSelectedNotes(state, action);
-				break;
+		case 'NOTE_SELECT':
+		case 'NOTE_SELECT_ADD':
+		case 'NOTE_SELECT_REMOVE':
+		case 'NOTE_SELECT_TOGGLE':
+			newState = changeSelectedNotes(state, action);
+			break;
 
-			case 'NOTE_SELECT_EXTEND':
-				{
-					newState = Object.assign({}, state);
-
-					if (!newState.selectedNoteIds.length) {
-						newState.selectedNoteIds = [action.id];
-					} else {
-						const selectRangeId1 = state.selectedNoteIds[state.selectedNoteIds.length - 1];
-						const selectRangeId2 = action.id;
-						if (selectRangeId1 === selectRangeId2) return state;
-
-						let newSelectedNoteIds = state.selectedNoteIds.slice();
-						let selectionStarted = false;
-						for (let i = 0; i < state.notes.length; i++) {
-							const id = state.notes[i].id;
-
-							if (!selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
-								selectionStarted = true;
-								if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
-								continue;
-							} else if (selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
-								if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
-								break;
-							}
-
-							if (selectionStarted && newSelectedNoteIds.indexOf(id) < 0) {
-								newSelectedNoteIds.push(id);
-							}
-						}
-						newState.selectedNoteIds = newSelectedNoteIds;
-					}
-				}
-				break;
-
-			case 'FOLDER_SELECT':
-				newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
-				break;
-
-			case 'FOLDER_AND_NOTE_SELECT':
-				{
-					newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
-					const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-					newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
-
-					if (action.historyNoteAction) {
-						const historyNotes = newState.historyNotes.slice();
-						if (typeof action.historyNoteAction === 'object') {
-							historyNotes.push(Object.assign({}, action.historyNoteAction));
-						} else if (action.historyNoteAction === 'pop') {
-							historyNotes.pop();
-						}
-						newState.historyNotes = historyNotes;
-					} else if (newState !== state) {
-						// Clear the note history if folder and selected note have actually been changed. For example
-						// they won't change if they are already selected. That way, the "Back" button to go to the
-						// previous note wll stay.
-						newState.historyNotes = [];
-					}
-				}
-				break;
-
-			case 'SETTING_UPDATE_ALL':
+		case 'NOTE_SELECT_EXTEND':
+			{
 				newState = Object.assign({}, state);
-				newState.settings = action.settings;
-				break;
 
-			case 'SETTING_UPDATE_ONE':
-				{
-					newState = Object.assign({}, state);
-					let newSettings = Object.assign({}, state.settings);
-					newSettings[action.key] = action.value;
-					newState.settings = newSettings;
+				if (!newState.selectedNoteIds.length) {
+					newState.selectedNoteIds = [action.id];
+				} else {
+					const selectRangeId1 = state.selectedNoteIds[state.selectedNoteIds.length - 1];
+					const selectRangeId2 = action.id;
+					if (selectRangeId1 === selectRangeId2) return state;
+
+					let newSelectedNoteIds = state.selectedNoteIds.slice();
+					let selectionStarted = false;
+					for (let i = 0; i < state.notes.length; i++) {
+						const id = state.notes[i].id;
+
+						if (!selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+							selectionStarted = true;
+							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+							continue;
+						} else if (selectionStarted && (id === selectRangeId1 || id === selectRangeId2)) {
+							if (newSelectedNoteIds.indexOf(id) < 0) newSelectedNoteIds.push(id);
+							break;
+						}
+
+						if (selectionStarted && newSelectedNoteIds.indexOf(id) < 0) {
+							newSelectedNoteIds.push(id);
+						}
+					}
+					newState.selectedNoteIds = newSelectedNoteIds;
 				}
-				break;
+			}
+			break;
+
+		case 'FOLDER_SELECT':
+			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
+			break;
+
+		case 'FOLDER_AND_NOTE_SELECT':
+			{
+				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
+				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
+				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
+
+				if (action.historyNoteAction) {
+					const historyNotes = newState.historyNotes.slice();
+					if (typeof action.historyNoteAction === 'object') {
+						historyNotes.push(Object.assign({}, action.historyNoteAction));
+					} else if (action.historyNoteAction === 'pop') {
+						historyNotes.pop();
+					}
+					newState.historyNotes = historyNotes;
+				} else if (newState !== state) {
+					// Clear the note history if folder and selected note have actually been changed. For example
+					// they won't change if they are already selected. That way, the "Back" button to go to the
+					// previous note wll stay.
+					newState.historyNotes = [];
+				}
+			}
+			break;
+
+		case 'SETTING_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.settings = action.settings;
+			break;
+
+		case 'SETTING_UPDATE_ONE':
+			{
+				newState = Object.assign({}, state);
+				let newSettings = Object.assign({}, state.settings);
+				newSettings[action.key] = action.value;
+				newState.settings = newSettings;
+			}
+			break;
 
 			// Replace all the notes with the provided array
-			case 'NOTE_UPDATE_ALL':
-				newState = Object.assign({}, state);
-				newState.notes = action.notes;
-				newState.notesSource = action.notesSource;
-				break;
+		case 'NOTE_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.notes = action.notes;
+			newState.notesSource = action.notesSource;
+			break;
 
 			// Insert the note into the note list if it's new, or
 			// update it within the note array if it already exists.
-			case 'NOTE_UPDATE_ONE':
-				{
-					const modNote = action.note;
+		case 'NOTE_UPDATE_ONE':
+			{
+				const modNote = action.note;
 
-					const noteIsInFolder = function(note, folderId) {
-						if (note.is_conflict) return folderId === Folder.conflictFolderId();
-						if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
-						return false;
-					};
+				const noteIsInFolder = function(note, folderId) {
+					if (note.is_conflict) return folderId === Folder.conflictFolderId();
+					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
+					return false;
+				};
 
-					let movedNotePreviousIndex = 0;
-					let noteFolderHasChanged = false;
-					let newNotes = state.notes.slice();
-					var found = false;
-					for (let i = 0; i < newNotes.length; i++) {
-						let n = newNotes[i];
-						if (n.id == modNote.id) {
-							// Note is still in the same folder
-							if (noteIsInFolder(modNote, n.parent_id)) {
-								// Merge the properties that have changed (in modNote) into
-								// the object we already have.
-								newNotes[i] = Object.assign({}, newNotes[i]);
+				let movedNotePreviousIndex = 0;
+				let noteFolderHasChanged = false;
+				let newNotes = state.notes.slice();
+				var found = false;
+				for (let i = 0; i < newNotes.length; i++) {
+					let n = newNotes[i];
+					if (n.id == modNote.id) {
+						// Note is still in the same folder
+						if (noteIsInFolder(modNote, n.parent_id)) {
+							// Merge the properties that have changed (in modNote) into
+							// the object we already have.
+							newNotes[i] = Object.assign({}, newNotes[i]);
 
-								for (let n in modNote) {
-									if (!modNote.hasOwnProperty(n)) continue;
-									newNotes[i][n] = modNote[n];
-								}
-							} else {
-								// Note has moved to a different folder
-								newNotes.splice(i, 1);
-								noteFolderHasChanged = true;
-								movedNotePreviousIndex = i;
+							for (let n in modNote) {
+								if (!modNote.hasOwnProperty(n)) continue;
+								newNotes[i][n] = modNote[n];
 							}
-							found = true;
-							break;
+						} else {
+							// Note has moved to a different folder
+							newNotes.splice(i, 1);
+							noteFolderHasChanged = true;
+							movedNotePreviousIndex = i;
 						}
+						found = true;
+						break;
 					}
+				}
 
-					// Note was not found - if the current folder is the same as the note folder,
-					// add it to it.
-					if (!found) {
-						if (noteIsInFolder(modNote, state.selectedFolderId)) {
-							newNotes.push(modNote);
-						}
+				// Note was not found - if the current folder is the same as the note folder,
+				// add it to it.
+				if (!found) {
+					if (noteIsInFolder(modNote, state.selectedFolderId)) {
+						newNotes.push(modNote);
 					}
+				}
 
-					//newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
-					newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
+				//newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
+				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
+				newState = Object.assign({}, state);
+				newState.notes = newNotes;
+
+				if (noteFolderHasChanged) {
+					let newIndex = movedNotePreviousIndex;
+					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
+					if (!newNotes.length) newIndex = -1;
+					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
+				}
+			}
+			break;
+
+		case 'NOTE_DELETE':
+			newState = handleItemDelete(state, action);
+			break;
+
+		case 'TAG_DELETE':
+			newState = handleItemDelete(state, action);
+			newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', action.id);
+			break;
+
+		case 'FOLDER_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.folders = action.items;
+			break;
+
+		case 'FOLDER_SET_COLLAPSED':
+			newState = folderSetCollapsed(state, action);
+			break;
+
+		case 'FOLDER_TOGGLE':
+			if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
+				newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
+			} else {
+				newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
+			}
+			break;
+
+		case 'FOLDER_SET_COLLAPSED_ALL':
+			newState = Object.assign({}, state);
+			newState.collapsedFolderIds = action.ids.slice();
+			break;
+
+		case 'TAG_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.tags = action.items;
+			break;
+
+		case 'TAG_SELECT':
+			newState = Object.assign({}, state);
+			newState.selectedTagId = action.id;
+			if (!action.id) {
+				newState.notesParentType = defaultNotesParentType(state, 'Tag');
+			} else {
+				newState.notesParentType = 'Tag';
+			}
+			break;
+
+		case 'TAG_UPDATE_ONE':
+			newState = updateOneItem(state, action);
+			newState = updateOneItem(newState, action, 'selectedNoteTags');
+			break;
+
+		case 'NOTE_TAG_REMOVE':
+			{
+				newState = updateOneItem(state, action, 'tags');
+				let tagRemoved = action.item;
+				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
+			}
+			break;
+
+		case 'FOLDER_UPDATE_ONE':
+		case 'MASTERKEY_UPDATE_ONE':
+			newState = updateOneItem(state, action);
+			break;
+
+		case 'FOLDER_DELETE':
+			newState = handleItemDelete(state, action);
+			break;
+
+		case 'MASTERKEY_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.masterKeys = action.items;
+			break;
+
+		case 'MASTERKEY_SET_NOT_LOADED':
+			newState = Object.assign({}, state);
+			newState.notLoadedMasterKeys = action.ids;
+			break;
+
+		case 'MASTERKEY_ADD_NOT_LOADED':
+			{
+				if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {
 					newState = Object.assign({}, state);
-					newState.notes = newNotes;
-
-					if (noteFolderHasChanged) {
-						let newIndex = movedNotePreviousIndex;
-						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
-						if (!newNotes.length) newIndex = -1;
-						newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
-					}
+					const keys = newState.notLoadedMasterKeys.slice();
+					keys.push(action.id);
+					newState.notLoadedMasterKeys = keys;
 				}
-				break;
+			}
+			break;
 
-			case 'NOTE_DELETE':
-				newState = handleItemDelete(state, action);
-				break;
-
-			case 'TAG_DELETE':
-				newState = handleItemDelete(state, action);
-				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', action.id);
-				break;
-
-			case 'FOLDER_UPDATE_ALL':
-				newState = Object.assign({}, state);
-				newState.folders = action.items;
-				break;
-
-			case 'FOLDER_SET_COLLAPSED':
-				newState = folderSetCollapsed(state, action);
-				break;
-
-			case 'FOLDER_TOGGLE':
-				if (state.collapsedFolderIds.indexOf(action.id) >= 0) {
-					newState = folderSetCollapsed(state, Object.assign({ collapsed: false }, action));
-				} else {
-					newState = folderSetCollapsed(state, Object.assign({ collapsed: true }, action));
-				}
-				break;
-
-			case 'FOLDER_SET_COLLAPSED_ALL':
-				newState = Object.assign({}, state);
-				newState.collapsedFolderIds = action.ids.slice();
-				break;
-
-			case 'TAG_UPDATE_ALL':
-				newState = Object.assign({}, state);
-				newState.tags = action.items;
-				break;
-
-			case 'TAG_SELECT':
-				newState = Object.assign({}, state);
-				newState.selectedTagId = action.id;
-				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Tag');
-				} else {
-					newState.notesParentType = 'Tag';
-				}
-				break;
-
-			case 'TAG_UPDATE_ONE':
-				newState = updateOneItem(state, action);
-				newState = updateOneItem(newState, action, 'selectedNoteTags');
-				break;
-
-			case 'NOTE_TAG_REMOVE':
-				{
-					newState = updateOneItem(state, action, 'tags');
-					let tagRemoved = action.item;
-					newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
-				}
-				break;
-
-			case 'FOLDER_UPDATE_ONE':
-			case 'MASTERKEY_UPDATE_ONE':
-				newState = updateOneItem(state, action);
-				break;
-
-			case 'FOLDER_DELETE':
-				newState = handleItemDelete(state, action);
-				break;
-
-			case 'MASTERKEY_UPDATE_ALL':
-				newState = Object.assign({}, state);
-				newState.masterKeys = action.items;
-				break;
-
-			case 'MASTERKEY_SET_NOT_LOADED':
-				newState = Object.assign({}, state);
-				newState.notLoadedMasterKeys = action.ids;
-				break;
-
-			case 'MASTERKEY_ADD_NOT_LOADED':
-				{
-					if (state.notLoadedMasterKeys.indexOf(action.id) < 0) {
+		case 'MASTERKEY_REMOVE_NOT_LOADED':
+			{
+				const ids = action.id ? [action.id] : action.ids;
+				for (let i = 0; i < ids.length; i++) {
+					const id = ids[i];
+					const index = state.notLoadedMasterKeys.indexOf(id);
+					if (index >= 0) {
 						newState = Object.assign({}, state);
 						const keys = newState.notLoadedMasterKeys.slice();
-						keys.push(action.id);
+						keys.splice(index, 1);
 						newState.notLoadedMasterKeys = keys;
 					}
 				}
-				break;
+			}
+			break;
 
-			case 'MASTERKEY_REMOVE_NOT_LOADED':
-				{
-					const ids = action.id ? [action.id] : action.ids;
-					for (let i = 0; i < ids.length; i++) {
-						const id = ids[i];
-						const index = state.notLoadedMasterKeys.indexOf(id);
-						if (index >= 0) {
-							newState = Object.assign({}, state);
-							const keys = newState.notLoadedMasterKeys.slice();
-							keys.splice(index, 1);
-							newState.notLoadedMasterKeys = keys;
-						}
+		case 'SYNC_STARTED':
+			newState = Object.assign({}, state);
+			newState.syncStarted = true;
+			break;
+
+		case 'SYNC_COMPLETED':
+			newState = Object.assign({}, state);
+			newState.syncStarted = false;
+			break;
+
+		case 'SYNC_REPORT_UPDATE':
+			newState = Object.assign({}, state);
+			newState.syncReport = action.report;
+			break;
+
+		case 'SEARCH_QUERY':
+			newState = Object.assign({}, state);
+			newState.searchQuery = action.query.trim();
+			break;
+
+		case 'SEARCH_ADD':
+			{
+				newState = Object.assign({}, state);
+				let searches = newState.searches.slice();
+				searches.push(action.search);
+				newState.searches = searches;
+			}
+			break;
+
+		case 'SEARCH_UPDATE':
+			{
+				newState = Object.assign({}, state);
+				let searches = newState.searches.slice();
+				let found = false;
+				for (let i = 0; i < searches.length; i++) {
+					if (searches[i].id === action.search.id) {
+						searches[i] = Object.assign({}, action.search);
+						found = true;
+						break;
 					}
 				}
-				break;
 
-			case 'SYNC_STARTED':
-				newState = Object.assign({}, state);
-				newState.syncStarted = true;
-				break;
+				if (!found) searches.push(action.search);
 
-			case 'SYNC_COMPLETED':
-				newState = Object.assign({}, state);
-				newState.syncStarted = false;
-				break;
-
-			case 'SYNC_REPORT_UPDATE':
-				newState = Object.assign({}, state);
-				newState.syncReport = action.report;
-				break;
-
-			case 'SEARCH_QUERY':
-				newState = Object.assign({}, state);
-				newState.searchQuery = action.query.trim();
-				break;
-
-			case 'SEARCH_ADD':
-				{
-					newState = Object.assign({}, state);
-					let searches = newState.searches.slice();
-					searches.push(action.search);
-					newState.searches = searches;
-				}
-				break;
-
-			case 'SEARCH_UPDATE':
-				{
-					newState = Object.assign({}, state);
-					let searches = newState.searches.slice();
-					let found = false;
-					for (let i = 0; i < searches.length; i++) {
-						if (searches[i].id === action.search.id) {
-							searches[i] = Object.assign({}, action.search);
-							found = true;
-							break;
-						}
-					}
-
-					if (!found) searches.push(action.search);
-
-					if (!action.search.query_pattern) {
-						newState.notesParentType = defaultNotesParentType(state, 'Search');
-					} else {
-						newState.notesParentType = 'Search';
-					}
-
-					newState.searches = searches;
-				}
-				break;
-
-			case 'SEARCH_DELETE':
-				newState = handleItemDelete(state, action);
-				break;
-
-			case 'SEARCH_SELECT':
-				newState = Object.assign({}, state);
-				newState.selectedSearchId = action.id;
-				if (!action.id) {
+				if (!action.search.query_pattern) {
 					newState.notesParentType = defaultNotesParentType(state, 'Search');
 				} else {
 					newState.notesParentType = 'Search';
 				}
-				break;
 
-			case 'APP_STATE_SET':
-				newState = Object.assign({}, state);
-				newState.appState = action.state;
-				break;
+				newState.searches = searches;
+			}
+			break;
 
-			case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
-				newState = Object.assign({}, state);
-				newState.hasDisabledSyncItems = true;
-				break;
+		case 'SEARCH_DELETE':
+			newState = handleItemDelete(state, action);
+			break;
 
-			case 'NOTE_SET_NEW_ONE':
+		case 'SEARCH_SELECT':
+			newState = Object.assign({}, state);
+			newState.selectedSearchId = action.id;
+			if (!action.id) {
+				newState.notesParentType = defaultNotesParentType(state, 'Search');
+			} else {
+				newState.notesParentType = 'Search';
+			}
+			break;
+
+		case 'APP_STATE_SET':
+			newState = Object.assign({}, state);
+			newState.appState = action.state;
+			break;
+
+		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
+			newState = Object.assign({}, state);
+			newState.hasDisabledSyncItems = true;
+			break;
+
+		case 'NOTE_SET_NEW_ONE':
+			newState = Object.assign({}, state);
+			newState.newNote = action.item;
+			if (newState.selectedNoteIds.length > 1) {
+				newState.selectedNoteIds = newState.selectedNoteIds.slice();
+				newState.selectedNoteIds = [newState.selectedNoteIds[0]];
+			}
+			break;
+
+		case 'CLIPPER_SERVER_SET':
+			{
 				newState = Object.assign({}, state);
-				newState.newNote = action.item;
-				if (newState.selectedNoteIds.length > 1) {
-					newState.selectedNoteIds = newState.selectedNoteIds.slice();
-					newState.selectedNoteIds = [newState.selectedNoteIds[0]];
+				const clipperServer = Object.assign({}, newState.clipperServer);
+				if ('startState' in action) clipperServer.startState = action.startState;
+				if ('port' in action) clipperServer.port = action.port;
+				newState.clipperServer = clipperServer;
+			}
+			break;
+
+		case 'DECRYPTION_WORKER_SET':
+			{
+				newState = Object.assign({}, state);
+				const decryptionWorker = Object.assign({}, newState.decryptionWorker);
+				for (var n in action) {
+					if (!action.hasOwnProperty(n) || n === 'type') continue;
+					decryptionWorker[n] = action[n];
 				}
-				break;
+				newState.decryptionWorker = decryptionWorker;
+			}
+			break;
 
-			case 'CLIPPER_SERVER_SET':
-				{
-					newState = Object.assign({}, state);
-					const clipperServer = Object.assign({}, newState.clipperServer);
-					if ('startState' in action) clipperServer.startState = action.startState;
-					if ('port' in action) clipperServer.port = action.port;
-					newState.clipperServer = clipperServer;
-				}
-				break;
-
-			case 'DECRYPTION_WORKER_SET':
-				{
-					newState = Object.assign({}, state);
-					const decryptionWorker = Object.assign({}, newState.decryptionWorker);
-					for (var n in action) {
-						if (!action.hasOwnProperty(n) || n === 'type') continue;
-						decryptionWorker[n] = action[n];
-					}
-					newState.decryptionWorker = decryptionWorker;
-				}
-				break;
-
-			case 'RESOURCE_FETCHER_SET':
-				{
-					newState = Object.assign({}, state);
-					const rf = Object.assign({}, action);
-					delete rf.type;
-					newState.resourceFetcher = rf;
-				}
-				break;
-
-			case 'LOAD_CUSTOM_CSS':
+		case 'RESOURCE_FETCHER_SET':
+			{
 				newState = Object.assign({}, state);
-				newState.customCss = action.css;
-				break;
+				const rf = Object.assign({}, action);
+				delete rf.type;
+				newState.resourceFetcher = rf;
+			}
+			break;
 
-			case 'TEMPLATE_UPDATE_ALL':
+		case 'LOAD_CUSTOM_CSS':
+			newState = Object.assign({}, state);
+			newState.customCss = action.css;
+			break;
+
+		case 'TEMPLATE_UPDATE_ALL':
+			newState = Object.assign({}, state);
+			newState.templates = action.templates;
+			break;
+
+		case 'SET_NOTE_TAGS':
+			newState = Object.assign({}, state);
+			newState.selectedNoteTags = action.items;
+			break;
+
+		case 'PLUGIN_DIALOG_SET':
+			{
+				if (!action.pluginName) throw new Error('action.pluginName not specified');
 				newState = Object.assign({}, state);
-				newState.templates = action.templates;
-				break;
-
-			case 'SET_NOTE_TAGS':
-				newState = Object.assign({}, state);
-				newState.selectedNoteTags = action.items;
-				break;
-
-			case 'PLUGIN_DIALOG_SET':
-				{
-					if (!action.pluginName) throw new Error('action.pluginName not specified');
-					newState = Object.assign({}, state);
-					const newPlugins = Object.assign({}, newState.plugins);
-					const newPlugin = newState.plugins[action.pluginName] ? Object.assign({}, newState.plugins[action.pluginName]) : {};
-					if ('open' in action) newPlugin.dialogOpen = action.open;
-					newPlugins[action.pluginName] = newPlugin;
-					newState.plugins = newPlugins;
-				}
-				break;
+				const newPlugins = Object.assign({}, newState.plugins);
+				const newPlugin = newState.plugins[action.pluginName] ? Object.assign({}, newState.plugins[action.pluginName]) : {};
+				if ('open' in action) newPlugin.dialogOpen = action.open;
+				newPlugins[action.pluginName] = newPlugin;
+				newState.plugins = newPlugins;
+			}
+			break;
 		}
 	} catch (error) {
 		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);

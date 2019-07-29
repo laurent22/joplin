@@ -281,7 +281,7 @@ class FileApiDriverWebDav {
 			// This is awful but instead of a 404 Not Found, Microsoft IIS returns an HTTP code 200
 			// with a response body "The specified file doesn't exist." for non-existing files,
 			// so we need to check for this.
-			if (response === "The specified file doesn't exist.") throw new JoplinError(response, 404);
+			if (response === 'The specified file doesn\'t exist.') throw new JoplinError(response, 404);
 			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;

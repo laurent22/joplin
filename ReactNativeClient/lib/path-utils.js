@@ -150,7 +150,7 @@ function unquotePath(path) {
 function extractExecutablePath(cmd) {
 	if (!cmd.length) return '';
 
-	const quoteType = ['"', "'"].indexOf(cmd[0]) >= 0 ? cmd[0] : '';
+	const quoteType = ['"', '\''].indexOf(cmd[0]) >= 0 ? cmd[0] : '';
 
 	let output = '';
 	for (let i = 0; i < cmd.length; i++) {

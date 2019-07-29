@@ -215,7 +215,7 @@ class WebDavApi {
 				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
 			}
 		}
-		if (options.body) output.push('--data ' + "'" + options.body + "'");
+		if (options.body) output.push('--data ' + '\'' + options.body + '\'');
 		output.push(url);
 
 		return output.join(' ');

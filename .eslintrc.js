@@ -15,6 +15,9 @@ module.exports = {
 		'it': 'readonly',
 		'beforeEach': 'readonly',
 		'jasmine': 'readonly',
+
+		// React Native variables
+		'__DEV__': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
