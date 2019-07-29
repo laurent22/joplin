@@ -372,11 +372,6 @@ function isNewLineBlock(s) {
 	return s == BLOCK_OPEN || s == BLOCK_CLOSE;
 }
 
-function xmlNodeText(xmlNode) {
-	if (!xmlNode || !xmlNode.length) return '';
-	return xmlNode[0];
-}
-
 function attributeToLowerCase(node) {
 	if (!node.attributes) return {};
 	let output = {};

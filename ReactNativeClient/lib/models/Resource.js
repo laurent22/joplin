@@ -3,7 +3,6 @@ const BaseItem = require('lib/models/BaseItem.js');
 const NoteResource = require('lib/models/NoteResource.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const Setting = require('lib/models/Setting.js');
-const ArrayUtils = require('lib/ArrayUtils.js');
 const pathUtils = require('lib/path-utils.js');
 const { mime } = require('lib/mime-utils.js');
 const { filename, safeFilename } = require('lib/path-utils.js');

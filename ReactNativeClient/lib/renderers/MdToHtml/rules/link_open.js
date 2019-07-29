@@ -7,7 +7,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
-		const text = utils.getAttr(token.attrs, 'text');
 		const isResourceUrl = Resource.isResourceUrl(href);
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
 
@@ -18,7 +17,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const resourceId = Resource.pathToId(href);
 
 			const result = ruleOptions.resources[resourceId];
-			const resource = result ? result.item : null;
 			const resourceStatus = utils.resourceStatus(result);
 
 			if (result && resourceStatus !== 'ready') {

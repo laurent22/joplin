@@ -1,4 +1,3 @@
-const Resource = require('lib/models/Resource');
 const htmlUtils = require('lib/htmlUtils');
 const utils = require('./utils');
 

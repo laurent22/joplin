@@ -134,8 +134,6 @@ class SearchEngine {
 					[BaseModel.TYPE_NOTE, lastChangeId]
 				);
 
-				const maxRow = await ItemChange.db().selectOne('SELECT max(id) FROM item_changes');
-
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);

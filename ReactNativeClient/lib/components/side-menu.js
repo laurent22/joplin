@@ -1,5 +1,3 @@
-const React = require('react');
-
 const { connect } = require('react-redux');
 const SideMenu_ = require('react-native-side-menu').default;
 

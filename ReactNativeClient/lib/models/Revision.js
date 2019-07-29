@@ -1,7 +1,5 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
 const DiffMatchPatch = require('diff-match-patch');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const JoplinError = require('lib/JoplinError');

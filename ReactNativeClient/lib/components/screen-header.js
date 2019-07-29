@@ -12,7 +12,6 @@ const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
-const RNFS = require('react-native-fs');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 

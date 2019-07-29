@@ -1,8 +1,5 @@
-const BaseItem = require('lib/models/BaseItem.js');
 const { basicDelta } = require('lib/file-api');
 const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
-const Entities = require('html-entities').AllHtmlEntities;
-const html_entity_decode = new Entities().decode;
 const JoplinError = require('lib/JoplinError');
 
 class FileApiDriverWebDav {

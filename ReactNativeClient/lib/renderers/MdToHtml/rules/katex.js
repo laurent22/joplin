@@ -220,6 +220,7 @@ module.exports = function(context, ruleOptions) {
 				await shim.fetchBlob('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-beta1/fonts/KaTeX_Size1-Regular.woff2', { overwrite: false, path: baseDir + '/fonts/KaTeX_Size1-Regular.woff2' });
 			}
 
+			// eslint-disable-next-line require-atomic-updates
 			assetsLoaded_ = true;
 		};
 	};

@@ -7,6 +7,7 @@ const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');
 const spawn = require('child_process').spawn;
 const chokidar = require('chokidar');
+const { bridge } = require('electron').remote.require('./bridge');
 
 class ExternalEditWatcher {
 	constructor() {
@@ -81,8 +82,7 @@ class ExternalEditWatcher {
 
 					this.skipNextChangeEvent_ = {};
 				} else if (event === 'error') {
-					this.logger().error('ExternalEditWatcher:');
-					this.logger().error(error);
+					this.logger().error('ExternalEditWatcher: error');
 				}
 			});
 			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
@@ -98,12 +98,6 @@ class ExternalEditWatcher {
 		}
 
 		return this.watcher_;
-	}
-
-	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new ExternalEditWatcher();
-		return this.instance_;
 	}
 
 	noteIdToFilePath_(noteId) {
