@@ -1,3 +1,6 @@
 *.min.js
+Clipper/joplin-webclipper/content_scripts/JSDOMParser.js
+Clipper/joplin-webclipper/content_scripts/Readability-readerable.js
+Clipper/joplin-webclipper/content_scripts/Readability.js
 highlight.pack.js
 ReactNativeClient/lib/vendor/

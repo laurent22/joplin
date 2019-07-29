@@ -46,7 +46,7 @@ class Bridge {
 			if (command.name === 'isProbablyReaderable') {
 				this.dispatch({ type: 'IS_PROBABLY_READERABLE', value: command.value });
 			}
-		}
+		};
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
@@ -74,7 +74,7 @@ class Bridge {
 		return new Promise((resolve, reject) => {
 			browser.runtime.getBackgroundPage((bgp) => {
 				resolve(bgp);
-			})
+			});
 		});
 	}
 
@@ -166,7 +166,7 @@ class Bridge {
 					return true;
 				}
 				return false;
-			}
+			};
 
 			if (checkStatus()) return;
 
@@ -192,13 +192,13 @@ class Bridge {
 			this.browser().tabs.executeScript(options, () => {
 				const e = this.browser().runtime.lastError;
 				if (e) {
-					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)]
+					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)];
 					if (e.message) msg.push(e.message);
 					reject(new Error(msg.join(': ')));
 				}
 				resolve();
 			});
-		})
+		});
 	}
 
 	async tabsQuery(options) {
@@ -284,9 +284,9 @@ class Bridge {
 		const fetchOptions = {
 			method: method,
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-		}
+		};
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
 
@@ -301,7 +301,7 @@ class Bridge {
 			if (queryString) queryString = '?' + queryString;
 		}
 
-		const response = await fetch(baseUrl + "/" + path + queryString, fetchOptions)
+		const response = await fetch(baseUrl + '/' + path + queryString, fetchOptions);
 		if (!response.ok) {
 			const msg = await response.text();
 			throw new Error(msg);
@@ -361,6 +361,6 @@ const bridge_ = new Bridge();
 
 const bridge = function() {
 	return bridge_;
-}
+};
 
-export { bridge }
+export { bridge };
