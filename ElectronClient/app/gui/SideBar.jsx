@@ -1,28 +1,25 @@
-const React = require("react");
-const { connect } = require("react-redux");
-const shared = require("lib/components/shared/side-menu-shared.js");
-const { Synchronizer } = require("lib/synchronizer.js");
-const BaseModel = require("lib/BaseModel.js");
+const React = require('react');
+const { connect } = require('react-redux');
+const shared = require('lib/components/shared/side-menu-shared.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const BaseModel = require('lib/BaseModel.js');
 const Setting = require('lib/models/Setting.js');
-const Folder = require("lib/models/Folder.js");
-const Note = require("lib/models/Note.js");
-const Tag = require("lib/models/Tag.js");
-const { _ } = require("lib/locale.js");
-const { themeStyle } = require("../theme.js");
-const { bridge } = require("electron").remote.require("./bridge");
+const Folder = require('lib/models/Folder.js');
+const Note = require('lib/models/Note.js');
+const Tag = require('lib/models/Tag.js');
+const { _ } = require('lib/locale.js');
+const { themeStyle } = require('../theme.js');
+const { bridge } = require('electron').remote.require('./bridge');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
-const InteropServiceHelper = require("../InteropServiceHelper.js");
+const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
-const { shim } = require('lib/shim');
 
 class SideBarComponent extends React.Component {
-
-
 	constructor() {
 		super();
 
-		this.onFolderDragStart_ = (event) => {
+		this.onFolderDragStart_ = event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			if (!folderId) return;
 
@@ -31,12 +28,12 @@ class SideBarComponent extends React.Component {
 			event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
 		};
 
-		this.onFolderDragOver_ = (event) => {
-			if (event.dataTransfer.types.indexOf("text/x-jop-note-ids") >= 0) event.preventDefault();
-			if (event.dataTransfer.types.indexOf("text/x-jop-folder-ids") >= 0) event.preventDefault();
+		this.onFolderDragOver_ = event => {
+			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
+			if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
 		};
 
-		this.onFolderDrop_ = async (event) => {
+		this.onFolderDrop_ = async event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
@@ -45,41 +42,41 @@ class SideBarComponent extends React.Component {
 			// to put the dropped folder at the root. But for notes, folderId needs to always be defined
 			// since there's no such thing as a root note.
 
-			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
+			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 				event.preventDefault();
 
 				if (!folderId) return;
 
-				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
+				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 				for (let i = 0; i < noteIds.length; i++) {
 					await Note.moveToFolder(noteIds[i], folderId);
 				}
-			} else if (dt.types.indexOf("text/x-jop-folder-ids") >= 0) {
+			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
 				event.preventDefault();
 
-				const folderIds = JSON.parse(dt.getData("text/x-jop-folder-ids"));
+				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
 				for (let i = 0; i < folderIds.length; i++) {
 					await Folder.moveToFolder(folderIds[i], folderId);
 				}
 			}
 		};
 
-		this.onTagDrop_ = async (event) => {
+		this.onTagDrop_ = async event => {
 			const tagId = event.currentTarget.getAttribute('tagid');
 			const dt = event.dataTransfer;
 			if (!dt) return;
 
-			if (dt.types.indexOf("text/x-jop-note-ids") >= 0) {
+			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 				event.preventDefault();
 
-				const noteIds = JSON.parse(dt.getData("text/x-jop-note-ids"));
+				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 				for (let i = 0; i < noteIds.length; i++) {
 					await Tag.addNote(tagId, noteIds[i]);
 				}
 			}
-		}
+		};
 
-		this.onFolderToggleClick_ = async (event) => {
+		this.onFolderToggleClick_ = async event => {
 			const folderId = event.currentTarget.getAttribute('folderid');
 
 			this.props.dispatch({
@@ -99,7 +96,7 @@ class SideBarComponent extends React.Component {
 
 		this.state = {
 			tagHeaderIsExpanded: Setting.value('tagHeaderIsExpanded'),
-			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded')
+			folderHeaderIsExpanded: Setting.value('folderHeaderIsExpanded'),
 		};
 	}
 
@@ -113,23 +110,23 @@ class SideBarComponent extends React.Component {
 				backgroundColor: theme.backgroundColor2,
 			},
 			listItemContainer: {
-				boxSizing: "border-box",
+				boxSizing: 'border-box',
 				height: itemHeight,
 				// paddingLeft: 14,
-				display: "flex",
-				alignItems: "stretch",
+				display: 'flex',
+				alignItems: 'stretch',
 				// Allow 3 levels of color depth
 				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
-				textDecoration: "none",
+				textDecoration: 'none',
 				color: theme.color2,
-				cursor: "default",
+				cursor: 'default',
 				opacity: 0.8,
-				whiteSpace: "nowrap",
-				display: "flex",
+				whiteSpace: 'nowrap',
+				display: 'flex',
 				flex: 1,
 				alignItems: 'center',
 			},
@@ -138,60 +135,60 @@ class SideBarComponent extends React.Component {
 			},
 			listItemExpandIcon: {
 				color: theme.color2,
-				cursor: "default",
+				cursor: 'default',
 				opacity: 0.8,
 				// fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
-				textDecoration: "none",
+				textDecoration: 'none',
 				paddingRight: 5,
-				display: "flex",
+				display: 'flex',
 				alignItems: 'center',
 			},
 			conflictFolder: {
 				color: theme.colorError2,
-				fontWeight: "bold",
+				fontWeight: 'bold',
 			},
 			header: {
 				height: itemHeight * 1.8,
 				fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize * 1.16,
-				textDecoration: "none",
-				boxSizing: "border-box",
+				textDecoration: 'none',
+				boxSizing: 'border-box',
 				color: theme.color2,
 				paddingLeft: 8,
-				display: "flex",
-				alignItems: "center",
+				display: 'flex',
+				alignItems: 'center',
 			},
 			button: {
 				padding: 6,
 				fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
-				textDecoration: "none",
-				boxSizing: "border-box",
+				textDecoration: 'none',
+				boxSizing: 'border-box',
 				color: theme.color2,
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				border: "1px solid rgba(255,255,255,0.2)",
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				border: '1px solid rgba(255,255,255,0.2)',
 				marginTop: 10,
 				marginLeft: 5,
 				marginRight: 5,
-				cursor: "default",
+				cursor: 'default',
 			},
 			syncReport: {
 				fontFamily: theme.fontFamily,
 				fontSize: Math.round(theme.fontSize * 0.9),
 				color: theme.color2,
 				opacity: 0.5,
-				display: "flex",
-				alignItems: "left",
-				justifyContent: "top",
-				flexDirection: "column",
+				display: 'flex',
+				alignItems: 'left',
+				justifyContent: 'top',
+				flexDirection: 'column',
 				marginTop: 10,
 				marginLeft: 5,
 				marginRight: 5,
 				marginBottom: 10,
-				wordWrap: "break-word",
+				wordWrap: 'break-word',
 			},
 		};
 
@@ -236,42 +233,40 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps) {
-		if (shim.isLinux()) {
-			// For some reason, the UI seems to sleep in some Linux distro during
-			// sync. Cannot find the reason for it and cannot replicate, so here
-			// as a test force the update at regular intervals.
-			// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
-			if (!prevProps.syncStarted && this.props.syncStarted) {
-				this.clearForceUpdateDuringSync();
-
-				this.forceUpdateDuringSyncIID_ = setInterval(() => {
-					this.forceUpdate();
-				}, 2000);
-			}
-
-			if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
-		}
-	}
-
 	componentWillUnmount() {
 		this.clearForceUpdateDuringSync();
 	}
 
-	componentDidUpdate(prevProps, prevState, snapshot) {
+	componentDidUpdate(prevProps) {
 		if (prevProps.windowCommand !== this.props.windowCommand) {
 			this.doCommand(this.props.windowCommand);
 		}
+
+		// if (shim.isLinux()) {
+		// 	// For some reason, the UI seems to sleep in some Linux distro during
+		// 	// sync. Cannot find the reason for it and cannot replicate, so here
+		// 	// as a test force the update at regular intervals.
+		// 	// https://github.com/laurent22/joplin/issues/312#issuecomment-429472193
+		// 	if (!prevProps.syncStarted && this.props.syncStarted) {
+		// 		this.clearForceUpdateDuringSync();
+
+		// 		this.forceUpdateDuringSyncIID_ = setInterval(() => {
+		// 			this.forceUpdate();
+		// 		}, 2000);
+		// 	}
+
+		// 	if (prevProps.syncStarted && !this.props.syncStarted) this.clearForceUpdateDuringSync();
+		// }
 	}
 
 	async itemContextMenu(event) {
-		const itemId = event.target.getAttribute("data-id");
+		const itemId = event.target.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
-		const itemType = Number(event.target.getAttribute("data-type"));
-		if (!itemId || !itemType) throw new Error("No data on element");
+		const itemType = Number(event.target.getAttribute('data-type'));
+		if (!itemId || !itemType) throw new Error('No data on element');
 
-		let deleteMessage = "";
+		let deleteMessage = '';
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const folder = await Folder.load(itemId);
 			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
@@ -279,7 +274,7 @@ class SideBarComponent extends React.Component {
 			const tag = await Tag.load(itemId);
 			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
-			deleteMessage = _("Remove this search from the sidebar?");
+			deleteMessage = _('Remove this search from the sidebar?');
 		}
 
 		const menu = new Menu();
@@ -291,7 +286,7 @@ class SideBarComponent extends React.Component {
 
 		menu.append(
 			new MenuItem({
-				label: _("Delete"),
+				label: _('Delete'),
 				click: async () => {
 					const ok = bridge().showConfirmMessageBox(deleteMessage);
 					if (!ok) return;
@@ -302,7 +297,7 @@ class SideBarComponent extends React.Component {
 						await Tag.untagAll(itemId);
 					} else if (itemType === BaseModel.TYPE_SEARCH) {
 						this.props.dispatch({
-							type: "SEARCH_DELETE",
+							type: 'SEARCH_DELETE',
 							id: itemId,
 						});
 					}
@@ -313,11 +308,11 @@ class SideBarComponent extends React.Component {
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
 				new MenuItem({
-					label: _("Rename"),
+					label: _('Rename'),
 					click: async () => {
 						this.props.dispatch({
-							type: "WINDOW_COMMAND",
-							name: "renameFolder",
+							type: 'WINDOW_COMMAND',
+							name: 'renameFolder',
 							id: itemId,
 						});
 					},
@@ -337,9 +332,9 @@ class SideBarComponent extends React.Component {
 			// 	})
 			// );
 
-			menu.append(new MenuItem({ type: "separator" }));
+			menu.append(new MenuItem({ type: 'separator' }));
 
-			const InteropService = require("lib/services/InteropService.js");
+			const InteropService = require('lib/services/InteropService.js');
 
 			const exportMenu = new Menu();
 			const ioService = new InteropService();
@@ -348,14 +343,19 @@ class SideBarComponent extends React.Component {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
 
-				exportMenu.append(new MenuItem({ label: module.fullLabel() , click: async () => {
-					await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
-				}}));
+				exportMenu.append(
+					new MenuItem({
+						label: module.fullLabel(),
+						click: async () => {
+							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
+						},
+					})
+				);
 			}
 
 			menu.append(
 				new MenuItem({
-					label: _("Export"),
+					label: _('Export'),
 					submenu: exportMenu,
 				})
 			);
@@ -367,9 +367,9 @@ class SideBarComponent extends React.Component {
 					label: _('Rename'),
 					click: async () => {
 						this.props.dispatch({
-							type: "WINDOW_COMMAND",
-							name: "renameTag",
-							id: itemId
+							type: 'WINDOW_COMMAND',
+							name: 'renameTag',
+							id: itemId,
 						});
 					},
 				})
@@ -381,14 +381,14 @@ class SideBarComponent extends React.Component {
 
 	folderItem_click(folder) {
 		this.props.dispatch({
-			type: "FOLDER_SELECT",
+			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
 		});
 	}
 
 	tagItem_click(tag) {
 		this.props.dispatch({
-			type: "TAG_SELECT",
+			type: 'TAG_SELECT',
 			id: tag ? tag.id : null,
 		});
 	}
@@ -405,8 +405,6 @@ class SideBarComponent extends React.Component {
 	}
 
 	anchorItemRef(type, id) {
-		let refs = null;
-
 		if (!this.anchorItemRefs[type]) this.anchorItemRefs[type] = {};
 		if (this.anchorItemRefs[type][id]) return this.anchorItemRefs[type][id];
 		this.anchorItemRefs[type][id] = React.createRef();
@@ -426,17 +424,23 @@ class SideBarComponent extends React.Component {
 		let expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 			paddingLeft: 8 + depth * 10,
-		}
+		};
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
-		const expandIcon = <i style={expandIconStyle} className={"fa " + iconName}></i>
-		const expandLink = hasChildren ? <a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>{expandIcon}</a> : <span style={expandLinkStyle}>{expandIcon}</span>
+		const expandIcon = <i style={expandIconStyle} className={'fa ' + iconName}></i>;
+		const expandLink = hasChildren ? (
+			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
+				{expandIcon}
+			</a>
+		) : (
+			<span style={expandLinkStyle}>{expandIcon}</span>
+		);
 
 		const anchorRef = this.anchorItemRef('folder', folder.id);
 
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
-				{ expandLink }
+				{expandLink}
 				<a
 					ref={anchorRef}
 					className="list-item"
@@ -506,15 +510,15 @@ class SideBarComponent extends React.Component {
 	// }
 
 	makeDivider(key) {
-		return <div style={{ height: 2, backgroundColor: "blue" }} key={key} />;
+		return <div style={{ height: 2, backgroundColor: 'blue' }} key={key} />;
 	}
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={"fa " + iconName} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={'fa ' + iconName} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
-			style.cursor = "pointer";
+			style.cursor = 'pointer';
 		}
 
 		let headerClick = extraProps.onClick || null;
@@ -525,22 +529,27 @@ class SideBarComponent extends React.Component {
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
 			let isExpanded = this.state[toggleKey];
-			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75,
-				marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125}}></i>;
+			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 
 		const ref = this.anchorItemRef('headers', key);
 
 		return (
-			<div ref={ref} style={style} key={key} {...extraProps} onClick={(event) => { 
-					// if a custom click event is attached, trigger that. 				
+			<div
+				ref={ref}
+				style={style}
+				key={key}
+				{...extraProps}
+				onClick={event => {
+					// if a custom click event is attached, trigger that.
 					if (headerClick) {
-						headerClick(key, event); 				
+						headerClick(key, event);
 					}
-					this.onHeaderClick_(key, event); 
-				}}>
+					this.onHeaderClick_(key, event);
+				}}
+			>
 				{icon}
-				<span style={{flex: 1 }}>{label}</span>
+				<span style={{ flex: 1 }}>{label}</span>
 				{toggleIcon}
 			</div>
 		);
@@ -562,7 +571,8 @@ class SideBarComponent extends React.Component {
 		const keyCode = event.keyCode;
 		const selectedItem = this.selectedItem();
 
-		if (keyCode === 40 || keyCode === 38) { // DOWN / UP
+		if (keyCode === 40 || keyCode === 38) {
+			// DOWN / UP
 			event.preventDefault();
 
 			const focusItems = [];
@@ -603,7 +613,8 @@ class SideBarComponent extends React.Component {
 			focusItem.ref.current.focus();
 		}
 
-		if (keyCode === 9) { // TAB
+		if (keyCode === 9) {
+			// TAB
 			event.preventDefault();
 
 			if (event.shiftKey) {
@@ -621,7 +632,8 @@ class SideBarComponent extends React.Component {
 			}
 		}
 
-		if (selectedItem && selectedItem.type === 'folder' && keyCode === 32) { // SPACE
+		if (selectedItem && selectedItem.type === 'folder' && keyCode === 32) {
+			// SPACE
 			event.preventDefault();
 
 			this.props.dispatch({
@@ -631,28 +643,28 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
-	onHeaderClick_(key, event) {	
+	onHeaderClick_(key, event) {
 		const currentHeader = event.currentTarget;
 		const toggleBlock = +currentHeader.getAttribute('toggleblock');
 		if (toggleBlock) {
-			const toggleKey = `${key}IsExpanded`;				
-			const isExpanded = this.state[toggleKey]; 					
-			this.setState({ [toggleKey]: !isExpanded }); 					
-			Setting.setValue(toggleKey, !isExpanded); 				
+			const toggleKey = `${key}IsExpanded`;
+			const isExpanded = this.state[toggleKey];
+			this.setState({ [toggleKey]: !isExpanded });
+			Setting.setValue(toggleKey, !isExpanded);
 		}
 	}
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = "fa-refresh";
-		const label = type === "sync" ? _("Synchronise") : _("Cancel");
+		const iconName = 'fa-refresh';
+		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
 
-		if(type !== 'sync'){
+		if (type !== 'sync') {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
 		}
 
-		const icon = <i style={iconStyle} className={"fa " + iconName} />;
+		const icon = <i style={iconStyle} className={'fa ' + iconName} />;
 		return (
 			<a
 				className="synchronize-button"
@@ -670,32 +682,38 @@ class SideBarComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
 		const style = Object.assign({}, this.style().root, this.props.style, {
-			overflowX: "hidden",
-			overflowY: "hidden",
+			overflowX: 'hidden',
+			overflowY: 'hidden',
 			display: 'inline-flex',
 			flexDirection: 'column',
 		});
 
 		let items = [];
-		items.push(this.makeHeader("folderHeader", _("Notebooks"), "fa-book", {
-			onDrop: this.onFolderDrop_,
-			folderid: '',
-			toggleblock: 1
-		}));
+		items.push(
+			this.makeHeader('folderHeader', _('Notebooks'), 'fa-book', {
+				onDrop: this.onFolderDrop_,
+				folderid: '',
+				toggleblock: 1,
+			})
+		);
 
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
 			const folderItems = result.items;
 			this.folderItemsOrder_ = result.order;
-			items.push(<div className="folders" key="folder_items" style={{display: this.state.folderHeaderIsExpanded ? 'block': 'none'}}>
-				{folderItems}</div>);
+			items.push(
+				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
+					{folderItems}
+				</div>
+			);
 		}
 
-		items.push(this.makeHeader("tagHeader", _("Tags"), "fa-tags", {
-			toggleblock: 1
-		}));
+		items.push(
+			this.makeHeader('tagHeader', _('Tags'), 'fa-tags', {
+				toggleblock: 1,
+			})
+		);
 
 		if (this.props.tags.length) {
 			const result = shared.renderTags(this.props, this.tagItem.bind(this));
@@ -703,7 +721,7 @@ class SideBarComponent extends React.Component {
 			this.tagItemsOrder_ = result.order;
 
 			items.push(
-				<div className="tags" key="tag_items" style={{display: this.state.tagHeaderIsExpanded ? 'block': 'none'}}>
+				<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
 					{tagItems}
 				</div>
 			);
@@ -725,27 +743,24 @@ class SideBarComponent extends React.Component {
 		const syncReportText = [];
 		for (let i = 0; i < lines.length; i++) {
 			syncReportText.push(
-				<div key={i} style={{ wordWrap: "break-word", width: "100%" }}>
+				<div key={i} style={{ wordWrap: 'break-word', width: '100%' }}>
 					{lines[i]}
 				</div>
 			);
 		}
 
-		const syncButton = this.synchronizeButton(this.props.syncStarted ? "cancel" : "sync");
+		const syncButton = this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync');
 
 		const syncReportComp = !syncReportText.length ? null : (
 			<div style={this.style().syncReport} key="sync_report">
-		 		{syncReportText}
-		 	</div>
-		 );
+				{syncReportText}
+			</div>
+		);
 
 		return (
 			<div ref={this.rootRef} onKeyDown={this.onKeyDown} className="side-bar" style={style}>
-				
-				<div style={{flex:1, overflowX: 'hidden', overflowY: 'auto'}}>
-					{items}
-				</div>
-				<div style={{flex:0}}>
+				<div style={{ flex: 1, overflowX: 'hidden', overflowY: 'auto' }}>{items}</div>
+				<div style={{ flex: 0 }}>
 					{syncReportComp}
 					{syncButton}
 				</div>

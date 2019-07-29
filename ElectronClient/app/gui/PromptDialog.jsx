@@ -1,7 +1,5 @@
 const React = require('react');
-const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
-const moment = require('moment');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const Datetime = require('react-datetime');
@@ -10,7 +8,6 @@ const Select = require('react-select').default;
 const makeAnimated = require('react-select/lib/animated').default;
 
 class PromptDialog extends React.Component {
-
 	constructor() {
 		super();
 
@@ -103,51 +100,58 @@ class PromptDialog extends React.Component {
 		};
 
 		this.styles_.select = {
-			control: (provided) => (Object.assign(provided, {
-				minWidth: width * 0.2,
-				maxWidth: width * 0.5,
-			})),
-			input: (provided) => (Object.assign(provided, {
-				minWidth: '20px',
-				color: theme.color,
-			})),
-			menu: (provided) => (Object.assign(provided, {
-				color: theme.color,
-				fontFamily: theme.fontFamily,
-				backgroundColor: theme.backgroundColor,
-			})),
-			option: (provided) => (Object.assign(provided, {
-				color: theme.color,
-				fontFamily: theme.fontFamily,
-			})),
-			multiValueLabel: (provided) => (Object.assign(provided, {
-				fontFamily: theme.fontFamily,
-			})),
-			multiValueRemove: (provided) => (Object.assign(provided, {
-				color: theme.color,
-			})),
+			control: provided =>
+				Object.assign(provided, {
+					minWidth: width * 0.2,
+					maxWidth: width * 0.5,
+				}),
+			input: provided =>
+				Object.assign(provided, {
+					minWidth: '20px',
+					color: theme.color,
+				}),
+			menu: provided =>
+				Object.assign(provided, {
+					color: theme.color,
+					fontFamily: theme.fontFamily,
+					backgroundColor: theme.backgroundColor,
+				}),
+			option: provided =>
+				Object.assign(provided, {
+					color: theme.color,
+					fontFamily: theme.fontFamily,
+				}),
+			multiValueLabel: provided =>
+				Object.assign(provided, {
+					fontFamily: theme.fontFamily,
+				}),
+			multiValueRemove: provided =>
+				Object.assign(provided, {
+					color: theme.color,
+				}),
 		};
 
-		this.styles_.selectTheme = (tagTheme) => (Object.assign(tagTheme, {
-			borderRadius: 2,
-			colors: Object.assign(tagTheme.colors, {
-				primary: theme.raisedBackgroundColor,
-				primary25: theme.raisedBackgroundColor,
-				neutral0: theme.backgroundColor,
-				neutral5: theme.backgroundColor,
-				neutral10: theme.raisedBackgroundColor,
-				neutral20: theme.raisedBackgroundColor,
-				neutral30: theme.raisedBackgroundColor,
-				neutral40: theme.color,
-				neutral50: theme.color,
-				neutral60: theme.color,
-				neutral70: theme.color,
-				neutral80: theme.color,
-				neutral90: theme.color,
-				danger: theme.backgroundColor,
-				dangerLight: theme.colorError2,
-			}),
-		}));
+		this.styles_.selectTheme = tagTheme =>
+			Object.assign(tagTheme, {
+				borderRadius: 2,
+				colors: Object.assign(tagTheme.colors, {
+					primary: theme.raisedBackgroundColor,
+					primary25: theme.raisedBackgroundColor,
+					neutral0: theme.backgroundColor,
+					neutral5: theme.backgroundColor,
+					neutral10: theme.raisedBackgroundColor,
+					neutral20: theme.raisedBackgroundColor,
+					neutral30: theme.raisedBackgroundColor,
+					neutral40: theme.color,
+					neutral50: theme.color,
+					neutral60: theme.color,
+					neutral70: theme.color,
+					neutral80: theme.color,
+					neutral90: theme.color,
+					danger: theme.backgroundColor,
+					dangerLight: theme.colorError2,
+				}),
+			});
 
 		this.styles_.desc = Object.assign({}, theme.textStyle, {
 			marginTop: 10,
@@ -173,11 +177,11 @@ class PromptDialog extends React.Component {
 				this.props.onClose(accept ? outputAnswer : null, buttonType);
 			}
 			this.setState({ visible: false, answer: '' });
-		}
+		};
 
-		const onChange = (event) => {
+		const onChange = event => {
 			this.setState({ answer: event.target.value });
-		}
+		};
 
 		// const anythingToDate = (o) => {
 		// 	if (o && o.toDate) return o.toDate();
@@ -188,16 +192,16 @@ class PromptDialog extends React.Component {
 		// 	return m.isValid() ? m.toDate() : null;
 		// }
 
-		const onDateTimeChange = (momentObject) => {
+		const onDateTimeChange = momentObject => {
 			this.setState({ answer: momentObject });
-		}
+		};
 
-		const onSelectChange = (newValue) => {
+		const onSelectChange = newValue => {
 			this.setState({ answer: newValue });
 			this.focusInput_ = true;
-		}
+		};
 
-		const onKeyDown = (event) => {
+		const onKeyDown = event => {
 			if (event.key === 'Enter') {
 				if (this.props.inputType !== 'tags' && this.props.inputType !== 'dropdown') {
 					onClose(true);
@@ -208,80 +212,55 @@ class PromptDialog extends React.Component {
 			} else if (event.key === 'Escape') {
 				onClose(false);
 			}
-		}
+		};
 
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
-			inputComp = <Datetime
-				value={this.state.answer}
-				inputProps={{style: styles.input}}
-				dateFormat={time.dateFormat()}
-				timeFormat={time.timeFormat()}
-				onChange={(momentObject) => onDateTimeChange(momentObject)}
-			/>
+			inputComp = <Datetime value={this.state.answer} inputProps={{ style: styles.input }} dateFormat={time.dateFormat()} timeFormat={time.timeFormat()} onChange={momentObject => onDateTimeChange(momentObject)} />;
 		} else if (this.props.inputType === 'tags') {
-			inputComp = <CreatableSelect
-				styles={styles.select}
-				theme={styles.selectTheme}
-				ref={this.answerInput_}
-				value={this.state.answer}
-				placeholder=""
-				components={makeAnimated()}
-				isMulti={true}
-				isClearable={false}
-				backspaceRemovesValue={true}
-				options={this.props.autocomplete}
-				onChange={onSelectChange}
-				onKeyDown={(event) => onKeyDown(event)}
-			/>
+			inputComp = <CreatableSelect styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select
-				styles={styles.select}
-				theme={styles.selectTheme}
-				ref={this.answerInput_}
-				components={makeAnimated()}
-				value={this.props.answer}
-				defaultValue={this.props.defaultValue}
-				isClearable={false}
-				options={this.props.autocomplete}
-				onChange={onSelectChange}
-				onKeyDown={(event) => onKeyDown(event)}
-			/>
+			inputComp = <Select styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
-			inputComp = <input
-				style={styles.input}
-				ref={this.answerInput_}
-				value={this.state.answer}
-				type="text"
-				onChange={(event) => onChange(event)}
-				onKeyDown={(event) => onKeyDown(event)}
-			/>
+			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
 
 		const buttonComps = [];
-		if (buttonTypes.indexOf('ok') >= 0) buttonComps.push(<button key="ok" style={styles.button} onClick={() => onClose(true, 'ok')}>{_('OK')}</button>);
-		if (buttonTypes.indexOf('cancel') >= 0) buttonComps.push(<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>{_('Cancel')}</button>);
-		if (buttonTypes.indexOf('clear') >= 0) buttonComps.push(<button key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>{_('Clear')}</button>);
+		if (buttonTypes.indexOf('ok') >= 0)
+			buttonComps.push(
+				<button key="ok" style={styles.button} onClick={() => onClose(true, 'ok')}>
+					{_('OK')}
+				</button>
+			);
+		if (buttonTypes.indexOf('cancel') >= 0)
+			buttonComps.push(
+				<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>
+					{_('Cancel')}
+				</button>
+			);
+		if (buttonTypes.indexOf('clear') >= 0)
+			buttonComps.push(
+				<button key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>
+					{_('Clear')}
+				</button>
+			);
 
 		return (
 			<div style={styles.modalLayer}>
 				<div style={styles.promptDialog}>
 					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
-					<div style={{display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor}}>
+					<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 						{inputComp}
 						{descComp}
 					</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>
-						{buttonComps}
-					</div>
+					<div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>
 				</div>
 			</div>
 		);
 	}
-
 }
 
 module.exports = { PromptDialog };

@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
 const Setting = require('lib/models/Setting.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
@@ -10,7 +9,6 @@ const { ReportService } = require('lib/services/report.js');
 const fs = require('fs-extra');
 
 class StatusScreenComponent extends React.Component {
-
 	constructor() {
 		super();
 		this.state = {
@@ -29,7 +27,7 @@ class StatusScreenComponent extends React.Component {
 	}
 
 	async exportDebugReportClick() {
-		const filename = 'syncReport-' + (new Date()).getTime() + '.csv';
+		const filename = 'syncReport-' + new Date().getTime() + '.csv';
 
 		const filePath = bridge().showSaveDialog({
 			title: _('Please select where the sync status should be exported to'),
@@ -48,7 +46,7 @@ class StatusScreenComponent extends React.Component {
 		const style = this.props.style;
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
-		const retryStyle = Object.assign({}, theme.urlStyle, {marginLeft: 5});
+		const retryStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
 
 		const containerPadding = 10;
 
@@ -58,7 +56,11 @@ class StatusScreenComponent extends React.Component {
 		});
 
 		function renderSectionTitleHtml(key, title) {
-			return <h2 key={'section_' + key} style={theme.h2Style}>{title}</h2>
+			return (
+				<h2 key={'section_' + key} style={theme.h2Style}>
+					{title}
+				</h2>
+			);
 		}
 
 		const renderSectionHtml = (key, section) => {
@@ -77,9 +79,13 @@ class StatusScreenComponent extends React.Component {
 						const onClick = async () => {
 							await item.retryHandler();
 							this.resfreshScreen();
-						}
+						};
 
-						retryLink = <a href="#" onClick={onClick} style={retryStyle}>{_('Retry')}</a>;
+						retryLink = (
+							<a href="#" onClick={onClick} style={retryStyle}>
+								{_('Retry')}
+							</a>
+						);
 					}
 					text = item.text;
 				} else {
@@ -88,28 +94,18 @@ class StatusScreenComponent extends React.Component {
 
 				if (!text) text = '\xa0';
 
-				itemsHtml.push(<div style={theme.textStyle} key={'item_' + n}><span>{text}</span>{retryLink}</div>);
+				itemsHtml.push(
+					<div style={theme.textStyle} key={'item_' + n}>
+						<span>{text}</span>
+						{retryLink}
+					</div>
+				);
 			}
 
-			return (
-				<div key={key}>
-					{itemsHtml}
-				</div>
-			);
-		}
+			return <div key={key}>{itemsHtml}</div>;
+		};
 
 		function renderBodyHtml(report) {
-			let output = [];
-			let baseStyle = {
-				paddingLeft: 6,
-				paddingRight: 6,
-				paddingTop: 2,
-				paddingBottom: 2,
-				flex: 0,
-				color: theme.color,
-				fontSize: theme.fontSize,
-			};
-
 			let sectionsHtml = [];
 
 			for (let i = 0; i < report.length; i++) {
@@ -118,29 +114,26 @@ class StatusScreenComponent extends React.Component {
 				sectionsHtml.push(renderSectionHtml(i, section));
 			}
 
-			return (
-				<div>
-					{sectionsHtml}
-				</div>
-			);
+			return <div>{sectionsHtml}</div>;
 		}
 
 		let body = renderBodyHtml(this.state.report);
-		
+
 		return (
 			<div style={style}>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					<a style={theme.textStyle} onClick={() => this.exportDebugReportClick()}href="#">Export debug report</a>
+					<a style={theme.textStyle} onClick={() => this.exportDebugReportClick()} href="#">
+						Export debug report
+					</a>
 					{body}
 				</div>
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		settings: state.settings,

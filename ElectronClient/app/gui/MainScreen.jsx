@@ -20,7 +20,6 @@ const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 
 class MainScreenComponent extends React.Component {
-
 	constructor() {
 		super();
 
@@ -87,7 +86,7 @@ class MainScreenComponent extends React.Component {
 				type: 'NOTE_SET_NEW_ONE',
 				item: newNote,
 			});
-		}
+		};
 
 		let commandProcessed = true;
 
@@ -107,7 +106,7 @@ class MainScreenComponent extends React.Component {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
-					onClose: async (answer) => {
+					onClose: async answer => {
 						if (answer) {
 							let folder = null;
 							try {
@@ -125,14 +124,22 @@ class MainScreenComponent extends React.Component {
 						}
 
 						this.setState({ promptOptions: null });
-					}
+					},
 				},
 			});
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.tagsByNoteId(command.noteId);
-			const noteTags = tags.map((a) => { return {value: a.id, label: a.title } }).sort((a, b) => { return a.label.localeCompare(b.label); });
+			const noteTags = tags
+				.map(a => {
+					return { value: a.id, label: a.title };
+				})
+				.sort((a, b) => {
+					return a.label.localeCompare(b.label);
+				});
 			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags.map((a) => { return {value: a.id, label: a.title } });
+			const tagSuggestions = allTags.map(a => {
+				return { value: a.id, label: a.title };
+			});
 
 			this.setState({
 				promptOptions: {
@@ -140,24 +147,26 @@ class MainScreenComponent extends React.Component {
 					inputType: 'tags',
 					value: noteTags,
 					autocomplete: tagSuggestions,
-					onClose: async (answer) => {
+					onClose: async answer => {
 						if (answer !== null) {
-							const tagTitles = answer.map((a) => { return a.label.trim() });
+							const tagTitles = answer.map(a => {
+								return a.label.trim();
+							});
 							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
 						}
 						this.setState({ promptOptions: null });
-					}
+					},
 				},
 			});
 		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
-			
+
 			if (folder) {
 				this.setState({
 					promptOptions: {
 						label: _('Rename notebook:'),
 						value: folder.title,
-						onClose: async (answer) => {
+						onClose: async answer => {
 							if (answer !== null) {
 								try {
 									folder.title = answer;
@@ -167,7 +176,7 @@ class MainScreenComponent extends React.Component {
 								}
 							}
 							this.setState({ promptOptions: null });
-						}
+						},
 					},
 				});
 			}
@@ -178,7 +187,7 @@ class MainScreenComponent extends React.Component {
 					promptOptions: {
 						label: _('Rename tag:'),
 						value: tag.title,
-						onClose: async (answer) => {
+						onClose: async answer => {
 							if (answer !== null) {
 								try {
 									tag.title = answer;
@@ -187,13 +196,12 @@ class MainScreenComponent extends React.Component {
 									bridge().showErrorMessageBox(error.message);
 								}
 							}
-							this.setState({promptOptions: null });
-						}
-					}
-				})
+							this.setState({ promptOptions: null });
+						},
+					},
+				});
 			}
 		} else if (command.name === 'search') {
-
 			if (!this.searchId_) this.searchId_ = uuid.create();
 
 			this.props.dispatch({
@@ -222,7 +230,6 @@ class MainScreenComponent extends React.Component {
 					});
 				}
 			}
-
 		} else if (command.name === 'commandNoteProperties') {
 			this.setState({
 				notePropertiesDialogOptions: {
@@ -273,7 +280,7 @@ class MainScreenComponent extends React.Component {
 						}
 
 						this.setState({ promptOptions: null });
-					}
+					},
 				},
 			});
 		} else if (command.name === 'selectTemplate') {
@@ -283,7 +290,7 @@ class MainScreenComponent extends React.Component {
 					inputType: 'dropdown',
 					value: this.props.templates[0], // Need to start with some value
 					autocomplete: this.props.templates,
-					onClose: async (answer) => {
+					onClose: async answer => {
 						if (answer) {
 							if (command.noteType === 'note' || command.noteType === 'todo') {
 								createNewNote(answer.value, command.noteType === 'todo');
@@ -297,7 +304,7 @@ class MainScreenComponent extends React.Component {
 						}
 
 						this.setState({ promptOptions: null });
-					}
+					},
 				},
 			});
 		} else {
@@ -313,7 +320,7 @@ class MainScreenComponent extends React.Component {
 	}
 
 	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, sidebarWidth, noteListWidth) {
-		const styleKey = [themeId, width, height, messageBoxVisible, (+isSidebarVisible), sidebarWidth, noteListWidth].join('_');
+		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -333,7 +340,7 @@ class MainScreenComponent extends React.Component {
 			alignItems: 'center',
 			paddingLeft: 10,
 			backgroundColor: theme.warningBackgroundColor,
-		}
+		};
 
 		this.styles_.verticalResizer = {
 			width: 5,
@@ -390,10 +397,13 @@ class MainScreenComponent extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const style = Object.assign({
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-		}, this.props.style);
+		const style = Object.assign(
+			{
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+			},
+			this.props.style
+		);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
@@ -408,47 +418,59 @@ class MainScreenComponent extends React.Component {
 			title: _('Toggle sidebar'),
 			iconName: 'fa-bars',
 			iconRotation: this.props.sidebarVisibility ? 0 : 90,
-			onClick: () => { this.doCommand({ name: 'toggleSidebar'}) }
+			onClick: () => {
+				this.doCommand({ name: 'toggleSidebar' });
+			},
 		});
 
 		headerItems.push({
 			title: _('New note'),
 			iconName: 'fa-file-o',
 			enabled: !!folders.length && !onConflictFolder,
-			onClick: () => { this.doCommand({ name: 'newNote' }) },
+			onClick: () => {
+				this.doCommand({ name: 'newNote' });
+			},
 		});
 
 		headerItems.push({
 			title: _('New to-do'),
 			iconName: 'fa-check-square-o',
 			enabled: !!folders.length && !onConflictFolder,
-			onClick: () => { this.doCommand({ name: 'newTodo' }) },
+			onClick: () => {
+				this.doCommand({ name: 'newTodo' });
+			},
 		});
 
 		headerItems.push({
 			title: _('New notebook'),
 			iconName: 'fa-book',
-			onClick: () => { this.doCommand({ name: 'newNotebook' }) },
+			onClick: () => {
+				this.doCommand({ name: 'newNotebook' });
+			},
 		});
 
 		headerItems.push({
 			title: _('Layout'),
 			iconName: 'fa-columns',
 			enabled: !!notes.length,
-			onClick: () => { this.doCommand({ name: 'toggleVisiblePanes' }) },
+			onClick: () => {
+				this.doCommand({ name: 'toggleVisiblePanes' });
+			},
 		});
 
 		headerItems.push({
 			title: _('Search...'),
 			iconName: 'fa-search',
-			onQuery: (query) => { this.doCommand({ name: 'search', query: query }) },
+			onQuery: query => {
+				this.doCommand({ name: 'search', query: query });
+			},
 			type: 'search',
 		});
 
 		if (!this.promptOnClose_) {
 			this.promptOnClose_ = (answer, buttonType) => {
 				return this.state.promptOptions.onClose(answer, buttonType);
-			}
+			};
 		}
 
 		const onViewDisabledItemsClick = () => {
@@ -456,36 +478,58 @@ class MainScreenComponent extends React.Component {
 				type: 'NAV_GO',
 				routeName: 'Status',
 			});
-		}
+		};
 
 		const onViewMasterKeysClick = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
 				routeName: 'EncryptionConfig',
 			});
-		}
+		};
 
 		let messageComp = null;
 
 		if (messageBoxVisible) {
 			let msg = null;
 			if (this.props.hasDisabledSyncItems) {
-				msg = <span>{_('Some items cannot be synchronised.')} <a href="#" onClick={() => { onViewDisabledItemsClick() }}>{_('View them now')}</a></span>
+				msg = (
+					<span>
+						{_('Some items cannot be synchronised.')}{' '}
+						<a
+							href="#"
+							onClick={() => {
+								onViewDisabledItemsClick();
+							}}
+						>
+							{_('View them now')}
+						</a>
+					</span>
+				);
 			} else if (this.props.showMissingMasterKeyMessage) {
-				msg = <span>{_('One or more master keys need a password.')} <a href="#" onClick={() => { onViewMasterKeysClick() }}>{_('Set the password')}</a></span>
+				msg = (
+					<span>
+						{_('One or more master keys need a password.')}{' '}
+						<a
+							href="#"
+							onClick={() => {
+								onViewMasterKeysClick();
+							}}
+						>
+							{_('Set the password')}
+						</a>
+					</span>
+				);
 			}
 
 			messageComp = (
 				<div style={styles.messageBox}>
-					<span style={theme.textStyle}>
-						{msg}
-					</span>
+					<span style={theme.textStyle}>{msg}</span>
 				</div>
 			);
 		}
 
 		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.plugins);
-		const pluginDialog = !dialogInfo ? null :  <dialogInfo.Dialog {...dialogInfo.props}/>;
+		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
@@ -495,41 +539,25 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
-				{ notePropertiesDialogOptions.visible && <NotePropertiesDialog
-					theme={this.props.theme}
-					noteId={notePropertiesDialogOptions.noteId}
-					onClose={this.notePropertiesDialog_close}
-					onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick}
-				/> }
+				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 
-				<PromptDialog
-					autocomplete={promptOptions && ('autocomplete' in promptOptions) ? promptOptions.autocomplete : null}
-					defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''}
-					theme={this.props.theme}
-					style={styles.prompt}
-					onClose={this.promptOnClose_}
-					label={promptOptions ? promptOptions.label : ''}
-					description={promptOptions ? promptOptions.description : null}
-					visible={!!this.state.promptOptions}
-					buttons={promptOptions && ('buttons' in promptOptions) ? promptOptions.buttons : null}
-					inputType={promptOptions && ('inputType' in promptOptions) ? promptOptions.inputType : null} />
+				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag}/>
+				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag}/>
-				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible}/>
+				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
+				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible} />
 
-				{pluginDialog}	
+				{pluginDialog}
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,

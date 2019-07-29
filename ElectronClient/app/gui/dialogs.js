@@ -1,7 +1,6 @@
 const smalltalk = require('smalltalk');
 
 class Dialogs {
-
 	async alert(message, title = '') {
 		await smalltalk.alert(title, message);
 	}
@@ -25,7 +24,6 @@ class Dialogs {
 			return null;
 		}
 	}
-
 }
 
 const dialogs = new Dialogs();

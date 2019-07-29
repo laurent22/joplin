@@ -1,10 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('../theme.js');
-const { _ } = require('lib/locale.js');
 
 class NoteTextViewerComponent extends React.Component {
-
 	constructor() {
 		super();
 
@@ -49,7 +46,7 @@ class NoteTextViewerComponent extends React.Component {
 
 		let isAlreadyReady = false;
 		try {
-			isAlreadyReady = !this.webviewRef_.current.isLoading()
+			isAlreadyReady = !this.webviewRef_.current.isLoading();
 		} catch (error) {
 			// Ignore - it means the view has not started loading, and the DOM ready event has not been emitted yet
 			// Error is "The WebView must be attached to the DOM and the dom-ready event emitted before this method can be called."
@@ -111,14 +108,14 @@ class NoteTextViewerComponent extends React.Component {
 		return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
 	}
 
-	print(options = {}) {
+	print() {
 		// In Electron 4x, print is broken so need to use this hack:
 		// https://github.com/electron/electron/issues/16219#issuecomment-451454948
 		// Note that this is not a perfect workaround since it means the options are ignored
 		// In particular it means that background images and colours won't be printed (printBackground property will be ignored)
 
 		// return this.webviewRef_.current.getWebContents().print({});
-		return this.webviewRef_.current.getWebContents().executeJavaScript("window.print()")
+		return this.webviewRef_.current.getWebContents().executeJavaScript('window.print()');
 	}
 
 	openDevTools() {
@@ -138,23 +135,21 @@ class NoteTextViewerComponent extends React.Component {
 	// ----------------------------------------------------------------
 
 	render() {
-		return  <webview
-			ref={this.webviewRef_}
-			style={this.props.viewerStyle}
-			preload="gui/note-viewer/preload.js"
-			src="gui/note-viewer/index.html"
-			webpreferences="contextIsolation"
-		/>
+		return <webview ref={this.webviewRef_} style={this.props.viewerStyle} preload="gui/note-viewer/preload.js" src="gui/note-viewer/index.html" webpreferences="contextIsolation" />;
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};
 };
 
-const NoteTextViewer = connect(mapStateToProps, null, null, { withRef: true })(NoteTextViewerComponent);
+const NoteTextViewer = connect(
+	mapStateToProps,
+	null,
+	null,
+	{ withRef: true }
+)(NoteTextViewerComponent);
 
 module.exports = NoteTextViewer;

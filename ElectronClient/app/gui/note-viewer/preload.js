@@ -17,7 +17,7 @@ ipcRenderer.on('setMarkers', (event, keywords, options) => {
 	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords, options: options } }, '*');
 });
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', event => {
 	// Here we only deal with messages that are sent from the webview to the main Electron process
 	if (!event.data || event.data.target !== 'main') return;
 
