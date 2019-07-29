@@ -14,11 +14,14 @@ module.exports = {
 		"ecmaFeatures": {
 			"jsx": true,
 	    },
+	    "sourceType": "module",
 	},
 	'rules': {
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
-		"no-unused-vars": ["error", { "argsIgnorePattern": "event|reject|resolve|prevState|snapshot|prevProps" }],
+		// Ignore all unused function arguments, because in some
+		// case they are kept to indicate the function signature.
+		"no-unused-vars": ["error", { "argsIgnorePattern": ".*" }],
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
 		"prettier/prettier": "error",
