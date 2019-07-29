@@ -101,9 +101,18 @@ function friendlySafeFilename(e, maxLength = null) {
 	return output.substr(0, maxLength);
 }
 
-function toFileProtocolPath(path) {
-	const output = path.replace(/\\/g, "/");
-	return 'file://' + escape(output);
+function toFileProtocolPath(filePathEncode, os = null) {
+	if (os === null) os = process.platform;
+	
+	if (os === 'win32') {
+		filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
+		filePathEncode = "/" + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
+	}
+
+	filePathEncode = encodeURI(filePathEncode);
+	filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
+	filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
+	return "file://" + filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
 }
 
 function toSystemSlashes(path, os = null) {

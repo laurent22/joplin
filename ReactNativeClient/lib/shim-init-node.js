@@ -10,6 +10,7 @@ const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
 
+
 function shimInit() {
 	shim.fsDriver = () => { throw new Error('Not implemented') }
 	shim.FileApiDriverLocal = FileApiDriverLocal;
@@ -168,8 +169,16 @@ function shimInit() {
 		return await Resource.save(resource, { isNew: true });
 	}
 
-	shim.attachFileToNote = async function(note, filePath, position = null) {
-		const resource = await shim.createResourceFromPath(filePath);
+	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL = false) {
+
+		const { basename } = require('path');
+		const { escapeLinkText } = require('lib/markdownUtils');
+		const { toFileProtocolPath } = require('lib/path-utils');
+
+		let resource = [];
+		if (!createFileURL) {
+			resource = await shim.createResourceFromPath(filePath);
+		}
 
 		const newBody = [];
 
@@ -178,7 +187,15 @@ function shimInit() {
 		}
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
-		newBody.push(Resource.markdownTag(resource));
+
+		if (!createFileURL) {
+			newBody.push(Resource.markdownTag(resource));
+		} else {
+			let filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			let fileURL = "[" + filename + "]("+ toFileProtocolPath(filePath) +")"
+			newBody.push(fileURL);
+		}
+
 		if (note.body) newBody.push(note.body.substr(position));
 
 		const newNote = Object.assign({}, note, {
