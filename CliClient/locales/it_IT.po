@@ -17,7 +17,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "Per eliminare un'etichetta, togli l'etichetta dalle note a cui è associata."
+msgstr ""
+"Per eliminare un'etichetta, togli l'etichetta dalle note a cui è associata."
 
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Per favore seleziona la nota o il taccuino da eliminare."
@@ -1495,10 +1496,10 @@ msgstr "Chiaro"
 msgid "Dark"
 msgstr "Scuro"
 
-msgid "Solarized Light"
+msgid "Solarised Light"
 msgstr ""
 
-msgid "Solarized Dark"
+msgid "Solarised Dark"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
