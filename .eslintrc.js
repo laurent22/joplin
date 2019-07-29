@@ -18,7 +18,7 @@ module.exports = {
 	'rules': {
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
-		"no-unused-vars": ["error", { "argsIgnorePattern": "event" }],
+		"no-unused-vars": ["error", { "argsIgnorePattern": "event|reject|resolve|prevState|snapshot|prevProps" }],
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
 		"prettier/prettier": "error",
