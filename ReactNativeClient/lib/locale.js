@@ -179,6 +179,7 @@ codeToCountry_["GB"] = "UK";
 codeToCountry_["US"] = "US";
 
 let supportedLocales_ = null;
+let localeStats_ = null;
 
 let loadedLocales_ = {};
 
@@ -188,6 +189,11 @@ let currentLocale_ = defaultLocale_;
 
 function defaultLocale() {
 	return defaultLocale_;
+}
+
+function localeStats() {
+	if (!localeStats_) localeStats_ = require('../locales/index.js').stats;
+	return localeStats_;
 }
 
 function supportedLocales() {
@@ -201,12 +207,19 @@ function supportedLocales() {
 	return output;
 }
 
-function supportedLocalesToLanguages() {
+function supportedLocalesToLanguages(options = null) {
+	if (!options) options = {};
+	const stats = localeStats();
 	const locales = supportedLocales();
 	let output = {};
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 		output[locale] = countryDisplayName(locale);
+
+		const stat = stats[locale];
+		if (options.includeStats && stat) {
+			output[locale] += ' (' + stat.percentDone + '%)';
+		}
 	}
 	return output;
 }

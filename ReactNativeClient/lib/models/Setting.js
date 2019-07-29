@@ -79,7 +79,7 @@ class Setting extends BaseModel {
 			'activeFolderId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'firstStart': { value: true, type: Setting.TYPE_BOOL, public: false },
 			'locale': { value: defaultLocale(), type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Language'), options: () => {
-				return ObjectUtils.sortByValue(supportedLocalesToLanguages());
+				return ObjectUtils.sortByValue(supportedLocalesToLanguages({ includeStats: true }));
 			}},
 			'dateFormat': { value: Setting.DATE_FORMAT_1, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Date format'), options: () => {
 				let options = {}
