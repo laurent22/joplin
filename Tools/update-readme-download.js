@@ -3,7 +3,6 @@ require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 'use strict';
 
 const fs = require('fs-extra');
-const https = require('https');
 const request = require('request');
 
 const { fileExtension } = require('lib/path-utils.js');
@@ -23,7 +22,7 @@ async function gitHubLatestRelease() {
 		request.get({
 			url: url,
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'}
+			headers: {'User-Agent': 'Joplin Readme Updater'},
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);

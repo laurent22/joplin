@@ -1,4 +1,4 @@
-const { execCommand, githubRelease, handleCommitHook, githubOauthToken } = require('./tool-utils.js');
+const { execCommand } = require('./tool-utils.js');
 const path = require('path');
 const fs = require('fs-extra');
 const moment = require('moment');
@@ -32,6 +32,7 @@ async function insertChangelog(tag, changelog) {
 		'##',
 		'[' + tag + '](https://github.com/laurent22/joplin/releases/tag/' + tag + ')',
 		'-',
+		// eslint-disable-next-line no-useless-escape
 		moment.utc().format('YYYY-MM-DD\THH:mm:ss') + 'Z',
 	];
 

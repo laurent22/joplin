@@ -1,11 +1,9 @@
-"use strict"
+'use strict';
 
 // https://github.com/Homebrew/homebrew-core/blob/master/CONTRIBUTING.md
 
 const rootDir = __dirname + '/..';
 const { execCommand, downloadFile, fileSha256, unlinkForce } = require('./tool-utils.js');
-const fetch = require('node-fetch');
-const fs = require('fs-extra');
 
 async function main() {
 	const url = await execCommand('npm view joplin dist.tarball');

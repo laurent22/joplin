@@ -1,4 +1,4 @@
-const { execCommand, githubRelease, handleCommitHook, githubOauthToken } = require('./tool-utils.js');
+const { execCommand, githubRelease } = require('./tool-utils.js');
 const path = require('path');
 
 const rootDir = path.dirname(__dirname);
@@ -7,7 +7,6 @@ const appDir = rootDir + '/ElectronClient/app';
 async function main() {
 	const argv = require('yargs').argv;
 
-	const oauthToken = await githubOauthToken();
 	process.chdir(appDir);
 
 	console.info('Running from: ' + process.cwd());

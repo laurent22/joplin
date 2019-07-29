@@ -5,6 +5,7 @@ const outputDir = cwd + '/lib/csstojs';
 
 async function createJsFromCss(name, filePath) {
 	let css = await fs.readFile(filePath, 'utf-8');
+	// eslint-disable-next-line no-useless-escape
 	css = css.replace(/\`/g, '\\`');
 	const js = 'module.exports = `' + css + '`;';
 

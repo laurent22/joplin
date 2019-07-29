@@ -1,3 +1,5 @@
+/* eslint-disable require-atomic-updates */
+
 require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 const fetch = require('node-fetch');
@@ -80,7 +82,7 @@ async function main() {
 
 			rows.push(row);
 		}
-	}
+	};
 
 	console.info('Build stats: Downloading releases info...');
 

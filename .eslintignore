@@ -22,8 +22,8 @@ ElectronClient/app/lib/vendor/sjcl-rn.js
 ElectronClient/app/lib/vendor/sjcl.js
 ElectronClient/app/locales
 ElectronClient/app/node_modules
-ElectronClient/Tools/node_modules
-ElectronClient/Tools/PortableAppsLauncher
+Tools/node_modules
+Tools/PortableAppsLauncher
 highlight.pack.js
 ReactNativeClient/android
 ReactNativeClient/ios

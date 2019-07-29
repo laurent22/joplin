@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, isWindows, fileExists, readline } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken, fileExists, readline } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -35,7 +35,7 @@ function increaseGradleVersionCode(content) {
 function increaseGradleVersionName(content) {
 	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
 		const n = Number(buildNum);
-		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + versionCode);
+		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + buildNum);
 		return prefix + (n + 1) + '"';
 	});
 
