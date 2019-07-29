@@ -41,7 +41,7 @@ describe('models_Revision', function() {
 		const newObject = {
 			one: '123',
 			three: '999',
-		}
+		};
 
 		const patch = Revision.createObjectPatch(oldObject, newObject);
 		const merged = Revision.applyObjectPatch(oldObject, patch);

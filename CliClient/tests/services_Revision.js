@@ -22,7 +22,7 @@ describe('services_Revision', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		Setting.setValue('revisionService.intervalBetweenRevisions', 0)
+		Setting.setValue('revisionService.intervalBetweenRevisions', 0);
 		done();
 	});
 

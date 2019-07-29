@@ -43,8 +43,8 @@ describe('EnexToMd', function() {
 			let actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
 			
 			if (os.EOL === '\r\n') {
-				expectedMd = expectedMd.replace(/\r\n/g, '\n')
-				actualMd = actualMd.replace(/\r\n/g, '\n')
+				expectedMd = expectedMd.replace(/\r\n/g, '\n');
+				actualMd = actualMd.replace(/\r\n/g, '\n');
 			}
 
 			if (actualMd !== expectedMd) {
@@ -60,7 +60,7 @@ describe('EnexToMd', function() {
 				expect(false).toBe(true);
 				// return;
 			} else {
-				expect(true).toBe(true)
+				expect(true).toBe(true);
 			}
 		}
 	}));

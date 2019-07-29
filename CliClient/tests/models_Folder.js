@@ -26,10 +26,10 @@ describe('models_Folder', function() {
 	});
 
 	it('should tell if a notebook can be nested under another one', asyncTest(async () => {
-		let f1 = await Folder.save({ title: "folder1" });
-		let f2 = await Folder.save({ title: "folder2", parent_id: f1.id });
-		let f3 = await Folder.save({ title: "folder3", parent_id: f2.id });
-		let f4 = await Folder.save({ title: "folder4" });
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		let f4 = await Folder.save({ title: 'folder4' });
 
 		expect(await Folder.canNestUnder(f1.id, f2.id)).toBe(false);
 		expect(await Folder.canNestUnder(f2.id, f2.id)).toBe(false);
@@ -42,8 +42,8 @@ describe('models_Folder', function() {
 	}));
 
 	it('should recursively delete notes and sub-notebooks', asyncTest(async () => {
-		let f1 = await Folder.save({ title: "folder1" });
-		let f2 = await Folder.save({ title: "folder2", parent_id: f1.id });
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		let n1 = await Note.save({ title: 'note1', parent_id: f2.id });
 
 		await Folder.delete(f1.id);
@@ -55,9 +55,9 @@ describe('models_Folder', function() {
 	it('should sort by last modified, based on content', asyncTest(async () => {
 		let folders;
 
-		let f1 = await Folder.save({ title: "folder1" }); await sleep(0.1);
-		let f2 = await Folder.save({ title: "folder2" }); await sleep(0.1);
-		let f3 = await Folder.save({ title: "folder3" }); await sleep(0.1);
+		let f1 = await Folder.save({ title: 'folder1' }); await sleep(0.1);
+		let f2 = await Folder.save({ title: 'folder2' }); await sleep(0.1);
+		let f3 = await Folder.save({ title: 'folder3' }); await sleep(0.1);
 		let n1 = await Note.save({ title: 'note1', parent_id: f2.id });
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
@@ -89,9 +89,9 @@ describe('models_Folder', function() {
 	it('should sort by last modified, based on content (sub-folders too)', asyncTest(async () => {
 		let folders;
 
-		let f1 = await Folder.save({ title: "folder1" }); await sleep(0.1);
-		let f2 = await Folder.save({ title: "folder2" }); await sleep(0.1);
-		let f3 = await Folder.save({ title: "folder3", parent_id: f1.id }); await sleep(0.1);
+		let f1 = await Folder.save({ title: 'folder1' }); await sleep(0.1);
+		let f2 = await Folder.save({ title: 'folder2' }); await sleep(0.1);
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f1.id }); await sleep(0.1);
 		let n1 = await Note.save({ title: 'note1', parent_id: f3.id });
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
@@ -114,7 +114,7 @@ describe('models_Folder', function() {
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
 
-		let f4 = await Folder.save({ title: "folder4", parent_id: f1.id }); await sleep(0.1);
+		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id }); await sleep(0.1);
 		let n3 = await Note.save({ title: 'note3', parent_id: f4.id });
 
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');

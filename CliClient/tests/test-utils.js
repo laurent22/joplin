@@ -67,7 +67,7 @@ SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-const syncTargetId_ = SyncTargetRegistry.nameToId("memory");
+const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
 const syncDir = __dirname + '/../tests/sync';
@@ -186,7 +186,7 @@ async function setupDatabase(id = null) {
 		await fs.unlink(filePath);
 	} catch (error) {
 		// Don't care if the file doesn't exist
-	};
+	}
 
 	databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
 	databases_[id].setLogger(dbLogger);
@@ -293,7 +293,7 @@ function fileApi() {
 	if (fileApi_) return fileApi_;
 
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
-		fs.removeSync(syncDir)
+		fs.removeSync(syncDir);
 		fs.mkdirpSync(syncDir, 0o755);
 		fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
@@ -359,7 +359,7 @@ function asyncTest(callback) {
 		} finally {
 			done();
 		}
-	}
+	};
 }
 
 async function allSyncTargetItemsEncrypted() {
@@ -384,7 +384,7 @@ async function allSyncTargetItemsEncrypted() {
 			if (content.substr(0, 5) === 'JED01') output = encryptedCount++;
 		}
 
-		if (!!remoteContent.encryption_applied) encryptedCount++;
+		if (remoteContent.encryption_applied) encryptedCount++;
 	}
 
 	if (!totalCount) throw new Error('No encryptable item on sync target');

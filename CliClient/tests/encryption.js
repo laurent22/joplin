@@ -116,7 +116,7 @@ describe('Encryption', function() {
 		await service.loadMasterKey(masterKey, '123456', true);
 
 		let cipherText = await service.encryptString('some secret');
-		cipherText += "ABCDEFGHIJ";
+		cipherText += 'ABCDEFGHIJ';
 
 		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
