@@ -22,9 +22,12 @@ module.exports = {
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
 		"prettier/prettier": "error",
+		// Uncomment this to automatically remove unused requires:
+		// "autofix/no-unused-vars": "error",
 	},
 	"plugins": [
 		"react",
 		"prettier",
+		"autofix",
 	],
 };
