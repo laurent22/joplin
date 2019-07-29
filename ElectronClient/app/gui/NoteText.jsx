@@ -1119,13 +1119,18 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
+	// helper function to style the title for printing
+	title_(title) {
+		return '<div style="font-size: 2em; font-weight: bold; border-bottom: 1px solid rgb(230,230,230); padding-bottom: .3em;">' + title + '</div><br>';
+	}
+
 	async printTo_(target, options) {
 		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
 
 		const previousBody = this.state.note.body;
-		const tempBody = "# " + this.state.note.title + "\n\n" + previousBody;
+		const tempBody = this.title_(this.state.note.title) + "\n\n" + previousBody;
 
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
