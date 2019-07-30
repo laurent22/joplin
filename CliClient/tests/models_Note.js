@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -21,7 +23,7 @@ describe('models_Note', function() {
 	});
 
 	it('should find resource and note IDs', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'ma deuxième note', body: 'Lien vers première note : ' + Note.markdownTag(note1), parent_id: folder1.id });
 
@@ -67,7 +69,7 @@ describe('models_Note', function() {
 	}));
 
 	it('should change the type of notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
 
@@ -86,9 +88,9 @@ describe('models_Note', function() {
 		expect(changedNote === note1).toBe(false);
 		expect(!!changedNote.is_todo).toBe(false);
 	}));
-	
+
 	it('should serialize and unserialize without modifying data', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1"});
+		let folder1 = await Folder.save({ title: 'folder1'});
 		const testCases = [
 			[ {title: '', body:'Body and no title\nSecond line\nThird Line', parent_id: folder1.id},
 				'', 'Body and no title\nSecond line\nThird Line'],
@@ -96,19 +98,19 @@ describe('models_Note', function() {
 				'Note title', 'Body and title'],
 			[ {title: 'Title and no body', body:'', parent_id: folder1.id},
 				'Title and no body', ''],
-		]
-		
+		];
+
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
-			
+
 			const input = t[0];
 			const expectedTitle = t[1];
 			const expectedBody = t[1];
-			
+
 			let note1 = await Note.save(input);
 			let serialized = await Note.serialize(note1);
-			let unserialized = await Note.unserialize( serialized);
-			
+			let unserialized = await Note.unserialize(serialized);
+
 			expect(unserialized.title).toBe(input.title);
 			expect(unserialized.body).toBe(input.body);
 		}

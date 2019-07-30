@@ -2,14 +2,10 @@ const React = require('react');
 
 const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
 const { connect } = require('react-redux');
-const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');
-const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { _ } = require('lib/locale.js');
-const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class TagsScreenComponent extends BaseScreenComponent {

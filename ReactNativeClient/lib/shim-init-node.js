@@ -8,6 +8,7 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
+const { _ } = require('lib/locale.js');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -153,7 +154,7 @@ function shimInit() {
 		let targetPath = Resource.fullPath(resource);
 
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
-			const result = await resizeImage_(filePath, targetPath, resource.mime);
+			await resizeImage_(filePath, targetPath, resource.mime);
 		} else {
 			// const stat = await shim.fsDriver().stat(filePath);
 			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
@@ -171,7 +172,7 @@ function shimInit() {
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
 
-		return await Resource.save(resource, { isNew: true });
+		return Resource.save(resource, { isNew: true });
 	};
 
 	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL = false) {

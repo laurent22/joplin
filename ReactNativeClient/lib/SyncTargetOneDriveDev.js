@@ -1,7 +1,5 @@
-const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const { _ } = require('lib/locale.js');
-const Setting = require('lib/models/Setting.js');
 const { parameters } = require('lib/parameters.js');
 
 class SyncTargetOneDriveDev extends SyncTargetOneDrive {

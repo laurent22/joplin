@@ -10,7 +10,6 @@ const { time } = require('lib/time-utils.js');
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'ls [note-pattern]';
 	}
@@ -24,14 +23,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [
-			['-n, --limit <num>', _('Displays only the first top <num> notes.')],
-			['-s, --sort <field>', _('Sorts the item by <field> (eg. title, updated_time, created_time).')],
-			['-r, --reverse', _('Reverses the sorting order.')],
-			['-t, --type <type>', _('Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-ttd` would display notes and to-dos.')],
-			['-f, --format <format>', _('Either "text" or "json"')],
-			['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')],
-		];
+		return [['-n, --limit <num>', _('Displays only the first top <num> notes.')], ['-s, --sort <field>', _('Sorts the item by <field> (eg. title, updated_time, created_time).')], ['-r, --reverse', _('Reverses the sorting order.')], ['-t, --type <type>', _('Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-ttd` would display notes and to-dos.')], ['-f, --format <format>', _('Either "text" or "json"')], ['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')]];
 	}
 
 	async action(args) {
@@ -105,7 +97,7 @@ class Command extends BaseCommand {
 
 				if (hasTodos) {
 					if (item.is_todo) {
-						row.push(sprintf('[%s]', !!item.todo_completed ? 'X' : ' '));
+						row.push(sprintf('[%s]', item.todo_completed ? 'X' : ' '));
 					} else {
 						row.push('   ');
 					}
@@ -118,9 +110,7 @@ class Command extends BaseCommand {
 
 			cliUtils.printArray(this.stdout.bind(this), rows);
 		}
-
 	}
-
 }
 
 module.exports = Command;

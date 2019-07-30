@@ -1,19 +1,12 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('lib/locale.js');
-const { cliUtils } = require('./cli-utils.js');
-const EncryptionService = require('lib/services/EncryptionService');
-const DecryptionWorker = require('lib/services/DecryptionWorker');
-const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const BaseModel = require('lib/BaseModel');
-const Setting = require('lib/models/Setting.js');
 const { toTitleCase } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
 const markdownUtils = require('lib/markdownUtils');
 const { Database } = require('lib/database.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'apidoc';
 	}
@@ -23,15 +16,19 @@ class Command extends BaseCommand {
 	}
 
 	createPropertiesTable(tableFields) {
-  		const headers = [
-  			{ name: 'name', label: 'Name' },
-  			{ name: 'type', label: 'Type', filter: (value) => {
-  				return Database.enumName('fieldType', value);
-  			}},
-  			{ name: 'description', label: 'Description' },
-  		];
-		
-		return markdownUtils.createMarkdownTable(headers, tableFields); 
+		const headers = [
+			{ name: 'name', label: 'Name' },
+			{
+				name: 'type',
+				label: 'Type',
+				filter: value => {
+					return Database.enumName('fieldType', value);
+				},
+			},
+			{ name: 'description', label: 'Description' },
+		];
+
+		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
 	async action(args) {
@@ -70,8 +67,8 @@ class Command extends BaseCommand {
 		lines.push('}');
 		lines.push('```');
 		lines.push('');
-		
-		lines.push('# Authorisation')
+
+		lines.push('# Authorisation');
 		lines.push('');
 		lines.push('To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.');
 		lines.push('');
@@ -293,7 +290,6 @@ class Command extends BaseCommand {
 
 		this.stdout(lines.join('\n'));
 	}
-
 }
 
 module.exports = Command;

@@ -6,8 +6,6 @@ const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const fs = require('fs-extra');
-const md5 = require('md5');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { fileExtension } = require('lib/path-utils');
@@ -49,6 +47,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported');
+			// eslint-disable-next-line require-atomic-updates
 			defaultFolder_ = await Folder.save({ title: folderTitle });
 			return defaultFolder_;
 		};
@@ -65,6 +64,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 					itemIdMap[itemParentId] = destinationFolderId;
 				} else if (!itemParentExists) {
 					const parentFolder = await defaultFolder();
+					// eslint-disable-next-line require-atomic-updates
 					itemIdMap[itemParentId] = parentFolder.id;
 				} else {
 					itemIdMap[itemParentId] = uuid.create();

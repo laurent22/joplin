@@ -3,13 +3,7 @@ const Component = React.Component;
 const { TouchableOpacity, Text, StyleSheet, ScrollView, View } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const Tag = require('lib/models/Tag.js');
-const Note = require('lib/models/Note.js');
-const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
-const NavService = require('lib/services/NavService.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
-const shared = require('lib/components/shared/side-menu-shared.js');
 
 class SideMenuContentNoteComponent extends Component {
 	constructor() {
@@ -56,8 +50,6 @@ class SideMenuContentNoteComponent extends Component {
 	}
 
 	renderSideBarButton(key, title, iconName, onPressHandler) {
-		const theme = themeStyle(this.props.theme);
-
 		const content = (
 			<View key={key} style={onPressHandler ? this.styles().sideButton : this.styles().sideButtonDisabled}>
 				{!iconName ? null : <Icon name={iconName} style={this.styles().sidebarIcon} />}

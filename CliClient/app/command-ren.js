@@ -6,7 +6,6 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'ren <item> <name>';
 	}
@@ -35,7 +34,6 @@ class Command extends BaseCommand {
 			await Note.save(newItem);
 		}
 	}
-
 }
 
 module.exports = Command;

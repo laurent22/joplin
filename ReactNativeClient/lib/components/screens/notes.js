@@ -73,7 +73,6 @@ class NotesScreenComponent extends BaseScreenComponent {
 	styles() {
 		if (!this.styles_) this.styles_ = {};
 		const themeId = this.props.theme;
-		const theme = themeStyle(themeId);
 		const cacheKey = themeId;
 
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
@@ -178,7 +177,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			output = { id: this.props.selectedSmartFilterId, title: _('All notes') };
 		} else {
 			return null;
-			throw new Error('Invalid parent type: ' + props.notesParentType);
+			// throw new Error('Invalid parent type: ' + props.notesParentType);
 		}
 		return output;
 	}

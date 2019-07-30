@@ -8,7 +8,6 @@ const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');
-const Setting = require('lib/models/Setting.js');
 const shared = require('lib/components/shared/encryption-config-shared.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
@@ -106,7 +105,6 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
-		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
 
 		const inputStyle = { flex: 1, marginRight: 10, color: theme.color };
 		inputStyle.borderBottomWidth = 1;

@@ -4,9 +4,9 @@ const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const BaseItem = require('lib/models/BaseItem');
+const Resource = require('lib/models/Resource');
 const BaseModel = require('lib/BaseModel');
 const Setting = require('lib/models/Setting');
-const markdownUtils = require('lib/markdownUtils');
 const htmlUtils = require('lib/htmlUtils');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const mimeUtils = require('lib/mime-utils.js').mime;
@@ -591,12 +591,9 @@ class Api {
 
 		const output = {};
 
-		const downloadOne = url => {
-			return new Promise(async (resolve, reject) => {
-				const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
-				if (imagePath) output[url] = { path: imagePath, originalUrl: url };
-				resolve();
-			});
+		const downloadOne = async url => {
+			const imagePath = await this.downloadImage_(url, allowFileProtocolImages);
+			if (imagePath) output[url] = { path: imagePath, originalUrl: url };
 		};
 
 		let urlIndex = 0;
@@ -650,7 +647,8 @@ class Api {
 				return Resource.internalUrl(urlInfo.resource);
 			});
 		} else {
-			let output = md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
+			// eslint-disable-next-line no-useless-escape
+			return md.replace(/(!\[.*?\]\()([^\s\)]+)(.*?\))/g, (match, before, imageUrl, after) => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
 				if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
@@ -664,8 +662,6 @@ class Api {
 					return before + resourceUrl + after;
 				}
 			});
-
-			return output;
 		}
 	}
 }

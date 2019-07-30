@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath} = require('lib/path-utils.js');
@@ -50,7 +52,7 @@ describe('pathUtils', function() {
 			const t = testCases[i];
 			expect(quotePath(t[0])).toBe(t[1]);
 			expect(unquotePath(quotePath(t[0]))).toBe(t[0]);
-		} 
+		}
 
 		done();
 	});
@@ -68,7 +70,7 @@ describe('pathUtils', function() {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 			expect(extractExecutablePath(t[0])).toBe(t[1]);
-		} 
+		}
 
 		done();
 	});
@@ -77,7 +79,7 @@ describe('pathUtils', function() {
 		const testCases_win32 = [
 			['C:\\handle\\space test', 'file:///C:/handle/space+test'],
 			['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
-			['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],				
+			['C:\\handle\\single quote\'', 'file:///C:/handle/single+quote%27'],
 		];
 		const testCases_unixlike = [
 			['/handle/space test', 'file:///handle/space+test'],
@@ -88,11 +90,11 @@ describe('pathUtils', function() {
 		for (let i = 0; i < testCases_win32.length; i++) {
 			const t = testCases_win32[i];
 			expect(toFileProtocolPath(t[0], 'win32')).toBe(t[1]);
-		} 
+		}
 		for (let i = 0; i < testCases_unixlike.length; i++) {
 			const t = testCases_unixlike[i];
 			expect(toFileProtocolPath(t[0], 'linux')).toBe(t[1]);
-		} 
+		}
 
 		done();
 	});

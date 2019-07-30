@@ -5,9 +5,10 @@ const { themeStyle } = require('../theme.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
+const Folder = require('lib/models/Folder');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { substrWithEllipsis, surroundKeywords } = require('lib/string-utils.js');
+const { surroundKeywords } = require('lib/string-utils.js');
 
 const PLUGIN_NAME = 'gotoAnything';
 const itemHeight = 60;
@@ -205,27 +206,27 @@ class Dialog extends React.PureComponent {
 
 			for (const folder of folderPath) {
 				this.props.dispatch({
-					type: "FOLDER_SET_COLLAPSED",
+					type: 'FOLDER_SET_COLLAPSED',
 					id: folder.id,
 					collapsed: false,
 				});
 			}
-		}		
+		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
-				type: "FOLDER_AND_NOTE_SELECT",
+				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
-				type: "TAG_SELECT",
+				type: 'TAG_SELECT',
 				id: item.id,
 			});
 		} else if (this.state.listType === BaseModel.TYPE_FOLDER) {
 			this.props.dispatch({
-				type: "FOLDER_SELECT",
+				type: 'FOLDER_SELECT',
 				id: item.id,
 			});
 		}
@@ -247,7 +248,7 @@ class Dialog extends React.PureComponent {
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = surroundKeywords(this.state.keywords, item.title, '<span style="font-weight: bold; color: ' + theme.colorBright + ';">', '</span>');
 
-		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>
+		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
@@ -282,7 +283,7 @@ class Dialog extends React.PureComponent {
 			const inc = keyCode === 38 ? -1 : +1;
 			let index = this.selectedItemIndex();
 			if (index < 0) return; // Not possible, but who knows
-			
+
 			index += inc;
 			if (index < 0) index = 0;
 			if (index >= this.state.results.length) index = this.state.results.length - 1;
@@ -324,7 +325,7 @@ class Dialog extends React.PureComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>
+		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
 
 		return (
 			<div style={theme.dialogModalLayer}>

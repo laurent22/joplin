@@ -7,7 +7,7 @@ module.exports = function(style, options) {
 		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 	`;
 
-	const fontFamily = "'Avenir', 'Arial', sans-serif";
+	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
 
 	const css =
 		`

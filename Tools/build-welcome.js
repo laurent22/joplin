@@ -8,7 +8,7 @@ const markdownUtils = require('lib/markdownUtils.js');
 const rootDir = dirname(__dirname);
 const welcomeDir = rootDir + '/readme/welcome';
 
-const createdDate = new Date('2018-06-22T12:00:00Z')
+const createdDate = new Date('2018-06-22T12:00:00Z');
 
 const itemMetadata_ = {
 	'1_welcome_to_joplin.md': {
@@ -82,7 +82,7 @@ async function parseNoteFile(filePath) {
 		resources[imagePath] = {
 			id: itemIdFromPath(fullImagePath),
 			body: base64,
-		}
+		};
 	}
 
 	return {
@@ -103,7 +103,7 @@ async function main() {
 		id: itemIdFromPath('folder_Welcome'),
 		title: 'Welcome!',
 	};
-	
+
 	for (let i = 0; i < filenames.length; i++) {
 		const f = filenames[i];
 		const ext = fileExtension(f);
@@ -134,7 +134,7 @@ async function main() {
 	const folders = [];
 	folders.push(rootFolder);
 
-	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() }
+	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() };
 	const jsonContent = JSON.stringify(content, null, 4);
 	const jsContent = 'module.exports = ' + jsonContent;
 	fs.writeFileSync(rootDir + '/ReactNativeClient/lib/welcomeAssets.js', jsContent, { encoding: 'utf8' });

@@ -160,23 +160,23 @@ class FileApiDriverOneDrive {
 		// [0] https://stackoverflow.com/questions/29191091/onedrive-api-overwrite-on-move
 		throw new Error('NOT WORKING');
 
-		let previousItem = await this.statRaw_(oldPath);
+		// let previousItem = await this.statRaw_(oldPath);
 
-		let newDir = dirname(newPath);
-		let newName = basename(newPath);
+		// let newDir = dirname(newPath);
+		// let newName = basename(newPath);
 
-		// We don't want the modification date to change when we move the file so retrieve it
-		// now set it in the PATCH operation.
+		// // We don't want the modification date to change when we move the file so retrieve it
+		// // now set it in the PATCH operation.
 
-		let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
-			name: newName,
-			parentReference: { path: newDir },
-			fileSystemInfo: {
-				lastModifiedDateTime: previousItem.fileSystemInfo.lastModifiedDateTime,
-			},
-		});
+		// let item = await this.api_.execJson('PATCH', this.makePath_(oldPath), this.itemFilter_(), {
+		// 	name: newName,
+		// 	parentReference: { path: newDir },
+		// 	fileSystemInfo: {
+		// 		lastModifiedDateTime: previousItem.fileSystemInfo.lastModifiedDateTime,
+		// 	},
+		// });
 
-		return this.makeItem_(item);
+		// return this.makeItem_(item);
 	}
 
 	format() {

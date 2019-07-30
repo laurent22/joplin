@@ -215,7 +215,7 @@ class WebDavApi {
 				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
 			}
 		}
-		if (options.body) output.push('--data ' + "'" + options.body + "'");
+		if (options.body) output.push('--data ' + '\'' + options.body + '\'');
 		output.push(url);
 
 		return output.join(' ');
@@ -356,6 +356,7 @@ class WebDavApi {
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
+			// eslint-disable-next-line require-atomic-updates
 			responseJson_ = await this.xmlToJson(responseText);
 			if (!responseJson_) throw newError('Cannot parse XML response', response.status);
 			return responseJson_;

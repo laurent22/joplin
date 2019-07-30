@@ -9,7 +9,6 @@ const { pregQuote } = require('lib/string-utils.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const moment = require('moment');
 const lodash = require('lodash');
 
 class Note extends BaseItem {
@@ -340,6 +339,7 @@ class Note extends BaseItem {
 		}
 
 		if (hasNotes && hasTodos) {
+			// Nothing
 		} else if (hasNotes) {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
@@ -575,7 +575,7 @@ class Note extends BaseItem {
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
 
-			const result = await super.batchDelete(processIds, options);
+			await super.batchDelete(processIds, options);
 			const changeSource = options && options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];

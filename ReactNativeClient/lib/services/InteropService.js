@@ -4,8 +4,6 @@ const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
@@ -162,12 +160,14 @@ class InteropService {
 		if (options.format === 'auto') {
 			const module = this.moduleByFileExtension_('importer', fileExtension(options.path));
 			if (!module) throw new Error(_('Please specify import format for %s', options.path));
+			// eslint-disable-next-line require-atomic-updates
 			options.format = module.format;
 		}
 
 		if (options.destinationFolderId) {
 			const folder = await Folder.load(options.destinationFolderId);
 			if (!folder) throw new Error(_('Cannot find "%s".', options.destinationFolderId));
+			// eslint-disable-next-line require-atomic-updates
 			options.destinationFolder = folder;
 		}
 

@@ -53,25 +53,25 @@ shimInit();
 
 const application = app();
 
-if (process.platform === "win32") {
-	var rl = require("readline").createInterface({
+if (process.platform === 'win32') {
+	var rl = require('readline').createInterface({
 		input: process.stdin,
-		output: process.stdout
+		output: process.stdout,
 	});
 
-	rl.on("SIGINT", function () {
-		process.emit("SIGINT");
+	rl.on('SIGINT', function() {
+		process.emit('SIGINT');
 	});
 }
 
-process.stdout.on('error', function( err ) {
+process.stdout.on('error', function(err) {
 	// https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
-	if (err.code == "EPIPE") {
+	if (err.code == 'EPIPE') {
 		process.exit(0);
 	}
 });
 
-application.start(process.argv).catch((error) => {
+application.start(process.argv).catch(error => {
 	if (error.code == 'flagError') {
 		console.error(error.message);
 		console.error(_('Type `joplin help` for usage information.'));

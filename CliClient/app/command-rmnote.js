@@ -1,14 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
-const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'rmnote <note-pattern>';
 	}
@@ -18,9 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [
-			['-f, --force', _('Deletes the notes without asking for confirmation.')],
-		];
+		return [['-f, --force', _('Deletes the notes without asking for confirmation.')]];
 	}
 
 	async action(args) {
@@ -32,10 +26,9 @@ class Command extends BaseCommand {
 
 		const ok = force ? true : await this.prompt(notes.length > 1 ? _('%d notes match this pattern. Delete them?', notes.length) : _('Delete note?'), { booleanAnswerDefault: 'n' });
 		if (!ok) return;
-		let ids = notes.map((n) => n.id);
+		let ids = notes.map(n => n.id);
 		await Note.batchDelete(ids);
 	}
-
 }
 
 module.exports = Command;

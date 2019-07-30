@@ -30,8 +30,8 @@ const reduxMiddleware = store => next => async (action) => {
 		bridge().scheduleStateSave(newState);
 	}
 
-  	return result;
-}
+	return result;
+};
 
 function reducer(state = defaultState, action) {
 	let newState = state;

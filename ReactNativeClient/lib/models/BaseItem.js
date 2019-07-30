@@ -739,13 +739,10 @@ class BaseItem extends BaseModel {
 	}
 
 	static markdownTag(itemOrId) {
-		const item =
-			typeof itemOrId === 'object'
-				? itemOrId
-				: {
-						id: itemOrId,
-						title: '',
-				  };
+		const item = typeof itemOrId === 'object' ? itemOrId : {
+			id: itemOrId,
+			title: '',
+		};
 
 		const output = [];
 		output.push('[');

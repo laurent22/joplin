@@ -1,10 +1,10 @@
 const execCommand = function(command) {
-	const exec = require('child_process').exec
+	const exec = require('child_process').exec;
 
 	console.info('Running: ' + command);
 
 	return new Promise((resolve, reject) => {
-		let childProcess = exec(command, (error, stdout, stderr) => {
+		exec(command, (error, stdout, stderr) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -16,19 +16,11 @@ const execCommand = function(command) {
 			}
 		});
 	});
-}
-
-const isLinux = () => {
-	return process && process.platform === 'linux';
-}
+};
 
 const isWindows = () => {
 	return process && process.platform === 'win32';
-}
-
-const isMac = () => {
-	return process && process.platform === 'darwin';
-}
+};
 
 async function main() {
 	// electron-rebuild --arch ia32 && electron-rebuild --arch x64
@@ -41,7 +33,7 @@ async function main() {
 		console.info(await execCommand(['"' + exePath + '"', '--arch x64'].join(' ')));
 	} else {
 		console.info(await execCommand(['"' + exePath + '"'].join(' ')));
-	}	
+	}
 }
 
 main().catch((error) => {

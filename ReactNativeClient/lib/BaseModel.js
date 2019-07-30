@@ -443,10 +443,15 @@ class BaseModel {
 			await this.db().transactionExecBatch(queries);
 
 			o = Object.assign({}, o);
+			// eslint-disable-next-line require-atomic-updates
 			if (modelId) o.id = modelId;
+			// eslint-disable-next-line require-atomic-updates
 			if ('updated_time' in saveQuery.modObject) o.updated_time = saveQuery.modObject.updated_time;
+			// eslint-disable-next-line require-atomic-updates
 			if ('created_time' in saveQuery.modObject) o.created_time = saveQuery.modObject.created_time;
+			// eslint-disable-next-line require-atomic-updates
 			if ('user_updated_time' in saveQuery.modObject) o.user_updated_time = saveQuery.modObject.user_updated_time;
+			// eslint-disable-next-line require-atomic-updates
 			if ('user_created_time' in saveQuery.modObject) o.user_created_time = saveQuery.modObject.user_created_time;
 			o = this.addModelMd(o);
 

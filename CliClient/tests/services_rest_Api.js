@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -40,7 +42,7 @@ describe('services_rest_Api', function() {
 	});
 
 	it('should get folders', async (done) => {
-		let f1 = await Folder.save({ title: "mon carnet" });
+		let f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('GET', 'folders');
 		expect(response.length).toBe(1);
 		expect(response[0].title).toBe('mon carnet');
@@ -48,7 +50,7 @@ describe('services_rest_Api', function() {
 	});
 
 	it('should update folders', async (done) => {
-		let f1 = await Folder.save({ title: "mon carnet" });
+		let f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('PUT', 'folders/' + f1.id, null, JSON.stringify({
 			title: 'modifié',
 		}));
@@ -60,12 +62,12 @@ describe('services_rest_Api', function() {
 	});
 
 	it('should delete folders', async (done) => {
-		let f1 = await Folder.save({ title: "mon carnet" });
+		let f1 = await Folder.save({ title: 'mon carnet' });
 		await api.route('DELETE', 'folders/' + f1.id);
 
 		let f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);
-		
+
 		done();
 	});
 
@@ -79,12 +81,12 @@ describe('services_rest_Api', function() {
 		let f = await Folder.all();
 		expect(f.length).toBe(1);
 		expect(f[0].title).toBe('from api');
-		
+
 		done();
 	});
 
 	it('should get one folder', async (done) => {
-		let f1 = await Folder.save({ title: "mon carnet" });
+		let f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('GET', 'folders/' + f1.id);
 		expect(response.id).toBe(f1.id);
 
@@ -95,7 +97,7 @@ describe('services_rest_Api', function() {
 	});
 
 	it('should get the folder notes', async (done) => {
-		let f1 = await Folder.save({ title: "mon carnet" });
+		let f1 = await Folder.save({ title: 'mon carnet' });
 		const response2 = await api.route('GET', 'folders/' + f1.id + '/notes');
 		expect(response2.length).toBe(0);
 
@@ -116,12 +118,12 @@ describe('services_rest_Api', function() {
 
 	it('should get notes', async (done) => {
 		let response = null;
-		const f1 = await Folder.save({ title: "mon carnet" });
-		const f2 = await Folder.save({ title: "mon deuxième carnet" });
+		const f1 = await Folder.save({ title: 'mon carnet' });
+		const f2 = await Folder.save({ title: 'mon deuxième carnet' });
 		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
 		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
 		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
-		
+
 		response = await api.route('GET', 'notes');
 		expect(response.length).toBe(3);
 
@@ -138,8 +140,8 @@ describe('services_rest_Api', function() {
 
 	it('should create notes', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
-		
+		const f = await Folder.save({ title: 'mon carnet' });
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing',
 			parent_id: f.id,
@@ -159,11 +161,11 @@ describe('services_rest_Api', function() {
 
 	it('should preserve user timestamps when creating notes', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
+		const f = await Folder.save({ title: 'mon carnet' });
 
 		const updatedTime = Date.now() - 1000;
 		const createdTime = Date.now() - 10000;
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			parent_id: f.id,
 			user_updated_time: updatedTime,
@@ -178,8 +180,8 @@ describe('services_rest_Api', function() {
 
 	it('should create notes with supplied ID', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
-		
+		const f = await Folder.save({ title: 'mon carnet' });
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			id: '12345678123456781234567812345678',
 			title: 'testing',
@@ -192,19 +194,19 @@ describe('services_rest_Api', function() {
 
 	it('should create todos', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "stuff to do" });
+		const f = await Folder.save({ title: 'stuff to do' });
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing',
 			parent_id: f.id,
-			is_todo: 1
+			is_todo: 1,
 		}));
 		expect(response.is_todo).toBe(1);
 
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing 2',
 			parent_id: f.id,
-			is_todo: 0
+			is_todo: 0,
 		}));
 		expect(response.is_todo).toBe(0);
 
@@ -217,7 +219,7 @@ describe('services_rest_Api', function() {
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing 4',
 			parent_id: f.id,
-			is_todo: '1'
+			is_todo: '1',
 		}));
 		expect(response.is_todo).toBe(1);
 		done();
@@ -230,18 +232,18 @@ describe('services_rest_Api', function() {
 		}));
 
 		expect(response.id).toBe('12345678123456781234567812345678');
-		
+
 		done();
 	});
 
 	it('should create notes with images', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
-		
+		const f = await Folder.save({ title: 'mon carnet' });
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing image',
 			parent_id: f.id,
-			image_data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="
+			image_data_url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=',
 		}));
 
 		const resources = await Resource.all();
@@ -255,12 +257,12 @@ describe('services_rest_Api', function() {
 
 	it('should delete resources', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
-		
+		const f = await Folder.save({ title: 'mon carnet' });
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing image',
 			parent_id: f.id,
-			image_data_url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="
+			image_data_url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII=',
 		}));
 
 		const resource = (await Resource.all())[0];
@@ -271,14 +273,14 @@ describe('services_rest_Api', function() {
 		await api.route('DELETE', 'resources/' + resource.id);
 		expect(await shim.fsDriver().exists(filePath)).toBe(false);
 		expect(!(await Resource.load(resource.id))).toBe(true);
-		
+
 		done();
 	});
 
 	it('should create notes from HTML', async (done) => {
 		let response = null;
-		const f = await Folder.save({ title: "mon carnet" });
-		
+		const f = await Folder.save({ title: 'mon carnet' });
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing HTML',
 			parent_id: f.id,
@@ -314,7 +316,7 @@ describe('services_rest_Api', function() {
 		let hasThrown = await checkThrowAsync(async () => await api.route('GET', 'notes'));
 		expect(hasThrown).toBe(true);
 
-		const response = await api.route('GET', 'notes', { token: 'mytoken' })
+		const response = await api.route('GET', 'notes', { token: 'mytoken' });
 		expect(response.length).toBe(0);
 
 		hasThrown = await checkThrowAsync(async () => await api.route('POST', 'notes', null, JSON.stringify({title:'testing'})));
@@ -324,37 +326,37 @@ describe('services_rest_Api', function() {
 	});
 
 	it('should add tags to notes', async (done) => {
-		const tag = await Tag.save({ title: "mon étiquette" });
-		const note = await Note.save({ title: "ma note" });
+		const tag = await Tag.save({ title: 'mon étiquette' });
+		const note = await Note.save({ title: 'ma note' });
 
 		const response = await api.route('POST', 'tags/' + tag.id + '/notes', null, JSON.stringify({
 			id: note.id,
 		}));
 
-		const noteIds = await Tag.noteIds(tag.id);	
+		const noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds[0]).toBe(note.id);
 
 		done();
 	});
 
 	it('should remove tags from notes', async (done) => {
-		const tag = await Tag.save({ title: "mon étiquette" });
-		const note = await Note.save({ title: "ma note" });
+		const tag = await Tag.save({ title: 'mon étiquette' });
+		const note = await Note.save({ title: 'ma note' });
 		await Tag.addNote(tag.id, note.id);
 
 		const response = await api.route('DELETE', 'tags/' + tag.id + '/notes/' + note.id);
 
-		const noteIds = await Tag.noteIds(tag.id);	
+		const noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(0);
 
 		done();
 	});
 
 	it('should list all tag notes', async (done) => {
-		const tag = await Tag.save({ title: "mon étiquette" });
-		const tag2 = await Tag.save({ title: "mon étiquette 2" });
-		const note1 = await Note.save({ title: "ma note un" });
-		const note2 = await Note.save({ title: "ma note deux" });
+		const tag = await Tag.save({ title: 'mon étiquette' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+		const note1 = await Note.save({ title: 'ma note un' });
+		const note2 = await Note.save({ title: 'ma note deux' });
 		await Tag.addNote(tag.id, note1.id);
 		await Tag.addNote(tag.id, note2.id);
 

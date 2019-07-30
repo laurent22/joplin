@@ -1,14 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { renderCommandHelp } = require('./help-utils.js');
-const { Database } = require('lib/database.js');
-const Setting = require('lib/models/Setting.js');
-const { wrap } = require('lib/string-utils.js');
 const { _ } = require('lib/locale.js');
 const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'help [command]';
 	}
@@ -28,7 +24,7 @@ class Command extends BaseCommand {
 			output.push(command);
 		}
 
-		output.sort((a, b) => a.name() < b.name() ? -1 : +1);
+		output.sort((a, b) => (a.name() < b.name() ? -1 : +1));
 
 		return output;
 	}
@@ -40,31 +36,37 @@ class Command extends BaseCommand {
 			this.stdout(_('For information on how to customise the shortcuts please visit %s', 'https://joplinapp.org/terminal/#shortcuts'));
 			this.stdout('');
 
-			if (app().gui().isDummy()) {
+			if (
+				app()
+					.gui()
+					.isDummy()
+			) {
 				throw new Error(_('Shortcuts are not available in CLI mode.'));
 			}
 
-			const keymap = app().gui().keymap();
+			const keymap = app()
+				.gui()
+				.keymap();
 
 			let rows = [];
 
 			for (let i = 0; i < keymap.length; i++) {
 				const item = keymap[i];
-				const keys = item.keys.map((k) => k === ' ' ? '(SPACE)' : k);
+				const keys = item.keys.map(k => (k === ' ' ? '(SPACE)' : k));
 				rows.push([keys.join(', '), item.command]);
 			}
 
 			cliUtils.printArray(this.stdout.bind(this), rows);
 		} else if (args.command === 'all') {
 			const commands = this.allCommands();
-			const output = commands.map((c) => renderCommandHelp(c));
+			const output = commands.map(c => renderCommandHelp(c));
 			this.stdout(output.join('\n\n'));
 		} else if (args.command) {
 			const command = app().findCommandByName(args['command']);
 			if (!command) throw new Error(_('Cannot find "%s".', args.command));
 			this.stdout(renderCommandHelp(command, stdoutWidth));
 		} else {
-			const commandNames = this.allCommands().map((a) => a.name());
+			const commandNames = this.allCommands().map(a => a.name());
 
 			this.stdout(_('Type `help [command]` for more information about a command; or type `help all` for the complete usage information.'));
 			this.stdout('');
@@ -82,10 +84,13 @@ class Command extends BaseCommand {
 			this.stdout(_('For the list of keyboard shortcuts and config options, type `help keymap`'));
 		}
 
-		app().gui().showConsole();
-		app().gui().maximizeConsole();
+		app()
+			.gui()
+			.showConsole();
+		app()
+			.gui()
+			.maximizeConsole();
 	}
-
 }
 
 module.exports = Command;

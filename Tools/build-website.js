@@ -366,7 +366,7 @@ function markdownToHtml(md, templateParams) {
 			output = temp;
 
 			return output;
-		}
+		};
 
 		const createAnchorTokens = anchorName => {
 			const output = [];
@@ -393,27 +393,23 @@ function markdownToHtml(md, templateParams) {
 			}
 
 			return output;
-		}
+		};
 
 		let insideHeading = false;
-		let processedFirstInline = false;
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];
 
 			if (token.type === 'heading_open') {
 				insideHeading = true;
-				processedFirstInline = false;
 				continue;
 			}
 
 			if (token.type === 'heading_close') {
 				insideHeading = false;
-				processedFirstInline = false;
 				continue;
 			}
 
 			if (insideHeading && token.type === 'inline') {
-				processedFirstInline = true;
 				const anchorName = headingTextToAnchorName(token.content, doneNames);
 				doneNames.push(anchorName);
 				const anchorTokens = createAnchorTokens(anchorName);
@@ -427,7 +423,7 @@ function markdownToHtml(md, templateParams) {
 
 let tocMd_ = null;
 let tocHtml_ = null;
-const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/
+const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
 function tocMd() {
 	if (tocMd_) return tocMd_;
 	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');

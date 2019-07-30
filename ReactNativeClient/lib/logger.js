@@ -110,9 +110,6 @@ class Logger {
 
 		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
 
-		if (level == Logger.LEVEL_WARN) levelString += '[warn] ';
-		if (level == Logger.LEVEL_ERROR) levelString += '[error] ';
-
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
 

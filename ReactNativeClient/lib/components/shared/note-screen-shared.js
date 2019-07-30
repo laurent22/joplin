@@ -188,6 +188,7 @@ shared.attachedResources = async function(noteBody) {
 				localState: localState,
 			};
 
+			// eslint-disable-next-line require-atomic-updates
 			resourceCache_[id] = o;
 			output[id] = o;
 		}
@@ -229,6 +230,7 @@ shared.initState = async function(comp) {
 		this.noteComponent_change(comp, 'body', comp.props.sharedData.value);
 	}
 
+	// eslint-disable-next-line require-atomic-updates
 	comp.lastLoadedNoteId_ = note ? note.id : null;
 };
 

@@ -127,7 +127,7 @@ function commandArgumentsToString(args) {
 	let output = [];
 	for (let i = 0; i < args.length; i++) {
 		let arg = args[i];
-		const quote = arg.indexOf('"') >= 0 ? "'" : '"';
+		const quote = arg.indexOf('"') >= 0 ? '\'' : '"';
 		if (arg.indexOf(' ') >= 0) {
 			arg = quote + arg + quote;
 		}
@@ -172,7 +172,7 @@ function splitCommandString(command, options = null) {
 			continue;
 		}
 
-		if (c == '"' || c == "'") {
+		if (c == '"' || c == '\'') {
 			state = 'quotes';
 			quote = c;
 			continue;

@@ -4,7 +4,6 @@ const { View } = require('react-native');
 const { Button } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { connect } = require('react-redux');
-const Setting = require('lib/models/Setting.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale.js');

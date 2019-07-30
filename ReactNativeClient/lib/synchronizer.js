@@ -6,7 +6,6 @@ const ItemChange = require('lib/models/ItemChange.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
-const DecryptionWorker = require('lib/services/DecryptionWorker');
 const { sprintf } = require('sprintf-js');
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
@@ -34,10 +33,10 @@ class Synchronizer {
 		// such as cancelling in the middle of a loop.
 		this.testingHooks_ = [];
 
-		this.onProgress_ = function(s) {};
+		this.onProgress_ = function() {};
 		this.progressReport_ = {};
 
-		this.dispatch = function(action) {};
+		this.dispatch = function() {};
 	}
 
 	state() {
@@ -69,7 +68,7 @@ class Synchronizer {
 		this.encryptionService_ = v;
 	}
 
-	encryptionService(v) {
+	encryptionService() {
 		return this.encryptionService_;
 	}
 
@@ -195,7 +194,7 @@ class Synchronizer {
 
 		this.state_ = 'in_progress';
 
-		this.onProgress_ = options.onProgress ? options.onProgress : function(o) {};
+		this.onProgress_ = options.onProgress ? options.onProgress : function() {};
 		this.progressReport_ = { errors: [] };
 
 		const lastContext = options.context ? options.context : {};
@@ -723,7 +722,7 @@ class Synchronizer {
 
 		await this.logSyncSummary(this.progressReport_);
 
-		this.onProgress_ = function(s) {};
+		this.onProgress_ = function() {};
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED' });

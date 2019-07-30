@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -116,7 +118,7 @@ describe('Encryption', function() {
 		await service.loadMasterKey(masterKey, '123456', true);
 
 		let cipherText = await service.encryptString('some secret');
-		cipherText += "ABCDEFGHIJ";
+		cipherText += 'ABCDEFGHIJ';
 
 		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
@@ -147,8 +149,8 @@ describe('Encryption', function() {
 		// Check that encrypted data is there
 		expect(!!deserialized.encryption_cipher_text).toBe(true);
 
-		encryptedNote = await Note.save(deserialized);
-		decryptedNote = await Note.decrypt(encryptedNote);
+		const encryptedNote = await Note.save(deserialized);
+		const decryptedNote = await Note.decrypt(encryptedNote);
 
 		expect(decryptedNote.title).toBe(note.title);
 		expect(decryptedNote.body).toBe(note.body);
