@@ -31,7 +31,7 @@ describe('HtmlToMd', function() {
 		const basePath = __dirname + '/html_to_md';
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const htmlToMd = new HtmlToMd();
-		
+
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;

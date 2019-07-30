@@ -54,7 +54,7 @@ async function main() {
 
 	process.chdir(appDir);
 
-	const packageJson = await fs.readFile('package.json', 'UTF-8'); 
+	const packageJson = await fs.readFile('package.json', 'UTF-8');
 	const packageConf = JSON.parse(packageJson);
 
 	const previousVersion = 'v' + packageConf.version;
@@ -65,12 +65,12 @@ async function main() {
 	const newVersion = await execCommand('npm version patch');
 	console.info('Building ' + newVersion + '...');
 	const newTag = 'cli-' + newVersion;
-	
+
 	await execCommand('touch app/main.js');
 	await execCommand('bash build.sh');
 	await execCommand('cp package.json build/');
 	await execCommand('cp ../README.md build/');
-	
+
 	process.chdir(appDir + '/build');
 
 	await execCommand('npm publish');

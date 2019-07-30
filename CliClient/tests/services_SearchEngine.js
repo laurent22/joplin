@@ -23,7 +23,7 @@ describe('services_SearchEngine', function() {
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-		
+
 		done();
 	});
 

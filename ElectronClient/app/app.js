@@ -159,7 +159,7 @@ class Application extends BaseApplication {
 				if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
 					newState = Object.assign({}, state);
 					const watchedNoteFiles = newState.watchedNoteFiles.slice();
-					watchedNoteFiles.push(action.id); 
+					watchedNoteFiles.push(action.id);
 					newState.watchedNoteFiles = watchedNoteFiles;
 				}
 				break;
@@ -286,7 +286,7 @@ class Application extends BaseApplication {
 					},
 				});
 			}
-			
+
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
@@ -935,7 +935,7 @@ class Application extends BaseApplication {
 					visible: shim.isMac() ? false : true,
 					click: () => _showAbout(),
 				}],
-			},	
+			},
 		};
 
 		if (shim.isMac()) {

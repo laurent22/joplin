@@ -29,7 +29,7 @@ describe('EnexToMd', function() {
 	it('should convert from Enex to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/enex_to_md';
 		const files = await shim.fsDriver().readDirStats(basePath);
-		
+
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;
@@ -43,7 +43,7 @@ describe('EnexToMd', function() {
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
 			let actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
-			
+
 			if (os.EOL === '\r\n') {
 				expectedMd = expectedMd.replace(/\r\n/g, '\n');
 				actualMd = actualMd.replace(/\r\n/g, '\n');

@@ -88,7 +88,7 @@ describe('models_Note', function() {
 		expect(changedNote === note1).toBe(false);
 		expect(!!changedNote.is_todo).toBe(false);
 	}));
-	
+
 	it('should serialize and unserialize without modifying data', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1'});
 		const testCases = [
@@ -99,18 +99,18 @@ describe('models_Note', function() {
 			[ {title: 'Title and no body', body:'', parent_id: folder1.id},
 				'Title and no body', ''],
 		];
-		
+
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
-			
+
 			const input = t[0];
 			const expectedTitle = t[1];
 			const expectedBody = t[1];
-			
+
 			let note1 = await Note.save(input);
 			let serialized = await Note.serialize(note1);
 			let unserialized = await Note.unserialize(serialized);
-			
+
 			expect(unserialized.title).toBe(input.title);
 			expect(unserialized.body).toBe(input.body);
 		}

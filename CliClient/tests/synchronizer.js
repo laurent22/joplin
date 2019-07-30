@@ -358,7 +358,7 @@ describe('Synchronizer', function() {
 
 		let note = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await synchronizer().start();
-		let items = await allNotesFolders();		
+		let items = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);
@@ -606,7 +606,7 @@ describe('Synchronizer', function() {
 
 		expect(deletedItems.length).toBe(0);
 	}));
-	
+
 	async function ignorableNoteConflictTest(withEncryption) {
 		if (withEncryption) {
 			Setting.setValue('encryption.enabled', true);
@@ -652,7 +652,7 @@ describe('Synchronizer', function() {
 			let notes = await Note.all();
 			expect(notes.length).toBe(1);
 			expect(notes[0].id).toBe(note1.id);
-			expect(notes[0].todo_completed).toBe(note2.todo_completed);		
+			expect(notes[0].todo_completed).toBe(note2.todo_completed);
 		} else {
 			// If the notes are encrypted however it's not possible to do this kind of
 			// smart conflict resolving since we don't know the content, so in that
@@ -681,7 +681,7 @@ describe('Synchronizer', function() {
 
 		await switchClient(2);
 
-		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];		
+		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];
 		let context = await synchronizer().start();
 		let notes = await Note.all();
 		expect(notes.length).toBe(0);
@@ -832,7 +832,7 @@ describe('Synchronizer', function() {
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 		await synchronizer().start();
-		
+
 		// Even though the folder has not been changed it should have been synced again so that
 		// an encrypted version of it replaces the decrypted version.
 		files = await fileApi().list();
@@ -853,7 +853,7 @@ describe('Synchronizer', function() {
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
-		await synchronizer().start();	
+		await synchronizer().start();
 		expect((await remoteNotesFoldersResources()).length).toBe(3);
 
 		await switchClient(2);
@@ -911,7 +911,7 @@ describe('Synchronizer', function() {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
-		await synchronizer().start();	
+		await synchronizer().start();
 
 		await switchClient(2);
 
@@ -981,7 +981,7 @@ describe('Synchronizer', function() {
 		const fetcher = new ResourceFetcher(() => { return synchronizer().api(); });
 		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
-		
+
 		let resource1_2 = (await Resource.all())[0];
 		resource1_2 = await Resource.decrypt(resource1_2);
 		let resourcePath1_2 = Resource.fullPath(resource1_2);
@@ -1030,7 +1030,7 @@ describe('Synchronizer', function() {
 
 		// Now supply the password, and decrypt the items
 		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();	
+		await encryptionService().loadMasterKeysFromSettings();
 		await decryptionWorker().start();
 
 		// Try to disable encryption again
@@ -1152,7 +1152,7 @@ describe('Synchronizer', function() {
 		const beforeNoteCount = (await Note.all()).length;
 		expect(beforeFolderCount === 1).toBe(true);
 		expect(beforeNoteCount > 1).toBe(true);
-		
+
 		await synchronizer().start();
 
 		const afterFolderCount = (await Folder.all()).length;

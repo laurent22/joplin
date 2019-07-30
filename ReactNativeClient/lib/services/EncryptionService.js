@@ -9,7 +9,7 @@ const JoplinError = require('lib/JoplinError');
 function hexPad(s, length) {
 	return padLeft(s, length, '0');
 }
-       
+
 class EncryptionService {
 	constructor() {
 		// Note: 1 MB is very slow with Node and probably even worse on mobile.

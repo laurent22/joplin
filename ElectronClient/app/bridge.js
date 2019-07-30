@@ -121,7 +121,7 @@ class Bridge {
 		const { checkForUpdates } = require('./checkForUpdates.js');
 		checkForUpdates(inBackground, window, logFilePath, options);
 	}
-	
+
 }
 
 let bridge_ = null;
@@ -135,6 +135,6 @@ function initBridge(wrapper) {
 function bridge() {
 	if (!bridge_) throw new Error('Bridge not initialized');
 	return bridge_;
-}	
+}
 
 module.exports = { bridge, initBridge };

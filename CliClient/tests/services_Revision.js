@@ -379,7 +379,7 @@ describe('services_Revision', function() {
 
 		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // Note has not changed (except its timestamp) so don't create a revision
-		expect((await Revision.all()).length).toBe(1);		
+		expect((await Revision.all()).length).toBe(1);
 	}));
 
 	it('should preserve user update time', asyncTest(async () => {
@@ -394,7 +394,7 @@ describe('services_Revision', function() {
 		const userUpdatedTime = Date.now() - 1000 * 60 * 60;
 		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello', updated_time: Date.now(), user_updated_time: userUpdatedTime }, { autoTimestamp: false });
 		await revisionService().collectRevisions(); // Only the user timestamp has changed, but that needs to be saved
-		
+
 		const revisions = await Revision.all();
 		expect(revisions.length).toBe(2);
 

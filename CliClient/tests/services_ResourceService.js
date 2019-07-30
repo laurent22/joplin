@@ -88,9 +88,9 @@ describe('services_ResourceService', function() {
 		await service.indexNoteResources();
 
 		await Note.delete(note1.id);
-		
+
 		await service.indexNoteResources();
-		
+
 		await Note.save({ id: note2.id, body: Resource.markdownTag(resource1) });
 
 		await service.indexNoteResources();
@@ -121,9 +121,9 @@ describe('services_ResourceService', function() {
 		await service.indexNoteResources();
 
 		await Note.save({ id: note1.id, body: 'This is HTML: <img src=":/' + resource1.id + '"/>' });
-		
+
 		await service.indexNoteResources();
-		
+
 		await service.deleteOrphanResources(0);
 
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
@@ -163,7 +163,7 @@ describe('services_ResourceService', function() {
 		// - Client 1 syncs
 		// - Client 1 runs resource indexer - but because N1 hasn't been decrypted yet, it found that R1 is no longer associated with any note
 		// - Client 1 decrypts notes, but too late
-		// 
+		//
 		// Eventually R1 is deleted because service thinks that it was at some point associated with a note, but no longer.
 
 		const masterKey = await loadEncryptionMasterKey();

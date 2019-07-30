@@ -69,7 +69,7 @@ toolUtils.unlinkForce = async function(filePath) {
 
 toolUtils.fileExists = async function(filePath) {
 	const fs = require('fs-extra');
-	
+
 	return new Promise((resolve, reject) => {
 		fs.stat(filePath, function(err, stat) {
 			if (err == null) {
@@ -98,9 +98,9 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 	const fetch = require('node-fetch');
 
 	const oauthToken = await toolUtils.githubOauthToken();
-	
+
 	const response = await fetch('https://api.github.com/repos/laurent22/' + project + '/releases', {
-		method: 'POST', 
+		method: 'POST',
 		body: JSON.stringify({
 			tag_name: tagName,
 			name: tagName,
@@ -114,7 +114,7 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 	});
 
 	const responseText = await response.text();
-	
+
 	if (!response.ok) throw new Error('Cannot create GitHub release: ' + responseText);
 
 	const responseJson = JSON.parse(responseText);

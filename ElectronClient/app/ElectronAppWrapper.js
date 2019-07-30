@@ -219,7 +219,7 @@ class ElectronAppWrapper {
 		await this.waitForElectronAppReady();
 
 		const alreadyRunning = this.ensureSingleInstance();
-		if (alreadyRunning) return;		
+		if (alreadyRunning) return;
 
 		this.createWindow();
 

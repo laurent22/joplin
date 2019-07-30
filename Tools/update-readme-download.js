@@ -44,7 +44,7 @@ function downloadUrl(release, os, portable = false) {
 		const name = asset.name;
 		const ext = fileExtension(name);
 
-		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url; 
+		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url;
 		if (ext === 'exe' && os === 'windows') {
 			if (portable) {
 				if (name === 'JoplinPortable.exe') return asset.browser_download_url;
@@ -52,7 +52,7 @@ function downloadUrl(release, os, portable = false) {
 				if (name.match(/^Joplin-Setup-[\d.]+\.exe$/)) return asset.browser_download_url;
 			}
 		}
-		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url; 
+		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url;
 	}
 }
 

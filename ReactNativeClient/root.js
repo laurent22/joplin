@@ -160,7 +160,7 @@ function historyCanGoBackTo(route, nextRoute) {
 	if (route.routeName === 'Folder') return false;
 
 	// There's no point going back to these screens in general and, at least in OneDrive case,
-	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...) 
+	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...)
 	if (route.routeName === 'OneDriveLogin') return false;
 	if (route.routeName === 'DropboxLogin') return false;
 
@@ -369,7 +369,7 @@ async function initialize(dispatch) {
 	const mainLogger = new Logger();
 	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
-	
+
 	if (Setting.value('env') == 'dev') {
 		mainLogger.addTarget('console');
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
@@ -384,7 +384,7 @@ async function initialize(dispatch) {
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
 	const dbLogger = new Logger();
-	dbLogger.addTarget('database', { database: logDatabase, source: 'm' }); 
+	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
 	if (Setting.value('env') == 'dev') {
 		dbLogger.addTarget('console');
 		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
@@ -450,12 +450,12 @@ async function initialize(dispatch) {
 
 		if (Setting.value('env') === 'dev') {
 			Setting.setValue('welcome.enabled', false);
-		}       
+		}
 
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.revisionService_ = RevisionService.instance();
 
-		// Note: for now we hard-code the folder sort order as we need to 
+		// Note: for now we hard-code the folder sort order as we need to
 		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
 		Setting.setValue('folders.sortOrder.field', 'title');
 		Setting.setValue('folders.sortOrder.reverse', false);
@@ -609,7 +609,7 @@ class AppComponent extends React.Component {
 						parent_id: this.props.selectedFolderId,
 					});
 
-					// This is a bit hacky, but the surest way to go to 
+					// This is a bit hacky, but the surest way to go to
 					// the needed note. We go back one screen in case there's
 					// already a note open - if we don't do this, the dispatch
 					// below will do nothing (because routeName wouldn't change)

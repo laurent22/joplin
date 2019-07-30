@@ -68,8 +68,8 @@ async function createRelease(name, tagName, version) {
 		let filename = rnDir + '/android/app/build.gradle';
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
-		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"'); 
-		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"'); 
+		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
+		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
 		await fs.writeFile(filename, content);
 	}
 
@@ -149,7 +149,7 @@ async function main() {
 	const releaseFiles = {};
 
 	for (const releaseName of releaseNames) {
-		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);		
+		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
 	console.info('Updating Readme URL...');
@@ -180,7 +180,7 @@ async function main() {
 		console.info('Uploading ' + releaseFile.apkFilename + ' to ' + uploadUrl);
 
 		const uploadResponse = await fetch(uploadUrl, {
-			method: 'POST', 
+			method: 'POST',
 			body: binaryBody,
 			headers: {
 				'Content-Type': 'application/vnd.android.package-archive',

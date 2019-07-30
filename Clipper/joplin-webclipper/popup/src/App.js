@@ -181,7 +181,7 @@ class AppComponent extends Component {
 			if (this.state.selectedTags[index] !== value) {
 				const newTags = this.state.selectedTags.slice();
 				newTags[index] = value;
-				this.setState({ selectedTags: newTags });				
+				this.setState({ selectedTags: newTags });
 			}
 		}
 	}
@@ -291,14 +291,14 @@ class AppComponent extends Component {
 			const stateToString = function(state) {
 				if (state === 'not_found') return 'Not found';
 				return state.charAt(0).toUpperCase() + state.slice(1);
-			}; 
+			};
 
 			let msg = '';
 			let led = null;
 			let helpLink = null;
 
 			const foundState = this.props.clipperServer.foundState;
-			
+
 			if (foundState === 'found') {
 				msg = 'Ready on port ' + this.props.clipperServer.port;
 				led = led_green;
@@ -380,7 +380,7 @@ class AppComponent extends Component {
 
 		return (
 			<div className="App">
-				<div className="Controls">			
+				<div className="Controls">
 					<ul>
 						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>

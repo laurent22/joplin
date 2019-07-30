@@ -211,7 +211,7 @@ class Dialog extends React.PureComponent {
 					collapsed: false,
 				});
 			}
-		}		
+		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
@@ -283,7 +283,7 @@ class Dialog extends React.PureComponent {
 			const inc = keyCode === 38 ? -1 : +1;
 			let index = this.selectedItemIndex();
 			if (index < 0) return; // Not possible, but who knows
-			
+
 			index += inc;
 			if (index < 0) index = 0;
 			if (index >= this.state.results.length) index = this.state.results.length - 1;

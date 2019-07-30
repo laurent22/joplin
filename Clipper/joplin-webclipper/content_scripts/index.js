@@ -212,7 +212,7 @@
 	}
 
 	// Given a document, return a <style> tag that contains all the styles
-	// required to render the page. Not currently used but could be as an 
+	// required to render the page. Not currently used but could be as an
 	// option to clip pages as HTML.
 	function getStyleSheets(doc) {
 		const output = [];
@@ -273,7 +273,7 @@
 				source_command: Object.assign({}, command),
 				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
-			};			
+			};
 		};
 
 		if (command.name === 'simplifiedPageHtml') {

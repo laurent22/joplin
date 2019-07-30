@@ -17,7 +17,7 @@ class Bridge {
 
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command:', command);
-			
+
 			if (command.warning) {
 				console.warn('Popup: Got warning: ' + command.warning);
 				this.dispatch({ type: 'WARNING_SET', text: command.warning });
@@ -125,7 +125,7 @@ class Bridge {
 			state = randomClipperPort(state, this.env());
 
 			try {
-				console.info('findClipperServerPort: Trying ' + state.port); 
+				console.info('findClipperServerPort: Trying ' + state.port);
 				const response = await fetch('http://127.0.0.1:' + state.port + '/ping');
 				const text = await response.text();
 				console.info('findClipperServerPort: Got response: ' + text);
@@ -213,7 +213,7 @@ class Bridge {
 
 	async tabsSendMessage(tabId, command) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
-		
+
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.sendMessage(tabId, command, (result) => {
 				resolve(result);
@@ -223,7 +223,7 @@ class Bridge {
 
 	async tabsCreate(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
-		
+
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.create(options, () => {
 				resolve();

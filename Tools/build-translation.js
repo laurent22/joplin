@@ -136,7 +136,7 @@ function availableLocales(defaultLocale) {
 function extractTranslator(regex, poContent) {
 	const translatorMatch = poContent.match(regex);
 	let translatorName = '';
-	
+
 	if (translatorMatch && translatorMatch.length >= 1) {
 		translatorName = translatorMatch[1];
 		translatorName = translatorName.replace(/["\s]+$/, '');

@@ -41,7 +41,7 @@ describe('models_BaseItem', function() {
 	// the sync target will still have the old property but we don't need it locally.
 	it('should ignore properties that are present in sync file but not in database when serialising', asyncTest(async () => {
 		let folder = await Folder.save({ title: 'folder1' });
-		
+
 		let serialized = await Folder.serialize(folder);
 		serialized += '\nignore_me: true';
 
@@ -49,7 +49,7 @@ describe('models_BaseItem', function() {
 
 		expect('ignore_me' in unserialized).toBe(false);
 	}));
-	
+
 	it('should not modify title when unserializing', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: '' });
 		let folder2 = await Folder.save({ title: 'folder1' });

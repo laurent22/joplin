@@ -58,7 +58,7 @@ async function fetchLatestRelease(options) {
 
 		json = await response.json();
 	}
-	
+
 	const version = json.tag_name.substr(1);
 	let downloadUrl = null;
 	const platform = process.platform;

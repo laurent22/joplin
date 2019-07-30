@@ -110,7 +110,7 @@ describe('models_Folder', function() {
 		expect(folders[2].id).toBe(f3.id);
 
 		await Note.save({ id: n1.id, title: 'note1 MOD' });
-		
+
 		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f3.id);

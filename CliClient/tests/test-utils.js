@@ -152,7 +152,7 @@ async function clearDatabase(id = null) {
 		'master_keys',
 		'item_changes',
 		'note_resources',
-		'settings',		
+		'settings',
 		'deleted_items',
 		'sync_items',
 		'notes_normalized',

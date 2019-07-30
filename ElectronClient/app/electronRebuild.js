@@ -33,7 +33,7 @@ async function main() {
 		console.info(await execCommand(['"' + exePath + '"', '--arch x64'].join(' ')));
 	} else {
 		console.info(await execCommand(['"' + exePath + '"'].join(' ')));
-	}	
+	}
 }
 
 main().catch((error) => {

@@ -103,7 +103,7 @@ async function main() {
 		id: itemIdFromPath('folder_Welcome'),
 		title: 'Welcome!',
 	};
-	
+
 	for (let i = 0; i < filenames.length; i++) {
 		const f = filenames[i];
 		const ext = fileExtension(f);

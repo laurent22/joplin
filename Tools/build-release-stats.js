@@ -69,7 +69,7 @@ async function main() {
 			const release = releases[i];
 			if (!release.tag_name.match(/^v\d+\.\d+\.\d+$/)) continue;
 			if (release.draft) continue;
-			
+
 			let row = {};
 			row = Object.assign(row, downloadCounts(release));
 			row.tag_name = '[' + release.tag_name + '](https://github.com/laurent22/joplin/releases/tag/' + release.tag_name + ')';

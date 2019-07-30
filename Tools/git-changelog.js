@@ -17,7 +17,7 @@ async function gitLog(sinceTag) {
 		const splitted = line.split(':');
 		const commit = splitted[0];
 		const message = line.substr(commit.length + 1).trim();
-		
+
 		output.push({
 			commit: commit,
 			message: message,
@@ -74,7 +74,7 @@ function filterLogs(logs, platform) {
 
 function formatCommitMessage(msg) {
 	let output = '';
-	
+
 	const splitted = msg.split(':');
 
 	const isPlatformPrefix = prefix => {
@@ -126,7 +126,7 @@ function formatCommitMessage(msg) {
 		let type = null;
 
 		// eg. "All: Resolves #712: New: Support for note history (#1415)"
-		// "Resolves" doesn't tell us if it's new or improved so check the 
+		// "Resolves" doesn't tell us if it's new or improved so check the
 		// third token (which in this case is "new").
 		if (t.indexOf('resolves') === 0 && ['new', 'improved', 'fixed'].indexOf(parts[0].trim().toLowerCase()) >= 0) {
 			t = parts[0].trim().toLowerCase();
@@ -139,7 +139,7 @@ function formatCommitMessage(msg) {
 		if (t.indexOf('improved') === 0) type = 'improved';
 
 		if (!type) type = detectType(message);
-	
+
 		let issueNumber = output.match(/#(\d+)/);
 		issueNumber = issueNumber && issueNumber.length >= 2 ? issueNumber[1] : null;
 

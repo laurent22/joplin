@@ -67,7 +67,7 @@ describe('services_rest_Api', function() {
 
 		let f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);
-		
+
 		done();
 	});
 
@@ -81,7 +81,7 @@ describe('services_rest_Api', function() {
 		let f = await Folder.all();
 		expect(f.length).toBe(1);
 		expect(f[0].title).toBe('from api');
-		
+
 		done();
 	});
 
@@ -123,7 +123,7 @@ describe('services_rest_Api', function() {
 		const n1 = await Note.save({ title: 'un', parent_id: f1.id });
 		const n2 = await Note.save({ title: 'deux', parent_id: f1.id });
 		const n3 = await Note.save({ title: 'trois', parent_id: f2.id });
-		
+
 		response = await api.route('GET', 'notes');
 		expect(response.length).toBe(3);
 
@@ -141,7 +141,7 @@ describe('services_rest_Api', function() {
 	it('should create notes', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing',
 			parent_id: f.id,
@@ -165,7 +165,7 @@ describe('services_rest_Api', function() {
 
 		const updatedTime = Date.now() - 1000;
 		const createdTime = Date.now() - 10000;
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			parent_id: f.id,
 			user_updated_time: updatedTime,
@@ -181,7 +181,7 @@ describe('services_rest_Api', function() {
 	it('should create notes with supplied ID', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			id: '12345678123456781234567812345678',
 			title: 'testing',
@@ -232,14 +232,14 @@ describe('services_rest_Api', function() {
 		}));
 
 		expect(response.id).toBe('12345678123456781234567812345678');
-		
+
 		done();
 	});
 
 	it('should create notes with images', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing image',
 			parent_id: f.id,
@@ -258,7 +258,7 @@ describe('services_rest_Api', function() {
 	it('should delete resources', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing image',
 			parent_id: f.id,
@@ -273,14 +273,14 @@ describe('services_rest_Api', function() {
 		await api.route('DELETE', 'resources/' + resource.id);
 		expect(await shim.fsDriver().exists(filePath)).toBe(false);
 		expect(!(await Resource.load(resource.id))).toBe(true);
-		
+
 		done();
 	});
 
 	it('should create notes from HTML', async (done) => {
 		let response = null;
 		const f = await Folder.save({ title: 'mon carnet' });
-		
+
 		response = await api.route('POST', 'notes', null, JSON.stringify({
 			title: 'testing HTML',
 			parent_id: f.id,
@@ -333,7 +333,7 @@ describe('services_rest_Api', function() {
 			id: note.id,
 		}));
 
-		const noteIds = await Tag.noteIds(tag.id);	
+		const noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds[0]).toBe(note.id);
 
 		done();
@@ -346,7 +346,7 @@ describe('services_rest_Api', function() {
 
 		const response = await api.route('DELETE', 'tags/' + tag.id + '/notes/' + note.id);
 
-		const noteIds = await Tag.noteIds(tag.id);	
+		const noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(0);
 
 		done();
