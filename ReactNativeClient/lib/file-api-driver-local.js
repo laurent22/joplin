@@ -194,7 +194,7 @@ class FileApiDriverLocal {
 		try {
 			await this.fsDriver().move(oldPath, newPath);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
+			throw this.fsErrorToJsError_(error, oldPath);
 		}
 
 		// let lastError = null;

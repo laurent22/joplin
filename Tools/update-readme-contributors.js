@@ -2,21 +2,17 @@ require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 'use strict';
 
-const fs = require('fs-extra');
-const https = require('https');
 const request = require('request');
 
-const { fileExtension } = require('lib/path-utils.js');
 const readmePath = __dirname + '/../README.md';
 const { insertContentIntoFile } = require('./tool-utils.js');
-const markdownUtils = require('lib/markdownUtils');
 
 async function gitHubContributors(page) {
 	return new Promise((resolve, reject) => {
 		request.get({
 			url: 'https://api.github.com/repos/laurent22/joplin/contributors' + (page ? '?page=' + page : ''),
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'}
+			headers: {'User-Agent': 'Joplin Readme Updater'},
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);
@@ -34,8 +30,6 @@ function contributorTable(contributors) {
 
 	let row = [];
 	rows.push(row);
-	let x = 0;
-	let y = 0;
 	let rowLength = 5;
 	let contributorIndex = 0;
 	while (contributorIndex < contributors.length) {

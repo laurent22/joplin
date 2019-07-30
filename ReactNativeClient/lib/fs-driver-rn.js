@@ -141,6 +141,7 @@ class FsDriverRN extends FsDriverBase {
 
 		if (!length) return null;
 		let output = await RNFS.read(handle.path, length, handle.offset, encoding);
+		// eslint-disable-next-line require-atomic-updates
 		handle.offset += length;
 		return output ? output : null;
 	}

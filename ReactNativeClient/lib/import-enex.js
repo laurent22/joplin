@@ -4,11 +4,9 @@ const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
-const jsSHA = require('jssha');
 const md5 = require('md5');
 
 //const Promise = require('promise');
@@ -48,13 +46,6 @@ function removeUndefinedProperties(note) {
 		output[n] = v;
 	}
 	return output;
-}
-
-function createNoteId(note) {
-	let shaObj = new jsSHA('SHA-256', 'TEXT');
-	shaObj.update(note.title + '_' + note.body + '_' + note.created_time + '_' + note.updated_time + '_');
-	let hash = shaObj.getHash('HEX');
-	return hash.substr(0, 32);
 }
 
 function levenshteinPercent(s1, s2) {

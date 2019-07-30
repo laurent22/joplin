@@ -1,4 +1,3 @@
-const ArrayUtils = require('lib/ArrayUtils');
 const Folder = require('lib/models/Folder');
 const BaseModel = require('lib/BaseModel');
 
@@ -22,8 +21,6 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return false;
 		folderId = folder.parent_id;
 	}
-
-	return true;
 }
 
 function renderFoldersRecursive_(props, renderItem, items, parentId, depth, order) {
@@ -85,7 +82,6 @@ shared.renderTags = function(props, renderItem) {
 // }
 
 shared.synchronize_press = async function(comp) {
-	const Setting = require('lib/models/Setting.js');
 	const { reg } = require('lib/registry.js');
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';

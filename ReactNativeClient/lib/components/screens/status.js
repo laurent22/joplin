@@ -4,8 +4,6 @@ const { StyleSheet, View, Text, Button, FlatList } = require('react-native');
 const Setting = require('lib/models/Setting.js');
 const { connect } = require('react-redux');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const BaseItem = require('lib/models/BaseItem.js');
-const Folder = require('lib/models/Folder.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
@@ -44,7 +42,6 @@ class StatusScreenComponent extends BaseScreenComponent {
 		const theme = themeStyle(this.props.theme);
 
 		const renderBody = report => {
-			let output = [];
 			let baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,

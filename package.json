@@ -1,9 +1,17 @@
 {
   "name": "joplin",
   "version": "1.0.0",
-  "description": "[![Donate](https://joplinapp.org/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Become a patron](https://joplinapp.org/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin)",
+  "description": "Joplin root package for linting",
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "npm run linter"
   },
   "repository": {
     "type": "git",
@@ -12,11 +20,9 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-autofix": "0.0.8",
-    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
-    "prettier": "1.18.2"
+    "husky": "^3.0.2",
+    "lint-staged": "^9.2.1"
   },
   "dependencies": {}
 }

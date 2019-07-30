@@ -4,7 +4,6 @@ const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'mknote <new-note>';
 	}
@@ -26,7 +25,6 @@ class Command extends BaseCommand {
 
 		app().switchCurrentFolder(app().currentFolder());
 	}
-
 }
 
 module.exports = Command;

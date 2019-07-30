@@ -194,21 +194,21 @@ class EncryptionService {
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
 
-	async seedSjcl() {
-		throw new Error('NOT TESTED');
+	// async seedSjcl() {
+	// 	throw new Error('NOT TESTED');
 
-		// Just putting this here in case it becomes needed
-		// Normally seeding random bytes is not needed for our use since
-		// we use shim.randomBytes directly to generate master keys.
+	// 	// Just putting this here in case it becomes needed
+	// 	// Normally seeding random bytes is not needed for our use since
+	// 	// we use shim.randomBytes directly to generate master keys.
 
-		const sjcl = shim.sjclModule;
-		const randomBytes = await shim.randomBytes(1024 / 8);
-		const hexBytes = randomBytes.map(a => {
-			return a.toString(16);
-		});
-		const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
-		sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
-	}
+	// 	const sjcl = shim.sjclModule;
+	// 	const randomBytes = await shim.randomBytes(1024 / 8);
+	// 	const hexBytes = randomBytes.map(a => {
+	// 		return a.toString(16);
+	// 	});
+	// 	const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
+	// 	sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
+	// }
 
 	async randomHexString(byteCount) {
 		const bytes = await shim.randomBytes(byteCount);
@@ -458,7 +458,9 @@ class EncryptionService {
 		const cleanUp = async () => {
 			if (source) await source.close();
 			if (destination) await destination.close();
+			// eslint-disable-next-line require-atomic-updates
 			source = null;
+			// eslint-disable-next-line require-atomic-updates
 			destination = null;
 		};
 
@@ -481,7 +483,9 @@ class EncryptionService {
 		const cleanUp = async () => {
 			if (source) await source.close();
 			if (destination) await destination.close();
+			// eslint-disable-next-line require-atomic-updates
 			source = null;
+			// eslint-disable-next-line require-atomic-updates
 			destination = null;
 		};
 
@@ -526,14 +530,17 @@ class EncryptionService {
 		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0, 64));
 		const template = this.headerTemplate(version);
 
-		const size = parseInt(reader.read(6), 16);
+		// eslint-disable-next-line no-unused-vars
+		const size = parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
 		let output = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
 			const m = template.fields[i];
+			const name = m[0];
+			const size = m[1];
 			const type = m[2];
-			let v = reader.read(m[1]);
+			let v = reader.read(size);
 
 			if (type === 'int') {
 				v = parseInt(v, 16);
@@ -543,7 +550,7 @@ class EncryptionService {
 				throw new Error('Invalid type: ' + type);
 			}
 
-			output[m[0]] = v;
+			output[name] = v;
 		}
 
 		return output;

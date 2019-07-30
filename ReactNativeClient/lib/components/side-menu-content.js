@@ -3,10 +3,7 @@ const Component = React.Component;
 const { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Alert } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const Tag = require('lib/models/Tag.js');
-const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
-const Setting = require('lib/models/Setting.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const NavService = require('lib/services/NavService.js');
 const { _ } = require('lib/locale.js');
@@ -121,8 +118,6 @@ class SideMenuContentComponent extends Component {
 
 	async folder_longPress(folder) {
 		if (folder === 'all') return;
-
-		const buttons = [];
 
 		Alert.alert(
 			'',
@@ -278,8 +273,6 @@ class SideMenuContentComponent extends Component {
 	}
 
 	renderSideBarButton(key, title, iconName, onPressHandler = null, selected = false) {
-		const theme = themeStyle(this.props.theme);
-
 		let icon = <Icon name={iconName} style={this.styles().sidebarIcon} />;
 
 		if (key === 'synchronize_button') {

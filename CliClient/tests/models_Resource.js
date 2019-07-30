@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars, require-atomic-updates */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -25,7 +27,7 @@ describe('models_Resource', function() {
 	});
 
 	it('should have a "done" fetch_status when created locally', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
 		let resource1 = (await Resource.all())[0];
@@ -34,7 +36,7 @@ describe('models_Resource', function() {
 	}));
 
 	it('should have a default local state', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
 		let resource1 = (await Resource.all())[0];
@@ -45,7 +47,7 @@ describe('models_Resource', function() {
 	}));
 
 	it('should save and delete local state', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
 		let resource1 = (await Resource.all())[0];
@@ -61,7 +63,7 @@ describe('models_Resource', function() {
 	}));
 
 	it('should resize the resource if the image is below the required dimensions', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		const previousMax = Resource.IMAGE_MAX_DIMENSION;
 		Resource.IMAGE_MAX_DIMENSION = 5;
@@ -76,7 +78,7 @@ describe('models_Resource', function() {
 	}));
 
 	it('should not resize the resource if the image is below the required dimensions', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, testImagePath);
 		let resource1 = (await Resource.all())[0];

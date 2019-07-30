@@ -69,28 +69,28 @@ globalStyle.buttonStyle = {
 };
 
 const lightStyle = {
-	backgroundColor: "#ffffff",
+	backgroundColor: '#ffffff',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: "#dddddd",
-	color: "#222222", // For regular text
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
-	colorBright: "#000000", // For important text
-	dividerColor: "#dddddd",
+	oddBackgroundColor: '#dddddd',
+	color: '#222222', // For regular text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
+	colorBright: '#000000', // For important text
+	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
 
-	backgroundColor2: "#162B3D",
+	backgroundColor2: '#162B3D',
 	depthColor: 'rgb(100, 182, 253, OPACITY)',
-	color2: "#f5f5f5",
-	selectedColor2: "#0269C2",
-	colorError2: "#ff6c6c",
+	color2: '#f5f5f5',
+	selectedColor2: '#0269C2',
+	colorError2: '#ff6c6c',
 
-	raisedBackgroundColor: "#e5e5e5",
-	raisedColor: "#222222",
+	raisedBackgroundColor: '#e5e5e5',
+	raisedColor: '#222222',
 
-	warningBackgroundColor: "#FFD08D",
+	warningBackgroundColor: '#FFD08D',
 
 	htmlColor:'#222222',
 	htmlBackgroundColor: 'white',
@@ -101,34 +101,33 @@ const lightStyle = {
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
 
-	editorTheme: "chrome",
-	codeThemeCss: "atom-one-light.css",
+	editorTheme: 'chrome',
+	codeThemeCss: 'atom-one-light.css',
 };
 
 const darkStyle = {
 	backgroundColor: '#1D2024',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: "#dddddd",
+	oddBackgroundColor: '#dddddd',
 	color: '#dddddd',
-	colorFaded: '#777777',
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
-	colorBright: "#ffffff", // For important text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
+	colorBright: '#ffffff', // For important text
 	dividerColor: '#555555',
 	selectedColor: '#333333',
 	urlColor: '#4E87EE',
 
-	backgroundColor2: "#181A1D",
+	backgroundColor2: '#181A1D',
 	depthColor: 'rgb(200, 200, 200, OPACITY)',
-	color2: "#ffffff",
-	selectedColor2: "#013F74",
-	colorError2: "#ff6c6c",
+	color2: '#ffffff',
+	selectedColor2: '#013F74',
+	colorError2: '#ff6c6c',
 
-	raisedBackgroundColor: "#474747",
-	raisedColor: "#ffffff",
+	raisedBackgroundColor: '#474747',
+	raisedColor: '#ffffff',
 
-	warningBackgroundColor: "#CC6600",
+	warningBackgroundColor: '#CC6600',
 
 	htmlColor: 'rgb(220,220,220)',
 	htmlBackgroundColor: 'rgb(29,32,36)',
@@ -140,82 +139,82 @@ const darkStyle = {
 	htmlCodeBorderColor: 'rgb(70, 70, 70)',
 
 	editorTheme: 'twilight',
-	codeThemeCss: "atom-one-dark-reasonable.css",
+	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
 // Solarized Styles
 const solarizedLightStyle = {
-	backgroundColor: "#fdf6e3",
-	backgroundColorTransparent: "rgba(253, 246, 227, 0.9)",
-	oddBackgroundColor: "#eee8d5",
-	color: "#657b83", // For regular text
-	colorError: "#dc322f",
-	colorWarn: "#cb4b16",
-	colorFaded: "#839496", // For less important text;
-	colorBright: "#073642", // For important text;
-	dividerColor: "#eee8d5",
-	selectedColor: "#eee8d5",
-	urlColor: "#268bd2",
+	backgroundColor: '#fdf6e3',
+	backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)',
+	oddBackgroundColor: '#eee8d5',
+	color: '#657b83', // For regular text
+	colorError: '#dc322f',
+	colorWarn: '#cb4b16',
+	colorFaded: '#839496', // For less important text;
+	colorBright: '#073642', // For important text;
+	dividerColor: '#eee8d5',
+	selectedColor: '#eee8d5',
+	urlColor: '#268bd2',
 
-	backgroundColor2: "#002b36",
+	backgroundColor2: '#002b36',
 	depthColor: 'rgb(100, 182, 253, OPACITY)',
-	color2: "#eee8d5",
-	selectedColor2: "#6c71c4",
-	colorError2: "#cb4b16",
+	color2: '#eee8d5',
+	selectedColor2: '#6c71c4',
+	colorError2: '#cb4b16',
 
-	raisedBackgroundColor: "#eee8d5",
-	raisedColor: "#073642",
+	raisedBackgroundColor: '#eee8d5',
+	raisedColor: '#073642',
 
-	warningBackgroundColor: "#b58900",
+	warningBackgroundColor: '#b58900',
 
-	htmlColor: "#657b83",
-	htmlBackgroundColor: "#fdf6e3",
-	htmlDividerColor: "#eee8d5",
-	htmlLinkColor: "#268bd2",
-	htmlTableBackgroundColor: "#fdf6e3",
-	htmlCodeBackgroundColor: "#fdf6e3",
-	htmlCodeBorderColor: "#eee8d5",
-	htmlCodeColor: "#002b36",
+	htmlColor: '#657b83',
+	htmlBackgroundColor: '#fdf6e3',
+	htmlDividerColor: '#eee8d5',
+	htmlLinkColor: '#268bd2',
+	htmlTableBackgroundColor: '#fdf6e3',
+	htmlCodeBackgroundColor: '#fdf6e3',
+	htmlCodeBorderColor: '#eee8d5',
+	htmlCodeColor: '#002b36',
 
-	editorTheme: "solarized_light",
-	codeThemeCss: "atom-one-light.css",
+	editorTheme: 'solarized_light',
+	codeThemeCss: 'atom-one-light.css',
 };
 
 const solarizedDarkStyle = {
-	backgroundColor: "#002b36",
-	backgroundColorTransparent: "rgba(0, 43, 54, 0.9)",
-	oddBackgroundColor: "#073642",
-	color: "#93a1a1", // For regular text
-	colorError: "#dc322f",
-	colorWarn: "#cb4b16",
-	colorFaded: "#657b83", // For less important text;
-	colorBright: "#eee8d5", // For important text;
-	dividerColor: "#586e75",
-	selectedColor: "#073642",
-	urlColor: "#268bd2",
+	backgroundColor: '#002b36',
+	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
+	oddBackgroundColor: '#073642',
+	color: '#93a1a1', // For regular text
+	colorError: '#dc322f',
+	colorWarn: '#cb4b16',
+	colorFaded: '#657b83', // For less important text;
+	colorBright: '#eee8d5', // For important text;
+	dividerColor: '#586e75',
+	selectedColor: '#073642',
+	urlColor: '#268bd2',
 
-	backgroundColor2: "#073642",
+	backgroundColor2: '#073642',
 	depthColor: 'rgb(200, 200, 200, OPACITY)',
-	color2: "#eee8d5",
-	selectedColor2: "#6c71c4",
-	colorError2: "#cb4b16",
+	color2: '#eee8d5',
+	selectedColor2: '#6c71c4',
+	colorError2: '#cb4b16',
 
-	raisedBackgroundColor: "#073642",
-	raisedColor: "#839496",
+	raisedBackgroundColor: '#073642',
+	raisedColor: '#839496',
 
-	warningBackgroundColor: "#b58900",
+	warningBackgroundColor: '#b58900',
 
-	htmlColor: "#93a1a1",
-	htmlBackgroundColor: "#002b36",
-	htmlDividerColor: "#073642",
-	htmlLinkColor: "#268bd2",
-	htmlTableBackgroundColor: "#002b36",
-	htmlCodeBackgroundColor: "#002b36",
-	htmlCodeBorderColor: "#073642",
-	htmlCodeColor: "#fdf6e3",
+	htmlColor: '#93a1a1',
+	htmlBackgroundColor: '#002b36',
+	htmlDividerColor: '#073642',
+	htmlLinkColor: '#268bd2',
+	htmlTableBackgroundColor: '#002b36',
+	htmlCodeBackgroundColor: '#002b36',
+	htmlCodeBorderColor: '#073642',
+	htmlCodeColor: '#fdf6e3',
 
 	editorTheme: 'solarized_dark',
-	codeThemeCss: "atom-one-dark-reasonable.css",
+	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
 function addExtraStyles(style) {
@@ -254,17 +253,17 @@ function addExtraStyles(style) {
 		fontFamily: globalStyle.fontFamily,
 		fontSize: style.fontSize,
 		lineHeight: '1.6em',
-		color: style.color
+		color: style.color,
 	};
 
 	style.textStyle2 = Object.assign({}, style.textStyle,
-		{ color: style.color2, }
+		{ color: style.color2 }
 	);
 
 	style.urlStyle = Object.assign({}, style.textStyle,
 		{
 			textDecoration: 'underline',
-			color: style.urlColor
+			color: style.urlColor,
 		}
 	);
 
@@ -273,7 +272,7 @@ function addExtraStyles(style) {
 		{
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.5,
-			fontWeight: 'bold'
+			fontWeight: 'bold',
 		}
 	);
 
@@ -282,7 +281,7 @@ function addExtraStyles(style) {
 		{
 			color: style.color,
 			fontSize: style.textStyle.fontSize * 1.3,
-			fontWeight: 'bold'
+			fontWeight: 'bold',
 		}
 	);
 
@@ -304,12 +303,12 @@ function addExtraStyles(style) {
 		padding: 16,
 		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		marginTop: 20,
-	}
+	};
 
 	style.buttonIconStyle = {
 		color: style.color,
 		marginRight: 6,
-	}
+	};
 
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
@@ -342,7 +341,7 @@ function themeStyle(theme) {
 		htmlLineHeight: '1.6em', //Math.round(20 * zoomRatio) + 'px'
 
 		htmlCodeFontSize: '.9em',
-	}
+	};
 
 	let output = {};
 	output.zoomRatio = zoomRatio;

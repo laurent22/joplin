@@ -1,5 +1,4 @@
 const { time } = require('lib/time-utils.js');
-const JoplinError = require('lib/JoplinError');
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');
 

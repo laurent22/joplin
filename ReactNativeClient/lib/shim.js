@@ -144,28 +144,38 @@ shim.fsDriver = () => {
 	throw new Error('Not implemented');
 };
 shim.FileApiDriverLocal = null;
+
 shim.readLocalFileBase64 = path => {
 	throw new Error('Not implemented');
 };
+
 shim.uploadBlob = () => {
 	throw new Error('Not implemented');
 };
+
 shim.sjclModule = null;
+
 shim.randomBytes = async count => {
 	throw new Error('Not implemented');
 };
+
 shim.setInterval = function(fn, interval) {
 	return setInterval(fn, interval);
 };
+
 shim.clearInterval = function(id) {
 	return clearInterval(id);
 };
+
 shim.stringByteLength = function(string) {
 	throw new Error('Not implemented');
 };
+
 shim.detectAndSetLocale = null;
+
 shim.attachFileToNote = async (note, filePath) => {};
-shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
+
+shim.imageFromDataUrl = async function(imageDataUrl, filePath) {
 	throw new Error('Not implemented');
 };
 shim.Buffer = null;
@@ -175,7 +185,9 @@ shim.openUrl = () => {
 shim.waitForFrame = () => {
 	throw new Error('Not implemented');
 };
+
 shim.injectedJs = name => '';
+
 shim.loadCssFromJs = name => {
 	throw new Error('Not implemented');
 };

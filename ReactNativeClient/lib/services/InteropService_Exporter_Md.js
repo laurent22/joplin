@@ -29,7 +29,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
 		}
-		return output;
 	}
 
 	async replaceResourceIdsByRelativePaths_(item) {

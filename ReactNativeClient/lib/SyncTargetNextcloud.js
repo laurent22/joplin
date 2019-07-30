@@ -5,7 +5,6 @@ const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 const { Synchronizer } = require('lib/synchronizer.js');
-const WebDavApi = require('lib/WebDavApi');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
 
 class SyncTargetNextcloud extends BaseSyncTarget {

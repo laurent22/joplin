@@ -3,7 +3,6 @@ const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const Folder = require('lib/models/Folder');
 const Tag = require('lib/models/Tag');
-const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
 const { uuid } = require('lib/uuid');
 const { fileExtension, basename } = require('lib/path-utils');

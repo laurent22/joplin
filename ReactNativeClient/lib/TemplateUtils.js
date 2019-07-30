@@ -1,4 +1,3 @@
-const fs = require('fs-extra');
 const { shim } = require('lib/shim.js');
 const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');

@@ -1,10 +1,8 @@
-const { _ } = require('lib/locale.js');
-const { BrowserWindow, Menu, Tray } = require('electron');
+const { BrowserWindow, Tray } = require('electron');
 const { shim } = require('lib/shim');
-const url = require('url')
-const path = require('path')
-const urlUtils = require('lib/urlUtils.js');
-const { dirname, basename } = require('lib/path-utils');
+const url = require('url');
+const path = require('path');
+const { dirname } = require('lib/path-utils');
 const fs = require('fs-extra');
 
 class ElectronAppWrapper {
@@ -42,7 +40,7 @@ class ElectronAppWrapper {
 			defaultWidth: 800,
 			defaultHeight: 600,
 			file: 'window-state-' + this.env_ + '.json',
-		}
+		};
 
 		if (this.profilePath_) stateOptions.path = this.profilePath_;
 
@@ -54,7 +52,7 @@ class ElectronAppWrapper {
 			y: windowState.y,
 			width: windowState.width,
 			height: windowState.height,
-                        backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
+			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
 			},
@@ -72,13 +70,13 @@ class ElectronAppWrapper {
 			},
 		});
 
-		this.win_ = new BrowserWindow(windowOptions)
+		this.win_ = new BrowserWindow(windowOptions);
 
 		this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
-			slashes: true
-		}))
+			slashes: true,
+		}));
 
 		// Uncomment this to view errors if the application does not start
 		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
@@ -106,7 +104,7 @@ class ElectronAppWrapper {
 					this.win_ = null;
 				}
 			}
-		})
+		});
 
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
@@ -166,7 +164,7 @@ class ElectronAppWrapper {
 			output = '16x16.png';
 		}
 
-		if (this.env_ === 'dev') output = '16x16-dev.png'
+		if (this.env_ === 'dev') output = '16x16-dev.png';
 
 		return output;
 	}
@@ -174,15 +172,15 @@ class ElectronAppWrapper {
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_())
-			this.tray_.setToolTip(this.electronApp_.getName())
-			this.tray_.setContextMenu(contextMenu)
+			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_());
+			this.tray_.setToolTip(this.electronApp_.getName());
+			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
 				this.window().show();
 			});
 		} catch (error) {
-			console.error("Cannot create tray", error);
+			console.error('Cannot create tray', error);
 		}
 	}
 
@@ -221,21 +219,21 @@ class ElectronAppWrapper {
 		await this.waitForElectronAppReady();
 
 		const alreadyRunning = this.ensureSingleInstance();
-		if (alreadyRunning) return;		
+		if (alreadyRunning) return;
 
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
-		})
+		});
 
 		this.electronApp_.on('window-all-closed', () => {
 			this.electronApp_.quit();
-		})
+		});
 
 		this.electronApp_.on('activate', () => {
 			this.win_.show();
-		})
+		});
 	}
 
 }

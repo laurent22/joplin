@@ -345,7 +345,7 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 4) {
-				queries.push("INSERT INTO settings (`key`, `value`) VALUES ('sync.3.context', (SELECT `value` FROM settings WHERE `key` = 'sync.context'))");
+				queries.push('INSERT INTO settings (`key`, `value`) VALUES (\'sync.3.context\', (SELECT `value` FROM settings WHERE `key` = \'sync.context\'))');
 				queries.push('DELETE FROM settings WHERE `key` = "sync.context"');
 			}
 

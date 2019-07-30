@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, isWindows, fileExists, readline } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken, fileExists, readline } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -35,7 +35,7 @@ function increaseGradleVersionCode(content) {
 function increaseGradleVersionName(content) {
 	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
 		const n = Number(buildNum);
-		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + versionCode);
+		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + buildNum);
 		return prefix + (n + 1) + '"';
 	});
 
@@ -68,8 +68,8 @@ async function createRelease(name, tagName, version) {
 		let filename = rnDir + '/android/app/build.gradle';
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
-		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"'); 
-		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"'); 
+		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
+		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
 		await fs.writeFile(filename, content);
 	}
 
@@ -149,7 +149,7 @@ async function main() {
 	const releaseFiles = {};
 
 	for (const releaseName of releaseNames) {
-		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);		
+		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
 	}
 
 	console.info('Updating Readme URL...');
@@ -180,7 +180,7 @@ async function main() {
 		console.info('Uploading ' + releaseFile.apkFilename + ' to ' + uploadUrl);
 
 		const uploadResponse = await fetch(uploadUrl, {
-			method: 'POST', 
+			method: 'POST',
 			body: binaryBody,
 			headers: {
 				'Content-Type': 'application/vnd.android.package-archive',

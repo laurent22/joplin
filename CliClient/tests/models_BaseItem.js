@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -38,29 +40,29 @@ describe('models_BaseItem', function() {
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in
 	// the sync target will still have the old property but we don't need it locally.
 	it('should ignore properties that are present in sync file but not in database when serialising', asyncTest(async () => {
-		let folder = await Folder.save({ title: "folder1" });
-		
+		let folder = await Folder.save({ title: 'folder1' });
+
 		let serialized = await Folder.serialize(folder);
-		serialized += "\nignore_me: true"
+		serialized += '\nignore_me: true';
 
 		let unserialized = await Folder.unserialize(serialized);
 
 		expect('ignore_me' in unserialized).toBe(false);
 	}));
-	
+
 	it('should not modify title when unserializing', asyncTest(async () => {
-	  let folder1 = await Folder.save({ title: "" });
-	  let folder2 = await Folder.save({ title: "folder1" });
-	  
-	  let serialized1 = await Folder.serialize(folder1);
-	  let unserialized1 = await Folder.unserialize(serialized1);
-	  
-	  expect(unserialized1.title).toBe(folder1.title);
-	  
-	  let serialized2 = await Folder.serialize(folder2);
-	  let unserialized2 = await Folder.unserialize(serialized2);
-	  
-	  expect(unserialized2.title).toBe(folder2.title);
+		let folder1 = await Folder.save({ title: '' });
+		let folder2 = await Folder.save({ title: 'folder1' });
+
+		let serialized1 = await Folder.serialize(folder1);
+		let unserialized1 = await Folder.unserialize(serialized1);
+
+		expect(unserialized1.title).toBe(folder1.title);
+
+		let serialized2 = await Folder.serialize(folder2);
+		let unserialized2 = await Folder.unserialize(serialized2);
+
+		expect(unserialized2.title).toBe(folder2.title);
 	}));
 
 });

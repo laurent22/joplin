@@ -5,7 +5,6 @@ const stripAnsi = require('strip-ansi');
 const { handleAutocompletion } = require('../autocompletion.js');
 
 class StatusBarWidget extends BaseWidget {
-
 	constructor() {
 		super();
 
@@ -75,7 +74,7 @@ class StatusBarWidget extends BaseWidget {
 		super.render();
 
 		const doSaveCursor = !this.promptActive;
-		
+
 		if (doSaveCursor) this.term.saveCursor();
 
 		this.innerClear();
@@ -87,14 +86,13 @@ class StatusBarWidget extends BaseWidget {
 
 		//const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
 		//const textStyle = (s) => s;
-		const textStyle = this.promptActive ? (s) => s : chalk.gray;
+		const textStyle = this.promptActive ? s => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));
 
 		this.term.moveTo(this.absoluteInnerX, this.absoluteInnerY);
 
 		if (this.promptActive) {
-
 			this.term.write(textStyle(this.promptState_.promptString));
 
 			if (this.inputEventEmitter_) {
@@ -113,8 +111,8 @@ class StatusBarWidget extends BaseWidget {
 				history: this.history,
 				default: this.promptState_.initialText,
 				autoComplete: handleAutocompletion,
-				autoCompleteHint : true,
-				autoCompleteMenu : true,
+				autoCompleteHint: true,
+				autoCompleteMenu: true,
 			};
 
 			if ('cursorPosition' in this.promptState_) options.cursorPosition = this.promptState_.cursorPosition;
@@ -153,19 +151,15 @@ class StatusBarWidget extends BaseWidget {
 				// Only callback once everything has been cleaned up and reset
 				resolveFn(resolveResult);
 			});
-
 		} else {
-
 			for (let i = 0; i < this.items_.length; i++) {
 				const s = this.items_[i].substr(0, this.innerWidth - 1);
 				this.term.write(textStyle(s));
 			}
-
 		}
 
 		if (doSaveCursor) this.term.restoreCursor();
 	}
-
 }
 
 module.exports = StatusBarWidget;

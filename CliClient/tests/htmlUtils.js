@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -46,8 +48,8 @@ describe('htmlUtils', function() {
 			return function(src) {
 				i++;
 				return urls[i];
-			}
-		}
+			};
+		};
 
 		for (let i = 0; i < testCases.length; i++) {
 			const md = testCases[i][0];

@@ -40,10 +40,7 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 ## Coding style
 
-There are only two rules, but not following them means the pull request will not be accepted (it can be accepted once the issues are fixed):
-
-- **Please use tabs, NOT spaces.**
-- **Please do not add or remove optional characters, such as spaces or colons.** Please setup your editor so that it only changes what you are working on and is not making automated changes elsewhere. The reason for this is that small white space changes make diff hard to read and can cause needless conflicts.
+Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `npm install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `npm install` at the root of the repository.
 
 ## Unit tests
 

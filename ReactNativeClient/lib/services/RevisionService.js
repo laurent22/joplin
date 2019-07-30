@@ -8,7 +8,6 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { shim } = require('lib/shim');
 const BaseService = require('lib/services/BaseService');
 const { _ } = require('lib/locale.js');
-const ArrayUtils = require('lib/ArrayUtils.js');
 const { sprintf } = require('sprintf-js');
 
 class RevisionService extends BaseService {

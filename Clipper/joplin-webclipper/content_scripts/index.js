@@ -7,10 +7,14 @@
 
 	let browser_ = null;
 	if (typeof browser !== 'undefined') {
+		// eslint-disable-next-line no-undef
 		browser_ = browser;
+		// eslint-disable-next-line no-undef
 		browserSupportsPromises_ = true;
 	} else if (typeof chrome !== 'undefined') {
+		// eslint-disable-next-line no-undef
 		browser_ = chrome;
+		// eslint-disable-next-line no-undef
 		browserSupportsPromises_ = false;
 	}
 
@@ -29,7 +33,7 @@
 	}
 
 	function pageTitle() {
-		const titleElements = document.getElementsByTagName("title");
+		const titleElements = document.getElementsByTagName('title');
 		if (titleElements.length) return titleElements[0].text.trim();
 		return document.title.trim();
 	}
@@ -179,7 +183,7 @@
 			}
 
 			if (nodeName === 'source' && nodeParentName === 'picture') {
-				isVisible = false
+				isVisible = false;
 			}
 
 			if (node.nodeType === 8) { // Comments are just removed since we can't add a class
@@ -208,7 +212,7 @@
 	}
 
 	// Given a document, return a <style> tag that contains all the styles
-	// required to render the page. Not currently used but could be as an 
+	// required to render the page. Not currently used but could be as an
 	// option to clip pages as HTML.
 	function getStyleSheets(doc) {
 		const output = [];
@@ -238,14 +242,7 @@
 	}
 
 	function readabilityProcess() {
-		var uri = {
-			spec: location.href,
-			host: location.host,
-			prePath: location.protocol + "//" + location.host,
-			scheme: location.protocol.substr(0, location.protocol.indexOf(":")),
-			pathBase: location.protocol + "//" + location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
-		};
-
+		// eslint-disable-next-line no-undef
 		const readability = new Readability(documentForReadability());
 		const article = readability.parse();
 
@@ -254,7 +251,7 @@
 		return {
 			title: article.title,
 			body: article.content,
-		}
+		};
 	}
 
 	async function prepareCommandResponse(command) {
@@ -276,10 +273,10 @@
 				source_command: Object.assign({}, command),
 				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
-			};			
-		}
+			};
+		};
 
-		if (command.name === "simplifiedPageHtml") {
+		if (command.name === 'simplifiedPageHtml') {
 
 			let article = null;
 			try {
@@ -294,12 +291,13 @@
 			}
 			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
 
-		} else if (command.name === "isProbablyReaderable") {
+		} else if (command.name === 'isProbablyReaderable') {
 
+			// eslint-disable-next-line no-undef
 			const ok = isProbablyReaderable(documentForReadability());
 			return { name: 'isProbablyReaderable', value: ok };
 
-		} else if (command.name === "completePageHtml") {
+		} else if (command.name === 'completePageHtml') {
 
 			hardcodePreStyles(document);
 			preProcessDocument(document);
@@ -313,7 +311,7 @@
 			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
 			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document), stylesheets);
 
-		} else if (command.name === "selectedHtml") {
+		} else if (command.name === 'selectedHtml') {
 
 			hardcodePreStyles(document);
 			preProcessDocument(document);
@@ -342,19 +340,19 @@
 			const messageComp = document.createElement('div');
 
 			const messageCompWidth = 300;
-			messageComp.style.position = 'fixed'
-			messageComp.style.opacity = '0.95'
+			messageComp.style.position = 'fixed';
+			messageComp.style.opacity = '0.95';
 			messageComp.style.fontSize = '14px';
-			messageComp.style.width = messageCompWidth + 'px'
-			messageComp.style.maxWidth = messageCompWidth + 'px'
-			messageComp.style.border = '1px solid black'
-			messageComp.style.background = 'white'
+			messageComp.style.width = messageCompWidth + 'px';
+			messageComp.style.maxWidth = messageCompWidth + 'px';
+			messageComp.style.border = '1px solid black';
+			messageComp.style.background = 'white';
 			messageComp.style.color = 'black';
-			messageComp.style.top = '10px'
+			messageComp.style.top = '10px';
 			messageComp.style.textAlign = 'center';
-			messageComp.style.padding = '10px'
-			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px'
-			messageComp.style.zIndex = overlay.style.zIndex + 1
+			messageComp.style.padding = '10px';
+			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px';
+			messageComp.style.zIndex = overlay.style.zIndex + 1;
 
 			messageComp.textContent = 'Drag and release to capture a screenshot';
 
@@ -376,32 +374,32 @@
 			let draggingStartPos = null;
 			let selectionArea = {};
 
-			function updateSelection() {
+			const updateSelection = function() {
 				selection.style.left = selectionArea.x + 'px';
 				selection.style.top = selectionArea.y + 'px';
 				selection.style.width = selectionArea.width + 'px';
 				selection.style.height = selectionArea.height + 'px';
-			}
+			};
 
-			function setSelectionSizeFromMouse(event) {
+			const setSelectionSizeFromMouse = function(event) {
 				selectionArea.width = Math.max(1, event.clientX - draggingStartPos.x);
 				selectionArea.height = Math.max(1, event.clientY - draggingStartPos.y);
 				updateSelection();
-			}
+			};
 
-			function selection_mouseDown(event) {
-				selectionArea = { x: event.clientX, y: event.clientY, width: 0, height: 0 }
+			const selection_mouseDown = function(event) {
+				selectionArea = { x: event.clientX, y: event.clientY, width: 0, height: 0 };
 				draggingStartPos = { x: event.clientX, y: event.clientY };
 				isDragging = true;
 				updateSelection();
-			}
+			};
 
-			function selection_mouseMove(event) {
+			const selection_mouseMove = function(event) {
 				if (!isDragging) return;
 				setSelectionSizeFromMouse(event);
-			}
+			};
 
-			function selection_mouseUp(event) {
+			const selection_mouseUp = function(event) {
 				setSelectionSizeFromMouse(event);
 
 				isDragging = false;
@@ -436,7 +434,7 @@
 						api_base_url: command.api_base_url,
 					});
 				}, 100);
-			}
+			};
 
 			overlay.addEventListener('mousedown', selection_mouseDown);
 			overlay.addEventListener('mousemove', selection_mouseMove);
@@ -444,7 +442,7 @@
 
 			return {};
 
-		} else if (command.name === "pageUrl") {
+		} else if (command.name === 'pageUrl') {
 
 			let url = pageLocationOrigin() + location.pathname + location.search;
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));

@@ -1,7 +1,6 @@
 const { Logger } = require('lib/logger.js');
 const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
-const URL = require('url-parse');
 const { time } = require('lib/time-utils');
 const EventDispatcher = require('lib/EventDispatcher');
 
@@ -58,7 +57,7 @@ class DropboxApi {
 		if (options.headers) {
 			for (let n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push('-H ' + "'" + n + ': ' + options.headers[n] + "'");
+				output.push('-H ' + '\'' + n + ': ' + options.headers[n] + '\'');
 			}
 		}
 		if (options.body) output.push('--data ' + '"' + options.body + '"');
@@ -182,7 +181,6 @@ class DropboxApi {
 				};
 
 				if (!response.ok) {
-					const json = loadResponseJson();
 					if (this.isTokenError(response.status, responseText)) {
 						this.setAuthToken(null);
 					}

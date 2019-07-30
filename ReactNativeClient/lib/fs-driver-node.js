@@ -141,7 +141,7 @@ class FsDriverNode extends FsDriverBase {
 		try {
 			return await fs.close(handle);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
+			throw this.fsErrorToJsError_(error, '');
 		}
 	}
 

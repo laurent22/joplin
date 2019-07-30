@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -41,7 +43,7 @@ describe('models_Revision', function() {
 		const newObject = {
 			one: '123',
 			three: '999',
-		}
+		};
 
 		const patch = Revision.createObjectPatch(oldObject, newObject);
 		const merged = Revision.applyObjectPatch(oldObject, patch);
@@ -82,16 +84,16 @@ describe('models_Revision', function() {
 - 
 +x
  %5D Check `,
- 				expected: [-1, +1],
- 			},
- 			{
- 				patch: `@@ -1022,56 +1022,415 @@
+				expected: [-1, +1],
+			},
+			{
+				patch: `@@ -1022,56 +1022,415 @@
  .%0A%0A#
 - How to view a note history%0A%0AWhile all the apps 
 +%C2%A0How does it work?%0A%0AAll the apps save a version of the modified notes every 10 minutes.
  %0A%0A# `,
- 				expected: [-(19+27+2), 17+67+4],
- 			},
+				expected: [-(19+27+2), 17+67+4],
+			},
 		];
 
 		for (const test of tests) {

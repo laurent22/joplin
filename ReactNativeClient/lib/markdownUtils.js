@@ -16,6 +16,7 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md, baseUrl) {
+		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (match, before, url, after) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
@@ -64,7 +65,6 @@ const markdownUtils = {
 		const headersMd = [];
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
-			const mdRow = [];
 			const h = headers[i];
 			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
 			lineMd.push('---');

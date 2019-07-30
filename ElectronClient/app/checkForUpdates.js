@@ -1,4 +1,4 @@
-const { dialog } = require('electron')
+const { dialog } = require('electron');
 const { shim } = require('lib/shim');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
@@ -46,7 +46,7 @@ async function fetchLatestRelease(options) {
 		}
 
 		json = await response.json();
-		if (!json.length) throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+		if (!json.length) throw new Error('Cannot get latest release info (JSON)');
 		json = json[0];
 	} else {
 		const response = await fetch('https://api.github.com/repos/laurent22/joplin/releases/latest');
@@ -58,7 +58,7 @@ async function fetchLatestRelease(options) {
 
 		json = await response.json();
 	}
-	
+
 	const version = json.tag_name.substr(1);
 	let downloadUrl = null;
 	const platform = process.platform;
@@ -121,18 +121,18 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
 			if (!checkInBackground_) dialog.showMessageBox({
-                type: 'info',
-                message: _('Current version is up-to-date.'),
-                buttons: [_('OK')],
-            })
+				type: 'info',
+				message: _('Current version is up-to-date.'),
+				buttons: [_('OK')],
+			});
 		} else {
-			const releaseNotes = release.notes.trim() ? "\n\n" + release.notes.trim() : '';
+			const releaseNotes = release.notes.trim() ? '\n\n' + release.notes.trim() : '';
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
 
 			const buttonIndex = dialog.showMessageBox(parentWindow_, {
 				type: 'info',
 				message: _('An update is available, do you want to download it now?') + '\n\n' + _('Your version: %s', packageInfo.version) + '\n' + _('New version: %s', newVersionString) + releaseNotes,
-				buttons: [_('Yes'), _('No')]
+				buttons: [_('Yes'), _('No')],
 			});
 
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
@@ -145,4 +145,4 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 	});
 }
 
-module.exports.checkForUpdates = checkForUpdates
+module.exports.checkForUpdates = checkForUpdates;

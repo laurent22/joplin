@@ -1,14 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const BaseItem = require('lib/models/BaseItem.js');
 const Folder = require('lib/models/Folder.js');
-const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
-const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'rmbook <notebook>';
 	}
@@ -18,9 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [
-			['-f, --force', _('Deletes the notebook without asking for confirmation.')],
-		];
+		return [['-f, --force', _('Deletes the notebook without asking for confirmation.')]];
 	}
 
 	async action(args) {
@@ -34,7 +28,6 @@ class Command extends BaseCommand {
 
 		await Folder.delete(folder.id);
 	}
-
 }
 
 module.exports = Command;

@@ -4,8 +4,6 @@ const { connect } = require('react-redux');
 const { ListView, Text, StyleSheet } = require('react-native');
 const { _ } = require('lib/locale.js');
 const { NoteItem } = require('lib/components/note-item.js');
-const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
 

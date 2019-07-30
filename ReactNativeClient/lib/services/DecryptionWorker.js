@@ -2,7 +2,6 @@ const BaseItem = require('lib/models/BaseItem');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
-const KvStore = require('lib/services/KvStore');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
 

@@ -1,13 +1,10 @@
 let browser_ = null;
-let browserName_ = null;
 if (typeof browser !== 'undefined') {
 	browser_ = browser;
 	browserSupportsPromises_ = true;
-	browserName_ = 'firefox';
 } else if (typeof chrome !== 'undefined') {
 	browser_ = chrome;
 	browserSupportsPromises_ = false;
-	browserName_ = 'chrome';
 }
 
 let env_ = null;
@@ -21,7 +18,7 @@ window.joplinEnv = function() {
 	const manifest = browser_.runtime.getManifest();
 	env_ = manifest.name.indexOf('[DEV]') >= 0 ? 'dev' : 'prod';
 	return env_;
-}
+};
 
 async function browserCaptureVisibleTabs(windowId) {
 	const options = { format: 'jpeg' };
@@ -58,7 +55,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		const zoom = await browserGetZoom();
 
 		const imageDataUrl = await browserCaptureVisibleTabs(null);
-		content = Object.assign({}, command.content);
+		const content = Object.assign({}, command.content);
 		content.image_data_url = imageDataUrl;
 
 		const newArea = Object.assign({}, command.content.crop_rect);
@@ -68,13 +65,13 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		newArea.height *= zoom;
 		content.crop_rect = newArea;
 
-		fetch(command.api_base_url + "/notes", {
-			method: "POST",
+		fetch(command.api_base_url + '/notes', {
+			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(content)
+			body: JSON.stringify(content),
 		});
 	}
 });

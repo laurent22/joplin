@@ -1,14 +1,6 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
 const InteropService_Exporter_Raw = require('lib/services/InteropService_Exporter_Raw');
-const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel.js');
-const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
 const fs = require('fs-extra');
-const md5 = require('md5');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 

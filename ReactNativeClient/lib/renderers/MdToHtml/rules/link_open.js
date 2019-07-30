@@ -7,7 +7,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
-		const text = utils.getAttr(token.attrs, 'text');
 		const isResourceUrl = Resource.isResourceUrl(href);
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
 
@@ -18,7 +17,6 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			const resourceId = Resource.pathToId(href);
 
 			const result = ruleOptions.resources[resourceId];
-			const resource = result ? result.item : null;
 			const resourceStatus = utils.resourceStatus(result);
 
 			if (result && resourceStatus !== 'ready') {
@@ -26,7 +24,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				return '<a class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>';
 			} else {
 				href = 'joplin://' + resourceId;
-				resourceIdAttr = "data-resource-id='" + resourceId + "'";
+				resourceIdAttr = 'data-resource-id=\'' + resourceId + '\'';
 				icon = '<span class="resource-icon"></span>';
 			}
 		} else {
@@ -37,7 +35,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		let js = ruleOptions.postMessageSyntax + '(' + JSON.stringify(href) + '); return false;';
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
-		return '<a data-from-md ' + resourceIdAttr + " title='" + htmlentities(title) + "' href='" + hrefAttr + "' onclick='" + js + "'>" + icon;
+		return '<a data-from-md ' + resourceIdAttr + ' title=\'' + htmlentities(title) + '\' href=\'' + hrefAttr + '\' onclick=\'' + js + '\'>' + icon;
 	};
 }
 
