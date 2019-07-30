@@ -11,7 +11,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": "npm run linter"
+    "*.{js,jsx}": ["npm run linter", "git add"]
   },
   "repository": {
     "type": "git",
