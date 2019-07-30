@@ -45,13 +45,9 @@ module.exports = {
 		"quotes": ["error", "single"],
 		"indent": ["error", "tab"],
 		"comma-dangle": ["error", "always-multiline"],
-		// "prettier/prettier": "error",
-		// Uncomment this to automatically remove unused requires:
-		// "autofix/no-unused-vars": "error",
+		"no-trailing-spaces": "error",
 	},
 	"plugins": [
 		"react",
-		// "prettier",
-		"autofix",
 	],
 };
