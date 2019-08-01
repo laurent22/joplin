@@ -1210,7 +1210,27 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true }, (error, data) => {
+				var pageSize_ = 'A4';
+				var landscape_ = false;
+				switch (Setting.value('export.pdfPageSize')) {
+				default:
+					pageSize_ = 'A4';
+					landscape_ = false;
+					break;
+				case 'Letter':
+					pageSize_ = 'Letter';
+					landscape_ = false;
+					break;
+				case 'A4L':
+					pageSize_ = 'A4';
+					landscape_ = true;
+					break;
+				case 'LetterL':
+					pageSize_ = 'Letter';
+					landscape_ = true;
+					break;
+				}
+				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true, pageSize: pageSize_, landscape: landscape_ }, (error, data) => {
 					restoreSettings();
 
 					if (error) {
