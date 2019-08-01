@@ -69,6 +69,10 @@ First you need to setup React Native to build projects with native code. For thi
 
 Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
 
+If app crashes with `Unable to load script` error after running `react-native run-android` on Linux, check this StackOverflow question:
+
+https://stackoverflow.com/questions/44446523/unable-to-load-script-from-assets-index-android-bundle-on-windows/44476757
+
 # Building the Terminal application
 
 ```
