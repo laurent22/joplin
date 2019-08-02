@@ -294,6 +294,14 @@ class Setting extends BaseModel {
 					};
 				},
 			},
+			'notes.autoSave': {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				section: 'note',
+				public: true,
+				label: () => _('Enable auto-save'),
+				appTypes: ['mobile', 'desktop'],
+			},
 			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
 			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
 			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },

@@ -446,6 +446,11 @@ class NoteTextComponent extends React.Component {
 		if (!forceSave) {
 			if (!shared.isModified(this)) return;
 		}
+
+		if (Setting.value('notes.autoSave') === false) {
+			return;
+		}
+
 		await shared.saveNoteButton_press(this, null, options);
 
 		ExternalEditWatcher.instance().updateNoteFile(this.state.note);
@@ -1471,6 +1476,10 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('[', '](' + url + ')');
 	}
 
+	async commandSave() {
+		await shared.saveNoteButton_press(this, null);
+	}
+
 	itemContextMenu(event) {
 		const note = this.state.note;
 		if (!note) return;
@@ -1521,6 +1530,16 @@ class NoteTextComponent extends React.Component {
 						folderId: this.state.folder.id,
 						noteId: note.id,
 					});
+				},
+			});
+		}
+
+		if (Setting.value('notes.autoSave') === false) {
+			toolbarItems.push({
+				tooltip: _('Save'),
+				iconName: 'fa-save',
+				onClick: () => {
+					return this.commandSave();
 				},
 			});
 		}

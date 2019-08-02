@@ -321,6 +321,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.scheduleSaveIID_ = null;
 		}
 
+		if (Setting.value('notes.autoSave') === false) {
+			return;
+		}
+
 		this.scheduleSaveIID_ = setTimeout(async () => {
 			await shared.saveNoteButton_press(this);
 		}, 1000);
