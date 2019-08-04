@@ -18,7 +18,7 @@ async function copyJs(name, filePath) {
 
 async function main(argv) {
 	await fs.mkdirp(outputDir);
-	await copyJs('webviewLib', rnDir + '/lib/renderers/webviewLib.js');	
+	await copyJs('webviewLib', rnDir + '/lib/renderers/webviewLib.js');
 }
 
 main(process.argv).catch((error) => {

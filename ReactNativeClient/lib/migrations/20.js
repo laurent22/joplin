@@ -11,7 +11,7 @@ script.exec = async function() {
 
 	let queries = [];
 	for (const stat of stats) {
-		if (fileExtension(stat.path) === 'crypted') continue;		
+		if (fileExtension(stat.path) === 'crypted') continue;
 		const resourceId = Resource.pathToId(stat.path);
 		if (!resourceId) continue;
 
@@ -24,6 +24,6 @@ script.exec = async function() {
 	}
 
 	await reg.db().transactionExecBatch(queries);
-}
+};
 
 module.exports = script;

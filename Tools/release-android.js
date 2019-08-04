@@ -1,9 +1,10 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, isWindows, fileExists, readline } = require('./tool-utils.js');
+const { execCommand, githubRelease, githubOauthToken, fileExists, readline } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
+const projectName = 'joplin-android';
 const rnDir = __dirname + '/../ReactNativeClient';
 const rootDir = path.dirname(__dirname);
 const releaseDir = rootDir + '/_releases';
@@ -34,7 +35,7 @@ function increaseGradleVersionCode(content) {
 function increaseGradleVersionName(content) {
 	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
 		const n = Number(buildNum);
-		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + versionCode);
+		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + buildNum);
 		return prefix + (n + 1) + '"';
 	});
 
@@ -57,14 +58,22 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function main() {
-	console.info('Updating version numbers in build.gradle...');
+async function createRelease(name, tagName, version) {
+	const originalContents = {};
+	const suffix = version + (name === 'main' ? '' : '-' + name);
 
-	const projectName = 'joplin-android';
-	const newContent = updateGradleConfig();
-	const version = gradleVersionName(newContent);
-	const tagName = 'android-v' + version;
-	const apkFilename = 'joplin-v' + version + '.apk';
+	console.info('Creating release: ' + suffix);
+
+	if (name === '32bit') {
+		let filename = rnDir + '/android/app/build.gradle';
+		let content = await fs.readFile(filename, 'utf8');
+		originalContents[filename] = content;
+		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
+		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
+		await fs.writeFile(filename, content);
+	}
+
+	const apkFilename = 'joplin-v' + suffix + '.apk';
 	const apkFilePath = releaseDir + '/' + apkFilename;
 	const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
 
@@ -72,7 +81,7 @@ async function main() {
 
 	console.info('Running from: ' + process.cwd());
 
-	console.info('Building APK file v' + version + '...');
+	console.info('Building APK file v' + suffix + '...');
 
 	let restoreDir = null;
 	let apkBuildCmd = 'assembleRelease -PbuildDir=build';
@@ -94,8 +103,6 @@ async function main() {
 		console.info('');
 		await readline('Press Enter when done:');
 		apkBuildCmd = ''; // Clear the command because we've already ran it
-		
-		// apkBuildCmd = '/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ' + apkBuildCmd + '"';
 	} else {
 		process.chdir(rnDir + '/android');
 		apkBuildCmd = './gradlew ' + apkBuildCmd;
@@ -114,13 +121,41 @@ async function main() {
 
 	console.info('Copying APK to ' + apkFilePath);
 	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
-	console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
-	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
+
+	if (name === 'main') {
+		console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
+		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
+	}
+
+	for (let filename in originalContents) {
+		const content = originalContents[filename];
+		await fs.writeFile(filename, content);
+	}
+
+	return {
+		downloadUrl: downloadUrl,
+		apkFilename: apkFilename,
+		apkFilePath: apkFilePath,
+	};
+}
+
+async function main() {
+	console.info('Updating version numbers in build.gradle...');
+
+	const newContent = updateGradleConfig();
+	const version = gradleVersionName(newContent);
+	const tagName = 'android-v' + version;
+	const releaseNames = ['main', '32bit'];
+	const releaseFiles = {};
+
+	for (const releaseName of releaseNames) {
+		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
+	}
 
 	console.info('Updating Readme URL...');
 
 	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, downloadUrl);
+	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/.*?\.apk)/, releaseFiles['main'].downloadUrl);
 	await fs.writeFile('README.md', readmeContent);
 
 	console.info(await execCommand('git pull'));
@@ -132,28 +167,34 @@ async function main() {
 
 	console.info('Creating GitHub release ' + tagName + '...');
 
+	const oauthToken = await githubOauthToken();
 	const release = await githubRelease(projectName, tagName);
 	const uploadUrlTemplate = uriTemplate.parse(release.upload_url);
-	const uploadUrl = uploadUrlTemplate.expand({ name: apkFilename });
 
-	const binaryBody = await fs.readFile(apkFilePath);
+	for (const releaseFilename in releaseFiles) {
+		const releaseFile = releaseFiles[releaseFilename];
+		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
-	const oauthToken = await githubOauthToken();
+		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
 
-	console.info('Uploading ' + apkFilename + ' to ' + uploadUrl);
+		console.info('Uploading ' + releaseFile.apkFilename + ' to ' + uploadUrl);
 
-	const uploadResponse = await fetch(uploadUrl, {
-		method: 'POST', 
-		body: binaryBody,
-		headers: {
-			'Content-Type': 'application/vnd.android.package-archive',
-			'Authorization': 'token ' + oauthToken,
-			'Content-Length': binaryBody.length,
-		},
-	});
+		const uploadResponse = await fetch(uploadUrl, {
+			method: 'POST',
+			body: binaryBody,
+			headers: {
+				'Content-Type': 'application/vnd.android.package-archive',
+				'Authorization': 'token ' + oauthToken,
+				'Content-Length': binaryBody.length,
+			},
+		});
 
-	const uploadResponseText = await uploadResponse.text();
-	console.info(uploadResponseText);
+		const uploadResponseText = await uploadResponse.text();
+		const uploadResponseObject = JSON.parse(uploadResponseText);
+		if (!uploadResponseObject || !uploadResponseObject.browser_download_url) throw new Error('Could not upload file to GitHub');
+	}
+
+	console.info('Main download URL: ' + releaseFiles['main'].downloadUrl);
 }
 
 main().catch((error) => {

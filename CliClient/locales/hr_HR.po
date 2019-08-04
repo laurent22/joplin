@@ -1469,10 +1469,10 @@ msgstr "Svijetla"
 msgid "Dark"
 msgstr "Tamna"
 
-msgid "Solarized Light"
+msgid "Solarised Light"
 msgstr ""
 
-msgid "Solarized Dark"
+msgid "Solarised Dark"
 msgstr ""
 
 #, fuzzy

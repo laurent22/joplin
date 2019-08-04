@@ -13,7 +13,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -1005,9 +1007,8 @@ msgstr "Renommer étiquette :"
 msgid "Set alarm:"
 msgstr "Régler alarme :"
 
-#, fuzzy
 msgid "Template file:"
-msgstr "Modèles"
+msgstr "Fichier de modèle :"
 
 msgid "Layout"
 msgstr "Disposition"
@@ -1047,7 +1048,7 @@ msgid "Note History"
 msgstr "Historique des notes"
 
 msgid "Markup"
-msgstr ""
+msgstr "Langage de balisage"
 
 msgid "Previous versions of this note"
 msgstr "Versions précédentes de cette note"
@@ -1497,11 +1498,11 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
-msgid "Solarized Light"
-msgstr ""
+msgid "Solarised Light"
+msgstr "Solarisé clair"
 
-msgid "Solarized Dark"
-msgstr ""
+msgid "Solarised Dark"
+msgstr "Solarisé sombre"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
@@ -1913,7 +1914,6 @@ msgstr "Entrez de nouvelles étiquettes ou sélectionnez de la liste"
 msgid "Warning"
 msgstr "Avertissement"
 
-#, fuzzy
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -1948,13 +1948,12 @@ msgstr "Correction de l'index..."
 msgid "Fix search index"
 msgstr "Corriger index de recherche"
 
-#, fuzzy
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 "Utilisez ceci pour corriger l'index du moteur de recherche en cas de "
-"problème. Cela peut prendre assez longtemps selon le nombre de notes."
+"problème. Cela peut prendre longtemps selon le nombre de notes."
 
 msgid "More information"
 msgstr "Plus d'information"

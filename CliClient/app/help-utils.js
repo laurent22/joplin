@@ -1,10 +1,7 @@
-const fs = require('fs-extra');
 const { wrap } = require('lib/string-utils.js');
 const Setting = require('lib/models/Setting.js');
-const { fileExtension, basename, dirname } = require('lib/path-utils.js');
-const { _, setLocale, languageCode } = require('lib/locale.js');
+const { _ } = require('lib/locale.js');
 
-const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
 const INDENT = '    ';
 
@@ -16,14 +13,14 @@ function renderTwoColumnData(options, baseIndent, width) {
 		let option = options[i];
 		const flag = option[0];
 		const indent = baseIndent + INDENT + ' '.repeat(optionColWidth + 2);
-		
+
 		let r = wrap(option[1], indent, width);
 		r = r.substr(flag.length + (baseIndent + INDENT).length);
 		r = baseIndent + INDENT + flag + r;
 		output.push(r);
 	}
 
-	return output.join("\n");
+	return output.join('\n');
 }
 
 function renderCommandHelp(cmd, width = null) {
@@ -44,7 +41,7 @@ function renderCommandHelp(cmd, width = null) {
 	}
 
 	if (cmd.name() === 'config') {
-		const renderMetadata = (md) => {
+		const renderMetadata = md => {
 			let desc = [];
 
 			if (md.label) {
@@ -67,13 +64,13 @@ function renderCommandHelp(cmd, width = null) {
 				} else if (md.type === Setting.TYPE_INT) {
 					defaultString = (md.value ? md.value : 0).toString();
 				} else if (md.type === Setting.TYPE_BOOL) {
-					defaultString = (md.value === true ? 'true' : 'false');
+					defaultString = md.value === true ? 'true' : 'false';
 				}
 			}
-			
+
 			if (defaultString !== null) desc.push(_('Default: %s', defaultString));
 
-			return [md.key, desc.join("\n")];
+			return [md.key, desc.join('\n')];
 		};
 
 		output.push('');
@@ -83,7 +80,7 @@ function renderCommandHelp(cmd, width = null) {
 		let keysValues = [];
 		const keys = Setting.keys(true, 'cli');
 		for (let i = 0; i < keys.length; i++) {
-			if (keysValues.length) keysValues.push(['','']);
+			if (keysValues.length) keysValues.push(['', '']);
 			const md = Setting.settingMetadata(keys[i]);
 			if (!md.label) continue;
 			keysValues.push(renderMetadata(md));
@@ -91,8 +88,8 @@ function renderCommandHelp(cmd, width = null) {
 
 		output.push(renderTwoColumnData(keysValues, baseIndent, width));
 	}
-	
-	return output.join("\n");
+
+	return output.join('\n');
 }
 
 function getOptionColWidth(options) {

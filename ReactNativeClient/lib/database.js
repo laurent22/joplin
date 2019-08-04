@@ -1,12 +1,8 @@
-const { uuid } = require('lib/uuid.js');
-const { promiseChain } = require('lib/promise-utils.js');
 const { Logger } = require('lib/logger.js');
 const { time } = require('lib/time-utils.js');
-const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
 class Database {
-
 	constructor(driver) {
 		this.debugMode_ = false;
 		this.driver_ = driver;
@@ -48,7 +44,7 @@ class Database {
 		let p = field.split('.');
 		if (p.length == 1) return '`' + field + '`';
 		if (p.length == 2) return p[0] + '.`' + p[1] + '`';
-		
+
 		throw new Error('Invalid field format: ' + field);
 	}
 
@@ -152,7 +148,7 @@ class Database {
 		if (type == 'fieldType') {
 			if (s) s = s.toUpperCase();
 			if (s == 'INTEGER') s = 'INT';
-			if (!(('TYPE_' + s) in this)) throw new Error('Unkonwn fieldType: ' + s);
+			if (!('TYPE_' + s in this)) throw new Error('Unkonwn fieldType: ' + s);
 			return this['TYPE_' + s];
 		}
 		if (type == 'syncTarget') {
@@ -183,12 +179,12 @@ class Database {
 
 	sqlStringToLines(sql) {
 		let output = [];
-		let lines = sql.split("\n");
+		let lines = sql.split('\n');
 		let statement = '';
 		for (var i = 0; i < lines.length; i++) {
 			var line = lines[i];
 			if (line == '') continue;
-			if (line.substr(0, 2) == "--") continue;
+			if (line.substr(0, 2) == '--') continue;
 			statement += line.trim();
 			if (line[line.length - 1] == ',') statement += ' ';
 			if (line[line.length - 1] == ';') {
@@ -214,7 +210,7 @@ class Database {
 	static insertQuery(tableName, data) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
-		let keySql= '';
+		let keySql = '';
 		let valueSql = '';
 		let params = [];
 		for (let key in data) {
@@ -272,7 +268,7 @@ class Database {
 		for (let n in fields) {
 			if (!fields.hasOwnProperty(n)) continue;
 			fieldsWithType.push(this.escapeField(n) + ' ' + fields[n]);
-		}		
+		}
 
 		let sql = `
 			CREATE TEMPORARY TABLE _BACKUP_TABLE_NAME_(_FIELDS_TYPE_);
@@ -288,9 +284,9 @@ class Database {
 		sql = sql.replace(/_FIELDS_NO_TYPE_/g, this.escapeFields(fieldsNoType).join(','));
 		sql = sql.replace(/_FIELDS_TYPE_/g, fieldsWithType.join(','));
 
-		return sql.trim().split("\n");
+		return sql.trim().split('\n');
 	}
-	
+
 	wrapQueries(queries) {
 		let output = [];
 		for (let i = 0; i < queries.length; i++) {
@@ -313,7 +309,6 @@ class Database {
 			return sql; // Already wrapped
 		}
 	}
-
 }
 
 Database.TYPE_UNKNOWN = 0;

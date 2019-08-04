@@ -1,9 +1,5 @@
 const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
-const NoteTag = require('lib/models/NoteTag.js');
-const Note = require('lib/models/Note.js');
-const { time } = require('lib/time-utils.js');
-const { _ } = require('lib/locale');
 const DiffMatchPatch = require('diff-match-patch');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const JoplinError = require('lib/JoplinError');
@@ -12,7 +8,6 @@ const { sprintf } = require('sprintf-js');
 const dmp = new DiffMatchPatch();
 
 class Revision extends BaseItem {
-
 	static tableName() {
 		return 'revisions';
 	}
@@ -57,7 +52,7 @@ class Revision extends BaseItem {
 	static applyObjectPatch(object, patch) {
 		patch = JSON.parse(patch);
 		const output = Object.assign({}, object);
-		
+
 		for (let k in patch.new) {
 			output[k] = patch.new[k];
 		}
@@ -74,7 +69,7 @@ class Revision extends BaseItem {
 
 		const countChars = diffLine => {
 			return unescape(diffLine).length - 1;
-		}
+		};
 
 		const lines = patch.split('\n');
 		let added = 0;
@@ -113,36 +108,25 @@ class Revision extends BaseItem {
 	}
 
 	static async countRevisions(itemType, itemId) {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [
-			itemType,
-			itemId,
-		]);
+		const r = await this.db().selectOne('SELECT count(*) as total FROM revisions WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
 
 		return r ? r.total : 0;
 	}
 
 	static latestRevision(itemType, itemId) {
-		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [
-			itemType,
-			itemId,
-		]);
+		return this.modelSelectOne('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC LIMIT 1', [itemType, itemId]);
 	}
 
 	static allByType(itemType, itemId) {
-		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time ASC', [
-			itemType,
-			itemId,
-		]);
+		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time ASC', [itemType, itemId]);
 	}
 
 	static async itemsWithRevisions(itemType, itemIds) {
 		if (!itemIds.length) return [];
-		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [
-			itemType,
-		]);
+		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [itemType]);
 
 		return rows.map(r => r.item_id);
-	}		
+	}
 
 	static async itemsWithNoRevisions(itemType, itemIds) {
 		const withRevs = await this.itemsWithRevisions(itemType, itemIds);
@@ -180,11 +164,7 @@ class Revision extends BaseItem {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
-			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [
-				revision.item_type,
-				revision.item_id,
-				revision.item_updated_time,
-			]);
+			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
 		} else {
 			revs = revs.slice();
 		}
@@ -213,7 +193,7 @@ class Revision extends BaseItem {
 
 		for (const revIndex of revIndexes) {
 			const rev = revs[revIndex];
-			if (!!rev.encryption_applied) throw new JoplinError(sprintf('Revision "%s" is encrypted', rev.id), 'revision_encrypted');
+			if (rev.encryption_applied) throw new JoplinError(sprintf('Revision "%s" is encrypted', rev.id), 'revision_encrypted');
 			output.title = this.applyTextPatch(output.title, rev.title_diff);
 			output.body = this.applyTextPatch(output.body, rev.body_diff);
 			output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);
@@ -236,11 +216,7 @@ class Revision extends BaseItem {
 			const doneKey = rev.item_type + '_' + rev.item_id;
 			if (doneItems[doneKey]) continue;
 
-			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1', [
-				cutOffDate,
-				rev.item_type,
-				rev.item_id,
-			]);
+			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1', [cutOffDate, rev.item_type, rev.item_id]);
 
 			try {
 				const deleteQueryCondition = 'item_updated_time < ? AND item_id = ?';
@@ -249,7 +225,7 @@ class Revision extends BaseItem {
 
 				if (!keptRev) {
 					const hasEncrypted = await this.modelSelectOne('SELECT * FROM revisions WHERE encryption_applied = 1 AND ' + deleteQueryCondition, deleteQueryParams);
-					if (!!hasEncrypted) throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
+					if (hasEncrypted) throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
 					await this.db().transactionExecBatch([deleteQuery]);
 				} else {
 					// Note: we don't need to check for encrypted rev here because
@@ -257,15 +233,7 @@ class Revision extends BaseItem {
 					// if a rev is encrypted.
 					const merged = await this.mergeDiffs(keptRev);
 
-					const queries = [
-						deleteQuery,
-						{ sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [
-							this.createTextPatch('', merged.title),
-							this.createTextPatch('', merged.body),
-							this.createObjectPatch({}, merged.metadata),
-							keptRev.id,
-						] },
-					];
+					const queries = [deleteQuery, { sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [this.createTextPatch('', merged.title), this.createTextPatch('', merged.body), this.createObjectPatch({}, merged.metadata), keptRev.id] }];
 
 					await this.db().transactionExecBatch(queries);
 				}
@@ -285,7 +253,6 @@ class Revision extends BaseItem {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
-
 }
 
 module.exports = Revision;

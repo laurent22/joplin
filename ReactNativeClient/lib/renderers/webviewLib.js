@@ -5,7 +5,7 @@ let manualDownloadResourceElements = [];
 webviewLib.onUnloadedResourceClick = function(event) {
 	const resourceId = event.currentTarget.getAttribute('data-resource-id');
 	webviewLib.options_.postMessage('markForDownload:' + resourceId);
-}
+};
 
 webviewLib.setupResourceManualDownload = function() {
 	for (const element of manualDownloadResourceElements) {
@@ -22,7 +22,7 @@ webviewLib.setupResourceManualDownload = function() {
 		element.addEventListener('click', webviewLib.onUnloadedResourceClick);
 		manualDownloadResourceElements.push(element);
 	}
-}
+};
 
 webviewLib.handleInternalLink = function(event, anchorNode) {
 	const href = anchorNode.getAttribute('href');
@@ -34,26 +34,27 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 
 		location.hash = href;
 
-		// HACK 
+		// HACK
 		// For some reason anchors at the bottom cause the webview to move itself
 		// so that the content is aligned with the top of the screen
 		// This basically refreshes the scroll view so that is returns to a normal
 		// position, the scroll positions stays correct though
 		// Additionally an anchor could not be clicked twice because the location
 		// would not change, this fixes that also
-		setTimeout(function() { location.hash = old_hash; }, 10);
+		setTimeout(function() {
+			location.hash = old_hash;
+		}, 10);
 		return true;
 	}
-	
+
 	return false;
-}
+};
 
 webviewLib.getParentAnchorElement = function(element) {
 	let counter = 0;
 	while (true) {
-
 		if (counter++ >= 10000) {
-			console.warn('been looping for too long - exiting')
+			console.warn('been looping for too long - exiting');
 			return null;
 		}
 
@@ -61,14 +62,14 @@ webviewLib.getParentAnchorElement = function(element) {
 		if (element.nodeName === 'A') return element;
 		element = element.parentElement;
 	}
-}
+};
 
 webviewLib.cloneError = function(error) {
 	return {
 		message: error.message,
-		stack: error.stack
+		stack: error.stack,
 	};
-}
+};
 
 webviewLib.logEnabledEventHandler = function(fn) {
 	return function(event) {
@@ -78,12 +79,12 @@ webviewLib.logEnabledEventHandler = function(fn) {
 			webviewLib.options_.postMessage('error:' + JSON.stringify(webviewLib.cloneError(error)));
 			throw error;
 		}
-	}
-}
+	};
+};
 
 webviewLib.initialize = function(options) {
 	webviewLib.options_ = options;
-}
+};
 
 document.addEventListener('click', function(event) {
 	const anchor = webviewLib.getParentAnchorElement(event.target);
@@ -107,4 +108,3 @@ document.addEventListener('click', function(event) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
 	}
 });
-

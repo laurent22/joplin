@@ -2,17 +2,15 @@ const BaseItem = require('lib/models/BaseItem');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
-const KvStore = require('lib/services/KvStore');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
 
 class DecryptionWorker {
-
 	constructor() {
 		this.state_ = 'idle';
 		this.logger_ = new Logger();
 
-		this.dispatch = (action) => {
+		this.dispatch = action => {
 			//console.warn('DecryptionWorker.dispatch is not defined');
 		};
 
@@ -158,8 +156,8 @@ class DecryptionWorker {
 
 					const clearDecryptionCounter = async () => {
 						await this.kvStore().deleteValue(counterKey);
-					}
-					
+					};
+
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
@@ -177,7 +175,7 @@ class DecryptionWorker {
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
 							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
-							// So skip the ID for now, and the service will try to decrypt the blob again the next time. 
+							// So skip the ID for now, and the service will try to decrypt the blob again the next time.
 							excludedIds.push(decryptedItem.id);
 						}
 
@@ -242,7 +240,6 @@ class DecryptionWorker {
 			this.scheduleStart();
 		}
 	}
-
 }
 
 module.exports = DecryptionWorker;

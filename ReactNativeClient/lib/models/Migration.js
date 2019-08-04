@@ -5,7 +5,6 @@ const migrationScripts = {
 };
 
 class Migration extends BaseModel {
-
 	static tableName() {
 		return 'migrations';
 	}
@@ -21,7 +20,6 @@ class Migration extends BaseModel {
 	static script(number) {
 		return migrationScripts[number];
 	}
-
 }
 
 module.exports = Migration;

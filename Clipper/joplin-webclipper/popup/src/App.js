@@ -45,9 +45,9 @@ class PreviewComponent extends React.PureComponent {
 		return (
 			<div className="Preview">
 				<h2>Title:</h2>
-				<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
+				<input className={'Title'} value={this.props.title} onChange={this.props.onTitleChange}/>
 				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
-				<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
+				<a className={'Confirm Button'} onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
 
@@ -81,46 +81,46 @@ class AppComponent extends Component {
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
 			bridge().sendContentToJoplin(content);
-		}
+		};
 
 		this.contentTitle_change = (event) => {
 			this.props.dispatch({
 				type: 'CLIPPED_CONTENT_TITLE_SET',
-				text: event.currentTarget.value
+				text: event.currentTarget.value,
 			});
-		}
+		};
 
 		this.clipSimplified_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'simplifiedPageHtml',
 			});
-		}
+		};
 
 		this.clipComplete_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'completePageHtml',
 				preProcessFor: 'markdown',
 			});
-		}
+		};
 
 		this.clipCompleteHtml_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'completePageHtml',
 				preProcessFor: 'html',
 			});
-		}
+		};
 
 		this.clipSelection_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'selectedHtml',
 			});
-		}
+		};
 
 		this.clipUrl_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'pageUrl',
 			});
-		}
+		};
 
 		this.clipScreenshot_click = async () => {
 			try {
@@ -137,18 +137,18 @@ class AppComponent extends Component {
 			} catch (error) {
 				this.props.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
 			}
-		}
+		};
 
 		this.clipperServerHelpLink_click = () => {
 			bridge().tabsCreate({ url: 'https://joplinapp.org/clipper/' });
-		}
+		};
 
 		this.folderSelect_change = (event) => {
 			this.props.dispatch({
 				type: 'SELECTED_FOLDER_SET',
 				id: event.target.value,
 			});
-		}
+		};
 
 		this.tagCompChanged = this.tagCompChanged.bind(this);
 		this.onAddTagClick = this.onAddTagClick.bind(this);
@@ -181,16 +181,16 @@ class AppComponent extends Component {
 			if (this.state.selectedTags[index] !== value) {
 				const newTags = this.state.selectedTags.slice();
 				newTags[index] = value;
-				this.setState({ selectedTags: newTags });				
+				this.setState({ selectedTags: newTags });
 			}
 		}
 	}
 
 	async loadContentScripts() {
-		await bridge().tabsExecuteScript({file: "/content_scripts/JSDOMParser.js"});
-		await bridge().tabsExecuteScript({file: "/content_scripts/Readability.js"});
-		await bridge().tabsExecuteScript({file: "/content_scripts/Readability-readerable.js"});
-		await bridge().tabsExecuteScript({file: "/content_scripts/index.js"});
+		await bridge().tabsExecuteScript({file: '/content_scripts/JSDOMParser.js'});
+		await bridge().tabsExecuteScript({file: '/content_scripts/Readability.js'});
+		await bridge().tabsExecuteScript({file: '/content_scripts/Readability-readerable.js'});
+		await bridge().tabsExecuteScript({file: '/content_scripts/index.js'});
 	}
 
 	async componentDidMount() {
@@ -214,7 +214,7 @@ class AppComponent extends Component {
 				if (folder.id === this.props.selectedFolderId) foundSelectedFolderId = true;
 				if (folder.children) searchSelectedFolder(folder.children);
 			}
-		}
+		};
 
 		searchSelectedFolder(this.props.folders);
 
@@ -249,7 +249,7 @@ class AppComponent extends Component {
 			return <div style={{padding: 10, fontSize: 12, maxWidth: 200}}>{msg}</div>;
 		}
 
-		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>
+		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>;
 
 		const hasContent = !!this.props.clippedContent;
 		const content = this.props.clippedContent;
@@ -283,7 +283,7 @@ class AppComponent extends Component {
 				body_html={content.body_html}
 				onTitleChange={this.contentTitle_change}
 				command={content.source_command}
-			/>
+			/>;
 		}
 
 		const clipperStatusComp = () => {
@@ -291,43 +291,43 @@ class AppComponent extends Component {
 			const stateToString = function(state) {
 				if (state === 'not_found') return 'Not found';
 				return state.charAt(0).toUpperCase() + state.slice(1);
-			} 
+			};
 
-			let msg = ''
+			let msg = '';
 			let led = null;
 			let helpLink = null;
 
-			const foundState = this.props.clipperServer.foundState
-			
+			const foundState = this.props.clipperServer.foundState;
+
 			if (foundState === 'found') {
-				msg = "Ready on port " + this.props.clipperServer.port
-				led = led_green
+				msg = 'Ready on port ' + this.props.clipperServer.port;
+				led = led_green;
 			} else {
-				msg = stateToString(foundState)
-				led = foundState === 'searching' ? led_orange : led_red
-				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>
+				msg = stateToString(foundState);
+				led = foundState === 'searching' ? led_orange : led_red;
+				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>;
 			}
 
-			msg = "Service status: " + msg
+			msg = 'Service status: ' + msg;
 
-			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>
-		}
+			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>;
+		};
 
 		const foldersComp = () => {
 			const optionComps = [];
 
 			const nonBreakingSpacify = (s) => {
 				// https://stackoverflow.com/a/24437562/561309
-				return s.replace(/ /g, "\u00a0");
-			}
+				return s.replace(/ /g, '\u00a0');
+			};
 
 			const addOptions = (folders, depth) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
-					optionComps.push(<option key={folder.id} value={folder.id}>{nonBreakingSpacify('    '.repeat(depth) + folder.title)}</option>)
+					optionComps.push(<option key={folder.id} value={folder.id}>{nonBreakingSpacify('    '.repeat(depth) + folder.title)}</option>);
 					if (folder.children) addOptions(folder.children, depth + 1);
 				}
-			}
+			};
 
 			addOptions(this.props.folders, 0);
 
@@ -339,7 +339,7 @@ class AppComponent extends Component {
 					</select>
 				</div>
 			);
-		}
+		};
 
 		const tagsComp = () => {
 			const comps = [];
@@ -363,7 +363,7 @@ class AppComponent extends Component {
 					<a className="AddTagButton" href="#" onClick={this.onAddTagClick}>Add tag</a>
 				</div>
 			);
-		}
+		};
 
 		const tagDataListOptions = [];
 		for (let i = 0; i < this.props.tags.length; i++) {
@@ -380,7 +380,7 @@ class AppComponent extends Component {
 
 		return (
 			<div className="App">
-				<div className="Controls">			
+				<div className="Controls">
 					<ul>
 						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
 						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>

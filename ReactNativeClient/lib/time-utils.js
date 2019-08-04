@@ -1,7 +1,6 @@
 const moment = require('moment');
 
 class Time {
-
 	constructor() {
 		this.dateFormat_ = 'DD/MM/YYYY';
 		this.timeFormat_ = 'HH:mm';
@@ -44,11 +43,21 @@ class Time {
 	}
 
 	unixMsToIso(ms) {
-		return moment.unix(ms / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+		return (
+			moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z'
+		);
 	}
 
 	unixMsToIsoSec(ms) {
-		return moment.unix(ms / 1000).utc().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+		return (
+			moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DDTHH:mm:ss') + 'Z'
+		);
 	}
 
 	unixMsToLocalDateTime(ms) {
@@ -88,7 +97,6 @@ class Time {
 	sleep(seconds) {
 		return this.msleep(seconds * 1000);
 	}
-
 }
 
 const time = new Time();

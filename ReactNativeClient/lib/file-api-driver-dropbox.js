@@ -1,10 +1,8 @@
 const { time } = require('lib/time-utils.js');
 const { shim } = require('lib/shim');
 const JoplinError = require('lib/JoplinError');
-const { basicDelta } = require('lib/file-api');
 
-class FileApiDriverDropbox { 
-
+class FileApiDriverDropbox {
 	constructor(api) {
 		this.api_ = api;
 	}
@@ -77,12 +75,12 @@ class FileApiDriverDropbox {
 
 			try {
 				const response = await this.api().exec('POST', urlPath, body);
-				
+
 				const output = {
 					items: this.metadataToStats_(response.entries),
 					hasMore: response.has_more,
 					context: { cursor: response.cursor },
-				}
+				};
 
 				return output;
 			} catch (error) {
@@ -124,11 +122,17 @@ class FileApiDriverDropbox {
 	async get(path, options) {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
-		
+
 		try {
-			const response = await this.api().exec('POST', 'files/download', null, {
-				'Dropbox-API-Arg': JSON.stringify({ "path": this.makePath_(path) }),
-			}, options);
+			const response = await this.api().exec(
+				'POST',
+				'files/download',
+				null,
+				{
+					'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }),
+				},
+				options
+			);
 			return response;
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'not_found')) {
@@ -151,21 +155,28 @@ class FileApiDriverDropbox {
 				// Ignore
 			} else {
 				throw error;
-			} 
+			}
 		}
 	}
 
 	async put(path, content, options = null) {
 		// See https://github.com/facebook/react-native/issues/14445#issuecomment-352965210
-		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8')
+		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8');
 
 		try {
-			await this.api().exec('POST', 'files/upload', content, {
-				'Dropbox-API-Arg': JSON.stringify({
-					path: this.makePath_(path),
-					mode: 'overwrite',
-					mute: true, // Don't send a notification to user since there can be many of these updates
-			})}, options);
+			await this.api().exec(
+				'POST',
+				'files/upload',
+				content,
+				{
+					'Dropbox-API-Arg': JSON.stringify({
+						path: this.makePath_(path),
+						mode: 'overwrite',
+						mute: true, // Don't send a notification to user since there can be many of these updates
+					}),
+				},
+				options
+			);
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'restricted_content')) {
 				throw new JoplinError('Cannot upload because content is restricted by Dropbox', 'rejectedByTarget');
@@ -218,7 +229,6 @@ class FileApiDriverDropbox {
 			await time.sleep(2);
 		}
 	}
-
 }
 
 module.exports = { FileApiDriverDropbox };

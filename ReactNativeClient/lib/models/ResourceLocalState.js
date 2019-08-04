@@ -2,7 +2,6 @@ const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 
 class ResourceLocalState extends BaseModel {
-
 	static tableName() {
 		return 'resource_local_states';
 	}
@@ -15,7 +14,7 @@ class ResourceLocalState extends BaseModel {
 		if (!resourceId) throw new Error('Resource ID not provided'); // Sanity check
 
 		const result = await this.modelSelectOne('SELECT * FROM resource_local_states WHERE resource_id = ?', [resourceId]);
-		
+
 		if (!result) {
 			const defaultRow = this.db().createDefaultRow(this.tableName());
 			delete defaultRow.id;
@@ -27,10 +26,7 @@ class ResourceLocalState extends BaseModel {
 	}
 
 	static async save(o) {
-		const queries = [
-			{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] },
-			Database.insertQuery(this.tableName(), o),
-		];
+		const queries = [{ sql: 'DELETE FROM resource_local_states WHERE resource_id = ?', params: [o.resource_id] }, Database.insertQuery(this.tableName(), o)];
 
 		return this.db().transactionExecBatch(queries);
 	}
@@ -40,7 +36,6 @@ class ResourceLocalState extends BaseModel {
 		options.idFieldName = 'resource_id';
 		return super.batchDelete(ids, options);
 	}
-
 }
 
 module.exports = ResourceLocalState;

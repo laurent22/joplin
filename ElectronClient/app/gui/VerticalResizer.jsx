@@ -1,12 +1,11 @@
-const React = require("react");
+const React = require('react');
 const electron = require('electron');
 
 class VerticalResizer extends React.PureComponent {
-
 	constructor() {
 		super();
 
-		this.state = {
+		this.state = {
 			parentRight: 0,
 			parentHeight: 0,
 			parentWidth: 0,
@@ -29,17 +28,17 @@ class VerticalResizer extends React.PureComponent {
 	}
 
 	onDragStart(event) {
-		document.addEventListener('dragover', this.document_onDragOver)
+		document.addEventListener('dragover', this.document_onDragOver);
 
-        event.dataTransfer.dropEffect= 'none';
+		event.dataTransfer.dropEffect = 'none';
 
-        const cursor = electron.screen.getCursorScreenPoint();
-        
+		const cursor = electron.screen.getCursorScreenPoint();
+
 		this.setState({
 			drag: {
 				startX: cursor.x,
 				lastX: cursor.x,
-			}
+			},
 		});
 
 		if (this.props.onDragStart) this.props.onDragStart({});
@@ -58,11 +57,14 @@ class VerticalResizer extends React.PureComponent {
 		const delta = newX - this.state.drag.lastX;
 		if (!delta) return;
 
-		this.setState({
-			drag: Object.assign({}, this.state.drag, { lastX: newX }),
-		}, () => {
-			this.props.onDrag({ deltaX: delta });
-		});
+		this.setState(
+			{
+				drag: Object.assign({}, this.state.drag, { lastX: newX }),
+			},
+			() => {
+				this.props.onDrag({ deltaX: delta });
+			}
+		);
 	}
 
 	onDragEnd(event) {
@@ -76,26 +78,22 @@ class VerticalResizer extends React.PureComponent {
 	render() {
 		const debug = false;
 
-		const rootStyle = Object.assign({}, {
-			height: '100%',
-			width:5,
-			borderColor:'red',
-			borderWidth: debug ? 1 : 0,
-			borderStyle:'solid',
-			cursor: 'col-resize',
-			boxSizing: 'border-box',
-			opacity: 0,
-		}, this.props.style);
-
-		return (
-			<div
-				style={rootStyle}
-				draggable={true}
-				onDragStart={this.onDragStart}
-				onDrag={this.onDrag}
-				onDragEnd={this.onDragEnd}
-			/>
+		const rootStyle = Object.assign(
+			{},
+			{
+				height: '100%',
+				width: 5,
+				borderColor: 'red',
+				borderWidth: debug ? 1 : 0,
+				borderStyle: 'solid',
+				cursor: 'col-resize',
+				boxSizing: 'border-box',
+				opacity: 0,
+			},
+			this.props.style
 		);
+
+		return <div style={rootStyle} draggable={true} onDragStart={this.onDragStart} onDrag={this.onDrag} onDragEnd={this.onDragEnd} />;
 	}
 }
 

@@ -1,12 +1,10 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 
 class HeaderComponent extends React.Component {
-
 	constructor() {
 		super();
 		this.state = {
@@ -18,13 +16,13 @@ class HeaderComponent extends React.Component {
 		this.searchOnQuery_ = null;
 		this.searchElement_ = null;
 
-		const triggerOnQuery = (query) => {
+		const triggerOnQuery = query => {
 			clearTimeout(this.scheduleSearchChangeEventIid_);
 			if (this.searchOnQuery_) this.searchOnQuery_(query);
 			this.scheduleSearchChangeEventIid_ = null;
-		}
+		};
 
-		this.search_onChange = (event) => {
+		this.search_onChange = event => {
 			this.setState({ searchQuery: event.target.value });
 
 			if (this.scheduleSearchChangeEventIid_) clearTimeout(this.scheduleSearchChangeEventIid_);
@@ -34,10 +32,10 @@ class HeaderComponent extends React.Component {
 			}, 500);
 		};
 
-		this.search_onClear = (event) => {
+		this.search_onClear = event => {
 			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
-		}
+		};
 
 		this.search_onFocus = event => {
 			if (this.hideSearchUsageLinkIID_) {
@@ -46,7 +44,7 @@ class HeaderComponent extends React.Component {
 			}
 
 			this.setState({ showSearchUsageLink: true });
-		}
+		};
 
 		this.search_onBlur = event => {
 			if (this.hideSearchUsageLinkIID_) return;
@@ -54,22 +52,23 @@ class HeaderComponent extends React.Component {
 			this.hideSearchUsageLinkIID_ = setTimeout(() => {
 				this.setState({ showSearchUsageLink: false });
 			}, 5000);
-		}
-		
+		};
+
 		this.search_keyDown = event => {
-			if (event.keyCode === 27) { // ESCAPE
+			if (event.keyCode === 27) {
+				// ESCAPE
 				this.resetSearch();
 			}
-		}
-		
+		};
+
 		this.resetSearch = () => {
 			this.setState({ searchQuery: '' });
 			triggerOnQuery('');
-		}
+		};
 
 		this.searchUsageLink_click = event => {
 			bridge().openExternal('https://joplinapp.org/#searching');
-		}
+		};
 	}
 
 	async componentWillReceiveProps(nextProps) {
@@ -79,11 +78,11 @@ class HeaderComponent extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if(prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
+		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
 			this.resetSearch();
 		}
 	}
-	
+
 	componentWillUnmount() {
 		if (this.hideSearchUsageLinkIID_) {
 			clearTimeout(this.hideSearchUsageLinkIID_);
@@ -122,14 +121,14 @@ class HeaderComponent extends React.Component {
 				color: style.color,
 			};
 			if (options.title) iconStyle.marginRight = 5;
-			if("undefined" != typeof(options.iconRotation)) {
-				iconStyle.transition = "transform 0.15s ease-in-out";
+			if ('undefined' != typeof options.iconRotation) {
+				iconStyle.transition = 'transform 0.15s ease-in-out';
 				iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
 			}
-			icon = <i style={iconStyle} className={"fa " + options.iconName}></i>
+			icon = <i style={iconStyle} className={'fa ' + options.iconName}></i>;
 		}
 
-		const isEnabled = (!('enabled' in options) || options.enabled);
+		const isEnabled = !('enabled' in options) || options.enabled;
 		let classes = ['button'];
 		if (!isEnabled) classes.push('disabled');
 
@@ -139,16 +138,21 @@ class HeaderComponent extends React.Component {
 
 		const title = options.title ? options.title : '';
 
-		return <a
-			className={classes.join(' ')}
-			style={finalStyle}
-			key={key}
-			href="#"
-			title={title}
-			onClick={() => { if (isEnabled) options.onClick() }}
-		>
-			{icon}<span className="title">{title}</span>
-		</a>
+		return (
+			<a
+				className={classes.join(' ')}
+				style={finalStyle}
+				key={key}
+				href="#"
+				title={title}
+				onClick={() => {
+					if (isEnabled) options.onClick();
+				}}
+			>
+				{icon}
+				<span className="title">{title}</span>
+			</a>
+		);
 	}
 
 	makeSearch(key, style, options, state) {
@@ -159,8 +163,8 @@ class HeaderComponent extends React.Component {
 			flex: 1,
 			paddingLeft: 6,
 			paddingRight: 6,
-			paddingTop: 1,  // vertical alignment with buttons
-			paddingBottom: 0,  // vertical alignment with buttons
+			paddingTop: 1, // vertical alignment with buttons
+			paddingBottom: 0, // vertical alignment with buttons
 			height: style.fontSize * 2,
 			color: style.color,
 			fontSize: style.fontSize,
@@ -191,33 +195,24 @@ class HeaderComponent extends React.Component {
 		};
 
 		const iconName = state.searchQuery ? 'fa-times' : 'fa-search';
-		const icon = <i style={iconStyle} className={"fa " + iconName}></i>
+		const icon = <i style={iconStyle} className={'fa ' + iconName}></i>;
 		if (options.onQuery) this.searchOnQuery_ = options.onQuery;
 
 		const usageLink = !this.state.showSearchUsageLink ? null : (
-			<a onClick={this.searchUsageLink_click} style={theme.urlStyle} href="#">{_('Usage')}</a>
+			<a onClick={this.searchUsageLink_click} style={theme.urlStyle} href="#">
+				{_('Usage')}
+			</a>
 		);
 
 		return (
 			<div key={key} style={containerStyle}>
-				<input
-					type="text"
-					style={inputStyle}
-					placeholder={options.title}
-					value={state.searchQuery}
-					onChange={this.search_onChange}
-					ref={elem => this.searchElement_ = elem}
-					onFocus={this.search_onFocus}
-					onBlur={this.search_onBlur}
-					onKeyDown={this.search_keyDown}
-				/>
-				<a
-					href="#"
-					style={searchButton}
-					onClick={this.search_onClear}
-				>{icon}</a>
+				<input type="text" style={inputStyle} placeholder={options.title} value={state.searchQuery} onChange={this.search_onChange} ref={elem => (this.searchElement_ = elem)} onFocus={this.search_onFocus} onBlur={this.search_onBlur} onKeyDown={this.search_keyDown} />
+				<a href="#" style={searchButton} onClick={this.search_onClear}>
+					{icon}
+				</a>
 				{usageLink}
-			</div>);
+			</div>
+		);
 	}
 
 	render() {
@@ -226,7 +221,7 @@ class HeaderComponent extends React.Component {
 		const showBackButton = this.props.showBackButton === undefined || this.props.showBackButton === true;
 		style.height = theme.headerHeight;
 		style.display = 'flex';
-		style.flexDirection  = 'row';
+		style.flexDirection = 'row';
 		style.borderBottom = '1px solid ' + theme.dividerColor;
 		style.boxSizing = 'border-box';
 
@@ -266,14 +261,13 @@ class HeaderComponent extends React.Component {
 
 		return (
 			<div className="header" style={style}>
-				{ items }
+				{items}
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,

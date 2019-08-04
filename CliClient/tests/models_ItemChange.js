@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -25,7 +27,7 @@ describe('models_ItemChange', function() {
 	});
 
 	it('should delete old changes that have been processed', asyncTest(async () => {
-		const n1 = await Note.save({ title: "abcd efgh" }); // 3
+		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
 
 		await ItemChange.waitForAllSaved();
 

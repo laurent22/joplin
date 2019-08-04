@@ -3,7 +3,7 @@ const { shim } = require('lib/shim.js');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
-const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
@@ -13,7 +13,6 @@ const base64 = require('base-64');
 // In general, we should only deal with things in "d:", which is the standard DAV namespace.
 
 class WebDavApi {
-
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
@@ -52,7 +51,7 @@ class WebDavApi {
 	async xmlToJson(xml) {
 		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
-		const nameProcessor = (name) => {
+		const nameProcessor = name => {
 			if (name.indexOf('xmlns:') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
@@ -72,13 +71,13 @@ class WebDavApi {
 				const p = name.split(':');
 				davNamespaces.push(p[p.length - 1]);
 			}
-		}
+		};
 
 		const options = {
 			tagNameProcessors: [nameProcessor],
 			attrNameProcessors: [nameProcessor],
-			attrValueProcessors: [attrValueProcessor]
-		}
+			attrValueProcessors: [attrValueProcessor],
+		};
 
 		return new Promise((resolve, reject) => {
 			parseXmlString(xml, options, (error, result) => {
@@ -91,7 +90,7 @@ class WebDavApi {
 		});
 	}
 
-	valueFromJson(json, keys, type) {	
+	valueFromJson(json, keys, type) {
 		let output = json;
 
 		for (let i = 0; i < keys.length; i++) {
@@ -192,14 +191,17 @@ class WebDavApi {
 		// 	<propname/>
 		// </propfind>`;
 
-		const body = `<?xml version="1.0" encoding="UTF-8"?>
+		const body =
+			`<?xml version="1.0" encoding="UTF-8"?>
 			<d:propfind xmlns:d="DAV:">
 				<d:prop xmlns:oc="http://owncloud.org/ns">
-					` + fieldsXml + `
+					` +
+			fieldsXml +
+			`
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body, { 'Depth': depth }, options);
+		return this.exec('PROPFIND', path, body, { Depth: depth }, options);
 	}
 
 	requestToCurl_(url, options) {
@@ -213,10 +215,10 @@ class WebDavApi {
 				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
 			}
 		}
-		if (options.body) output.push('--data ' + "'" + options.body + "'");
+		if (options.body) output.push('--data ' + '\'' + options.body + '\'');
 		output.push(url);
 
-		return output.join(' ');		
+		return output.join(' ');
 	}
 
 	handleNginxHack_(jsonResponse, newErrorHandler) {
@@ -333,7 +335,8 @@ class WebDavApi {
 		} else if (options.target == 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = shim.stringByteLength(body) + '';
 			response = await shim.fetch(url, fetchOptions);
-		} else { // file
+		} else {
+			// file
 			response = await shim.fetchBlob(url, fetchOptions);
 		}
 
@@ -347,16 +350,17 @@ class WebDavApi {
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (responseText + '').substr(0, 1024);
 			return new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + '): ' + shortResponseText, code);
-		}
+		};
 
 		let responseJson_ = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
+			// eslint-disable-next-line require-atomic-updates
 			responseJson_ = await this.xmlToJson(responseText);
 			if (!responseJson_) throw newError('Cannot parse XML response', response.status);
 			return responseJson_;
-		}
+		};
 
 		if (!response.ok) {
 			// When using fetchBlob we only get a string (not xml or json) back
@@ -371,13 +375,13 @@ class WebDavApi {
 
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
-				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join('\n') : 'Unknown error 1';
 				throw newError(message + ' (Exception ' + code + ')', response.status);
 			}
 
 			throw newError('Unknown error 2', response.status);
 		}
-		
+
 		if (options.responseFormat === 'text') return responseText;
 
 		// The following methods may have a response depending on the server but it's not
@@ -394,7 +398,6 @@ class WebDavApi {
 
 		return output;
 	}
-
 }
 
 module.exports = WebDavApi;

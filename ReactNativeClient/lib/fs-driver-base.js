@@ -2,7 +2,6 @@ const { filename, fileExtension } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
 
 class FsDriverBase {
-
 	async isDirectory(path) {
 		const stat = await this.stat(path);
 		return !stat ? false : stat.isDirectory();
@@ -34,7 +33,7 @@ class FsDriverBase {
 			if (!exists) return nameToTry;
 			nameToTry = nameNoExt + ' (' + counter + ')' + extension;
 			counter++;
-			if (counter >= 1000) nameToTry = nameNoExt + ' (' + ((new Date()).getTime()) + ')' + extension;
+			if (counter >= 1000) nameToTry = nameNoExt + ' (' + new Date().getTime() + ')' + extension;
 			if (counter >= 10000) throw new Error('Cannot find unique title');
 		}
 	}
@@ -61,7 +60,6 @@ class FsDriverBase {
 			await time.msleep(100);
 		}
 	}
-
 }
 
 module.exports = FsDriverBase;

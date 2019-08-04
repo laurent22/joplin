@@ -9,7 +9,6 @@ const { _ } = require('lib/locale.js');
 const { toTitleCase } = require('lib/string-utils.js');
 
 class ReportService {
-
 	csvEscapeCell(cell) {
 		cell = this.csvValueToString(cell);
 		let output = cell.replace(/"/, '""');
@@ -61,7 +60,7 @@ class ReportService {
 			for (let j = 0; j < items.length; j++) {
 				const item = items[j];
 				let row = [itemType, item.id, item.updated_time, item.sync_time];
-				row.push(('is_conflict' in item) ? item.is_conflict : '');
+				row.push('is_conflict' in item ? item.is_conflict : '');
 				output.push(row);
 			}
 		}
@@ -143,13 +142,17 @@ class ReportService {
 			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
 
 			section.body.push('');
-			
+
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
-				section.body.push({ text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id), canRetry: true, retryHandler: async () => {
-					await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
-					DecryptionWorker.instance().scheduleStart();
-				}});
+				section.body.push({
+					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
+					canRetry: true,
+					retryHandler: async () => {
+						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
+						DecryptionWorker.instance().scheduleStart();
+					},
+				});
 			}
 
 			sections.push(section);
@@ -177,7 +180,6 @@ class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			const folder = folders[i];
 			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
 		}
 
@@ -199,7 +201,6 @@ class ReportService {
 
 		return sections;
 	}
-
 }
 
 module.exports = { ReportService };

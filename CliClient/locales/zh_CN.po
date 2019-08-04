@@ -1424,10 +1424,10 @@ msgstr "明亮"
 msgid "Dark"
 msgstr "深邃"
 
-msgid "Solarized Light"
+msgid "Solarised Light"
 msgstr ""
 
-msgid "Solarized Dark"
+msgid "Solarised Dark"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

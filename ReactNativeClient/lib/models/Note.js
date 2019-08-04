@@ -6,15 +6,12 @@ const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const { pregQuote } = require('lib/string-utils.js');
-const { toSystemSlashes, toFileProtocolPath } = require('lib/path-utils.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const moment = require('moment');
 const lodash = require('lodash');
 
 class Note extends BaseItem {
-
 	static tableName() {
 		return 'notes';
 	}
@@ -34,7 +31,7 @@ class Note extends BaseItem {
 	}
 
 	static async unserializeForEdit(content) {
-		content += "\n\ntype_: " + BaseModel.TYPE_NOTE;
+		content += '\n\ntype_: ' + BaseModel.TYPE_NOTE;
 		let output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
@@ -83,12 +80,12 @@ class Note extends BaseItem {
 
 	static defaultTitleFromBody(body) {
 		if (body && body.length) {
-			const lines = body.trim().split("\n");
+			const lines = body.trim().split('\n');
 			let output = lines[0].trim();
 			// Remove the first #, *, etc.
 			while (output.length) {
 				const c = output[0];
-				if (['#', ' ', "\n", "\t", '*', '`', '-'].indexOf(c) >= 0) {
+				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
 					output = output.substr(1);
 				} else {
 					break;
@@ -107,7 +104,7 @@ class Note extends BaseItem {
 	}
 
 	static geoLocationUrlFromLatLong(lat, long) {
-		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long)
+		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
 	}
 
 	static modelType() {
@@ -120,16 +117,16 @@ class Note extends BaseItem {
 		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
 		if (!matches) matches = [];
-		matches = matches.map((m) => m.substr(3, 32));
+		matches = matches.map(m => m.substr(3, 32));
 
 		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b "Some title")
 		let matches2 = body.match(/\(:\/[a-zA-Z0-9]{32}\s(.*?)\)/g);
 		if (!matches2) matches2 = [];
-		matches2 = matches2.map((m) => m.substr(3, 32));
-		matches = matches.concat(matches2)
+		matches2 = matches2.map(m => m.substr(3, 32));
+		matches = matches.concat(matches2);
 
 		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi
+		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi;
 		const imgMatches = [];
 		while (true) {
 			const m = imgRegex.exec(body);
@@ -170,7 +167,7 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = Resource.relativePath(resource)
+			const resourcePath = Resource.relativePath(resource);
 			body = body.replace(new RegExp(':/' + id, 'gi'), resourcePath);
 		}
 
@@ -178,9 +175,9 @@ class Note extends BaseItem {
 	}
 
 	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = pregQuote(Resource.baseRelativeDirectoryPath() + '/') + '[a-zA-Z0-9\.]+';
+		const reString = pregQuote(Resource.baseRelativeDirectoryPath() + '/') + '[a-zA-Z0-9.]+';
 		const re = new RegExp(reString, 'gi');
-		body = body.replace(re, (match) => {
+		body = body.replace(re, match => {
 			const id = Resource.pathToId(match);
 			return ':/' + id;
 		});
@@ -201,28 +198,31 @@ class Note extends BaseItem {
 
 	// Note: sort logic must be duplicated in previews();
 	static sortNotes(notes, orders, uncompletedTodosOnTop) {
-		const noteOnTop = (note) => {
+		const noteOnTop = note => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
-		}
+		};
 
 		const noteFieldComp = (f1, f2) => {
 			if (f1 === f2) return 0;
 			return f1 < f2 ? -1 : +1;
-		}
+		};
 
 		// Makes the sort deterministic, so that if, for example, a and b have the
 		// same updated_time, they aren't swapped every time a list is refreshed.
 		const sortIdenticalNotes = (a, b) => {
 			let r = null;
-			r = noteFieldComp(a.user_updated_time, b.user_updated_time); if (r) return r;
-			r = noteFieldComp(a.user_created_time, b.user_created_time); if (r) return r;
+			r = noteFieldComp(a.user_updated_time, b.user_updated_time);
+			if (r) return r;
+			r = noteFieldComp(a.user_created_time, b.user_created_time);
+			if (r) return r;
 
 			const titleA = a.title ? a.title.toLowerCase() : '';
 			const titleB = b.title ? b.title.toLowerCase() : '';
-			r = noteFieldComp(titleA, titleB); if (r) return r;
+			r = noteFieldComp(titleA, titleB);
+			if (r) return r;
 
 			return noteFieldComp(a.id, b.id);
-		}
+		};
 
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
@@ -253,7 +253,9 @@ class Note extends BaseItem {
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db().escapeFields(fields).join(',');
+		return this.db()
+			.escapeFields(fields)
+			.join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -263,7 +265,7 @@ class Note extends BaseItem {
 			conditions: ['`' + field + '` = ?'],
 			conditionsParams: [value],
 			fields: '*',
-		}
+		};
 
 		let results = await this.previews(folderId, options);
 		return results.length ? results[0] : null;
@@ -274,12 +276,7 @@ class Note extends BaseItem {
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!('order' in options)) options.order = [
-			{ by: 'user_updated_time', dir: 'DESC' },
-			{ by: 'user_created_time', dir: 'DESC' },
-			{ by: 'title', dir: 'DESC' },
-			{ by: 'id', dir: 'DESC' },
-		];
+		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
@@ -342,7 +339,7 @@ class Note extends BaseItem {
 		}
 
 		if (hasNotes && hasTodos) {
-
+			// Nothing
 		} else if (hasNotes) {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
@@ -485,7 +482,7 @@ class Note extends BaseItem {
 	}
 
 	static toggleIsTodo(note) {
-		return this.changeNoteType(note, !!note.is_todo ? 'note' : 'todo');
+		return this.changeNoteType(note, note.is_todo ? 'note' : 'todo');
 	}
 
 	static toggleTodoCompleted(note) {
@@ -497,7 +494,7 @@ class Note extends BaseItem {
 		} else {
 			note.todo_completed = Date.now();
 		}
-		
+
 		return note;
 	}
 
@@ -578,7 +575,7 @@ class Note extends BaseItem {
 				beforeChangeItems[note.id] = JSON.stringify(note);
 			}
 
-			const result = await super.batchDelete(processIds, options);
+			await super.batchDelete(processIds, options);
 			const changeSource = options && options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
@@ -631,7 +628,6 @@ class Note extends BaseItem {
 		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error('Invalid markup language ID: ' + markupLanguageId);
 	}
-
 }
 
 Note.updateGeolocationEnabled_ = true;

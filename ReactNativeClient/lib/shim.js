@@ -10,34 +10,34 @@ shim.isReactNative = () => {
 	if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('ReactNativeDebugger') >= 0) {
 		return true;
 	}
-	
+
 	return !shim.isNode();
 };
 
 shim.isLinux = () => {
 	return process && process.platform === 'linux';
-}
+};
 
 shim.isFreeBSD = () => {
 	return process && process.platform === 'freebsd';
-}
+};
 
 shim.isWindows = () => {
 	return process && process.platform === 'win32';
-}
+};
 
 shim.isMac = () => {
 	return process && process.platform === 'darwin';
-}
+};
 
 shim.platformName = function() {
 	if (shim.isReactNative()) return 'mobile';
-	if (shim.isMac()) return 'darwin'; 
-	if (shim.isWindows()) return 'win32'; 
+	if (shim.isMac()) return 'darwin';
+	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
- 	if (shim.isFreeBSD()) return 'freebsd';
+	if (shim.isFreeBSD()) return 'freebsd';
 	throw new Error('Cannot determine platform');
-}
+};
 
 // https://github.com/cheton/is-electron
 shim.isElectron = () => {
@@ -57,11 +57,11 @@ shim.isElectron = () => {
 	}
 
 	return false;
-}
+};
 
 shim.isPortable = function() {
 	return typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
-}
+};
 
 // Node requests can go wrong is so many different ways and with so
 // many different error messages... This handler inspects the error
@@ -79,7 +79,7 @@ shim.fetchRequestCanBeRetried = function(error) {
 	// OneDrive (or Node?) sometimes sends back a "not found" error for resources
 	// that definitely exist and in this case repeating the request works.
 	// Error is:
-	// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443      
+	// request to https://graph.microsoft.com/v1.0/drive/special/approot failed, reason: getaddrinfo ENOTFOUND graph.microsoft.com graph.microsoft.com:443
 	if (error.code == 'ENOTFOUND') return true;
 
 	// network timeout at: https://public-ch3302...859f9b0e3ab.md
@@ -104,12 +104,20 @@ shim.fetchRequestCanBeRetried = function(error) {
 	return false;
 };
 
+shim.fetchMaxRetry_ = 5;
+
+shim.fetchMaxRetrySet = v => {
+	const previous = shim.fetchMaxRetry_;
+	shim.fetchMaxRetry_ = v;
+	return previous;
+};
+
 shim.fetchWithRetry = async function(fetchFn, options = null) {
 	const { time } = require('lib/time-utils.js');
 
 	if (!options) options = {};
 	if (!options.timeout) options.timeout = 1000 * 120; // ms
-	if (!('maxRetry' in options)) options.maxRetry = 5;
+	if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
 
 	let retryCount = 0;
 	while (true) {
@@ -126,30 +134,62 @@ shim.fetchWithRetry = async function(fetchFn, options = null) {
 			}
 		}
 	}
-}
+};
 
-shim.fetch = () => { throw new Error('Not implemented'); }
+shim.fetch = () => {
+	throw new Error('Not implemented');
+};
 shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
-shim.fsDriver = () => { throw new Error('Not implemented') }
+shim.fsDriver = () => {
+	throw new Error('Not implemented');
+};
 shim.FileApiDriverLocal = null;
-shim.readLocalFileBase64 = (path) => { throw new Error('Not implemented'); }
-shim.uploadBlob = () => { throw new Error('Not implemented'); }
+
+shim.readLocalFileBase64 = path => {
+	throw new Error('Not implemented');
+};
+
+shim.uploadBlob = () => {
+	throw new Error('Not implemented');
+};
+
 shim.sjclModule = null;
-shim.randomBytes = async (count) => { throw new Error('Not implemented'); }
+
+shim.randomBytes = async count => {
+	throw new Error('Not implemented');
+};
+
 shim.setInterval = function(fn, interval) {
 	return setInterval(fn, interval);
-}
+};
+
 shim.clearInterval = function(id) {
 	return clearInterval(id);
-}
-shim.stringByteLength = function(string) { throw new Error('Not implemented'); }
+};
+
+shim.stringByteLength = function(string) {
+	throw new Error('Not implemented');
+};
+
 shim.detectAndSetLocale = null;
-shim.attachFileToNote = async (note, filePath) => {}
-shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) { throw new Error('Not implemented') }
+
+shim.attachFileToNote = async (note, filePath) => {};
+
+shim.imageFromDataUrl = async function(imageDataUrl, filePath) {
+	throw new Error('Not implemented');
+};
 shim.Buffer = null;
-shim.openUrl = () => { throw new Error('Not implemented'); }
-shim.waitForFrame = () => { throw new Error('Not implemented'); }
+shim.openUrl = () => {
+	throw new Error('Not implemented');
+};
+shim.waitForFrame = () => {
+	throw new Error('Not implemented');
+};
+
 shim.injectedJs = name => '';
-shim.loadCssFromJs = name => { throw new Error('Not implemented'); }
+
+shim.loadCssFromJs = name => {
+	throw new Error('Not implemented');
+};
 
 module.exports = { shim };

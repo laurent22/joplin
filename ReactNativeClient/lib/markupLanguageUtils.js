@@ -3,7 +3,6 @@ const htmlUtils = require('lib/htmlUtils');
 const Note = require('lib/models/Note');
 
 class MarkupLanguageUtils {
-
 	lib_(language) {
 		if (language === Note.MARKUP_LANGUAGE_HTML) return htmlUtils;
 		if (language === Note.MARKUP_LANGUAGE_MARKDOWN) return markdownUtils;
@@ -13,7 +12,6 @@ class MarkupLanguageUtils {
 	extractImageUrls(language, text) {
 		return this.lib_(language).extractImageUrls(text);
 	}
-
 }
 
 const markupLanguageUtils = new MarkupLanguageUtils();

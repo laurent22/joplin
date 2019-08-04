@@ -1,9 +1,8 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, filename } = require('lib/path-utils.js');
+const { basename } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 
 class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
-
 	async init(destDir) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? destDir + '/resources' : null;
@@ -24,7 +23,6 @@ class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 	}
 
 	async close() {}
-
 }
 
 module.exports = InteropService_Exporter_Raw;

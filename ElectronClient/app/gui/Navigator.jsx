@@ -1,10 +1,9 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { connect } = require('react-redux');
-const { app } = require('../app.js');
 const { bridge } = require('electron').remote.require('./bridge');
 
 class NavigatorComponent extends Component {
-
 	componentWillReceiveProps(newProps) {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
@@ -18,7 +17,10 @@ class NavigatorComponent extends Component {
 
 	updateWindowTitle(title) {
 		try {
-			if (bridge().window()) bridge().window().setTitle(title);
+			if (bridge().window())
+				bridge()
+					.window()
+					.setTitle(title);
 		} catch (error) {
 			console.warn('updateWindowTitle', error);
 		}
@@ -39,19 +41,16 @@ class NavigatorComponent extends Component {
 
 		return (
 			<div style={this.props.style}>
-				<Screen style={screenStyle} {...screenProps}/>
+				<Screen style={screenStyle} {...screenProps} />
 			</div>
 		);
 	}
-
 }
 
-const Navigator = connect(
-	(state) => {
-		return {
-			route: state.route,
-		};
-	}
-)(NavigatorComponent)
+const Navigator = connect(state => {
+	return {
+		route: state.route,
+	};
+})(NavigatorComponent);
 
 module.exports = { Navigator };

@@ -7,7 +7,6 @@ const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 
 class OneDriveLoginScreenComponent extends React.Component {
-
 	constructor() {
 		super();
 		this.webview_ = null;
@@ -36,8 +35,8 @@ class OneDriveLoginScreenComponent extends React.Component {
 
 	webview_domReady() {
 		this.setState({ webviewReady: true });
-		
-		this.webview_.addEventListener('did-navigate', async (event) => {
+
+		this.webview_.addEventListener('did-navigate', async event => {
 			const url = event.url;
 
 			if (this.authCode_) return;
@@ -50,11 +49,14 @@ class OneDriveLoginScreenComponent extends React.Component {
 			this.authCode_ = parsedUrl.query.code;
 
 			try {
-				await reg.syncTarget().api().execTokenRequest(this.authCode_, this.redirectUrl(), true);
+				await reg
+					.syncTarget()
+					.api()
+					.execTokenRequest(this.authCode_, this.redirectUrl(), true);
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
-				bridge().showErrorMessageBox('Could not login to OneDrive. Please try again.\n\n' + error.message + "\n\n" + url.match(/.{1,64}/g).join('\n'));
+				bridge().showErrorMessageBox('Could not login to OneDrive. Please try again.\n\n' + error.message + '\n\n' + url.match(/.{1,64}/g).join('\n'));
 			}
 
 			this.authCode_ = null;
@@ -62,11 +64,17 @@ class OneDriveLoginScreenComponent extends React.Component {
 	}
 
 	startUrl() {
-		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
+		return reg
+			.syncTarget()
+			.api()
+			.authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
-		return reg.syncTarget().api().nativeClientRedirectUrl();
+		return reg
+			.syncTarget()
+			.api()
+			.nativeClientRedirectUrl();
 	}
 
 	render() {
@@ -94,14 +102,13 @@ class OneDriveLoginScreenComponent extends React.Component {
 		return (
 			<div>
 				<Header style={headerStyle} buttons={headerButtons} />
-				<webview src={this.startUrl()} style={webviewStyle} nodeintegration="1" ref={elem => this.webview_ = elem} />
+				<webview src={this.startUrl()} style={webviewStyle} nodeintegration="1" ref={elem => (this.webview_ = elem)} />
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 // Dependencies:
 //
@@ -9,11 +9,7 @@ require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 
 const rootDir = __dirname + '/..';
 
-const processArgs = process.argv.splice(2, process.argv.length);
-
-const silentLog = processArgs.indexOf('--silent') >= 0;
-
-const { basename, dirname, filename, fileExtension } = require(rootDir + '/ReactNativeClient/lib/path-utils.js');
+const { filename, fileExtension } = require(rootDir + '/ReactNativeClient/lib/path-utils.js');
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
@@ -37,12 +33,16 @@ function serializeTranslation(translation) {
 		if (!translations.hasOwnProperty(n)) continue;
 		if (n == '') continue;
 		const t = translations[n];
+		let translated = '';
 		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
-			output[n] = t['msgid'];
-		} else {		
-			output[n] = t['msgstr'][0];
+			// Don't include fuzzy translations
+		} else {
+			translated = t['msgstr'][0];
 		}
+
+		if (translated) output[n] = translated;
 	}
+
 	return JSON.stringify(output);
 }
 
@@ -99,15 +99,27 @@ async function mergePotToPo(potFilePath, poFilePath) {
 	await removePoHeaderDate(poFilePath);
 }
 
-function buildIndex(locales) {
+function buildIndex(locales, stats) {
 	let output = [];
 	output.push('var locales = {};');
+	output.push('var stats = {};');
+
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
-		output.push("locales['" + locale + "'] = require('./" + locale + ".json');");
+		output.push('locales[\'' + locale + '\'] = require(\'./' + locale + '.json\');');
 	}
-	output.push('module.exports = { locales: locales };');
-	return output.join("\n");
+
+	for (let i = 0; i < stats.length; i++) {
+		const stat = Object.assign({}, stats[i]);
+		const locale = stat.locale;
+		delete stat.locale;
+		delete stat.translatorName;
+		delete stat.languageName;
+		output.push('stats[\'' + locale + '\'] = ' + JSON.stringify(stat) + ';');
+	}
+
+	output.push('module.exports = { locales: locales, stats: stats };');
+	return output.join('\n');
 }
 
 function availableLocales(defaultLocale) {
@@ -124,7 +136,7 @@ function availableLocales(defaultLocale) {
 function extractTranslator(regex, poContent) {
 	const translatorMatch = poContent.match(regex);
 	let translatorName = '';
-	
+
 	if (translatorMatch && translatorMatch.length >= 1) {
 		translatorName = translatorMatch[1];
 		translatorName = translatorName.replace(/["\s]+$/, '');
@@ -162,7 +174,7 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/>/, ')');
 
 	let isAlways100 = false;
-	if (poFile.endsWith("en_US.po")) {
+	if (poFile.endsWith('en_US.po')) {
 		isAlways100 = true;
 	}
 
@@ -183,7 +195,7 @@ function flagImageUrl(locale) {
 	if (locale === 'nb_NO') return baseUrl + '/country-4x3/no.png';
 	if (locale === 'ro') return baseUrl + '/country-4x3/ro.png';
 	if (locale === 'fa') return baseUrl + '/country-4x3/ir.png';
-	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png'
+	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png';
 }
 
 function poFileUrl(locale) {
@@ -256,7 +268,7 @@ async function main() {
 
 	stats.sort((a, b) => a.languageName < b.languageName ? -1 : +1);
 
-	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
+	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales, stats));
 
 	const rnJsonLocaleDir = rnDir + '/locales';
 	await execCommand('rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"');

@@ -1,10 +1,8 @@
 const { time } = require('lib/time-utils.js');
-const JoplinError = require('lib/JoplinError');
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');
 
 class TaskQueue {
-
 	constructor(name) {
 		this.waitingTasks_ = [];
 		this.processingTasks_ = {};
@@ -47,7 +45,7 @@ class TaskQueue {
 			this.results_[task.id] = r;
 
 			this.processQueue_();
-		}
+		};
 
 		while (this.waitingTasks_.length > 0 && Object.keys(this.processingTasks_).length < this.concurrency()) {
 			if (this.stopping_) break;
@@ -55,19 +53,22 @@ class TaskQueue {
 			const task = this.waitingTasks_.splice(0, 1)[0];
 			this.processingTasks_[task.id] = task;
 
-			task.callback().then(result => {
-				completeTask(task, result, null);
-			}).catch(error => {
-				if (!error) error = new Error('Unknown error');
-				completeTask(task, null, error);
-			});
+			task
+				.callback()
+				.then(result => {
+					completeTask(task, result, null);
+				})
+				.catch(error => {
+					if (!error) error = new Error('Unknown error');
+					completeTask(task, null, error);
+				});
 		}
 
 		this.processingQueue_ = false;
 	}
 
 	isWaiting(taskId) {
-		return this.waitingTasks_.find(task => task.id === taskId)
+		return this.waitingTasks_.find(task => task.id === taskId);
 	}
 
 	isProcessing(taskId) {
@@ -118,7 +119,6 @@ class TaskQueue {
 	isStopping() {
 		return this.stopping_;
 	}
-
 }
 
 TaskQueue.CONCURRENCY = 5;

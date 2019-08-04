@@ -1,7 +1,3 @@
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = (new Entities()).encode;
-const Resource = require('lib/models/Resource.js');
-const utils = require('../../utils');
 const StringUtils = require('lib/string-utils.js');
 const md5 = require('md5');
 
@@ -56,7 +52,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				const splitted = StringUtils.surroundKeywords(keywords, child.content, divider, divider).split(divider);
 				const splittedTokens = createHighlightedTokens(Token, splitted);
 				if (splittedTokens.length <= 1) continue;
-				
+
 				token.children = markdownIt.utils.arrayReplaceAt(token.children, j, splittedTokens);
 				j += splittedTokens.length - 1;
 			}

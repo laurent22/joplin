@@ -6,6 +6,7 @@ const NoteTextViewer = require('./NoteTextViewer.min');
 const HelpButton = require('./HelpButton.min');
 const BaseModel = require('lib/BaseModel');
 const Revision = require('lib/models/Revision');
+const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
@@ -15,7 +16,6 @@ const ReactTooltip = require('react-tooltip');
 const { substrWithEllipsis } = require('lib/string-utils');
 
 class NoteRevisionViewerComponent extends React.PureComponent {
-
 	constructor() {
 		super();
 
@@ -55,13 +55,16 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		// this.viewerRef_.current.wrappedInstance.openDevTools();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, this.props.noteId);
-		
-		this.setState({
-			revisions: revisions,
-			currentRevId: revisions.length ? revisions[revisions.length - 1].id : '',
-		}, () => {
-			this.reloadNote();
-		});
+
+		this.setState(
+			{
+				revisions: revisions,
+				currentRevId: revisions.length ? revisions[revisions.length - 1].id : '',
+			},
+			() => {
+				this.reloadNote();
+			}
+		);
 	}
 
 	async importButton_onClick() {
@@ -82,11 +85,14 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		if (!value) {
 			if (this.props.onBack) this.props.onBack();
 		} else {
-			this.setState({
-				currentRevId: value,
-			}, () => {
-				this.reloadNote();
-			});
+			this.setState(
+				{
+					currentRevId: value,
+				},
+				() => {
+					this.reloadNote();
+				}
+			);
 		}
 	}
 
@@ -117,7 +123,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			resources: await shared.attachedResources(noteBody),
 		});
 
-		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html,  { cssFiles: result.cssFiles });		
+		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, { cssFiles: result.cssFiles });
 	}
 
 	render() {
@@ -130,45 +136,45 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			const rev = revs[i];
 			const stats = Revision.revisionPatchStatsText(rev);
 
-			revisionListItems.push(<option
-				key={rev.id}
-				value={rev.id}
-			>{time.formatMsToLocal(rev.item_updated_time) + ' (' + stats + ')'}</option>);
+			revisionListItems.push(
+				<option key={rev.id} value={rev.id}>
+					{time.formatMsToLocal(rev.item_updated_time) + ' (' + stats + ')'}
+				</option>
+			);
 		}
 
 		const restoreButtonTitle = _('Restore');
 		const helpMessage = _('Click "%s" to restore the note. It will be copied in the notebook named "%s". The current version of the note will not be replaced or modified.', restoreButtonTitle, RevisionService.instance().restoreFolderTitle());
 
 		const titleInput = (
-			<div style={{display:'flex', flexDirection: 'row', alignItems:'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom:10}}>
-				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>{'⬅ ' + _('Back')}</button>
-				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''}/>
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom: 10 }}>
+				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>
+					{'⬅ ' + _('Back')}
+				</button>
+				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''} />
 				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
 					{revisionListItems}
 				</select>
-				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>{restoreButtonTitle}</button>
-				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick}/>
+				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 10, height: theme.inputStyle.height })}>
+					{restoreButtonTitle}
+				</button>
+				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick} />
 			</div>
 		);
 
-		const viewer = <NoteTextViewer
-			viewerStyle={{display:'flex', flex:1}}
-			ref={this.viewerRef_}
-			onDomReady={this.viewer_domReady}
-		/>
+		const viewer = <NoteTextViewer viewerStyle={{ display: 'flex', flex: 1 }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} />;
 
 		return (
 			<div style={style.root}>
 				{titleInput}
 				{viewer}
-				<ReactTooltip place="bottom" delayShow={300} className="help-tooltip"/>
+				<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

@@ -1,12 +1,11 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, filename, friendlySafeFilename, rtrimSlashes } = require('lib/path-utils.js');
+const { basename, friendlySafeFilename, rtrimSlashes } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const { shim } = require('lib/shim');
 
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
-
 	async init(destDir) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? destDir + '/_resources' : null;
@@ -30,7 +29,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
 		}
-		return output;
 	}
 
 	async replaceResourceIdsByRelativePaths_(item) {
@@ -75,7 +73,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	}
 
 	async close() {}
-
 }
 
 module.exports = InteropService_Exporter_Md;

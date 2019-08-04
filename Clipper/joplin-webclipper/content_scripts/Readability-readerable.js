@@ -24,15 +24,15 @@
  */
 
 var REGEXPS = {
-  // NOTE: These two regular expressions are duplicated in
-  // Readability.js. Please keep both copies in sync.
-  unlikelyCandidates: /-ad-|ai2html|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|foot|gdpr|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
-  okMaybeItsACandidate: /and|article|body|column|main|shadow/i,
+	// NOTE: These two regular expressions are duplicated in
+	// Readability.js. Please keep both copies in sync.
+	unlikelyCandidates: /-ad-|ai2html|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|foot|gdpr|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
+	okMaybeItsACandidate: /and|article|body|column|main|shadow/i,
 };
 
 function isNodeVisible(node) {
-  // Have to null-check node.style to deal with SVG and MathML nodes.
-  return (!node.style || node.style.display != "none") && !node.hasAttribute("hidden");
+	// Have to null-check node.style to deal with SVG and MathML nodes.
+	return (!node.style || node.style.display != 'none') && !node.hasAttribute('hidden');
 }
 
 /**
@@ -41,59 +41,59 @@ function isNodeVisible(node) {
  * @return boolean Whether or not we suspect Readability.parse() will suceeed at returning an article object.
  */
 function isProbablyReaderable(doc, isVisible) {
-  if (!isVisible) {
-    isVisible = isNodeVisible;
-  }
+	if (!isVisible) {
+		isVisible = isNodeVisible;
+	}
 
-  var nodes = doc.querySelectorAll("p, pre");
+	var nodes = doc.querySelectorAll('p, pre');
 
-  // Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
-  // Some articles' DOM structures might look like
-  // <div>
-  //   Sentences<br>
-  //   <br>
-  //   Sentences<br>
-  // </div>
-  var brNodes = doc.querySelectorAll("div > br");
-  if (brNodes.length) {
-    var set = new Set(nodes);
-    [].forEach.call(brNodes, function(node) {
-      set.add(node.parentNode);
-    });
-    nodes = Array.from(set);
-  }
+	// Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
+	// Some articles' DOM structures might look like
+	// <div>
+	//   Sentences<br>
+	//   <br>
+	//   Sentences<br>
+	// </div>
+	var brNodes = doc.querySelectorAll('div > br');
+	if (brNodes.length) {
+		var set = new Set(nodes);
+		[].forEach.call(brNodes, function(node) {
+			set.add(node.parentNode);
+		});
+		nodes = Array.from(set);
+	}
 
-  var score = 0;
-  // This is a little cheeky, we use the accumulator 'score' to decide what to return from
-  // this callback:
-  return [].some.call(nodes, function(node) {
-    if (!isVisible(node))
-      return false;
+	var score = 0;
+	// This is a little cheeky, we use the accumulator 'score' to decide what to return from
+	// this callback:
+	return [].some.call(nodes, function(node) {
+		if (!isVisible(node))
+			return false;
 
-    var matchString = node.className + " " + node.id;
-    if (REGEXPS.unlikelyCandidates.test(matchString) &&
+		var matchString = node.className + ' ' + node.id;
+		if (REGEXPS.unlikelyCandidates.test(matchString) &&
         !REGEXPS.okMaybeItsACandidate.test(matchString)) {
-      return false;
-    }
+			return false;
+		}
 
-    if (node.matches("li p")) {
-      return false;
-    }
+		if (node.matches('li p')) {
+			return false;
+		}
 
-    var textContentLength = node.textContent.trim().length;
-    if (textContentLength < 140) {
-      return false;
-    }
+		var textContentLength = node.textContent.trim().length;
+		if (textContentLength < 140) {
+			return false;
+		}
 
-    score += Math.sqrt(textContentLength - 140);
+		score += Math.sqrt(textContentLength - 140);
 
-    if (score > 20) {
-      return true;
-    }
-    return false;
-  });
+		if (score > 20) {
+			return true;
+		}
+		return false;
+	});
 }
 
-if (typeof exports === "object") {
-  exports.isProbablyReaderable = isProbablyReaderable;
+if (typeof exports === 'object') {
+	exports.isProbablyReaderable = isProbablyReaderable;
 }

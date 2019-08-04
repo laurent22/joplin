@@ -3,12 +3,9 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
-const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
-const BaseItem = require('lib/models/BaseItem.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'set <note> <name> [value]';
 	}
@@ -45,7 +42,6 @@ class Command extends BaseCommand {
 			await Note.save(newNote);
 		}
 	}
-
 }
 
 module.exports = Command;

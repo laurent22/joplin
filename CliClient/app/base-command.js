@@ -2,7 +2,6 @@ const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
 
 class BaseCommand {
-
 	constructor() {
 		this.stdout_ = null;
 		this.prompt_ = null;
@@ -93,7 +92,6 @@ class BaseCommand {
 	logger() {
 		return reg.logger();
 	}
-
 }
 
 module.exports = { BaseCommand };

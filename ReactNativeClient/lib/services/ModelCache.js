@@ -1,7 +1,6 @@
 const BaseItem = require('lib/models/BaseItem');
 
 class ModelCache {
-
 	constructor() {
 		this.cache_ = {};
 	}
@@ -25,14 +24,13 @@ class ModelCache {
 			this.cache_[models[i].id] = {
 				model: models[i],
 				timestamp: Date.now(),
-			}
+			};
 
 			output.push(models[i]);
 		}
 
 		return output;
 	}
-
 }
 
 module.exports = ModelCache;

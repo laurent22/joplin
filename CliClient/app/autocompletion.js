@@ -14,11 +14,11 @@ async function handleAutocompletionPromise(line) {
 	//should look for commmands it could be
 	if (words.length == 1) {
 		if (names.indexOf(words[0]) === -1) {
-			let x = names.filter((n) => n.indexOf(words[0]) === 0);
+			let x = names.filter(n => n.indexOf(words[0]) === 0);
 			if (x.length === 1) {
 				return x[0] + ' ';
 			}
-			return x.length > 0 ? x.map((a) => a + ' ') : line;
+			return x.length > 0 ? x.map(a => a + ' ') : line;
 		} else {
 			return line;
 		}
@@ -34,9 +34,9 @@ async function handleAutocompletionPromise(line) {
 	let next = words.length > 1 ? words[words.length - 1] : '';
 	let l = [];
 	if (next[0] === '-') {
-		for (let i = 0; i<metadata.options.length; i++) {
+		for (let i = 0; i < metadata.options.length; i++) {
 			const options = metadata.options[i][0].split(' ');
-		//if there are multiple options then they will be separated by comma and
+			//if there are multiple options then they will be separated by comma and
 			//space. The comma should be removed
 			if (options[0][options[0].length - 1] === ',') {
 				options[0] = options[0].slice(0, -1);
@@ -55,20 +55,19 @@ async function handleAutocompletionPromise(line) {
 		if (l.length === 0) {
 			return line;
 		}
-		let ret = l.map(a=>toCommandLine(a));
+		let ret = l.map(a => toCommandLine(a));
 		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
 		return ret;
 	}
 	//Complete an argument
 	//Determine the number of positional arguments by counting the number of
 	//words that don't start with a - less one for the command name
-	const positionalArgs = words.filter((a)=>a.indexOf('-') !== 0).length - 1;
+	const positionalArgs = words.filter(a => a.indexOf('-') !== 0).length - 1;
 
 	let cmdUsage = yargParser(metadata.usage)['_'];
 	cmdUsage.splice(0, 1);
 
 	if (cmdUsage.length >= positionalArgs) {
-
 		let argName = cmdUsage[positionalArgs - 1];
 		argName = cliUtils.parseCommandArg(argName).name;
 
@@ -76,23 +75,23 @@ async function handleAutocompletionPromise(line) {
 
 		if (argName == 'note' || argName == 'note-pattern') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
-			l.push(...notes.map((n) => n.title));
+			l.push(...notes.map(n => n.title));
 		}
 
 		if (argName == 'notebook') {
 			const folders = await Folder.search({ titlePattern: next + '*' });
-			l.push(...folders.map((n) => n.title));
+			l.push(...folders.map(n => n.title));
 		}
 
 		if (argName == 'item') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
 			const folders = await Folder.search({ titlePattern: next + '*' });
-			l.push(...notes.map((n) => n.title), folders.map((n) => n.title));
+			l.push(...notes.map(n => n.title), folders.map(n => n.title));
 		}
 
 		if (argName == 'tag') {
 			let tags = await Tag.search({ titlePattern: next + '*' });
-			l.push(...tags.map((n) => n.title));
+			l.push(...tags.map(n => n.title));
 		}
 
 		if (argName == 'file') {
@@ -113,12 +112,11 @@ async function handleAutocompletionPromise(line) {
 	if (l.length === 1) {
 		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
-		let ret = l.map(a=>toCommandLine(a));
+		let ret = l.map(a => toCommandLine(a));
 		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
 		return ret;
 	}
 	return line;
-
 }
 function handleAutocompletion(str, callback) {
 	handleAutocompletionPromise(str).then(function(res) {
@@ -127,19 +125,21 @@ function handleAutocompletion(str, callback) {
 }
 function toCommandLine(args) {
 	if (Array.isArray(args)) {
-		return args.map(function(a) {
-			if(a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
-				return "'" + a + "'";
-			} else if (a.indexOf("'") !== -1) {
-				return '"' + a + '"';
-			} else {
-				return a;
-			}
-		}).join(' ');
+		return args
+			.map(function(a) {
+				if (a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
+					return '\'' + a + '\'';
+				} else if (a.indexOf('\'') !== -1) {
+					return '"' + a + '"';
+				} else {
+					return a;
+				}
+			})
+			.join(' ');
 	} else {
-		if(args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
-			return "'" + args + "' ";
-		} else if (args.indexOf("'") !== -1) {
+		if (args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
+			return '\'' + args + '\' ';
+		} else if (args.indexOf('\'') !== -1) {
 			return '"' + args + '" ';
 		} else {
 			return args + ' ';
@@ -151,9 +151,9 @@ function getArguments(line) {
 	let inDoubleQuotes = false;
 	let currentWord = '';
 	let parsed = [];
-	for(let i = 0; i<line.length; i++) {
-		if(line[i] === '"') {
-			if(inDoubleQuotes) {
+	for (let i = 0; i < line.length; i++) {
+		if (line[i] === '"') {
+			if (inDoubleQuotes) {
 				inDoubleQuotes = false;
 				//maybe push word to parsed?
 				//currentWord += '"';
@@ -161,8 +161,8 @@ function getArguments(line) {
 				inDoubleQuotes = true;
 				//currentWord += '"';
 			}
-		} else if(line[i] === "'") {
-			if(inSingleQuotes) {
+		} else if (line[i] === '\'') {
+			if (inSingleQuotes) {
 				inSingleQuotes = false;
 				//maybe push word to parsed?
 				//currentWord += "'";
@@ -170,8 +170,7 @@ function getArguments(line) {
 				inSingleQuotes = true;
 				//currentWord += "'";
 			}
-		} else if (/\s/.test(line[i]) &&
-			!(inDoubleQuotes || inSingleQuotes)) {
+		} else if (/\s/.test(line[i]) && !(inDoubleQuotes || inSingleQuotes)) {
 			if (currentWord !== '') {
 				parsed.push(currentWord);
 				currentWord = '';

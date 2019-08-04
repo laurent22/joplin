@@ -26,11 +26,11 @@ ObjectUtils.sortByValue = function(object) {
 	}
 
 	return output;
-}
+};
 
 ObjectUtils.fieldsEqual = function(o1, o2) {
-	if ((!o1 || !o2) && (o1 !== o2)) return false;
-	
+	if ((!o1 || !o2) && o1 !== o2) return false;
+
 	for (let k in o1) {
 		if (!o1.hasOwnProperty(k)) continue;
 		if (o1[k] !== o2[k]) return false;
@@ -42,20 +42,22 @@ ObjectUtils.fieldsEqual = function(o1, o2) {
 	if (c1.length !== c2.length) return false;
 
 	return true;
-}
+};
 
 ObjectUtils.convertValuesToFunctions = function(o) {
 	const output = {};
 	for (let n in o) {
 		if (!o.hasOwnProperty(n)) continue;
-		output[n] = () => { return typeof o[n] === 'function' ? o[n]() : o[n]; }
+		output[n] = () => {
+			return typeof o[n] === 'function' ? o[n]() : o[n];
+		};
 	}
 	return output;
-}
+};
 
 ObjectUtils.isEmpty = function(o) {
 	if (!o) return true;
 	return Object.keys(o).length === 0 && o.constructor === Object;
-}
+};
 
 module.exports = ObjectUtils;

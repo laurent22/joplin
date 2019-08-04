@@ -1,8 +1,6 @@
 const BaseModel = require('lib/BaseModel.js');
-const Note = require('lib/models/Note.js');
 
 class Search extends BaseModel {
-
 	static tableName() {
 		throw new Error('Not using database');
 	}
@@ -17,7 +15,6 @@ class Search extends BaseModel {
 		output = output.filter(o => !!o);
 		return output;
 	}
-
 }
 
 module.exports = Search;

@@ -1,16 +1,12 @@
 const { uuid } = require('lib/uuid.js');
 const moment = require('moment');
-const { promiseChain } = require('lib/promise-utils.js');
-const { folderItemFilename } = require('lib/string-utils.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
-const jsSHA = require("jssha");
 const md5 = require('md5');
 
 //const Promise = require('promise');
@@ -50,13 +46,6 @@ function removeUndefinedProperties(note) {
 		output[n] = v;
 	}
 	return output;
-}
-
-function createNoteId(note) {
-	let shaObj = new jsSHA("SHA-256", "TEXT");
-	shaObj.update(note.title + '_' + note.body + "_" + note.created_time + "_" + note.updated_time + "_");
-	let hash = shaObj.getHash("HEX");
-	return hash.substr(0, 32);
 }
 
 function levenshteinPercent(s1, s2) {
@@ -106,7 +95,7 @@ async function saveNoteResources(note) {
 		let existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await filePutContents(Resource.fullPath(toSave), resource.data)
+		await filePutContents(Resource.fullPath(toSave), resource.data);
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -160,7 +149,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 		diff.id = existingNote.id;
 		diff.type_ = existingNote.type_;
-		await Note.save(diff, { autoTimestamp: false })
+		await Note.save(diff, { autoTimestamp: false });
 		result.noteUpdated = true;
 	} else {
 		await Note.save(note, {
@@ -204,7 +193,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let notes = [];
 		let processingNotes = false;
 
-		stream.on('error', (error) => {
+		stream.on('error', error => {
 			reject(new Error(error.toString()));
 		});
 
@@ -256,7 +245,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
 				}
-			} catch(error) {
+			} catch (error) {
 				console.error(error);
 			}
 
@@ -265,7 +254,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return true;
 		}
 
-		saxStream.on('error', (error) => {
+		saxStream.on('error', error => {
 			importOptions.onError(error);
 		});
 
@@ -275,7 +264,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			if (noteAttributes) {
 				noteAttributes[n] = text;
 			} else if (noteResourceAttributes) {
-				noteResourceAttributes[n] = text;				
+				noteResourceAttributes[n] = text;
 			} else if (noteResource) {
 				if (n == 'data') {
 					let attr = currentNodeAttributes();
@@ -300,7 +289,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					console.warn('Unsupported note tag: ' + n);
 				}
 			}
-		})
+		});
 
 		saxStream.on('opentag', function(node) {
 			let n = node.name.toLowerCase();
@@ -350,7 +339,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				notes.push(note);
 
 				if (notes.length >= 10) {
-					processNotes().catch((error) => {
+					processNotes().catch(error => {
 						importOptions.onError(error);
 					});
 				}
@@ -371,8 +360,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
-				note.source = !!noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
-				note.source_url = !!noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
+				note.source = noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
+				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
 
 				// if (noteAttributes['reminder-time']) {
 				// 	console.info('======================================================');
@@ -432,7 +421,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		saxStream.on('end', function() {
 			// Wait till there is no more notes to process.
 			let iid = setInterval(() => {
-				processNotes().then((allDone) => {
+				processNotes().then(allDone => {
 					if (allDone) {
 						clearTimeout(iid);
 						resolve();

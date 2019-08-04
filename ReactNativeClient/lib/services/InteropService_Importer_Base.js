@@ -1,5 +1,4 @@
 class InteropService_Importer_Base {
-
 	setMetadata(md) {
 		this.metadata_ = md;
 	}
@@ -21,7 +20,6 @@ class InteropService_Importer_Base {
 		if (createIt) await require('fs-extra').mkdirp(tempDir);
 		return tempDir;
 	}
-
 }
 
 module.exports = InteropService_Importer_Base;

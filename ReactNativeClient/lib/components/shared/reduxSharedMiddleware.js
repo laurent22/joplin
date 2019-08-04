@@ -30,6 +30,6 @@ const reduxSharedMiddleware = async function(store, next, action) {
 			items: await Tag.allWithNotes(),
 		});
 	}
-}
+};
 
 module.exports = reduxSharedMiddleware;

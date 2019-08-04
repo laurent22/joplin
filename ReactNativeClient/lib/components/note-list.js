@@ -1,21 +1,19 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { connect } = require('react-redux');
-const { ListView, Text, TouchableHighlight, Switch, View, StyleSheet } = require('react-native');
+const { ListView, Text, StyleSheet, Button, View } = require('react-native');
 const { _ } = require('lib/locale.js');
-const { Checkbox } = require('lib/components/checkbox.js');
 const { NoteItem } = require('lib/components/note-item.js');
-const { reg } = require('lib/registry.js');
-const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteListComponent extends Component {
-
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({
-			rowHasChanged: (r1, r2) => { return r1 !== r2; }
+			rowHasChanged: (r1, r2) => {
+				return r1 !== r2;
+			},
 		});
 		this.state = {
 			dataSource: ds,
@@ -24,6 +22,8 @@ class NoteListComponent extends Component {
 		};
 		this.rootRef_ = null;
 		this.styles_ = {};
+
+		this.createNotebookButton_click = this.createNotebookButton_click.bind(this);
 	}
 
 	styles() {
@@ -41,11 +41,23 @@ class NoteListComponent extends Component {
 				paddingBottom: theme.marginBottom,
 				fontSize: theme.fontSize,
 				color: theme.color,
+				textAlign: 'center',
+			},
+			noNotebookView: {
+
 			},
 		};
 
 		this.styles_[themeId] = StyleSheet.create(styles);
 		return this.styles_[themeId];
+	}
+
+	createNotebookButton_click() {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Folder',
+			folderId: null,
+		});
 	}
 
 	filterNotes(notes) {
@@ -91,30 +103,39 @@ class NoteListComponent extends Component {
 		if (this.state.dataSource.getRowCount()) {
 			return (
 				<ListView
-					ref={(ref) => this.rootRef_ = ref}
+					ref={ref => (this.rootRef_ = ref)}
 					dataSource={this.state.dataSource}
-					renderRow={(note) => {
-						return <NoteItem note={note}/>
+					renderRow={note => {
+						return <NoteItem note={note} />;
 					}}
 					enableEmptySections={true}
 				/>
 			);
 		} else {
-			const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-			return <Text style={this.styles().noItemMessage} >{noItemMessage}</Text>;
+			if (!this.props.folders.length) {
+				const noItemMessage = _('You currently have no notebooks.');
+				return (
+					<View style={this.styles().noNotebookView}>
+						<Text style={this.styles().noItemMessage}>{noItemMessage}</Text>
+						<Button title={_('Create a notebook')} onPress={this.createNotebookButton_click} />
+					</View>
+				);
+			} else {
+				const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
+				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
+			}
 		}
 	}
 }
 
-const NoteList = connect(
-	(state) => {
-		return {
-			items: state.notes,
-			notesSource: state.notesSource,
-			theme: state.settings.theme,
-			noteSelectionEnabled: state.noteSelectionEnabled,
-		};
-	}
-)(NoteListComponent)
+const NoteList = connect(state => {
+	return {
+		items: state.notes,
+		folders: state.folders,
+		notesSource: state.notesSource,
+		theme: state.settings.theme,
+		noteSelectionEnabled: state.noteSelectionEnabled,
+	};
+})(NoteListComponent);
 
 module.exports = { NoteList };

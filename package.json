@@ -1,0 +1,28 @@
+{
+  "name": "joplin",
+  "version": "1.0.0",
+  "description": "Joplin root package for linting",
+  "scripts": {
+    "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": ["npm run linter", "git add"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.2",
+    "lint-staged": "^9.2.1"
+  },
+  "dependencies": {}
+}

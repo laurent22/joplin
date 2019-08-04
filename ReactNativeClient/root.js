@@ -1,5 +1,5 @@
-const React = require('react'); const Component = React.Component;
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, View, Animated } = require('react-native');
+const React = require('react');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -48,7 +48,7 @@ const { SideMenuContent } = require('lib/components/side-menu-content.js');
 const { SideMenuContentNote } = require('lib/components/side-menu-content-note.js');
 const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
-const { _, setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
+const { setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
@@ -88,7 +88,7 @@ const logReducerAction = function(action) {
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
-}
+};
 
 const generalMiddleware = store => next => async (action) => {
 	logReducerAction(action);
@@ -99,10 +99,10 @@ const generalMiddleware = store => next => async (action) => {
 
 	await reduxSharedMiddleware(store, next, action);
 
-	if (action.type == "NAV_GO") Keyboard.dismiss();
+	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
-	if (["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
+	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -150,8 +150,8 @@ const generalMiddleware = store => next => async (action) => {
 		ResourceFetcher.instance().autoAddResources();
 	}
 
-  	return result;
-}
+	return result;
+};
 
 let navHistory = [];
 
@@ -160,7 +160,7 @@ function historyCanGoBackTo(route, nextRoute) {
 	if (route.routeName === 'Folder') return false;
 
 	// There's no point going back to these screens in general and, at least in OneDrive case,
-	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...) 
+	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...)
 	if (route.routeName === 'OneDriveLogin') return false;
 	if (route.routeName === 'DropboxLogin') return false;
 
@@ -187,33 +187,35 @@ const appReducer = (state = appDefaultState, action) => {
 	try {
 		switch (action.type) {
 
-			case 'NAV_BACK':
+		case 'NAV_BACK':
 
-				if (!navHistory.length) break;
+		{
+			if (!navHistory.length) break;
 
-				let newAction = null;
-				while (navHistory.length) {
-					newAction = navHistory.pop();
-					if (newAction.routeName != state.route.routeName) break;
-				}
+			let newAction = null;
+			while (navHistory.length) {
+				newAction = navHistory.pop();
+				if (newAction.routeName != state.route.routeName) break;
+			}
 
-				action = newAction ? newAction : navHistory.pop();
+			action = newAction ? newAction : navHistory.pop();
 
-				historyGoingBack = true;
+			historyGoingBack = true;
+		}
 
-				// Fall throught
+		// Fall throught
 
-			case 'NAV_GO':
+		case 'NAV_GO':
 
+			{
 				const currentRoute = state.route;
-				const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-					// If the route *name* is the same (even if the other parameters are different), we
-					// overwrite the last route in the history with the current one. If the route name
-					// is different, we push a new history entry.
+				// If the route *name* is the same (even if the other parameters are different), we
+				// overwrite the last route in the history with the current one. If the route name
+				// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
-						// nothing
+					// nothing
 					} else {
 						navHistory.push(currentRoute);
 					}
@@ -231,8 +233,6 @@ const appReducer = (state = appDefaultState, action) => {
 						navHistory[i] = Object.assign({}, action);
 					}
 				}
-
-				//reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
 
 				newState = Object.assign({}, state);
 
@@ -267,34 +267,36 @@ const appReducer = (state = appDefaultState, action) => {
 
 				newState.route = action;
 				newState.historyCanGoBack = !!navHistory.length;
-				break;
+			}
+			break;
 
-			case 'SIDE_MENU_TOGGLE':
+		case 'SIDE_MENU_TOGGLE':
 
-				newState = Object.assign({}, state);
-				newState.showSideMenu = !newState.showSideMenu
-				break;
+			newState = Object.assign({}, state);
+			newState.showSideMenu = !newState.showSideMenu;
+			break;
 
-			case 'SIDE_MENU_OPEN':
+		case 'SIDE_MENU_OPEN':
 
-				newState = Object.assign({}, state);
-				newState.showSideMenu = true
-				break;
+			newState = Object.assign({}, state);
+			newState.showSideMenu = true;
+			break;
 
-			case 'SIDE_MENU_CLOSE':
+		case 'SIDE_MENU_CLOSE':
 
-				newState = Object.assign({}, state);
-				newState.showSideMenu = false
-				break;
+			newState = Object.assign({}, state);
+			newState.showSideMenu = false;
+			break;
 
-			case 'SIDE_MENU_OPEN_PERCENT':
+		case 'SIDE_MENU_OPEN_PERCENT':
 
-				newState = Object.assign({}, state);
-				newState.sideMenuOpenPercent = action.value;
-				break;
+			newState = Object.assign({}, state);
+			newState.sideMenuOpenPercent = action.value;
+			break;
 
-			case 'NOTE_SELECTION_TOGGLE':
+		case 'NOTE_SELECTION_TOGGLE':
 
+			{
 				newState = Object.assign({}, state);
 
 				const noteId = action.id;
@@ -309,29 +311,30 @@ const appReducer = (state = appDefaultState, action) => {
 
 				newState.selectedNoteIds = newSelectedNoteIds;
 				newState.noteSelectionEnabled = !!newSelectedNoteIds.length;
-				break;
+			}
+			break;
 
-			case 'NOTE_SELECTION_START':
+		case 'NOTE_SELECTION_START':
 
-				if (!state.noteSelectionEnabled) {
-					newState = Object.assign({}, state);
-					newState.noteSelectionEnabled = true;
-					newState.selectedNoteIds = [action.id];
-				}
-				break;
-
-			case 'NOTE_SELECTION_END':
-
+			if (!state.noteSelectionEnabled) {
 				newState = Object.assign({}, state);
-				newState.noteSelectionEnabled = false;
-				newState.selectedNoteIds = [];
-				break;
+				newState.noteSelectionEnabled = true;
+				newState.selectedNoteIds = [action.id];
+			}
+			break;
 
-			case 'NOTE_SIDE_MENU_OPTIONS_SET':
+		case 'NOTE_SELECTION_END':
 
-				newState = Object.assign({}, state);
-				newState.noteSideMenuOptions = action.options;
-				break;
+			newState = Object.assign({}, state);
+			newState.noteSelectionEnabled = false;
+			newState.selectedNoteIds = [];
+			break;
+
+		case 'NOTE_SIDE_MENU_OPTIONS_SET':
+
+			newState = Object.assign({}, state);
+			newState.noteSideMenuOptions = action.options;
+			break;
 
 		}
 	} catch (error) {
@@ -340,7 +343,7 @@ const appReducer = (state = appDefaultState, action) => {
 	}
 
 	return reducer(newState, action);
-}
+};
 
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
@@ -366,14 +369,14 @@ async function initialize(dispatch) {
 	const mainLogger = new Logger();
 	mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
-	
+
 	if (Setting.value('env') == 'dev') {
 		mainLogger.addTarget('console');
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}
 
 	reg.setLogger(mainLogger);
-	reg.setShowErrorMessageBoxHandler((message) => { alert(message) });
+	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
 
 	BaseService.logger_ = mainLogger;
 
@@ -381,7 +384,7 @@ async function initialize(dispatch) {
 	reg.logger().info('Starting application ' + Setting.value('appId') + ' (' + Setting.value('env') + ')');
 
 	const dbLogger = new Logger();
-	dbLogger.addTarget('database', { database: logDatabase, source: 'm' }); 
+	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
 	if (Setting.value('env') == 'dev') {
 		dbLogger.addTarget('console');
 		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
@@ -420,7 +423,7 @@ async function initialize(dispatch) {
 
 	try {
 		if (Setting.value('env') == 'prod') {
-			await db.open({ name: 'joplin.sqlite' })
+			await db.open({ name: 'joplin.sqlite' });
 		} else {
 			await db.open({ name: 'joplin-70.sqlite' });
 
@@ -432,7 +435,7 @@ async function initialize(dispatch) {
 		await Setting.load();
 
 		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier
+			let locale = NativeModules.I18nManager.localeIdentifier;
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
 			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
@@ -447,11 +450,12 @@ async function initialize(dispatch) {
 
 		if (Setting.value('env') === 'dev') {
 			Setting.setValue('welcome.enabled', false);
-		}		
+		}
 
+		// eslint-disable-next-line require-atomic-updates
 		BaseItem.revisionService_ = RevisionService.instance();
 
-		// Note: for now we hard-code the folder sort order as we need to 
+		// Note: for now we hard-code the folder sort order as we need to
 		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
 		Setting.setValue('folders.sortOrder.field', 'title');
 		Setting.setValue('folders.sortOrder.reverse', false);
@@ -466,6 +470,7 @@ async function initialize(dispatch) {
 
 		EncryptionService.fsDriver_ = fsDriver;
 		EncryptionService.instance().setLogger(mainLogger);
+		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
@@ -527,7 +532,7 @@ async function initialize(dispatch) {
 
 	ResourceService.runInBackground();
 
-	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi(); });
 	ResourceFetcher.instance().setLogger(reg.logger());
 	ResourceFetcher.instance().dispatch = dispatch;
 	ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
@@ -569,11 +574,11 @@ class AppComponent extends React.Component {
 
 		this.backButtonHandler_ = () => {
 			return this.backButtonHandler();
-		}
+		};
 
 		this.onAppStateChange_ = () => {
 			PoorManIntervals.update();
-		}
+		};
 	}
 
 	async componentDidMount() {
@@ -597,14 +602,14 @@ class AppComponent extends React.Component {
 
 				// reg.logger().info('Got share data:', type, value);
 
-				if (type != "" && this.props.selectedFolderId) {
+				if (type != '' && this.props.selectedFolderId) {
 					const newNote = await Note.save({
 						title: Note.defaultTitleFromBody(value),
 						body: value,
-						parent_id: this.props.selectedFolderId
+						parent_id: this.props.selectedFolderId,
 					});
 
-					// This is a bit hacky, but the surest way to go to 
+					// This is a bit hacky, but the surest way to go to
 					// the needed note. We go back one screen in case there's
 					// already a note open - if we don't do this, the dispatch
 					// below will do nothing (because routeName wouldn't change)
@@ -727,7 +732,7 @@ class AppComponent extends React.Component {
 						value: percent,
 					});
 				}}
-				>
+			>
 				<MenuContext style={{ flex: 1 }}>
 					<SafeAreaView style={{flex:0, backgroundColor: theme.raisedBackgroundColor}} />
 					<SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}>

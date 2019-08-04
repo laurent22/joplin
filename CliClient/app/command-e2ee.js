@@ -1,9 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { _ } = require('lib/locale.js');
-const { cliUtils } = require('./cli-utils.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
-const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim');
@@ -12,7 +10,6 @@ const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'e2ee <command> [path]';
 	}
@@ -35,7 +32,7 @@ class Command extends BaseCommand {
 
 		const options = args.options;
 
-		const askForMasterKey = async (error) => {
+		const askForMasterKey = async error => {
 			const masterKeyId = error.masterKeyId;
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
@@ -45,7 +42,7 @@ class Command extends BaseCommand {
 			Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
 			await EncryptionService.instance().loadMasterKeysFromSettings();
 			return true;
-		}
+		};
 
 		if (args.command === 'enable') {
 			const password = options.password ? options.password.toString() : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
@@ -100,7 +97,7 @@ class Command extends BaseCommand {
 			while (true) {
 				try {
 					const outputDir = options.output ? options.output : require('os').tmpdir();
-					let outFile = outputDir + '/' + pathUtils.filename(args.path) + '.' + Date.now() + '.bin'; 
+					let outFile = outputDir + '/' + pathUtils.filename(args.path) + '.' + Date.now() + '.bin';
 					await EncryptionService.instance().decryptFile(args.path, outFile);
 					const buffer = await readChunk(outFile, 0, 64);
 					const detectedType = imageType(buffer);
@@ -128,19 +125,17 @@ class Command extends BaseCommand {
 
 		if (args.command === 'target-status') {
 			const fs = require('fs-extra');
-			const pathUtils = require('lib/path-utils.js');
-			const fsDriver = new (require('lib/fs-driver-node.js').FsDriverNode)();
 
 			const targetPath = args.path;
 			if (!targetPath) throw new Error('Please specify the sync target path.');
 
 			const dirPaths = function(targetPath) {
 				let paths = [];
-				fs.readdirSync(targetPath).forEach((path) => {
+				fs.readdirSync(targetPath).forEach(path => {
 					paths.push(path);
 				});
 				return paths;
-			}
+			};
 
 			let itemCount = 0;
 			let resourceCount = 0;
@@ -224,7 +219,6 @@ class Command extends BaseCommand {
 			return;
 		}
 	}
-
 }
 
 module.exports = Command;

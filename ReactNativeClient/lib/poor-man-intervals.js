@@ -1,7 +1,6 @@
 const { time } = require('lib/time-utils.js');
 
 class PoorManIntervals {
-
 	static setInterval(callback, interval) {
 		PoorManIntervals.intervalId_++;
 
@@ -63,7 +62,6 @@ class PoorManIntervals {
 
 		PoorManIntervals.lastUpdateTime_ = time.unixMs();
 	}
-
 }
 
 PoorManIntervals.lastUpdateTime_ = 0;

@@ -1,24 +1,14 @@
-const React = require('react'); const Component = React.Component;
-const { AppState, View, Button, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
-const { stateUtils } = require('lib/reducer.js');
+const React = require('react');
+
+const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
-const { NoteList } = require('lib/components/note-list.js');
-const Folder = require('lib/models/Folder.js');
 const Tag = require('lib/models/Tag.js');
-const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
 const { ScreenHeader } = require('lib/components/screen-header.js');
-const { MenuOption } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
-const { ActionButton } = require('lib/components/action-button.js');
-const { dialogs } = require('lib/dialogs.js');
-const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class TagsScreenComponent extends BaseScreenComponent {
-	
 	static navigationOptions(options) {
 		return { header: null };
 	}
@@ -74,8 +64,12 @@ class TagsScreenComponent extends BaseScreenComponent {
 	tagList_renderItem(event) {
 		const tag = event.item;
 		return (
-			<TouchableOpacity onPress={() => { this.tagItem_press({ id: tag.id }) }}>
-				<View style={ this.styles().listItem }>
+			<TouchableOpacity
+				onPress={() => {
+					this.tagItem_press({ id: tag.id });
+				}}
+			>
+				<View style={this.styles().listItem}>
 					<Text style={this.styles().listItemText}>{tag.title}</Text>
 				</View>
 			</TouchableOpacity>
@@ -100,31 +94,21 @@ class TagsScreenComponent extends BaseScreenComponent {
 		let rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-		}
+		};
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader
-					title={_('Tags')}
-					parentComponent={this}
-					showSearchButton={false}
-				/>
-				<FlatList style={{flex:1}}
-					data={this.state.tags}
-					renderItem={this.tagList_renderItem}
-					keyExtractor={this.tagList_keyExtractor}
-				/>
+				<ScreenHeader title={_('Tags')} parentComponent={this} showSearchButton={false} />
+				<FlatList style={{ flex: 1 }} data={this.state.tags} renderItem={this.tagList_renderItem} keyExtractor={this.tagList_keyExtractor} />
 			</View>
 		);
 	}
 }
 
-const TagsScreen = connect(
-	(state) => {
-		return {
-			theme: state.settings.theme,
-		};
-	}
-)(TagsScreenComponent)
+const TagsScreen = connect(state => {
+	return {
+		theme: state.settings.theme,
+	};
+})(TagsScreenComponent);
 
 module.exports = { TagsScreen };

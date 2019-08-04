@@ -1,19 +1,18 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+const Component = React.Component;
 const { connect } = require('react-redux');
 const { NotesScreen } = require('lib/components/screens/notes.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
 const { KeyboardAvoidingView, Keyboard, Platform, View } = require('react-native');
-const { _ } = require('lib/locale.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
 class AppNavComponent extends Component {
-
 	constructor() {
 		super();
 		this.previousRouteName_ = null;
 		this.state = {
 			autoCompletionBarExtraHeight: 0, // Extra padding for the auto completion bar at the top of the keyboard
-		}
+		};
 	}
 
 	UNSAFE_componentWillMount() {
@@ -30,12 +29,12 @@ class AppNavComponent extends Component {
 		this.keyboardDidHideListener = null;
 	}
 
-	keyboardDidShow () {
-		this.setState({ autoCompletionBarExtraHeight: 30 })
+	keyboardDidShow() {
+		this.setState({ autoCompletionBarExtraHeight: 30 });
 	}
 
-	keyboardDidHide () {
-		this.setState({ autoCompletionBarExtraHeight:0  })
+	keyboardDidHide() {
+		this.setState({ autoCompletionBarExtraHeight: 0 });
 	}
 
 	render() {
@@ -66,27 +65,24 @@ class AppNavComponent extends Component {
 
 		const theme = themeStyle(this.props.theme);
 
-		const style = { flex: 1, backgroundColor: theme.backgroundColor }
+		const style = { flex: 1, backgroundColor: theme.backgroundColor };
 
 		return (
-			<KeyboardAvoidingView behavior={ Platform.OS === 'ios' ? "padding" : null } style={style}>
+			<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={style}>
 				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
-				{ searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} /> }
-				{ (!notesScreenVisible && !searchScreenVisible) && <Screen navigation={{ state: route }} /> }
+				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
+				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} />}
 				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
 			</KeyboardAvoidingView>
 		);
 	}
-
 }
 
-const AppNav = connect(
-	(state) => {
-		return {
-			route: state.route,
-			theme: state.settings.theme,
-		};
-	}
-)(AppNavComponent)
+const AppNav = connect(state => {
+	return {
+		route: state.route,
+		theme: state.settings.theme,
+	};
+})(AppNavComponent);
 
 module.exports = { AppNav };

@@ -2,11 +2,9 @@ const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const BaseModel = require('lib/BaseModel.js');
-const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'cat <note>';
 	}
@@ -16,9 +14,7 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [
-			['-v, --verbose', _('Displays the complete information about note.')],
-		];
+		return [['-v, --verbose', _('Displays the complete information about note.')]];
 	}
 
 	async action(args) {
@@ -30,10 +26,13 @@ class Command extends BaseCommand {
 		const content = args.options.verbose ? await Note.serialize(item) : await Note.serializeForEdit(item);
 		this.stdout(content);
 
-		app().gui().showConsole();
-		app().gui().maximizeConsole();
+		app()
+			.gui()
+			.showConsole();
+		app()
+			.gui()
+			.maximizeConsole();
 	}
-
 }
 
 module.exports = Command;

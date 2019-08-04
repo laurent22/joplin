@@ -3,10 +3,8 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim.js');
-const fs = require('fs-extra');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'attach <note> <file>';
 	}
@@ -26,7 +24,6 @@ class Command extends BaseCommand {
 
 		await shim.attachFileToNote(note, localFilePath);
 	}
-
 }
 
 module.exports = Command;

@@ -1,7 +1,6 @@
 const { createStore, applyMiddleware } = require('redux');
 const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
-const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -12,13 +11,11 @@ const Tag = require('lib/models/Tag.js');
 const Setting = require('lib/models/Setting.js');
 const { Logger } = require('lib/logger.js');
 const { splitCommandString } = require('lib/string-utils.js');
-const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { fileExtension } = require('lib/path-utils.js');
 const { shim } = require('lib/shim.js');
-const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
@@ -50,7 +47,6 @@ SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 class BaseApplication {
-
 	constructor() {
 		this.logger_ = new Logger();
 		this.dbLogger_ = new Logger();
@@ -322,9 +318,9 @@ class BaseApplication {
 	}
 
 	generalMiddlewareFn() {
-		const middleware = store => next => (action) => {
+		const middleware = store => next => action => {
 			return this.generalMiddleware(store, next, action);
-		}
+		};
 
 		return middleware;
 	}
@@ -341,14 +337,14 @@ class BaseApplication {
 
 		await reduxSharedMiddleware(store, next, action);
 
-		if (this.hasGui()  && ["NOTE_UPDATE_ONE", "NOTE_DELETE", "FOLDER_UPDATE_ONE", "FOLDER_DELETE"].indexOf(action.type) >= 0) {
-			if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(30 * 1000, { syncSteps: ["update_remote", "delete_remote"] });
+		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+			if (!(await reg.syncTarget().syncStarted())) reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
 			SearchEngine.instance().scheduleSyncTables();
 		}
 
 		// Don't add FOLDER_UPDATE_ALL as refreshFolders() is calling it too, which
 		// would cause the sidebar to refresh all the time.
-		if (this.hasGui() && ["FOLDER_UPDATE_ONE"].indexOf(action.type) >= 0) {
+		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
 			refreshFolders = true;
 		}
 
@@ -395,17 +391,17 @@ class BaseApplication {
 		// 	});
 		// }
 
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
+		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || action.type == 'SETTING_UPDATE_ALL') {
 			time.setDateFormat(Setting.value('dateFormat'));
 			time.setTimeFormat(Setting.value('timeFormat'));
 		}
 
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || (action.type == 'SETTING_UPDATE_ALL')) {
+		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || action.type == 'SETTING_UPDATE_ALL') {
 			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
 			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
 		}
 
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || (action.type == 'SETTING_UPDATE_ALL')) {
+		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || action.type == 'SETTING_UPDATE_ALL') {
 			const caPaths = Setting.value('net.customCertificates').split(',');
 			for (let i = 0; i < caPaths.length; i++) {
 				const f = caPaths[i].trim();
@@ -414,7 +410,7 @@ class BaseApplication {
 			}
 		}
 
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
+		if ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('encryption.') === 0) || action.type == 'SETTING_UPDATE_ALL') {
 			if (this.hasGui()) {
 				await EncryptionService.instance().loadMasterKeysFromSettings();
 				DecryptionWorker.instance().scheduleStart();
@@ -439,7 +435,7 @@ class BaseApplication {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
+		if ((this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval') || action.type == 'SETTING_UPDATE_ALL') {
 			reg.setupRecurrentSync();
 		}
 
@@ -459,7 +455,7 @@ class BaseApplication {
 			}
 		}
 
-	  	return result;
+		return result;
 	}
 
 	dispatch(action) {
@@ -523,10 +519,7 @@ class BaseApplication {
 		console.info('--------------------------------------------------');
 		console.info(markdown);
 		console.info('--------------------------------------------------');
-
-
 	}
-
 
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
@@ -568,7 +561,7 @@ class BaseApplication {
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
-		reg.dispatch = (o) => {};
+		reg.dispatch = o => {};
 
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);
@@ -609,9 +602,11 @@ class BaseApplication {
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
 
 		if (!Setting.value('api.token')) {
-			EncryptionService.instance().randomHexString(64).then((token) => {
-				Setting.setValue('api.token', token);
-			});
+			EncryptionService.instance()
+				.randomHexString(64)
+				.then(token => {
+					Setting.setValue('api.token', token);
+				});
 		}
 
 		time.setDateFormat(Setting.value('dateFormat'));
@@ -630,7 +625,9 @@ class BaseApplication {
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
-		ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi() });
+		ResourceFetcher.instance().setFileApi(() => {
+			return reg.syncTarget().fileApi();
+		});
 		ResourceFetcher.instance().setLogger(this.logger_);
 		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
 		ResourceFetcher.instance().start();
@@ -649,7 +646,6 @@ class BaseApplication {
 
 		return argv;
 	}
-
 }
 
 module.exports = { BaseApplication };

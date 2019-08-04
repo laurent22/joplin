@@ -16,19 +16,18 @@ dialogs.confirm = (parentComponent, message) => {
 
 		parentComponent.dialogbox.confirm({
 			content: message,
-			
+
 			ok: {
 				callback: () => {
 					resolve(true);
-				}
+				},
 			},
 
 			cancel: {
 				callback: () => {
 					resolve(false);
-				}
+				},
 			},
-
 		});
 	});
 };
@@ -55,23 +54,23 @@ dialogs.pop = (parentComponent, message, buttons, options = null) => {
 		}
 
 		parentComponent.dialogbox.pop({
-			content: message, 
+			content: message,
 			btns: btns,
 			buttonFlow: options.buttonFlow,
 		});
 	});
-}
+};
 
 dialogs.error = (parentComponent, message) => {
 	Keyboard.dismiss();
 	return parentComponent.dialogbox.alert(message);
-}
+};
 
 dialogs.info = (parentComponent, message) => {
 	Keyboard.dismiss();
 	return parentComponent.dialogbox.alert(message);
-}
+};
 
-dialogs.DialogBox = DialogBox
+dialogs.DialogBox = DialogBox;
 
 module.exports = { dialogs };

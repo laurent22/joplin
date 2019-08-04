@@ -3,7 +3,6 @@ require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
 'use strict';
 
 const fs = require('fs-extra');
-const https = require('https');
 const request = require('request');
 
 const { fileExtension } = require('lib/path-utils.js');
@@ -23,7 +22,7 @@ async function gitHubLatestRelease() {
 		request.get({
 			url: url,
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'}
+			headers: {'User-Agent': 'Joplin Readme Updater'},
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);
@@ -45,7 +44,7 @@ function downloadUrl(release, os, portable = false) {
 		const name = asset.name;
 		const ext = fileExtension(name);
 
-		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url; 
+		if (ext === 'dmg' && os === 'macos') return asset.browser_download_url;
 		if (ext === 'exe' && os === 'windows') {
 			if (portable) {
 				if (name === 'JoplinPortable.exe') return asset.browser_download_url;
@@ -53,7 +52,7 @@ function downloadUrl(release, os, portable = false) {
 				if (name.match(/^Joplin-Setup-[\d.]+\.exe$/)) return asset.browser_download_url;
 			}
 		}
-		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url; 
+		if (ext === 'AppImage' && os === 'linux') return asset.browser_download_url;
 	}
 }
 

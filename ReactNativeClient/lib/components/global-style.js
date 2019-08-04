@@ -6,25 +6,25 @@ const globalStyle = {
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	backgroundColor: "#ffffff",
-	color: "#555555", // For regular text
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
+	backgroundColor: '#ffffff',
+	color: '#555555', // For regular text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
 	fontSizeSmaller: 14,
-	dividerColor: "#dddddd",
-	strongDividerColor: "#aaaaaa",
+	dividerColor: '#dddddd',
+	strongDividerColor: '#aaaaaa',
 	selectedColor: '#e5e5e5',
 	headerBackgroundColor: '#F0F0F0',
 	disabledOpacity: 0.2,
 	colorUrl: '#7B81FF',
-	textSelectionColor: "#0096FF",
+	textSelectionColor: '#0096FF',
 
-	raisedBackgroundColor: "#0080EF",
-	raisedColor: "#003363",
-	raisedHighlightedColor: "#ffffff",
+	raisedBackgroundColor: '#0080EF',
+	raisedColor: '#003363',
+	raisedHighlightedColor: '#ffffff',
 
-	warningBackgroundColor: "#FFD08D",
+	warningBackgroundColor: '#FFD08D',
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '16px',
@@ -118,9 +118,9 @@ function themeStyle(theme) {
 	output.textSelectionColor = '#00AEFF';
 	output.headerBackgroundColor = '#2D3136';
 
-	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#788BC3";
-	output.raisedHighlightedColor = "#ffffff";
+	output.raisedBackgroundColor = '#0F2051';
+	output.raisedColor = '#788BC3';
+	output.raisedHighlightedColor = '#ffffff';
 
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';

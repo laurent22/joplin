@@ -5,7 +5,6 @@ const ListWidget = require('tkwidgets/ListWidget.js');
 const _ = require('lib/locale.js')._;
 
 class FolderListWidget extends ListWidget {
-
 	constructor() {
 		super();
 
@@ -20,7 +19,7 @@ class FolderListWidget extends ListWidget {
 		this.updateItems_ = false;
 		this.trimItemTitle = false;
 
-		this.itemRenderer = (item) => {
+		this.itemRenderer = item => {
 			let output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
@@ -32,7 +31,7 @@ class FolderListWidget extends ListWidget {
 				output.push(_('Search:'));
 				output.push(item.title);
 			}
-			
+
 			return output.join(' ');
 		};
 	}
@@ -45,7 +44,6 @@ class FolderListWidget extends ListWidget {
 			output++;
 			folderId = folder.parent_id;
 		}
-		throw new Error('unreachable');
 	}
 
 	get selectedFolderId() {
@@ -54,7 +52,7 @@ class FolderListWidget extends ListWidget {
 
 	set selectedFolderId(v) {
 		this.selectedFolderId_ = v;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -64,7 +62,7 @@ class FolderListWidget extends ListWidget {
 
 	set selectedSearchId(v) {
 		this.selectedSearchId_ = v;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -74,7 +72,7 @@ class FolderListWidget extends ListWidget {
 
 	set selectedTagId(v) {
 		this.selectedTagId_ = v;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -84,7 +82,7 @@ class FolderListWidget extends ListWidget {
 
 	set notesParentType(v) {
 		this.notesParentType_ = v;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -95,7 +93,7 @@ class FolderListWidget extends ListWidget {
 	set searches(v) {
 		this.searches_ = v;
 		this.updateItems_ = true;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -106,7 +104,7 @@ class FolderListWidget extends ListWidget {
 	set tags(v) {
 		this.tags_ = v;
 		this.updateItems_ = true;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -117,7 +115,7 @@ class FolderListWidget extends ListWidget {
 	set folders(v) {
 		this.folders_ = v;
 		this.updateItems_ = true;
-		this.updateIndexFromSelectedItemId()
+		this.updateIndexFromSelectedItemId();
 		this.invalidate();
 	}
 
@@ -128,7 +126,7 @@ class FolderListWidget extends ListWidget {
 		}
 		return false;
 	}
-	
+
 	render() {
 		if (this.updateItems_) {
 			this.logger().debug('Rebuilding items...', this.notesParentType, this.selectedJoplinItemId, this.selectedSearchId);
@@ -136,7 +134,7 @@ class FolderListWidget extends ListWidget {
 			const previousParentType = this.notesParentType;
 
 			let newItems = [];
-			const orderFolders = (parentId) => {
+			const orderFolders = parentId => {
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
 					const folderParentId = f.parent_id ? f.parent_id : '';
@@ -145,7 +143,7 @@ class FolderListWidget extends ListWidget {
 						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
 					}
 				}
-			}
+			};
 
 			orderFolders('');
 
@@ -162,7 +160,7 @@ class FolderListWidget extends ListWidget {
 			this.items = newItems;
 
 			this.notesParentType = previousParentType;
-			this.updateIndexFromSelectedItemId(wasSelectedItemId)
+			this.updateIndexFromSelectedItemId(wasSelectedItemId);
 			this.updateItems_ = false;
 		}
 
@@ -188,7 +186,6 @@ class FolderListWidget extends ListWidget {
 		const index = this.itemIndexByKey('id', itemId);
 		this.currentIndex = index >= 0 ? index : 0;
 	}
-
 }
 
 module.exports = FolderListWidget;

@@ -2,7 +2,7 @@ const { shim } = require('lib/shim.js');
 const { GeolocationReact } = require('lib/geolocation-react.js');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
-const { generateSecureRandom }  = require('react-native-securerandom');
+const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
@@ -30,9 +30,9 @@ function shimInit() {
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverRN();
 		return shim.fsDriver_;
-	}
+	};
 
-	shim.randomBytes = async (count) => {
+	shim.randomBytes = async count => {
 		const randomBytes = await generateSecureRandom(count);
 		let temp = [];
 		for (let n in randomBytes) {
@@ -40,7 +40,7 @@ function shimInit() {
 			temp.push(randomBytes[n]);
 		}
 		return temp;
-	}
+	};
 
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatable error that crashes the app if calling it with an
@@ -53,7 +53,7 @@ function shimInit() {
 		return shim.fetchWithRetry(() => {
 			return fetch(validatedUrl, options);
 		}, options);
-	}
+	};
 
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
@@ -77,13 +77,13 @@ function shimInit() {
 
 		const doFetchBlob = () => {
 			return RNFetchBlob.config({
-				path: localFilePath
+				path: localFilePath,
 			}).fetch(method, url, headers);
-		}
+		};
 
 		try {
 			const response = await shim.fetchWithRetry(doFetchBlob, options);
-			
+
 			// Returns an object that's roughtly compatible with a standard Response object
 			let output = {
 				ok: response.respInfo.status < 400,
@@ -98,7 +98,7 @@ function shimInit() {
 		} catch (error) {
 			throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
 		}
-	}
+	};
 
 	shim.uploadBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
@@ -121,27 +121,29 @@ function shimInit() {
 		} catch (error) {
 			throw new Error('uploadBlob: ' + method + ' ' + url + ': ' + error.toString());
 		}
-	}
+	};
 
 	shim.readLocalFileBase64 = async function(path) {
-		return RNFetchBlob.fs.readFile(path, 'base64')
-	}
+		return RNFetchBlob.fs.readFile(path, 'base64');
+	};
 
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');
-	}
+	};
 
 	shim.Buffer = Buffer;
 
-	shim.openUrl = (url) => {
+	shim.openUrl = url => {
 		Linking.openURL(url);
-	}
+	};
 
 	shim.waitForFrame = () => {
 		return new Promise(function(resolve, reject) {
-			requestAnimationFrame(function() { resolve(); });
+			requestAnimationFrame(function() {
+				resolve();
+			});
 		});
-	}
+	};
 
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
 	// only really works with images. It does not resize the image either.
@@ -161,7 +163,7 @@ function shimInit() {
 
 		let targetPath = Resource.fullPath(resource);
 		await shim.fsDriver().copy(filePath, targetPath);
-		
+
 		if (defaultProps) {
 			resource = Object.assign({}, resource, defaultProps);
 		}
@@ -175,18 +177,17 @@ function shimInit() {
 		resource = await Resource.save(resource, { isNew: true });
 
 		return resource;
-	}
+	};
 
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error('Cannot find injectedJs file (add it to "injectedJs" object): ' + name);
 		return injectedJs[name];
-	}
+	};
 
 	shim.loadCssFromJs = function(name) {
 		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file (add it to "cssToJs" object): ' + name);
 		return cssToJs[name];
-	}
-
+	};
 }
 
 module.exports = { shimInit };

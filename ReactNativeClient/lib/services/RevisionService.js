@@ -1,4 +1,3 @@
-const { Logger } = require('lib/logger.js');
 const ItemChange = require('lib/models/ItemChange');
 const Note = require('lib/models/Note');
 const Folder = require('lib/models/Folder');
@@ -9,11 +8,9 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { shim } = require('lib/shim');
 const BaseService = require('lib/services/BaseService');
 const { _ } = require('lib/locale.js');
-const ArrayUtils = require('lib/ArrayUtils.js');
 const { sprintf } = require('sprintf-js');
 
 class RevisionService extends BaseService {
-
 	constructor() {
 		super();
 
@@ -57,8 +54,8 @@ class RevisionService extends BaseService {
 	}
 
 	isEmptyRevision_(rev) {
-		if (!!rev.title_diff) return false;
-		if (!!rev.body_diff) return false;
+		if (rev.title_diff) return false;
+		if (rev.body_diff) return false;
 
 		const md = JSON.parse(rev.metadata_diff);
 		if (md.new && Object.keys(md.new).length) return false;
@@ -113,7 +110,8 @@ class RevisionService extends BaseService {
 			while (true) {
 				// See synchronizer test units to see why changes coming
 				// from sync are skipped.
-				const changes = await ItemChange.modelSelectAll(`
+				const changes = await ItemChange.modelSelectAll(
+					`
 					SELECT id, item_id, type, before_change_item
 					FROM item_changes
 					WHERE item_type = ?
@@ -122,7 +120,9 @@ class RevisionService extends BaseService {
 					AND id > ?
 					ORDER BY id ASC
 					LIMIT 10
-				`, [BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')]);
+				`,
+					[BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')]
+				);
 
 				if (!changes.length) break;
 
@@ -176,7 +176,7 @@ class RevisionService extends BaseService {
 		}
 
 		await Setting.saveAll();
-		await ItemChangeUtils.deleteProcessedChanges();	
+		await ItemChangeUtils.deleteProcessedChanges();
 
 		this.isCollecting_ = false;
 
@@ -193,10 +193,13 @@ class RevisionService extends BaseService {
 		const rev = revisions[index];
 		const merged = await Revision.mergeDiffs(rev, revisions);
 
-		const output = Object.assign({
-			title: merged.title,
-			body: merged.body,
-		}, merged.metadata);
+		const output = Object.assign(
+			{
+				title: merged.title,
+				body: merged.body,
+			},
+			merged.metadata
+		);
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
 		output.type_ = BaseModel.TYPE_NOTE;
@@ -237,7 +240,7 @@ class RevisionService extends BaseService {
 
 		if (!Setting.value('revisionService.enabled')) {
 			this.logger().info('RevisionService::maintenance: Service is disabled');
-			// We do as if we had processed all the latest changes so that they can be cleaned up 
+			// We do as if we had processed all the latest changes so that they can be cleaned up
 			// later on by ItemChangeUtils.deleteProcessedChanges().
 			Setting.setValue('revisionService.lastProcessedChangeId', await ItemChange.lastChangeId());
 			await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
@@ -261,12 +264,11 @@ class RevisionService extends BaseService {
 		setTimeout(() => {
 			this.maintenance();
 		}, 1000 * 4);
-		
+
 		shim.setInterval(() => {
 			this.maintenance();
 		}, collectRevisionInterval);
 	}
-
 }
 
 module.exports = RevisionService;

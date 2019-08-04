@@ -40,10 +40,7 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 ## Coding style
 
-There are only two rules, but not following them means the pull request will not be accepted (it can be accepted once the issues are fixed):
-
-- **Please use tabs, NOT spaces.**
-- **Please do not add or remove optional characters, such as spaces or colons.** Please setup your editor so that it only changes what you are working on and is not making automated changes elsewhere. The reason for this is that small white space changes make diff hard to read and can cause needless conflicts.
+Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `npm install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `npm install` at the root of the repository.
 
 ## Unit tests
 
@@ -54,7 +51,20 @@ The tests are under CliClient/tests. To get them running, you first need to buil
     cd CliClient
     npm i
 
-Then to run all the test units:
+To run the test units, you must have an instance of the cli app running. In a first window navigate into `CliClient` and run:
+
+```sh
+./run.sh
+```
+
+> If you get an error like `Error: Cannot find module '../locales/index.js'`, this means you must (a) rebuild translations or (b) take > them from one of the other apps. To do option b, you can run the following command to copy them from the `ReactNativeClient` directory:> 
+>
+> ```sh
+> cd .. # Return to the root of the project
+> rsync -aP ./ReactNativeClient/locales/ ./CliClient/build/locales/
+> ```
+
+Then run the tests in a second window. To run all the test units:
 
     ./run_test.sh
 

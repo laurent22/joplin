@@ -1,9 +1,8 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, filename } = require('lib/path-utils.js');
+const { basename } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 
 class InteropService_Exporter_Json extends InteropService_Exporter_Base {
-
 	async init(destDir) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? destDir + '/resources' : null;
@@ -13,7 +12,7 @@ class InteropService_Exporter_Json extends InteropService_Exporter_Base {
 	}
 
 	async processItem(ItemClass, item) {
-		const fileName = ItemClass.systemPath(item, "json");
+		const fileName = ItemClass.systemPath(item, 'json');
 		const filePath = this.destDir_ + '/' + fileName;
 		const serialized = JSON.stringify(item);
 		await shim.fsDriver().writeFile(filePath, serialized, 'utf-8');

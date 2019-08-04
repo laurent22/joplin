@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');

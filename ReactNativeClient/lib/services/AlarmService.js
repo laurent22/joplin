@@ -2,7 +2,6 @@ const Note = require('lib/models/Note.js');
 const Alarm = require('lib/models/Alarm.js');
 
 class AlarmService {
-
 	static setDriver(v) {
 		this.driver_ = v;
 	}
@@ -40,7 +39,7 @@ class AlarmService {
 		await Alarm.batchDelete(alarmIds);
 	}
 
-	// When passing a note, make sure it has all the required properties 
+	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
 	static async updateNoteNotification(noteOrId, isDeleted = false) {
 		try {
@@ -62,14 +61,12 @@ class AlarmService {
 			let alarm = noteId ? await Alarm.byNoteId(noteId) : null;
 			let clearAlarm = false;
 
-			if (isDeleted ||
-			    !Note.needAlarm(note) ||
-			    (alarm && alarm.trigger_time !== note.todo_due))
-			{
+			if (isDeleted || !Note.needAlarm(note) || (alarm && alarm.trigger_time !== note.todo_due)) {
 				clearAlarm = !!alarm;
 			}
 
-			if (!clearAlarm && alarm) { // Alarm already exists and set at the right time
+			if (!clearAlarm && alarm) {
+				// Alarm already exists and set at the right time
 
 				// For persistent notifications (those that stay active after the app has been closed, like on mobile), if we have
 				// an alarm object we can be sure that the notification has already been set, so there's nothing to do.
@@ -118,7 +115,6 @@ class AlarmService {
 			await this.updateNoteNotification(dueNotes[i]);
 		}
 	}
-
 }
 
 module.exports = AlarmService;

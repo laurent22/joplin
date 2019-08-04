@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -22,7 +24,7 @@ describe('models_Tag', function() {
 	});
 
 	it('should add tags by title', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
@@ -32,7 +34,7 @@ describe('models_Tag', function() {
 	}));
 
 	it('should not allow renaming tag to existing tag names', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
@@ -44,7 +46,7 @@ describe('models_Tag', function() {
 	}));
 
 	it('should not return tags without notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 

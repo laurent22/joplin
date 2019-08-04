@@ -1,16 +1,12 @@
 const BaseModel = require('lib/BaseModel.js');
-const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
-const moment = require('moment');
 const BaseItem = require('lib/models/BaseItem.js');
 const { substrWithEllipsis } = require('lib/string-utils.js');
 
 class Folder extends BaseItem {
-
 	static tableName() {
 		return 'folders';
 	}
@@ -18,12 +14,12 @@ class Folder extends BaseItem {
 	static modelType() {
 		return BaseModel.TYPE_FOLDER;
 	}
-	
+
 	static newFolder() {
 		return {
 			id: null,
 			title: '',
-		}
+		};
 	}
 
 	static fieldToLabel(field) {
@@ -36,14 +32,16 @@ class Folder extends BaseItem {
 	}
 
 	static noteIds(parentId) {
-		return this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]).then((rows) => {			
-			let output = [];
-			for (let i = 0; i < rows.length; i++) {
-				let row = rows[i];
-				output.push(row.id);
-			}
-			return output;
-		});
+		return this.db()
+			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
+			.then(rows => {
+				let output = [];
+				for (let i = 0; i < rows.length; i++) {
+					let row = rows[i];
+					output.push(row.id);
+				}
+				return output;
+			});
 	}
 
 	static async subFolderIds(parentId) {
@@ -68,7 +66,7 @@ class Folder extends BaseItem {
 		let folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
-		if (options.deleteChildren) {		
+		if (options.deleteChildren) {
 			let noteIds = await Folder.noteIds(folderId);
 			for (let i = 0; i < noteIds.length; i++) {
 				await Note.delete(noteIds[i]);
@@ -128,7 +126,7 @@ class Folder extends BaseItem {
 				if (folders[i].id === folder.parent_id) return folders[i];
 			}
 			throw new Error('Could not find parent');
-		}
+		};
 
 		const applyChildTimeToParent = folderId => {
 			const parent = findFolderParent(folderId);
@@ -139,9 +137,9 @@ class Folder extends BaseItem {
 			} else {
 				folderIdToTime[parent.id] = folderIdToTime[folderId];
 			}
-			
+
 			applyChildTimeToParent(parent.id);
-		}
+		};
 
 		for (let folderId in folderIdToTime) {
 			if (!folderIdToTime.hasOwnProperty(folderId)) continue;
@@ -194,24 +192,24 @@ class Folder extends BaseItem {
 
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models, parentId) {
-		    const nestedTreeStructure = [];
-		    const length = models.length;
+			const nestedTreeStructure = [];
+			const length = models.length;
 
-		    for (let i = 0; i < length; i++) {
-		        const model = models[i];
+			for (let i = 0; i < length; i++) {
+				const model = models[i];
 
-		        if (model.parent_id == parentId) {
-		            const children = getNestedChildren(models, model.id);
+				if (model.parent_id == parentId) {
+					const children = getNestedChildren(models, model.id);
 
-		            if (children.length > 0) {
-		                model.children = children;
-		            }
+					if (children.length > 0) {
+						model.children = children;
+					}
 
-		            nestedTreeStructure.push(model);
-		        }
-		    }
+					nestedTreeStructure.push(model);
+				}
+			}
 
-		    return nestedTreeStructure;
+			return nestedTreeStructure;
 		}
 
 		return getNestedChildren(all, '');
@@ -329,7 +327,7 @@ class Folder extends BaseItem {
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
 	// manually creating a folder. They shouldn't be done for example when the folders
-	// are being synced to avoid any strange side-effects. Technically it's possible to 
+	// are being synced to avoid any strange side-effects. Technically it's possible to
 	// have folders and notes with duplicate titles (or no title), or with reserved words.
 	static async save(o, options = null) {
 		if (!options) options = {};
@@ -337,11 +335,11 @@ class Folder extends BaseItem {
 		if (options.userSideValidation === true) {
 			if (!('duplicateCheck' in options)) options.duplicateCheck = true;
 			if (!('reservedTitleCheck' in options)) options.reservedTitleCheck = true;
-			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;			
+			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;
 		}
 
 		if (options.stripLeftSlashes === true && o.title) {
-			while (o.title.length && (o.title[0] == '/' || o.title[0] == "\\")) {
+			while (o.title.length && (o.title[0] == '/' || o.title[0] == '\\')) {
 				o.title = o.title.substr(1);
 			}
 		}
@@ -364,7 +362,7 @@ class Folder extends BaseItem {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
-		return super.save(o, options).then((folder) => {
+		return super.save(o, options).then(folder => {
 			this.dispatch({
 				type: 'FOLDER_UPDATE_ONE',
 				item: folder,
@@ -372,7 +370,6 @@ class Folder extends BaseItem {
 			return folder;
 		});
 	}
-
 }
 
 module.exports = Folder;

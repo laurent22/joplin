@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -44,7 +46,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import folders', asyncTest(async () => {
 		const service = new InteropService();
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		folder1 = await Folder.load(folder1.id);
 		const filePath = exportDir() + '/test.jex';
 
@@ -79,7 +81,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import folders and notes', asyncTest(async () => {
 		const service = new InteropService();
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
 		const filePath = exportDir() + '/test.jex';
@@ -118,7 +120,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import notes to specific folder', asyncTest(async () => {
 		const service = new InteropService();
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
 		const filePath = exportDir() + '/test.jex';
@@ -138,7 +140,7 @@ describe('services_InteropService', function() {
 	it('should export and import tags', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let tag1 = await Tag.save({ title: 'mon tag' });
 		tag1 = await Tag.load(tag1.id);
@@ -178,7 +180,7 @@ describe('services_InteropService', function() {
 	it('should export and import resources', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
 		note1 = await Note.load(note1.id);
@@ -186,7 +188,7 @@ describe('services_InteropService', function() {
 		let resource1 = await Resource.load(resourceIds[0]);
 
 		await service.export({ path: filePath });
-		
+
 		await Note.delete(note1.id);
 
 		await service.import({ path: filePath });
@@ -214,11 +216,11 @@ describe('services_InteropService', function() {
 	it('should export and import single notes', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await service.export({ path: filePath, sourceNoteIds: [note1.id] });
-		
+
 		await Note.delete(note1.id);
 		await Folder.delete(folder1.id);
 
@@ -234,11 +236,11 @@ describe('services_InteropService', function() {
 	it('should export and import single folders', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
-		
+
 		await Note.delete(note1.id);
 		await Folder.delete(folder1.id);
 
@@ -252,17 +254,17 @@ describe('services_InteropService', function() {
 	}));
 
 	it('should export and import folder and its sub-folders', asyncTest(async () => {
-		
+
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
-		let folder2 = await Folder.save({ title: "folder2", parent_id: folder1.id });
-		let folder3 = await Folder.save({ title: "folder3", parent_id: folder2.id });
-		let folder4 = await Folder.save({ title: "folder4", parent_id: folder2.id });
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder2.id });
+		let folder4 = await Folder.save({ title: 'folder4', parent_id: folder2.id });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder4.id });
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
-		
+
 		await Note.delete(note1.id);
 		await Folder.delete(folder1.id);
 		await Folder.delete(folder2.id);
@@ -273,7 +275,7 @@ describe('services_InteropService', function() {
 
 		expect(await Note.count()).toBe(1);
 		expect(await Folder.count()).toBe(4);
-		
+
 		let folder1_2 = await Folder.loadByTitle('folder1');
 		let folder2_2 = await Folder.loadByTitle('folder2');
 		let folder3_2 = await Folder.loadByTitle('folder3');
@@ -289,12 +291,12 @@ describe('services_InteropService', function() {
 	it('should export and import links to notes', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = exportDir() + '/test.jex';
-		let folder1 = await Folder.save({ title: "folder1" });
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'ma deuxième note', body: 'Lien vers première note : ' + Note.markdownTag(note1), parent_id: folder1.id });
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
-		
+
 		await Note.delete(note1.id);
 		await Note.delete(note2.id);
 		await Folder.delete(folder1.id);
@@ -322,7 +324,7 @@ describe('services_InteropService', function() {
 		// verify that the json files exist and can be parsed
 		const items = [folder1, note1];
 		for (let i = 0; i < items.length; i++) {
-			const jsonFile = filePath + '/' + items[i].id + '.json'; 
+			const jsonFile = filePath + '/' + items[i].id + '.json';
 			let json = await fs.readFile(jsonFile, 'utf-8');
 			let obj = JSON.parse(json);
 			expect(obj.id).toBe(items[i].id);

@@ -1,3 +1,5 @@
+/*eslint no-useless-escape: 0*/
+
 const { _ } = require('lib/locale');
 
 function dirname(path) {
@@ -46,8 +48,8 @@ function safeFileExtension(e, maxLength = null) {
 function safeFilename(e, maxLength = null, allowSpaces = false) {
 	if (maxLength === null) maxLength = 32;
 	if (!e || !e.replace) return '';
-	const regex = allowSpaces ? /[^a-zA-Z0-9\-_\(\)\. ]/g : /[^a-zA-Z0-9\-_\(\)\.]/g
-	let output = e.replace(regex, '_')
+	const regex = allowSpaces ? /[^a-zA-Z0-9\-_\(\)\. ]/g : /[^a-zA-Z0-9\-_\(\)\.]/g;
+	let output = e.replace(regex, '_');
 	return output.substr(0, maxLength);
 }
 
@@ -56,12 +58,12 @@ for (let i = 0; i < 32; i++) {
 	friendlySafeFilename_blackListChars += String.fromCharCode(i);
 }
 
-const friendlySafeFilename_blackListNames = [".", "..", "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"];
+const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'];
 
 function friendlySafeFilename(e, maxLength = null) {
 	if (maxLength === null) maxLength = 255;
 	if (!e || !e.replace) return _('Untitled');
-	
+
 	let output = '';
 	for (let i = 0; i < e.length; i++) {
 		const c = e[i];
@@ -96,20 +98,29 @@ function friendlySafeFilename(e, maxLength = null) {
 		}
 	}
 
-	if (!output) return _('Untitled'); 
+	if (!output) return _('Untitled');
 
 	return output.substr(0, maxLength);
 }
 
-function toFileProtocolPath(path) {
-	const output = path.replace(/\\/g, "/");
-	return 'file://' + escape(output);
+function toFileProtocolPath(filePathEncode, os = null) {
+	if (os === null) os = process.platform;
+
+	if (os === 'win32') {
+		filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
+		filePathEncode = '/' + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
+	}
+
+	filePathEncode = encodeURI(filePathEncode);
+	filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
+	filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
+	return 'file://' + filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
 }
 
 function toSystemSlashes(path, os = null) {
 	if (os === null) os = process.platform;
-	if (os === 'win32') return path.replace(/\//g, "\\");
-	return path.replace(/\\/g, "/");
+	if (os === 'win32') return path.replace(/\//g, '\\');
+	return path.replace(/\\/g, '/');
 }
 
 function rtrimSlashes(path) {
@@ -139,7 +150,7 @@ function unquotePath(path) {
 function extractExecutablePath(cmd) {
 	if (!cmd.length) return '';
 
-	const quoteType = ['"', "'"].indexOf(cmd[0]) >= 0 ? cmd[0] : '';
+	const quoteType = ['"', '\''].indexOf(cmd[0]) >= 0 ? cmd[0] : '';
 
 	let output = '';
 	for (let i = 0; i < cmd.length; i++) {
