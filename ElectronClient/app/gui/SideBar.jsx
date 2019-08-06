@@ -261,6 +261,7 @@ class SideBarComponent extends React.Component {
 
 	async itemContextMenu(event) {
 		const itemId = event.target.getAttribute('data-id');
+		console.log(itemId);
 		if (itemId === Folder.conflictFolderId()) return;
 
 		const itemType = Number(event.target.getAttribute('data-type'));
@@ -698,12 +699,28 @@ class SideBarComponent extends React.Component {
 			})
 		);
 
+		const deleteAllNotebooks = async () => {
+			console.log(JSON.stringify(this.props.folders, null, 2));
+			const ok = bridge().showConfirmMessageBox('Are you sure you want to delete all notebooks? ');
+			if (!ok) return;
+
+			console.log('deleting folder with id ', this.props.folders[0].id);
+
+			const promisesToAwait = [];
+			for (let i = 0; i < this.props.folders.length; i++) {
+				const folder = this.props.folders[i];
+				promisesToAwait.push(Folder.delete(folder.id));
+			}
+			await Promise.all(promisesToAwait);
+		};
+
 		if (this.props.folders.length) {
 			const result = shared.renderFolders(this.props, this.folderItem.bind(this));
 			const folderItems = result.items;
 			this.folderItemsOrder_ = result.order;
 			items.push(
 				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
+					<button onClick={deleteAllNotebooks}>Delete all notebooks</button> {/* TODO: Remove this */}
 					{folderItems}
 				</div>
 			);
