@@ -13,8 +13,7 @@ const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 	constructor() {
-		this.modules_ = null;
-	}
+		this.modules_ = null;	}
 
 	modules() {
 		if (this.modules_) return this.modules_;
@@ -42,7 +41,16 @@ class InteropService {
 				format: 'enex',
 				fileExtensions: ['enex'],
 				sources: ['file'],
-				description: _('Evernote Export File'),
+				description: _('Evernote Export File (as Markdown)'),
+				importerClass: 'InteropService_Importer_EnexToMd',
+			},
+			{
+				format: 'enex',
+				fileExtensions: ['enex'],
+				sources: ['file'],
+				description: _('Evernote Export File (as HTML)'),
+				// TODO: Consider doing this the same way as the multiple `md` importers are handled
+				importerClass: 'InteropService_Importer_EnexToHtml',
 			},
 		];
 
@@ -71,7 +79,7 @@ class InteropService {
 		];
 
 		importModules = importModules.map(a => {
-			const className = 'InteropService_Importer_' + toTitleCase(a.format);
+			const className = a.importerClass || 'InteropService_Importer_' + toTitleCase(a.format);
 			const output = Object.assign(
 				{},
 				{
@@ -114,6 +122,8 @@ class InteropService {
 
 	moduleByFormat_(type, format) {
 		const modules = this.modules();
+		// console.log('modules:')
+		// console.log(JSON.stringify(modules, null, 2))
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (m.format === format && m.type === type) return modules[i];
@@ -127,6 +137,15 @@ class InteropService {
 		const ModuleClass = require(module.path);
 		const output = new ModuleClass();
 		output.setMetadata(module);
+		return output;
+	}
+
+	newModuleFromPath_(options) {
+		// const module = this.moduleByFormat_(type, format);
+		if (!options || !options.modulePath) throw new Error('Cannot load module without a defined path to load from.');
+		const ModuleClass = require(options.modulePath);
+		const output = new ModuleClass();
+		output.setMetadata(options); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -173,7 +192,15 @@ class InteropService {
 
 		let result = { warnings: [] };
 
-		const importer = this.newModule_('importer', options.format);
+		console.log('options passed to InteropService:');
+		console.log(JSON.stringify(options, null, 2));
+		// /*
+		//  * TODO: Omg these options don't seem to get any data from the actual function
+		//  * that's supposedly being called! The menu options are just a nice way to guide
+		//  * you to import the right types of files???
+		//  */
+		// const importer = this.newModule_('importer', options.format);
+		const importer = this.newModuleFromPath_(options);
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 

@@ -352,13 +352,14 @@ class Application extends BaseApplication {
 				for (let j = 0; j < module.sources.length; j++) {
 					const moduleSource = module.sources[j];
 					importItems.push({
-						label: module.fullLabel(moduleSource),
+						label: module.fullLabel(moduleSource) + 'XXXXXXXXXX',
 						screens: ['Main'],
-						click: async () => {
+						click: async (clickArgs) => {
 							let path = null;
 
 							const selectedFolderId = this.store().getState().selectedFolderId;
 
+							// console.log(JSON.stringify({moduleSource, module}, null, 2))
 							if (moduleSource === 'file') {
 								path = bridge().showOpenDialog({
 									filters: [{ name: module.description, extensions: module.fileExtensions}],
@@ -382,6 +383,7 @@ class Application extends BaseApplication {
 							const importOptions = {};
 							importOptions.path = path;
 							importOptions.format = module.format;
+							importOptions.modulePath = module.path;
 							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
 							importOptions.onError = (error) => {
 								console.warn(error);
