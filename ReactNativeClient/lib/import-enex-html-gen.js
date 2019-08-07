@@ -373,13 +373,14 @@ function enexXmlToHtml_(stream, resources) {
 				// console.log(JSON.stringify({nodeAttributes}, null, 2))
 				// section.lines.push(`<input type="checkbox"><label>`);
 				const checkboxId = randomHash();
+				const checkedState = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'checked' : 'unchecked';
 				section.lines.push(
 					`
 						<input
 							type="checkbox"
 							id="evernote-checkbox-${checkboxId}"
 							onclick="
-								pcProxySendToHost('checkboxclick:unchecked:0');
+								ipcProxySendToHost('checkboxclick:${checkedState}:${section.lines.length}');
 								const label = document.getElementById('cb-label-evernote-checkbox-${checkboxId}');
 								label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
 								label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
