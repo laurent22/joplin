@@ -9,7 +9,7 @@ const NEWLINE = '[[NEWLINE]]';
 
 const imageMimeTypes = ['image/cgm', 'image/fits', 'image/g3fax', 'image/gif', 'image/ief', 'image/jp2', 'image/jpeg', 'image/jpm', 'image/jpx', 'image/naplps', 'image/png', 'image/prs.btif', 'image/prs.pti', 'image/t38', 'image/tiff', 'image/tiff-fx', 'image/vnd.adobe.photoshop', 'image/vnd.cns.inf2', 'image/vnd.djvu', 'image/vnd.dwg', 'image/vnd.dxf', 'image/vnd.fastbidsheet', 'image/vnd.fpx', 'image/vnd.fst', 'image/vnd.fujixerox.edmics-mmr', 'image/vnd.fujixerox.edmics-rlc', 'image/vnd.globalgraphics.pgb', 'image/vnd.microsoft.icon', 'image/vnd.mix', 'image/vnd.ms-modi', 'image/vnd.net-fpx', 'image/vnd.sealed.png', 'image/vnd.sealedmedia.softseal.gif', 'image/vnd.sealedmedia.softseal.jpg', 'image/vnd.svf', 'image/vnd.wap.wbmp', 'image/vnd.xiff'];
 
-const randomHash = () => Math.random().toString(36).substring(2);
+// const randomHash = () => Math.random().toString(36).substring(2);
 
 function isImageMimeType(m) {
 	return imageMimeTypes.indexOf(m) >= 0;
@@ -372,31 +372,17 @@ function enexXmlToHtml_(stream, resources) {
 				// // section.lines.push('- [' + x + '] ');
 				// console.log(JSON.stringify({nodeAttributes}, null, 2))
 				// section.lines.push(`<input type="checkbox"><label>`);
-				const checkboxId = randomHash();
-				const checkedState = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'checked' : 'unchecked';
+				// const checkboxId = randomHash();
+				// const checkedState = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'checked' : 'unchecked';
 				section.lines.push(
-					`
-						<input
-							type="checkbox"
-							id="evernote-checkbox-${checkboxId}"
-							onclick="
-								ipcProxySendToHost('checkboxclick:${checkedState}:${section.lines.length}');
-								const label = document.getElementById('cb-label-evernote-checkbox-${checkboxId}');
-								label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
-								label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
-								return true;
-							"
-						/>
-					`
-				// 	`<ul>
-				// <li class="md-checkbox"><input type="checkbox" id="evernote-checkbox-${id}" onclick="
-				// 		ipcProxySendToHost('checkboxclick:unchecked:0');
-				// 		const label = document.getElementById(&quot;cb-label-evernote-checkbox-${id}&quot;);
-				// 		label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
-				// 		label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
-				// 		return true;
-				// 	" /><label id="cb-label-evernote-checkbox-${id}" for="evernote-checkbox-${id}" class="checkbox-label-unchecked">fooo</label></li>
-				// </ul>`
+					// TODO: maybe just live with the fact that you won't be able to toggle
+					// checkboxes on old imported enex imports?
+					// Not a big deal because we will only import as HTML for notes with a
+					// URL in the metadata, implying that it was clipped from the web (rather
+					// than a personal note).
+					// TODO: in a separate PR, make it clear to the user what the consequences
+					// of each import choice is.
+					'<input type="checkbox" onclick="alert(\'This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\\n\\nTo do so, please update the raw HTML in the editor.\'); return false;" />'
 				);
 			} else if (tagName == 'en-media') {
 				const hash = nodeAttributes.hash;
@@ -473,6 +459,8 @@ function enexXmlToHtml_(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
+			} else if (tagName == 'br') {
+				// Do nothing
 			} else if (tagName == 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
 					state.spanAttributes.push(nodeAttributes);
@@ -492,6 +480,8 @@ function enexXmlToHtml_(stream, resources) {
 
 			if (n == 'en-note') {
 				// End of note, do nothing.
+			} else if (n == 'br' || n == 'en-todo') {
+				// Do nothing
 			} else if (n == 'span') {
 				let attributes = state.spanAttributes.pop();
 				if (isSpanWithStyle(attributes)) {
