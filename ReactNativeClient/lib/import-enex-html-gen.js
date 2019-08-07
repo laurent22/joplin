@@ -1,11 +1,11 @@
 // const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 
-const BLOCK_OPEN = '[[BLOCK_OPEN]]';
-const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
+// const BLOCK_OPEN = '[[BLOCK_OPEN]]';
+// const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
 const NEWLINE = '[[NEWLINE]]';
-const NEWLINE_MERGED = '[[MERGED]]';
-const SPACE = '[[SPACE]]';
+// const NEWLINE_MERGED = '[[MERGED]]';
+// const SPACE = '[[SPACE]]';
 
 const imageMimeTypes = ['image/cgm', 'image/fits', 'image/g3fax', 'image/gif', 'image/ief', 'image/jp2', 'image/jpeg', 'image/jpm', 'image/jpx', 'image/naplps', 'image/png', 'image/prs.btif', 'image/prs.pti', 'image/t38', 'image/tiff', 'image/tiff-fx', 'image/vnd.adobe.photoshop', 'image/vnd.cns.inf2', 'image/vnd.djvu', 'image/vnd.dwg', 'image/vnd.dxf', 'image/vnd.fastbidsheet', 'image/vnd.fpx', 'image/vnd.fst', 'image/vnd.fujixerox.edmics-mmr', 'image/vnd.fujixerox.edmics-rlc', 'image/vnd.globalgraphics.pgb', 'image/vnd.microsoft.icon', 'image/vnd.mix', 'image/vnd.ms-modi', 'image/vnd.net-fpx', 'image/vnd.sealed.png', 'image/vnd.sealedmedia.softseal.gif', 'image/vnd.sealedmedia.softseal.jpg', 'image/vnd.svf', 'image/vnd.wap.wbmp', 'image/vnd.xiff'];
 
@@ -13,6 +13,19 @@ const randomHash = () => Math.random().toString(36).substring(2);
 
 function isImageMimeType(m) {
 	return imageMimeTypes.indexOf(m) >= 0;
+}
+
+function isSpanStyleBold(attributes) {
+	let style = attributes.style;
+	if (style.includes('font-weight: bold;')) {
+		return true;
+	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
+		//console.debug('font-family regex matched');
+		return true;
+	} else {
+		//console.debug('Found unsupported style(s) in span tag: %s', style);
+		return false;
+	}
 }
 
 function tagAttributeToMdText(attr) {
@@ -24,199 +37,199 @@ function tagAttributeToMdText(attr) {
 	return attr;
 }
 
-function processMdArrayNewLines(md) {
-	while (md.length && md[0] == BLOCK_OPEN) {
-		md.shift();
-	}
+// function processMdArrayNewLines(md) {
+// 	while (md.length && md[0] == BLOCK_OPEN) {
+// 		md.shift();
+// 	}
 
-	while (md.length && md[md.length - 1] == BLOCK_CLOSE) {
-		md.pop();
-	}
+// 	while (md.length && md[md.length - 1] == BLOCK_CLOSE) {
+// 		md.pop();
+// 	}
 
-	let temp = [];
-	let last = '';
-	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
-		if (isNewLineBlock(last) && isNewLineBlock(v) && last == v) {
-			// Skip it
-		} else {
-			temp.push(v);
-		}
-		last = v;
-	}
-	md = temp;
+// 	let temp = [];
+// 	let last = '';
+// 	for (let i = 0; i < md.length; i++) {
+// 		let v = md[i];
+// 		if (isNewLineBlock(last) && isNewLineBlock(v) && last == v) {
+// 			// Skip it
+// 		} else {
+// 			temp.push(v);
+// 		}
+// 		last = v;
+// 	}
+// 	md = temp;
 
-	temp = [];
-	last = '';
-	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
-		if (last == BLOCK_CLOSE && v == BLOCK_OPEN) {
-			temp.pop();
-			temp.push(NEWLINE_MERGED);
-		} else {
-			temp.push(v);
-		}
-		last = v;
-	}
-	md = temp;
+// 	temp = [];
+// 	last = '';
+// 	for (let i = 0; i < md.length; i++) {
+// 		let v = md[i];
+// 		if (last == BLOCK_CLOSE && v == BLOCK_OPEN) {
+// 			temp.pop();
+// 			temp.push(NEWLINE_MERGED);
+// 		} else {
+// 			temp.push(v);
+// 		}
+// 		last = v;
+// 	}
+// 	md = temp;
 
-	temp = [];
-	last = '';
-	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
-		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_CLOSE)) {
-			// Skip it
-		} else {
-			temp.push(v);
-		}
-		last = v;
-	}
-	md = temp;
+// 	temp = [];
+// 	last = '';
+// 	for (let i = 0; i < md.length; i++) {
+// 		let v = md[i];
+// 		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_CLOSE)) {
+// 			// Skip it
+// 		} else {
+// 			temp.push(v);
+// 		}
+// 		last = v;
+// 	}
+// 	md = temp;
 
-	// NEW!!!
-	temp = [];
-	last = '';
-	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
-		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_OPEN)) {
-			// Skip it
-		} else {
-			temp.push(v);
-		}
-		last = v;
-	}
-	md = temp;
+// 	// NEW!!!
+// 	temp = [];
+// 	last = '';
+// 	for (let i = 0; i < md.length; i++) {
+// 		let v = md[i];
+// 		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_OPEN)) {
+// 			// Skip it
+// 		} else {
+// 			temp.push(v);
+// 		}
+// 		last = v;
+// 	}
+// 	md = temp;
 
-	if (md.length > 2) {
-		if (md[md.length - 2] == NEWLINE_MERGED && md[md.length - 1] == NEWLINE) {
-			md.pop();
-		}
-	}
+// 	if (md.length > 2) {
+// 		if (md[md.length - 2] == NEWLINE_MERGED && md[md.length - 1] == NEWLINE) {
+// 			md.pop();
+// 		}
+// 	}
 
-	let output = '';
-	let previous = '';
-	let start = true;
-	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
-		let add = '';
-		if (v == BLOCK_CLOSE || v == BLOCK_OPEN || v == NEWLINE || v == NEWLINE_MERGED) {
-			add = '\n';
-		} else if (v == SPACE) {
-			if (previous == SPACE || previous == '\n' || start) {
-				continue; // skip
-			} else {
-				add = ' ';
-			}
-		} else {
-			add = v;
-		}
-		start = false;
-		output += add;
-		previous = add;
-	}
+// 	let output = '';
+// 	let previous = '';
+// 	let start = true;
+// 	for (let i = 0; i < md.length; i++) {
+// 		let v = md[i];
+// 		let add = '';
+// 		if (v == BLOCK_CLOSE || v == BLOCK_OPEN || v == NEWLINE || v == NEWLINE_MERGED) {
+// 			add = '\n';
+// 		} else if (v == SPACE) {
+// 			if (previous == SPACE || previous == '\n' || start) {
+// 				continue; // skip
+// 			} else {
+// 				add = ' ';
+// 			}
+// 		} else {
+// 			add = v;
+// 		}
+// 		start = false;
+// 		output += add;
+// 		previous = add;
+// 	}
 
-	if (!output.trim().length) return '';
+// 	if (!output.trim().length) return '';
 
-	// To simplify the result, we only allow up to one empty line between blocks of text
-	const mergeMultipleNewLines = function(lines) {
-		let output = [];
-		let newlineCount = 0;
-		for (let i = 0; i < lines.length; i++) {
-			const line = lines[i];
-			if (!line.trim()) {
-				newlineCount++;
-			} else {
-				newlineCount = 0;
-			}
+// 	// To simplify the result, we only allow up to one empty line between blocks of text
+// 	const mergeMultipleNewLines = function(lines) {
+// 		let output = [];
+// 		let newlineCount = 0;
+// 		for (let i = 0; i < lines.length; i++) {
+// 			const line = lines[i];
+// 			if (!line.trim()) {
+// 				newlineCount++;
+// 			} else {
+// 				newlineCount = 0;
+// 			}
 
-			if (newlineCount >= 2) continue;
+// 			if (newlineCount >= 2) continue;
 
-			output.push(line);
-		}
-		return output;
-	};
+// 			output.push(line);
+// 		}
+// 		return output;
+// 	};
 
-	let lines = output.replace(/\\r/g, '').split('\n');
-	lines = formatMdLayout(lines);
-	lines = mergeMultipleNewLines(lines);
-	return lines.join('\n');
-}
+// 	let lines = output.replace(/\\r/g, '').split('\n');
+// 	lines = formatMdLayout(lines);
+// 	lines = mergeMultipleNewLines(lines);
+// 	return lines.join('\n');
+// }
 
-const isHeading = function(line) {
-	return !!line.match(/^#+\s/);
-};
+// const isHeading = function(line) {
+// 	return !!line.match(/^#+\s/);
+// };
 
-const isListItem = function(line) {
-	return line && line.trim().indexOf('- ') === 0;
-};
+// const isListItem = function(line) {
+// 	return line && line.trim().indexOf('- ') === 0;
+// };
 
-const isCodeLine = function(line) {
-	return line && line.indexOf('\t') === 0;
-};
+// const isCodeLine = function(line) {
+// 	return line && line.indexOf('\t') === 0;
+// };
 
-const isTableLine = function(line) {
-	return line.indexOf('| ') === 0;
-};
+// const isTableLine = function(line) {
+// 	return line.indexOf('| ') === 0;
+// };
 
-const isPlainParagraph = function(line) {
-	// Note: if a line is no longer than 80 characters, we don't consider it's a paragraph, which
-	// means no newlines will be added before or after. This is to handle text that has been
-	// written with "hard" new lines.
-	if (!line || line.length < 80) return false;
+// const isPlainParagraph = function(line) {
+// 	// Note: if a line is no longer than 80 characters, we don't consider it's a paragraph, which
+// 	// means no newlines will be added before or after. This is to handle text that has been
+// 	// written with "hard" new lines.
+// 	if (!line || line.length < 80) return false;
 
-	if (isListItem(line)) return false;
-	if (isHeading(line)) return false;
-	if (isCodeLine(line)) return false;
-	if (isTableLine(line)) return false;
+// 	if (isListItem(line)) return false;
+// 	if (isHeading(line)) return false;
+// 	if (isCodeLine(line)) return false;
+// 	if (isTableLine(line)) return false;
 
-	return true;
-};
+// 	return true;
+// };
 
-function formatMdLayout(lines) {
-	let previous = '';
-	let newLines = [];
-	for (let i = 0; i < lines.length; i++) {
-		const line = lines[i];
+// function formatMdLayout(lines) {
+// 	let previous = '';
+// 	let newLines = [];
+// 	for (let i = 0; i < lines.length; i++) {
+// 		const line = lines[i];
 
-		// Add a new line at the end of a list of items
-		if (isListItem(previous) && line && !isListItem(line)) {
-			newLines.push('');
+// 		// Add a new line at the end of a list of items
+// 		if (isListItem(previous) && line && !isListItem(line)) {
+// 			newLines.push('');
 
-			// Add a new line at the beginning of a list of items
-		} else if (isListItem(line) && previous && !isListItem(previous)) {
-			newLines.push('');
+// 			// Add a new line at the beginning of a list of items
+// 		} else if (isListItem(line) && previous && !isListItem(previous)) {
+// 			newLines.push('');
 
-			// Add a new line before a heading
-		} else if (isHeading(line) && previous) {
-			newLines.push('');
+// 			// Add a new line before a heading
+// 		} else if (isHeading(line) && previous) {
+// 			newLines.push('');
 
-			// Add a new line after a heading
-		} else if (isHeading(previous) && line) {
-			newLines.push('');
-		} else if (isCodeLine(line) && !isCodeLine(previous)) {
-			newLines.push('');
-		} else if (!isCodeLine(line) && isCodeLine(previous)) {
-			newLines.push('');
-		} else if (isTableLine(line) && !isTableLine(previous)) {
-			newLines.push('');
-		} else if (!isTableLine(line) && isTableLine(previous)) {
-			newLines.push('');
+// 			// Add a new line after a heading
+// 		} else if (isHeading(previous) && line) {
+// 			newLines.push('');
+// 		} else if (isCodeLine(line) && !isCodeLine(previous)) {
+// 			newLines.push('');
+// 		} else if (!isCodeLine(line) && isCodeLine(previous)) {
+// 			newLines.push('');
+// 		} else if (isTableLine(line) && !isTableLine(previous)) {
+// 			newLines.push('');
+// 		} else if (!isTableLine(line) && isTableLine(previous)) {
+// 			newLines.push('');
 
-			// Add a new line at beginning of paragraph
-		} else if (isPlainParagraph(line) && previous) {
-			newLines.push('');
+// 			// Add a new line at beginning of paragraph
+// 		} else if (isPlainParagraph(line) && previous) {
+// 			newLines.push('');
 
-			// Add a new line at end of paragraph
-		} else if (isPlainParagraph(previous) && line) {
-			newLines.push('');
-		}
+// 			// Add a new line at end of paragraph
+// 		} else if (isPlainParagraph(previous) && line) {
+// 			newLines.push('');
+// 		}
 
-		newLines.push(line);
-		previous = newLines[newLines.length - 1];
-	}
+// 		newLines.push(line);
+// 		previous = newLines[newLines.length - 1];
+// 	}
 
-	return newLines;
-}
+// 	return newLines;
+// }
 
 function addResourceTag(lines, resource, alt = '') {
 	// Note: refactor to use Resource.markdownTag
@@ -227,10 +240,13 @@ function addResourceTag(lines, resource, alt = '') {
 
 	alt = tagAttributeToMdText(alt);
 	if (isImageMimeType(resource.mime)) {
-		lines.push('![');
-		lines.push(alt);
-		lines.push('](:/' + resource.id + ')');
+		lines.push(
+			`
+			<img src=":/${resource.id}" alt="${alt}" />
+			`
+		);
 	} else {
+		console.warn('mime type not recognized:', resource.mime);
 		lines.push('[');
 		lines.push(alt);
 		lines.push('](:/' + resource.id + ')');
@@ -239,14 +255,10 @@ function addResourceTag(lines, resource, alt = '') {
 	return lines;
 }
 
-// Elements that don't require any special treatment beside adding a newline character
-function isNewLineOnlyEndTag(n) {
-	return ['div', 'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
-}
-
-function isNewLineBlock(s) {
-	return s == BLOCK_OPEN || s == BLOCK_CLOSE;
-}
+// // Elements that don't require any special treatment beside adding a newline character
+// function isNewLineOnlyEndTag(n) {
+// 	return ['div', 'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dl', 'dd', 'dt', 'center', 'address'].indexOf(n) >= 0;
+// }
 
 function attributeToLowerCase(node) {
 	if (!node.attributes) return {};
@@ -258,15 +270,15 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
-// function isSpanWithStyle(attributes, state) {
-// 	if (attributes != undefined) {
-// 		if ('style' in attributes) {
-// 			return true;
-// 		} else {
-// 			return false;
-// 		}
-// 	}
-// }
+function isSpanWithStyle(attributes, state) {
+	if (attributes != undefined) {
+		if ('style' in attributes) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
 
 function enexXmlToHtml_(stream, resources) {
 	let remainingResources = resources.slice();
@@ -281,14 +293,14 @@ function enexXmlToHtml_(stream, resources) {
 	};
 
 	return new Promise((resolve, reject) => {
-		// let state = {
-		// 	inCode: [],
-		// 	inPre: false,
-		// 	inQuote: false,
-		// 	lists: [],
-		// 	anchorAttributes: [],
-		// 	spanAttributes: [],
-		// };
+		let state = {
+			inCode: [],
+			inPre: false,
+			inQuote: false,
+			lists: [],
+			anchorAttributes: [],
+			spanAttributes: [],
+		};
 
 		let options = {};
 		let strict = false;
@@ -347,10 +359,13 @@ function enexXmlToHtml_(stream, resources) {
 			} else if (tagName == 'img') {
 				if (nodeAttributes.src) {
 					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
-					let s = '![';
-					if (nodeAttributes.alt) s += tagAttributeToMdText(nodeAttributes.alt);
-					s += '](' + nodeAttributes.src + ')';
-					section.lines.push(s);
+					section.lines.push(
+						`
+						<img src="${nodeAttributes.src}" alt="${
+	nodeAttributes.alt ? tagAttributeToMdText(nodeAttributes.alt) : ''
+}" />
+						`
+					);
 				}
 			} else if (tagName == 'en-todo') {
 				// // let x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
@@ -360,20 +375,17 @@ function enexXmlToHtml_(stream, resources) {
 				const checkboxId = randomHash();
 				section.lines.push(
 					`
-							<li class="evernote-checkbox">
-								<input
-									type="checkbox"
-									id="evernote-checkbox-${checkboxId}"
-									onclick="
-										pcProxySendToHost('checkboxclick:unchecked:0');
-										const label = document.getElementById('cb-label-evernote-checkbox-${checkboxId}');
-										label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
-										label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
-										return true;
-									"
-								/>
-								<label  id="cb-label-evernote-checkbox-${checkboxId}" for="evernote-checkbox-${checkboxId}">fooo</label>
-							</li>
+						<input
+							type="checkbox"
+							id="evernote-checkbox-${checkboxId}"
+							onclick="
+								pcProxySendToHost('checkboxclick:unchecked:0');
+								const label = document.getElementById('cb-label-evernote-checkbox-${checkboxId}');
+								label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
+								label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
+								return true;
+							"
+						/>
 					`
 				// 	`<ul>
 				// <li class="md-checkbox"><input type="checkbox" id="evernote-checkbox-${id}" onclick="
@@ -460,6 +472,14 @@ function enexXmlToHtml_(stream, resources) {
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
 				}
+			} else if (tagName == 'span') {
+				if (isSpanWithStyle(nodeAttributes)) {
+					state.spanAttributes.push(nodeAttributes);
+					if (isSpanStyleBold(nodeAttributes)) {
+						//console.debug('Applying style found in span tag: bold')
+						section.lines.push('<strong>');
+					}
+				}
 			} else {
 				console.log(node);
 				section.lines.push(`<${tagName}>`); // TODO: don't forget to include closing tag
@@ -470,13 +490,16 @@ function enexXmlToHtml_(stream, resources) {
 			n = n ? n.toLowerCase() : n;
 
 			if (n == 'en-note') {
-				// End of note
-			// } else if (n == 'en-todo') {
-			// 	section.lines.push(`</label></input>`);
-			} else if (isNewLineOnlyEndTag(n)) {
-				section.lines.push(BLOCK_CLOSE);
+				// End of note, do nothing.
+			} else if (n == 'span') {
+				let attributes = state.spanAttributes.pop();
+				if (isSpanWithStyle(attributes)) {
+					if (isSpanStyleBold(attributes)) {
+						//console.debug('Applying style found in span tag (closing): bold')
+						section.lines.push('</strong>');
+					}
+				}
 			} else {
-				console.warn('Unsupported end tag: ' + n);
 				section.lines.push(`</${n}>`); // TODO: don't forget to include closing tag
 			}
 		});
@@ -499,7 +522,6 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 	let result = await enexXmlToHtml_(stream, resources, options);
 
 	let mdLines = [];
-	// console.log(JSON.stringify({result}))
 
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
@@ -510,16 +532,19 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 		firstAttachment = false;
 	}
 
-	let output = processMdArrayNewLines(mdLines).split('\n');
+	// let output = processMdArrayNewLines(mdLines).split('\n');
+	console.log(JSON.stringify({result, mdLines},null, 2));
 
 	// output = postProcessMarkdown(output);
 
-	return output.join('\n');
+	return result.content.lines.map(s => s.trim()).join('');
+	// return output.join('\n');
 	// return 'ciao! 👋';
 	// return xmlString;
 }
 
 // TODO: consider just not using the parser, or do it for sometthing else.
-module.exports = { enexXmlToHtml, processMdArrayNewLines,
+module.exports = { enexXmlToHtml,
+	// processMdArrayNewLines,
 	// , NEWLINE, addResourceTag
 };
