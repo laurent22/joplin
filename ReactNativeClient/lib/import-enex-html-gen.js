@@ -1,5 +1,6 @@
 // const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
+// const htmlFormat = require('html-format');
 
 // const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 // const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
@@ -9,10 +10,209 @@ const NEWLINE = '[[NEWLINE]]';
 
 const imageMimeTypes = ['image/cgm', 'image/fits', 'image/g3fax', 'image/gif', 'image/ief', 'image/jp2', 'image/jpeg', 'image/jpm', 'image/jpx', 'image/naplps', 'image/png', 'image/prs.btif', 'image/prs.pti', 'image/t38', 'image/tiff', 'image/tiff-fx', 'image/vnd.adobe.photoshop', 'image/vnd.cns.inf2', 'image/vnd.djvu', 'image/vnd.dwg', 'image/vnd.dxf', 'image/vnd.fastbidsheet', 'image/vnd.fpx', 'image/vnd.fst', 'image/vnd.fujixerox.edmics-mmr', 'image/vnd.fujixerox.edmics-rlc', 'image/vnd.globalgraphics.pgb', 'image/vnd.microsoft.icon', 'image/vnd.mix', 'image/vnd.ms-modi', 'image/vnd.net-fpx', 'image/vnd.sealed.png', 'image/vnd.sealedmedia.softseal.gif', 'image/vnd.sealedmedia.softseal.jpg', 'image/vnd.svf', 'image/vnd.wap.wbmp', 'image/vnd.xiff'];
 
+// TODO: write function like for checking imageMimeTypes index
+const inlineHtmlElements = [
+	'b',
+	'big',
+	'i',
+	'small',
+	'tt',
+	'abbr',
+	'acronym',
+	'cite',
+	'code',
+	'dfn',
+	'em',
+	'kbd',
+	'strong',
+	'samp',
+	'var',
+	'a',
+	'bdo',
+	'br',
+	'img',
+	'map',
+	'object',
+	'q',
+	'script',
+	'span',
+	'sub',
+	'sup',
+	'button',
+	'input',
+	'label',
+	'select',
+	'textarea',
+];
+
 // const randomHash = () => Math.random().toString(36).substring(2);
 
 function isImageMimeType(m) {
 	return imageMimeTypes.indexOf(m) >= 0;
+}
+
+class Char {
+	constructor(stream, pos) {
+		this.stream = stream;
+		this.pos = pos;
+	}
+	get value() {
+		return this.stream[this.pos];
+	}
+}
+class Token {
+	constructor(stream, start, end) {
+		this.stream = stream;
+		this.start = start;
+		this.end = end;
+	}
+	get value() {
+		return this.stream.slice(this.start, this.end);
+	}
+	get whitespace() {
+		let i = this.start - 1;
+		for (; i >= 0 && /\s/.test(this.stream[i]); i--)
+			;
+		return new Token(this.stream, i + 1, this.start);
+	}
+}
+function nextChar(s, i, regex = /\S/g) {
+	if (!regex.global)
+		throw new Error('Regexp must be global');
+	regex.lastIndex = i;
+	const res = regex.exec(s);
+	if (!res)
+		return;
+	return new Char(s, res.index);
+}
+function nextToken(s, i) {
+	let char = nextChar(s, i);
+	if (!char)
+		return;
+	const start = char.pos;
+	char = nextChar(s, start + 1, /[\s<]|>/g);
+	const end = char ? char.pos + Number(char.value == '>') : s.length;
+	return new Token(s, start, end);
+}
+const voidTags = [
+	'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input',
+	'keygen', 'link', 'menuitem', 'meta', 'param', 'source', 'track', 'wbr',
+	'!doctype', '--',
+];
+function parseTokenValue(value) {
+	let tagName = value.replace(/^<\/?|>$/g, '').toLowerCase();
+	if (tagName.startsWith('!--') || tagName.endsWith('--'))
+		tagName = '--';
+	const isTagStart = /</.test(value);
+	const isTagEnd = />/.test(value);
+	const isStartTag = /<([^/]|$)/.test(value);
+	const isEndTag = /<\//.test(value) || (isStartTag && voidTags.includes(tagName));
+	return {
+		isTagStart, isTagEnd, isStartTag, isEndTag, tagName,
+	};
+}
+function htmlFormat(html) {
+	const indent = '  ';
+	const output = [];
+	let inStartTag = false;
+	let inEndTag = false;
+	let inPre = false;
+	let inSpecialElement = false;
+	let tag = '';
+	let indentLevel = 0;
+	let prevState = {};
+	let token;
+	let i = 0;
+	while ((token = nextToken(html, i)) !== null) {
+		let tokenValue = token.value;
+		let tokenWhitespaceValue = token.whitespace.value;
+		let pendingWhitespace = '';
+		let { isTagStart, isTagEnd, isStartTag, isEndTag, tagName } = parseTokenValue(tokenValue);
+		// Token adjustments for edge cases
+		if (!inSpecialElement) {
+			// Remove space before tag name
+			if (isTagStart && !tagName) {
+				i = token.end;
+				token = nextToken(html, i);
+				if (!token)
+					break;
+				tokenValue += token.value;
+				({ isTagStart, isTagEnd, isStartTag, isEndTag, tagName } =
+									parseTokenValue(tokenValue));
+			}
+			// Split attributes stuck together
+			if (!isTagStart && (inStartTag || inEndTag)) {
+				// If attribute has end quote followed by another attribute
+				const regex = /[^=]"[^>]/g;
+				const res = regex.exec(tokenValue);
+				if (res && token.end != token.start + res.index + 2) {
+					token.end = token.start + res.index + 2;
+					tokenValue = token.value;
+					({ isTagStart, isTagEnd, isStartTag, isEndTag, tagName } =
+											parseTokenValue(tokenValue));
+					pendingWhitespace = indent;
+				}
+			}
+		}
+		if (!inSpecialElement && isStartTag)
+			tag = tagName;
+		const isEndSpecialTag = ((isEndTag && tagName != '--') || (isTagEnd && tagName == '--')) &&
+					tagName == tag;
+			// Ignore any tags inside special elements
+		if (inSpecialElement && !isEndSpecialTag)
+			isTagStart = isTagEnd = isStartTag = isEndTag = false;
+			// Current State
+		if (isStartTag)
+			inStartTag = true;
+		if (isEndTag)
+			inEndTag = true;
+		if (isEndTag && !isStartTag) // A void tag will be both
+			--indentLevel;
+		const isStartSpecialTag = (inStartTag && isTagEnd && ['script', 'style'].includes(tag)) ||
+					(isStartTag && tag == '--');
+			// Convenience
+		const inTag = inStartTag || inEndTag;
+		// Whitespace
+		const whitespace = tokenWhitespaceValue || prevState.pendingWhitespace;
+		const ignoreSpace = inTag && (/^[=">]([^=]|$)/.test(tokenValue) || /(^|=)"$/.test(prevState.tokenValue));
+		// Preserve whitespace inside special and pre elements
+		if (inSpecialElement || inPre)
+			output.push(tokenWhitespaceValue);
+		else if (whitespace && !ignoreSpace) {
+			const numNewlines = (whitespace.match(/\n/g) || []).length;
+			console.info('BEFORE', indentLevel, Number(inTag && !isTagStart));
+			if (indentLevel < 0) {
+				console.warn(output);
+			}
+			const indents = indent.repeat(indentLevel + Number(inTag && !isTagStart));
+			console.info('AFTER');
+			if (numNewlines)
+				output.push(...Array(numNewlines).fill('\n'), indents);
+			else
+				output.push(' ');
+		}
+		output.push(tokenValue);
+		prevState = {
+			pendingWhitespace, tokenValue,
+		};
+		// Next state
+		if (isStartSpecialTag)
+			inSpecialElement = true;
+		if (isEndSpecialTag)
+			inSpecialElement = false;
+		if (inStartTag && isTagEnd && tag == 'pre')
+			inPre = true;
+		if (isEndTag && tagName == 'pre')
+			inPre = false;
+		if (inStartTag && isTagEnd && !inEndTag) // A void tag is both start & end
+			++indentLevel;
+		if (isTagEnd)
+			inStartTag = inEndTag = false;
+		i = token.end;
+	}
+	if (html[html.length - 1] == '\n')
+		output.push('\n');
+	return output.join('');
 }
 
 function isSpanStyleBold(attributes) {
@@ -246,6 +446,7 @@ function addResourceTag(lines, resource, alt = '') {
 			`
 		);
 	} else {
+		// TODO: haandle other mime types, including audio/x-m4a
 		console.warn('mime type not recognized:', resource.mime);
 		lines.push('[');
 		lines.push(alt);
@@ -350,7 +551,6 @@ function enexXmlToHtml_(stream, resources) {
 		});
 
 		saxStream.on('opentag', function(node) {
-			console.log({node});
 			const nodeAttributes = attributeToLowerCase(node);
 			let tagName = node.name.toLowerCase();
 
@@ -360,11 +560,9 @@ function enexXmlToHtml_(stream, resources) {
 				if (nodeAttributes.src) {
 					// Many (most?) img tags don't have no source associated, especially when they were imported from HTML
 					section.lines.push(
-						`
-						<img src="${nodeAttributes.src}" alt="${
-	nodeAttributes.alt ? tagAttributeToMdText(nodeAttributes.alt) : ''
-}" />
-						`
+						`\n<img src="${nodeAttributes.src}" alt="${
+							nodeAttributes.alt ? tagAttributeToMdText(nodeAttributes.alt) : ''
+						}" />\n`
 					);
 				}
 			} else if (tagName == 'en-todo') {
@@ -458,6 +656,7 @@ function enexXmlToHtml_(stream, resources) {
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes.alt);
+					section.lines.push('\n');
 				}
 			} else if (tagName == 'br') {
 				// Do nothing
@@ -467,11 +666,16 @@ function enexXmlToHtml_(stream, resources) {
 					if (isSpanStyleBold(nodeAttributes)) {
 						//console.debug('Applying style found in span tag: bold')
 						section.lines.push('<strong>');
+					} else {
+						section.lines.push('<span>');
 					}
+				} else {
+					section.lines.push('<span>');
 				}
+			} else if (inlineHtmlElements.includes(tagName)) {
+				section.lines.push(`<${tagName}>`); // No newline for inline tags
 			} else {
-				console.log(node);
-				section.lines.push(`<${tagName}>`); // TODO: don't forget to include closing tag
+				section.lines.push(`<${tagName}>\n`); // TODO: don't forget to include closing tag
 			}
 		});
 
@@ -480,18 +684,20 @@ function enexXmlToHtml_(stream, resources) {
 
 			if (n == 'en-note') {
 				// End of note, do nothing.
-			} else if (n == 'br' || n == 'en-todo') {
+			} else if (n == 'br' || n == 'en-todo' || n == 'img' || n == 'en-media') {
 				// Do nothing
 			} else if (n == 'span') {
 				let attributes = state.spanAttributes.pop();
-				if (isSpanWithStyle(attributes)) {
-					if (isSpanStyleBold(attributes)) {
-						//console.debug('Applying style found in span tag (closing): bold')
-						section.lines.push('</strong>');
-					}
+				if (isSpanWithStyle(attributes) && isSpanStyleBold(attributes)) {
+					//console.debug('Applying style found in span tag (closing): bold')
+					section.lines.push('</strong>');
+				} else {
+					section.lines.push('</span>');
 				}
-			} else {
-				section.lines.push(`</${n}>`); // TODO: don't forget to include closing tag
+			} else if (inlineHtmlElements.includes(n)) { // is inline tag
+				section.lines.push(`</${n}>`); // No newline for inline tags
+			} else { // is block tag
+				section.lines.push(`\n</${n}>\n`); // TODO: don't forget to include closing tag
 			}
 		});
 
@@ -509,6 +715,7 @@ function enexXmlToHtml_(stream, resources) {
 }
 
 async function enexXmlToHtml(xmlString, resources, options = {}) {
+	console.log(xmlString);
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToHtml_(stream, resources, options);
 
@@ -528,7 +735,9 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 
 	// output = postProcessMarkdown(output);
 
-	return result.content.lines.map(s => s.trim()).join('');
+	// return result.content.lines.join('')
+	// TODO: put htmlFormat back in
+	return htmlFormat(result.content.lines.map(s => s.trim()).join(''));
 	// return output.join('\n');
 	// return 'ciao! 👋';
 	// return xmlString;
@@ -539,3 +748,12 @@ module.exports = { enexXmlToHtml,
 	// processMdArrayNewLines,
 	// , NEWLINE, addResourceTag
 };
+
+
+// TODO: Handle `RangeError: Invalid count value` when importing funny-cc-gp.
+// NOTE: it has something to do with poorly-formed xml...
+// NOTE: Looks like I resolved it (at least for the test cases I tried) by handling en-media.
+
+// TODO: Consider taking the ENEX wholesale and then doing a series of substring
+// substitutions (possibly with the parser too) rather than rebuilding everything
+// with a parser, which loses so much.
