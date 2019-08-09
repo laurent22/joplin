@@ -239,9 +239,6 @@ function enexXmlToHtml_(stream, resources) {
 }
 
 async function enexXmlToHtml(xmlString, resources, options = {}) {
-	// console.log('xmlString')
-	// console.log(xmlString)
-	// console.log('------------')
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToHtml_(stream, resources, options);
 

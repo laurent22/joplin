@@ -37,7 +37,10 @@ describe('EnexToHtml', function() {
 
 	it('should convert from Enex to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/enex_to_html';
-		const files = ['example-1'];
+		const files = [
+			'checklist-list',
+			'en-media-image',
+		];
 
 		for (let i = 0; i < files.length; i++) {
 			const filename = files[i];
@@ -47,7 +50,13 @@ describe('EnexToHtml', function() {
 			const enexInput = await shim.fsDriver().readFile(enexInputPath);
 			const expectedOutput = await shim.fsDriver().readFile(htmlOutputPath);
 
-			const resources = [];
+			const resources = [{
+				filename: '',
+				id: '89ce7da62c6b2832929a6964237e98e9', // Mock id
+				mime: 'image/jpeg',
+				size: 50347,
+				title: '',
+			}];
 			const actualOutput = await enexXmlToHtml(enexInput, resources);
 
 			if (actualOutput !== expectedOutput) {
