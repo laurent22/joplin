@@ -27,6 +27,30 @@ process.on('unhandledRejection', (reason, p) => {
  * `<note>...</note>` node in an `.enex` file already extracted from
  * `<content><![CDATA[...]]</content>`.
  */
+const compareOutputToExpected = (options) => {
+	const {inputFile, outputFile, resources} = options;
+
+	it('should convert from Enex to Markdown', asyncTest(async () => {
+		const enexInput = await shim.fsDriver().readFile(inputFile);
+		const expectedOutput = await shim.fsDriver().readFile(outputFile);
+
+		const actualOutput = await enexXmlToHtml(enexInput, resources);
+
+		if (actualOutput !== expectedOutput) {
+			console.info('');
+			console.info(`Error converting file: ${filename}.enex`);
+			console.info('--------------------------------- Received:');
+			console.info(actualOutput.split('\n'));
+			console.info('--------------------------------- Expected:');
+			console.info(expectedOutput.split('\n'));
+			console.info('--------------------------------------------');
+			console.info('');
+
+			expect(false).toBe(true);
+		}
+	}));
+};
+
 describe('EnexToHtml', function() {
 
 	beforeEach(async (done) => {
@@ -35,43 +59,25 @@ describe('EnexToHtml', function() {
 		done();
 	});
 
-	it('should convert from Enex to Markdown', asyncTest(async () => {
-		const basePath = __dirname + '/enex_to_html';
-		const files = [
-			'checklist-list',
-			'en-media-image',
-		];
+	const fileWithPath = (filename) =>
+		`${__dirname}/enex_to_html/${filename}`;
 
-		for (let i = 0; i < files.length; i++) {
-			const filename = files[i];
-			const enexInputPath = `${basePath}/${filename}.enex`;
-			const htmlOutputPath = `${basePath}/${filename}.html`;
+	compareOutputToExpected({
+		inputFile: fileWithPath('checklist-list.enex'),
+		outputFile: fileWithPath('checklist-list.html'),
+		resources: [],
+	});
 
-			const enexInput = await shim.fsDriver().readFile(enexInputPath);
-			const expectedOutput = await shim.fsDriver().readFile(htmlOutputPath);
-
-			const resources = [{
-				filename: '',
-				id: '89ce7da62c6b2832929a6964237e98e9', // Mock id
-				mime: 'image/jpeg',
-				size: 50347,
-				title: '',
-			}];
-			const actualOutput = await enexXmlToHtml(enexInput, resources);
-
-			if (actualOutput !== expectedOutput) {
-				console.info('');
-				console.info(`Error converting file: ${filename}.enex`);
-				console.info('--------------------------------- Received:');
-				console.info(actualOutput.split('\n'));
-				console.info('--------------------------------- Expected:');
-				console.info(expectedOutput.split('\n'));
-				console.info('--------------------------------------------');
-				console.info('');
-
-				expect(false).toBe(true);
-			}
-		}
-	}));
+	compareOutputToExpected({
+		inputFile: fileWithPath('en-media-image.enex'),
+		outputFile: fileWithPath('en-media-image.html'),
+		resources: [{
+			filename: '',
+			id: '89ce7da62c6b2832929a6964237e98e9', // Mock id
+			mime: 'image/jpeg',
+			size: 50347,
+			title: '',
+		}],
+	});
 
 });
