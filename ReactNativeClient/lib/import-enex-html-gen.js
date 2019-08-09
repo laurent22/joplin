@@ -266,17 +266,21 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 	// return htmlFormat(result.content.lines.map(s => s.trim()).join(''));
 
 
-	let final;
-	const preCleaning = result.content.lines.join(''); // xmlString
-	cleanHtml.clean(preCleaning, {wrap: 0}, (cleanedHtml) => {
-		final = cleanedHtml;
-	});
-	return final;
-	// return result.content.lines.join('');
-
-
-	// return output.join('\n');
+	try {
+		const preCleaning = result.content.lines.join(''); // xmlString
+		const final = await beautifyHtml(preCleaning);
+		return final.join('');
+	} catch (error) {
+		console.warn(error);
+	}
 }
+
+const beautifyHtml = (html) => {
+	return new Promise((resolve, _reject) => {
+		const options = {wrap: 0};
+		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
+	});
+};
 
 // TODO: consider just not using the parser, or do it for sometthing else.
 module.exports = {enexXmlToHtml};

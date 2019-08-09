@@ -37,46 +37,30 @@ describe('EnexToHtml', function() {
 
 	it('should convert from Enex to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/enex_to_html';
-		const files = await shim.fsDriver().readDirStats(basePath);
+		const files = ['example-1'];
 
-		console.log(files);
 		for (let i = 0; i < files.length; i++) {
-			const enexFilename = files[i].path;
-			if (enexFilename.indexOf('.html') < 0) continue;
+			const filename = files[i];
+			const enexInputPath = `${basePath}/${filename}.enex`;
+			const htmlOutputPath = `${basePath}/${filename}.html`;
 
-			const enexPath = basePath + '/' + enexFilename;
-			const htmlPath = basePath + '/' + filename(enexFilename) + '.html';
+			const enexInput = await shim.fsDriver().readFile(enexInputPath);
+			const expectedOutput = await shim.fsDriver().readFile(htmlOutputPath);
 
-			// // if (enexFilename !== 'multiline_inner_text.html') continue;
+			const resources = [];
+			const actualOutput = await enexXmlToHtml(enexInput, resources);
 
-			const html = await shim.fsDriver().readFile(enexPath);
-			let expectedHtml = await shim.fsDriver().readFile(htmlPath);
-
-			let actualHtml = await enexXmlToHtml(html, []);
-
-			// if (os.EOL === '\r\n') {
-			// 	expectedHtml = expectedHtml.replace(/\r\n/g, '\n');
-			// 	actualHtml = actualHtml.replace(/\r\n/g, '\n');
-			// }
-
-			console.log(expectedHtml);
-			console.log('====================');
-			console.log(actualHtml);
-
-			if (actualHtml !== expectedHtml) {
+			if (actualOutput !== expectedOutput) {
 				console.info('');
-				console.info('Error converting file: ' + enexFilename);
-				console.info('--------------------------------- Got:');
-				console.info(actualHtml.split('\n'));
+				console.info(`Error converting file: ${filename}.enex`);
+				console.info('--------------------------------- Received:');
+				console.info(actualOutput.split('\n'));
 				console.info('--------------------------------- Expected:');
-				console.info(expectedHtml.split('\n'));
+				console.info(expectedOutput.split('\n'));
 				console.info('--------------------------------------------');
 				console.info('');
 
 				expect(false).toBe(true);
-				// return;
-			} else {
-				expect(true).toBe(true);
 			}
 		}
 	}));
