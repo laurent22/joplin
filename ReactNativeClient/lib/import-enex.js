@@ -165,8 +165,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
-	console.log(importOptions);
-	console.log(JSON.stringify(importOptions));
+	// console.info(JSON.stringify({importOptions}, null, 2));
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
 	if (!('onError' in importOptions)) importOptions.onError = function(error) {};

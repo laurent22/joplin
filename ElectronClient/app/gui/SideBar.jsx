@@ -261,7 +261,6 @@ class SideBarComponent extends React.Component {
 
 	async itemContextMenu(event) {
 		const itemId = event.target.getAttribute('data-id');
-		console.log(itemId);
 		if (itemId === Folder.conflictFolderId()) return;
 
 		const itemType = Number(event.target.getAttribute('data-type'));
@@ -720,6 +719,7 @@ class SideBarComponent extends React.Component {
 			this.folderItemsOrder_ = result.order;
 			items.push(
 				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
+					{/* TODO: Delete this */}
 					<button onClick={deleteAllNotebooks}>Delete all notebooks</button> {/* TODO: Remove this */}
 					{folderItems}
 				</div>

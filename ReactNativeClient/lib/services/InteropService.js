@@ -122,8 +122,7 @@ class InteropService {
 
 	moduleByFormat_(type, format) {
 		const modules = this.modules();
-		// console.log('modules:')
-		// console.log(JSON.stringify(modules, null, 2))
+		// console.log(JSON.stringify({modules}, null, 2))
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (m.format === format && m.type === type) return modules[i];
@@ -192,14 +191,15 @@ class InteropService {
 
 		let result = { warnings: [] };
 
-		console.log('options passed to InteropService:');
-		console.log(JSON.stringify(options, null, 2));
+		// console.log('options passed to InteropService:');
+		// console.log(JSON.stringify({options}, null, 2));
+
+		// TODO: Remove the below comment, incorporate into PR comment
 		// /*
-		//  * TODO: Omg these options don't seem to get any data from the actual function
-		//  * that's supposedly being called! The menu options are just a nice way to guide
-		//  * you to import the right types of files???
+		//  * TODO: Omg just realized these options don't seem to get any data from
+		//  * the actual function that's supposedly being called! The menu options
+		//  * are just a nice way to guide you to import the right types of files???
 		//  */
-		// const importer = this.newModule_('importer', options.format);
 		const importer = this.newModuleFromPath_(options);
 		await importer.init(options.path, options);
 		result = await importer.exec(result);

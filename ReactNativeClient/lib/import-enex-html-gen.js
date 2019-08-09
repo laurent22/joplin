@@ -1,9 +1,45 @@
-// const stringPadding = require('string-padding');
 const stringToStream = require('string-to-stream');
 const cleanHtml = require('clean-html');
-// const htmlFormat = require('html-format');
 
-const imageMimeTypes = ['image/cgm', 'image/fits', 'image/g3fax', 'image/gif', 'image/ief', 'image/jp2', 'image/jpeg', 'image/jpm', 'image/jpx', 'image/naplps', 'image/png', 'image/prs.btif', 'image/prs.pti', 'image/t38', 'image/tiff', 'image/tiff-fx', 'image/vnd.adobe.photoshop', 'image/vnd.cns.inf2', 'image/vnd.djvu', 'image/vnd.dwg', 'image/vnd.dxf', 'image/vnd.fastbidsheet', 'image/vnd.fpx', 'image/vnd.fst', 'image/vnd.fujixerox.edmics-mmr', 'image/vnd.fujixerox.edmics-rlc', 'image/vnd.globalgraphics.pgb', 'image/vnd.microsoft.icon', 'image/vnd.mix', 'image/vnd.ms-modi', 'image/vnd.net-fpx', 'image/vnd.sealed.png', 'image/vnd.sealedmedia.softseal.gif', 'image/vnd.sealedmedia.softseal.jpg', 'image/vnd.svf', 'image/vnd.wap.wbmp', 'image/vnd.xiff'];
+const imageMimeTypes = [
+	'image/cgm',
+	'image/fits',
+	'image/g3fax',
+	'image/gif',
+	'image/ief',
+	'image/jp2',
+	'image/jpeg',
+	'image/jpm',
+	'image/jpx',
+	'image/naplps',
+	'image/png',
+	'image/prs.btif',
+	'image/prs.pti',
+	'image/t38',
+	'image/tiff',
+	'image/tiff-fx',
+	'image/vnd.adobe.photoshop',
+	'image/vnd.cns.inf2',
+	'image/vnd.djvu',
+	'image/vnd.dwg',
+	'image/vnd.dxf',
+	'image/vnd.fastbidsheet',
+	'image/vnd.fpx',
+	'image/vnd.fst',
+	'image/vnd.fujixerox.edmics-mmr',
+	'image/vnd.fujixerox.edmics-rlc',
+	'image/vnd.globalgraphics.pgb',
+	'image/vnd.microsoft.icon',
+	'image/vnd.mix',
+	'image/vnd.ms-modi',
+	'image/vnd.net-fpx',
+	'image/vnd.sealed.png',
+	'image/vnd.sealedmedia.softseal.gif',
+	'image/vnd.sealedmedia.softseal.jpg',
+	'image/vnd.svf',
+	'image/vnd.wap.wbmp',
+	'image/vnd.xiff',
+];
 
 function isImageMimeType(m) {
 	return imageMimeTypes.indexOf(m) >= 0;
@@ -24,11 +60,7 @@ function addResourceTag(lines, resource, attributes) {
 	const src = `:/${resource.id}`;
 
 	if (isImageMimeType(resource.mime)) {
-		lines.push(
-			`
-			<img src="${src}" ${attributesToStr(attributes)} />
-			`
-		);
+		lines.push(`<img src="${src}" ${attributesToStr(attributes)} />`);
 	} else if (resource.mime === 'audio/x-m4a') {
 		/* TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved, come back to this and make sure it works. */
 		lines.push(
@@ -42,8 +74,7 @@ function addResourceTag(lines, resource, attributes) {
 			'</p>',
 		);
 	} else {
-		// TODO: handle other mime types, including audio/x-m4a
-		console.warn('mime type not recognized:', resource.mime);
+		// TODO: figure out if we need to handle other mime types
 		console.warn('mime type not recognized:', resource.mime);
 		lines.push('[');
 		lines.push(attributes.alt);
@@ -76,15 +107,6 @@ function enexXmlToHtml_(stream, resources) {
 	};
 
 	return new Promise((resolve, reject) => {
-		/* let state = {
-			inCode: [],
-			inPre: false,
-			inQuote: false,
-			lists: [],
-			anchorAttributes: [],
-			spanAttributes: [],
-		}; */
-
 		const options = {};
 		const strict = false;
 		var saxStream = require('sax').createStream(strict, options);
@@ -97,7 +119,7 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('error', function(e) {
 			console.warn(e);
-			//reject(e);
+			// reject(e);
 		});
 
 
@@ -107,14 +129,12 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('opentag', function(node) {
 			const tagName = node.name.toLowerCase();
-			// console.log(tagName)
 			const attributesStr =
 				Object.entries(node.attributes)
 					.map(([key, value]) => ` ${key}="${value.replace(/"/g, '&quot;')}"`)
 					.join('');
 
 			if (tagName === 'en-media') {
-				// console.log({tagName, node})
 				const nodeAttributes = attributeToLowerCase(node);
 				const hash = nodeAttributes.hash;
 
@@ -193,20 +213,14 @@ function enexXmlToHtml_(stream, resources) {
 					section.lines.push('\n');
 				}
 			} else if (tagName == 'en-todo') {
-				// // let x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
-				// // section.lines.push('- [' + x + '] ');
-				// console.log(JSON.stringify({nodeAttributes}, null, 2))
-				// section.lines.push(`<input type="checkbox"><label>`);
-				// const checkboxId = randomHash();
-				// const checkedState = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'checked' : 'unchecked';
 				section.lines.push(
 					// TODO: maybe just live with the fact that you won't be able to toggle
 					// checkboxes on old imported enex imports?
 					// Not a big deal because we will only import as HTML for notes with a
 					// URL in the metadata, implying that it was clipped from the web (rather
 					// than a personal note).
-					// TODO: in a separate PR, make it clear to the user what the consequences
-					// of each import choice is.
+					// TODO: Extract the following note into an issue – in a separate PR,
+					// make it clear to the user what the consequences of each import choice is.
 					'<input type="checkbox" onclick="alert(\'This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\\n\\nTo do so, please update the raw HTML in the editor.\'); return false;" />'
 				);
 			} else if (node.isSelfClosing) {
@@ -215,12 +229,9 @@ function enexXmlToHtml_(stream, resources) {
 				section.lines.push(`<${tagName}${attributesStr} />`);
 			}
 		});
-		// saxStream.on('opentag', function(node) {
-		// 	let tagName = node.name.toLowerCase();
 
 		saxStream.on('closetag', function(n) {
 			const tagName = n ? n.toLowerCase() : n;
-			// console.log(tagName)
 			section.lines.push(`</${tagName}>`);
 		});
 
@@ -229,7 +240,7 @@ function enexXmlToHtml_(stream, resources) {
 		saxStream.on('end', function() {
 			resolve({
 				content: section,
-				// resources: remainingResources,
+				resources: remainingResources,
 			});
 		});
 
@@ -241,6 +252,7 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToHtml_(stream, resources, options);
 
+	// TODO: Put this back in
 	// let mdLines = [];
 
 	// let firstAttachment = true;
@@ -251,16 +263,6 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 	// 	mdLines = addResourceTag(mdLines, r, {alt: r.filename});
 	// 	firstAttachment = false;
 	// }
-
-	// // let output = processMdArrayNewLines(mdLines).split('\n');
-	// // console.log(JSON.stringify({result, mdLines},null, 2));
-
-	// // output = postProcessMarkdown(output);
-
-	// // return result.content.lines.join('')
-	// // TODO: put htmlFormat back in
-	// return htmlFormat(result.content.lines.map(s => s.trim()).join(''));
-
 
 	try {
 		const preCleaning = result.content.lines.join(''); // xmlString
@@ -278,18 +280,10 @@ const beautifyHtml = (html) => {
 	});
 };
 
-// TODO: consider just not using the parser, or do it for sometthing else.
 module.exports = {enexXmlToHtml};
 
-// TODO: Handle `RangeError: Invalid count value` when importing funny-cc-gp.
-// NOTE: it has something to do with poorly-formed xml...
-// NOTE: Looks like I resolved it (at least for the test cases I tried) by handling en-media.
-
-// TODO: Consider taking the ENEX wholesale and then doing a series of substring
-// substitutions (possibly with the parser too) rather than rebuilding everything
-// with a parser, which loses so much.
-
-// TODO: replace #cleanHtml with prettyPrint example:
+// TODO: consider replacing #cleanHtml with something like the prettyPrint
+// example here to remove the extra dependency on `clean-html` this PR added:
 // 	 https://github.com/isaacs/sax-js/blob/5aee2163d55cff24b817bbf550bac44841f9df45/examples/pretty-print.js
 
 // TODO: rather than a string, consider using the printer:

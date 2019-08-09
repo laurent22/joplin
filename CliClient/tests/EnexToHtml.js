@@ -93,4 +93,6 @@ describe('EnexToHtml', function() {
 		});
 	}));
 
+	// TODO: Add a test for atttachments
+
 });
