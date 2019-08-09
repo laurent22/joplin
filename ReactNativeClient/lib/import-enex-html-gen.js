@@ -97,7 +97,6 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('error', function(e) {
 			console.warn(e);
-			console.warn(e);
 			//reject(e);
 		});
 
@@ -182,7 +181,7 @@ function enexXmlToHtml_(stream, resources) {
 					}
 
 					if (!found) {
-						console.warn('Hash with no associated resource: ' + hash);
+						reject('Hash with no associated resource: ' + hash);
 					}
 				}
 

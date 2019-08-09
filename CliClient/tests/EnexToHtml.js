@@ -15,6 +15,14 @@ process.on('unhandledRejection', (reason, p) => {
 const fileWithPath = (filename) =>
 	`${__dirname}/enex_to_html/${filename}`;
 
+const audioResource = {
+	filename: 'audio test',
+	id: '9168ee833d03c5ea7c730ac6673978c1',
+	mime: 'audio/x-m4a',
+	size: 82011,
+	title: 'audio test',
+};
+
 /**
  * Tests the importer for a single note, checking that the result of
  * processing the given `.enex` input file matches the contents of the given
@@ -29,10 +37,9 @@ const fileWithPath = (filename) =>
 const compareOutputToExpected = (options) => {
 	const {inputFile, outputFile, resources} = options;
 
-	it('should convert from Enex to Markdown', asyncTest(async () => {
+	it('should convert from Enex to Html', asyncTest(async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);
-
 		const actualOutput = await enexXmlToHtml(enexInput, resources);
 
 		expect(actualOutput).toEqual(expectedOutput);
@@ -67,15 +74,23 @@ describe('EnexToHtml', function() {
 	compareOutputToExpected({
 		inputFile: fileWithPath('en-media-audio.enex'),
 		outputFile: fileWithPath('en-media-audio.html'),
-		resources: [{
-			filename: 'audio test',
-			id: '9168ee833d03c5ea7c730ac6673978c1',
-			mime: 'audio/x-m4a',
-			size: 82011,
-			title: 'audio test',
-		}],
+		resources: [audioResource],
 	});
 
-	// TODO: Test something with "no matching resource"
+	it('fails when not given a matching resource', asyncTest(async () => {
+		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
+		const resources = [];
+		const inputFile = fileWithPath('en-media-image.enex');
+		const enexInput = await shim.fsDriver().readFile(inputFile);
+		const promisedOutput = enexXmlToHtml(enexInput, resources);
+
+		promisedOutput.then(() => {
+			// Promise should not be resolved
+			expect(false).toEqual(true);
+		}, (reason) => {
+			expect(reason)
+				.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
+		});
+	}));
 
 });
