@@ -2,7 +2,6 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { filename } = require('lib/path-utils.js');
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');
 const { shim } = require('lib/shim');
 const { enexXmlToHtml } = require('lib/import-enex-html-gen.js');
@@ -36,18 +35,7 @@ const compareOutputToExpected = (options) => {
 
 		const actualOutput = await enexXmlToHtml(enexInput, resources);
 
-		if (actualOutput !== expectedOutput) {
-			console.info('');
-			console.info(`Error converting file: ${filename}.enex`);
-			console.info('--------------------------------- Received:');
-			console.info(actualOutput.split('\n'));
-			console.info('--------------------------------- Expected:');
-			console.info(expectedOutput.split('\n'));
-			console.info('--------------------------------------------');
-			console.info('');
-
-			expect(false).toBe(true);
-		}
+		expect(actualOutput).toEqual(expectedOutput);
 	}));
 };
 
@@ -75,4 +63,19 @@ describe('EnexToHtml', function() {
 			title: '',
 		}],
 	});
+
+	compareOutputToExpected({
+		inputFile: fileWithPath('en-media-audio.enex'),
+		outputFile: fileWithPath('en-media-audio.html'),
+		resources: [{
+			filename: 'audio test',
+			id: '9168ee833d03c5ea7c730ac6673978c1',
+			mime: 'audio/x-m4a',
+			size: 82011,
+			title: 'audio test',
+		}],
+	});
+
+	// TODO: Test something with "no matching resource"
+
 });
