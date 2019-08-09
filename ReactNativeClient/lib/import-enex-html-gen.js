@@ -123,7 +123,8 @@ function htmlFormat(html) {
 	let prevState = {};
 	let token;
 	let i = 0;
-	while ((token = nextToken(html, i)) !== null) {
+	// eslint-disable-next-line no-cond-assign
+	while (token = nextToken(html, i)) {
 		let tokenValue = token.value;
 		let tokenWhitespaceValue = token.whitespace.value;
 		let pendingWhitespace = '';
@@ -180,12 +181,12 @@ function htmlFormat(html) {
 			output.push(tokenWhitespaceValue);
 		else if (whitespace && !ignoreSpace) {
 			const numNewlines = (whitespace.match(/\n/g) || []).length;
-			console.info('BEFORE', indentLevel, Number(inTag && !isTagStart));
+			// console.info('BEFORE', indentLevel, Number(inTag && !isTagStart));
 			if (indentLevel < 0) {
 				console.warn(output);
 			}
 			const indents = indent.repeat(indentLevel + Number(inTag && !isTagStart));
-			console.info('AFTER');
+			// console.info('AFTER');
 			if (numNewlines)
 				output.push(...Array(numNewlines).fill('\n'), indents);
 			else
@@ -731,7 +732,7 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 	}
 
 	// let output = processMdArrayNewLines(mdLines).split('\n');
-	console.log(JSON.stringify({result, mdLines},null, 2));
+	// console.log(JSON.stringify({result, mdLines},null, 2));
 
 	// output = postProcessMarkdown(output);
 
