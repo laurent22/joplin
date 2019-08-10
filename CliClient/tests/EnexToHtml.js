@@ -37,7 +37,7 @@ const audioResource = {
 const compareOutputToExpected = (options) => {
 	const {inputFile, outputFile, resources} = options;
 
-	it('should convert from Enex to Html', asyncTest(async () => {
+	it(`should convert from Enex to Html: ${options.name}`, asyncTest(async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);
 		const actualOutput = await enexXmlToHtml(enexInput, resources);
@@ -54,12 +54,14 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
+		name: 'checklist in a list',
 		inputFile: fileWithPath('checklist-list.enex'),
 		outputFile: fileWithPath('checklist-list.html'),
 		resources: [],
 	});
 
 	compareOutputToExpected({
+		name: 'image',
 		inputFile: fileWithPath('en-media-image.enex'),
 		outputFile: fileWithPath('en-media-image.html'),
 		resources: [{
@@ -72,6 +74,7 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
+		name: 'audio',
 		inputFile: fileWithPath('en-media-audio.enex'),
 		outputFile: fileWithPath('en-media-audio.html'),
 		resources: [audioResource],
