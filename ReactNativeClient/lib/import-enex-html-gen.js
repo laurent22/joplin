@@ -1,55 +1,6 @@
 const stringToStream = require('string-to-stream');
 const cleanHtml = require('clean-html');
-
-const imageMimeTypes = [
-	'image/cgm',
-	'image/fits',
-	'image/g3fax',
-	'image/gif',
-	'image/ief',
-	'image/jp2',
-	'image/jpeg',
-	'image/jpm',
-	'image/jpx',
-	'image/naplps',
-	'image/png',
-	'image/prs.btif',
-	'image/prs.pti',
-	'image/t38',
-	'image/tiff',
-	'image/tiff-fx',
-	'image/vnd.adobe.photoshop',
-	'image/vnd.cns.inf2',
-	'image/vnd.djvu',
-	'image/vnd.dwg',
-	'image/vnd.dxf',
-	'image/vnd.fastbidsheet',
-	'image/vnd.fpx',
-	'image/vnd.fst',
-	'image/vnd.fujixerox.edmics-mmr',
-	'image/vnd.fujixerox.edmics-rlc',
-	'image/vnd.globalgraphics.pgb',
-	'image/vnd.microsoft.icon',
-	'image/vnd.mix',
-	'image/vnd.ms-modi',
-	'image/vnd.net-fpx',
-	'image/vnd.sealed.png',
-	'image/vnd.sealedmedia.softseal.gif',
-	'image/vnd.sealedmedia.softseal.jpg',
-	'image/vnd.svf',
-	'image/vnd.wap.wbmp',
-	'image/vnd.xiff',
-];
-
-function isImageMimeType(m) {
-	return imageMimeTypes.indexOf(m) >= 0;
-}
-const escapeQuotes = (str) => str.replace(/"/g, '&quot;');
-
-const attributesToStr = (attributes) =>
-	Object.entries(attributes)
-		.map(([key, value]) => ` ${key}="${escapeQuotes(value)}"`)
-		.join('');
+const resourceUtils = require('lib/resourceUtils.js');
 
 function addResourceTag(lines, resource, attributes) {
 	// Note: refactor to use Resource.markdownTag
@@ -59,26 +10,18 @@ function addResourceTag(lines, resource, attributes) {
 
 	const src = `:/${resource.id}`;
 
-	if (isImageMimeType(resource.mime)) {
-		lines.push(`<img src="${src}" ${attributesToStr(attributes)} />`);
+	if (resourceUtils.isImageMimeType(resource.mime)) {
+		lines.push(resourceUtils.imgElement({src, attributes}));
 	} else if (resource.mime === 'audio/x-m4a') {
-		/* TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved, come back to this and make sure it works. */
-		lines.push(
-			'<audio controls preload="none" style="width:480px;">',
-			`<source src="${src}" type="audio/mp4" />`,
-			'<p>Your browser does not support HTML5 audio.</p>',
-			'</audio>',
-			'<p>',
-			'<strong>Download Audio:</strong>',
-			`<a onclick="ipcProxySendToHost("joplin://${resource.id}"); return false;" href="${src}">M4A</a>,`,
-			'</p>',
-		);
+		/**
+		 * TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
+		 * come back to this and make sure it works.
+		 */
+		lines.push(resourceUtils.audioElement({src, id: resource.id}));
 	} else {
 		// TODO: figure out if we need to handle other mime types
 		console.warn('mime type not recognized:', resource.mime);
-		lines.push('[');
-		lines.push(attributes.alt);
-		lines.push('](:/' + resource.id + ')');
+		lines.push(`[${attributes.alt}](${src})`);
 	}
 
 	return lines;
