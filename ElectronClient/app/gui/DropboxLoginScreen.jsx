@@ -17,18 +17,6 @@ class DropboxLoginScreenComponent extends React.Component {
 		this.shared_.refreshUrl();
 	}
 
-	componentDidMount() {
-		document.addEventListener('keydown', event => {
-			if (event.keyCode === 27) { // `escape` key
-				this.props.dispatch({ type: 'NAV_BACK' });
-			}
-		});
-	}
-
-	componentWillUnmount() {
-		document.removeEventListener('keydown', null);
-	}
-
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
