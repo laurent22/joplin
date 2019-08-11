@@ -69,6 +69,7 @@ const audioElement = ({src, id}) => [
 const resourceUtils = {
 	imgElement,
 	audioElement,
+	attributesToStr,
 	isImageMimeType: (m) => imageMimeTypes.indexOf(m) >= 0,
 };
 

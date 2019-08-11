@@ -72,10 +72,7 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('opentag', function(node) {
 			const tagName = node.name.toLowerCase();
-			const attributesStr =
-				Object.entries(node.attributes)
-					.map(([key, value]) => ` ${key}="${value.replace(/"/g, '&quot;')}"`)
-					.join('');
+			const attributesStr = resourceUtils.attributesToStr(node.attributes);
 
 			if (tagName === 'en-media') {
 				const nodeAttributes = attributeToLowerCase(node);
@@ -92,45 +89,7 @@ function enexXmlToHtml_(stream, resources) {
 				}
 
 				if (!resource) {
-					// TODO: Extract this
-					// This is a bit of a hack. Notes sometime have resources attached to it, but those <resource> tags don't contain
-					// an "objID" tag, making it impossible to reference the resource. However, in this case the content of the note
-					// will contain a corresponding <en-media/> tag, which has the ID in the "hash" attribute. All this information
-					// has been collected above so we now set the resource ID to the hash attribute of the en-media tags. Here's an
-					// example of note that shows this problem:
-
-					//	<?xml version="1.0" encoding="UTF-8"?>
-					//	<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export2.dtd">
-					//	<en-export export-date="20161221T203133Z" application="Evernote/Windows" version="6.x">
-					//		<note>
-					//			<title>Commande</title>
-					//			<content>
-					//				<![CDATA[
-					//					<?xml version="1.0" encoding="UTF-8"?>
-					//					<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
-					//					<en-note>
-					//						<en-media alt="your QR code" hash="216a16a1bbe007fba4ccf60b118b4ccc" type="image/png"></en-media>
-					//					</en-note>
-					//				]]>
-					//			</content>
-					//			<created>20160921T203424Z</created>
-					//			<updated>20160921T203438Z</updated>
-					//			<note-attributes>
-					//				<reminder-order>20160902T140445Z</reminder-order>
-					//				<reminder-done-time>20160924T101120Z</reminder-done-time>
-					//			</note-attributes>
-					//			<resource>
-					//				<data encoding="base64">........</data>
-					//				<mime>image/png</mime>
-					//				<width>150</width>
-					//				<height>150</height>
-					//			</resource>
-					//		</note>
-					//	</en-export>
-
-					// Note that there's also the case of resources with no ID where the ID is actually the MD5 of the content.
-					// This is handled in import-enex.js
-
+					// TODO: Extract this duplicate of code in ./import-enex-md-gen.js
 					let found = false;
 					for (let i = 0; i < remainingResources.length; i++) {
 						let r = remainingResources[i];
@@ -153,7 +112,6 @@ function enexXmlToHtml_(stream, resources) {
 				// other remaining resources at the bottom of the markdown text.
 				if (resource && !!resource.id) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
-					section.lines.push('\n');
 				}
 			} else if (tagName == 'en-todo') {
 				section.lines.push(
@@ -224,10 +182,3 @@ const beautifyHtml = (html) => {
 };
 
 module.exports = {enexXmlToHtml};
-
-// TODO: consider replacing #cleanHtml with something like the prettyPrint
-// example here to remove the extra dependency on `clean-html` this PR added:
-// 	 https://github.com/isaacs/sax-js/blob/5aee2163d55cff24b817bbf550bac44841f9df45/examples/pretty-print.js
-
-// TODO: rather than a string, consider using the printer:
-//   https://github.com/isaacs/sax-js/blob/5aee2163d55cff24b817bbf550bac44841f9df45/examples/pretty-print.js#L2

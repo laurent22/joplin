@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 require('app-module-path').addPath(__dirname);
 
 const { asyncTest, setupDatabaseAndSynchronizer, switchClient } = require('test-utils.js');

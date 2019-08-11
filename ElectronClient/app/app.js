@@ -354,7 +354,7 @@ class Application extends BaseApplication {
 					importItems.push({
 						label: module.fullLabel(moduleSource),
 						screens: ['Main'],
-						click: async (clickArgs) => {
+						click: async () => {
 							let path = null;
 
 							const selectedFolderId = this.store().getState().selectedFolderId;
