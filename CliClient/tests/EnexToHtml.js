@@ -78,6 +78,18 @@ describe('EnexToHtml', function() {
 		resources: [audioResource],
 	});
 
+	compareOutputToExpected({
+		name: 'attachment',
+		inputFile: fileWithPath('attachment.enex'),
+		outputFile: fileWithPath('attachment.html'),
+		resources: [{
+			filename: 'attachment-1',
+			id: '21ca2b948f222a38802940ec7e2e5de3',
+			mime: 'application/pdf', // Any non-image/non-audio mime type will do
+			size: 1000,
+		}],
+	});
+
 	it('fails when not given a matching resource', asyncTest(async () => {
 		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
 		const resources = [];
@@ -93,7 +105,5 @@ describe('EnexToHtml', function() {
 				.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
 		});
 	}));
-
-	// TODO: Add a test for atttachments
 
 });

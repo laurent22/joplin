@@ -38,37 +38,45 @@ const imageMimeTypes = [
 	'image/vnd.xiff',
 ];
 
-const escapeQuotes = (str) => str.replace(/"/g, '&quot;');
+const escapeQuotes = (str) => str.replace(/"/g, '"');
 
 const attributesToStr = (attributes) =>
 	Object.entries(attributes)
 		.map(([key, value]) => ` ${key}="${escapeQuotes(value)}"`)
 		.join('');
 
+const ipcProxySendToHost = (id) =>
+	`onclick="ipcProxySendToHost('joplin://${id}'); return false;"`;
+
+const attachmentElement = ({src, attributes, id}) =>
+	[
+		`<a href='#' ${attributesToStr(attributes)} ${ipcProxySendToHost(id)}>`,
+		`  ${attributes.alt || src}`,
+		'</a>',
+	].join('');
+
 const imgElement = ({src, attributes}) =>
 	`<img src="${src}" ${attributesToStr(attributes)} />`;
 
-const audioElement = ({src, id}) => [
-	'<audio controls preload="none" style="width:480px;">',
-	`	<source src="${src}" type="audio/mp4" />`,
-	'	<p>',
-	'		Your browser does not support HTML5 audio.',
-	'	</p>',
-	'</audio>',
-	'<p>',
-	'	<strong>Download Audio:</strong>',
-	'	<a',
-	`		onclick="ipcProxySendToHost('joplin://${id}'); return false;"`,
-	`		href="${src}"`,
-	'	>',
-	'		M4A',
-	'	</a>',
-	'</p>',
-].join('');
+const audioElement = ({src, alt, id}) =>
+	[
+		'<audio controls preload="none" style="width:480px;">',
+		`	<source src="${src}" type="audio/mp4" />`,
+		'	<p>',
+		'		Your browser does not support HTML5 audio.',
+		'	</p>',
+		'</audio>',
+		'<p>',
+		`  <a href="${src}" ${ipcProxySendToHost(id)}>`,
+		`    ${alt || src || id || 'Download audio'}`,
+		'  </a>',
+		'</p>',
+	].join('');
 
 const resourceUtils = {
 	imgElement,
 	audioElement,
+	attachmentElement,
 	attributesToStr,
 	isImageMimeType: (m) => imageMimeTypes.indexOf(m) >= 0,
 };

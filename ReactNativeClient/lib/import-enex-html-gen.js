@@ -17,11 +17,19 @@ function addResourceTag(lines, resource, attributes) {
 		 * TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
 		 * come back to this and make sure it works.
 		 */
-		lines.push(resourceUtils.audioElement({src, id: resource.id}));
+		lines.push(resourceUtils.audioElement({
+			src,
+			alt: attributes.alt,
+			id: resource.id,
+		}));
 	} else {
 		// TODO: figure out if we need to handle other mime types
 		console.warn('mime type not recognized:', resource.mime);
-		lines.push(`[${attributes.alt}](${src})`);
+		lines.push(resourceUtils.attachmentElement({
+			src,
+			attributes,
+			id: resource.id,
+		}));
 	}
 
 	return lines;
@@ -122,7 +130,7 @@ function enexXmlToHtml_(stream, resources) {
 					// than a personal note).
 					// TODO: Extract the following note into an issue – in a separate PR,
 					// make it clear to the user what the consequences of each import choice is.
-					'<input type="checkbox" onclick="alert(\'This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\\n\\nTo do so, please update the raw HTML in the editor.\'); return false;" />'
+					'<input type="checkbox" onclick="return false;" />'
 				);
 			} else if (node.isSelfClosing) {
 				section.lines.push(`<${tagName}${attributesStr}>`);

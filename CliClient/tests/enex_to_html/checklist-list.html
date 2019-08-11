@@ -3,13 +3,13 @@
     <p>For example, consider an exported Evernote list with todo checkboxes like this:</p>
     <ul>
       <li>
-        <div><input type="checkbox" onclick="alert('This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\n\nTo do so, please update the raw HTML in the editor.'); return false;">Foo</div>
+        <div><input type="checkbox" onclick="return false;">Foo</div>
       </li>
       <li>
-        <div><input type="checkbox" onclick="alert('This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\n\nTo do so, please update the raw HTML in the editor.'); return false;"><b>Bar</b></div>
+        <div><input type="checkbox" onclick="return false;"><b>Bar</b></div>
       </li>
       <li>
-        <div><input type="checkbox" onclick="alert('This note was imported with the ENEX to HTML importer, so you cannot mark to-dos as complete in the preview.\n\nTo do so, please update the raw HTML in the editor.'); return false;"><i>Baz</i></div>
+        <div><input type="checkbox" onclick="return false;"><i>Baz</i></div>
       </li>
     </ul>
   </div>
