@@ -23,8 +23,7 @@ function addResourceTag(lines, resource, attributes) {
 			id: resource.id,
 		}));
 	} else {
-		// TODO: figure out if we need to handle other mime types
-		console.warn('mime type not recognized:', resource.mime);
+		// TODO: figure out what other mime types can be handled more gracefully
 		lines.push(resourceUtils.attachmentElement({
 			src,
 			attributes,
@@ -122,16 +121,7 @@ function enexXmlToHtml_(stream, resources) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
 				}
 			} else if (tagName == 'en-todo') {
-				section.lines.push(
-					// TODO: maybe just live with the fact that you won't be able to toggle
-					// checkboxes on old imported enex imports?
-					// Not a big deal because we will only import as HTML for notes with a
-					// URL in the metadata, implying that it was clipped from the web (rather
-					// than a personal note).
-					// TODO: Extract the following note into an issue – in a separate PR,
-					// make it clear to the user what the consequences of each import choice is.
-					'<input type="checkbox" onclick="return false;" />'
-				);
+				section.lines.push('<input type="checkbox" onclick="return false;" />');
 			} else if (node.isSelfClosing) {
 				section.lines.push(`<${tagName}${attributesStr}>`);
 			} else {
@@ -160,18 +150,6 @@ function enexXmlToHtml_(stream, resources) {
 async function enexXmlToHtml(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToHtml_(stream, resources, options);
-
-	// TODO: Put this back in
-	// let mdLines = [];
-
-	// let firstAttachment = true;
-	// for (let i = 0; i < result.resources.length; i++) {
-	// 	let r = result.resources[i];
-	// 	if (firstAttachment) mdLines.push(NEWLINE);
-	// 	mdLines.push(NEWLINE);
-	// 	mdLines = addResourceTag(mdLines, r, {alt: r.filename});
-	// 	firstAttachment = false;
-	// }
 
 	try {
 		const preCleaning = result.content.lines.join(''); // xmlString
