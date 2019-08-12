@@ -33,12 +33,14 @@ const audioResource = {
  * `<content><![CDATA[...]]</content>`.
  */
 const compareOutputToExpected = (options) => {
-	const {inputFile, outputFile, resources} = options;
+	const inputFile = fileWithPath(`${options.testName}.enex`);
+	const outputFile = fileWithPath(`${options.testName}.html`);
+	const testTitle = `should convert from Enex to Html: ${options.testName}`;
 
-	it(`should convert from Enex to Html: ${options.name}`, asyncTest(async () => {
+	it(testTitle, asyncTest(async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);
-		const actualOutput = await enexXmlToHtml(enexInput, resources);
+		const actualOutput = await enexXmlToHtml(enexInput, options.resources);
 
 		expect(actualOutput).toEqual(expectedOutput);
 	}));
@@ -52,23 +54,17 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
-		name: 'checklist in a list',
-		inputFile: fileWithPath('checklist-list.enex'),
-		outputFile: fileWithPath('checklist-list.html'),
+		testName: 'checklist-list',
 		resources: [],
 	});
 
 	compareOutputToExpected({
-		name: 'svg',
-		inputFile: fileWithPath('svg.enex'),
-		outputFile: fileWithPath('svg.html'),
+		testName: 'svg',
 		resources: [],
 	});
 
 	compareOutputToExpected({
-		name: 'image',
-		inputFile: fileWithPath('en-media-image.enex'),
-		outputFile: fileWithPath('en-media-image.html'),
+		testName: 'en-media--image',
 		resources: [{
 			filename: '',
 			id: '89ce7da62c6b2832929a6964237e98e9', // Mock id
@@ -79,16 +75,12 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
-		name: 'audio',
-		inputFile: fileWithPath('en-media-audio.enex'),
-		outputFile: fileWithPath('en-media-audio.html'),
+		testName: 'en-media--audio',
 		resources: [audioResource],
 	});
 
 	compareOutputToExpected({
-		name: 'attachment',
-		inputFile: fileWithPath('attachment.enex'),
-		outputFile: fileWithPath('attachment.html'),
+		testName: 'attachment',
 		resources: [{
 			filename: 'attachment-1',
 			id: '21ca2b948f222a38802940ec7e2e5de3',
@@ -100,7 +92,7 @@ describe('EnexToHtml', function() {
 	it('fails when not given a matching resource', asyncTest(async () => {
 		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
 		const resources = [];
-		const inputFile = fileWithPath('en-media-image.enex');
+		const inputFile = fileWithPath('en-media--image.enex');
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const promisedOutput = enexXmlToHtml(enexInput, resources);
 
