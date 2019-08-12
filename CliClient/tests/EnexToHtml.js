@@ -59,6 +59,13 @@ describe('EnexToHtml', function() {
 	});
 
 	compareOutputToExpected({
+		name: 'svg',
+		inputFile: fileWithPath('svg.enex'),
+		outputFile: fileWithPath('svg.html'),
+		resources: [],
+	});
+
+	compareOutputToExpected({
 		name: 'image',
 		inputFile: fileWithPath('en-media-image.enex'),
 		outputFile: fileWithPath('en-media-image.html'),
