@@ -224,19 +224,6 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
-			editorFont: {
-				value: Setting.FONT_MENLO,
-				type: Setting.TYPE_STRING,
-				isEnum: true,
-				public: true,
-				label: () => _('Editor font'),
-				section: 'appearance',
-				options: () => ({
-					[Setting.FONT_MENLO]: 'Menlo',
-					[Setting.FONT_COURIER_NEW]: 'Courier New',
-					[Setting.FONT_AVENIR]: 'Avenir',
-				}),
-			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
 			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
@@ -347,7 +334,36 @@ class Setting extends BaseModel {
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
-			'style.editor.fontFamily': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.') },
+			'style.editor.fontFamily': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: true,
+				appTypes: ['desktop'],
+				section: 'appearance',
+				label: () => _('Editor font family'),
+				description: () =>
+					_('This must be *monospace* font or it will not work properly. If the font ' +
+					'is incorrect or empty, it will default to a generic monospace font.'),
+			},
+			editorFont: {
+				value: Setting.FONT_MENLO,
+				type: Setting.TYPE_STRING,
+				isEnum: true,
+				public: true,
+				label: () => _('Editor font'),
+				appTypes: ['mobile'],
+				section: 'appearance',
+				options: () => ({
+					/**
+					 * TODO: Check if these fonts break Android. If so, how to retrieve
+					 * info that is more detailed than the `platform` metadata (which
+					 * returns "desktop"|"mobile"|"cli", not the OS info.)
+					 */
+					[Setting.FONT_MENLO]: 'Menlo',
+					[Setting.FONT_COURIER_NEW]: 'Courier New',
+					[Setting.FONT_AVENIR]: 'Avenir',
+				}),
+			},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },

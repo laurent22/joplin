@@ -98,6 +98,20 @@ function addExtraStyles(style) {
 	return style;
 }
 
+function editorFont(fontId) {
+	const fonts = {
+		[Setting.FONT_MENLO]: 'Menlo',
+		[Setting.FONT_COURIER_NEW]: 'Courier New',
+		[Setting.FONT_AVENIR]: 'Avenir',
+	};
+	if (!fontId) {
+		const menlo = globalStyle.fonts[Setting.FONT_MENLO];
+		console.warn(`Editor font not set! Defaulting to "${menlo}"`);
+		fontId = Setting.FONT_MENLO;
+	}
+	return fonts[fontId];
+}
+
 function themeStyle(theme) {
 	if (!theme) {
 		console.warn('Theme not set!! Defaulting to Light theme');
@@ -140,4 +154,4 @@ function themeStyle(theme) {
 	return addExtraStyles(themeCache_[theme]);
 }
 
-module.exports = { globalStyle, themeStyle };
+module.exports = { globalStyle, themeStyle, editorFont };
