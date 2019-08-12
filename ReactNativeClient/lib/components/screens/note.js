@@ -206,6 +206,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 				fontSize: theme.fontSize,
+				fontFamily: 'Menlo',
 			},
 			noteBodyViewer: {
 				flex: 1,
