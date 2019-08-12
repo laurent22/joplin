@@ -224,6 +224,19 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
+			editorFont: {
+				value: Setting.FONT_MENLO,
+				type: Setting.TYPE_STRING,
+				isEnum: true,
+				public: true,
+				label: () => _('Editor font'),
+				section: 'appearance',
+				options: () => ({
+					[Setting.FONT_MENLO]: 'Menlo',
+					[Setting.FONT_COURIER_NEW]: 'Courier New',
+					[Setting.FONT_AVENIR]: 'Avenir',
+				}),
+			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
 			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
@@ -830,6 +843,10 @@ Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
+
+Setting.FONT_MENLO = 1;
+Setting.FONT_COURIER_NEW = 2;
+Setting.FONT_AVENIR = 3;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';
