@@ -52,8 +52,3 @@ subprojects {
     }
 }
 
-ext {
-    googlePlayServicesVersion = "16.0.0"
-    googlePlayServicesVisionVersion = "17.0.2"
-}
-
