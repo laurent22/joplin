@@ -276,6 +276,7 @@ Joplin supports a number of plugins that can be toggled on top the standard mark
 | [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` :smile: | See [this list](https://gist.github.com/rxaviers/7360908) for more emoji | no |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
+| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
 
 ## Math notation
 

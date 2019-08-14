@@ -413,6 +413,11 @@ class NoteTextComponent extends React.Component {
 	}
 
 	componentDidUpdate() {
+		if (Setting.value('env') === 'dev' && this.webviewRef()) {
+			this.webviewRef().openDevTools();
+			return;
+		}
+
 		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
 			if (this.props.noteDevToolsVisible) {
 				this.webviewRef().openDevTools();
