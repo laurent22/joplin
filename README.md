@@ -369,7 +369,7 @@ Please see the [donation page](https://joplinapp.org/donate/) for information on
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
 - You can also follow us on <a rel="me" href="https://mastodon.social/@joplinapp">the Mastodon feed</a> or [the Twitter feed](https://twitter.com/joplinapp).
-- You can join the community in live on [the discord server](https://discordapp.com/channels/610762468960239627/610762468960239629) to get help and exchange on joplin.
+- You can join the community in live on [the discord server](https://discordapp.com/invite/d2HMPwE) to get help and exchange on joplin.
 
 # Contributing
 
