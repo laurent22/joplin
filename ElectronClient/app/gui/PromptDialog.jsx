@@ -104,6 +104,7 @@ class PromptDialog extends React.Component {
 				Object.assign(provided, {
 					minWidth: width * 0.2,
 					maxWidth: width * 0.5,
+					fontFamily: theme.fontFamily,
 				}),
 			input: provided =>
 				Object.assign(provided, {

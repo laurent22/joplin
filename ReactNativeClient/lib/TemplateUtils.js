@@ -56,7 +56,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		});
 	}
 
-	return templates;
+	return templates.sort((a, b) => { return a.label.localeCompare(b.label); });
 };
 
 module.exports = TemplateUtils;
