@@ -56,6 +56,23 @@ function buildLocale(inputFile, outputFile) {
 	saveToFile(outputFile, translation);
 }
 
+function returnPath(file) {
+	const potentialPaths = [
+		'/usr/local/opt/gettext/bin/',
+		'/opt/local/bin/',
+		'/usr/local/bin/',
+	];
+
+	for (const path of potentialPaths) {
+		let pathFile = path + file;
+		if (fs.existsSync(pathFile)) {
+			return pathFile;
+		}
+	}
+	console.log(file + ' could not be found. Please install via brew or MacPorts.');
+	process.exit(1);
+}
+
 async function removePoHeaderDate(filePath) {
 	let sedPrefix = 'sed -i';
 	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
@@ -78,7 +95,7 @@ async function createPotFile(potFilePath, sources) {
 		if (i > 0) args.push('--join-existing');
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
-		if (isMac()) xgettextPath = '/usr/local/opt/gettext/bin/xgettext'; // Needs to have been installed with `brew install gettext`
+		if (isMac()) xgettextPath = returnPath('xgettext'); // Needs to have been installed with `brew install gettext`
 		const result = await execCommand(xgettextPath + ' ' + args.join(' '));
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
@@ -87,7 +104,7 @@ async function createPotFile(potFilePath, sources) {
 
 async function mergePotToPo(potFilePath, poFilePath) {
 	let msgmergePath = 'msgmerge';
-	if (isMac()) msgmergePath = '/usr/local/opt/gettext/bin/msgmerge'; // Needs to have been installed with `brew install gettext`
+	if (isMac()) msgmergePath = returnPath('msgmerge'); // Needs to have been installed with `brew install gettext`
 
 	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
 	const result = await execCommand(command);
@@ -148,7 +165,10 @@ function extractTranslator(regex, poContent) {
 
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
-	const command = 'pocount "' + poFile + '"';
+	let pocountPath = 'pocount';
+	if (isMac()) pocountPath = returnPath('pocount');
+
+	const command = pocountPath + ' "' + poFile + '"';
 	const result = await execCommand(command);
 	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
 	if (!matches || matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
