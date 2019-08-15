@@ -57,12 +57,8 @@ function buildLocale(inputFile, outputFile) {
 }
 
 async function removePoHeaderDate(filePath) {
-	// Note: on macOS this will fail because it needs to be 'sed -i ""'
-	// Solution would be to install gsed, detect it here, and use it in place of sed in macOS
-	// https://stackoverflow.com/questions/30003570/how-to-use-gnu-sed-on-mac-os-x#34815955
-
 	let sedPrefix = 'sed -i';
-	if (isMac()) sedPrefix += ' ""';
+	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
 	await execCommand(sedPrefix + ' -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
 	await execCommand(sedPrefix + ' -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
 }
