@@ -317,7 +317,7 @@
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.281/joplin-v1.0.281.apk">Download APK File</a></td>
+<td>or <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.294/joplin-v1.0.294.apk">Download APK File</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -386,12 +386,12 @@
 </li>
 </ul>
 <p>To import Evernote data, first export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>. Then follow these steps:</p>
-<p>On the <strong>desktop application</strong>, open File &gt; Import &gt; ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
-<p>On the <strong>terminal application</strong>, in <a href="https://joplinapp.org/terminal/#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
+<p>In the <strong>desktop application</strong>, open File &gt; Import &gt; ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.</p>
+<p>In the <strong>terminal application</strong>, in <a href="https://joplinapp.org/terminal/#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</p>
 <h2><a name="importing-from-markdown-files" href="#importing-from-markdown-files" class="heading-anchor">🔗</a>Importing from Markdown files</h2>
 <p>Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.</p>
-<p>On the <strong>desktop application</strong>, open File &gt; Import &gt; MD and select your Markdown file or directory.</p>
-<p>On the <strong>terminal application</strong>, in <a href="https://joplinapp.org/terminal/#command-line-mode">command-line mode</a>, type <code>import --format md /path/to/file.md</code> or <code>import --format md /path/to/directory/</code>.</p>
+<p>In the <strong>desktop application</strong>, open File &gt; Import &gt; MD and select your Markdown file or directory.</p>
+<p>In the <strong>terminal application</strong>, in <a href="https://joplinapp.org/terminal/#command-line-mode">command-line mode</a>, type <code>import --format md /path/to/file.md</code> or <code>import --format md /path/to/directory/</code>.</p>
 <h2><a name="importing-from-other-applications" href="#importing-from-other-applications" class="heading-anchor">🔗</a>Importing from other applications</h2>
 <p>In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:</p>
 <ul>
@@ -407,8 +407,8 @@
 <p>Currently, synchronisation is possible with Nextcloud, Dropbox (by default), OneDrive or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
 <h2><a name="nextcloud-synchronisation" href="#nextcloud-synchronisation" class="heading-anchor">🔗</a>Nextcloud synchronisation</h2>
 <p><img src="https://joplinapp.org/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.</p>
-<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally <code>https://example.com/nextcloud/remote.php/webdav/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong>), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
-<p>On the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally <code>https://example.com/nextcloud/remote.php/webdav/Joplin</code> (<strong>make sure to create the &quot;Joplin&quot; directory in Nextcloud</strong>), and set the username and password. If it does not work, please <a href="https://github.com/laurent22/joplin/issues/61#issuecomment-373282608">see this explanation</a> for more details.</p>
+<p>In the <strong>terminal application</strong>, you will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
 :config sync.5.username YOUR_USERNAME
 :config sync.5.password YOUR_PASSWORD
@@ -417,8 +417,8 @@
 <p>If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
 <h2><a name="dropbox-synchronisation" href="#dropbox-synchronisation" class="heading-anchor">🔗</a>Dropbox synchronisation</h2>
 <p>When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in <code>/Apps/Joplin</code> and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
-<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;Dropbox&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
-<p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;Dropbox&quot; as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
+<p>In the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre>
 <h2><a name="webdav-synchronisation" href="#webdav-synchronisation" class="heading-anchor">🔗</a>WebDAV synchronisation</h2>
@@ -440,8 +440,8 @@
 </ul>
 <h2><a name="onedrive-synchronisation" href="#onedrive-synchronisation" class="heading-anchor">🔗</a>OneDrive synchronisation</h2>
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
-<p>On the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the config screen. Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
-<p>On the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the config screen. Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
+<p>In the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
 <h1><a name="encryption" href="#encryption" class="heading-anchor">🔗</a>Encryption</h1>
 <p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="https://joplinapp.org/e2ee/">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
 <p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplinapp.org/spec/">Encryption specification</a>.</p>
@@ -453,13 +453,14 @@
 <p>Joplin notes can be opened and edited using an external editor of your choice. It can be a simple text editor like Notepad++ or Sublime Text or an actual Markdown editor like Typora. In that case, images will also be displayed within the editor. To open the note in an external editor, click on the icon in the toolbar or press Ctrl+E (or Cmd+E). Your default text editor will be used to open the note. If needed, you can also specify the editor directly in the General Options, under &quot;Text editor command&quot;.</p>
 <h1><a name="attachments" href="#attachments" class="heading-anchor">🔗</a>Attachments</h1>
 <p>Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the attachment. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.</p>
-<p>On the <strong>desktop application</strong>, images can be attached either by clicking on &quot;Attach file&quot; or by pasting (with Ctrl+V) an image directly in the editor, or by drag and dropping an image.</p>
+<p>In the <strong>desktop application</strong>, files can be attached either by clicking the &quot;Attach file&quot; icon in the editor or via drag and drop. If you prefer to create a link to a local file instead, hold the ALT key while performing the drag and drop operation.<br>
+If the OS-clipboard contains an image you can directly paste it in the editor via Ctrl+V.</p>
 <p>Resources that are not attached to any note will be automatically deleted after 10 days (see <a href="https://github.com/laurent22/joplin/issues/154#issuecomment-356582366">rationale</a>).</p>
 <p><strong>Important:</strong> Resources larger than 10 MB are not currently supported on mobile. They will crash the application when synchronising so it is recommended not to attach such resources at the moment. The issue is being looked at.</p>
 <h2><a name="downloading-attachments" href="#downloading-attachments" class="heading-anchor">🔗</a>Downloading attachments</h2>
 <p>The way the attachments are downloaded during synchronisation can be customised in the Configuration screen, under &quot;Attachment download behaviour&quot;. The default option (&quot;Always&quot;) is to download all the attachments, all the time, so that the data is available even when the device is offline. There is also the option to download the attachments manually (option &quot;Manual&quot;), by clicking on it, or automatically (Option &quot;Auto&quot;), in which case the attachments are downloaded only when a note is opened. These options should help saving disk space and network bandwidth, especially on mobile.</p>
 <h1><a name="notifications" href="#notifications" class="heading-anchor">🔗</a>Notifications</h1>
-<p>On the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:</p>
+<p>In the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:</p>
 <ul>
 <li><strong>Windows</strong>: &gt;= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows &lt; 8. Growl as fallback. Growl takes precedence over Windows balloons.</li>
 <li><strong>macOS</strong>: &gt;= 10.8 or Growl if earlier.</li>
@@ -472,7 +473,7 @@
 <p>Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For example it can be used to regroup all the notebooks related to work, to family or to a particular project under a parent notebook.</p>
 <p><img src="https://joplinapp.org/images/SubNotebooks.png" alt=""></p>
 <ul>
-<li>On the <strong>desktop application</strong>, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the &quot;Notebooks&quot; header. Currently only the desktop app can be used to organise the notebooks.</li>
+<li>In the <strong>desktop application</strong>, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the &quot;Notebooks&quot; header. Currently only the desktop app can be used to organise the notebooks.</li>
 <li>The <strong>mobile application</strong> supports displaying and collapsing/expanding the tree of notebooks, however it does not currently support moving the subnotebooks to different notebooks.</li>
 <li>The <strong>terminal app</strong> supports displaying the tree of subnotebooks but it does not support collapsing/expanding them or moving the subnotebooks around.</li>
 </ul>
@@ -561,6 +562,12 @@
 <td>Adds more power and customization to markdown tables</td>
 <td>no</td>
 </tr>
+<tr>
+<td><a href="https://fountain.io">Fountain</a></td>
+<td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
+<td>Add support for the Fountain markup language, a plain text markup language for screenwriting</td>
+<td>no</td>
+</tr>
 </tbody>
 </table>
 <h2><a name="math-notation" href="#math-notation" class="heading-anchor">🔗</a>Math notation</h2>
@@ -644,7 +651,7 @@ Details:
 <tr>
 <td>Single word</td>
 <td>Returns all the notes that contain this term.</td>
-<td><code>dog</code>, <code>cat</code></td>
+<td>For example, searching for <code>cat</code> will return all the notes that contain this exact word. Note: it will not return the notes that contain the substring - thus, for &quot;cat&quot;, notes that contain &quot;cataclysmic&quot; or &quot;prevaricate&quot; will <strong>not</strong> be returned.</td>
 </tr>
 <tr>
 <td>Multiples words</td>
@@ -712,14 +719,14 @@ Details:
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
 <td>عبد الناصر سعيد (<a href="mailto:as@althobaity.com">as@althobaity.com</a>)</td>
-<td>86%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>48%</td>
+<td>47%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
@@ -740,14 +747,14 @@ Details:
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
 <td>Hrvoje Mandić (<a href="mailto:trbuhom@net.hr">trbuhom@net.hr</a>)</td>
-<td>39%</td>
+<td>38%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
 <td>Lukas Helebrandt (<a href="mailto:lukas@aiya.cz">lukas@aiya.cz</a>)</td>
-<td>86%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
@@ -761,7 +768,7 @@ Details:
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (<a href="mailto:ms@editorei.de">ms@editorei.de</a>)</td>
-<td>95%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -782,14 +789,14 @@ Details:
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Andros Fenollosa (andros@fenollosa.email)</td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
 <td>Français</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>100%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/galicia.png" alt=""></td>
@@ -803,7 +810,7 @@ Details:
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
@@ -817,7 +824,7 @@ Details:
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
 <td>Heimen Stoffels (<a href="mailto:vistausss@outlook.com">vistausss@outlook.com</a>)</td>
-<td>95%</td>
+<td>94%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
@@ -831,21 +838,21 @@ Details:
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po">fa</a></td>
 <td>Mehrad Mahmoudian (<a href="mailto:mehrad@mahmoudian.me">mehrad@mahmoudian.me</a>)</td>
-<td>47%</td>
+<td>46%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po">pl_PL</a></td>
 <td></td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td>Renato Nunes Bastos (<a href="mailto:rnbastos@gmail.com">rnbastos@gmail.com</a>)</td>
-<td>92%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
@@ -866,35 +873,35 @@ Details:
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po">sv</a></td>
 <td>Jonatan Nyberg (<a href="mailto:jonatan@autistici.org">jonatan@autistici.org</a>)</td>
-<td>83%</td>
+<td>82%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po">tr_TR</a></td>
 <td>Zorbey Doğangüneş (<a href="mailto:zorbeyd@gmail.com">zorbeyd@gmail.com</a>)</td>
-<td>81%</td>
+<td>80%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
 <td>Artyom Karlov (<a href="mailto:artyom.karlov@gmail.com">artyom.karlov@gmail.com</a>)</td>
-<td>86%</td>
+<td>85%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>93%</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>94%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
@@ -908,14 +915,14 @@ Details:
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td>AWASHIRO Ikuya (<a href="mailto:ikunya@gmail.com">ikunya@gmail.com</a>)</td>
-<td>81%</td>
+<td>80%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국말</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>82%</td>
+<td>98%</td>
 </tr>
 </tbody>
 </table>
