@@ -56,7 +56,7 @@ function buildLocale(inputFile, outputFile) {
 	saveToFile(outputFile, translation);
 }
 
-function returnPath(file) {
+function executablePath(file) {
 	const potentialPaths = [
 		'/usr/local/opt/gettext/bin/',
 		'/opt/local/bin/',
@@ -69,8 +69,7 @@ function returnPath(file) {
 			return pathFile;
 		}
 	}
-	console.log(file + ' could not be found. Please install via brew or MacPorts.');
-	process.exit(1);
+	throw new Error(file + ' could not be found. Please install via brew or MacPorts.\n');
 }
 
 async function removePoHeaderDate(filePath) {
@@ -95,7 +94,7 @@ async function createPotFile(potFilePath, sources) {
 		if (i > 0) args.push('--join-existing');
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
-		if (isMac()) xgettextPath = returnPath('xgettext'); // Needs to have been installed with `brew install gettext`
+		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
 		const result = await execCommand(xgettextPath + ' ' + args.join(' '));
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
@@ -104,7 +103,7 @@ async function createPotFile(potFilePath, sources) {
 
 async function mergePotToPo(potFilePath, poFilePath) {
 	let msgmergePath = 'msgmerge';
-	if (isMac()) msgmergePath = returnPath('msgmerge'); // Needs to have been installed with `brew install gettext`
+	if (isMac()) msgmergePath = executablePath('msgmerge'); // Needs to have been installed with `brew install gettext`
 
 	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
 	const result = await execCommand(command);
@@ -166,7 +165,7 @@ function extractTranslator(regex, poContent) {
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
 	let pocountPath = 'pocount';
-	if (isMac()) pocountPath = returnPath('pocount');
+	if (isMac()) pocountPath = executablePath('pocount');
 
 	const command = pocountPath + ' "' + poFile + '"';
 	const result = await execCommand(command);
