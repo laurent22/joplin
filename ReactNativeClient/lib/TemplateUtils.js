@@ -41,6 +41,10 @@ TemplateUtils.loadTemplates = async function(filePath) {
 			throw error;
 		}
 
+		// Make sure templates are always in the same order
+		// sensitivity ensures that the sort will ignore case
+		files.sort((a, b) => { return a.path.localeCompare(b.path, undefined, {sensitivity: 'accent'}); });
+
 		files.forEach(async file => {
 			if (file.path.endsWith('.md')) {
 				try {
@@ -56,7 +60,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		});
 	}
 
-	return templates.sort((a, b) => { return a.label.localeCompare(b.label); });
+	return templates;
 };
 
 module.exports = TemplateUtils;
