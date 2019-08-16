@@ -1833,9 +1833,9 @@ msgstr "Selecionar data"
 msgid "Confirm"
 msgstr "Confirmar"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "Cadernos"
+msgstr "Caderno: %s"
 
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Cadernos encriptados não podem ser renomeados"
@@ -1909,9 +1909,8 @@ msgid ""
 "external storage is required."
 msgstr ""
 
-#, fuzzy
 msgid "Information"
-msgstr "Configuração"
+msgstr "Informação"
 
 msgid "Encryption Config"
 msgstr "Configuração de Encriptação"
@@ -2010,9 +2009,8 @@ msgstr "O caderno não pôde ser salvo: %s"
 msgid "Edit notebook"
 msgstr "Editar caderno"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "Título do caderno:"
+msgstr "Entre o título do caderno"
 
 msgid "Show all"
 msgstr "Exibir tudo"
@@ -2090,9 +2088,8 @@ msgstr ""
 msgid "Edit"
 msgstr "Editar"
 
-#, fuzzy
 msgid "Add title"
-msgstr "título"
+msgstr "Adicionar título"
 
 msgid "Login with OneDrive"
 msgstr "Login com OneDrive"
