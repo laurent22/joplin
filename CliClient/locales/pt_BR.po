@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -60,7 +62,7 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "O comando \"%s\" está disponível somente em modo gráfico"
 
 msgid "Cannot change encrypted item"
-msgstr "Não pode mudar um item encriptado"
+msgstr "Não é possível mudar um item encriptado"
 
 #, javascript-format
 msgid "Missing required argument: %s"
@@ -593,7 +595,7 @@ msgid "Note list"
 msgstr "Lista de notas"
 
 msgid "Note title"
-msgstr "Título da Nota:"
+msgstr "Título da Nota"
 
 msgid "Note body"
 msgstr "Corpo da Nota"
@@ -755,7 +757,7 @@ msgid "Make a donation"
 msgstr "Fazer uma doação"
 
 msgid "Toggle development tools"
-msgstr ""
+msgstr "Habilitar/Desabilitar ferramentas de desenvolvimento"
 
 #, javascript-format
 msgid "Open %s"
@@ -1175,7 +1177,7 @@ msgid "Encryption Options"
 msgstr "Opções de Encriptação"
 
 msgid "Clipper Options"
-msgstr "Opções do clipper"
+msgstr "Opções do Clipper"
 
 #, javascript-format
 msgid ""
@@ -1206,7 +1208,7 @@ msgstr ""
 "exportado"
 
 msgid "Retry"
-msgstr ""
+msgstr "Tentar novamente"
 
 msgid "Add or remove tags"
 msgstr "Adicionar ou remover tags"
@@ -1452,15 +1454,18 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"No modo \"Manual\", os anexos são baixados apenas quando você clica neles. "
+"Em \"Automático\", eles são baixados quando você abre a nota. Em \"Sempre\", "
+"todos os anexos são baixados independentemente de você abrir a nota ou não."
 
 msgid "Always"
-msgstr ""
+msgstr "Sempre"
 
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 msgid "Auto"
-msgstr ""
+msgstr "Automático"
 
 msgid "Max concurrent connections"
 msgstr ""
@@ -1526,7 +1531,7 @@ msgid "Enable math expressions"
 msgstr "Habilitar expressões matemáticas"
 
 msgid "Enable ==mark== syntax"
-msgstr "Habilitar sintaxe ==marcador== "
+msgstr "Habilitar sintaxe ==marcador=="
 
 msgid "Enable footnotes"
 msgstr "Habilitar notas de rodapé"
@@ -1538,22 +1543,22 @@ msgid "Enable ~sub~ syntax"
 msgstr "Habilitar sintaxe ~sub~"
 
 msgid "Enable ^sup^ syntax"
-msgstr "Habilitar sintaxe ^sup^ "
+msgstr "Habilitar sintaxe ^sup^"
 
 msgid "Enable deflist syntax"
-msgstr "Habilitar sintaxe de deflist "
+msgstr "Habilitar sintaxe de deflist"
 
 msgid "Enable abbreviation syntax"
 msgstr "Habilitar sintaxe de abreviações"
 
 msgid "Enable markdown emoji"
-msgstr "Habilitar emojis em markdown "
+msgstr "Habilitar emojis em markdown"
 
 msgid "Enable ++insert++ syntax"
-msgstr "Habilitar sintaxe ++inserir++ "
+msgstr "Habilitar sintaxe ++inserir++"
 
 msgid "Enable multimarkdown table extension"
-msgstr "Habilitar extensão de tabela de multimarkdown "
+msgstr "Habilitar extensão de tabela de multimarkdown"
 
 msgid "Show tray icon"
 msgstr "Exibir tray icon"
@@ -1747,17 +1752,19 @@ msgstr "%s (%s) não pôde ser enviado: %s"
 
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Item \"%s\" não pôde ser baixado: %s"
+msgstr "O item \"%s\" não pôde ser baixado: %s"
 
-#, fuzzy
 msgid "Items that cannot be decrypted"
-msgstr "Os itens não podem ser sincronizados"
+msgstr "Os itens não podem ser decriptados"
 
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
+"O Joplin falhou ao tentar decriptar esses múltiplos items, possivelmente "
+"porque eles estão corruptos ou são grandes demais. Esses itens permanecerão "
+"no dispositivo, porém o Joplin não vai mais tentar decriptá-los."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de sincronização (sincronizados / totais)"
@@ -1826,15 +1833,13 @@ msgstr "Selecionar data"
 msgid "Confirm"
 msgstr "Confirmar"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "Cadernos"
+msgstr "Caderno: %s"
 
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Itens encriptados não podem ser modificados"
+msgstr "Cadernos encriptados não podem ser renomeados"
 
-#, fuzzy
 msgid "New Notebook"
 msgstr "Novo caderno"
 
@@ -1849,9 +1854,8 @@ msgstr "Decriptando itens: %d/%d"
 msgid "Fetching resources: %d/%d"
 msgstr "Buscando recursos: %d"
 
-#, fuzzy
 msgid "All notes"
-msgstr "Excluir notas?"
+msgstr "Todas as notas"
 
 msgid "Notebooks"
 msgstr "Cadernos"
@@ -1898,27 +1902,24 @@ msgid "Type new tags or select from list"
 msgstr "Digite novsa tags, ou selecione da lista"
 
 msgid "Warning"
-msgstr ""
+msgstr "Atenção"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
-#, fuzzy
 msgid "Information"
-msgstr "Configuração"
+msgstr "Informação"
 
 msgid "Encryption Config"
 msgstr "Configuração de Encriptação"
 
-#, fuzzy
 msgid "Tools"
-msgstr "&Ferramentas"
+msgstr "Ferramentas"
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "Status"
+msgstr "Status de sincronização"
 
 msgid "Log"
 msgstr "Log"
@@ -1941,9 +1942,8 @@ msgid ""
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#, fuzzy
 msgid "More information"
-msgstr "Configuração"
+msgstr "Mais informações"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -2009,9 +2009,8 @@ msgstr "O caderno não pôde ser salvo: %s"
 msgid "Edit notebook"
 msgstr "Editar caderno"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "Título do caderno:"
+msgstr "Entre o título do caderno"
 
 msgid "Show all"
 msgstr "Exibir tudo"
@@ -2038,15 +2037,15 @@ msgstr "O app mobile do Joplin não suporta, atualmente, esse tipo de link: %s"
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Links com o protocolo \"%s\" não são suportados"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imagem não suportada: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "Atualizado: %d."
+msgstr "Atualizado: %s"
 
 msgid "View on map"
 msgstr "Ver no mapa"
@@ -2058,9 +2057,8 @@ msgstr "Ir para a URL de origem"
 msgid "Attach..."
 msgstr "Pesquisar..."
 
-#, fuzzy
 msgid "Choose an option"
-msgstr "Mostrar opções avançadas"
+msgstr "Escolha uma opção"
 
 msgid "Take photo"
 msgstr "Tirar foto"
@@ -2090,9 +2088,8 @@ msgstr ""
 msgid "Edit"
 msgstr "Editar"
 
-#, fuzzy
 msgid "Add title"
-msgstr "título"
+msgstr "Adicionar título"
 
 msgid "Login with OneDrive"
 msgstr "Login com OneDrive"
