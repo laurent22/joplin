@@ -391,7 +391,8 @@ class BaseApplication {
 		// 	});
 		// }
 
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || action.type == 'SETTING_UPDATE_ALL') {
+		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat' || action.key == 'locale')) || action.type == 'SETTING_UPDATE_ALL') {
+			time.setLocale(Setting.value('locale'));
 			time.setDateFormat(Setting.value('dateFormat'));
 			time.setTimeFormat(Setting.value('timeFormat'));
 		}
