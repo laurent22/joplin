@@ -1534,7 +1534,7 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (Setting.value('notes.autoSave') === false) {
+		if (Setting.value('notes.autoSave') === false && shared.isModified(this)) {
 			toolbarItems.push({
 				tooltip: _('Save'),
 				iconName: 'fa-save',
