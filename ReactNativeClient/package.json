@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "node ../Tools/copycss.js && node ../Tools/buildReactNativeInjectedJs.js && cd .. && npm i"
+    "postinstall": "node ../Tools/copycss.js && node ../Tools/buildReactNativeInjectedJs.js && npx jetify && cd .. && npm i"
   },
   "dependencies": {
     "@react-native-community/slider": "^1.1.3",
@@ -80,6 +80,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
+    "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "^16.8.3"
   }

@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -190,7 +192,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"조플린의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
+"Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
 "타 자원을 포함한 완전한 데이터베이스를 내보내게 됩니다."
 
 #, javascript-format
@@ -259,7 +261,7 @@ msgid ""
 msgstr "키보드 단축키 및 설정 옵션을 변경하려면 `help keymap`을 입력해주세요"
 
 msgid "Imports data into Joplin."
-msgstr "데이터를 조플린으로 가져옵니다."
+msgstr "데이터를 Joplin으로 가져옵니다."
 
 #, javascript-format
 msgid "Source format: %s"
@@ -411,7 +413,7 @@ msgstr "인증이 완료되지 않았습니다 (인증 토큰을 받을 수 없�
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "조플린을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
+msgstr "Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1단계: 브라우저에서 이 URL에 접근하여 애플리케이션을 허가합니다:"
@@ -550,7 +552,7 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"조플린에 오신 것을 환영합니다!\n"
+"Joplin에 오신 것을 환영합니다!\n"
 "\n"
 "`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`"
 "를 입력하시면 사용 방법을 확인하실 수 있습니다.\n"
@@ -638,12 +640,11 @@ msgstr "개정판: %s (%s)"
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#, fuzzy
 msgid "&File"
 msgstr "파일"
 
 msgid "About Joplin"
-msgstr "조플린에 대해서"
+msgstr "Joplin에 대해서"
 
 msgid "Preferences..."
 msgstr "설정…"
@@ -673,7 +674,6 @@ msgstr "종료"
 msgid "Close Window"
 msgstr "창 닫기"
 
-#, fuzzy
 msgid "&Edit"
 msgstr "편집"
 
@@ -716,7 +716,6 @@ msgstr "모든 노트에서 검색"
 msgid "Search in current note"
 msgstr "현재 노트에서 검색"
 
-#, fuzzy
 msgid "&View"
 msgstr "보기"
 
@@ -729,11 +728,9 @@ msgstr "편집기 배치 형태 전환"
 msgid "Focus"
 msgstr "강조"
 
-#, fuzzy
 msgid "&Tools"
 msgstr "도구"
 
-#, fuzzy
 msgid "&Help"
 msgstr "도움말"
 
@@ -760,7 +757,7 @@ msgid "Cancel"
 msgstr "취소"
 
 msgid "Current version is up-to-date."
-msgstr "현재 최신 버전을 사용하고 있으십니다."
+msgstr "현재 최신 버전을 사용중입니다."
 
 #, javascript-format
 msgid "%s (pre-release)"
@@ -810,7 +807,7 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"조플린 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 조플린에 저장할 수 있"
+"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있"
 "게 해줍니다."
 
 msgid "In order to use the web clipper, you need to do the following:"
@@ -824,8 +821,8 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"이 서비스는 브라우저 확장 기능이 조플린과 연결하게 해줍니다. 활성화시 방화벽"
-"에서 조플린에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
+"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성"
+"화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
 
 msgid "Step 2: Install the extension"
 msgstr "2단계: 확장 기능 설치"
@@ -846,7 +843,7 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"이 인증 토큰은 오직 서드파티 애플리케이션에서 조플린에 접근할 때만 필요합니"
+"이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
 "다."
 
 #, javascript-format
@@ -942,7 +939,7 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advices on how "
 "to enable it please check the documentation:"
 msgstr ""
-"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인하세요:"
+"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
 
 msgid "Status"
 msgstr "상태"
@@ -1226,9 +1223,8 @@ msgstr ""
 "노트 제목을 적으시거나 혹은 건너 뛰세요. 혹은 # 를 적고 태그 이름을 붙이거"
 "나, @뒤에 노트북 이름을 적으세요."
 
-#, fuzzy
 msgid "Goto Anything..."
-msgstr "가고 싶은 곳으로 이동…"
+msgstr "가고자 하는 곳으로 이동…"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1345,7 +1341,7 @@ msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"알려지지 않은 타입을 다운로드 했습니다 - 조플린을 최신 버전으로 업데이트 해주"
+"알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주"
 "세요"
 
 msgid "Encrypted"
@@ -1466,11 +1462,9 @@ msgstr "밝음"
 msgid "Dark"
 msgstr "어두움"
 
-#, fuzzy
 msgid "Solarised Light"
 msgstr "Solarized Light"
 
-#, fuzzy
 msgid "Solarised Dark"
 msgstr "Solarized Dark"
 
@@ -1486,7 +1480,6 @@ msgstr "노트를 다음 기준으로 정렬"
 msgid "Reverse sort order"
 msgstr "정렬 순서 반전"
 
-#, fuzzy
 msgid "Sort notebooks by"
 msgstr "노트를 다음 기준으로 정렬"
 
@@ -1552,11 +1545,11 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"조플린을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟"
+"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟"
 "수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
 
 msgid "Start application minimised in the tray icon"
-msgstr "트레이에 최소화 된 채로 조플린 실행"
+msgstr "트레이에 최소화 된 채로 Joplin 실행"
 
 msgid "Global zoom percentage"
 msgstr "전체 확대 비율"
@@ -1667,13 +1660,13 @@ msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "태그 \"%s\"(이)가 이미 존재합니다. 다른 이름을 선택해 주세요."
 
 msgid "Joplin Export File"
-msgstr "조플린 내보내기 파일"
+msgstr "Joplin 내보내기 파일"
 
 msgid "Markdown"
 msgstr "마크다운"
 
 msgid "Joplin Export Directory"
-msgstr "조플린 내보내기 폴더"
+msgstr "Joplin 내보내기 폴더"
 
 msgid "Evernote Export File"
 msgstr "에버노트 내보내기 파일"
@@ -1740,8 +1733,8 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"조플린이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손"
-"상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, 조플린은 더이상 이 항목"
+"Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손"
+"상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목"
 "들을 복호화 할 수 없습니다."
 
 msgid "Sync status (synced items / total items)"
@@ -1946,7 +1939,7 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 위치: 지리적 위치 정보를 노트에 첨부하기 위해 필요합니다."
 
 msgid "Joplin website"
-msgstr "조플린 웹사이트"
+msgstr "Joplin 웹사이트"
 
 #, javascript-format
 msgid "Database v%s"
@@ -2010,7 +2003,7 @@ msgstr "ID %s에 해당하는 항목이 없습니다"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
