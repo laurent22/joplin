@@ -217,7 +217,7 @@ class Setting extends BaseModel {
 					let output = {};
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
-					if (platform === 'desktop') {
+					if (platform !== 'mobile') {
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 					}
@@ -306,6 +306,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji') },
 			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax') },
 			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension') },
+			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Fountain syntax support') },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html

@@ -20,15 +20,15 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-Setup-1.0.160.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/JoplinPortable.exe'>Portable version</a><br><br>The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-1.0.160.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew: `brew cask install joplin`
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.160/Joplin-1.0.160-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash`
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-Setup-1.0.165.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/JoplinPortable.exe'>Portable version</a><br><br>The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-1.0.165.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew: `brew cask install joplin`
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-1.0.165-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash`
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.294/joplin-v1.0.294.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.299/joplin-v1.0.299.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -276,6 +276,7 @@ Joplin supports a number of plugins that can be toggled on top the standard mark
 | [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` :smile: | See [this list](https://gist.github.com/rxaviers/7360908) for more emoji | no |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
+| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
 
 ## Math notation
 

@@ -80,7 +80,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
-    "jetifier": "^1.6.3",
+    "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "^16.8.3"
   }
