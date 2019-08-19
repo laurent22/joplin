@@ -40,7 +40,6 @@ Tools/github_oauth_token.txt
 _releases
 ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
-ReactNativeClient/android/app/src/main/assets/index.android.bundle
 ElectronClient/app/gui/note-viewer/fonts/
 ElectronClient/app/gui/note-viewer/lib.js
 Tools/commit_hook.txt
