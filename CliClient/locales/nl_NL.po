@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -531,7 +533,7 @@ msgstr "Fatale fout:"
 
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "Alle potentiële poorten zijn in gebruik - Meld het probleem op %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -632,10 +634,10 @@ msgid "Web clipper options"
 msgstr "Webclipper-opties"
 
 msgid "Create note from template"
-msgstr ""
+msgstr "Notitie maken van sjabloon"
 
 msgid "Create to-do from template"
-msgstr ""
+msgstr "To-do maken van sjabloon"
 
 #, fuzzy
 msgid "Insert template"
@@ -646,7 +648,7 @@ msgid "Open template directory"
 msgstr "Joplin-exportmap"
 
 msgid "Refresh templates"
-msgstr ""
+msgstr "Sjablonen vernieuwen"
 
 #, fuzzy, javascript-format
 msgid "Revision: %s (%s)"
@@ -669,7 +671,7 @@ msgid "Check for updates..."
 msgstr "Controleren op updates..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Sjablonen"
 
 msgid "Import"
 msgstr "Importeren"
@@ -1003,7 +1005,7 @@ msgid "Set alarm:"
 msgstr "Alarm instellen:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "Sjabloonbestand:"
 
 msgid "Layout"
 msgstr "Indeling"
@@ -1044,7 +1046,7 @@ msgid "Note History"
 msgstr "Notitiegeschiedenis"
 
 msgid "Markup"
-msgstr ""
+msgstr "Opmaak"
 
 msgid "Previous versions of this note"
 msgstr "Vorige versies van deze notitie"
@@ -1496,10 +1498,10 @@ msgid "Dark"
 msgstr "Donker"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised Light"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised Dark"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
@@ -1915,12 +1917,14 @@ msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
 
 msgid "Warning"
-msgstr ""
+msgstr "Waarschuwing"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"Om synchronisatie via het bestandssysteem te gebruiken is je toestemming "
+"nodig om naar externe opslag te schrijven."
 
 #, fuzzy
 msgid "Information"
@@ -1948,15 +1952,17 @@ msgid "Export Debug Report"
 msgstr "Foutopsporingsrapportage exporteren"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Zoekindex repareren…"
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Zoekindex repareren"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Gebruik dit om de zoekindex opnieuw op te bouwen als er een probleem is met "
+"zoeken: Het kan lang duren afhankelijk van het aantal notities."
 
 msgid "More information"
 msgstr "Meer informatie"
@@ -2099,7 +2105,7 @@ msgid "Properties"
 msgstr "Eigenschappen van notitie"
 
 msgid "Add body"
-msgstr ""
+msgstr "Inhoud toevoegen"
 
 msgid "Edit"
 msgstr "Bewerken"
