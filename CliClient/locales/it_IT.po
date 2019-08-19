@@ -964,7 +964,7 @@ msgstr ""
 "ad essi. È probabile che verranno scaricati tramite la sincronizzazione."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "Per ulteriori informazioni sulla crittografia end-to-end (E2EE) e consigli "

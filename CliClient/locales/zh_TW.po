@@ -921,7 +921,7 @@ msgstr ""
 "可能最終會通過同步下載。"
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用它，請參考線上文檔:"
 

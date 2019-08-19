@@ -936,7 +936,7 @@ msgstr ""
 "될 가능성이 있습니다."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
