@@ -71,7 +71,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 
     # Create icon for Gnome
     echo 'Create Desktop icon.'
-    if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*X-Cinnamon.* ]]
+    if [[ $desktop =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.* ]]
     then
        : "${TMPDIR:=/tmp}"
        # This command extracts to squashfs-root by default and can't be changed...
