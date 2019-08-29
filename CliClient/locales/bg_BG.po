@@ -958,7 +958,7 @@ msgstr ""
 "ще бъдат свалени тепърва чрез синхронизация."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "За повече информация относно криптирането от край до край (E2EE) и за съвети "

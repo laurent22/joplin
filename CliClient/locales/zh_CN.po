@@ -908,7 +908,7 @@ msgstr ""
 "能通过同步下载。"
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr "有关端到端加密（E2EE）的更多信息，以及如何启用它的建议，请查看文档："
 

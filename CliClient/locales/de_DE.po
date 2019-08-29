@@ -973,7 +973,7 @@ msgstr ""
 "Die Hauptschlüssel dieser IDs werden für die Verschlüsselung einiger ..."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "Weitere Informationen zur Ende-zu-Ende-Verschlüsselung (E2EE) und Hinweise "

@@ -961,7 +961,7 @@ msgstr ""
 "través de la sincronización."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "Para más información acerca del cifrado extremo a extremo (E2EE) y "

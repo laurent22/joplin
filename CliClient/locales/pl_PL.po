@@ -965,7 +965,7 @@ msgstr ""
 "pobrane przy synchonizacji."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "Aby uzyskać informacje o szyfrowaniu po stronie klienta (E2EE) i przykłady "

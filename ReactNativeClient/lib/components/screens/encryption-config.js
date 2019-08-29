@@ -243,7 +243,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<ScrollView style={this.styles().container}>
 					{
 						<View style={{ backgroundColor: theme.warningBackgroundColor, paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10 }}>
-							<Text>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:')}</Text>
+							<Text>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
 							<TouchableOpacity
 								onPress={() => {
 									Linking.openURL('https://joplinapp.org/e2ee/');

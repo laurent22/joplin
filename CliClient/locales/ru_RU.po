@@ -960,7 +960,7 @@ msgstr ""
 "загрузятся при синхронизации."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
+"For more information about End-To-End Encryption (E2EE) and advice on how "
 "to enable it please check the documentation:"
 msgstr ""
 "Для получения дополнительной информации о сквозном шифровании (E2EE) и "
