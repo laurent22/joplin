@@ -79,7 +79,7 @@ class AppGui {
 			reg.setupRecurrentSync();
 			DecryptionWorker.instance().scheduleStart();
 		} catch (error) {
-			this.fullScreen(false);
+			if (this.term_) { this.fullScreen(false); }
 			console.error(error);
 			process.exit(1);
 		}

@@ -70,6 +70,7 @@
     "syswide-cas": "^5.2.0",
     "tar": "^4.4.10",
     "tcp-port-used": "^0.1.2",
+    "terminal-kit": "^1.30.0",
     "tkwidgets": "^0.5.26",
     "url-parse": "^1.4.7",
     "uuid": "^3.0.1",
