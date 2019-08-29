@@ -4,6 +4,16 @@ class Time {
 	constructor() {
 		this.dateFormat_ = 'DD/MM/YYYY';
 		this.timeFormat_ = 'HH:mm';
+		this.locale_ = 'en-us';
+	}
+
+	locale() {
+		return this.locale_;
+	}
+
+	setLocale(v) {
+		moment.locale(v);
+		this.locale_ = v
 	}
 
 	dateFormat() {
