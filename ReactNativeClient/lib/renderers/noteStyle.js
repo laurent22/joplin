@@ -253,6 +253,14 @@ module.exports = function(style, options) {
 			.code, .inline-code {
 				border: 1px solid #CBCBCB;
 			}
+
+			#content {
+				/* The height of the content is set dynamically by JavaScript (in updateBodyHeight) to go
+				   around various issues related to scrolling. However when printing we don't want this
+				   fixed size as that would crop the content. So we set it to auto here. "important" is
+				   needed to override the style set by JavaScript at the element-level. */
+				height: auto !important;
+			}
 		}
 	`;
 
