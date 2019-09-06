@@ -37,7 +37,7 @@ async function main() {
 
 	console.info('Building extension...');
 	process.chdir(clipperDir + '/popup');
-	console.info(await execCommand('npm run build'));
+	console.info(await execCommand('SKIP_PREFLIGHT_CHECK=true npm run build'));
 
 	const dists = [
 		{
