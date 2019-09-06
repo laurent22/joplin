@@ -973,8 +973,8 @@ msgstr ""
 "Die Hauptschlüssel dieser IDs werden für die Verschlüsselung einiger ..."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Weitere Informationen zur Ende-zu-Ende-Verschlüsselung (E2EE) und Hinweise "
 "zur Aktivierung findest du in der Dokumentation (auf Englisch):"
@@ -1585,6 +1585,10 @@ msgstr "Aktiviere ++insert++ Syntax"
 msgid "Enable multimarkdown table extension"
 msgstr "Aktiviere multimarkdown Tabellen Erweiterung"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Aktiviere ~sub~ Syntax"
+
 msgid "Show tray icon"
 msgstr "Zeige Tray-Icon"
 
@@ -1832,6 +1836,14 @@ msgstr "Berechtigung zur Verwendung der Kamera"
 
 msgid "Your permission to use your camera is required."
 msgstr "Deine Zustimmung zur Verwendung deiner Kamera ist erforderlich."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Erstellt ein neues Notizbuch."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -2241,9 +2253,6 @@ msgstr "Suchen"
 
 #~ msgid "Exit the application."
 #~ msgstr "Das Programm verlassen."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Ein To-Do als abgeschlossen / nicht abgeschlossen markieren"

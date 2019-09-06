@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -961,8 +959,8 @@ msgstr ""
 "probable qu'elle vont être prochainement disponible via la synchronisation."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Pour plus d'informations sur le chiffrement de bout en bout, ainsi que des "
 "conseils pour l'activer, veuillez consulter la documentation :"
@@ -1570,6 +1568,9 @@ msgstr "Activer la syntaxe ++insertion++"
 msgid "Enable multimarkdown table extension"
 msgstr "Activer les tables multi-markdown"
 
+msgid "Enable Fountain syntax support"
+msgstr "Activer la syntaxe \"Fountain\""
+
 msgid "Show tray icon"
 msgstr "Afficher l'icône dans la zone de notifications"
 
@@ -1813,6 +1814,12 @@ msgstr "Permission d'utiliser l'appareil photo"
 
 msgid "Your permission to use your camera is required."
 msgstr "Votre permission est requise pour utiliser l'appareil photo."
+
+msgid "You currently have no notebooks."
+msgstr "Vous n'avez pour l'instant pas de carnets."
+
+msgid "Create a notebook"
+msgstr "Créer un carnet"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -2232,9 +2239,6 @@ msgstr "Chercher"
 
 #~ msgid "Exit the application."
 #~ msgstr "Quitter le logiciel."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Supprimer la note ou carnet sélectionné."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Marquer une tâches comme complétée / non-complétée"

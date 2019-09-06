@@ -957,8 +957,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 
 msgid "Status"
@@ -1573,6 +1573,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr ""
 
@@ -1813,6 +1816,14 @@ msgstr ""
 
 msgid "Your permission to use your camera is required."
 msgstr ""
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ezabatu aukeratutako oharra edo koadernoa"
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Koaderno berria sortzen du."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Ez dago oharrik. Sortu bat (+) botoian klik eginaz."
@@ -2199,9 +2210,6 @@ msgstr "Bilatu"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Utzi uneko komandoa"
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Ezabatu aukeratutako oharra edo koadernoa"
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Zeregina eginda / ez-eginda markatu"

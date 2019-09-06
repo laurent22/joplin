@@ -959,8 +959,8 @@ msgstr ""
 "преузети путем синхронизације."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "За више информација о End-To-End Шифровању (Е2ЕЕ) и саветима о томе како да "
 "га омогућите, молимо вас да проверите документацију:"
@@ -1564,6 +1564,10 @@ msgstr "Омогући ++insert++ синтаксу"
 msgid "Enable multimarkdown table extension"
 msgstr "Омогући проширење мултимаркдаун табеле"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Омогућу ~sub~ синтаксу"
+
 msgid "Show tray icon"
 msgstr "Прикажи иконицу апликације на траци"
 
@@ -1807,6 +1811,14 @@ msgstr "Дозвола за употребу камере"
 
 msgid "Your permission to use your camera is required."
 msgstr "Ваша дозвола за употребу камере је неопходна."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Нема активне бележнице."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Креира нову бележницу."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""

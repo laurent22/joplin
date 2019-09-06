@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -958,8 +956,8 @@ msgstr ""
 "items. Waarschijnlijk worden ze uiteindelijk gedownload via synchronisatie."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Bekijk, voor meer informatie over End-To-End-versleuteling (E2EE) en hulp "
 "bij het inschakelen hiervan, onze documentatie:"
@@ -1569,6 +1567,10 @@ msgstr "Inschakelen ++insert++ syntaxis"
 msgid "Enable multimarkdown table extension"
 msgstr "Inschakelen multimarkdown tabel extensie"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Inschakelen ~sub~ syntaxis"
+
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
 
@@ -1815,6 +1817,14 @@ msgstr "Toestemming om de camera te gebruiken"
 
 msgid "Your permission to use your camera is required."
 msgstr "Je toestemming om de camera te gebruiken is vereist."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Geen actief notitieboek."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Creëert een nieuw notitieboek."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""

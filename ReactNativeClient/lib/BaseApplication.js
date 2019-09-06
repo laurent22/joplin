@@ -366,8 +366,8 @@ class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled']
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled']
+		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
 
 		if (action) {
 			const effect = sideEffects[action.key];

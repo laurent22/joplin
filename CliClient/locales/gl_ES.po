@@ -950,8 +950,8 @@ msgstr ""
 "descargados pola sincronización."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 
 msgid "Status"
@@ -1552,6 +1552,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Mostrar a icona na bandexa"
 
@@ -1794,6 +1797,14 @@ msgstr ""
 
 msgid "Your permission to use your camera is required."
 msgstr ""
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ningún caderno activo."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Crea un caderno novo."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Non ten notas actualmente. Cree unha premendo no botón (+)."

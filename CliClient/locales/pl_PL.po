@@ -965,8 +965,8 @@ msgstr ""
 "pobrane przy synchonizacji."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Aby uzyskać informacje o szyfrowaniu po stronie klienta (E2EE) i przykłady "
 "ułatwiające jego uruchomienie, proszę sprawdź dokumentację:"
@@ -1575,6 +1575,10 @@ msgstr "Aktywuj składnię ++instert++"
 msgid "Enable multimarkdown table extension"
 msgstr "Aktywuj rozszerzenie dla tabeli multimarkdown"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Aktywuj składnię ~sub~"
+
 msgid "Show tray icon"
 msgstr "Pokaż ikonę w zasobniku systemowym"
 
@@ -1819,6 +1823,14 @@ msgstr "Uprawenie do użytkowania kamery"
 
 msgid "Your permission to use your camera is required."
 msgstr "Wymagane uprawenienie do użytkowania kamery."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Brak aktywnego notatnika."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Tworzy nowy notatnik."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Brak notatek. Aby utworzyć, naciśnij przycisk (+)."

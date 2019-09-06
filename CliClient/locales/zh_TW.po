@@ -921,8 +921,8 @@ msgstr ""
 "可能最終會通過同步下載。"
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr "有關端到端加密 (E2EE) 的詳細資訊以及該如何啟用它，請參考線上文檔:"
 
 msgid "Status"
@@ -1507,6 +1507,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "顯示系統匣圖示"
 
@@ -1746,6 +1749,14 @@ msgstr ""
 
 msgid "Your permission to use your camera is required."
 msgstr ""
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "無使用中的記事本。"
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "新增記事本。"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "您當前沒有任何筆記。通過按一下 (+) 鍵去新增一則筆記。"

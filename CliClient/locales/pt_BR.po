@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -955,8 +953,8 @@ msgstr ""
 "elas serão baixadas via sincronização."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Para mais informações sobre Encriptação ponto-a-ponto (E2EE) e recomendações "
 "sobre como habilitar, favor verificar a documentação:"
@@ -1560,6 +1558,10 @@ msgstr "Habilitar sintaxe ++inserir++"
 msgid "Enable multimarkdown table extension"
 msgstr "Habilitar extensão de tabela de multimarkdown"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Habilitar sintaxe ~sub~"
+
 msgid "Show tray icon"
 msgstr "Exibir tray icon"
 
@@ -1804,6 +1806,14 @@ msgstr "Permissão para utilizar sua câmera"
 
 msgid "Your permission to use your camera is required."
 msgstr "É necessária a sua permissão para utilizar sua câmera."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Excluir nota selecionada ou notebook."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Cria um novo caderno."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
@@ -2201,9 +2211,6 @@ msgstr "Procurar"
 
 #~ msgid "Exit the application."
 #~ msgstr "Sair da aplicação."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Excluir nota selecionada ou notebook."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Marcar uma tarefa como completada / não completada"

@@ -1567,6 +1567,10 @@ msgstr "Attiva sintassi ++insert++"
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Attiva sintassi ~sub~"
+
 msgid "Show tray icon"
 msgstr "Visualizza tray icon"
 
@@ -1811,6 +1815,14 @@ msgstr "Permesso di usare la fotocamera"
 
 msgid "Your permission to use your camera is required."
 msgstr "E’ richiesto il permesso di usare la fotocamera."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Elimina la nota o il taccuino selezionato."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Crea un nuovo Taccuino."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
@@ -2222,9 +2234,6 @@ msgstr "Cerca"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Annulla il comando corrente."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Elimina la nota o il taccuino selezionato."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Imposta un \"Cose-da-fare\" come completato / non completato"

@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -936,8 +934,8 @@ msgstr ""
 "될 가능성이 있습니다."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
 
@@ -1534,6 +1532,10 @@ msgstr "++insert++ 확장 허용"
 msgid "Enable multimarkdown table extension"
 msgstr "멀티마크다운 테이블 확장 허용"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "~sub~ 구문 허용"
+
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
 
@@ -1775,6 +1777,14 @@ msgstr "카메라 사용 허가"
 
 msgid "Your permission to use your camera is required."
 msgstr "카메라 사용 허가가 필요합니다."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "활성화된 노트북이 없습니다."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "새 노트북을 만듭니다."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."

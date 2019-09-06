@@ -961,8 +961,8 @@ msgstr ""
 "través de la sincronización."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Para más información acerca del cifrado extremo a extremo (E2EE) y "
 "advertencias de como habilitarlo por favor revise la documentación:"
@@ -1567,6 +1567,10 @@ msgstr "Activar sintaxis ++insert++"
 msgid "Enable multimarkdown table extension"
 msgstr "Activar extensión de tablas multimarkdown"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Activar sintaxis ~sub~"
+
 msgid "Show tray icon"
 msgstr "Mostrar icono en la bandeja"
 
@@ -1809,6 +1813,14 @@ msgstr "Permiso para usar tu cámara"
 
 msgid "Your permission to use your camera is required."
 msgstr "El permiso para usar tu cámara es necesario."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Eliminar la nota o libreta seleccionada."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Crea una nueva libreta."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "No hay notas. Cree una pulsando en el botón (+)."
@@ -2223,9 +2235,6 @@ msgstr "Buscar"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Cancelar el comando actual."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Eliminar la nota o libreta seleccionada."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Marca una tarea como completada/no completada"

@@ -950,8 +950,8 @@ msgstr ""
 "staženy při synchronizaci."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Pro více informací o End-To-End šifrování (E2EE) a návod jak je povolit "
 "náhledněte do dokumentace:"
@@ -1547,6 +1547,10 @@ msgstr "Povolit ++insert++ syntaxi"
 msgid "Enable multimarkdown table extension"
 msgstr "Povolit rozšíření multimarkdown tabulky"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Povolit ~sub~ syntaxi"
+
 msgid "Show tray icon"
 msgstr "Zobrazovat ikonu v panelu"
 
@@ -1787,6 +1791,14 @@ msgstr "Oprávnění použít kameru"
 
 msgid "Your permission to use your camera is required."
 msgstr "Je vyžadováno oprávnění použít vaši kameru."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Není vybrán žádný zápisník."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Vytvoří nový zápisník."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Nemáte žádné poznámky. Vytvořte jednu kliknutím na tlačítko (+)."

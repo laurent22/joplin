@@ -946,8 +946,8 @@ msgstr ""
 "vil siden bli lastet ned via synkronisering."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "For mer informasjon om ende-til-ende-kryptering (E2EE) og råd om hvordan du "
 "aktiverer det kan du sjekke dokumentasjonen:"
@@ -1547,6 +1547,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Vis systemmenyikon"
 
@@ -1788,6 +1791,14 @@ msgstr "Tillatelse til å bruke kamera"
 
 msgid "Your permission to use your camera is required."
 msgstr "Tillatelse til å bruke kamera er nødvendig."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ingen aktiv notatbok."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Oppretter en ny notatbok."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Det finnes enda ingen notater. Lag en ved å klikke på (+)-knappen."

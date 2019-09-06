@@ -935,8 +935,8 @@ msgstr ""
 "فيما بعد عبر المزامنة."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "يرجى الرجوع إلى التوثيق للمزيد من المعلومات عن التشفير من الطرف للطرف (E2EE) "
 "و طرق تفعيله."
@@ -1530,6 +1530,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "إظهار أيقونة لوحة النظام"
 
@@ -1769,6 +1772,14 @@ msgstr "الإذن باستخدام الكاميرا"
 
 msgid "Your permission to use your camera is required."
 msgstr "إذنك باستخدام كاميرا الجوال مطلوب."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "لا يوجد دفتر ملاحظات نشط."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "ينشئ دفتر ملاحظات جديد."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "لا توجد ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."

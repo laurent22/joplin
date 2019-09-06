@@ -934,8 +934,8 @@ msgstr ""
 "senkronizasyon yoluyla indirilmeleri sağlanacaktır."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Uçtan Uca Şifreleme (E2EE) hakkında bilgi ve nasıl aktif edilebileceğine "
 "dair ipuçları için lütfen belgeleri inceleyin:"
@@ -1536,6 +1536,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Tepsi simgesini göster"
 
@@ -1778,6 +1781,14 @@ msgstr "Kamera kullanımı için izin"
 
 msgid "Your permission to use your camera is required."
 msgstr "Kamera kullanımı için izniniz gerekmektedir."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Aktif not defteri yok."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Yeni bir not defteri oluşturur."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
