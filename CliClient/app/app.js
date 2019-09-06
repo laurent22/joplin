@@ -384,6 +384,8 @@ class Application extends BaseApplication {
 
 			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
 
+			await this.applySettingsSideEffects();
+
 			try {
 				await this.execCommand(argv);
 			} catch (error) {

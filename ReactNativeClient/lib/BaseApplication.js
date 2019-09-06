@@ -325,6 +325,60 @@ class BaseApplication {
 		return middleware;
 	}
 
+	async applySettingsSideEffects(action = null) {
+		const sideEffects = {
+			'dateFormat': async () => {
+				time.setLocale(Setting.value('locale'));
+				time.setDateFormat(Setting.value('dateFormat'));
+				time.setTimeFormat(Setting.value('timeFormat'));
+			},
+			'net.ignoreTlsErrors': async () => {
+				process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
+			},
+			'net.customCertificates': async () => {
+				const caPaths = Setting.value('net.customCertificates').split(',');
+				for (let i = 0; i < caPaths.length; i++) {
+					const f = caPaths[i].trim();
+					if (!f) continue;
+					syswidecas.addCAs(f);
+				}
+			},
+			'encryption.enabled': async () => {
+				if (this.hasGui()) {
+					await EncryptionService.instance().loadMasterKeysFromSettings();
+					DecryptionWorker.instance().scheduleStart();
+					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+					this.dispatch({
+						type: 'MASTERKEY_REMOVE_NOT_LOADED',
+						ids: loadedMasterKeyIds,
+					});
+
+					// Schedule a sync operation so that items that need to be encrypted
+					// are sent to sync target.
+					reg.scheduleSync();
+				}
+			},
+			'sync.interval': async () => {
+				if (this.hasGui()) reg.setupRecurrentSync();
+			},
+		};
+
+		sideEffects['timeFormat'] = sideEffects['dateFormat'];
+		sideEffects['locale'] = sideEffects['dateFormat'];
+		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled']
+		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled']
+
+		if (action) {
+			const effect = sideEffects[action.key];
+			if (effect) await effect();
+		} else {
+			for (const key in sideEffects) {
+				await sideEffects[key]();
+			}
+		}
+	}
+
 	async generalMiddleware(store, next, action) {
 		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
@@ -376,56 +430,8 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
-		// if (action.type == 'NOTE_DELETE') {
-		// 	refreshTags = true;
-		// }
-
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
-		}
-
-		// if (refreshTags) {
-		// 	this.dispatch({
-		// 		type: 'TAG_UPDATE_ALL',
-		// 		items: await Tag.allWithNotes(),
-		// 	});
-		// }
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat' || action.key == 'locale')) || action.type == 'SETTING_UPDATE_ALL') {
-			time.setLocale(Setting.value('locale'));
-			time.setDateFormat(Setting.value('dateFormat'));
-			time.setTimeFormat(Setting.value('timeFormat'));
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || action.type == 'SETTING_UPDATE_ALL') {
-			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
-			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || action.type == 'SETTING_UPDATE_ALL') {
-			const caPaths = Setting.value('net.customCertificates').split(',');
-			for (let i = 0; i < caPaths.length; i++) {
-				const f = caPaths[i].trim();
-				if (!f) continue;
-				syswidecas.addCAs(f);
-			}
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('encryption.') === 0) || action.type == 'SETTING_UPDATE_ALL') {
-			if (this.hasGui()) {
-				await EncryptionService.instance().loadMasterKeysFromSettings();
-				DecryptionWorker.instance().scheduleStart();
-				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
-
-				this.dispatch({
-					type: 'MASTERKEY_REMOVE_NOT_LOADED',
-					ids: loadedMasterKeyIds,
-				});
-
-				// Schedule a sync operation so that items that need to be encrypted
-				// are sent to sync target.
-				reg.scheduleSync();
-			}
 		}
 
 		if (action.type === 'NOTE_UPDATE_ONE') {
@@ -436,16 +442,18 @@ class BaseApplication {
 			refreshFolders = 'now';
 		}
 
-		if ((this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval') || action.type == 'SETTING_UPDATE_ALL') {
-			reg.setupRecurrentSync();
-		}
-
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE') {
+			await this.applySettingsSideEffects(action);
+		} else if (action.type == 'SETTING_UPDATE_ALL') {
+			await this.applySettingsSideEffects();
 		}
 
 		if (refreshFolders) {
