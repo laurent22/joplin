@@ -28,6 +28,7 @@ import cx.evermeet.versioninfo.RNVersionInfoPackage;
 
 import java.util.Arrays;
 import java.util.List;
+import android.database.CursorWindow;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -73,13 +74,13 @@ public class MainApplication extends Application implements ReactApplication {
 		// https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
 		// https://github.com/laurent22/joplin/issues/1767#issuecomment-515617991
 		try {
-			Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-			field.setAccessible(true);
-			field.set(null, 50 * 1024 * 1024); // 50 MB
+			// Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+			CursorWindow.class.getDeclaredField("sCursorWindowSize").setAccessible(true);
+			CursorWindow.class.getDeclaredField("sCursorWindowSize").set(null, 50 * 1024 * 1024); // 50 MB
 		} catch (Exception e) {
-			if (DEBUG_MODE) {
-				e.printStackTrace();
-			}
+			// if (DEBUG_MODE) {
+			// 	e.printStackTrace();
+			// }
 		}
 
 		SoLoader.init(this, /* native exopackage */ false);
