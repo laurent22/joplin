@@ -652,10 +652,21 @@ class Api {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
 				if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
-				const imageSize = imageSizes[urlInfo.originalUrl][imageSizesIndexes[urlInfo.originalUrl]];
-				imageSizesIndexes[urlInfo.originalUrl]++;
-				const resourceUrl = Resource.internalUrl(urlInfo.resource);
 
+				const resourceUrl = Resource.internalUrl(urlInfo.resource);
+				const imageSizesCollection = imageSizes[urlInfo.originalUrl];
+
+				if (!imageSizesCollection) {
+					// In some cases, we won't find the image size information for that particular URL. Normally
+					// it will only happen when using the "Clip simplified page" feature, which can modify the 
+					// image URLs (for example it will select a smaller size resolution). In that case, it's
+					// fine to return the image as-is because it has already good dimensions.
+					return before + resourceUrl + after;
+				}
+
+				const imageSize = imageSizesCollection[imageSizesIndexes[urlInfo.originalUrl]];
+				imageSizesIndexes[urlInfo.originalUrl]++;
+				
 				if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
 					return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
 				} else {
