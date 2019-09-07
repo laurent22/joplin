@@ -270,6 +270,7 @@ class NoteTextComponent extends React.Component {
 				localSearch: {
 					query: query,
 					selectedIndex: 0,
+					timestamp: Date.now(),
 				},
 			});
 		};
@@ -277,6 +278,7 @@ class NoteTextComponent extends React.Component {
 		const noteSearchBarNextPrevious = inc => {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.selectedIndex += inc;
+			ls.timestamp = Date.now();
 			if (ls.selectedIndex < 0) ls.selectedIndex = ls.resultCount - 1;
 			if (ls.selectedIndex >= ls.resultCount) ls.selectedIndex = 0;
 
@@ -1934,6 +1936,7 @@ class NoteTextComponent extends React.Component {
 				];
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
 				markerOptions.separateWordSearch = false;
+				markerOptions.searchTimestamp = this.state.localSearch.timestamp;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (search) {

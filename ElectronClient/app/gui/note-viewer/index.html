@@ -227,7 +227,11 @@
 
 			ipcProxySendToHost('setMarkerCount', elementIndex);
 
-			if (selectedElement) selectedElement.scrollIntoView();
+			// We only scroll the element into view if the search just happened. So when the user type the search
+			// or select the next/previous result, we scroll into view. However for other actions that trigger a
+			// re-render, we don't scroll as this is normally not wanted.
+			// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
+			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
 		}
 
 		let markLoaded_ = false;
