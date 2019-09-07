@@ -37,7 +37,10 @@ async function main() {
 
 	console.info('Building extension...');
 	process.chdir(clipperDir + '/popup');
-	console.info(await execCommand('npm run build'));
+	// SKIP_PREFLIGHT_CHECK avoids the error "There might be a problem with the project dependency tree." due to eslint 5.12.0 being
+	// installed by CRA and 6.1.0 by us. It doesn't affect anything though, and the behaviour of the preflight
+	// check is buggy so we can ignore it.
+	console.info(await execCommand('SKIP_PREFLIGHT_CHECK=true npm run build'));
 
 	const dists = [
 		{
