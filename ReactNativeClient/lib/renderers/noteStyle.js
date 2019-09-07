@@ -237,7 +237,11 @@ module.exports = function(style, options) {
 			align-items: center;
 		}
 
-		.checkbox-label-checked {
+		.md-checkbox input[type=checkbox]:checked {
+			opacity: 0.7;
+		}
+
+		.md-checkbox .checkbox-label-checked {
 			opacity: 0.5;
 		}
 
