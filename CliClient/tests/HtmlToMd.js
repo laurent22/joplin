@@ -39,7 +39,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'mathjax_block.html') continue;
+			// if (htmlFilename !== 'table_with_pipe.html') continue;
 
 			const htmlToMdOptions = {};
 
