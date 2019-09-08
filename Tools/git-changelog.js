@@ -175,14 +175,47 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function decreaseTagVersion(tag) {
+	const s = tag.split('.');
+	let num = Number(s.pop());
+	num--;
+	if (num < 0) throw new Error('Cannot decrease tag version: ' + tag);
+	s.push('' + num);
+	return s.join('.');
+}
+
+// This function finds the first relevant tag starting from the given tag.
+// The first "relevant tag" is the one that exists, and from which there are changes.
+async function findFirstRelevantTag(baseTag) {
+	let tag = decreaseTagVersion(baseTag);
+	while (true) {
+		try {
+			const logs = await gitLog(tag);
+			if (logs.length) return tag;
+		} catch (error) {
+			if (error.message.indexOf('unknown revision') >= 0) {
+				// We skip the error - it means this particular tag has never been created
+			} else {
+				throw error;
+			}
+		}
+
+		tag = decreaseTagVersion(tag);
+	}
+}
+
 async function main() {
 	const argv = require('yargs').argv;
-	if (!argv._.length) throw new Error('Tag name must be specified');
+	if (!argv._.length) throw new Error('Tag name must be specified. Provide the tag of the new version and git-changelog will walk backward to find the changes to the previous relevant tag.');
 
-	const sinceTagName = argv._[0];
-	const platform = platformFromTag(sinceTagName);
+	const fromTagName = argv._[0];
 
-	const logsSinceTags = await gitLog(sinceTagName);
+	const platform = platformFromTag(fromTagName);
+
+	const toTagName = await findFirstRelevantTag(fromTagName);
+
+	const logsSinceTags = await gitLog(toTagName);
+
 	const filteredLogs = filterLogs(logsSinceTags, platform);
 
 	let changelog = createChangeLog(filteredLogs);

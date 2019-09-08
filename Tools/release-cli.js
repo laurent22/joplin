@@ -50,17 +50,7 @@ async function insertChangelog(tag, changelog) {
 // Start with node Tools/release-cli.js --changelog-from cli-v1.0.126
 // to specify from where the changelog should be created
 async function main() {
-	const argv = require('yargs').argv;
-
 	process.chdir(appDir);
-
-	const packageJson = await fs.readFile('package.json', 'UTF-8');
-	const packageConf = JSON.parse(packageJson);
-
-	const previousVersion = 'v' + packageConf.version;
-	let changelogFrom = 'cli-' + previousVersion;
-
-	if (argv.changelogFrom) changelogFrom = argv.changelogFrom;
 
 	const newVersion = await execCommand('npm version patch');
 	console.info('Building ' + newVersion + '...');
@@ -75,7 +65,7 @@ async function main() {
 
 	await execCommand('npm publish');
 
-	const changelog = await execCommand('node ' + rootDir + '/Tools/git-changelog ' + changelogFrom);
+	const changelog = await execCommand('node ' + rootDir + '/Tools/git-changelog ' + newTag);
 
 	const newChangelog = await insertChangelog(newTag, changelog);
 
