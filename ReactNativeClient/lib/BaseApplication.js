@@ -1,7 +1,6 @@
 const { createStore, applyMiddleware } = require('redux');
 const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
 const { JoplinDatabase } = require('lib/joplin-database.js');
-const { Database } = require('lib/database.js');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -12,13 +11,11 @@ const Tag = require('lib/models/Tag.js');
 const Setting = require('lib/models/Setting.js');
 const { Logger } = require('lib/logger.js');
 const { splitCommandString } = require('lib/string-utils.js');
-const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
-const { fileExtension } = require('lib/path-utils.js');
 const { shim } = require('lib/shim.js');
-const { _, setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
 const fs = require('fs-extra');
@@ -33,8 +30,14 @@ const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
+const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const RevisionService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
+const SearchEngine = require('lib/services/SearchEngine');
+const KvStore = require('lib/services/KvStore');
+const MigrationService = require('lib/services/MigrationService');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -44,7 +47,6 @@ SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 class BaseApplication {
-
 	constructor() {
 		this.logger_ = new Logger();
 		this.dbLogger_ = new Logger();
@@ -54,6 +56,8 @@ class BaseApplication {
 		// be derived from the state and not set directly since that would make the
 		// state and UI out of sync.
 		this.currentFolder_ = null;
+
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
 	logger() {
@@ -107,6 +111,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg == '--no-welcome') {
+				matched.welcomeDisabled = true;
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg == '--env') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--env <dev|prod>'), 'flagError');
 				matched.env = nextArg;
@@ -153,6 +163,12 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--enable-logging') {
+				// Electron-specific flag used for debugging - ignore it
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
@@ -180,7 +196,7 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(state) {
+	async refreshNotes(state, useSelectedNoteId = false) {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -217,12 +233,8 @@ class BaseApplication {
 			} else if (parentType === Tag.modelType()) {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
-				let fields = Note.previewFields();
-				let search = BaseModel.byId(state.searches, parentId);
-				notes = await Note.previews(null, {
-					fields: fields,
-					anywherePattern: '*' + search.query_pattern + '*',
-				});
+				const search = BaseModel.byId(state.searches, parentId);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
 			}
 		}
 
@@ -232,10 +244,57 @@ class BaseApplication {
 			notesSource: source,
 		});
 
-		this.store().dispatch({
-			type: 'NOTE_SELECT',
-			id: notes.length ? notes[0].id : null,
-		});
+		if (useSelectedNoteId) {
+			this.store().dispatch({
+				type: 'NOTE_SELECT',
+				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+			});
+		} else {
+			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
+			const foundIds = [];
+			for (let i = 0; i < lastSelectedNoteIds.length; i++) {
+				const noteId = lastSelectedNoteIds[i];
+				let found = false;
+				for (let j = 0; j < notes.length; j++) {
+					if (notes[j].id === noteId) {
+						found = true;
+						break;
+					}
+				}
+				if (found) foundIds.push(noteId);
+			}
+
+			let selectedNoteId = null;
+			if (foundIds.length) {
+				selectedNoteId = foundIds[0];
+			} else {
+				selectedNoteId = notes.length ? notes[0].id : null;
+			}
+
+			this.store().dispatch({
+				type: 'NOTE_SELECT',
+				id: selectedNoteId,
+			});
+		}
+	}
+
+	resourceFetcher_downloadComplete(event) {
+		if (event.encrypted) {
+			DecryptionWorker.instance().scheduleStart();
+		}
+	}
+
+	async decryptionWorker_resourceMetadataButNotBlobDecrypted(event) {
+		this.scheduleAutoAddResources();
+	}
+
+	scheduleAutoAddResources() {
+		if (this.scheduleAutoAddResourcesIID_) return;
+
+		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
+			this.scheduleAutoAddResourcesIID_ = null;
+			ResourceFetcher.instance().autoAddResources();
+		}, 1000);
 	}
 
 	reducerActionToString(action) {
@@ -259,26 +318,96 @@ class BaseApplication {
 	}
 
 	generalMiddlewareFn() {
-		const middleware = store => next => (action) => {
+		const middleware = store => next => action => {
 			return this.generalMiddleware(store, next, action);
-		}
+		};
 
 		return middleware;
 	}
 
+	async applySettingsSideEffects(action = null) {
+		const sideEffects = {
+			'dateFormat': async () => {
+				time.setLocale(Setting.value('locale'));
+				time.setDateFormat(Setting.value('dateFormat'));
+				time.setTimeFormat(Setting.value('timeFormat'));
+			},
+			'net.ignoreTlsErrors': async () => {
+				process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
+			},
+			'net.customCertificates': async () => {
+				const caPaths = Setting.value('net.customCertificates').split(',');
+				for (let i = 0; i < caPaths.length; i++) {
+					const f = caPaths[i].trim();
+					if (!f) continue;
+					syswidecas.addCAs(f);
+				}
+			},
+			'encryption.enabled': async () => {
+				if (this.hasGui()) {
+					await EncryptionService.instance().loadMasterKeysFromSettings();
+					DecryptionWorker.instance().scheduleStart();
+					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+					this.dispatch({
+						type: 'MASTERKEY_REMOVE_NOT_LOADED',
+						ids: loadedMasterKeyIds,
+					});
+
+					// Schedule a sync operation so that items that need to be encrypted
+					// are sent to sync target.
+					reg.scheduleSync();
+				}
+			},
+			'sync.interval': async () => {
+				if (this.hasGui()) reg.setupRecurrentSync();
+			},
+		};
+
+		sideEffects['timeFormat'] = sideEffects['dateFormat'];
+		sideEffects['locale'] = sideEffects['dateFormat'];
+		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+
+		if (action) {
+			const effect = sideEffects[action.key];
+			if (effect) await effect();
+		} else {
+			for (const key in sideEffects) {
+				await sideEffects[key]();
+			}
+		}
+	}
+
 	async generalMiddleware(store, next, action) {
-		this.logger().debug('Reducer action', this.reducerActionToString(action));
+		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
 		const result = next(action);
 		const newState = store.getState();
 		let refreshNotes = false;
+		let refreshFolders = false;
+		// let refreshTags = false;
+		let refreshNotesUseSelectedNoteId = false;
 
-		reduxSharedMiddleware(store, next, action);
+		await reduxSharedMiddleware(store, next, action);
 
-		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
+		if (this.hasGui() && ['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
+			if (!(await reg.syncTarget().syncStarted())) reg.scheduleSync(30 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+			SearchEngine.instance().scheduleSyncTables();
+		}
+
+		// Don't add FOLDER_UPDATE_ALL as refreshFolders() is calling it too, which
+		// would cause the sidebar to refresh all the time.
+		if (this.hasGui() && ['FOLDER_UPDATE_ONE'].indexOf(action.type) >= 0) {
+			refreshFolders = true;
+		}
+
+		if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE' || action.type === 'FOLDER_AND_NOTE_SELECT' || (action.type === 'SEARCH_UPDATE' && newState.notesParentType === 'Folder')) {
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
+
+			if (action.type === 'FOLDER_AND_NOTE_SELECT') refreshNotesUseSelectedNoteId = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -302,61 +431,40 @@ class BaseApplication {
 		}
 
 		if (refreshNotes) {
-			await this.refreshNotes(newState);
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
-			time.setDateFormat(Setting.value('dateFormat'));
-			time.setTimeFormat(Setting.value('timeFormat'));
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || (action.type == 'SETTING_UPDATE_ALL')) {
-			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
-			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || (action.type == 'SETTING_UPDATE_ALL')) {
-			const caPaths = Setting.value('net.customCertificates').split(',');
-			for (let i = 0; i < caPaths.length; i++) {
-				const f = caPaths[i].trim();
-				if (!f) continue;
-				syswidecas.addCAs(f);
-			}
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
-			if (this.hasGui()) {
-				await EncryptionService.instance().loadMasterKeysFromSettings();
-				DecryptionWorker.instance().scheduleStart();
-				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
-
-				this.dispatch({
-					type: 'MASTERKEY_REMOVE_NOT_LOADED',
-					ids: loadedMasterKeyIds,
-				});
-
-				// Schedule a sync operation so that items that need to be encrypted
-				// are sent to sync target.
-				reg.scheduleSync();
-			}
+			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
 		}
 
 		if (action.type === 'NOTE_UPDATE_ONE') {
-			// If there is a conflict, we refresh the folders so as to display "Conflicts" folder
-			if (action.note && action.note.is_conflict) {
-				await FoldersScreenUtils.refreshFolders();
-			}
+			refreshFolders = true;
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
-			reg.setupRecurrentSync();
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
 			DecryptionWorker.instance().scheduleStart();
 		}
 
-	  	return result;
+		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
+			ResourceFetcher.instance().autoAddResources();
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE') {
+			await this.applySettingsSideEffects(action);
+		} else if (action.type == 'SETTING_UPDATE_ALL') {
+			await this.applySettingsSideEffects();
+		}
+
+		if (refreshFolders) {
+			if (refreshFolders === 'now') {
+				await FoldersScreenUtils.refreshFolders();
+			} else {
+				await FoldersScreenUtils.scheduleRefreshFolders();
+			}
+		}
+
+		return result;
 	}
 
 	dispatch(action) {
@@ -374,6 +482,7 @@ class BaseApplication {
 		reg.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
+		ResourceFetcher.instance().dispatch = this.store().dispatch;
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -419,10 +528,7 @@ class BaseApplication {
 		console.info('--------------------------------------------------');
 		console.info(markdown);
 		console.info('--------------------------------------------------');
-
-
 	}
-
 
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
@@ -436,11 +542,14 @@ class BaseApplication {
 		Setting.setConstant('appName', appName);
 
 		const profileDir = this.determineProfileDir(initArgs);
-		const resourceDir = profileDir + '/resources';
+		const resourceDirName = 'resources';
+		const resourceDir = profileDir + '/' + resourceDirName;
 		const tempDir = profileDir + '/tmp';
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
+		Setting.setConstant('templateDir', profileDir + '/templates');
+		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
@@ -450,21 +559,24 @@ class BaseApplication {
 		await fs.mkdirp(resourceDir, 0o755);
 		await fs.mkdirp(tempDir, 0o755);
 
+		// Clean up any remaining watched files (they start with "edit-")
+		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
+
 		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
-		//this.logger_.addTarget('console');
+		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
-		reg.dispatch = (o) => {};
+		reg.dispatch = o => {};
 
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
-			this.dbLogger_.setLevel(Logger.LEVEL_WARN);
+			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
 		}
 
 		this.logger_.info('Profile directory: ' + profileDir);
@@ -473,6 +585,8 @@ class BaseApplication {
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
 		await this.database_.open({ name: profileDir + '/database.sqlite' });
+
+		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
 		BaseModel.db_ = this.database_;
@@ -494,21 +608,42 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+
 		if (!Setting.value('api.token')) {
-			EncryptionService.instance().randomHexString(64).then((token) => {
-				Setting.setValue('api.token', token);
-			});
+			EncryptionService.instance()
+				.randomHexString(64)
+				.then(token => {
+					Setting.setValue('api.token', token);
+				});
 		}
 
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
+
+		BaseItem.revisionService_ = RevisionService.instance();
+
+		KvStore.instance().setDb(reg.db());
 
 		BaseService.logger_ = this.logger_;
 		EncryptionService.instance().setLogger(this.logger_);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		DecryptionWorker.instance().setLogger(this.logger_);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
+		DecryptionWorker.instance().setKvStore(KvStore.instance());
 		await EncryptionService.instance().loadMasterKeysFromSettings();
+		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
+
+		ResourceFetcher.instance().setFileApi(() => {
+			return reg.syncTarget().fileApi();
+		});
+		ResourceFetcher.instance().setLogger(this.logger_);
+		ResourceFetcher.instance().on('downloadComplete', this.resourceFetcher_downloadComplete);
+		ResourceFetcher.instance().start();
+
+		SearchEngine.instance().setDb(reg.db());
+		SearchEngine.instance().setLogger(reg.logger());
+		SearchEngine.instance().scheduleSyncTables();
 
 		let currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;
@@ -516,11 +651,10 @@ class BaseApplication {
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
-		// await this.testing();process.exit();
+		await MigrationService.instance().run();
 
 		return argv;
 	}
-
 }
 
 module.exports = { BaseApplication };

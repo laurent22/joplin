@@ -3,7 +3,7 @@ const { shim } = require('lib/shim.js');
 const parseXmlString = require('xml2js').parseString;
 const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
-const { rtrimSlashes, ltrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
@@ -13,7 +13,6 @@ const base64 = require('base-64');
 // In general, we should only deal with things in "d:", which is the standard DAV namespace.
 
 class WebDavApi {
-
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
@@ -41,7 +40,7 @@ class WebDavApi {
 	}
 
 	baseUrl() {
-		return this.options_.baseUrl();
+		return rtrimSlashes(this.options_.baseUrl());
 	}
 
 	relativeBaseUrl() {
@@ -52,7 +51,7 @@ class WebDavApi {
 	async xmlToJson(xml) {
 		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
-		const nameProcessor = (name) => {
+		const nameProcessor = name => {
 			if (name.indexOf('xmlns:') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
@@ -72,13 +71,13 @@ class WebDavApi {
 				const p = name.split(':');
 				davNamespaces.push(p[p.length - 1]);
 			}
-		}
+		};
 
 		const options = {
 			tagNameProcessors: [nameProcessor],
 			attrNameProcessors: [nameProcessor],
-			attrValueProcessors: [attrValueProcessor]
-		}
+			attrValueProcessors: [attrValueProcessor],
+		};
 
 		return new Promise((resolve, reject) => {
 			parseXmlString(xml, options, (error, result) => {
@@ -91,7 +90,7 @@ class WebDavApi {
 		});
 	}
 
-	valueFromJson(json, keys, type) {	
+	valueFromJson(json, keys, type) {
 		let output = json;
 
 		for (let i = 0; i < keys.length; i++) {
@@ -192,19 +191,23 @@ class WebDavApi {
 		// 	<propname/>
 		// </propfind>`;
 
-		const body = `<?xml version="1.0" encoding="UTF-8"?>
+		const body =
+			`<?xml version="1.0" encoding="UTF-8"?>
 			<d:propfind xmlns:d="DAV:">
 				<d:prop xmlns:oc="http://owncloud.org/ns">
-					` + fieldsXml + `
+					` +
+			fieldsXml +
+			`
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body, { 'Depth': depth }, options);
+		return this.exec('PROPFIND', path, body, { Depth: depth }, options);
 	}
 
 	requestToCurl_(url, options) {
 		let output = [];
 		output.push('curl');
+		output.push('-v');
 		if (options.method) output.push('-X ' + options.method);
 		if (options.headers) {
 			for (let n in options.headers) {
@@ -212,11 +215,75 @@ class WebDavApi {
 				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
 			}
 		}
-		if (options.body) output.push('--data ' + "'" + options.body + "'");
+		if (options.body) output.push('--data ' + '\'' + options.body + '\'');
 		output.push(url);
 
-		return output.join(' ');		
-	}	
+		return output.join(' ');
+	}
+
+	handleNginxHack_(jsonResponse, newErrorHandler) {
+		// Trying to fix 404 error issue with Nginx WebDAV server.
+		// https://github.com/laurent22/joplin/issues/624
+		// https://github.com/laurent22/joplin/issues/808
+		// Not tested but someone confirmed it worked - https://github.com/laurent22/joplin/issues/808#issuecomment-443552858
+		// and fix is narrowly scoped so shouldn't affect anything outside this particular edge case.
+		//
+		// The issue is that instead of an HTTP 404 status code, Nginx returns 200 but with this response:
+		//
+		// <?xml version="1.0" encoding="utf-8" ?>
+		// <D:multistatus xmlns:D="DAV:">
+		// 	<D:response>
+		// 		<D:href>/notes/ecd4027a5271483984b00317433e2c66.md</D:href>
+		// 		<D:propstat>
+		// 			<D:prop/>
+		// 			<D:status>HTTP/1.1 404 Not Found</D:status>
+		// 		</D:propstat>
+		// 	</D:response>
+		// </D:multistatus>
+		//
+		// So we need to parse this and find that it is in fact a 404 error.
+		//
+		// HOWEVER, some implementations also return 404 for missing props, for example SeaFile:
+		// (indicates that the props "getlastmodified" is not present, but this call is only
+		// used when checking the conf, so we don't really need it)
+		// https://github.com/laurent22/joplin/issues/1137
+		//
+		// <?xml version='1.0' encoding='UTF-8'?>
+		// <ns0:multistatus xmlns:ns0="DAV:">
+		// 	<ns0:response>
+		// 		<ns0:href>/seafdav/joplin/</ns0:href>
+		// 		<ns0:propstat>
+		// 			<ns0:prop>
+		// 				<ns0:getlastmodified/>
+		// 			</ns0:prop>
+		// 			<ns0:status>HTTP/1.1 404 Not Found</ns0:status>
+		// 		</ns0:propstat>
+		// 		<ns0:propstat>
+		// 			<ns0:prop>
+		// 				<ns0:resourcetype>
+		// 					<ns0:collection/>
+		// 				</ns0:resourcetype>
+		// 			</ns0:prop>
+		// 			<ns0:status>HTTP/1.1 200 OK</ns0:status>
+		// 		</ns0:propstat>
+		// 	</ns0:response>
+		// </ns0:multistatus>
+		//
+		// As a simple fix for now it's enough to check if ALL the statuses are 404 - in that case
+		// it really means that the file doesn't exist. Otherwise we can proceed as usual.
+		const responseArray = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response']);
+		if (responseArray && responseArray.length === 1) {
+			const propStats = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat']);
+			if (!propStats.length) return;
+			let count404 = 0;
+			for (let i = 0; i < propStats.length; i++) {
+				const status = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat', i, 'd:status']);
+				if (status && status.length && status[0].indexOf('404') >= 0) count404++;
+			}
+
+			if (count404 === propStats.length) throw newErrorHandler('Not found', 404);
+		}
+	}
 
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>
 	//  <d:propfind xmlns:d="DAV:">
@@ -268,7 +335,8 @@ class WebDavApi {
 		} else if (options.target == 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = shim.stringByteLength(body) + '';
 			response = await shim.fetch(url, fetchOptions);
-		} else { // file
+		} else {
+			// file
 			response = await shim.fetchBlob(url, fetchOptions);
 		}
 
@@ -282,16 +350,17 @@ class WebDavApi {
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (responseText + '').substr(0, 1024);
 			return new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + '): ' + shortResponseText, code);
-		}
+		};
 
 		let responseJson_ = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
+			// eslint-disable-next-line require-atomic-updates
 			responseJson_ = await this.xmlToJson(responseText);
 			if (!responseJson_) throw newError('Cannot parse XML response', response.status);
 			return responseJson_;
-		}
+		};
 
 		if (!response.ok) {
 			// When using fetchBlob we only get a string (not xml or json) back
@@ -306,13 +375,13 @@ class WebDavApi {
 
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
-				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join("\n") : 'Unknown error 1';
+				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join('\n') : 'Unknown error 1';
 				throw newError(message + ' (Exception ' + code + ')', response.status);
 			}
 
 			throw newError('Unknown error 2', response.status);
 		}
-		
+
 		if (options.responseFormat === 'text') return responseText;
 
 		// The following methods may have a response depending on the server but it's not
@@ -321,6 +390,7 @@ class WebDavApi {
 		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
 
 		const output = await loadResponseJson();
+		this.handleNginxHack_(output, newError);
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
@@ -328,7 +398,6 @@ class WebDavApi {
 
 		return output;
 	}
-
 }
 
 module.exports = WebDavApi;

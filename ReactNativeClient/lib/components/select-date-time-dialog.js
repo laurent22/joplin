@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
-import { Keyboard, View, Button, Text, StyleSheet, Linking, Image } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import PopupDialog, { DialogTitle, DialogButton } from 'react-native-popup-dialog';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
 
-class SelectDateTimeDialog extends Component {
+class SelectDateTimeDialog extends React.PureComponent {
 
 	constructor() {
 		super();
 		this.dialog_ = null;
 		this.shown_ = false;
 		this.state = { date: null };
+
+		this.onReject = this.onReject.bind(this);
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps) {
@@ -39,7 +41,7 @@ class SelectDateTimeDialog extends Component {
 	}
 
 	dateTimeFormat() {
-		return "MM/DD/YYYY HH:mm";
+		return 'MM/DD/YYYY HH:mm';
 	}
 
 	stringToDate(s) {
@@ -59,10 +61,12 @@ class SelectDateTimeDialog extends Component {
 	}
 
 	render() {
+		const clearAlarmText = _('Clear alarm'); // For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
+
 		const popupActions = [
-			<DialogButton text={_("Save alarm")} align="center" onPress={() => this.onAccept()} key="saveButton" />,
-			<DialogButton text={_("Clear alarm")} align="center" onPress={() => this.onClear()} key="clearButton" />,
-			<DialogButton text={_("Cancel")} align="center" onPress={() => this.onReject()} key="cancelButton" />,
+			<DialogButton text={_('Save alarm')} align="center" onPress={() => this.onAccept()} key="saveButton" />,
+			<DialogButton text={clearAlarmText} align="center" onPress={() => this.onClear()} key="clearButton" />,
+			<DialogButton text={_('Cancel')} align="center" onPress={() => this.onReject()} key="cancelButton" />,
 		];
 
 		return (
@@ -70,9 +74,10 @@ class SelectDateTimeDialog extends Component {
 				ref={(dialog) => { this.dialog_ = dialog; }}
 				dialogTitle={<DialogTitle title={_('Set alarm')} />}
 				actions={popupActions}
+				dismissOnTouchOutside={false}
 				width={0.9}
 				height={350}
-				>
+			>
 				<View style={{flex:1, margin: 20, alignItems:'center'}}>
 					<DatePicker
 						date={this.state.date}
@@ -83,6 +88,14 @@ class SelectDateTimeDialog extends Component {
 						cancelBtnText={_('Cancel')}
 						onDateChange={(date) => { this.setState({ date: this.stringToDate(date) }); }}
 						style={{width:300}}
+						customStyles={{
+							btnConfirm: {
+								paddingVertical: 0,
+							},
+							btnCancel: {
+								paddingVertical: 0,
+							},
+						}}
 					/>
 				</View>
 			</PopupDialog>

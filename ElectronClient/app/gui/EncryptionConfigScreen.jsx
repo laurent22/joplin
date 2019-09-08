@@ -1,7 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting');
-const BaseItem = require('lib/models/BaseItem');
 const EncryptionService = require('lib/services/EncryptionService');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
@@ -9,11 +8,9 @@ const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 const dialogs = require('./dialogs');
 const shared = require('lib/components/shared/encryption-config-shared.js');
-const pathUtils = require('lib/path-utils.js');
 const { bridge } = require('electron').remote.require('./bridge');
 
 class EncryptionConfigScreenComponent extends React.Component {
-
 	constructor() {
 		super();
 		shared.constructor(this);
@@ -50,13 +47,20 @@ class EncryptionConfigScreenComponent extends React.Component {
 	renderMasterKey(mk) {
 		const theme = themeStyle(this.props.theme);
 
+		const passwordStyle = {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
+		};
+
 		const onSaveClick = () => {
 			return shared.onSavePasswordClick(this, mk);
-		}
+		};
 
-		const onPasswordChange = (event) => {
+		const onPasswordChange = event => {
 			return shared.onPasswordChange(this, mk, event.target.value);
-		}
+		};
 
 		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
@@ -69,7 +73,12 @@ class EncryptionConfigScreenComponent extends React.Component {
 				<td style={theme.textStyle}>{mk.source_application}</td>
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.created_time)}</td>
 				<td style={theme.textStyle}>{time.formatMsToLocal(mk.updated_time)}</td>
-				<td style={theme.textStyle}><input type="password" value={password} onChange={(event) => onPasswordChange(event)}/> <button onClick={() => onSaveClick()}>{_('Save')}</button></td>
+				<td style={theme.textStyle}>
+					<input type="password" style={passwordStyle} value={password} onChange={event => onPasswordChange(event)} />{' '}
+					<button style={theme.buttonStyle} onClick={() => onSaveClick()}>
+						{_('Save')}
+					</button>
+				</td>
 				<td style={theme.textStyle}>{passwordOk}</td>
 			</tr>
 		);
@@ -81,15 +90,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 		const masterKeys = this.state.masterKeys;
 		const containerPadding = 10;
 
-		const headerStyle = {
-			width: style.width,
-		};
+		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const containerStyle = {
+		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: containerPadding,
 			overflow: 'auto',
 			height: style.height - theme.headerHeight - containerPadding * 2,
-		};
+		});
 
 		const mkComps = [];
 		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
@@ -123,10 +130,19 @@ class EncryptionConfigScreenComponent extends React.Component {
 			} catch (error) {
 				await dialogs.alert(error.message);
 			}
-		}
+		};
 
 		const decryptedItemsInfo = <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p>;
-		const toggleButton = <button onClick={() => { onToggleButtonClick() }}>{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}</button>
+		const toggleButton = (
+			<button
+				style={theme.buttonStyle}
+				onClick={() => {
+					onToggleButtonClick();
+				}}
+			>
+				{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}
+			</button>
+		);
 
 		let masterKeySection = null;
 
@@ -159,7 +175,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 			const rows = [];
 			for (let i = 0; i < nonExistingMasterKeyIds.length; i++) {
 				const id = nonExistingMasterKeyIds[i];
-				rows.push(<tr key={id}><td style={theme.textStyle}>{id}</td></tr>);
+				rows.push(
+					<tr key={id}>
+						<td style={theme.textStyle}>{id}</td>
+					</tr>
+				);
 			}
 
 			nonExistingMasterKeySection = (
@@ -171,7 +191,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 							<tr>
 								<th style={theme.textStyle}>{_('ID')}</th>
 							</tr>
-							{ rows }
+							{rows}
 						</tbody>
 					</table>
 				</div>
@@ -182,13 +202,25 @@ class EncryptionConfigScreenComponent extends React.Component {
 			<div>
 				<Header style={headerStyle} />
 				<div style={containerStyle}>
-					{<div style={{backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
-						<p style={theme.textStyle}>
-							<span>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:')}</span> <a onClick={() => {bridge().openExternal('https://joplin.cozic.net/e2ee')}} href="#">https://joplin.cozic.net/e2ee</a>
-						</p>
-					</div>}
+					{
+						<div style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+							<p style={theme.textStyle}>
+								<span>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</span>{' '}
+								<a
+									onClick={() => {
+										bridge().openExternal('https://joplinapp.org/e2ee/');
+									}}
+									href="#"
+								>
+									https://joplinapp.org/e2ee/
+								</a>
+							</p>
+						</div>
+					}
 					<h1 style={theme.h1Style}>{_('Status')}</h1>
-					<p style={theme.textStyle}>{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong></p>
+					<p style={theme.textStyle}>
+						{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
+					</p>
 					{decryptedItemsInfo}
 					{toggleButton}
 					{masterKeySection}
@@ -197,10 +229,9 @@ class EncryptionConfigScreenComponent extends React.Component {
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 		masterKeys: state.masterKeys,

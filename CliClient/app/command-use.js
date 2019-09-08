@@ -2,20 +2,14 @@ const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const BaseModel = require('lib/BaseModel.js');
-const Folder = require('lib/models/Folder.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'use <notebook>';
 	}
 
 	description() {
 		return _('Switches to [notebook] - all further operations will happen within this notebook.');
-	}
-
-	autocomplete() {
-		return { data: autocompleteFolders };
 	}
 
 	compatibleUis() {
@@ -27,7 +21,6 @@ class Command extends BaseCommand {
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 		app().switchCurrentFolder(folder);
 	}
-
 }
 
 module.exports = Command;

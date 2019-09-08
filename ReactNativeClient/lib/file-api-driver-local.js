@@ -1,4 +1,3 @@
-const { time } = require('lib/time-utils.js');
 const { basicDelta } = require('lib/file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
@@ -6,7 +5,7 @@ const { basicDelta } = require('lib/file-api');
 // both clients will not know about each others updates during the next sync. They will simply both sync their note and whoever
 // comes last will overwrite (on the remote storage) the note of the other client. Both client will then have a different note at
 // that point and that will only be resolved if one of them changes the note and sync (if they don't change it, it will never get resolved).
-// 
+//
 // This is compound with the fact that we can't have a reliable delta API on the file system so we need to check all the timestamps
 // every time and rely on this exclusively to know about changes.
 //
@@ -15,7 +14,6 @@ const { basicDelta } = require('lib/file-api');
 // will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
 
 class FileApiDriverLocal {
-
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += '. Path: ' + path;
@@ -66,7 +64,7 @@ class FileApiDriverLocal {
 	}
 
 	async delta(path, options) {
-		const getStatFn = async (path) => {
+		const getStatFn = async path => {
 			const stats = await this.fsDriver().readDirStats(path);
 			return this.metadataFromStats_(stats);
 		};
@@ -74,7 +72,7 @@ class FileApiDriverLocal {
 		try {
 			const output = await basicDelta(path, getStatFn, options);
 			return output;
-		} catch(error) {
+		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
 	}
@@ -89,7 +87,7 @@ class FileApiDriverLocal {
 				hasMore: false,
 				context: null,
 			};
-		} catch(error) {
+		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
 	}
@@ -128,7 +126,7 @@ class FileApiDriverLocal {
 		// 			resolve();
 		// 			return;
 		// 		}
-			
+
 		// 		fs.mkdirp(path, (error) => {
 		// 			if (error) {
 		// 				reject(this.fsErrorToJsError_(error));
@@ -148,7 +146,7 @@ class FileApiDriverLocal {
 				await this.fsDriver().copy(options.path, path);
 				return;
 			}
-		
+
 			await this.fsDriver().writeFile(path, content, 'utf8');
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -196,11 +194,11 @@ class FileApiDriverLocal {
 		try {
 			await this.fsDriver().move(oldPath, newPath);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
+			throw this.fsErrorToJsError_(error, oldPath);
 		}
 
 		// let lastError = null;
-		
+
 		// for (let i = 0; i < 5; i++) {
 		// 	try {
 		// 		let output = await fs.move(oldPath, newPath, { overwrite: true });
@@ -228,7 +226,6 @@ class FileApiDriverLocal {
 		await this.fsDriver().remove(baseDir);
 		await this.fsDriver().mkdir(baseDir);
 	}
-
 }
 
 module.exports = { FileApiDriverLocal };

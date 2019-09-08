@@ -1,11 +1,12 @@
-const { execCommand, githubRelease, handleCommitHook, githubOauthToken } = require('./tool-utils.js');
+const { execCommand, githubRelease } = require('./tool-utils.js');
 const path = require('path');
 
 const rootDir = path.dirname(__dirname);
 const appDir = rootDir + '/ElectronClient/app';
 
 async function main() {
-	const oauthToken = await githubOauthToken();
+	const argv = require('yargs').argv;
+
 	process.chdir(appDir);
 
 	console.info('Running from: ' + process.cwd());
@@ -20,7 +21,11 @@ async function main() {
 	console.info(await execCommand('git tag ' + tagName));
 	console.info(await execCommand('git push && git push --tags'));
 
-	const release = await githubRelease('joplin', tagName, true);
+	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
+
+	console.info('Release options: ', releaseOptions);
+
+	const release = await githubRelease('joplin', tagName, releaseOptions);
 
 	console.info('Created GitHub release: ' + release.html_url);
 }

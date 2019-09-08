@@ -3,10 +3,12 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Alarm = require('lib/models/Alarm');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const BaseModel = require('lib/BaseModel.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker');
 const { _ } = require('lib/locale.js');
+const { toTitleCase } = require('lib/string-utils.js');
 
 class ReportService {
-
 	csvEscapeCell(cell) {
 		cell = this.csvValueToString(cell);
 		let output = cell.replace(/"/, '""');
@@ -58,7 +60,7 @@ class ReportService {
 			for (let j = 0; j < items.length; j++) {
 				const item = items[j];
 				let row = [itemType, item.id, item.updated_time, item.sync_time];
-				row.push(('is_conflict' in item) ? item.is_conflict : '');
+				row.push('is_conflict' in item ? item.is_conflict : '');
 				output.push(row);
 			}
 		}
@@ -116,13 +118,42 @@ class ReportService {
 		if (disabledItems.length) {
 			section = { title: _('Items that cannot be synchronised'), body: [] };
 
-			for (let i = 0; i < disabledItems.length; i++) {
-				const row = disabledItems[i];
-				section.body.push(_('%s (%s): %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
-			}
+			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
 
 			section.body.push('');
-			section.body.push(_('These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).'));
+
+			for (let i = 0; i < disabledItems.length; i++) {
+				const row = disabledItems[i];
+				if (row.location === BaseItem.SYNC_ITEM_LOCATION_LOCAL) {
+					section.body.push(_('%s (%s) could not be uploaded: %s', row.item.title, row.item.id, row.syncInfo.sync_disabled_reason));
+				} else {
+					section.body.push(_('Item "%s" could not be downloaded: %s', row.syncInfo.item_id, row.syncInfo.sync_disabled_reason));
+				}
+			}
+
+			sections.push(section);
+		}
+
+		const decryptionDisabledItems = await DecryptionWorker.instance().decryptionDisabledItems();
+
+		if (decryptionDisabledItems.length) {
+			section = { title: _('Items that cannot be decrypted'), body: [], name: 'failedDecryption' };
+
+			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
+
+			section.body.push('');
+
+			for (let i = 0; i < decryptionDisabledItems.length; i++) {
+				const row = decryptionDisabledItems[i];
+				section.body.push({
+					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
+					canRetry: true,
+					retryHandler: async () => {
+						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
+						DecryptionWorker.instance().scheduleStart();
+					},
+				});
+			}
 
 			sections.push(section);
 		}
@@ -149,7 +180,6 @@ class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			const folder = folders[i];
 			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
 		}
 
@@ -171,7 +201,6 @@ class ReportService {
 
 		return sections;
 	}
-
 }
 
 module.exports = { ReportService };

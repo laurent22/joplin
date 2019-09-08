@@ -1,1 +1,1 @@
-[# ![](https://joplin.cozic.net/images/Icon512.png)oplin](https://joplin.cozic.net)
+[# ![](https://joplinapp.org/images/Icon512.png)oplin](https://joplinapp.org)

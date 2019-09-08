@@ -2,6 +2,10 @@ const { randomClipperPort } = require('./randomClipperPort');
 
 class Bridge {
 
+	constructor() {
+		this.nounce_ = Date.now();
+	}
+
 	async init(browser, browserSupportsPromises, dispatch) {
 		console.info('Popup: Init bridge');
 
@@ -13,7 +17,7 @@ class Bridge {
 
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command:', command);
-			
+
 			if (command.warning) {
 				console.warn('Popup: Got warning: ' + command.warning);
 				this.dispatch({ type: 'WARNING_SET', text: command.warning });
@@ -29,11 +33,20 @@ class Bridge {
 					source_url: command.url,
 					parent_id: command.parent_id,
 					tags: command.tags || '',
+					image_sizes: command.image_sizes || {},
+					anchor_names: command.anchor_names || [],
+					source_command: command.source_command,
+					convert_to: command.convert_to,
+					stylesheets: command.stylesheets,
 				};
 
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
 			}
-		}
+
+			if (command.name === 'isProbablyReaderable') {
+				this.dispatch({ type: 'IS_PROBABLY_READERABLE', value: command.value });
+			}
+		};
 
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
 
@@ -61,7 +74,7 @@ class Bridge {
 		return new Promise((resolve, reject) => {
 			browser.runtime.getBackgroundPage((bgp) => {
 				resolve(bgp);
-			})
+			});
 		});
 	}
 
@@ -112,7 +125,7 @@ class Bridge {
 			state = randomClipperPort(state, this.env());
 
 			try {
-				console.info('findClipperServerPort: Trying ' + state.port); 
+				console.info('findClipperServerPort: Trying ' + state.port);
 				const response = await fetch('http://127.0.0.1:' + state.port + '/ping');
 				const text = await response.text();
 				console.info('findClipperServerPort: Got response: ' + text);
@@ -153,7 +166,7 @@ class Bridge {
 					return true;
 				}
 				return false;
-			}
+			};
 
 			if (checkStatus()) return;
 
@@ -179,13 +192,13 @@ class Bridge {
 			this.browser().tabs.executeScript(options, () => {
 				const e = this.browser().runtime.lastError;
 				if (e) {
-					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)]
+					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)];
 					if (e.message) msg.push(e.message);
 					reject(new Error(msg.join(': ')));
 				}
 				resolve();
 			});
-		})
+		});
 	}
 
 	async tabsQuery(options) {
@@ -200,7 +213,7 @@ class Bridge {
 
 	async tabsSendMessage(tabId, command) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
-		
+
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.sendMessage(tabId, command, (result) => {
 				resolve(result);
@@ -210,7 +223,7 @@ class Bridge {
 
 	async tabsCreate(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
-		
+
 		return new Promise((resolve, reject) => {
 			this.browser().tabs.create(options, () => {
 				resolve();
@@ -263,7 +276,7 @@ class Bridge {
 		await this.tabsSendMessage(tabs[0].id, command);
 	}
 
-	async clipperApiExec(method, path, body) {
+	async clipperApiExec(method, path, query, body) {
 		console.info('Popup: ' + method + ' ' + path);
 
 		const baseUrl = await this.clipperServerBaseUrl();
@@ -271,13 +284,24 @@ class Bridge {
 		const fetchOptions = {
 			method: method,
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-		}
+		};
 
 		if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body);
 
-		const response = await fetch(baseUrl + "/" + path, fetchOptions)
+		let queryString = '';
+		if (query) {
+			const s = [];
+			for (const k in query) {
+				if (!query.hasOwnProperty(k)) continue;
+				s.push(encodeURIComponent(k) + '=' + encodeURIComponent(query[k]));
+			}
+			queryString = s.join('&');
+			if (queryString) queryString = '?' + queryString;
+		}
+
+		const response = await fetch(baseUrl + '/' + path + queryString, fetchOptions);
 		if (!response.ok) {
 			const msg = await response.text();
 			throw new Error(msg);
@@ -295,11 +319,39 @@ class Bridge {
 
 			if (!content) throw new Error('Cannot send empty content');
 
-			await this.clipperApiExec('POST', 'notes', content);
+			// There is a bug in Chrome that somehow makes the app send the same request twice, which
+			// results in Joplin having the same note twice. There's a 2-3 sec delay between
+			// each request. The bug only happens the first time the extension popup is open and the
+			// Complete button is clicked.
+			//
+			// It's beyond my understanding how it's happening. I don't know how this sendContentToJoplin function
+			// can be called twice. But even if it is, logically, it's impossible that this
+			// call below would be done with twice the same nounce. Even if the function sendContentToJoplin
+			// is called twice in parallel, the increment is atomic and should result in two nounces
+			// being generated. But it's not. Somehow the function below is called twice with the exact same nounce.
+			//
+			// It's also not something internal to Chrome that repeat the request since the error is caught
+			// so it really seems like a double function call.
+			//
+			// So this is why below, when we get the duplicate nounce error, we just ignore it so as not to display
+			// a useless error message. The whole nounce feature is not for security (it's not to prevent replay
+			// attacks), but simply to detect these double-requests and ignore them on Joplin side.
+			//
+			// This nounce feature is optional, it's only active when the nounce query parameter is provided
+			// so it shouldn't affect any other call.
+			//
+			// This is the perfect Heisenbug - it happens always when opening the popup the first time EXCEPT
+			// when the debugger is open. Then everything is working fine and the bug NEVER EVER happens,
+			// so it's impossible to understand what's going on.
+			await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
 		} catch (error) {
-			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+			if (error.message === '{"error":"Duplicate Nounce"}') {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
+			} else {
+				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: false, errorMessage: error.message } });
+			}
 		}
 	}
 
@@ -309,6 +361,6 @@ const bridge_ = new Bridge();
 
 const bridge = function() {
 	return bridge_;
-}
+};
 
-export { bridge }
+export { bridge };

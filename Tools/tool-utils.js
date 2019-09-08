@@ -1,10 +1,10 @@
 const toolUtils = {};
 
 toolUtils.execCommand = function(command) {
-	const exec = require('child_process').exec
+	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		let childProcess = exec(command, (error, stdout, stderr) => {
+		exec(command, (error, stdout, stderr) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -16,7 +16,7 @@ toolUtils.execCommand = function(command) {
 			}
 		});
 	});
-}
+};
 
 toolUtils.downloadFile = function(url, targetPath) {
 	const https = require('https');
@@ -24,7 +24,7 @@ toolUtils.downloadFile = function(url, targetPath) {
 
 	return new Promise((resolve, reject) => {
 		const file = fs.createWriteStream(targetPath);
-		const request = https.get(url, function(response) {
+		https.get(url, function(response) {
 			if (response.statusCode !== 200) reject(new Error('HTTP error ' + response.statusCode));
 			response.pipe(file);
 			file.on('finish', function() {
@@ -35,7 +35,7 @@ toolUtils.downloadFile = function(url, targetPath) {
 			reject(error);
 		});
 	});
-}
+};
 
 toolUtils.fileSha256 = function(filePath) {
 	return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ toolUtils.fileSha256 = function(filePath) {
 			reject(error);
 		});
 	});
-}
+};
 
 toolUtils.unlinkForce = async function(filePath) {
 	const fs = require('fs-extra');
@@ -65,9 +65,11 @@ toolUtils.unlinkForce = async function(filePath) {
 		if (error.code === 'ENOENT') return;
 		throw error;
 	}
-}
+};
 
 toolUtils.fileExists = async function(filePath) {
+	const fs = require('fs-extra');
+
 	return new Promise((resolve, reject) => {
 		fs.stat(filePath, function(err, stat) {
 			if (err == null) {
@@ -79,25 +81,31 @@ toolUtils.fileExists = async function(filePath) {
 			}
 		});
 	});
-}
+};
 
 toolUtils.githubOauthToken = async function() {
 	const fs = require('fs-extra');
 	const r = await fs.readFile(__dirname + '/github_oauth_token.txt');
 	return r.toString();
-}
+};
 
-toolUtils.githubRelease = async function(project, tagName, isDraft) {
+toolUtils.githubRelease = async function(project, tagName, options = null) {
+	options = Object.assign({}, {
+		isDraft: false,
+		isPreRelease: false,
+	}, options);
+
 	const fetch = require('node-fetch');
 
 	const oauthToken = await toolUtils.githubOauthToken();
-	
+
 	const response = await fetch('https://api.github.com/repos/laurent22/' + project + '/releases', {
-		method: 'POST', 
+		method: 'POST',
 		body: JSON.stringify({
 			tag_name: tagName,
 			name: tagName,
-			draft: isDraft,
+			draft: options.isDraft,
+			prerelease: options.isPreRelease,
 		}),
 		headers: {
 			'Content-Type': 'application/json',
@@ -106,13 +114,50 @@ toolUtils.githubRelease = async function(project, tagName, isDraft) {
 	});
 
 	const responseText = await response.text();
-	
+
 	if (!response.ok) throw new Error('Cannot create GitHub release: ' + responseText);
 
 	const responseJson = JSON.parse(responseText);
 	if (!responseJson.url) throw new Error('No URL for release: ' + responseText);
 
 	return responseJson;
-}
+};
+
+toolUtils.readline = question => {
+	return new Promise((resolve, reject) => {
+		const readline = require('readline');
+
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout,
+		});
+
+		rl.question(question + ' ', answer => {
+			resolve(answer);
+			rl.close();
+		});
+	});
+};
+
+toolUtils.isLinux = () => {
+	return process && process.platform === 'linux';
+};
+
+toolUtils.isWindows = () => {
+	return process && process.platform === 'win32';
+};
+
+toolUtils.isMac = () => {
+	return process && process.platform === 'darwin';
+};
+
+toolUtils.insertContentIntoFile = async function (filePath, markerOpen, markerClose, contentToInsert) {
+	const fs = require('fs-extra');
+	let content = await fs.readFile(filePath, 'utf-8');
+	// [^]* matches any character including new lines
+	const regex = new RegExp(markerOpen + '[^]*?' + markerClose);
+	content = content.replace(regex, markerOpen + contentToInsert + markerClose);
+	await fs.writeFile(filePath, content);
+};
 
 module.exports = toolUtils;

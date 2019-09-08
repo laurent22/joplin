@@ -1,9 +1,9 @@
 const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
+const setupLinkify = require('lib/renderers/MdToHtml/setupLinkify');
 
 const markdownUtils = {
-
 	// Not really escaping because that's not supported by marked.js
 	escapeLinkText(text) {
 		return text.replace(/(\[|\]|\(|\))/g, '_');
@@ -16,6 +16,7 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md, baseUrl) {
+		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (match, before, url, after) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
@@ -23,11 +24,13 @@ const markdownUtils = {
 
 	extractImageUrls(md) {
 		const markdownIt = new MarkdownIt();
+		setupLinkify(markdownIt); // Necessary to support file:/// links
+
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
 		const output = [];
 
-		const searchUrls = (tokens) => {
+		const searchUrls = tokens => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 
@@ -39,12 +42,12 @@ const markdownUtils = {
 						}
 					}
 				}
-				
+
 				if (token.children && token.children.length) {
 					searchUrls(token.children);
 				}
 			}
-		}
+		};
 
 		searchUrls(tokens);
 
@@ -62,7 +65,6 @@ const markdownUtils = {
 		const headersMd = [];
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
-			const mdRow = [];
 			const h = headers[i];
 			headersMd.push(stringPadding(h.label, 3, ' ', stringPadding.RIGHT));
 			lineMd.push('---');
@@ -84,8 +86,6 @@ const markdownUtils = {
 
 		return output.join('\n');
 	},
-
-
 };
 
 module.exports = markdownUtils;

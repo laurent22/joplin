@@ -58,4 +58,4 @@ script:
     npm install
     cd ../ElectronClient/app
     rsync -aP --delete ../../ReactNativeClient/lib/ lib/
-    npm install && yarn dist
+    npm install && USE_HARD_LINKS=false yarn dist

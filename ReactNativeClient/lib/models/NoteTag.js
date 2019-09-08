@@ -2,19 +2,12 @@ const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 
 class NoteTag extends BaseItem {
-
 	static tableName() {
 		return 'note_tags';
 	}
 
 	static modelType() {
 		return BaseModel.TYPE_NOTE_TAG;
-	}
-
-	static async serialize(item, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(item, 'note_tag', fieldNames);
 	}
 
 	static async byNoteIds(noteIds) {
@@ -30,7 +23,6 @@ class NoteTag extends BaseItem {
 		}
 		return output;
 	}
-
 }
 
 module.exports = NoteTag;

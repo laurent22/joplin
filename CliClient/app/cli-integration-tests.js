@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 const fs = require('fs-extra');
 const { Logger } = require('lib/logger.js');
@@ -10,7 +10,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Setting = require('lib/models/Setting.js');
 const { sprintf } = require('sprintf-js');
-const exec = require('child_process').exec
+const exec = require('child_process').exec;
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);
@@ -32,8 +32,8 @@ db.setLogger(dbLogger);
 
 function createClient(id) {
 	return {
-		'id': id,
-		'profileDir': baseDir + '/client' + id,
+		id: id,
+		profileDir: baseDir + '/client' + id,
 	};
 }
 
@@ -72,14 +72,7 @@ function assertEquals(expected, real) {
 }
 
 async function clearDatabase() {
-	await db.transactionExecBatch([
-		'DELETE FROM folders',
-		'DELETE FROM notes',
-		'DELETE FROM tags',
-		'DELETE FROM note_tags',
-		'DELETE FROM resources',
-		'DELETE FROM deleted_items',
-	]);
+	await db.transactionExecBatch(['DELETE FROM folders', 'DELETE FROM notes', 'DELETE FROM tags', 'DELETE FROM note_tags', 'DELETE FROM resources', 'DELETE FROM deleted_items']);
 }
 
 const testUnits = {};
@@ -101,7 +94,7 @@ testUnits.testFolders = async () => {
 
 	folders = await Folder.all();
 	assertEquals(0, folders.length);
-}
+};
 
 testUnits.testNotes = async () => {
 	await execCommand(client, 'mkbook nb1');
@@ -121,16 +114,16 @@ testUnits.testNotes = async () => {
 	notes = await Note.all();
 	assertEquals(2, notes.length);
 
-	await execCommand(client, "rm -f 'blabla*'");
+	await execCommand(client, 'rm -f \'blabla*\'');
 
 	notes = await Note.all();
 	assertEquals(2, notes.length);
 
-	await execCommand(client, "rm -f 'n*'");
+	await execCommand(client, 'rm -f \'n*\'');
 
 	notes = await Note.all();
 	assertEquals(0, notes.length);
-}
+};
 
 testUnits.testCat = async () => {
 	await execCommand(client, 'mkbook nb1');
@@ -145,7 +138,7 @@ testUnits.testCat = async () => {
 
 	r = await execCommand(client, 'cat -v mynote');
 	assertTrue(r.indexOf(note.id) >= 0);
-}
+};
 
 testUnits.testConfig = async () => {
 	await execCommand(client, 'config editor vim');
@@ -159,7 +152,7 @@ testUnits.testConfig = async () => {
 	let r = await execCommand(client, 'config');
 	assertTrue(r.indexOf('editor') >= 0);
 	assertTrue(r.indexOf('subl') >= 0);
-}
+};
 
 testUnits.testCp = async () => {
 	await execCommand(client, 'mkbook nb2');
@@ -180,7 +173,7 @@ testUnits.testCp = async () => {
 	notes = await Note.previews(f2.id);
 	assertEquals(1, notes.length);
 	assertEquals(notesF1[0].title, notes[0].title);
-}
+};
 
 testUnits.testLs = async () => {
 	await execCommand(client, 'mkbook nb1');
@@ -190,7 +183,7 @@ testUnits.testLs = async () => {
 
 	assertTrue(r.indexOf('note1') >= 0);
 	assertTrue(r.indexOf('note2') >= 0);
-}
+};
 
 testUnits.testMv = async () => {
 	await execCommand(client, 'mkbook nb2');
@@ -210,14 +203,14 @@ testUnits.testMv = async () => {
 	await execCommand(client, 'mknote note2');
 	await execCommand(client, 'mknote note3');
 	await execCommand(client, 'mknote blabla');
-	await execCommand(client, "mv 'note*' nb2");
+	await execCommand(client, 'mv \'note*\' nb2');
 
 	notes1 = await Note.previews(f1.id);
 	notes2 = await Note.previews(f2.id);
 
 	assertEquals(1, notes1.length);
 	assertEquals(4, notes2.length);
-}
+};
 
 async function main(argv) {
 	await fs.remove(baseDir);
@@ -243,7 +236,7 @@ async function main(argv) {
 	}
 }
 
-main(process.argv).catch((error) => {
+main(process.argv).catch(error => {
 	console.info('');
 	logger.error(error);
 });

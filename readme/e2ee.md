@@ -8,7 +8,7 @@ There is a small overhead to using E2EE since data constantly has to be encrypte
 
 # Enabling E2EE
 
-Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on all the applications that you synchronise with. It is recommended to first enable it on the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.
+Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on a single device first (this will create a Master Key for encryption secured by your password) and then it must be synced with all other remaining devices. It is recommended to start with the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.
 
 To enable it, please follow these steps:
 
@@ -19,6 +19,8 @@ To enable it, please follow these steps:
 5. Once this first synchronisation operation is done, open the next device you are synchronising with. Click "Synchronise" and wait for the sync operation to complete. The device will receive the master key, and you will need to provide the password for it. At this point E2EE will be automatically enabled on this device. Once done, click Synchronise again and wait for it to complete.
 6. Repeat step 5 for each device.
 
+Do not manually enable encryption on multiple devices in parallel, but rather wait for the other ones to sync with the first already encrypted device. Otherwise, you may end up with multiple encryption keys (which is supported by Joplin but most probably not what you want).
+
 Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.
 
 # Disabling E2EE
@@ -27,4 +29,4 @@ Follow the same procedure as above but instead disable E2EE on each device one b
 
 # Technical specification
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplin.cozic.net/spec).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/).

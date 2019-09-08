@@ -2,11 +2,11 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](https://joplin.cozic.net/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-<img src="https://joplin.cozic.net/images/ScreenshotTerminal.png" style="max-width: 60%">
+<img src="https://joplinapp.org/images/ScreenshotTerminal.png" style="max-width: 60%">
 
 # Installation
 
@@ -18,19 +18,11 @@ Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org
 
 To start it, type `joplin`.
 
-# Demo
-
-The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
-
-	npm install -g demo-joplin
-
-To start it, type `demo-joplin`.
-
 # Usage
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
-<img src="https://joplin.cozic.net/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://joplinapp.org/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -94,7 +86,7 @@ Command | Description
 
 If the help is not fully visible, press `Tab` multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.
 
-For general information relevant to all the applications, see also [Joplin home page](https://joplin.cozic.net).
+For general information relevant to all the applications, see also [Joplin home page](https://joplinapp.org).
 
 # Importing notes from Evernote
 
@@ -137,13 +129,13 @@ It is possible to also synchronise outside of the user interface by typing `jopl
 
 When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://joplin.cozic.net/images/UrlCut.png" width="300px">
+<img src="https://joplinapp.org/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://joplin.cozic.net/images/UrlNoCut.png" width="300px">
+<img src="https://joplinapp.org/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -276,7 +268,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             (Deutsch), en_GB (English), es_ES (Español), 
 	                             fr_FR (Français), gl_ES (Galician), it_IT 
 	                             (Italiano), nl_NL (Nederlands), nl_BE 
-	                             (Nederlands), no (Norwegian), pt_BR (Português 
+	                             (Nederlands), nb_NO (Norwegian), pt_BR (Português 
 	                             (Brasil)), ro (Română), sl_SI (Slovenian), sv 
 	                             (Svenska), ru_RU (Русский), zh_CN (中文 (简体)), 
 	                             zh_TW (中文 (繁體)), ja_JP (日本語), ko (한국말).
@@ -350,7 +342,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Attention: If you change this location, make sure 
 	                             you copy all your content to it before syncing, 
 	                             otherwise all files will be removed! See the FAQ 
-	                             for more details: https://joplin.cozic.net/faq/
+	                             for more details: https://joplinapp.org/faq/
 	                             Type: string.
 	                             
 	    sync.5.username          Nextcloud username.
@@ -363,7 +355,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Attention: If you change this location, make sure 
 	                             you copy all your content to it before syncing, 
 	                             otherwise all files will be removed! See the FAQ 
-	                             for more details: https://joplin.cozic.net/faq/
+	                             for more details: https://joplinapp.org/faq/
 	                             Type: string.
 	                             
 	    sync.6.username          WebDAV username.
@@ -522,7 +514,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 # License
 
-Copyright (c) 2016-2018 Laurent Cozic
+Copyright (c) 2016-2019 Laurent Cozic
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

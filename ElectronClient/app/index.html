@@ -2,6 +2,11 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<!--
+		No CPS because we need to allow everything due to some dependencies (eg. depd, which comes from maybe Node or Electron
+		uses 'eval'.
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
+		-->
 		<title>Joplin</title>
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="css/fork-awesome.min.css">

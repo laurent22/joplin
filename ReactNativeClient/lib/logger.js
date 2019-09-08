@@ -4,11 +4,10 @@ const { time } = require('lib/time-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
 class Logger {
-
 	constructor() {
 		this.targets_ = [];
 		this.level_ = Logger.LEVEL_INFO;
-		this.fileAppendQueue_ = []
+		this.fileAppendQueue_ = [];
 		this.lastDbCleanup_ = time.unixMs();
 	}
 
@@ -49,10 +48,10 @@ class Logger {
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
 				output = object.toString();
-				if (object.code) output += "\nCode: " + object.code;
-				if (object.headers) output += "\nHeader: " + JSON.stringify(object.headers);
-				if (object.request) output += "\nRequest: " + (object.request.substr ? object.request.substr(0, 1024) : '');
-				if (object.stack) output += "\n" + object.stack;
+				if (object.code) output += '\nCode: ' + object.code;
+				if (object.headers) output += '\nHeader: ' + JSON.stringify(object.headers);
+				if (object.request) output += '\nRequest: ' + (object.request.substr ? object.request.substr(0, 1024) : '');
+				if (object.stack) output += '\n' + object.stack;
 			} else {
 				output = JSON.stringify(object);
 			}
@@ -60,7 +59,7 @@ class Logger {
 			output = object;
 		}
 
-		return output;		
+		return output;
 	}
 
 	objectsToString(...object) {
@@ -81,7 +80,7 @@ class Logger {
 			\`timestamp\` INT NOT NULL
 		);
 		`;
-		return output.split("\n").join(' ');
+		return output.split('\n').join(' ');
 	}
 
 	// Only for database at the moment
@@ -94,24 +93,28 @@ class Logger {
 			const target = this.targets_[i];
 			if (target.type == 'database') {
 				let sql = 'SELECT * FROM logs WHERE level IN (' + options.levels.join(',') + ') ORDER BY timestamp DESC';
-				if (limit !== null) sql += ' LIMIT ' + limit
+				if (limit !== null) sql += ' LIMIT ' + limit;
 				return await target.database.selectAll(sql);
 			}
 		}
 		return [];
 	}
 
+	targetLevel(target) {
+		if ('level' in target) return target.level;
+		return this.level();
+	}
+
 	log(level, ...object) {
-		if (this.level() < level || !this.targets_.length) return;
+		if (!this.targets_.length) return;
 
-		let levelString = '';
 		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
-
-		if (level == Logger.LEVEL_WARN) levelString += '[warn] ';
-		if (level == Logger.LEVEL_ERROR) levelString += '[error] ';
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
+
+			if (this.targetLevel(target) < level) continue;
+
 			if (target.type == 'console') {
 				let fn = 'log';
 				if (level == Logger.LEVEL_ERROR) fn = 'error';
@@ -121,14 +124,16 @@ class Logger {
 				consoleObj[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
-				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + "\n");
+				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + '\n');
 			} else if (target.type == 'database') {
 				let msg = this.objectsToString(...object);
 
-				let queries = [{
-					sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
-					params: [target.source, level, msg, time.unixMs()],
-				}];
+				let queries = [
+					{
+						sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
+						params: [target.source, level, msg, time.unixMs()],
+					},
+				];
 
 				const now = time.unixMs();
 				if (now - this.lastDbCleanup_ > 1000 * 60 * 60) {
@@ -145,10 +150,18 @@ class Logger {
 		}
 	}
 
-	error(...object) { return this.log(Logger.LEVEL_ERROR, ...object); }
-	warn(...object)  { return this.log(Logger.LEVEL_WARN, ...object); }
-	info(...object)  { return this.log(Logger.LEVEL_INFO, ...object); }
-	debug(...object) { return this.log(Logger.LEVEL_DEBUG, ...object); }
+	error(...object) {
+		return this.log(Logger.LEVEL_ERROR, ...object);
+	}
+	warn(...object) {
+		return this.log(Logger.LEVEL_WARN, ...object);
+	}
+	info(...object) {
+		return this.log(Logger.LEVEL_INFO, ...object);
+	}
+	debug(...object) {
+		return this.log(Logger.LEVEL_DEBUG, ...object);
+	}
 
 	static levelStringToId(s) {
 		if (s == 'none') return Logger.LEVEL_NONE;
@@ -180,7 +193,6 @@ class Logger {
 		}
 		return output;
 	}
-
 }
 
 Logger.LEVEL_NONE = 0;

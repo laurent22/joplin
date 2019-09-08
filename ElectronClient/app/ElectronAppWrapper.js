@@ -1,10 +1,8 @@
-const { _ } = require('lib/locale.js');
-const { BrowserWindow, Menu, Tray } = require('electron');
+const { BrowserWindow, Tray } = require('electron');
 const { shim } = require('lib/shim');
-const url = require('url')
-const path = require('path')
-const urlUtils = require('lib/urlUtils.js');
-const { dirname, basename } = require('lib/path-utils');
+const url = require('url');
+const path = require('path');
+const { dirname } = require('lib/path-utils');
 const fs = require('fs-extra');
 
 class ElectronAppWrapper {
@@ -42,7 +40,7 @@ class ElectronAppWrapper {
 			defaultWidth: 800,
 			defaultHeight: 600,
 			file: 'window-state-' + this.env_ + '.json',
-		}
+		};
 
 		if (this.profilePath_) stateOptions.path = this.profilePath_;
 
@@ -54,11 +52,15 @@ class ElectronAppWrapper {
 			y: windowState.y,
 			width: windowState.width,
 			height: windowState.height,
+			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
+			webPreferences: {
+				nodeIntegration: true,
+			},
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
-		if (shim.isLinux()) windowOptions.icon = __dirname + '/build/icons/128x128.png';
+		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
 		require('electron-context-menu')({
 			shouldShowMenu: (event, params) => {
@@ -68,13 +70,13 @@ class ElectronAppWrapper {
 			},
 		});
 
-		this.win_ = new BrowserWindow(windowOptions)
+		this.win_ = new BrowserWindow(windowOptions);
 
 		this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
-			slashes: true
-		}))
+			slashes: true,
+		}));
 
 		// Uncomment this to view errors if the application does not start
 		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
@@ -102,7 +104,7 @@ class ElectronAppWrapper {
 					this.win_ = null;
 				}
 			}
-		})
+		});
 
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
@@ -162,7 +164,7 @@ class ElectronAppWrapper {
 			output = '16x16.png';
 		}
 
-		if (this.env_ === 'dev') output = '16x16-dev.png'
+		if (this.env_ === 'dev') output = '16x16-dev.png';
 
 		return output;
 	}
@@ -170,15 +172,15 @@ class ElectronAppWrapper {
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_())
-			this.tray_.setToolTip(this.electronApp_.getName())
-			this.tray_.setContextMenu(contextMenu)
+			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_());
+			this.tray_.setToolTip(this.electronApp_.getName());
+			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
 				this.window().show();
 			});
 		} catch (error) {
-			console.error("Cannot create tray", error);
+			console.error('Cannot create tray', error);
 		}
 	}
 
@@ -191,19 +193,24 @@ class ElectronAppWrapper {
 	ensureSingleInstance() {
 		if (this.env_ === 'dev') return false;
 
-		return new Promise((resolve, reject) => {
-			const alreadyRunning = this.electronApp_.makeSingleInstance((commandLine, workingDirectory) => {
-				const win = this.window();
-				if (!win) return;
-				if (win.isMinimized()) win.restore();
-				win.show();
-				win.focus();
-			});
+		const gotTheLock = this.electronApp_.requestSingleInstanceLock();
 
-			if (alreadyRunning) this.electronApp_.quit();
+		if (!gotTheLock) {
+			// Another instance is already running - exit
+			this.electronApp_.quit();
+			return true;
+		}
 
-			resolve(alreadyRunning);
+		// Someone tried to open a second instance - focus our window instead
+		this.electronApp_.on('second-instance', (event, commandLine, workingDirectory) => {
+			const win = this.window();
+			if (!win) return;
+			if (win.isMinimized()) win.restore();
+			win.show();
+			win.focus();
 		});
+
+		return false;
 	}
 
 	async start() {
@@ -211,22 +218,22 @@ class ElectronAppWrapper {
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
 
-		const alreadyRunning = await this.ensureSingleInstance();
+		const alreadyRunning = this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
-		})
+		});
 
 		this.electronApp_.on('window-all-closed', () => {
 			this.electronApp_.quit();
-		})
+		});
 
 		this.electronApp_.on('activate', () => {
 			this.win_.show();
-		})
+		});
 	}
 
 }

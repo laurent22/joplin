@@ -11,24 +11,22 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
 
+	<!-- ============================= -->
+	<!-- START RN-push-notitication    -->
+	<!-- ============================= -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<!-- ============================= -->
+	<!-- END RN-push-notitication      -->
+	<!-- ============================= -->
+
 	<!-- Make these features optional to enable Chromebooks -->
 	<!-- https://github.com/laurent22/joplin/issues/37 -->
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-
-	<!-- ==================================== -->
-	<!-- START react-native-push-notification -->
-	<!-- ==================================== -->
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<permission
-		android:name="${applicationId}.permission.C2D_MESSAGE"
-		android:protectionLevel="signature" />
-	<uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<!-- ================================== -->
-	<!-- END react-native-push-notification -->
-	<!-- ================================== -->
 
 	<uses-sdk
 		android:minSdkVersion="16"
@@ -39,29 +37,56 @@
 		android:allowBackup="true"
 		android:label="@string/app_name"
 		android:icon="@mipmap/ic_launcher"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme"
+		android:networkSecurityConfig="@xml/network_security_config"
+		android:hardwareAccelerated="true"
+		android:largeHeap="true"
+		>
 
-		<!-- ==================================== -->
-		<!-- START react-native-push-notification -->
-		<!-- ==================================== -->
+		<!-- ============================= -->
+		<!-- START RN-push-notitication    -->
+		<!-- ============================= -->
+		<meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="@string/default_notification_channel_id"/>
+        <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_description" android:value="Allow displaying a notification for Joplin's alarms"/>
+        <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@android:color/white"/>
+
+		<receiver
+		    android:name="com.google.android.gms.gcm.GcmReceiver"
+		    android:exported="true"
+		    android:permission="com.google.android.c2dm.permission.SEND" >
+		    <intent-filter>
+		        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		        <category android:name="${applicationId}" />
+		    </intent-filter>
+		</receiver>
 
 		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-		<receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-		<service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-		<!-- ================================== -->
-		<!-- END react-native-push-notification -->
-		<!-- ================================== -->
+        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
 
+        <service
+            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+		<!-- ============================= -->
+		<!-- END RN-push-notitication      -->
+		<!-- ============================= -->
+		
+		<!-- 2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification -->
+		<!--             Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed. -->
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
 			android:windowSoftInputMode="adjustResize"
-			android:launchMode="singleInstance">
+			android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

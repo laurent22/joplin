@@ -14,6 +14,7 @@ for (let portToTest = 41184; portToTest <= 41194; portToTest++) {
     }
 }
 ```
+
 # Authorisation
 
 To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.
@@ -23,6 +24,7 @@ This would be an example of valid cURL call using a token:
 	curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
 
 In the documentation below, the token will not be specified every time however you will need to include it.
+
 # Using the API
 
 All the calls, unless noted otherwise, receives and send **JSON data**. For example to create a new note:
@@ -42,6 +44,20 @@ The four verbs supported by the API are the following ones:
 * **PUT**: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {"title": "my new title"}, only the "title" property will be changed. The other properties will be left untouched (they won't be cleared nor changed).
 * **DELETE**: To delete items.
 
+# Filtering data
+
+You can change the fields that will be returned by the API using the `fields=` query parameter, which takes a list of comma separated fields. For example, to get the longitude and latitude of a note, use this:
+
+	curl http://localhost:41184/notes/ABCD123?fields=longitude,latitude
+
+To get the IDs only of all the tags:
+
+	curl http://localhost:41184/tags?fields=id
+
+# Error handling
+
+In case of an error, an HTTP status code >= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format `{ "error": "description of error" }`.
+
 # About the property types
 
 * Text is UTF-8.
@@ -51,6 +67,10 @@ The four verbs supported by the API are the following ones:
 # Testing if the service is available
 
 Call **GET /ping** to check if the service is available. It should return "JoplinClipperServer" if it works.
+
+# Searching
+
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching
 
 # Notes
 
@@ -81,6 +101,7 @@ user_created_time | int | When the note was created. It may differ from created_
 user_updated_time | int | When the note was last updated. It may differ from updated_time as it can be manually set by the user.
 encryption_cipher_text | text |    
 encryption_applied | int |    
+markup_language | int |    
 body_html | text | Note body, in HTML format
 base_url | text | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.
 image_data_url | text | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
@@ -117,6 +138,12 @@ Examples:
 * Create a note and attach an image to it:
 
       curl --data '{ "title": "Image test", "body": "Here is Joplin icon:", "image_data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANZJREFUeNoAyAA3/wFwtO3K6gUB/vz2+Prw9fj/+/r+/wBZKAAExOgF4/MC9ff+MRH6Ui4E+/0Bqc/zutj6AgT+/Pz7+vv7++nu82c4DlMqCvLs8goA/gL8/fz09fb59vXa6vzZ6vjT5fbn6voD/fwC8vX4UiT9Zi//APHyAP8ACgUBAPv5APz7BPj2+DIaC2o3E+3o6ywaC5fT6gD6/QD9/QEVf9kD+/dcLQgJA/7v8vqfwOf18wA1IAIEVycAyt//v9XvAPv7APz8LhoIAPz9Ri4OAgwARgx4W/6fVeEAAAAASUVORK5CYII="}' http://127.0.0.1:41184/notes
+
+### Creating a note with a specific ID
+
+When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a 32 characters long hexadecimal string. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.
+
+      curl --data '{ "id": "00a87474082744c1a8515da6aa5792d2", "title": "My note with custom ID"}' http://127.0.0.1:41184/notes
 
 ## PUT /notes/:id
 
@@ -188,6 +215,7 @@ file_extension | text |
 encryption_cipher_text | text |    
 encryption_applied | int |    
 encryption_blob_encrypted | int |    
+size | int |    
 
 ## GET /resources
 
@@ -196,6 +224,10 @@ Gets all resources
 ## GET /resources/:id
 
 Gets resource with ID :id
+
+## GET /resources/:id/file
+
+Gets the actual file associated with this resource.
 
 ## POST /resources
 

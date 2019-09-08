@@ -1,8 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
-const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
@@ -10,7 +8,6 @@ const { filename, basename } = require('lib/path-utils.js');
 const { importEnex } = require('lib/import-enex');
 
 class ImportScreenComponent extends React.Component {
-
 	componentWillMount() {
 		this.setState({
 			doImport: true,
@@ -21,11 +18,16 @@ class ImportScreenComponent extends React.Component {
 
 	componentWillReceiveProps(newProps) {
 		if (newProps.filePath) {
-			this.setState({
-				doImport: true,
-				filePath: newProps.filePath,
-				messages: [],
-			}, () => { this.doImport() });
+			this.setState(
+				{
+					doImport: true,
+					filePath: newProps.filePath,
+					messages: [],
+				},
+				() => {
+					this.doImport();
+				}
+			);
 		}
 	}
 
@@ -37,7 +39,6 @@ class ImportScreenComponent extends React.Component {
 
 	addMessage(key, text) {
 		const messages = this.state.messages.slice();
-		let found = false;
 
 		messages.push({ key: key, text: text });
 
@@ -60,15 +61,13 @@ class ImportScreenComponent extends React.Component {
 	async doImport() {
 		const filePath = this.props.filePath;
 		const folderTitle = await Folder.findUniqueItemTitle(filename(filePath));
-		const messages = this.state.messages.slice();
 
 		this.addMessage('start', _('New notebook "%s" will be created and file "%s" will be imported into it', folderTitle, basename(filePath)));
 
 		let lastProgress = '';
-		let progressCount = 0;
 
 		const options = {
-			onProgress: (progressState) => {
+			onProgress: progressState => {
 				let line = [];
 				line.push(_('Found: %d.', progressState.loaded));
 				line.push(_('Created: %d.', progressState.created));
@@ -79,15 +78,15 @@ class ImportScreenComponent extends React.Component {
 				lastProgress = line.join(' ');
 				this.addMessage('progress', lastProgress);
 			},
-			onError: (error) => {
+			onError: error => {
 				// Don't display the error directly because most of the time it doesn't matter
 				// (eg. for weird broken HTML, but the note is still imported)
 				console.warn('When importing ENEX file', error);
 			},
-		}
+		};
 
 		const folder = await Folder.save({ title: folderTitle });
-		
+
 		await importEnex(folder.id, filePath, options);
 
 		this.addMessage('done', _('The notes have been imported: %s', lastProgress));
@@ -118,16 +117,13 @@ class ImportScreenComponent extends React.Component {
 		return (
 			<div style={{}}>
 				<Header style={headerStyle} />
-				<div style={messagesStyle}>
-					{messageComps}
-				</div>
+				<div style={messagesStyle}>{messageComps}</div>
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};

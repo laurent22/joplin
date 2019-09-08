@@ -1,7 +1,5 @@
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const urlUtils = require('lib/urlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -30,6 +28,7 @@ describe('urlUtils', function() {
 		expect(urlUtils.prependBaseUrl('mailto:emailme@example.com', 'http://example.com')).toBe('mailto:emailme@example.com');
 		expect(urlUtils.prependBaseUrl('javascript:var%20testing=true', 'http://example.com')).toBe('javascript:var%20testing=true');
 		expect(urlUtils.prependBaseUrl('http://alreadyabsolute.com', 'http://example.com')).toBe('http://alreadyabsolute.com');
+		expect(urlUtils.prependBaseUrl('#local-anchor', 'http://example.com')).toBe('#local-anchor');
 
 		done();
 	});

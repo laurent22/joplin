@@ -18,15 +18,18 @@ shared.constructor = function(comp) {
 	comp.isMounted_ = false;
 
 	comp.refreshStatsIID_ = null;
-}
+};
 
 shared.initState = function(comp, props) {
-	comp.setState({
-		masterKeys: props.masterKeys,
-		passwords: props.passwords ? props.passwords : {},
-	}, () => {
-		comp.checkPasswords();
-	});
+	comp.setState(
+		{
+			masterKeys: props.masterKeys,
+			passwords: props.passwords ? props.passwords : {},
+		},
+		() => {
+			comp.checkPasswords();
+		}
+	);
 
 	comp.refreshStats();
 
@@ -43,12 +46,12 @@ shared.initState = function(comp, props) {
 		}
 		comp.refreshStats();
 	}, 3000);
-}
+};
 
 shared.refreshStats = async function(comp) {
 	const stats = await BaseItem.encryptedItemsStats();
 	comp.setState({ stats: stats });
-}
+};
 
 shared.checkPasswords = async function(comp) {
 	const passwordChecks = Object.assign({}, comp.state.passwordChecks);
@@ -59,14 +62,14 @@ shared.checkPasswords = async function(comp) {
 		passwordChecks[mk.id] = ok;
 	}
 	comp.setState({ passwordChecks: passwordChecks });
-}
+};
 
 shared.decryptedStatText = function(comp) {
 	const stats = comp.state.stats;
-	const doneCount = stats.encrypted !== null ? (stats.total - stats.encrypted) : '-';
+	const doneCount = stats.encrypted !== null ? stats.total - stats.encrypted : '-';
 	const totalCount = stats.total !== null ? stats.total : '-';
 	return _('Decrypted items: %s / %s', doneCount, totalCount);
-}
+};
 
 shared.onSavePasswordClick = function(comp, mk) {
 	const password = comp.state.passwords[mk.id];
@@ -77,12 +80,12 @@ shared.onSavePasswordClick = function(comp, mk) {
 	}
 
 	comp.checkPasswords();
-}
+};
 
 shared.onPasswordChange = function(comp, mk, password) {
 	const passwords = comp.state.passwords;
 	passwords[mk.id] = password;
 	comp.setState({ passwords: passwords });
-}
+};
 
 module.exports = shared;

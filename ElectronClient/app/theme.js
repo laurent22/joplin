@@ -1,54 +1,26 @@
 const Setting = require('lib/models/Setting.js');
 
-const zoomRatio = Setting.value('style.zoom') / 100;
-
+// globalStyle should be used for properties that do not change across themes
+// i.e. should not be used for colors
 const globalStyle = {
-	fontSize: Math.round(12 * zoomRatio),
+	fontSize: 12,
 	fontFamily: 'sans-serif',
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	backgroundColor: "#ffffff",
-	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: "#dddddd",
-	color: "#222222", // For regular text
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
 	fontSizeSmaller: 14,
-	dividerColor: "#dddddd",
-	selectedColor: '#e5e5e5',
 	disabledOpacity: 0.3,
 	buttonMinWidth: 50,
 	buttonMinHeight: 30,
+	editorFontSize: 12,
 	textAreaLineHeight: 17,
-
-	//backgroundColor2: "#2B2634",
-	backgroundColor2: "#162B3D",
-	color2: "#ffffff",
-	//selectedColor2: "#5A4D70",
-	selectedColor2: "#0269C2",
-	colorError2: "#ff6c6c",
-
-	warningBackgroundColor: "#FFD08D",
 
 	headerHeight: 35,
 	headerButtonHPadding: 6,
 
 	toolbarHeight: 35,
-
-	raisedBackgroundColor: "#0080EF",
-	raisedColor: "#003363",
-	raisedHighlightedColor: "#ffffff",
+	tagItemPadding: 3,
 };
-
-// For WebView - must correspond to the properties above
-globalStyle.htmlFontSize = globalStyle.fontSize + 'px';
-globalStyle.htmlColor ='black'; // Note: CSS in WebView component only supports named colors or rgb() notation
-globalStyle.htmlBackgroundColor ='white';
-globalStyle.htmlDividerColor = 'rgb(150,150,150)';
-globalStyle.htmlLinkColor ='blue';
-globalStyle.htmlLineHeight = Math.round(20 * zoomRatio) + 'px';
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
@@ -57,78 +29,392 @@ globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
 
 globalStyle.icon = {
-	color: globalStyle.color,
 	fontSize: 30,
 };
 
 globalStyle.lineInput = {
-	color: globalStyle.color,
-	backgroundColor: globalStyle.backgroundColor,
+	fontFamily: globalStyle.fontFamily,
+	maxHeight: 22,
+	height: 22,
+	paddingLeft: 5,
+};
+
+globalStyle.headerStyle = {
 	fontFamily: globalStyle.fontFamily,
 };
 
-globalStyle.textStyle = {
-	color: globalStyle.color,
-	fontFamily: globalStyle.fontFamily,
-	fontSize: globalStyle.fontSize,
-	lineHeight: '1.6em',
-};
-
-globalStyle.textStyle2 = Object.assign({}, globalStyle.textStyle, {
-	color: globalStyle.color2,
-});
-
-globalStyle.urlStyle = Object.assign({}, globalStyle.textStyle, { color: "#155BDA", textDecoration: 'underline' });
-
-globalStyle.h1Style = Object.assign({}, globalStyle.textStyle);
-globalStyle.h1Style.fontSize *= 1.5;
-globalStyle.h1Style.fontWeight = 'bold';
-
-globalStyle.h2Style = Object.assign({}, globalStyle.textStyle);
-globalStyle.h2Style.fontSize *= 1.3;
-globalStyle.h2Style.fontWeight = 'bold';
-
-globalStyle.toolbarStyle = {
-	height: globalStyle.toolbarHeight,
-	minWidth: globalStyle.toolbarHeight,
-	display: 'flex',
-	alignItems: 'center',
-	paddingLeft: globalStyle.headerButtonHPadding,
-	paddingRight: globalStyle.headerButtonHPadding,
-	color: globalStyle.color,
-	textDecoration: 'none',
-	fontFamily: globalStyle.fontFamily,
-	fontSize: globalStyle.fontSize,
+globalStyle.inputStyle = {
+	border: '1px solid',
+	height: 24,
+	maxHeight: 24,
+	paddingLeft: 5,
+	paddingRight: 5,
 	boxSizing: 'border-box',
-	cursor: 'default',
-	justifyContent: 'center',
 };
+
+globalStyle.containerStyle = {
+	overflow: 'auto',
+	overflowY: 'auto',
+};
+
+globalStyle.buttonStyle = {
+	// marginRight: 10,
+	border: '1px solid',
+	minHeight: 26,
+	minWidth: 80,
+	maxWidth: 160,
+	paddingLeft: 12,
+	paddingRight: 12,
+	boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
+};
+
+const lightStyle = {
+	backgroundColor: '#ffffff',
+	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
+	oddBackgroundColor: '#dddddd',
+	color: '#222222', // For regular text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
+	colorBright: '#000000', // For important text
+	dividerColor: '#dddddd',
+	selectedColor: '#e5e5e5',
+	urlColor: '#155BDA',
+
+	backgroundColor2: '#162B3D',
+	depthColor: 'rgb(100, 182, 253, OPACITY)',
+	color2: '#f5f5f5',
+	selectedColor2: '#0269C2',
+	colorError2: '#ff6c6c',
+
+	raisedBackgroundColor: '#e5e5e5',
+	raisedColor: '#222222',
+
+	warningBackgroundColor: '#FFD08D',
+
+	htmlColor:'#222222',
+	htmlBackgroundColor: 'white',
+	htmlDividerColor: 'rgb(230,230,230)',
+	htmlLinkColor: 'rgb(80,130,190)',
+	htmlTableBackgroundColor: 'rgb(247, 247, 247)',
+	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
+	htmlCodeBorderColor: 'rgb(220, 220, 220)',
+	htmlCodeColor: 'rgb(0,0,0)',
+
+	editorTheme: 'chrome',
+	codeThemeCss: 'atom-one-light.css',
+};
+
+const darkStyle = {
+	backgroundColor: '#1D2024',
+	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
+	oddBackgroundColor: '#dddddd',
+	color: '#dddddd',
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
+	colorBright: '#ffffff', // For important text
+	dividerColor: '#555555',
+	selectedColor: '#333333',
+	urlColor: '#4E87EE',
+
+	backgroundColor2: '#181A1D',
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
+	color2: '#ffffff',
+	selectedColor2: '#013F74',
+	colorError2: '#ff6c6c',
+
+	raisedBackgroundColor: '#474747',
+	raisedColor: '#ffffff',
+
+	warningBackgroundColor: '#CC6600',
+
+	htmlColor: 'rgb(220,220,220)',
+	htmlBackgroundColor: 'rgb(29,32,36)',
+	htmlDividerColor: '#3D444E',
+	htmlCodeColor: '#ffffff',
+	htmlLinkColor: 'rgb(166,166,255)',
+	htmlTableBackgroundColor: 'rgb(40, 41, 42)',
+	htmlCodeBackgroundColor: 'rgb(47, 48, 49)',
+	htmlCodeBorderColor: 'rgb(70, 70, 70)',
+
+	editorTheme: 'twilight',
+	codeThemeCss: 'atom-one-dark-reasonable.css',
+};
+
+// Solarized Styles
+const solarizedLightStyle = {
+	backgroundColor: '#fdf6e3',
+	backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)',
+	oddBackgroundColor: '#eee8d5',
+	color: '#657b83', // For regular text
+	colorError: '#dc322f',
+	colorWarn: '#cb4b16',
+	colorFaded: '#839496', // For less important text;
+	colorBright: '#073642', // For important text;
+	dividerColor: '#eee8d5',
+	selectedColor: '#eee8d5',
+	urlColor: '#268bd2',
+
+	backgroundColor2: '#002b36',
+	depthColor: 'rgb(100, 182, 253, OPACITY)',
+	color2: '#eee8d5',
+	selectedColor2: '#6c71c4',
+	colorError2: '#cb4b16',
+
+	raisedBackgroundColor: '#eee8d5',
+	raisedColor: '#073642',
+
+	warningBackgroundColor: '#b58900',
+
+	htmlColor: '#657b83',
+	htmlBackgroundColor: '#fdf6e3',
+	htmlDividerColor: '#eee8d5',
+	htmlLinkColor: '#268bd2',
+	htmlTableBackgroundColor: '#fdf6e3',
+	htmlCodeBackgroundColor: '#fdf6e3',
+	htmlCodeBorderColor: '#eee8d5',
+	htmlCodeColor: '#002b36',
+
+	editorTheme: 'solarized_light',
+	codeThemeCss: 'atom-one-light.css',
+};
+
+const solarizedDarkStyle = {
+	backgroundColor: '#002b36',
+	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
+	oddBackgroundColor: '#073642',
+	color: '#93a1a1', // For regular text
+	colorError: '#dc322f',
+	colorWarn: '#cb4b16',
+	colorFaded: '#657b83', // For less important text;
+	colorBright: '#eee8d5', // For important text;
+	dividerColor: '#586e75',
+	selectedColor: '#073642',
+	urlColor: '#268bd2',
+
+	backgroundColor2: '#073642',
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
+	color2: '#eee8d5',
+	selectedColor2: '#6c71c4',
+	colorError2: '#cb4b16',
+
+	raisedBackgroundColor: '#073642',
+	raisedColor: '#839496',
+
+	warningBackgroundColor: '#b58900',
+
+	htmlColor: '#93a1a1',
+	htmlBackgroundColor: '#002b36',
+	htmlDividerColor: '#073642',
+	htmlLinkColor: '#268bd2',
+	htmlTableBackgroundColor: '#002b36',
+	htmlCodeBackgroundColor: '#002b36',
+	htmlCodeBorderColor: '#073642',
+	htmlCodeColor: '#fdf6e3',
+
+	editorTheme: 'solarized_dark',
+	codeThemeCss: 'atom-one-dark-reasonable.css',
+};
+
+function addExtraStyles(style) {
+	style.tagStyle = {
+		fontSize: style.fontSize,
+		fontFamily: style.fontFamily,
+		marginTop: style.itemMarginTop * 0.4,
+		marginBottom: style.itemMarginBottom * 0.4,
+		marginRight: style.margin * 0.3,
+		paddingTop: style.tagItemPadding,
+		paddingBottom: style.tagItemPadding,
+		paddingRight: style.tagItemPadding * 2,
+		paddingLeft: style.tagItemPadding * 2,
+		backgroundColor: style.raisedBackgroundColor,
+		color: style.raisedColor,
+	};
+
+	style.toolbarStyle = {
+		height: style.toolbarHeight,
+		// minWidth: style.toolbarHeight,
+		display: 'flex',
+		alignItems: 'center',
+		paddingLeft: style.headerButtonHPadding,
+		paddingRight: style.headerButtonHPadding,
+		textDecoration: 'none',
+		fontFamily: style.fontFamily,
+		fontSize: style.fontSize,
+		boxSizing: 'border-box',
+		cursor: 'default',
+		justifyContent: 'center',
+		color: style.color,
+		whiteSpace: 'nowrap',
+	};
+
+	style.textStyle = {
+		fontFamily: globalStyle.fontFamily,
+		fontSize: style.fontSize,
+		lineHeight: '1.6em',
+		color: style.color,
+	};
+
+	style.textStyle2 = Object.assign({}, style.textStyle,
+		{ color: style.color2 }
+	);
+
+	style.urlStyle = Object.assign({}, style.textStyle,
+		{
+			textDecoration: 'underline',
+			color: style.urlColor,
+		}
+	);
+
+	style.h1Style = Object.assign({},
+		style.textStyle,
+		{
+			color: style.color,
+			fontSize: style.textStyle.fontSize * 1.5,
+			fontWeight: 'bold',
+		}
+	);
+
+	style.h2Style = Object.assign({},
+		style.textStyle,
+		{
+			color: style.color,
+			fontSize: style.textStyle.fontSize * 1.3,
+			fontWeight: 'bold',
+		}
+	);
+
+	style.dialogModalLayer = {
+		zIndex: 9999,
+		display: 'flex',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		backgroundColor: 'rgba(0,0,0,0.6)',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+	};
+
+	style.dialogBox = {
+		backgroundColor: style.backgroundColor,
+		padding: 16,
+		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
+		marginTop: 20,
+	};
+
+	style.buttonIconStyle = {
+		color: style.color,
+		marginRight: 6,
+	};
+
+	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
+
+	style.dropdownList = Object.assign({}, style.inputStyle);
+
+	return style;
+}
 
 let themeCache_ = {};
 
 function themeStyle(theme) {
 	if (!theme) throw new Error('Theme must be specified');
-	if (themeCache_[theme]) return themeCache_[theme];
 
-	let output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return output;
+	var zoomRatio = Setting.value('style.zoom') / 100;
+	var editorFontSize = Setting.value('style.editor.fontSize');
 
-	output.backgroundColor = '#1D2024';
-	output.color = '#dddddd';
-	output.colorFaded = '#777777';
-	output.dividerColor = '#555555';
-	output.selectedColor = '#333333';
+	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');
+	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
-	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#788BC3";
-	output.raisedHighlightedColor = "#ffffff";
+	// Font size are not theme specific, but they must be referenced
+	// and computed here to allow them to respond to settings changes
+	// without the need to restart
+	let fontSizes = {
+		fontSize: Math.round(globalStyle.fontSize * zoomRatio),
+		editorFontSize: editorFontSize,
+		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 
-	output.htmlColor = 'rgb(220,220,220)';
-	output.htmlBackgroundColor = 'rgb(29,32,36)';
-	output.htmlLinkColor = 'rgb(166,166,255)';
+		// For WebView - must correspond to the properties above
+		htmlFontSize: Math.round(15 * zoomRatio) + 'px',
+		htmlLineHeight: '1.6em', //Math.round(20 * zoomRatio) + 'px'
 
-	themeCache_[theme] = output;
-	return themeCache_[theme];
+		htmlCodeFontSize: '.9em',
+	};
+
+	let output = {};
+	output.zoomRatio = zoomRatio;
+	output.editorFontSize = editorFontSize;
+
+	// All theme are based on the light style, and just override the
+	// relevant properties
+	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
+
+	if (theme == Setting.THEME_DARK) {
+		output = Object.assign({}, output, darkStyle);
+	} else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
+		output = Object.assign({}, output, solarizedLightStyle);
+	} else if (theme == Setting.THEME_SOLARIZED_DARK) {
+		output = Object.assign({}, output, solarizedDarkStyle);
+	}
+
+	// Note: All the theme specific things should go in addExtraStyles
+	// so that their definition is not split between here and the
+	// beginning of the file. At least new styles should go in
+	// addExtraStyles.
+
+	output.icon = Object.assign({},
+		output.icon,
+		{ color: output.color }
+	);
+
+	output.lineInput = Object.assign({},
+		output.lineInput,
+		{
+			color: output.color,
+			backgroundColor: output.backgroundColor,
+		}
+	);
+
+	output.headerStyle = Object.assign({},
+		output.headerStyle,
+		{
+			color: output.color,
+			backgroundColor: output.backgroundColor,
+		}
+	);
+
+	output.inputStyle = Object.assign({},
+		output.inputStyle,
+		{
+			color: output.color,
+			backgroundColor: output.backgroundColor,
+			borderColor: output.dividerColor,
+		}
+	);
+
+	output.containerStyle = Object.assign({},
+		output.containerStyle,
+		{
+			color: output.color,
+			backgroundColor: output.backgroundColor,
+		}
+	);
+
+	output.buttonStyle = Object.assign({},
+		output.buttonStyle,
+		{
+			color: output.color,
+			backgroundColor: output.backgroundColor,
+			borderColor: output.dividerColor,
+		}
+	);
+
+	output = addExtraStyles(output);
+
+	themeCache_[cacheKey] = output;
+	return themeCache_[cacheKey];
 }
 
 module.exports = { themeStyle };

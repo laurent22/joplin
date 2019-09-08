@@ -2,16 +2,18 @@ const fs = require('fs-extra');
 const { shim } = require('lib/shim.js');
 const { GeolocationNode } = require('lib/geolocation-node.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { time } = require('lib/time-utils.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('lib/locale.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
+const { _ } = require('lib/locale.js');
 
 function shimInit() {
-	shim.fsDriver = () => { throw new Error('Not implemented') }
+	shim.fsDriver = () => {
+		throw new Error('Not implemented');
+	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
@@ -20,14 +22,14 @@ function shimInit() {
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
-	}
+	};
 
-	shim.randomBytes = async (count) => {
+	shim.randomBytes = async count => {
 		const buffer = require('crypto').randomBytes(count);
 		return Array.from(buffer);
-	}
+	};
 
-	shim.detectAndSetLocale = function (Setting) {
+	shim.detectAndSetLocale = function(Setting) {
 		let locale = process.env.LANG;
 		if (!locale) locale = defaultLocale();
 		locale = locale.split('.');
@@ -36,10 +38,11 @@ function shimInit() {
 		Setting.setValue('locale', locale);
 		setLocale(locale);
 		return locale;
-	}
+	};
 
 	shim.writeImageToFile = async function(nativeImage, mime, targetPath) {
-		if (shim.isElectron()) { // For Electron
+		if (shim.isElectron()) {
+			// For Electron
 			let buffer = null;
 
 			mime = mime.toLowerCase();
@@ -56,15 +59,17 @@ function shimInit() {
 		} else {
 			throw new Error('Node support not implemented');
 		}
-	}
+	};
 
 	const resizeImage_ = async function(filePath, targetPath, mime) {
-		if (shim.isElectron()) { // For Electron
+		const maxDim = Resource.IMAGE_MAX_DIMENSION;
+
+		if (shim.isElectron()) {
+			// For Electron
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error('Image is invalid or does not exist: ' + filePath);
 
-			const maxDim = Resource.IMAGE_MAX_DIMENSION;
 			const size = image.getSize();
 
 			if (size.width <= maxDim && size.height <= maxDim) {
@@ -82,26 +87,36 @@ function shimInit() {
 			image = image.resize(options);
 
 			await shim.writeImageToFile(image, mime, targetPath);
-		} else { // For the CLI tool
+		} else {
+			// For the CLI tool
 			const sharp = require('sharp');
 
+			const image = sharp(filePath);
+			const md = await image.metadata();
+
+			if (md.width <= maxDim && md.height <= maxDim) {
+				shim.fsDriver().copy(filePath, targetPath);
+				return;
+			}
+
 			return new Promise((resolve, reject) => {
-				sharp(filePath)
-				.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION)
-				.max()
-				.withoutEnlargement()
-				.toFile(targetPath, (err, info) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(info);
-					}
-				});
+				image
+					.resize(Resource.IMAGE_MAX_DIMENSION, Resource.IMAGE_MAX_DIMENSION, {
+						fit: 'inside',
+						withoutEnlargement: true,
+					})
+					.toFile(targetPath, (err, info) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve(info);
+						}
+					});
 			});
 		}
-	}
+	};
 
-	shim.createResourceFromPath = async function(filePath) {
+	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
@@ -111,8 +126,12 @@ function shimInit() {
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
+		defaultProps = defaultProps ? defaultProps : {};
+
+		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+
 		let resource = Resource.new();
-		resource.id = uuid.create();
+		resource.id = resourceId;
 		resource.mime = mime.getType(filePath);
 		resource.title = basename(filePath);
 
@@ -135,19 +154,36 @@ function shimInit() {
 		let targetPath = Resource.fullPath(resource);
 
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
-			const result = await resizeImage_(filePath, targetPath, resource.mime);
+			await resizeImage_(filePath, targetPath, resource.mime);
 		} else {
-			const stat = await shim.fsDriver().stat(filePath);
-			if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+			// const stat = await shim.fsDriver().stat(filePath);
+			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
 
 			await fs.copy(filePath, targetPath, { overwrite: true });
 		}
 
-		return await Resource.save(resource, { isNew: true });
-	}
+		if (defaultProps) {
+			resource = Object.assign({}, resource, defaultProps);
+		}
 
-	shim.attachFileToNote = async function(note, filePath, position = null) {
-		const resource = await shim.createResourceFromPath(filePath);
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
+
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
+		return Resource.save(resource, { isNew: true });
+	};
+
+	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL = false) {
+		const { basename } = require('path');
+		const { escapeLinkText } = require('lib/markdownUtils');
+		const { toFileProtocolPath } = require('lib/path-utils');
+
+		let resource = [];
+		if (!createFileURL) {
+			resource = await shim.createResourceFromPath(filePath);
+		}
 
 		const newBody = [];
 
@@ -156,14 +192,22 @@ function shimInit() {
 		}
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
-		newBody.push(Resource.markdownTag(resource));
+
+		if (!createFileURL) {
+			newBody.push(Resource.markdownTag(resource));
+		} else {
+			let filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			let fileURL = '[' + filename + '](' + toFileProtocolPath(filePath) + ')';
+			newBody.push(fileURL);
+		}
+
 		if (note.body) newBody.push(note.body.substr(position));
 
 		const newNote = Object.assign({}, note, {
 			body: newBody.join('\n\n'),
 		});
 		return await Note.save(newNote);
-	}
+	};
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};
@@ -188,27 +232,27 @@ function shimInit() {
 
 			const imageDataURI = require('image-data-uri');
 			const result = imageDataURI.decode(imageDataUrl);
-			await shim.fsDriver().writeFile(filePath, result.dataBuffer, 'buffer');	
+			await shim.fsDriver().writeFile(filePath, result.dataBuffer, 'buffer');
 		}
-	}
+	};
 
 	const nodeFetch = require('node-fetch');
 
 	// Not used??
-	shim.readLocalFileBase64 = (path) => {
+	shim.readLocalFileBase64 = path => {
 		const data = fs.readFileSync(path);
 		return new Buffer(data).toString('base64');
-	}
+	};
 
 	shim.fetch = async function(url, options = null) {
 		const validatedUrl = urlValidator.isUri(url);
 		if (!validatedUrl) throw new Error('Not a valid URL: ' + url);
 
 		return shim.fetchWithRetry(() => {
-			return nodeFetch(url, options)
+			return nodeFetch(url, options);
 		}, options);
-	}
-	
+	};
+
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
@@ -226,8 +270,12 @@ function shimInit() {
 			return {
 				ok: response.statusCode < 400,
 				path: filePath,
-				text: () => { return response.statusMessage; },
-				json: () => { return { message: response.statusCode + ': ' + response.statusMessage }; },
+				text: () => {
+					return response.statusMessage;
+				},
+				json: () => {
+					return { message: response.statusCode + ': ' + response.statusMessage };
+				},
 				status: response.statusCode,
 				headers: response.headers,
 			};
@@ -238,7 +286,7 @@ function shimInit() {
 			host: url.hostname,
 			port: url.port,
 			method: method,
-			path: url.path + (url.query ? '?' + url.query : ''),
+			path: url.pathname + (url.query ? '?' + url.query : ''),
 			headers: headers,
 		};
 
@@ -246,19 +294,21 @@ function shimInit() {
 			return new Promise((resolve, reject) => {
 				let file = null;
 
-				const cleanUpOnError = (error) => {
+				const cleanUpOnError = error => {
 					// We ignore any unlink error as we only want to report on the main error
-					fs.unlink(filePath).catch(() => {}).then(() => {
-						if (file) {
-							file.close(() => {
-								file = null;
+					fs.unlink(filePath)
+						.catch(() => {})
+						.then(() => {
+							if (file) {
+								file.close(() => {
+									file = null;
+									reject(error);
+								});
+							} else {
 								reject(error);
-							});
-						} else {
-							reject(error);
-						}						
-					});
-				}
+							}
+						});
+				};
 
 				try {
 					// Note: relative paths aren't supported
@@ -276,7 +326,7 @@ function shimInit() {
 								resolve(makeResponse(response));
 							});
 						});
-					})
+					});
 
 					request.on('error', function(error) {
 						cleanUpOnError(error);
@@ -290,30 +340,29 @@ function shimInit() {
 		};
 
 		return shim.fetchWithRetry(doFetchOperation, options);
-	}
+	};
 
 	shim.uploadBlob = async function(url, options) {
-		 if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
+		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
 		const content = await fs.readFile(options.path);
 		options = Object.assign({}, options, {
 			body: content,
 		});
 		return shim.fetch(url, options);
-	}
+	};
 
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');
-	}
+	};
 
 	shim.Buffer = Buffer;
 
-	shim.openUrl = (url) => {
+	shim.openUrl = url => {
 		const { bridge } = require('electron').remote.require('./bridge');
-		bridge().openExternal(url)
-	}
+		bridge().openExternal(url);
+	};
 
-	shim.waitForFrame = () => {}
-
+	shim.waitForFrame = () => {};
 }
 
 module.exports = { shimInit };

@@ -1,16 +1,12 @@
 const { uuid } = require('lib/uuid.js');
 const moment = require('moment');
-const { promiseChain } = require('lib/promise-utils.js');
-const { folderItemFilename } = require('lib/string-utils.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
-const Folder = require('lib/models/Folder.js');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
-const jsSHA = require("jssha");
 const md5 = require('md5');
 
 //const Promise = require('promise');
@@ -52,13 +48,6 @@ function removeUndefinedProperties(note) {
 	return output;
 }
 
-function createNoteId(note) {
-	let shaObj = new jsSHA("SHA-256", "TEXT");
-	shaObj.update(note.title + '_' + note.body + "_" + note.created_time + "_" + note.updated_time + "_");
-	let hash = shaObj.getHash("HEX");
-	return hash.substr(0, 32);
-}
-
 function levenshteinPercent(s1, s2) {
 	let l = new Levenshtein(s1, s2);
 	if (!s1.length || !s2.length) return 1;
@@ -95,6 +84,8 @@ async function saveNoteResources(note) {
 	let resourcesCreated = 0;
 	for (let i = 0; i < note.resources.length; i++) {
 		let resource = note.resources[i];
+		if (!resource.id) continue;
+
 		let toSave = Object.assign({}, resource);
 		delete toSave.data;
 
@@ -104,7 +95,7 @@ async function saveNoteResources(note) {
 		let existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await filePutContents(Resource.fullPath(toSave), resource.data)
+		await filePutContents(Resource.fullPath(toSave), resource.data);
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -158,7 +149,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 		diff.id = existingNote.id;
 		diff.type_ = existingNote.type_;
-		await Note.save(diff, { autoTimestamp: false })
+		await Note.save(diff, { autoTimestamp: false });
 		result.noteUpdated = true;
 	} else {
 		await Note.save(note, {
@@ -202,7 +193,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let notes = [];
 		let processingNotes = false;
 
-		stream.on('error', (error) => {
+		stream.on('error', error => {
 			reject(new Error(error.toString()));
 		});
 
@@ -254,7 +245,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					progressState.notesTagged += result.notesTagged;
 					importOptions.onProgress(progressState);
 				}
-			} catch(error) {
+			} catch (error) {
 				console.error(error);
 			}
 
@@ -263,7 +254,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			return true;
 		}
 
-		saxStream.on('error', (error) => {
+		saxStream.on('error', error => {
 			importOptions.onError(error);
 		});
 
@@ -273,7 +264,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			if (noteAttributes) {
 				noteAttributes[n] = text;
 			} else if (noteResourceAttributes) {
-				noteResourceAttributes[n] = text;				
+				noteResourceAttributes[n] = text;
 			} else if (noteResource) {
 				if (n == 'data') {
 					let attr = currentNodeAttributes();
@@ -298,7 +289,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					console.warn('Unsupported note tag: ' + n);
 				}
 			}
-		})
+		});
 
 		saxStream.on('opentag', function(node) {
 			let n = node.name.toLowerCase();
@@ -348,7 +339,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				notes.push(note);
 
 				if (notes.length >= 10) {
-					processNotes().catch((error) => {
+					processNotes().catch(error => {
 						importOptions.onError(error);
 					});
 				}
@@ -358,18 +349,19 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				noteResourceRecognition = null;
 			} else if (n == 'resource-attributes') {
 				noteResource.filename = noteResourceAttributes['file-name'];
+				if (noteResourceAttributes['source-url']) noteResource.sourceUrl = noteResourceAttributes['source-url'];
 				noteResourceAttributes = null;
 			} else if (n == 'note-attributes') {
 				note.latitude = noteAttributes.latitude;
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author;
-				note.is_todo = !!noteAttributes['reminder-order'];
+				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'];
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], true);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], true);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], true);
-				note.source = !!noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
-				note.source_url = !!noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
+				note.source = noteAttributes.source ? 'evernote.' + noteAttributes.source : 'evernote';
+				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
 
 				// if (noteAttributes['reminder-time']) {
 				// 	console.info('======================================================');
@@ -389,7 +381,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					} catch (error) {
 						importOptions.onError(error);
 					}
-				} else {
+				} else if (noteResource.dataEncoding) {
 					importOptions.onError(new Error('Cannot decode resource with encoding: ' + noteResource.dataEncoding));
 					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
 				}
@@ -400,15 +392,28 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					resourceId = md5(decodedData);
 				}
 
-				let r = {
-					id: resourceId,
-					data: decodedData,
-					mime: noteResource.mime,
-					title: noteResource.filename ? noteResource.filename : '',
-					filename: noteResource.filename ? noteResource.filename : '',
-				};
+				if (!resourceId || !noteResource.data) {
+					const debugTemp = Object.assign({}, noteResource);
+					debugTemp.data = debugTemp.data ? debugTemp.data.substr(0, 32) + '...' : debugTemp.data;
+					importOptions.onError(new Error('This resource was not added because it has no ID or no content: ' + JSON.stringify(debugTemp)));
+				} else {
+					let size = 0;
+					if (decodedData) {
+						size = 'byteLength' in decodedData ? decodedData.byteLength : decodedData.length;
+					}
 
-				note.resources.push(r);
+					let r = {
+						id: resourceId,
+						data: decodedData,
+						mime: noteResource.mime,
+						title: noteResource.filename ? noteResource.filename : '',
+						filename: noteResource.filename ? noteResource.filename : '',
+						size: size,
+					};
+
+					note.resources.push(r);
+				}
+
 				noteResource = null;
 			}
 		});
@@ -416,7 +421,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		saxStream.on('end', function() {
 			// Wait till there is no more notes to process.
 			let iid = setInterval(() => {
-				processNotes().then((allDone) => {
+				processNotes().then(allDone => {
 					if (allDone) {
 						clearTimeout(iid);
 						resolve();

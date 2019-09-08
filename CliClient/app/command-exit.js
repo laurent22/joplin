@@ -3,7 +3,6 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'exit';
 	}
@@ -19,7 +18,6 @@ class Command extends BaseCommand {
 	async action(args) {
 		await app().exit();
 	}
-
 }
 
 module.exports = Command;

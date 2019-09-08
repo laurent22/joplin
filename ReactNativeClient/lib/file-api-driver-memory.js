@@ -3,7 +3,6 @@ const fs = require('fs-extra');
 const { basicDelta } = require('lib/file-api');
 
 class FileApiDriverMemory {
-
 	constructor() {
 		this.items_ = [];
 		this.deletedItems_ = [];
@@ -139,7 +138,7 @@ class FileApiDriverMemory {
 	}
 
 	async delta(path, options = null) {
-		const getStatFn = async (path) => {
+		const getStatFn = async path => {
 			let output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {
 				const item = Object.assign({}, output[i]);
@@ -156,7 +155,6 @@ class FileApiDriverMemory {
 	async clearRoot() {
 		this.items_ = [];
 	}
-
 }
 
 module.exports = { FileApiDriverMemory };

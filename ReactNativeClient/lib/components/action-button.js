@@ -1,9 +1,9 @@
-const React = require('react'); const Component = React.Component;
-const { StyleSheet, Text } = require('react-native');
+const React = require('react');
+
+const { StyleSheet } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
-const { globalStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale.js');
 
 const styles = StyleSheet.create({
@@ -14,11 +14,10 @@ const styles = StyleSheet.create({
 	},
 	itemText: {
 		// fontSize: 14, // Cannot currently set fontsize since the bow surrounding the label has a fixed size
-	}
+	},
 });
 
 class ActionButtonComponent extends React.Component {
-
 	constructor() {
 		super();
 		this.state = {
@@ -52,14 +51,6 @@ class ActionButtonComponent extends React.Component {
 		});
 	}
 
-	newFolder_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Folder',
-			folderId: null,
-		});
-	}
-
 	render() {
 		let buttons = this.props.buttons ? this.props.buttons : [];
 
@@ -67,25 +58,22 @@ class ActionButtonComponent extends React.Component {
 			if (this.props.folders.length) {
 				buttons.push({
 					title: _('New to-do'),
-					onPress: () => { this.newTodo_press() },
+					onPress: () => {
+						this.newTodo_press();
+					},
 					color: '#9b59b6',
 					icon: 'md-checkbox-outline',
 				});
 
 				buttons.push({
 					title: _('New note'),
-					onPress: () => { this.newNote_press() },
+					onPress: () => {
+						this.newNote_press();
+					},
 					color: '#9b59b6',
 					icon: 'md-document',
 				});
 			}
-
-			buttons.push({
-				title: _('New notebook'),
-				onPress: () => { this.newFolder_press() },
-				color: '#3498db',
-				icon: 'md-folder',
-			});
 		}
 
 		let buttonComps = [];
@@ -101,41 +89,41 @@ class ActionButtonComponent extends React.Component {
 		}
 
 		if (!buttonComps.length && !this.props.mainButton) {
-			return <ReactNativeActionButton style={{ display: 'none' }}/>
+			return <ReactNativeActionButton style={{ display: 'none' }} />;
 		}
 
 		let mainButton = this.props.mainButton ? this.props.mainButton : {};
-		let mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />
+		let mainIcon = mainButton.icon ? <Icon name={mainButton.icon} style={styles.actionButtonIcon} /> : <Icon name="md-add" style={styles.actionButtonIcon} />;
 
 		if (this.props.multiStates) {
 			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');
 			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error('Button index out of bounds: ' + this.state.buttonIndex + '/' + this.props.buttons.length);
 			let button = this.props.buttons[this.state.buttonIndex];
-			let mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />
+			let mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />;
 			return (
 				<ReactNativeActionButton
 					icon={mainIcon}
 					buttonColor="rgba(231,76,60,1)"
-					onPress={() => { button.onPress() }}
+					onPress={() => {
+						button.onPress();
+					}}
 				/>
 			);
 		} else {
 			return (
-				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={ function() { } }>
-					{ buttonComps }
+				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() {}}>
+					{buttonComps}
 				</ReactNativeActionButton>
 			);
 		}
 	}
 }
 
-const ActionButton = connect(
-	(state) => {
-		return {
-			folders: state.folders,
-			locale: state.settings.locale,
-		};
-	}
-)(ActionButtonComponent)
+const ActionButton = connect(state => {
+	return {
+		folders: state.folders,
+		locale: state.settings.locale,
+	};
+})(ActionButtonComponent);
 
 module.exports = { ActionButton };

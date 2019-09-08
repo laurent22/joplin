@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
+const os = require('os');
 const { time } = require('lib/time-utils.js');
 const { filename } = require('lib/path-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
@@ -26,7 +29,7 @@ describe('EnexToMd', function() {
 	it('should convert from Enex to Markdown', asyncTest(async () => {
 		const basePath = __dirname + '/enex_to_md';
 		const files = await shim.fsDriver().readDirStats(basePath);
-		
+
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;
@@ -34,12 +37,17 @@ describe('EnexToMd', function() {
 			const htmlPath = basePath + '/' + htmlFilename;
 			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
 
-			// if (htmlFilename !== 'text2.html') continue;
+			// if (htmlFilename !== 'multiline_inner_text.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
-			const expectedMd = await shim.fsDriver().readFile(mdPath);
+			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			const actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
+			let actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
+
+			if (os.EOL === '\r\n') {
+				expectedMd = expectedMd.replace(/\r\n/g, '\n');
+				actualMd = actualMd.replace(/\r\n/g, '\n');
+			}
 
 			if (actualMd !== expectedMd) {
 				console.info('');
@@ -54,7 +62,7 @@ describe('EnexToMd', function() {
 				expect(false).toBe(true);
 				// return;
 			} else {
-				expect(true).toBe(true)
+				expect(true).toBe(true);
 			}
 		}
 	}));

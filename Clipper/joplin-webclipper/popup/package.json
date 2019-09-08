@@ -7,7 +7,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^2.1.5",
     "redux": "^4.0.0"
   },
   "scripts": {
@@ -19,7 +19,13 @@
     "postinstall": "node scripts/postinstall.js"
   },
   "devDependencies": {
-    "cra-build-watch": "^1.0.1",
+    "cra-build-watch": "^1.4.0",
     "fs-extra": "^6.0.1"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

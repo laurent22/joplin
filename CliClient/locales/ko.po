@@ -13,22 +13,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "태그를 지우려면 연결된 노트의 태그를 해제하세요."
+msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "삭제할 노트나 노트북을 먼저 선택하세요."
+msgstr "삭제할 노트나 노트북을 먼저 선택해주세요."
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Ctrl+D 키를 누르거나 \"exit\"를 입력해서 종료하세요"
+msgstr "Ctrl+D 키를 누르거나 혹은 “exit\"를 입력해서 종료해주세요"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"\"%s\"에 대해 하나 이상의 항목이 일치합니다. 검색 범위를 좁혀보시기 바랍니다."
+"\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 
 msgid "No notebook selected."
 msgstr "선택된 노트북이 없습니다."
@@ -49,11 +49,11 @@ msgid "y"
 msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기다리세요."
+msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr "다음과 같은 명령어가 없습니다: %s"
+msgstr "다음 명령어가 없습니다: %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
@@ -75,17 +75,17 @@ msgstr "선택한 항목: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "올바르지 않은 정답: %s"
+msgstr "잘못된 답: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "제공된 파일을 노트에 첨부합니다."
+msgstr "주어진 파일을 노트에 첨부합니다."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "다음을 찾을 수 없습니다: \"%s\""
+msgstr "다음을 찾을 수 없습니다: “%s”."
 
 msgid "Displays the given note."
-msgstr "제공된 노트를 표시합니다."
+msgstr "주어진 노트를 표시합니다."
 
 msgid "Displays the complete information about note."
 msgstr "노트와 관련된 모든 정보를 표시합니다."
@@ -95,9 +95,9 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"설정값을 얻거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 "
-"표시할 것입니다. [name] 및 [value] 모두가 제공되지 않았다면, 현재의 설정을 표"
-"시할 것입니다."
+"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 "
+"값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
+"표시할 것입니다."
 
 msgid "Also displays unset and hidden config variables."
 msgstr "또한 설정하지 않았거나 숨겨진 설정 변수를 표시합니다."
@@ -126,13 +126,13 @@ msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status` and `target-status`."
+"`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"E2EE(종단간 암호화) 설정을 관리합니다. 명령어는 `enable`, `disable`, "
-"`decrypt`, `status`, `target-status` 입니다."
+"E2EE(종단간 암호화) 설정을 관리합니다. 다음과 같은 명령어 `enable`, "
+"`disable`, `decrypt`, `status`, `target-status` 들이 있습니다."
 
 msgid "Enter master password:"
-msgstr "관리자 비밀번호를 입력하세요:"
+msgstr "마스터 키를 넣어주세요:"
 
 msgid "Operation cancelled"
 msgstr "작업이 중지되었습니다"
@@ -141,8 +141,8 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"복호화를 시작합니다... 작업량에 따라서 몇 분이 걸릴 수 있으니 잠시만 기다리세"
-"요."
+"복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다"
+"러주세요."
 
 msgid "Completed decryption."
 msgstr "복호화가 완료되었습니다."
@@ -164,7 +164,7 @@ msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 "텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 "
-"지정하세요."
+"지정해주세요"
 
 msgid "No active notebook."
 msgstr "활성화된 노트북이 없습니다."
@@ -174,11 +174,11 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" 노트가 존재하지 않습니다. 새로 만들까요?"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "노트 편집을 시작합니다. 프롬프트로 가려면 편집기를 종료하세요."
+msgstr "노트 편집을 시작합니다. 프롬프트로 가시려면 편집기를 종료해주세요."
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "편집기에서 노트를 열 수 없는 오류입니다: %s"
+msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 msgid "Note has been saved."
 msgstr "노트가 저장되었습니다."
@@ -190,7 +190,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"조플린의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
+"Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
 "타 자원을 포함한 완전한 데이터베이스를 내보내게 됩니다."
 
 #, javascript-format
@@ -198,21 +198,20 @@ msgid "Destination format: %s"
 msgstr "목표 포맷: %s"
 
 msgid "Exports only the given note."
-msgstr "주어진 노트만을 내보냅니다."
+msgstr "특정 노트만을 내보냅니다."
 
 msgid "Exports only the given notebook."
-msgstr "주어진 노트북만을 내보냅니다."
+msgstr "특정 노트북만을 내보냅니다."
 
 msgid "Displays a geolocation URL for the note."
-msgstr "노트의 지리적 위치 URL을 표시합니다."
+msgstr "노트 위치 URL을 표시합니다."
 
 msgid "Displays usage information."
-msgstr "사용량 정보를 표시합니다."
+msgstr "얼마나 썼는지 표시합니다."
 
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr ""
-"바로가기를 편집할 수 있는 방법에 관한 정보는 다음에서 찾으실 수 있습니다: %s"
+msgstr "바로가기를 편집하는 것은 여기서 찾아보실 수 있습니다: %s"
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "바로가기는 명령줄 인터페이스 모드에서는 사용할 수 없습니다."
@@ -222,7 +221,7 @@ msgid ""
 "all` for the complete usage information."
 msgstr ""
 "명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help "
-"all'을 입력하시면 완전한 명령어 용법에 관한 정보가 있습니다."
+"all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
 
 msgid "The possible commands are:"
 msgstr "가능한 명령어는 다음과 같습니다:"
@@ -232,35 +231,35 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"어느 명령어에서든, 노트 또는 노트북은 그것의 제목이나 ID를 통해 참조할 수 있"
-"습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현"
-"재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
+"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니"
+"다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 "
+"선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "한 패널에서 다른 패널으로 옮기려면 Tab키 또는 Shift+Tab 키를 누르세요."
+msgstr "한 패널에서 다른 패널로 옮기려면 Tab키 또는 Shift+Tab 키를 누르세요."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"화살표 키와 Page Up/Down를 눌러 목록이나 텍스트 영역을 스크롤하세요 (현재 콘"
-"솔 포함)."
+"화살표 키와 Page Up/Down 키를 눌러 목록이나 텍스트 영역을 스크롤 하세요 (현"
+"재 콘솔 포함)."
 
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "콘솔을 최대화/최소화 하려면 \"tc\"를 누르세요."
+msgstr "콘솔을 최대화/최소화 하려면 \"tc\"를 눌러주세요."
 
 msgid "To enter command line mode, press \":\""
-msgstr "명령줄 모드로 진입하려면 \":\"를 누르세요."
+msgstr "명령줄 모드로 진입하시려면 \":\"를 눌러주세요."
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr "명령줄 모드를 종료하려면 ESC를 누르세요."
+msgstr "명령줄 모드를 종료하시려면 ESC를 눌러주세요"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr "키보드 단축키 및 설정 옵션은 `help keymap`를 입력하시면 됩니다"
+msgstr "키보드 단축키 및 설정 옵션을 변경하려면 `help keymap`을 입력해주세요"
 
 msgid "Imports data into Joplin."
-msgstr "데이터를 조플린으로 가져옵니다."
+msgstr "데이터를 Joplin으로 가져옵니다."
 
 #, javascript-format
 msgid "Source format: %s"
@@ -271,7 +270,7 @@ msgstr "더 이상 확인을 묻지 않습니다."
 
 #, javascript-format
 msgid "Found: %d."
-msgstr "발견됨: %d"
+msgstr "발견됨: %d."
 
 #, javascript-format
 msgid "Created: %d."
@@ -294,7 +293,7 @@ msgid "Tagged: %d."
 msgstr "태그됨: %d."
 
 msgid "Importing notes..."
-msgstr "노트 가져오는 중..."
+msgstr "노트를 가져오는 중..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
@@ -304,18 +303,18 @@ msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인할 수 있습"
-"니다."
+"현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인하실 수 있"
+"습니다."
 
 msgid "Displays only the first top <num> notes."
 msgstr "맨 처음 <num> 노트만 표시합니다."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"항목을 <field>별로 정렬합니다(예시: title, updated_time, created_time)."
+"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
 
 msgid "Reverses the sorting order."
-msgstr "정렬 순서를 반전시킵니다."
+msgstr "정렬 순서를 바꿉니다."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
@@ -323,7 +322,7 @@ msgid ""
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 "
-"일 모두는 `nt`(예시: 할 일은 `-tt`, 노트와 할 일은 `-ttd`)를 사용하세요."
+"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-ttd`)."
 
 msgid "Either \"text\" or \"json\""
 msgstr "\"text\" 또는 \"json\""
@@ -333,10 +332,10 @@ msgid ""
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
-"TODO_CHECKED (할 일에 해당), TITLE 입니다."
+"TODO_CHECKED (할 일에 해당), TITLE 입니다"
 
 msgid "Please select a notebook first."
-msgstr "노트북을 먼저 선택하세요."
+msgstr "노트북을 먼저 선택해주세요."
 
 msgid "Creates a new notebook."
 msgstr "새 노트북을 만듭니다."
@@ -345,7 +344,7 @@ msgid "Creates a new note."
 msgstr "새 노트를 만듭니다."
 
 msgid "Notes can only be created within a notebook."
-msgstr "노트는 노트북 속에만 만들 수 있습니다."
+msgstr "노트는 노트북 속에서만 만들 수 있습니다."
 
 msgid "Creates a new to-do."
 msgstr "새 '할 일'을 만듭니다."
@@ -354,10 +353,10 @@ msgid "Moves the notes matching <note> to [notebook]."
 msgstr "<note>와 일치하는 노트를 [notebook]으로 옮깁니다."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "주어진 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니다."
+msgstr "해당 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니다."
 
 msgid "Deletes the given notebook."
-msgstr "주어진 노트북을 삭제합니다."
+msgstr "해당 노트북을 삭제합니다."
 
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "확인을 거치지 않고 노트북을 삭제합니다."
@@ -366,8 +365,8 @@ msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 하위 노트북들도 함께 삭"
-"제됩니다."
+"이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들"
+"도 함께 삭제됩니다."
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "<note-pattern>에 일치하는 노트를 삭제합니다."
@@ -377,13 +376,13 @@ msgstr "확인을 거치지 않고 노트를 삭제합니다."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d개의 노트가 이 패턴과 일치합니다. 삭제할까요?"
+msgstr "%d개의 노트가 이 패턴과 일치합니다. 이를 삭제할까요?"
 
 msgid "Delete note?"
-msgstr "노트를 삭제할까요?"
+msgstr "이 노트를 삭제할까요?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "주어진 <pattern>을 모든 노트에서 찾습니다."
+msgstr "주어진 <pattern>을 모든 노트에서 검색합니다."
 
 #, javascript-format
 msgid ""
@@ -404,25 +403,25 @@ msgid "Synchronises with remote storage."
 msgstr "원격 저장소와 동기화 합니다."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "지정된 대상으로 동기화 (기본값은 sync.target config value)"
+msgstr "지정된 대상으로 동기화 합니다 (기본값은 sync.target config value)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "인증이 완료되지 않았습니다(인증 토큰을 받을 수 없음)."
+msgstr "인증이 완료되지 않았습니다 (인증 토큰을 받을 수 없음)."
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "조플린을 드롭박스와 동기화하려면 다음 절차를 따르세요:"
+msgstr "Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "1단계: 브라우저에서 이 URL에 접속해 애플리케이션을 허가합니다:"
+msgstr "1단계: 브라우저에서 이 URL에 접근하여 애플리케이션을 허가합니다:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "2단계: 드롭박스에서 제공하는 코드를 입력합니다:"
+msgstr "2단계: Dropbox에서 제공하는 코드를 입력합니다:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "%s 사항과 인증되지 않았습니다. 누락된 증명사항을 제공하세요."
+msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
 msgid "Synchronisation is already in progress."
 msgstr "이미 동기화가 진행중입니다."
@@ -434,7 +433,7 @@ msgid ""
 "operation."
 msgstr ""
 "잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠"
-"금 파일을 삭제하고 작업을 재개할 수 있습니다."
+"금 파일을 삭제하고 작업을 재개하실 수 있습니다."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
@@ -446,18 +445,21 @@ msgstr "동기화를 시작할 수 없습니다."
 msgid "Starting synchronisation..."
 msgstr "동기화를 시작합니다..."
 
+msgid "Downloading resources..."
+msgstr "리소스 다운로드 중..."
+
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용할 수 있습"
-"니다. `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다."
+"확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용하실 수 있"
+"습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태"
+"그인 옵션 -l 을 사용하실수 있습니다)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -469,7 +471,7 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용할 수 있습니다. \"toggle"
+"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle"
 "\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용"
 "됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear"
 "\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
@@ -509,14 +511,18 @@ msgid "Possible keys/values:"
 msgstr "가능한 키/값:"
 
 msgid "Type `joplin help` for usage information."
-msgstr "사용법 정보를 알고 싶다면 `joplin help`를 입력하세요."
+msgstr "사용법에 대한 정보를 알고 싶으시다면 `joplin help`를 입력해주세요."
 
 msgid "Fatal error:"
 msgstr "치명적인 오류:"
 
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "애플리케이션이 허가되었습니다 - 브라우저 탭을 종료하셔도 됩니다."
+msgstr "애플리케이션이 허가되었습니다 - 브라우저 탭을 닫으셔도 됩니다."
 
 msgid "The application has been successfully authorised."
 msgstr "애플리케이션이 성공적으로 허가되었습니다."
@@ -528,10 +534,10 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"다음의 URL을 브라우저에서 열어 애플리케이션을 허가하세요. 애플리케이션은 "
-"\"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만을 읽고 쓸 "
-"것입니다. 이 외의 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없습니"
-"다. 데이터는 제3자와 공유되지 않습니다."
+"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 "
+"\"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것"
+"입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 "
+"데이터는 제3자와 공유되지 않습니다."
 
 msgid "Search:"
 msgstr "검색:"
@@ -544,12 +550,13 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"조플린에 오신 것을 환영합니다!\n"
+"Joplin에 오신 것을 환영합니다!\n"
 "\n"
 "`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`"
-"를 입력하면 사용 방법을 확인할 수 있습니다.\n"
+"를 입력하시면 사용 방법을 확인하실 수 있습니다.\n"
 "\n"
-"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력하세요."
+"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세"
+"요."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -557,23 +564,35 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"현재 하나 또는 여러개의 항목이 암호화되어 있으며 관리자 비밀번호를 입력해야 "
-"합니다. `e2ee decrypt`를 입력해서 암호화를 해제하세요. 이미 비밀번호를 입력했"
-"다면 암호화된 항목들은 복호화 작업을 백그라운드에서 진행중입니다."
+"현재 하나 또는 여러개의 항목이 암호화되어 있으며, 해당 마스터 키의 비밀번호"
+"를 입력하셔야 합니다. `e2ee decrypt`를 입력하셔서 암호화를 해제해주세요. 비밀"
+"번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다리세요..."
+msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다려주세요..."
+
+msgid "Sidebar"
+msgstr "사이드바"
+
+msgid "Note list"
+msgstr "노트 목록"
+
+msgid "Note title"
+msgstr "노트 제목"
+
+msgid "Note body"
+msgstr "노트 본문"
 
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다리세요..."
+msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
 
 msgid "PDF File"
 msgstr "PDF 파일"
 
-msgid "File"
-msgstr "파일"
+msgid "Synchronisation status"
+msgstr "동기화 상태"
 
 msgid "New note"
 msgstr "새 노트"
@@ -584,14 +603,64 @@ msgstr "새 '할 일'"
 msgid "New notebook"
 msgstr "새 노트북"
 
+msgid "Print"
+msgstr "인쇄"
+
+msgid "General Options"
+msgstr "일반 옵션"
+
+msgid "Encryption options"
+msgstr "암호화 옵션"
+
+msgid "Web clipper options"
+msgstr "웹 수집기 옵션"
+
+msgid "Create note from template"
+msgstr "템플릿에서 노트 생성"
+
+msgid "Create to-do from template"
+msgstr "템플릿에서 할일 생성"
+
+msgid "Insert template"
+msgstr "템플릿 삽입"
+
+msgid "Open template directory"
+msgstr "템플릿 디렉터리 열기"
+
+msgid "Refresh templates"
+msgstr "템플릿 새로고침"
+
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "개정판: %s (%s)"
+
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "&File"
+msgstr "파일"
+
+msgid "About Joplin"
+msgstr "Joplin에 대해서"
+
+msgid "Preferences..."
+msgstr "설정…"
+
+msgid "Check for updates..."
+msgstr "업데이트 확인..."
+
+msgid "Templates"
+msgstr "템플릿"
+
 msgid "Import"
 msgstr "가져오기"
 
 msgid "Export"
 msgstr "내보내기"
 
-msgid "Print"
-msgstr "인쇄"
+msgid "Synchronise"
+msgstr "동기화"
 
 #, javascript-format
 msgid "Hide %s"
@@ -600,7 +669,10 @@ msgstr "%s 숨기기"
 msgid "Quit"
 msgstr "종료"
 
-msgid "Edit"
+msgid "Close Window"
+msgstr "창 닫기"
+
+msgid "&Edit"
 msgstr "편집"
 
 msgid "Copy"
@@ -612,11 +684,20 @@ msgstr "잘라내기"
 msgid "Paste"
 msgstr "붙여넣기"
 
+msgid "Select all"
+msgstr "모두 선택"
+
 msgid "Bold"
 msgstr "굵게"
 
 msgid "Italic"
 msgstr "기울임"
+
+msgid "Link"
+msgstr "링크"
+
+msgid "Code"
+msgstr "코드"
 
 msgid "Insert Date Time"
 msgstr "날짜와 시간 입력"
@@ -624,10 +705,16 @@ msgstr "날짜와 시간 입력"
 msgid "Edit in external editor"
 msgstr "외부 편집기에서 편집하기"
 
+msgid "Tags"
+msgstr "태그"
+
 msgid "Search in all the notes"
 msgstr "모든 노트에서 검색"
 
-msgid "View"
+msgid "Search in current note"
+msgstr "현재 노트에서 검색"
+
+msgid "&View"
 msgstr "보기"
 
 msgid "Toggle sidebar"
@@ -636,22 +723,13 @@ msgstr "사이드바 표시 전환"
 msgid "Toggle editor layout"
 msgstr "편집기 배치 형태 전환"
 
-msgid "Tools"
+msgid "Focus"
+msgstr "강조"
+
+msgid "&Tools"
 msgstr "도구"
 
-msgid "Synchronisation status"
-msgstr "동기화 상태"
-
-msgid "Web clipper options"
-msgstr "웹 수집기 옵션"
-
-msgid "Encryption options"
-msgstr "암호화 옵션"
-
-msgid "General Options"
-msgstr "일반 옵션"
-
-msgid "Help"
+msgid "&Help"
 msgstr "도움말"
 
 msgid "Website and documentation"
@@ -660,15 +738,8 @@ msgstr "웹사이트 및 각종 문서"
 msgid "Make a donation"
 msgstr "기부하기"
 
-msgid "Check for updates..."
-msgstr "업데이트 확인..."
-
-msgid "About Joplin"
-msgstr "조플린이란?"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
+msgid "Toggle development tools"
+msgstr "개발자 도구 띄우기"
 
 #, javascript-format
 msgid "Open %s"
@@ -684,10 +755,22 @@ msgid "Cancel"
 msgstr "취소"
 
 msgid "Current version is up-to-date."
-msgstr "현재 버전은 최신입니다."
+msgstr "현재 최신 버전을 사용중입니다."
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (프리-릴리즈)"
 
 msgid "An update is available, do you want to download it now?"
-msgstr "업데이트가 있습니다. 지금 다운로드할까요?"
+msgstr "업데이트가 있습니다. 지금 다운로드 할까요?"
+
+#, javascript-format
+msgid "Your version: %s"
+msgstr "현재 버전: %s"
+
+#, javascript-format
+msgid "New version: %s"
+msgstr "새 버전: %s"
 
 msgid "Yes"
 msgstr "예"
@@ -696,21 +779,21 @@ msgid "No"
 msgstr "아니오"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "토큰이 클립보드로 복사되었습니다!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도록 설정되었습니다."
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "상태: %d 포트에서 시작됨"
+msgstr "상태: %d 포트 열림"
 
 #, javascript-format
 msgid "Status: %s"
 msgstr "상태: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr "웹 수집기 서비스 사용하지 않음"
+msgstr "웹 수집기 서비스 사용 안함"
 
 msgid "The web clipper service is not enabled."
 msgstr "웹 수집기 서비스가 비활성화 되었습니다."
@@ -722,50 +805,54 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"조플린 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 조플린에 저장할 수 있"
+"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있"
 "게 해줍니다."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "웹 수집기를 사용하려면 다음 절차를 따르세요:"
+msgstr "웹 수집기를 사용하려면 다음 절차를 따라주세요:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr "1단계:  웹 수집기 서비스를 활성화"
+msgstr "1단계: 웹 수집기 서비스 활성화"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"이 서비스는 브라우저 확장 기능이 조플린과 통신하도록 해줍니다. 활성화를 할 "
-"때 방화벽이 조플린에게 특정 포트 접근을 허가할 것인지 물어볼수도 있습니다."
+"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성"
+"화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
 
 msgid "Step 2: Install the extension"
 msgstr "2단계: 확장 기능 설치"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr "브라우저에 적절한 확장 기능을 다운로드 및 설치하세요:"
+msgstr "브라우저에 맞는 확장 기능을 다운로드 및 설치하세요:"
 
-#, fuzzy
 msgid "Advanced options"
 msgstr "고급 옵션"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "인증 토큰:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "토큰 복사"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-
-msgid "Check synchronisation configuration"
-msgstr "동기화 설정 확인"
+"이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
+"다."
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
+
+msgid "Check synchronisation configuration"
+msgstr "동기화 설정 확인"
+
+msgid "Browse..."
+msgstr "훑어보기…"
 
 msgid "Apply"
 msgstr "적용"
@@ -781,8 +868,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"암호화를 해제한다는 것은 모든 노트와 첨부파일이 다시 동기화되며, 암호화되지 "
-"않은 상태로 동기화 대상에 전달된다는 것을 의미합니다. 계속 진행할까요?"
+"암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
+"않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -790,10 +877,10 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"암호화를 사용한다는 것은 모든 노트와 첨부파일이 다시 동기화되며, 암호화된 상"
-"태로 동기화 대상에 전달된다는 것을 의미합니다. 비밀번호는 데이터를 복호화할 "
-"수 있는 유일한 수단이므로 보안을 위해 비밀번호를 절대로 잃어버리지 마세요. 암"
-"호화를 사용하려면 비밀번호를 입력하세요."
+"암호화를 사용하게 되면 모든 노트와 첨부파일이 다시 동기화되며, 암호화 된 상태"
+"로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할수 있는 유일한 수단"
+"으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하실려면 아래에 비"
+"밀번호를 넣어주세요."
 
 msgid "Disable encryption"
 msgstr "암호화 해제"
@@ -802,10 +889,10 @@ msgid "Enable encryption"
 msgstr "암호화 사용"
 
 msgid "Master Keys"
-msgstr "관리자 키"
+msgstr "마스터 키"
 
 msgid "Active"
-msgstr "활성화"
+msgstr "활성"
 
 msgid "ID"
 msgstr "ID"
@@ -830,33 +917,36 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"참고사항: \"활성화\"로 표시된 단 하나의 관리자 키만 암호화에 사용됩니다. 모"
-"든 키는 노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용"
-"될 수 있습니다."
+"참고: \"활성\"로 표시된 단 하나의 마스터 키만 암호화에 사용됩니다. 모든 키는 "
+"노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용될 수 있습"
+"니다."
 
 msgid "Missing Master Keys"
-msgstr "관리자 키를 찾을 수 없음"
+msgstr "마스터 키를 찾을 수 없음"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"이 ID와 연관된 관리자 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플"
+"이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플"
 "리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드"
 "될 가능성이 있습니다."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
-"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인하세요:"
+"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
 
 msgid "Status"
 msgstr "상태"
 
 msgid "Encryption is:"
 msgstr "암호화는 다음과 같습니다:"
+
+msgid "Usage"
+msgstr "사용 방법"
 
 msgid "Back"
 msgstr "뒤로 가기"
@@ -878,9 +968,6 @@ msgstr "노트북 제목:"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-msgid "Separate each tag by a comma."
-msgstr "각각의 태그를 쉼표로 구분합니다."
-
 msgid "Rename notebook:"
 msgstr "노트북 이름 바꾸기:"
 
@@ -889,6 +976,9 @@ msgstr "태그 이름 바꾸기:"
 
 msgid "Set alarm:"
 msgstr "알람 설정:"
+
+msgid "Template file:"
+msgstr "템플릿 파일:"
 
 msgid "Layout"
 msgstr "배치"
@@ -902,33 +992,11 @@ msgstr "일부 항목들은 동기화할 수 없습니다."
 msgid "View them now"
 msgstr "지금 보여주기"
 
-msgid "Some items cannot be decrypted."
-msgstr "일부 항목들은 암호화할 수 없습니다."
+msgid "One or more master keys need a password."
+msgstr "하나 혹은 그 이상의 마스터 키 비밀번호를 입력해주세요."
 
 msgid "Set the password"
 msgstr "암호 설정"
-
-msgid "Add or remove tags"
-msgstr "태그 추가 및 제거"
-
-msgid "Duplicate"
-msgstr "복제"
-
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - 복사"
-
-msgid "Switch between note and to-do type"
-msgstr "'노트' 또는'할 일' 형식으로 전환합니다."
-
-msgid "Copy Markdown link"
-msgstr "마크다운 링크 복사"
-
-msgid "Delete"
-msgstr "삭제"
-
-msgid "Delete notes?"
-msgstr "노트를 삭제할까요?"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "노트가 없습니다. '새 노트'를 선택해서 노트를 새로 만드세요."
@@ -938,10 +1006,40 @@ msgid ""
 msgstr "노트북이 없습니다. '새 노트북'을 선택해서 노트북을 새로 만드세요."
 
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 msgid "URL"
+msgstr "URL"
+
+msgid "Note History"
+msgstr "노트 역사"
+
+msgid "Markup"
+msgstr "마크업"
+
+msgid "Previous versions of this note"
+msgstr "노트의 이전 버전들"
+
+msgid "Note properties"
+msgstr "노트 속성"
+
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "노트 “%s”가 노트북 “%s”에 성공적으로 복구되었습니다."
+
+msgid "This note has no history"
+msgstr "이 노트엔 역사가 없습니다"
+
+msgid "Restore"
+msgstr "복구"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"“%s”를 클릭하여 노트를 복구하세요. 노트는 “%s” 이름을 가진 노트북에 복사될 것"
+"입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
 
 msgid "Open..."
 msgstr "열기..."
@@ -959,6 +1057,9 @@ msgstr "경로를 클립보드에 복사"
 msgid "Copy Link Address"
 msgstr "링크 주소 복사"
 
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "이 첨부는 아직 다운로드 또는 복호화 되지 않았습니다."
+
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "지원하지 않는 링크 또는 메세지: %s"
@@ -971,23 +1072,23 @@ msgstr ""
 "비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세"
 "요."
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr "한 번에 오직 하나의 노트만 출력하거나 내보내기 할 수 있습니다."
+
 msgid "strong text"
-msgstr "중요 텍스트"
+msgstr "굵게"
 
 msgid "emphasized text"
-msgstr "강조된 텍스트"
+msgstr "강조"
 
 msgid "List item"
-msgstr "목록 항목"
+msgstr "목록 추가"
 
 msgid "Insert Hyperlink"
 msgstr "하이퍼링크 삽입"
 
 msgid "Attach file"
 msgstr "파일 첨부"
-
-msgid "Tags"
-msgstr "태그"
 
 msgid "Set alarm"
 msgstr "알람 설정"
@@ -996,14 +1097,8 @@ msgstr "알람 설정"
 msgid "In: %s"
 msgstr "내부: %s"
 
-msgid "Note properties"
-msgstr ""
-
 msgid "Hyperlink"
 msgstr "하이퍼링크"
-
-msgid "Code"
-msgstr "코드"
 
 msgid "Numbered List"
 msgstr "숫자가 매겨진 목록"
@@ -1021,10 +1116,10 @@ msgid "Horizontal Rule"
 msgstr "수평줄"
 
 msgid "Click to stop external editing"
-msgstr "외부 편집을 그만두려면 클릭하세요"
+msgstr "외부 편집을 그만 두시려면 클릭하세요"
 
 msgid "Watching..."
-msgstr "관측..."
+msgstr "외부 보기…"
 
 msgid "to-do"
 msgstr "할 일"
@@ -1060,23 +1155,74 @@ msgstr "암호화 옵션"
 msgid "Clipper Options"
 msgstr "수집기 옵션"
 
-msgid "Remove this tag from all the notes?"
-msgstr "모든 노트에서 이 태그를 제거할까요?"
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"“%s” 노트북을 삭제할까요?\n"
+"\n"
+"이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
+
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
 
+msgid "Delete"
+msgstr "삭제"
+
 msgid "Rename"
 msgstr "이름 바꾸기"
 
-msgid "Synchronise"
-msgstr "동기화"
-
-msgid "Notebooks"
-msgstr "노트북"
-
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
+
+msgid "Retry"
+msgstr "재시도"
+
+msgid "Add or remove tags"
+msgstr "태그 추가 및 제거"
+
+msgid "Duplicate"
+msgstr "복제"
+
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - 복사"
+
+msgid "Switch between note and to-do type"
+msgstr "'노트' 또는 '할 일' 형식으로 전환합니다"
+
+msgid "Switch to note type"
+msgstr "'노트' 형식으로 전환합니다"
+
+msgid "Switch to to-do type"
+msgstr "'할 일' 형식으로 전환합니다"
+
+msgid "Copy Markdown link"
+msgstr "마크다운 링크 복사"
+
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "“%s” 노트를 삭제할까요?"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "%d 개의 노트들을 삭제할까요?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"노트 제목을 적으시거나 혹은 건너 뛰세요. 혹은 # 를 적고 태그 이름을 붙이거"
+"나, @뒤에 노트북 이름을 적으세요."
+
+msgid "Goto Anything..."
+msgstr "가고자 하는 곳으로 이동…"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1099,7 +1245,7 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dev (테스트 용도 전용)"
+msgstr "OneDrive Dev (실험 전용)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
@@ -1116,8 +1262,11 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"토큰 새로고침 불가: 인증 데이터를 찾을 수 없습니다. 동기화를 다시 시도하면 문"
-"제가 해결될수도 있습니다."
+"인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
+"도하면 문제가 해결될 수 있습니다."
+
+msgid "Untitled"
+msgstr "제목 없음"
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -1129,8 +1278,8 @@ msgid ""
 msgstr ""
 "OneDrive와 동기화 할 수 없습니다.\n"
 "\n"
-"이 오류는 OneDrive for Business를 사용할 경우 주로 발생합니다. 현재로서는 지"
-"원하지 않는 제품입니다.\n"
+"이 오류는 OneDrive for Business를 사용할 경우 주로 발생하며, 현재 지원하지 않"
+"습니다.\n"
 "\n"
 "일반 OneDrive 계정을 사용해보시기 바랍니다."
 
@@ -1166,10 +1315,6 @@ msgstr "원격 항목 삭제됨: %d."
 msgid "Fetched items: %d/%d."
 msgstr "가져온 항목: %d/%d."
 
-#, javascript-format
-msgid "State: %s."
-msgstr "상태: %s."
-
 msgid "Cancelling..."
 msgstr "취소하는 중..."
 
@@ -1191,11 +1336,23 @@ msgstr "진행 중"
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
 
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+"알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주"
+"세요"
+
 msgid "Encrypted"
 msgstr "암호화됨"
 
 msgid "Encrypted items cannot be modified"
 msgstr "암호화된 항목은 변경될 수 없습니다"
+
+msgid "title"
+msgstr "제목"
+
+msgid "updated date"
+msgstr "업데이트된 날짜"
 
 msgid "Conflicts"
 msgstr "충돌"
@@ -1205,22 +1362,13 @@ msgstr "노트북을 이 위치로 옮길 수 없습니다"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "노트북을 \"%s\" 제목으로 정할 수 없습니다. 이미 예약중입니다."
-
-msgid "title"
-msgstr "제목"
-
-msgid "updated date"
-msgstr "업데이트된 날짜"
+msgstr "노트북 제목을 \"%s\" 으로 정할 수 없습니다. 이미 예약중입니다."
 
 msgid "created date"
-msgstr "만들어진 날짜"
-
-msgid "Untitled"
-msgstr "제목 없음"
+msgstr "만든 날짜"
 
 msgid "This note does not have geolocation information."
-msgstr "이 노트는 지리적 위치 정보를 포함하고 있지 않습니다."
+msgstr "이 노트는 위치 정보를 포함하고 있지 않습니다."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1229,6 +1377,70 @@ msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "노트를 \"%s\" 노트북으로 옮길 수 없습니다"
+
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
+"세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
+
+msgid "Synchronisation target"
+msgstr "동기화 대상"
+
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
+"된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
+
+msgid "Directory to synchronise with (absolute path)"
+msgstr "동기화를 할 폴더 (절대 경로)"
+
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+msgid "Nextcloud username"
+msgstr "Nextcloud 사용자 이름"
+
+msgid "Nextcloud password"
+msgstr "Nextcloud 암호"
+
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+msgid "WebDAV username"
+msgstr "WebDAV 사용자 이름"
+
+msgid "WebDAV password"
+msgstr "WebDAV 암호"
+
+msgid "Attachment download behaviour"
+msgstr "첨부파일 다운로드시 행동"
+
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"“수동” 모드에서, 첨부파일은 클릭시에만 다운로드 되며, “자동”모드에서는 노트"
+"를 열때만 다운로드 됩니다. “항상” 모드에서는 노트를 열지 않아도 첨부파일이 다"
+"운로드 됩니다."
+
+msgid "Always"
+msgstr "항상"
+
+msgid "Manual"
+msgstr "수동"
+
+msgid "Auto"
+msgstr "자동"
+
+msgid "Max concurrent connections"
+msgstr "최대 동시 연결수"
 
 msgid "Language"
 msgstr "언어"
@@ -1248,6 +1460,12 @@ msgstr "밝음"
 msgid "Dark"
 msgstr "어두움"
 
+msgid "Solarised Light"
+msgstr "Solarized Light"
+
+msgid "Solarised Dark"
+msgstr "Solarized Dark"
+
 msgid "Uncompleted to-dos on top"
 msgstr "완료되지 않은 '할 일'을 맨 위에"
 
@@ -1259,6 +1477,9 @@ msgstr "노트를 다음 기준으로 정렬"
 
 msgid "Reverse sort order"
 msgstr "정렬 순서 반전"
+
+msgid "Sort notebooks by"
+msgstr "노트를 다음 기준으로 정렬"
 
 msgid "Save geo-location with notes"
 msgstr "노트에 지리적 위치 정보 포함시키기"
@@ -1275,31 +1496,89 @@ msgstr "내용에 포커스"
 msgid "When creating a new note:"
 msgstr "새 노트를 만들 때:"
 
+msgid "Enable soft breaks"
+msgstr "소프트 브레이크 허용"
+
+msgid "Enable math expressions"
+msgstr "수학 정규식 허용"
+
+msgid "Enable ==mark== syntax"
+msgstr "==Mark== 구문 허용"
+
+msgid "Enable footnotes"
+msgstr "각주 허용"
+
+msgid "Enable table of contents extension"
+msgstr "표 내용 확장 허용"
+
+msgid "Enable ~sub~ syntax"
+msgstr "~sub~ 구문 허용"
+
+msgid "Enable ^sup^ syntax"
+msgstr "^sup^ 구문 허용"
+
+msgid "Enable deflist syntax"
+msgstr "목록 구문 허용"
+
+msgid "Enable abbreviation syntax"
+msgstr "약어 구문 허용"
+
+msgid "Enable markdown emoji"
+msgstr "마크다운 이모지 허용"
+
+msgid "Enable ++insert++ syntax"
+msgstr "++insert++ 확장 허용"
+
+msgid "Enable multimarkdown table extension"
+msgstr "멀티마크다운 테이블 확장 허용"
+
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "~sub~ 구문 허용"
+
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr "참고사항: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
+msgstr "참고: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
+
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟"
+"수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
 
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "트레이에 최소화 된 채로 Joplin 실행"
 
 msgid "Global zoom percentage"
-msgstr "전체적 확대 비율"
+msgstr "전체 확대 비율"
+
+msgid "Editor font size"
+msgstr "편집기 글꼴 크기"
 
 msgid "Editor font family"
-msgstr "편집기 글꼴 집합"
+msgstr "편집기 글꼴 모음"
 
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"반드시 모노스페이스 글꼴을 사용해야만 정상적으로 작동합니다. 만약 글꼴이 없거"
-"나 올바르지 않을 경우, 기본 제공되는 모노스페이스 글꼴을 기본값으로 사용합니"
-"다."
+"반드시 모노스페이스 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거"
+"나 올바르지 않을 경우, 기본적으로 제공되는 모노스페이스 글꼴을 기본값으로 사"
+"용합니다."
 
 msgid "Automatically update the application"
-msgstr "애플리케이션을 자동으로 업데이트"
+msgstr "자동으로 업데이트 하기"
+
+msgid "Get pre-releases when checking for updates"
+msgstr "업데이트 시 프리-릴리즈 받기"
+
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "자세한 내용은 프리-릴리즈 페이지를 참조해주세요: %s"
 
 msgid "Synchronisation interval"
 msgstr "동기화 간격"
@@ -1324,58 +1603,10 @@ msgid ""
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 "노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합"
-"니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 탐지할 것입니다."
-
-msgid "Show advanced options"
-msgstr "고급 옵션"
-
-msgid "Synchronisation target"
-msgstr "동기화 대상"
-
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
-"된 추가적인 매개 변수를 포함할 수 있습니다(아래에 문서화되어 있습니다)."
-
-msgid "Directory to synchronise with (absolute path)"
-msgstr "동기화를 할 폴더 (절대적 경로)"
-
-msgid ""
-"The path to synchronise with when file system synchronisation is enabled. "
-"See `sync.target`."
-msgstr ""
-"파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`를 "
-"참조하세요."
-
-msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
-
-#, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-
-msgid "Nextcloud username"
-msgstr "Nextcloud 사용자 이름"
-
-msgid "Nextcloud password"
-msgstr "Nextcloud 암호"
-
-msgid "WebDAV URL"
-msgstr "WebDAV URL"
-
-msgid "WebDAV username"
-msgstr "WebDAV 사용자 이름"
-
-msgid "WebDAV password"
-msgstr "WebDAV 암호"
+"니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 
 msgid "Custom TLS certificates"
-msgstr "임의의 TLS 인증서"
+msgstr "사용자 TLS 인증서"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1384,32 +1615,69 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "인증서를 불러올 (쉼표로 구분되어 있는) 경로들의 목록, 또는 개별적인 인증서 파"
-"일들의 경로입니다. 예를 들어 다음과 같은 형식입니다: /my/cert_dir, /other/"
+"일들의 경로입니다. 예를 들면 다음과 같은 형식입니다: /my/cert_dir, /other/"
 "custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행"
 "하기 전에 반드시 변경 사항을 저장해야 합니다."
 
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
+msgid "Enable note history"
+msgstr "노트 역사 허용"
+
+msgid "days"
+msgstr "일"
+
+#, javascript-format
+msgid "%d days"
+msgstr "%d 일"
+
+msgid "Keep note history for"
+msgstr "노트 역사를 다음 날짜로 보관합니다"
+
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: \"%s\"."
 
+msgid "General"
+msgstr "일반"
+
+msgid "Synchronisation"
+msgstr "동기화"
+
+msgid "Appearance"
+msgstr "보기"
+
+msgid "Note"
+msgstr "노트"
+
+msgid "Plugins"
+msgstr "플러그인"
+
+msgid "Application"
+msgstr "애플리케이션"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "태그 \"%s\"(이)가 이미 존재합니다. 다른 이름을 선택해 주세요."
 
 msgid "Joplin Export File"
-msgstr "조플린 내보내기 파일"
+msgstr "Joplin 내보내기 파일"
 
 msgid "Markdown"
 msgstr "마크다운"
 
 msgid "Joplin Export Directory"
-msgstr "조플린 내보내기 폴더"
+msgstr "Joplin 내보내기 폴더"
 
 msgid "Evernote Export File"
 msgstr "에버노트 내보내기 파일"
+
+msgid "Json Export Directory"
+msgstr "Json 내보내기 폴더"
+
+msgid "File"
+msgstr "파일"
 
 msgid "Directory"
 msgstr "폴더"
@@ -1427,21 +1695,20 @@ msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-"이 항목은 암호화되어 있습니다: %s \"%s\". 모든 항목이 복호화 될 때까지 기다리"
-"고 나서 다시 시도하세요."
+"이 항목은 암호화되어 있습니다: %s \"%s\". 모든 항목이 복호화 될 때까지 기다"
+"린 후 다시 시도하세요."
 
 msgid "There is no data to export."
 msgstr "내보낼 데이터가 없습니다."
 
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "노트를 가져와서 저장할 노트북을 지정하세요."
+msgstr "노트를 가져와서 저장할 노트북을 지정해주세요."
+
+msgid "Restored Notes"
+msgstr "복구된 노트들"
 
 msgid "Items that cannot be synchronised"
-msgstr "동기화를 할 수 없는 항목"
-
-#, javascript-format
-msgid "%s (%s): %s"
-msgstr "%s (%s): %s"
+msgstr "동기화 할 수 없는 항목"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
@@ -1449,8 +1716,28 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 "해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이"
-"런 항목을 찾으려면 제목 또는 ID로 검색하세요. (상단에 괄호 안에 표시되어 있습"
-"니다)"
+"런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되"
+"어 있습니다)"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) 는 업로드 할 수 없습니다: %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "“%s”를 다운로드 할 수 없습니다: %s"
+
+msgid "Items that cannot be decrypted"
+msgstr "항목을 복호화 할 수 없습니다"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손"
+"상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목"
+"들을 복호화 할 수 없습니다."
 
 msgid "Sync status (synced items / total items)"
 msgstr "동기화 상태 (동기화 완료 항목 / 전체 항목)"
@@ -1469,7 +1756,7 @@ msgstr "충돌됨: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr "삭제: %d"
+msgstr "삭제됨 : %d"
 
 msgid "Folders"
 msgstr "폴더"
@@ -1485,23 +1772,25 @@ msgstr "다가오는 예정된 알람"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
+msgid "Permission to use camera"
+msgstr "카메라 사용 허가"
+
+msgid "Your permission to use your camera is required."
+msgstr "카메라 사용 허가가 필요합니다."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "활성화된 노트북이 없습니다."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "새 노트북을 만듭니다."
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "노트가 없습니다. (+) 버튼을 선택해 새로 만드세요."
+msgstr "노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."
 
 msgid "Delete these notes?"
-msgstr "노트를 삭제할까요?"
-
-msgid "Log"
-msgstr "로그"
-
-msgid "Export Debug Report"
-msgstr "디버그 보고서 내보내기"
-
-msgid "Encryption Config"
-msgstr "암호화 설정"
-
-msgid "Configuration"
-msgstr "설정"
+msgstr "이 노트를 삭제할까요?"
 
 msgid "Move to notebook..."
 msgstr "노트북으로 옮기기..."
@@ -1513,6 +1802,9 @@ msgstr "%d 노트를 \"%s\" 노트북으로 옮길까요?"
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
+msgid "Clear alarm"
+msgstr "알람 취소"
+
 msgid "Save alarm"
 msgstr "알람 저장"
 
@@ -1522,12 +1814,67 @@ msgstr "날짜 선택"
 msgid "Confirm"
 msgstr "확인"
 
-msgid "Cancel synchronisation"
-msgstr "동기화 취소"
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "노트북: %s"
+
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "암호화된 노트북은 이름을 변경할 수 없습니다"
+
+msgid "New Notebook"
+msgstr "새 노트북"
+
+msgid "Configuration"
+msgstr "설정"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "복호화 항목: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "리소스 가져오는 중: %d/%d"
+
+msgid "All notes"
+msgstr "모든 노트"
+
+msgid "Notebooks"
+msgstr "노트북"
+
+msgid "Checking... Please wait."
+msgstr "확인 중입니다... 잠시만 기다리세요."
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "성공! 동기화 설정이 올바릅니다."
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목"
+"표하는 동기화 장소가 접근가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
+"다:"
+
+msgid "The application has been authorised!"
+msgstr "애플리케이션이 성공적으로 허가되었습니다!"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"애플리케이션을 허가할 수 없습니다:\n"
+"\n"
+"%s\n"
+"\n"
+"다시 시도해 주세요."
+
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "복호화된 항목: %s / %s"
 
 msgid "New tags:"
 msgstr "새 태그:"
@@ -1535,35 +1882,92 @@ msgstr "새 태그:"
 msgid "Type new tags or select from list"
 msgstr "새 태그를 입력하거나 목록에서 선택하세요"
 
+msgid "Warning"
+msgstr "경고"
+
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"파일 시스템 동기화를 사용하실려면 외부 저장소 쓰기 권한을 필요로 합니다."
+
+msgid "Information"
+msgstr "정보"
+
+msgid "Encryption Config"
+msgstr "암호화 설정"
+
+msgid "Tools"
+msgstr "도구"
+
+msgid "Sync Status"
+msgstr "동기화 상태"
+
+msgid "Log"
+msgstr "로그"
+
+msgid "Creating report..."
+msgstr "보고서 생성하기…"
+
+msgid "Export Debug Report"
+msgstr "디버그 보고서 내보내기"
+
+msgid "Fixing search index..."
+msgstr "검색 인덱스 수정…"
+
+msgid "Fix search index"
+msgstr "검색 인덱스 수정"
+
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"검색에 오류가 있는 경우, 이를 이용하여 검색 인덱스를 다시 만들수 있습니다. 이"
+"는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
+
+msgid "More information"
+msgstr "더 많은 정보"
+
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"앱이 정상적으로 작동하기 위해서는 권한을 허가해야 합니다. '설정 > 애플리케이"
-"션 > Joplin > 권한'에서 허가하세요."
+"앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케"
+"이션 > Joplin > 권한'에서 허가해주세요"
 
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해서 필요"
-"합니다."
+"- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합"
+"니다."
 
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- 카메라: 사진을 찍고 노트에 첨부하기 위해서 필요합니다."
+msgstr "- 카메라: 사진을 찍고 노트에 첨부하기 위해 필요합니다."
 
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 위치: 지리적 위치 정보를 노트에 첨부하기 위해서 필요합니다."
+msgstr "- 위치: 지리적 위치 정보를 노트에 첨부하기 위해 필요합니다."
 
 msgid "Joplin website"
-msgstr "조플린 웹사이트"
+msgstr "Joplin 웹사이트"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "데이터베이스 v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS 활성됨: %d"
 
 msgid "Login with Dropbox"
 msgstr "Dropbox로 로그인"
 
+msgid "Enter code here"
+msgstr "여기에 코드를 입력하세요"
+
 #, javascript-format
 msgid "Master Key %s"
-msgstr "관리자 키 %s"
+msgstr "마스터 키 %s"
 
 #, javascript-format
 msgid "Created: %s"
@@ -1585,11 +1989,14 @@ msgstr "노트북을 저장할 수 없습니다: %s"
 msgid "Edit notebook"
 msgstr "노트북 편집"
 
+msgid "Enter notebook title"
+msgstr "노트북 제목을 입력해주세요"
+
 msgid "Show all"
 msgstr "모두 표시"
 
 msgid "Errors only"
-msgstr "오류들만"
+msgstr "오류들만 보기"
 
 msgid "This note has been modified:"
 msgstr "노트가 변경되었습니다:"
@@ -1606,11 +2013,34 @@ msgstr "ID %s에 해당하는 항목이 없습니다"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "조플린 모바일 앱은 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
+
+#, javascript-format
+msgid "Updated: %s"
+msgstr "업데이트됨: %s"
+
+msgid "View on map"
+msgstr "지도에 표시"
+
+msgid "Go to source URL"
+msgstr "소스 URL로 이동"
+
+msgid "Attach..."
+msgstr "첨부…"
+
+msgid "Choose an option"
+msgstr "옵션 선택"
+
+msgid "Take photo"
+msgstr "사진 찍기"
 
 msgid "Attach photo"
 msgstr "사진 첨부"
@@ -1627,17 +2057,17 @@ msgstr "노트로 변환"
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
-msgid "Hide metadata"
-msgstr "메타데이터 숨김"
+msgid "Properties"
+msgstr "속성"
 
-msgid "Show metadata"
-msgstr "메타데이터 표시"
+msgid "Add body"
+msgstr "내용 추가"
 
-msgid "View on map"
-msgstr "지도에 표시"
+msgid "Edit"
+msgstr "편집"
 
-msgid "Delete notebook"
-msgstr "노트북 삭제"
+msgid "Add title"
+msgstr "제목 추가"
 
 msgid "Login with OneDrive"
 msgstr "OneDrive 로그인"
@@ -1645,18 +2075,57 @@ msgstr "OneDrive 로그인"
 msgid "Search"
 msgstr "검색"
 
-msgid ""
-"Click on the (+) button to create a new note or notebook. Click on the side "
-"menu to access your existing notebooks."
-msgstr ""
-"(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트북"
-"을 관리하세요."
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "카메라 사용 허가"
 
-msgid "You currently have no notebook. Create one by clicking on (+) button."
-msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
+#~ msgid "Cancel synchronisation"
+#~ msgstr "동기화 취소"
 
-msgid "Welcome"
-msgstr "환영합니다"
+#~ msgid "Hide metadata"
+#~ msgstr "메타데이터 숨김"
+
+#~ msgid "Show metadata"
+#~ msgstr "메타데이터 표시"
+
+#~ msgid "Delete notebook"
+#~ msgstr "노트북 삭제"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트"
+#~ "북을 관리하세요."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
+
+#~ msgid "Welcome"
+#~ msgstr "환영합니다"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "각각의 태그를 쉼표로 구분합니다."
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "일부 항목들은 암호화할 수 없습니다."
+
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`"
+#~ "를 참조하세요."
+
+#~ msgid "Joplin v%s"
+#~ msgstr "조플린 v%s"
+
+#~ msgid "State: %s."
+#~ msgstr "상태: %s."
 
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "같은 제목의 노트북이 이미 있습니다: \"%s\""

@@ -5,6 +5,7 @@ require('app-module-path').addPath(__dirname);
 
 // Disable React message in console "Download the React DevTools for a better development experience"
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
+// eslint-disable-next-line no-undef
 __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	supportsFiber: true,
 	inject: function() {},
@@ -21,6 +22,7 @@ const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const MasterKey = require('lib/models/MasterKey');
 const Setting = require('lib/models/Setting.js');
+const Revision = require('lib/models/Revision.js');
 const { Logger } = require('lib/logger.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { shimInit } = require('lib/shim-init-node.js');
@@ -42,6 +44,7 @@ BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
+BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplin-desktop');
 Setting.setConstant('appType', 'desktop');

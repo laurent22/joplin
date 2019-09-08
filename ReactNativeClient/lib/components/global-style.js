@@ -6,31 +6,39 @@ const globalStyle = {
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	backgroundColor: "#ffffff",
-	color: "#555555", // For regular text
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
+	backgroundColor: '#ffffff',
+	color: '#555555', // For regular text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
 	fontSizeSmaller: 14,
-	dividerColor: "#dddddd",
+	dividerColor: '#dddddd',
+	strongDividerColor: '#aaaaaa',
 	selectedColor: '#e5e5e5',
+	headerBackgroundColor: '#F0F0F0',
 	disabledOpacity: 0.2,
-	colorUrl: '#000CFF',
-	textSelectionColor: "#0096FF",
+	colorUrl: '#7B81FF',
+	textSelectionColor: '#0096FF',
 
-	raisedBackgroundColor: "#0080EF",
-	raisedColor: "#003363",
-	raisedHighlightedColor: "#ffffff",
+	raisedBackgroundColor: '#0080EF',
+	raisedColor: '#003363',
+	raisedHighlightedColor: '#ffffff',
 
-	warningBackgroundColor: "#FFD08D",
+	warningBackgroundColor: '#FFD08D',
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '16px',
-	htmlColor: 'black', // Note: CSS in WebView component only supports named colors or rgb() notation
+	htmlColor: '#222222',
 	htmlBackgroundColor: 'white',
-	htmlDividerColor: 'Gainsboro',
-	htmlLinkColor: 'blue',
-	htmlLineHeight: '20px',
+	htmlDividerColor: 'rgb(230,230,230)',
+	htmlLinkColor: 'rgb(80,130,190)',
+	htmlLineHeight: '1.6em',
+
+	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
+	htmlCodeBorderColor: 'rgb(220, 220, 220)',
+	htmlCodeColor: 'rgb(0,0,0)',
+
+	codeThemeCss: 'hljs-atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -38,28 +46,6 @@ globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
-
-// globalStyle.icon = {
-// 	color: globalStyle.color,
-// 	fontSize: 30,
-// };
-
-// globalStyle.lineInput = {
-// 	color: globalStyle.color,
-// 	backgroundColor: globalStyle.backgroundColor,
-// };
-
-// globalStyle.buttonRow = {
-// 	flexDirection: 'row',
-// 	borderTopWidth: 1,
-// 	borderTopColor: globalStyle.dividerColor,
-// 	paddingTop: 10,
-// };
-
-// globalStyle.normalText = {
-// 	color: globalStyle.color,
-// 	fontSize: globalStyle.fontSize,
-// };
 
 let themeCache_ = {};
 
@@ -72,11 +58,14 @@ function addExtraStyles(style) {
 	style.lineInput = {
 		color: style.color,
 		backgroundColor: style.backgroundColor,
+		borderBottomWidth: 1,
+		borderColor: style.strongDividerColor,
+		paddingBottom: 0,
 	};
 
 	if (Platform.OS === 'ios') {
-		style.lineInput.borderBottomWidth = 1;
-		style.lineInput.borderBottomColor = style.dividerColor;
+		delete style.lineInput.borderBottomWidth;
+		delete style.lineInput.borderColor;
 	}
 
 	style.buttonRow = {
@@ -94,6 +83,16 @@ function addExtraStyles(style) {
 	style.urlText = {
 		color: style.colorUrl,
 		fontSize: style.fontSize,
+	};
+
+	style.headerStyle = {
+		color: style.color,
+		fontSize: style.fontSize * 1.2,
+		fontWeight: 'bold',
+	};
+
+	style.headerWrapperStyle = {
+		backgroundColor: style.headerBackgroundColor,
 	};
 
 	return style;
@@ -114,16 +113,28 @@ function themeStyle(theme) {
 	output.color = '#dddddd';
 	output.colorFaded = '#777777';
 	output.dividerColor = '#555555';
+	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
+	output.headerBackgroundColor = '#2D3136';
 
-	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#788BC3";
-	output.raisedHighlightedColor = "#ffffff";
+	output.raisedBackgroundColor = '#0F2051';
+	output.raisedColor = '#788BC3';
+	output.raisedHighlightedColor = '#ffffff';
 
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';
 	output.htmlLinkColor = 'rgb(166,166,255)';
+
+	output.htmlDividerColor = '#3D444E';
+	output.htmlLinkColor = 'rgb(166,166,255)';
+	output.htmlCodeColor = '#ffffff';
+	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
+	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
+
+	output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+
+	output.colorUrl = '#7B81FF';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);

@@ -1,36 +1,45 @@
 const PushNotification = require('react-native-push-notification');
 
 class AlarmServiceDriver {
+	PushNotificationHandler_() {
+		if (!this.PushNotification_) {
+			PushNotification.configure({
+				// (required) Called when a remote or local notification is opened or received
+				onNotification: function(notification) {
+					console.info('Notification was opened: ', notification);
+					// process the notification
+				},
+				popInitialNotification: true,
+				requestPermissions: true,
+			});
+
+			this.PushNotification_ = PushNotification;
+		}
+
+		return this.PushNotification_;
+	}
 
 	hasPersistentNotifications() {
 		return true;
 	}
 
 	notificationIsSet(alarmId) {
-		throw new Error('Available only for non-persistent alarms');	
+		throw new Error('Available only for non-persistent alarms');
 	}
 
 	async clearNotification(id) {
-		PushNotification.cancelLocalNotifications({ id: id + '' });
+		return this.PushNotificationHandler_().cancelLocalNotifications({ id: id + '' });
 	}
-	
+
 	async scheduleNotification(notification) {
-		// Arguments must be set in a certain way and certain format otherwise it cannot be
-		// cancelled later on. See:
-		// https://github.com/zo0r/react-native-push-notification/issues/570#issuecomment-337642922
-		const androidNotification = {
+		const config = {
 			id: notification.id + '',
 			message: notification.title,
 			date: notification.date,
-			userInfo: { id: notification.id + '' },
-			number: 0,
 		};
 
-		if ('body' in notification) androidNotification.body = notification.body;
-
-		PushNotification.localNotificationSchedule(androidNotification);
+		this.PushNotificationHandler_().localNotificationSchedule(config);
 	}
-
 }
 
 module.exports = AlarmServiceDriver;

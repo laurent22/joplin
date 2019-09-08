@@ -5,19 +5,19 @@
 
 const ipcRenderer = require('electron').ipcRenderer;
 
-ipcRenderer.on('setHtml', (event, html) => {
-	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html } }, '*');
+ipcRenderer.on('setHtml', (event, html, options) => {
+	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html, options: options } }, '*');
 });
 
 ipcRenderer.on('setPercentScroll', (event, percent) => {
 	window.postMessage({ target: 'webview', name: 'setPercentScroll', data: { percent: percent } }, '*');
 });
 
-ipcRenderer.on('setMarkers', (event, keywords) => {
-	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords } }, '*');
+ipcRenderer.on('setMarkers', (event, keywords, options) => {
+	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords, options: options } }, '*');
 });
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', event => {
 	// Here we only deal with messages that are sent from the webview to the main Electron process
 	if (!event.data || event.data.target !== 'main') return;
 

@@ -17,13 +17,23 @@ function requestCanBeRepeated(error) {
 async function tryAndRepeat(fn, count) {
 	let retryCount = 0;
 
+	// Don't use internal fetch retry mechanim since we
+	// are already retrying here.
+	const shimFetchMaxRetryPrevious = shim.fetchMaxRetrySet(0);
+	const defer = () => {
+		shim.fetchMaxRetrySet(shimFetchMaxRetryPrevious);
+	};
+
 	while (true) {
 		try {
 			const result = await fn();
+			defer();
 			return result;
 		} catch (error) {
-			if (retryCount >= count) throw error;
-			if (!requestCanBeRepeated(error)) throw error;
+			if (retryCount >= count || !requestCanBeRepeated(error)) {
+				defer();
+				throw error;
+			}
 			retryCount++;
 			await time.sleep(1 + retryCount * 3);
 		}
@@ -31,7 +41,6 @@ async function tryAndRepeat(fn, count) {
 }
 
 class FileApi {
-
 	constructor(baseDir, driver) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
@@ -155,9 +164,9 @@ class FileApi {
 
 	async put(path, content, options = null) {
 		this.logger().debug('put ' + this.fullPath_(path), options);
-		
+
 		if (options && options.source === 'file') {
-			if (!await this.fsDriver().exists(options.path)) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
+			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
@@ -187,7 +196,6 @@ class FileApi {
 		this.logger().debug('delta ' + this.fullPath_(path));
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
 	}
-
 }
 
 function basicDeltaContextFromOptions_(options) {
@@ -207,7 +215,7 @@ function basicDeltaContextFromOptions_(options) {
 	output.filesAtTimestamp = Array.isArray(options.context.filesAtTimestamp) ? options.context.filesAtTimestamp.slice() : [];
 	output.statsCache = options.context && options.context.statsCache ? options.context.statsCache : null;
 	output.statIdsCache = options.context && options.context.statIdsCache ? options.context.statIdsCache : null;
-	output.deletedItemsProcessed = options.context && ('deletedItemsProcessed' in options.context) ? options.context.deletedItemsProcessed : false;
+	output.deletedItemsProcessed = options.context && 'deletedItemsProcessed' in options.context ? options.context.deletedItemsProcessed : false;
 
 	return output;
 }
@@ -236,9 +244,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		newContext.statsCache.sort(function(a, b) {
 			return a.updated_time - b.updated_time;
 		});
-		newContext.statIdsCache = newContext.statsCache
-			.filter(item => BaseItem.isSystemPath(item.path))
-			.map(item => BaseItem.pathToId(item.path));
+		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 

@@ -2,15 +2,16 @@ const BaseModel = require('lib/BaseModel.js');
 const { sprintf } = require('sprintf-js');
 const BaseItem = require('lib/models/BaseItem.js');
 const ItemChange = require('lib/models/ItemChange.js');
+const Resource = require('lib/models/Resource.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
+const { pregQuote } = require('lib/string-utils.js');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
-const moment = require('moment');
+const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 
 class Note extends BaseItem {
-
 	static tableName() {
 		return 'notes';
 	}
@@ -25,21 +26,16 @@ class Note extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static async serialize(note, type = null, shownKeys = null) {
-		let fieldNames = this.fieldNames();
-		fieldNames.push('type_');
-		return super.serialize(note, 'note', fieldNames);
-	}
-
 	static async serializeForEdit(note) {
-		return super.serialize(note, 'note', ['title', 'body']);
+		return this.replaceResourceInternalToExternalLinks(await super.serialize(note, ['title', 'body']));
 	}
 
 	static async unserializeForEdit(content) {
-		content += "\n\ntype_: " + BaseModel.TYPE_NOTE;
+		content += '\n\ntype_: ' + BaseModel.TYPE_NOTE;
 		let output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
+		output.body = await this.replaceResourceExternalToInternalLinks(output.body);
 		return output;
 	}
 
@@ -47,7 +43,7 @@ class Note extends BaseItem {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
 		lodash.pull(fieldNames, 'title', 'body');
-		return super.serialize(note, 'note', fieldNames);
+		return super.serialize(note, fieldNames);
 	}
 
 	static minimalSerializeForDisplay(note) {
@@ -75,17 +71,21 @@ class Note extends BaseItem {
 		lodash.pull(fieldNames, 'updated_time');
 		lodash.pull(fieldNames, 'order');
 
-		return super.serialize(n, 'note', fieldNames);
+		return super.serialize(n, fieldNames);
 	}
 
 	static defaultTitle(note) {
-		if (note.body && note.body.length) {
-			const lines = note.body.trim().split("\n");
+		return this.defaultTitleFromBody(note.body);
+	}
+
+	static defaultTitleFromBody(body) {
+		if (body && body.length) {
+			const lines = body.trim().split('\n');
 			let output = lines[0].trim();
 			// Remove the first #, *, etc.
 			while (output.length) {
 				const c = output[0];
-				if (['#', ' ', "\n", "\t", '*', '`', '-'].indexOf(c) >= 0) {
+				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
 					output = output.substr(1);
 				} else {
 					break;
@@ -104,7 +104,7 @@ class Note extends BaseItem {
 	}
 
 	static geoLocationUrlFromLatLong(lat, long) {
-		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long)
+		return sprintf('https://www.openstreetmap.org/?lat=%s&lon=%s&zoom=20', lat, long);
 	}
 
 	static modelType() {
@@ -112,14 +112,21 @@ class Note extends BaseItem {
 	}
 
 	static linkedItemIds(body) {
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		if (!body || body.length <= 32) return [];
+
+		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
 		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
 		if (!matches) matches = [];
-		matches = matches.map((m) => m.substr(3, 32));
+		matches = matches.map(m => m.substr(3, 32));
+
+		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b "Some title")
+		let matches2 = body.match(/\(:\/[a-zA-Z0-9]{32}\s(.*?)\)/g);
+		if (!matches2) matches2 = [];
+		matches2 = matches2.map(m => m.substr(3, 32));
+		matches = matches.concat(matches2);
 
 		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img.*?src=["']:\/([a-zA-Z0-9]{32})["']/g
+		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi;
 		const imgMatches = [];
 		while (true) {
 			const m = imgRegex.exec(body);
@@ -127,20 +134,13 @@ class Note extends BaseItem {
 			imgMatches.push(m[1]);
 		}
 
-		return matches.concat(imgMatches);
+		return ArrayUtils.unique(matches.concat(imgMatches));
 	}
 
 	static async linkedItems(body) {
 		const itemIds = this.linkedItemIds(body);
-		const output = [];
-
-		for (let i = 0; i < itemIds.length; i++) {
-			const item = await BaseItem.loadItemById(itemIds[i]);
-			if (!item) continue;
-			output.push(item);
-		}
-
-		return output;
+		const r = await BaseItem.loadItemsByIds(itemIds);
+		return r;
 	}
 
 	static async linkedItemIdsByType(type, body) {
@@ -156,7 +156,32 @@ class Note extends BaseItem {
 	}
 
 	static async linkedResourceIds(body) {
-		return await this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
+		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
+	}
+
+	static async replaceResourceInternalToExternalLinks(body) {
+		const resourceIds = await this.linkedResourceIds(body);
+		const Resource = this.getClass('Resource');
+
+		for (let i = 0; i < resourceIds.length; i++) {
+			const id = resourceIds[i];
+			const resource = await Resource.load(id);
+			if (!resource) continue;
+			const resourcePath = Resource.relativePath(resource);
+			body = body.replace(new RegExp(':/' + id, 'gi'), resourcePath);
+		}
+
+		return body;
+	}
+
+	static async replaceResourceExternalToInternalLinks(body) {
+		const reString = pregQuote(Resource.baseRelativeDirectoryPath() + '/') + '[a-zA-Z0-9.]+';
+		const re = new RegExp(reString, 'gi');
+		body = body.replace(re, match => {
+			const id = Resource.pathToId(match);
+			return ':/' + id;
+		});
+		return body;
 	}
 
 	static new(parentId = '') {
@@ -173,28 +198,31 @@ class Note extends BaseItem {
 
 	// Note: sort logic must be duplicated in previews();
 	static sortNotes(notes, orders, uncompletedTodosOnTop) {
-		const noteOnTop = (note) => {
+		const noteOnTop = note => {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
-		}
+		};
 
 		const noteFieldComp = (f1, f2) => {
 			if (f1 === f2) return 0;
 			return f1 < f2 ? -1 : +1;
-		}
+		};
 
 		// Makes the sort deterministic, so that if, for example, a and b have the
 		// same updated_time, they aren't swapped every time a list is refreshed.
 		const sortIdenticalNotes = (a, b) => {
 			let r = null;
-			r = noteFieldComp(a.user_updated_time, b.user_updated_time); if (r) return r;
-			r = noteFieldComp(a.user_created_time, b.user_created_time); if (r) return r;
+			r = noteFieldComp(a.user_updated_time, b.user_updated_time);
+			if (r) return r;
+			r = noteFieldComp(a.user_created_time, b.user_created_time);
+			if (r) return r;
 
 			const titleA = a.title ? a.title.toLowerCase() : '';
 			const titleB = b.title ? b.title.toLowerCase() : '';
-			r = noteFieldComp(titleA, titleB); if (r) return r;
+			r = noteFieldComp(titleA, titleB);
+			if (r) return r;
 
 			return noteFieldComp(a.id, b.id);
-		}
+		};
 
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
@@ -204,8 +232,12 @@ class Note extends BaseItem {
 
 			for (let i = 0; i < orders.length; i++) {
 				const order = orders[i];
-				if (a[order.by] < b[order.by]) r = +1;
-				if (a[order.by] > b[order.by]) r = -1;
+				let aProp = a[order.by];
+				let bProp = b[order.by];
+				if (typeof aProp === 'string') aProp = aProp.toLowerCase();
+				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
+				if (aProp < bProp) r = +1;
+				if (aProp > bProp) r = -1;
 				if (order.dir == 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
@@ -215,12 +247,15 @@ class Note extends BaseItem {
 	}
 
 	static previewFields() {
-		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
-		return this.db().escapeFields(fields).join(',');
+		return this.db()
+			.escapeFields(fields)
+			.join(',');
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -230,9 +265,7 @@ class Note extends BaseItem {
 			conditions: ['`' + field + '` = ?'],
 			conditionsParams: [value],
 			fields: '*',
-		}
-
-		// TODO: add support for limits on .search()
+		};
 
 		let results = await this.previews(folderId, options);
 		return results.length ? results[0] : null;
@@ -243,12 +276,7 @@ class Note extends BaseItem {
 		// is used to sort already loaded notes.
 
 		if (!options) options = {};
-		if (!options.order) options.order = [
-			{ by: 'user_updated_time', dir: 'DESC' },
-			{ by: 'user_created_time', dir: 'DESC' },
-			{ by: 'title', dir: 'DESC' },
-			{ by: 'id', dir: 'DESC' },
-		];
+		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
@@ -311,7 +339,7 @@ class Note extends BaseItem {
 		}
 
 		if (hasNotes && hasTodos) {
-
+			// Nothing
 		} else if (hasNotes) {
 			options.conditions.push('is_todo = 0');
 		} else if (hasTodos) {
@@ -324,6 +352,20 @@ class Note extends BaseItem {
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null };
 		return this.modelSelectOne('SELECT ' + this.previewFieldsSql(options.fields) + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
+	}
+
+	static async search(options = null) {
+		if (!options) options = {};
+		if (!options.conditions) options.conditions = [];
+		if (!options.conditionsParams) options.conditionsParams = [];
+
+		if (options.bodyPattern) {
+			const pattern = options.bodyPattern.replace(/\*/g, '%');
+			options.conditions.push('body LIKE ?');
+			options.conditionsParams.push(pattern);
+		}
+
+		return super.search(options);
 	}
 
 	static conflictedNotes() {
@@ -424,15 +466,36 @@ class Note extends BaseItem {
 		return Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
-	static toggleIsTodo(note) {
+	static changeNoteType(note, type) {
 		if (!('is_todo' in note)) throw new Error('Missing "is_todo" property');
 
-		let output = Object.assign({}, note);
-		output.is_todo = output.is_todo ? 0 : 1;
+		const newIsTodo = type === 'todo' ? 1 : 0;
+
+		if (Number(note.is_todo) === newIsTodo) return note;
+
+		const output = Object.assign({}, note);
+		output.is_todo = newIsTodo;
 		output.todo_due = 0;
 		output.todo_completed = 0;
 
 		return output;
+	}
+
+	static toggleIsTodo(note) {
+		return this.changeNoteType(note, note.is_todo ? 'note' : 'todo');
+	}
+
+	static toggleTodoCompleted(note) {
+		if (!('todo_completed' in note)) throw new Error('Missing "todo_completed" property');
+
+		note = Object.assign({}, note);
+		if (note.todo_completed) {
+			note.todo_completed = 0;
+		} else {
+			note.todo_completed = Date.now();
+		}
+
+		return note;
 	}
 
 	static async duplicate(noteId, options = null) {
@@ -458,14 +521,32 @@ class Note extends BaseItem {
 		return this.save(newNote);
 	}
 
+	static async noteIsOlderThan(noteId, date) {
+		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
+		if (!n) throw new Error('No such note: ' + noteId);
+		return n.updated_time < date;
+	}
+
 	static async save(o, options = null) {
 		let isNew = this.isNew(o, options);
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
+		// We only keep the previous note content for "old notes" (see Revision Service for more info)
+		// In theory, we could simply save all the previous note contents, and let the revision service
+		// decide what to keep and what to ignore, but in practice keeping the previous content is a bit
+		// heavy - the note needs to be reloaded here, the JSON blob needs to be saved, etc.
+		// So the check for old note here is basically an optimisation.
+		let beforeNoteJson = null;
+		if (!isNew && this.revisionService().isOldNote(o.id)) {
+			beforeNoteJson = await Note.load(o.id);
+			if (beforeNoteJson) beforeNoteJson = JSON.stringify(beforeNoteJson);
+		}
+
 		const note = await super.save(o, options);
 
-		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE);
+		const changeSource = options && options.changeSource ? options.changeSource : null;
+		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
@@ -483,16 +564,29 @@ class Note extends BaseItem {
 	}
 
 	static async batchDelete(ids, options = null) {
-		const result = await super.batchDelete(ids, options);
-		for (let i = 0; i < ids.length; i++) {
-			ItemChange.add(BaseModel.TYPE_NOTE, ids[i], ItemChange.TYPE_DELETE);
+		ids = ids.slice();
 
-			this.dispatch({
-				type: 'NOTE_DELETE',
-				id: ids[i],
-			});
+		while (ids.length) {
+			const processIds = ids.splice(0, 50);
+
+			const notes = await Note.byIds(processIds);
+			const beforeChangeItems = {};
+			for (const note of notes) {
+				beforeChangeItems[note.id] = JSON.stringify(note);
+			}
+
+			await super.batchDelete(processIds, options);
+			const changeSource = options && options.changeSource ? options.changeSource : null;
+			for (let i = 0; i < processIds.length; i++) {
+				const id = processIds[i];
+				ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+
+				this.dispatch({
+					type: 'NOTE_DELETE',
+					id: id,
+				});
+			}
 		}
-		return result;
 	}
 
 	static dueNotes() {
@@ -501,6 +595,17 @@ class Note extends BaseItem {
 
 	static needAlarm(note) {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
+	}
+
+	static dueDateObject(note) {
+		if (!!note.is_todo && note.todo_due) {
+			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
+			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
+			this.dueDateObjects_[note.todo_due] = new Date(note.todo_due);
+			return this.dueDateObjects_[note.todo_due];
+		}
+
+		return null;
 	}
 
 	// Tells whether the conflict between the local and remote note can be ignored.
@@ -518,9 +623,17 @@ class Note extends BaseItem {
 		return false;
 	}
 
+	static markupLanguageToLabel(markupLanguageId) {
+		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
+		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
+		throw new Error('Invalid markup language ID: ' + markupLanguageId);
+	}
 }
 
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
+
+Note.MARKUP_LANGUAGE_MARKDOWN = 1;
+Note.MARKUP_LANGUAGE_HTML = 2;
 
 module.exports = Note;
