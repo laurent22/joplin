@@ -11,8 +11,6 @@ the source Markdown file:
 
 https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 
-!!! WARNING !!!
-
 -->
 
 <head>
@@ -289,7 +287,7 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 <p>The system is designed to defeat any attempts at surveillance or tampering because no third party can decipher the data being communicated or stored.</p>
 <p>There is a small overhead to using E2EE since data constantly has to be encrypted and decrypted so consider whether you really need the feature.</p>
 <h1><a name="enabling-e2ee" href="#enabling-e2ee" class="heading-anchor">🔗</a>Enabling E2EE</h1>
-<p>Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on a single device first (this will create a Master Key for encryption secured by your password) and then it must be synced with all other remaining devices. It is recommended to start with the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.</p>
+<p>Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on all the applications that you synchronise with. It is recommended to first enable it on the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.</p>
 <p>To enable it, please follow these steps:</p>
 <ol>
 <li>On your first device (eg. on the desktop application), go to the Encryption Config screen and click &quot;Enable encryption&quot;</li>
@@ -299,7 +297,6 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 <li>Once this first synchronisation operation is done, open the next device you are synchronising with. Click &quot;Synchronise&quot; and wait for the sync operation to complete. The device will receive the master key, and you will need to provide the password for it. At this point E2EE will be automatically enabled on this device. Once done, click Synchronise again and wait for it to complete.</li>
 <li>Repeat step 5 for each device.</li>
 </ol>
-<p>Do not manually enable encryption on multiple devices in parallel, but rather wait for the other ones to sync with the first already encrypted device. Otherwise, you may end up with multiple encryption keys (which is supported by Joplin but most probably not what you want).</p>
 <p>Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.</p>
 <h1><a name="disabling-e2ee" href="#disabling-e2ee" class="heading-anchor">🔗</a>Disabling E2EE</h1>
 <p>Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.</p>
