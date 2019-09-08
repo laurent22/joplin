@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.146](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.146) - 2019-09-08T19:12:41Z
+
+- Fixed: Fixed regression that was making installation fail
+
 ## [cli-v1.0.145](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.145) - 2019-09-08T16:23:02Z
 
 - New: Added headless server command (Beta) (#1860)
