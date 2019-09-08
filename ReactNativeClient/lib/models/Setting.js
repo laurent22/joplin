@@ -22,6 +22,7 @@ class Setting extends BaseModel {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
+		const mobilePlatform = shim.mobilePlatform();
 
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
@@ -353,16 +354,16 @@ class Setting extends BaseModel {
 				label: () => _('Editor font'),
 				appTypes: ['mobile'],
 				section: 'appearance',
-				options: () => ({
-					/**
-					 * TODO: Check if these fonts break Android. If so, how to retrieve
-					 * info that is more detailed than the `platform` metadata (which
-					 * returns "desktop"|"mobile"|"cli", not the OS info.)
-					 */
-					[Setting.FONT_MENLO]: 'Menlo',
-					[Setting.FONT_COURIER_NEW]: 'Courier New',
-					[Setting.FONT_AVENIR]: 'Avenir',
-				}),
+				options: () => {
+					if (mobilePlatform === 'ios') {
+						return {
+							[Setting.FONT_MENLO]: 'Menlo',
+							[Setting.FONT_COURIER_NEW]: 'Courier New',
+							[Setting.FONT_AVENIR]: 'Avenir',
+						};
+					}
+					return {};
+				},
 			},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
