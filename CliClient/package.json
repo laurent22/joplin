@@ -60,6 +60,7 @@
     "query-string": "4.3.4",
     "read-chunk": "^2.1.0",
     "redux": "^3.7.2",
+    "request": "^2.88.0",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
     "sharp": "^0.22.1",

@@ -209,6 +209,10 @@ class ClipperServer {
 		this.server_.listen(this.port_, '127.0.0.1');
 
 		this.setStartState('started');
+
+		// We return an empty promise that never resolves so that it's possible to `await` the server indefinitely.
+		// This is used only in command-server.js
+		return new Promise(() => {});
 	}
 
 	async stop() {
