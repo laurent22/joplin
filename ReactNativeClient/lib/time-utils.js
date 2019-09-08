@@ -13,7 +13,7 @@ class Time {
 
 	setLocale(v) {
 		moment.locale(v);
-		this.locale_ = v
+		this.locale_ = v;
 	}
 
 	dateFormat() {

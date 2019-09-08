@@ -120,7 +120,8 @@ class Logger {
 				if (level == Logger.LEVEL_ERROR) fn = 'error';
 				if (level == Logger.LEVEL_WARN) fn = 'warn';
 				if (level == Logger.LEVEL_INFO) fn = 'info';
-				console[fn](line + this.objectsToString(...object));
+				const consoleObj = target.console ? target.console : console;
+				consoleObj[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
 				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + '\n');

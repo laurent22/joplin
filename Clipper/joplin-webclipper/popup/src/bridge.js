@@ -1,4 +1,4 @@
-const randomClipperPort = require('./randomClipperPort');
+const { randomClipperPort } = require('./randomClipperPort');
 
 class Bridge {
 
