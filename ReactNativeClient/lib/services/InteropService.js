@@ -120,7 +120,7 @@ class InteropService {
 		return this.modules_;
 	}
 
-	moduleByFormat_(type, format) {
+	findModuleByFormat_(type, format) {
 		const modules = this.modules();
 		// console.log(JSON.stringify({modules}, null, 2))
 		for (let i = 0; i < modules.length; i++) {
@@ -130,8 +130,8 @@ class InteropService {
 		return null;
 	}
 
-	newModule_(type, format) {
-		const module = this.moduleByFormat_(type, format);
+	newModuleByFormat_(type, format) {
+		const module = this.findModuleByFormat_(type, format);
 		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
 		const ModuleClass = require(module.path);
 		const output = new ModuleClass();
@@ -140,7 +140,6 @@ class InteropService {
 	}
 
 	newModuleFromPath_(options) {
-		// const module = this.moduleByFormat_(type, format);
 		if (!options || !options.modulePath) throw new Error('Cannot load module without a defined path to load from.');
 		const ModuleClass = require(options.modulePath);
 		const output = new ModuleClass();
@@ -269,7 +268,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModule_('exporter', exportFormat);
+		const exporter = this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
