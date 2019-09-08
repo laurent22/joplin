@@ -85,7 +85,6 @@
     "jasmine": "^2.6.0"
   },
   "scripts": {
-    "test": "jasmine",
-    "postinstall": "cd .. && npm i"
+    "test": "jasmine"
   }
 }
