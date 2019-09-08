@@ -4,6 +4,19 @@ const Mustache = require('mustache');
 
 const headerHtml = `<!doctype html>
 <html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from {{sourceMarkdownFile}} and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file: {{sourceMarkdownFile}}
+
+!!! WARNING !!!
+
+-->
+
 <head>
 	<title>{{pageTitle}}</title>
 	<meta charset="utf-8">
