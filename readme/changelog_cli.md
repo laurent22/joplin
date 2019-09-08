@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.145](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.145) - 2019-09-08T16:23:02Z
+
+- New: Added headless server command (Beta) (#1860)
+- Improved: Improved bold formatting support in Enex import (#1708)
+- Improved: Make translation files smaller by not including untranslated strings. Also add percentage translated to config screen. (#1459)
+- Fixed: Make sure setting side-effects are applied even when running in command line mode (#1779)
+- Fixed: Fix typo on encryption options screen (#1823)
+- Fixed: Fixes fatal error with cli 1.0.141 on start (#1791)
+
 ## [cli-v1.0.137](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.137) - 2019-05-19T11:04:28Z
 
 - Fixed: Fixed method to autosize resource
