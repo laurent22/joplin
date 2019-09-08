@@ -223,6 +223,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						await enexXmlToMd(note.bodyXml, note.resources);
 					delete note.bodyXml;
 
+					note.markup_language = importOptions.outputFormat === 'html' ?
+						Note.MARKUP_LANGUAGE_HTML :
+						Note.MARKUP_LANGUAGE_MARKDOWN;
+
 					// console.info('*************************************************************************');
 					// console.info(body);
 					// console.info('*************************************************************************');
