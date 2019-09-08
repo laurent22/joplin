@@ -33,6 +33,7 @@ node_modules/
 ReactNativeClient/android
 ReactNativeClient/ios
 ReactNativeClient/lib/vendor/
+ReactNativeClient/lib/welcomeAssets.js
 ReactNativeClient/locales
 ReactNativeClient/node_modules
 readme/
