@@ -9,11 +9,11 @@ const headerHtml = `<!doctype html>
 
 !!! WARNING !!!
 
-This file was auto-generated from {{sourceMarkdownFile}} and any manual change
+This file was auto-generated from {{{sourceMarkdownFile}}} and any manual change
 made to it will be overwritten. To make a change to this file please modify
-the source Markdown file: {{sourceMarkdownFile}}
+the source Markdown file:
 
-!!! WARNING !!!
+https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 
 -->
 
@@ -500,20 +500,42 @@ async function main() {
 
 	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
 
-	renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog (Desktop App)' });
-	renderFileToHtml(rootDir + '/readme/changelog_cli.md', rootDir + '/docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' });
-	renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', { title: 'Web Clipper' });
-	renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', { title: 'Debugging' });
-	renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', { title: 'Desktop Application' });
-	renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', { title: 'Donate' });
-	renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', { title: 'End-To-End Encryption' });
-	renderFileToHtml(rootDir + '/readme/faq.md', rootDir + '/docs/faq/index.html', { title: 'FAQ' });
-	renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', { title: 'Mobile Application' });
-	renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', { title: 'Specifications' });
-	renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', { title: 'Statistics' });
-	renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', { title: 'Terminal Application' });
-	renderFileToHtml(rootDir + '/readme/api.md', rootDir + '/docs/api/index.html', { title: 'REST API' });
-	renderFileToHtml(rootDir + '/readme/prereleases.md', rootDir + '/docs/prereleases/index.html', { title: 'Pre-releases' });
+	const sources = [
+		[ 'readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' } ],
+		[ 'readme/changelog_cli.md', 'docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' } ],
+		[ 'readme/clipper.md', 'docs/clipper/index.html', { title: 'Web Clipper' } ],
+		[ 'readme/debugging.md', 'docs/debugging/index.html', { title: 'Debugging' } ],
+		[ 'readme/desktop.md', 'docs/desktop/index.html', { title: 'Desktop Application' } ],
+		[ 'readme/donate.md', 'docs/donate/index.html', { title: 'Donate' } ],
+		[ 'readme/e2ee.md', 'docs/e2ee/index.html', { title: 'End-To-End Encryption' } ],
+		[ 'readme/faq.md', 'docs/faq/index.html', { title: 'FAQ' } ],
+		[ 'readme/mobile.md', 'docs/mobile/index.html', { title: 'Mobile Application' } ],
+		[ 'readme/spec.md', 'docs/spec/index.html', { title: 'Specifications' } ],
+		[ 'readme/stats.md', 'docs/stats/index.html', { title: 'Statistics' } ],
+		[ 'readme/terminal.md', 'docs/terminal/index.html', { title: 'Terminal Application' } ],
+		[ 'readme/api.md', 'docs/api/index.html', { title: 'REST API' } ],
+		[ 'readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' } ],
+	];
+
+	for (const source of sources) {
+		source[2].sourceMarkdownFile = source[0];
+		renderFileToHtml(rootDir + '/' + source[0], rootDir + '/' + source[1], source[2]);
+	}
+
+	// renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog (Desktop App)' });
+	// renderFileToHtml(rootDir + '/readme/changelog_cli.md', rootDir + '/docs/changelog_cli/index.html', { title: 'Changelog (CLI App)' });
+	// renderFileToHtml(rootDir + '/readme/clipper.md', rootDir + '/docs/clipper/index.html', { title: 'Web Clipper' });
+	// renderFileToHtml(rootDir + '/readme/debugging.md', rootDir + '/docs/debugging/index.html', { title: 'Debugging' });
+	// renderFileToHtml(rootDir + '/readme/desktop.md', rootDir + '/docs/desktop/index.html', { title: 'Desktop Application' });
+	// renderFileToHtml(rootDir + '/readme/donate.md', rootDir + '/docs/donate/index.html', { title: 'Donate' });
+	// renderFileToHtml(rootDir + '/readme/e2ee.md', rootDir + '/docs/e2ee/index.html', { title: 'End-To-End Encryption' });
+	// renderFileToHtml(rootDir + '/readme/faq.md', rootDir + '/docs/faq/index.html', { title: 'FAQ' });
+	// renderFileToHtml(rootDir + '/readme/mobile.md', rootDir + '/docs/mobile/index.html', { title: 'Mobile Application' });
+	// renderFileToHtml(rootDir + '/readme/spec.md', rootDir + '/docs/spec/index.html', { title: 'Specifications' });
+	// renderFileToHtml(rootDir + '/readme/stats.md', rootDir + '/docs/stats/index.html', { title: 'Statistics' });
+	// renderFileToHtml(rootDir + '/readme/terminal.md', rootDir + '/docs/terminal/index.html', { title: 'Terminal Application' });
+	// renderFileToHtml(rootDir + '/readme/api.md', rootDir + '/docs/api/index.html', { title: 'REST API' });
+	// renderFileToHtml(rootDir + '/readme/prereleases.md', rootDir + '/docs/prereleases/index.html', { title: 'Pre-releases' });
 }
 
 main().catch((error) => {
