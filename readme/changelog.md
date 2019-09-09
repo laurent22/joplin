@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v1.0.166](https://github.com/laurent22/joplin/releases/tag/v1.0.166) - 2019-09-09T17:35:54Z
+
+Note that on Windows the code signing certificate has been renewed, which sometimes trigger warnings when installing the application.
+
+- New: Add support for anchor hashes in note links ([#1490](https://github.com/laurent22/joplin/issues/1490))
+- Improved: Only support checkboxes that start with a dash ([#1832](https://github.com/laurent22/joplin/issues/1832))
+- Improved: Apply current locale to date and time ([#1822](https://github.com/laurent22/joplin/issues/1822))
+- Improved: Update template prompt font and sort templates ([#1806](https://github.com/laurent22/joplin/issues/1806))
+- Fixed: Do not scroll text when search is open and user type in note ([#1833](https://github.com/laurent22/joplin/issues/1833))
+- Fixed: Fixed cropped content issue when printing or exporting to PDF ([#1815](https://github.com/laurent22/joplin/issues/1815))
+- Fixed: Fix typo on encryption options screen ([#1823](https://github.com/laurent22/joplin/issues/1823))
+- Fixed: Use correct date format for templates ([#1810](https://github.com/laurent22/joplin/issues/1810)) ([#1803](https://github.com/laurent22/joplin/issues/1803))
+
 ## [v1.0.165](https://github.com/laurent22/joplin/releases/tag/v1.0.165) - 2019-08-14T21:46:29Z
 
 - New: Added support for Fountain screenwriting language
