@@ -912,7 +912,7 @@ const NoteScreen = connect(state => {
 		folders: state.folders,
 		searchQuery: state.searchQuery,
 		theme: state.settings.theme,
-		editorFont: [state.settings.editorFont],
+		editorFont: [state.settings['style.editor.fontFamily']],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
