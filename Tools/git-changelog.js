@@ -209,10 +209,11 @@ async function main() {
 	if (!argv._.length) throw new Error('Tag name must be specified. Provide the tag of the new version and git-changelog will walk backward to find the changes to the previous relevant tag.');
 
 	const fromTagName = argv._[0];
+	let toTagName = argv._.length >= 2 ? argv._[1] : '';
 
 	const platform = platformFromTag(fromTagName);
 
-	const toTagName = await findFirstRelevantTag(fromTagName);
+	if (!toTagName) toTagName = await findFirstRelevantTag(fromTagName);
 
 	const logsSinceTags = await gitLog(toTagName);
 
