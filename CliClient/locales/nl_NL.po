@@ -397,6 +397,23 @@ msgstr "Doorzoekt alle notities op het opgegeven <pattern>."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -752,6 +769,10 @@ msgstr "&Help"
 
 msgid "Website and documentation"
 msgstr "Website en documentatie"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin-website"
 
 msgid "Make a donation"
 msgstr "Doneren"
@@ -1660,6 +1681,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 msgid "Enable note history"
 msgstr "Inschakelen geschiedenis van notities"
 
@@ -2177,10 +2203,6 @@ msgstr "Zoeken"
 #~ msgstr ""
 #~ "Het pad waarnaar gesynchroniseerd moet worden als bestandssysteem-"
 #~ "synchronisatie is ingeschakeld. Zie `sync.target`."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin-website"
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."

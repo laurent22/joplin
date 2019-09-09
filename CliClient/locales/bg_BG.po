@@ -394,6 +394,23 @@ msgstr "Търси всред всички бележки за зададени�
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -753,6 +770,10 @@ msgstr "Помощ (&H)"
 
 msgid "Website and documentation"
 msgstr "Уебсайт и документация"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin експорт файл"
 
 msgid "Make a donation"
 msgstr "Искам да направя дарение"
@@ -1657,6 +1678,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорирай грешки в TLS сертификати"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 msgid "Enable note history"
 msgstr "Пусни история за бележките"

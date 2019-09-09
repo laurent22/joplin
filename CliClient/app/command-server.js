@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (start|stop|status).') + ' This is an experimental feature - use at your own risks! It is recommended that the server runs off its own separate profile so that no two CLI instances access that profile at the same time. Use --profile to specify the profile path.';
+		return _('Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).', ['start', 'stop', 'status'].join('|')) + ' This is an experimental feature - use at your own risks! It is recommended that the server runs off its own separate profile so that no two CLI instances access that profile at the same time. Use --profile to specify the profile path.';
 	}
 
 	async action(args) {
@@ -43,7 +43,7 @@ class Command extends BaseCommand {
 			this.stdout(runningOnPort ? _('Server is running on port %d', runningOnPort) : _('Server is not running.'));
 		} else if (command === 'stop') {
 			if (!runningOnPort) {
-				this.stdout(_('Server is not running'));
+				this.stdout(_('Server is not running.'));
 				return;
 			}
 			const pid = await shim.fsDriver().readFile(pidPath);

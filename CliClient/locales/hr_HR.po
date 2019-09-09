@@ -393,6 +393,23 @@ msgstr "Obrisati bilješku?"
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Pretražuje dati <pattern> u svim bilješkama."
 
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
@@ -757,6 +774,10 @@ msgstr "Pomoć"
 
 msgid "Website and documentation"
 msgstr "Website i dokumentacija"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Evernote izvozne datoteke"
 
 #, fuzzy
 msgid "Make a donation"
@@ -1629,6 +1650,11 @@ msgid ""
 msgstr ""
 
 msgid "Ignore TLS certificate errors"
+msgstr ""
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
 msgstr ""
 
 #, fuzzy

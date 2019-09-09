@@ -359,6 +359,23 @@ msgstr ""
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -696,6 +713,10 @@ msgstr "Ajutor"
 
 msgid "Website and documentation"
 msgstr "Website și documentație"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Website Joplin"
 
 msgid "Make a donation"
 msgstr "Faceți o donație"
@@ -1537,6 +1558,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 #, fuzzy
 msgid "Enable note history"
 msgstr "Activați criptarea"
@@ -2018,10 +2044,6 @@ msgstr "Caută"
 
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Website Joplin"
 
 #~ msgid "State: %s."
 #~ msgstr "Statut: %s."

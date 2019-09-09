@@ -392,6 +392,23 @@ msgstr "Søger efter <pattern> mønster i alle noter."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -754,6 +771,10 @@ msgstr "Hjælp"
 
 msgid "Website and documentation"
 msgstr "Joplins hjemmeside og dokumentation"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin hjemmeside"
 
 msgid "Make a donation"
 msgstr "Giv en donation"
@@ -1638,6 +1659,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 #, fuzzy
 msgid "Enable note history"
 msgstr "Start kryptering"
@@ -2140,10 +2166,6 @@ msgstr "Søg"
 #~ msgstr ""
 #~ "Sti til synkronisering, når filsystem synkronisering er slået til. Se "
 #~ "`sync.target`."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin hjemmeside"
 
 #~ msgid "State: %s."
 #~ msgstr "Tilstand: %s."

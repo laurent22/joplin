@@ -378,6 +378,23 @@ msgstr "Tüm notlarda girilen <pattern> i arar."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -729,6 +746,10 @@ msgstr "Yardım"
 
 msgid "Website and documentation"
 msgstr "Web sitesi ve dökümanlar"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin v%s"
 
 msgid "Make a donation"
 msgstr "Bağış yapın"
@@ -1627,6 +1648,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS sertifikası hatalarını yoksay"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 #, fuzzy
 msgid "Enable note history"
 msgstr "Şifrelemeyi etkinleştir"
@@ -2136,6 +2162,3 @@ msgstr "Arama"
 #~ msgstr ""
 #~ "Dosya sistemi senkronizasyonu etkinleştirildiğinde senkronize edilecek "
 #~ "yol. Bakınız `sync.target`."
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"

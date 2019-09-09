@@ -390,6 +390,23 @@ msgstr "Busca o patrón <pattern> en todas as notas."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -754,6 +771,10 @@ msgstr "Axuda"
 
 msgid "Website and documentation"
 msgstr "Sitio web e documentación"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Sitio web de Joplin"
 
 msgid "Make a donation"
 msgstr "Doar"
@@ -1638,6 +1659,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 #, fuzzy
 msgid "Enable note history"
 msgstr "Activar cifrado"
@@ -2140,10 +2166,6 @@ msgstr "Buscar"
 #~ msgstr ""
 #~ "Ruta para sincronizar cando estea activada a sincronización do sistema de "
 #~ "ficheiros. Vexa «sync.target»."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Sitio web de Joplin"
 
 #~ msgid "State: %s."
 #~ msgstr "Estado: %s."

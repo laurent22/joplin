@@ -386,6 +386,23 @@ msgstr "주어진 <pattern>을 모든 노트에서 검색합니다."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -734,6 +751,10 @@ msgstr "도움말"
 
 msgid "Website and documentation"
 msgstr "웹사이트 및 각종 문서"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "조플린 v%s"
 
 msgid "Make a donation"
 msgstr "기부하기"
@@ -1622,6 +1643,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 msgid "Enable note history"
 msgstr "노트 역사 허용"
 
@@ -2120,9 +2146,6 @@ msgstr "검색"
 #~ msgstr ""
 #~ "파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`"
 #~ "를 참조하세요."
-
-#~ msgid "Joplin v%s"
-#~ msgstr "조플린 v%s"
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."

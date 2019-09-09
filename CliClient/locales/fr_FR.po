@@ -14,6 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pour supprimer une vignette, enlever là des notes associées."
@@ -391,6 +393,26 @@ msgstr "Chercher le motif <pattern> dans toutes les notes."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Démarre, stop ou vérifie l'état du serveur API. Pour spécifier sur quel port "
+"il doit tourner, veuillez utiliser la variable de config api.port. Les "
+"commandes sont (%s)."
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Le serveur tourne déjà sur le port %d"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Le serveur tourne sur le port %d"
+
+msgid "Server is not running."
+msgstr "Le serveur est arrêté."
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -752,6 +774,9 @@ msgstr "&Aide"
 
 msgid "Website and documentation"
 msgstr "Documentation en ligne"
+
+msgid "Joplin Forum"
+msgstr "Forum Joplin"
 
 msgid "Make a donation"
 msgstr "Faire un don"
@@ -1659,6 +1684,13 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer les erreurs de certificats TLS"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Détermine quel port sera utilisé par le serveur API. Si aucun n'est "
+"spécifié, un port par défaut sera utilisé."
+
 msgid "Enable note history"
 msgstr "Activer l'historique des notes"
 
@@ -2171,9 +2203,6 @@ msgstr "Chercher"
 #~ msgstr ""
 #~ "Le chemin du répertoire avec lequel synchroniser lorsque la "
 #~ "synchronisation par système de fichier est activée. Voir `sync.target`."
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"
 
 #~ msgid "Remove?"
 #~ msgstr "Supprimer ?"

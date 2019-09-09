@@ -387,6 +387,23 @@ msgstr "指定された<pattern>をすべてのノートから検索する。"
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -739,6 +756,10 @@ msgstr "&ヘルプ"
 
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "JoplinのWebサイト"
 
 msgid "Make a donation"
 msgstr "寄付する"
@@ -1632,6 +1653,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 msgid "Enable note history"
 msgstr "ノートの履歴を有効にする"
 
@@ -2134,10 +2160,6 @@ msgstr "検索"
 #~ msgstr ""
 #~ "ファイルシステム同期の有効時に同期を行うパスです。`sync.target`も参考にし"
 #~ "てください。"
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "JoplinのWebサイト"
 
 #~ msgid "State: %s."
 #~ msgstr "状態: \"%s\"."

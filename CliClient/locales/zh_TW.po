@@ -374,6 +374,23 @@ msgstr "在所有記事中搜索特定的 <pattern>。"
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -727,6 +744,10 @@ msgstr "說明"
 
 msgid "Website and documentation"
 msgstr "官方網站及線上說明"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin 官方網站"
 
 msgid "Make a donation"
 msgstr "捐助"
@@ -1593,6 +1614,11 @@ msgstr ""
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 證書錯誤"
 
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+
 #, fuzzy
 msgid "Enable note history"
 msgstr "啟用加密"
@@ -2088,10 +2114,6 @@ msgstr "搜尋"
 #~ "The path to synchronise with when file system synchronisation is enabled. "
 #~ "See `sync.target`."
 #~ msgstr "啟用檔案系統同步時要同步的路徑。請參閱 `sync.target`。"
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin 官方網站"
 
 #~ msgid "State: %s."
 #~ msgstr "狀態: %s。"
