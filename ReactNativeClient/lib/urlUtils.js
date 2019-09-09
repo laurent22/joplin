@@ -39,4 +39,19 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 	}
 };
 
+urlUtils.parseResourceUrl = function(url) {
+	const filename = url.split('/').pop();
+	const splitted = filename.split('#');
+
+	const output = {
+		itemId: '',
+		hash: '',
+	};
+
+	if (splitted.length) output.itemId = splitted[0];
+	if (splitted.length >= 2) output.hash = splitted[1];
+
+	return output;
+};
+
 module.exports = urlUtils;

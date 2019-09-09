@@ -196,7 +196,7 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(state, useSelectedNoteId = false) {
+	async refreshNotes(state, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -248,6 +248,7 @@ class BaseApplication {
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
 				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+				hash: noteHash,
 			});
 		} else {
 			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
@@ -388,6 +389,7 @@ class BaseApplication {
 		let refreshFolders = false;
 		// let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
+		let refreshNotesHash = '';
 
 		await reduxSharedMiddleware(store, next, action);
 
@@ -407,7 +409,10 @@ class BaseApplication {
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
 
-			if (action.type === 'FOLDER_AND_NOTE_SELECT') refreshNotesUseSelectedNoteId = true;
+			if (action.type === 'FOLDER_AND_NOTE_SELECT') {
+				refreshNotesUseSelectedNoteId = true;
+				refreshNotesHash = action.hash;
+			}
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -431,7 +436,7 @@ class BaseApplication {
 		}
 
 		if (refreshNotes) {
-			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
+			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
 
 		if (action.type === 'NOTE_UPDATE_ONE') {

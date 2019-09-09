@@ -36,6 +36,7 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
+const urlUtils = require('lib/urlUtils');
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -123,7 +124,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onJoplinLinkClick_ = async msg => {
 			try {
 				if (msg.indexOf('joplin://') === 0) {
-					const itemId = msg.substr('joplin://'.length);
+					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+					const itemId = resourceUrlInfo.itemId;
 					const item = await BaseItem.loadItemById(itemId);
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
@@ -140,6 +142,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 								type: 'NAV_GO',
 								routeName: 'Note',
 								noteId: item.id,
+								noteHash: resourceUrlInfo.hash,
 							});
 						}, 5);
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
@@ -823,6 +826,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
 						theme={this.props.theme}
+						noteHash={this.props.noteHash}
 						onCheckboxChange={newBody => {
 							onCheckboxChange(newBody);
 						}}
@@ -906,6 +910,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 const NoteScreen = connect(state => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+		noteHash: state.selectedNoteHash,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,

@@ -1,20 +1,21 @@
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const Resource = require('lib/models/Resource.js');
 const utils = require('../../utils');
+const urlUtils = require('lib/urlUtils.js');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
 	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
-		const isResourceUrl = Resource.isResourceUrl(href);
+		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
+		const isResourceUrl = !!resourceHrefInfo.itemId;
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
 
 		let resourceIdAttr = '';
 		let icon = '';
 		let hrefAttr = '#';
 		if (isResourceUrl) {
-			const resourceId = Resource.pathToId(href);
+			const resourceId = resourceHrefInfo.itemId;
 
 			const result = ruleOptions.resources[resourceId];
 			const resourceStatus = utils.resourceStatus(result);
@@ -24,6 +25,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				return '<a class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>';
 			} else {
 				href = 'joplin://' + resourceId;
+				if (resourceHrefInfo.hash) href += '#' + resourceHrefInfo.hash;
 				resourceIdAttr = 'data-resource-id=\'' + resourceId + '\'';
 				icon = '<span class="resource-icon"></span>';
 			}

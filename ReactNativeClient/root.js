@@ -236,6 +236,8 @@ const appReducer = (state = appDefaultState, action) => {
 
 				newState = Object.assign({}, state);
 
+				newState.selectedNoteHash = '';
+
 				if ('noteId' in action) {
 					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
 				}
@@ -257,6 +259,10 @@ const appReducer = (state = appDefaultState, action) => {
 
 				if ('itemType' in action) {
 					newState.selectedItemType = action.itemType;
+				}
+
+				if ('noteHash' in action) {
+					newState.selectedNoteHash = action.noteHash;
 				}
 
 				if ('sharedData' in action) {

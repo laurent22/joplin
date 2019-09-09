@@ -574,8 +574,14 @@ class NoteTextComponent extends React.Component {
 				this.editor_.editor.moveCursorTo(0, 0);
 
 				setTimeout(() => {
-					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
-					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+					// If we have an anchor hash, jump to that anchor
+					if (this.props.selectedNoteHash) {
+						this.webviewRef_.current.wrappedInstance.send('scrollToHash', this.props.selectedNoteHash);
+					} else {
+						// Otherwise restore the normal scroll position
+						this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
+						this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+					}
 				}, 10);
 			}
 
@@ -797,7 +803,8 @@ class NoteTextComponent extends React.Component {
 
 			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
-			const itemId = msg.substr('joplin://'.length);
+			const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+			const itemId = resourceUrlInfo.itemId;
 			const item = await BaseItem.loadItemById(itemId);
 
 			if (!item) throw new Error('No item with ID ' + itemId);
@@ -815,6 +822,7 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: item.parent_id,
 					noteId: item.id,
+					hash: resourceUrlInfo.hash,
 					historyNoteAction: {
 						id: this.state.note.id,
 						parent_id: this.state.note.parent_id,
@@ -2055,6 +2063,7 @@ const mapStateToProps = state => {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedNoteHash: state.selectedNoteHash,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,

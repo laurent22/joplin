@@ -909,6 +909,9 @@ class Application extends BaseApplication {
 					accelerator: 'F1',
 					click () { bridge().openExternal('https://joplinapp.org'); },
 				}, {
+					label: _('Joplin Forum'),
+					click () { bridge().openExternal('https://discourse.joplinapp.org'); },
+				}, {
 					label: _('Make a donation'),
 					click () { bridge().openExternal('https://joplinapp.org/donate/'); },
 				}, {
