@@ -24,7 +24,8 @@
     "appId": "net.cozic.joplin-desktop",
     "npmRebuild": false,
     "extraResources": [
-      "build/icons/*"
+      "build/icons/*",
+      "build/images/*"
     ],
     "win": {
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
@@ -141,6 +142,7 @@
     "read-chunk": "^2.1.0",
     "readability-node": "^0.1.0",
     "redux": "^3.7.2",
+    "reselect": "^4.0.0",
     "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
