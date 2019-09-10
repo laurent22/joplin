@@ -39,7 +39,13 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 	}
 };
 
+urlUtils.isResourceUrl = function(url) {
+	return !!url.match(/^(joplin:\/\/|:\/)[0-9a-zA-Z]{32}(|#.*)$/);
+};
+
 urlUtils.parseResourceUrl = function(url) {
+	if (!urlUtils.isResourceUrl(url)) return null;
+
 	const filename = url.split('/').pop();
 	const splitted = filename.split('#');
 

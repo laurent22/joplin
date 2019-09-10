@@ -8,7 +8,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
-		const isResourceUrl = !!resourceHrefInfo.itemId;
+		const isResourceUrl = !!resourceHrefInfo;
 		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
 
 		let resourceIdAttr = '';
