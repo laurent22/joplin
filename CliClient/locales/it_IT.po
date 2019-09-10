@@ -399,17 +399,19 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"Avvia, ferma o controlla il server API. Per specificare su quale porta deve "
+"essere eseguito, setta la variabile api.config. I comandi sono (%s)."
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "Il server è già in esecuzione sulla porta %d"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "Il server è in esecuzione sulla porta %d"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "Il server non è in esecuzione."
 
 #, javascript-format
 msgid ""
@@ -776,9 +778,8 @@ msgstr "&Aiuto"
 msgid "Website and documentation"
 msgstr "Sito web e documentazione"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin v%s"
+msgstr "Joplin Forum"
 
 msgid "Make a donation"
 msgstr "Fai una donazione"
@@ -1588,9 +1589,8 @@ msgstr "Attiva sintassi ++insert++"
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "Attiva sintassi ~sub~"
+msgstr "Attiva supporto sintassi Fountain"
 
 msgid "Show tray icon"
 msgstr "Visualizza tray icon"
@@ -1685,6 +1685,8 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"Specifica la porta che deve essere usata dal server API. Se non viene "
+"settato, viene usato un valore di default."
 
 msgid "Enable note history"
 msgstr "Attiva cronologia della nota"
@@ -1842,13 +1844,11 @@ msgstr "Permesso di usare la fotocamera"
 msgid "Your permission to use your camera is required."
 msgstr "E’ richiesto il permesso di usare la fotocamera."
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "Elimina la nota o il taccuino selezionato."
+msgstr "Al momento non hai taccuini."
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "Crea un nuovo Taccuino."
+msgstr "Crea un Taccuino"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
