@@ -811,6 +811,21 @@ class Setting extends BaseModel {
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
+		if (name === 'encryption') return _('Encryption');
+		if (name === 'server') return _('Web Clipper');
+		return name;
+	}
+
+	static sectionNameToIcon(name, platform) {
+		if (name === 'general') return 'fa-sliders';
+		if (name === 'sync') return 'fa-refresh';
+		if (name === 'appearance') return 'fa-pencil';
+		if (name === 'note') return 'fa-file-text-o';
+		if (name === 'plugins') return 'fa-puzzle-piece';
+		if (name === 'application') return 'fa-cog';
+		if (name === 'revisionService') return 'fa-archive-org';
+		if (name === 'encryption') return 'fa-key-modern';
+		if (name === 'server') return 'fa-hand-scissors-o';
 		return name;
 	}
 

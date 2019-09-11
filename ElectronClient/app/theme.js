@@ -65,7 +65,11 @@ globalStyle.buttonStyle = {
 	maxWidth: 160,
 	paddingLeft: 12,
 	paddingRight: 12,
+	paddingTop: 6,
+	paddingBottom: 6,
 	boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
+	fontSize: globalStyle.fontSize,
+	borderRadius: 4,
 };
 
 const lightStyle = {
@@ -140,6 +144,8 @@ const darkStyle = {
 
 	editorTheme: 'twilight',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
+
+	highlightedColor: '#0066C7',
 };
 
 // Solarized Styles
@@ -313,6 +319,11 @@ function addExtraStyles(style) {
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
 	style.dropdownList = Object.assign({}, style.inputStyle);
+
+	// In general the highlighted color, used to highlight text or icons, should be the same as selectedColor2
+	// but some times, depending on the theme, it might be too dark or too light, so it can be
+	// specified directly by the theme too.
+	if (!style.highlightedColor) style.highlightedColor = style.selectedColor2;
 
 	return style;
 }
