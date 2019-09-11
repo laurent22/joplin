@@ -1,8 +1,12 @@
 # Joplin changelog
 
+## [v1.0.167](https://github.com/laurent22/joplin/releases/tag/v1.0.167) - 2019-09-10T08:48:37Z
+
+- Fixed: Fixed link issue following last update
+
 ## [v1.0.166](https://github.com/laurent22/joplin/releases/tag/v1.0.166) - 2019-09-09T17:35:54Z
 
-Note that on Windows the code signing certificate has been renewed, which sometimes trigger warnings when installing the application.
+Note that on Windows the code signing certificate has been renewed, which some times triggers warnings when installing the application.
 
 - New: Add support for anchor hashes in note links ([#1490](https://github.com/laurent22/joplin/issues/1490))
 - Improved: Only support checkboxes that start with a dash ([#1832](https://github.com/laurent22/joplin/issues/1832))
@@ -14,28 +18,6 @@ Note that on Windows the code signing certificate has been renewed, which someti
 - Fixed: Use correct date format for templates ([#1810](https://github.com/laurent22/joplin/issues/1810)) ([#1803](https://github.com/laurent22/joplin/issues/1803))
 
 ## [v1.0.165](https://github.com/laurent22/joplin/releases/tag/v1.0.165) - 2019-08-14T21:46:29Z
-
-- New: Added support for Fountain screenwriting language
-- New: Add solarized themes to desktop client ([#1733](https://github.com/laurent22/joplin/issues/1733))
-- New: Added support for templates ([#1647](https://github.com/laurent22/joplin/issues/1647))
-- New: Added markup language to property dialog
-- New: Add support for cinnamon to install script ([#1738](https://github.com/laurent22/joplin/issues/1738))
-- Improved: Better handling of adding the title to print and export to PDF ([#1744](https://github.com/laurent22/joplin/issues/1744))
-- Improved: Improved bold formatting support in Enex import ([#1708](https://github.com/laurent22/joplin/issues/1708))
-- Improved: Create fileURLs via drag and drop ([#1653](https://github.com/laurent22/joplin/issues/1653))
-- Improved: No longer crash if certain theme properties are not set
-- Improved: Make translation files smaller by not including untranslated strings. Also add percentage translated to config screen. ([#1459](https://github.com/laurent22/joplin/issues/1459))
-- Improved: Only repeat failed requests up to 3 times during sync
-- Improved: Upgraded packages to fix security issue
-- Improved: Make depthColor theme property optional
-- Improved: Optimised loading of multiple items
-- Improved: Disable Markdown actions for HTML notes
-- Improved: Footnote, toc-done-right, anchor ([#1741](https://github.com/laurent22/joplin/issues/1741))
-- Fixed: Fixed Back button icon on Config screen
-- Fixed: Fixed note order when dragging a note outside a notebook ([#1732](https://github.com/laurent22/joplin/issues/1732))
-- Fixed: Fixed race condition when loading a note while another one is still loading. Improved performance when loading large note.
-
-## [v1.0.164](https://github.com/laurent22/joplin/releases/tag/v1.0.164) - 2019-08-14T21:07:27Z
 
 - New: Added support for Fountain screenwriting language
 - New: Add solarized themes to desktop client ([#1733](https://github.com/laurent22/joplin/issues/1733))
