@@ -389,17 +389,19 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは "
+"api.port で変更できます。コマンドは (%s)。"
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "サーバーはすでにポート %d で実行中です。"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "サーバーはポート %d で実行中です。"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "サーバーは実行されていません。"
 
 #, javascript-format
 msgid ""
@@ -664,7 +666,6 @@ msgstr "&ファイル"
 msgid "About Joplin"
 msgstr "Joplinについて"
 
-#, fuzzy
 msgid "Preferences..."
 msgstr "環境設定"
 
@@ -756,9 +757,8 @@ msgstr "&ヘルプ"
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "JoplinのWebサイト"
+msgstr "Joplinフォーラム"
 
 msgid "Make a donation"
 msgstr "寄付する"
@@ -1492,10 +1492,10 @@ msgid "Dark"
 msgstr "暗い"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised (明)"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised (暗)"
 
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
@@ -1563,9 +1563,8 @@ msgstr "++追加++構文を有効にする"
 msgid "Enable multimarkdown table extension"
 msgstr "MultiMarkdownのテーブル拡張を有効にする"
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "~下付きテキスト~構文を有効にする"
+msgstr "Fountain構文を有効にする"
 
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
@@ -1656,6 +1655,8 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが"
+"使用されます。"
 
 msgid "Enable note history"
 msgstr "ノートの履歴を有効にする"
@@ -1813,13 +1814,11 @@ msgstr "カメラ使用の許可"
 msgid "Your permission to use your camera is required."
 msgstr "カメラを使用するには権限が必要です。"
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "選択中のノートまたはノートブックを削除"
+msgstr "ノートブックがありません。"
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "あたらしいノートブックを作成します。"
+msgstr "ノートブックを作成します。"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "ノートがありません。(+)ボタンを押して新しいノートを作成してください。"
@@ -2067,7 +2066,6 @@ msgstr "地図上に表示"
 msgid "Go to source URL"
 msgstr "ソースURLに行く"
 
-#, fuzzy
 msgid "Attach..."
 msgstr "添付..."
 
@@ -2095,14 +2093,12 @@ msgstr "ToDoに変換"
 msgid "Properties"
 msgstr "プロパティ"
 
-#, fuzzy
 msgid "Add body"
-msgstr "ボディを追加"
+msgstr "本文を追加"
 
 msgid "Edit"
 msgstr "編集"
 
-#, fuzzy
 msgid "Add title"
 msgstr "タイトルを追加"
 
