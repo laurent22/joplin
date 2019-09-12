@@ -1,4 +1,5 @@
 const { rtrimSlashes } = require('lib/path-utils');
+const { urlDecode } = require('lib/string-utils');
 
 const urlUtils = {};
 
@@ -55,7 +56,11 @@ urlUtils.parseResourceUrl = function(url) {
 	};
 
 	if (splitted.length) output.itemId = splitted[0];
-	if (splitted.length >= 2) output.hash = splitted[1];
+
+	// In general we want the hash to be decoded so that non-alphabetical languages
+	// appear as-is without being encoded with %.
+	// Fixes https://github.com/laurent22/joplin/issues/1870
+	if (splitted.length >= 2) output.hash = urlDecode(splitted[1]);
 
 	return output;
 };
