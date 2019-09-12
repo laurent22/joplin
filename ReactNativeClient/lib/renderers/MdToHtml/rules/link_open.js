@@ -4,7 +4,7 @@ const utils = require('../../utils');
 const urlUtils = require('lib/urlUtils.js');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
-	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+	markdownIt.renderer.rules.link_open = function(tokens, idx) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);

@@ -5,7 +5,7 @@ const stringPadding = require('string-padding');
 
 const cliUtils = {};
 
-cliUtils.printArray = function(logFunction, rows, headers = null) {
+cliUtils.printArray = function(logFunction, rows) {
 	if (!rows.length) return '';
 
 	const ALIGN_LEFT = 0;
@@ -167,7 +167,7 @@ cliUtils.promptConfirm = function(message, answers = null) {
 
 	message += ' (' + answers.join('/') + ')';
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		rl.question(message + ' ', answer => {
 			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
 			rl.close();
@@ -179,6 +179,7 @@ cliUtils.promptConfirm = function(message, answers = null) {
 // Note: initialText is there to have the same signature as statusBar.prompt() so that
 // it can be a drop-in replacement, however initialText is not used (and cannot be
 // with readline.question?).
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 cliUtils.prompt = function(initialText = '', promptString = ':', options = null) {
 	if (!options) options = {};
 
@@ -198,7 +199,7 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 		terminal: true,
 	});
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		mutableStdout.muted = false;
 
 		rl.question(promptString, answer => {

@@ -21,7 +21,7 @@ function wslToWinPath(wslPath) {
 }
 
 function increaseGradleVersionCode(content) {
-	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode, c) {
+	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
 		const n = Number(versionCode);
 		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + versionCode);
 		return 'versionCode ' + (n + 1);

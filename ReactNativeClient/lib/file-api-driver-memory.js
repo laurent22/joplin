@@ -54,7 +54,7 @@ class FileApiDriverMemory {
 		item.updated_time = timestampMs;
 	}
 
-	async list(path, options) {
+	async list(path) {
 		let output = [];
 
 		for (let i = 0; i < this.items_.length; i++) {

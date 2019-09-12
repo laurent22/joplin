@@ -71,7 +71,7 @@ class Bridge {
 		const bgp = browser.extension.getBackgroundPage();
 		if (bgp) return bgp;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			browser.runtime.getBackgroundPage((bgp) => {
 				resolve(bgp);
 			});
@@ -204,7 +204,7 @@ class Bridge {
 	async tabsQuery(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.query(options);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.query(options, (tabs) => {
 				resolve(tabs);
 			});
@@ -214,7 +214,7 @@ class Bridge {
 	async tabsSendMessage(tabId, command) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.sendMessage(tabId, command, (result) => {
 				resolve(result);
 			});
@@ -224,7 +224,7 @@ class Bridge {
 	async tabsCreate(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.create(options, () => {
 				resolve();
 			});
@@ -238,7 +238,7 @@ class Bridge {
 	async storageSet(keys) {
 		if (this.browserSupportsPromises_) return this.browser().storage.local.set(keys);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().storage.local.set(keys, () => {
 				resolve();
 			});
@@ -254,7 +254,7 @@ class Bridge {
 				return defaultValue;
 			}
 		} else {
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				this.browser().storage.local.get(keys, (result) => {
 					resolve(result);
 				});

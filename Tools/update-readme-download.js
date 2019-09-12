@@ -10,7 +10,7 @@ const url = 'https://api.github.com/repos/laurent22/joplin/releases/latest';
 const readmePath = __dirname + '/../README.md';
 
 async function msleep(ms) {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve();
 		}, ms);

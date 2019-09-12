@@ -115,7 +115,7 @@ class ElectronAppWrapper {
 	async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (this.electronApp().isReady()) {
 					clearInterval(iid);
@@ -202,7 +202,7 @@ class ElectronAppWrapper {
 		}
 
 		// Someone tried to open a second instance - focus our window instead
-		this.electronApp_.on('second-instance', (event, commandLine, workingDirectory) => {
+		this.electronApp_.on('second-instance', () => {
 			const win = this.window();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();

@@ -79,7 +79,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
-let storeDispatch = function(action) {};
+let storeDispatch = function() {};
 
 const logReducerAction = function(action) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
@@ -155,7 +155,7 @@ const generalMiddleware = store => next => async (action) => {
 
 let navHistory = [];
 
-function historyCanGoBackTo(route, nextRoute) {
+function historyCanGoBackTo(route) {
 	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 

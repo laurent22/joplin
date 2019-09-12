@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 			warn: stdoutFn,
 			error: stdoutFn,
 		}});
-		ClipperServer.instance().setDispatch(action => {});
+		ClipperServer.instance().setDispatch(() => {});
 		ClipperServer.instance().setLogger(clipperLogger);
 
 		const pidPath = Setting.value('profileDir') + '/clipper-pid.txt';

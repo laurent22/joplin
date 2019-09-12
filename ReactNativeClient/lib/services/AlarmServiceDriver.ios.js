@@ -22,7 +22,7 @@ class AlarmServiceDriver {
 		return true;
 	}
 
-	notificationIsSet(alarmId) {
+	notificationIsSet() {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
@@ -35,7 +35,7 @@ class AlarmServiceDriver {
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			PushNotificationIOS.checkPermissions(async perm => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;

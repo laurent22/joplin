@@ -238,7 +238,7 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BOOL) {
-			const onCheckboxClick = event => {
+			const onCheckboxClick = () => {
 				updateSettingValue(key, !value);
 			};
 

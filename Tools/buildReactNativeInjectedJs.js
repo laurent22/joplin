@@ -16,7 +16,7 @@ async function copyJs(name, filePath) {
 	await fs.writeFile(outputPath, json);
 }
 
-async function main(argv) {
+async function main() {
 	await fs.mkdirp(outputDir);
 	await copyJs('webviewLib', rnDir + '/lib/renderers/webviewLib.js');
 }

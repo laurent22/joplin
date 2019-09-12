@@ -816,7 +816,7 @@ class Setting extends BaseModel {
 		return name;
 	}
 
-	static sectionNameToIcon(name, platform) {
+	static sectionNameToIcon(name) {
 		if (name === 'general') return 'fa-sliders';
 		if (name === 'sync') return 'fa-refresh';
 		if (name === 'appearance') return 'fa-pencil';

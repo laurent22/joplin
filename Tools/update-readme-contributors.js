@@ -66,7 +66,7 @@ function contributorTable(contributors) {
 	return lines.join('\n');
 }
 
-async function main(argv) {
+async function main() {
 	let contributors = [];
 	let pageIndex = 0;
 	const doneNames = [];

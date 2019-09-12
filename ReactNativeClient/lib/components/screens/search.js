@@ -13,7 +13,7 @@ const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 
 class SearchScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -185,7 +185,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 						</TouchableHighlight>
 					</View>
 
-					<FlatList data={this.state.notes} keyExtractor={(item, index) => item.id} renderItem={event => <NoteItem note={event.item} />} />
+					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
 				<DialogBox
 					ref={dialogbox => {

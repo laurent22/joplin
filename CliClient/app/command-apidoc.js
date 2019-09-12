@@ -31,7 +31,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	async action(args) {
+	async action() {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,

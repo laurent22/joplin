@@ -158,7 +158,7 @@ class Synchronizer {
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (this.state() == 'idle') {
 					clearInterval(iid);

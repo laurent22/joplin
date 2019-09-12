@@ -15,7 +15,7 @@ const itemHeight = 60;
 
 class GotoAnything {
 
-	onTrigger(event) {
+	onTrigger() {
 		this.dispatch({
 			type: 'PLUGIN_DIALOG_SET',
 			open: true,
@@ -106,7 +106,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	helpButton_onClick(event) {
+	helpButton_onClick() {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 

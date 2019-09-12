@@ -21,7 +21,7 @@ import { PermissionsAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -324,7 +324,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								color: theme.color,
 								fontSize: theme.fontSize,
 							}}
-							onValueChange={(itemValue, itemIndex) => {
+							onValueChange={(itemValue) => {
 								updateSettingValue(key, itemValue);
 							}}
 						/>

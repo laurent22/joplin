@@ -39,3 +39,9 @@ ReactNativeClient/node_modules
 readme/
 Tools/node_modules
 Tools/PortableAppsLauncher
+Server/.git/
+Server/.github/
+Server/docs/
+Server/dist/
+Server/bin/
+Server/node_modules/

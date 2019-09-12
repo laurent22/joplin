@@ -695,7 +695,7 @@ class AppGui {
 
 			term.grabInput();
 
-			term.on('key', async (name, matches, data) => {
+			term.on('key', async (name) => {
 				// -------------------------------------------------------------------------
 				// Handle special shortcuts
 				// -------------------------------------------------------------------------

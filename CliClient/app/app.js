@@ -125,7 +125,7 @@ class Application extends BaseApplication {
 			if (this.store()) {
 				return this.store().dispatch(action);
 			} else {
-				return action => {};
+				return () => {};
 			}
 		});
 
@@ -278,16 +278,16 @@ class Application extends BaseApplication {
 			stdout: text => {
 				console.info(text);
 			},
-			fullScreen: (b = true) => {},
+			fullScreen: () => {},
 			exit: () => {},
-			showModalOverlay: text => {},
+			showModalOverlay: () => {},
 			hideModalOverlay: () => {},
 			stdoutMaxWidth: () => {
 				return 100;
 			},
 			forceRender: () => {},
 			termSaveState: () => {},
-			termRestoreState: state => {},
+			termRestoreState: () => {},
 		};
 	}
 

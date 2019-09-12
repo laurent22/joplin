@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
+
 let shim = {};
 
 shim.isNode = () => {

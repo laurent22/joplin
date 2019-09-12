@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 });
 
 class StatusScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 

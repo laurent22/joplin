@@ -151,7 +151,7 @@ class NoteTextComponent extends React.Component {
 			this.setState({ lastKeys: lastKeys });
 		};
 
-		this.onEditorContextMenu_ = event => {
+		this.onEditorContextMenu_ = () => {
 			const menu = new Menu();
 
 			const selectedText = this.selectedText();
@@ -244,7 +244,7 @@ class NoteTextComponent extends React.Component {
 			updateSelectionRange();
 		};
 
-		this.aceEditor_focus = event => {
+		this.aceEditor_focus = () => {
 			updateSelectionRange();
 		};
 
@@ -1486,7 +1486,7 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('[', '](' + url + ')');
 	}
 
-	itemContextMenu(event) {
+	itemContextMenu() {
 		const note = this.state.note;
 		if (!note) return;
 
@@ -2016,7 +2016,7 @@ class NoteTextComponent extends React.Component {
 				showGutter={false}
 				name="note-editor"
 				wrapEnabled={true}
-				onScroll={event => {
+				onScroll={() => {
 					this.editor_scroll();
 				}}
 				ref={elem => {

@@ -63,7 +63,7 @@ class NoteTagsDialogComponent extends React.Component {
 			);
 		};
 
-		this.tagKeyExtractor = (tag, index) => tag.id;
+		this.tagKeyExtractor = (tag) => tag.id;
 
 		this.okButton_press = async () => {
 			this.setState({ savingTags: true });

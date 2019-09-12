@@ -77,7 +77,7 @@ class FileApiDriverLocal {
 		}
 	}
 
-	async list(path, options) {
+	async list(path) {
 		try {
 			const stats = await this.fsDriver().readDirStats(path);
 			const output = this.metadataFromStats_(stats);

@@ -19,7 +19,7 @@ class BaseCommand {
 		throw new Error('Description not defined');
 	}
 
-	async action(args) {
+	async action() {
 		throw new Error('Action not defined');
 	}
 

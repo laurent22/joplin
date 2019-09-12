@@ -229,7 +229,7 @@ class Api {
 		throw new ErrorMethodNotAllowed();
 	}
 
-	async action_ping(request, id = null, link = null) {
+	async action_ping(request) {
 		if (request.method === 'GET') {
 			return 'JoplinClipperServer';
 		}
@@ -552,7 +552,7 @@ class Api {
 		return output;
 	}
 
-	async downloadImage_(url, allowFileProtocolImages) {
+	async downloadImage_(url /*, allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;

@@ -13,7 +13,7 @@ class Command extends BaseCommand {
 		return _('Displays summary about the notes and notebooks.');
 	}
 
-	async action(args) {
+	async action() {
 		let service = new ReportService();
 		let report = await service.status(Setting.value('sync.target'));
 

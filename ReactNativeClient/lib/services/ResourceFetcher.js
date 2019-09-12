@@ -11,7 +11,7 @@ class ResourceFetcher extends BaseService {
 	constructor(fileApi = null) {
 		super();
 
-		this.dispatch = action => {};
+		this.dispatch = () => {};
 
 		this.setFileApi(fileApi);
 		this.logger_ = new Logger();
@@ -194,7 +194,7 @@ class ResourceFetcher extends BaseService {
 	}
 
 	async waitForAllFinished() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!this.updateReportIID_ && !this.scheduleQueueProcessIID_ && !this.addingResources_ && !this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
 					clearInterval(iid);

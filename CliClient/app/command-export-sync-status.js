@@ -17,7 +17,7 @@ class Command extends BaseCommand {
 		return true;
 	}
 
-	async action(args) {
+	async action() {
 		const service = new ReportService();
 		const csv = await service.basicItemList({ format: 'csv' });
 		const filePath = Setting.value('profileDir') + '/syncReport-' + new Date().getTime() + '.csv';

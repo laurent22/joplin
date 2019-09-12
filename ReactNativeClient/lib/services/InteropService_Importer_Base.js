@@ -12,7 +12,7 @@ class InteropService_Importer_Base {
 		this.options_ = options;
 	}
 
-	async exec(result) {}
+	async exec() {}
 
 	async temporaryDirectory_(createIt) {
 		const md5 = require('md5');

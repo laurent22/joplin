@@ -285,7 +285,7 @@ class BaseApplication {
 		}
 	}
 
-	async decryptionWorker_resourceMetadataButNotBlobDecrypted(event) {
+	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 		this.scheduleAutoAddResources();
 	}
 
@@ -575,7 +575,7 @@ class BaseApplication {
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
-		reg.dispatch = o => {};
+		reg.dispatch = () => {};
 
 		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
 		this.dbLogger_.setLevel(initArgs.logLevel);

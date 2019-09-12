@@ -530,8 +530,7 @@ class EncryptionService {
 		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0, 64));
 		const template = this.headerTemplate(version);
 
-		// eslint-disable-next-line no-unused-vars
-		const size = parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
+		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
 		let output = {};
 

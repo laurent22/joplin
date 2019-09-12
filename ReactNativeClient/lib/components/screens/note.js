@@ -41,7 +41,7 @@ const urlUtils = require('lib/urlUtils');
 import FileViewer from 'react-native-file-viewer';
 
 class NoteScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -358,7 +358,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async pickDocument() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			DocumentPicker.show({ filetype: [DocumentPickerUtil.allFiles()] }, (error, res) => {
 				if (error) {
 					// Also returns an error if the user doesn't pick a file
@@ -388,7 +388,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	showImagePicker(options) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			ImagePicker.launchImageLibrary(options, response => {
 				resolve(response);
 			});
@@ -750,7 +750,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
 	}
 
-	async folderPickerOptions_valueChanged(itemValue, itemIndex) {
+	async folderPickerOptions_valueChanged(itemValue) {
 		const note = this.state.note;
 
 		if (!note.id) {

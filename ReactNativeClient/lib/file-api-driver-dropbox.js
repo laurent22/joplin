@@ -61,7 +61,7 @@ class FileApiDriverDropbox {
 		return output;
 	}
 
-	async setTimestamp(path, timestampMs) {
+	async setTimestamp() {
 		throw new Error('Not implemented'); // Not needed anymore
 	}
 
@@ -97,7 +97,7 @@ class FileApiDriverDropbox {
 		}
 	}
 
-	async list(path, options) {
+	async list(path) {
 		let response = await this.api().exec('POST', 'files/list_folder', {
 			path: this.makePath_(path),
 		});
@@ -200,7 +200,7 @@ class FileApiDriverDropbox {
 		}
 	}
 
-	async move(oldPath, newPath) {
+	async move() {
 		throw new Error('Not supported');
 	}
 

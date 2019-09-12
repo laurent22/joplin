@@ -512,9 +512,8 @@ class BaseModel {
 		return output;
 	}
 
-	static delete(id, options = null) {
+	static delete(id) {
 		if (!id) throw new Error('Cannot delete object without an ID');
-		options = this.modOptions(options);
 		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
 	}
 
@@ -544,7 +543,7 @@ for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 }
 
 BaseModel.db_ = null;
-BaseModel.dispatch = function(o) {};
+BaseModel.dispatch = function() {};
 BaseModel.saveMutexes_ = {};
 
 module.exports = BaseModel;

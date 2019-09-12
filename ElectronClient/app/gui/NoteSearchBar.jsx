@@ -88,15 +88,15 @@ class NoteSearchBarComponent extends React.Component {
 		}
 	}
 
-	previousButton_click(event) {
+	previousButton_click() {
 		if (this.props.onPrevious) this.props.onPrevious();
 	}
 
-	nextButton_click(event) {
+	nextButton_click() {
 		if (this.props.onNext) this.props.onNext();
 	}
 
-	closeButton_click(event) {
+	closeButton_click() {
 		if (this.props.onClose) this.props.onClose();
 	}
 

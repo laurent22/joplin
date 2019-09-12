@@ -10,7 +10,7 @@ const { sprintf } = require('sprintf-js');
 
 class SearchEngine {
 	constructor() {
-		this.dispatch = action => {};
+		this.dispatch = () => {};
 		this.logger_ = new Logger();
 		this.db_ = null;
 		this.isIndexing_ = false;
