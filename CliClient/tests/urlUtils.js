@@ -35,7 +35,10 @@ describe('urlUtils', function() {
 	it('should detect resource URLs', asyncTest(async (done) => {
 		const testCases = [
 			[':/1234abcd1234abcd1234abcd1234abcd', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
+			[':/1234abcd1234abcd1234abcd1234abcd "some text"', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
 			[':/1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
+			[':/1234abcd1234abcd1234abcd1234abcd#Книги-из-номер', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'Книги-из-номер' }],
+			[':/1234abcd1234abcd1234abcd1234abcd#hash "some text"', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			['joplin://1234abcd1234abcd1234abcd1234abcd', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
 			['joplin://1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			[':/1234abcd1234abcd1234abcd1234abc', null],
@@ -49,9 +52,32 @@ describe('urlUtils', function() {
 			if (!expected) {
 				expect(!u).toBe(true);
 			} else {
-				expect(u.itemId).toBe(expected.itemId);
-				expect(u.hash).toBe(expected.hash);
+				if (!u) {
+					expect(!!u).toBe(true);
+				} else {
+					expect(u.itemId).toBe(expected.itemId);
+					expect(u.hash).toBe(expected.hash);
+				}
 			}
+		}
+	}));
+
+	it('should extract resource URLs', asyncTest(async (done) => {
+		const testCases = [
+			['Bla [](:/11111111111111111111111111111111) bla [](:/22222222222222222222222222222222) bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],
+			['Bla [](:/11111111111111111111111111111111 "Some title") bla [](:/22222222222222222222222222222222 "something else") bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],
+			['Bla <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/> bla [](:/22222222222222222222222222222222) bla', ['fcca2938a96a22570e8eae2565bc6b0b', '22222222222222222222222222222222']],
+			['Bla <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/> bla <a href=":/33333333333333333333333333333333"/>Some note link</a> blu [](:/22222222222222222222222222222222) bla', ['fcca2938a96a22570e8eae2565bc6b0b', '33333333333333333333333333333333', '22222222222222222222222222222222']],
+			['nothing here', []],
+			['', []],
+		];
+
+		for (const t of testCases) {
+			const result = urlUtils.extractResourceUrls(t[0]);
+			const expected = t[1];
+
+			const itemIds = result.map(r => r.itemId);
+			expect(itemIds.sort().join(',')).toBe(expected.sort().join(','));
 		}
 	}));
 
