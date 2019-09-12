@@ -473,9 +473,10 @@ msgid ""
 "[tag] from [note], or to list the notes associated with [tag]. The command "
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> は\"add\", \"remove\", \"list\"のいずれかで、指定した[ノート]か"
-"ら[タグ]をつけたり外したりできます。あるいは[タグ]で関連するノートをリスト"
-"アップします。`tag list`で、すべてのタグを見ることができます。"
+"<tag-command> は\"add\", \"remove\", \"list\"のいずれかで、指定した[note]から"
+"[tag]をつけたり外したりできます。あるいは[tag]のついたノートをリストアップし"
+"ます。`tag list`で、すべてのタグを見ることができます(-lオプションでより多くの"
+"情報を表示します)。"
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -525,7 +526,7 @@ msgid "Default: %s"
 msgstr "既定値: %s"
 
 msgid "Possible keys/values:"
-msgstr "取り得るキーバリュー:"
+msgstr "取り得るキー/値:"
 
 msgid "Type `joplin help` for usage information."
 msgstr "`joplin help`を実行して使い方を表示します。"
@@ -535,7 +536,7 @@ msgstr "致命的なエラー:"
 
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "すべての潜在ポートは利用中です - 問題を %s に報告してください"
+msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -572,8 +573,7 @@ msgstr ""
 "`:help shortcuts`と入力することで、キーボードショートカットのリストを見ること"
 "ができます。また、`:help`で使い方を確認できます。\n"
 "\n"
-"例えば、ノートブックの作成には`mb`ででき、ノートの作成は`mn`で行うことができ"
-"ます。"
+"例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -818,7 +818,7 @@ msgid "Status: %s"
 msgstr "状態: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr "Webクリッパーサービス無効"
+msgstr "Webクリッパーサービスを無効にする"
 
 msgid "The web clipper service is not enabled."
 msgstr "Webクリッパーサービスは有効になっていません。"
@@ -844,21 +844,21 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"このサービスはブラウザーの拡張機能とJoplinを接続します。ファイアーウォールが"
-"有効になっている場合は、Joplinから特定のポートへの許可を与えるよう質問される"
-"でしょう。"
+"このサービスはブラウザー拡張機能からJoplinへのアクセスを可能にします。本サー"
+"ビスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、"
+"お使いのファイアーウォールから許可を求められる場合があります。"
 
 msgid "Step 2: Install the extension"
 msgstr "ステップ2: 拡張機能のインストール"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr "関連する拡張機能をブラウザーにインストールします:"
+msgstr "ご使用のブラウザーに対応する拡張機能をインストールします:"
 
 msgid "Advanced options"
 msgstr "詳細な設定"
 
 msgid "Authorisation token:"
-msgstr "認証するトークン:"
+msgstr "認証トークン:"
 
 msgid "Copy token"
 msgstr "トークンのコピー"
@@ -867,8 +867,8 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"この認証トークンはサードパーティアプリケーションがJoplinにアクセスするためだ"
-"けに必要です。"
+"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
+"するときにだけ使用します。"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -954,9 +954,9 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"これらのIDとマスターキーはアイテムを暗号化するのに使われていますが、このアプ"
-"リケーションからはアクセスすることができていません。おそらく同期機能でダウン"
-"ロードしてきたのでしょう。"
+"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在"
+"このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
+"ムはまだ同期（ダウンロード）されていないものと考えられます。"
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
@@ -1086,7 +1086,7 @@ msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "この添付ファイルはダウンロードできないか、まだ復号できません。"
+msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1101,7 +1101,7 @@ msgstr ""
 "ノートを編集してください。"
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr "一度に一つのノートだけPDFに印刷もしくはエクスポートができます。"
+msgstr "一度に印刷またはPDF出力できるノートは1つだけです。"
 
 msgid "strong text"
 msgstr "文字を太字に"
@@ -1908,7 +1908,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "復号中のアイテム: %s/%s"
+msgstr "復号済み（非暗号化）アイテム: %s/%s"
 
 msgid "New tags:"
 msgstr "新しいタグ:"
