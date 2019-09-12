@@ -20,7 +20,7 @@ msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "ます削除するノートかノートブックを選択してください。"
+msgstr "まず削除するノートかノートブックを選択してください。"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
@@ -60,7 +60,7 @@ msgid "The command \"%s\" is only available in GUI mode"
 msgstr "コマンド \"%s\"は、GUIのみで有効です"
 
 msgid "Cannot change encrypted item"
-msgstr "暗号化したアイテムをは変更できません"
+msgstr "暗号化したアイテムは変更できません"
 
 #, javascript-format
 msgid "Missing required argument: %s"
@@ -123,13 +123,12 @@ msgstr "ToDoを完了としてマークします。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "ノートはToDoリストではありません：\"%s\""
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"E2EEの設定を変更します。コマンドは `enable`, `disable`, `decrypt`, `status` "
-"and `target-status` です。"
+"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, "
+"`disable`, `decrypt`, `status`, `target-status` があります。"
 
 msgid "Enter master password:"
 msgstr "マスターパスワードを入力してください:"
@@ -171,7 +170,7 @@ msgstr "有効なノートブックがありません。"
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "\"%s\"というノートはありません。お作りいたしますか？"
+msgstr "\"%s\"というノートはありません。作成しますか？"
 
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
@@ -336,7 +335,7 @@ msgstr ""
 "(ノートブックのみ), DATE, TODO_CHECKED (ToDoのみ), TITLE"
 
 msgid "Please select a notebook first."
-msgstr "ますはノートブックを選択して下さい。"
+msgstr "まずはノートブックを選択して下さい。"
 
 msgid "Creates a new notebook."
 msgstr "あたらしいノートブックを作成します。"
@@ -945,7 +944,7 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 "注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
-"使用されたキーの応じて、すべてのキーが暗号解除のために使用されます。"
+"使用されたキーに応じて、いずれかのキーが暗号解除のために使用されます。"
 
 msgid "Missing Master Keys"
 msgstr "マスターキーがありません"
@@ -986,7 +985,7 @@ msgstr ""
 "されます"
 
 msgid "Please create a notebook first."
-msgstr "ますはノートブックを作成して下さい。"
+msgstr "まずはノートブックを作成して下さい。"
 
 msgid "Please create a notebook first"
 msgstr "まず最初にノートブックを作成して下さい"
@@ -1057,7 +1056,7 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "ノート \"%s\" のノートブック \"%s\"への復元は成功しました。"
 
 msgid "This note has no history"
-msgstr "こののーとに履歴はありません"
+msgstr "このノートに履歴はありません"
 
 msgid "Restore"
 msgstr "復元"
@@ -1583,7 +1582,7 @@ msgstr ""
 "的に同期し、衝突を減らすために強くおすすめする設定です。"
 
 msgid "Start application minimised in the tray icon"
-msgstr "アプリケーションをトレイアンコンで最小化して起動"
+msgstr "アプリケーションをトレイアイコンで最小化して起動"
 
 msgid "Global zoom percentage"
 msgstr "全体ズームの割合"
