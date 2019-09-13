@@ -65,6 +65,7 @@
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
+    "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.10.13",
     "stream": "0.0.2",
     "string-natural-compare": "^2.0.2",
