@@ -9,6 +9,8 @@ export async function up(knex: Knex): Promise<any> {
 		table.text('name', 'mediumtext').notNullable();
 		table.text('email', 'mediumtext').notNullable();
 		table.text('password', 'mediumtext').notNullable();
+		table.integer('updated_time').notNullable();
+		table.integer('created_time').notNullable();
 	});
 
 	await knex.schema.createTable('sessions', function(table:Knex.CreateTableBuilder) {
@@ -18,7 +20,14 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('created_time').notNullable();
 	});
 
-	await knex.insert({id: uuid.create(), name: 'admin', password: auth.hashPassword('admin'), email: 'admin@localhost'}).into('users');
+	await knex.insert({
+		id: uuid.create(),
+		name: 'admin',
+		password: auth.hashPassword('admin'),
+		email: 'admin@localhost',
+		updated_time: Date.now(),
+		created_time: Date.now(),
+	}).into('users');
 }
 
 export async function down(knex: Knex): Promise<any> {

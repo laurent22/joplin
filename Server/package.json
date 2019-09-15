@@ -7,12 +7,13 @@
     "start-prod": "gulp scripts && node ./bin/www",
     "generate-types": "npx sql-ts -c sqlite3.json",
     "compile": "gulp",
-    "db-migrate-latest": "npx knex migrate:latest",
+    "db-migrate-latest": "npm run compile && npx knex migrate:latest",
     "postinstall": "npm run compile && npm run db-migrate-latest && npm run generate-types",
     "watch": "nodemon",
     "test": "npm run compile && npx jasmine"
   },
   "dependencies": {
+    "@types/jasmine": "^3.4.0",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
