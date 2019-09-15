@@ -338,7 +338,7 @@ class Setting extends BaseModel {
 			'style.editor.fontFamily':
 				(mobilePlatform === 'ios') ?
 					({
-						value: Setting.FONT_MENLO,
+						value: Setting.FONT_DEFAULT,
 						type: Setting.TYPE_STRING,
 						isEnum: true,
 						public: true,
@@ -348,12 +348,15 @@ class Setting extends BaseModel {
 						options: () => {
 							if (mobilePlatform === 'ios') {
 								return {
+									[Setting.FONT_DEFAULT]: 'Default',
 									[Setting.FONT_MENLO]: 'Menlo',
 									[Setting.FONT_COURIER_NEW]: 'Courier New',
 									[Setting.FONT_AVENIR]: 'Avenir',
 								};
 							}
-							return {};
+							return {
+								[Setting.FONT_DEFAULT]: 'Default',
+							};
 						},
 					}) : {
 						value: '',
@@ -862,6 +865,7 @@ Setting.THEME_DARK = 2;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
 
+Setting.FONT_DEFAULT = 0;
 Setting.FONT_MENLO = 1;
 Setting.FONT_COURIER_NEW = 2;
 Setting.FONT_AVENIR = 3;

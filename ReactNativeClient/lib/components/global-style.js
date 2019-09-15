@@ -100,21 +100,21 @@ function addExtraStyles(style) {
 
 function editorFont(fontId) {
 	const fonts = {
+		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
 		[Setting.FONT_COURIER_NEW]: 'Courier New',
 		[Setting.FONT_AVENIR]: 'Avenir',
 	};
 	if (!fontId) {
-		const menlo = globalStyle.fonts[Setting.FONT_MENLO];
-		console.warn(`Editor font not set! Defaulting to "${menlo}"`);
-		fontId = Setting.FONT_MENLO;
+		console.warn('Editor font not set! Falling back to default font."');
+		fontId = Setting.FONT_DEFAULT;
 	}
 	return fonts[fontId];
 }
 
 function themeStyle(theme) {
 	if (!theme) {
-		console.warn('Theme not set!! Defaulting to Light theme');
+		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
 	}
 
