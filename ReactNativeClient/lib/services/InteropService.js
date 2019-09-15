@@ -139,6 +139,18 @@ class InteropService {
 		return output;
 	}
 
+	/**
+	 * The existing `newModuleByFormat_` fn would load by the input format. This
+	 * was fine when there was a 1-1 mapping of input formats to output formats,
+	 * but now that we have 2 possible outputs for an `enex` input, we need to be
+	 * explicit with which importer we want to use.
+	 *
+	 * In the long run, it might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one
+	 * way to do this mapping.
+	 *
+	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
+	 */
 	newModuleFromPath_(options) {
 		if (!options || !options.modulePath) throw new Error('Cannot load module without a defined path to load from.');
 		const ModuleClass = require(options.modulePath);
