@@ -1,0 +1,11 @@
+{
+	"dialect":"sqlite3",
+	"connection": {
+		"filename": "./db.sqlite"
+	},
+	"useNullAsDefault": true,
+	"excludedTables": ["knex_migrations", "knex_migrations_lock", "android_metadata"],
+	"interfaceNameFormat": "PascalCaseSingular",
+	"filename": "./app/db",
+	"fileReplaceWithinMarker": "// AUTO-GENERATED-TYPES"
+  }

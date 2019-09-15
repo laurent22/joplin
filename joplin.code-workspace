@@ -24,6 +24,7 @@
 			"ElectronClient/build/": true,
 			"ElectronClient/app/lib/": true,
 			"ElectronClient/app/locale/": true,
+			"Server/dist/": true,
 			"node_modules/": true,
 			"ReactNativeClient/android/.gradle/": true,
 			"ReactNativeClient/android/.idea/": true,
