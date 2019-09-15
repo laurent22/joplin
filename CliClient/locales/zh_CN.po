@@ -13,7 +13,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -376,17 +378,19 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"启动，停止或检查API服务。可以通过设置‘api.port’变量指定API服务运行在哪个端口"
+"上。执行命令（%s）。"
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "服务已在端口%d上运行"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "服务正在端口%d上运行"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "服务没有运行。"
 
 #, javascript-format
 msgid ""
@@ -518,7 +522,7 @@ msgstr "严重错误："
 
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -612,25 +616,23 @@ msgid "Web clipper options"
 msgstr "网页剪辑选项"
 
 msgid "Create note from template"
-msgstr ""
+msgstr "从模版创建笔记"
 
 msgid "Create to-do from template"
-msgstr ""
+msgstr "从模版创建TODO列表"
 
-#, fuzzy
 msgid "Insert template"
-msgstr "插入时间"
+msgstr "插入模版"
 
-#, fuzzy
 msgid "Open template directory"
-msgstr "Joplin 导出目录"
+msgstr "打开模版目录"
 
 msgid "Refresh templates"
-msgstr ""
+msgstr "刷新模版"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "调整： %s (%s)"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
@@ -649,7 +651,7 @@ msgid "Check for updates..."
 msgstr "检查更新..."
 
 msgid "Templates"
-msgstr ""
+msgstr "模版"
 
 msgid "Import"
 msgstr "导入"
@@ -733,9 +735,8 @@ msgstr "帮助 (&H)"
 msgid "Website and documentation"
 msgstr "网站与文档"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin v%s"
+msgstr "Joplin 论坛"
 
 msgid "Make a donation"
 msgstr "捐赠"
@@ -972,7 +973,7 @@ msgid "Set alarm:"
 msgstr "设置提醒："
 
 msgid "Template file:"
-msgstr ""
+msgstr "模版文件："
 
 msgid "Layout"
 msgstr "布局"
@@ -1009,7 +1010,7 @@ msgid "Note History"
 msgstr "笔记历史"
 
 msgid "Markup"
-msgstr ""
+msgstr "标记"
 
 msgid "Previous versions of this note"
 msgstr "此笔记的早期版本"
@@ -1446,10 +1447,10 @@ msgid "Dark"
 msgstr "深邃"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised Light风格"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised Dark风格"
 
 msgid "Uncompleted to-dos on top"
 msgstr "将未完成的待办事项置顶"
@@ -1482,7 +1483,7 @@ msgid "When creating a new note:"
 msgstr "当新建笔记时："
 
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "启动软中断"
 
 msgid "Enable math expressions"
 msgstr "启用数学表达式"
@@ -1517,9 +1518,8 @@ msgstr "启用 ++insert++ 句法"
 msgid "Enable multimarkdown table extension"
 msgstr "启用 multimarkdown 表格扩展"
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "启用 ~sub~ 句法"
+msgstr "启用 Fountain 语法支持"
 
 msgid "Show tray icon"
 msgstr "显示托盘图标"
@@ -1608,17 +1608,17 @@ msgstr "忽略 TLS 证书错误"
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr ""
+msgstr "请设置一个API服务的端口数字。如果不指定，默认的端口会被使用。"
 
 msgid "Enable note history"
 msgstr "启用笔记历史"
 
 msgid "days"
-msgstr ""
+msgstr "天"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d天"
 
 msgid "Keep note history for"
 msgstr "保留笔记历史记录"
@@ -1762,13 +1762,11 @@ msgstr "使用摄像头的权限"
 msgid "Your permission to use your camera is required."
 msgstr "您须要授予相机权限。"
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "无活动笔记本。"
+msgstr "你现在还没有笔记本。"
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "新建笔记本。"
+msgstr "新建笔记本"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
@@ -1798,17 +1796,15 @@ msgstr "选择日期"
 msgid "Confirm"
 msgstr "确认"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "笔记本"
+msgstr "笔记本：%s"
 
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "无法修改已加密的项目"
+msgstr "无法重命名已加密的笔记本"
 
-#, fuzzy
 msgid "New Notebook"
-msgstr "新建笔记本"
+msgstr "新笔记本"
 
 msgid "Configuration"
 msgstr "配置"
@@ -1821,9 +1817,8 @@ msgstr "正在解密项目：%d/%d"
 msgid "Fetching resources: %d/%d"
 msgstr "正在获取资源：%d/%d"
 
-#, fuzzy
 msgid "All notes"
-msgstr "笔记"
+msgstr "全部笔记"
 
 msgid "Notebooks"
 msgstr "笔记本"
@@ -1869,48 +1864,45 @@ msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
 
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
-msgstr ""
+msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
 
-#, fuzzy
 msgid "Information"
-msgstr "更多信息"
+msgstr "说明"
 
 msgid "Encryption Config"
 msgstr "加密配置"
 
-#, fuzzy
 msgid "Tools"
-msgstr "工具 (&T)"
+msgstr "工具"
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "状态"
+msgstr "同步的状态"
 
 msgid "Log"
 msgstr "日志"
 
-#, fuzzy
 msgid "Creating report..."
-msgstr "新建 %s…"
+msgstr "新建报告…"
 
 msgid "Export Debug Report"
 msgstr "导出调试报告"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "正在修复搜索索引…"
 
 msgid "Fix search index"
-msgstr ""
+msgstr "修复搜索索引"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"如果‘搜索’功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
 
 msgid "More information"
 msgstr "更多信息"
@@ -1974,9 +1966,8 @@ msgstr "该笔记本无法保存：%s"
 msgid "Edit notebook"
 msgstr "编辑笔记本"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "笔记本标题："
+msgstr "笔记本标题"
 
 msgid "Show all"
 msgstr "显示全部"
@@ -2009,9 +2000,9 @@ msgstr "不支持“%s”协议链接"
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "已更新：%d条。"
+msgstr "已更新：%s"
 
 msgid "View on map"
 msgstr "查看地图"
@@ -2019,13 +2010,11 @@ msgstr "查看地图"
 msgid "Go to source URL"
 msgstr "定位到源 URL"
 
-#, fuzzy
 msgid "Attach..."
-msgstr "搜索..."
+msgstr "添附…"
 
-#, fuzzy
 msgid "Choose an option"
-msgstr "显示高级选项"
+msgstr "选择一个选项"
 
 msgid "Take photo"
 msgstr "拍照"
@@ -2045,19 +2034,17 @@ msgstr "转换为笔记"
 msgid "Convert to todo"
 msgstr "转换为待办事项"
 
-#, fuzzy
 msgid "Properties"
 msgstr "笔记属性"
 
 msgid "Add body"
-msgstr ""
+msgstr "添加body内容"
 
 msgid "Edit"
 msgstr "编辑"
 
-#, fuzzy
 msgid "Add title"
-msgstr "标题"
+msgstr "添加标题"
 
 msgid "Login with OneDrive"
 msgstr "通过 OneDrive 登录"
