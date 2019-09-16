@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { checkPassword } from "../auth"
+import { checkPassword } from "../utils/auth"
 import db from '../db'
 import { User } from '../db'
 

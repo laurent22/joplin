@@ -265,7 +265,7 @@ Joplin supports a number of plugins that can be toggled on top the standard mark
 
 | Plugin | Syntax | Description | Enabled |
 |--------|--------|-------------|---------|
-| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See Below](https://github.com/laurent22/joplin#math-notation) | yes |
+| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See Below](#math-notation) | yes |
 | [Mark](https://github.com/markdown-it/markdown-it-mark) | `==marked==` | Transforms into `<mark>marked</mark>` (highlighted) | yes |
 | [Footnote](https://github.com/markdown-it/markdown-it-footnote) | `Simples inline footnote ^[I'm inline!]` | See [plugin page](https://github.com/markdown-it/markdown-it-footnote) for full description | yes |
 | [TOC](https://github.com/nagaozen/markdown-it-toc-done-right) | Any of `${toc}, [[toc]], [toc], [[_toc_]]` | Adds a table of contents to the location of the toc page. Based on headings and sub-headings | no |

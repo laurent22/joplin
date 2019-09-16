@@ -16,12 +16,16 @@ function createDistDir() {
 
 function buildTypeScripts() {
 	return gulp.src([
-			'app/routes/*.ts',
-			'app/controllers/*.ts',
 			'app/*.ts',
+			'app/controllers/*.ts',
+			'app/models/*.ts',
+			'app/routes/*.ts',
+			'app/utils/*.ts',
 			'migrations/*.ts',
-			'spec/*.ts',
-			'spec/routes/*.ts',
+			'tests/*.ts',
+			'tests/routes/*.ts',
+			'tests/controllers/*.ts',
+			'tools/*.ts',
 		]).pipe(tsProject()).js.pipe(gulp.dest((src) => {
 		const baseDir = rtrimSlashes(src.dirname.substr(serverRootDir.length + 1));
 		return 'dist/' + baseDir;

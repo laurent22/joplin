@@ -5,7 +5,7 @@
   "scripts": {
     "start": "gulp scripts && DEBUG=joplin-server:* node ./bin/www",
     "start-prod": "gulp scripts && node ./bin/www",
-    "generate-types": "npx sql-ts -c sqlite3.json",
+    "generate-types": "node dist/tools/generate-types.js",
     "compile": "gulp",
     "db-migrate-latest": "npm run compile && npx knex migrate:latest",
     "postinstall": "npm run compile && npm run db-migrate-latest && npm run generate-types",
@@ -13,7 +13,6 @@
     "test": "npm run compile && npx jasmine"
   },
   "dependencies": {
-    "@types/jasmine": "^3.4.0",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
@@ -21,7 +20,6 @@
     "express": "~4.16.1",
     "fs-extra": "^8.1.0",
     "http-errors": "^1.6.3",
-    "jade": "~1.11.0",
     "knex": "^0.19.4",
     "morgan": "~1.9.1",
     "mustache-express": "^1.2.8",
@@ -30,6 +28,7 @@
   "devDependencies": {
     "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
     "@types/express": "^4.17.1",
+    "@types/jasmine": "^3.4.0",
     "gulp": "^4.0.0",
     "gulp-typescript": "^5.0.1",
     "jasmine": "^3.4.0",
