@@ -9,7 +9,7 @@ const { uuid } = require('lib/uuid.js');
 export default class SessionController {
 
 	async authenticate(name: string, password: string):Promise<Session> {
-		const user:User = await UserModel.loadByName(name);
+		const user:User = await UserModel.loadByName(name); 
 		
 		const ok = checkPassword(password, user.password);
 
