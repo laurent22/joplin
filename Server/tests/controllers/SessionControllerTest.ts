@@ -3,9 +3,9 @@ const { asyncTest } = require('../testUtils');
 import SessionController from '../../app/controllers/SessionController';
 import { Session } from '../../app/db'
 
-describe('sessions', function() {
+describe('SessionController', function() {
 
-	it('should login and give back a session', asyncTest(async function() {
+	it('should authenticate a user and give back a session', asyncTest(async function() {
 		const controller = new SessionController();
 		const session:Session = await controller.authenticate('admin', 'admin')
 		expect(!!session).toBe(true);

@@ -10,7 +10,7 @@
     "db-migrate-latest": "npm run compile && npx knex migrate:latest",
     "postinstall": "npm run compile && npm run db-migrate-latest && npm run generate-types",
     "watch": "nodemon",
-    "test": "npm run compile && npx jasmine"
+    "test": "npm run compile && npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
