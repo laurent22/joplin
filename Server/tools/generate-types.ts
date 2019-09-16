@@ -1,22 +1,22 @@
-import sqlts from '@rmp135/sql-ts'
+import sqlts from '@rmp135/sql-ts';
 
-const dbFilePath:string = __dirname + '/../../app/db.ts'
+const dbFilePath:string = __dirname + '/../../app/db.ts';
 
 const config = {
-	"dialect":"sqlite3",
-	"connection": {
-		"filename": "./db.sqlite"
+	'dialect':'sqlite3',
+	'connection': {
+		'filename': './db.sqlite',
 	},
-	"useNullAsDefault": true,
-	"excludedTables": ["knex_migrations", "knex_migrations_lock", "android_metadata"],
-	"interfaceNameFormat": "PascalCaseSingular",
-	"filename": "./app/db",
-	"fileReplaceWithinMarker": "// AUTO-GENERATED-TYPES",
-	"extends": {
-		"main.sessions": "WithDates",
-		"main.users": "WithDates"
-	}
-  }
+	'useNullAsDefault': true,
+	'excludedTables': ['knex_migrations', 'knex_migrations_lock', 'android_metadata'],
+	'interfaceNameFormat': 'PascalCaseSingular',
+	'filename': './app/db',
+	'fileReplaceWithinMarker': '// AUTO-GENERATED-TYPES',
+	'extends': {
+		'main.sessions': 'WithDates',
+		'main.users': 'WithDates',
+	},
+};
 
 function insertContentIntoFile(filePath:string, markerOpen:string, markerClose:string, contentToInsert:string):void {
 	const fs = require('fs');
@@ -25,9 +25,9 @@ function insertContentIntoFile(filePath:string, markerOpen:string, markerClose:s
 	// [^]* matches any character including new lines
 	const regex:RegExp = new RegExp(markerOpen + '[^]*?' + markerClose);
 	if (!content.match(regex)) throw new Error('Could not find markers: ' + markerOpen);
-	content = content.replace(regex, markerOpen + "\n" + contentToInsert + "\n" + markerClose);
+	content = content.replace(regex, markerOpen + '\n' + contentToInsert + '\n' + markerClose);
 	fs.writeFileSync(filePath, content);
-};
+}
 
 function createTypeString(table:any) {
 	const colStrings = [];
@@ -51,12 +51,12 @@ async function main() {
 
 	const typeStrings = [];
 
-	for (const table of definitions.tables) {	
+	for (const table of definitions.tables) {
 		typeStrings.push(createTypeString(table));
 	}
 
 	const content = '// Auto-generated using `npm run generate-types`\n' + typeStrings.join('\n\n');
-	
+
 	insertContentIntoFile(dbFilePath, config.fileReplaceWithinMarker, config.fileReplaceWithinMarker, content);
 }
 

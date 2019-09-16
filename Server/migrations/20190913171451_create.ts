@@ -1,5 +1,5 @@
-import * as Knex from "knex";
-import * as auth from "../app/utils/auth"
+import * as Knex from 'knex';
+import * as auth from '../app/utils/auth';
 
 const { uuid } = require('lib/uuid.js');
 

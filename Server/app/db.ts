@@ -1,17 +1,17 @@
-import Knex = require("knex");
+import Knex = require('knex');
 
 const knex:Knex = require('knex')({
 	client: 'sqlite3',
 	connection: {
-		filename: __dirname + "/../../db.sqlite"
+		filename: __dirname + '/../../db.sqlite',
 	},
 });
 
 export default knex;
 
 export interface WithDates {
-	updated_time?: number 
-	created_time?: number 
+	updated_time?: number
+	created_time?: number
 }
 
 // AUTO-GENERATED-TYPES

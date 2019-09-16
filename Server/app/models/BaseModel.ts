@@ -1,4 +1,4 @@
-import db, { WithDates } from '../db'
+import db, { WithDates } from '../db';
 
 export interface SaveOptions {
 	isNew?: boolean,
