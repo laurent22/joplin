@@ -4,7 +4,7 @@ const knex:Knex = require('knex')({
 	client: 'sqlite3',
 	connection: {
 		filename: __dirname + "/../../db.sqlite"
-	}
+	},
 });
 
 export default knex;

@@ -1,9 +1,14 @@
-const { asyncTest } = require('../testUtils');
+const { asyncTest, clearDatabase } = require('../testUtils');
 
 import SessionController from '../../app/controllers/SessionController';
 import { Session } from '../../app/db'
 
 describe('SessionController', function() {
+
+	beforeEach(async (done) => {
+		await clearDatabase();
+		done();
+	});
 
 	it('should authenticate a user and give back a session', asyncTest(async function() {
 		const controller = new SessionController();
