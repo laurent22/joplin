@@ -535,7 +535,7 @@ class Application extends BaseApplication {
 			},
 		});
 
-		const toolsItems = toolsItemsFirst.push({
+		const toolsItems = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
 			accelerator: 'CommandOrControl+,',
@@ -545,7 +545,7 @@ class Application extends BaseApplication {
 					routeName: 'Config',
 				});
 			},
-		});
+		}]);
 
 		function _checkForUpdates(ctx) {
 			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
