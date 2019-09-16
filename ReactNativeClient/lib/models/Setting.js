@@ -336,7 +336,7 @@ class Setting extends BaseModel {
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
-				(mobilePlatform === 'ios') ?
+				(!!mobilePlatform) ?
 					({
 						value: Setting.FONT_DEFAULT,
 						type: Setting.TYPE_STRING,
@@ -346,6 +346,7 @@ class Setting extends BaseModel {
 						appTypes: ['mobile'],
 						section: 'appearance',
 						options: () => {
+							// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
 							if (mobilePlatform === 'ios') {
 								return {
 									[Setting.FONT_DEFAULT]: 'Default',
@@ -356,6 +357,7 @@ class Setting extends BaseModel {
 							}
 							return {
 								[Setting.FONT_DEFAULT]: 'Default',
+								[Setting.FONT_MONOSPACE]: 'Monospace',
 							};
 						},
 					}) : {
@@ -869,6 +871,7 @@ Setting.FONT_DEFAULT = 0;
 Setting.FONT_MENLO = 1;
 Setting.FONT_COURIER_NEW = 2;
 Setting.FONT_AVENIR = 3;
+Setting.FONT_MONOSPACE = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';

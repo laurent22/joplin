@@ -99,11 +99,13 @@ function addExtraStyles(style) {
 }
 
 function editorFont(fontId) {
+	// IMPORTANT: The font mapping must match the one in Setting.js
 	const fonts = {
 		[Setting.FONT_DEFAULT]: null,
 		[Setting.FONT_MENLO]: 'Menlo',
 		[Setting.FONT_COURIER_NEW]: 'Courier New',
 		[Setting.FONT_AVENIR]: 'Avenir',
+		[Setting.FONT_MONOSPACE]: 'monospace',
 	};
 	if (!fontId) {
 		console.warn('Editor font not set! Falling back to default font."');
