@@ -1,4 +1,4 @@
-import db from '../db';
+import db, { WithDates, WithUuid } from '../db';
 const { uuid } = require('lib/uuid.js');
 
 export interface SaveOptions {
@@ -15,28 +15,28 @@ export default abstract class BaseModel {
 		return true;
 	}
 
-	static async save(object:any, options:SaveOptions = {}):Promise<any> {
+	static async save<T>(object:T, options:SaveOptions = {}):Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
 
-		object = Object.assign({}, object);
+		const newObject:T = Object.assign({}, object);
 
-		const isNew = options.isNew === true || !object.id;
+		const isNew = options.isNew === true || !(object as WithUuid).id;
 
-		if (isNew && !object.id) {
-			object.id = uuid.create();
+		if (isNew && !(newObject as WithUuid).id) {
+			(newObject as WithUuid).id = uuid.create();
 		}
 
 		if (this.hasDateProperties()) {
 			const timestamp = Date.now();
 			if (isNew) {
-				object.created_time = timestamp;
+				(newObject as WithDates).created_time = timestamp;
 			}
-			object.updated_time = timestamp;
+			(newObject as WithDates).updated_time = timestamp;
 		}
 
-		await db(this.tableName()).insert(object);
+		await db(this.tableName()).insert(newObject);
 
-		return object;
+		return newObject;
 	}
 
 	static async load<T>(id:string):Promise<T> {

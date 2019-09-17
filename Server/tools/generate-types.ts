@@ -13,8 +13,10 @@ const config = {
 	'filename': './app/db',
 	'fileReplaceWithinMarker': '// AUTO-GENERATED-TYPES',
 	'extends': {
-		'main.sessions': 'WithDates',
-		'main.users': 'WithDates',
+		'main.sessions': 'WithDates, WithUuid',
+		'main.users': 'WithDates, WithUuid',
+		'main.permissions': 'WithDates, WithUuid',
+		'main.files': 'WithDates, WithUuid',
 	},
 };
 
@@ -32,8 +34,12 @@ function insertContentIntoFile(filePath:string, markerOpen:string, markerClose:s
 function createTypeString(table:any) {
 	const colStrings = [];
 	for (const col of table.columns) {
-		if (table.extends === 'WithDates') {
+		if (table.extends.indexOf('WithDates') >= 0) {
 			if (['created_time', 'updated_time'].includes(col.propertyName)) continue;
+		}
+
+		if (table.extends.indexOf('WithUuid') >= 0) {
+			if (['id'].includes(col.propertyName)) continue;
 		}
 
 		colStrings.push('\t' + col.propertyName + '?: ' + col.propertyType);

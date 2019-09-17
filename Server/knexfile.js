@@ -28,6 +28,17 @@ module.exports = {
 		useNullAsDefault: true,
 	},
 
+	buildTypes: {
+		client: 'sqlite3',
+		connection: {
+			filename: './db-types.sqlite',
+		},
+		migrations: {
+			directory: './dist/migrations',
+		},
+		useNullAsDefault: true,
+	},
+
 	staging: {
 		client: 'postgresql',
 		connection: {
