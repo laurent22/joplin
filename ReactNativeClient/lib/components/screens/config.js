@@ -269,6 +269,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
 		}
 
+		if (!settingComps.length) return null;
+
 		return (
 			<View key={key}>
 				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}

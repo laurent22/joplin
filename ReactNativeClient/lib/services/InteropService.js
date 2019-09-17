@@ -13,8 +13,7 @@ const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 	constructor() {
-		this.modules_ = null;
-	}
+		this.modules_ = null;	}
 
 	modules() {
 		if (this.modules_) return this.modules_;
@@ -42,7 +41,16 @@ class InteropService {
 				format: 'enex',
 				fileExtensions: ['enex'],
 				sources: ['file'],
-				description: _('Evernote Export File'),
+				description: _('Evernote Export File (as Markdown)'),
+				importerClass: 'InteropService_Importer_EnexToMd',
+			},
+			{
+				format: 'enex',
+				fileExtensions: ['enex'],
+				sources: ['file'],
+				description: _('Evernote Export File (as HTML)'),
+				// TODO: Consider doing this the same way as the multiple `md` importers are handled
+				importerClass: 'InteropService_Importer_EnexToHtml',
 			},
 		];
 
@@ -71,7 +79,7 @@ class InteropService {
 		];
 
 		importModules = importModules.map(a => {
-			const className = 'InteropService_Importer_' + toTitleCase(a.format);
+			const className = a.importerClass || 'InteropService_Importer_' + toTitleCase(a.format);
 			const output = Object.assign(
 				{},
 				{
@@ -112,8 +120,9 @@ class InteropService {
 		return this.modules_;
 	}
 
-	moduleByFormat_(type, format) {
+	findModuleByFormat_(type, format) {
 		const modules = this.modules();
+		// console.log(JSON.stringify({modules}, null, 2))
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (m.format === format && m.type === type) return modules[i];
@@ -121,12 +130,32 @@ class InteropService {
 		return null;
 	}
 
-	newModule_(type, format) {
-		const module = this.moduleByFormat_(type, format);
+	newModuleByFormat_(type, format) {
+		const module = this.findModuleByFormat_(type, format);
 		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
 		const ModuleClass = require(module.path);
 		const output = new ModuleClass();
 		output.setMetadata(module);
+		return output;
+	}
+
+	/**
+	 * The existing `newModuleByFormat_` fn would load by the input format. This
+	 * was fine when there was a 1-1 mapping of input formats to output formats,
+	 * but now that we have 2 possible outputs for an `enex` input, we need to be
+	 * explicit with which importer we want to use.
+	 *
+	 * In the long run, it might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one
+	 * way to do this mapping.
+	 *
+	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
+	 */
+	newModuleFromPath_(options) {
+		if (!options || !options.modulePath) throw new Error('Cannot load module without a defined path to load from.');
+		const ModuleClass = require(options.modulePath);
+		const output = new ModuleClass();
+		output.setMetadata(options); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -173,7 +202,10 @@ class InteropService {
 
 		let result = { warnings: [] };
 
-		const importer = this.newModule_('importer', options.format);
+		// console.log('options passed to InteropService:');
+		// console.log(JSON.stringify({options}, null, 2));
+
+		const importer = this.newModuleFromPath_(options);
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 
@@ -248,7 +280,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModule_('exporter', exportFormat);
+		const exporter = this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];

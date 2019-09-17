@@ -18,11 +18,10 @@
 
 # Building the tools
 
-Before building any of the applications, you need to build the tools:
+Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-cd Tools
-npm install
+npm install && cd Tools && npm install
 ```
 
 # Building the Electron application

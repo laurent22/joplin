@@ -378,12 +378,15 @@ class Application extends BaseApplication {
 								message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
 							});
 
-							const importOptions = {};
-							importOptions.path = path;
-							importOptions.format = module.format;
-							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
-							importOptions.onError = (error) => {
-								console.warn(error);
+							const importOptions = {
+								path,
+								format: module.format,
+								modulePath: module.path,
+								onError: console.warn,
+								destinationFolderId:
+								!module.isNoteArchive && moduleSource === 'file'
+									? selectedFolderId
+									: null,
 							};
 
 							const service = new InteropService();
@@ -535,7 +538,7 @@ class Application extends BaseApplication {
 			},
 		});
 
-		const toolsItems = toolsItemsFirst.push({
+		const toolsItems = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
 			accelerator: 'CommandOrControl+,',
@@ -545,7 +548,7 @@ class Application extends BaseApplication {
 					routeName: 'Config',
 				});
 			},
-		});
+		}]);
 
 		function _checkForUpdates(ctx) {
 			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
