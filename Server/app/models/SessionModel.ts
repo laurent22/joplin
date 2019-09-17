@@ -10,6 +10,7 @@ export default class SessionModel extends BaseModel {
 
 	static async sessionUser(sessionId:string):Promise<User> {
 		const session:Session = await this.load(sessionId);
+		if (!session) return null;
 		return UserModel.load(session.user_id);
 	}
 

@@ -1,14 +1,13 @@
-import { User, File, Permission } from '../db';
+import { User, File, Permission, ItemType } from '../db';
 import { ErrorForbidden } from '../utils/errors';
-import SessionModel from '../models/SessionModel';
 import FileModel from '../models/FileModel';
 import PermissionModel from '../models/PermissionModel';
+import BaseController from './BaseController';
 
-export default class FileController {
+export default class FileController extends BaseController {
 
 	async createFile(sessionId:string, file:File):Promise<File> {
-		const user:User = await SessionModel.sessionUser(sessionId);
-		if (!user) throw new ErrorForbidden('Invalid session ID: ' + sessionId);
+		const user:User = await this.initSession(sessionId);
 
 		const invalidParentError = new ErrorForbidden('Invalid parent ID or no permission to write to it: ' + file.parent_id);
 
@@ -29,8 +28,9 @@ export default class FileController {
 
 		const permission:Permission = {
 			user_id: user.id,
-			is_owner: true,
-			file_id: newFile.id,
+			is_owner: 1,
+			item_type: ItemType.File,
+			item_id: newFile.id,
 		};
 
 		await PermissionModel.save(permission);

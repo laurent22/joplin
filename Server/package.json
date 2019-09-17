@@ -5,12 +5,12 @@
   "scripts": {
     "start": "gulp scripts && DEBUG=joplin-server:* node ./bin/www",
     "start-prod": "gulp scripts && node ./bin/www",
-    "generate-types": "NODE_ENV=buildTypes rm -f db-types.sqlite && npm run db-migrate && node dist/tools/generate-types.js && rm -f db-types.sqlite",
+    "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "compile": "gulp",
     "db-migrate": "npm run compile && npx knex migrate:latest",
     "postinstall": "npm run compile && npm run db-migrate-latest && npm run generate-types",
     "watch": "nodemon",
-    "test": "NODE_ENV=testing rm -f db-test.sqlite && npm run compile && npx knex migrate:latest && npx jasmine --config=tests/support/jasmine.json"
+    "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing npx knex migrate:latest && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",

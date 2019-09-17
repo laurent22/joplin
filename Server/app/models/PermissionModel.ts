@@ -1,5 +1,5 @@
 import BaseModel from './BaseModel';
-import db, { Permission } from '../db';
+import db, { Permission, ItemType } from '../db';
 
 export default class PermissionModel extends BaseModel {
 
@@ -9,7 +9,8 @@ export default class PermissionModel extends BaseModel {
 
 	static async filePermissions(fileId:string, userId:string = null):Promise<Array<Permission>> {
 		const p:Permission = {
-			file_id: fileId,
+			item_type: ItemType.File,
+			item_id: fileId,
 		};
 
 		if (userId) p.user_id = userId;

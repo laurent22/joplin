@@ -5,7 +5,7 @@ const dbFilePath:string = __dirname + '/../../app/db.ts';
 const config = {
 	'dialect':'sqlite3',
 	'connection': {
-		'filename': './db.sqlite',
+		'filename': './db-buildTypes.sqlite',
 	},
 	'useNullAsDefault': true,
 	'excludedTables': ['knex_migrations', 'knex_migrations_lock', 'android_metadata'],
@@ -34,15 +34,20 @@ function insertContentIntoFile(filePath:string, markerOpen:string, markerClose:s
 function createTypeString(table:any) {
 	const colStrings = [];
 	for (const col of table.columns) {
+		let name = col.propertyName;
+		let type = col.propertyType;
+
 		if (table.extends.indexOf('WithDates') >= 0) {
-			if (['created_time', 'updated_time'].includes(col.propertyName)) continue;
+			if (['created_time', 'updated_time'].includes(name)) continue;
 		}
 
 		if (table.extends.indexOf('WithUuid') >= 0) {
-			if (['id'].includes(col.propertyName)) continue;
+			if (['id'].includes(name)) continue;
 		}
 
-		colStrings.push('\t' + col.propertyName + '?: ' + col.propertyType);
+		if (name === 'item_type') type = 'ItemType';
+
+		colStrings.push('\t' + name + '?: ' + type);
 	}
 
 	const header = ['export interface'];
