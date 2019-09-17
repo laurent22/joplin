@@ -1,4 +1,5 @@
 require('app-module-path').addPath(__dirname + '/..');
+require('source-map-support').install();
 
 import db from '../app/db';
 

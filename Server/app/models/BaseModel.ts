@@ -1,4 +1,5 @@
-import db, { WithDates } from '../db';
+import db from '../db';
+const { uuid } = require('lib/uuid.js');
 
 export interface SaveOptions {
 	isNew?: boolean,
@@ -14,22 +15,32 @@ export default abstract class BaseModel {
 		return true;
 	}
 
-	static async save<T>(object:T, options:SaveOptions = {}):Promise<T> {
+	static async save(object:any, options:SaveOptions = {}):Promise<any> {
+		if (!object) throw new Error('Object cannot be empty');
+
 		object = Object.assign({}, object);
+
+		const isNew = options.isNew === true || !object.id;
+
+		if (isNew && !object.id) {
+			object.id = uuid.create();
+		}
 
 		if (this.hasDateProperties()) {
 			const timestamp = Date.now();
-			if (options.isNew) {
-				(object as WithDates).created_time = timestamp;
+			if (isNew) {
+				object.created_time = timestamp;
 			}
-			(object as WithDates).updated_time = timestamp;
+			object.updated_time = timestamp;
 		}
 
 		await db(this.tableName()).insert(object);
+
 		return object;
 	}
 
 	static async load<T>(id:string):Promise<T> {
+		if (!id) throw new Error('ID cannot be empty');
 		return db(this.tableName()).where({ id: id }).first();
 	}
 

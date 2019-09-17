@@ -1,4 +1,4 @@
 node_modules/
 dist
 db.sqlite
-
+db-test.sqlite

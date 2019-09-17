@@ -2,8 +2,8 @@ const { asyncTest, clearDatabase } = require('../testUtils');
 
 import FileController from '../../app/controllers/FileController';
 import SessionController from '../../app/controllers/SessionController';
-import { Session, User, File } from '../../app/db';
-import UserModel from '../../app/models/UserModel';
+import { Session, File } from '../../app/db';
+import FileModel from '../../app/models/FileModel';
 
 describe('FileController', function() {
 
@@ -12,19 +12,22 @@ describe('FileController', function() {
 		done();
 	});
 
-	it('should authenticate a user and give back a session', asyncTest(async function() {
+	it('should create a file', asyncTest(async function() {
 		const controller = new FileController();
 		const sessionController = new SessionController();
-		const user:User = await UserModel.loadByName('admin');
-		const session:Session = await sessionController.authenticate(user.name, user.password);
+
+		const session:Session = await sessionController.authenticate('admin', 'admin');
+		const rootFile:File = await FileModel.userRootFile(session.user_id);
 
 		const file:File = {
 			name: 'testing.md',
 			content: '# My test',
+			parent_id: rootFile.id,
 			mime_type: 'text/markdown',
 		};
 
-		const newFile = await controller.createFile(session, user, file);
+		const newFile = await controller.createFile(session.id, file);
+		console.info(newFile);
 		expect(!!newFile).toBe(true);
 	}));
 

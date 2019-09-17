@@ -10,7 +10,7 @@
     "db-migrate": "npm run compile && npx knex migrate:latest",
     "postinstall": "npm run compile && npm run db-migrate-latest && npm run generate-types",
     "watch": "nodemon",
-    "test": "npm run compile && NODE_ENV=testing npx knex migrate:latest && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
+    "test": "rm -f db-test.sqlite && npm run compile && NODE_ENV=testing npx knex migrate:latest && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
@@ -30,9 +30,11 @@
     "@types/express": "^4.17.1",
     "@types/jasmine": "^3.4.0",
     "gulp": "^4.0.0",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "jasmine": "^3.4.0",
     "nodemon": "^1.19.2",
+    "source-map-support": "^0.5.13",
     "supertest": "^4.0.2",
     "typescript": "^3.6.3"
   }

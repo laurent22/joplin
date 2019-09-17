@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname + '/..');
+require('source-map-support').install();
 
-import { Request, Response, Router, NextFunction } from 'express';
-import db from './db';
+import { Request, Response, NextFunction } from 'express';
 
 const createError = require('http-errors');
 const express = require('express');

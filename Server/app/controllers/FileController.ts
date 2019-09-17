@@ -1,24 +1,41 @@
-// import { Session, User, File } from '../db';
-// import { checkPassword } from '../utils/auth';
-// import { ErrorForbidden } from '../utils/errors';
-// import SessionModel from '../models/SessionModel';
-// import UserModel from '../models/UserModel';
+import { User, File, Permission } from '../db';
+import { ErrorForbidden } from '../utils/errors';
+import SessionModel from '../models/SessionModel';
+import FileModel from '../models/FileModel';
+import PermissionModel from '../models/PermissionModel';
 
-// const { uuid } = require('lib/uuid.js');
+export default class FileController {
 
-// export default class FileController {
+	async createFile(sessionId:string, file:File):Promise<File> {
+		const user:User = await SessionModel.sessionUser(sessionId);
+		if (!user) throw new ErrorForbidden('Invalid session ID: ' + sessionId);
 
-// 	async createFile(session:Session, user:User, file:File):Promise<File> {
-// 		const user:User = await UserModel.loadByName(name);
+		const invalidParentError = new ErrorForbidden('Invalid parent ID or no permission to write to it: ' + file.parent_id);
 
-// 		const ok = checkPassword(password, user.password);
+		let parentFile:File;
+		try {
+			parentFile = await FileModel.load(file.parent_id);
+			if (!parentFile) throw invalidParentError;
+		} catch (error) {
+			throw invalidParentError;
+		}
 
-// 		if (!ok) throw new ErrorForbidden();
+		const canWrite:boolean = await PermissionModel.canWrite(user.id, parentFile.id);
+		if (!canWrite) throw invalidParentError;
 
-// 		const session:Session = { id: uuid.create(), user_id: user.id }
-// 		const newSession:Session = await SessionModel.save(session, { isNew: true });
+		// TODO: in a transaction
 
-// 		return newSession;
-// 	}
+		const newFile:File = await FileModel.save(file);
 
-// }
+		const permission:Permission = {
+			user_id: user.id,
+			is_owner: true,
+			file_id: newFile.id,
+		};
+
+		await PermissionModel.save(permission);
+
+		return newFile;
+	}
+
+}
