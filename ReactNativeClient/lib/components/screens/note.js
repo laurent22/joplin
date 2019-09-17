@@ -24,7 +24,7 @@ const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
-const { themeStyle } = require('lib/components/global-style.js');
+const { themeStyle, editorFont } = require('lib/components/global-style.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
@@ -209,6 +209,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 				fontSize: theme.fontSize,
+				fontFamily: editorFont(this.props.editorFont),
 			},
 			noteBodyViewer: {
 				flex: 1,
@@ -916,6 +917,7 @@ const NoteScreen = connect(state => {
 		folders: state.folders,
 		searchQuery: state.searchQuery,
 		theme: state.settings.theme,
+		editorFont: [state.settings['style.editor.fontFamily']],
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,

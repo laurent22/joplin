@@ -98,9 +98,25 @@ function addExtraStyles(style) {
 	return style;
 }
 
+function editorFont(fontId) {
+	// IMPORTANT: The font mapping must match the one in Setting.js
+	const fonts = {
+		[Setting.FONT_DEFAULT]: null,
+		[Setting.FONT_MENLO]: 'Menlo',
+		[Setting.FONT_COURIER_NEW]: 'Courier New',
+		[Setting.FONT_AVENIR]: 'Avenir',
+		[Setting.FONT_MONOSPACE]: 'monospace',
+	};
+	if (!fontId) {
+		console.warn('Editor font not set! Falling back to default font."');
+		fontId = Setting.FONT_DEFAULT;
+	}
+	return fonts[fontId];
+}
+
 function themeStyle(theme) {
 	if (!theme) {
-		console.warn('Theme not set!! Defaulting to Light theme');
+		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
 	}
 
@@ -140,4 +156,4 @@ function themeStyle(theme) {
 	return addExtraStyles(themeCache_[theme]);
 }
 
-module.exports = { globalStyle, themeStyle };
+module.exports = { globalStyle, themeStyle, editorFont };

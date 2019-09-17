@@ -22,6 +22,7 @@ class Setting extends BaseModel {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
+		const mobilePlatform = shim.mobilePlatform();
 
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
@@ -334,7 +335,42 @@ class Setting extends BaseModel {
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
-			'style.editor.fontFamily': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.') },
+			'style.editor.fontFamily':
+				(!!mobilePlatform) ?
+					({
+						value: Setting.FONT_DEFAULT,
+						type: Setting.TYPE_STRING,
+						isEnum: true,
+						public: true,
+						label: () => _('Editor font'),
+						appTypes: ['mobile'],
+						section: 'appearance',
+						options: () => {
+							// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
+							if (mobilePlatform === 'ios') {
+								return {
+									[Setting.FONT_DEFAULT]: 'Default',
+									[Setting.FONT_MENLO]: 'Menlo',
+									[Setting.FONT_COURIER_NEW]: 'Courier New',
+									[Setting.FONT_AVENIR]: 'Avenir',
+								};
+							}
+							return {
+								[Setting.FONT_DEFAULT]: 'Default',
+								[Setting.FONT_MONOSPACE]: 'Monospace',
+							};
+						},
+					}) : {
+						value: '',
+						type: Setting.TYPE_STRING,
+						public: true,
+						appTypes: ['desktop'],
+						section: 'appearance',
+						label: () => _('Editor font family'),
+						description: () =>
+							_('This must be *monospace* font or it will not work properly. If the font ' +
+						'is incorrect or empty, it will default to a generic monospace font.'),
+					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
@@ -846,6 +882,12 @@ Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
+
+Setting.FONT_DEFAULT = 0;
+Setting.FONT_MENLO = 1;
+Setting.FONT_COURIER_NEW = 2;
+Setting.FONT_AVENIR = 3;
+Setting.FONT_MONOSPACE = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';

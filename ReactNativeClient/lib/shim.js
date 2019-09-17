@@ -41,6 +41,10 @@ shim.platformName = function() {
 	throw new Error('Cannot determine platform');
 };
 
+shim.mobilePlatform = function() {
+	return ''; // Default if we're not on mobile (React Native)
+};
+
 // https://github.com/cheton/is-electron
 shim.isElectron = () => {
 	// Renderer process

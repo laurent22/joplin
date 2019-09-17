@@ -6,7 +6,7 @@ const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
-const { Linking } = require('react-native');
+const { Linking, Platform } = require('react-native');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('lib/path-utils.js');
 const { uuid } = require('lib/uuid.js');
@@ -143,6 +143,10 @@ function shimInit() {
 				resolve();
 			});
 		});
+	};
+
+	shim.mobilePlatform = () => {
+		return Platform.OS;
 	};
 
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
