@@ -36,7 +36,7 @@ class ItemChange extends BaseModel {
 	// Because item changes are recorded in the background, this function
 	// can be used for synchronous code, in particular when unit testing.
 	static async waitForAllSaved() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!ItemChange.saveCalls_.length) {
 					clearInterval(iid);

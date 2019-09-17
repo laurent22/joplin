@@ -377,7 +377,7 @@ function attributeToLowerCase(node) {
 	return output;
 }
 
-function isSpanWithStyle(attributes, state) {
+function isSpanWithStyle(attributes) {
 	if (attributes != undefined) {
 		if ('style' in attributes) {
 			return true;
@@ -412,7 +412,7 @@ function enexXmlToMdArray(stream, resources) {
 		}
 	};
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		let state = {
 			inCode: [],
 			inPre: false,
@@ -434,7 +434,6 @@ function enexXmlToMdArray(stream, resources) {
 
 		saxStream.on('error', function(e) {
 			console.warn(e);
-			//reject(e);
 		});
 
 		const unwrapInnerText = text => {
@@ -896,7 +895,7 @@ function enexXmlToMdArray(stream, resources) {
 			}
 		});
 
-		saxStream.on('attribute', function(attr) {});
+		saxStream.on('attribute', function() {});
 
 		saxStream.on('end', function() {
 			resolve({

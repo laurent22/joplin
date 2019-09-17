@@ -393,6 +393,26 @@ msgstr "Chercher le motif <pattern> dans toutes les notes."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Démarre, stop ou vérifie l'état du serveur API. Pour spécifier sur quel port "
+"il doit tourner, veuillez utiliser la variable de config api.port. Les "
+"commandes sont (%s)."
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Le serveur tourne déjà sur le port %d"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Le serveur tourne sur le port %d"
+
+msgid "Server is not running."
+msgstr "Le serveur est arrêté."
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -755,6 +775,9 @@ msgstr "&Aide"
 msgid "Website and documentation"
 msgstr "Documentation en ligne"
 
+msgid "Joplin Forum"
+msgstr "Forum Joplin"
+
 msgid "Make a donation"
 msgstr "Faire un don"
 
@@ -961,8 +984,8 @@ msgstr ""
 "probable qu'elle vont être prochainement disponible via la synchronisation."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Pour plus d'informations sur le chiffrement de bout en bout, ainsi que des "
 "conseils pour l'activer, veuillez consulter la documentation :"
@@ -1570,6 +1593,9 @@ msgstr "Activer la syntaxe ++insertion++"
 msgid "Enable multimarkdown table extension"
 msgstr "Activer les tables multi-markdown"
 
+msgid "Enable Fountain syntax support"
+msgstr "Activer la syntaxe \"Fountain\""
+
 msgid "Show tray icon"
 msgstr "Afficher l'icône dans la zone de notifications"
 
@@ -1657,6 +1683,13 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer les erreurs de certificats TLS"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Détermine quel port sera utilisé par le serveur API. Si aucun n'est "
+"spécifié, un port par défaut sera utilisé."
 
 msgid "Enable note history"
 msgstr "Activer l'historique des notes"
@@ -1813,6 +1846,12 @@ msgstr "Permission d'utiliser l'appareil photo"
 
 msgid "Your permission to use your camera is required."
 msgstr "Votre permission est requise pour utiliser l'appareil photo."
+
+msgid "You currently have no notebooks."
+msgstr "Vous n'avez pour l'instant pas de carnets."
+
+msgid "Create a notebook"
+msgstr "Créer un carnet"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -2165,9 +2204,6 @@ msgstr "Chercher"
 #~ "Le chemin du répertoire avec lequel synchroniser lorsque la "
 #~ "synchronisation par système de fichier est activée. Voir `sync.target`."
 
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"
-
 #~ msgid "Remove?"
 #~ msgstr "Supprimer ?"
 
@@ -2232,9 +2268,6 @@ msgstr "Chercher"
 
 #~ msgid "Exit the application."
 #~ msgstr "Quitter le logiciel."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Supprimer la note ou carnet sélectionné."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Marquer une tâches comme complétée / non-complétée"

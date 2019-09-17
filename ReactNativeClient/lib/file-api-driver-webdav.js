@@ -65,7 +65,7 @@ class FileApiDriverWebDav {
 		};
 	}
 
-	async setTimestamp(path, timestampMs) {
+	async setTimestamp() {
 		throw new Error('Not implemented'); // Not needed anymore
 	}
 
@@ -111,7 +111,7 @@ class FileApiDriverWebDav {
 		return output;
 	}
 
-	async list(path, options) {
+	async list(path) {
 		// const relativeBaseUrl = this.api().relativeBaseUrl();
 
 		// function parsePropFindXml(xmlString) {

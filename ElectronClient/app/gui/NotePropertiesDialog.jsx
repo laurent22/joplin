@@ -192,7 +192,7 @@ class NotePropertiesDialog extends React.Component {
 	async saveProperty() {
 		if (!this.state.editedKey) return;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const newFormNote = Object.assign({}, this.state.formNote);
 
 			if (this.state.editedKey.indexOf('_time') >= 0) {
@@ -216,7 +216,7 @@ class NotePropertiesDialog extends React.Component {
 	}
 
 	async cancelProperty() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.okButton.current.focus();
 			this.setState(
 				{

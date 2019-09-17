@@ -134,7 +134,9 @@ class MainScreenComponent extends React.Component {
 					return { value: a.id, label: a.title };
 				})
 				.sort((a, b) => {
-					return a.label.localeCompare(b.label);
+					// sensitivity accent will treat accented characters as differemt
+					// but treats caps as equal
+					return a.label.localeCompare(b.label, undefined, {sensitivity: 'accent'});
 				});
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags.map(a => {
@@ -483,7 +485,10 @@ class MainScreenComponent extends React.Component {
 		const onViewMasterKeysClick = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'EncryptionConfig',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'encryption',
+				},
 			});
 		};
 

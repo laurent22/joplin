@@ -32,12 +32,12 @@ class HeaderComponent extends React.Component {
 			}, 500);
 		};
 
-		this.search_onClear = event => {
+		this.search_onClear = () => {
 			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
 		};
 
-		this.search_onFocus = event => {
+		this.search_onFocus = () => {
 			if (this.hideSearchUsageLinkIID_) {
 				clearTimeout(this.hideSearchUsageLinkIID_);
 				this.hideSearchUsageLinkIID_ = null;
@@ -46,7 +46,7 @@ class HeaderComponent extends React.Component {
 			this.setState({ showSearchUsageLink: true });
 		};
 
-		this.search_onBlur = event => {
+		this.search_onBlur = () => {
 			if (this.hideSearchUsageLinkIID_) return;
 
 			this.hideSearchUsageLinkIID_ = setTimeout(() => {
@@ -66,7 +66,7 @@ class HeaderComponent extends React.Component {
 			triggerOnQuery('');
 		};
 
-		this.searchUsageLink_click = event => {
+		this.searchUsageLink_click = () => {
 			bridge().openExternal('https://joplinapp.org/#searching');
 		};
 	}

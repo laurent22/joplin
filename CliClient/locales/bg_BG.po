@@ -394,6 +394,23 @@ msgstr "Търси всред всички бележки за зададени�
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -754,6 +771,10 @@ msgstr "Помощ (&H)"
 msgid "Website and documentation"
 msgstr "Уебсайт и документация"
 
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin експорт файл"
+
 msgid "Make a donation"
 msgstr "Искам да направя дарение"
 
@@ -958,8 +979,8 @@ msgstr ""
 "ще бъдат свалени тепърва чрез синхронизация."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "За повече информация относно криптирането от край до край (E2EE) и за съвети "
 "относно как да го пуснете, вижте документацията:"
@@ -1564,6 +1585,10 @@ msgstr "Пусни синтаксис ++вметка++"
 msgid "Enable multimarkdown table extension"
 msgstr "Пусни разширението за multimarkdown таблици"
 
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Пусни синтаксис ~ниско~"
+
 msgid "Show tray icon"
 msgstr "Покажи иконка до часовника"
 
@@ -1653,6 +1678,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорирай грешки в TLS сертификати"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 msgid "Enable note history"
 msgstr "Пусни история за бележките"
@@ -1811,6 +1841,14 @@ msgstr "Разрешение за употреба на камерата"
 
 msgid "Your permission to use your camera is required."
 msgstr "Трябва да разрешените употребата на камерата."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Няма активна тетрадка."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Създава нова тетрадка."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "В момента няма бележки. Натиснете бутон (+) за да създадете бележка."

@@ -1,4 +1,4 @@
-function installRule(markdownIt, mdOptions, ruleOptions) {
+function installRule(markdownIt) {
 	const defaultRender =
 		markdownIt.renderer.rules.code_inline ||
 		function(tokens, idx, options, env, self) {

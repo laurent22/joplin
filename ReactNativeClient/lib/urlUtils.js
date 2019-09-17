@@ -1,4 +1,5 @@
 const { rtrimSlashes } = require('lib/path-utils');
+const { urlDecode } = require('lib/string-utils');
 
 const urlUtils = {};
 
@@ -37,6 +38,57 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 	} else {
 		return baseUrl + (url ? '/' + url : '');
 	}
+};
+
+const resourceRegex = /^(joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
+
+urlUtils.isResourceUrl = function(url) {
+	return !!url.match(resourceRegex);
+};
+
+urlUtils.parseResourceUrl = function(url) {
+	if (!urlUtils.isResourceUrl(url)) return null;
+
+	const match = url.match(resourceRegex);
+
+	const itemId = match[2];
+	let hash = match[3].trim();
+
+	// In general we want the hash to be decoded so that non-alphabetical languages
+	// appear as-is without being encoded with %.
+	// Fixes https://github.com/laurent22/joplin/issues/1870
+	if (hash) hash = urlDecode(hash.substr(1)); // Remove the first #
+
+	return {
+		itemId: itemId,
+		hash: hash,
+	};
+};
+
+urlUtils.extractResourceUrls = function(text) {
+	const markdownLinksRE = /\]\((.*?)\)/g;
+	const output = [];
+	let result = null;
+
+	while ((result = markdownLinksRE.exec(text)) !== null) {
+		const resourceUrlInfo = urlUtils.parseResourceUrl(result[1]);
+		if (resourceUrlInfo) output.push(resourceUrlInfo);
+	}
+
+	const htmlRegexes = [
+		/<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
+		/<a[\s\S]*?href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
+	];
+
+	for (const htmlRegex of htmlRegexes) {
+		while (true) {
+			const m = htmlRegex.exec(text);
+			if (!m) break;
+			output.push({ itemId: m[1], hash: '' });
+		}
+	}
+
+	return output;
 };
 
 module.exports = urlUtils;

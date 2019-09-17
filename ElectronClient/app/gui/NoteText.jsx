@@ -151,7 +151,7 @@ class NoteTextComponent extends React.Component {
 			this.setState({ lastKeys: lastKeys });
 		};
 
-		this.onEditorContextMenu_ = event => {
+		this.onEditorContextMenu_ = () => {
 			const menu = new Menu();
 
 			const selectedText = this.selectedText();
@@ -244,7 +244,7 @@ class NoteTextComponent extends React.Component {
 			updateSelectionRange();
 		};
 
-		this.aceEditor_focus = event => {
+		this.aceEditor_focus = () => {
 			updateSelectionRange();
 		};
 
@@ -270,6 +270,7 @@ class NoteTextComponent extends React.Component {
 				localSearch: {
 					query: query,
 					selectedIndex: 0,
+					timestamp: Date.now(),
 				},
 			});
 		};
@@ -277,6 +278,7 @@ class NoteTextComponent extends React.Component {
 		const noteSearchBarNextPrevious = inc => {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.selectedIndex += inc;
+			ls.timestamp = Date.now();
 			if (ls.selectedIndex < 0) ls.selectedIndex = ls.resultCount - 1;
 			if (ls.selectedIndex >= ls.resultCount) ls.selectedIndex = 0;
 
@@ -413,6 +415,11 @@ class NoteTextComponent extends React.Component {
 	}
 
 	componentDidUpdate() {
+		// if (Setting.value('env') === 'dev' && this.webviewRef()) {
+		// 	this.webviewRef().openDevTools();
+		// 	return;
+		// }
+
 		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
 			if (this.props.noteDevToolsVisible) {
 				this.webviewRef().openDevTools();
@@ -567,8 +574,14 @@ class NoteTextComponent extends React.Component {
 				this.editor_.editor.moveCursorTo(0, 0);
 
 				setTimeout(() => {
-					this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
-					this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+					// If we have an anchor hash, jump to that anchor
+					if (this.props.selectedNoteHash) {
+						this.webviewRef_.current.wrappedInstance.send('scrollToHash', this.props.selectedNoteHash);
+					} else {
+						// Otherwise restore the normal scroll position
+						this.setEditorPercentScroll(scrollPercent ? scrollPercent : 0);
+						this.setViewerPercentScroll(scrollPercent ? scrollPercent : 0);
+					}
 				}, 10);
 			}
 
@@ -790,7 +803,8 @@ class NoteTextComponent extends React.Component {
 
 			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
-			const itemId = msg.substr('joplin://'.length);
+			const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+			const itemId = resourceUrlInfo.itemId;
 			const item = await BaseItem.loadItemById(itemId);
 
 			if (!item) throw new Error('No item with ID ' + itemId);
@@ -808,6 +822,7 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: item.parent_id,
 					noteId: item.id,
+					hash: resourceUrlInfo.hash,
 					historyNoteAction: {
 						id: this.state.note.id,
 						parent_id: this.state.note.parent_id,
@@ -1471,7 +1486,7 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('[', '](' + url + ')');
 	}
 
-	itemContextMenu(event) {
+	itemContextMenu() {
 		const note = this.state.note;
 		if (!note) return;
 
@@ -1929,6 +1944,7 @@ class NoteTextComponent extends React.Component {
 				];
 				markerOptions.selectedIndex = this.state.localSearch.selectedIndex;
 				markerOptions.separateWordSearch = false;
+				markerOptions.searchTimestamp = this.state.localSearch.timestamp;
 			} else {
 				const search = BaseModel.byId(this.props.searches, this.props.selectedSearchId);
 				if (search) {
@@ -2000,7 +2016,7 @@ class NoteTextComponent extends React.Component {
 				showGutter={false}
 				name="note-editor"
 				wrapEnabled={true}
-				onScroll={event => {
+				onScroll={() => {
 					this.editor_scroll();
 				}}
 				ref={elem => {
@@ -2047,6 +2063,7 @@ const mapStateToProps = state => {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
+		selectedNoteHash: state.selectedNoteHash,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,

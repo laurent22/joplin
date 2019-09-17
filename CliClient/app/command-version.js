@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 		return _('Displays version information');
 	}
 
-	async action(args) {
+	async action() {
 		const p = require('./package.json');
 		this.stdout(_('%s %s (%s)', p.name, p.version, Setting.value('env')));
 	}

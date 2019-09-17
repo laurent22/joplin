@@ -393,6 +393,23 @@ msgstr "Emandako <pattern> bilatzen du ohar guztietan."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -761,6 +778,10 @@ msgid "Website and documentation"
 msgstr "Web orria eta dokumentazioa (en)"
 
 #, fuzzy
+msgid "Joplin Forum"
+msgstr "Evernotetik esportatutako fitxategiak"
+
+#, fuzzy
 msgid "Make a donation"
 msgstr "Web orria eta dokumentazioa (en)"
 
@@ -957,8 +978,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 
 msgid "Status"
@@ -1573,6 +1594,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr ""
 
@@ -1652,6 +1676,11 @@ msgid ""
 msgstr ""
 
 msgid "Ignore TLS certificate errors"
+msgstr ""
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
 msgstr ""
 
 #, fuzzy
@@ -1813,6 +1842,14 @@ msgstr ""
 
 msgid "Your permission to use your camera is required."
 msgstr ""
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ezabatu aukeratutako oharra edo koadernoa"
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Koaderno berria sortzen du."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Ez dago oharrik. Sortu bat (+) botoian klik eginaz."
@@ -2199,9 +2236,6 @@ msgstr "Bilatu"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Utzi uneko komandoa"
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Ezabatu aukeratutako oharra edo koadernoa"
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Zeregina eginda / ez-eginda markatu"

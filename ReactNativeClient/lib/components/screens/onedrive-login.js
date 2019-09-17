@@ -11,7 +11,7 @@ const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const parseUri = require('lib/parseUri');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -116,7 +116,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	}
 }
 
-const OneDriveLoginScreen = connect(state => {
+const OneDriveLoginScreen = connect(() => {
 	return {};
 })(OneDriveLoginScreenComponent);
 

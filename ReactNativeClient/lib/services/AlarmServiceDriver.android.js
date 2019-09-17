@@ -23,7 +23,7 @@ class AlarmServiceDriver {
 		return true;
 	}
 
-	notificationIsSet(alarmId) {
+	notificationIsSet() {
 		throw new Error('Available only for non-persistent alarms');
 	}
 

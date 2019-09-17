@@ -2,7 +2,7 @@ const RNFS = require('react-native-fs');
 const FsDriverBase = require('lib/fs-driver-base');
 
 class FsDriverRN extends FsDriverBase {
-	appendFileSync(path, string) {
+	appendFileSync() {
 		throw new Error('Not implemented');
 	}
 
@@ -19,7 +19,7 @@ class FsDriverRN extends FsDriverBase {
 		return await this.unlink(path);
 	}
 
-	writeBinaryFile(path, content) {
+	writeBinaryFile() {
 		throw new Error('Not implemented');
 	}
 
@@ -81,7 +81,7 @@ class FsDriverRN extends FsDriverBase {
 	// arguments but the function returns `false` and the timestamp is not set.
 	// Current setTimestamp is not really used so keep it that way, but careful if it
 	// becomes needed.
-	async setTimestamp(path, timestampDate) {
+	async setTimestamp() {
 		// return RNFS.touch(path, timestampDate, timestampDate);
 	}
 
@@ -98,7 +98,7 @@ class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	close(handle) {
+	close() {
 		return null;
 	}
 

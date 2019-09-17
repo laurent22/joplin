@@ -9,6 +9,10 @@ ipcRenderer.on('setHtml', (event, html, options) => {
 	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html, options: options } }, '*');
 });
 
+ipcRenderer.on('scrollToHash', (event, hash) => {
+	window.postMessage({ target: 'webview', name: 'scrollToHash', data: { hash: hash } }, '*');
+});
+
 ipcRenderer.on('setPercentScroll', (event, percent) => {
 	window.postMessage({ target: 'webview', name: 'setPercentScroll', data: { percent: percent } }, '*');
 });

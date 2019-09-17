@@ -24,7 +24,7 @@ async function browserCaptureVisibleTabs(windowId) {
 	const options = { format: 'jpeg' };
 	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, options);
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		browser_.tabs.captureVisibleTab(windowId, options, (image) => {
 			resolve(image);
 		});
@@ -34,14 +34,14 @@ async function browserCaptureVisibleTabs(windowId) {
 async function browserGetZoom(tabId) {
 	if (browserSupportsPromises_) return browser_.tabs.getZoom(tabId);
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		browser_.tabs.getZoom(tabId, (zoom) => {
 			resolve(zoom);
 		});
 	});
 }
 
-browser_.runtime.onInstalled.addListener(function(details) {
+browser_.runtime.onInstalled.addListener(function() {
 	if (window.joplinEnv() === 'dev') {
 		browser_.browserAction.setIcon({
 			path: 'icons/32-dev.png',

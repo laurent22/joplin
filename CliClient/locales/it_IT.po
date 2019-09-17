@@ -396,6 +396,25 @@ msgstr "Cerca <pattern> in tutte le note."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Avvia, ferma o controlla il server API. Per specificare su quale porta deve "
+"essere eseguito, setta la variabile api.config. I comandi sono (%s)."
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Il server è già in esecuzione sulla porta %d"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Il server è in esecuzione sulla porta %d"
+
+msgid "Server is not running."
+msgstr "Il server non è in esecuzione."
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -538,6 +557,7 @@ msgstr "Errore fatale:"
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Tutte le potenziali porte sono in uso - prego riportare il problema a %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -639,25 +659,23 @@ msgid "Web clipper options"
 msgstr "Opzioni Web Clipper"
 
 msgid "Create note from template"
-msgstr ""
+msgstr "Crea nota da modello"
 
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Nuovo \"Cose-da-fare\" da modello"
 
-#, fuzzy
 msgid "Insert template"
-msgstr "Inserisci data e ora"
+msgstr "Inserisci modello"
 
-#, fuzzy
 msgid "Open template directory"
-msgstr "Cartella di esportazione di Joplin"
+msgstr "Apri cartella modelli"
 
 msgid "Refresh templates"
-msgstr ""
+msgstr "Aggiorna modelli"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "Revisione: %s (%s)"
 
 #, javascript-format
 msgid "%s %s (%s, %s)"
@@ -676,7 +694,7 @@ msgid "Check for updates..."
 msgstr "Controlla aggiornamenti..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Modelli"
 
 msgid "Import"
 msgstr "Importa"
@@ -759,6 +777,9 @@ msgstr "&Aiuto"
 
 msgid "Website and documentation"
 msgstr "Sito web e documentazione"
+
+msgid "Joplin Forum"
+msgstr "Joplin Forum"
 
 msgid "Make a donation"
 msgstr "Fai una donazione"
@@ -964,8 +985,8 @@ msgstr ""
 "ad essi. È probabile che verranno scaricati tramite la sincronizzazione."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Per ulteriori informazioni sulla crittografia end-to-end (E2EE) e consigli "
 "su come abilitarlo, consultare la documentazione:"
@@ -997,7 +1018,7 @@ msgid "Notebook title:"
 msgstr "Titolo del Taccuino:"
 
 msgid "Add or remove tags:"
-msgstr "Aggiungi or rimuovi etichetta:"
+msgstr "Aggiungi o rimuovi etichetta:"
 
 msgid "Rename notebook:"
 msgstr "Rinomina il Taccuino:"
@@ -1009,7 +1030,7 @@ msgid "Set alarm:"
 msgstr "Imposta allarme:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "File del modello:"
 
 msgid "Layout"
 msgstr "Disposizione"
@@ -1503,10 +1524,10 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
-msgstr "Cose da fare incomplete in cima alla lista"
+msgstr "\"Cose-da-fare\" incomplete in cima alla lista"
 
 msgid "Show completed to-dos"
-msgstr "Mostra le cose da fare completate"
+msgstr "Mostra le \"Cose-da-fare\" completate"
 
 msgid "Sort notes by"
 msgstr "Ordina le note per"
@@ -1567,6 +1588,9 @@ msgstr "Attiva sintassi ++insert++"
 
 msgid "Enable multimarkdown table extension"
 msgstr ""
+
+msgid "Enable Fountain syntax support"
+msgstr "Attiva supporto sintassi Fountain"
 
 msgid "Show tray icon"
 msgstr "Visualizza tray icon"
@@ -1656,6 +1680,13 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignora gli errori del certificato TLS"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Specifica la porta che deve essere usata dal server API. Se non viene "
+"settato, viene usato un valore di default."
 
 msgid "Enable note history"
 msgstr "Attiva cronologia della nota"
@@ -1813,6 +1844,12 @@ msgstr "Permesso di usare la fotocamera"
 msgid "Your permission to use your camera is required."
 msgstr "E’ richiesto il permesso di usare la fotocamera."
 
+msgid "You currently have no notebooks."
+msgstr "Al momento non hai taccuini."
+
+msgid "Create a notebook"
+msgstr "Crea un Taccuino"
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
 
@@ -1841,17 +1878,15 @@ msgstr "Seleziona la data"
 msgid "Confirm"
 msgstr "Conferma"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "Taccuini"
+msgstr "Taccuini: %s"
 
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Gli elementi crittografati non possono essere modificati"
+msgstr "I Taccuini crittografati non possono essere rinominati"
 
-#, fuzzy
 msgid "New Notebook"
-msgstr "Nuovo taccuino"
+msgstr "Nuovo Taccuino"
 
 msgid "Configuration"
 msgstr "Configurazione"
@@ -1864,9 +1899,8 @@ msgstr "Decrittografia Elementi: %d/%d"
 msgid "Fetching resources: %d/%d"
 msgstr "Recupero risorse: %d/%d"
 
-#, fuzzy
 msgid "All notes"
-msgstr "Eliminare le note?"
+msgstr "Tutte le note"
 
 msgid "Notebooks"
 msgstr "Taccuini"
@@ -1914,48 +1948,46 @@ msgid "Type new tags or select from list"
 msgstr "Digita nuovi tag o seleziona dalla lista"
 
 msgid "Warning"
-msgstr ""
+msgstr "Attenzione"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
-#, fuzzy
 msgid "Information"
-msgstr "Maggiori informazioni"
+msgstr "Informazioni"
 
 msgid "Encryption Config"
 msgstr "Configurazione Crittografia"
 
-#, fuzzy
 msgid "Tools"
-msgstr "&Strumenti"
+msgstr "Strumenti"
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "Stato"
+msgstr "Stato sincronizzazione"
 
 msgid "Log"
 msgstr "Log"
 
-#, fuzzy
 msgid "Creating report..."
-msgstr "Creare nuovo %s..."
+msgstr "Creazione report..."
 
 msgid "Export Debug Report"
 msgstr "Esporta il Report di Debug"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Correzione indice di ricerca..."
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Correggi indice di ricerca"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Usa questo per ricostruire l’indice di ricerca se c’è un problema con la "
+"ricerca. Potrebbe richiedere molto tempo, dipende dal numero di note."
 
 msgid "More information"
 msgstr "Maggiori informazioni"
@@ -2025,9 +2057,8 @@ msgstr "Il Taccuino non può essere salvato: %s"
 msgid "Edit notebook"
 msgstr "Modifica Taccuino"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "Titolo del Taccuino:"
+msgstr "Inserisci titolo del Taccuino"
 
 msgid "Show all"
 msgstr "Mostra tutto"
@@ -2061,9 +2092,9 @@ msgstr "Collegamenti con protocollo \"%s\" non sono supportati"
 msgid "Unsupported image type: %s"
 msgstr "Tipo di immagine non supportata: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "Aggiornato: %d."
+msgstr "Aggiornato: %s"
 
 msgid "View on map"
 msgstr "Guarda sulla mappa"
@@ -2071,13 +2102,11 @@ msgstr "Guarda sulla mappa"
 msgid "Go to source URL"
 msgstr ""
 
-#, fuzzy
 msgid "Attach..."
-msgstr "Cerca..."
+msgstr "Allega..."
 
-#, fuzzy
 msgid "Choose an option"
-msgstr "Mostra opzioni avanzate"
+msgstr "Scegli un’opzione"
 
 msgid "Take photo"
 msgstr "Scatta foto"
@@ -2097,19 +2126,17 @@ msgstr "Converti in nota"
 msgid "Convert to todo"
 msgstr "Converti in Todo"
 
-#, fuzzy
 msgid "Properties"
-msgstr "Proprietà della nota"
+msgstr "Proprietà"
 
 msgid "Add body"
-msgstr ""
+msgstr "Aggiungi corpo"
 
 msgid "Edit"
 msgstr "Modifica"
 
-#, fuzzy
 msgid "Add title"
-msgstr "titolo"
+msgstr "Aggiungi titolo"
 
 msgid "Login with OneDrive"
 msgstr "Accedi a OneDrive"
@@ -2164,9 +2191,6 @@ msgstr "Cerca"
 #~ msgstr ""
 #~ "Il percorso di sincronizzazione quando la sincronizzazione è abilitata. "
 #~ "Vedi `sync.target`."
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"
 
 #~ msgid "State: %s."
 #~ msgstr "Stato: %s."
@@ -2233,9 +2257,6 @@ msgstr "Cerca"
 
 #~ msgid "Cancel the current command."
 #~ msgstr "Annulla il comando corrente."
-
-#~ msgid "Delete the currently selected note or notebook."
-#~ msgstr "Elimina la nota o il taccuino selezionato."
 
 #~ msgid "Set a to-do as completed / not completed"
 #~ msgstr "Imposta un \"Cose-da-fare\" come completato / non completato"

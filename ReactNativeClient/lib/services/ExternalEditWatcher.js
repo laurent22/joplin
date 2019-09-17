@@ -12,7 +12,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 class ExternalEditWatcher {
 	constructor() {
 		this.logger_ = new Logger();
-		this.dispatch = action => {};
+		this.dispatch = () => {};
 		this.watcher_ = null;
 		this.eventEmitter_ = new EventEmitter();
 		this.skipNextChangeEvent_ = {};

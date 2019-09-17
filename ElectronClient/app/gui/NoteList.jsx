@@ -271,7 +271,7 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState, snapshot) {
+	componentDidUpdate(prevProps) {
 		if (prevProps.windowCommand !== this.props.windowCommand) {
 			this.doCommand(this.props.windowCommand);
 		}

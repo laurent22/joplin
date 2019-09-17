@@ -11,9 +11,11 @@ const rules = {
 	html_image: require('./MdToHtml/rules/html_image'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
+	fountain: require('./MdToHtml/rules/fountain'),
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
+const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
 // The keys must match the corresponding entry in Setting.js
 const plugins = {
@@ -69,6 +71,8 @@ class MdToHtml {
 			assetLoaders: {},
 		};
 
+		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
+
 		const markdownIt = new MarkdownIt({
 			breaks: breaks_,
 			linkify: true,
@@ -103,8 +107,6 @@ class MdToHtml {
 			},
 		});
 
-		const ruleOptions = Object.assign({}, options, { resourceBaseUrl: this.resourceBaseUrl_ });
-
 		// To add a plugin, there are three options:
 		//
 		// 1. If the plugin does not need any application specific data, use the standard way:
@@ -138,9 +140,12 @@ class MdToHtml {
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_image(context, ruleOptions));
 		if (Setting.value('markdown.plugin.katex')) markdownIt.use(rules.katex(context, ruleOptions));
+		if (Setting.value('markdown.plugin.fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
-		markdownIt.use(markdownItAnchor);
+		markdownIt.use(markdownItAnchor, {
+			slugify: s => uslug(s),
+		});
 
 		for (let key in plugins) {
 			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);

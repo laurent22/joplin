@@ -1,5 +1,5 @@
 function promiseChain(chain, defaultValue = null) {
-	let output = new Promise((resolve, reject) => {
+	let output = new Promise((resolve) => {
 		resolve(defaultValue);
 	});
 	for (let i = 0; i < chain.length; i++) {

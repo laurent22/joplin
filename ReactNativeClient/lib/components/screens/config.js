@@ -21,7 +21,7 @@ import { PermissionsAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -269,6 +269,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
 		}
 
+		if (!settingComps.length) return null;
+
 		return (
 			<View key={key}>
 				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}
@@ -324,7 +326,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 								color: theme.color,
 								fontSize: theme.fontSize,
 							}}
-							onValueChange={(itemValue, itemIndex) => {
+							onValueChange={(itemValue) => {
 								updateSettingValue(key, itemValue);
 							}}
 						/>

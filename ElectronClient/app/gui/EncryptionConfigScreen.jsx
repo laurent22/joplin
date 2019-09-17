@@ -2,7 +2,6 @@ const React = require('react');
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting');
 const EncryptionService = require('lib/services/EncryptionService');
-const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
@@ -85,17 +84,13 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 
 	render() {
-		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 		const masterKeys = this.state.masterKeys;
 		const containerPadding = 10;
 
-		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
-
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: containerPadding,
 			overflow: 'auto',
-			height: style.height - theme.headerHeight - containerPadding * 2,
 		});
 
 		const mkComps = [];
@@ -200,12 +195,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 
 		return (
 			<div>
-				<Header style={headerStyle} />
 				<div style={containerStyle}>
 					{
 						<div style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 							<p style={theme.textStyle}>
-								<span>{_('For more information about End-To-End Encryption (E2EE) and advices on how to enable it please check the documentation:')}</span>{' '}
+								<span>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</span>{' '}
 								<a
 									onClick={() => {
 										bridge().openExternal('https://joplinapp.org/e2ee/');

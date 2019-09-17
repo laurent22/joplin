@@ -10,6 +10,7 @@ const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
+const urlUtils = require('lib/urlUtils.js');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -114,27 +115,9 @@ class Note extends BaseItem {
 	static linkedItemIds(body) {
 		if (!body || body.length <= 32) return [];
 
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
-		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
-		if (!matches) matches = [];
-		matches = matches.map(m => m.substr(3, 32));
-
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b "Some title")
-		let matches2 = body.match(/\(:\/[a-zA-Z0-9]{32}\s(.*?)\)/g);
-		if (!matches2) matches2 = [];
-		matches2 = matches2.map(m => m.substr(3, 32));
-		matches = matches.concat(matches2);
-
-		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi;
-		const imgMatches = [];
-		while (true) {
-			const m = imgRegex.exec(body);
-			if (!m) break;
-			imgMatches.push(m[1]);
-		}
-
-		return ArrayUtils.unique(matches.concat(imgMatches));
+		const links = urlUtils.extractResourceUrls(body);
+		const itemIds = links.map(l => l.itemId);
+		return ArrayUtils.unique(itemIds);
 	}
 
 	static async linkedItems(body) {

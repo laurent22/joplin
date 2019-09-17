@@ -194,7 +194,7 @@ function math_block(state, start, end, silent) {
 let assetsLoaded_ = false;
 let cache_ = {};
 
-module.exports = function(context, ruleOptions) {
+module.exports = function(context) {
 	// Keep macros that persist across Katex blocks to allow defining a macro
 	// in one block and re-using it later in other blocks.
 	// https://github.com/laurent22/joplin/issues/1105

@@ -107,6 +107,7 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	async list(path = '', options = null) {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;

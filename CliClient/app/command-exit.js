@@ -15,7 +15,7 @@ class Command extends BaseCommand {
 		return ['gui'];
 	}
 
-	async action(args) {
+	async action() {
 		await app().exit();
 	}
 }

@@ -155,7 +155,7 @@ class AppComponent extends Component {
 		this.onClearTagButtonClick = this.onClearTagButtonClick.bind(this);
 	}
 
-	onAddTagClick(event) {
+	onAddTagClick() {
 		const newTags = this.state.selectedTags.slice();
 		newTags.push('');
 		this.setState({ selectedTags: newTags });

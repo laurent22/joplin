@@ -397,6 +397,23 @@ msgstr "Doorzoekt alle notities op het opgegeven <pattern>."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -531,7 +548,7 @@ msgstr "Fatale fout:"
 
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgstr "Alle potentiële poorten zijn in gebruik - Meld het probleem op %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -632,10 +649,10 @@ msgid "Web clipper options"
 msgstr "Webclipper-opties"
 
 msgid "Create note from template"
-msgstr ""
+msgstr "Notitie maken van sjabloon"
 
 msgid "Create to-do from template"
-msgstr ""
+msgstr "To-do maken van sjabloon"
 
 #, fuzzy
 msgid "Insert template"
@@ -646,7 +663,7 @@ msgid "Open template directory"
 msgstr "Joplin-exportmap"
 
 msgid "Refresh templates"
-msgstr ""
+msgstr "Sjablonen vernieuwen"
 
 #, fuzzy, javascript-format
 msgid "Revision: %s (%s)"
@@ -669,7 +686,7 @@ msgid "Check for updates..."
 msgstr "Controleren op updates..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Sjablonen"
 
 msgid "Import"
 msgstr "Importeren"
@@ -752,6 +769,10 @@ msgstr "&Help"
 
 msgid "Website and documentation"
 msgstr "Website en documentatie"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin-website"
 
 msgid "Make a donation"
 msgstr "Doneren"
@@ -956,8 +977,8 @@ msgstr ""
 "items. Waarschijnlijk worden ze uiteindelijk gedownload via synchronisatie."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Bekijk, voor meer informatie over End-To-End-versleuteling (E2EE) en hulp "
 "bij het inschakelen hiervan, onze documentatie:"
@@ -1003,7 +1024,7 @@ msgid "Set alarm:"
 msgstr "Alarm instellen:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "Sjabloonbestand:"
 
 msgid "Layout"
 msgstr "Indeling"
@@ -1044,7 +1065,7 @@ msgid "Note History"
 msgstr "Notitiegeschiedenis"
 
 msgid "Markup"
-msgstr ""
+msgstr "Opmaak"
 
 msgid "Previous versions of this note"
 msgstr "Vorige versies van deze notitie"
@@ -1496,10 +1517,10 @@ msgid "Dark"
 msgstr "Donker"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised Light"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised Dark"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
@@ -1566,6 +1587,10 @@ msgstr "Inschakelen ++insert++ syntaxis"
 
 msgid "Enable multimarkdown table extension"
 msgstr "Inschakelen multimarkdown tabel extensie"
+
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Inschakelen ~sub~ syntaxis"
 
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
@@ -1655,6 +1680,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 msgid "Enable note history"
 msgstr "Inschakelen geschiedenis van notities"
@@ -1814,6 +1844,14 @@ msgstr "Toestemming om de camera te gebruiken"
 msgid "Your permission to use your camera is required."
 msgstr "Je toestemming om de camera te gebruiken is vereist."
 
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Geen actief notitieboek."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Creëert een nieuw notitieboek."
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Er zijn momenteel geen notities. Creëer een notitie door te drukken op de "
@@ -1915,12 +1953,14 @@ msgid "Type new tags or select from list"
 msgstr "Typ nieuwe labels of kies ze uit de lijst"
 
 msgid "Warning"
-msgstr ""
+msgstr "Waarschuwing"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"Om synchronisatie via het bestandssysteem te gebruiken is je toestemming "
+"nodig om naar externe opslag te schrijven."
 
 #, fuzzy
 msgid "Information"
@@ -1948,15 +1988,17 @@ msgid "Export Debug Report"
 msgstr "Foutopsporingsrapportage exporteren"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Zoekindex repareren…"
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Zoekindex repareren"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Gebruik dit om de zoekindex opnieuw op te bouwen als er een probleem is met "
+"zoeken: Het kan lang duren afhankelijk van het aantal notities."
 
 msgid "More information"
 msgstr "Meer informatie"
@@ -2099,7 +2141,7 @@ msgid "Properties"
 msgstr "Eigenschappen van notitie"
 
 msgid "Add body"
-msgstr ""
+msgstr "Inhoud toevoegen"
 
 msgid "Edit"
 msgstr "Bewerken"
@@ -2161,10 +2203,6 @@ msgstr "Zoeken"
 #~ msgstr ""
 #~ "Het pad waarnaar gesynchroniseerd moet worden als bestandssysteem-"
 #~ "synchronisatie is ingeschakeld. Zie `sync.target`."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin-website"
 
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."

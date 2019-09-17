@@ -378,6 +378,23 @@ msgstr "Tüm notlarda girilen <pattern> i arar."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -730,6 +747,10 @@ msgstr "Yardım"
 msgid "Website and documentation"
 msgstr "Web sitesi ve dökümanlar"
 
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin v%s"
+
 msgid "Make a donation"
 msgstr "Bağış yapın"
 
@@ -934,8 +955,8 @@ msgstr ""
 "senkronizasyon yoluyla indirilmeleri sağlanacaktır."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Uçtan Uca Şifreleme (E2EE) hakkında bilgi ve nasıl aktif edilebileceğine "
 "dair ipuçları için lütfen belgeleri inceleyin:"
@@ -1536,6 +1557,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Tepsi simgesini göster"
 
@@ -1623,6 +1647,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "TLS sertifikası hatalarını yoksay"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 #, fuzzy
 msgid "Enable note history"
@@ -1778,6 +1807,14 @@ msgstr "Kamera kullanımı için izin"
 
 msgid "Your permission to use your camera is required."
 msgstr "Kamera kullanımı için izniniz gerekmektedir."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Aktif not defteri yok."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Yeni bir not defteri oluşturur."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
@@ -2125,6 +2162,3 @@ msgstr "Arama"
 #~ msgstr ""
 #~ "Dosya sistemi senkronizasyonu etkinleştirildiğinde senkronize edilecek "
 #~ "yol. Bakınız `sync.target`."
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"

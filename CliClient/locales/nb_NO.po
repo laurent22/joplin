@@ -390,6 +390,23 @@ msgstr "Søker etter angitt <pattern> i alle notatene."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -744,6 +761,10 @@ msgstr "&Hjelp"
 msgid "Website and documentation"
 msgstr "Nettsted og dokumentasjon"
 
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin v%s"
+
 msgid "Make a donation"
 msgstr "Gi et bidrag"
 
@@ -946,8 +967,8 @@ msgstr ""
 "vil siden bli lastet ned via synkronisering."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "For mer informasjon om ende-til-ende-kryptering (E2EE) og råd om hvordan du "
 "aktiverer det kan du sjekke dokumentasjonen:"
@@ -1547,6 +1568,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Vis systemmenyikon"
 
@@ -1633,6 +1657,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorer TLS-sertifikatfeil"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 #, fuzzy
 msgid "Enable note history"
@@ -1788,6 +1817,14 @@ msgstr "Tillatelse til å bruke kamera"
 
 msgid "Your permission to use your camera is required."
 msgstr "Tillatelse til å bruke kamera er nødvendig."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "Ingen aktiv notatbok."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Oppretter en ny notatbok."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Det finnes enda ingen notater. Lag en ved å klikke på (+)-knappen."
@@ -2135,7 +2172,3 @@ msgstr "Søk"
 #~ msgstr ""
 #~ "Stien som skal synkroniseres når filsystemsynkronisering er aktivert. Se "
 #~ "`sync.target`."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin v%s"

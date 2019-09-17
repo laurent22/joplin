@@ -151,7 +151,7 @@ class FileApiDriverOneDrive {
 		return this.api_.exec('DELETE', this.makePath_(path));
 	}
 
-	async move(oldPath, newPath) {
+	async move() {
 		// Cannot work in an atomic way because if newPath already exist, the OneDrive API throw an error
 		// "An item with the same name already exists under the parent". Some posts suggest to use
 		// @name.conflictBehavior [0]but that doesn't seem to work. So until Microsoft fixes this

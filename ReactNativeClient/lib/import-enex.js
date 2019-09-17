@@ -167,8 +167,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
 	// console.info(JSON.stringify({importOptions}, null, 2));
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
-	if (!('onProgress' in importOptions)) importOptions.onProgress = function(state) {};
-	if (!('onError' in importOptions)) importOptions.onError = function(error) {};
+	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
+	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
 	return new Promise((resolve, reject) => {
 		let progressState = {

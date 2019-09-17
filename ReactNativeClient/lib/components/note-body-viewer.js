@@ -114,6 +114,20 @@ class NoteBodyViewer extends Component {
 			    if (document.readyState === "complete") {
 			    	clearInterval(readyStateCheckInterval);
 			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+
+			    	const hash = "${this.props.noteHash}";
+			    	// Gives it a bit of time before scrolling to the anchor
+			    	// so that images are loaded.
+			    	if (hash) {
+				    	setTimeout(() => { 
+					    	const e = document.getElementById(hash);
+							if (!e) {
+								console.warn('Cannot find hash', hash);
+								return;
+							}
+							e.scrollIntoView();
+						}, 500);
+					}
 			    }
 			}, 10);
 		`);

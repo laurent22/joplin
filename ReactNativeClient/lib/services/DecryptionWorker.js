@@ -10,9 +10,7 @@ class DecryptionWorker {
 		this.state_ = 'idle';
 		this.logger_ = new Logger();
 
-		this.dispatch = action => {
-			//console.warn('DecryptionWorker.dispatch is not defined');
-		};
+		this.dispatch = () => {};
 
 		this.scheduleId_ = null;
 		this.eventEmitter_ = new EventEmitter();

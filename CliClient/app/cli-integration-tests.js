@@ -39,7 +39,7 @@ function createClient(id) {
 
 const client = createClient(1);
 
-function execCommand(client, command, options = {}) {
+function execCommand(client, command) {
 	let exePath = 'node ' + joplinAppPath;
 	let cmd = exePath + ' --update-geolocation-disabled --env dev --profile ' + client.profileDir + ' ' + command;
 	logger.info(client.id + ': ' + command);
@@ -212,7 +212,7 @@ testUnits.testMv = async () => {
 	assertEquals(4, notes2.length);
 };
 
-async function main(argv) {
+async function main() {
 	await fs.remove(baseDir);
 
 	logger.info(await execCommand(client, 'version'));

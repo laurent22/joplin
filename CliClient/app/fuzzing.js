@@ -2312,7 +2312,7 @@ async function compareClientItems(clientItems) {
 	}
 }
 
-async function main(argv) {
+async function main() {
 	await fs.remove(syncDir);
 
 	let clients = await createClients();

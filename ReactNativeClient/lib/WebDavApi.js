@@ -79,7 +79,7 @@ class WebDavApi {
 			attrValueProcessors: [attrValueProcessor],
 		};
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			parseXmlString(xml, options, (error, result) => {
 				if (error) {
 					resolve(null); // Error handled by caller which will display the XML text (or plain text) if null is returned from this function

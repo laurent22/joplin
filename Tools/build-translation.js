@@ -56,13 +56,25 @@ function buildLocale(inputFile, outputFile) {
 	saveToFile(outputFile, translation);
 }
 
-async function removePoHeaderDate(filePath) {
-	// Note: on macOS this will fail because it needs to be 'sed -i ""'
-	// Solution would be to install gsed, detect it here, and use it in place of sed in macOS
-	// https://stackoverflow.com/questions/30003570/how-to-use-gnu-sed-on-mac-os-x#34815955
+function executablePath(file) {
+	const potentialPaths = [
+		'/usr/local/opt/gettext/bin/',
+		'/opt/local/bin/',
+		'/usr/local/bin/',
+	];
 
+	for (const path of potentialPaths) {
+		let pathFile = path + file;
+		if (fs.existsSync(pathFile)) {
+			return pathFile;
+		}
+	}
+	throw new Error(file + ' could not be found. Please install via brew or MacPorts.\n');
+}
+
+async function removePoHeaderDate(filePath) {
 	let sedPrefix = 'sed -i';
-	if (isMac()) sedPrefix += ' ""';
+	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
 	await execCommand(sedPrefix + ' -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
 	await execCommand(sedPrefix + ' -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
 }
@@ -82,7 +94,7 @@ async function createPotFile(potFilePath, sources) {
 		if (i > 0) args.push('--join-existing');
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
-		if (isMac()) xgettextPath = '/usr/local/opt/gettext/bin/xgettext'; // Needs to have been installed with `brew install gettext`
+		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
 		const result = await execCommand(xgettextPath + ' ' + args.join(' '));
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
@@ -91,7 +103,7 @@ async function createPotFile(potFilePath, sources) {
 
 async function mergePotToPo(potFilePath, poFilePath) {
 	let msgmergePath = 'msgmerge';
-	if (isMac()) msgmergePath = '/usr/local/opt/gettext/bin/msgmerge'; // Needs to have been installed with `brew install gettext`
+	if (isMac()) msgmergePath = executablePath('msgmerge'); // Needs to have been installed with `brew install gettext`
 
 	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
 	const result = await execCommand(command);
@@ -152,7 +164,10 @@ function extractTranslator(regex, poContent) {
 
 async function translationStatus(isDefault, poFile) {
 	// "apt install translate-toolkit" to have pocount
-	const command = 'pocount "' + poFile + '"';
+	let pocountPath = 'pocount';
+	if (isMac()) pocountPath = executablePath('pocount');
+
+	const command = pocountPath + ' "' + poFile + '"';
 	const result = await execCommand(command);
 	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
 	if (!matches || matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);

@@ -387,6 +387,23 @@ msgstr "يبحث عن الـ <pattern> (نمط) المعطى في كل المل�
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -737,6 +754,10 @@ msgstr "م&ساعدة"
 msgid "Website and documentation"
 msgstr "موقع الويب و التوثيق"
 
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin نسخة %s"
+
 msgid "Make a donation"
 msgstr "تبرَّع"
 
@@ -935,8 +956,8 @@ msgstr ""
 "فيما بعد عبر المزامنة."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "يرجى الرجوع إلى التوثيق للمزيد من المعلومات عن التشفير من الطرف للطرف (E2EE) "
 "و طرق تفعيله."
@@ -1530,6 +1551,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "إظهار أيقونة لوحة النظام"
 
@@ -1614,6 +1638,11 @@ msgstr ""
 
 msgid "Ignore TLS certificate errors"
 msgstr "تجاهل أخطاء شهادات TLS"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
 
 #, fuzzy
 msgid "Enable note history"
@@ -1769,6 +1798,14 @@ msgstr "الإذن باستخدام الكاميرا"
 
 msgid "Your permission to use your camera is required."
 msgstr "إذنك باستخدام كاميرا الجوال مطلوب."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "لا يوجد دفتر ملاحظات نشط."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "ينشئ دفتر ملاحظات جديد."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "لا توجد ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
@@ -2110,6 +2147,3 @@ msgstr "بحث"
 
 #~ msgid "Remove?"
 #~ msgstr "إزالة ؟"
-
-#~ msgid "Joplin v%s"
-#~ msgstr "Joplin نسخة %s"

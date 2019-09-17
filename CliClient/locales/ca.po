@@ -1,14 +1,17 @@
 # Catalan Joplin Translation.
-# Copyright (C) 2018 Joan Montané
+# Copyright (C) 2019 Joan Montané, Josep Maria Planell
 # This file is distributed under the same license as the Joplin-CLI package.
-# Joan Montané <jmontane@softcatala.org>, 2018.
+#
+# Translators:
+# Josep Maria Planell <planell.josep@gmail.com>, 2019
+# Joan Montané <jmontane@softcatala.org>, 2019
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: jmontane, 2018\n"
+"Last-Translator: jmontane, 2019\n"
 "Language-Team: jmontane@softcatala.org\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +68,7 @@ msgstr "No es pot canviar l'element xifrat"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Manca un argument requerit: 1%s"
+msgstr "Manca un argument requerit: %s"
 
 #, javascript-format
 msgid "%s: %s"
@@ -287,7 +290,7 @@ msgstr "Creades: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "Acualitzades: %d."
+msgstr "Actualitzades: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
@@ -396,6 +399,23 @@ msgstr "Cerca el patró <pattern> en totes les notes."
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -474,8 +494,9 @@ msgid ""
 "`tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command>pot ser «add», «remove» o «list» per a assignar o suprimir "
-"[tag] de la [nota], o per a llistar les notes associades amb [tag]. L'ordre "
-"«tag list» es pot usar per a llistar totes les etiquetes."
+"l'[etiqueta] de la [nota], o per a llistar les notes associades amb "
+"l'[etiqueta]. L'ordre «tag list» es pot usar per a llistar totes les "
+"etiquetes."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -645,8 +666,9 @@ msgstr ""
 msgid "Create to-do from template"
 msgstr ""
 
+#, fuzzy
 msgid "Insert template"
-msgstr ""
+msgstr "Insereix la data i hora"
 
 #, fuzzy
 msgid "Open template directory"
@@ -716,22 +738,22 @@ msgid "Select all"
 msgstr "Seleccioneu una data"
 
 msgid "Bold"
-msgstr ""
+msgstr "Negreta"
 
 msgid "Italic"
-msgstr ""
+msgstr "Cursiva"
 
 msgid "Link"
 msgstr ""
 
 msgid "Code"
-msgstr ""
+msgstr "Codi"
 
 msgid "Insert Date Time"
-msgstr ""
+msgstr "Insereix la data i hora"
 
 msgid "Edit in external editor"
-msgstr ""
+msgstr "Edita en un editor extern"
 
 msgid "Tags"
 msgstr "Etiquetes"
@@ -767,6 +789,10 @@ msgstr "Ajuda"
 
 msgid "Website and documentation"
 msgstr "Lloc web i documentació"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Fitxer d'exportació del Joplin"
 
 msgid "Make a donation"
 msgstr "Donatius"
@@ -890,7 +916,7 @@ msgid "Browse..."
 msgstr ""
 
 msgid "Apply"
-msgstr ""
+msgstr "Aplica"
 
 msgid "Submit"
 msgstr "Tramet"
@@ -971,8 +997,8 @@ msgstr ""
 "sincrontizació."
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Per a més informació sobre el xifratge d'extrem a extrem (E2EE) i consells "
 "sobre com activar-lo, llegiu la documentació:"
@@ -1053,9 +1079,8 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-#, fuzzy
 msgid "Note History"
-msgstr "Blocs de notes"
+msgstr ""
 
 msgid "Markup"
 msgstr ""
@@ -1086,9 +1111,9 @@ msgstr ""
 msgid "Open..."
 msgstr "Obre..."
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "No s'ha pogut desar el bloc de notes: %s"
+msgstr "Aquest fitxer no s'ha pogut obrir: %s"
 
 msgid "Save as..."
 msgstr "Anomena i desa..."
@@ -1097,7 +1122,7 @@ msgid "Copy path to clipboard"
 msgstr "Copia el camí al porta-retalls"
 
 msgid "Copy Link Address"
-msgstr ""
+msgstr "Copia l'adreça de l'enllaç"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
@@ -1118,16 +1143,16 @@ msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
 msgid "strong text"
-msgstr ""
+msgstr "text en negreta"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "text amb èmfasi"
 
 msgid "List item"
-msgstr ""
+msgstr "Element de llista"
 
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "insereix un enllaç"
 
 msgid "Attach file"
 msgstr "Adjunta un fitxer"
@@ -1140,29 +1165,28 @@ msgid "In: %s"
 msgstr "A: %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Enllaç"
 
 msgid "Numbered List"
-msgstr ""
+msgstr "Llista numerada"
 
 msgid "Bulleted List"
-msgstr ""
+msgstr "Llista de pics"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Casella de verificació"
 
 msgid "Heading"
-msgstr ""
+msgstr "Capçalera"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Línia horitzontal"
 
 msgid "Click to stop external editing"
-msgstr ""
+msgstr "Feu-hi clic per a aturar l'edició externa"
 
-#, fuzzy
 msgid "Watching..."
-msgstr "S'està cancel·lant..."
+msgstr "S'està vigilant..."
 
 msgid "to-do"
 msgstr "Tasques pendents"
@@ -1229,13 +1253,12 @@ msgstr ""
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
 
-#, fuzzy
 msgid "Duplicate"
-msgstr "Surt de l'aplicació"
+msgstr "Duplica"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s - Copy"
-msgstr "Copia"
+msgstr "%s - Còpia"
 
 msgid "Switch between note and to-do type"
 msgstr "Alterna entre el tipus nota i tasques pendents"
@@ -1570,6 +1593,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr "Mostra la icona a la safata"
 
@@ -1628,20 +1654,19 @@ msgstr "%d hora"
 msgid "%d hours"
 msgstr "%d hores"
 
-#, fuzzy
 msgid "Text editor command"
-msgstr "Editor de text"
+msgstr "Ordre de l'editor de text"
 
-#, fuzzy
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"L'editor que s'usarà per a obrir una nota. Si no s'indica cap, intentarà "
-"detectar automàticament l'editor predeterminat."
+"L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una "
+"nota. Si no se'n proporciona cap, l'editor predeterminat es detectarà "
+"automàticament."
 
 msgid "Custom TLS certificates"
-msgstr ""
+msgstr "Certificats TLS personalitzats"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1649,8 +1674,18 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
+"Una llista separada per comes de camins a directoris d'on carregar els "
+"certificats, o el camí a fitxers de certificats concrets. Per exemple, "
+"el_meu/dir_cert, /altres/personalitzat.pem. Tingueu en compte que si feu "
+"canvis en la configuració TLS, cal que els deseu abans de fer clic a "
+"«Comprova la configuració de la sincronització»."
 
 msgid "Ignore TLS certificate errors"
+msgstr "Ignora els errors de certificat TLS"
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
 msgstr ""
 
 #, fuzzy
@@ -1758,11 +1793,11 @@ msgstr ""
 
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "No s'ha pogut desar el bloc de notes: %s"
+msgstr "Aquest fitxer no s'ha pogut obrir: %s"
 
 #, fuzzy, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "No s'ha pogut desar el bloc de notes: %s"
+msgstr "Aquest fitxer no s'ha pogut obrir: %s"
 
 #, fuzzy
 msgid "Items that cannot be decrypted"
@@ -1813,6 +1848,14 @@ msgstr ""
 msgid "Your permission to use your camera is required."
 msgstr ""
 
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "No hi ha cap bloc de notes actiu."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "Crea un bloc de notes nou."
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
 
@@ -1857,17 +1900,17 @@ msgstr "Bloc de notes nou"
 msgid "Configuration"
 msgstr "Configuració"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Elements obtinguts: %d/%d"
+msgstr "S'estan desxifrant els elements: %d/%d"
 
 #, fuzzy, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Recursos: %d/%d"
+msgstr "Elements obtinguts: %d/%d."
 
 #, fuzzy
 msgid "All notes"
-msgstr "nota"
+msgstr "Voleu suprimir les notes?"
 
 msgid "Notebooks"
 msgstr "Blocs de notes"
@@ -1900,7 +1943,7 @@ msgstr ""
 
 #, fuzzy, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Elements obtinguts: %d/%d."
+msgstr "S'estan desxifrant els elements: %d/%d"
 
 msgid "New tags:"
 msgstr "Etiquetes noves:"
@@ -1923,7 +1966,6 @@ msgstr "Configuració"
 msgid "Encryption Config"
 msgstr "Configuració del xifratge"
 
-#, fuzzy
 msgid "Tools"
 msgstr "Eines"
 
@@ -2058,7 +2100,7 @@ msgstr "Tipus d'imatge no admesa: %s"
 
 #, fuzzy, javascript-format
 msgid "Updated: %s"
-msgstr "Acualitzades: %d."
+msgstr "Actualitzades: %d."
 
 msgid "View on map"
 msgstr "Mostra-ho al mapa"
@@ -2112,6 +2154,31 @@ msgstr "Inicia sessió amb OneDrive"
 msgid "Search"
 msgstr "Cerca"
 
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separeu les etiquetes amb comes."
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Alguns elements no s'han pogut desxifrar."
+
+#, javascript-format
+#~ msgid "State: %s."
+#~ msgstr "Estat: %s."
+
+#, javascript-format
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
+#~ "«sync.target»."
+
+#, javascript-format
+#~ msgid "%s (%s): %s"
+#~ msgstr "%s (%s): %s"
+
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Cancel·la la sincronització"
 
@@ -2138,29 +2205,3 @@ msgstr "Cerca"
 
 #~ msgid "Welcome"
 #~ msgstr "Benvingut"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separeu les etiquetes amb comes."
-
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "Alguns elements no s'han pogut desxifrar."
-
-#~ msgid "%s (%s): %s"
-#~ msgstr "%s (%s): %s"
-
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr ""
-#~ "El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
-#~ "«sync.target»."
-
-#, fuzzy
-#~ msgid "Joplin v%s"
-#~ msgstr "Lloc web del Joplin"
-
-#~ msgid "State: %s."
-#~ msgstr "Estat: %s"
-
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"

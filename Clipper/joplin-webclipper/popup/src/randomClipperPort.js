@@ -17,4 +17,4 @@ function randomClipperPort(state, env) {
 	return state;
 }
 
-module.exports = randomClipperPort;
+module.exports = { randomClipperPort };

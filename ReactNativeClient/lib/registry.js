@@ -53,7 +53,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 	if (syncOptions === null) syncOptions = {};
 
 	let promiseResolve = null;
-	const promise = new Promise((resolve, reject) => {
+	const promise = new Promise((resolve) => {
 		promiseResolve = resolve;
 	});
 

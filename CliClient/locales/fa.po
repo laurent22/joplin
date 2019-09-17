@@ -358,6 +358,23 @@ msgstr ""
 
 #, javascript-format
 msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
 "properties are:\n"
 "\n"
@@ -684,6 +701,10 @@ msgstr "&کمک"
 msgid "Website and documentation"
 msgstr ""
 
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "فایل خروجی Joplin"
+
 msgid "Make a donation"
 msgstr ""
 
@@ -866,8 +887,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advices on how "
-"to enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 
 msgid "Status"
@@ -1448,6 +1469,9 @@ msgstr ""
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
+msgid "Enable Fountain syntax support"
+msgstr ""
+
 msgid "Show tray icon"
 msgstr ""
 
@@ -1522,6 +1546,11 @@ msgid ""
 msgstr ""
 
 msgid "Ignore TLS certificate errors"
+msgstr ""
+
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
 msgstr ""
 
 msgid "Enable note history"
@@ -1671,6 +1700,14 @@ msgstr "اجازه برای استفاده از دوربین"
 
 msgid "Your permission to use your camera is required."
 msgstr "اجازه ی شما برای استفاده از دوربین شما نیاز است."
+
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "دفترچه‌ی فعالی وجود ندارد."
+
+#, fuzzy
+msgid "Create a notebook"
+msgstr "ایجاد دفترچه جدید."
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""

@@ -199,7 +199,7 @@ class JoplinDatabase extends Database {
 		await this.transactionExecBatch(queries);
 	}
 
-	createDefaultRow(tableName) {
+	createDefaultRow() {
 		const row = {};
 		const fields = this.tableFields('resource_local_states');
 		for (let i = 0; i < fields.length; i++) {

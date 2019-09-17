@@ -4,6 +4,7 @@ module.exports = {
 		'es6': true,
 		'node': true,
 	},
+	"parser": "@typescript-eslint/parser",
 	'extends': ['eslint:recommended'],
 	'globals': {
 		'Atomics': 'readonly',
@@ -36,7 +37,8 @@ module.exports = {
 		"react/jsx-uses-vars": "error",
 		// Ignore all unused function arguments, because in some
 		// case they are kept to indicate the function signature.
-		"no-unused-vars": ["error", { "argsIgnorePattern": ".*" }],
+		//"no-unused-vars": ["error", { "argsIgnorePattern": ".*" }],
+		"@typescript-eslint/no-unused-vars": ["error"],
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
 		"space-in-parens": ["error", "never"],
@@ -49,5 +51,6 @@ module.exports = {
 	},
 	"plugins": [
 		"react",
+		"@typescript-eslint",
 	],
 };

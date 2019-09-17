@@ -12,6 +12,7 @@ const defaultState = {
 	notLoadedMasterKeys: [],
 	searches: [],
 	selectedNoteIds: [],
+	selectedNoteHash: '',
 	selectedFolderId: null,
 	selectedTagId: null,
 	selectedSearchId: null,
@@ -267,6 +268,7 @@ function changeSelectedNotes(state, action, options = null) {
 		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
+		newState.selectedNoteHash = action.hash ? action.hash : '';
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));

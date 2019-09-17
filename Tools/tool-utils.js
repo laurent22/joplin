@@ -4,7 +4,7 @@ toolUtils.execCommand = function(command) {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout, stderr) => {
+		exec(command, (error, stdout) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -71,7 +71,7 @@ toolUtils.fileExists = async function(filePath) {
 	const fs = require('fs-extra');
 
 	return new Promise((resolve, reject) => {
-		fs.stat(filePath, function(err, stat) {
+		fs.stat(filePath, function(err) {
 			if (err == null) {
 				resolve(true);
 			} else if(err.code == 'ENOENT') {
@@ -124,7 +124,7 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 };
 
 toolUtils.readline = question => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const readline = require('readline');
 
 		const rl = readline.createInterface({

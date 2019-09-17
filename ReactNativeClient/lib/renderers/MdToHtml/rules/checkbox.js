@@ -83,7 +83,8 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 				continue;
 			}
 
-			if (currentListItem && !processedFirstInline && token.type === 'inline') {
+			// Note that we only support list items that start with "-" (not with "*")
+			if (currentListItem && currentListItem.markup === '-' && !processedFirstInline && token.type === 'inline') {
 				processedFirstInline = true;
 				const firstChild = token.children && token.children.length ? token.children[0] : null;
 				if (!firstChild) continue;

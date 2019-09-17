@@ -122,6 +122,6 @@ class BaseSyncTarget {
 	}
 }
 
-BaseSyncTarget.dispatch = action => {};
+BaseSyncTarget.dispatch = () => {};
 
 module.exports = BaseSyncTarget;
