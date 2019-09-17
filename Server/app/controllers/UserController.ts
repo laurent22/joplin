@@ -4,9 +4,11 @@ import BaseController from './BaseController';
 
 export default class UserController extends BaseController {
 
-	async createUser(sessionId:string, email:string, password:string):Promise<User> {
+	async createUser(sessionId:string, email:string, password:string, options:User = {}):Promise<User> {
 		await this.initSession(sessionId, true);
-		return UserModel.createUser(email, password);
+		const userModel = new UserModel();
+		const user = await userModel.createUser(email, password, options);
+		return user;
 	}
 
 }

@@ -9,11 +9,12 @@ const { uuid } = require('lib/uuid.js');
 export default class SessionController {
 
 	async authenticate(email: string, password: string):Promise<Session> {
-		const user:User = await UserModel.loadByEmail(email);
+		const userModel = new UserModel();
+		const user:User = await userModel.loadByEmail(email);
 		if (!checkPassword(password, user.password)) throw new ErrorForbidden('Invalid username or password');
 		const session:Session = { id: uuid.create(), user_id: user.id };
-		const newSession:Session = await SessionModel.save(session, { isNew: true });
-		return newSession;
+		const sessionModel = new SessionModel();
+		return sessionModel.save(session, { isNew: true });
 	}
 
 }

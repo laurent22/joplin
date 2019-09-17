@@ -17,7 +17,9 @@ export const asyncTest = function(callback:Function) {
 	};
 };
 
-export const clearDatabase = function():void {
-	db('sessions').truncate();
-	db('users').truncate();
+export const clearDatabase = async function():Promise<void> {
+	await db('sessions').truncate();
+	await db('users').truncate();
+	await db('permissions').truncate();
+	await db('files').truncate();
 };

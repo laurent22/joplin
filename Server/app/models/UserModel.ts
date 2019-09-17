@@ -1,31 +1,43 @@
 import BaseModel from './BaseModel';
-import db, { User } from '../db';
+import { User } from '../db';
 import FileModel from './FileModel';
 import * as auth from '../utils/auth';
 
 export default class UserModel extends BaseModel {
 
-	static tableName():string {
+	tableName():string {
 		return 'users';
 	}
 
-	static async loadByEmail(email:string):Promise<User> {
+	async loadByEmail(email:string):Promise<User> {
 		const user:User = { email: email };
-		return db<User>(this.tableName()).where(user).first();
+		return this.db<User>(this.tableName()).where(user).first();
 	}
 
-	static async createUser(email:string, password:string):Promise<User> {
+	async createUser(email:string, password:string, options:User = {}):Promise<User> {
+		const transactionHandler = await this.transactionHandler(this.dbOptions);
+
 		let user:User = {
 			email: email,
 			password: auth.hashPassword(password),
 		};
 
-		user = await UserModel.save(user);
+		if ('is_admin' in options) user.is_admin = options.is_admin;
 
-		await FileModel.createFile(user.id, {
-			is_directory: 1,
-			name: '',
-		});
+		try {
+			const userModel = new UserModel(transactionHandler.dbOptions);
+			user = await userModel.save(user);
+
+			const fileModel = new FileModel(transactionHandler.dbOptions);
+			await fileModel.createFile(user.id, {
+				is_directory: 1,
+				name: '',
+			});
+		} catch (error) {
+			transactionHandler.onError(error);
+		}
+
+		transactionHandler.onSuccess();
 
 		return user;
 	}

@@ -7,6 +7,10 @@ const knex:Knex = require('knex')({
 	connection: {
 		filename: __dirname + '/../../db-' + nodeEnv + '.sqlite',
 	},
+	useNullAsDefault: true,
+	// Allow propery stack traces in case of an error, however
+	// it has a small performance overhead so only enable in testing and dev
+	asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
 });
 
 export default knex;

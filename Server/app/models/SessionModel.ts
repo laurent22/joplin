@@ -4,14 +4,15 @@ import { User, Session } from '../db';
 
 export default class SessionModel extends BaseModel {
 
-	static tableName():string {
+	tableName():string {
 		return 'sessions';
 	}
 
-	static async sessionUser(sessionId:string):Promise<User> {
+	async sessionUser(sessionId:string):Promise<User> {
 		const session:Session = await this.load(sessionId);
 		if (!session) return null;
-		return UserModel.load(session.user_id);
+		const userModel = new UserModel(this.dbOptions);
+		return userModel.load(session.user_id);
 	}
 
 }

@@ -1,15 +1,15 @@
 import BaseModel from './BaseModel';
 import PermissionModel from './PermissionModel';
-import db, { File, Permission, ItemType } from '../db';
+import { File, Permission, ItemType } from '../db';
 
 export default class FileModel extends BaseModel {
 
-	static tableName():string {
+	tableName():string {
 		return 'files';
 	}
 
-	static async userRootFile(userId:string):Promise<File> {
-		const r = await db(this.tableName()).select('files.id').from(this.tableName()).leftJoin('permissions', 'permissions.item_id', 'files.id').where({
+	async userRootFile(userId:string):Promise<File> {
+		const r = await this.db(this.tableName()).select('files.id').from(this.tableName()).leftJoin('permissions', 'permissions.item_id', 'files.id').where({
 			'item_type': ItemType.File,
 			'parent_id': '',
 			'user_id': userId,
@@ -18,11 +18,11 @@ export default class FileModel extends BaseModel {
 
 		if (!r) return null;
 
-		return FileModel.load(r.id);
+		return this.load(r.id);
 	}
 
-	static async createFile(ownerId:string, file:File):Promise<File> {
-		const newFile = await FileModel.save(file);
+	async createFile(ownerId:string, file:File):Promise<File> {
+		const newFile = await this.save(file);
 
 		let permission:Permission = {
 			user_id: ownerId,
@@ -33,7 +33,9 @@ export default class FileModel extends BaseModel {
 			can_write: 1,
 		};
 
-		await PermissionModel.save(permission);
+		const permissionModel = new PermissionModel(this.dbOptions);
+
+		await permissionModel.save(permission);
 
 		return newFile;
 	}
