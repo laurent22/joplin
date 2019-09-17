@@ -48,6 +48,7 @@ module.exports = {
 		"indent": ["error", "tab"],
 		"comma-dangle": ["error", "always-multiline"],
 		"no-trailing-spaces": "error",
+		"linebreak-style": ["error", "unix"],
 	},
 	"plugins": [
 		"react",
