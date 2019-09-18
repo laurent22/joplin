@@ -29,10 +29,7 @@ export default class UserModel extends BaseModel {
 			user = await userModel.save(user);
 
 			const fileModel = new FileModel(transactionHandler.dbOptions);
-			await fileModel.createFile(user.id, {
-				is_directory: 1,
-				name: '',
-			});
+			await fileModel.createRootFile(user.id);
 		} catch (error) {
 			transactionHandler.onError(error);
 		}
