@@ -49,6 +49,9 @@ module.exports = {
 		"comma-dangle": ["error", "always-multiline"],
 		"no-trailing-spaces": "error",
 		"linebreak-style": ["error", "unix"],
+		// This error is always a false positive so far since it detects
+		// possible race conditions in contexts where we know it cannot happen.
+		"require-atomic-updates": 0
 	},
 	"plugins": [
 		"react",

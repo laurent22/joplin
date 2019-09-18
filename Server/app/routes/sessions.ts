@@ -1,23 +1,10 @@
-// import { Request, Response, Router } from 'express';
-// import { checkPassword } from '../utils/auth';
-// import db from '../db';
-// import { User } from '../db';
+import * as Koa from 'koa';
+import * as parse from 'co-body';
+import SessionController from '../controllers/SessionController';
 
-// const router = Router();
-
-// router.post('/', async function(req:Request, res:Response) {
-
-// 	// const user = req.body;
-
-// 	// const result = await db('users').where({
-// 	// 	name: user.name,
-// 	// }).first('password');
-
-// 	// const ok = checkPassword(user.password, result.password);
-
-// 	// if (!ok) throw new ErrorForbidden();
-
-// 	// res.json({ title: 'from sessions',ok: ok, User:User });
-// });
-
-// module.exports = router;
+export default async function(path:string, ctx:Koa.Context) {
+	const user = await parse.json(ctx);
+	const sessionController = new SessionController();
+	const session = await sessionController.authenticate(user.email, user.password);
+	ctx.response.body = { id: session.id };
+}

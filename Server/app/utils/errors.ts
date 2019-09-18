@@ -1,12 +1,8 @@
 class ApiError extends Error {
-	httpCode_: number
+	httpCode: number
 	constructor(message:string, httpCode:number = 400) {
 		super(message);
-		this.httpCode_ = httpCode;
-	}
-
-	get httpCode(): number {
-		return this.httpCode_;
+		this.httpCode = httpCode;
 	}
 }
 
