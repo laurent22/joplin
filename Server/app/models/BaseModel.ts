@@ -3,6 +3,7 @@ import * as Knex from 'knex';
 const { uuid } = require('lib/uuid.js');
 
 export interface DbOptions {
+	db?: Knex<any, any[]>
 	transaction?: Knex.Transaction,
 }
 
@@ -10,6 +11,10 @@ export interface SaveOptions {
 	isNew?: boolean,
 }
 
+// The TransactionHandler allows handling the logic of transactions within
+// the models. In particular it allows having transactions within transactions.
+// Instead of rollback/commit, onError/onSuccess should be called so that
+// it does what's appropriate depending on the context.
 class TransactionHandler {
 
 	private dbOptions_: DbOptions = null
@@ -23,9 +28,13 @@ class TransactionHandler {
 		return this.dbOptions_;
 	}
 
+	private get db():Knex<any, any[]> {
+		return this.dbOptions.db ? this.dbOptions.db : db;
+	}
+
 	async init() {
 		if (!this.dbOptions_.transaction) {
-			const trx = await db.transaction();
+			const trx = await this.db.transaction();
 			this.dbOptions_.transaction = trx;
 			this.hasCreatedTransaction_ = true;
 		}
@@ -60,7 +69,9 @@ export default abstract class BaseModel {
 	}
 
 	get db():Knex<any, any[]> {
-		return this.dbOptions && this.dbOptions.transaction ? this.dbOptions.transaction : db;
+		if (!!this.dbOptions && !!this.dbOptions.transaction) return this.dbOptions.transaction;
+		if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
+		return db;
 	}
 
 	tableName():string {

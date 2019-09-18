@@ -53,6 +53,7 @@ describe('UserController', function() {
 		const fileModel = new FileModel();
 		const permissionModel = new PermissionModel();
 		const userModel = new UserModel();
+
 		await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
 		const session:Session = await sessionController.authenticate('admin@localhost', 'admin');
 		await controller.createUser(session.id, 'test@example.com', '123456');

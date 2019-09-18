@@ -22,20 +22,30 @@ export default class FileModel extends BaseModel {
 	}
 
 	async createFile(ownerId:string, file:File):Promise<File> {
-		const newFile = await this.save(file);
+		const transactionHandler = await this.transactionHandler(this.dbOptions);
 
-		let permission:Permission = {
-			user_id: ownerId,
-			is_owner: 1,
-			item_type: ItemType.File,
-			item_id: newFile.id,
-			can_read: 1,
-			can_write: 1,
-		};
+		let newFile:File = null;
 
-		const permissionModel = new PermissionModel(this.dbOptions);
+		try {
+			newFile = await this.save(file);
 
-		await permissionModel.save(permission);
+			let permission:Permission = {
+				user_id: ownerId,
+				is_owner: 1,
+				item_type: ItemType.File,
+				item_id: newFile.id,
+				can_read: 1,
+				can_write: 1,
+			};
+
+			const permissionModel = new PermissionModel(this.dbOptions);
+
+			await permissionModel.save(permission);
+		} catch (error) {
+			transactionHandler.onError(error);
+		}
+
+		transactionHandler.onSuccess();
 
 		return newFile;
 	}

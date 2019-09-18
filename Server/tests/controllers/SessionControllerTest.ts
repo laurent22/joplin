@@ -1,4 +1,4 @@
-const { asyncTest, clearDatabase } = require('../testUtils');
+import { asyncTest, clearDatabase } from '../testUtils';
 
 // import SessionController from '../../app/controllers/SessionController';
 // import { Session } from '../../app/db';

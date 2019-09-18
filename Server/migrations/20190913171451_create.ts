@@ -1,7 +1,5 @@
 import * as Knex from 'knex';
-import * as auth from '../app/utils/auth';
-
-const { uuid } = require('lib/uuid.js');
+import UserModel from '../app/models/UserModel';
 
 export async function up(knex: Knex): Promise<any> {
 	await knex.schema.createTable('users', function(table:Knex.CreateTableBuilder) {
@@ -43,42 +41,14 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('created_time').notNullable();
 	});
 
-	const timestamp:number = Date.now();
-
-	const userId = uuid.create();
-	const fileId = uuid.create();
-
-	await knex.insert({
-		id: userId,
-		password: auth.hashPassword('admin'),
-		email: 'admin@localhost',
-		is_admin: 1,
-		updated_time: timestamp,
-		created_time: timestamp,
-	}).into('users');
-
-	await knex.insert({
-		id: fileId,
-		name: '',
-		is_directory: 1,
-		parent_id: '',
-		updated_time: timestamp,
-		created_time: timestamp,
-	}).into('files');
-
-	await knex.insert({
-		id: uuid.create(),
-		user_id: userId,
-		item_type: 1,
-		item_id: fileId,
-		is_owner: 1,
-		can_read: 1,
-		can_write: 1,
-		updated_time: timestamp,
-		created_time: timestamp,
-	}).into('permissions');
+	const userModel = new UserModel({ db: knex });
+	await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
 }
 
 export async function down(knex: Knex): Promise<any> {
-	return knex.schema.dropTable('users');
+	await knex.schema.dropTable('users');
+	await knex.schema.dropTable('sessions');
+	await knex.schema.dropTable('permissions');
+	await knex.schema.dropTable('files');
 }
+
