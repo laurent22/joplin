@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -389,17 +391,19 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, "
+"api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "서버가 이미 포트 %d에서 동작하고 있습니다"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "서버가 포트 %d에서 동작하고 있습니다"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "서버가 동작하지 않습니다."
 
 #, javascript-format
 msgid ""
@@ -752,9 +756,8 @@ msgstr "도움말"
 msgid "Website and documentation"
 msgstr "웹사이트 및 각종 문서"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "조플린 v%s"
+msgstr "Joplin 포럼"
 
 msgid "Make a donation"
 msgstr "기부하기"
@@ -1551,11 +1554,10 @@ msgid "Enable ++insert++ syntax"
 msgstr "++insert++ 확장 허용"
 
 msgid "Enable multimarkdown table extension"
-msgstr "멀티마크다운 테이블 확장 허용"
+msgstr "멀티 마크다운 테이블 확장 허용"
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "~sub~ 구문 허용"
+msgstr "Fountain 구문 지원 허용"
 
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
@@ -1647,6 +1649,8 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"API 서버에 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니"
+"다."
 
 msgid "Enable note history"
 msgstr "노트 역사 허용"
@@ -1804,13 +1808,11 @@ msgstr "카메라 사용 허가"
 msgid "Your permission to use your camera is required."
 msgstr "카메라 사용 허가가 필요합니다."
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "활성화된 노트북이 없습니다."
+msgstr "현재 노트북이 없습니다."
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "새 노트북을 만듭니다."
+msgstr "새 노트북을 만듭니다"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "노트가 없습니다. (+) 버튼을 클릭하여 새로 만드세요."
