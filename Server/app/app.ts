@@ -1,8 +1,8 @@
 require('app-module-path').addPath(__dirname + '/..');
 
 import * as Koa from 'koa';
-import sessionRoute from './routes/sessions';
-import pingRoute from './routes/ping';
+import apiSessionRoute from './routes/api/sessions';
+import apiPingRoute from './routes/api/ping';
 import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import { argv } from 'yargs';
@@ -17,20 +17,49 @@ interface Routes {
 	[key: string]: Function,
 }
 
+interface MatchedRoute {
+	route: Function,
+	subPath: string,
+}
+
 const routes:Routes = {
-	'ping': pingRoute,
-	'sessions': sessionRoute,
+	'api/ping': apiPingRoute,
+	'api/sessions': apiSessionRoute,
 };
 
+function findMatchingRoute(path:string, routes:Routes):MatchedRoute {
+	let splittedPath = path.split('/');
+	splittedPath.splice(0, 1);
+
+	if (splittedPath.length >= 2) {
+		const basePath = splittedPath[0] + '/' + splittedPath[1];
+		if (routes[basePath]) {
+			splittedPath.splice(0, 2);
+			return {
+				route: routes[basePath],
+				subPath: '/' + splittedPath.join('/'),
+			};
+		}
+	}
+
+	const basePath = splittedPath[0];
+	if (routes[basePath]) {
+		splittedPath.splice(0, 1);
+		return {
+			route: routes[basePath],
+			subPath: '/' + splittedPath.join('/'),
+		};
+	}
+
+	return null;
+}
+
 app.use(async (ctx:Koa.Context) => {
-	const splittedPath = ctx.path.split('/');
-	const basePath = splittedPath[1];
-	splittedPath.splice(0, 2);
-	const subPath = '/' + splittedPath.join('/');
+	const match = findMatchingRoute(ctx.path, routes);
 
 	try {
-		if (routes[basePath]) {
-			const responseObject = await routes[basePath](subPath, ctx);
+		if (match) {
+			const responseObject = await match.route(match.subPath, ctx);
 			ctx.response.status = 200;
 			ctx.response.body = responseObject;
 		} else {

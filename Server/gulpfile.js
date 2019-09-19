@@ -21,6 +21,7 @@ function buildTypeScripts() {
 		'app/controllers/*.ts',
 		'app/models/*.ts',
 		'app/routes/*.ts',
+		'app/routes/api/*.ts',
 		'app/utils/*.ts',
 		'migrations/*.ts',
 		'tests/*.ts',
