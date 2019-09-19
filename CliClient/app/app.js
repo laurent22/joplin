@@ -136,10 +136,10 @@ class Application extends BaseApplication {
 			if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
 
 			if (options.type == 'boolean') {
-				message += ' (' + options.answers.join('/') + ')';
+				message += ` (${options.answers.join('/')})`;
 			}
 
-			let answer = await this.gui().prompt('', message + ' ', options);
+			let answer = await this.gui().prompt('', `${message} `, options);
 
 			if (options.type === 'boolean') {
 				if (answer === null) return false; // Pressed ESCAPE
@@ -181,7 +181,7 @@ class Application extends BaseApplication {
 				const ext = fileExtension(path);
 				if (ext != 'js') return;
 
-				let CommandClass = require('./' + path);
+				let CommandClass = require(`./${path}`);
 				let cmd = new CommandClass();
 				if (!cmd.enabled()) return;
 				cmd = this.setupCommand(cmd);
@@ -248,7 +248,7 @@ class Application extends BaseApplication {
 
 		let CommandClass = null;
 		try {
-			CommandClass = require(__dirname + '/command-' + name + '.js');
+			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
 				let e = new Error(_('No such command: %s', name));
@@ -343,7 +343,7 @@ class Application extends BaseApplication {
 			itemsByCommand[defaultKeyMap[i].command] = defaultKeyMap[i];
 		}
 
-		const filePath = Setting.value('profileDir') + '/keymap.json';
+		const filePath = `${Setting.value('profileDir')}/keymap.json`;
 		if (await fs.pathExists(filePath)) {
 			try {
 				let configString = await fs.readFile(filePath, 'utf-8');
@@ -355,7 +355,7 @@ class Application extends BaseApplication {
 				}
 			} catch (error) {
 				let msg = error.message ? error.message : '';
-				msg = 'Could not load keymap ' + filePath + '\n' + msg;
+				msg = `Could not load keymap ${filePath}\n${msg}`;
 				error.message = msg;
 				throw error;
 			}

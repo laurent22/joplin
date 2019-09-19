@@ -77,7 +77,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			if (stat.isDirectory()) continue;
 			if (fileExtension(stat.path).toLowerCase() !== 'md') continue;
 
-			const content = await shim.fsDriver().readFile(this.sourcePath_ + '/' + stat.path);
+			const content = await shim.fsDriver().readFile(`${this.sourcePath_}/${stat.path}`);
 			let item = await BaseItem.unserialize(content);
 			const itemType = item.type_;
 			const ItemClass = BaseItem.itemClass(item);
@@ -146,11 +146,11 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			await NoteTag.save(noteTag, { isNew: true });
 		}
 
-		if (await shim.fsDriver().isDirectory(this.sourcePath_ + '/resources')) {
-			const resourceStats = await shim.fsDriver().readDirStats(this.sourcePath_ + '/resources');
+		if (await shim.fsDriver().isDirectory(`${this.sourcePath_}/resources`)) {
+			const resourceStats = await shim.fsDriver().readDirStats(`${this.sourcePath_}/resources`);
 
 			for (let i = 0; i < resourceStats.length; i++) {
-				const resourceFilePath = this.sourcePath_ + '/resources/' + resourceStats[i].path;
+				const resourceFilePath = `${this.sourcePath_}/resources/${resourceStats[i].path}`;
 				const oldId = Resource.pathToId(resourceFilePath);
 				const newId = itemIdMap[oldId];
 				if (!newId) {

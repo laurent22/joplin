@@ -20,9 +20,9 @@ class Command extends BaseCommand {
 	async action() {
 		const service = new ReportService();
 		const csv = await service.basicItemList({ format: 'csv' });
-		const filePath = Setting.value('profileDir') + '/syncReport-' + new Date().getTime() + '.csv';
+		const filePath = `${Setting.value('profileDir')}/syncReport-${new Date().getTime()}.csv`;
 		await fs.writeFileSync(filePath, csv);
-		this.stdout('Sync status exported to ' + filePath);
+		this.stdout(`Sync status exported to ${filePath}`);
 
 		app()
 			.gui()

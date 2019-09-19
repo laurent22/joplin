@@ -297,9 +297,9 @@ describe('services_SearchEngine', function() {
 			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
 			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
 
-			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), 'Test case (_) ' + i);
-			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), 'Test case (title) ' + i);
-			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), 'Test case (body) ' + i);
+			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
+			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);
+			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), `Test case (body) ${i}`);
 		}
 	}));
 

@@ -218,7 +218,7 @@ function supportedLocalesToLanguages(options = null) {
 
 		const stat = stats[locale];
 		if (options.includeStats && stat) {
-			output[locale] += ' (' + stat.percentDone + '%)';
+			output[locale] += ` (${stat.percentDone}%)`;
 		}
 	}
 	return output;
@@ -281,7 +281,7 @@ function countryDisplayName(canonicalName) {
 
 	if (languageCode == 'zh' && (countryCode == '' || countryCode == 'TW')) extraString = '繁體'; // "Traditional" in "Traditional Chinese"
 
-	if (extraString) output += ' (' + extraString + ')';
+	if (extraString) output += ` (${extraString})`;
 
 	return output;
 }
@@ -312,7 +312,7 @@ function _(s, ...args) {
 	try {
 		return sprintf(result, ...args);
 	} catch (error) {
-		return result + ' ' + args.join(', ') + ' (Translation error: ' + error.message + ')';
+		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
 	}
 }
 

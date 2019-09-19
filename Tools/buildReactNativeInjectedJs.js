@@ -6,19 +6,19 @@
 const fs = require('fs-extra');
 
 const cwd = process.cwd();
-const outputDir = cwd + '/lib/rnInjectedJs';
-const rnDir = __dirname + '/../ReactNativeClient';
+const outputDir = `${cwd}/lib/rnInjectedJs`;
+const rnDir = `${__dirname}/../ReactNativeClient`;
 
 async function copyJs(name, filePath) {
 	const js = await fs.readFile(filePath, 'utf-8');
-	const json = 'module.exports = ' + JSON.stringify(js) + ';';
-	const outputPath = outputDir + '/' + name + '.js';
+	const json = `module.exports = ${JSON.stringify(js)};`;
+	const outputPath = `${outputDir}/${name}.js`;
 	await fs.writeFile(outputPath, json);
 }
 
 async function main() {
 	await fs.mkdirp(outputDir);
-	await copyJs('webviewLib', rnDir + '/lib/renderers/webviewLib.js');
+	await copyJs('webviewLib', `${rnDir}/lib/renderers/webviewLib.js`);
 }
 
 main(process.argv).catch((error) => {

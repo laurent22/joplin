@@ -8,7 +8,7 @@ const { shim } = require('lib/shim');
 class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async init(destDir) {
 		this.destDir_ = destDir;
-		this.resourceDir_ = destDir ? destDir + '/_resources' : null;
+		this.resourceDir_ = destDir ? `${destDir}/_resources` : null;
 		this.createdDirs_ = [];
 
 		await shim.fsDriver().mkdir(this.destDir_);
@@ -20,9 +20,9 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
 				if (pathPart) {
-					output = pathPart + '/' + output;
+					output = `${pathPart}/${output}`;
 				} else {
-					output = friendlySafeFilename(item.title, null, true) + '/' + output;
+					output = `${friendlySafeFilename(item.title, null, true)}/${output}`;
 					output = await shim.fsDriver().findUniqueFilename(output);
 				}
 			}
@@ -40,8 +40,8 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 		for (let i = 0; i < linkedResourceIds.length; i++) {
 			const id = linkedResourceIds[i];
-			const resourcePath = relativePath + '/_resources/' + basename(resourcePaths[id]);
-			newBody = newBody.replace(new RegExp(':/' + id, 'g'), resourcePath);
+			const resourcePath = `${relativePath}/_resources/${basename(resourcePaths[id])}`;
+			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), resourcePath);
 		}
 
 		return newBody;
@@ -50,7 +50,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async processItem(ItemClass, item) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
-		const dirPath = this.destDir_ + '/' + (await this.makeDirPath_(item));
+		const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
 
 		if (this.createdDirs_.indexOf(dirPath) < 0) {
 			await shim.fsDriver().mkdir(dirPath);
@@ -58,7 +58,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		}
 
 		if (item.type_ === BaseModel.TYPE_NOTE) {
-			let noteFilePath = dirPath + '/' + friendlySafeFilename(item.title, null, true) + '.md';
+			let noteFilePath = `${dirPath}/${friendlySafeFilename(item.title, null, true)}.md`;
 			noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
 			const noteBody = await this.replaceResourceIdsByRelativePaths_(item);
 			const modNote = Object.assign({}, item, { body: noteBody });
@@ -68,7 +68,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	}
 
 	async processResource(resource, filePath) {
-		const destResourcePath = this.resourceDir_ + '/' + basename(filePath);
+		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);
 	}
 

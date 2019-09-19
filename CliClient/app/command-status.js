@@ -22,7 +22,7 @@ class Command extends BaseCommand {
 
 			if (i > 0) this.stdout('');
 
-			this.stdout('# ' + section.title);
+			this.stdout(`# ${section.title}`);
 			this.stdout('');
 
 			for (let n in section.body) {

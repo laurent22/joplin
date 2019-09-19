@@ -113,7 +113,7 @@ class FileApi {
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
 
-		this.logger().debug('list ' + this.baseDir());
+		this.logger().debug(`list ${this.baseDir()}`);
 
 		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
 
@@ -130,18 +130,18 @@ class FileApi {
 
 	// Deprectated
 	setTimestamp(path, timestampMs) {
-		this.logger().debug('setTimestamp ' + this.fullPath_(path));
+		this.logger().debug(`setTimestamp ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
 		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {
-		this.logger().debug('mkdir ' + this.fullPath_(path));
+		this.logger().debug(`mkdir ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	async stat(path) {
-		this.logger().debug('stat ' + this.fullPath_(path));
+		this.logger().debug(`stat ${this.fullPath_(path)}`);
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath_(path)), this.requestRepeatCount());
 
@@ -159,28 +159,28 @@ class FileApi {
 	get(path, options = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
-		this.logger().debug('get ' + this.fullPath_(path));
+		this.logger().debug(`get ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.get(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 
 	async put(path, content, options = null) {
-		this.logger().debug('put ' + this.fullPath_(path), options);
+		this.logger().debug(`put ${this.fullPath_(path)}`, options);
 
 		if (options && options.source === 'file') {
-			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
+			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError(`File not found: ${options.path}`, 'fileNotFound');
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
 	}
 
 	delete(path) {
-		this.logger().debug('delete ' + this.fullPath_(path));
+		this.logger().debug(`delete ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated
 	move(oldPath, newPath) {
-		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
+		this.logger().debug(`move ${this.fullPath_(oldPath)} => ${this.fullPath_(newPath)}`);
 		return tryAndRepeat(() => this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath)), this.requestRepeatCount());
 	}
 
@@ -194,7 +194,7 @@ class FileApi {
 	}
 
 	delta(path, options = null) {
-		this.logger().debug('delta ' + this.fullPath_(path));
+		this.logger().debug(`delta ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 }

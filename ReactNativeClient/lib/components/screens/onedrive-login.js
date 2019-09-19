@@ -59,7 +59,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 				this.props.dispatch({ type: 'NAV_BACK' });
 				reg.scheduleSync(0);
 			} catch (error) {
-				alert('Could not login to OneDrive. Please try again\n\n' + error.message + '\n\n' + url);
+				alert(`Could not login to OneDrive. Please try again\n\n${error.message}\n\n${url}`);
 			}
 
 			this.authCode_ = null;

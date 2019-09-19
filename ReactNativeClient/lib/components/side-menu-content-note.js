@@ -76,7 +76,7 @@ class SideMenuContentNoteComponent extends Component {
 
 		for (const option of options) {
 			if (option.isDivider) {
-				items.push(this.renderDivider('divider_' + dividerIndex++));
+				items.push(this.renderDivider(`divider_${dividerIndex++}`));
 			} else {
 				items.push(this.renderSideBarButton(option.title, option.title, null, option.onPress));
 			}

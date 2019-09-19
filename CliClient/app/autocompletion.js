@@ -16,9 +16,9 @@ async function handleAutocompletionPromise(line) {
 		if (names.indexOf(words[0]) === -1) {
 			let x = names.filter(n => n.indexOf(words[0]) === 0);
 			if (x.length === 1) {
-				return x[0] + ' ';
+				return `${x[0]} `;
 			}
-			return x.length > 0 ? x.map(a => a + ' ') : line;
+			return x.length > 0 ? x.map(a => `${a} `) : line;
 		} else {
 			return line;
 		}
@@ -56,7 +56,7 @@ async function handleAutocompletionPromise(line) {
 			return line;
 		}
 		let ret = l.map(a => toCommandLine(a));
-		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
 	//Complete an argument
@@ -74,23 +74,23 @@ async function handleAutocompletionPromise(line) {
 		const currentFolder = app().currentFolder();
 
 		if (argName == 'note' || argName == 'note-pattern') {
-			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			l.push(...notes.map(n => n.title));
 		}
 
 		if (argName == 'notebook') {
-			const folders = await Folder.search({ titlePattern: next + '*' });
+			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...folders.map(n => n.title));
 		}
 
 		if (argName == 'item') {
-			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
-			const folders = await Folder.search({ titlePattern: next + '*' });
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
+			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...notes.map(n => n.title), folders.map(n => n.title));
 		}
 
 		if (argName == 'tag') {
-			let tags = await Tag.search({ titlePattern: next + '*' });
+			let tags = await Tag.search({ titlePattern: `${next}*` });
 			l.push(...tags.map(n => n.title));
 		}
 
@@ -113,7 +113,7 @@ async function handleAutocompletionPromise(line) {
 		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
 		let ret = l.map(a => toCommandLine(a));
-		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
 	return line;
@@ -128,9 +128,9 @@ function toCommandLine(args) {
 		return args
 			.map(function(a) {
 				if (a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
-					return '\'' + a + '\'';
+					return `'${a}'`;
 				} else if (a.indexOf('\'') !== -1) {
-					return '"' + a + '"';
+					return `"${a}"`;
 				} else {
 					return a;
 				}
@@ -138,11 +138,11 @@ function toCommandLine(args) {
 			.join(' ');
 	} else {
 		if (args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
-			return '\'' + args + '\' ';
+			return `'${args}' `;
 		} else if (args.indexOf('\'') !== -1) {
-			return '"' + args + '" ';
+			return `"${args}" `;
 		} else {
-			return args + ' ';
+			return `${args} `;
 		}
 	}
 }

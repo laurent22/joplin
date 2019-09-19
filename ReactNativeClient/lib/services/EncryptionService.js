@@ -95,7 +95,7 @@ class EncryptionService {
 		const passwords = Setting.value('encryption.passwordCache');
 		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
 
-		this.logger().info('Trying to load ' + masterKeys.length + ' master keys...');
+		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
@@ -106,11 +106,11 @@ class EncryptionService {
 			try {
 				await this.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
 			} catch (error) {
-				this.logger().warn('Cannot load master key ' + mk.id + '. Invalid password?', error);
+				this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
 			}
 		}
 
-		this.logger().info('Loaded master keys: ' + this.loadedMasterKeysCount());
+		this.logger().info(`Loaded master keys: ${this.loadedMasterKeysCount()}`);
 	}
 
 	loadedMasterKeysCount() {
@@ -166,7 +166,7 @@ class EncryptionService {
 
 	loadedMasterKey(id) {
 		if (!this.loadedMasterKeys_[id]) {
-			const error = new Error('Master key is not loaded: ' + id);
+			const error = new Error(`Master key is not loaded: ${id}`);
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
@@ -299,7 +299,7 @@ class EncryptionService {
 			}
 		}
 
-		throw new Error('Unknown encryption method: ' + method);
+		throw new Error(`Unknown encryption method: ${method}`);
 	}
 
 	async decrypt(method, key, cipherText) {
@@ -317,7 +317,7 @@ class EncryptionService {
 			}
 		}
 
-		throw new Error('Unknown decryption method: ' + method);
+		throw new Error(`Unknown decryption method: ${method}`);
 	}
 
 	async encryptAbstract_(source, destination, options = null) {
@@ -358,10 +358,10 @@ class EncryptionService {
 		if (!options) options = {};
 
 		const identifier = await source.read(5);
-		if (!this.isValidHeaderIdentifier(identifier)) throw new JoplinError('Invalid encryption identifier. Data is not actually encrypted? ID was: ' + identifier, 'invalidIdentifier');
+		if (!this.isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
-		if (isNaN(mdSize) || !mdSize) throw new Error('Invalid header metadata size: ' + mdSizeHex);
+		if (isNaN(mdSize) || !mdSize) throw new Error(`Invalid header metadata size: ${mdSizeHex}`);
 		const md = await source.read(parseInt(mdSizeHex, 16));
 		const header = this.decodeHeader_(identifier + mdSizeHex + md);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
@@ -371,7 +371,7 @@ class EncryptionService {
 		while (true) {
 			const lengthHex = await source.read(6);
 			if (!lengthHex) break;
-			if (lengthHex.length !== 6) throw new Error('Invalid block size: ' + lengthHex);
+			if (lengthHex.length !== 6) throw new Error(`Invalid block size: ${lengthHex}`);
 			const length = parseInt(lengthHex, 16);
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
 
@@ -502,32 +502,32 @@ class EncryptionService {
 	}
 
 	decodeHeaderVersion_(hexaByte) {
-		if (hexaByte.length !== 2) throw new Error('Invalid header version length: ' + hexaByte);
+		if (hexaByte.length !== 2) throw new Error(`Invalid header version length: ${hexaByte}`);
 		return parseInt(hexaByte, 16);
 	}
 
 	headerTemplate(version) {
 		const r = this.headerTemplates_[version];
-		if (!r) throw new Error('Unknown header version: ' + version);
+		if (!r) throw new Error(`Unknown header version: ${version}`);
 		return r;
 	}
 
 	encodeHeader_(header) {
 		// Sanity check
-		if (header.masterKeyId.length !== 32) throw new Error('Invalid master key ID size: ' + header.masterKeyId);
+		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
 		let encryptionMetadata = '';
 		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
 		encryptionMetadata += header.masterKeyId;
 		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		return 'JED01' + encryptionMetadata;
+		return `JED01${encryptionMetadata}`;
 	}
 
 	decodeHeader_(headerHexaBytes) {
 		const reader = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error('Invalid header (missing identifier): ' + headerHexaBytes.substr(0, 64));
+		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
 		const template = this.headerTemplate(version);
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
@@ -546,7 +546,7 @@ class EncryptionService {
 			} else if (type === 'hex') {
 				// Already in hexa
 			} else {
-				throw new Error('Invalid type: ' + type);
+				throw new Error(`Invalid type: ${type}`);
 			}
 
 			output[name] = v;

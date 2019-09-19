@@ -110,7 +110,7 @@ function enexXmlToHtml_(stream, resources) {
 					}
 
 					if (!found) {
-						reject('Hash with no associated resource: ' + hash);
+						reject(`Hash with no associated resource: ${hash}`);
 					}
 				}
 

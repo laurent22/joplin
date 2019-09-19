@@ -165,9 +165,9 @@ describe('Encryption', function() {
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
 
-		const sourcePath = __dirname + '/../tests/support/photo.jpg';
-		const encryptedPath = __dirname + '/data/photo.crypted';
-		const decryptedPath = __dirname + '/data/photo.jpg';
+		const sourcePath = `${__dirname}/../tests/support/photo.jpg`;
+		const encryptedPath = `${__dirname}/data/photo.crypted`;
+		const decryptedPath = `${__dirname}/data/photo.jpg`;
 
 		await service.encryptFile(sourcePath, encryptedPath);
 		await service.decryptFile(encryptedPath, decryptedPath);

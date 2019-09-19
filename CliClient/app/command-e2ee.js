@@ -97,13 +97,13 @@ class Command extends BaseCommand {
 			while (true) {
 				try {
 					const outputDir = options.output ? options.output : require('os').tmpdir();
-					let outFile = outputDir + '/' + pathUtils.filename(args.path) + '.' + Date.now() + '.bin';
+					let outFile = `${outputDir}/${pathUtils.filename(args.path)}.${Date.now()}.bin`;
 					await EncryptionService.instance().decryptFile(args.path, outFile);
 					const buffer = await readChunk(outFile, 0, 64);
 					const detectedType = imageType(buffer);
 
 					if (detectedType) {
-						const newOutFile = outFile + '.' + detectedType.ext;
+						const newOutFile = `${outFile}.${detectedType.ext}`;
 						await shim.fsDriver().move(outFile, newOutFile);
 						outFile = newOutFile;
 					}
@@ -150,7 +150,7 @@ class Command extends BaseCommand {
 
 			for (let i = 0; i < paths.length; i++) {
 				const path = paths[i];
-				const fullPath = targetPath + '/' + path;
+				const fullPath = `${targetPath}/${path}`;
 				const stat = await fs.stat(fullPath);
 
 				// this.stdout(fullPath);
@@ -160,7 +160,7 @@ class Command extends BaseCommand {
 					for (let j = 0; j < resourcePaths.length; j++) {
 						const resourcePath = resourcePaths[j];
 						resourceCount++;
-						const fullResourcePath = fullPath + '/' + resourcePath;
+						const fullResourcePath = `${fullPath}/${resourcePath}`;
 						const isEncrypted = await EncryptionService.instance().fileIsEncrypted(fullResourcePath);
 						if (isEncrypted) {
 							encryptedResourceCount++;
@@ -194,9 +194,9 @@ class Command extends BaseCommand {
 				}
 			}
 
-			this.stdout('Encrypted items: ' + encryptedItemCount + '/' + itemCount);
-			this.stdout('Encrypted resources: ' + encryptedResourceCount + '/' + resourceCount);
-			this.stdout('Other items (never encrypted): ' + otherItemCount);
+			this.stdout(`Encrypted items: ${encryptedItemCount}/${itemCount}`);
+			this.stdout(`Encrypted resources: ${encryptedResourceCount}/${resourceCount}`);
+			this.stdout(`Other items (never encrypted): ${otherItemCount}`);
 
 			if (options.verbose) {
 				this.stdout('');

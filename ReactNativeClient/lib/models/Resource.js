@@ -31,7 +31,7 @@ class Resource extends BaseItem {
 
 	static fetchStatuses(resourceIds) {
 		if (!resourceIds.length) return [];
-		return this.db().selectAll('SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("' + resourceIds.join('","') + '")');
+		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
 	}
 
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
@@ -40,7 +40,7 @@ class Resource extends BaseItem {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
 		sql.push('ORDER BY updated_time DESC');
-		if (limit !== null) sql.push('LIMIT ' + limit);
+		if (limit !== null) sql.push(`LIMIT ${limit}`);
 		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
@@ -58,7 +58,7 @@ class Resource extends BaseItem {
 		if (!output) output = resource.id;
 		let extension = resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? '.' + extension : '';
+		extension = extension ? `.${extension}` : '';
 		return output + extension;
 	}
 
@@ -73,16 +73,16 @@ class Resource extends BaseItem {
 	static filename(resource, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? '.' + extension : '';
+		extension = extension ? `.${extension}` : '';
 		return resource.id + extension;
 	}
 
 	static relativePath(resource, encryptedBlob = false) {
-		return Setting.value('resourceDirName') + '/' + this.filename(resource, encryptedBlob);
+		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
 	static fullPath(resource, encryptedBlob = false) {
-		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
+		return `${Setting.value('resourceDir')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
 	static async isReady(resource) {
@@ -106,7 +106,7 @@ class Resource extends BaseItem {
 
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
-		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
+		const noExtPath = `${pathUtils.dirname(encryptedPath)}/${pathUtils.filename(encryptedPath)}`;
 
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
@@ -123,7 +123,7 @@ class Resource extends BaseItem {
 				// As the identifier is invalid it most likely means that this is not encrypted data
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
-				this.logger().warn('Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ' + item.id);
+				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
 				this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
@@ -154,7 +154,7 @@ class Resource extends BaseItem {
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
+			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
 			throw error;
 		}
 
@@ -170,17 +170,17 @@ class Resource extends BaseItem {
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push('](:/' + resource.id + ')');
+			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push('](:/' + resource.id + ')');
+			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');
 	}
 
 	static internalUrl(resource) {
-		return ':/' + resource.id;
+		return `:/${resource.id}`;
 	}
 
 	static pathToId(path) {
@@ -200,7 +200,7 @@ class Resource extends BaseItem {
 	}
 
 	static urlToId(url) {
-		if (!this.isResourceUrl(url)) throw new Error('Not a valid resource URL: ' + url);
+		if (!this.isResourceUrl(url)) throw new Error(`Not a valid resource URL: ${url}`);
 		return url.substr(2);
 	}
 

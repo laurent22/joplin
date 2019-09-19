@@ -83,7 +83,7 @@ class DecryptionWorker {
 	}
 
 	async clearDisabledItem(typeId, itemId) {
-		await this.kvStore().deleteValue('decrypt:' + typeId + ':' + itemId);
+		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
 	dispatchReport(report) {
@@ -98,7 +98,7 @@ class DecryptionWorker {
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
 
 		if (this.state_ !== 'idle') {
-			this.logger().debug('DecryptionWorker: cannot start because state is "' + this.state_ + '"');
+			this.logger().debug(`DecryptionWorker: cannot start because state is "${this.state_}"`);
 			return;
 		}
 
@@ -150,7 +150,7 @@ class DecryptionWorker {
 						itemCount: items.length,
 					});
 
-					const counterKey = 'decrypt:' + item.type_ + ':' + item.id;
+					const counterKey = `decrypt:${item.type_}:${item.id}`;
 
 					const clearDecryptionCounter = async () => {
 						await this.kvStore().deleteValue(counterKey);
@@ -161,7 +161,7 @@ class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().warn('DecryptionWorker: ' + item.id + ' decryption has failed more than 2 times - skipping it');
+							this.logger().warn(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
 							excludedIds.push(item.id);
 							continue;
 						}
@@ -205,7 +205,7 @@ class DecryptionWorker {
 						}
 
 						if (options.errorHandler === 'log') {
-							this.logger().warn('DecryptionWorker: error for: ' + item.id + ' (' + ItemClass.tableName() + ')', error, item);
+							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error, item);
 						} else {
 							throw error;
 						}
@@ -234,7 +234,7 @@ class DecryptionWorker {
 		this.dispatchReport({ state: 'idle' });
 
 		if (downloadedButEncryptedBlobCount) {
-			this.logger().info('DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ' + downloadedButEncryptedBlobCount);
+			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);
 			this.scheduleStart();
 		}
 	}

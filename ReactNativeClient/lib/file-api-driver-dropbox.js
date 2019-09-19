@@ -17,7 +17,7 @@ class FileApiDriverDropbox {
 
 	makePath_(path) {
 		if (!path) return '';
-		return '/' + path;
+		return `/${path}`;
 	}
 
 	hasErrorCode_(error, errorCode) {
@@ -224,7 +224,7 @@ class FileApiDriverDropbox {
 
 			// It returns "failed" if it didn't work but anyway throw an error if it's anything other than complete or in_progress
 			if (check['.tag'] !== 'in_progress') {
-				throw new Error('Batch delete failed? ' + JSON.stringify(check));
+				throw new Error(`Batch delete failed? ${JSON.stringify(check)}`);
 			}
 			await time.sleep(2);
 		}

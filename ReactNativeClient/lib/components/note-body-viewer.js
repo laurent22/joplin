@@ -66,7 +66,7 @@ class NoteBodyViewer extends Component {
 
 		// If the length of the body has changed, then it's something other than a checkbox that has changed,
 		// for example a resource that has been attached to the note while in View mode. In that case, update.
-		return (safeGetNoteProp(this.props, 'body') + '').length !== (safeGetNoteProp(nextProps, 'body') + '').length;
+		return (`${safeGetNoteProp(this.props, 'body')}`).length !== (`${safeGetNoteProp(nextProps, 'body')}`).length;
 	}
 
 	rebuildMd() {
@@ -140,9 +140,9 @@ class NoteBodyViewer extends Component {
 					<meta name="viewport" content="width=device-width, initial-scale=1">
 				</head>
 				<body>
-					` +
-			html +
-			`
+					${
+	html
+}
 				</body>
 			</html>
 		`;
@@ -176,7 +176,7 @@ class NoteBodyViewer extends Component {
 		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
 		const source = {
 			html: html,
-			baseUrl: 'file://' + Setting.value('resourceDir') + '/',
+			baseUrl: `file://${Setting.value('resourceDir')}/`,
 		};
 
 		// Note: useWebKit={false} is needed to go around this bug:

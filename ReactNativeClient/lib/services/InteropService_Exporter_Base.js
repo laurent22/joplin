@@ -24,7 +24,7 @@ class InteropService_Exporter_Base {
 
 	async temporaryDirectory_(createIt) {
 		const md5 = require('md5');
-		const tempDir = require('os').tmpdir() + '/' + md5(Math.random() + Date.now());
+		const tempDir = `${require('os').tmpdir()}/${md5(Math.random() + Date.now())}`;
 		if (createIt) await require('fs-extra').mkdirp(tempDir);
 		return tempDir;
 	}

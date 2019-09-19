@@ -65,7 +65,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		newArea.height *= zoom;
 		content.crop_rect = newArea;
 
-		fetch(command.api_base_url + '/notes', {
+		fetch(`${command.api_base_url}/notes`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',

@@ -135,7 +135,7 @@ class NoteTextComponent extends React.Component {
 					const image = clipboard.readImage();
 
 					const fileExt = mimeUtils.toFileExtension(format);
-					const filePath = Setting.value('tempDir') + '/' + md5(Date.now()) + '.' + fileExt;
+					const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
 
 					await shim.writeImageToFile(image, format, filePath);
 					await this.commandAttachFile([filePath]);
@@ -362,7 +362,7 @@ class NoteTextComponent extends React.Component {
 	markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
 		this.markupToHtml_ = new MarkupToHtml({
-			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 		return this.markupToHtml_;
 	}
@@ -712,7 +712,7 @@ class NoteTextComponent extends React.Component {
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		if (msg !== 'percentScroll') console.info('Got ipc-message: ' + msg, args);
+		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		if (msg.indexOf('checkboxclick:') === 0) {
 			// Ugly hack because setting the body here will make the scrollbar
@@ -733,7 +733,7 @@ class NoteTextComponent extends React.Component {
 			this.setState({ localSearch: ls });
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
-			if (s.length < 2) throw new Error('Invalid message: ' + msg);
+			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
 			ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'percentScroll') {
 			this.ignoreNextEditorScroll_ = true;
@@ -751,7 +751,7 @@ class NoteTextComponent extends React.Component {
 					new MenuItem({
 						label: _('Open...'),
 						click: async () => {
-							const ok = bridge().openExternal('file://' + resourcePath);
+							const ok = bridge().openExternal(`file://${resourcePath}`);
 							if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
 						},
 					})
@@ -797,7 +797,7 @@ class NoteTextComponent extends React.Component {
 					})
 				);
 			} else {
-				reg.logger().error('Unhandled item type: ' + itemType);
+				reg.logger().error(`Unhandled item type: ${itemType}`);
 				return;
 			}
 
@@ -807,7 +807,7 @@ class NoteTextComponent extends React.Component {
 			const itemId = resourceUrlInfo.itemId;
 			const item = await BaseItem.loadItemById(itemId);
 
-			if (!item) throw new Error('No item with ID ' + itemId);
+			if (!item) throw new Error(`No item with ID ${itemId}`);
 
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
 				const localState = await Resource.localState(item);
@@ -829,7 +829,7 @@ class NoteTextComponent extends React.Component {
 					},
 				});
 			} else {
-				throw new Error('Unsupported item type: ' + item.type_);
+				throw new Error(`Unsupported item type: ${item.type_}`);
 			}
 		} else if (urlUtils.urlProtocol(msg)) {
 			if (msg.indexOf('file://') === 0) {
@@ -929,8 +929,8 @@ class NoteTextComponent extends React.Component {
 			const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
 			for (let i = 0; i < letters.length; i++) {
 				const l = letters[i];
-				cancelledKeys.push('Ctrl+' + l);
-				cancelledKeys.push('Command+' + l);
+				cancelledKeys.push(`Ctrl+${l}`);
+				cancelledKeys.push(`Command+${l}`);
 			}
 
 			for (let i = 0; i < cancelledKeys.length; i++) {
@@ -940,7 +940,7 @@ class NoteTextComponent extends React.Component {
 					// an exception from this undocumented function seems to cancel it without any
 					// side effect.
 					// https://stackoverflow.com/questions/36075846
-					throw new Error('HACK: Overriding Ace Editor shortcut: ' + k);
+					throw new Error(`HACK: Overriding Ace Editor shortcut: ${k}`);
 				});
 			}
 
@@ -970,12 +970,12 @@ class NoteTextComponent extends React.Component {
 				const leftSpaces = lineLeftSpaces(line);
 				const lineNoLeftSpaces = line.trimLeft();
 
-				if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return leftSpaces + '- [ ] ';
-				if (lineNoLeftSpaces.indexOf('- ') === 0) return leftSpaces + '- ';
-				if (lineNoLeftSpaces.indexOf('* ') === 0 && line.trim() !== '* * *') return leftSpaces + '* ';
+				if (lineNoLeftSpaces.indexOf('- [ ] ') === 0 || lineNoLeftSpaces.indexOf('- [x] ') === 0 || lineNoLeftSpaces.indexOf('- [X] ') === 0) return `${leftSpaces}- [ ] `;
+				if (lineNoLeftSpaces.indexOf('- ') === 0) return `${leftSpaces}- `;
+				if (lineNoLeftSpaces.indexOf('* ') === 0 && line.trim() !== '* * *') return `${leftSpaces}* `;
 
 				const bulletNumber = markdownUtils.olLineNumber(lineNoLeftSpaces);
-				if (bulletNumber) return leftSpaces + (bulletNumber + 1) + '. ';
+				if (bulletNumber) return `${leftSpaces + (bulletNumber + 1)}. `;
 
 				return this.$getIndent(line);
 			};
@@ -1032,7 +1032,7 @@ class NoteTextComponent extends React.Component {
 
 		if (!bodyToRender.trim() && visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') < 0) {
 			// Fixes https://github.com/laurent22/joplin/issues/217
-			bodyToRender = '<i>' + _('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout')) + '</i>';
+			bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 		}
 
 		const result = this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
@@ -1155,7 +1155,7 @@ class NoteTextComponent extends React.Component {
 		for (let i = 0; i < filePaths.length; i++) {
 			const filePath = filePaths[i];
 			try {
-				reg.logger().info('Attaching ' + filePath);
+				reg.logger().info(`Attaching ${filePath}`);
 				note = await shim.attachFileToNote(note, filePath, position, createFileURL);
 				reg.logger().info('File was attached.');
 				this.setState({
@@ -1183,7 +1183,7 @@ class NoteTextComponent extends React.Component {
 
 	// helper function to style the title for printing
 	title_(title) {
-		return '<div style="font-size: 2em; font-weight: bold; border-bottom: 1px solid rgb(230,230,230); padding-bottom: .3em;">' + title + '</div><br>';
+		return `<div style="font-size: 2em; font-weight: bold; border-bottom: 1px solid rgb(230,230,230); padding-bottom: .3em;">${title}</div><br>`;
 	}
 
 	async printTo_(target, options) {
@@ -1192,7 +1192,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		const previousBody = this.state.note.body;
-		const tempBody = this.title_(this.state.note.title) + '\n\n' + previousBody;
+		const tempBody = `${this.title_(this.state.note.title)}\n\n${previousBody}`;
 
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
@@ -1470,7 +1470,7 @@ class NoteTextComponent extends React.Component {
 		let bulletNumber = markdownUtils.olLineNumber(this.selectionRangeCurrentLine());
 		if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(this.selectionRangePreviousLine());
 		if (!bulletNumber) bulletNumber = 0;
-		this.addListItem(bulletNumber + 1 + '. ', '', _('List item'));
+		this.addListItem(`${bulletNumber + 1}. `, '', _('List item'));
 	}
 
 	commandTextHeading() {
@@ -1483,7 +1483,7 @@ class NoteTextComponent extends React.Component {
 
 	async commandTextLink() {
 		const url = await dialogs.prompt(_('Insert Hyperlink'));
-		this.wrapSelectionWithStrings('[', '](' + url + ')');
+		this.wrapSelectionWithStrings('[', `](${url})`);
 	}
 
 	itemContextMenu() {
@@ -1796,7 +1796,7 @@ class NoteTextComponent extends React.Component {
 
 		const rootStyle = Object.assign(
 			{
-				borderLeft: borderWidth + 'px solid ' + theme.dividerColor,
+				borderLeft: `${borderWidth}px solid ${theme.dividerColor}`,
 				boxSizing: 'border-box',
 				paddingLeft: 10,
 				paddingRight: 0,
@@ -1887,9 +1887,9 @@ class NoteTextComponent extends React.Component {
 			overflowY: 'hidden',
 			float: 'left',
 			verticalAlign: 'top',
-			paddingTop: paddingTop + 'px',
-			lineHeight: theme.textAreaLineHeight + 'px',
-			fontSize: theme.editorFontSize + 'px',
+			paddingTop: `${paddingTop}px`,
+			lineHeight: `${theme.textAreaLineHeight}px`,
+			fontSize: `${theme.editorFontSize}px`,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			editorTheme: theme.editorTheme,
@@ -1913,7 +1913,7 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (visiblePanes.indexOf('viewer') >= 0 && visiblePanes.indexOf('editor') >= 0) {
-			viewerStyle.borderLeft = '1px solid ' + theme.dividerColor;
+			viewerStyle.borderLeft = `1px solid ${theme.dividerColor}`;
 		} else {
 			viewerStyle.borderLeft = 'none';
 		}
@@ -2010,8 +2010,8 @@ class NoteTextComponent extends React.Component {
 				mode={markupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 				theme={editorRootStyle.editorTheme}
 				style={editorRootStyle}
-				width={editorStyle.width + 'px'}
-				height={editorStyle.height + 'px'}
+				width={`${editorStyle.width}px`}
+				height={`${editorStyle.height}px`}
 				fontSize={editorStyle.fontSize}
 				showGutter={false}
 				name="note-editor"
@@ -2038,7 +2038,7 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: '1px solid ' + theme.dividerColor }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: `1px solid ${theme.dividerColor}` }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>

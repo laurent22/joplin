@@ -45,22 +45,22 @@ class HtmlUtils {
 
 			console.info('src', src);
 
-			if (!action) return '<img' + before + 'src="' + src + '"' + after + '>';
+			if (!action) return `<img${before}src="${src}"${after}>`;
 
 			if (action.type === 'replaceElement') {
 				return action.html;
 			}
 
 			if (action.type === 'replaceSource') {
-				return '<img' + before + 'src="' + action.src + '"' + after + '>';
+				return `<img${before}src="${action.src}"${after}>`;
 			}
 
 			if (action.type === 'setAttributes') {
 				const attrHtml = this.attributesHtml(action.attrs);
-				return '<img' + before + attrHtml + after + '>';
+				return `<img${before}${attrHtml}${after}>`;
 			}
 
-			throw new Error('Invalid action: ' + action.type);
+			throw new Error(`Invalid action: ${action.type}`);
 		});
 	}
 
@@ -69,7 +69,7 @@ class HtmlUtils {
 
 		return html.replace(anchorRegex, (v, before, href, after) => {
 			const newHref = urlUtils.prependBaseUrl(href, baseUrl);
-			return '<a' + before + 'href="' + newHref + '"' + after + '>';
+			return `<a${before}href="${newHref}"${after}>`;
 		});
 	}
 
@@ -78,7 +78,7 @@ class HtmlUtils {
 
 		for (const n in attr) {
 			if (!attr.hasOwnProperty(n)) continue;
-			output.push(n + '="' + htmlentities(attr[n]) + '"');
+			output.push(`${n}="${htmlentities(attr[n])}"`);
 		}
 
 		return output.join(' ');

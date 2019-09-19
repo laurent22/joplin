@@ -1,7 +1,7 @@
 class SyncTargetRegistry {
 	static classById(syncTargetId) {
 		const info = SyncTargetRegistry.reg_[syncTargetId];
-		if (!info) throw new Error('Invalid id: ' + syncTargetId);
+		if (!info) throw new Error(`Invalid id: ${syncTargetId}`);
 		return info.classRef;
 	}
 
@@ -20,7 +20,7 @@ class SyncTargetRegistry {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].name === name) return this.reg_[n].id;
 		}
-		throw new Error('Name not found: ' + name);
+		throw new Error(`Name not found: ${name}`);
 	}
 
 	static idToMetadata(id) {
@@ -28,7 +28,7 @@ class SyncTargetRegistry {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].id === id) return this.reg_[n];
 		}
-		throw new Error('ID not found: ' + id);
+		throw new Error(`ID not found: ${id}`);
 	}
 
 	static idToName(id) {

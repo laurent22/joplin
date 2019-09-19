@@ -28,7 +28,7 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	const lineIndex = sourceToken.map && sourceToken.map.length ? sourceToken.map[0] : 99999999;
 	const checkedString = checked ? 'checked' : 'unchecked';
 
-	const labelId = 'cb-label-' + id;
+	const labelId = `cb-label-${id}`;
 
 	const js = `
 		${postMessageSyntax}('checkboxclick:${checkedString}:${lineIndex}');
@@ -44,7 +44,7 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	tokens.push(token);
 
 	token = new Token('label_open', 'label', 1);
-	token.attrs = [['id', labelId], ['for', id], ['class', 'checkbox-label-' + checkedString]];
+	token.attrs = [['id', labelId], ['for', id], ['class', `checkbox-label-${checkedString}`]];
 	tokens.push(token);
 
 	if (label) {
@@ -94,7 +94,7 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 
 				checkboxIndex_++;
 				const checked = matches[1] !== ' ';
-				const id = 'md-checkbox-' + checkboxIndex_;
+				const id = `md-checkbox-${checkboxIndex_}`;
 				const label = matches.length >= 3 ? matches[2] : '';
 
 				// Prepend the text content with the checkbox markup and the opening <label> tag

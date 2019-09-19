@@ -74,7 +74,7 @@ class BaseModel {
 			const e = BaseModel.typeEnum_[i];
 			if (e[1] === type) return e[0].substr(5).toLowerCase();
 		}
-		throw new Error('Unknown model type: ' + type);
+		throw new Error(`Unknown model type: ${type}`);
 	}
 
 	static hasField(name) {
@@ -89,7 +89,7 @@ class BaseModel {
 		let p = withPrefix === true ? this.tableName() : withPrefix;
 		let temp = [];
 		for (let i = 0; i < output.length; i++) {
-			temp.push(p + '.' + output[i]);
+			temp.push(`${p}.${output[i]}`);
 		}
 
 		return temp;
@@ -101,7 +101,7 @@ class BaseModel {
 			if (fields[i].name == name) return fields[i].type;
 		}
 		if (defaultValue !== null) return defaultValue;
-		throw new Error('Unknown field: ' + name);
+		throw new Error(`Unknown field: ${name}`);
 	}
 
 	static fields() {
@@ -141,8 +141,8 @@ class BaseModel {
 
 	static count(options = null) {
 		if (!options) options = {};
-		let sql = 'SELECT count(*) as total FROM `' + this.tableName() + '`';
-		if (options.where) sql += ' WHERE ' + options.where;
+		let sql = `SELECT count(*) as total FROM \`${this.tableName()}\``;
+		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
 			.then(r => {
@@ -159,7 +159,7 @@ class BaseModel {
 	}
 
 	static loadByPartialId(partialId) {
-		return this.modelSelectAll('SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
+		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
 	static applySqlOptions(options, sql, params = null) {
@@ -171,19 +171,19 @@ class BaseModel {
 				const o = options.order[i];
 				let item = o.by;
 				if (options.caseInsensitive === true) item += ' COLLATE NOCASE';
-				if (o.dir) item += ' ' + o.dir;
+				if (o.dir) item += ` ${o.dir}`;
 				items.push(item);
 			}
-			sql += ' ORDER BY ' + items.join(', ');
+			sql += ` ORDER BY ${items.join(', ')}`;
 		}
 
-		if (options.limit) sql += ' LIMIT ' + options.limit;
+		if (options.limit) sql += ` LIMIT ${options.limit}`;
 
 		return { sql: sql, params: params };
 	}
 
 	static async allIds(options = null) {
-		let q = this.applySqlOptions(options, 'SELECT id FROM `' + this.tableName() + '`');
+		let q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
 		const rows = await this.db().selectAll(q.sql, q.params);
 		return rows.map(r => r.id);
 	}
@@ -192,7 +192,7 @@ class BaseModel {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
-		let q = this.applySqlOptions(options, 'SELECT ' + this.db().escapeFields(options.fields) + ' FROM `' + this.tableName() + '`');
+		let q = this.applySqlOptions(options, `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``);
 		return this.modelSelectAll(q.sql);
 	}
 
@@ -201,8 +201,8 @@ class BaseModel {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
-		let sql = 'SELECT ' + this.db().escapeFields(options.fields) + ' FROM `' + this.tableName() + '`';
-		sql += ' WHERE id IN ("' + ids.join('","') + '")';
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
+		sql += ` WHERE id IN ("${ids.join('","')}")`;
 		let q = this.applySqlOptions(options, sql);
 		return this.modelSelectAll(q.sql);
 	}
@@ -222,8 +222,8 @@ class BaseModel {
 
 		if ('limit' in options && options.limit <= 0) return [];
 
-		let sql = 'SELECT ' + this.db().escapeFields(options.fields) + ' FROM `' + this.tableName() + '`';
-		if (conditions.length) sql += ' WHERE ' + conditions.join(' AND ');
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
+		if (conditions.length) sql += ` WHERE ${conditions.join(' AND ')}`;
 
 		let query = this.applySqlOptions(options, sql, params);
 		return this.modelSelectAll(query.sql, query.params);
@@ -250,13 +250,13 @@ class BaseModel {
 	static loadByField(fieldName, fieldValue, options = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
-		let sql = 'SELECT * FROM `' + this.tableName() + '` WHERE `' + fieldName + '` = ?';
+		let sql = `SELECT * FROM \`${this.tableName()}\` WHERE \`${fieldName}\` = ?`;
 		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
 	static loadByTitle(fieldValue) {
-		return this.modelSelectOne('SELECT * FROM `' + this.tableName() + '` WHERE `title` = ?', [fieldValue]);
+		return this.modelSelectOne(`SELECT * FROM \`${this.tableName()}\` WHERE \`title\` = ?`, [fieldValue]);
 	}
 
 	static diffObjects(oldModel, newModel) {
@@ -514,14 +514,14 @@ class BaseModel {
 
 	static delete(id) {
 		if (!id) throw new Error('Cannot delete object without an ID');
-		return this.db().exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id]);
+		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
 	static batchDelete(ids, options = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
-		const sql = 'DELETE FROM ' + this.tableName() + ' WHERE ' + idFieldName + ' IN ("' + ids.join('","') + '")';
+		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ("${ids.join('","')}")`;
 		return this.db().exec(sql);
 	}
 

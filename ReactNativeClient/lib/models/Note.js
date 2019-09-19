@@ -32,7 +32,7 @@ class Note extends BaseItem {
 	}
 
 	static async unserializeForEdit(content) {
-		content += '\n\ntype_: ' + BaseModel.TYPE_NOTE;
+		content += `\n\ntype_: ${BaseModel.TYPE_NOTE}`;
 		let output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
@@ -151,18 +151,18 @@ class Note extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 			const resourcePath = Resource.relativePath(resource);
-			body = body.replace(new RegExp(':/' + id, 'gi'), resourcePath);
+			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
 
 		return body;
 	}
 
 	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = pregQuote(Resource.baseRelativeDirectoryPath() + '/') + '[a-zA-Z0-9.]+';
+		const reString = `${pregQuote(`${Resource.baseRelativeDirectoryPath()}/`)}[a-zA-Z0-9.]+`;
 		const re = new RegExp(reString, 'gi');
 		body = body.replace(re, match => {
 			const id = Resource.pathToId(match);
-			return ':/' + id;
+			return `:/${id}`;
 		});
 		return body;
 	}
@@ -245,7 +245,7 @@ class Note extends BaseItem {
 		if (!folderId) throw new Error('folderId is undefined');
 
 		let options = {
-			conditions: ['`' + field + '` = ?'],
+			conditions: [`\`${field}\` = ?`],
 			conditionsParams: [value],
 			fields: '*',
 		};
@@ -334,7 +334,7 @@ class Note extends BaseItem {
 
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null };
-		return this.modelSelectOne('SELECT ' + this.previewFieldsSql(options.fields) + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
+		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
 	static async search(options = null) {
@@ -374,7 +374,7 @@ class Note extends BaseItem {
 			this.logger().info('Waiting for geolocation update...');
 			await time.sleep(1);
 			if (startWait + 1000 * 20 < time.unixMs()) {
-				this.logger().warn('Failed to update geolocation for: timeout: ' + noteId);
+				this.logger().warn(`Failed to update geolocation for: timeout: ${noteId}`);
 				return;
 			}
 		}
@@ -389,7 +389,7 @@ class Note extends BaseItem {
 			try {
 				geoData = await shim.Geolocation.currentPosition();
 			} catch (error) {
-				this.logger().error('Could not get lat/long for note ' + noteId + ': ', error);
+				this.logger().error(`Could not get lat/long for note ${noteId}: `, error);
 				geoData = null;
 			}
 
@@ -401,7 +401,7 @@ class Note extends BaseItem {
 			this.geolocationCache_ = geoData;
 		}
 
-		this.logger().info('Updating lat/long of note ' + noteId);
+		this.logger().info(`Updating lat/long of note ${noteId}`);
 
 		let note = await Note.load(noteId);
 		if (!note) return; // Race condition - note has been deleted in the meantime
@@ -486,7 +486,7 @@ class Note extends BaseItem {
 		const uniqueTitle = options && options.uniqueTitle;
 
 		const originalNote = await Note.load(noteId);
-		if (!originalNote) throw new Error('Unknown note: ' + noteId);
+		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		let newNote = Object.assign({}, originalNote);
 		delete newNote.id;
@@ -506,7 +506,7 @@ class Note extends BaseItem {
 
 	static async noteIsOlderThan(noteId, date) {
 		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
-		if (!n) throw new Error('No such note: ' + noteId);
+		if (!n) throw new Error(`No such note: ${noteId}`);
 		return n.updated_time < date;
 	}
 
@@ -609,7 +609,7 @@ class Note extends BaseItem {
 	static markupLanguageToLabel(markupLanguageId) {
 		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
 		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
-		throw new Error('Invalid markup language ID: ' + markupLanguageId);
+		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
 	}
 }
 

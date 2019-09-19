@@ -51,7 +51,7 @@ class ExternalEditWatcher {
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event, path) => {
-				this.logger().debug('ExternalEditWatcher: Event: ' + event + ': ' + path);
+				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
 				if (event === 'unlink') {
 					// File are unwatched in the stopWatching functions below. When we receive an unlink event
@@ -67,7 +67,7 @@ class ExternalEditWatcher {
 						const note = await Note.load(id);
 
 						if (!note) {
-							this.logger().warn('Watched note has been deleted: ' + id);
+							this.logger().warn(`Watched note has been deleted: ${id}`);
 							this.stopWatching(id);
 							return;
 						}
@@ -101,12 +101,12 @@ class ExternalEditWatcher {
 	}
 
 	noteIdToFilePath_(noteId) {
-		return this.tempDir() + '/edit-' + noteId + '.md';
+		return `${this.tempDir()}/edit-${noteId}.md`;
 	}
 
 	noteFilePathToId_(path) {
 		let id = path.split('/');
-		if (!id.length) throw new Error('Invalid path: ' + path);
+		if (!id.length) throw new Error(`Invalid path: ${path}`);
 		id = id[id.length - 1];
 		id = id.split('.');
 		id.pop();
@@ -125,7 +125,7 @@ class ExternalEditWatcher {
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
 				const f = watchedPaths[dirName][i];
-				output.push(this.tempDir() + '/' + f);
+				output.push(`${this.tempDir()}/${f}`);
 			}
 		}
 
@@ -157,7 +157,7 @@ class ExternalEditWatcher {
 
 		const s = splitCommandString(editorCommand, { handleEscape: false });
 		const path = s.splice(0, 1);
-		if (!path.length) throw new Error('Invalid editor command: ' + editorCommand);
+		if (!path.length) throw new Error(`Invalid editor command: ${editorCommand}`);
 
 		return {
 			path: path[0],
@@ -187,7 +187,7 @@ class ExternalEditWatcher {
 			const wrapError = error => {
 				if (!error) return error;
 				let msg = error.message ? [error.message] : [];
-				msg.push('Command was: "' + path + '" ' + args.join(' '));
+				msg.push(`Command was: "${path}" ${args.join(' ')}`);
 				error.message = msg.join('\n\n');
 				return error;
 			};
@@ -197,7 +197,7 @@ class ExternalEditWatcher {
 
 				const iid = setInterval(() => {
 					if (subProcess && subProcess.pid) {
-						this.logger().debug('Started editor with PID ' + subProcess.pid);
+						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
 						clearInterval(iid);
 						resolve();
 					}
@@ -224,7 +224,7 @@ class ExternalEditWatcher {
 
 		const cmd = this.textEditorCommand();
 		if (!cmd) {
-			bridge().openExternal('file://' + filePath);
+			bridge().openExternal(`file://${filePath}`);
 		} else {
 			cmd.args.push(filePath);
 			await this.spawnCommand(cmd.path, cmd.args, { detached: true });
@@ -235,7 +235,7 @@ class ExternalEditWatcher {
 			id: note.id,
 		});
 
-		this.logger().info('ExternalEditWatcher: Started watching ' + filePath);
+		this.logger().info(`ExternalEditWatcher: Started watching ${filePath}`);
 	}
 
 	async stopWatching(noteId) {
@@ -248,7 +248,7 @@ class ExternalEditWatcher {
 			type: 'NOTE_FILE_WATCHER_REMOVE',
 			id: noteId,
 		});
-		this.logger().info('ExternalEditWatcher: Stopped watching ' + filePath);
+		this.logger().info(`ExternalEditWatcher: Stopped watching ${filePath}`);
 	}
 
 	async stopWatchingAll() {
@@ -273,7 +273,7 @@ class ExternalEditWatcher {
 			return;
 		}
 
-		this.logger().debug('ExternalEditWatcher: Update note file: ' + note.id);
+		this.logger().debug(`ExternalEditWatcher: Update note file: ${note.id}`);
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.

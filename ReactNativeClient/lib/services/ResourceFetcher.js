@@ -46,7 +46,7 @@ class ResourceFetcher extends BaseService {
 	}
 
 	setFileApi(v) {
-		if (v !== null && typeof v !== 'function') throw new Error('fileApi must be a function that returns the API. Type is ' + typeof v);
+		if (v !== null && typeof v !== 'function') throw new Error(`fileApi must be a function that returns the API. Type is ${typeof v}`);
 		this.fileApi_ = v;
 	}
 
@@ -142,7 +142,7 @@ class ResourceFetcher extends BaseService {
 		};
 
 		if (!resource) {
-			this.logger().info('ResourceFetcher: Attempting to download a resource that does not exist (has been deleted?): ' + resourceId);
+			this.logger().info(`ResourceFetcher: Attempting to download a resource that does not exist (has been deleted?): ${resourceId}`);
 			await completeDownload(false);
 			return;
 		}
@@ -157,13 +157,13 @@ class ResourceFetcher extends BaseService {
 		this.fetchingItems_[resourceId] = resource;
 
 		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
-		const remoteResourceContentPath = this.resourceDirName_ + '/' + resource.id;
+		const remoteResourceContentPath = `${this.resourceDirName_}/${resource.id}`;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
 
 		const fileApi = await this.fileApi();
 
-		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
+		this.logger().debug(`ResourceFetcher: Downloading resource: ${resource.id}`);
 
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
@@ -171,11 +171,11 @@ class ResourceFetcher extends BaseService {
 			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
 			.then(async () => {
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
-				this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
+				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
 				await completeDownload(true, localResourceContentPath);
 			})
 			.catch(async error => {
-				this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
+				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
 				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
 				await completeDownload();
 			});
@@ -210,7 +210,7 @@ class ResourceFetcher extends BaseService {
 		if (this.addingResources_) return;
 		this.addingResources_ = true;
 
-		this.logger().info('ResourceFetcher: Auto-add resources: Mode: ' + Setting.value('sync.resourceDownloadMode'));
+		this.logger().info(`ResourceFetcher: Auto-add resources: Mode: ${Setting.value('sync.resourceDownloadMode')}`);
 
 		let count = 0;
 		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
@@ -219,7 +219,7 @@ class ResourceFetcher extends BaseService {
 			if (added) count++;
 		}
 
-		this.logger().info('ResourceFetcher: Auto-added resources: ' + count);
+		this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 		this.addingResources_ = false;
 	}
 

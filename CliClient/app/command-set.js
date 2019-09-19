@@ -16,7 +16,7 @@ class Command extends BaseCommand {
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
 			if (f.name === 'id') continue;
-			s.push(f.name + ' (' + Database.enumName('fieldType', f.type) + ')');
+			s.push(`${f.name} (${Database.enumName('fieldType', f.type)})`);
 		}
 
 		return _('Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s', s.join(', '));

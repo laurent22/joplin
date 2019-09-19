@@ -42,25 +42,25 @@ class DropboxApi {
 	}
 
 	loginUrl() {
-		return 'https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=' + this.clientId();
+		return `https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=${this.clientId()}`;
 	}
 
 	baseUrl(endPointFormat) {
-		if (['content', 'api'].indexOf(endPointFormat) < 0) throw new Error('Invalid end point format: ' + endPointFormat);
-		return 'https://' + endPointFormat + '.dropboxapi.com/2';
+		if (['content', 'api'].indexOf(endPointFormat) < 0) throw new Error(`Invalid end point format: ${endPointFormat}`);
+		return `https://${endPointFormat}.dropboxapi.com/2`;
 	}
 
 	requestToCurl_(url, options) {
 		let output = [];
 		output.push('curl');
-		if (options.method) output.push('-X ' + options.method);
+		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
 			for (let n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push('-H ' + '\'' + n + ': ' + options.headers[n] + '\'');
+				output.push(`${'-H ' + '\''}${n}: ${options.headers[n]}'`);
 			}
 		}
-		if (options.body) output.push('--data ' + '"' + options.body + '"');
+		if (options.body) output.push(`${'--data ' + '"'}${options.body}"`);
 		output.push(url);
 
 		return output.join(' ');
@@ -78,7 +78,7 @@ class DropboxApi {
 		for (var property in postData) {
 			var encodedKey = encodeURIComponent(property);
 			var encodedValue = encodeURIComponent(postData[property]);
-			formBody.push(encodedKey + '=' + encodedValue);
+			formBody.push(`${encodedKey}=${encodedValue}`);
 		}
 		formBody = formBody.join('&');
 
@@ -110,7 +110,7 @@ class DropboxApi {
 
 		const authToken = this.authToken();
 
-		if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+		if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
 
 		const endPointFormat = ['files/upload', 'files/download'].indexOf(path) >= 0 ? 'content' : 'api';
 
@@ -127,7 +127,7 @@ class DropboxApi {
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 
-		const url = path.indexOf('https://') === 0 ? path : this.baseUrl(endPointFormat) + '/' + path;
+		const url = path.indexOf('https://') === 0 ? path : `${this.baseUrl(endPointFormat)}/${path}`;
 
 		let tryCount = 0;
 
@@ -174,8 +174,8 @@ class DropboxApi {
 
 					// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 					// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-					const shortResponseText = (responseText + '').substr(0, 1024);
-					const error = new JoplinError(method + ' ' + path + ': ' + message + ' (' + response.status + '): ' + shortResponseText, code);
+					const shortResponseText = (`${responseText}`).substr(0, 1024);
+					const error = new JoplinError(`${method} ${path}: ${message} (${response.status}): ${shortResponseText}`, code);
 					error.httpStatus = response.status;
 					return error;
 				};
@@ -197,7 +197,7 @@ class DropboxApi {
 			} catch (error) {
 				tryCount++;
 				if (error && typeof error.code === 'string' && error.code.indexOf('too_many_write_operations') >= 0) {
-					this.logger().warn('too_many_write_operations ' + tryCount);
+					this.logger().warn(`too_many_write_operations ${tryCount}`);
 					if (tryCount >= 3) {
 						throw error;
 					}

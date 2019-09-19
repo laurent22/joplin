@@ -76,7 +76,7 @@ class NotePropertiesDialog extends React.Component {
 
 		formNote.location = '';
 		if (Number(note.latitude) || Number(note.longitude)) {
-			formNote.location = note.latitude + ', ' + note.longitude;
+			formNote.location = `${note.latitude}, ${note.longitude}`;
 		}
 
 		formNote.revisionsLink = note.id;
@@ -328,7 +328,7 @@ class NotePropertiesDialog extends React.Component {
 		if (editCompHandler) {
 			editComp = (
 				<a href="#" onClick={editCompHandler} style={styles.editPropertyButton}>
-					<i className={'fa ' + editCompIcon} aria-hidden="true" style={{ marginLeft: '.5em' }}></i>
+					<i className={`fa ${editCompIcon}`} aria-hidden="true" style={{ marginLeft: '.5em' }}></i>
 				</a>
 			);
 		}

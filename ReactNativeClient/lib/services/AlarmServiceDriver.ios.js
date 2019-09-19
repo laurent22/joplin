@@ -55,7 +55,7 @@ class AlarmServiceDriver {
 	}
 
 	async clearNotification(id) {
-		PushNotificationIOS.cancelLocalNotifications({ id: id + '' });
+		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
 	async scheduleNotification(notification) {
@@ -66,10 +66,10 @@ class AlarmServiceDriver {
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
 		const iosNotification = {
-			id: notification.id + '',
+			id: `${notification.id}`,
 			alertTitle: notification.title,
 			fireDate: notification.date,
-			userInfo: { id: notification.id + '' },
+			userInfo: { id: `${notification.id}` },
 		};
 
 		if ('body' in notification) iosNotification.alertBody = notification.body;

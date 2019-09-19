@@ -62,7 +62,7 @@ class Application extends BaseApplication {
 	}
 
 	checkForUpdateLoggerPath() {
-		return Setting.value('profileDir') + '/log-autoupdater.txt';
+		return `${Setting.value('profileDir')}/log-autoupdater.txt`;
 	}
 
 	reducer(state = appDefaultState, action) {
@@ -203,7 +203,7 @@ class Application extends BaseApplication {
 
 			}
 		} catch (error) {
-			error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
+			error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 			throw error;
 		}
 
@@ -272,16 +272,16 @@ class Application extends BaseApplication {
 
 		const sortNoteFolderItems = (type) => {
 			const sortItems = [];
-			const sortOptions = Setting.enumOptions(type + '.sortOrder.field');
+			const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 			for (let field in sortOptions) {
 				if (!sortOptions.hasOwnProperty(field)) continue;
 				sortItems.push({
 					label: sortOptions[field],
 					screens: ['Main'],
 					type: 'checkbox',
-					checked: Setting.value(type + '.sortOrder.field') === field,
+					checked: Setting.value(`${type}.sortOrder.field`) === field,
 					click: () => {
-						Setting.setValue(type + '.sortOrder.field', field);
+						Setting.setValue(`${type}.sortOrder.field`, field);
 						this.refreshMenu();
 					},
 				});
@@ -290,12 +290,12 @@ class Application extends BaseApplication {
 			sortItems.push({ type: 'separator' });
 
 			sortItems.push({
-				label: Setting.settingMetadata(type + '.sortOrder.reverse').label(),
+				label: Setting.settingMetadata(`${type}.sortOrder.reverse`).label(),
 				type: 'checkbox',
-				checked: Setting.value(type + '.sortOrder.reverse'),
+				checked: Setting.value(`${type}.sortOrder.reverse`),
 				screens: ['Main'],
 				click: () => {
-					Setting.setValue(type + '.sortOrder.reverse', !Setting.value(type + '.sortOrder.reverse'));
+					Setting.setValue(`${type}.sortOrder.reverse`, !Setting.value(`${type}.sortOrder.reverse`));
 				},
 			});
 
@@ -408,7 +408,7 @@ class Application extends BaseApplication {
 		}
 
 		exportItems.push({
-			label: 'PDF - ' + _('PDF File'),
+			label: `PDF - ${_('PDF File')}`,
 			screens: ['Main'],
 			click: async () => {
 				this.dispatch({
@@ -567,11 +567,11 @@ class Application extends BaseApplication {
 				_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
 			];
 			if (gitInfo) {
-				message.push('\n' + gitInfo);
+				message.push(`\n${gitInfo}`);
 				console.info(gitInfo);
 			}
 			bridge().showInfoMessageBox(message.join('\n'), {
-				icon: bridge().electronApp().buildDir() + '/icons/32x32.png',
+				icon: `${bridge().electronApp().buildDir()}/icons/32x32.png`,
 			});
 		}
 
@@ -1027,7 +1027,7 @@ class Application extends BaseApplication {
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
-			const menuItem = Menu.getApplicationMenu().getMenuItemById('edit:' + itemId);
+			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
 			menuItem.enabled = !!note && note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN;
 		}
@@ -1052,13 +1052,13 @@ class Application extends BaseApplication {
 
 	updateEditorFont() {
 		const fontFamilies = [];
-		if (Setting.value('style.editor.fontFamily')) fontFamilies.push('"' + Setting.value('style.editor.fontFamily') + '"');
+		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
 		fontFamilies.push('monospace');
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
 
-		const css = '.ace_editor * { font-family: ' + fontFamilies.join(', ') + ' !important; }';
+		const css = `.ace_editor * { font-family: ${fontFamilies.join(', ')} !important; }`;
 		const styleTag = document.createElement('style');
 		styleTag.type = 'text/css';
 		styleTag.appendChild(document.createTextNode(css));
@@ -1073,7 +1073,7 @@ class Application extends BaseApplication {
 
 			} catch (error) {
 				let msg = error.message ? error.message : '';
-				msg = 'Could not load custom css from ' + filePath + '\n' + msg;
+				msg = `Could not load custom css from ${filePath}\n${msg}`;
 				error.message = msg;
 				throw error;
 			}
@@ -1139,7 +1139,7 @@ class Application extends BaseApplication {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		const cssString = await this.loadCustomCss(Setting.value('profileDir') + '/userstyle.css');
+		const cssString = await this.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',
@@ -1193,7 +1193,7 @@ class Application extends BaseApplication {
 		}
 
 		const clipperLogger = new Logger();
-		clipperLogger.addTarget('file', { path: Setting.value('profileDir') + '/log-clipper.txt' });
+		clipperLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-clipper.txt` });
 		clipperLogger.addTarget('console');
 
 		ClipperServer.instance().setLogger(clipperLogger);

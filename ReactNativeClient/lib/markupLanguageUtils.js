@@ -6,7 +6,7 @@ class MarkupLanguageUtils {
 	lib_(language) {
 		if (language === Note.MARKUP_LANGUAGE_HTML) return htmlUtils;
 		if (language === Note.MARKUP_LANGUAGE_MARKDOWN) return markdownUtils;
-		throw new Error('Unsupported markup language: ' + language);
+		throw new Error(`Unsupported markup language: ${language}`);
 	}
 
 	extractImageUrls(language, text) {

@@ -114,7 +114,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		const theme = themeStyle(this.props.theme);
 
 		const markupToHtml = new MarkupToHtml({
-			resourceBaseUrl: 'file://' + Setting.value('resourceDir') + '/',
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 
 		const result = markupToHtml.render(markupLanguage, noteBody, theme, {
@@ -138,7 +138,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 			revisionListItems.push(
 				<option key={rev.id} value={rev.id}>
-					{time.formatMsToLocal(rev.item_updated_time) + ' (' + stats + ')'}
+					{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
 				</option>
 			);
 		}
@@ -149,7 +149,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		const titleInput = (
 			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom: 10 }}>
 				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>
-					{'⬅ ' + _('Back')}
+					{`⬅ ${_('Back')}`}
 				</button>
 				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''} />
 				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>

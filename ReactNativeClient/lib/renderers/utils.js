@@ -67,7 +67,7 @@ utils.resourceStatusFile = function(state) {
 	if (state === 'encrypted') return utils.loaderImage();
 	if (state === 'error') return utils.errorImage();
 
-	throw new Error('Unknown state: ' + state);
+	throw new Error(`Unknown state: ${state}`);
 };
 
 utils.resourceStatus = function(resourceInfo) {
@@ -103,12 +103,12 @@ utils.imageReplacement = function(src, resources, resourceBaseUrl) {
 
 	if (resourceStatus !== 'ready') {
 		const icon = utils.resourceStatusImage(resourceStatus);
-		return '<div class="not-loaded-resource resource-status-' + resourceStatus + '" data-resource-id="' + resourceId + '">' + '<img src="data:image/svg+xml;utf8,' + htmlentities(icon) + '"/>' + '</div>';
+		return `<div class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>` + '</div>';
 	}
 
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';
 	if (Resource.isSupportedImageMimeType(mime)) {
-		let newSrc = './' + Resource.filename(resource);
+		let newSrc = `./${Resource.filename(resource)}`;
 		if (resourceBaseUrl) newSrc = resourceBaseUrl + newSrc;
 		return {
 			'data-resource-id': resource.id,

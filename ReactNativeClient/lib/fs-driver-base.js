@@ -9,11 +9,11 @@ class FsDriverBase {
 
 	async readDirStatsHandleRecursion_(basePath, stat, output, options) {
 		if (options.recursive && stat.isDirectory()) {
-			const subPath = basePath + '/' + stat.path;
+			const subPath = `${basePath}/${stat.path}`;
 			const subStats = await this.readDirStats(subPath, options);
 			for (let j = 0; j < subStats.length; j++) {
 				const subStat = subStats[j];
-				subStat.path = stat.path + '/' + subStat.path;
+				subStat.path = `${stat.path}/${subStat.path}`;
 				output.push(subStat);
 			}
 		}
@@ -26,14 +26,14 @@ class FsDriverBase {
 
 		let nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
-		if (extension) extension = '.' + extension;
+		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
 			const exists = await this.exists(nameToTry);
 			if (!exists) return nameToTry;
-			nameToTry = nameNoExt + ' (' + counter + ')' + extension;
+			nameToTry = `${nameNoExt} (${counter})${extension}`;
 			counter++;
-			if (counter >= 1000) nameToTry = nameNoExt + ' (' + new Date().getTime() + ')' + extension;
+			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
 			if (counter >= 10000) throw new Error('Cannot find unique title');
 		}
 	}
@@ -45,7 +45,7 @@ class FsDriverBase {
 
 		for (const stat of stats) {
 			if (stat.path.indexOf(filenameStart) === 0) {
-				await this.remove(dirPath + '/' + stat.path);
+				await this.remove(`${dirPath}/${stat.path}`);
 			}
 		}
 	}

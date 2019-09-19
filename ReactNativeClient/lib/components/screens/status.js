@@ -60,7 +60,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				let style = Object.assign({}, baseStyle);
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
-				lines.push({ key: 'section_' + i, isSection: true, text: section.title });
+				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
 
 				for (let n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
@@ -82,10 +82,10 @@ class StatusScreenComponent extends BaseScreenComponent {
 						text = item;
 					}
 
-					lines.push({ key: 'item_' + i + '_' + n, text: text, retryHandler: retryHandler });
+					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler: retryHandler });
 				}
 
-				lines.push({ key: 'divider2_' + i, isDivider: true });
+				lines.push({ key: `divider2_${i}`, isDivider: true });
 			}
 
 			return (

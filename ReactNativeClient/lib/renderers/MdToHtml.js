@@ -81,7 +81,7 @@ class MdToHtml {
 				try {
 					let hlCode = '';
 
-					const cacheKey = md5(str + '_' + lang);
+					const cacheKey = md5(`${str}_${lang}`);
 
 					if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
 						hlCode = this.cachedHighlightedCode_[cacheKey];
@@ -97,12 +97,12 @@ class MdToHtml {
 					if (shim.isReactNative()) {
 						context.css['hljs'] = shim.loadCssFromJs(options.codeTheme);
 					} else {
-						context.cssFiles['hljs'] = 'highlight/styles/' + options.codeTheme;
+						context.cssFiles['hljs'] = `highlight/styles/${options.codeTheme}`;
 					}
 
-					return '<pre class="hljs"><code>' + hlCode + '</code></pre>';
+					return `<pre class="hljs"><code>${hlCode}</code></pre>`;
 				} catch (error) {
-					return '<pre class="hljs"><code>' + markdownIt.utils.escapeHtml(str) + '</code></pre>';
+					return `<pre class="hljs"><code>${markdownIt.utils.escapeHtml(str)}</code></pre>`;
 				}
 			},
 		});
@@ -148,7 +148,7 @@ class MdToHtml {
 		});
 
 		for (let key in plugins) {
-			if (Setting.value('markdown.plugin.' + key)) markdownIt.use(plugins[key].module, plugins[key].options);
+			if (Setting.value(`markdown.plugin.${key}`)) markdownIt.use(plugins[key].module, plugins[key].options);
 		}
 
 		setupLinkify(markdownIt);
@@ -165,15 +165,15 @@ class MdToHtml {
 		for (let k in context.assetLoaders) {
 			if (!context.assetLoaders.hasOwnProperty(k)) continue;
 			context.assetLoaders[k]().catch(error => {
-				console.warn('MdToHtml: Error loading assets for ' + k + ': ', error.message);
+				console.warn(`MdToHtml: Error loading assets for ${k}: `, error.message);
 			});
 		}
 
 		if (options.userCss) cssStrings.push(options.userCss);
 
-		const styleHtml = '<style>' + cssStrings.join('\n') + '</style>';
+		const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
 
-		const html = styleHtml + '<div id="rendered-md">' + renderedBody + '</div>';
+		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
 
 		const output = {
 			html: html,

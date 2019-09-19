@@ -60,7 +60,7 @@ const derivedStateCache_ = {};
 // Allows, for a given state, to return the same derived
 // objects, to prevent unecessary updates on calling components.
 const cacheEnabledOutput = (key, output) => {
-	key = key + '_' + JSON.stringify(output);
+	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
 
 	derivedStateCache_[key] = output;
@@ -724,7 +724,7 @@ const reducer = (state = defaultState, action) => {
 			break;
 		}
 	} catch (error) {
-		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
+		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 		throw error;
 	}
 

@@ -147,7 +147,7 @@ class JoplinDatabase extends Database {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
-		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
+		if (!this.tableFields_[tableName]) throw new Error(`Unknown table: ${tableName}`);
 		const output = this.tableFields_[tableName].slice();
 
 		if (options.includeDescription) {
@@ -180,8 +180,8 @@ class JoplinDatabase extends Database {
 
 		const queries = [];
 		for (const n of tableNames) {
-			queries.push('DELETE FROM ' + n);
-			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+			queries.push(`DELETE FROM ${n}`);
+			queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 		}
 
 		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
@@ -260,7 +260,7 @@ class JoplinDatabase extends Database {
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
 					chain.push(() => {
-						return this.selectAll('PRAGMA table_info("' + tableName + '")').then(pragmas => {
+						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
 								let item = pragmas[i];
 								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
@@ -316,7 +316,7 @@ class JoplinDatabase extends Database {
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
-			this.logger().info('Converting database to version ' + targetVersion);
+			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
 
@@ -353,11 +353,11 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_created_time INT NOT NULL DEFAULT 0');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0');
-					queries.push('UPDATE ' + n + ' SET user_created_time = created_time');
-					queries.push('UPDATE ' + n + ' SET user_updated_time = updated_time');
-					queries.push('CREATE INDEX ' + n + '_user_updated_time ON ' + n + ' (user_updated_time)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_created_time INT NOT NULL DEFAULT 0`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0`);
+					queries.push(`UPDATE ${n} SET user_created_time = created_time`);
+					queries.push(`UPDATE ${n} SET user_updated_time = updated_time`);
+					queries.push(`CREATE INDEX ${n}_user_updated_time ON ${n} (user_updated_time)`);
 				}
 			}
 
@@ -391,9 +391,9 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
-					queries.push('CREATE INDEX ' + n + '_encryption_applied ON ' + n + ' (encryption_applied)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0`);
+					queries.push(`CREATE INDEX ${n}_encryption_applied ON ${n} (encryption_applied)`);
 				}
 
 				queries.push('ALTER TABLE sync_items ADD COLUMN force_sync INT NOT NULL DEFAULT 0');

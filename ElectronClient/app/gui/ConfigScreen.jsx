@@ -49,14 +49,14 @@ class ConfigScreenComponent extends React.Component {
 			if (section.name === name) return section;
 		}
 
-		throw new Error('Invalid section name: ' + name);
+		throw new Error(`Invalid section name: ${name}`);
 	}
 
 	screenFromName(screenName) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
 		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
 
-		throw new Error('Invalid screen name: ' + screenName);
+		throw new Error(`Invalid screen name: ${screenName}`);
 	}
 
 	switchSection(name) {
@@ -249,7 +249,7 @@ class ConfigScreenComponent extends React.Component {
 				<div key={key + value.toString()} style={rowStyle}>
 					<div style={controlStyle}>
 						<input
-							id={'setting_checkbox_' + key}
+							id={`setting_checkbox_${key}`}
 							type="checkbox"
 							checked={!!value}
 							onChange={event => {
@@ -261,7 +261,7 @@ class ConfigScreenComponent extends React.Component {
 								onCheckboxClick(event);
 							}}
 							style={checkboxLabelStyle}
-							htmlFor={'setting_checkbox_' + key}
+							htmlFor={`setting_checkbox_${key}`}
 						>
 							{md.label()}
 						</label>
@@ -289,7 +289,7 @@ class ConfigScreenComponent extends React.Component {
 					if (!cmdArray[0] && !cmdArray[1]) return '';
 					let cmdString = pathUtils.quotePath(cmdArray[0]);
 					if (!cmdString) cmdString = '""';
-					if (cmdArray[1]) cmdString += ' ' + cmdArray[1];
+					if (cmdArray[1]) cmdString += ` ${cmdArray[1]}`;
 					return cmdString;
 				};
 
@@ -390,7 +390,7 @@ class ConfigScreenComponent extends React.Component {
 			};
 
 			const label = [md.label()];
-			if (md.unitLabel) label.push('(' + md.unitLabel() + ')');
+			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
 
 			const inputStyle = Object.assign({}, textInputBaseStyle);
 
@@ -414,7 +414,7 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else {
-			console.warn('Type not implemented: ' + key);
+			console.warn(`Type not implemented: ${key}`);
 		}
 
 		return output;

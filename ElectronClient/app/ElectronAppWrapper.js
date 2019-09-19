@@ -39,7 +39,7 @@ class ElectronAppWrapper {
 		const stateOptions = {
 			defaultWidth: 800,
 			defaultHeight: 600,
-			file: 'window-state-' + this.env_ + '.json',
+			file: `window-state-${this.env_}.json`,
 		};
 
 		if (this.profilePath_) stateOptions.path = this.profilePath_;
@@ -145,9 +145,9 @@ class ElectronAppWrapper {
 
 	buildDir() {
 		if (this.buildDir_) return this.buildDir_;
-		let dir = __dirname + '/build';
+		let dir = `${__dirname}/build`;
 		if (!fs.pathExistsSync(dir)) {
-			dir = dirname(__dirname) + '/build';
+			dir = `${dirname(__dirname)}/build`;
 			if (!fs.pathExistsSync(dir)) throw new Error('Cannot find build dir');
 		}
 
@@ -172,7 +172,7 @@ class ElectronAppWrapper {
 	// Note: this must be called only after the "ready" event of the app has been dispatched
 	createTray(contextMenu) {
 		try {
-			this.tray_ = new Tray(this.buildDir() + '/icons/' + this.trayIconFilename_());
+			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
 			this.tray_.setToolTip(this.electronApp_.getName());
 			this.tray_.setContextMenu(contextMenu);
 

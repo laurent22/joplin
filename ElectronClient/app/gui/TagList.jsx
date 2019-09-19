@@ -11,7 +11,7 @@ class TagListComponent extends React.Component {
 
 		style.display = 'flex';
 		style.flexDirection = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
 

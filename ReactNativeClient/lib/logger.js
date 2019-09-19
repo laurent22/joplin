@@ -48,10 +48,10 @@ class Logger {
 		if (typeof object === 'object') {
 			if (object instanceof Error) {
 				output = object.toString();
-				if (object.code) output += '\nCode: ' + object.code;
-				if (object.headers) output += '\nHeader: ' + JSON.stringify(object.headers);
-				if (object.request) output += '\nRequest: ' + (object.request.substr ? object.request.substr(0, 1024) : '');
-				if (object.stack) output += '\n' + object.stack;
+				if (object.code) output += `\nCode: ${object.code}`;
+				if (object.headers) output += `\nHeader: ${JSON.stringify(object.headers)}`;
+				if (object.request) output += `\nRequest: ${object.request.substr ? object.request.substr(0, 1024) : ''}`;
+				if (object.stack) output += `\n${object.stack}`;
 			} else {
 				output = JSON.stringify(object);
 			}
@@ -65,7 +65,7 @@ class Logger {
 	objectsToString(...object) {
 		let output = [];
 		for (let i = 0; i < object.length; i++) {
-			output.push('"' + this.objectToString(object[i]) + '"');
+			output.push(`"${this.objectToString(object[i])}"`);
 		}
 		return output.join(', ');
 	}
@@ -92,8 +92,8 @@ class Logger {
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
 			if (target.type == 'database') {
-				let sql = 'SELECT * FROM logs WHERE level IN (' + options.levels.join(',') + ') ORDER BY timestamp DESC';
-				if (limit !== null) sql += ' LIMIT ' + limit;
+				let sql = `SELECT * FROM logs WHERE level IN (${options.levels.join(',')}) ORDER BY timestamp DESC`;
+				if (limit !== null) sql += ` LIMIT ${limit}`;
 				return await target.database.selectAll(sql);
 			}
 		}
@@ -108,7 +108,7 @@ class Logger {
 	log(level, ...object) {
 		if (!this.targets_.length) return;
 
-		let line = moment().format('YYYY-MM-DD HH:mm:ss') + ': ';
+		let line = `${moment().format('YYYY-MM-DD HH:mm:ss')}: `;
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
@@ -124,7 +124,7 @@ class Logger {
 				consoleObj[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
-				Logger.fsDriver().appendFileSync(target.path, line + serializedObject + '\n');
+				Logger.fsDriver().appendFileSync(target.path, `${line + serializedObject}\n`);
 			} else if (target.type == 'database') {
 				let msg = this.objectsToString(...object);
 

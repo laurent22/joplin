@@ -509,9 +509,9 @@ class BaseApplication {
 	determineProfileDir(initArgs) {
 		if (initArgs.profileDir) return initArgs.profileDir;
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return process.env.PORTABLE_EXECUTABLE_DIR + '/JoplinProfile';
+		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 
-		return os.homedir() + '/.config/' + Setting.value('appName');
+		return `${os.homedir()}/.config/${Setting.value('appName')}`;
 	}
 
 	async testing() {
@@ -548,12 +548,12 @@ class BaseApplication {
 
 		const profileDir = this.determineProfileDir(initArgs);
 		const resourceDirName = 'resources';
-		const resourceDir = profileDir + '/' + resourceDirName;
-		const tempDir = profileDir + '/tmp';
+		const resourceDir = `${profileDir}/${resourceDirName}`;
+		const tempDir = `${profileDir}/tmp`;
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('templateDir', profileDir + '/templates');
+		Setting.setConstant('templateDir', `${profileDir}/templates`);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -567,29 +567,29 @@ class BaseApplication {
 		// Clean up any remaining watched files (they start with "edit-")
 		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
 
-		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
+		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
 		initArgs = Object.assign(initArgs, extraFlags);
 
-		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
+		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
 		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
 		reg.dispatch = () => {};
 
-		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
+		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
 			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
 		}
 
-		this.logger_.info('Profile directory: ' + profileDir);
+		this.logger_.info(`Profile directory: ${profileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
-		await this.database_.open({ name: profileDir + '/database.sqlite' });
+		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
@@ -600,7 +600,7 @@ class BaseApplication {
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info('First start: detected locale as ' + locale);
+			reg.logger().info(`First start: detected locale as ${locale}`);
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', 0);

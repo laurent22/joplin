@@ -132,7 +132,7 @@ class Dialog extends React.PureComponent {
 			const s = splitted[i].trim();
 			if (!s) continue;
 
-			output.push('title:' + s + '*');
+			output.push(`title:${s}*`);
 		}
 
 		return output.join(' ');
@@ -153,11 +153,11 @@ class Dialog extends React.PureComponent {
 
 			if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = '*' + this.state.query.split(' ')[0].substr(1).trim() + '*';
+				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = '*' + this.state.query.split(' ')[0].substr(1).trim() + '*';
+				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Folder.search({ titlePattern: searchQuery });
 
 				for (let i = 0; i < results.length; i++) {
@@ -246,7 +246,7 @@ class Dialog extends React.PureComponent {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
-		const titleHtml = surroundKeywords(this.state.keywords, item.title, '<span style="font-weight: bold; color: ' + theme.colorBright + ';">', '</span>');
+		const titleHtml = surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
 
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>;
 

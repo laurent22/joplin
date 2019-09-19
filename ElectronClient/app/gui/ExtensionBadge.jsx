@@ -6,19 +6,19 @@ const { _ } = require('lib/locale.js');
 function platformAssets(type) {
 	if (type === 'firefox') {
 		return {
-			logoImage: bridge().buildDir() + '/images/firefox-logo.svg',
+			logoImage: `${bridge().buildDir()}/images/firefox-logo.svg`,
 			locationLabel: _('Firefox Extension'),
 		};
 	}
 
 	if (type === 'chrome') {
 		return {
-			logoImage: bridge().buildDir() + '/images/chrome-logo.svg',
+			logoImage: `${bridge().buildDir()}/images/chrome-logo.svg`,
 			locationLabel: _('Chrome Web Store'),
 		};
 	}
 
-	throw new Error('Invalid type:' + type);
+	throw new Error(`Invalid type:${type}`);
 }
 
 function ExtensionBadge(props) {

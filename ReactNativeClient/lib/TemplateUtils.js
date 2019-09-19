@@ -38,7 +38,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 			files = await shim.fsDriver().readDirStats(filePath);
 		} catch (error) {
 			let msg = error.message ? error.message : '';
-			msg = 'Could not read template names from ' + filePath + '\n' + msg;
+			msg = `Could not read template names from ${filePath}\n${msg}`;
 			error.message = msg;
 			throw error;
 		}
@@ -50,11 +50,11 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		files.forEach(async file => {
 			if (file.path.endsWith('.md')) {
 				try {
-					let fileString = await shim.fsDriver().readFile(filePath + '/' + file.path, 'utf-8');
+					let fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');
 					templates.push({ label: file.path, value: fileString });
 				} catch (error) {
 					let msg = error.message ? error.message : '';
-					msg = 'Could not load template ' + file.path + '\n' + msg;
+					msg = `Could not load template ${file.path}\n${msg}`;
 					error.message = msg;
 					throw error;
 				}

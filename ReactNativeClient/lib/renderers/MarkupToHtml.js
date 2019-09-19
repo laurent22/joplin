@@ -18,7 +18,7 @@ class MarkupToHtml {
 		} else if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
 			RendererClass = HtmlToHtml;
 		} else {
-			throw new Error('Invalid markup language: ' + markupLanguage);
+			throw new Error(`Invalid markup language: ${markupLanguage}`);
 		}
 
 		this.renderers_[markupLanguage] = new RendererClass(this.options_);

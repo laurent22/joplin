@@ -58,7 +58,7 @@ cliUtils.parseFlags = function(flags) {
 };
 
 cliUtils.parseCommandArg = function(arg) {
-	if (arg.length <= 2) throw new Error('Invalid command arg: ' + arg);
+	if (arg.length <= 2) throw new Error(`Invalid command arg: ${arg}`);
 
 	const c1 = arg[0];
 	const c2 = arg[arg.length - 1];
@@ -69,7 +69,7 @@ cliUtils.parseCommandArg = function(arg) {
 	} else if (c1 == '[' && c2 == ']') {
 		return { required: false, name: name };
 	} else {
-		throw new Error('Invalid command arg: ' + arg);
+		throw new Error(`Invalid command arg: ${arg}`);
 	}
 };
 
@@ -82,7 +82,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	let booleanFlags = [];
 	let aliases = {};
 	for (let i = 0; i < options.length; i++) {
-		if (options[i].length != 2) throw new Error('Invalid options: ' + options[i]);
+		if (options[i].length != 2) throw new Error(`Invalid options: ${options[i]}`);
 		let flags = options[i][0];
 
 		flags = cliUtils.parseFlags(flags);
@@ -136,7 +136,7 @@ cliUtils.promptMcq = function(message, answers) {
 	message += '\n\n';
 	for (let n in answers) {
 		if (!answers.hasOwnProperty(n)) continue;
-		message += _('%s: %s', n, answers[n]) + '\n';
+		message += `${_('%s: %s', n, answers[n])}\n`;
 	}
 
 	message += '\n';
@@ -165,10 +165,10 @@ cliUtils.promptConfirm = function(message, answers = null) {
 		output: process.stdout,
 	});
 
-	message += ' (' + answers.join('/') + ')';
+	message += ` (${answers.join('/')})`;
 
 	return new Promise((resolve) => {
-		rl.question(message + ' ', answer => {
+		rl.question(`${message} `, answer => {
 			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
 			rl.close();
 			resolve(ok);

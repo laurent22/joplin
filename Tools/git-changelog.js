@@ -4,12 +4,12 @@
 
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
 const { execCommand } = require('./tool-utils.js');
 
 async function gitLog(sinceTag) {
-	let lines = await execCommand('git log --pretty=format:"%H:%s" ' + sinceTag + '..HEAD');
+	let lines = await execCommand(`git log --pretty=format:"%H:%s" ${sinceTag}..HEAD`);
 	lines = lines.split('\n');
 
 	const output = [];
@@ -33,7 +33,7 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('ios') >= 0) return 'ios';
 	if (tagName.indexOf('clipper') === 0) return 'clipper';
 	if (tagName.indexOf('cli') === 0) return 'cli';
-	throw new Error('Could not determine platform from tag: ' + tagName);
+	throw new Error(`Could not determine platform from tag: ${tagName}`);
 }
 
 function filterLogs(logs, platform) {
@@ -152,10 +152,10 @@ function formatCommitMessage(msg) {
 
 	const commitMessage = parseCommitMessage(output);
 
-	output = capitalizeFirstLetter(commitMessage.type) + ': ' + capitalizeFirstLetter(commitMessage.message);
+	output = `${capitalizeFirstLetter(commitMessage.type)}: ${capitalizeFirstLetter(commitMessage.message)}`;
 	if (commitMessage.issueNumber) {
-		const formattedIssueNum = '(#' + commitMessage.issueNumber + ')';
-		if (output.indexOf(formattedIssueNum) < 0) output += ' ' + formattedIssueNum;
+		const formattedIssueNum = `(#${commitMessage.issueNumber})`;
+		if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
 	}
 
 	return output;
@@ -179,8 +179,8 @@ function decreaseTagVersion(tag) {
 	const s = tag.split('.');
 	let num = Number(s.pop());
 	num--;
-	if (num < 0) throw new Error('Cannot decrease tag version: ' + tag);
-	s.push('' + num);
+	if (num < 0) throw new Error(`Cannot decrease tag version: ${tag}`);
+	s.push(`${num}`);
 	return s.join('.');
 }
 
@@ -233,13 +233,13 @@ async function main() {
 		} else if (l.indexOf('New') === 0) {
 			changelogNews.push(l);
 		} else {
-			throw new Error('Invalid changelog line: ' + l);
+			throw new Error(`Invalid changelog line: ${l}`);
 		}
 	}
 
 	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 
-	const changelogString = changelog.map(l => '- ' + l);
+	const changelogString = changelog.map(l => `- ${l}`);
 	console.info(changelogString.join('\n'));
 }
 

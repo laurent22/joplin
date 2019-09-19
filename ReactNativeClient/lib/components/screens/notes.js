@@ -37,7 +37,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			const makeCheckboxText = function(selected, sign, label) {
 				const s = sign === 'tick' ? '✓' : '⬤';
-				return (selected ? s + ' ' : '') + label;
+				return (selected ? `${s} ` : '') + label;
 			};
 
 			for (let field in sortNoteOptions) {
@@ -49,17 +49,17 @@ class NotesScreenComponent extends BaseScreenComponent {
 			}
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', '[ ' + Setting.settingMetadata('notes.sortOrder.reverse').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', `[ ${Setting.settingMetadata('notes.sortOrder.reverse').label()} ]`),
 				id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
 			});
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', '[ ' + Setting.settingMetadata('uncompletedTodosOnTop').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', `[ ${Setting.settingMetadata('uncompletedTodosOnTop').label()} ]`),
 				id: { name: 'uncompletedTodosOnTop', value: !Setting.value('uncompletedTodosOnTop') },
 			});
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', '[ ' + Setting.settingMetadata('showCompletedTodos').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', `[ ${Setting.settingMetadata('showCompletedTodos').label()} ]`),
 				id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 			});
 

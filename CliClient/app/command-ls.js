@@ -90,7 +90,7 @@ class Command extends BaseCommand {
 
 				let title = item.title;
 				if (!shortIdShown && (seenTitles.indexOf(item.title) >= 0 || !item.title)) {
-					title += ' (' + BaseModel.shortId(item.id) + ')';
+					title += ` (${BaseModel.shortId(item.id)})`;
 				} else {
 					seenTitles.push(item.title);
 				}
