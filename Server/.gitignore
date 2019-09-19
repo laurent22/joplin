@@ -2,3 +2,4 @@ node_modules/
 dist
 db.sqlite
 db-*.sqlite
+*.pid

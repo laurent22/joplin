@@ -6,5 +6,5 @@ export default async function(path:string, ctx:Koa.Context) {
 	const user = await parse.json(ctx);
 	const sessionController = new SessionController();
 	const session = await sessionController.authenticate(user.email, user.password);
-	ctx.response.body = { id: session.id };
+	return { id: session.id };
 }

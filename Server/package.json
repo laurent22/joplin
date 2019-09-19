@@ -13,13 +13,17 @@
     "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing npx knex migrate:latest && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/yargs": "^13.0.2",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "co-body": "^6.0.0",
     "fs-extra": "^8.1.0",
     "knex": "^0.19.4",
     "koa": "^2.8.1",
-    "sqlite3": "^4.1.0"
+    "query-string": "^6.8.3",
+    "sqlite3": "^4.1.0",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/koa": "^2.0.49",

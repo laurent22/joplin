@@ -2,7 +2,14 @@ require('app-module-path').addPath(__dirname + '/..');
 
 import * as Koa from 'koa';
 import sessionRoute from './routes/sessions';
+import pingRoute from './routes/ping';
 import { ErrorNotFound } from './utils/errors';
+import * as fs from 'fs-extra';
+import { argv } from 'yargs';
+
+const port = 3222;
+
+console.info('Starting server on port ' + port + ' and PID ' + process.pid + '...');
 
 const app = new Koa();
 
@@ -11,6 +18,7 @@ interface Routes {
 }
 
 const routes:Routes = {
+	'ping': pingRoute,
 	'sessions': sessionRoute,
 };
 
@@ -22,7 +30,9 @@ app.use(async (ctx:Koa.Context) => {
 
 	try {
 		if (routes[basePath]) {
-			await routes[basePath](subPath, ctx);
+			const responseObject = await routes[basePath](subPath, ctx);
+			ctx.response.status = 200;
+			ctx.response.body = responseObject;
 		} else {
 			throw new ErrorNotFound();
 		}
@@ -32,4 +42,11 @@ app.use(async (ctx:Koa.Context) => {
 	}
 });
 
-app.listen(3000);
+const pidFile = argv.pidfile as string;
+if (pidFile) {
+	console.info('Writing PID to ' + pidFile + '...');
+	fs.removeSync(pidFile as string);
+	fs.writeFileSync(pidFile, '' + process.pid);
+}
+
+app.listen(port);
