@@ -28,20 +28,36 @@ async function sleep(seconds:number) {
 	});
 }
 
-async function curl(method:string, path:string, query:object = null, body:any = null):Promise<object> {
+async function curl(method:string, path:string, query:object = null, body:any = null, headers:any = null, formFields:string[] = null):Promise<any> {
 	const curlCmd:string[] = ['curl'];
 
-	if (method !== 'GET') {
+	if (method !== 'GET' && !formFields && !body) {
 		curlCmd.push('-X');
 		curlCmd.push(method);
 	}
 
-	if (typeof body === 'object') {
+	if (typeof body === 'object' && body) {
 		curlCmd.push('--data');
 		curlCmd.push('\'' + JSON.stringify(body) + '\'');
 	}
 
+	if (formFields) {
+		for (const f of formFields) {
+			curlCmd.push('-F');
+			curlCmd.push('\'' + f + '\'');
+		}
+	}
+
+	if (headers) {
+		for (const k in headers) {
+			curlCmd.push('--header');
+			curlCmd.push('"' + k + ': ' + headers[k] + '"');
+		}
+	}
+
 	curlCmd.push('http://localhost:3222/' + path + (query ? '?' + stringify(query) : ''));
+
+	console.info('Running ' + curlCmd.join(' '));
 
 	const result = await execCommand(curlCmd.join(' '));
 	return result ? JSON.parse(result) : null;
@@ -83,9 +99,16 @@ async function main() {
 
 	console.info('Server is ready');
 
-	response = await curl('POST', 'sessions', null, { email: 'admin@localhost', password: 'admin' });
+	const session = await curl('POST', 'api/sessions', null, { email: 'admin@localhost', password: 'admin' });
 
-	console.info(response);
+	console.info('Session: ', session);
+
+	response = await curl('POST', 'api/files', null, null, { 'X-API-AUTH': session.id }, [
+		'data=@' + serverRoot + '/tests/support/photo.jpg',
+		'props={"title":"my resource title"}',
+	]);
+
+	console.info('Response:', response);
 
 	serverProcess.kill();
 }
