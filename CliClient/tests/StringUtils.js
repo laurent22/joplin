@@ -38,7 +38,7 @@ describe('StringUtils', function() {
 
 			const actual = StringUtils.surroundKeywords(keywords, input, prefix, suffix);
 
-			expect(actual).toBe(expected, 'Test case ' + i);
+			expect(actual).toBe(expected, `Test case ${i}`);
 		}
 
 		done();

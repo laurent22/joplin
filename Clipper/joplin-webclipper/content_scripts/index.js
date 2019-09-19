@@ -26,9 +26,9 @@
 		if (url.indexOf('//') === 0) {
 			return location.protocol + url;
 		} else if (url[0] === '/') {
-			return location.protocol + '//' + location.host + url;
+			return `${location.protocol}//${location.host}${url}`;
 		} else {
-			return baseUrl() + '/' + url;
+			return `${baseUrl()}/${url}`;
 		}
 	}
 
@@ -255,7 +255,7 @@
 	}
 
 	async function prepareCommandResponse(command) {
-		console.info('Got command: ' + command.name);
+		console.info(`Got command: ${command.name}`);
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
@@ -343,15 +343,15 @@
 			messageComp.style.position = 'fixed';
 			messageComp.style.opacity = '0.95';
 			messageComp.style.fontSize = '14px';
-			messageComp.style.width = messageCompWidth + 'px';
-			messageComp.style.maxWidth = messageCompWidth + 'px';
+			messageComp.style.width = `${messageCompWidth}px`;
+			messageComp.style.maxWidth = `${messageCompWidth}px`;
 			messageComp.style.border = '1px solid black';
 			messageComp.style.background = 'white';
 			messageComp.style.color = 'black';
 			messageComp.style.top = '10px';
 			messageComp.style.textAlign = 'center';
 			messageComp.style.padding = '10px';
-			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px';
+			messageComp.style.left = `${Math.round(document.body.clientWidth / 2 - messageCompWidth / 2)}px`;
 			messageComp.style.zIndex = overlay.style.zIndex + 1;
 
 			messageComp.textContent = 'Drag and release to capture a screenshot';
@@ -375,10 +375,10 @@
 			let selectionArea = {};
 
 			const updateSelection = function() {
-				selection.style.left = selectionArea.x + 'px';
-				selection.style.top = selectionArea.y + 'px';
-				selection.style.width = selectionArea.width + 'px';
-				selection.style.height = selectionArea.height + 'px';
+				selection.style.left = `${selectionArea.x}px`;
+				selection.style.top = `${selectionArea.y}px`;
+				selection.style.width = `${selectionArea.width}px`;
+				selection.style.height = `${selectionArea.height}px`;
 			};
 
 			const setSelectionSizeFromMouse = function(event) {
@@ -448,7 +448,7 @@
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {
-			throw new Error('Unknown command: ' + JSON.stringify(command));
+			throw new Error(`Unknown command: ${JSON.stringify(command)}`);
 		}
 	}
 

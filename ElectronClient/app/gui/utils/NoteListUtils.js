@@ -128,7 +128,7 @@ class NoteListUtils {
 			if (noteIds.length === 1) {
 				exportMenu.append(
 					new MenuItem({
-						label: 'PDF - ' + _('PDF File'),
+						label: `PDF - ${_('PDF File')}`,
 						click: () => {
 							props.dispatch({
 								type: 'WINDOW_COMMAND',

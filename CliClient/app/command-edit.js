@@ -60,7 +60,7 @@ class Command extends BaseCommand {
 
 			const originalContent = await Note.serializeForEdit(note);
 
-			tempFilePath = Setting.value('tempDir') + '/' + uuid.create() + '.md';
+			tempFilePath = `${Setting.value('tempDir')}/${uuid.create()}.md`;
 			editorArgs.push(tempFilePath);
 
 			await fs.writeFile(tempFilePath, originalContent);

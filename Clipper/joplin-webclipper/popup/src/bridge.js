@@ -19,7 +19,7 @@ class Bridge {
 			console.info('Popup: Got command:', command);
 
 			if (command.warning) {
-				console.warn('Popup: Got warning: ' + command.warning);
+				console.warn(`Popup: Got warning: ${command.warning}`);
 				this.dispatch({ type: 'WARNING_SET', text: command.warning });
 			} else {
 				this.dispatch({ type: 'WARNING_SET', text: '' });
@@ -125,10 +125,10 @@ class Bridge {
 			state = randomClipperPort(state, this.env());
 
 			try {
-				console.info('findClipperServerPort: Trying ' + state.port);
-				const response = await fetch('http://127.0.0.1:' + state.port + '/ping');
+				console.info(`findClipperServerPort: Trying ${state.port}`);
+				const response = await fetch(`http://127.0.0.1:${state.port}/ping`);
 				const text = await response.text();
-				console.info('findClipperServerPort: Got response: ' + text);
+				console.info(`findClipperServerPort: Got response: ${text}`);
 				if (text.trim() === 'JoplinClipperServer') {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
@@ -182,7 +182,7 @@ class Bridge {
 
 	async clipperServerBaseUrl() {
 		const port = await this.clipperServerPort();
-		return 'http://127.0.0.1:' + port;
+		return `http://127.0.0.1:${port}`;
 	}
 
 	async tabsExecuteScript(options) {
@@ -192,7 +192,7 @@ class Bridge {
 			this.browser().tabs.executeScript(options, () => {
 				const e = this.browser().runtime.lastError;
 				if (e) {
-					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)];
+					const msg = [`tabsExecuteScript: Cannot load ${JSON.stringify(options)}`];
 					if (e.message) msg.push(e.message);
 					reject(new Error(msg.join(': ')));
 				}
@@ -277,7 +277,7 @@ class Bridge {
 	}
 
 	async clipperApiExec(method, path, query, body) {
-		console.info('Popup: ' + method + ' ' + path);
+		console.info(`Popup: ${method} ${path}`);
 
 		const baseUrl = await this.clipperServerBaseUrl();
 
@@ -295,13 +295,13 @@ class Bridge {
 			const s = [];
 			for (const k in query) {
 				if (!query.hasOwnProperty(k)) continue;
-				s.push(encodeURIComponent(k) + '=' + encodeURIComponent(query[k]));
+				s.push(`${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`);
 			}
 			queryString = s.join('&');
-			if (queryString) queryString = '?' + queryString;
+			if (queryString) queryString = `?${queryString}`;
 		}
 
-		const response = await fetch(baseUrl + '/' + path + queryString, fetchOptions);
+		const response = await fetch(`${baseUrl}/${path}${queryString}`, fetchOptions);
 		if (!response.ok) {
 			const msg = await response.text();
 			throw new Error(msg);

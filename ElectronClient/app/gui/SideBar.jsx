@@ -427,7 +427,7 @@ class SideBarComponent extends React.Component {
 		};
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
-		const expandIcon = <i style={expandIconStyle} className={'fa ' + iconName}></i>;
+		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
@@ -515,7 +515,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={'fa ' + iconName} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fa ${iconName}`} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = 'pointer';
@@ -603,7 +603,7 @@ class SideBarComponent extends React.Component {
 
 			const focusItem = focusItems[newIndex];
 
-			let actionName = focusItem.type.toUpperCase() + '_SELECT';
+			let actionName = `${focusItem.type.toUpperCase()}_SELECT`;
 
 			this.props.dispatch({
 				type: actionName,
@@ -664,7 +664,7 @@ class SideBarComponent extends React.Component {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
 		}
 
-		const icon = <i style={iconStyle} className={'fa ' + iconName} />;
+		const icon = <i style={iconStyle} className={`fa ${iconName}`} />;
 		return (
 			<a
 				className="synchronize-button"

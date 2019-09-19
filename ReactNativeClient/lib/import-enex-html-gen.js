@@ -110,7 +110,7 @@ function enexXmlToHtml_(stream, resources) {
 					}
 
 					if (!found) {
-						reject('Hash with no associated resource: ' + hash);
+						reject(`Hash with no associated resource: ${hash}`);
 					}
 				}
 
@@ -134,7 +134,7 @@ function enexXmlToHtml_(stream, resources) {
 			section.lines.push(`</${tagName}>`);
 		});
 
-		saxStream.on('attribute', function(attr) {});
+		saxStream.on('attribute', function() {});
 
 		saxStream.on('end', function() {
 			resolve({
@@ -161,7 +161,7 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 }
 
 const beautifyHtml = (html) => {
-	return new Promise((resolve, _reject) => {
+	return new Promise((resolve) => {
 		const options = {wrap: 0};
 		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
 	});

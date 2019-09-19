@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-const testImagePath = __dirname + '/../tests/support/photo.jpg';
+const testImagePath = `${__dirname}/../tests/support/photo.jpg`;
 
 describe('models_Resource', function() {
 

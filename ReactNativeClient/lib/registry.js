@@ -84,7 +84,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 		try {
 			const sync = await reg.syncTarget(syncTargetId).synchronizer();
 
-			const contextKey = 'sync.' + syncTargetId + '.context';
+			const contextKey = `sync.${syncTargetId}.context`;
 			let context = Setting.value(contextKey);
 			try {
 				context = context ? JSON.parse(context) : {};
@@ -92,7 +92,7 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 				// Clearing the context is inefficient since it means all items are going to be re-downloaded
 				// however it won't result in duplicate items since the synchroniser is going to compare each
 				// item to the current state.
-				reg.logger().warn('Could not parse JSON sync context ' + contextKey + ':', context);
+				reg.logger().warn(`Could not parse JSON sync context ${contextKey}:`, context);
 				reg.logger().info('Clearing context and starting from scratch');
 				context = null;
 			}
@@ -157,7 +157,7 @@ reg.setupRecurrentSync = () => {
 	if (!Setting.value('sync.interval')) {
 		reg.logger().debug('Recurrent sync is disabled');
 	} else {
-		reg.logger().debug('Setting up recurrent sync with interval ' + Setting.value('sync.interval'));
+		reg.logger().debug(`Setting up recurrent sync with interval ${Setting.value('sync.interval')}`);
 
 		if (Setting.value('env') === 'dev') {
 			reg.logger().info('Recurrent sync operation DISABLED!!!');

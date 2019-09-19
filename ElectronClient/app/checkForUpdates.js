@@ -42,7 +42,7 @@ async function fetchLatestRelease(options) {
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
 		}
 
 		json = await response.json();
@@ -53,7 +53,7 @@ async function fetchLatestRelease(options) {
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
 		}
 
 		json = await response.json();
@@ -112,11 +112,11 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 	checkInBackground_ = inBackground;
 
-	autoUpdateLogger_.info('checkForUpdates: Checking with options ' + JSON.stringify(options));
+	autoUpdateLogger_.info(`checkForUpdates: Checking with options ${JSON.stringify(options)}`);
 
 	fetchLatestRelease(options).then(release => {
-		autoUpdateLogger_.info('Current version: ' + packageInfo.version);
-		autoUpdateLogger_.info('Latest version: ' + release.version);
+		autoUpdateLogger_.info(`Current version: ${packageInfo.version}`);
+		autoUpdateLogger_.info(`Latest version: ${release.version}`);
 		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
@@ -126,12 +126,12 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 				buttons: [_('OK')],
 			});
 		} else {
-			const releaseNotes = release.notes.trim() ? '\n\n' + release.notes.trim() : '';
+			const releaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
 
 			const buttonIndex = dialog.showMessageBox(parentWindow_, {
 				type: 'info',
-				message: _('An update is available, do you want to download it now?') + '\n\n' + _('Your version: %s', packageInfo.version) + '\n' + _('New version: %s', newVersionString) + releaseNotes,
+				message: `${_('An update is available, do you want to download it now?')}\n\n${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
 				buttons: [_('Yes'), _('No')],
 			});
 

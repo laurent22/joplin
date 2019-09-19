@@ -16,7 +16,7 @@ function commandUserString(command) {
 	if (command.name === 'pageUrl') s.push('URL only');
 
 	const p = command.preProcessFor ? command.preProcessFor : 'markdown';
-	s.push('(' + p + ')');
+	s.push(`(${p})`);
 
 	return s.join(' ');
 }
@@ -234,7 +234,7 @@ class AppComponent extends Component {
 			this.focusNewTagInput_ = false;
 			let lastRef = null;
 			for (let i = 0; i < 100; i++) {
-				const ref = this.refs['tagSelector' + i];
+				const ref = this.refs[`tagSelector${i}`];
 				if (!ref) break;
 				lastRef = ref;
 			}
@@ -245,7 +245,7 @@ class AppComponent extends Component {
 	render() {
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
-			if (this.state.contentScriptError) msg = 'The Joplin extension is not available on this tab due to: ' + this.state.contentScriptError;
+			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
 			return <div style={{padding: 10, fontSize: 12, maxWidth: 200}}>{msg}</div>;
 		}
 
@@ -268,7 +268,7 @@ class AppComponent extends Component {
 			} else if (operation.success) {
 				msg = 'Note was successfully created!';
 			} else {
-				msg = 'There was some error creating the note: ' + operation.errorMessage;
+				msg = `There was some error creating the note: ${operation.errorMessage}`;
 			}
 
 			previewComponent = (
@@ -300,7 +300,7 @@ class AppComponent extends Component {
 			const foundState = this.props.clipperServer.foundState;
 
 			if (foundState === 'found') {
-				msg = 'Ready on port ' + this.props.clipperServer.port;
+				msg = `Ready on port ${this.props.clipperServer.port}`;
 				led = led_green;
 			} else {
 				msg = stateToString(foundState);
@@ -308,7 +308,7 @@ class AppComponent extends Component {
 				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>;
 			}
 
-			msg = 'Service status: ' + msg;
+			msg = `Service status: ${msg}`;
 
 			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>;
 		};
@@ -346,7 +346,7 @@ class AppComponent extends Component {
 			for (let i = 0; i < this.state.selectedTags.length; i++) {
 				comps.push(<div key={i}>
 					<input
-						ref={'tagSelector' + i}
+						ref={`tagSelector${i}`}
 						data-index={i}
 						type="text"
 						list="tags"

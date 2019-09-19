@@ -68,12 +68,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const logItemCsv = service.csvCreate(logItemRows);
 
 			const itemListCsv = await service.basicItemList({ format: 'csv' });
-			const filePath = RNFS.ExternalDirectoryPath + '/syncReport-' + new Date().getTime() + '.txt';
+			const filePath = `${RNFS.ExternalDirectoryPath}/syncReport-${new Date().getTime()}.txt`;
 
 			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
 
 			await RNFS.writeFile(filePath, finalText);
-			alert('Debug report exported to ' + filePath);
+			alert(`Debug report exported to ${filePath}`);
 			this.setState({ creatingReport: false });
 		};
 
@@ -454,7 +454,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(
 			<View key="version_info_app" style={this.styles().settingContainer}>
-				<Text style={this.styles().settingText}>{'Joplin ' + VersionInfo.appVersion}</Text>
+				<Text style={this.styles().settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
 			</View>
 		);
 

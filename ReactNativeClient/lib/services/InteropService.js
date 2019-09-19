@@ -79,12 +79,12 @@ class InteropService {
 		];
 
 		importModules = importModules.map(a => {
-			const className = a.importerClass || 'InteropService_Importer_' + toTitleCase(a.format);
+			const className = a.importerClass || `InteropService_Importer_${toTitleCase(a.format)}`;
 			const output = Object.assign(
 				{},
 				{
 					type: 'importer',
-					path: 'lib/services/' + className,
+					path: `lib/services/${className}`,
 				},
 				a
 			);
@@ -93,12 +93,12 @@ class InteropService {
 		});
 
 		exportModules = exportModules.map(a => {
-			const className = 'InteropService_Exporter_' + toTitleCase(a.format);
+			const className = `InteropService_Exporter_${toTitleCase(a.format)}`;
 			return Object.assign(
 				{},
 				{
 					type: 'exporter',
-					path: 'lib/services/' + className,
+					path: `lib/services/${className}`,
 				},
 				a
 			);
@@ -108,9 +108,9 @@ class InteropService {
 
 		this.modules_ = this.modules_.map(a => {
 			a.fullLabel = function(moduleSource = null) {
-				const label = [this.format.toUpperCase() + ' - ' + this.description];
+				const label = [`${this.format.toUpperCase()} - ${this.description}`];
 				if (moduleSource && this.sources.length > 1) {
-					label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
+					label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 				}
 				return label.join(' ');
 			};

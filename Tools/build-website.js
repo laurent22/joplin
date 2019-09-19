@@ -373,7 +373,7 @@ function markdownToHtml(md, templateParams) {
 			let temp = output;
 			let index = 1;
 			while (doneNames.indexOf(temp) >= 0) {
-				temp = output + '-' + index;
+				temp = `${output}-${index}`;
 				index++;
 			}
 			output = temp;
@@ -388,7 +388,7 @@ function markdownToHtml(md, templateParams) {
 				const token = new Token('heading_anchor_open', 'a', 1);
 				token.attrs = [
 					['name', anchorName],
-					['href', '#' + anchorName],
+					['href', `#${anchorName}`],
 					['class', 'heading-anchor'],
 				];
 				output.push(token);
@@ -439,7 +439,7 @@ let tocHtml_ = null;
 const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
 function tocMd() {
 	if (tocMd_) return tocMd_;
-	const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
+	const md = fs.readFileSync(`${rootDir}/README.md`, 'utf8');
 	const toc = md.match(tocRegex_);
 	tocMd_ = toc[1];
 	return tocMd_;
@@ -453,7 +453,7 @@ function tocHtml() {
 	md = md.replace(/# Table of contents/, '');
 	md = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md/g, 'https://joplinapp.org/$1');
 	tocHtml_ = markdownIt.render(md);
-	tocHtml_ = '<div id="toc">' + tocHtml_ + '</div>';
+	tocHtml_ = `<div id="toc">${tocHtml_}</div>`;
 	return tocHtml_;
 }
 
@@ -462,7 +462,7 @@ function renderMdToHtml(md, targetPath, templateParams) {
 	md = md.replace(/# Joplin\n/, '');
 
 	templateParams.baseUrl = 'https://joplinapp.org';
-	templateParams.imageBaseUrl = templateParams.baseUrl + '/images';
+	templateParams.imageBaseUrl = `${templateParams.baseUrl}/images`;
 	templateParams.tocHtml = tocHtml();
 
 	const title = [];
@@ -485,7 +485,7 @@ function renderFileToHtml(sourcePath, targetPath, templateParams) {
 }
 
 function makeHomePageMd() {
-	let md = fs.readFileSync(rootDir + '/README.md', 'utf8');
+	let md = fs.readFileSync(`${rootDir}/README.md`, 'utf8');
 	md = md.replace(tocRegex_, '');
 
 	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
@@ -498,7 +498,7 @@ function makeHomePageMd() {
 async function main() {
 	tocMd();
 
-	renderMdToHtml(makeHomePageMd(), rootDir + '/docs/index.html', {});
+	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, {});
 
 	const sources = [
 		[ 'readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' } ],
@@ -519,7 +519,7 @@ async function main() {
 
 	for (const source of sources) {
 		source[2].sourceMarkdownFile = source[0];
-		renderFileToHtml(rootDir + '/' + source[0], rootDir + '/' + source[1], source[2]);
+		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, source[2]);
 	}
 
 	// renderFileToHtml(rootDir + '/readme/changelog.md', rootDir + '/docs/changelog/index.html', { title: 'Changelog (Desktop App)' });

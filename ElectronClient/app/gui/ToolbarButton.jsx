@@ -17,7 +17,7 @@ class ToolbarButton extends React.Component {
 				color: theme.color,
 			};
 			if (title) iconStyle.marginRight = 5;
-			icon = <i style={iconStyle} className={'fa ' + this.props.iconName}></i>;
+			icon = <i style={iconStyle} className={`fa ${this.props.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in this.props) || this.props.enabled === true;

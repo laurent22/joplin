@@ -102,8 +102,8 @@ class Revision extends BaseItem {
 		};
 
 		const output = [];
-		if (total.removed) output.push('-' + total.removed);
-		output.push('+' + total.added);
+		if (total.removed) output.push(`-${total.removed}`);
+		output.push(`+${total.added}`);
 		return output.join(', ');
 	}
 
@@ -123,7 +123,7 @@ class Revision extends BaseItem {
 
 	static async itemsWithRevisions(itemType, itemIds) {
 		if (!itemIds.length) return [];
-		const rows = await this.db().selectAll('SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("' + itemIds.join('","') + '")', [itemType]);
+		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ("${itemIds.join('","')}")`, [itemType]);
 
 		return rows.map(r => r.item_id);
 	}
@@ -147,7 +147,7 @@ class Revision extends BaseItem {
 			}
 		}
 
-		if (targetIndex < 0) throw new Error('Could not find revision: ' + revision.id);
+		if (targetIndex < 0) throw new Error(`Could not find revision: ${revision.id}`);
 
 		if (targetIndex !== revs.length - 1) {
 			revs = revs.slice();
@@ -213,7 +213,7 @@ class Revision extends BaseItem {
 		const doneItems = {};
 
 		for (const rev of revisions) {
-			const doneKey = rev.item_type + '_' + rev.item_id;
+			const doneKey = `${rev.item_type}_${rev.item_id}`;
 			if (doneItems[doneKey]) continue;
 
 			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1', [cutOffDate, rev.item_type, rev.item_id]);
@@ -221,10 +221,10 @@ class Revision extends BaseItem {
 			try {
 				const deleteQueryCondition = 'item_updated_time < ? AND item_id = ?';
 				const deleteQueryParams = [cutOffDate, rev.item_id];
-				const deleteQuery = { sql: 'DELETE FROM revisions WHERE ' + deleteQueryCondition, params: deleteQueryParams };
+				const deleteQuery = { sql: `DELETE FROM revisions WHERE ${deleteQueryCondition}`, params: deleteQueryParams };
 
 				if (!keptRev) {
-					const hasEncrypted = await this.modelSelectOne('SELECT * FROM revisions WHERE encryption_applied = 1 AND ' + deleteQueryCondition, deleteQueryParams);
+					const hasEncrypted = await this.modelSelectOne(`SELECT * FROM revisions WHERE encryption_applied = 1 AND ${deleteQueryCondition}`, deleteQueryParams);
 					if (hasEncrypted) throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
 					await this.db().transactionExecBatch([deleteQuery]);
 				} else {
@@ -239,7 +239,7 @@ class Revision extends BaseItem {
 				}
 			} catch (error) {
 				if (error.code === 'revision_encrypted') {
-					this.logger().info('Aborted deletion of old revisions for item ' + rev.item_id + ' because one of the revisions is still encrypted', error);
+					this.logger().info(`Aborted deletion of old revisions for item ${rev.item_id} because one of the revisions is still encrypted`, error);
 				} else {
 					throw error;
 				}

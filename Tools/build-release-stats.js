@@ -1,6 +1,6 @@
 /* eslint-disable require-atomic-updates */
 
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
@@ -45,7 +45,7 @@ function createChangeLog(releases) {
 	for (let i = 0; i < releases.length; i++) {
 		const r = releases[i];
 		let s = [];
-		s.push('## ' + r.tag_name + ' - ' + r.published_at);
+		s.push(`## ${r.tag_name} - ${r.published_at}`);
 		s.push('');
 		let body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
 		s.push(body);
@@ -72,7 +72,7 @@ async function main() {
 
 			let row = {};
 			row = Object.assign(row, downloadCounts(release));
-			row.tag_name = '[' + release.tag_name + '](https://github.com/laurent22/joplin/releases/tag/' + release.tag_name + ')';
+			row.tag_name = `[${release.tag_name}](https://github.com/laurent22/joplin/releases/tag/${release.tag_name})`;
 			row.published_at = release.published_at;
 			row.body = release.body;
 
@@ -90,8 +90,8 @@ async function main() {
 	// const baseUrl = 'http://test.local/releases.json?page='
 	let pageNum = 1;
 	while (true) {
-		console.info('Build stats: Page ' + pageNum);
-		const response = await fetch(baseUrl + (pageNum + ''));
+		console.info(`Build stats: Page ${pageNum}`);
+		const response = await fetch(`${baseUrl}${pageNum}`);
 		const releases = await response.json();
 		if (!releases || !releases.length) break;
 		processReleases(releases);
@@ -99,7 +99,7 @@ async function main() {
 	}
 
 	const changelogText = createChangeLog(rows);
-	await fs.writeFile(rootDir + '/readme/changelog.md', changelogText);
+	await fs.writeFile(`${rootDir}/readme/changelog.md`, changelogText);
 
 	const grandTotal = totals.windows_count + totals.mac_count + totals.linux_count;
 	totals.windows_percent = totals.windows_count / grandTotal;
@@ -112,9 +112,9 @@ async function main() {
 		{ name: 'Total Windows downloads', value: formatter.format(totals.windows_count) },
 		{ name: 'Total macOs downloads', value: formatter.format(totals.mac_count) },
 		{ name: 'Total Linux downloads', value: formatter.format(totals.linux_count) },
-		{ name: 'Windows %', value: Math.round(totals.windows_percent * 100) + '%' },
-		{ name: 'macOS %', value: Math.round(totals.mac_percent * 100) + '%' },
-		{ name: 'Linux %', value: Math.round(totals.linux_percent * 100) + '%' },
+		{ name: 'Windows %', value: `${Math.round(totals.windows_percent * 100)}%` },
+		{ name: 'macOS %', value: `${Math.round(totals.mac_percent * 100)}%` },
+		{ name: 'Linux %', value: `${Math.round(totals.linux_percent * 100)}%` },
 	];
 
 	for (let i = 0; i < rows.length; i++) {
@@ -143,7 +143,7 @@ async function main() {
 	], rows));
 
 	const statsText = statsMd.join('\n\n');
-	await fs.writeFile(rootDir + '/readme/stats.md', statsText);
+	await fs.writeFile(`${rootDir}/readme/stats.md`, statsText);
 }
 
 main().catch((error) => {

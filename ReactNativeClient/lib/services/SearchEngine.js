@@ -61,7 +61,7 @@ class SearchEngine {
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + currentIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
+			const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -137,7 +137,7 @@ class SearchEngine {
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);
-				const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
+				const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 				const queries = [];
 
 				for (let i = 0; i < changes.length; i++) {
@@ -155,7 +155,7 @@ class SearchEngine {
 						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
 						report.deleted++;
 					} else {
-						throw new Error('Invalid change type: ' + change.type);
+						throw new Error(`Invalid change type: ${change.type}`);
 					}
 
 					lastChangeId = change.id;
@@ -252,7 +252,7 @@ class SearchEngine {
 
 		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = regexString.substr(0, regexString.length - 2) + '[^' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']' + '*?';
+			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
 			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
 		}
 
@@ -372,9 +372,9 @@ class SearchEngine {
 
 		for (const key of parsedQuery.keys) {
 			const term = parsedQuery.terms[key][0].value;
-			if (key === '_') searchOptions.anywherePattern = '*' + term + '*';
-			if (key === 'title') searchOptions.titlePattern = '*' + term + '*';
-			if (key === 'body') searchOptions.bodyPattern = '*' + term + '*';
+			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
+			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
+			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
 		}
 
 		return Note.previews(null, searchOptions);
@@ -397,7 +397,7 @@ class SearchEngine {
 				this.orderResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {
-				this.logger().warn('Cannot execute MATCH query: ' + query + ': ' + error.message);
+				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
 				return [];
 			}
 		}

@@ -53,7 +53,7 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.color,
 		};
 
-		const icon = <i style={iconStyle} className={'fa ' + iconName}></i>;
+		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
 
 		return (
 			<a href="#" style={searchButton} onClick={clickHandler}>

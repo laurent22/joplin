@@ -196,13 +196,13 @@ describe('Synchronizer', function() {
 		for (let n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n == 'id' || n == 'is_conflict') continue;
-			expect(conflictedNote[n]).toBe(note2conf[n], 'Property: ' + n);
+			expect(conflictedNote[n]).toBe(note2conf[n], `Property: ${n}`);
 		}
 
 		let noteUpdatedFromRemote = await Note.load(note1.id);
 		for (let n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			expect(noteUpdatedFromRemote[n]).toBe(note2[n], 'Property: ' + n);
+			expect(noteUpdatedFromRemote[n]).toBe(note2[n], `Property: ${n}`);
 		}
 	}));
 
@@ -850,7 +850,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -883,7 +883,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -910,7 +910,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -933,7 +933,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -949,7 +949,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		expect((await remoteNotesFoldersResources()).length).toBe(2);
 
-		const remoteBlob = await fileApi().stat('.resource/' + resource1.id);
+		const remoteBlob = await fileApi().stat(`.resource/${resource1.id}`);
 		expect(!remoteBlob).toBe(true);
 
 		await switchClient(1);
@@ -967,7 +967,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -1049,7 +1049,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		await Resource.setFileSizeOnly(resource1.id, -1);
 		let resourcePath1 = Resource.fullPath(resource1);
@@ -1075,7 +1075,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		expect(await allSyncTargetItemsEncrypted()).toBe(false);
@@ -1094,7 +1094,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
@@ -1307,7 +1307,7 @@ describe('Synchronizer', function() {
 
 	it('should not download resources over the limit', asyncTest(async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -1337,7 +1337,7 @@ describe('Synchronizer', function() {
 		// does get uploaded.
 
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const resource = (await Resource.all())[0];
 		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_IDLE });
 		await synchronizer().start();
@@ -1352,7 +1352,7 @@ describe('Synchronizer', function() {
 
 	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', asyncTest(async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();

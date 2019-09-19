@@ -34,7 +34,7 @@ class ResourceService extends BaseService {
 			if (!changes.length) break;
 
 			const noteIds = changes.map(a => a.item_id);
-			const notes = await Note.modelSelectAll('SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("' + noteIds.join('","') + '")');
+			const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ("${noteIds.join('","')}")`);
 
 			const noteById = noteId => {
 				for (let i = 0; i < notes.length; i++) {
@@ -66,12 +66,12 @@ class ResourceService extends BaseService {
 					if (note) {
 						await this.setAssociatedResources_(note);
 					} else {
-						this.logger().warn('ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ' + change.item_id);
+						this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);
 					}
 				} else if (change.type === ItemChange.TYPE_DELETE) {
 					await NoteResource.remove(change.item_id);
 				} else {
-					throw new Error('Invalid change type: ' + change.type);
+					throw new Error(`Invalid change type: ${change.type}`);
 				}
 
 				Setting.setValue('resourceService.lastProcessedChangeId', change.id);

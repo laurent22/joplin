@@ -196,7 +196,7 @@ function splitCommandString(command, options = null) {
 	}
 
 	if (state == 'quotes') {
-		throw new Error('Unclosed quote in command line: ' + command);
+		throw new Error(`Unclosed quote in command line: ${command}`);
 	}
 
 	if (current != '') {
@@ -226,7 +226,7 @@ function toTitleCase(string) {
 }
 
 function urlDecode(string) {
-	return decodeURIComponent((string + '').replace(/\+/g, '%20'));
+	return decodeURIComponent((`${string}`).replace(/\+/g, '%20'));
 }
 
 function escapeHtml(s) {
@@ -254,14 +254,14 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 			}
 		})
 		.join('|');
-	regexString = '(' + regexString + ')';
+	regexString = `(${regexString})`;
 	const re = new RegExp(regexString, 'gi');
-	return text.replace(re, prefix + '$1' + suffix);
+	return text.replace(re, `${prefix}$1${suffix}`);
 }
 
 function substrWithEllipsis(s, start, length) {
 	if (s.length <= length) return s;
-	return s.substr(start, length - 3) + '...';
+	return `${s.substr(start, length - 3)}...`;
 }
 
 const REGEX_JAPANESE = /[\u3000-\u303f]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uff00-\uff9f]|[\u4e00-\u9faf]|[\u3400-\u4dbf]/;

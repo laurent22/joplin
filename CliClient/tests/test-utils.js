@@ -56,8 +56,8 @@ Resource.fsDriver_ = fsDriver;
 EncryptionService.fsDriver_ = fsDriver;
 FileApiDriverLocal.fsDriver_ = fsDriver;
 
-const logDir = __dirname + '/../tests/logs';
-const tempDir = __dirname + '/../tests/tmp';
+const logDir = `${__dirname}/../tests/logs`;
+const tempDir = `${__dirname}/../tests/tmp`;
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(tempDir, 0o755);
 
@@ -71,20 +71,20 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 //const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
-const syncDir = __dirname + '/../tests/sync';
+const syncDir = `${__dirname}/../tests/sync`;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
 
-console.info('Testing with sync target: ' + SyncTargetRegistry.idToName(syncTargetId_));
+console.info(`Testing with sync target: ${SyncTargetRegistry.idToName(syncTargetId_)}`);
 
 const dbLogger = new Logger();
 dbLogger.addTarget('console');
-dbLogger.addTarget('file', { path: logDir + '/log.txt' });
+dbLogger.addTarget('file', { path: `${logDir}/log.txt` });
 dbLogger.setLevel(Logger.LEVEL_WARN);
 
 const logger = new Logger();
 logger.addTarget('console');
-logger.addTarget('file', { path: logDir + '/log.txt' });
+logger.addTarget('file', { path: `${logDir}/log.txt` });
 logger.setLevel(Logger.LEVEL_WARN); // Set to DEBUG to display sync process in console
 
 BaseItem.loadClass('Note', Note);
@@ -116,7 +116,7 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
-	if (!databases_[id]) throw new Error('Call setupDatabaseAndSynchronizer(' + id + ') first!!');
+	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
 
 	await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
 	await Setting.saveAll();
@@ -162,8 +162,8 @@ async function clearDatabase(id = null) {
 
 	const queries = [];
 	for (const n of tableNames) {
-		queries.push('DELETE FROM ' + n);
-		queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+		queries.push(`DELETE FROM ${n}`);
+		queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 	}
 
 	await databases_[id].transactionExecBatch(queries);
@@ -181,7 +181,7 @@ async function setupDatabase(id = null) {
 		return;
 	}
 
-	const filePath = __dirname + '/data/test-' + id + '.sqlite';
+	const filePath = `${__dirname}/data/test-${id}.sqlite`;
 
 	try {
 		await fs.unlink(filePath);
@@ -199,7 +199,7 @@ async function setupDatabase(id = null) {
 
 function resourceDir(id = null) {
 	if (id === null) id = currentClient_;
-	return __dirname + '/data/resources-' + id;
+	return `${__dirname}/data/resources-${id}`;
 }
 
 async function setupDatabaseAndSynchronizer(id = null) {
@@ -310,9 +310,9 @@ function fileApi() {
 		fileApi_ = new FileApi('', new FileApiDriverWebDav(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
 		const api = new DropboxApi();
-		const authTokenPath = __dirname + '/support/dropbox-auth.txt';
+		const authTokenPath = `${__dirname}/support/dropbox-auth.txt`;
 		const authToken = fs.readFileSync(authTokenPath, 'utf8');
-		if (!authToken) throw new Error('Dropbox auth token missing in ' + authTokenPath);
+		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
 	}
@@ -380,7 +380,7 @@ async function allSyncTargetItemsEncrypted() {
 		totalCount++;
 
 		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
-			const content = await fileApi().get('.resource/' + remoteContent.id);
+			const content = await fileApi().get(`.resource/${remoteContent.id}`);
 			totalCount++;
 			if (content.substr(0, 5) === 'JED01') encryptedCount++;
 		}

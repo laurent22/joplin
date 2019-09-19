@@ -16,8 +16,8 @@ process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);
 });
 
-const baseDir = dirname(__dirname) + '/tests/cli-integration';
-const joplinAppPath = __dirname + '/main.js';
+const baseDir = `${dirname(__dirname)}/tests/cli-integration`;
+const joplinAppPath = `${__dirname}/main.js`;
 
 const logger = new Logger();
 logger.addTarget('console');
@@ -33,16 +33,16 @@ db.setLogger(dbLogger);
 function createClient(id) {
 	return {
 		id: id,
-		profileDir: baseDir + '/client' + id,
+		profileDir: `${baseDir}/client${id}`,
 	};
 }
 
 const client = createClient(1);
 
 function execCommand(client, command) {
-	let exePath = 'node ' + joplinAppPath;
-	let cmd = exePath + ' --update-geolocation-disabled --env dev --profile ' + client.profileDir + ' ' + command;
-	logger.info(client.id + ': ' + command);
+	let exePath = `node ${joplinAppPath}`;
+	let cmd = `${exePath} --update-geolocation-disabled --env dev --profile ${client.profileDir} ${command}`;
+	logger.info(`${client.id}: ${command}`);
 
 	return new Promise((resolve, reject) => {
 		exec(cmd, (error, stdout, stderr) => {
@@ -217,7 +217,7 @@ async function main() {
 
 	logger.info(await execCommand(client, 'version'));
 
-	await db.open({ name: client.profileDir + '/database.sqlite' });
+	await db.open({ name: `${client.profileDir}/database.sqlite` });
 	BaseModel.db_ = db;
 	await Setting.load();
 
@@ -230,7 +230,7 @@ async function main() {
 
 		await clearDatabase();
 		let testName = n.substr(4).toLowerCase();
-		process.stdout.write(testName + ': ');
+		process.stdout.write(`${testName}: `);
 		await testUnits[n]();
 		console.info('');
 	}

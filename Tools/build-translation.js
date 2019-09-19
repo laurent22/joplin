@@ -5,18 +5,18 @@
 // sudo apt install gettext
 // sudo apt install translate-toolkit
 
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
-const rootDir = __dirname + '/..';
+const rootDir = `${__dirname}/..`;
 
-const { filename, fileExtension } = require(rootDir + '/ReactNativeClient/lib/path-utils.js');
+const { filename, fileExtension } = require(`${rootDir}/ReactNativeClient/lib/path-utils.js`);
 const fs = require('fs-extra');
 const gettextParser = require('gettext-parser');
 
-const cliDir = rootDir + '/CliClient';
-const cliLocalesDir = cliDir + '/locales';
-const rnDir = rootDir + '/ReactNativeClient';
-const electronDir = rootDir + '/ElectronClient/app';
+const cliDir = `${rootDir}/CliClient`;
+const cliLocalesDir = `${cliDir}/locales`;
+const rnDir = `${rootDir}/ReactNativeClient`;
+const electronDir = `${rootDir}/ElectronClient/app`;
 
 const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
@@ -69,20 +69,20 @@ function executablePath(file) {
 			return pathFile;
 		}
 	}
-	throw new Error(file + ' could not be found. Please install via brew or MacPorts.\n');
+	throw new Error(`${file} could not be found. Please install via brew or MacPorts.\n`);
 }
 
 async function removePoHeaderDate(filePath) {
 	let sedPrefix = 'sed -i';
 	if (isMac()) sedPrefix += ' ""'; // Note: on macOS it has to be 'sed -i ""' (BSD quirk)
-	await execCommand(sedPrefix + ' -e\'/POT-Creation-Date:/d\' "' + filePath + '"');
-	await execCommand(sedPrefix + ' -e\'/PO-Revision-Date:/d\' "' + filePath + '"');
+	await execCommand(`${sedPrefix} -e'/POT-Creation-Date:/d' "${filePath}"`);
+	await execCommand(`${sedPrefix} -e'/PO-Revision-Date:/d' "${filePath}"`);
 }
 
 async function createPotFile(potFilePath, sources) {
 	let baseArgs = [];
 	baseArgs.push('--from-code=utf-8');
-	baseArgs.push('--output="' + potFilePath + '"');
+	baseArgs.push(`--output="${potFilePath}"`);
 	baseArgs.push('--language=JavaScript');
 	baseArgs.push('--copyright-holder="Laurent Cozic"');
 	baseArgs.push('--package-name=Joplin-CLI');
@@ -95,7 +95,7 @@ async function createPotFile(potFilePath, sources) {
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
 		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-		const result = await execCommand(xgettextPath + ' ' + args.join(' '));
+		const result = await execCommand(`${xgettextPath} ${args.join(' ')}`);
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
 	}
@@ -105,7 +105,7 @@ async function mergePotToPo(potFilePath, poFilePath) {
 	let msgmergePath = 'msgmerge';
 	if (isMac()) msgmergePath = executablePath('msgmerge'); // Needs to have been installed with `brew install gettext`
 
-	const command = msgmergePath + ' -U "' + poFilePath + '" "' + potFilePath + '"';
+	const command = `${msgmergePath} -U "${poFilePath}" "${potFilePath}"`;
 	const result = await execCommand(command);
 	if (result) console.error(result);
 	await removePoHeaderDate(poFilePath);
@@ -118,7 +118,7 @@ function buildIndex(locales, stats) {
 
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
-		output.push('locales[\'' + locale + '\'] = require(\'./' + locale + '.json\');');
+		output.push(`locales['${locale}'] = require('./${locale}.json');`);
 	}
 
 	for (let i = 0; i < stats.length; i++) {
@@ -127,7 +127,7 @@ function buildIndex(locales, stats) {
 		delete stat.locale;
 		delete stat.translatorName;
 		delete stat.languageName;
-		output.push('stats[\'' + locale + '\'] = ' + JSON.stringify(stat) + ';');
+		output.push(`stats['${locale}'] = ${JSON.stringify(stat)};`);
 	}
 
 	output.push('module.exports = { locales: locales, stats: stats };');
@@ -167,13 +167,13 @@ async function translationStatus(isDefault, poFile) {
 	let pocountPath = 'pocount';
 	if (isMac()) pocountPath = executablePath('pocount');
 
-	const command = pocountPath + ' "' + poFile + '"';
+	const command = `${pocountPath} "${poFile}"`;
 	const result = await execCommand(command);
 	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
-	if (!matches || matches.length < 3) throw new Error('Cannot extract status: ' + command + ':\n' + result);
+	if (!matches || matches.length < 3) throw new Error(`Cannot extract status: ${command}:\n${result}`);
 
 	const percentDone = Number(matches[2]);
-	if (isNaN(percentDone)) throw new Error('Cannot extract percent translated: ' + command + ':\n' + result);
+	if (isNaN(percentDone)) throw new Error(`Cannot extract percent translated: ${command}:\n${result}`);
 
 	let translatorName = '';
 	const content = await fs.readFile(poFile, 'utf-8');
@@ -201,20 +201,20 @@ async function translationStatus(isDefault, poFile) {
 
 function flagImageUrl(locale) {
 	const baseUrl = 'https://joplinapp.org/images/flags';
-	if (locale === 'ar') return baseUrl + '/country-4x3/arableague.png';
-	if (locale === 'eu') return baseUrl + '/es/basque_country.png';
-	if (locale === 'gl_ES') return baseUrl + '/es/galicia.png';
-	if (locale === 'ca') return baseUrl + '/es/catalonia.png';
-	if (locale === 'ko') return baseUrl + '/country-4x3/kr.png';
-	if (locale === 'sv') return baseUrl + '/country-4x3/se.png';
-	if (locale === 'nb_NO') return baseUrl + '/country-4x3/no.png';
-	if (locale === 'ro') return baseUrl + '/country-4x3/ro.png';
-	if (locale === 'fa') return baseUrl + '/country-4x3/ir.png';
-	return baseUrl + '/country-4x3/' + countryCodeOnly(locale).toLowerCase() + '.png';
+	if (locale === 'ar') return `${baseUrl}/country-4x3/arableague.png`;
+	if (locale === 'eu') return `${baseUrl}/es/basque_country.png`;
+	if (locale === 'gl_ES') return `${baseUrl}/es/galicia.png`;
+	if (locale === 'ca') return `${baseUrl}/es/catalonia.png`;
+	if (locale === 'ko') return `${baseUrl}/country-4x3/kr.png`;
+	if (locale === 'sv') return `${baseUrl}/country-4x3/se.png`;
+	if (locale === 'nb_NO') return `${baseUrl}/country-4x3/no.png`;
+	if (locale === 'ro') return `${baseUrl}/country-4x3/ro.png`;
+	if (locale === 'fa') return `${baseUrl}/country-4x3/ir.png`;
+	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
 }
 
 function poFileUrl(locale) {
-	return 'https://github.com/laurent22/joplin/blob/master/CliClient/locales/' + locale + '.po';
+	return `https://github.com/laurent22/joplin/blob/master/CliClient/locales/${locale}.po`;
 }
 
 function translationStatusToMdTable(status) {
@@ -224,14 +224,14 @@ function translationStatusToMdTable(status) {
 	for (let i = 0; i < status.length; i++) {
 		const stat = status[i];
 		const flagUrl = flagImageUrl(stat.locale);
-		output.push(['![](' + flagUrl + ')', stat.languageName, '[' + stat.locale + '](' + poFileUrl(stat.locale) + ')', stat.translatorName, stat.percentDone + '%'].join('  |  '));
+		output.push([`![](${flagUrl})`, stat.languageName, `[${stat.locale}](${poFileUrl(stat.locale)})`, stat.translatorName, `${stat.percentDone}%`].join('  |  '));
 	}
 	return output.join('\n');
 }
 
 async function updateReadmeWithStats(stats) {
 	await insertContentIntoFile(
-		rootDir + '/README.md',
+		`${rootDir}/README.md`,
 		'<!-- LOCALE-TABLE-AUTO-GENERATED -->\n',
 		'\n<!-- LOCALE-TABLE-AUTO-GENERATED -->',
 		translationStatusToMdTable(stats)
@@ -239,26 +239,26 @@ async function updateReadmeWithStats(stats) {
 }
 
 async function main() {
-	let potFilePath = cliLocalesDir + '/joplin.pot';
-	let jsonLocalesDir = cliDir + '/build/locales';
+	let potFilePath = `${cliLocalesDir}/joplin.pot`;
+	let jsonLocalesDir = `${cliDir}/build/locales`;
 	const defaultLocale = 'en_GB';
 
 	await createPotFile(potFilePath, [
-		cliDir + '/app/*.js',
-		cliDir + '/app/gui/*.js',
-		electronDir + '/*.js',
-		electronDir + '/gui/*.js',
-		electronDir + '/gui/utils/*.js',
-		electronDir + '/plugins/*.js',
-		rnDir + '/lib/*.js',
-		rnDir + '/lib/models/*.js',
-		rnDir + '/lib/services/*.js',
-		rnDir + '/lib/components/*.js',
-		rnDir + '/lib/components/shared/*.js',
-		rnDir + '/lib/components/screens/*.js',
+		`${cliDir}/app/*.js`,
+		`${cliDir}/app/gui/*.js`,
+		`${electronDir}/*.js`,
+		`${electronDir}/gui/*.js`,
+		`${electronDir}/gui/utils/*.js`,
+		`${electronDir}/plugins/*.js`,
+		`${rnDir}/lib/*.js`,
+		`${rnDir}/lib/models/*.js`,
+		`${rnDir}/lib/services/*.js`,
+		`${rnDir}/lib/components/*.js`,
+		`${rnDir}/lib/components/shared/*.js`,
+		`${rnDir}/lib/components/screens/*.js`,
 	]);
 
-	await execCommand('cp "' + potFilePath + '" ' + '"' + cliLocalesDir + '/' + defaultLocale + '.po"');
+	await execCommand(`cp "${potFilePath}" ` + `"${cliLocalesDir}/${defaultLocale}.po"`);
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
 
@@ -268,10 +268,10 @@ async function main() {
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 
-		console.info('Building ' + locale + '...');
+		console.info(`Building ${locale}...`);
 
-		const poFilePäth = cliLocalesDir + '/' + locale + '.po';
-		const jsonFilePath = jsonLocalesDir + '/' + locale + '.json';
+		const poFilePäth = `${cliLocalesDir}/${locale}.po`;
+		const jsonFilePath = `${jsonLocalesDir}/${locale}.json`;
 		if (locale != defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
 		buildLocale(poFilePäth, jsonFilePath);
 
@@ -283,13 +283,13 @@ async function main() {
 
 	stats.sort((a, b) => a.languageName < b.languageName ? -1 : +1);
 
-	saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales, stats));
+	saveToFile(`${jsonLocalesDir}/index.js`, buildIndex(locales, stats));
 
-	const rnJsonLocaleDir = rnDir + '/locales';
-	await execCommand('rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"');
+	const rnJsonLocaleDir = `${rnDir}/locales`;
+	await execCommand(`rsync -a "${jsonLocalesDir}/" "${rnJsonLocaleDir}"`);
 
-	const electronJsonLocaleDir = electronDir + '/locales';
-	await execCommand('rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"');
+	const electronJsonLocaleDir = `${electronDir}/locales`;
+	await execCommand(`rsync -a "${jsonLocalesDir}/" "${electronJsonLocaleDir}"`);
 
 	await updateReadmeWithStats(stats);
 }

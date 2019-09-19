@@ -28,7 +28,7 @@ describe('HtmlToMd', function() {
 	});
 
 	it('should convert from Html to Markdown', asyncTest(async () => {
-		const basePath = __dirname + '/html_to_md';
+		const basePath = `${__dirname}/html_to_md`;
 		const files = await shim.fsDriver().readDirStats(basePath);
 		const htmlToMd = new HtmlToMd();
 
@@ -36,8 +36,8 @@ describe('HtmlToMd', function() {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;
 
-			const htmlPath = basePath + '/' + htmlFilename;
-			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
+			const htmlPath = `${basePath}/${htmlFilename}`;
+			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
 			// if (htmlFilename !== 'table_with_pipe.html') continue;
 
@@ -54,7 +54,7 @@ describe('HtmlToMd', function() {
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			let actualMd = await htmlToMd.parse('<div>' + html + '</div>', htmlToMdOptions);
+			let actualMd = await htmlToMd.parse(`<div>${html}</div>`, htmlToMdOptions);
 
 			if (os.EOL === '\r\n') {
 				expectedMd = expectedMd.replace(/\r\n/g, '\n');
@@ -63,7 +63,7 @@ describe('HtmlToMd', function() {
 
 			if (actualMd !== expectedMd) {
 				console.info('');
-				console.info('Error converting file: ' + htmlFilename);
+				console.info(`Error converting file: ${htmlFilename}`);
 				console.info('--------------------------------- Got:');
 				console.info(actualMd);
 				console.info('--------------------------------- Raw:');

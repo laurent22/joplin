@@ -6,7 +6,7 @@ const { _ } = require('lib/locale');
 
 class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 	async init(destPath) {
-		if (await shim.fsDriver().isDirectory(destPath)) throw new Error('Path is a directory: ' + destPath);
+		if (await shim.fsDriver().isDirectory(destPath)) throw new Error(`Path is a directory: ${destPath}`);
 
 		this.tempDir_ = await this.temporaryDirectory_(false);
 		this.destPath_ = destPath;

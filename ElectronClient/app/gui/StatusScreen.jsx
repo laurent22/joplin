@@ -27,7 +27,7 @@ class StatusScreenComponent extends React.Component {
 	}
 
 	async exportDebugReportClick() {
-		const filename = 'syncReport-' + new Date().getTime() + '.csv';
+		const filename = `syncReport-${new Date().getTime()}.csv`;
 
 		const filePath = bridge().showSaveDialog({
 			title: _('Please select where the sync status should be exported to'),
@@ -57,7 +57,7 @@ class StatusScreenComponent extends React.Component {
 
 		function renderSectionTitleHtml(key, title) {
 			return (
-				<h2 key={'section_' + key} style={theme.h2Style}>
+				<h2 key={`section_${key}`} style={theme.h2Style}>
 					{title}
 				</h2>
 			);
@@ -95,7 +95,7 @@ class StatusScreenComponent extends React.Component {
 				if (!text) text = '\xa0';
 
 				itemsHtml.push(
-					<div style={theme.textStyle} key={'item_' + n}>
+					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
 					</div>

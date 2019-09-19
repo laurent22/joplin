@@ -13,7 +13,7 @@ class ReportService {
 		cell = this.csvValueToString(cell);
 		let output = cell.replace(/"/, '""');
 		if (this.csvCellRequiresQuotes(cell, ',')) {
-			return '"' + output + '"';
+			return `"${output}"`;
 		}
 		return output;
 	}
@@ -55,7 +55,7 @@ class ReportService {
 		for (let i = 0; i < itemTypes.length; i++) {
 			const itemType = itemTypes[i];
 			const ItemClass = BaseItem.getClassByItemType(itemType);
-			const items = await ItemClass.modelSelectAll('SELECT items.id, items.updated_time, sync_items.sync_time FROM ' + ItemClass.tableName() + ' items JOIN sync_items ON sync_items.item_id = items.id');
+			const items = await ItemClass.modelSelectAll(`SELECT items.id, items.updated_time, sync_items.sync_time FROM ${ItemClass.tableName()} items JOIN sync_items ON sync_items.item_id = items.id`);
 
 			for (let j = 0; j < items.length; j++) {
 				const item = items[j];

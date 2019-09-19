@@ -129,7 +129,7 @@ class ClipperServer {
 				if (instance.type === 'attachment') {
 					const filename = instance.attachmentFilename ? instance.attachmentFilename : 'file';
 					writeCorsHeaders(code, instance.contentType ? instance.contentType : 'application/octet-stream', {
-						'Content-disposition': 'attachment; filename=' + filename,
+						'Content-disposition': `attachment; filename=${filename}`,
 						'Content-Length': instance.body.length,
 					});
 					response.end(instance.body);
@@ -148,7 +148,7 @@ class ClipperServer {
 				}
 			};
 
-			this.logger().info('Request: ' + request.method + ' ' + request.url);
+			this.logger().info(`Request: ${request.method} ${request.url}`);
 
 			const url = urlParser.parse(request.url, true);
 
@@ -204,7 +204,7 @@ class ClipperServer {
 
 		enableServerDestroy(this.server_);
 
-		this.logger().info('Starting Clipper server on port ' + this.port_);
+		this.logger().info(`Starting Clipper server on port ${this.port_}`);
 
 		this.server_.listen(this.port_, '127.0.0.1');
 

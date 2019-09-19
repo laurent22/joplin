@@ -263,10 +263,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 				let o = this.props.menuOptions[i];
 
 				if (o.isDivider) {
-					menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
+					menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
 				} else {
 					menuOptionComponents.push(
-						<MenuOption value={o.onPress} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem}>
 							<Text style={this.styles().contextMenuItemText}>{o.title}</Text>
 						</MenuOption>
 					);
@@ -274,7 +274,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			}
 
 			if (menuOptionComponents.length) {
-				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
+				menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
 			}
 		} else {
 			menuOptionComponents.push(
@@ -299,7 +299,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 					for (let i = 0; i < folders.length; i++) {
 						const f = folders[i];
-						pickerItems.push({ label: '      '.repeat(indent) + ' ' + Folder.displayTitle(f), value: f.id });
+						pickerItems.push({ label: `${'      '.repeat(indent)} ${Folder.displayTitle(f)}`, value: f.id });
 						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
 					}
 

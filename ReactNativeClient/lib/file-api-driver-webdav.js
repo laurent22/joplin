@@ -31,7 +31,7 @@ class FileApiDriverWebDav {
 		// WebDAV implementations are always slightly different from one server to another but, at the minimum,
 		// a resource should have a propstat key - if not it's probably an error.
 		const propStat = this.api().arrayFromJson(resource, ['d:propstat']);
-		if (!Array.isArray(propStat)) throw new Error('Invalid WebDAV resource format: ' + JSON.stringify(resource));
+		if (!Array.isArray(propStat)) throw new Error(`Invalid WebDAV resource format: ${JSON.stringify(resource)}`);
 
 		// Disabled for now to try to fix this: https://github.com/laurent22/joplin/issues/624
 		//
@@ -54,9 +54,9 @@ class FileApiDriverWebDav {
 
 		// Note: Not all WebDAV servers return a getlastmodified date (eg. Seafile, which doesn't return the
 		// property for folders) so we can only throw an error if it's a file.
-		if (!lastModifiedString && !isDir) throw new Error('Could not get lastModified date for resource: ' + JSON.stringify(resource));
+		if (!lastModifiedString && !isDir) throw new Error(`Could not get lastModified date for resource: ${JSON.stringify(resource)}`);
 		const lastModifiedDate = lastModifiedString ? new Date(lastModifiedString) : new Date();
-		if (isNaN(lastModifiedDate.getTime())) throw new Error('Invalid date: ' + lastModifiedString);
+		if (isNaN(lastModifiedDate.getTime())) throw new Error(`Invalid date: ${lastModifiedString}`);
 
 		return {
 			path: path,
@@ -88,7 +88,7 @@ class FileApiDriverWebDav {
 		} else if (href.indexOf(relativeBaseUrl) === 0) {
 			output = href.substr(relativeBaseUrl.length);
 		} else {
-			throw new Error('href ' + href + ' not in baseUrl ' + baseUrl + ' nor relativeBaseUrl ' + relativeBaseUrl);
+			throw new Error(`href ${href} not in baseUrl ${baseUrl} nor relativeBaseUrl ${relativeBaseUrl}`);
 		}
 
 		return rtrimSlashes(ltrimSlashes(output));
@@ -295,7 +295,7 @@ class FileApiDriverWebDav {
 			// WebDAV implementations will redirect to a URL with "/". However, when doing so
 			// in React Native, the auth headers, etc. are lost so we need to avoid this.
 			// https://github.com/facebook/react-native/issues/929
-			if (!path.endsWith('/')) path = path + '/';
+			if (!path.endsWith('/')) path = `${path}/`;
 			await this.api().exec('MKCOL', path);
 		} catch (error) {
 			if (error.code === 405) return; // 405 means that the collection already exists (Method Not Allowed)
@@ -326,7 +326,7 @@ class FileApiDriverWebDav {
 
 	async move(oldPath, newPath) {
 		await this.api().exec('MOVE', oldPath, null, {
-			Destination: this.api().baseUrl() + '/' + newPath,
+			Destination: `${this.api().baseUrl()}/${newPath}`,
 			Overwrite: 'T',
 		});
 	}

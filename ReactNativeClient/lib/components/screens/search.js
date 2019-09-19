@@ -125,7 +125,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 				}
 
 				notes = await Note.previews(null, {
-					anywherePattern: '*' + temp.join('*') + '*',
+					anywherePattern: `*${temp.join('*')}*`,
 				});
 			}
 		}

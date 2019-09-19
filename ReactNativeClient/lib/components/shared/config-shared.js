@@ -16,7 +16,7 @@ shared.init = function(comp) {
 shared.checkSyncConfig = async function(comp, settings) {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
-	const options = Setting.subValues('sync.' + syncTargetId, settings);
+	const options = Setting.subValues(`sync.${syncTargetId}`, settings);
 	comp.setState({ checkSyncConfigResult: 'checking' });
 	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });

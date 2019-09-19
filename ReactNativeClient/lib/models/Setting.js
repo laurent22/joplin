@@ -336,7 +336,7 @@ class Setting extends BaseModel {
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
-				(!!mobilePlatform) ?
+				(mobilePlatform) ?
 					({
 						value: Setting.FONT_DEFAULT,
 						type: Setting.TYPE_STRING,
@@ -460,7 +460,7 @@ class Setting extends BaseModel {
 
 	static settingMetadata(key) {
 		const metadata = this.metadata();
-		if (!(key in metadata)) throw new Error('Unknown key: ' + key);
+		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
 		let output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
@@ -541,7 +541,7 @@ class Setting extends BaseModel {
 	}
 
 	static setConstant(key, value) {
-		if (!(key in this.constants_)) throw new Error('Unknown constant key: ' + key);
+		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
 		this.constants_[key] = value;
 	}
 
@@ -618,9 +618,9 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
+		if (md.type == Setting.TYPE_STRING) return value ? `${value}` : '';
 
-		throw new Error('Unhandled value type: ' + md.type);
+		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
 	static filterValue(key, value) {
@@ -659,10 +659,10 @@ class Setting extends BaseModel {
 
 		if (md.type === Setting.TYPE_STRING) {
 			if (!value) return '';
-			return value + '';
+			return `${value}`;
 		}
 
-		throw new Error('Unhandled value type: ' + md.type);
+		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
 	static value(key) {
@@ -680,7 +680,7 @@ class Setting extends BaseModel {
 		if (key in this.constants_) {
 			const v = this.constants_[key];
 			const output = typeof v === 'function' ? v() : v;
-			if (output == 'SET_ME') throw new Error('Setting constant has not been set: ' + key);
+			if (output == 'SET_ME') throw new Error(`Setting constant has not been set: ${key}`);
 			return output;
 		}
 
@@ -721,8 +721,8 @@ class Setting extends BaseModel {
 
 	static enumOptions(key) {
 		const metadata = this.metadata();
-		if (!metadata[key]) throw new Error('Unknown key: ' + key);
-		if (!metadata[key].options) throw new Error('No options for: ' + key);
+		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
+		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
 

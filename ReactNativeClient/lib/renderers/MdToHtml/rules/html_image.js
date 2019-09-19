@@ -5,8 +5,8 @@ const utils = require('../../utils');
 function renderImageHtml(before, src, after, ruleOptions) {
 	const r = utils.imageReplacement(src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 	if (typeof r === 'string') return r;
-	if (r) return '<img ' + before + ' ' + htmlUtils.attributesHtml(r) + ' ' + after + '/>';
-	return '[Image: ' + src + ']';
+	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
+	return `[Image: ${src}]`;
 }
 
 function installRule(markdownIt, mdOptions, ruleOptions) {

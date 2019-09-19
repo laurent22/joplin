@@ -1,4 +1,4 @@
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
 const fs = require('fs-extra');
 const dirname = require('path').dirname;
@@ -6,7 +6,7 @@ const { fileExtension, basename } = require('lib/path-utils.js');
 const markdownUtils = require('lib/markdownUtils.js');
 
 const rootDir = dirname(__dirname);
-const welcomeDir = rootDir + '/readme/welcome';
+const welcomeDir = `${rootDir}/readme/welcome`;
 
 const createdDate = new Date('2018-06-22T12:00:00Z');
 
@@ -44,7 +44,7 @@ const itemMetadata_ = {
 function itemMetadata(path) {
 	const f = basename(path);
 	const md = itemMetadata_[f];
-	if (!md) throw new Error('No metadata for: ' + path);
+	if (!md) throw new Error(`No metadata for: ${path}`);
 	return md;
 }
 
@@ -56,7 +56,7 @@ function noteTags(path) {
 
 function itemIdFromPath(path) {
 	const md = itemMetadata(path);
-	if (!md.id) throw new Error('No ID for ' + path);
+	if (!md.id) throw new Error(`No ID for ${path}`);
 	return md.id;
 }
 
@@ -69,14 +69,14 @@ async function parseNoteFile(filePath) {
 	const n = basename(filePath);
 	const number = n.split('_')[0];
 	const body = fs.readFileSync(filePath, 'utf8');
-	const title = number + '. ' + body.split('\n')[0].substr(2);
+	const title = `${number}. ${body.split('\n')[0].substr(2)}`;
 	const resources = {};
 
 	const imagePaths = markdownUtils.extractImageUrls(body);
 
 	for (let i = 0; i < imagePaths.length; i++) {
 		const imagePath = imagePaths[i];
-		const fullImagePath = welcomeDir + '/' + imagePath;
+		const fullImagePath = `${welcomeDir}/${imagePath}`;
 		const base64 = fileToBase64(fullImagePath);
 
 		resources[imagePath] = {
@@ -109,7 +109,7 @@ async function main() {
 		const ext = fileExtension(f);
 
 		if (ext === 'md') {
-			const note = await parseNoteFile(welcomeDir + '/' + f);
+			const note = await parseNoteFile(`${welcomeDir}/${f}`);
 			note.parent_id = rootFolder.id;
 
 			for (let j = 0; j < note.tags.length; j++) {
@@ -136,8 +136,8 @@ async function main() {
 
 	const content = { notes: notes, folders: folders, tags: tags, timestamp: createdDate.getTime() };
 	const jsonContent = JSON.stringify(content, null, 4);
-	const jsContent = 'module.exports = ' + jsonContent;
-	fs.writeFileSync(rootDir + '/ReactNativeClient/lib/welcomeAssets.js', jsContent, { encoding: 'utf8' });
+	const jsContent = `module.exports = ${jsonContent}`;
+	fs.writeFileSync(`${rootDir}/ReactNativeClient/lib/welcomeAssets.js`, jsContent, { encoding: 'utf8' });
 }
 
 main().catch((error) => {

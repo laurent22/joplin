@@ -42,10 +42,10 @@ class Database {
 	escapeField(field) {
 		if (field == '*') return '*';
 		let p = field.split('.');
-		if (p.length == 1) return '`' + field + '`';
-		if (p.length == 2) return p[0] + '.`' + p[1] + '`';
+		if (p.length == 1) return `\`${field}\``;
+		if (p.length == 2) return `${p[0]}.\`${p[1]}\``;
 
-		throw new Error('Invalid field format: ' + field);
+		throw new Error(`Invalid field format: ${field}`);
 	}
 
 	escapeFields(fields) {
@@ -101,7 +101,7 @@ class Database {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			const v = rows[i][field];
-			if (!v) throw new Error('No such field: ' + field + '. Query was: ' + sql);
+			if (!v) throw new Error(`No such field: ${field}. Query was: ${sql}`);
 			output.push(rows[i][field]);
 		}
 		return output;
@@ -148,15 +148,15 @@ class Database {
 		if (type == 'fieldType') {
 			if (s) s = s.toUpperCase();
 			if (s == 'INTEGER') s = 'INT';
-			if (!('TYPE_' + s in this)) throw new Error('Unkonwn fieldType: ' + s);
-			return this['TYPE_' + s];
+			if (!(`TYPE_${s}` in this)) throw new Error(`Unkonwn fieldType: ${s}`);
+			return this[`TYPE_${s}`];
 		}
 		if (type == 'syncTarget') {
 			if (s == 'memory') return 1;
 			if (s == 'filesystem') return 2;
 			if (s == 'onedrive') return 3;
 		}
-		throw new Error('Unknown enum type or value: ' + type + ', ' + s);
+		throw new Error(`Unknown enum type or value: ${type}, ${s}`);
 	}
 
 	static enumName(type, id) {
@@ -165,7 +165,7 @@ class Database {
 			if (id === Database.TYPE_INT) return 'int';
 			if (id === Database.TYPE_TEXT) return 'text';
 			if (id === Database.TYPE_NUMERIC) return 'numeric';
-			throw new Error('Invalid type id: ' + id);
+			throw new Error(`Invalid type id: ${id}`);
 		}
 	}
 
@@ -174,7 +174,7 @@ class Database {
 		if (type == this.TYPE_INT) return Number(value);
 		if (type == this.TYPE_TEXT) return value;
 		if (type == this.TYPE_NUMERIC) return Number(value);
-		throw new Error('Unknown type: ' + type);
+		throw new Error(`Unknown type: ${type}`);
 	}
 
 	sqlStringToLines(sql) {
@@ -218,12 +218,12 @@ class Database {
 			if (key[key.length - 1] == '_') continue;
 			if (keySql != '') keySql += ', ';
 			if (valueSql != '') valueSql += ', ';
-			keySql += '`' + key + '`';
+			keySql += `\`${key}\``;
 			valueSql += '?';
 			params.push(data[key]);
 		}
 		return {
-			sql: 'INSERT INTO `' + tableName + '` (' + keySql + ') VALUES (' + valueSql + ')',
+			sql: `INSERT INTO \`${tableName}\` (${keySql}) VALUES (${valueSql})`,
 			params: params,
 		};
 	}
@@ -237,7 +237,7 @@ class Database {
 			if (!data.hasOwnProperty(key)) continue;
 			if (key[key.length - 1] == '_') continue;
 			if (sql != '') sql += ', ';
-			sql += '`' + key + '`=?';
+			sql += `\`${key}\`=?`;
 			params.push(data[key]);
 		}
 
@@ -246,13 +246,13 @@ class Database {
 			for (let n in where) {
 				if (!where.hasOwnProperty(n)) continue;
 				params.push(where[n]);
-				s.push('`' + n + '`=?');
+				s.push(`\`${n}\`=?`);
 			}
 			where = s.join(' AND ');
 		}
 
 		return {
-			sql: 'UPDATE `' + tableName + '` SET ' + sql + ' WHERE ' + where,
+			sql: `UPDATE \`${tableName}\` SET ${sql} WHERE ${where}`,
 			params: params,
 		};
 	}
@@ -267,7 +267,7 @@ class Database {
 		let fieldsWithType = [];
 		for (let n in fields) {
 			if (!fields.hasOwnProperty(n)) continue;
-			fieldsWithType.push(this.escapeField(n) + ' ' + fields[n]);
+			fieldsWithType.push(`${this.escapeField(n)} ${fields[n]}`);
 		}
 
 		let sql = `
@@ -279,7 +279,7 @@ class Database {
 			DROP TABLE _BACKUP_TABLE_NAME_;
 		`;
 
-		sql = sql.replace(/_BACKUP_TABLE_NAME_/g, this.escapeField(tableName + '_backup'));
+		sql = sql.replace(/_BACKUP_TABLE_NAME_/g, this.escapeField(`${tableName}_backup`));
 		sql = sql.replace(/_TABLE_NAME_/g, this.escapeField(tableName));
 		sql = sql.replace(/_FIELDS_NO_TYPE_/g, this.escapeFields(fieldsNoType).join(','));
 		sql = sql.replace(/_FIELDS_TYPE_/g, fieldsWithType.join(','));
@@ -296,7 +296,7 @@ class Database {
 	}
 
 	wrapQuery(sql, params = null) {
-		if (!sql) throw new Error('Cannot wrap empty string: ' + sql);
+		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 
 		if (sql.constructor === Array) {
 			let output = {};

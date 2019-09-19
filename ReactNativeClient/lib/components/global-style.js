@@ -45,7 +45,7 @@ globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
-globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
+globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
 let themeCache_ = {};
 

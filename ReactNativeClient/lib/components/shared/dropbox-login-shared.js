@@ -34,7 +34,7 @@ class Shared {
 			try {
 				const response = await api.execAuthToken(this.comp_.state.authCode);
 
-				Setting.setValue('sync.' + this.syncTargetId() + '.auth', response.access_token);
+				Setting.setValue(`sync.${this.syncTargetId()}.auth`, response.access_token);
 				api.setAuthToken(response.access_token);
 				await showInfoMessageBox(_('The application has been authorised!'));
 				this.comp_.props.dispatch({ type: 'NAV_BACK' });

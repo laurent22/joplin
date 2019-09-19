@@ -5,9 +5,9 @@ const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
 
 const projectName = 'joplin-android';
-const rnDir = __dirname + '/../ReactNativeClient';
+const rnDir = `${__dirname}/../ReactNativeClient`;
 const rootDir = path.dirname(__dirname);
-const releaseDir = rootDir + '/_releases';
+const releaseDir = `${rootDir}/_releases`;
 
 function wslToWinPath(wslPath) {
 	const s = wslPath.split('/');
@@ -15,7 +15,7 @@ function wslToWinPath(wslPath) {
 	s.splice(0, 1);
 	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
 	s.splice(0, 1);
-	s[0] = s[0].toUpperCase() + ':';
+	s[0] = `${s[0].toUpperCase()}:`;
 	while (s.length && !s[s.length - 1]) s.pop();
 	return s.join('\\');
 }
@@ -23,8 +23,8 @@ function wslToWinPath(wslPath) {
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
 		const n = Number(versionCode);
-		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + versionCode);
-		return 'versionCode ' + (n + 1);
+		if (isNaN(n) || !n) throw new Error(`Invalid version code: ${versionCode}`);
+		return `versionCode ${n + 1}`;
 	});
 
 	if (newContent === content) throw new Error('Could not update version code');
@@ -35,8 +35,8 @@ function increaseGradleVersionCode(content) {
 function increaseGradleVersionName(content) {
 	const newContent = content.replace(/(versionName\s+"\d+?\.\d+?\.)(\d+)"/, function(match, prefix, buildNum) {
 		const n = Number(buildNum);
-		if (isNaN(n) || !n) throw new Error('Invalid version code: ' + buildNum);
-		return prefix + (n + 1) + '"';
+		if (isNaN(n) || !n) throw new Error(`Invalid version code: ${buildNum}`);
+		return `${prefix + (n + 1)}"`;
 	});
 
 	if (newContent === content) throw new Error('Could not update version name');
@@ -45,10 +45,10 @@ function increaseGradleVersionName(content) {
 }
 
 function updateGradleConfig() {
-	let content = fs.readFileSync(rnDir + '/android/app/build.gradle', 'utf8');
+	let content = fs.readFileSync(`${rnDir}/android/app/build.gradle`, 'utf8');
 	content = increaseGradleVersionCode(content);
 	content = increaseGradleVersionName(content);
-	fs.writeFileSync(rnDir + '/android/app/build.gradle', content);
+	fs.writeFileSync(`${rnDir}/android/app/build.gradle`, content);
 	return content;
 }
 
@@ -60,12 +60,12 @@ function gradleVersionName(content) {
 
 async function createRelease(name, tagName, version) {
 	const originalContents = {};
-	const suffix = version + (name === 'main' ? '' : '-' + name);
+	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
-	console.info('Creating release: ' + suffix);
+	console.info(`Creating release: ${suffix}`);
 
 	if (name === '32bit') {
-		let filename = rnDir + '/android/app/build.gradle';
+		let filename = `${rnDir}/android/app/build.gradle`;
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
@@ -73,15 +73,15 @@ async function createRelease(name, tagName, version) {
 		await fs.writeFile(filename, content);
 	}
 
-	const apkFilename = 'joplin-v' + suffix + '.apk';
-	const apkFilePath = releaseDir + '/' + apkFilename;
-	const downloadUrl = 'https://github.com/laurent22/' + projectName + '/releases/download/' + tagName + '/' + apkFilename;
+	const apkFilename = `joplin-v${suffix}.apk`;
+	const apkFilePath = `${releaseDir}/${apkFilename}`;
+	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
 
 	process.chdir(rootDir);
 
-	console.info('Running from: ' + process.cwd());
+	console.info(`Running from: ${process.cwd()}`);
 
-	console.info('Building APK file v' + suffix + '...');
+	console.info(`Building APK file v${suffix}...`);
 
 	let restoreDir = null;
 	let apkBuildCmd = 'assembleRelease -PbuildDir=build';
@@ -99,13 +99,13 @@ async function createRelease(name, tagName, version) {
 
 		console.info('Run this command from DOS:');
 		console.info('');
-		console.info('cd "' + wslToWinPath(rootDir) + '\\ReactNativeClient\\android" && gradlew.bat ' + apkBuildCmd + '"');
+		console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
 		console.info('');
 		await readline('Press Enter when done:');
 		apkBuildCmd = ''; // Clear the command because we've already ran it
 	} else {
-		process.chdir(rnDir + '/android');
-		apkBuildCmd = './gradlew ' + apkBuildCmd;
+		process.chdir(`${rnDir}/android`);
+		apkBuildCmd = `./gradlew ${apkBuildCmd}`;
 		restoreDir = rootDir;
 	}
 
@@ -119,12 +119,12 @@ async function createRelease(name, tagName, version) {
 
 	await fs.mkdirp(releaseDir);
 
-	console.info('Copying APK to ' + apkFilePath);
+	console.info(`Copying APK to ${apkFilePath}`);
 	await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', apkFilePath);
 
 	if (name === 'main') {
-		console.info('Copying APK to ' + releaseDir + '/joplin-latest.apk');
-		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', releaseDir + '/joplin-latest.apk');
+		console.info(`Copying APK to ${releaseDir}/joplin-latest.apk`);
+		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
 	for (let filename in originalContents) {
@@ -144,7 +144,7 @@ async function main() {
 
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
-	const tagName = 'android-v' + version;
+	const tagName = `android-v${version}`;
 	const releaseNames = ['main', '32bit'];
 	const releaseFiles = {};
 
@@ -161,12 +161,12 @@ async function main() {
 
 	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
-	console.info(await execCommand('git commit -m "Android release v' + version + '"'));
-	console.info(await execCommand('git tag ' + tagName));
+	console.info(await execCommand(`git commit -m "Android release v${version}"`));
+	console.info(await execCommand(`git tag ${tagName}`));
 	console.info(await execCommand('git push'));
 	console.info(await execCommand('git push --tags'));
 
-	console.info('Creating GitHub release ' + tagName + '...');
+	console.info(`Creating GitHub release ${tagName}...`);
 
 	const oauthToken = await githubOauthToken();
 	const release = await githubRelease(projectName, tagName);
@@ -178,14 +178,14 @@ async function main() {
 
 		const binaryBody = await fs.readFile(releaseFile.apkFilePath);
 
-		console.info('Uploading ' + releaseFile.apkFilename + ' to ' + uploadUrl);
+		console.info(`Uploading ${releaseFile.apkFilename} to ${uploadUrl}`);
 
 		const uploadResponse = await fetch(uploadUrl, {
 			method: 'POST',
 			body: binaryBody,
 			headers: {
 				'Content-Type': 'application/vnd.android.package-archive',
-				'Authorization': 'token ' + oauthToken,
+				'Authorization': `token ${oauthToken}`,
 				'Content-Length': binaryBody.length,
 			},
 		});
@@ -195,7 +195,7 @@ async function main() {
 		if (!uploadResponseObject || !uploadResponseObject.browser_download_url) throw new Error('Could not upload file to GitHub');
 	}
 
-	console.info('Main download URL: ' + releaseFiles['main'].downloadUrl);
+	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 }
 
 main().catch((error) => {

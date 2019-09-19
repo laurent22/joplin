@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).', ['start', 'stop', 'status'].join('|')) + ' This is an experimental feature - use at your own risks! It is recommended that the server runs off its own separate profile so that no two CLI instances access that profile at the same time. Use --profile to specify the profile path.';
+		return `${_('Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).', ['start', 'stop', 'status'].join('|'))} This is an experimental feature - use at your own risks! It is recommended that the server runs off its own separate profile so that no two CLI instances access that profile at the same time. Use --profile to specify the profile path.`;
 	}
 
 	async action(args) {
@@ -20,7 +20,7 @@ class Command extends BaseCommand {
 		const ClipperServer = require('lib/ClipperServer');
 		const stdoutFn = (s) => this.stdout(s);
 		const clipperLogger = new Logger();
-		clipperLogger.addTarget('file', { path: Setting.value('profileDir') + '/log-clipper.txt' });
+		clipperLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-clipper.txt` });
 		clipperLogger.addTarget('console', { console: {
 			info: stdoutFn,
 			warn: stdoutFn,
@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 		ClipperServer.instance().setDispatch(() => {});
 		ClipperServer.instance().setLogger(clipperLogger);
 
-		const pidPath = Setting.value('profileDir') + '/clipper-pid.txt';
+		const pidPath = `${Setting.value('profileDir')}/clipper-pid.txt`;
 		const runningOnPort = await ClipperServer.instance().isRunning();
 
 		if (command === 'start') {

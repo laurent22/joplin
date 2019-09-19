@@ -123,9 +123,9 @@ class HeaderComponent extends React.Component {
 			if (options.title) iconStyle.marginRight = 5;
 			if ('undefined' != typeof options.iconRotation) {
 				iconStyle.transition = 'transform 0.15s ease-in-out';
-				iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
+				iconStyle.transform = `rotate(${options.iconRotation}deg)`;
 			}
-			icon = <i style={iconStyle} className={'fa ' + options.iconName}></i>;
+			icon = <i style={iconStyle} className={`fa ${options.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in options) || options.enabled;
@@ -195,7 +195,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		const iconName = state.searchQuery ? 'fa-times' : 'fa-search';
-		const icon = <i style={iconStyle} className={'fa ' + iconName}></i>;
+		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
 		if (options.onQuery) this.searchOnQuery_ = options.onQuery;
 
 		const usageLink = !this.state.showSearchUsageLink ? null : (
@@ -222,7 +222,7 @@ class HeaderComponent extends React.Component {
 		style.height = theme.headerHeight;
 		style.display = 'flex';
 		style.flexDirection = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 
 		const items = [];
@@ -252,9 +252,9 @@ class HeaderComponent extends React.Component {
 				const item = this.props.items[i];
 
 				if (item.type === 'search') {
-					items.push(this.makeSearch('item_' + i + '_search', itemStyle, item, this.state));
+					items.push(this.makeSearch(`item_${i}_search`, itemStyle, item, this.state));
 				} else {
-					items.push(this.makeButton('item_' + i + '_' + item.title, itemStyle, item));
+					items.push(this.makeButton(`item_${i}_${item.title}`, itemStyle, item));
 				}
 			}
 		}

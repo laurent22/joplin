@@ -39,7 +39,7 @@ class PromptDialog extends React.Component {
 	}
 
 	styles(themeId, width, height, visible) {
-		const styleKey = themeId + '_' + width + '_' + height + '_' + visible;
+		const styleKey = `${themeId}_${width}_${height}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -61,7 +61,7 @@ class PromptDialog extends React.Component {
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-			paddingTop: paddingTop + 'px',
+			paddingTop: `${paddingTop}px`,
 		};
 
 		this.styles_.promptDialog = {

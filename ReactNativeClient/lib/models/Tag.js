@@ -31,7 +31,7 @@ class Tag extends BaseItem {
 		return Note.previews(
 			null,
 			Object.assign({}, options, {
-				conditions: ['id IN ("' + noteIds.join('","') + '")'],
+				conditions: [`id IN ("${noteIds.join('","')}")`],
 			})
 		);
 	}
@@ -96,19 +96,19 @@ class Tag extends BaseItem {
 	}
 
 	static async allWithNotes() {
-		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (' + this.tagsWithNotesSql_() + ')');
+		return await Tag.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.tagsWithNotesSql_()})`);
 	}
 
 	static async searchAllWithNotes(options) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
-		options.conditions.push('id IN (' + this.tagsWithNotesSql_() + ')');
+		options.conditions.push(`id IN (${this.tagsWithNotesSql_()})`);
 		return this.search(options);
 	}
 
 	static async tagsByNoteId(noteId) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
-		return this.modelSelectAll('SELECT * FROM tags WHERE id IN ("' + tagIds.join('","') + '")');
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
 	}
 
 	static async loadByTitle(title) {

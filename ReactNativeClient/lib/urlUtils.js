@@ -11,7 +11,7 @@ urlUtils.hash = function(url) {
 
 urlUtils.urlWithoutPath = function(url) {
 	const parsed = require('url').parse(url, true);
-	return parsed.protocol + '//' + parsed.host;
+	return `${parsed.protocol}//${parsed.host}`;
 };
 
 urlUtils.urlProtocol = function(url) {
@@ -36,7 +36,7 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 		// If it starts with a slash, it's an absolute URL so it should be relative to the domain (and not to the full baseUrl)
 		return urlUtils.urlWithoutPath(baseUrl) + url;
 	} else {
-		return baseUrl + (url ? '/' + url : '');
+		return baseUrl + (url ? `/${url}` : '');
 	}
 };
 

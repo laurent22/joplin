@@ -72,7 +72,7 @@ class Api {
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0, 1)[0];
-		let callName = 'action_' + callSuffix;
+		let callName = `action_${callSuffix}`;
 		return {
 			callName: callName,
 			params: pathParts,
@@ -384,17 +384,17 @@ class Api {
 
 			const imageUrls = ArrayUtils.unique(markupLanguageUtils.extractImageUrls(note.markup_language, note.body));
 
-			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
+			this.logger().info(`Request (${requestId}): Downloading images: ${imageUrls.length}`);
 
 			let result = await this.downloadImages_(imageUrls, allowFileProtocolImages);
 
-			this.logger().info('Request (' + requestId + '): Creating resources from paths: ' + Object.getOwnPropertyNames(result).length);
+			this.logger().info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
 
 			result = await this.createResourcesFromPaths_(result);
 			await this.removeTempFiles_(result);
 			note.body = this.replaceImageUrlsByResources_(note.markup_language, note.body, result, imageSizes);
 
-			this.logger().info('Request (' + requestId + '): Saving note...');
+			this.logger().info(`Request (${requestId}): Saving note...`);
 
 			const saveOptions = this.defaultSaveOptions_(note, 'POST');
 			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
@@ -413,7 +413,7 @@ class Api {
 				note = await this.attachImageFromDataUrl_(note, requestNote.image_data_url, requestNote.crop_rect);
 			}
 
-			this.logger().info('Request (' + requestId + '): Created note ' + note.id);
+			this.logger().info(`Request (${requestId}): Created note ${note.id}`);
 
 			return note;
 		}
@@ -464,7 +464,7 @@ class Api {
 					maxLineLen: 200,
 				});
 
-				const styleTag = style.length ? '<style>' + styleString + '</style>' + '\n' : '';
+				const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
@@ -473,7 +473,7 @@ class Api {
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 				// rendering but it makes sure everything will be parsed.
-				output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
+				output.body = await this.htmlToMdParser().parse(`<div>${requestNote.body_html}</div>`, {
 					baseUrl: baseUrl,
 					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 				});
@@ -506,8 +506,8 @@ class Api {
 		const tempDir = Setting.value('tempDir');
 		const mime = mimeUtils.fromDataUrl(imageDataUrl);
 		let ext = mimeUtils.toFileExtension(mime) || '';
-		if (ext) ext = '.' + ext;
-		const tempFilePath = tempDir + '/' + md5(Math.random() + '_' + Date.now()) + ext;
+		if (ext) ext = `.${ext}`;
+		const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
 		const imageConvOptions = {};
 		if (cropRect) imageConvOptions.cropRect = cropRect;
 		await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
@@ -521,7 +521,7 @@ class Api {
 		const newExt = mimeUtils.toFileExtension(mimeType);
 		if (!newExt) return imagePath;
 
-		const newImagePath = imagePath + '.' + newExt;
+		const newImagePath = `${imagePath}.${newExt}`;
 		await shim.fsDriver().move(imagePath, newImagePath);
 		return newImagePath;
 	}
@@ -536,16 +536,16 @@ class Api {
 				output.push(stylesheet.value);
 			} else if (stylesheet.type === 'url') {
 				try {
-					const tempPath = Setting.value('tempDir') + '/' + md5(Math.random() + '_' + Date.now()) + '.css';
+					const tempPath = `${Setting.value('tempDir')}/${md5(`${Math.random()}_${Date.now()}`)}.css`;
 					await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
 					const text = await shim.fsDriver().readFile(tempPath);
 					output.push(text);
 					await shim.fsDriver().remove(tempPath);
 				} catch (error) {
-					this.logger().warn('Cannot download stylesheet at ' + stylesheet.value, error);
+					this.logger().warn(`Cannot download stylesheet at ${stylesheet.value}`, error);
 				}
 			} else {
-				throw new Error('Invalid stylesheet type: ' + stylesheet.type);
+				throw new Error(`Invalid stylesheet type: ${stylesheet.type}`);
 			}
 		}
 
@@ -557,12 +557,12 @@ class Api {
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
 
-		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
+		const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
-		if (fileExt) fileExt = '.' + fileExt;
-		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0, 10) + fileExt;
+		if (fileExt) fileExt = `.${fileExt}`;
+		let imagePath = `${tempDir}/${safeFilename(name)}${fileExt}`;
+		if (await shim.fsDriver().exists(imagePath)) imagePath = `${tempDir}/${safeFilename(name)}_${md5(`${Math.random()}_${Date.now()}`).substr(0, 10)}${fileExt}`;
 
 		try {
 			if (isDataUrl) {
@@ -581,7 +581,7 @@ class Api {
 			}
 			return imagePath;
 		} catch (error) {
-			this.logger().warn('Cannot download image at ' + url, error);
+			this.logger().warn(`Cannot download image at ${url}`, error);
 			return '';
 		}
 	}
@@ -619,7 +619,7 @@ class Api {
 				const resource = await shim.createResourceFromPath(urlInfo.path);
 				urlInfo.resource = resource;
 			} catch (error) {
-				this.logger().warn('Cannot create resource for ' + url, error);
+				this.logger().warn(`Cannot create resource for ${url}`, error);
 			}
 		}
 		return urls;
@@ -632,7 +632,7 @@ class Api {
 			try {
 				await shim.fsDriver().remove(urlInfo.path);
 			} catch (error) {
-				this.logger().warn('Cannot remove ' + urlInfo.path, error);
+				this.logger().warn(`Cannot remove ${urlInfo.path}`, error);
 			}
 		}
 	}
@@ -668,7 +668,7 @@ class Api {
 				imageSizesIndexes[urlInfo.originalUrl]++;
 
 				if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
-					return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
+					return `<img width="${imageSize.width}" height="${imageSize.height}" src="${resourceUrl}"/>`;
 				} else {
 					return before + resourceUrl + after;
 				}

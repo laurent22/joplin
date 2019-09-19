@@ -4,7 +4,7 @@ let manualDownloadResourceElements = [];
 
 webviewLib.onUnloadedResourceClick = function(event) {
 	const resourceId = event.currentTarget.getAttribute('data-resource-id');
-	webviewLib.options_.postMessage('markForDownload:' + resourceId);
+	webviewLib.options_.postMessage(`markForDownload:${resourceId}`);
 };
 
 webviewLib.setupResourceManualDownload = function() {
@@ -76,7 +76,7 @@ webviewLib.logEnabledEventHandler = function(fn) {
 		try {
 			return fn(event);
 		} catch (error) {
-			webviewLib.options_.postMessage('error:' + JSON.stringify(webviewLib.cloneError(error)));
+			webviewLib.options_.postMessage(`error:${JSON.stringify(webviewLib.cloneError(error))}`);
 			throw error;
 		}
 	};
