@@ -1,6 +1,12 @@
 import db from '../db';
 import * as Knex from 'knex';
 
+// This transaction handler allows abstracting away the complexity of managing nested transactions
+// within models.
+// Any method in a model can start a transaction and, if one is already started, it
+// simply won't do anything. The last active transaction commits the results. If a rollback
+// happens, the following calls to rollback will be a no-op.
+// Set logEnabled_ to `true` to see what happens with nested transactions.
 class TransactionHandler {
 
 	db_:Knex<any, any[]> = null;

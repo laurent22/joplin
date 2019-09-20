@@ -1,8 +1,6 @@
-const { asyncTest, clearDatabase } = require('../testUtils');
-
+import { asyncTest, clearDatabase, createUserAndSession } from '../testUtils';
 import UserController from '../../app/controllers/UserController';
-import SessionController from '../../app/controllers/SessionController';
-import { Session, File, Permission, ItemType } from '../../app/db';
+import { File, Permission, ItemType } from '../../app/db';
 import UserModel from '../../app/models/UserModel';
 import FileModel from '../../app/models/FileModel';
 import PermissionModel from '../../app/models/PermissionModel';
@@ -16,13 +14,10 @@ describe('UserController', function() {
 
 	it('should create a new user along with his root file', asyncTest(async function() {
 		const controller = new UserController();
-		const sessionController = new SessionController();
 		const fileModel = new FileModel();
 		const permissionModel = new PermissionModel();
-		const userModel = new UserModel();
 
-		await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
-		const session:Session = await sessionController.authenticate('admin@localhost', 'admin');
+		const { session } = await createUserAndSession(true);
 		const newUser = await controller.createUser(session.id, 'test@example.com', '123456');
 
 		expect(!!newUser).toBe(true);
@@ -49,13 +44,11 @@ describe('UserController', function() {
 
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', asyncTest(async function() {
 		const controller = new UserController();
-		const sessionController = new SessionController();
 		const fileModel = new FileModel();
 		const permissionModel = new PermissionModel();
 		const userModel = new UserModel();
 
-		await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
-		const session:Session = await sessionController.authenticate('admin@localhost', 'admin');
+		const { session } = await createUserAndSession(true);
 		await controller.createUser(session.id, 'test@example.com', '123456');
 
 		const beforeFileCount = (await fileModel.all<File[]>()).length;

@@ -12,56 +12,9 @@ export interface SaveOptions {
 	isNew?: boolean,
 }
 
-// The TransactionHandler allows handling the logic of transactions within
-// the models. In particular it allows having transactions within transactions.
-// Instead of rollback/commit, onError/onSuccess should be called so that
-// it does what's appropriate depending on the context.
-class TransactionHandler {
-
-	private dbOptions_: DbOptions = null
-	private hasCreatedTransaction_: boolean = false
-
-	constructor(baseDbOptions:DbOptions) {
-		this.dbOptions_ = { ...baseDbOptions };
-	}
-
-	get dbOptions():DbOptions {
-		return this.dbOptions_;
-	}
-
-	private get db():Knex<any, any[]> {
-		return this.dbOptions.db ? this.dbOptions.db : db;
-	}
-
-	async init() {
-		// if (!this.dbOptions_.transaction) {
-		// 	const trx = await this.db.transaction();
-		// 	this.dbOptions_.transaction = trx;
-		// 	this.hasCreatedTransaction_ = true;
-		// }
-	}
-
-	onError(error:Error) {
-		if (this.hasCreatedTransaction_) {
-			this.dbOptions_.transaction.rollback();
-		}
-
-		throw error;
-	}
-
-	onSuccess() {
-		if (this.hasCreatedTransaction_) {
-			this.dbOptions_.transaction.commit();
-		}
-	}
-
-}
-
 export default abstract class BaseModel {
 
 	private dbOptions_:DbOptions = null;
-	private transactionStack_:boolean[] = [];
-	private currentTransaction_:Knex.Transaction = null;
 
 	constructor(dbOptions:DbOptions = null) {
 		this.dbOptions_ = dbOptions;
@@ -74,14 +27,6 @@ export default abstract class BaseModel {
 	get db():Knex<any, any[]> {
 		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
 		return db;
-
-		// if (this.currentTransaction_) return this.currentTransaction_;
-		// if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
-
-
-		// if (!!this.dbOptions && !!this.dbOptions.transaction) return this.dbOptions.transaction;
-		// if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
-		// return db;
 	}
 
 	tableName():string {
@@ -104,14 +49,12 @@ export default abstract class BaseModel {
 		return transactionHandler.rollback(txIndex);
 	}
 
-	async transactionHandler(baseDbOptions:DbOptions):Promise<TransactionHandler> {
-		const t = new TransactionHandler(baseDbOptions);
-		await t.init();
-		return t;
-	}
-
 	async all<T>():Promise<T[]> {
 		return this.db(this.tableName()).select('*');
+	}
+
+	toApiOutput(object:any):any {
+		return { ...object };
 	}
 
 	async save<T>(object:T, options:SaveOptions = {}):Promise<T> {

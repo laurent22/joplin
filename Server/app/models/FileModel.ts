@@ -105,4 +105,10 @@ export default class FileModel extends BaseModel {
 		return newFile;
 	}
 
+	toApiOutput(object:any):any {
+		const output:File = { ...object };
+		delete output.content;
+		return output;
+	}
+
 }

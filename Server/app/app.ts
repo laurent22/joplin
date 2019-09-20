@@ -25,6 +25,9 @@ interface MatchedRoute {
 	subPath: string,
 }
 
+// TODO: the routes should be an object with { exec: () => {} }
+//       + additional properties to tell what the route needs.
+//       For example `needBodyMiddleware` for api/files
 const routes:Routes = {
 	'api/ping': apiPingRoute,
 	'api/sessions': apiSessionsRoute,

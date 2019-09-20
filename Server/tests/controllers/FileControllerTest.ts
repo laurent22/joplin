@@ -1,9 +1,8 @@
-import { asyncTest, clearDatabase } from '../testUtils';
-
-// import FileController from '../../app/controllers/FileController';
-// import SessionController from '../../app/controllers/SessionController';
-// import { Session, File } from '../../app/db';
-// import FileModel from '../../app/models/FileModel';
+import { asyncTest, clearDatabase, supportDir, createUserAndSession } from '../testUtils';
+import FileController from '../../app/controllers/FileController';
+import FileModel from '../../app/models/FileModel';
+import * as fs from 'fs-extra';
+import { File } from '../../app/db';
 
 describe('FileController', function() {
 
@@ -13,22 +12,33 @@ describe('FileController', function() {
 	});
 
 	it('should create a file', asyncTest(async function() {
-		// const controller = new FileController();
-		// const sessionController = new SessionController();
+		const { session } = await createUserAndSession(true);
 
-		// const session:Session = await sessionController.authenticate('admin@locahost', 'admin');
-		// const rootFile:File = await FileModel.userRootFile(session.user_id);
+		const file:File = {
+			name: 'photo.jpg',
+			content: await fs.readFile(`${supportDir}/photo.jpg`),
+			mime_type: 'image/jpeg',
+			parent_id: '',
+		};
 
-		// const file:File = {
-		// 	name: 'testing.md',
-		// 	content: '# My test',
-		// 	parent_id: rootFile.id,
-		// 	mime_type: 'text/markdown',
-		// };
+		const fileController = new FileController();
+		let newFile = await fileController.createFile(session.id, file);
 
-		// const newFile = await controller.createFile(session.id, file);
-		// console.info(newFile);
-		// expect(!!newFile).toBe(true);
+		expect(!!newFile.id).toBe(true);
+		expect(newFile.name).toBe(file.name);
+		expect(newFile.mime_type).toBe(file.mime_type);
+		expect(!!newFile.parent_id).toBe(true);
+		expect(!newFile.content).toBe(true);
+
+		const fileModel = new FileModel();
+		newFile = await fileModel.load(newFile.id);
+
+		expect(!!newFile).toBe(true);
+
+		const originalFileHex = (file.content as Buffer).toString('hex');
+		const newFileHex = (newFile.content as Buffer).toString('hex');
+		expect(newFileHex.length > 0).toBe(true);
+		expect(newFileHex).toBe(originalFileHex);
 	}));
 
 });
