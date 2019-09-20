@@ -28,7 +28,7 @@ class InteropService {
 			},
 			{
 				format: 'md',
-				fileExtensions: ['md', 'markdown'],
+				fileExtensions: ['md', 'markdown', 'txt'],
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
