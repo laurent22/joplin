@@ -5,7 +5,6 @@ const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
-const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
 const md5 = require('md5');
@@ -165,7 +164,6 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
 function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!importOptions) importOptions = {};
-	// console.info(JSON.stringify({importOptions}, null, 2));
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
@@ -218,14 +216,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 				while (notes.length) {
 					let note = notes.shift();
-					const body = importOptions.outputFormat === 'html' ?
-						await enexXmlToHtml(note.bodyXml, note.resources) :
-						await enexXmlToMd(note.bodyXml, note.resources);
+					const body = await enexXmlToMd(note.bodyXml, note.resources);
 					delete note.bodyXml;
-
-					note.markup_language = importOptions.outputFormat === 'html' ?
-						Note.MARKUP_LANGUAGE_HTML :
-						Note.MARKUP_LANGUAGE_MARKDOWN;
 
 					// console.info('*************************************************************************');
 					// console.info(body);
