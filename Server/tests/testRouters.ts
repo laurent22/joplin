@@ -38,26 +38,26 @@ async function curl(method:string, path:string, query:object = null, body:any = 
 
 	if (typeof body === 'object' && body) {
 		curlCmd.push('--data');
-		curlCmd.push('\'' + JSON.stringify(body) + '\'');
+		curlCmd.push(`'${JSON.stringify(body)}'`);
 	}
 
 	if (formFields) {
 		for (const f of formFields) {
 			curlCmd.push('-F');
-			curlCmd.push('\'' + f + '\'');
+			curlCmd.push(`'${f}'`);
 		}
 	}
 
 	if (headers) {
 		for (const k in headers) {
 			curlCmd.push('--header');
-			curlCmd.push('"' + k + ': ' + headers[k] + '"');
+			curlCmd.push(`"${k}: ${headers[k]}"`);
 		}
 	}
 
-	curlCmd.push('http://localhost:3222/' + path + (query ? '?' + stringify(query) : ''));
+	curlCmd.push(`http://localhost:3222/${path}${query ? `?${stringify(query)}` : ''}`);
 
-	console.info('Running ' + curlCmd.join(' '));
+	console.info(`Running ${curlCmd.join(' ')}`);
 
 	const result = await execCommand(curlCmd.join(' '));
 	return result ? JSON.parse(result) : null;
@@ -68,14 +68,14 @@ const spawn = require('child_process').spawn;
 let serverProcess:any = null;
 
 async function main() {
-	const serverRoot = __dirname + '/../..';
+	const serverRoot = `${__dirname}/../..`;
 	process.chdir(serverRoot);
-	const pidFilePath = serverRoot + '/test.pid';
+	const pidFilePath = `${serverRoot}/test.pid`;
 
-	fs.removeSync(serverRoot + '/db-testing.sqlite');
+	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
 	await execCommand('npm run compile');
-	await execCommand('NODE_ENV=testing npx knex migrate:latest');
+	await execCommand('NODE_ENV=testing npm run db-migrate');
 
 	serverProcess = spawn('node', ['dist/app/app.js', '--pidfile', pidFilePath], {
 		detached: true,
@@ -89,8 +89,8 @@ async function main() {
 
 	while (true) {
 		try {
-			response = await curl('GET', 'ping');
-			console.info('Got ping response: ' + JSON.stringify(response));
+			response = await curl('GET', 'api/ping');
+			console.info(`Got ping response: ${JSON.stringify(response)}`);
 			break;
 		} catch (error) {
 			await sleep(0.5);
@@ -104,7 +104,7 @@ async function main() {
 	console.info('Session: ', session);
 
 	response = await curl('POST', 'api/files', null, null, { 'X-API-AUTH': session.id }, [
-		'data=@' + serverRoot + '/tests/support/photo.jpg',
+		`data=@${serverRoot}/tests/support/photo.jpg`,
 		'props={"title":"my resource title"}',
 	]);
 

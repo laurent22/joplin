@@ -15,11 +15,14 @@ export default class PermissionModel extends BaseModel {
 
 		if (userId) p.user_id = userId;
 
+		console.info(this.db<Permission>(this.tableName()).where(p).toSQL());
+
 		return this.db<Permission>(this.tableName()).where(p).select();
 	}
 
 	async canWrite(fileId:string, userId:string):Promise<boolean> {
 		const permissions = await this.filePermissions(fileId, userId);
+		console.info(permissions);
 		for (const p of permissions) {
 			if (p.can_write || p.is_owner) return true;
 		}

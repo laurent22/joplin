@@ -4,23 +4,24 @@
   "private": true,
   "scripts": {
     "start": "npm run compile && node dist/app/app.js",
-    "start-prod": "gulp scripts && node ./bin/www",
+    "start-prod": "npm run compile && node dist/app/app.js",
     "generate-types": "rm -f db-buildTypes.sqlite && NODE_ENV=buildTypes npm run db-migrate && NODE_ENV=buildTypes node dist/tools/generate-types.js && rm -f db-buildTypes.sqlite",
     "compile": "gulp",
-    "db-migrate": "npm run compile && npx knex migrate:latest",
+    "db-migrate": "npm run compile && node dist/tools/db-migrate.js",
     "postinstall": "npm run compile && npm run generate-types",
     "watch": "nodemon",
-    "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing npx knex migrate:latest && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
+    "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
     "@types/fs-extra": "^8.0.0",
     "@types/yargs": "^13.0.2",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
-    "co-body": "^6.0.0",
     "fs-extra": "^8.1.0",
     "knex": "^0.19.4",
     "koa": "^2.8.1",
+    "koa-body": "^4.1.1",
+    "koa-if": "^1.0.2",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",
     "yargs": "^14.0.0"

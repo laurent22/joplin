@@ -41,7 +41,7 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('created_time').notNullable();
 	});
 
-	const userModel = new UserModel({ db: knex });
+	const userModel = new UserModel();
 	await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
 }
 

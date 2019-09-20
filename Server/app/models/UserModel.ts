@@ -15,7 +15,7 @@ export default class UserModel extends BaseModel {
 	}
 
 	async createUser(email:string, password:string, options:User = {}):Promise<User> {
-		const transactionHandler = await this.transactionHandler(this.dbOptions);
+		const txIndex = await this.startTransaction();
 
 		let user:User = {
 			email: email,
@@ -25,16 +25,17 @@ export default class UserModel extends BaseModel {
 		if ('is_admin' in options) user.is_admin = options.is_admin;
 
 		try {
-			const userModel = new UserModel(transactionHandler.dbOptions);
+			const userModel = new UserModel();
 			user = await userModel.save(user);
 
-			const fileModel = new FileModel(transactionHandler.dbOptions);
+			const fileModel = new FileModel();
 			await fileModel.createRootFile(user.id);
 		} catch (error) {
-			transactionHandler.onError(error);
+			await this.rollbackTransaction(txIndex);
+			throw error;
 		}
 
-		transactionHandler.onSuccess();
+		await this.commitTransaction(txIndex);
 
 		return user;
 	}

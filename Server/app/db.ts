@@ -2,10 +2,10 @@ import Knex = require('knex');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-const knex:Knex = require('knex')({
+let knex:Knex = require('knex')({
 	client: 'sqlite3',
 	connection: {
-		filename: __dirname + '/../../db-' + nodeEnv + '.sqlite',
+		filename: `${__dirname}/../../db-${nodeEnv}.sqlite`,
 	},
 	useNullAsDefault: true,
 	// Allow propery stack traces in case of an error, however

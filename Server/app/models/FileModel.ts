@@ -3,6 +3,8 @@ import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType } from '../db';
 import { ErrorForbidden } from '../utils/errors';
 
+const nodeEnv = process.env.NODE_ENV || 'development';
+
 export interface CreateFileOptions {
 	skipPermissionChecks?: boolean
 }
@@ -26,9 +28,14 @@ export default class FileModel extends BaseModel {
 		return this.load(r.id);
 	}
 
+	async userRootFileId(userId:string):Promise<string> {
+		const r = await this.userRootFile(userId);
+		return r ? r.id : '';
+	}
+
 	async createRootFile(ownerId:string):Promise<File> {
 		const existingRootFile = await this.userRootFile(ownerId);
-		if (existingRootFile) throw new Error('User ' + ownerId + ' has already a root file');
+		if (existingRootFile) throw new Error(`User ${ownerId} has already a root file`);
 
 		return this.createFile(ownerId, {
 			is_directory: 1,
@@ -36,32 +43,45 @@ export default class FileModel extends BaseModel {
 		}, { skipPermissionChecks: true });
 	}
 
+	// In order to create a file, we need a parent_id. If `file` has this property set, use that.
+	// If not, use the user's root file ID.
 	async createFile(ownerId:string, file:File, options:CreateFileOptions = {}):Promise<File> {
-		const transactionHandler = await this.transactionHandler(this.dbOptions);
+		const txIndex = await this.startTransaction();
 
-		let newFile:File = null;
+		let newFile:File = { ... file };
+		let parentId = newFile.parent_id;
 
 		try {
-			if (options.skipPermissionChecks !== true) {
-				const invalidParentError = new ErrorForbidden('Invalid parent ID or no permission to write to it: ' + file.parent_id);
+			if (!parentId) parentId = await this.userRootFileId(ownerId);
 
-				const fileModel = new FileModel();
+			if (options.skipPermissionChecks !== true) {
+
+				const invalidParentError = function(extraInfo:string) {
+					let msg = `Invalid parent ID or no permission to write to it: ${parentId}`;
+					if (nodeEnv !== 'production') msg += ` (${extraInfo})`;
+					return new ErrorForbidden(msg);
+				};
+
+				if (!parentId) throw invalidParentError('No parent ID');
 
 				let parentFile:File;
 				try {
-					parentFile = await fileModel.load(file.parent_id);
-					if (!parentFile) throw invalidParentError;
+					parentFile = await this.load(parentId);
+					if (!parentFile) throw invalidParentError('Cannot load parent file');
 				} catch (error) {
-					throw invalidParentError;
+					if (error.message.indexOf('Invalid parent') === 0) throw error;
+					throw invalidParentError(`Unknown: ${error.message}`);
 				}
 
 				const permissionModel = new PermissionModel();
 
-				const canWrite:boolean = await permissionModel.canWrite(ownerId, parentFile.id);
-				if (!canWrite) throw invalidParentError;
+				const canWrite:boolean = await permissionModel.canWrite(parentFile.id, ownerId);
+				if (!canWrite) throw invalidParentError('Cannot write to file');
 			}
 
-			newFile = await this.save(file);
+			newFile.parent_id = parentId;
+
+			newFile = await this.save(newFile);
 
 			let permission:Permission = {
 				user_id: ownerId,
@@ -76,10 +96,11 @@ export default class FileModel extends BaseModel {
 
 			await permissionModel.save(permission);
 		} catch (error) {
-			transactionHandler.onError(error);
+			await this.rollbackTransaction(txIndex);
+			throw error;
 		}
 
-		transactionHandler.onSuccess();
+		await this.commitTransaction(txIndex);
 
 		return newFile;
 	}

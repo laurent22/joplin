@@ -1,6 +1,7 @@
 import db, { WithDates, WithUuid } from '../db';
 import * as Knex from 'knex';
 const { uuid } = require('lib/uuid.js');
+import { transactionHandler } from '../utils/dbUtils';
 
 export interface DbOptions {
 	db?: Knex<any, any[]>
@@ -33,11 +34,11 @@ class TransactionHandler {
 	}
 
 	async init() {
-		if (!this.dbOptions_.transaction) {
-			const trx = await this.db.transaction();
-			this.dbOptions_.transaction = trx;
-			this.hasCreatedTransaction_ = true;
-		}
+		// if (!this.dbOptions_.transaction) {
+		// 	const trx = await this.db.transaction();
+		// 	this.dbOptions_.transaction = trx;
+		// 	this.hasCreatedTransaction_ = true;
+		// }
 	}
 
 	onError(error:Error) {
@@ -59,6 +60,8 @@ class TransactionHandler {
 export default abstract class BaseModel {
 
 	private dbOptions_:DbOptions = null;
+	private transactionStack_:boolean[] = [];
+	private currentTransaction_:Knex.Transaction = null;
 
 	constructor(dbOptions:DbOptions = null) {
 		this.dbOptions_ = dbOptions;
@@ -69,9 +72,16 @@ export default abstract class BaseModel {
 	}
 
 	get db():Knex<any, any[]> {
-		if (!!this.dbOptions && !!this.dbOptions.transaction) return this.dbOptions.transaction;
-		if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
+		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
 		return db;
+
+		// if (this.currentTransaction_) return this.currentTransaction_;
+		// if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
+
+
+		// if (!!this.dbOptions && !!this.dbOptions.transaction) return this.dbOptions.transaction;
+		// if (!!this.dbOptions && !!this.dbOptions.db) return this.dbOptions.db;
+		// return db;
 	}
 
 	tableName():string {
@@ -80,6 +90,18 @@ export default abstract class BaseModel {
 
 	hasDateProperties():boolean {
 		return true;
+	}
+
+	async startTransaction():Promise<number> {
+		return transactionHandler.start();
+	}
+
+	async commitTransaction(txIndex:number):Promise<void> {
+		return transactionHandler.commit(txIndex);
+	}
+
+	async rollbackTransaction(txIndex:number):Promise<void> {
+		return transactionHandler.rollback(txIndex);
 	}
 
 	async transactionHandler(baseDbOptions:DbOptions):Promise<TransactionHandler> {
