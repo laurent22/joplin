@@ -378,15 +378,12 @@ class Application extends BaseApplication {
 								message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
 							});
 
-							const importOptions = {
-								path,
-								format: module.format,
-								modulePath: module.path,
-								onError: console.warn,
-								destinationFolderId:
-								!module.isNoteArchive && moduleSource === 'file'
-									? selectedFolderId
-									: null,
+							const importOptions = {};
+							importOptions.path = path;
+							importOptions.format = module.format;
+							importOptions.destinationFolderId = !module.isNoteArchive && moduleSource === 'file' ? selectedFolderId : null;
+							importOptions.onError = (error) => {
+								console.warn(error);
 							};
 
 							const service = new InteropService();

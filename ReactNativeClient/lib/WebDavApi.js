@@ -195,9 +195,7 @@ class WebDavApi {
 			`<?xml version="1.0" encoding="UTF-8"?>
 			<d:propfind xmlns:d="DAV:">
 				<d:prop xmlns:oc="http://owncloud.org/ns">
-					${
-	fieldsXml
-}
+					${fieldsXml}
 				</d:prop>
 			</d:propfind>`;
 

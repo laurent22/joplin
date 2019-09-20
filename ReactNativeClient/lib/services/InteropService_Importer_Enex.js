@@ -2,7 +2,7 @@ const InteropService_Importer_Base = require('lib/services/InteropService_Import
 const Folder = require('lib/models/Folder.js');
 const { filename } = require('lib/path-utils.js');
 
-class InteropService_Importer_EnexToHtml extends InteropService_Importer_Base {
+class InteropService_Importer_Enex extends InteropService_Importer_Base {
 	async exec(result) {
 		const { importEnex } = require('lib/import-enex');
 
@@ -13,10 +13,10 @@ class InteropService_Importer_EnexToHtml extends InteropService_Importer_Base {
 			folder = await Folder.save({ title: folderTitle });
 		}
 
-		await importEnex(folder.id, this.sourcePath_, {...this.options_, outputFormat: 'html'});
+		await importEnex(folder.id, this.sourcePath_, this.options_);
 
 		return result;
 	}
 }
 
-module.exports = InteropService_Importer_EnexToHtml;
+module.exports = InteropService_Importer_Enex;
