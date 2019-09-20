@@ -43,7 +43,6 @@ class InteropService {
 				sources: ['file'],
 				description: _('Evernote Export File (as Markdown)'),
 				importerClass: 'InteropService_Importer_EnexToMd',
-				isDefault: true,
 			},
 			{
 				format: 'enex',
@@ -121,23 +120,14 @@ class InteropService {
 		return this.modules_;
 	}
 
-	// Find the module that matches the given type ("importer" or "exporter")
-	// and the given format. Some formats can have multiple assocated importers
-	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
-	// is returned. This is useful to auto-detect the module based on the format.
-	// For more precise matching, newModuleFromPath_ should be used.
 	findModuleByFormat_(type, format) {
 		const modules = this.modules();
-		const matches = [];
+		// console.log(JSON.stringify({modules}, null, 2))
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
-			if (m.format === format && m.type === type) matches.push(modules[i]);
+			if (m.format === format && m.type === type) return modules[i];
 		}
-
-		const output = matches.find(m => !!m.isDefault);
-		if (output) return output;
-
-		return matches.length ? matches[0] : null;
+		return null;
 	}
 
 	newModuleByFormat_(type, format) {
@@ -154,6 +144,10 @@ class InteropService {
 	 * was fine when there was a 1-1 mapping of input formats to output formats,
 	 * but now that we have 2 possible outputs for an `enex` input, we need to be
 	 * explicit with which importer we want to use.
+	 *
+	 * In the long run, it might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one
+	 * way to do this mapping.
 	 *
 	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	 */
@@ -211,14 +205,7 @@ class InteropService {
 		// console.log('options passed to InteropService:');
 		// console.log(JSON.stringify({options}, null, 2));
 
-		let importer = null;
-
-		if (options.modulePath) {
-			importer = this.newModuleFromPath_(options);
-		} else {
-			importer = this.newModuleByFormat_('importer', options.format);
-		}
-
+		const importer = this.newModuleFromPath_(options);
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 
