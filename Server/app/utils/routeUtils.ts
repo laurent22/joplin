@@ -1,7 +1,12 @@
 const { ltrimSlashes, rtrimSlashes } = require('lib/path-utils');
 
+export interface Route {
+	exec: Function,
+	needsBodyMiddleware?: boolean
+}
+
 export interface Routes {
-	[key: string]: Function,
+	[key: string]: Route,
 }
 
 export interface SubPath {
@@ -10,7 +15,7 @@ export interface SubPath {
 }
 
 export interface MatchedRoute {
-	route: Function,
+	route: Route,
 	basePath: string,
 	subPath: SubPath,
 }

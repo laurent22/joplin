@@ -10,6 +10,7 @@ import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
 import { Routes, findMatchingRoute } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
+import koaIf from './utils/koaIf';
 
 const port = 3222;
 
@@ -26,25 +27,14 @@ const routes:Routes = {
 	'api/files': apiFilesRoute,
 };
 
-function koaIf(middleware:Function, condition:any=null) {
-	return async (ctx:Koa.Context, next:Function) => {
-		if (typeof condition === 'function' && condition(ctx)) {
-			await middleware(ctx, next);
-		} else if (typeof condition === 'boolean' && condition) {
-			await middleware(ctx, next);
-		} else {
-			await next();
-		}
-	};
-}
-
 const koaBodyMiddleware = koaBody({
 	multipart: true,
 	includeUnparsed: true,
 });
 
 app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
-	return ctx.path.indexOf('/api/files') === 0;
+	const match = findMatchingRoute(ctx.path, routes);
+	return match.route.needsBodyMiddleware === true;
 }));
 
 app.use(async (ctx:Koa.Context) => {
@@ -52,7 +42,7 @@ app.use(async (ctx:Koa.Context) => {
 
 	try {
 		if (match) {
-			const responseObject = await match.route(match.subPath, ctx);
+			const responseObject = await match.route.exec(match.subPath, ctx);
 			ctx.response.status = 200;
 			ctx.response.body = responseObject;
 		} else {
