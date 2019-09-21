@@ -20,7 +20,7 @@ export default class FileController extends BaseController {
 	async updateFile(sessionId:string, fileId:string, file:File):Promise<void> {
 		await this.initSession(sessionId);
 		const fileModel = new FileModel();
-		const newFile = fileModel.objectToEntity(file);
+		const newFile = await fileModel.objectToEntity(file);
 		newFile.id = fileId;
 		await fileModel.save(newFile);
 	}

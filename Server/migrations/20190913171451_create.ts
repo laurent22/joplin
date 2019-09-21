@@ -33,9 +33,10 @@ export async function up(knex: Knex): Promise<any> {
 	await knex.schema.createTable('files', function(table:Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('name').notNullable();
-		table.binary('content').defaultTo('').notNullable(); // $id: Buffer.from(item.id, 'hex')
+		table.binary('content').defaultTo('').notNullable();
 		table.string('mime_type', 128).defaultTo('application/octet-stream').notNullable();
 		table.integer('is_directory').defaultTo(0).notNullable();
+		table.integer('is_root').defaultTo(0).notNullable();
 		table.string('parent_id', 32).defaultTo('').notNullable();
 		table.integer('updated_time').notNullable();
 		table.integer('created_time').notNullable();

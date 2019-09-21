@@ -3,29 +3,29 @@ import * as Knex from 'knex';
 const { uuid } = require('lib/uuid.js');
 import { transactionHandler } from '../utils/dbUtils';
 
-export interface DbOptions {
-	db?: Knex<any, any[]>
-	transaction?: Knex.Transaction,
+export interface ModelOptions {
+	userId?: number
 }
 
 export interface SaveOptions {
 	isNew?: boolean,
 }
 
-export interface ObjectToEntityOptions {
+export interface ValidateOptions {
+	userId?: string
 	isCreation?: boolean
 }
 
 export default abstract class BaseModel {
 
-	private dbOptions_:DbOptions = null;
+	private options_:ModelOptions = null;
 
-	constructor(dbOptions:DbOptions = null) {
-		this.dbOptions_ = dbOptions;
+	constructor(options:ModelOptions = null) {
+		this.options_ = options;
 	}
 
-	get dbOptions():DbOptions {
-		return this.dbOptions_;
+	get options():ModelOptions {
+		return this.options_;
 	}
 
 	get db():Knex<any, any[]> {

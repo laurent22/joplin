@@ -56,6 +56,7 @@ export interface File extends WithDates, WithUuid {
 	content?: any
 	mime_type?: string
 	is_directory?: number
+	is_root?: number
 	parent_id?: string
 }
 // AUTO-GENERATED-TYPES

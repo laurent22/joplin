@@ -18,9 +18,6 @@ appLogger.info(`Starting server on port ${port} and PID ${process.pid}...`);
 
 const app = new Koa();
 
-// TODO: the routes should be an object with { exec: () => {} }
-//       + additional properties to tell what the route needs.
-//       For example `needBodyMiddleware` for api/files
 const routes:Routes = {
 	'api/ping': apiPingRoute,
 	'api/sessions': apiSessionsRoute,
