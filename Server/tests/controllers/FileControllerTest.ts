@@ -1,4 +1,4 @@
-import { asyncTest, clearDatabase, supportDir, createUserAndSession } from '../testUtils';
+import { asyncTest, clearDatabase, supportDir, createUserAndSession, createUser, checkThrowAsync } from '../testUtils';
 import FileController from '../../app/controllers/FileController';
 import FileModel from '../../app/models/FileModel';
 import * as fs from 'fs-extra';
@@ -58,32 +58,56 @@ describe('FileController', function() {
 		expect(newFileHex).toBe(originalFileHex);
 	}));
 
-	// it('should update a file name', asyncTest(async function() {
-	// 	const fileModel = new FileModel();
+	it('should not let create a file in a directory not owned by user', asyncTest(async function() {
+		const { session } = await createUserAndSession(true);
 
-	// 	const { session } = await createUserAndSession(true);
+		const user2 = await createUser(2);
+		const fileModel2 = new FileModel({ userId: user2.id });
+		const rootFile2 = await fileModel2.userRootFile();
 
-	// 	let file:File = await makeTestFile();
+		const file:File = await makeTestFile();
+		file.parent_id = rootFile2.id;
+		const fileController = new FileController();
 
-	// 	const fileController = new FileController();
-	// 	file = await fileController.createFile(session.id, file);
+		const hasThrown = await checkThrowAsync(async () => fileController.createFile(session.id, file));
+		expect(hasThrown).toBe(true);
+	}));
 
-	// 	let hasThrown = false;
-	// 	try {
-	// 		await fileController.updateFile(session.id, file.id, { name: '' });
-	// 	} catch (error) {
-	// 		hasThrown = true;
-	// 	}
 
-	// 	expect(hasThrown).toBe(true);
+	it('should update a file name', asyncTest(async function() {
+		const { session, user } = await createUserAndSession(true);
 
-	// 	await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
+		const fileModel = new FileModel({ userId: user.id });
 
-	// 	file = await fileModel.load(file.id);
-	// 	expect(file.name).toBe('modified.jpg');
-	// }));
+		let file:File = await makeTestFile();
 
-	// // TODO: Check that file with the same name cannot be added to same dir
+		const fileController = new FileController();
+		file = await fileController.createFile(session.id, file);
+
+		const hasThrown = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
+		expect(hasThrown).toBe(true);
+
+		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
+
+		file = await fileModel.load(file.id);
+		expect(file.name).toBe('modified.jpg');
+	}));
+
+	it('should not allow duplicate filenames', asyncTest(async function() {
+		const { session } = await createUserAndSession(true);
+
+		let file1:File = await makeTestFile(1);
+		let file2:File = await makeTestFile(1);
+
+		const fileController = new FileController();
+		file1 = await fileController.createFile(session.id, file1);
+
+		expect(!!file1.id).toBe(true);
+		expect(file1.name).toBe(file2.name);
+
+		const hasThrown = await checkThrowAsync(async () =>  await fileController.createFile(session.id, file2));
+		expect(hasThrown).toBe(true);
+	}));
 
 	// it('should change the file parent', asyncTest(async function() {
 	// 	const fileModel = new FileModel();

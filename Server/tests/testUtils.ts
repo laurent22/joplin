@@ -36,11 +36,26 @@ interface UserAndSession {
 export const createUserAndSession = async function(isAdmin:boolean):Promise<UserAndSession> {
 	const userModel = new UserModel();
 	const sessionController = new SessionController();
-	const user = await userModel.createUser('admin@localhost', 'admin', { is_admin: isAdmin ? 1 : 0 });
-	const session = await sessionController.authenticate('admin@localhost', 'admin');
+	const user = await userModel.createUser('admin@localhost', '123456', { is_admin: isAdmin ? 1 : 0 });
+	const session = await sessionController.authenticate('admin@localhost', '123456');
 
 	return {
 		user: user,
 		session: session,
 	};
 };
+
+export const createUser = async function(index:number = 1, isAdmin:boolean = false):Promise<User> {
+	const userModel = new UserModel();
+	return userModel.createUser(`user${index}@localhost`, '123456', { is_admin: isAdmin ? 1 : 0 });
+};
+
+export async function checkThrowAsync(asyncFn:Function):Promise<boolean> {
+	let hasThrown = false;
+	try {
+		await asyncFn();
+	} catch (error) {
+		hasThrown = true;
+	}
+	return hasThrown;
+}

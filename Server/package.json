@@ -23,6 +23,7 @@
     "koa-body": "^4.1.1",
     "koa-if": "^1.0.2",
     "moment": "^2.24.0",
+    "nanoid": "^2.1.1",
     "query-string": "^6.8.3",
     "sqlite3": "^4.1.0",
     "yargs": "^14.0.0"

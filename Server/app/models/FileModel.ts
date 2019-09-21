@@ -1,7 +1,7 @@
-import BaseModel, { ValidateOptions } from './BaseModel';
+import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound } from '../utils/errors';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -40,6 +40,17 @@ export default class FileModel extends BaseModel {
 		return r.user_id;
 	}
 
+	defaultFields():string | string[] {
+		return ['id', 'name', 'mime_type', 'is_directory', 'is_root', 'parent_id'];
+	}
+
+	async fileByName(parentId:string, name:string):Promise<File> {
+		return this.db<File>(this.tableName()).select(this.defaultFields()).where({
+			parent_id: parentId,
+			name: name,
+		}).first();
+	}
+
 	async validate(object:File, options:ValidateOptions = {}):Promise<File> {
 		const file:File = object;
 
@@ -49,10 +60,10 @@ export default class FileModel extends BaseModel {
 			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		}
 
-		if ('parent_id' in file && !file.is_root) {
-			let parentId = file.parent_id;
-			if (!parentId) parentId = await this.userRootFileId();
+		let parentId = file.parent_id;
+		if (!parentId) parentId = await this.userRootFileId();
 
+		if ('parent_id' in file && !file.is_root) {
 			const invalidParentError = function(extraInfo:string) {
 				let msg = `Invalid parent ID or no permission to write to it: ${parentId}`;
 				if (nodeEnv !== 'production') msg += ` (${extraInfo})`;
@@ -65,7 +76,6 @@ export default class FileModel extends BaseModel {
 				const parentFile:File = await this.load(parentId);
 				if (!parentFile) throw invalidParentError('Cannot load parent file');
 				if (!parentFile.is_directory) throw invalidParentError('Specified parent is not a directory');
-				// TODO: Check that user owns parent directory
 			} catch (error) {
 				if (error.message.indexOf('Invalid parent') === 0) throw error;
 				throw invalidParentError(`Unknown: ${error.message}`);
@@ -77,16 +87,22 @@ export default class FileModel extends BaseModel {
 			if (!canWrite) throw invalidParentError('Cannot write to file');
 		}
 
+		if ('name' in file) {
+			const existingFile = await this.fileByName(parentId, file.name);
+			if (existingFile && options.isNew) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
+			if (existingFile && file.id === existingFile.id) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
+		}
+
 		return file;
 	}
 
-	async objectToEntity(object:any, options:ValidateOptions = {}):Promise<any> {
+	async objectToEntity(object:any):Promise<any> {
 		const file:File = {};
 
 		if ('name' in object) file.name = object.name;
 		if ('parent_id' in object) file.parent_id = object.parent_id;
 
-		return this.validate(file, options);
+		return file;
 	}
 
 	async createRootFile():Promise<File> {
@@ -102,28 +118,39 @@ export default class FileModel extends BaseModel {
 		});
 	}
 
-	async save(object:File):Promise<File> {
+	async load(id:string):Promise<File> {
+		const permissionModel = new PermissionModel();
+		const canRead:boolean = await permissionModel.canRead(id, this.userId);
+		if (!canRead) throw new ErrorNotFound(); // Return 404 for security reasons, so that user cannot test if file exists or not
+
+		return super.load(id);
+	}
+
+	async save(object:File, options:SaveOptions = {}):Promise<File> {
+		const isNew = this.isNew(object, options);
+
 		const txIndex = await this.startTransaction();
 
-		let newFile:File = { ... object };
+		let file:File = { ... object };
 
 		try {
-			if (!newFile.parent_id && !newFile.is_root) newFile.parent_id = await this.userRootFileId();
+			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
 
-			newFile = await super.save(newFile);
+			file = await super.save(file, options);
 
-			let permission:Permission = {
-				user_id: this.options.userId,
-				is_owner: 1,
-				item_type: ItemType.File,
-				item_id: newFile.id,
-				can_read: 1,
-				can_write: 1,
-			};
+			if (isNew) {
+				const permission:Permission = {
+					user_id: this.options.userId,
+					is_owner: 1,
+					item_type: ItemType.File,
+					item_id: file.id,
+					can_read: 1,
+					can_write: 1,
+				};
 
-			const permissionModel = new PermissionModel();
-
-			await permissionModel.save(permission);
+				const permissionModel = new PermissionModel();
+				await permissionModel.save(permission);
+			}
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;
@@ -131,7 +158,7 @@ export default class FileModel extends BaseModel {
 
 		await this.commitTransaction(txIndex);
 
-		return newFile;
+		return file;
 	}
 
 	toApiOutput(object:any):any {

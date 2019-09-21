@@ -1,7 +1,7 @@
 import db, { WithDates, WithUuid, File, User, Session, Permission } from '../db';
 import * as Knex from 'knex';
-const { uuid } = require('lib/uuid.js');
 import { transactionHandler } from '../utils/dbUtils';
+import uuidgen from '../utils/uuidgen';
 
 export interface ModelOptions {
 	userId?: string
@@ -34,6 +34,10 @@ export default abstract class BaseModel {
 	get db():Knex<any, any[]> {
 		if (transactionHandler.activeTransaction) return transactionHandler.activeTransaction;
 		return db;
+	}
+
+	defaultFields():string | string[] {
+		return '*';
 	}
 
 	tableName():string {
@@ -69,15 +73,20 @@ export default abstract class BaseModel {
 		return object;
 	}
 
+	isNew(object:File | User | Session | Permission, options:SaveOptions):boolean {
+		if (options.isNew && !(object as WithUuid).id) throw new Error('Object must have an ID when isNew option is set');
+		return options.isNew === true || !(object as WithUuid).id;
+	}
+
 	async save(object:File | User | Session | Permission, options:SaveOptions = {}):Promise<File | User | Session | Permission> {
 		if (!object) throw new Error('Object cannot be empty');
 
 		const toSave = Object.assign({}, object);
 
-		const isNew = options.isNew === true || !(object as WithUuid).id;
+		const isNew = this.isNew(object, options);
 
 		if (isNew && !(toSave as WithUuid).id) {
-			(toSave as WithUuid).id = uuid.create();
+			(toSave as WithUuid).id = uuidgen();
 		}
 
 		if (this.hasDateProperties()) {
@@ -102,7 +111,7 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
-	async load<T>(id:string):Promise<T> {
+	async load(id:string):Promise<File | User | Session | Permission> {
 		if (!id) throw new Error('ID cannot be empty');
 		return this.db(this.tableName()).where({ id: id }).first();
 	}

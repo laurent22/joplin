@@ -3,8 +3,7 @@ import { checkPassword } from '../utils/auth';
 import { ErrorForbidden } from '../utils/errors';
 import SessionModel from '../models/SessionModel';
 import UserModel from '../models/UserModel';
-
-const { uuid } = require('lib/uuid.js');
+import uuidgen from '../utils/uuidgen';
 
 export default class SessionController {
 
@@ -12,7 +11,7 @@ export default class SessionController {
 		const userModel = new UserModel();
 		const user:User = await userModel.loadByEmail(email);
 		if (!checkPassword(password, user.password)) throw new ErrorForbidden('Invalid username or password');
-		const session:Session = { id: uuid.create(), user_id: user.id };
+		const session:Session = { id: uuidgen(), user_id: user.id };
 		const sessionModel = new SessionModel();
 		return sessionModel.save(session, { isNew: true });
 	}
