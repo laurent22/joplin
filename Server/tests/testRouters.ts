@@ -31,7 +31,7 @@ async function sleep(seconds:number) {
 async function curl(method:string, path:string, query:object = null, body:any = null, headers:any = null, formFields:string[] = null):Promise<any> {
 	const curlCmd:string[] = ['curl'];
 
-	if (method !== 'GET' && !formFields && !body) {
+	if ((['PUT', 'DELETE'].indexOf(method) >= 0) || (method == 'POST' && !formFields && !body)) {
 		curlCmd.push('-X');
 		curlCmd.push(method);
 	}
@@ -47,6 +47,10 @@ async function curl(method:string, path:string, query:object = null, body:any = 
 			curlCmd.push(`'${f}'`);
 		}
 	}
+
+	if (!headers && body) headers = {};
+
+	if (body) headers['Content-Type'] = 'application/json';
 
 	if (headers) {
 		for (const k in headers) {
@@ -83,7 +87,7 @@ async function main() {
 		env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
 	});
 
-	let response:object = null;
+	let response:any = null;
 
 	console.info('Waiting for server to be ready...');
 
@@ -109,6 +113,18 @@ async function main() {
 	]);
 
 	console.info('Response:', response);
+
+	let file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
+
+	console.info('Response:', file);
+
+	await curl('PUT', `api/files/${response.id}`, null, {
+		name: 'changed-name.jpg',
+	}, { 'X-API-AUTH': session.id });
+
+	file = await curl('GET', `api/files/${file.id}`, null, null, { 'X-API-AUTH': session.id });
+
+	console.info('Response:', file);
 
 	serverProcess.kill();
 }

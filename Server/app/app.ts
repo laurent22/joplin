@@ -8,22 +8,14 @@ import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
+import { Routes, findMatchingRoute } from './utils/routeUtils';
+import appLogger from './utils/appLogger';
 
 const port = 3222;
 
-console.info(`Starting server on port ${port} and PID ${process.pid}...`);
+appLogger.info(`Starting server on port ${port} and PID ${process.pid}...`);
 
 const app = new Koa();
-
-interface Routes {
-	[key: string]: Function,
-}
-
-interface MatchedRoute {
-	route: Function,
-	basePath: string,
-	subPath: string,
-}
 
 // TODO: the routes should be an object with { exec: () => {} }
 //       + additional properties to tell what the route needs.
@@ -33,35 +25,6 @@ const routes:Routes = {
 	'api/sessions': apiSessionsRoute,
 	'api/files': apiFilesRoute,
 };
-
-function findMatchingRoute(path:string, routes:Routes):MatchedRoute {
-	let splittedPath = path.split('/');
-	splittedPath.splice(0, 1);
-
-	if (splittedPath.length >= 2) {
-		const basePath = `${splittedPath[0]}/${splittedPath[1]}`;
-		if (routes[basePath]) {
-			splittedPath.splice(0, 2);
-			return {
-				route: routes[basePath],
-				basePath: basePath,
-				subPath: `/${splittedPath.join('/')}`,
-			};
-		}
-	}
-
-	const basePath = splittedPath[0];
-	if (routes[basePath]) {
-		splittedPath.splice(0, 1);
-		return {
-			route: routes[basePath],
-			basePath: basePath,
-			subPath: `/${splittedPath.join('/')}`,
-		};
-	}
-
-	return null;
-}
 
 function koaIf(middleware:Function, condition:any=null) {
 	return async (ctx:Koa.Context, next:Function) => {
@@ -96,7 +59,7 @@ app.use(async (ctx:Koa.Context) => {
 			throw new ErrorNotFound();
 		}
 	} catch (error) {
-		console.error(error);
+		appLogger.error(error);
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 		ctx.response.body = { error: error.message };
 	}
@@ -104,7 +67,7 @@ app.use(async (ctx:Koa.Context) => {
 
 const pidFile = argv.pidfile as string;
 if (pidFile) {
-	console.info(`Writing PID to ${pidFile}...`);
+	appLogger.info(`Writing PID to ${pidFile}...`);
 	fs.removeSync(pidFile as string);
 	fs.writeFileSync(pidFile, `${process.pid}`);
 }

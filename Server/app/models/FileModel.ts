@@ -1,7 +1,7 @@
-import BaseModel from './BaseModel';
+import BaseModel, { ObjectToEntityOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType } from '../db';
-import { ErrorForbidden } from '../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -31,6 +31,23 @@ export default class FileModel extends BaseModel {
 	async userRootFileId(userId:string):Promise<string> {
 		const r = await this.userRootFile(userId);
 		return r ? r.id : '';
+	}
+
+	objectToEntity(object:any, options:ObjectToEntityOptions = {}):File {
+		const file:File = {};
+
+		if ('name' in object) file.name = object.name;
+		if ('parent_id' in object) file.parent_id = object.parent_id;
+
+		if (options.isCreation) {
+			if (!file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if (!file.parent_id) throw new ErrorUnprocessableEntity('parent_id cannot be empty');
+		} else {
+			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if ('parent_id' in file && !file.parent_id) throw new ErrorUnprocessableEntity('parent_id cannot be empty');
+		}
+
+		return file;
 	}
 
 	async createRootFile(ownerId:string):Promise<File> {

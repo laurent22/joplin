@@ -30,3 +30,9 @@ export class ErrorBadRequest extends ApiError {
 	}
 
 }
+
+export class ErrorUnprocessableEntity extends ApiError {
+	constructor(message:string = 'Unprocessable Entity') {
+		super(message, 422);
+	}
+}

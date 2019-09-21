@@ -11,6 +11,7 @@ let knex:Knex = require('knex')({
 	// Allow propery stack traces in case of an error, however
 	// it has a small performance overhead so only enable in testing and dev
 	asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
+	// debug: nodeEnv == 'development' || nodeEnv === 'testing',
 });
 
 export default knex;

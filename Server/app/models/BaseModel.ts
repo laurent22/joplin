@@ -12,6 +12,10 @@ export interface SaveOptions {
 	isNew?: boolean,
 }
 
+export interface ObjectToEntityOptions {
+	isCreation?: boolean
+}
+
 export default abstract class BaseModel {
 
 	private dbOptions_:DbOptions = null;
@@ -60,25 +64,32 @@ export default abstract class BaseModel {
 	async save<T>(object:T, options:SaveOptions = {}):Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
 
-		const newObject:T = Object.assign({}, object);
+		const toSave:T = Object.assign({}, object);
 
 		const isNew = options.isNew === true || !(object as WithUuid).id;
 
-		if (isNew && !(newObject as WithUuid).id) {
-			(newObject as WithUuid).id = uuid.create();
+		if (isNew && !(toSave as WithUuid).id) {
+			(toSave as WithUuid).id = uuid.create();
 		}
 
 		if (this.hasDateProperties()) {
 			const timestamp = Date.now();
 			if (isNew) {
-				(newObject as WithDates).created_time = timestamp;
+				(toSave as WithDates).created_time = timestamp;
 			}
-			(newObject as WithDates).updated_time = timestamp;
+			(toSave as WithDates).updated_time = timestamp;
 		}
 
-		await this.db(this.tableName()).insert(newObject);
+		if (isNew) {
+			await this.db(this.tableName()).insert(toSave);
+		} else {
+			const objectId:string = (toSave as WithUuid).id;
+			if (!objectId) throw new Error('Missing "id" property');
+			delete (toSave as WithUuid).id;
+			await this.db(this.tableName()).update(toSave).where({id: objectId });
+		}
 
-		return newObject;
+		return toSave;
 	}
 
 	async load<T>(id:string):Promise<T> {
