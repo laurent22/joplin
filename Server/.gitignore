@@ -3,3 +3,4 @@ dist
 db.sqlite
 db-*.sqlite
 *.pid
+logs/
