@@ -12,8 +12,7 @@ export interface SaveOptions {
 }
 
 export interface ValidateOptions {
-	userId?: string
-	isCreation?: boolean
+	isNew?: boolean
 }
 
 export default abstract class BaseModel {
@@ -65,6 +64,11 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	async validate(object:File | User | Session | Permission, options:ValidateOptions = {}):Promise<File | User | Session | Permission> {
+		return object;
+	}
+
 	async save(object:File | User | Session | Permission, options:SaveOptions = {}):Promise<File | User | Session | Permission> {
 		if (!object) throw new Error('Object cannot be empty');
 
@@ -83,6 +87,8 @@ export default abstract class BaseModel {
 			}
 			(toSave as WithDates).updated_time = timestamp;
 		}
+
+		object = await this.validate(object, { isNew: isNew });
 
 		if (isNew) {
 			await this.db(this.tableName()).insert(toSave);
