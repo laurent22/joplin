@@ -28,8 +28,8 @@ export default class UserModel extends BaseModel {
 			const userModel = new UserModel();
 			user = await userModel.save(user);
 
-			const fileModel = new FileModel();
-			await fileModel.createRootFile(user.id);
+			const fileModel = new FileModel({ userId: user.id });
+			await fileModel.createRootFile();
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;

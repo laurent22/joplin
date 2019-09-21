@@ -13,11 +13,11 @@ describe('UserController', function() {
 	});
 
 	it('should create a new user along with his root file', asyncTest(async function() {
+		const { session } = await createUserAndSession(true);
+
 		const controller = new UserController();
-		const fileModel = new FileModel();
 		const permissionModel = new PermissionModel();
 
-		const { session } = await createUserAndSession(true);
 		const newUser = await controller.createUser(session.id, 'test@example.com', '123456');
 
 		expect(!!newUser).toBe(true);
@@ -26,7 +26,8 @@ describe('UserController', function() {
 		expect(!!newUser.email).toBe(true);
 		expect(!!newUser.password).toBe(true);
 
-		const rootFile:File = await fileModel.userRootFile(newUser.id);
+		const fileModel = new FileModel({ userId: newUser.id });
+		const rootFile:File = await fileModel.userRootFile();
 
 		expect(!!rootFile).toBe(true);
 		expect(!!rootFile.id).toBe(true);
@@ -43,12 +44,13 @@ describe('UserController', function() {
 	}));
 
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', asyncTest(async function() {
+		const { user, session } = await createUserAndSession(true);
+
 		const controller = new UserController();
-		const fileModel = new FileModel();
+		const fileModel = new FileModel({ userId: user.id });
 		const permissionModel = new PermissionModel();
 		const userModel = new UserModel();
 
-		const { session } = await createUserAndSession(true);
 		await controller.createUser(session.id, 'test@example.com', '123456');
 
 		const beforeFileCount = (await fileModel.all<File[]>()).length;

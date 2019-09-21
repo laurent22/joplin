@@ -34,7 +34,7 @@ describe('FileController', function() {
 	});
 
 	it('should create a file', asyncTest(async function() {
-		const { session } = await createUserAndSession(true);
+		const { user, session } = await createUserAndSession(true);
 
 		const file:File = await makeTestFile();
 
@@ -47,7 +47,7 @@ describe('FileController', function() {
 		expect(!!newFile.parent_id).toBe(true);
 		expect(!newFile.content).toBe(true);
 
-		const fileModel = new FileModel();
+		const fileModel = new FileModel({ userId: user.id });
 		newFile = await fileModel.load(newFile.id);
 
 		expect(!!newFile).toBe(true);

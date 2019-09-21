@@ -1,10 +1,10 @@
-import db, { WithDates, WithUuid } from '../db';
+import db, { WithDates, WithUuid, File, User, Session, Permission } from '../db';
 import * as Knex from 'knex';
 const { uuid } = require('lib/uuid.js');
 import { transactionHandler } from '../utils/dbUtils';
 
 export interface ModelOptions {
-	userId?: number
+	userId?: string
 }
 
 export interface SaveOptions {
@@ -21,11 +21,15 @@ export default abstract class BaseModel {
 	private options_:ModelOptions = null;
 
 	constructor(options:ModelOptions = null) {
-		this.options_ = options;
+		this.options_ = Object.assign({}, options);
 	}
 
 	get options():ModelOptions {
 		return this.options_;
+	}
+
+	get userId():string {
+		return this.options.userId;
 	}
 
 	get db():Knex<any, any[]> {
@@ -61,10 +65,10 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
-	async save<T>(object:T, options:SaveOptions = {}):Promise<T> {
+	async save(object:File | User | Session | Permission, options:SaveOptions = {}):Promise<File | User | Session | Permission> {
 		if (!object) throw new Error('Object cannot be empty');
 
-		const toSave:T = Object.assign({}, object);
+		const toSave = Object.assign({}, object);
 
 		const isNew = options.isNew === true || !(object as WithUuid).id;
 
