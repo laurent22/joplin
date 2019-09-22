@@ -31,7 +31,6 @@ class InteropService {
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
-				importerClass: 'InteropService_Importer_Md',
 			},
 			{
 				format: 'raw',
