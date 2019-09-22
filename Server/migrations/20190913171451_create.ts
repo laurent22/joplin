@@ -43,11 +43,14 @@ export async function up(knex: Knex): Promise<any> {
 	});
 
 	const userModel = new UserModel();
+
+	// We skip validation because at this point there's no user in the system so
+	// there can't be an owner for that first user.
 	await userModel.save({
 		email: 'admin@localhost',
 		password: 'admin',
 		is_admin: 1,
-	});
+	}, { skipValidation: true});
 }
 
 export async function down(knex: Knex): Promise<any> {

@@ -55,7 +55,7 @@ describe('UserController', function() {
 		const controller = new UserController();
 		const fileModel = new FileModel({ userId: user.id });
 		const permissionModel = new PermissionModel();
-		const userModel = new UserModel();
+		const userModel = new UserModel({ userId: user.id });
 
 		await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 

@@ -9,6 +9,7 @@ export interface ModelOptions {
 
 export interface SaveOptions {
 	isNew?: boolean,
+	skipValidation?: boolean,
 }
 
 export interface ValidateOptions {
@@ -101,7 +102,7 @@ export default abstract class BaseModel {
 			(toSave as WithDates).updated_time = timestamp;
 		}
 
-		object = await this.validate(object, { isNew: isNew });
+		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew });
 
 		if (isNew) {
 			await this.db(this.tableName()).insert(toSave);
