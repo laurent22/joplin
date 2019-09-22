@@ -99,6 +99,16 @@ describe('UserController', function() {
 		expect(modUser.password === previousPassword).toBe(false);
 	}));
 
+	it('should get a user', asyncTest(async function() {
+		const { user, session } = await createUserAndSession();
+
+		const controller = new UserController();
+		const gotUser = await controller.getUser(session.id, user.id);
+
+		expect(gotUser.id).toBe(user.id);
+		expect(gotUser.email).toBe(user.email);
+	}));
+
 
 	it('should validate user objects', asyncTest(async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
