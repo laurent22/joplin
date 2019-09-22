@@ -32,8 +32,9 @@ const route:Route = {
 		}
 
 		if (ctx.method === 'PUT') {
-			const body = ctx.request.body;
-			return fileController.updateFile(sessionIdFromHeaders(ctx.headers), path.id, body);
+			const body = { ...ctx.request.body };
+			body.id = path.id;
+			return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
 		}
 
 	},

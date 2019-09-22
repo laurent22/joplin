@@ -99,6 +99,7 @@ export default class FileModel extends BaseModel {
 	async fromApiInput(object:File):Promise<File> {
 		const file:File = {};
 
+		if ('id' in object) file.id = object.id;
 		if ('name' in object) file.name = object.name;
 		if ('parent_id' in object) file.parent_id = object.parent_id;
 		if ('mime_type' in object) file.mime_type = object.mime_type;

@@ -12,4 +12,11 @@ export default class UserController extends BaseController {
 		return userModel.toApiOutput(newUser);
 	}
 
+	async updateUser(sessionId:string, user:User):Promise<void> {
+		const owner = await this.initSession(sessionId);
+		const userModel = new UserModel({ userId: owner.id });
+		const newUser = await userModel.fromApiInput(user);
+		await userModel.save(newUser, { isNew: false });
+	}
+
 }

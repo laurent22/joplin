@@ -1,4 +1,4 @@
-import Knex = require('knex');
+import * as Knex from 'knex';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 

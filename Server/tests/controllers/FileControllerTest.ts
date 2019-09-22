@@ -84,14 +84,14 @@ describe('FileController', function() {
 		file = await fileController.createFile(session.id, file);
 
 		// Can't have file with empty name
-		const hasThrown = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
+		const hasThrown = await checkThrowAsync(async () =>  fileController.updateFile(session.id, { id: file.id, name: '' }));
 		expect(!!hasThrown).toBe(true);
 
-		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
+		await fileController.updateFile(session.id, { id: file.id, name: 'modified.jpg' });
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
 
-		await fileController.updateFile(session.id, file.id, { mime_type: 'image/png' });
+		await fileController.updateFile(session.id, { id: file.id, mime_type: 'image/png' });
 		file = await fileModel.load(file.id);
 		expect(file.mime_type).toBe('image/png');
 	}));
@@ -128,7 +128,7 @@ describe('FileController', function() {
 		dir = await fileController.createFile(session.id, dir);
 
 		// Can't set parent to another non-directory file
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, file.id, { parent_id: file2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, { id: file.id, parent_id: file2.id }));
 		expect(!!hasThrown).toBe(true);
 
 		const user2 = await createUser(2);
@@ -136,10 +136,10 @@ describe('FileController', function() {
 		const userRoot2 = await fileModel2.userRootFile();
 
 		// Can't set parent to someone else directory
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, file.id, { parent_id: userRoot2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, { id: file.id, parent_id: userRoot2.id }));
 		expect(!!hasThrown).toBe(true);
 
-		await fileController.updateFile(session.id, file.id, { parent_id: dir.id });
+		await fileController.updateFile(session.id, { id: file.id, parent_id: dir.id });
 
 		file = await fileModel.load(file.id);
 

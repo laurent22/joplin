@@ -18,6 +18,7 @@ export default class UserModel extends BaseModel {
 	async fromApiInput(object:User):Promise<User> {
 		const user:User = {};
 
+		if ('id' in object) user.id = object.id;
 		if ('email' in object) user.email = object.email;
 		if ('password' in object) user.password = object.password;
 		if ('is_admin' in object) user.is_admin = object.is_admin;
@@ -32,7 +33,7 @@ export default class UserModel extends BaseModel {
 	}
 
 	async validate(object:User, options:ValidateOptions = {}):Promise<User> {
-		const user:User = object;
+		const user:User = await super.validate(object, options);
 
 		const owner:User = await this.load(this.userId);
 
@@ -45,7 +46,7 @@ export default class UserModel extends BaseModel {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
 			if (!owner.is_admin && 'is_admin' in user) throw new ErrorForbidden('non-admin user cannot make a user an admin');
-			if (owner.is_admin && 'is_admin' in user && !user.is_admin) throw new ErrorForbidden('non-admin user cannot remove admin bit from themselves');
+			if (owner.is_admin && owner.id === user.id && 'is_admin' in user && !user.is_admin) throw new ErrorUnprocessableEntity('non-admin user cannot remove admin bit from themselves');
 		}
 
 		if ('email' in user) {
@@ -68,8 +69,10 @@ export default class UserModel extends BaseModel {
 		try {
 			newUser = await super.save(newUser, options);
 
-			const fileModel = new FileModel({ userId: newUser.id });
-			await fileModel.createRootFile();
+			if (isNew) {
+				const fileModel = new FileModel({ userId: newUser.id });
+				await fileModel.createRootFile();
+			}
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;

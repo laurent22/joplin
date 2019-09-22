@@ -2,6 +2,7 @@ import db, { WithDates, WithUuid, File, User, Session, Permission } from '../db'
 import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
+import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 
 export interface ModelOptions {
 	userId?: string
@@ -22,6 +23,8 @@ export default abstract class BaseModel {
 
 	constructor(options:ModelOptions = null) {
 		this.options_ = Object.assign({}, options);
+
+		if ('userId' in this.options && !this.options.userId) throw new Error('If userId is set, it cannot be null');
 	}
 
 	get options():ModelOptions {
@@ -75,12 +78,14 @@ export default abstract class BaseModel {
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	async validate(object:File | User | Session | Permission, options:ValidateOptions = {}):Promise<File | User | Session | Permission> {
+		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
 
 	isNew(object:File | User | Session | Permission, options:SaveOptions):boolean {
-		if (options.isNew && !(object as WithUuid).id) throw new Error('Object must have an ID when isNew option is set');
-		return options.isNew === true || !(object as WithUuid).id;
+		if (options.isNew === false) return false;
+		if (options.isNew === true) return true;
+		return !(object as WithUuid).id;
 	}
 
 	async save(object:File | User | Session | Permission, options:SaveOptions = {}):Promise<File | User | Session | Permission> {
@@ -110,7 +115,11 @@ export default abstract class BaseModel {
 			const objectId:string = (toSave as WithUuid).id;
 			if (!objectId) throw new Error('Missing "id" property');
 			delete (toSave as WithUuid).id;
-			await this.db(this.tableName()).update(toSave).where({id: objectId });
+			const updatedCount:number = await this.db(this.tableName()).update(toSave).where({id: objectId });
+			toSave.id = objectId;
+
+			// Sanity check:
+			if (updatedCount !== 1) throw new ErrorBadRequest(`one row should have been updated, but ${updatedCount} row(s) were updated`);
 		}
 
 		return toSave;
