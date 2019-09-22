@@ -140,6 +140,13 @@ class InteropService {
 		return matches.length ? matches[0] : null;
 	}
 
+	/**
+	 * NOTE TO FUTURE SELF: It might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one way
+	 * to do this mapping. This isn't a priority right now (per the convo in:
+	 * https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
+	 * we can do it if it ever becomes necessary.
+	 */
 	newModuleByFormat_(type, format) {
 		const moduleMetadata = this.findModuleByFormat_(type, format);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
