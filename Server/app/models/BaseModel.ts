@@ -64,6 +64,10 @@ export default abstract class BaseModel {
 		return this.db(this.tableName()).select('*');
 	}
 
+	async fromApiInput(object:File | User | Session | Permission):Promise<File | User | Session | Permission> {
+		return object;
+	}
+
 	toApiOutput(object:any):any {
 		return { ...object };
 	}

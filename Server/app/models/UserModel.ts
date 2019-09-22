@@ -1,4 +1,4 @@
-import BaseModel from './BaseModel';
+import BaseModel, { SaveOptions } from './BaseModel';
 import { User } from '../db';
 import FileModel from './FileModel';
 import * as auth from '../utils/auth';
@@ -14,21 +14,38 @@ export default class UserModel extends BaseModel {
 		return this.db<User>(this.tableName()).where(user).first();
 	}
 
-	async createUser(email:string, password:string, options:User = {}):Promise<User> {
+	async fromApiInput(object:User):Promise<User> {
+		const user:User = {};
+
+		if ('email' in object) user.email = object.email;
+		if ('password' in object) user.password = object.password;
+		if ('is_admin' in object) user.is_admin = object.is_admin;
+
+		return user;
+	}
+
+	toApiOutput(object:User):User {
+		const output:User = { ...object };
+		delete output.password;
+		return output;
+	}
+
+	async save(object:User, options:SaveOptions = {}):Promise<User> {
 		const txIndex = await this.startTransaction();
 
-		let user:User = {
-			email: email,
-			password: auth.hashPassword(password),
-		};
+		const isNew = this.isNew(object, options);
 
-		if ('is_admin' in options) user.is_admin = options.is_admin;
+		let newUser = {...object};
+
+		if (isNew) newUser.password = auth.hashPassword(newUser.password);
+
+		// TODO: password can't be empty
+		// TODO: email can't be empty
 
 		try {
-			const userModel = new UserModel();
-			user = await userModel.save(user);
+			newUser = await super.save(newUser);
 
-			const fileModel = new FileModel({ userId: user.id });
+			const fileModel = new FileModel({ userId: newUser.id });
 			await fileModel.createRootFile();
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
@@ -37,7 +54,7 @@ export default class UserModel extends BaseModel {
 
 		await this.commitTransaction(txIndex);
 
-		return user;
+		return newUser;
 	}
 
 }

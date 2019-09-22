@@ -1,6 +1,6 @@
 import { asyncTest, clearDatabase, createUserAndSession } from '../testUtils';
 import UserController from '../../app/controllers/UserController';
-import { File, Permission, ItemType } from '../../app/db';
+import { File, Permission, ItemType, User } from '../../app/db';
 import UserModel from '../../app/models/UserModel';
 import FileModel from '../../app/models/FileModel';
 import PermissionModel from '../../app/models/PermissionModel';
@@ -18,13 +18,19 @@ describe('UserController', function() {
 		const controller = new UserController();
 		const permissionModel = new PermissionModel();
 
-		const newUser = await controller.createUser(session.id, 'test@example.com', '123456');
+		const newUser = await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 
 		expect(!!newUser).toBe(true);
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
-		expect(!!newUser.password).toBe(true);
+		expect(!newUser.password).toBe(true);
+
+		const userModel = new UserModel({ userId: newUser.id });
+		const userFromModel:User = await userModel.load(newUser.id);
+
+		expect(!!userFromModel.password).toBe(true);
+		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
 
 		const fileModel = new FileModel({ userId: newUser.id });
 		const rootFile:File = await fileModel.userRootFile();
@@ -51,7 +57,7 @@ describe('UserController', function() {
 		const permissionModel = new PermissionModel();
 		const userModel = new UserModel();
 
-		await controller.createUser(session.id, 'test@example.com', '123456');
+		await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 
 		const beforeFileCount = (await fileModel.all<File[]>()).length;
 		const beforeUserCount = (await userModel.all<File[]>()).length;
@@ -59,7 +65,7 @@ describe('UserController', function() {
 
 		let hasThrown = false;
 		try {
-			await controller.createUser(session.id, 'test@example.com', '123456');
+			await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 		} catch (error) {
 			hasThrown = true;
 		}

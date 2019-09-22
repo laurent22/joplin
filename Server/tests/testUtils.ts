@@ -12,8 +12,12 @@ export const asyncTest = function(callback:Function) {
 		try {
 			await callback();
 		} catch (error) {
-			console.error(error);
-			expect('good').toBe('not good', 'Test has thrown an exception - see above error');
+			if (error.constructor.name === 'ExpectationFailed') {
+				// ExpectationFailed are handled correctly by Jasmine
+			} else {
+				console.error(error);
+				expect('good').toBe('not good', 'Test has thrown an exception - see above error');
+			}
 		} finally {
 			done();
 		}
@@ -37,7 +41,7 @@ interface UserAndSession {
 export const createUserAndSession = async function(isAdmin:boolean):Promise<UserAndSession> {
 	const userModel = new UserModel();
 	const sessionController = new SessionController();
-	const user = await userModel.createUser('admin@localhost', '123456', { is_admin: isAdmin ? 1 : 0 });
+	const user = await userModel.save({ email: 'admin@localhost', password: '123456', is_admin: isAdmin ? 1 : 0 });
 	const session = await sessionController.authenticate('admin@localhost', '123456');
 
 	return {
@@ -48,7 +52,7 @@ export const createUserAndSession = async function(isAdmin:boolean):Promise<User
 
 export const createUser = async function(index:number = 1, isAdmin:boolean = false):Promise<User> {
 	const userModel = new UserModel();
-	return userModel.createUser(`user${index}@localhost`, '123456', { is_admin: isAdmin ? 1 : 0 });
+	return userModel.save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 });
 };
 
 export async function checkThrowAsync(asyncFn:Function):Promise<boolean> {

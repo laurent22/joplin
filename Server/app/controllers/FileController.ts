@@ -7,7 +7,8 @@ export default class FileController extends BaseController {
 	async createFile(sessionId:string, file:File):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const newFile = await fileModel.save(file);
+		let newFile = await fileModel.fromApiInput(file);
+		newFile = await fileModel.save(file);
 		return fileModel.toApiOutput(newFile);
 	}
 
@@ -20,7 +21,7 @@ export default class FileController extends BaseController {
 	async updateFile(sessionId:string, fileId:string, file:File):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const newFile = await fileModel.objectToEntity(file);
+		const newFile = await fileModel.fromApiInput(file);
 		newFile.id = fileId;
 		await fileModel.save(newFile);
 	}

@@ -96,7 +96,7 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async objectToEntity(object:any):Promise<any> {
+	async fromApiInput(object:File):Promise<File> {
 		const file:File = {};
 
 		if ('name' in object) file.name = object.name;
@@ -104,6 +104,12 @@ export default class FileModel extends BaseModel {
 		if ('mime_type' in object) file.mime_type = object.mime_type;
 
 		return file;
+	}
+
+	toApiOutput(object:any):any {
+		const output:File = { ...object };
+		delete output.content;
+		return output;
 	}
 
 	async createRootFile():Promise<File> {
@@ -160,12 +166,6 @@ export default class FileModel extends BaseModel {
 		await this.commitTransaction(txIndex);
 
 		return file;
-	}
-
-	toApiOutput(object:any):any {
-		const output:File = { ...object };
-		delete output.content;
-		return output;
 	}
 
 }

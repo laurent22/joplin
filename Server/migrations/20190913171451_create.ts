@@ -43,7 +43,11 @@ export async function up(knex: Knex): Promise<any> {
 	});
 
 	const userModel = new UserModel();
-	await userModel.createUser('admin@localhost', 'admin', { is_admin: 1 });
+	await userModel.save({
+		email: 'admin@localhost',
+		password: 'admin',
+		is_admin: 1,
+	});
 }
 
 export async function down(knex: Knex): Promise<any> {
