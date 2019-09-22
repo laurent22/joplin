@@ -1,9 +1,10 @@
-import { asyncTest, clearDatabase, createUserAndSession } from '../testUtils';
+import { asyncTest, clearDatabase, createUserAndSession, checkThrowAsync } from '../testUtils';
 import UserController from '../../app/controllers/UserController';
 import { File, Permission, ItemType, User } from '../../app/db';
 import UserModel from '../../app/models/UserModel';
 import FileModel from '../../app/models/FileModel';
 import PermissionModel from '../../app/models/PermissionModel';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../app/utils/errors';
 
 describe('UserController', function() {
 
@@ -13,7 +14,7 @@ describe('UserController', function() {
 	});
 
 	it('should create a new user along with his root file', asyncTest(async function() {
-		const { session } = await createUserAndSession(true);
+		const { session } = await createUserAndSession(1, true);
 
 		const controller = new UserController();
 		const permissionModel = new PermissionModel();
@@ -50,7 +51,7 @@ describe('UserController', function() {
 	}));
 
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', asyncTest(async function() {
-		const { user, session } = await createUserAndSession(true);
+		const { user, session } = await createUserAndSession(1, true);
 
 		const controller = new UserController();
 		const fileModel = new FileModel({ userId: user.id });
@@ -79,6 +80,32 @@ describe('UserController', function() {
 		expect(beforeFileCount).toBe(afterFileCount);
 		expect(beforeUserCount).toBe(afterUserCount);
 		expect(beforePermissionCount).toBe(afterPermissionCount);
+	}));
+
+	it('should validate user objects', asyncTest(async function() {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { session: userSession1 } = await createUserAndSession(2, false);
+		await createUserAndSession(3, false);
+
+		let error = null;
+		const controller = new UserController();
+
+		// Non-admin user can't create a user
+		error = await checkThrowAsync(async () =>  await controller.createUser(userSession1.id, { email: 'newone@example.com', password: '1234546' }));
+		expect(error instanceof ErrorForbidden).toBe(true);
+
+		// Email must be set
+		error = await checkThrowAsync(async () =>  await controller.createUser(adminSession.id, { email: '', password: '1234546' }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// Password must be set
+		error = await checkThrowAsync(async () =>  await controller.createUser(adminSession.id, { email: 'newone@example.com', password: '' }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// Non-admin user cannot modify another user
+		// error = await checkThrowAsync(async () =>  await controller.upda(userSession1.id, { email: 'newone@example.com', password: '' }));
+		// expect(error instanceof ErrorForbidden).toBe(true);
+
 	}));
 
 });

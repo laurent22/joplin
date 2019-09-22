@@ -38,11 +38,13 @@ interface UserAndSession {
 	session: Session,
 }
 
-export const createUserAndSession = async function(isAdmin:boolean):Promise<UserAndSession> {
+export const createUserAndSession = async function(index:number = 1, isAdmin:boolean = false):Promise<UserAndSession> {
 	const userModel = new UserModel();
 	const sessionController = new SessionController();
-	const user = await userModel.save({ email: 'admin@localhost', password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
-	const session = await sessionController.authenticate('admin@localhost', '123456');
+
+	const email:string = `user${index}@localhost`;
+	const user = await userModel.save({ email: email, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
+	const session = await sessionController.authenticate(email, '123456');
 
 	return {
 		user: user,
@@ -55,13 +57,11 @@ export const createUser = async function(index:number = 1, isAdmin:boolean = fal
 	return userModel.save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
-export async function checkThrowAsync(asyncFn:Function):Promise<boolean> {
-	let hasThrown = false;
+export async function checkThrowAsync(asyncFn:Function):Promise<any> {
 	try {
 		await asyncFn();
 	} catch (error) {
-		// console.info(error);
-		hasThrown = true;
+		return error;
 	}
-	return hasThrown;
+	return null;
 }

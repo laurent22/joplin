@@ -48,6 +48,11 @@ export default class UserModel extends BaseModel {
 			if (owner.is_admin && 'is_admin' in user && !user.is_admin) throw new ErrorForbidden('non-admin user cannot remove admin bit from themselves');
 		}
 
+		if ('email' in user) {
+			const existingUser = await this.loadByEmail(user.email);
+			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
+		}
+
 		return user;
 	}
 
@@ -58,7 +63,7 @@ export default class UserModel extends BaseModel {
 
 		let newUser = {...object};
 
-		if (isNew) newUser.password = auth.hashPassword(newUser.password);
+		if (isNew && newUser.password) newUser.password = auth.hashPassword(newUser.password);
 
 		try {
 			newUser = await super.save(newUser, options);
