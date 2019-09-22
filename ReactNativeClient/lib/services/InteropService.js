@@ -31,6 +31,7 @@ class InteropService {
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
+				importerClass: 'InteropService_Importer_Md',
 			},
 			{
 				format: 'raw',
@@ -42,7 +43,6 @@ class InteropService {
 				fileExtensions: ['enex'],
 				sources: ['file'],
 				description: _('Evernote Export File (as Markdown)'),
-				importerClass: 'InteropService_Importer_EnexToMd',
 				isDefault: true,
 			},
 			{
@@ -141,11 +141,11 @@ class InteropService {
 	}
 
 	newModuleByFormat_(type, format) {
-		const module = this.findModuleByFormat_(type, format);
-		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
-		const ModuleClass = require(module.path);
+		const moduleMetadata = this.findModuleByFormat_(type, format);
+		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
+		const ModuleClass = require(moduleMetadata.path);
 		const output = new ModuleClass();
-		output.setMetadata(module);
+		output.setMetadata(moduleMetadata);
 		return output;
 	}
 
@@ -157,11 +157,14 @@ class InteropService {
 	 *
 	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	 */
-	newModuleFromPath_(options) {
-		if (!options || !options.modulePath) throw new Error('Cannot load module without a defined path to load from.');
+	newModuleFromPath_(type, options) {
+		if (!options || !options.modulePath) {
+			throw new Error('Cannot load module without a defined path to load from.');
+		}
 		const ModuleClass = require(options.modulePath);
 		const output = new ModuleClass();
-		output.setMetadata(options); // TODO: Check that this metadata is equivalent to module above
+		const moduleMetadata = this.findModuleByFormat_(type, options.format);
+		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -214,7 +217,7 @@ class InteropService {
 		let importer = null;
 
 		if (options.modulePath) {
-			importer = this.newModuleFromPath_(options);
+			importer = this.newModuleFromPath_('importer', options);
 		} else {
 			importer = this.newModuleByFormat_('importer', options.format);
 		}
