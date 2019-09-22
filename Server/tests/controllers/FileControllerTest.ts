@@ -15,16 +15,15 @@ async function makeTestFile(id:number = 1):Promise<File> {
 	return file;
 }
 
-// async function makeTestDirectory():Promise<File> {
-// 	const file:File = {
-// 		name: 'Docs',
-// 		parent_id: '',
-// 		is_directory: 1,
-// 	};
+async function makeTestDirectory():Promise<File> {
+	const file:File = {
+		name: 'Docs',
+		parent_id: '',
+		is_directory: 1,
+	};
 
-// 	return file;
-// }
-
+	return file;
+}
 
 describe('FileController', function() {
 
@@ -74,7 +73,7 @@ describe('FileController', function() {
 	}));
 
 
-	it('should update a file name', asyncTest(async function() {
+	it('should update file properties', asyncTest(async function() {
 		const { session, user } = await createUserAndSession(true);
 
 		const fileModel = new FileModel({ userId: user.id });
@@ -84,13 +83,17 @@ describe('FileController', function() {
 		const fileController = new FileController();
 		file = await fileController.createFile(session.id, file);
 
+		// Can't have file with empty name
 		const hasThrown = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
 		expect(hasThrown).toBe(true);
 
 		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
-
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
+
+		await fileController.updateFile(session.id, file.id, { mime_type: 'image/png' });
+		file = await fileModel.load(file.id);
+		expect(file.mime_type).toBe('image/png');
 	}));
 
 	it('should not allow duplicate filenames', asyncTest(async function() {
@@ -105,40 +108,43 @@ describe('FileController', function() {
 		expect(!!file1.id).toBe(true);
 		expect(file1.name).toBe(file2.name);
 
-		const hasThrown = await checkThrowAsync(async () =>  await fileController.createFile(session.id, file2));
+		const hasThrown = await checkThrowAsync(async () => await fileController.createFile(session.id, file2));
 		expect(hasThrown).toBe(true);
 	}));
 
-	// it('should change the file parent', asyncTest(async function() {
-	// 	const fileModel = new FileModel();
+	it('should change the file parent', asyncTest(async function() {
+		const { session, user } = await createUserAndSession(true);
+		let hasThrown:any = null;
 
-	// 	const { session } = await createUserAndSession(true);
+		const fileModel = new FileModel({ userId: user.id });
 
-	// 	let file:File = await makeTestFile();
-	// 	let file2:File = await makeTestFile(2);
-	// 	let dir:File = await makeTestDirectory();
+		let file:File = await makeTestFile();
+		let file2:File = await makeTestFile(2);
+		let dir:File = await makeTestDirectory();
 
-	// 	const fileController = new FileController();
-	// 	file = await fileController.createFile(session.id, file);
-	// 	file2 = await fileController.createFile(session.id, file2);
-	// 	dir = await fileController.createFile(session.id, dir);
+		const fileController = new FileController();
+		file = await fileController.createFile(session.id, file);
+		file2 = await fileController.createFile(session.id, file2);
+		dir = await fileController.createFile(session.id, dir);
 
-	// 	let hasThrown = false;
-	// 	try {
-	// 		await fileController.updateFile(session.id, file.id, { parent_id: file2.id });
-	// 	} catch (error) {
-	// 		console.info(error);
-	// 		hasThrown = true;
-	// 	}
+		// Can't set parent to another non-directory file
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, file.id, { parent_id: file2.id }));
+		expect(hasThrown).toBe(true);
 
-	// 	expect(hasThrown).toBe(true);
+		const user2 = await createUser(2);
+		const fileModel2 = new FileModel({ userId: user2.id });
+		const userRoot2 = await fileModel2.userRootFile();
 
-	// 	await fileController.updateFile(session.id, file.id, { parent_id: dir.id });
+		// Can't set parent to someone else directory
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session.id, file.id, { parent_id: userRoot2.id }));
+		expect(hasThrown).toBe(true);
 
-	// 	file = await fileModel.load(file.id);
+		await fileController.updateFile(session.id, file.id, { parent_id: dir.id });
 
-	// 	expect(!!file.parent_id).toBe(true);
-	// 	expect(file.parent_id).toBe(dir.id);
-	// }));
+		file = await fileModel.load(file.id);
+
+		expect(!!file.parent_id).toBe(true);
+		expect(file.parent_id).toBe(dir.id);
+	}));
 
 });

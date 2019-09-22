@@ -13,6 +13,7 @@ export const asyncTest = function(callback:Function) {
 			await callback();
 		} catch (error) {
 			console.error(error);
+			expect('good').toBe('not good', 'Test has thrown an exception - see above error');
 		} finally {
 			done();
 		}
@@ -55,6 +56,7 @@ export async function checkThrowAsync(asyncFn:Function):Promise<boolean> {
 	try {
 		await asyncFn();
 	} catch (error) {
+		// console.info(error);
 		hasThrown = true;
 	}
 	return hasThrown;

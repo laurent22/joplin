@@ -87,7 +87,7 @@ export default class FileModel extends BaseModel {
 			if (!canWrite) throw invalidParentError('Cannot write to file');
 		}
 
-		if ('name' in file) {
+		if ('name' in file && !file.is_root) {
 			const existingFile = await this.fileByName(parentId, file.name);
 			if (existingFile && options.isNew) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
 			if (existingFile && file.id === existingFile.id) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
@@ -101,6 +101,7 @@ export default class FileModel extends BaseModel {
 
 		if ('name' in object) file.name = object.name;
 		if ('parent_id' in object) file.parent_id = object.parent_id;
+		if ('mime_type' in object) file.mime_type = object.mime_type;
 
 		return file;
 	}
