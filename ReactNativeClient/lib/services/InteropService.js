@@ -42,6 +42,7 @@ class InteropService {
 				fileExtensions: ['enex'],
 				sources: ['file'],
 				description: _('Evernote Export File (as Markdown)'),
+				importerClass: 'InteropService_Importer_EnexToMd',
 				isDefault: true,
 			},
 			{
