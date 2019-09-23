@@ -2,7 +2,7 @@
 name: "🐛 Bug Report"
 about: Report a reproducible bug or regression in Joplin.
 title: ''
-labels: 'bug'
+labels: ':bug: bug'
 
 ---
 

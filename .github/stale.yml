@@ -5,13 +5,13 @@ daysUntilStale: 90
 daysUntilClose: 7
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - "good first issue"
-  - "essential"
-  - "essential-reviewed"
-  - "help wanted"
-  - "nice to have"
-  - "upstream"
-  - "backlog"
+  - ":roller_coaster: good first issue"
+  - ":sparkles: essential"
+  - ":sparkles: :eyes: essential-reviewed"
+  - ":ambulance: help wanted"
+  - ":ribbon: nice to have"
+  - ":mount_fuji: upstream"
+  - ":page_with_curl: backlog"
 # Label to use when marking an issue as stale
 staleLabel: stale
 # Comment to post when marking an issue as stale. Set to `false` to disable

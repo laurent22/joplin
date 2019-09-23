@@ -1,0 +1,11 @@
+<en-note>
+  <div>
+    <p>For example, consider an exported Evernote list with todo checkboxes like this:</p>
+
+    <ul>
+      <li><div><en-todo checked="true"/>Foo</div></li>
+      <li><div><en-todo checked="false"/><b>Bar</b></div></li>
+      <li><div><en-todo checked="false"/><i>Baz</i></div></li>
+    </ul>
+  </div>
+</en-note>

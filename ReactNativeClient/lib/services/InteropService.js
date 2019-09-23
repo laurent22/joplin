@@ -13,8 +13,7 @@ const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
 	constructor() {
-		this.modules_ = null;
-	}
+		this.modules_ = null;	}
 
 	modules() {
 		if (this.modules_) return this.modules_;
@@ -42,7 +41,17 @@ class InteropService {
 				format: 'enex',
 				fileExtensions: ['enex'],
 				sources: ['file'],
-				description: _('Evernote Export File'),
+				description: _('Evernote Export File (as Markdown)'),
+				importerClass: 'InteropService_Importer_EnexToMd',
+				isDefault: true,
+			},
+			{
+				format: 'enex',
+				fileExtensions: ['enex'],
+				sources: ['file'],
+				description: _('Evernote Export File (as HTML)'),
+				// TODO: Consider doing this the same way as the multiple `md` importers are handled
+				importerClass: 'InteropService_Importer_EnexToHtml',
 			},
 		];
 
@@ -112,21 +121,57 @@ class InteropService {
 		return this.modules_;
 	}
 
-	moduleByFormat_(type, format) {
+	// Find the module that matches the given type ("importer" or "exporter")
+	// and the given format. Some formats can have multiple assocated importers
+	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
+	// is returned. This is useful to auto-detect the module based on the format.
+	// For more precise matching, newModuleFromPath_ should be used.
+	findModuleByFormat_(type, format) {
 		const modules = this.modules();
+		const matches = [];
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
-			if (m.format === format && m.type === type) return modules[i];
+			if (m.format === format && m.type === type) matches.push(modules[i]);
 		}
-		return null;
+
+		const output = matches.find(m => !!m.isDefault);
+		if (output) return output;
+
+		return matches.length ? matches[0] : null;
 	}
 
-	newModule_(type, format) {
-		const module = this.moduleByFormat_(type, format);
-		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
-		const ModuleClass = require(module.path);
+	/**
+	 * NOTE TO FUTURE SELF: It might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one way
+	 * to do this mapping. This isn't a priority right now (per the convo in:
+	 * https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
+	 * we can do it if it ever becomes necessary.
+	 */
+	newModuleByFormat_(type, format) {
+		const moduleMetadata = this.findModuleByFormat_(type, format);
+		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
+		const ModuleClass = require(moduleMetadata.path);
 		const output = new ModuleClass();
-		output.setMetadata(module);
+		output.setMetadata(moduleMetadata);
+		return output;
+	}
+
+	/**
+	 * The existing `newModuleByFormat_` fn would load by the input format. This
+	 * was fine when there was a 1-1 mapping of input formats to output formats,
+	 * but now that we have 2 possible outputs for an `enex` input, we need to be
+	 * explicit with which importer we want to use.
+	 *
+	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
+	 */
+	newModuleFromPath_(type, options) {
+		if (!options || !options.modulePath) {
+			throw new Error('Cannot load module without a defined path to load from.');
+		}
+		const ModuleClass = require(options.modulePath);
+		const output = new ModuleClass();
+		const moduleMetadata = this.findModuleByFormat_(type, options.format);
+		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -173,7 +218,17 @@ class InteropService {
 
 		let result = { warnings: [] };
 
-		const importer = this.newModule_('importer', options.format);
+		// console.log('options passed to InteropService:');
+		// console.log(JSON.stringify({options}, null, 2));
+
+		let importer = null;
+
+		if (options.modulePath) {
+			importer = this.newModuleFromPath_('importer', options);
+		} else {
+			importer = this.newModuleByFormat_('importer', options.format);
+		}
+
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 
@@ -248,7 +303,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModule_('exporter', exportFormat);
+		const exporter = this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
