@@ -45,6 +45,8 @@
 			"CliClient/tests/fuzzing/": true,
 			"CliClient/tests/src/": true,
 			"CliClient/tests/sync/": true,
+			"CliClient/tests/tmp/": true,
+			"CliClient/tests/logs/": true,
 			"Clipper/joplin-webclipper/dist/": true,
 			"Clipper/joplin-webclipper/popup/build/": true,
 			"ElectronClient/app/dist/": true,
@@ -66,7 +68,6 @@
 			"ReactNativeClient/node_modules/": true,
 			"Server/db*.sqlite/": true,
 			"Server/dist/": true,
-			"tests/logs/": true,
 		}
 	},
 }

@@ -54,8 +54,20 @@ before_install:
 
 script:
   - |
+    # Instal tools
     cd Tools
     npm install
+
+    # Run test units
+    cd CliClient
+    npm install
+    ./run_test.sh
+    testResult=$?
+    if [ $testResult -ne 0 ]; then
+      exit $testResult
+    fi
+
+    # Prepare the Electron app and build it
     cd ../ElectronClient/app
     rsync -aP --delete ../../ReactNativeClient/lib/ lib/
     npm install && USE_HARD_LINKS=false yarn dist
