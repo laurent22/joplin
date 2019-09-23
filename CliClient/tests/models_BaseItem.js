@@ -29,14 +29,6 @@ describe('models_BaseItem', function() {
 		done();
 	});
 
-	// it('should be able to exclude keys when syncing', asyncTest(async () => {
-	// 	let folder1 = await Folder.save({ title: "folder1" });
-	// 	let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-	// 	await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
-	// 	let resource1 = (await Resource.all())[0];
-	// 	console.info(await Resource.serializeForSync(resource1));
-	// }));
-
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in
 	// the sync target will still have the old property but we don't need it locally.
 	it('should ignore properties that are present in sync file but not in database when serialising', asyncTest(async () => {

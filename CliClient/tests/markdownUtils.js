@@ -2,8 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest } = require('test-utils.js');
 const markdownUtils = require('lib/markdownUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,7 +15,7 @@ describe('markdownUtils', function() {
 		done();
 	});
 
-	it('should prepend a base URL', async (done) => {
+	it('should prepend a base URL', asyncTest(async () => {
 		const baseUrl = 'https://test.com/site';
 
 		const testCases = [
@@ -32,11 +31,9 @@ describe('markdownUtils', function() {
 			const expected = testCases[i][1];
 			expect(markdownUtils.prependBaseUrl(md, baseUrl)).toBe(expected);
 		}
+	}));
 
-		done();
-	});
-
-	it('should extract image URLs', async (done) => {
+	it('should extract image URLs', asyncTest(async () => {
 		const testCases = [
 			['![something](http://test.com/img.png)', ['http://test.com/img.png']],
 			['![something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
@@ -50,8 +47,6 @@ describe('markdownUtils', function() {
 
 			expect(markdownUtils.extractImageUrls(md).join('')).toBe(expected.join(''));
 		}
-
-		done();
-	});
+	}));
 
 });
