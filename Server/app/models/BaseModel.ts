@@ -77,7 +77,6 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	async validate(object:File | User | Session | Permission, options:ValidateOptions = {}):Promise<File | User | Session | Permission> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;

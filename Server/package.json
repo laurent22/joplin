@@ -13,8 +13,6 @@
     "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json"
   },
   "dependencies": {
-    "@types/fs-extra": "^8.0.0",
-    "@types/yargs": "^13.0.2",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "fs-extra": "^8.1.0",
@@ -33,6 +31,8 @@
     "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
     "@types/jasmine": "^3.4.0",
     "@types/co-body": "0.0.3",
+    "@types/fs-extra": "^8.0.0",
+    "@types/yargs": "^13.0.2",
     "gulp": "^4.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
