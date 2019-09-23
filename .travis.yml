@@ -54,7 +54,7 @@ before_install:
 
 script:
   - |
-    # Instal tools
+    # Install tools
     cd Tools
     npm install
 

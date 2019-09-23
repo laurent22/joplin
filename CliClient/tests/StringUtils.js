@@ -2,8 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest } = require('test-utils.js');
 const StringUtils = require('lib/string-utils');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,7 +15,7 @@ describe('StringUtils', function() {
 		done();
 	});
 
-	it('should surround keywords with strings', async (done) => {
+	it('should surround keywords with strings', asyncTest(async () => {
 		const testCases = [
 			[[], 'test', 'a', 'b', 'test'],
 			[['test'], 'test', 'a', 'b', 'atestb'],
@@ -40,8 +39,6 @@ describe('StringUtils', function() {
 
 			expect(actual).toBe(expected, `Test case ${i}`);
 		}
-
-		done();
-	});
+	}));
 
 });

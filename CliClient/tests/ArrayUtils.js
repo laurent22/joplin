@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,7 +16,7 @@ describe('ArrayUtils', function() {
 		done();
 	});
 
-	it('should remove array elements', async (done) => {
+	it('should remove array elements', asyncTest(async () => {
 		let a = ['un', 'deux', 'trois'];
 		a = ArrayUtils.removeElement(a, 'deux');
 
@@ -27,11 +27,9 @@ describe('ArrayUtils', function() {
 		a = ['un', 'deux', 'trois'];
 		a = ArrayUtils.removeElement(a, 'not in there');
 		expect(a.length).toBe(3);
+	}));
 
-		done();
-	});
-
-	it('should find items using binary search', async (done) => {
+	it('should find items using binary search', asyncTest(async () => {
 		let items = ['aaa', 'ccc', 'bbb'];
 		expect(ArrayUtils.binarySearch(items, 'bbb')).toBe(-1); // Array not sorted!
 		items.sort();
@@ -42,17 +40,13 @@ describe('ArrayUtils', function() {
 
 		items = [];
 		expect(ArrayUtils.binarySearch(items, 'aaa')).toBe(-1);
+	}));
 
-		done();
-	});
-
-	it('should compare arrays', async (done) => {
+	it('should compare arrays', asyncTest(async () => {
 		expect(ArrayUtils.contentEquals([], [])).toBe(true);
 		expect(ArrayUtils.contentEquals(['a'], ['a'])).toBe(true);
 		expect(ArrayUtils.contentEquals(['b', 'a'], ['a', 'b'])).toBe(true);
 		expect(ArrayUtils.contentEquals(['b'], ['a', 'b'])).toBe(false);
-
-		done();
-	});
+	}));
 
 });
