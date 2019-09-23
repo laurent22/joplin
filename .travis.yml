@@ -1,5 +1,5 @@
 # Only build tags (Doesn't work - doesn't build anything)
-if: tag IS present
+if: tag IS present OR type = pull_request
 
 rvm: 2.3.3
 
