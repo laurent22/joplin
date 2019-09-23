@@ -59,7 +59,7 @@ script:
     npm install
 
     # Run test units
-    cd CliClient
+    cd ../CliClient
     npm install
     ./run_test.sh
     testResult=$?
