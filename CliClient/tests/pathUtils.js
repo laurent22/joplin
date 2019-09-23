@@ -2,8 +2,8 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath} = require('lib/path-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { extractExecutablePath, quotePath, unquotePath, friendlySafeFilename, toFileProtocolPath } = require('lib/path-utils.js');
+const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -15,7 +15,7 @@ describe('pathUtils', function() {
 		done();
 	});
 
-	it('should create friendly safe filename', async (done) => {
+	it('should create friendly safe filename', asyncTest(async () => {
 		const testCases = [
 			['生活', '生活'],
 			['not/good', 'not_good'],
@@ -34,11 +34,9 @@ describe('pathUtils', function() {
 
 		expect(!!friendlySafeFilename('')).toBe(true);
 		expect(!!friendlySafeFilename('...')).toBe(true);
+	}));
 
-		done();
-	});
-
-	it('should quote and unquote paths', async (done) => {
+	it('should quote and unquote paths', asyncTest(async () => {
 		const testCases = [
 			['', ''],
 			['/my/path', '/my/path'],
@@ -53,11 +51,9 @@ describe('pathUtils', function() {
 			expect(quotePath(t[0])).toBe(t[1]);
 			expect(unquotePath(quotePath(t[0]))).toBe(t[0]);
 		}
+	}));
 
-		done();
-	});
-
-	it('should extract executable path from command', async (done) => {
+	it('should extract executable path from command', asyncTest(async () => {
 		const testCases = [
 			['', ''],
 			['/my/cmd -some -args', '/my/cmd'],
@@ -71,11 +67,9 @@ describe('pathUtils', function() {
 			const t = testCases[i];
 			expect(extractExecutablePath(t[0])).toBe(t[1]);
 		}
+	}));
 
-		done();
-	});
-
-	it('should create correct fileURL syntax', async (done) => {
+	it('should create correct fileURL syntax', asyncTest(async () => {
 		const testCases_win32 = [
 			['C:\\handle\\space test', 'file:///C:/handle/space+test'],
 			['C:\\escapeplus\\+', 'file:///C:/escapeplus/%2B'],
@@ -95,8 +89,6 @@ describe('pathUtils', function() {
 			const t = testCases_unixlike[i];
 			expect(toFileProtocolPath(t[0], 'linux')).toBe(t[1]);
 		}
-
-		done();
-	});
+	}));
 
 });

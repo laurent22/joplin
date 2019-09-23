@@ -357,6 +357,7 @@ function asyncTest(callback) {
 			await callback();
 		} catch (error) {
 			console.error(error);
+			expect('good').toBe('not good', 'Test has thrown an exception - see above error');
 		} finally {
 			done();
 		}
