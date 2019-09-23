@@ -12,7 +12,7 @@ function rtrimSlashes(path) {
 }
 
 function createDistDir() {
-	return fs.mkdirp(serverRootDir + '/dist');
+	return fs.mkdirp(`${serverRootDir}/dist`);
 }
 
 function buildTypeScripts() {
@@ -30,12 +30,12 @@ function buildTypeScripts() {
 		'tools/*.ts',
 	]).pipe(sourcemaps.init()).pipe(tsProject()).js.pipe(sourcemaps.write()).pipe(gulp.dest((src) => {
 		const baseDir = rtrimSlashes(src.dirname.substr(serverRootDir.length + 1));
-		return 'dist/' + baseDir;
+		return `dist/${baseDir}`;
 	}));
 }
 
 function copyLib() {
-	return gulp.src([projectRootDir + '/ReactNativeClient/lib/**/*']).pipe(gulp.dest(serverRootDir + '/dist/lib'));
+	return gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
 }
 
 gulp.task('default', async function () {

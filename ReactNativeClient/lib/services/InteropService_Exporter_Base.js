@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
+/* eslint no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
 
 class InteropService_Exporter_Base {
 	async init(destDir) {}

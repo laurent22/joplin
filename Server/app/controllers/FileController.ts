@@ -25,4 +25,10 @@ export default class FileController extends BaseController {
 		await fileModel.save(newFile);
 	}
 
+	async deleteFile(sessionId:string, fileId:string):Promise<void> {
+		const user = await this.initSession(sessionId);
+		const fileModel = new FileModel({ userId: user.id });
+		await fileModel.delete(fileId);
+	}
+
 }

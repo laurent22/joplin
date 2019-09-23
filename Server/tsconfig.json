@@ -1,7 +1,16 @@
 {
     "compilerOptions": {
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSourceMap": true,
+        "listEmittedFiles": true,
+        "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
-        "target": "es5",
-        "inlineSourceMap": true
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "target": "es5"
     }
 }

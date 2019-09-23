@@ -30,6 +30,10 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('created_time').notNullable();
 	});
 
+	await knex.schema.alterTable('permissions', function(table:Knex.CreateTableBuilder) {
+		table.unique(['user_id', 'item_type', 'item_id']);
+	});
+
 	await knex.schema.createTable('files', function(table:Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
 		table.text('name').notNullable();

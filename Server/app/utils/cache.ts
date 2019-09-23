@@ -11,24 +11,29 @@ class Cache {
 
 	cache:CacheEntries = {};
 
-	async setAny(key:string, o:any):Promise<void> {
+	private async setAny(key:string, o:any):Promise<void> {
 		this.cache[key] = {
-			object: o,
+			object: JSON.stringify(o),
 			timestamp: Date.now(),
 		};
 	}
 
 	async setObject(key:string, object:Object):Promise<void> {
-		this.setAny(key, object);
+		return this.setAny(key, object);
 	}
 
-	async getAny(key:string):Promise<any> {
+	private async getAny(key:string):Promise<any> {
 		if (!this.cache[key]) return null;
-		return this.cache[key].object;
+		return JSON.parse(this.cache[key].object);
 	}
 
 	async object(key:string):Promise<object> {
 		return this.getAny(key) as object;
+	}
+
+	async delete(key:string | string[]):Promise<void> {
+		const keys = typeof key === 'string' ? [key] : key;
+		for (const k of keys) delete this.cache[k];
 	}
 
 }

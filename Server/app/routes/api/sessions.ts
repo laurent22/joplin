@@ -5,7 +5,7 @@ import { SubPath, Route } from '../../utils/routeUtils';
 
 const route:Route = {
 
-	exec: async function(path:SubPath, ctx:Koa.Context) {
+	exec: async function(_:SubPath, ctx:Koa.Context) {
 		const user = await parse.json(ctx);
 		const sessionController = new SessionController();
 		const session = await sessionController.authenticate(user.email, user.password);

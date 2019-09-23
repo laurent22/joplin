@@ -1,6 +1,6 @@
 import sqlts from '@rmp135/sql-ts';
 
-const dbFilePath:string = __dirname + '/../../app/db.ts';
+const dbFilePath:string = `${__dirname}/../../app/db.ts`;
 
 const config = {
 	'dialect':'sqlite3',
@@ -22,12 +22,12 @@ const config = {
 
 function insertContentIntoFile(filePath:string, markerOpen:string, markerClose:string, contentToInsert:string):void {
 	const fs = require('fs');
-	if (!fs.existsSync(filePath)) throw new Error('File not found: ' + filePath);
+	if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`);
 	let content:string = fs.readFileSync(filePath, 'utf-8');
 	// [^]* matches any character including new lines
-	const regex:RegExp = new RegExp(markerOpen + '[^]*?' + markerClose);
-	if (!content.match(regex)) throw new Error('Could not find markers: ' + markerOpen);
-	content = content.replace(regex, markerOpen + '\n' + contentToInsert + '\n' + markerClose);
+	const regex:RegExp = new RegExp(`${markerOpen}[^]*?${markerClose}`);
+	if (!content.match(regex)) throw new Error(`Could not find markers: ${markerOpen}`);
+	content = content.replace(regex, `${markerOpen}\n${contentToInsert}\n${markerClose}`);
 	fs.writeFileSync(filePath, content);
 }
 
@@ -47,14 +47,14 @@ function createTypeString(table:any) {
 
 		if (name === 'item_type') type = 'ItemType';
 
-		colStrings.push('\t' + name + '?: ' + type);
+		colStrings.push(`\t${name}?: ${type}`);
 	}
 
 	const header = ['export interface'];
 	header.push(table.interfaceName);
-	if (table.extends) header.push('extends ' + table.extends);
+	if (table.extends) header.push(`extends ${table.extends}`);
 
-	return header.join(' ') + ' {\n' + colStrings.join('\n') + '\n}';
+	return `${header.join(' ')} {\n${colStrings.join('\n')}\n}`;
 }
 
 async function main() {
@@ -66,7 +66,7 @@ async function main() {
 		typeStrings.push(createTypeString(table));
 	}
 
-	const content = '// Auto-generated using `npm run generate-types`\n' + typeStrings.join('\n\n');
+	const content = `// Auto-generated using \`npm run generate-types\`\n${typeStrings.join('\n\n')}`;
 
 	insertContentIntoFile(dbFilePath, config.fileReplaceWithinMarker, config.fileReplaceWithinMarker, content);
 }

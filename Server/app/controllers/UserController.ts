@@ -25,4 +25,10 @@ export default class UserController extends BaseController {
 		await userModel.save(newUser, { isNew: false });
 	}
 
+	async deleteUser(sessionId:string, userId:string):Promise<void> {
+		const user = await this.initSession(sessionId);
+		const userModel = new UserModel({ userId: user.id });
+		await userModel.delete(userId);
+	}
+
 }

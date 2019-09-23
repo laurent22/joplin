@@ -57,6 +57,38 @@ export default class UserModel extends BaseModel {
 		return user;
 	}
 
+	async checkIsOwnerOrAdmin(userId:string):Promise<void> {
+		if (!this.userId) throw new ErrorForbidden('no user is active');
+
+		if (userId === this.userId) return;
+
+		const owner = await this.load(this.userId);
+		if (!owner.is_admin) throw new ErrorForbidden();
+	}
+
+	async load(id:string):Promise<User> {
+		await this.checkIsOwnerOrAdmin(id);
+		return super.load(id);
+	}
+
+	async delete(id:string):Promise<void> {
+		await this.checkIsOwnerOrAdmin(id);
+
+		const txIndex = await this.startTransaction();
+
+		try {
+			const fileModel = new FileModel({ userId: this.userId });
+			const rootFile = await fileModel.userRootFile();
+			await fileModel.delete(rootFile.id);
+			await super.delete(id);
+		} catch (error) {
+			await this.rollbackTransaction(txIndex);
+			throw error;
+		}
+
+		await this.commitTransaction(txIndex);
+	}
+
 	async save(object:User, options:SaveOptions = {}):Promise<User> {
 		const txIndex = await this.startTransaction();
 

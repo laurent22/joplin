@@ -3,6 +3,7 @@ import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
+import cache from '../utils/cache';
 
 export interface ModelOptions {
 	userId?: string
@@ -76,7 +77,7 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 	async validate(object:File | User | Session | Permission, options:ValidateOptions = {}):Promise<File | User | Session | Permission> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
@@ -114,6 +115,7 @@ export default abstract class BaseModel {
 		} else {
 			const objectId:string = (toSave as WithUuid).id;
 			if (!objectId) throw new Error('Missing "id" property');
+			await cache.delete(objectId);
 			delete (toSave as WithUuid).id;
 			const updatedCount:number = await this.db(this.tableName()).update(toSave).where({id: objectId });
 			toSave.id = objectId;
@@ -126,8 +128,30 @@ export default abstract class BaseModel {
 	}
 
 	async load(id:string):Promise<File | User | Session | Permission> {
-		if (!id) throw new Error('ID cannot be empty');
-		return this.db(this.tableName()).where({ id: id }).first();
+		if (!id) throw new Error('id cannot be empty');
+
+		let cached:object = await cache.object(id);
+		if (cached) return cached;
+
+		cached = await this.db(this.tableName()).where({ id: id }).first();
+		await cache.setObject(id, cached);
+		return cached;
+	}
+
+	async delete(id:string | string[]):Promise<void> {
+		if (!id) throw new Error('id cannot be empty');
+
+		const ids = typeof id === 'string' ? [id] : id;
+
+		if (!ids.length) throw new Error('no id provided');
+
+		const query = this.db(this.tableName()).where({ id: ids[0] });
+		for (let i = 1; i < ids.length; i++) query.orWhere({ id: ids[i] });
+
+		await cache.delete(ids);
+
+		const deletedCount = await query.del();
+		if (deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted by ${deletedCount} row(s) were deleted`);
 	}
 
 }

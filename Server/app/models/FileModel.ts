@@ -1,7 +1,7 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound } from '../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -129,7 +129,7 @@ export default class FileModel extends BaseModel {
 	async load(id:string):Promise<File> {
 		const permissionModel = new PermissionModel();
 		const canRead:boolean = await permissionModel.canRead(id, this.userId);
-		if (!canRead) throw new ErrorNotFound(); // Return 404 for security reasons, so that user cannot test if file exists or not
+		if (!canRead) throw new ErrorForbidden();
 
 		return super.load(id);
 	}
@@ -167,6 +167,24 @@ export default class FileModel extends BaseModel {
 		await this.commitTransaction(txIndex);
 
 		return file;
+	}
+
+	async delete(id:string):Promise<void> {
+		const permissionModel = new PermissionModel();
+		const canWrite:boolean = await permissionModel.canWrite(id, this.userId);
+		if (!canWrite) throw new ErrorForbidden();
+
+		const txIndex = await this.startTransaction();
+
+		try {
+			await permissionModel.deleteByFileId(id);
+			await super.delete(id);
+		} catch (error) {
+			await this.rollbackTransaction(txIndex);
+			throw error;
+		}
+
+		await this.commitTransaction(txIndex);
 	}
 
 }
