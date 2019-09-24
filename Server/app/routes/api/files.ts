@@ -29,12 +29,12 @@ const route:Route = {
 			}
 
 			if (ctx.method === 'GET') {
-				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
+				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.value);
 			}
 
 			if (ctx.method === 'PUT') {
 				const body = { ...ctx.request.body };
-				body.id = path.id;
+				body.id = path.value;
 				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
 			}
 		}
@@ -42,7 +42,7 @@ const route:Route = {
 		if (path.link === 'content') {
 			if (ctx.method === 'GET') {
 				const koaResponse = ctx.response;
-				const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.id);
+				const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.value);
 				koaResponse.body = file.content;
 				koaResponse.set('Content-Type', file.mime_type);
 				koaResponse.set('Content-Length', file.size.toString());
@@ -54,7 +54,7 @@ const route:Route = {
 				if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
 				const data = files.data;
 				const content = await fs.readFile(data.path);
-				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, content);
+				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
 			}
 		}
 

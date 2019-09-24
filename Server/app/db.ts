@@ -16,6 +16,16 @@ let knex:Knex = require('knex')({
 
 export default knex;
 
+export enum ItemAddressingType {
+	Id = 1,
+	Path,
+}
+
+export interface ItemId {
+	value: string
+	addressingType: ItemAddressingType
+}
+
 export enum ItemType {
     File = 1,
     User,

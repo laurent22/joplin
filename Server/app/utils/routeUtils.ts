@@ -1,3 +1,5 @@
+import { ItemId, ItemAddressingType } from '../db';
+
 const { ltrimSlashes, rtrimSlashes } = require('lib/path-utils');
 
 export interface Route {
@@ -9,9 +11,8 @@ export interface Routes {
 	[key: string]: Route,
 }
 
-export interface SubPath {
-	id?: string
-	link?: string
+export interface SubPath extends ItemId {
+	link: string
 }
 
 export interface MatchedRoute {
@@ -35,11 +36,47 @@ export class ApiResponse {
 	}
 }
 
-function parseSubPath(p:string):SubPath {
-	const s = rtrimSlashes(ltrimSlashes(p)).split('/');
-	const output:SubPath = {};
-	if (s.length >= 1) output.id = s[0];
-	if (s.length >= 2) output.link = s[1];
+// root:/Documents/MyFile.md
+export function splitItemPath(path:string):string[] {
+	if (!path) return [];
+
+	const output = path.split('/');
+	// Remove trailing ":" from root dir
+	if (output.length && output[0][output[0].length - 1] === ':') output[0] = output[0].substr(0, output[0].length - 1);
+	return output;
+}
+
+// Allows parsing the two types of paths supported by the API:
+//
+// /api/files/root:/Documents/MyFile.md:/content
+// /api/files/ABCDEFG/content
+export function parseSubPath(p:string):SubPath {
+	p = rtrimSlashes(ltrimSlashes(p));
+
+	const output:SubPath = {
+		value: '',
+		link: '',
+		addressingType: ItemAddressingType.Id,
+	};
+
+	const prefix = 'root:';
+	if (p.indexOf(prefix) === 0) {
+		output.addressingType = ItemAddressingType.Path;
+
+		const secondIdx = p.indexOf(':', prefix.length);
+
+		if (secondIdx < 0) {
+			output.value = p;
+		} else {
+			output.value = p.substr(0, secondIdx);
+			output.link = ltrimSlashes(p.substr(secondIdx + 1));
+		}
+	} else {
+		const s = p.split('/');
+		if (s.length >= 1) output.value = s[0];
+		if (s.length >= 2) output.link = s[1];
+	}
+
 	return output;
 }
 

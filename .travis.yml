@@ -58,10 +58,19 @@ script:
     cd Tools
     npm install
 
-    # Run test units
+    # Run Joplin core test units
     cd ../CliClient
     npm install
     ./run_test.sh
+    testResult=$?
+    if [ $testResult -ne 0 ]; then
+      exit $testResult
+    fi
+
+    # Run Joplin API test units
+    cd ../Server
+    npm install
+    npm run test
     testResult=$?
     if [ $testResult -ne 0 ]; then
       exit $testResult

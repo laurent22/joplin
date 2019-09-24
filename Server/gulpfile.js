@@ -27,6 +27,7 @@ function buildTypeScripts() {
 		'tests/*.ts',
 		'tests/routes/*.ts',
 		'tests/controllers/*.ts',
+		'tests/utils/*.ts',
 		'tools/*.ts',
 	]).pipe(sourcemaps.init()).pipe(tsProject()).js.pipe(sourcemaps.write()).pipe(gulp.dest((src) => {
 		const baseDir = rtrimSlashes(src.dirname.substr(serverRootDir.length + 1));

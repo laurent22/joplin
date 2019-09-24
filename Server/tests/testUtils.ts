@@ -31,7 +31,7 @@ export const clearDatabase = async function():Promise<void> {
 	await db('permissions').truncate();
 	await db('files').truncate();
 
-	cache.clearAll();
+	await cache.clearAll();
 };
 
 export const supportDir = `${__dirname}/../../tests/support`;

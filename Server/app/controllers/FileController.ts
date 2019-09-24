@@ -1,4 +1,4 @@
-import { File } from '../db';
+import { File, ItemId } from '../db';
 import FileModel from '../models/FileModel';
 import BaseController from './BaseController';
 
@@ -12,13 +12,13 @@ export default class FileController extends BaseController {
 		return fileModel.toApiOutput(newFile);
 	}
 
-	async getFile(sessionId:string, fileId:string):Promise<File> {
+	async getFile(sessionId:string, fileId:string | ItemId):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		return fileModel.toApiOutput(await fileModel.load(fileId));
 	}
 
-	async getFileContent(sessionId:string, fileId:string):Promise<File> {
+	async getFileContent(sessionId:string, fileId:string | ItemId):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.loadWithContent(fileId);
@@ -38,14 +38,14 @@ export default class FileController extends BaseController {
 		await fileModel.save(newFile);
 	}
 
-	async updateFileContent(sessionId:string, fileId:string, content:any):Promise<any> {
+	async updateFileContent(sessionId:string, fileId:string | ItemId, content:any):Promise<any> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const newFile:File = { id: fileId, content: content };
+		const newFile:File = { id: await fileModel.idFromItemId(fileId), content: content };
 		await fileModel.save(newFile);
 	}
 
-	async deleteFile(sessionId:string, fileId:string):Promise<void> {
+	async deleteFile(sessionId:string, fileId:string | ItemId):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		await fileModel.delete(fileId);

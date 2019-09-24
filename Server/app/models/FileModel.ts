@@ -1,8 +1,9 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
-import { File, Permission, ItemType, databaseSchema } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { File, Permission, ItemType, databaseSchema, ItemId, ItemAddressingType } from '../db';
+import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
+import { splitItemPath } from '../utils/routeUtils';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -141,14 +142,51 @@ export default class FileModel extends BaseModel {
 		if (!canRead) throw new ErrorForbidden();
 	}
 
-	async loadWithContent(id:string):Promise<any> {
-		await this.checkCanReadPermissions(id);
+	private async pathToFiles(path:string):Promise<File[]> {
+		const filenames = splitItemPath(path);
+		const output:File[] = [];
+		let parentId:string = '';
+
+		for (const filename of filenames) {
+			let file:File = null;
+			if (filename === 'root') {
+				file = await this.userRootFile();
+			} else {
+				file = await this.fileByName(parentId, filename);
+			}
+
+			if (!file) throw new ErrorNotFound(`file not found: ${filename}`);
+
+			output.push(file);
+			parentId = file.id;
+		}
+
+		return output;
+	}
+
+	async idFromItemId(id:string | ItemId):Promise<string> {
+		if (typeof id === 'string') return id;
+
+		const itemId = id as ItemId;
+		if (itemId.addressingType === ItemAddressingType.Id) {
+			return itemId.value;
+		} else {
+			const files = await this.pathToFiles(itemId.value);
+			if (!files.length) throw new ErrorNotFound(`invalid path: ${itemId.value}`);
+			return files[files.length - 1].id;
+		}
+	}
+
+	async loadWithContent(id:string | ItemId):Promise<any> {
+		const idString = await this.idFromItemId(id);
+		await this.checkCanReadPermissions(idString);
 		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
 		return file;
 	}
 
-	async load(id:string):Promise<File> {
-		await this.checkCanReadPermissions(id);
+	async load(id:string | ItemId):Promise<File> {
+		const idString = await this.idFromItemId(id);
+		await this.checkCanReadPermissions(idString);
 		return super.load(id);
 	}
 
@@ -189,16 +227,18 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async delete(id:string):Promise<void> {
+	async delete(id:string | ItemId):Promise<void> {
+		const idString = await this.idFromItemId(id);
+
 		const permissionModel = new PermissionModel();
-		const canWrite:boolean = await permissionModel.canWrite(id, this.userId);
+		const canWrite:boolean = await permissionModel.canWrite(idString, this.userId);
 		if (!canWrite) throw new ErrorForbidden();
 
 		const txIndex = await this.startTransaction();
 
 		try {
-			await permissionModel.deleteByFileId(id);
-			await super.delete(id);
+			await permissionModel.deleteByFileId(idString);
+			await super.delete(idString);
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;

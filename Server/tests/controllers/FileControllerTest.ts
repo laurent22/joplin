@@ -6,14 +6,14 @@ import { File } from '../../app/db';
 import PermissionModel from '../../app/models/PermissionModel';
 import { ErrorForbidden } from '../../app/utils/errors';
 
-async function makeTestFile(id:number = 1, ext:string = 'jpg'):Promise<File> {
+async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string = ''):Promise<File> {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
 
 	const file:File = {
 		name: id > 1 ? `${basename}-${id}.${ext}` : `${basename}.${ext}`,
 		content: await fs.readFile(`${supportDir}/${basename}.${ext}`),
 		mime_type: `image/${ext}`,
-		parent_id: '',
+		parent_id: parentId,
 	};
 
 	return file;
@@ -254,6 +254,34 @@ describe('FileController', function() {
 		expect(modFileHex === originalFileHex).toBe(false);
 		expect(modFile.size).toBe(modFile.content.byteLength);
 		expect(newFile.size).toBe(file.content.byteLength);
+	}));
+
+	it('should allow addressing a file by path', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		const fileController = new FileController();
+
+		let dir = await fileController.createFile(session.id, await makeTestDirectory());
+		let file1 = await fileController.createFile(session.id, await makeTestFile(1));
+		let file2 = await fileController.createFile(session.id, await makeTestFile(2, 'jpg', dir.id));
+
+
+
+		// const file:File = await makeTestFile(1);
+		// const file2:File = await makeTestFile(2, 'png');
+
+		// const fileController = new FileController();
+		// let newFile = await fileController.createFile(session.id, file);
+		// await fileController.updateFileContent(session.id, newFile.id, file2.content);
+
+		// const modFile = await fileController.getFileContent(session.id, newFile.id);
+
+		// const originalFileHex = (file.content as Buffer).toString('hex');
+		// const modFileHex = (modFile.content as Buffer).toString('hex');
+		// expect(modFileHex.length > 0).toBe(true);
+		// expect(modFileHex === originalFileHex).toBe(false);
+		// expect(modFile.size).toBe(modFile.content.byteLength);
+		// expect(newFile.size).toBe(file.content.byteLength);
 	}));
 
 });

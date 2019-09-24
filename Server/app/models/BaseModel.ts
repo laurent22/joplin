@@ -1,4 +1,4 @@
-import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema } from '../db';
+import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ItemId } from '../db';
 import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
@@ -130,8 +130,10 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
-	async load(id:string):Promise<File | User | Session | Permission> {
+	async load(id:string | ItemId):Promise<File | User | Session | Permission> {
 		if (!id) throw new Error('id cannot be empty');
+
+		if (!(typeof id === 'string')) throw new Error('ItemId support must be implemented in sub-class');
 
 		let cached:object = await cache.object(id);
 		if (cached) return cached;
@@ -141,8 +143,10 @@ export default abstract class BaseModel {
 		return cached;
 	}
 
-	async delete(id:string | string[]):Promise<void> {
+	async delete(id:string | string[] | ItemId):Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
+
+		if (!(typeof id === 'string') && !Array.isArray(id)) throw new Error('ItemId support must be implemented in sub-class');
 
 		const ids = typeof id === 'string' ? [id] : id;
 
