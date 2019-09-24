@@ -20,6 +20,21 @@ export interface MatchedRoute {
 	subPath: SubPath,
 }
 
+export enum ApiResponseType {
+	KoaResponse,
+	Object
+}
+
+export class ApiResponse {
+	type: ApiResponseType
+	response: any
+
+	constructor(type:ApiResponseType, response:any) {
+		this.type = type;
+		this.response = response;
+	}
+}
+
 function parseSubPath(p:string):SubPath {
 	const s = rtrimSlashes(ltrimSlashes(p)).split('/');
 	const output:SubPath = {};

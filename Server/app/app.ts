@@ -8,7 +8,7 @@ import { ErrorNotFound } from './utils/errors';
 import * as fs from 'fs-extra';
 import * as koaBody from 'koa-body';
 import { argv } from 'yargs';
-import { Routes, findMatchingRoute } from './utils/routeUtils';
+import { Routes, findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
 
@@ -40,8 +40,13 @@ app.use(async (ctx:Koa.Context) => {
 	try {
 		if (match) {
 			const responseObject = await match.route.exec(match.subPath, ctx);
-			ctx.response.status = 200;
-			ctx.response.body = responseObject;
+
+			if (responseObject instanceof ApiResponse) {
+				ctx.response = responseObject.response;
+			} else {
+				ctx.response.status = 200;
+				ctx.response.body = responseObject;
+			}
 		} else {
 			throw new ErrorNotFound();
 		}

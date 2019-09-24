@@ -1,42 +1,63 @@
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import { ErrorBadRequest } from '../../utils/errors';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { File } from '../../db';
 import FileController from '../../controllers/FileController';
 import { sessionIdFromHeaders } from '../../utils/requestUtils';
-import { SubPath, Route } from '../../utils/routeUtils';
+import { SubPath, Route, ApiResponseType, ApiResponse } from '../../utils/routeUtils';
 
 const route:Route = {
 
 	exec: async function(path:SubPath, ctx:Koa.Context) {
 		const fileController = new FileController();
 
-		if (ctx.method === 'POST') {
-			const files = ctx.request.files;
-			if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-			const data = files.data;
-			const props:any = ctx.request.body.props;
+		if (!path.link) {
+			if (ctx.method === 'POST') {
+				const files = ctx.request.files;
+				if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
+				const data = files.data;
+				const props:any = ctx.request.body.props;
 
-			const file:File = {
-				name: data.name,
-				content: await fs.readFile(data.path),
-				mime_type: data.type,
-				parent_id: props.parent_id ? props.parent_id : '',
-			};
+				const file:File = {
+					name: data.name,
+					content: await fs.readFile(data.path),
+					mime_type: data.type,
+					parent_id: props.parent_id ? props.parent_id : '',
+				};
 
-			return fileController.createFile(sessionIdFromHeaders(ctx.headers), file);
+				return fileController.createFile(sessionIdFromHeaders(ctx.headers), file);
+			}
+
+			if (ctx.method === 'GET') {
+				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
+			}
+
+			if (ctx.method === 'PUT') {
+				const body = { ...ctx.request.body };
+				body.id = path.id;
+				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
+			}
 		}
 
-		if (ctx.method === 'GET') {
-			return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
+		if (path.link === 'content') {
+			if (ctx.method === 'GET') {
+				const koaResponse = ctx.response;
+				const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.id);
+				koaResponse.body = file.content;
+				koaResponse.set('Content-Type', file.mime_type);
+				return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
+			}
+
+			if (ctx.method === 'PUT') {
+				const files = ctx.request.files;
+				if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
+				const data = files.data;
+				const content = await fs.readFile(data.path);
+				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, content);
+			}
 		}
 
-		if (ctx.method === 'PUT') {
-			const body = { ...ctx.request.body };
-			body.id = path.id;
-			return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
-		}
-
+		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
 
 	needsBodyMiddleware: true,

@@ -1,4 +1,4 @@
-import db, { WithDates, WithUuid, File, User, Session, Permission } from '../db';
+import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema } from '../db';
 import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
@@ -21,6 +21,7 @@ export interface ValidateOptions {
 export default abstract class BaseModel {
 
 	private options_:ModelOptions = null;
+	private defaultFields_:string[] = [];
 
 	constructor(options:ModelOptions = null) {
 		this.options_ = Object.assign({}, options);
@@ -41,11 +42,14 @@ export default abstract class BaseModel {
 		return db;
 	}
 
-	defaultFields():string | string[] {
-		return '*';
+	get defaultFields():string[] {
+		if (!this.defaultFields_.length) {
+			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
+		}
+		return this.defaultFields_.slice();
 	}
 
-	tableName():string {
+	get tableName():string {
 		throw new Error('Not implemented');
 	}
 
@@ -66,7 +70,7 @@ export default abstract class BaseModel {
 	}
 
 	async all<T>():Promise<T[]> {
-		return this.db(this.tableName()).select('*');
+		return this.db(this.tableName).select('*');
 	}
 
 	async fromApiInput(object:File | User | Session | Permission):Promise<File | User | Session | Permission> {
@@ -110,13 +114,13 @@ export default abstract class BaseModel {
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew });
 
 		if (isNew) {
-			await this.db(this.tableName()).insert(toSave);
+			await this.db(this.tableName).insert(toSave);
 		} else {
 			const objectId:string = (toSave as WithUuid).id;
 			if (!objectId) throw new Error('Missing "id" property');
 			await cache.delete(objectId);
 			delete (toSave as WithUuid).id;
-			const updatedCount:number = await this.db(this.tableName()).update(toSave).where({id: objectId });
+			const updatedCount:number = await this.db(this.tableName).update(toSave).where({id: objectId });
 			toSave.id = objectId;
 
 			// Sanity check:
@@ -132,7 +136,7 @@ export default abstract class BaseModel {
 		let cached:object = await cache.object(id);
 		if (cached) return cached;
 
-		cached = await this.db(this.tableName()).where({ id: id }).first();
+		cached = await this.db(this.tableName).select(this.defaultFields).where({ id: id }).first();
 		await cache.setObject(id, cached);
 		return cached;
 	}
@@ -144,7 +148,7 @@ export default abstract class BaseModel {
 
 		if (!ids.length) throw new Error('no id provided');
 
-		const query = this.db(this.tableName()).where({ id: ids[0] });
+		const query = this.db(this.tableName).where({ id: ids[0] });
 		for (let i = 1; i < ids.length; i++) query.orWhere({ id: ids[i] });
 
 		await cache.delete(ids);

@@ -6,13 +6,13 @@ import { ErrorUnprocessableEntity, ErrorForbidden } from '../utils/errors';
 
 export default class UserModel extends BaseModel {
 
-	tableName():string {
+	get tableName():string {
 		return 'users';
 	}
 
 	async loadByEmail(email:string):Promise<User> {
 		const user:User = { email: email };
-		return this.db<User>(this.tableName()).where(user).first();
+		return this.db<User>(this.tableName).where(user).first();
 	}
 
 	async fromApiInput(object:User):Promise<User> {

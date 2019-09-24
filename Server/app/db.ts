@@ -30,6 +30,18 @@ export interface WithUuid {
 	id?: string
 }
 
+interface DatabaseTableColumn {
+	type: string
+}
+
+interface DatabaseTable {
+	[key:string]: DatabaseTableColumn
+}
+
+interface DatabaseTables {
+	[key:string]: DatabaseTable
+}
+
 // AUTO-GENERATED-TYPES
 // Auto-generated using `npm run generate-types`
 export interface User extends WithDates, WithUuid {
@@ -59,4 +71,43 @@ export interface File extends WithDates, WithUuid {
 	is_root?: number
 	parent_id?: string
 }
+
+export const databaseSchema:DatabaseTables = {
+	users: {
+		id: { type: 'string' },
+		email: { type: 'string' },
+		password: { type: 'string' },
+		is_admin: { type: 'number' },
+		updated_time: { type: 'number' },
+		created_time: { type: 'number' },
+	},
+	sessions: {
+		id: { type: 'string' },
+		user_id: { type: 'string' },
+		updated_time: { type: 'number' },
+		created_time: { type: 'number' },
+	},
+	permissions: {
+		id: { type: 'string' },
+		user_id: { type: 'string' },
+		item_type: { type: 'number' },
+		item_id: { type: 'string' },
+		is_owner: { type: 'number' },
+		can_read: { type: 'number' },
+		can_write: { type: 'number' },
+		updated_time: { type: 'number' },
+		created_time: { type: 'number' },
+	},
+	files: {
+		id: { type: 'string' },
+		name: { type: 'string' },
+		content: { type: 'any' },
+		mime_type: { type: 'string' },
+		is_directory: { type: 'number' },
+		is_root: { type: 'number' },
+		parent_id: { type: 'string' },
+		updated_time: { type: 'number' },
+		created_time: { type: 'number' },
+	},
+};
 // AUTO-GENERATED-TYPES

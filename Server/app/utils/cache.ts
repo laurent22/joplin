@@ -36,6 +36,10 @@ class Cache {
 		for (const k of keys) delete this.cache[k];
 	}
 
+	async clearAll():Promise<void> {
+		this.cache = {};
+	}
+
 }
 
 const cache:Cache = new Cache();

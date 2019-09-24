@@ -4,6 +4,7 @@ require('source-map-support').install();
 import db, { User, Session } from '../app/db';
 import UserModel from '../app/models/UserModel';
 import SessionController from '../app/controllers/SessionController';
+import cache from '../app/utils/cache';
 
 // Wrap an async test in a try/catch block so that done() is always called
 // and display a proper error message instead of "unhandled promise error"
@@ -29,6 +30,8 @@ export const clearDatabase = async function():Promise<void> {
 	await db('users').truncate();
 	await db('permissions').truncate();
 	await db('files').truncate();
+
+	cache.clearAll();
 };
 
 export const supportDir = `${__dirname}/../../tests/support`;

@@ -4,7 +4,7 @@ import { User, Session } from '../db';
 
 export default class SessionModel extends BaseModel {
 
-	tableName():string {
+	get tableName():string {
 		return 'sessions';
 	}
 

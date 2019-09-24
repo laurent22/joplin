@@ -9,7 +9,7 @@ enum ReadOrWriteKeys {
 
 export default class PermissionModel extends BaseModel {
 
-	tableName():string {
+	get tableName():string {
 		return 'permissions';
 	}
 
@@ -21,7 +21,7 @@ export default class PermissionModel extends BaseModel {
 
 		if (userId) p.user_id = userId;
 
-		return this.db<Permission>(this.tableName()).where(p).select();
+		return this.db<Permission>(this.tableName).where(p).select();
 	}
 
 	private async canReadOrWrite(fileId:string, userId:string, method:ReadOrWriteKeys):Promise<boolean> {
@@ -40,27 +40,10 @@ export default class PermissionModel extends BaseModel {
 
 	async canRead(fileId:string, userId:string):Promise<boolean> {
 		return this.canReadOrWrite(fileId, userId, ReadOrWriteKeys.CanRead);
-		// if (!userId || !fileId) return false;
-		// const permissions = await this.filePermissions(fileId, userId);
-		// for (const p of permissions) {
-		// 	if (p.can_read || p.is_owner) return true;
-		// }
-		// return false;
 	}
 
 	async canWrite(fileId:string, userId:string):Promise<boolean> {
 		return this.canReadOrWrite(fileId, userId, ReadOrWriteKeys.CanWrite);
-		// if (!userId || !fileId) return false;
-		// const permissions = await this.filePermissions(fileId, userId);
-		// for (const p of permissions) {
-		// 	if (p.can_write || p.is_owner) return true;
-		// }
-
-		// const userModel = new UserModel({ userId: userId });
-		// const owner:User = await userModel.load(userId);
-		// if (owner.is_admin) return true;
-
-		// return false;
 	}
 
 	async deleteByFileId(fileId:string):Promise<void> {

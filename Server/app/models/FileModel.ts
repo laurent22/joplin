@@ -1,18 +1,18 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
-import { File, Permission, ItemType } from '../db';
+import { File, Permission, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 export default class FileModel extends BaseModel {
 
-	tableName():string {
+	get tableName():string {
 		return 'files';
 	}
 
 	async userRootFile():Promise<File> {
-		const r = await this.db(this.tableName()).select('files.id').from(this.tableName()).leftJoin('permissions', 'permissions.item_id', 'files.id').where({
+		const r = await this.db(this.tableName).select('files.id').from(this.tableName).leftJoin('permissions', 'permissions.item_id', 'files.id').where({
 			'item_type': ItemType.File,
 			'user_id': this.userId,
 			'is_root': 1,
@@ -40,12 +40,12 @@ export default class FileModel extends BaseModel {
 		return r.user_id;
 	}
 
-	defaultFields():string | string[] {
-		return ['id', 'name', 'mime_type', 'is_directory', 'is_root', 'parent_id'];
+	get defaultFields():string[] {
+		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
 	async fileByName(parentId:string, name:string):Promise<File> {
-		return this.db<File>(this.tableName()).select(this.defaultFields()).where({
+		return this.db<File>(this.tableName).select(...this.defaultFields).where({
 			parent_id: parentId,
 			name: name,
 		}).first();
@@ -126,11 +126,20 @@ export default class FileModel extends BaseModel {
 		});
 	}
 
-	async load(id:string):Promise<File> {
+	private async checkCanReadPermissions(id:string):Promise<void> {
 		const permissionModel = new PermissionModel();
 		const canRead:boolean = await permissionModel.canRead(id, this.userId);
 		if (!canRead) throw new ErrorForbidden();
+	}
 
+	async loadWithContent(id:string):Promise<any> {
+		await this.checkCanReadPermissions(id);
+		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+		return file;
+	}
+
+	async load(id:string):Promise<File> {
+		await this.checkCanReadPermissions(id);
 		return super.load(id);
 	}
 

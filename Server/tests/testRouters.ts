@@ -126,6 +126,10 @@ async function main() {
 
 	console.info('Response:', file);
 
+	await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
+		`data=@${serverRoot}/tests/support/poster.png`,
+	]);
+
 	serverProcess.kill();
 }
 

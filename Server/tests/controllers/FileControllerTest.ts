@@ -6,11 +6,13 @@ import { File } from '../../app/db';
 import PermissionModel from '../../app/models/PermissionModel';
 import { ErrorForbidden } from '../../app/utils/errors';
 
-async function makeTestFile(id:number = 1):Promise<File> {
+async function makeTestFile(id:number = 1, ext:string = 'jpg'):Promise<File> {
+	const basename = ext === 'jpg' ? 'photo' : 'poster';
+
 	const file:File = {
-		name: id > 1 ? `photo-${id}.jpg` : 'photo.jpg',
-		content: await fs.readFile(`${supportDir}/photo.jpg`),
-		mime_type: 'image/jpeg',
+		name: id > 1 ? `${basename}-${id}.${ext}` : `${basename}.${ext}`,
+		content: await fs.readFile(`${supportDir}/${basename}.${ext}`),
+		mime_type: `image/${ext}`,
 		parent_id: '',
 	};
 
@@ -49,7 +51,7 @@ describe('FileController', function() {
 		expect(!newFile.content).toBe(true);
 
 		const fileModel = new FileModel({ userId: user.id });
-		newFile = await fileModel.load(newFile.id);
+		newFile = await fileModel.loadWithContent(newFile.id);
 
 		expect(!!newFile).toBe(true);
 
@@ -205,5 +207,22 @@ describe('FileController', function() {
 		expect(!!error).toBe(true);
 	}));
 
+	it('should update a file content', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		const file:File = await makeTestFile(1);
+		const file2:File = await makeTestFile(2, 'png');
+
+		const fileController = new FileController();
+		let newFile = await fileController.createFile(session.id, file);
+		await fileController.updateFileContent(session.id, newFile.id, file2.content);
+
+		const modFile = await fileController.getFileContent(session.id, newFile.id);
+
+		const originalFileHex = (file.content as Buffer).toString('hex');
+		const modFileHex = (modFile.content as Buffer).toString('hex');
+		expect(modFileHex.length > 0).toBe(true);
+		expect(modFileHex === originalFileHex).toBe(false);
+	}));
 
 });
