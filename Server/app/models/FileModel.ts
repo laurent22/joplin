@@ -153,6 +153,8 @@ export default class FileModel extends BaseModel {
 		try {
 			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
 
+			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
+
 			file = await super.save(file, options);
 
 			if (isNew) {

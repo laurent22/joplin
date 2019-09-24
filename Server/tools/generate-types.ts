@@ -53,6 +53,7 @@ function createTypeString(table:any) {
 		}
 
 		if (name === 'item_type') type = 'ItemType';
+		if (table.name === 'files' && name === 'content') type = 'Buffer';
 
 		colStrings.push(`\t${name}?: ${type}`);
 	}
@@ -81,7 +82,7 @@ function createRuntimeObject(table:any) {
 	for (const col of table.columns) {
 		let name = col.propertyName;
 		let type = col.propertyType;
-		colStrings.push(`\t\t${name}: { type: "${type}" },`);
+		colStrings.push(`\t\t${name}: { type: '${type}' },`);
 	}
 
 	return `\t${table.name}: {\n${colStrings.join('\n')}\n\t},`;

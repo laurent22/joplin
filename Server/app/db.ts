@@ -65,8 +65,9 @@ export interface Permission extends WithDates, WithUuid {
 
 export interface File extends WithDates, WithUuid {
 	name?: string
-	content?: any
+	content?: Buffer
 	mime_type?: string
+	size?: number
 	is_directory?: number
 	is_root?: number
 	parent_id?: string
@@ -103,6 +104,7 @@ export const databaseSchema:DatabaseTables = {
 		name: { type: 'string' },
 		content: { type: 'any' },
 		mime_type: { type: 'string' },
+		size: { type: 'number' },
 		is_directory: { type: 'number' },
 		is_root: { type: 'number' },
 		parent_id: { type: 'string' },

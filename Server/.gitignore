@@ -4,3 +4,4 @@ db.sqlite
 db-*.sqlite
 *.pid
 logs/
+tests/temp/

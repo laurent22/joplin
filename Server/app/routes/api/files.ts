@@ -45,6 +45,7 @@ const route:Route = {
 				const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.id);
 				koaResponse.body = file.content;
 				koaResponse.set('Content-Type', file.mime_type);
+				koaResponse.set('Content-Length', file.size.toString());
 				return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
 			}
 

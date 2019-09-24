@@ -2,11 +2,11 @@ import * as fs from 'fs-extra';
 
 const { stringify } = require('query-string');
 
-const execCommand = function(command:string):Promise<string> {
+const execCommand = function(command:string, returnStdErr:boolean = false):Promise<string> {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error:any, stdout:any) => {
+		exec(command, (error:any, stdout:any, stderr:any) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -14,7 +14,10 @@ const execCommand = function(command:string):Promise<string> {
 					reject(error);
 				}
 			} else {
-				resolve(stdout.trim());
+				const output = [];
+				if (stdout.trim()) output.push(stdout.trim());
+				if (returnStdErr && stderr.trim()) output.push(stderr.trim());
+				resolve(output.join('\n\n'));
 			}
 		});
 	});
@@ -28,8 +31,11 @@ async function sleep(seconds:number) {
 	});
 }
 
-async function curl(method:string, path:string, query:object = null, body:any = null, headers:any = null, formFields:string[] = null):Promise<any> {
+async function curl(method:string, path:string, query:object = null, body:any = null, headers:any = null, formFields:string[] = null, options:any = {}):Promise<any> {
 	const curlCmd:string[] = ['curl'];
+
+	if (options.verbose) curlCmd.push('-v');
+	if (options.output) curlCmd.push(`--output "${options.output}"`);
 
 	if ((['PUT', 'DELETE'].indexOf(method) >= 0) || (method == 'POST' && !formFields && !body)) {
 		curlCmd.push('-X');
@@ -63,7 +69,8 @@ async function curl(method:string, path:string, query:object = null, body:any = 
 
 	console.info(`Running ${curlCmd.join(' ')}`);
 
-	const result = await execCommand(curlCmd.join(' '));
+	const result = await execCommand(curlCmd.join(' '), !!options.verbose);
+	if (options.verbose) return result;
 	return result ? JSON.parse(result) : null;
 }
 
@@ -73,13 +80,19 @@ let serverProcess:any = null;
 
 async function main() {
 	const serverRoot = `${__dirname}/../..`;
+	const tempDir = `${serverRoot}/tests/temp`;
 	process.chdir(serverRoot);
+	await fs.remove(tempDir);
+	await fs.mkdirp(tempDir);
 	const pidFilePath = `${serverRoot}/test.pid`;
 
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
-	await execCommand('npm run compile');
-	await execCommand('NODE_ENV=testing npm run db-migrate');
+	const compileCommmand = 'npm run compile';
+	const startServerCommand = 'NODE_ENV=testing npm run db-migrate';
+
+	await execCommand(compileCommmand);
+	await execCommand(startServerCommand);
 
 	serverProcess = spawn('node', ['dist/app/app.js', '--pidfile', pidFilePath], {
 		detached: true,
@@ -126,9 +139,15 @@ async function main() {
 
 	console.info('Response:', file);
 
-	await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
-		`data=@${serverRoot}/tests/support/poster.png`,
-	]);
+	// await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
+	// 	`data=@${serverRoot}/tests/support/poster.png`,
+	// ]);
+
+	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, { verbose: true, output: `${serverRoot}/tests/temp/photo-downloaded.jpg` });
+
+	console.info('Response:', response);
+
+	console.info(`To run this server again: ${compileCommmand} && ${startServerCommand}`);
 
 	serverProcess.kill();
 }

@@ -49,6 +49,7 @@ describe('FileController', function() {
 		expect(newFile.mime_type).toBe(file.mime_type);
 		expect(!!newFile.parent_id).toBe(true);
 		expect(!newFile.content).toBe(true);
+		expect(newFile.size > 0).toBe(true);
 
 		const fileModel = new FileModel({ userId: user.id });
 		newFile = await fileModel.loadWithContent(newFile.id);
@@ -223,6 +224,8 @@ describe('FileController', function() {
 		const modFileHex = (modFile.content as Buffer).toString('hex');
 		expect(modFileHex.length > 0).toBe(true);
 		expect(modFileHex === originalFileHex).toBe(false);
+		expect(modFile.size).toBe(modFile.content.byteLength);
+		expect(newFile.size).toBe(file.content.byteLength);
 	}));
 
 });

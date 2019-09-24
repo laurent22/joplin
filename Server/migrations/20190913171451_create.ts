@@ -39,6 +39,7 @@ export async function up(knex: Knex): Promise<any> {
 		table.text('name').notNullable();
 		table.binary('content').defaultTo('').notNullable();
 		table.string('mime_type', 128).defaultTo('application/octet-stream').notNullable();
+		table.integer('size').defaultTo(0).notNullable();
 		table.integer('is_directory').defaultTo(0).notNullable();
 		table.integer('is_root').defaultTo(0).notNullable();
 		table.string('parent_id', 32).defaultTo('').notNullable();
