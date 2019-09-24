@@ -145,20 +145,20 @@ export default class FileModel extends BaseModel {
 	private async pathToFiles(path:string):Promise<File[]> {
 		const filenames = splitItemPath(path);
 		const output:File[] = [];
-		let parentId:string = '';
+		let parent:File = null;
 
 		for (const filename of filenames) {
 			let file:File = null;
 			if (filename === 'root') {
 				file = await this.userRootFile();
 			} else {
-				file = await this.fileByName(parentId, filename);
+				file = await this.fileByName(parent.id, filename);
 			}
 
-			if (!file) throw new ErrorNotFound(`file not found: ${filename}`);
+			if (!file) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent.name}"`);
 
 			output.push(file);
-			parentId = file.id;
+			parent = {...file};
 		}
 
 		return output;
@@ -180,14 +180,14 @@ export default class FileModel extends BaseModel {
 	async loadWithContent(id:string | ItemId):Promise<any> {
 		const idString = await this.idFromItemId(id);
 		await this.checkCanReadPermissions(idString);
-		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+		const file:File = await this.db<File>(this.tableName).select('*').where({ id: idString }).first();
 		return file;
 	}
 
 	async load(id:string | ItemId):Promise<File> {
 		const idString = await this.idFromItemId(id);
 		await this.checkCanReadPermissions(idString);
-		return super.load(id);
+		return super.load(idString);
 	}
 
 	async save(object:File, options:SaveOptions = {}):Promise<File> {
