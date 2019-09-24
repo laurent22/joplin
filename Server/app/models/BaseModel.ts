@@ -69,8 +69,8 @@ export default abstract class BaseModel {
 		return transactionHandler.rollback(txIndex);
 	}
 
-	async all<T>():Promise<T[]> {
-		return this.db(this.tableName).select('*');
+	async all():Promise<File[] | User[] | Session[] | Permission[]> {
+		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
 	async fromApiInput(object:File | User | Session | Permission):Promise<File | User | Session | Permission> {

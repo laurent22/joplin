@@ -69,6 +69,7 @@
 			"Server/db*.sqlite/": true,
 			"Server/dist/": true,
 			"Server/tests/temp/": true,
+			"**/.*.swp": true,
 		}
 	},
 }

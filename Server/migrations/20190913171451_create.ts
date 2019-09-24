@@ -47,6 +47,10 @@ export async function up(knex: Knex): Promise<any> {
 		table.integer('created_time').notNullable();
 	});
 
+	await knex.schema.alterTable('files', function(table:Knex.CreateTableBuilder) {
+		table.unique(['parent_id', 'name']);
+	});
+
 	const userModel = new UserModel();
 
 	// We skip validation because at this point there's no user in the system so

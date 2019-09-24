@@ -2,6 +2,7 @@ import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import uuidgen from '../utils/uuidgen';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -42,6 +43,11 @@ export default class FileModel extends BaseModel {
 
 	get defaultFields():string[] {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
+	}
+
+	async allByParent(parentId:string):Promise<File[]> {
+		if (!parentId) parentId = await this.userRootFileId();
+		return this.db(this.tableName).select(...this.defaultFields).where({ parent_id: parentId });
 	}
 
 	async fileByName(parentId:string, name:string):Promise<File> {
@@ -119,11 +125,14 @@ export default class FileModel extends BaseModel {
 
 		const fileModel = new FileModel({ userId: this.userId });
 
+		const id = uuidgen();
+
 		return fileModel.save({
+			id: id,
 			is_directory: 1,
 			is_root: 1,
-			name: '',
-		});
+			name: id, // Name must be unique so we set it to the ID
+		}, { isNew: true });
 	}
 
 	private async checkCanReadPermissions(id:string):Promise<void> {

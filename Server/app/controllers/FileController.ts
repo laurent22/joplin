@@ -25,6 +25,12 @@ export default class FileController extends BaseController {
 		return file;
 	}
 
+	async getAll(sessionId:string, parentId:string = ''):Promise<File[]> {
+		const user = await this.initSession(sessionId);
+		const fileModel = new FileModel({ userId: user.id });
+		return fileModel.allByParent(parentId);
+	}
+
 	async updateFile(sessionId:string, file:File):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });

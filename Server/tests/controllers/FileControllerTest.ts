@@ -62,6 +62,34 @@ describe('FileController', function() {
 		expect(newFileHex).toBe(originalFileHex);
 	}));
 
+	it('should get files', asyncTest(async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		let file1:File = await makeTestFile(1);
+		let file2:File = await makeTestFile(2);
+		let file3:File = await makeTestFile(3);
+
+		const fileController = new FileController();
+		file1 = await fileController.createFile(session1.id, file1);
+		file2 = await fileController.createFile(session1.id, file2);
+		file3 = await fileController.createFile(session2.id, file3);
+
+		const fileId1 = file1.id;
+		const fileId2 = file2.id;
+
+		// Can't get someone else file
+		const error = await checkThrowAsync(async () => fileController.getFile(session1.id, file3.id));
+		expect(error instanceof ErrorForbidden).toBe(true);
+
+		file1 = await fileController.getFile(session1.id, file1.id);
+		expect(file1.id).toBe(fileId1);
+
+		const allFiles = await fileController.getAll(session1.id);
+		expect(allFiles.length).toBe(2);
+		expect(JSON.stringify(allFiles.map(f => f.id).sort())).toBe(JSON.stringify([fileId1, fileId2].sort()));
+	}));
+
 	it('should not let create a file in a directory not owned by user', asyncTest(async function() {
 		const { session } = await createUserAndSession(1);
 

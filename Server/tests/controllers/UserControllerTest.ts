@@ -60,9 +60,9 @@ describe('UserController', function() {
 
 		await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 
-		const beforeFileCount = (await fileModel.all<File[]>()).length;
-		const beforeUserCount = (await userModel.all<File[]>()).length;
-		const beforePermissionCount = (await permissionModel.all<File[]>()).length;
+		const beforeFileCount = (await fileModel.all()).length;
+		const beforeUserCount = (await userModel.all()).length;
+		const beforePermissionCount = (await permissionModel.all()).length;
 
 		let hasThrown = false;
 		try {
@@ -73,9 +73,9 @@ describe('UserController', function() {
 
 		expect(hasThrown).toBe(true);
 
-		const afterFileCount = (await fileModel.all<File[]>()).length;
-		const afterUserCount = (await userModel.all<File[]>()).length;
-		const afterPermissionCount = (await permissionModel.all<File[]>()).length;
+		const afterFileCount = (await fileModel.all()).length;
+		const afterUserCount = (await userModel.all()).length;
+		const afterPermissionCount = (await permissionModel.all()).length;
 
 		expect(beforeFileCount).toBe(afterFileCount);
 		expect(beforeUserCount).toBe(afterUserCount);
