@@ -1,7 +1,7 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType, databaseSchema, ItemId, ItemAddressingType } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound } from '../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath } from '../utils/routeUtils';
 
@@ -147,9 +147,13 @@ export default class FileModel extends BaseModel {
 		const output:File[] = [];
 		let parent:File = null;
 
-		for (const filename of filenames) {
+		for (let i = 0; i < filenames.length; i++) {
+			const filename = filenames[i];
 			let file:File = null;
-			if (filename === 'root') {
+			if (i === 0) {
+				// For now we only support "root" as a root component, but potentially it could
+				// be any special directory like "documents", "pictures", etc.
+				if (filename !== 'root') throw new ErrorBadRequest(`unknown path root component: ${filename}`);
 				file = await this.userRootFile();
 			} else {
 				file = await this.fileByName(parent.id, filename);
