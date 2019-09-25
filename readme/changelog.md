@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v1.0.168](https://github.com/laurent22/joplin/releases/tag/v1.0.168) - 2019-09-25T21:21:38Z
+
+- New: Import Evernote notes as HTML ([#1887](https://github.com/laurent22/joplin/issues/1887))
+- New: Added fail-safe to prevent data from being wiped out when the sync target is empty
+- Improved: Also allow importing TXT files with markdown
+- Improved: Cleaned up and improved config screen design, move all screens under same one, and added section buttons
+- Fixed: Fixed broken menu bar
+- Fixed: Fixed import of notes that contain links with hashes
+- Fixed: Support non-alphabetical characters in note link anchors ([#1870](https://github.com/laurent22/joplin/issues/1870))
+
 ## [v1.0.167](https://github.com/laurent22/joplin/releases/tag/v1.0.167) - 2019-09-10T08:48:37Z
 
 - Fixed: Fixed link issue following last update
