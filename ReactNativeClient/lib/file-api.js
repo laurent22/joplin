@@ -9,7 +9,14 @@ const { time } = require('lib/time-utils.js');
 function requestCanBeRepeated(error) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
+	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget') return false;
+
+	// We don't repeat failSafe errors because it's an indication of an issue at the
+	// server-level issue which usually cannot be fixed by repeating the request.
+	// Also we print the previous requests and responses to the log in this case,
+	// so not repeating means there will be less noise in the log.
+	if (errorCode === 'failSafe') return false;
 
 	return true;
 }
@@ -58,6 +65,14 @@ class FileApi {
 		if (this.requestRepeatCount_ !== null) return this.requestRepeatCount_;
 		if (this.driver_.requestRepeatCount) return this.driver_.requestRepeatCount();
 		return 0;
+	}
+
+	lastRequests() {
+		return this.driver_.lastRequests ? this.driver_.lastRequests() : [];
+	}
+
+	clearLastRequests() {
+		if (this.driver_.clearLastRequests) this.driver_.clearLastRequests();
 	}
 
 	baseDir() {

@@ -173,6 +173,17 @@ class Synchronizer {
 		return this.cancelling_;
 	}
 
+	logLastRequests() {
+		const lastRequests = this.api().lastRequests();
+		if (!lastRequests || !lastRequests.length) return;
+
+		for (const r of lastRequests) {
+			const timestamp = time.unixMsToLocalHms(r.timestamp);
+			this.logger().info(`Req ${timestamp}: ${r.request}`);
+			this.logger().info(`Res ${timestamp}: ${r.response}`);
+		}
+	}
+
 	static stateToLabel(state) {
 		if (state === 'idle') return _('Idle');
 		if (state === 'in_progress') return _('In progress');
@@ -703,6 +714,8 @@ class Synchronizer {
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
+
+				if (error.code === 'failSafe') this.logLastRequests();
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				this.logger().error(error);
@@ -710,7 +723,10 @@ class Synchronizer {
 				this.logger().error(error);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) this.progressReport_.errors.push(error);
+				if (!shim.fetchRequestCanBeRetried(error)) {
+					this.progressReport_.errors.push(error);
+					this.logLastRequests();
+				}
 			}
 		}
 
