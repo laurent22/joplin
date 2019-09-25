@@ -159,7 +159,7 @@ export default class FileModel extends BaseModel {
 				file = await this.fileByName(parent.id, filename);
 			}
 
-			if (!file) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent.name}"`);
+			if (!file) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
 
 			output.push(file);
 			parent = {...file};
