@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -174,16 +172,6 @@ msgstr "활성화된 노트북이 없습니다."
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" 노트가 존재하지 않습니다. 새로 만들까요?"
-
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "노트 편집을 시작합니다. 프롬프트로 가시려면 편집기를 종료해주세요."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
-
-msgid "Note has been saved."
-msgstr "노트가 저장되었습니다."
 
 msgid "Exits the application."
 msgstr "애플리케이션을 종료합니다."
@@ -537,10 +525,6 @@ msgstr "사용법에 대한 정보를 알고 싶으시다면 `joplin help`를 �
 msgid "Fatal error:"
 msgstr "치명적인 오류:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "애플리케이션이 허가되었습니다 - 브라우저 탭을 닫으셔도 됩니다."
@@ -592,72 +576,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기다려주세요..."
-
-msgid "Sidebar"
-msgstr "사이드바"
-
-msgid "Note list"
-msgstr "노트 목록"
-
-msgid "Note title"
-msgstr "노트 제목"
-
-msgid "Note body"
-msgstr "노트 본문"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
-
-msgid "PDF File"
-msgstr "PDF 파일"
-
-msgid "Synchronisation status"
-msgstr "동기화 상태"
-
-msgid "New note"
-msgstr "새 노트"
-
-msgid "New to-do"
-msgstr "새 '할 일'"
-
-msgid "New notebook"
-msgstr "새 노트북"
-
-msgid "Print"
-msgstr "인쇄"
-
-msgid "General Options"
-msgstr "일반 옵션"
-
-msgid "Encryption options"
-msgstr "암호화 옵션"
-
-msgid "Web clipper options"
-msgstr "웹 수집기 옵션"
-
-msgid "Create note from template"
-msgstr "템플릿에서 노트 생성"
-
-msgid "Create to-do from template"
-msgstr "템플릿에서 할일 생성"
-
-msgid "Insert template"
-msgstr "템플릿 삽입"
-
-msgid "Open template directory"
-msgstr "템플릿 디렉터리 열기"
-
-msgid "Refresh templates"
-msgstr "템플릿 새로고침"
-
-#, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "개정판: %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "파일"
@@ -868,6 +786,9 @@ msgstr ""
 "이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
 "다."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
@@ -877,6 +798,9 @@ msgstr "동기화 설정 확인"
 
 msgid "Browse..."
 msgstr "훑어보기…"
+
+msgid "Back"
+msgstr "뒤로 가기"
 
 msgid "Apply"
 msgstr "적용"
@@ -969,11 +893,17 @@ msgstr "상태"
 msgid "Encryption is:"
 msgstr "암호화는 다음과 같습니다:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "사용 방법"
-
-msgid "Back"
-msgstr "뒤로 가기"
 
 #, javascript-format
 msgid ""
@@ -1003,6 +933,15 @@ msgstr "알람 설정:"
 
 msgid "Template file:"
 msgstr "템플릿 파일:"
+
+msgid "New note"
+msgstr "새 노트"
+
+msgid "New to-do"
+msgstr "새 '할 일'"
+
+msgid "New notebook"
+msgstr "새 노트북"
 
 msgid "Layout"
 msgstr "배치"
@@ -1099,6 +1038,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "한 번에 오직 하나의 노트만 출력하거나 내보내기 할 수 있습니다."
 
+msgid "PDF File"
+msgstr "PDF 파일"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
+
 msgid "strong text"
 msgstr "굵게"
 
@@ -1173,12 +1119,6 @@ msgstr "옵션"
 msgid "Synchronisation Status"
 msgstr "동기화 상태"
 
-msgid "Encryption Options"
-msgstr "암호화 옵션"
-
-msgid "Clipper Options"
-msgstr "수집기 옵션"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1201,6 +1141,17 @@ msgstr "삭제"
 
 msgid "Rename"
 msgstr "이름 바꾸기"
+
+msgid "Notebooks"
+msgstr "노트북"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "복호화 항목: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "리소스 가져오는 중: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
@@ -1359,12 +1310,6 @@ msgstr "진행 중"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주"
-"세요"
 
 msgid "Encrypted"
 msgstr "암호화됨"
@@ -1582,6 +1527,10 @@ msgstr "전체 확대 비율"
 msgid "Editor font size"
 msgstr "편집기 글꼴 크기"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "편집기 글꼴 크기"
+
 msgid "Editor font family"
 msgstr "편집기 글꼴 모음"
 
@@ -1646,6 +1595,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1687,6 +1641,14 @@ msgstr "플러그인"
 msgid "Application"
 msgstr "애플리케이션"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "암호화는 다음과 같습니다:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "웹 수집기 옵션"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "태그 \"%s\"(이)가 이미 존재합니다. 다른 이름을 선택해 주세요."
@@ -1700,7 +1662,12 @@ msgstr "마크다운"
 msgid "Joplin Export Directory"
 msgstr "Joplin 내보내기 폴더"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "에버노트 내보내기 파일"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "에버노트 내보내기 파일"
 
 msgid "Json Export Directory"
@@ -1855,19 +1822,8 @@ msgstr "새 노트북"
 msgid "Configuration"
 msgstr "설정"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "복호화 항목: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "리소스 가져오는 중: %d/%d"
-
 msgid "All notes"
 msgstr "모든 노트"
-
-msgid "Notebooks"
-msgstr "노트북"
 
 msgid "Checking... Please wait."
 msgstr "확인 중입니다... 잠시만 기다리세요."
@@ -1918,9 +1874,6 @@ msgid ""
 "external storage is required."
 msgstr ""
 "파일 시스템 동기화를 사용하실려면 외부 저장소 쓰기 권한을 필요로 합니다."
-
-msgid "Information"
-msgstr "정보"
 
 msgid "Encryption Config"
 msgstr "암호화 설정"
@@ -2102,6 +2055,80 @@ msgstr "OneDrive 로그인"
 
 msgid "Search"
 msgstr "검색"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr "노트 편집을 시작합니다. 프롬프트로 가시려면 편집기를 종료해주세요."
+
+#~ msgid "Note has been saved."
+#~ msgstr "노트가 저장되었습니다."
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr ""
+#~ "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
+
+#~ msgid "Sidebar"
+#~ msgstr "사이드바"
+
+#~ msgid "Note list"
+#~ msgstr "노트 목록"
+
+#~ msgid "Note title"
+#~ msgstr "노트 제목"
+
+#~ msgid "Note body"
+#~ msgstr "노트 본문"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr ""
+#~ "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "동기화 상태"
+
+#~ msgid "Print"
+#~ msgstr "인쇄"
+
+#~ msgid "General Options"
+#~ msgstr "일반 옵션"
+
+#~ msgid "Encryption options"
+#~ msgstr "암호화 옵션"
+
+#~ msgid "Create note from template"
+#~ msgstr "템플릿에서 노트 생성"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "템플릿에서 할일 생성"
+
+#~ msgid "Insert template"
+#~ msgstr "템플릿 삽입"
+
+#~ msgid "Open template directory"
+#~ msgstr "템플릿 디렉터리 열기"
+
+#~ msgid "Refresh templates"
+#~ msgstr "템플릿 새로고침"
+
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "개정판: %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "암호화 옵션"
+
+#~ msgid "Clipper Options"
+#~ msgstr "수집기 옵션"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr ""
+#~ "알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 "
+#~ "해주세요"
+
+#~ msgid "Information"
+#~ msgstr "정보"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

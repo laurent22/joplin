@@ -174,17 +174,6 @@ msgstr "Není vybrán žádný zápisník."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Poznámka \"%s\" neexistuje. Chcete ji vytvořit?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Začínám s úpravou poznámky. Pro návrat do příkazové řádky ukončete editor."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Chyba při otevírání poznámky v editoru: %s"
-
-msgid "Note has been saved."
-msgstr "Poznámka uložena."
-
 msgid "Exits the application."
 msgstr "Ukončí aplikaci."
 
@@ -540,10 +529,6 @@ msgstr "Zadejte `joplin help` pro nápovědu."
 msgid "Fatal error:"
 msgstr "Fatální chyba:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Aplikace byla autorizována, tento tab můžete zavřít."
@@ -594,75 +579,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
-
-msgid "Sidebar"
-msgstr "Postranní lišta"
-
-msgid "Note list"
-msgstr "Seznam položek"
-
-msgid "Note title"
-msgstr "Název zápisníku"
-
-#, fuzzy
-msgid "Note body"
-msgstr "Zápisník"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
-
-msgid "PDF File"
-msgstr "PDF soubor"
-
-msgid "Synchronisation status"
-msgstr "Stav synchronizace"
-
-msgid "New note"
-msgstr "Nová poznámka"
-
-msgid "New to-do"
-msgstr "Nové to-do"
-
-msgid "New notebook"
-msgstr "Nový zápisník"
-
-msgid "Print"
-msgstr "Tisk"
-
-msgid "General Options"
-msgstr "Obecná nastavení"
-
-msgid "Encryption options"
-msgstr "Nastavení šifrování"
-
-msgid "Web clipper options"
-msgstr "Web clipper volby"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Vložit datum a čas"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Složka pro export"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -882,6 +798,9 @@ msgstr ""
 "Tento autorizační token je potřeba pouze pro povolení komunikace Joplin s "
 "aplikacemi třetích stran."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Poznámky a nastavení uloženo v: %s"
@@ -891,6 +810,9 @@ msgstr "Zkontrolujte nastavení synchronizace"
 
 msgid "Browse..."
 msgstr "Procházet..."
+
+msgid "Back"
+msgstr "Zpět"
 
 msgid "Apply"
 msgstr "Použít"
@@ -983,11 +905,17 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Šifrování je:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Použití: %s"
-
-msgid "Back"
-msgstr "Zpět"
 
 #, javascript-format
 msgid ""
@@ -1017,6 +945,15 @@ msgstr "Nastavit alarm:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Nová poznámka"
+
+msgid "New to-do"
+msgstr "Nové to-do"
+
+msgid "New notebook"
+msgstr "Nový zápisník"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1113,6 +1050,13 @@ msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 "Pouze jedna poznámka může být zároveň vytištěna nebo exportována do PDF."
 
+msgid "PDF File"
+msgstr "PDF soubor"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Chyba při otevírání poznámky v editoru: %s"
+
 msgid "strong text"
 msgstr "tučný text"
 
@@ -1188,13 +1132,6 @@ msgstr "Nastavení"
 msgid "Synchronisation Status"
 msgstr "Stav synchronizace"
 
-msgid "Encryption Options"
-msgstr "Nastavení šifrování"
-
-#, fuzzy
-msgid "Clipper Options"
-msgstr "Obecná nastavení"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1214,6 +1151,17 @@ msgstr "Smazat"
 
 msgid "Rename"
 msgstr "Přejmenovat"
+
+msgid "Notebooks"
+msgstr "Zápisníky"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Rozšifrované položky: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Stahování zdrojů: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Prosím vyberte, kam má být stav synchronizace exportován"
@@ -1375,10 +1323,6 @@ msgstr "Probíhá"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Synchronizace již probíhá. Stav: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "Zašifrováno"
@@ -1595,6 +1539,10 @@ msgstr "Globální zoom"
 msgid "Editor font size"
 msgstr "Rodina písma v editoru"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Rodina písma v editoru"
+
 msgid "Editor font family"
 msgstr "Rodina písma v editoru"
 
@@ -1659,6 +1607,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorovat chyby TLS certifikátu"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1699,6 +1652,14 @@ msgstr "Rozšíření"
 msgid "Application"
 msgstr "Aplikace"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Šifrování je:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Web clipper volby"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Tag \"%s\" již existuje. Zvolte jiný název."
@@ -1712,7 +1673,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Složka pro export"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Soubor Evernote Exportu"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Soubor Evernote Exportu"
 
 msgid "Json Export Directory"
@@ -1869,20 +1835,9 @@ msgstr "Nový zápisník"
 msgid "Configuration"
 msgstr "Nastavení"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Rozšifrované položky: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Stahování zdrojů: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "poznámka"
-
-msgid "Notebooks"
-msgstr "Zápisníky"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1932,10 +1887,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Nastavení"
 
 msgid "Encryption Config"
 msgstr "Nastavení šifrování"
@@ -2125,6 +2076,67 @@ msgstr "Přihlásit se pomocí OneDrive"
 
 msgid "Search"
 msgstr "Hledání"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Začínám s úpravou poznámky. Pro návrat do příkazové řádky ukončete editor."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Poznámka uložena."
+
+#~ msgid "Sidebar"
+#~ msgstr "Postranní lišta"
+
+#~ msgid "Note list"
+#~ msgstr "Seznam položek"
+
+#~ msgid "Note title"
+#~ msgstr "Název zápisníku"
+
+#, fuzzy
+#~ msgid "Note body"
+#~ msgstr "Zápisník"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Stav synchronizace"
+
+#~ msgid "Print"
+#~ msgstr "Tisk"
+
+#~ msgid "General Options"
+#~ msgstr "Obecná nastavení"
+
+#~ msgid "Encryption options"
+#~ msgstr "Nastavení šifrování"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Vložit datum a čas"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Složka pro export"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Nastavení šifrování"
+
+#, fuzzy
+#~ msgid "Clipper Options"
+#~ msgstr "Obecná nastavení"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Nastavení"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

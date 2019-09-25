@@ -173,18 +173,6 @@ msgstr "Nema aktivne bilježnice."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Bilješka ne postoji: \"%s\". Napravi je?"
 
-#, fuzzy
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Počinjem uređivati bilješku. Za povratak u naredbeni redak, zatvori uređivač."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr ""
-
-msgid "Note has been saved."
-msgstr "Bilješka je spremljena."
-
 msgid "Exits the application."
 msgstr "Izlaz iz aplikacije."
 
@@ -547,10 +535,6 @@ msgstr "Prikazuje informacije o korištenju."
 msgid "Fatal error:"
 msgstr "Fatalna greška:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Aplikacija je autorizirana - smiješ zatvoriti karticu preglednika."
@@ -599,76 +583,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
-
-msgid "Sidebar"
-msgstr ""
-
-msgid "Note list"
-msgstr ""
-
-#, fuzzy
-msgid "Note title"
-msgstr "Naslov bilježnice:"
-
-#, fuzzy
-msgid "Note body"
-msgstr "Bilježnice"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-
-#, fuzzy
-msgid "PDF File"
-msgstr "Datoteka"
-
-msgid "Synchronisation status"
-msgstr "Status sinkronizacije"
-
-msgid "New note"
-msgstr "Nova bilješka"
-
-msgid "New to-do"
-msgstr "Novi zadatak"
-
-msgid "New notebook"
-msgstr "Nova bilježnica"
-
-msgid "Print"
-msgstr ""
-
-#, fuzzy
-msgid "General Options"
-msgstr "Opcije"
-
-msgid "Encryption options"
-msgstr ""
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-msgid "Insert template"
-msgstr ""
-
-msgid "Open template directory"
-msgstr ""
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -885,6 +799,9 @@ msgid ""
 "access Joplin."
 msgstr ""
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke su pohranjene u: %s"
@@ -895,6 +812,9 @@ msgstr "Prekini sinkronizaciju"
 
 msgid "Browse..."
 msgstr ""
+
+msgid "Back"
+msgstr "Natrag"
 
 msgid "Apply"
 msgstr ""
@@ -974,12 +894,18 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr ""
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 #, fuzzy
 msgid "Usage"
 msgstr "Korištenje: %s"
-
-msgid "Back"
-msgstr "Natrag"
 
 #, javascript-format
 msgid ""
@@ -1012,6 +938,15 @@ msgstr "Postavi upozorenje:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Nova bilješka"
+
+msgid "New to-do"
+msgstr "Novi zadatak"
+
+msgid "New notebook"
+msgstr "Nova bilježnica"
 
 msgid "Layout"
 msgstr "Izgled"
@@ -1108,6 +1043,14 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
+#, fuzzy
+msgid "PDF File"
+msgstr "Datoteka"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
 msgid "strong text"
 msgstr ""
 
@@ -1185,13 +1128,6 @@ msgstr "Opcije"
 msgid "Synchronisation Status"
 msgstr "Status Sinkronizacije"
 
-msgid "Encryption Options"
-msgstr ""
-
-#, fuzzy
-msgid "Clipper Options"
-msgstr "Opcije"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1212,6 +1148,17 @@ msgstr "Obriši"
 
 msgid "Rename"
 msgstr "Preimenuj"
+
+msgid "Notebooks"
+msgstr "Bilježnice"
+
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Stvorene lokalne stavke: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Resursi: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
@@ -1369,10 +1316,6 @@ msgstr ""
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sinkronizacija je već u toku. Stanje: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr ""
@@ -1594,6 +1537,10 @@ msgstr ""
 msgid "Editor font size"
 msgstr "Uredi bilješku."
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Uredi bilješku."
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1653,6 +1600,11 @@ msgid "Ignore TLS certificate errors"
 msgstr ""
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1697,6 +1649,12 @@ msgstr ""
 msgid "Application"
 msgstr "Izađi iz aplikacije."
 
+msgid "Encryption"
+msgstr ""
+
+msgid "Web Clipper"
+msgstr ""
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1712,7 +1670,11 @@ msgid "Joplin Export Directory"
 msgstr ""
 
 #, fuzzy
-msgid "Evernote Export File"
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote izvozne datoteke"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote izvozne datoteke"
 
 #, fuzzy
@@ -1868,20 +1830,9 @@ msgstr "Nova bilježnica"
 msgid "Configuration"
 msgstr "Konfiguracija"
 
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Stvorene lokalne stavke: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Resursi: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "Nova bilješka"
-
-msgid "Notebooks"
-msgstr "Bilježnice"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1926,10 +1877,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Konfiguracija"
 
 msgid "Encryption Config"
 msgstr ""
@@ -2117,6 +2064,45 @@ msgstr "Prijavi se u OneDrive"
 
 msgid "Search"
 msgstr "Traži"
+
+#, fuzzy
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Počinjem uređivati bilješku. Za povratak u naredbeni redak, zatvori "
+#~ "uređivač."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Bilješka je spremljena."
+
+#, fuzzy
+#~ msgid "Note title"
+#~ msgstr "Naslov bilježnice:"
+
+#, fuzzy
+#~ msgid "Note body"
+#~ msgstr "Bilježnice"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Status sinkronizacije"
+
+#, fuzzy
+#~ msgid "General Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#, fuzzy
+#~ msgid "Clipper Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Konfiguracija"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Prekini sinkronizaciju"

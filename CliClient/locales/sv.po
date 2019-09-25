@@ -174,18 +174,6 @@ msgstr "Ingen aktiv anteckningsbok."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Anteckning finns inte: \"%s\". Skapa den?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Börjar redigera anteckning. Stäng redigeraren för att komma tillbaka till "
-"prompten."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Fel vid öppning av anteckning i redigeraren: %s"
-
-msgid "Note has been saved."
-msgstr "Anteckning har sparats."
-
 msgid "Exits the application."
 msgstr "Avslutar programmet."
 
@@ -552,10 +540,6 @@ msgstr "Skriv `joplin help` för användningsinformation."
 msgid "Fatal error:"
 msgstr "Allvarligt fel:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Programmet har godkänts - du kan nu stänga den här webbläsarfliken."
@@ -609,74 +593,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportera till \"%s\" som \"%s\" format. Vänta..."
-
-msgid "Sidebar"
-msgstr "Sidofältet"
-
-msgid "Note list"
-msgstr "Anteckningsboken"
-
-msgid "Note title"
-msgstr "Rubriken"
-
-msgid "Note body"
-msgstr "Texten"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
-
-msgid "PDF File"
-msgstr "PDF-fil"
-
-msgid "Synchronisation status"
-msgstr "Synkroniseringstillstånd"
-
-msgid "New note"
-msgstr "Ny anteckning"
-
-msgid "New to-do"
-msgstr "Ny att-göra"
-
-msgid "New notebook"
-msgstr "Ny anteckningsbok"
-
-msgid "Print"
-msgstr "Skriv ut"
-
-msgid "General Options"
-msgstr "Allmänna inställningar"
-
-msgid "Encryption options"
-msgstr "Krypteringsinställningar"
-
-msgid "Web clipper options"
-msgstr "Web clipper-inställningar"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Infoga datumtid"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Joplin-exporteringskatalog"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -894,6 +810,9 @@ msgstr ""
 "Denna auktorisering behövs endast för att tillåta tredjepartsprogram att "
 "integrera med Joplin."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Anteckningar och inställningar lagras i: %s"
@@ -903,6 +822,9 @@ msgstr "Kontrollera synkroniseringskonfigurationen"
 
 msgid "Browse..."
 msgstr "Bläddra..."
+
+msgid "Back"
+msgstr "Tillbaka"
 
 msgid "Apply"
 msgstr "Tillämpa"
@@ -998,11 +920,17 @@ msgstr "Tillstånd"
 msgid "Encryption is:"
 msgstr "Kryptering är:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Användning"
-
-msgid "Back"
-msgstr "Tillbaka"
 
 #, javascript-format
 msgid ""
@@ -1034,6 +962,15 @@ msgstr "Ställ in alarm:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Ny anteckning"
+
+msgid "New to-do"
+msgstr "Ny att-göra"
+
+msgid "New notebook"
+msgstr "Ny anteckningsbok"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1134,6 +1071,13 @@ msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 "Endast en anteckning i taget kan bli utskriven eller exporterad till PDF."
 
+msgid "PDF File"
+msgstr "PDF-fil"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Fel vid öppning av anteckning i redigeraren: %s"
+
 msgid "strong text"
 msgstr "stark text"
 
@@ -1208,12 +1152,6 @@ msgstr "Inställningar"
 msgid "Synchronisation Status"
 msgstr "Synkroniseringstillstånd"
 
-msgid "Encryption Options"
-msgstr "Krypteringsinställningar"
-
-msgid "Clipper Options"
-msgstr "Clipper-inställningar"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1235,6 +1173,17 @@ msgstr "Ta bort"
 
 msgid "Rename"
 msgstr "Byt namn"
+
+msgid "Notebooks"
+msgstr "Anteckningsböcker"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Dekrypterar objekt: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Hämtar resurser: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
@@ -1393,10 +1342,6 @@ msgstr "Pågår"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Synkronisering pågår redan. Tillstånd: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "Krypterad"
@@ -1616,6 +1561,10 @@ msgstr "Global zoomprocent"
 msgid "Editor font size"
 msgstr "Redigerarens teckenstorlek"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Redigerarens teckenstorlek"
+
 msgid "Editor font family"
 msgstr "Redigerarens typsnittsfamilj"
 
@@ -1682,6 +1631,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorera TLS-certifikatfel"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1723,6 +1677,14 @@ msgstr ""
 msgid "Application"
 msgstr "Avslutar programmet"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Kryptering är:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Web clipper-inställningar"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Taggen \"%s\" finns redan. Välj ett annat namn."
@@ -1736,7 +1698,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin-exporteringskatalog"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote-exporteringsfil"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote-exporteringsfil"
 
 msgid "Json Export Directory"
@@ -1895,20 +1862,9 @@ msgstr "Ny anteckningsbok"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Dekrypterar objekt: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Hämtar resurser: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "anteckning"
-
-msgid "Notebooks"
-msgstr "Anteckningsböcker"
 
 msgid "Checking... Please wait."
 msgstr "Kontrollerar... vänta."
@@ -1957,10 +1913,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Konfiguration"
 
 msgid "Encryption Config"
 msgstr "Kryptering-konfiguration"
@@ -2154,6 +2106,66 @@ msgstr "Logga in med OneDrive"
 
 msgid "Search"
 msgstr "Sök"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Börjar redigera anteckning. Stäng redigeraren för att komma tillbaka till "
+#~ "prompten."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Anteckning har sparats."
+
+#~ msgid "Sidebar"
+#~ msgstr "Sidofältet"
+
+#~ msgid "Note list"
+#~ msgstr "Anteckningsboken"
+
+#~ msgid "Note title"
+#~ msgstr "Rubriken"
+
+#~ msgid "Note body"
+#~ msgstr "Texten"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Synkroniseringstillstånd"
+
+#~ msgid "Print"
+#~ msgstr "Skriv ut"
+
+#~ msgid "General Options"
+#~ msgstr "Allmänna inställningar"
+
+#~ msgid "Encryption options"
+#~ msgstr "Krypteringsinställningar"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Infoga datumtid"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Joplin-exporteringskatalog"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Krypteringsinställningar"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Clipper-inställningar"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Konfiguration"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"
