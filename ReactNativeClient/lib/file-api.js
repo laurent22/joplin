@@ -247,6 +247,13 @@ async function basicDelta(path, getDirStatFn, options) {
 		});
 		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
+
+		// At this point statIdsCache contains the list of all the item IDs on the sync target.
+		// If it's empty, it's most likely a configuration error or bug. For example, if the
+		// user moves their Nextcloud directory, or if a network drive gets disconnected and
+		// returns an empty dir instead of an error. In that case, we don't wipe out the user
+		// data, unless they have switched off the fail-safe.
+		if (options.wipeOutFailSafe && !newContext.statIdsCache.length) throw new JoplinError('Fail-safe: The delta operation was interrupted because the sync target appears to be empty. To override this behaviour disable the "Wipe out fail-safe" option in the settings.', 'failSafe');
 	}
 
 	let output = [];

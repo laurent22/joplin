@@ -425,6 +425,8 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 			},
 
+			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
+
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
 

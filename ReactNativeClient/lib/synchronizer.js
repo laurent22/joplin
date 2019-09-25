@@ -3,6 +3,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ItemChange = require('lib/models/ItemChange.js');
+const Setting = require('lib/models/Setting.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -508,6 +509,8 @@ class Synchronizer {
 						allItemIdsHandler: async () => {
 							return BaseItem.syncedItemIds(syncTargetId);
 						},
+
+						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
 					});
 
 					let remotes = listResult.items;
@@ -695,7 +698,7 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice'].indexOf(error.code) >= 0) {
+			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
