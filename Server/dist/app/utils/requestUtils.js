@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function sessionIdFromHeaders(headers) {
+    return headers['x-api-auth'] ? headers['x-api-auth'] : '';
+}
+exports.sessionIdFromHeaders = sessionIdFromHeaders;
+
+//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInJlcXVlc3RVdGlscy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLFNBQWdCLG9CQUFvQixDQUFDLE9BQVc7SUFDL0MsT0FBTyxPQUFPLENBQUMsWUFBWSxDQUFDLENBQUMsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxZQUFZLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDO0FBQzNELENBQUM7QUFGRCxvREFFQyIsImZpbGUiOiJyZXF1ZXN0VXRpbHMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gc2Vzc2lvbklkRnJvbUhlYWRlcnMoaGVhZGVyczphbnkpOnN0cmluZyB7XG5cdHJldHVybiBoZWFkZXJzWyd4LWFwaS1hdXRoJ10gPyBoZWFkZXJzWyd4LWFwaS1hdXRoJ10gOiAnJztcbn1cbiJdfQ==
