@@ -1,9 +1,0 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var generate = require('nanoid/generate');
-function uuidgen() {
-    return generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 22);
-}
-exports.default = uuidgen;
-
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInV1aWRnZW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxJQUFNLFFBQVEsR0FBRyxPQUFPLENBQUMsaUJBQWlCLENBQUMsQ0FBQztBQUU1QyxTQUF3QixPQUFPO0lBQzlCLE9BQU8sUUFBUSxDQUFDLGdFQUFnRSxFQUFFLEVBQUUsQ0FBQyxDQUFDO0FBQ3ZGLENBQUM7QUFGRCwwQkFFQyIsImZpbGUiOiJ1dWlkZ2VuLmpzIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgZ2VuZXJhdGUgPSByZXF1aXJlKCduYW5vaWQvZ2VuZXJhdGUnKTtcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gdXVpZGdlbigpOnN0cmluZyB7XG5cdHJldHVybiBnZW5lcmF0ZSgnMDEyMzQ1Njc4OUFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXonLCAyMik7XG59XG4iXX0=
