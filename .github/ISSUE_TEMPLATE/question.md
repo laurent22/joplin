@@ -1,7 +1,7 @@
 ---
 name: "🤔 Questions and Help"
 about: The issue tracker is not for questions. Please ask questions on https://discourse.joplinapp.org/.
-title: 'Question: '
+title: ''
 labels: ':question: question'
 
 ---
