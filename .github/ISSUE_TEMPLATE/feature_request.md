@@ -2,7 +2,7 @@
 name: Feature request
 about: Report an accepted feature request.
 title: ''
-labels: ':four_leaf_clover: feature request'
+labels: 'feature request'
 
 ---
 
