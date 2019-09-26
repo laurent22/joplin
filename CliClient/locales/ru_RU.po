@@ -177,18 +177,6 @@ msgstr "Нет активного блокнота."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Заметка не существует: \"%s\". Создать?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Запуск редактирования заметки. Закройте редактор, чтобы вернуться к "
-"приглашению."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Ошибка при открытии заметки в редакторе: %s"
-
-msgid "Note has been saved."
-msgstr "Заметка сохранена."
-
 msgid "Exits the application."
 msgstr "Выйти из приложения."
 
@@ -551,10 +539,6 @@ msgstr "Введите `joplin help` для получения информац�
 msgid "Fatal error:"
 msgstr "Фатальная ошибка:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Приложение авторизовано — можно закрыть вкладку браузера."
@@ -608,74 +592,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
-
-msgid "Sidebar"
-msgstr "Боковая панель"
-
-msgid "Note list"
-msgstr "Список заметок"
-
-msgid "Note title"
-msgstr "Название заметки"
-
-msgid "Note body"
-msgstr "Тело заметки"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Импорт из \"%s\" в формате \"%s\". Пожалуйста, подождите..."
-
-msgid "PDF File"
-msgstr "Файл PDF"
-
-msgid "Synchronisation status"
-msgstr "Статус синхронизации"
-
-msgid "New note"
-msgstr "Новая заметка"
-
-msgid "New to-do"
-msgstr "Новая задача"
-
-msgid "New notebook"
-msgstr "Новый блокнот"
-
-msgid "Print"
-msgstr "Печать"
-
-msgid "General Options"
-msgstr "Основные настройки"
-
-msgid "Encryption options"
-msgstr "Настройки шифрования"
-
-msgid "Web clipper options"
-msgstr "Настройки веб-клиппера"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Вставить дату и время"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Каталог экспорта Joplin"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "&Файл"
@@ -888,6 +804,9 @@ msgstr ""
 "Этот токен авторизации необходим только для разрешения сторонним приложениям "
 "получать доступ к Joplin."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
@@ -897,6 +816,9 @@ msgstr "Проверить настройки синхронизации"
 
 msgid "Browse..."
 msgstr "Обзор..."
+
+msgid "Back"
+msgstr "Назад"
 
 msgid "Apply"
 msgstr "Применить"
@@ -993,11 +915,17 @@ msgstr "Статус"
 msgid "Encryption is:"
 msgstr "Шифрование:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Использование: %s"
-
-msgid "Back"
-msgstr "Назад"
 
 #, javascript-format
 msgid ""
@@ -1028,6 +956,15 @@ msgstr "Установить напоминание:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Новая заметка"
+
+msgid "New to-do"
+msgstr "Новая задача"
+
+msgid "New notebook"
+msgstr "Новый блокнот"
 
 msgid "Layout"
 msgstr "Разметка"
@@ -1126,6 +1063,13 @@ msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 "Только одна заметка может быть напечатана или экспортирована в PDF за раз."
 
+msgid "PDF File"
+msgstr "Файл PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Ошибка при открытии заметки в редакторе: %s"
+
 msgid "strong text"
 msgstr "выделенный текст"
 
@@ -1200,12 +1144,6 @@ msgstr "Настройки"
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
-msgid "Encryption Options"
-msgstr "Настройки шифрования"
-
-msgid "Clipper Options"
-msgstr "Настройки клиппера"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1227,6 +1165,17 @@ msgstr "Удалить"
 
 msgid "Rename"
 msgstr "Переименовать"
+
+msgid "Notebooks"
+msgstr "Блокноты"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Расшифровано элементов: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Получение ресурсов: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1384,10 +1333,6 @@ msgstr "Выполнение"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация уже выполняется. Состояние: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "Зашифровано"
@@ -1606,6 +1551,10 @@ msgstr "Глобальный масштаб в процентах"
 msgid "Editor font size"
 msgstr "Размер шрифта редактора"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Размер шрифта редактора"
+
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
@@ -1673,6 +1622,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Игнорировать ошибки сертификата TLS"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1713,6 +1667,14 @@ msgstr ""
 msgid "Application"
 msgstr "Приложение"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Шифрование:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Настройки веб-клиппера"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
@@ -1726,7 +1688,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Каталог экспорта Joplin"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Файл экспорта Evernote"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Файл экспорта Evernote"
 
 msgid "Json Export Directory"
@@ -1884,20 +1851,9 @@ msgstr "Новый блокнот"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Расшифровано элементов: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Получение ресурсов: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "заметка"
-
-msgid "Notebooks"
-msgstr "Блокноты"
 
 msgid "Checking... Please wait."
 msgstr "Проверка... Пожалуйста, подождите."
@@ -1946,10 +1902,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Конфигурация"
 
 msgid "Encryption Config"
 msgstr "Конфигурация шифрования"
@@ -2142,6 +2094,66 @@ msgstr "Войти с OneDrive"
 
 msgid "Search"
 msgstr "Поиск"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Запуск редактирования заметки. Закройте редактор, чтобы вернуться к "
+#~ "приглашению."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Заметка сохранена."
+
+#~ msgid "Sidebar"
+#~ msgstr "Боковая панель"
+
+#~ msgid "Note list"
+#~ msgstr "Список заметок"
+
+#~ msgid "Note title"
+#~ msgstr "Название заметки"
+
+#~ msgid "Note body"
+#~ msgstr "Тело заметки"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Импорт из \"%s\" в формате \"%s\". Пожалуйста, подождите..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Статус синхронизации"
+
+#~ msgid "Print"
+#~ msgstr "Печать"
+
+#~ msgid "General Options"
+#~ msgstr "Основные настройки"
+
+#~ msgid "Encryption options"
+#~ msgstr "Настройки шифрования"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Вставить дату и время"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Каталог экспорта Joplin"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Настройки шифрования"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Настройки клиппера"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Конфигурация"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

@@ -74,6 +74,10 @@ class Time {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}
 
+	unixMsToLocalHms(ms) {
+		return moment.unix(ms / 1000).format('HH:mm:ss');
+	}
+
 	formatMsToLocal(ms, format = null) {
 		if (format === null) format = this.dateTimeFormat();
 		return moment(ms).format(format);

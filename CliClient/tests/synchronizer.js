@@ -1480,4 +1480,20 @@ describe('Synchronizer', function() {
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
+	it('should not wipe out user data when syncing with an empty target', asyncTest(async () => {
+		await Note.save({ title: 'ma note' });
+		await Note.save({ title: 'mon autre note' });
+		await Note.save({ title: 'ma troisième note' });
+
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizer().start();
+		await fileApi().clearRoot(); // oops
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(3); // but since the fail-safe if on, the notes have not been deleted
+
+		Setting.setValue('sync.wipeOutFailSafe', false); // Now switch it off
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(0); // Since the fail-safe was off, the data has been cleared
+	}));
+
 });

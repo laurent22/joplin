@@ -16,6 +16,38 @@ class WebDavApi {
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
+		this.lastRequests_ = [];
+	}
+
+	logRequest_(request, responseText) {
+		if (this.lastRequests_.length > 10) this.lastRequests_.splice(0, 1);
+
+		const serializeRequest = (r) => {
+			const options = Object.assign({}, r.options);
+			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
+			const output = [];
+			output.push(options.method ? options.method : 'GET');
+			output.push(r.url);
+			options.headers = Object.assign({}, options.headers);
+			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
+			delete options.method;
+			output.push(JSON.stringify(options));
+			return output.join(' ');
+		};
+
+		this.lastRequests_.push({
+			timestamp: Date.now(),
+			request: serializeRequest(request),
+			response: responseText ? responseText.substr(0, 4096) : '',
+		});
+	}
+
+	lastRequests() {
+		return this.lastRequests_;
+	}
+
+	clearLastRequests() {
+		this.lastRequests_ = [];
 	}
 
 	setLogger(l) {
@@ -339,6 +371,8 @@ class WebDavApi {
 		}
 
 		const responseText = await response.text();
+
+		this.logRequest_({ url: url, options: fetchOptions }, responseText);
 
 		// console.info('WebDAV Response', responseText);
 

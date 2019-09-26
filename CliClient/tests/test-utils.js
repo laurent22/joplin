@@ -135,7 +135,9 @@ async function switchClient(id) {
 
 	Setting.setConstant('resourceDir', resourceDir(id));
 
-	return Setting.load();
+	await Setting.load();
+
+	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
 async function clearDatabase(id = null) {

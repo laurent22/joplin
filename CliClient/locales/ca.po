@@ -178,18 +178,6 @@ msgstr "No hi ha cap bloc de notes actiu."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "No existeix «%s». Voleu crear-lo?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"S'està iniciant l'edició del a nota. Tanqueu l'editor per a tornar a "
-"l'indicador."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "S'ha produït un error en obrir la nota amb l'editor: %s"
-
-msgid "Note has been saved."
-msgstr "S'ha desat la nota."
-
 msgid "Exits the application."
 msgstr "Surt de l'aplicació"
 
@@ -555,10 +543,6 @@ msgstr "Escriviu «joplin help» per a obtenir informació d'ús."
 msgid "Fatal error:"
 msgstr "Error fatal:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -614,76 +598,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està exportant a «%s» com a format «%s». Espereu..."
-
-msgid "Sidebar"
-msgstr ""
-
-msgid "Note list"
-msgstr ""
-
-#, fuzzy
-msgid "Note title"
-msgstr "Títol del bloc de notes:"
-
-#, fuzzy
-msgid "Note body"
-msgstr "Blocs de notes"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "S'està important des de «%s» com a format «%s». Espereu..."
-
-msgid "PDF File"
-msgstr "Fitxer PDF"
-
-msgid "Synchronisation status"
-msgstr "Estat de la sincronització"
-
-msgid "New note"
-msgstr "Nota nova"
-
-msgid "New to-do"
-msgstr "Llistat de tasques pendents nou"
-
-msgid "New notebook"
-msgstr "Bloc de notes nou"
-
-msgid "Print"
-msgstr "Imprimeix"
-
-msgid "General Options"
-msgstr "Opcions generals"
-
-msgid "Encryption options"
-msgstr "Opcions del xifratge"
-
-msgid "Web clipper options"
-msgstr "Opcions del desa-retalls de webs"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Insereix la data i hora"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Directori d'exportació del Joplin"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -905,6 +819,9 @@ msgid ""
 "access Joplin."
 msgstr ""
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes i la configuració es desen a: %s"
@@ -914,6 +831,9 @@ msgstr "Comprova la configuració de la sincronització"
 
 msgid "Browse..."
 msgstr ""
+
+msgid "Back"
+msgstr "Enrere"
 
 msgid "Apply"
 msgstr "Aplica"
@@ -1009,12 +929,18 @@ msgstr "Estat"
 msgid "Encryption is:"
 msgstr "El xifratge és:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 #, fuzzy
 msgid "Usage"
 msgstr "Ús: %s"
-
-msgid "Back"
-msgstr "Enrere"
 
 #, javascript-format
 msgid ""
@@ -1044,6 +970,15 @@ msgstr "Estableix una alarma:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Nota nova"
+
+msgid "New to-do"
+msgstr "Llistat de tasques pendents nou"
+
+msgid "New notebook"
+msgstr "Bloc de notes nou"
 
 msgid "Layout"
 msgstr "Disposició"
@@ -1142,6 +1077,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
+msgid "PDF File"
+msgstr "Fitxer PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "S'ha produït un error en obrir la nota amb l'editor: %s"
+
 msgid "strong text"
 msgstr "text en negreta"
 
@@ -1216,12 +1158,6 @@ msgstr "Opcions"
 msgid "Synchronisation Status"
 msgstr "Estat de la sincronització"
 
-msgid "Encryption Options"
-msgstr "Opcions de xifratge"
-
-msgid "Clipper Options"
-msgstr "Opcions del desa-retalls"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1243,6 +1179,17 @@ msgstr "Suprimeix"
 
 msgid "Rename"
 msgstr "Canvia el nom"
+
+msgid "Notebooks"
+msgstr "Blocs de notes"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "S'estan desxifrant els elements: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Elements obtinguts: %d/%d."
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
@@ -1401,10 +1348,6 @@ msgstr "En progés"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "La sincronització ja és en procés. Estat: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "Xifrat"
@@ -1618,6 +1561,10 @@ msgstr "Percentatge de zoom global"
 msgid "Editor font size"
 msgstr "Tipus de lletra de l'editor"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Tipus de lletra de l'editor"
+
 msgid "Editor font family"
 msgstr "Tipus de lletra de l'editor"
 
@@ -1684,6 +1631,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignora els errors de certificat TLS"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1728,6 +1680,14 @@ msgstr ""
 msgid "Application"
 msgstr "Surt de l'aplicació"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "El xifratge és:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Opcions del desa-retalls de webs"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1741,7 +1701,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Directori d'exportació del Joplin"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Fitxer d'exportació de l'Evernote"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Fitxer d'exportació de l'Evernote"
 
 #, fuzzy
@@ -1900,20 +1865,9 @@ msgstr "Bloc de notes nou"
 msgid "Configuration"
 msgstr "Configuració"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "S'estan desxifrant els elements: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Elements obtinguts: %d/%d."
-
 #, fuzzy
 msgid "All notes"
 msgstr "Voleu suprimir les notes?"
-
-msgid "Notebooks"
-msgstr "Blocs de notes"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1958,10 +1912,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Configuració"
 
 msgid "Encryption Config"
 msgstr "Configuració del xifratge"
@@ -2154,17 +2104,71 @@ msgstr "Inicia sessió amb OneDrive"
 msgid "Search"
 msgstr "Cerca"
 
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "S'està iniciant l'edició del a nota. Tanqueu l'editor per a tornar a "
+#~ "l'indicador."
+
+#~ msgid "Note has been saved."
+#~ msgstr "S'ha desat la nota."
+
+#, fuzzy
+#~ msgid "Note title"
+#~ msgstr "Títol del bloc de notes:"
+
+#, fuzzy
+#~ msgid "Note body"
+#~ msgstr "Blocs de notes"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "S'està important des de «%s» com a format «%s». Espereu..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Estat de la sincronització"
+
+#~ msgid "Print"
+#~ msgstr "Imprimeix"
+
+#~ msgid "General Options"
+#~ msgstr "Opcions generals"
+
+#~ msgid "Encryption options"
+#~ msgstr "Opcions del xifratge"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Insereix la data i hora"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Directori d'exportació del Joplin"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Opcions de xifratge"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Opcions del desa-retalls"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Configuració"
+
 #~ msgid "Separate each tag by a comma."
 #~ msgstr "Separeu les etiquetes amb comes."
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Alguns elements no s'han pogut desxifrar."
 
-#, javascript-format
 #~ msgid "State: %s."
 #~ msgstr "Estat: %s."
 
-#, javascript-format
 #~ msgid "A notebook with this title already exists: \"%s\""
 #~ msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"
 
@@ -2175,7 +2179,6 @@ msgstr "Cerca"
 #~ "El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
 #~ "«sync.target»."
 
-#, javascript-format
 #~ msgid "%s (%s): %s"
 #~ msgstr "%s (%s): %s"
 

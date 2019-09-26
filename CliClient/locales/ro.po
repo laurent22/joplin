@@ -164,16 +164,6 @@ msgstr "Niciun caiet de notițe activ."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notița nu există: \"%s\". Doriți să o creați?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Eroare deschidere notiță în editor: %s"
-
-msgid "Note has been saved."
-msgstr "Notița a fost salvată."
-
 msgid "Exits the application."
 msgstr ""
 
@@ -493,10 +483,6 @@ msgstr "Tastați `joplin help` pentru informații de utilizare."
 msgid "Fatal error:"
 msgstr "Eroare fatală:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -541,74 +527,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
-
-msgid "Sidebar"
-msgstr ""
-
-msgid "Note list"
-msgstr ""
-
-#, fuzzy
-msgid "Note title"
-msgstr "Titlul caietului de notițe:"
-
-#, fuzzy
-msgid "Note body"
-msgstr "Caiete de notițe"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-
-msgid "PDF File"
-msgstr "Fișier PDF"
-
-msgid "Synchronisation status"
-msgstr "Statusul sincronizării"
-
-msgid "New note"
-msgstr "Adăugați o nouă notiță"
-
-msgid "New to-do"
-msgstr "Adăugați o nouă sarcină"
-
-msgid "New notebook"
-msgstr "Adăugați un nou caiet de notițe"
-
-msgid "Print"
-msgstr "Printați"
-
-msgid "General Options"
-msgstr "Opțiuni Generale"
-
-msgid "Encryption options"
-msgstr "Opțiuni de criptare"
-
-msgid "Web clipper options"
-msgstr ""
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-msgid "Insert template"
-msgstr ""
-
-msgid "Open template directory"
-msgstr ""
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -822,6 +740,9 @@ msgid ""
 "access Joplin."
 msgstr ""
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr ""
@@ -831,6 +752,9 @@ msgstr ""
 
 msgid "Browse..."
 msgstr ""
+
+msgid "Back"
+msgstr "Înapoi"
 
 msgid "Apply"
 msgstr "Aplicați"
@@ -910,12 +834,18 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Criptarea este:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 #, fuzzy
 msgid "Usage"
 msgstr "Utilizare: %s"
-
-msgid "Back"
-msgstr "Înapoi"
 
 #, javascript-format
 msgid ""
@@ -945,6 +875,15 @@ msgstr "Setați alarma:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Adăugați o nouă notiță"
+
+msgid "New to-do"
+msgstr "Adăugați o nouă sarcină"
+
+msgid "New notebook"
+msgstr "Adăugați un nou caiet de notițe"
 
 msgid "Layout"
 msgstr ""
@@ -1039,6 +978,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
+msgid "PDF File"
+msgstr "Fișier PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Eroare deschidere notiță în editor: %s"
+
 msgid "strong text"
 msgstr ""
 
@@ -1113,12 +1059,6 @@ msgstr "Opțiuni"
 msgid "Synchronisation Status"
 msgstr "Statutul sincronizării"
 
-msgid "Encryption Options"
-msgstr "Opțiuni de criptare"
-
-msgid "Clipper Options"
-msgstr "Opțiuni Clipper"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1138,6 +1078,17 @@ msgstr "Ștergeți"
 
 msgid "Rename"
 msgstr "Redenumiți"
+
+msgid "Notebooks"
+msgstr "Caiete de notițe"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Se decriptează itemi: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Resurse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1288,10 +1239,6 @@ msgstr "În progres"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 
 msgid "Encrypted"
@@ -1504,6 +1451,10 @@ msgstr ""
 msgid "Editor font size"
 msgstr "Editează notiță."
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Editează notiță."
+
 msgid "Editor font family"
 msgstr ""
 
@@ -1559,6 +1510,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1603,6 +1559,13 @@ msgstr ""
 msgid "Application"
 msgstr "Duplicați"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Criptarea este:"
+
+msgid "Web Clipper"
+msgstr ""
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
@@ -1616,7 +1579,10 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr ""
 
-msgid "Evernote Export File"
+msgid "Evernote Export File (as Markdown)"
+msgstr ""
+
+msgid "Evernote Export File (as HTML)"
 msgstr ""
 
 msgid "Json Export Directory"
@@ -1769,20 +1735,9 @@ msgstr "Adăugați un nou caiet de notițe"
 msgid "Configuration"
 msgstr "Configurare"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Se decriptează itemi: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Resurse: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "notiță"
-
-msgid "Notebooks"
-msgstr "Caiete de notițe"
 
 #, fuzzy
 msgid "Checking... Please wait."
@@ -1825,10 +1780,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Configurare"
 
 msgid "Encryption Config"
 msgstr ""
@@ -2014,6 +1965,46 @@ msgstr "Autentificare prin OneDrive"
 
 msgid "Search"
 msgstr "Caută"
+
+#~ msgid "Note has been saved."
+#~ msgstr "Notița a fost salvată."
+
+#, fuzzy
+#~ msgid "Note title"
+#~ msgstr "Titlul caietului de notițe:"
+
+#, fuzzy
+#~ msgid "Note body"
+#~ msgstr "Caiete de notițe"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Statusul sincronizării"
+
+#~ msgid "Print"
+#~ msgstr "Printați"
+
+#~ msgid "General Options"
+#~ msgstr "Opțiuni Generale"
+
+#~ msgid "Encryption options"
+#~ msgstr "Opțiuni de criptare"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Opțiuni de criptare"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Opțiuni Clipper"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Configurare"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Amânați sincronizarea"

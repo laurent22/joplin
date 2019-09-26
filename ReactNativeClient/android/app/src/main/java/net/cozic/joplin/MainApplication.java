@@ -1,7 +1,6 @@
 package net.cozic.joplin;
 
 import android.app.Application;
-
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -21,11 +20,9 @@ import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
 import org.reactnative.camera.RNCameraPackage;
-
+import java.lang.reflect.Field;
 import com.alinz.parkerdan.shareextension.SharePackage;
-
 import cx.evermeet.versioninfo.RNVersionInfoPackage;
-
 import java.util.Arrays;
 import java.util.List;
 import android.database.CursorWindow;
@@ -42,9 +39,9 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
 				new MainReactPackage(),
-            new ReactSliderPackage(),
-            new RNCWebViewPackage(),
-            new ReactNativePushNotificationPackage(),
+				new ReactSliderPackage(),
+				new RNCWebViewPackage(),
+				new ReactNativePushNotificationPackage(),
 				new ImageResizerPackage(),
 				new RNFileViewerPackage(),
 				new RNSecureRandomPackage(),
@@ -74,13 +71,11 @@ public class MainApplication extends Application implements ReactApplication {
 		// https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
 		// https://github.com/laurent22/joplin/issues/1767#issuecomment-515617991
 		try {
-			// Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-			CursorWindow.class.getDeclaredField("sCursorWindowSize").setAccessible(true);
-			CursorWindow.class.getDeclaredField("sCursorWindowSize").set(null, 50 * 1024 * 1024); // 50 MB
+			Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+            field.setAccessible(true);
+            field.set(null, 50 * 1024 * 1024); //the 102400 is the new size added
 		} catch (Exception e) {
-			// if (DEBUG_MODE) {
-			// 	e.printStackTrace();
-			// }
+			e.printStackTrace();
 		}
 
 		SoLoader.init(this, /* native exopackage */ false);

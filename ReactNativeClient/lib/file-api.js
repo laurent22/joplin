@@ -9,7 +9,14 @@ const { time } = require('lib/time-utils.js');
 function requestCanBeRepeated(error) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
+	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget') return false;
+
+	// We don't repeat failSafe errors because it's an indication of an issue at the
+	// server-level issue which usually cannot be fixed by repeating the request.
+	// Also we print the previous requests and responses to the log in this case,
+	// so not repeating means there will be less noise in the log.
+	if (errorCode === 'failSafe') return false;
 
 	return true;
 }
@@ -58,6 +65,14 @@ class FileApi {
 		if (this.requestRepeatCount_ !== null) return this.requestRepeatCount_;
 		if (this.driver_.requestRepeatCount) return this.driver_.requestRepeatCount();
 		return 0;
+	}
+
+	lastRequests() {
+		return this.driver_.lastRequests ? this.driver_.lastRequests() : [];
+	}
+
+	clearLastRequests() {
+		if (this.driver_.clearLastRequests) this.driver_.clearLastRequests();
 	}
 
 	baseDir() {
@@ -247,6 +262,13 @@ async function basicDelta(path, getDirStatFn, options) {
 		});
 		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
+
+		// At this point statIdsCache contains the list of all the item IDs on the sync target.
+		// If it's empty, it's most likely a configuration error or bug. For example, if the
+		// user moves their Nextcloud directory, or if a network drive gets disconnected and
+		// returns an empty dir instead of an error. In that case, we don't wipe out the user
+		// data, unless they have switched off the fail-safe.
+		if (options.wipeOutFailSafe && !newContext.statIdsCache.length) throw new JoplinError('Fail-safe: The delta operation was interrupted because the sync target appears to be empty. To override this behaviour disable the "Wipe out fail-safe" option in the settings.', 'failSafe');
 	}
 
 	let output = [];

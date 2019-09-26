@@ -14,8 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "移除相关笔记的标签后才可删除此标签。"
@@ -168,16 +166,6 @@ msgstr "无活动笔记本。"
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "笔记不存在：“%s”。是否创建？"
-
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "打开以下笔记时出现错误：%s"
-
-msgid "Note has been saved."
-msgstr "笔记已被保存。"
 
 msgid "Exits the application."
 msgstr "退出程序。"
@@ -520,10 +508,6 @@ msgstr "输入 `joplin help` 获取用量信息。"
 msgid "Fatal error:"
 msgstr "严重错误："
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "授权成功 - 您可以关闭此页面了。"
@@ -571,72 +555,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
-
-msgid "Sidebar"
-msgstr "边栏"
-
-msgid "Note list"
-msgstr "笔记列表"
-
-msgid "Note title"
-msgstr "笔记标题"
-
-msgid "Note body"
-msgstr "笔记正文"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导入，导入格式为“%s”。请稍等……"
-
-msgid "PDF File"
-msgstr "PDF 文件"
-
-msgid "Synchronisation status"
-msgstr "同步状态"
-
-msgid "New note"
-msgstr "新建笔记"
-
-msgid "New to-do"
-msgstr "新建待办事项"
-
-msgid "New notebook"
-msgstr "新建笔记本"
-
-msgid "Print"
-msgstr "打印"
-
-msgid "General Options"
-msgstr "通用选项"
-
-msgid "Encryption options"
-msgstr "加密选项"
-
-msgid "Web clipper options"
-msgstr "网页剪辑选项"
-
-msgid "Create note from template"
-msgstr "从模版创建笔记"
-
-msgid "Create to-do from template"
-msgstr "从模版创建TODO列表"
-
-msgid "Insert template"
-msgstr "插入模版"
-
-msgid "Open template directory"
-msgstr "打开模版目录"
-
-msgid "Refresh templates"
-msgstr "刷新模版"
-
-#, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "调整： %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "文件 (&F)"
@@ -843,6 +761,9 @@ msgid ""
 "access Joplin."
 msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存在：%s"
@@ -852,6 +773,9 @@ msgstr "检查同步配置"
 
 msgid "Browse..."
 msgstr "浏览..."
+
+msgid "Back"
+msgstr "返回"
 
 msgid "Apply"
 msgstr "应用"
@@ -940,11 +864,17 @@ msgstr "状态"
 msgid "Encryption is:"
 msgstr "加密状态："
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "用法提示"
-
-msgid "Back"
-msgstr "返回"
 
 #, javascript-format
 msgid ""
@@ -974,6 +904,15 @@ msgstr "设置提醒："
 
 msgid "Template file:"
 msgstr "模版文件："
+
+msgid "New note"
+msgstr "新建笔记"
+
+msgid "New to-do"
+msgstr "新建待办事项"
+
+msgid "New notebook"
+msgstr "新建笔记本"
 
 msgid "Layout"
 msgstr "布局"
@@ -1068,6 +1007,13 @@ msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑�
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "一次只能输出一个笔记或导出为 PDF 文件。"
 
+msgid "PDF File"
+msgstr "PDF 文件"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "打开以下笔记时出现错误：%s"
+
 msgid "strong text"
 msgstr "加粗文本"
 
@@ -1142,12 +1088,6 @@ msgstr "选项"
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
-msgid "Encryption Options"
-msgstr "加密选项"
-
-msgid "Clipper Options"
-msgstr "网页剪辑选项"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1170,6 +1110,17 @@ msgstr "删除"
 
 msgid "Rename"
 msgstr "重命名"
+
+msgid "Notebooks"
+msgstr "笔记本"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "正在解密项目：%d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "正在获取资源：%d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
@@ -1325,10 +1276,6 @@ msgstr "正在进行"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "已经在同步。状态：%s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
 
 msgid "Encrypted"
 msgstr "已加密"
@@ -1544,6 +1491,10 @@ msgstr "全局缩放比例"
 msgid "Editor font size"
 msgstr "编辑器字体大小"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "编辑器字体大小"
+
 msgid "Editor font family"
 msgstr "编辑器字体"
 
@@ -1606,6 +1557,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr "请设置一个API服务的端口数字。如果不指定，默认的端口会被使用。"
@@ -1645,6 +1601,14 @@ msgstr "插件"
 msgid "Application"
 msgstr "应用程序"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "加密状态："
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "网页剪辑选项"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "标签“%s”已存在。请选择一个不同的名称。"
@@ -1658,7 +1622,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin 导出目录"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote 导出文件"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote 导出文件"
 
 msgid "Json Export Directory"
@@ -1809,19 +1778,8 @@ msgstr "新笔记本"
 msgid "Configuration"
 msgstr "配置"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "正在解密项目：%d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "正在获取资源：%d/%d"
-
 msgid "All notes"
 msgstr "全部笔记"
-
-msgid "Notebooks"
-msgstr "笔记本"
 
 msgid "Checking... Please wait."
 msgstr "正在检查... 请稍候。"
@@ -1870,9 +1828,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
-
-msgid "Information"
-msgstr "说明"
 
 msgid "Encryption Config"
 msgstr "加密配置"
@@ -2051,6 +2006,76 @@ msgstr "通过 OneDrive 登录"
 
 msgid "Search"
 msgstr "搜索"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
+
+#~ msgid "Note has been saved."
+#~ msgstr "笔记已被保存。"
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
+
+#~ msgid "Sidebar"
+#~ msgstr "边栏"
+
+#~ msgid "Note list"
+#~ msgstr "笔记列表"
+
+#~ msgid "Note title"
+#~ msgstr "笔记标题"
+
+#~ msgid "Note body"
+#~ msgstr "笔记正文"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "从“%s”导入，导入格式为“%s”。请稍等……"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "同步状态"
+
+#~ msgid "Print"
+#~ msgstr "打印"
+
+#~ msgid "General Options"
+#~ msgstr "通用选项"
+
+#~ msgid "Encryption options"
+#~ msgstr "加密选项"
+
+#~ msgid "Create note from template"
+#~ msgstr "从模版创建笔记"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "从模版创建TODO列表"
+
+#~ msgid "Insert template"
+#~ msgstr "插入模版"
+
+#~ msgid "Open template directory"
+#~ msgstr "打开模版目录"
+
+#~ msgid "Refresh templates"
+#~ msgstr "刷新模版"
+
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "调整： %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "加密选项"
+
+#~ msgid "Clipper Options"
+#~ msgstr "网页剪辑选项"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
+
+#~ msgid "Information"
+#~ msgstr "说明"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

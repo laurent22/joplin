@@ -171,16 +171,6 @@ msgstr "Aktif not defteri yok."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" notu mevcut değil. Oluşturulsun mu?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Editörde not açılırken hata oluştu: %s"
-
-msgid "Note has been saved."
-msgstr "Not kaydedildi."
-
 msgid "Exits the application."
 msgstr "Uygulamadan çıkar."
 
@@ -518,10 +508,6 @@ msgstr "Kullanım bilgisi için `joplin help` yazın."
 msgid "Fatal error:"
 msgstr "Büyük hata:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -576,74 +562,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
-
-msgid "Sidebar"
-msgstr "Kenar çubuğu"
-
-msgid "Note list"
-msgstr "Not listesi"
-
-msgid "Note title"
-msgstr "Not başlığı"
-
-msgid "Note body"
-msgstr "Not gövdesi"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "\"%s\" den \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
-
-msgid "PDF File"
-msgstr "PDF Dosyası"
-
-msgid "Synchronisation status"
-msgstr "Senkronizasyon durumu"
-
-msgid "New note"
-msgstr "Yeni not"
-
-msgid "New to-do"
-msgstr "Yeni yapılacak"
-
-msgid "New notebook"
-msgstr "Yeni not defteri"
-
-msgid "Print"
-msgstr "Yazdır"
-
-msgid "General Options"
-msgstr "Genel seçenekler"
-
-msgid "Encryption options"
-msgstr "Şifreleme seçenekleri"
-
-msgid "Web clipper options"
-msgstr "Web alıntılama ayarları"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Tarih Ekle"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Joplin Dizin Dışa Aktarım"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 #, fuzzy
 msgid "&File"
@@ -862,6 +780,9 @@ msgstr ""
 "Bu yetkilendirme yalnızca üçüncü taraf uygulamaların Joplin'e erişmesine "
 "izin vermek için gereklidir."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notlar ve ayarlar şu konumda saklanır: %s"
@@ -871,6 +792,9 @@ msgstr "Senkronizasyon yapılandırmasını kontrol et"
 
 msgid "Browse..."
 msgstr "Bul..."
+
+msgid "Back"
+msgstr "Geri"
 
 msgid "Apply"
 msgstr "Uygula"
@@ -967,11 +891,17 @@ msgstr "Durum"
 msgid "Encryption is:"
 msgstr "Şifreleme:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Kullanım"
-
-msgid "Back"
-msgstr "Geri"
 
 #, javascript-format
 msgid ""
@@ -1003,6 +933,15 @@ msgstr "Alarm kur:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Yeni not"
+
+msgid "New to-do"
+msgstr "Yeni yapılacak"
+
+msgid "New notebook"
+msgstr "Yeni not defteri"
 
 msgid "Layout"
 msgstr "Düzen"
@@ -1104,6 +1043,13 @@ msgstr ""
 "Bir seferde yalnızca bir not yazdırılabilir veya PDF olarak dışa "
 "aktarılabilir."
 
+msgid "PDF File"
+msgstr "PDF Dosyası"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Editörde not açılırken hata oluştu: %s"
+
 msgid "strong text"
 msgstr "kuvvetli metin"
 
@@ -1178,12 +1124,6 @@ msgstr "Seçenekler"
 msgid "Synchronisation Status"
 msgstr "Senkronizasyon Durumu"
 
-msgid "Encryption Options"
-msgstr "Şifreleme Seçenekleri"
-
-msgid "Clipper Options"
-msgstr "Alıntılama Seçenekleri"
-
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1204,6 +1144,17 @@ msgstr "Sil"
 
 msgid "Rename"
 msgstr "Yeniden adlandır"
+
+msgid "Notebooks"
+msgstr "Not defterleri"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Şifresi çözülenler: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Kaynaklar alınıyor: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
@@ -1362,10 +1313,6 @@ msgstr "Devam etmekte"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
@@ -1584,6 +1531,10 @@ msgstr "Global yakınlaştırma yüzdesi"
 msgid "Editor font size"
 msgstr "Editör yazı boyutu"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Editör yazı boyutu"
+
 msgid "Editor font family"
 msgstr "Editör yazı tipi"
 
@@ -1649,6 +1600,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "TLS sertifikası hatalarını yoksay"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1689,6 +1645,14 @@ msgstr ""
 msgid "Application"
 msgstr "Uygulama"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Şifreleme:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Web alıntılama ayarları"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr " \"%s\" etiketi mevcut. Lütfen başka isim seçin."
@@ -1702,7 +1666,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin Dizin Dışa Aktarım"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Dosya Dışa Aktarım"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote Dosya Dışa Aktarım"
 
 msgid "Json Export Directory"
@@ -1859,20 +1828,9 @@ msgstr "Yeni not defteri"
 msgid "Configuration"
 msgstr "Yapılandırma"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Şifresi çözülenler: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Kaynaklar alınıyor: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "not"
-
-msgid "Notebooks"
-msgstr "Not defterleri"
 
 msgid "Checking... Please wait."
 msgstr "Kontrol ediliyor... Lütfen bekleyin."
@@ -1921,10 +1879,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Yapılandırma"
 
 msgid "Encryption Config"
 msgstr "Yapılandırmayı şifrele"
@@ -2115,6 +2069,61 @@ msgstr "OneDrive ile giriş yapın"
 
 msgid "Search"
 msgstr "Arama"
+
+#~ msgid "Note has been saved."
+#~ msgstr "Not kaydedildi."
+
+#~ msgid "Sidebar"
+#~ msgstr "Kenar çubuğu"
+
+#~ msgid "Note list"
+#~ msgstr "Not listesi"
+
+#~ msgid "Note title"
+#~ msgstr "Not başlığı"
+
+#~ msgid "Note body"
+#~ msgstr "Not gövdesi"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "\"%s\" den \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Senkronizasyon durumu"
+
+#~ msgid "Print"
+#~ msgstr "Yazdır"
+
+#~ msgid "General Options"
+#~ msgstr "Genel seçenekler"
+
+#~ msgid "Encryption options"
+#~ msgstr "Şifreleme seçenekleri"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Tarih Ekle"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Joplin Dizin Dışa Aktarım"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Şifreleme Seçenekleri"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Alıntılama Seçenekleri"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Yapılandırma"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

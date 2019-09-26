@@ -174,18 +174,6 @@ msgstr "Няма активна тетрадка."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Бележката не съществува:\"%s\". Да я създам ли?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Започваме редакция на бележката. Затворете редактора за да се върнете към "
-"командния ред."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Грешка при отварянето на бележката в редактор: %s"
-
-msgid "Note has been saved."
-msgstr "Бележката бе запазена."
-
 msgid "Exits the application."
 msgstr "Напуска приложението."
 
@@ -548,10 +536,6 @@ msgstr "Въведете `joplin help` за информация за употр
 msgid "Fatal error:"
 msgstr "Фатална грешка:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Приложението бе оторизирано - може да затворите таба в браузъра."
@@ -605,74 +589,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Експортирам към \"%s\" във формат \"%s\". Моля изчакайте..."
-
-msgid "Sidebar"
-msgstr "Страничен панел"
-
-msgid "Note list"
-msgstr "Списък бележки"
-
-msgid "Note title"
-msgstr "Заглавие на бележката"
-
-msgid "Note body"
-msgstr "Съдържание на бележката"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Импортирам от \"%s\" във формат \"%s\". Моля изчакайте..."
-
-msgid "PDF File"
-msgstr "PDF файл"
-
-msgid "Synchronisation status"
-msgstr "Състояние на синхронизацията"
-
-msgid "New note"
-msgstr "Нова бележка"
-
-msgid "New to-do"
-msgstr "Нова задача"
-
-msgid "New notebook"
-msgstr "Нова тетрадка"
-
-msgid "Print"
-msgstr "Принтиране"
-
-msgid "General Options"
-msgstr "Общи настройки"
-
-msgid "Encryption options"
-msgstr "Настройки за криптиране"
-
-msgid "Web clipper options"
-msgstr "Настройки на уеб клипера"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Постави датата и часа"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Joplin експорт директория"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "Файл(&F)"
@@ -887,6 +803,9 @@ msgstr ""
 "Оторизационният жетон е необходим само ако искате да дадете достъп до Joplin "
 "на приложения от трети страни."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Бележките и настройките са запазени в: %s"
@@ -896,6 +815,9 @@ msgstr "Провери настройките за синхронизация"
 
 msgid "Browse..."
 msgstr "Търсене..."
+
+msgid "Back"
+msgstr "Назад"
 
 msgid "Apply"
 msgstr "Приложи"
@@ -991,11 +913,17 @@ msgstr "Статус"
 msgid "Encryption is:"
 msgstr "Криптирането е:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Употреба"
-
-msgid "Back"
-msgstr "Назад"
 
 #, javascript-format
 msgid ""
@@ -1026,6 +954,15 @@ msgstr "Задаване на аларма:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Нова бележка"
+
+msgid "New to-do"
+msgstr "Нова задача"
+
+msgid "New notebook"
+msgstr "Нова тетрадка"
 
 msgid "Layout"
 msgstr "Разположеня"
@@ -1128,6 +1065,13 @@ msgstr ""
 "Принтирането и експортирането към PDF не може да бъде извършено с повече от "
 "една бележка."
 
+msgid "PDF File"
+msgstr "PDF файл"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Грешка при отварянето на бележката в редактор: %s"
+
 msgid "strong text"
 msgstr "силно наблегнат текст"
 
@@ -1202,12 +1146,6 @@ msgstr "Конфигурация"
 msgid "Synchronisation Status"
 msgstr "Статус на синхронизацията"
 
-msgid "Encryption Options"
-msgstr "Конфигурация на криптирането"
-
-msgid "Clipper Options"
-msgstr "Конфигурация на клипера"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1230,6 +1168,17 @@ msgstr "Изтрий"
 
 msgid "Rename"
 msgstr "Преименувай"
+
+msgid "Notebooks"
+msgstr "Тетрадки"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Декриптиране на обекти: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Взимане на ресурси: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "Моля изберете къде да бъде експортиран статуса на синхронизацията"
@@ -1388,11 +1337,6 @@ msgstr "В момента върви"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Синхронизация вече се извършва. Статус: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"Неизвестен тип на свален обект - моля обновете Joplin до най-новата версия"
 
 msgid "Encrypted"
 msgstr "Криптирана"
@@ -1613,6 +1557,10 @@ msgstr "Процент за глобално уголемяване"
 msgid "Editor font size"
 msgstr "Размер на шрифта на редактора"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Размер на шрифта на редактора"
+
 msgid "Editor font family"
 msgstr "Шрифт на редактора"
 
@@ -1680,6 +1628,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Игнорирай грешки в TLS сертификати"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1720,6 +1673,14 @@ msgstr "Разширения"
 msgid "Application"
 msgstr "Приложение"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Криптирането е:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Настройки на уеб клипера"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Тагът \"%s\" вече съществува. Моля изберете друго име."
@@ -1733,7 +1694,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin експорт директория"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote експорт файл"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote експорт файл"
 
 msgid "Json Export Directory"
@@ -1893,20 +1859,9 @@ msgstr "Нова тетрадка"
 msgid "Configuration"
 msgstr "Настройки"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Декриптиране на обекти: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Взимане на ресурси: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "бележка"
-
-msgid "Notebooks"
-msgstr "Тетрадки"
 
 msgid "Checking... Please wait."
 msgstr "Проверявам... Моля изчакайте."
@@ -1956,10 +1911,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "Още информация"
 
 msgid "Encryption Config"
 msgstr "Настройки за криптиране"
@@ -2150,6 +2101,71 @@ msgstr "Вписване в OneDrive"
 
 msgid "Search"
 msgstr "Търсене"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Започваме редакция на бележката. Затворете редактора за да се върнете към "
+#~ "командния ред."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Бележката бе запазена."
+
+#~ msgid "Sidebar"
+#~ msgstr "Страничен панел"
+
+#~ msgid "Note list"
+#~ msgstr "Списък бележки"
+
+#~ msgid "Note title"
+#~ msgstr "Заглавие на бележката"
+
+#~ msgid "Note body"
+#~ msgstr "Съдържание на бележката"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Импортирам от \"%s\" във формат \"%s\". Моля изчакайте..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Състояние на синхронизацията"
+
+#~ msgid "Print"
+#~ msgstr "Принтиране"
+
+#~ msgid "General Options"
+#~ msgstr "Общи настройки"
+
+#~ msgid "Encryption options"
+#~ msgstr "Настройки за криптиране"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Постави датата и часа"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Joplin експорт директория"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Конфигурация на криптирането"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Конфигурация на клипера"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr ""
+#~ "Неизвестен тип на свален обект - моля обновете Joplin до най-новата версия"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Още информация"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

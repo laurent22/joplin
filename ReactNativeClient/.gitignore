@@ -55,3 +55,10 @@ fastlane/screenshots
 # This is generated:
 android/build*
 android/app/build*
+
+android/.project
+android/.settings/
+android/app/.classpath
+android/app/.project
+android/app/.settings/
+android/app/src/debug/res/

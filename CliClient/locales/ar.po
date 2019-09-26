@@ -169,16 +169,6 @@ msgstr "لا يوجد دفتر ملاحظات نشط."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "الملاحظة: \"%s\" غير موجودة. تريد إنشائها؟"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "بدء تحرير الملاحظة. أغلق المحرر للعودة إلى المحث."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
-
-msgid "Note has been saved."
-msgstr "تم حفظ الملاحظة."
-
 msgid "Exits the application."
 msgstr "الخروج من التطبيق."
 
@@ -534,10 +524,6 @@ msgstr "أكتب `joplin help` لمعلومات الاستخدام."
 msgid "Fatal error:"
 msgstr "خطأ فادح:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "تم التصريح للتطبيق - يمكنك الآن إغلاق تبويب المستعرض هذا."
@@ -588,74 +574,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
-
-msgid "Sidebar"
-msgstr "الشريط الجانبي"
-
-msgid "Note list"
-msgstr "قائمة ملاحظات"
-
-msgid "Note title"
-msgstr "عنوان الملاحظة"
-
-msgid "Note body"
-msgstr "متن الملاحظة"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "الاستيراد من \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
-
-msgid "PDF File"
-msgstr "ملف PDF"
-
-msgid "Synchronisation status"
-msgstr "حالة المزامنة"
-
-msgid "New note"
-msgstr "ملاحظة جديدة"
-
-msgid "New to-do"
-msgstr "قائمة جديدة للمهام"
-
-msgid "New notebook"
-msgstr "دفتر ملاحظات جديد"
-
-msgid "Print"
-msgstr "اطبع"
-
-msgid "General Options"
-msgstr "الخيارات العامة"
-
-msgid "Encryption options"
-msgstr "خيارات التشفير"
-
-msgid "Web clipper options"
-msgstr "خيارات Web clipper"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "إدراج التاريخ والوقت"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "دليل تصدير بيانات Joplin"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "&ملف"
@@ -866,6 +784,9 @@ msgstr ""
 "هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى "
 "Joplin."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "الملاحظات و الإعدادات مخزّنة في: %s"
@@ -875,6 +796,9 @@ msgstr "فحص ضبط المزامنة"
 
 msgid "Browse..."
 msgstr "استعراض..."
+
+msgid "Back"
+msgstr "عودة"
 
 msgid "Apply"
 msgstr "تطبيق"
@@ -968,11 +892,17 @@ msgstr "الحالة"
 msgid "Encryption is:"
 msgstr "التشفير هو:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "الاستخدام"
-
-msgid "Back"
-msgstr "عودة"
 
 #, javascript-format
 msgid ""
@@ -1002,6 +932,15 @@ msgstr "ضبط منبّه:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "ملاحظة جديدة"
+
+msgid "New to-do"
+msgstr "قائمة جديدة للمهام"
+
+msgid "New notebook"
+msgstr "دفتر ملاحظات جديد"
 
 msgid "Layout"
 msgstr "تخطيط"
@@ -1099,6 +1038,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
 
+msgid "PDF File"
+msgstr "ملف PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
+
 msgid "strong text"
 msgstr "نص مشدَّد"
 
@@ -1173,12 +1119,6 @@ msgstr "خيارات"
 msgid "Synchronisation Status"
 msgstr "حالة المزامنة"
 
-msgid "Encryption Options"
-msgstr "خيارات التشفير"
-
-msgid "Clipper Options"
-msgstr "خيارات Clipper"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1201,6 +1141,17 @@ msgstr "حذف"
 
 msgid "Rename"
 msgstr "إعادة تسمية"
+
+msgid "Notebooks"
+msgstr "دفاتر ملاحظات"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "فك تشفير العناصر: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "جلب الموارد: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
@@ -1357,10 +1308,6 @@ msgstr "قيد التقدم"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
 
 msgid "Encrypted"
 msgstr "مشفّر"
@@ -1577,6 +1524,10 @@ msgstr "نسبة التكبير العمومية"
 msgid "Editor font size"
 msgstr "حجم خط المحرّر"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "حجم خط المحرّر"
+
 msgid "Editor font family"
 msgstr "نوع خط المحرّر"
 
@@ -1640,6 +1591,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "تجاهل أخطاء شهادات TLS"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1680,6 +1636,14 @@ msgstr ""
 msgid "Application"
 msgstr "التطبيق"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "التشفير هو:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "خيارات Web clipper"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "الوسم \"%s\" موجود بالفعل. فضلاً إختر اسماً مختلفاً."
@@ -1693,7 +1657,12 @@ msgstr "تنسيق Markdown"
 msgid "Joplin Export Directory"
 msgstr "دليل تصدير بيانات Joplin"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "ملف Evernote المصدَّر"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "ملف Evernote المصدَّر"
 
 msgid "Json Export Directory"
@@ -1850,20 +1819,9 @@ msgstr "دفتر ملاحظات جديد"
 msgid "Configuration"
 msgstr "الضبط"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "فك تشفير العناصر: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "جلب الموارد: %d/%d"
-
 #, fuzzy
 msgid "All notes"
 msgstr "ملاحظة"
-
-msgid "Notebooks"
-msgstr "دفاتر ملاحظات"
 
 msgid "Checking... Please wait."
 msgstr "التحقق جارٍ... فضلاً انتظر."
@@ -1910,10 +1868,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-#, fuzzy
-msgid "Information"
-msgstr "الضبط"
 
 msgid "Encryption Config"
 msgstr "ضبط التشفير"
@@ -2101,6 +2055,64 @@ msgstr "تسجيل الدخول عبر OneDrive"
 
 msgid "Search"
 msgstr "بحث"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr "بدء تحرير الملاحظة. أغلق المحرر للعودة إلى المحث."
+
+#~ msgid "Note has been saved."
+#~ msgstr "تم حفظ الملاحظة."
+
+#~ msgid "Sidebar"
+#~ msgstr "الشريط الجانبي"
+
+#~ msgid "Note list"
+#~ msgstr "قائمة ملاحظات"
+
+#~ msgid "Note title"
+#~ msgstr "عنوان الملاحظة"
+
+#~ msgid "Note body"
+#~ msgstr "متن الملاحظة"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "الاستيراد من \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "حالة المزامنة"
+
+#~ msgid "Print"
+#~ msgstr "اطبع"
+
+#~ msgid "General Options"
+#~ msgstr "الخيارات العامة"
+
+#~ msgid "Encryption options"
+#~ msgstr "خيارات التشفير"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "إدراج التاريخ والوقت"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "دليل تصدير بيانات Joplin"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "خيارات التشفير"
+
+#~ msgid "Clipper Options"
+#~ msgstr "خيارات Clipper"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "الضبط"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

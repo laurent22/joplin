@@ -172,17 +172,6 @@ msgstr "有効なノートブックがありません。"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\"というノートはありません。作成しますか？"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"ノートの編集を開始します。エディターを閉じると元の画面に戻ることができます。"
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "次のエディターで開く際にエラー: %s"
-
-msgid "Note has been saved."
-msgstr "ノートは保存されました。"
-
 msgid "Exits the application."
 msgstr "アプリケーションの終了。"
 
@@ -536,10 +525,6 @@ msgstr "`joplin help`を実行して使い方を表示します。"
 msgid "Fatal error:"
 msgstr "致命的なエラー:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "アプリケーションは認証されました - ブラウザを閉じてもかまいません。"
@@ -592,73 +577,6 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
-
-msgid "Sidebar"
-msgstr "サイドバー"
-
-msgid "Note list"
-msgstr "ノートの一覧"
-
-msgid "Note title"
-msgstr "ノートの題名："
-
-msgid "Note body"
-msgstr "ノートの本文"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
-"\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
-
-msgid "PDF File"
-msgstr "PDF ファイル"
-
-msgid "Synchronisation status"
-msgstr "同期状況"
-
-msgid "New note"
-msgstr "新しいノート"
-
-msgid "New to-do"
-msgstr "新しいToDo"
-
-msgid "New notebook"
-msgstr "新しいノートブック"
-
-msgid "Print"
-msgstr "印刷"
-
-msgid "General Options"
-msgstr "全般のオプション"
-
-msgid "Encryption options"
-msgstr "暗号化のオプション"
-
-msgid "Web clipper options"
-msgstr "Webクリッパーのオプション"
-
-msgid "Create note from template"
-msgstr "テンプレートからノートを作成"
-
-msgid "Create to-do from template"
-msgstr "テンプレートからto-doを作成"
-
-msgid "Insert template"
-msgstr "テンプレートを挿入"
-
-msgid "Open template directory"
-msgstr "テンプレートディレクトリを開く"
-
-msgid "Refresh templates"
-msgstr "テンプレートの更新"
-
-#, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "リビジョン: %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "&ファイル"
@@ -870,6 +788,9 @@ msgstr ""
 "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
 "するときにだけ使用します。"
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
@@ -879,6 +800,9 @@ msgstr "同期の設定を確認する"
 
 msgid "Browse..."
 msgstr "参照..."
+
+msgid "Back"
+msgstr "戻る"
 
 msgid "Apply"
 msgstr "適用"
@@ -971,11 +895,17 @@ msgstr "状態"
 msgid "Encryption is:"
 msgstr "暗号化の状態:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "使い方"
-
-msgid "Back"
-msgstr "戻る"
 
 #, javascript-format
 msgid ""
@@ -1007,6 +937,15 @@ msgstr "アラームをセット："
 
 msgid "Template file:"
 msgstr "テンプレートファイル："
+
+msgid "New note"
+msgstr "新しいノート"
+
+msgid "New to-do"
+msgstr "新しいToDo"
+
+msgid "New notebook"
+msgstr "新しいノートブック"
 
 msgid "Layout"
 msgstr "レイアウト"
@@ -1103,6 +1042,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "一度に印刷またはPDF出力できるノートは1つだけです。"
 
+msgid "PDF File"
+msgstr "PDF ファイル"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "次のエディターで開く際にエラー: %s"
+
 msgid "strong text"
 msgstr "文字を太字に"
 
@@ -1177,12 +1123,6 @@ msgstr "オプション"
 msgid "Synchronisation Status"
 msgstr "同期状況"
 
-msgid "Encryption Options"
-msgstr "暗号化のオプション"
-
-msgid "Clipper Options"
-msgstr "Clipperのオプション"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1205,6 +1145,17 @@ msgstr "削除"
 
 msgid "Rename"
 msgstr "名前の変更"
+
+msgid "Notebooks"
+msgstr "ノートブック"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "復号中のアイテム: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "取得中のリソース: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
@@ -1363,12 +1314,6 @@ msgstr "実行中"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "同期作業はすでに実行中です。状態: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてく"
-"ださい"
 
 msgid "Encrypted"
 msgstr "暗号化済"
@@ -1589,6 +1534,10 @@ msgstr "全体ズームの割合"
 msgid "Editor font size"
 msgstr "エディターのフォントサイズ"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "エディターのフォントサイズ"
+
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
@@ -1652,6 +1601,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1693,6 +1647,14 @@ msgstr "プラグイン"
 msgid "Application"
 msgstr "アプリケーション"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "暗号化の状態:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Webクリッパーのオプション"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
@@ -1706,7 +1668,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin エクスポートディレクトリ"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote エクスポートファイル"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Evernote エクスポートファイル"
 
 msgid "Json Export Directory"
@@ -1861,19 +1828,8 @@ msgstr "新しいノートブック"
 msgid "Configuration"
 msgstr "設定"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "復号中のアイテム: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "取得中のリソース: %d/%d"
-
 msgid "All notes"
 msgstr "すべてのノート"
-
-msgid "Notebooks"
-msgstr "ノートブック"
 
 msgid "Checking... Please wait."
 msgstr "確認中...お待ちください。"
@@ -1923,9 +1879,6 @@ msgid ""
 "external storage is required."
 msgstr ""
 "ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
-
-msgid "Information"
-msgstr "情報"
 
 msgid "Encryption Config"
 msgstr "暗号化の設定"
@@ -2107,6 +2060,81 @@ msgstr "OneDriveログイン"
 
 msgid "Search"
 msgstr "検索"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "ノートの編集を開始します。エディターを閉じると元の画面に戻ることができま"
+#~ "す。"
+
+#~ msgid "Note has been saved."
+#~ msgstr "ノートは保存されました。"
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
+
+#~ msgid "Sidebar"
+#~ msgstr "サイドバー"
+
+#~ msgid "Note list"
+#~ msgstr "ノートの一覧"
+
+#~ msgid "Note title"
+#~ msgstr "ノートの題名："
+
+#~ msgid "Note body"
+#~ msgstr "ノートの本文"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr ""
+#~ "\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "同期状況"
+
+#~ msgid "Print"
+#~ msgstr "印刷"
+
+#~ msgid "General Options"
+#~ msgstr "全般のオプション"
+
+#~ msgid "Encryption options"
+#~ msgstr "暗号化のオプション"
+
+#~ msgid "Create note from template"
+#~ msgstr "テンプレートからノートを作成"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "テンプレートからto-doを作成"
+
+#~ msgid "Insert template"
+#~ msgstr "テンプレートを挿入"
+
+#~ msgid "Open template directory"
+#~ msgstr "テンプレートディレクトリを開く"
+
+#~ msgid "Refresh templates"
+#~ msgstr "テンプレートの更新"
+
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "リビジョン: %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "暗号化のオプション"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Clipperのオプション"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr ""
+#~ "不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートし"
+#~ "てください"
+
+#~ msgid "Information"
+#~ msgstr "情報"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"

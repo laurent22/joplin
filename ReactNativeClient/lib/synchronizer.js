@@ -3,6 +3,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ItemChange = require('lib/models/ItemChange.js');
+const Setting = require('lib/models/Setting.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -170,6 +171,17 @@ class Synchronizer {
 
 	cancelling() {
 		return this.cancelling_;
+	}
+
+	logLastRequests() {
+		const lastRequests = this.api().lastRequests();
+		if (!lastRequests || !lastRequests.length) return;
+
+		for (const r of lastRequests) {
+			const timestamp = time.unixMsToLocalHms(r.timestamp);
+			this.logger().info(`Req ${timestamp}: ${r.request}`);
+			this.logger().info(`Res ${timestamp}: ${r.response}`);
+		}
 	}
 
 	static stateToLabel(state) {
@@ -508,6 +520,8 @@ class Synchronizer {
 						allItemIdsHandler: async () => {
 							return BaseItem.syncedItemIds(syncTargetId);
 						},
+
+						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
 					});
 
 					let remotes = listResult.items;
@@ -695,11 +709,13 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice'].indexOf(error.code) >= 0) {
+			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
+
+				if (error.code === 'failSafe') this.logLastRequests();
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				this.logger().error(error);
@@ -707,7 +723,10 @@ class Synchronizer {
 				this.logger().error(error);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) this.progressReport_.errors.push(error);
+				if (!shim.fetchRequestCanBeRetried(error)) {
+					this.progressReport_.errors.push(error);
+					this.logLastRequests();
+				}
 			}
 		}
 

@@ -173,16 +173,6 @@ msgstr "Nenhum caderno ativo."
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "A nota não existe: \"%s\". Criar?"
 
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr "Começando a editar a nota. Feche o editor para voltar ao prompt."
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Erro ao abir a nota no editor: %s"
-
-msgid "Note has been saved."
-msgstr "Nota gravada."
-
 msgid "Exits the application."
 msgstr "Sai da aplicação."
 
@@ -544,10 +534,6 @@ msgstr "Digite 'joplin help' para informações de uso."
 msgid "Fatal error:"
 msgstr "Erro fatal:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
@@ -602,74 +588,6 @@ msgstr ""
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando para \"%s\" com o formato \"%s\". Por favor, aguarde..."
-
-msgid "Sidebar"
-msgstr "Barra Lateral"
-
-msgid "Note list"
-msgstr "Lista de notas"
-
-msgid "Note title"
-msgstr "Título da Nota"
-
-msgid "Note body"
-msgstr "Corpo da Nota"
-
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Importando de \"%s\" com o formato \"%s\". Por favor, aguarde..."
-
-msgid "PDF File"
-msgstr "Arquivo PDF"
-
-msgid "Synchronisation status"
-msgstr "Status de sincronização"
-
-msgid "New note"
-msgstr "Nova nota"
-
-msgid "New to-do"
-msgstr "Nova tarefa"
-
-msgid "New notebook"
-msgstr "Novo caderno"
-
-msgid "Print"
-msgstr "Imprimir"
-
-msgid "General Options"
-msgstr "Opções Gerais"
-
-msgid "Encryption options"
-msgstr "Opções de Encriptação"
-
-msgid "Web clipper options"
-msgstr "Opções do Web clipper"
-
-msgid "Create note from template"
-msgstr ""
-
-msgid "Create to-do from template"
-msgstr ""
-
-#, fuzzy
-msgid "Insert template"
-msgstr "Inserir Data e Hora"
-
-#, fuzzy
-msgid "Open template directory"
-msgstr "Diretório de Exportação do Joplin"
-
-msgid "Refresh templates"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s, %s)"
 
 msgid "&File"
 msgstr "&Arquivo"
@@ -883,6 +801,9 @@ msgstr ""
 "Esse token de autorização só é necessário para permitir que aplicativos de "
 "terceiros acessem o Joplin."
 
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Notas e configurações estão armazenadas em: %s"
@@ -892,6 +813,9 @@ msgstr "Verificar a configuração da sincronização"
 
 msgid "Browse..."
 msgstr "Navegar..."
+
+msgid "Back"
+msgstr "Voltar"
 
 msgid "Apply"
 msgstr "Aplicar"
@@ -986,11 +910,17 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Encriptação está:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
 msgid "Usage"
 msgstr "Uso"
-
-msgid "Back"
-msgstr "Voltar"
 
 #, javascript-format
 msgid ""
@@ -1021,6 +951,15 @@ msgstr "Definir alarme:"
 
 msgid "Template file:"
 msgstr ""
+
+msgid "New note"
+msgstr "Nova nota"
+
+msgid "New to-do"
+msgstr "Nova tarefa"
+
+msgid "New notebook"
+msgstr "Novo caderno"
 
 msgid "Layout"
 msgstr "Layout"
@@ -1118,6 +1057,13 @@ msgstr ""
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr "Só uma nota pode ser impressa ou exportada para PDF de cada vez."
 
+msgid "PDF File"
+msgstr "Arquivo PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Erro ao abir a nota no editor: %s"
+
 msgid "strong text"
 msgstr "texto forte"
 
@@ -1192,12 +1138,6 @@ msgstr "Opções"
 msgid "Synchronisation Status"
 msgstr "Status de sincronização"
 
-msgid "Encryption Options"
-msgstr "Opções de Encriptação"
-
-msgid "Clipper Options"
-msgstr "Opções do Clipper"
-
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1220,6 +1160,17 @@ msgstr "Excluir"
 
 msgid "Rename"
 msgstr "Renomear"
+
+msgid "Notebooks"
+msgstr "Cadernos"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Decriptando itens: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Buscando recursos: %d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
@@ -1380,12 +1331,6 @@ msgstr "Em andamento"
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
 msgstr "Sincronização já em andamento. Estado: %s"
-
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-"Tipo de item desconhecido baixado - por favor, atualize o Joplin para a "
-"última versão"
 
 msgid "Encrypted"
 msgstr "Encriptado"
@@ -1607,6 +1552,10 @@ msgstr "Porcentagem global do zoom"
 msgid "Editor font size"
 msgstr "Tamanho da fonte no Editor"
 
+#, fuzzy
+msgid "Editor font"
+msgstr "Tamanho da fonte no Editor"
+
 msgid "Editor font family"
 msgstr "Família de fontes do editor"
 
@@ -1672,6 +1621,11 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorar erros de certificados TLS"
 
 msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
@@ -1711,6 +1665,14 @@ msgstr "Plugins"
 msgid "Application"
 msgstr "Aplicação"
 
+#, fuzzy
+msgid "Encryption"
+msgstr "Encriptação está:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Opções do Web clipper"
+
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "A tag \"%s\" já existe. Escolha um nome diferente."
@@ -1724,7 +1686,12 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Diretório de Exportação do Joplin"
 
-msgid "Evernote Export File"
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Arquivo de Exportação do Evernote"
+
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
 msgstr "Arquivo de Exportação do Evernote"
 
 msgid "Json Export Directory"
@@ -1882,19 +1849,8 @@ msgstr "Novo caderno"
 msgid "Configuration"
 msgstr "Configuração"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Decriptando itens: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Buscando recursos: %d"
-
 msgid "All notes"
 msgstr "Todas as notas"
-
-msgid "Notebooks"
-msgstr "Cadernos"
 
 msgid "Checking... Please wait."
 msgstr "Verificando... Por favor aguarde."
@@ -1944,9 +1900,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-msgid "Information"
-msgstr "Informação"
 
 msgid "Encryption Config"
 msgstr "Configuração de Encriptação"
@@ -2132,6 +2085,69 @@ msgstr "Login com OneDrive"
 
 msgid "Search"
 msgstr "Procurar"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr "Começando a editar a nota. Feche o editor para voltar ao prompt."
+
+#~ msgid "Note has been saved."
+#~ msgstr "Nota gravada."
+
+#~ msgid "Sidebar"
+#~ msgstr "Barra Lateral"
+
+#~ msgid "Note list"
+#~ msgstr "Lista de notas"
+
+#~ msgid "Note title"
+#~ msgstr "Título da Nota"
+
+#~ msgid "Note body"
+#~ msgstr "Corpo da Nota"
+
+#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Importando de \"%s\" com o formato \"%s\". Por favor, aguarde..."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Status de sincronização"
+
+#~ msgid "Print"
+#~ msgstr "Imprimir"
+
+#~ msgid "General Options"
+#~ msgstr "Opções Gerais"
+
+#~ msgid "Encryption options"
+#~ msgstr "Opções de Encriptação"
+
+#, fuzzy
+#~ msgid "Insert template"
+#~ msgstr "Inserir Data e Hora"
+
+#, fuzzy
+#~ msgid "Open template directory"
+#~ msgstr "Diretório de Exportação do Joplin"
+
+#, fuzzy
+#~ msgid "Revision: %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "%s %s (%s, %s)"
+#~ msgstr "%s %s (%s, %s)"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Opções de Encriptação"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Opções do Clipper"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr ""
+#~ "Tipo de item desconhecido baixado - por favor, atualize o Joplin para a "
+#~ "última versão"
+
+#~ msgid "Information"
+#~ msgstr "Informação"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"
