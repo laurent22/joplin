@@ -19,6 +19,11 @@ async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string =
 	return file;
 }
 
+async function makeTestContent(ext:string = 'jpg') {
+	const basename = ext === 'jpg' ? 'photo' : 'poster';
+	return await fs.readFile(`${supportDir}/${basename}.${ext}`);
+}
+
 async function makeTestDirectory(name:string = 'Docs'):Promise<File> {
 	const file:File = {
 		name: name,
@@ -39,27 +44,45 @@ describe('FileController', function() {
 	it('should create a file', asyncTest(async function() {
 		const { user, session } = await createUserAndSession(1, true);
 
-		const file:File = await makeTestFile();
-
 		const fileController = new FileController();
-		let newFile = await fileController.createFile(session.id, file);
+		let newFile = await fileController.updateFileContent(
+			session.id,
+			{ value: 'root:/photo.jpg', addressingType: ItemAddressingType.Path },
+			await makeTestContent(),
+		);
 
 		expect(!!newFile.id).toBe(true);
-		expect(newFile.name).toBe(file.name);
-		expect(newFile.mime_type).toBe(file.mime_type);
+		expect(newFile.name).toBe('photo.jpg');
+		expect(newFile.mime_type).toBe('image/jpeg');
 		expect(!!newFile.parent_id).toBe(true);
 		expect(!newFile.content).toBe(true);
 		expect(newFile.size > 0).toBe(true);
 
-		const fileModel = new FileModel({ userId: user.id });
-		newFile = await fileModel.loadWithContent(newFile.id);
 
-		expect(!!newFile).toBe(true);
 
-		const originalFileHex = (file.content as Buffer).toString('hex');
-		const newFileHex = (newFile.content as Buffer).toString('hex');
-		expect(newFileHex.length > 0).toBe(true);
-		expect(newFileHex).toBe(originalFileHex);
+		// Test invalid path
+		// test sub-path
+
+
+
+		// let newFile = await fileController.createFile(session.id, file);
+
+		// expect(!!newFile.id).toBe(true);
+		// expect(newFile.name).toBe(file.name);
+		// expect(newFile.mime_type).toBe(file.mime_type);
+		// expect(!!newFile.parent_id).toBe(true);
+		// expect(!newFile.content).toBe(true);
+		// expect(newFile.size > 0).toBe(true);
+
+		// const fileModel = new FileModel({ userId: user.id });
+		// newFile = await fileModel.loadWithContent(newFile.id);
+
+		// expect(!!newFile).toBe(true);
+
+		// const originalFileHex = (file.content as Buffer).toString('hex');
+		// const newFileHex = (newFile.content as Buffer).toString('hex');
+		// expect(newFileHex.length > 0).toBe(true);
+		// expect(newFileHex).toBe(originalFileHex);
 	}));
 
 	it('should get files', asyncTest(async function() {

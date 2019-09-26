@@ -3,7 +3,10 @@ import PermissionModel from './PermissionModel';
 import { File, Permission, ItemType, databaseSchema, ItemId, ItemAddressingType } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
-import { splitItemPath } from '../utils/routeUtils';
+import { splitItemPath, removeFilePathPrefix } from '../utils/routeUtils';
+
+const { dirname, basename } = require('lib/path-utils');
+const mimeUtils = require('lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -40,6 +43,29 @@ export default class FileModel extends BaseModel {
 		if (!r) return null;
 
 		return r.user_id;
+	}
+
+	async entityFromItemId(id:string | ItemId):Promise<File> {
+		const file:File = {};
+
+		if (typeof id === 'string') {
+			file.id = id;
+		} else {
+			const parsedId = await this.idFromItemId(id, false);
+
+			if (parsedId) {
+				file.id = parsedId;
+			} else {
+				const parentPath = dirname(id.value);
+				const filename = basename(id.value);
+				const parentFiles = await this.pathToFiles(parentPath);
+				file.name = filename;
+				file.parent_id = parentFiles[parentFiles.length - 1].id;
+				file.mime_type = mimeUtils.fromFilename(filename);
+			}
+		}
+
+		return file;
 	}
 
 	get defaultFields():string[] {
@@ -142,7 +168,7 @@ export default class FileModel extends BaseModel {
 		if (!canRead) throw new ErrorForbidden();
 	}
 
-	private async pathToFiles(path:string):Promise<File[]> {
+	private async pathToFiles(path:string, mustExist:boolean = true):Promise<File[]> {
 		const filenames = splitItemPath(path);
 		const output:File[] = [];
 		let parent:File = null;
@@ -159,23 +185,28 @@ export default class FileModel extends BaseModel {
 				file = await this.fileByName(parent.id, filename);
 			}
 
+			if (!file && !mustExist) return [];
+
 			if (!file) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
 
 			output.push(file);
 			parent = {...file};
 		}
 
+		if (!output.length && mustExist) throw new ErrorBadRequest(`path without a base directory: ${path}`);
+
 		return output;
 	}
 
-	async idFromItemId(id:string | ItemId):Promise<string> {
+	async idFromItemId(id:string | ItemId, mustExist:boolean = true):Promise<string> {
 		if (typeof id === 'string') return id;
 
 		const itemId = id as ItemId;
 		if (itemId.addressingType === ItemAddressingType.Id) {
 			return itemId.value;
 		} else {
-			const files = await this.pathToFiles(itemId.value);
+			const files = await this.pathToFiles(itemId.value, mustExist);
+			if (!files.length && !mustExist) return '';
 			if (!files.length) throw new ErrorNotFound(`invalid path: ${itemId.value}`);
 			return files[files.length - 1].id;
 		}

@@ -15,6 +15,13 @@ const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
 const RevisionService = require('lib/services/RevisionService');
 
+
+
+
+
+const JoplinServerApi = require('lib/JoplinServerApi').default;
+
+
 class Application extends BaseApplication {
 	constructor() {
 		super();
@@ -382,6 +389,19 @@ class Application extends BaseApplication {
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
+			const api = new JoplinServerApi({
+				baseUrl: () => {
+					return 'http://localhost:3222/api';
+				},
+			});
+
+			await api.exec('GET', 'ping');
+			process.exit(0);
+
+
+
+
+
 			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
 
 			await this.applySettingsSideEffects();
@@ -398,6 +418,7 @@ class Application extends BaseApplication {
 			}
 
 			await Setting.saveAll();
+
 
 			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095

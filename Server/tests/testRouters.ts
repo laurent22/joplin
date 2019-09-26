@@ -54,6 +54,11 @@ async function curl(method:string, path:string, query:object = null, body:any = 
 		}
 	}
 
+	if (options.uploadFile) {
+		curlCmd.push('--data-binary');
+		curlCmd.push(`@${options.uploadFile}`);
+	}
+
 	if (!headers && body) headers = {};
 
 	if (body) headers['Content-Type'] = 'application/json';
@@ -120,32 +125,35 @@ async function main() {
 
 	console.info('Session: ', session);
 
-	response = await curl('POST', 'api/files', null, null, { 'X-API-AUTH': session.id }, [
-		`data=@${serverRoot}/tests/support/photo.jpg`,
-		'props={"title":"my resource title"}',
-	]);
-
-	console.info('Response:', response);
-
-	let file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
-
-	console.info('Response:', file);
-
-	await curl('PUT', `api/files/${response.id}`, null, {
-		name: 'changed-name.jpg',
-	}, { 'X-API-AUTH': session.id });
-
-	file = await curl('GET', `api/files/${file.id}`, null, null, { 'X-API-AUTH': session.id });
-
-	console.info('Response:', file);
-
-	// await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
-	// 	`data=@${serverRoot}/tests/support/poster.png`,
+	// response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, [
+	// 	`data=@${serverRoot}/tests/support/photo.jpg`,
 	// ]);
 
-	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, { verbose: true, output: `${serverRoot}/tests/temp/photo-downloaded.jpg` });
+	response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, null, {
+		uploadFile: `${serverRoot}/tests/support/photo.jpg`,
+	});
 
 	console.info('Response:', response);
+
+	// let file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
+
+	// console.info('Response:', file);
+
+	// await curl('PUT', `api/files/${response.id}`, null, {
+	// 	name: 'changed-name.jpg',
+	// }, { 'X-API-AUTH': session.id });
+
+	// file = await curl('GET', `api/files/${file.id}`, null, null, { 'X-API-AUTH': session.id });
+
+	// console.info('Response:', file);
+
+	// // await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
+	// // 	`data=@${serverRoot}/tests/support/poster.png`,
+	// // ]);
+
+	// response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, { verbose: true, output: `${serverRoot}/tests/temp/photo-downloaded.jpg` });
+
+	// console.info('Response:', response);
 
 	console.info(`To run this server again: ${compileCommmand} && ${startServerCommand}`);
 

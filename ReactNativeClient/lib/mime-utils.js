@@ -780,6 +780,13 @@ const mime = {
 		return null;
 	},
 
+	fromFilename(name) {
+		if (!name) return null;
+		const splitted = name.trim().split('.');
+		if (splitted.length <= 1) return null;
+		return mime.fromFileExtension(splitted[splitted.length - 1]);
+	},
+
 	toFileExtension(mimeType) {
 		mimeType = mimeType.toLowerCase();
 		for (let i = 0; i < mimeTypes.length; i++) {

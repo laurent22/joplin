@@ -1,6 +1,7 @@
 import { File, ItemId } from '../db';
 import FileModel from '../models/FileModel';
 import BaseController from './BaseController';
+import { removeFilePathPrefix } from '../utils/routeUtils';
 
 export default class FileController extends BaseController {
 
@@ -41,8 +42,8 @@ export default class FileController extends BaseController {
 	async updateFileContent(sessionId:string, fileId:string | ItemId, content:any):Promise<any> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const newFile:File = { id: await fileModel.idFromItemId(fileId), content: content };
-		await fileModel.save(newFile);
+		const file:File = await fileModel.entityFromItemId(fileId);
+		return fileModel.save(file);
 	}
 
 	async deleteFile(sessionId:string, fileId:string | ItemId):Promise<void> {

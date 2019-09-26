@@ -46,10 +46,17 @@ export function splitItemPath(path:string):string[] {
 	return output;
 }
 
+// Converts root:/path/to/file.md to /path/to/file.md
+export function removeFilePathPrefix(path:string):string {
+	if (!path || path.indexOf(':') < 0) return path;
+	const p = path.split(':');
+	return p[1];
+}
+
 // Allows parsing the two types of paths supported by the API:
 //
-// /api/files/root:/Documents/MyFile.md:/content
-// /api/files/ABCDEFG/content
+// root:/Documents/MyFile.md:/content
+// ABCDEFG/content
 export function parseSubPath(p:string):SubPath {
 	p = rtrimSlashes(ltrimSlashes(p));
 

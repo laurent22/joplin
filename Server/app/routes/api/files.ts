@@ -1,10 +1,11 @@
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
 import { File } from '../../db';
 import FileController from '../../controllers/FileController';
 import { sessionIdFromHeaders } from '../../utils/requestUtils';
 import { SubPath, Route, ApiResponseType, ApiResponse } from '../../utils/routeUtils';
+import * as getRawBody from 'raw-body';
 
 const route:Route = {
 
@@ -12,22 +13,6 @@ const route:Route = {
 		const fileController = new FileController();
 
 		if (!path.link) {
-			if (ctx.method === 'POST') {
-				const files = ctx.request.files;
-				if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-				const data = files.data;
-				const props:any = ctx.request.body.props;
-
-				const file:File = {
-					name: data.name,
-					content: await fs.readFile(data.path),
-					mime_type: data.type,
-					parent_id: props.parent_id ? props.parent_id : '',
-				};
-
-				return fileController.createFile(sessionIdFromHeaders(ctx.headers), file);
-			}
-
 			if (ctx.method === 'GET') {
 				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.value);
 			}
@@ -37,6 +22,8 @@ const route:Route = {
 				body.id = path.value;
 				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
 			}
+
+			throw new ErrorMethodNotAllowed();
 		}
 
 		if (path.link === 'content') {
@@ -50,18 +37,48 @@ const route:Route = {
 			}
 
 			if (ctx.method === 'PUT') {
-				const files = ctx.request.files;
-				if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-				const data = files.data;
-				const content = await fs.readFile(data.path);
-				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
+				const body = await getRawBody(ctx.req);
+				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path, body);
+				// const files = ctx.request.files;
+				//console.info(ctx.request.files);
+				// if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
+				// const data = files.data;
+				// const content = await fs.readFile(data.path);
+				// return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
 			}
+
+			// if (ctx.method === 'POST') {
+			// 	const files = ctx.request.files;
+			// 	console.info(files);
+			// 	// if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
+			// 	// const data = files.data;
+			// 	// const props:any = ctx.request.body.props;
+
+			// 	// const file:File = {
+			// 	// 	name: data.name,
+			// 	// 	content: await fs.readFile(data.path),
+			// 	// 	mime_type: data.type,
+			// 	// 	parent_id: props.parent_id ? props.parent_id : '',
+			// 	// };
+
+			// 	// return fileController.createFile(sessionIdFromHeaders(ctx.headers), file);
+			// }
+
+			// if (ctx.method === 'PUT') {
+			// 	const files = ctx.request.files;
+			// 	if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
+			// 	const data = files.data;
+			// 	const content = await fs.readFile(data.path);
+			// 	return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
+			// }
+
+			throw new ErrorMethodNotAllowed();
 		}
 
 		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
 
-	needsBodyMiddleware: true,
+	// needsBodyMiddleware: true,
 
 };
 
