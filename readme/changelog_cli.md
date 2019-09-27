@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.149](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149) - 2019-09-27T21:18:57Z
+
+- New: Add support to Termux by returning a default when platform name cannot be determined (#1905)
+
 ## [cli-v1.0.148](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.148) - 2019-09-27T18:42:36Z
 
 - Improved: Improves deletion fail-safe so it is based on percentage of notes deleted. And display warning on sidebar.
