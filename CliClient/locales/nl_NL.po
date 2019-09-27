@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
-"Language-Team: Dutch <vistausss@outlook.com>\n"
+"Last-Translator: Robert <metbril@outlook.com>\n"
+"Language-Team: Dutch / Nederlands\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -389,17 +391,20 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"Start, stop of controleer de API-server. Stel de api.port "
+"configuratievariabele in om te specificeren op welke poort deze draait. "
+"Commando's zijn (%s)."
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "Server draait reeds op poort %d"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "Server draait op poort %d"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "Server draait niet."
 
 #, javascript-format
 msgid ""
@@ -687,9 +692,8 @@ msgstr "&Help"
 msgid "Website and documentation"
 msgstr "Website en documentatie"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin-website"
+msgstr "Joplin-forum"
 
 msgid "Make a donation"
 msgstr "Doneren"
@@ -803,7 +807,7 @@ msgstr ""
 "geven tot Joplin."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Dit opent een nieuw scherm. Wijzigingen opslaan?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -913,13 +917,13 @@ msgid "Encryption is:"
 msgstr "Gebruikte versleuteling:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox-extensie"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Web Store"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Haal nu op:"
 
 msgid "Usage"
 msgstr "Gebruik"
@@ -1533,9 +1537,8 @@ msgstr "Inschakelen ++insert++ syntaxis"
 msgid "Enable multimarkdown table extension"
 msgstr "Inschakelen multimarkdown tabel extensie"
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "Inschakelen ~sub~ syntaxis"
+msgstr "Inschakelen ondersteuning voor Fountain syntaxis"
 
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
@@ -1561,9 +1564,8 @@ msgstr "Globaal zoompercentage"
 msgid "Editor font size"
 msgstr "Lettergrootte van bewerker"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "Lettergrootte van bewerker"
+msgstr "Lettertype van bewerker"
 
 msgid "Editor font family"
 msgstr "Lettertype van bewerker"
@@ -1634,11 +1636,15 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Veiligheidswaarschuwing: Wis lokale gegevens niet wanneer synchronisatiedoel "
+"leeg is (vaak het gevolg van een misconfiguratie of softwarefout)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"Specificeer de door de API-server te gebruiken poort. Indien niet ingesteld, "
+"wordt een standaardwaarde gebruikt."
 
 msgid "Enable note history"
 msgstr "Inschakelen geschiedenis van notities"
@@ -1675,13 +1681,11 @@ msgstr "Plugins"
 msgid "Application"
 msgstr "Applicatie"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "Gebruikte versleuteling:"
+msgstr "Versleuteling"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "Webclipper-opties"
+msgstr "Webclipper"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1696,13 +1700,11 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin-exportmap"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote-exportbestand"
+msgstr "Evernote-exportbestand (als Markdown)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote-exportbestand"
+msgstr "Evernote-exportbestand (als HTML)"
 
 msgid "Json Export Directory"
 msgstr "JSON-exportmap"
@@ -1811,13 +1813,11 @@ msgstr "Toestemming om de camera te gebruiken"
 msgid "Your permission to use your camera is required."
 msgstr "Je toestemming om de camera te gebruiken is vereist."
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "Geen actief notitieboek."
+msgstr "Je hebt nog geen notitieboeken."
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "Creëert een nieuw notitieboek."
+msgstr "Creëer een notitieboek"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1849,24 +1849,21 @@ msgstr "Datum kiezen"
 msgid "Confirm"
 msgstr "Bevestigen"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "Notitieboeken"
+msgstr "Notitieboek: %s"
 
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Versleutelde items kunnen niet worden bewerkt"
+msgstr "Versleutelde notitieboeken kunnen niet worden hernoemd"
 
-#, fuzzy
 msgid "New Notebook"
 msgstr "Nieuw notitieboek"
 
 msgid "Configuration"
 msgstr "Configuratie"
 
-#, fuzzy
 msgid "All notes"
-msgstr "notitie"
+msgstr "Alle notities"
 
 msgid "Checking... Please wait."
 msgstr "Controleren… Even geduld."
@@ -1921,20 +1918,17 @@ msgstr ""
 msgid "Encryption Config"
 msgstr "Versleutelconfiguratie"
 
-#, fuzzy
 msgid "Tools"
-msgstr "E&xtra"
+msgstr "Hulpmiddelen"
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "Status"
+msgstr "Synchronisatiestatus"
 
 msgid "Log"
 msgstr "Log"
 
-#, fuzzy
 msgid "Creating report..."
-msgstr "Bezig met creëren van nieuw(e) %s..."
+msgstr "Creëren rapport..."
 
 msgid "Export Debug Report"
 msgstr "Foutopsporingsrapportage exporteren"
@@ -2017,9 +2011,8 @@ msgstr "Het notitieboek kan niet worden opgeslagen: %s"
 msgid "Edit notebook"
 msgstr "Notitieboek bewerken"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "Titel van notitieboek:"
+msgstr "Invoeren titel notitieboek"
 
 msgid "Show all"
 msgstr "Alles tonen"
@@ -2052,9 +2045,9 @@ msgstr "Links met protocol “%s” worden niet ondersteund"
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "Bijgewerkt: %d."
+msgstr "Bijgewerkt: %s"
 
 msgid "View on map"
 msgstr "Tonen op kaart"
@@ -2062,13 +2055,11 @@ msgstr "Tonen op kaart"
 msgid "Go to source URL"
 msgstr "Ga naar bron-URL"
 
-#, fuzzy
 msgid "Attach..."
-msgstr "Zoeken..."
+msgstr "Bijvoegen..."
 
-#, fuzzy
 msgid "Choose an option"
-msgstr "Geavanceerde opties tonen"
+msgstr "Kies een optie"
 
 msgid "Take photo"
 msgstr "Foto maken"
@@ -2088,9 +2079,8 @@ msgstr "Omzetten naar notitie"
 msgid "Convert to todo"
 msgstr "Omzetten naar taak"
 
-#, fuzzy
 msgid "Properties"
-msgstr "Eigenschappen van notitie"
+msgstr "Eigenschappen"
 
 msgid "Add body"
 msgstr "Inhoud toevoegen"
@@ -2098,9 +2088,8 @@ msgstr "Inhoud toevoegen"
 msgid "Edit"
 msgstr "Bewerken"
 
-#, fuzzy
 msgid "Add title"
-msgstr "titel"
+msgstr "Toevoegen titel"
 
 msgid "Login with OneDrive"
 msgstr "Inloggen met OneDrive"
