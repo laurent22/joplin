@@ -1,13 +1,17 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
-import { File, Permission, ItemType, databaseSchema, ItemAddressingType, WithUuid } from '../db';
+import { File, Permission, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
-import { splitItemPath, removeFilePathPrefix, isPathBasedAddressing, filePathInfo } from '../utils/routeUtils';
+import { splitItemPath, filePathInfo } from '../utils/routeUtils';
 
 const mimeUtils = require('lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
+
+export interface EntityFromItemIdOptions {
+	mustExist?: boolean
+}
 
 export default class FileModel extends BaseModel {
 
@@ -44,19 +48,36 @@ export default class FileModel extends BaseModel {
 		return r.user_id;
 	}
 
-	async entityFromItemId(idOrPath:string /* | ItemId */):Promise<File> {
-		const file:File = {};
+	async entityFromItemId(idOrPath:string, options:EntityFromItemIdOptions = {}):Promise<File> {
+		options = { mustExist: true, ...options };
 
 		if (idOrPath.indexOf(':') < 0) {
-			file.id = idOrPath;
+			return { id: idOrPath };
 		} else {
+			// When this input is a path, there can be two cases:
+			// - A path to an existing file - in which case we return the file
+			// - A path to a file that needs to be created - in which case we
+			//   return a file with all the relevant properties populated. This
+			//   file might then be created by the caller.
+			// The caller can check file.id to see if it's a new or existing file.
+			// In both cases the directories before the filename must exist.
+
 			const fileInfo = filePathInfo(idOrPath);
 			const parentFiles = await this.pathToFiles(fileInfo.dirname);
-			file.name = fileInfo.basename;
-			file.parent_id = parentFiles[parentFiles.length - 1].id;
-		}
+			const parentId = parentFiles[parentFiles.length - 1].id;
 
-		return file;
+			// This is an existing file
+			const existingFile = await this.fileByName(parentId, fileInfo.basename);
+			if (existingFile) return { id: existingFile.id };
+
+			if (options.mustExist) throw new ErrorNotFound(`file not found: ${idOrPath}`);
+
+			// This is a potentially new file
+			return {
+				name: fileInfo.basename,
+				parent_id: parentId,
+			};
+		}
 	}
 
 	get defaultFields():string[] {
@@ -159,9 +180,6 @@ export default class FileModel extends BaseModel {
 		if (!canRead) throw new ErrorForbidden();
 	}
 
-	// TODO: Return an interface FilePath { parents: File[], file:File, exists: boolean }
-	// If any of the parents don't exist - throw
-	// If
 	private async pathToFiles(path:string, mustExist:boolean = true):Promise<File[]> {
 		const filenames = splitItemPath(path);
 		const output:File[] = [];
@@ -179,7 +197,7 @@ export default class FileModel extends BaseModel {
 				file = await this.fileByName(parent.id, filename);
 			}
 
-			if (!file && i === filenames.length - 1 && mustExist) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
+			if (!file && mustExist) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
 
 			output.push(file);
 			parent = {...file};
@@ -190,44 +208,15 @@ export default class FileModel extends BaseModel {
 		return output;
 	}
 
-	async idFromItemId(id:string /* | ItemId */, mustExist:boolean = true):Promise<string> {
-		if (typeof id === 'string') return id;
-
-		// const itemId = id as ItemId;
-		// if (itemId.addressingType === ItemAddressingType.Id) {
-		// 	return itemId.value;
-		// } else {
-		// 	const files = await this.pathToFiles(itemId.value, mustExist);
-		// 	if (!files.length && !mustExist) return '';
-		// 	if (!files.length) throw new ErrorNotFound(`invalid path: ${itemId.value}`);
-		// 	return files[files.length - 1].id;
-		// }
-	}
-
-	async loadWithContent(id:string /* | ItemId */):Promise<any> {
-		const idString = await this.idFromItemId(id);
-		await this.checkCanReadPermissions(idString);
-		const file:File = await this.db<File>(this.tableName).select('*').where({ id: idString }).first();
+	async loadWithContent(id:string):Promise<any> {
+		await this.checkCanReadPermissions(id);
+		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
 		return file;
 	}
 
-	async load(id:string /* | ItemId */):Promise<File> {
-		const idString = await this.idFromItemId(id);
-		await this.checkCanReadPermissions(idString);
-		return super.load(idString);
-	}
-
-	async isNew(object:File, options:SaveOptions):Promise<boolean> {
-		const id = (object as WithUuid).id;
-
-		// TODO: Fix?
-
-		// if (isPathBasedAddressing(id)) {
-		// 	const fileInfo =
-		// 	const parentFiles = await this.pathToFiles(dirname(id), false);
-		// }
-
-		return super.isNew(object, options);
+	async load(id:string):Promise<File> {
+		await this.checkCanReadPermissions(id);
+		return super.load(id);
 	}
 
 	async save(object:File, options:SaveOptions = {}):Promise<File> {
@@ -240,10 +229,13 @@ export default class FileModel extends BaseModel {
 		try {
 			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
 
-			if ('content' in file) {
-				file.size = file.content ? file.content.byteLength : 0;
-				file.mime_type = mimeUtils.fromFilename(file.name);
-			}
+			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
+
+			// Even if there's no content, set the mime type based on the extension
+			if (isNew && !file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
+
+			// Make sure it's not NULL, which is not allowed
+			if (isNew && !file.mime_type) file.mime_type = '';
 
 			file = await super.save(file, options);
 
@@ -270,18 +262,16 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async delete(id:string /* | ItemId */):Promise<void> {
-		const idString = await this.idFromItemId(id);
-
+	async delete(id:string):Promise<void> {
 		const permissionModel = new PermissionModel();
-		const canWrite:boolean = await permissionModel.canWrite(idString, this.userId);
+		const canWrite:boolean = await permissionModel.canWrite(id, this.userId);
 		if (!canWrite) throw new ErrorForbidden();
 
 		const txIndex = await this.startTransaction();
 
 		try {
-			await permissionModel.deleteByFileId(idString);
-			await super.delete(idString);
+			await permissionModel.deleteByFileId(id);
+			await super.delete(id);
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;

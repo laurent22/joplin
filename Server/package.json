@@ -13,7 +13,7 @@
     "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json",
     "test-fast": "rm -f db-testing.sqlite &&  NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json",
     "typescript-watch": "tsc --project ./ --outDir dist/ --watch",
-    "tsw": "typescript-watch"
+    "tsw": "npm run typescript-watch"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",

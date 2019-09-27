@@ -2,9 +2,9 @@ import { asyncTest, clearDatabase, supportDir, createUserAndSession, createUser,
 import FileController from '../../app/controllers/FileController';
 import FileModel from '../../app/models/FileModel';
 import * as fs from 'fs-extra';
-import { File, ItemAddressingType } from '../../app/db';
+import { File } from '../../app/db';
 import PermissionModel from '../../app/models/PermissionModel';
-import { ErrorForbidden, ErrorNotFound } from '../../app/utils/errors';
+import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../app/utils/errors';
 
 async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string = ''):Promise<File> {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
@@ -45,13 +45,13 @@ describe('FileController', function() {
 		const { user, session } = await createUserAndSession(1, true);
 
 		const fileController = new FileController();
+		const fileContent = await makeTestContent();
+
 		let newFile = await fileController.updateFileContent(
 			session.id,
 			'root:/photo.jpg:',
-			await makeTestContent(),
+			fileContent,
 		);
-
-		console.info(newFile);
 
 		expect(!!newFile.id).toBe(true);
 		expect(newFile.name).toBe('photo.jpg');
@@ -60,31 +60,75 @@ describe('FileController', function() {
 		expect(!newFile.content).toBe(true);
 		expect(newFile.size > 0).toBe(true);
 
+		const fileModel = new FileModel({ userId: user.id });
+		const newFileReload = await fileModel.loadWithContent(newFile.id);
 
+		expect(!!newFileReload).toBe(true);
 
-		// Test invalid path
-		// test sub-path
+		const newFileHex = fileContent.toString('hex');
+		const newFileReloadHex = (newFileReload.content as Buffer).toString('hex');
+		expect(newFileReloadHex.length > 0).toBe(true);
+		expect(newFileReloadHex).toBe(newFileHex);
+	}));
 
+	it('should create sub-directories', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
 
+		const fileController = new FileController();
 
-		// let newFile = await fileController.createFile(session.id, file);
+		const newDir = await fileController.createFile(session.id, {
+			is_directory: 1,
+			name: 'subdir',
+		});
 
-		// expect(!!newFile.id).toBe(true);
-		// expect(newFile.name).toBe(file.name);
-		// expect(newFile.mime_type).toBe(file.mime_type);
-		// expect(!!newFile.parent_id).toBe(true);
-		// expect(!newFile.content).toBe(true);
-		// expect(newFile.size > 0).toBe(true);
+		expect(!!newDir.id).toBe(true);
+		expect(newDir.is_directory).toBe(1);
 
-		// const fileModel = new FileModel({ userId: user.id });
-		// newFile = await fileModel.loadWithContent(newFile.id);
+		const newDir2 = await fileController.createFile(session.id, {
+			is_directory: 1,
+			name: 'subdir2',
+			parent_id: newDir.id,
+		});
 
-		// expect(!!newFile).toBe(true);
+		const newDirReload2 = await fileController.getFile(session.id, 'root:/subdir/subdir2');
+		expect(newDirReload2.id).toBe(newDir2.id);
+		expect(newDirReload2.name).toBe(newDir2.name);
+	}));
 
-		// const originalFileHex = (file.content as Buffer).toString('hex');
-		// const newFileHex = (newFile.content as Buffer).toString('hex');
-		// expect(newFileHex.length > 0).toBe(true);
-		// expect(newFileHex).toBe(originalFileHex);
+	it('should create files in sub-directory', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		const fileController = new FileController();
+
+		await fileController.createFile(session.id, {
+			is_directory: 1,
+			name: 'subdir',
+		});
+
+		const newFile = await fileController.updateFileContent(
+			session.id,
+			'root:/subdir/photo.jpg:',
+			await makeTestContent(),
+		);
+
+		const newFileReload = await fileController.getFile(session.id, 'root:/subdir/photo.jpg');
+		expect(newFileReload.id).toBe(newFile.id);
+		expect(newFileReload.name).toBe('photo.jpg');
+	}));
+
+	it('should not create a file with an invalid path', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		const fileController = new FileController();
+		const fileContent = await makeTestContent();
+
+		const error = await checkThrowAsync(async () => fileController.updateFileContent(
+			session.id,
+			'root:/does/not/exist/photo.jpg:',
+			fileContent,
+		));
+
+		expect(error instanceof ErrorNotFound).toBe(true);
 	}));
 
 	it('should get files', asyncTest(async function() {
@@ -141,14 +185,14 @@ describe('FileController', function() {
 		file = await fileController.createFile(session.id, file);
 
 		// Can't have file with empty name
-		const hasThrown = await checkThrowAsync(async () =>  fileController.updateFile(session.id, { id: file.id, name: '' }));
-		expect(!!hasThrown).toBe(true);
+		const error = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
-		await fileController.updateFile(session.id, { id: file.id, name: 'modified.jpg' });
+		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
 
-		await fileController.updateFile(session.id, { id: file.id, mime_type: 'image/png' });
+		await fileController.updateFile(session.id, file.id, { mime_type: 'image/png' });
 		file = await fileModel.load(file.id);
 		expect(file.mime_type).toBe('image/png');
 	}));
@@ -186,17 +230,17 @@ describe('FileController', function() {
 		dir = await fileController.createFile(session1.id, dir);
 
 		// Can't set parent to another non-directory file
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, { id: file.id, parent_id: file2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: file2.id }));
 		expect(!!hasThrown).toBe(true);
 
 		const fileModel2 = new FileModel({ userId: user2.id });
 		const userRoot2 = await fileModel2.userRootFile();
 
 		// Can't set parent to someone else directory
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, { id: file.id, parent_id: userRoot2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: userRoot2.id }));
 		expect(!!hasThrown).toBe(true);
 
-		await fileController.updateFile(session1.id, { id: file.id, parent_id: dir.id });
+		await fileController.updateFile(session1.id, file.id, { parent_id: dir.id });
 
 		file = await fileModel.load(file.id);
 
@@ -252,7 +296,7 @@ describe('FileController', function() {
 		const fileController = new FileController();
 		file = await fileController.createFile(session.id, file);
 
-		await fileController.updateFile(adminSession.id, { id: file.id, name: 'modified.jpg' });
+		await fileController.updateFile(adminSession.id, file.id, { name: 'modified.jpg' });
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
 
@@ -279,29 +323,6 @@ describe('FileController', function() {
 		expect(modFileHex === originalFileHex).toBe(false);
 		expect(modFile.size).toBe(modFile.content.byteLength);
 		expect(newFile.size).toBe(file.content.byteLength);
-	}));
-
-	it('should allow addressing a file by path', asyncTest(async function() {
-		// const { session } = await createUserAndSession(1, true);
-
-		// const fileController = new FileController();
-
-		// let dir = await fileController.createFile(session.id, await makeTestDirectory('Docs'));
-		// let file1 = await fileController.createFile(session.id, await makeTestFile(1));
-		// let file2 = await fileController.createFile(session.id, await makeTestFile(2, 'jpg', dir.id));
-
-		// let aDir = await fileController.getFile(session.id, { value: 'root:/Docs', addressingType: ItemAddressingType.Path });
-		// expect(aDir.id).toBe(dir.id);
-
-		// let aFile1 = await fileController.getFile(session.id, { value: 'root:/photo.jpg', addressingType: ItemAddressingType.Path });
-		// expect(aFile1.id).toBe(file1.id);
-
-		// let aFile2 = await fileController.getFile(session.id, { value: 'root:/Docs/photo-2.jpg', addressingType: ItemAddressingType.Path });
-		// expect(aFile2.id).toBe(file2.id);
-
-		// await fileController.deleteFile(session.id, { value: 'root:/Docs/photo-2.jpg', addressingType: ItemAddressingType.Path });
-		// const error = await checkThrowAsync(async () => fileController.getFile(session.id, { value: 'root:/Docs/photo-2.jpg', addressingType: ItemAddressingType.Path }));
-		// expect(error instanceof ErrorNotFound).toBe(true);
 	}));
 
 });

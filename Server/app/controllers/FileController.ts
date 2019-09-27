@@ -15,7 +15,8 @@ export default class FileController extends BaseController {
 	async getFile(sessionId:string, fileId:string):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		return fileModel.toApiOutput(await fileModel.load(fileId));
+		const file:File = await fileModel.entityFromItemId(fileId);
+		return fileModel.toApiOutput(await fileModel.load(file.id));
 	}
 
 	async getFileContent(sessionId:string, fileId:string):Promise<File> {
@@ -31,17 +32,19 @@ export default class FileController extends BaseController {
 		return fileModel.allByParent(parentId);
 	}
 
-	async updateFile(sessionId:string, file:File):Promise<void> {
+	async updateFile(sessionId:string, fileId:string, file:File):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
+		const existingFile:File = await fileModel.entityFromItemId(fileId);
 		const newFile = await fileModel.fromApiInput(file);
-		await fileModel.toApiOutput(fileModel.save(newFile));
+		newFile.id = existingFile.id;
+		await fileModel.toApiOutput(await fileModel.save(newFile));
 	}
 
 	async updateFileContent(sessionId:string, fileId:string, content:Buffer):Promise<any> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const file:File = await fileModel.entityFromItemId(fileId);
+		const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });
 		file.content = content;
 		return fileModel.toApiOutput(await fileModel.save(file));
 	}
