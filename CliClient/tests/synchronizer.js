@@ -1481,19 +1481,27 @@ describe('Synchronizer', function() {
 	}));
 
 	it('should not wipe out user data when syncing with an empty target', asyncTest(async () => {
-		await Note.save({ title: 'ma note' });
-		await Note.save({ title: 'mon autre note' });
-		await Note.save({ title: 'ma troisième note' });
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
 
 		Setting.setValue('sync.wipeOutFailSafe', true);
 		await synchronizer().start();
 		await fileApi().clearRoot(); // oops
 		await synchronizer().start();
-		expect((await Note.all()).length).toBe(3); // but since the fail-safe if on, the notes have not been deleted
+		expect((await Note.all()).length).toBe(10); // but since the fail-safe if on, the notes have not been deleted
 
 		Setting.setValue('sync.wipeOutFailSafe', false); // Now switch it off
 		await synchronizer().start();
 		expect((await Note.all()).length).toBe(0); // Since the fail-safe was off, the data has been cleared
+
+		// Handle case where the sync target has been wiped out, then the user creates one note and sync.
+
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizer().start();
+		await fileApi().clearRoot();
+		await Note.save({ title: 'ma note encore' });
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(11);
 	}));
 
 });
