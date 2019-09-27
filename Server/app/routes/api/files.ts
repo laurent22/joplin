@@ -12,33 +12,35 @@ const route:Route = {
 	exec: async function(path:SubPath, ctx:Koa.Context) {
 		const fileController = new FileController();
 
-		if (!path.link) {
-			if (ctx.method === 'GET') {
-				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.value);
-			}
+		// if (!path.link) {
+		// 	if (ctx.method === 'GET') {
+		// 		return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.value);
+		// 	}
 
-			if (ctx.method === 'PUT') {
-				const body = { ...ctx.request.body };
-				body.id = path.value;
-				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
-			}
+		// 	if (ctx.method === 'PUT') {
+		// 		const body = { ...ctx.request.body };
+		// 		body.id = path.value;
+		// 		return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
+		// 	}
 
-			throw new ErrorMethodNotAllowed();
-		}
+		// 	throw new ErrorMethodNotAllowed();
+		// }
+
+		console.info(path);
 
 		if (path.link === 'content') {
 			if (ctx.method === 'GET') {
-				const koaResponse = ctx.response;
-				const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.value);
-				koaResponse.body = file.content;
-				koaResponse.set('Content-Type', file.mime_type);
-				koaResponse.set('Content-Length', file.size.toString());
-				return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
+				// const koaResponse = ctx.response;
+				// const file:File = await fileController.getFileContent(sessionIdFromHeaders(ctx.headers), path.value);
+				// koaResponse.body = file.content;
+				// koaResponse.set('Content-Type', file.mime_type);
+				// koaResponse.set('Content-Length', file.size.toString());
+				// return new ApiResponse(ApiResponseType.KoaResponse, koaResponse);
 			}
 
 			if (ctx.method === 'PUT') {
 				const body = await getRawBody(ctx.req);
-				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path, body);
+				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
 				// const files = ctx.request.files;
 				//console.info(ctx.request.files);
 				// if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');

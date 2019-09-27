@@ -92,7 +92,7 @@ export default class UserModel extends BaseModel {
 	async save(object:User, options:SaveOptions = {}):Promise<User> {
 		const txIndex = await this.startTransaction();
 
-		const isNew = this.isNew(object, options);
+		const isNew = await this.isNew(object, options);
 
 		let newUser = {...object};
 

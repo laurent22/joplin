@@ -1,7 +1,6 @@
-import { File, ItemId } from '../db';
+import { File } from '../db';
 import FileModel from '../models/FileModel';
 import BaseController from './BaseController';
-import { removeFilePathPrefix } from '../utils/routeUtils';
 
 export default class FileController extends BaseController {
 
@@ -13,13 +12,13 @@ export default class FileController extends BaseController {
 		return fileModel.toApiOutput(newFile);
 	}
 
-	async getFile(sessionId:string, fileId:string | ItemId):Promise<File> {
+	async getFile(sessionId:string, fileId:string):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		return fileModel.toApiOutput(await fileModel.load(fileId));
 	}
 
-	async getFileContent(sessionId:string, fileId:string | ItemId):Promise<File> {
+	async getFileContent(sessionId:string, fileId:string):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.loadWithContent(fileId);
@@ -36,17 +35,18 @@ export default class FileController extends BaseController {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const newFile = await fileModel.fromApiInput(file);
-		await fileModel.save(newFile);
+		await fileModel.toApiOutput(fileModel.save(newFile));
 	}
 
-	async updateFileContent(sessionId:string, fileId:string | ItemId, content:any):Promise<any> {
+	async updateFileContent(sessionId:string, fileId:string, content:Buffer):Promise<any> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.entityFromItemId(fileId);
-		return fileModel.save(file);
+		file.content = content;
+		return fileModel.toApiOutput(await fileModel.save(file));
 	}
 
-	async deleteFile(sessionId:string, fileId:string | ItemId):Promise<void> {
+	async deleteFile(sessionId:string, fileId:string):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		await fileModel.delete(fileId);

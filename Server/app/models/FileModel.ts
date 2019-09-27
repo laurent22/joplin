@@ -1,11 +1,10 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
-import { File, Permission, ItemType, databaseSchema, ItemId, ItemAddressingType } from '../db';
+import { File, Permission, ItemType, databaseSchema, ItemAddressingType, WithUuid } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
-import { splitItemPath, removeFilePathPrefix } from '../utils/routeUtils';
+import { splitItemPath, removeFilePathPrefix, isPathBasedAddressing, filePathInfo } from '../utils/routeUtils';
 
-const { dirname, basename } = require('lib/path-utils');
 const mimeUtils = require('lib/mime-utils.js').mime;
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -45,24 +44,16 @@ export default class FileModel extends BaseModel {
 		return r.user_id;
 	}
 
-	async entityFromItemId(id:string | ItemId):Promise<File> {
+	async entityFromItemId(idOrPath:string /* | ItemId */):Promise<File> {
 		const file:File = {};
 
-		if (typeof id === 'string') {
-			file.id = id;
+		if (idOrPath.indexOf(':') < 0) {
+			file.id = idOrPath;
 		} else {
-			const parsedId = await this.idFromItemId(id, false);
-
-			if (parsedId) {
-				file.id = parsedId;
-			} else {
-				const parentPath = dirname(id.value);
-				const filename = basename(id.value);
-				const parentFiles = await this.pathToFiles(parentPath);
-				file.name = filename;
-				file.parent_id = parentFiles[parentFiles.length - 1].id;
-				file.mime_type = mimeUtils.fromFilename(filename);
-			}
+			const fileInfo = filePathInfo(idOrPath);
+			const parentFiles = await this.pathToFiles(fileInfo.dirname);
+			file.name = fileInfo.basename;
+			file.parent_id = parentFiles[parentFiles.length - 1].id;
 		}
 
 		return file;
@@ -168,6 +159,9 @@ export default class FileModel extends BaseModel {
 		if (!canRead) throw new ErrorForbidden();
 	}
 
+	// TODO: Return an interface FilePath { parents: File[], file:File, exists: boolean }
+	// If any of the parents don't exist - throw
+	// If
 	private async pathToFiles(path:string, mustExist:boolean = true):Promise<File[]> {
 		const filenames = splitItemPath(path);
 		const output:File[] = [];
@@ -185,9 +179,7 @@ export default class FileModel extends BaseModel {
 				file = await this.fileByName(parent.id, filename);
 			}
 
-			if (!file && !mustExist) return [];
-
-			if (!file) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
+			if (!file && i === filenames.length - 1 && mustExist) throw new ErrorNotFound(`file not found: "${filename}" on parent "${parent ? parent.name : ''}"`);
 
 			output.push(file);
 			parent = {...file};
@@ -198,35 +190,48 @@ export default class FileModel extends BaseModel {
 		return output;
 	}
 
-	async idFromItemId(id:string | ItemId, mustExist:boolean = true):Promise<string> {
+	async idFromItemId(id:string /* | ItemId */, mustExist:boolean = true):Promise<string> {
 		if (typeof id === 'string') return id;
 
-		const itemId = id as ItemId;
-		if (itemId.addressingType === ItemAddressingType.Id) {
-			return itemId.value;
-		} else {
-			const files = await this.pathToFiles(itemId.value, mustExist);
-			if (!files.length && !mustExist) return '';
-			if (!files.length) throw new ErrorNotFound(`invalid path: ${itemId.value}`);
-			return files[files.length - 1].id;
-		}
+		// const itemId = id as ItemId;
+		// if (itemId.addressingType === ItemAddressingType.Id) {
+		// 	return itemId.value;
+		// } else {
+		// 	const files = await this.pathToFiles(itemId.value, mustExist);
+		// 	if (!files.length && !mustExist) return '';
+		// 	if (!files.length) throw new ErrorNotFound(`invalid path: ${itemId.value}`);
+		// 	return files[files.length - 1].id;
+		// }
 	}
 
-	async loadWithContent(id:string | ItemId):Promise<any> {
+	async loadWithContent(id:string /* | ItemId */):Promise<any> {
 		const idString = await this.idFromItemId(id);
 		await this.checkCanReadPermissions(idString);
 		const file:File = await this.db<File>(this.tableName).select('*').where({ id: idString }).first();
 		return file;
 	}
 
-	async load(id:string | ItemId):Promise<File> {
+	async load(id:string /* | ItemId */):Promise<File> {
 		const idString = await this.idFromItemId(id);
 		await this.checkCanReadPermissions(idString);
 		return super.load(idString);
 	}
 
+	async isNew(object:File, options:SaveOptions):Promise<boolean> {
+		const id = (object as WithUuid).id;
+
+		// TODO: Fix?
+
+		// if (isPathBasedAddressing(id)) {
+		// 	const fileInfo =
+		// 	const parentFiles = await this.pathToFiles(dirname(id), false);
+		// }
+
+		return super.isNew(object, options);
+	}
+
 	async save(object:File, options:SaveOptions = {}):Promise<File> {
-		const isNew = this.isNew(object, options);
+		const isNew = await this.isNew(object, options);
 
 		const txIndex = await this.startTransaction();
 
@@ -235,7 +240,10 @@ export default class FileModel extends BaseModel {
 		try {
 			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
 
-			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
+			if ('content' in file) {
+				file.size = file.content ? file.content.byteLength : 0;
+				file.mime_type = mimeUtils.fromFilename(file.name);
+			}
 
 			file = await super.save(file, options);
 
@@ -262,7 +270,7 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
-	async delete(id:string | ItemId):Promise<void> {
+	async delete(id:string /* | ItemId */):Promise<void> {
 		const idString = await this.idFromItemId(id);
 
 		const permissionModel = new PermissionModel();

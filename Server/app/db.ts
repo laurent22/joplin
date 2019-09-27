@@ -21,11 +21,6 @@ export enum ItemAddressingType {
 	Path,
 }
 
-export interface ItemId {
-	value: string
-	addressingType: ItemAddressingType
-}
-
 export enum ItemType {
     File = 1,
     User,
