@@ -38,6 +38,7 @@ shim.platformName = function() {
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
 	if (shim.isFreeBSD()) return 'freebsd';
+	if (process && process.platform) return process.platform;
 	throw new Error('Cannot determine platform');
 };
 
