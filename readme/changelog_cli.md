@@ -1,5 +1,10 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.148](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.148) - 2019-09-27T18:42:36Z
+
+- Improved: Improves deletion fail-safe so it is based on percentage of notes deleted. And display warning on sidebar.
+- Improved: Log last requests in case of a sync error
+
 ## [cli-v1.0.147](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.147) - 2019-09-25T21:26:24Z
 
 - New: Import Evernote notes as HTML (#1887)
