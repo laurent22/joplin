@@ -223,6 +223,43 @@ const solarizedDarkStyle = {
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
+const nordStyle = {
+	backgroundColor: '#2E3440',
+	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
+	oddBackgroundColor: '#434C5E',
+	color: '#88C0D0', // For regular text
+	colorError: '#BF616A',
+	colorWarn: '#D08770',
+	colorFaded: '#81A1C1', // For less important text;
+	colorBright: '#A3BE8C', // For important text;
+	dividerColor: '#81A1C1',
+	selectedColor: '#434C5E',
+	urlColor: '#5E81AC',
+
+	backgroundColor2: '#434C5E',
+	depthColor: 'rgb(200, 200, 200, OPACITY)',
+	color2: '#EBCB8B',
+	selectedColor2: '#5E81AC',
+	colorError2: '#BF616A',
+
+	raisedBackgroundColor: '#434C5E',
+	raisedColor: '#8FBCBB',
+
+	warningBackgroundColor: '#EBCB8B',
+
+	htmlColor: '#D8DEE9',
+	htmlBackgroundColor: '#3B4252',
+	htmlDividerColor: '#434C5E',
+	htmlLinkColor: '#5E81AC',
+	htmlTableBackgroundColor: '#2E3440',
+	htmlCodeBackgroundColor: '#2E3440',
+	htmlCodeBorderColor: '#434C5E',
+	htmlCodeColor: '#EBCB8B',
+
+	editorTheme: 'nord',
+	codeThemeCss: 'atom-one-dark-reasonable.css',
+};
+
 function addExtraStyles(style) {
 	style.tagStyle = {
 		fontSize: style.fontSize,
@@ -368,6 +405,8 @@ function themeStyle(theme) {
 		output = Object.assign({}, output, solarizedLightStyle);
 	} else if (theme == Setting.THEME_SOLARIZED_DARK) {
 		output = Object.assign({}, output, solarizedDarkStyle);
+	} else if (theme == Setting.THEME_NORD) {
+		output = Object.assign({}, output, nordStyle);
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles
