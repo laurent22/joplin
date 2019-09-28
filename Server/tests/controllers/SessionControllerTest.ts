@@ -4,7 +4,7 @@ import { ErrorForbidden } from '../../app/utils/errors';
 
 describe('SessionController', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async(done) => {
 		await clearDatabase();
 		done();
 	});
@@ -22,10 +22,10 @@ describe('SessionController', function() {
 		const user = await createUser(1);
 		const controller = new SessionController();
 
-		let error = await checkThrowAsync(async () => controller.authenticate(user.email, 'wrong'));
+		let error = await checkThrowAsync(async() => controller.authenticate(user.email, 'wrong'));
 		expect(error instanceof ErrorForbidden).toBe(true);
 
-		error = await checkThrowAsync(async () => controller.authenticate('wrong@wrong.com', '123456'));
+		error = await checkThrowAsync(async() => controller.authenticate('wrong@wrong.com', '123456'));
 		expect(error instanceof ErrorForbidden).toBe(true);
 	}));
 

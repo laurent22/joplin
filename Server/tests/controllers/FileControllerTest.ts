@@ -36,7 +36,7 @@ async function makeTestDirectory(name:string = 'Docs'):Promise<File> {
 
 describe('FileController', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async(done) => {
 		await clearDatabase();
 		done();
 	});
@@ -122,7 +122,7 @@ describe('FileController', function() {
 		const fileController = new FileController();
 		const fileContent = await makeTestContent();
 
-		const error = await checkThrowAsync(async () => fileController.updateFileContent(
+		const error = await checkThrowAsync(async() => fileController.updateFileContent(
 			session.id,
 			'root:/does/not/exist/photo.jpg:',
 			fileContent,
@@ -148,7 +148,7 @@ describe('FileController', function() {
 		const fileId2 = file2.id;
 
 		// Can't get someone else file
-		const error = await checkThrowAsync(async () => fileController.getFile(session1.id, file3.id));
+		const error = await checkThrowAsync(async() => fileController.getFile(session1.id, file3.id));
 		expect(error instanceof ErrorForbidden).toBe(true);
 
 		file1 = await fileController.getFile(session1.id, file1.id);
@@ -170,7 +170,7 @@ describe('FileController', function() {
 		file.parent_id = rootFile2.id;
 		const fileController = new FileController();
 
-		const hasThrown = await checkThrowAsync(async () => fileController.createFile(session.id, file));
+		const hasThrown = await checkThrowAsync(async() => fileController.createFile(session.id, file));
 		expect(!!hasThrown).toBe(true);
 	}));
 
@@ -185,7 +185,7 @@ describe('FileController', function() {
 		file = await fileController.createFile(session.id, file);
 
 		// Can't have file with empty name
-		const error = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
+		const error = await checkThrowAsync(async() =>  fileController.updateFile(session.id, file.id, { name: '' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
@@ -209,7 +209,7 @@ describe('FileController', function() {
 		expect(!!file1.id).toBe(true);
 		expect(file1.name).toBe(file2.name);
 
-		const hasThrown = await checkThrowAsync(async () => await fileController.createFile(session.id, file2));
+		const hasThrown = await checkThrowAsync(async() => await fileController.createFile(session.id, file2));
 		expect(!!hasThrown).toBe(true);
 	}));
 
@@ -230,14 +230,14 @@ describe('FileController', function() {
 		dir = await fileController.createFile(session1.id, dir);
 
 		// Can't set parent to another non-directory file
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: file2.id }));
+		hasThrown = await checkThrowAsync(async() => await fileController.updateFile(session1.id, file.id, { parent_id: file2.id }));
 		expect(!!hasThrown).toBe(true);
 
 		const fileModel2 = new FileModel({ userId: user2.id });
 		const userRoot2 = await fileModel2.userRootFile();
 
 		// Can't set parent to someone else directory
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: userRoot2.id }));
+		hasThrown = await checkThrowAsync(async() => await fileController.updateFile(session1.id, file.id, { parent_id: userRoot2.id }));
 		expect(!!hasThrown).toBe(true);
 
 		await fileController.updateFile(session1.id, file.id, { parent_id: dir.id });
@@ -281,7 +281,7 @@ describe('FileController', function() {
 		file1 = await fileController.createFile(session1.id, file1);
 		file2 = await fileController.createFile(session2.id, file2);
 
-		const error = await checkThrowAsync(async () => await fileController.deleteFile(session1.id, file2.id));
+		const error = await checkThrowAsync(async() => await fileController.deleteFile(session1.id, file2.id));
 		expect(error instanceof ErrorForbidden).toBe(true);
 	}));
 
@@ -300,7 +300,7 @@ describe('FileController', function() {
 		expect(file.name).toBe('modified.jpg');
 
 		await fileController.deleteFile(adminSession.id, file.id);
-		const error = await checkThrowAsync(async () => await fileModel.load(file.id));
+		const error = await checkThrowAsync(async() => await fileModel.load(file.id));
 		expect(!!error).toBe(true);
 	}));
 

@@ -35,7 +35,7 @@ app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
 	return match.route.needsBodyMiddleware === true;
 }));
 
-app.use(async (ctx:Koa.Context) => {
+app.use(async(ctx:Koa.Context) => {
 	const match = findMatchingRoute(ctx.path, routes);
 
 	try {

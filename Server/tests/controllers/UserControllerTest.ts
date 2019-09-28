@@ -8,7 +8,7 @@ import { ErrorForbidden, ErrorUnprocessableEntity } from '../../app/utils/errors
 
 describe('UserController', function() {
 
-	beforeEach(async (done) => {
+	beforeEach(async(done) => {
 		await clearDatabase();
 		done();
 	});
@@ -107,43 +107,43 @@ describe('UserController', function() {
 		const controller = new UserController();
 
 		// Non-admin user can't create a user
-		error = await checkThrowAsync(async () => await controller.createUser(userSession1.id, { email: 'newone@example.com', password: '1234546' }));
+		error = await checkThrowAsync(async() => await controller.createUser(userSession1.id, { email: 'newone@example.com', password: '1234546' }));
 		expect(error instanceof ErrorForbidden).toBe(true);
 
 		// Email must be set
-		error = await checkThrowAsync(async () => await controller.createUser(adminSession.id, { email: '', password: '1234546' }));
+		error = await checkThrowAsync(async() => await controller.createUser(adminSession.id, { email: '', password: '1234546' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// Password must be set
-		error = await checkThrowAsync(async () => await controller.createUser(adminSession.id, { email: 'newone@example.com', password: '' }));
+		error = await checkThrowAsync(async() => await controller.createUser(adminSession.id, { email: 'newone@example.com', password: '' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// ID must be set when updating a user
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { email: 'newone@example.com' }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { email: 'newone@example.com' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// non-admin user cannot modify another user
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { id: user2.id, email: 'newone@example.com' }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { id: user2.id, email: 'newone@example.com' }));
 		expect(error instanceof ErrorForbidden).toBe(true);
 
 		// email must be set
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { id: user1.id, email: '' }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { id: user1.id, email: '' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// password must be set
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { id: user1.id, password: '' }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { id: user1.id, password: '' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// non-admin user cannot make a user an admin
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { id: user1.id, is_admin: 1 }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { id: user1.id, is_admin: 1 }));
 		expect(error instanceof ErrorForbidden).toBe(true);
 
 		// non-admin user cannot remove admin bit from themselves
-		error = await checkThrowAsync(async () => await controller.updateUser(adminSession.id, { id: admin.id, is_admin: 0 }));
+		error = await checkThrowAsync(async() => await controller.updateUser(adminSession.id, { id: admin.id, is_admin: 0 }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
 		// there is already a user with this email
-		error = await checkThrowAsync(async () => await controller.updateUser(userSession1.id, { id: user1.id, email: user2.email }));
+		error = await checkThrowAsync(async() => await controller.updateUser(userSession1.id, { id: user1.id, email: user2.email }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	}));
 
@@ -159,7 +159,7 @@ describe('UserController', function() {
 		const beforeCount:number = allUsers.length;
 
 		// Can't delete someone else user
-		const error = await checkThrowAsync(async () => await controller.deleteUser(session1.id, user2.id));
+		const error = await checkThrowAsync(async() => await controller.deleteUser(session1.id, user2.id));
 		expect(error instanceof ErrorForbidden).toBe(true);
 		expect((await userModel.all()).length).toBe(beforeCount);
 

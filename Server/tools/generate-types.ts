@@ -5,7 +5,7 @@ import sqlts from '@rmp135/sql-ts';
 const dbFilePath:string = `${__dirname}/../../app/db.ts`;
 
 const config = {
-	'dialect':'sqlite3',
+	'dialect': 'sqlite3',
 	'connection': {
 		'filename': './db-buildTypes.sqlite',
 	},

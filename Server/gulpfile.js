@@ -39,7 +39,7 @@ function copyLib() {
 	return gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
 }
 
-gulp.task('default', async function () {
+gulp.task('default', async function() {
 	await createDistDir();
 	await copyLib();
 	return buildTypeScripts();
