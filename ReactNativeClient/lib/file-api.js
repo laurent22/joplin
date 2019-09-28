@@ -5,6 +5,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');
 const ArrayUtils = require('lib/ArrayUtils');
 const { time } = require('lib/time-utils.js');
+const { sprintf } = require('sprintf-js');
 
 function requestCanBeRepeated(error) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
@@ -262,13 +263,6 @@ async function basicDelta(path, getDirStatFn, options) {
 		});
 		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
-
-		// At this point statIdsCache contains the list of all the item IDs on the sync target.
-		// If it's empty, it's most likely a configuration error or bug. For example, if the
-		// user moves their Nextcloud directory, or if a network drive gets disconnected and
-		// returns an empty dir instead of an error. In that case, we don't wipe out the user
-		// data, unless they have switched off the fail-safe.
-		if (options.wipeOutFailSafe && !newContext.statIdsCache.length) throw new JoplinError('Fail-safe: The delta operation was interrupted because the sync target appears to be empty. To override this behaviour disable the "Wipe out fail-safe" option in the settings.', 'failSafe');
 	}
 
 	let output = [];
@@ -321,6 +315,15 @@ async function basicDelta(path, getDirStatFn, options) {
 				});
 			}
 		}
+
+		const percentDeleted = itemIds.length ? deletedItems.length / itemIds.length : 0;
+
+		// If more than 90% of the notes are going to be deleted, it's most likely a
+		// configuration error or bug. For example, if the user moves their Nextcloud
+		// directory, or if a network drive gets disconnected and returns an empty dir
+		// instead of an error. In that case, we don't wipe out the user data, unless
+		// they have switched off the fail-safe.
+		if (options.wipeOutFailSafe && percentDeleted >= 0.90) throw new JoplinError(sprintf('Fail-safe: Sync was interrupted because %d%% of the data (%d items) is about to be deleted. To override this behaviour disable the fail-safe in the sync settings.', Math.round(percentDeleted * 100), deletedItems.length), 'failSafe');
 
 		output = output.concat(deletedItems);
 	}

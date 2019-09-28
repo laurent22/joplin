@@ -715,7 +715,11 @@ class Synchronizer {
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
 
-				if (error.code === 'failSafe') this.logLastRequests();
+				if (error.code === 'failSafe') {
+					// Get the message to display on UI, but not in testing to avoid poluting stdout
+					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
+					this.logLastRequests();
+				}
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				this.logger().error(error);

@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: AWASHIRO Ikuya <ikunya@gmail.com>\n"
+"Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -789,7 +791,7 @@ msgstr ""
 "するときにだけ使用します。"
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "新しい画面を開きます。変更を保存しますか?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -896,13 +898,13 @@ msgid "Encryption is:"
 msgstr "暗号化の状態:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox 拡張機能"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome ウェブストア"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "今すぐ取得:"
 
 msgid "Usage"
 msgstr "使い方"
@@ -1534,9 +1536,8 @@ msgstr "全体ズームの割合"
 msgid "Editor font size"
 msgstr "エディターのフォントサイズ"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "エディターのフォントサイズ"
+msgstr "エディターのフォント"
 
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
@@ -1604,6 +1605,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"フェイルセーフ: 同期先が空の場合 (設定ミスやバグに起因することが多い) にロー"
+"カルデータを消去しないようにする"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -1647,13 +1650,11 @@ msgstr "プラグイン"
 msgid "Application"
 msgstr "アプリケーション"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "暗号化の状態:"
+msgstr "暗号化"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "Webクリッパーのオプション"
+msgstr "Webクリッパー"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1668,13 +1669,11 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin エクスポートディレクトリ"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote エクスポートファイル"
+msgstr "Evernote エクスポートファイル (Markdownとしてインポート)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote エクスポートファイル"
+msgstr "Evernote エクスポートファイル (HTMLとしてインポート)"
 
 msgid "Json Export Directory"
 msgstr "Json エクスポートディレクトリ"
