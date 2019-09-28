@@ -3,7 +3,6 @@ import FileController from '../../app/controllers/FileController';
 import FileModel from '../../app/models/FileModel';
 import * as fs from 'fs-extra';
 import { File } from '../../app/db';
-import PermissionModel from '../../app/models/PermissionModel';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../app/utils/errors';
 
 async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string = ''):Promise<File> {
@@ -253,7 +252,6 @@ describe('FileController', function() {
 
 		const fileController = new FileController();
 		const fileModel = new FileModel({ userId: user.id });
-		const permissionModel = new PermissionModel();
 
 		let file1:File = await makeTestFile(1);
 		let file2:File = await makeTestFile(2);
@@ -264,9 +262,8 @@ describe('FileController', function() {
 		const beforeCount:number = allFiles.length;
 
 		await fileController.deleteFile(session.id, file2.id);
-		// allFiles = await fileModel.all();
-		// expect(allFiles.length).toBe(beforeCount - 1);
-		// expect((await permissionModel.filePermissions(file2.id)).length).toBe(0);
+		allFiles = await fileModel.all();
+		expect(allFiles.length).toBe(beforeCount - 1);
 	}));
 
 	it('should not delete someone else file', asyncTest(async function() {

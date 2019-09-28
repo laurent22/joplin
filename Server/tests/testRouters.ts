@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import * as fs from 'fs-extra';
 
 const { stringify } = require('query-string');
@@ -72,7 +74,7 @@ async function curl(method:string, path:string, query:object = null, body:any = 
 
 	curlCmd.push(`http://localhost:3222/${path}${query ? `?${stringify(query)}` : ''}`);
 
-	console.info(`Running ${curlCmd.join(' ')}`);
+	console.info(`Running: ${curlCmd.join(' ')}`);
 
 	const result = await execCommand(curlCmd.join(' '), !!options.verbose);
 	if (options.verbose) return result;
@@ -94,12 +96,14 @@ async function main() {
 	fs.removeSync(`${serverRoot}/db-testing.sqlite`);
 
 	const compileCommmand = 'npm run compile';
-	const startServerCommand = 'NODE_ENV=testing npm run db-migrate';
+	const migrateCommand = 'NODE_ENV=testing npm run db-migrate';
 
 	await execCommand(compileCommmand);
-	await execCommand(startServerCommand);
+	await execCommand(migrateCommand);
 
-	serverProcess = spawn('node', ['dist/app/app.js', '--pidfile', pidFilePath], {
+	const serverCommandParams = ['dist/app/app.js', '--pidfile', pidFilePath];
+
+	serverProcess = spawn('node', serverCommandParams, {
 		detached: true,
 		stdio: 'inherit',
 		env: Object.assign({}, process.env, { NODE_ENV: 'testing' }),
@@ -121,41 +125,32 @@ async function main() {
 
 	console.info('Server is ready');
 
-	const session = await curl('POST', 'api/sessions', null, { email: 'admin@localhost', password: 'admin' });
+	// POST api/sessions
 
+	const session = await curl('POST', 'api/sessions', null, { email: 'admin@localhost', password: 'admin' });
 	console.info('Session: ', session);
 
-	// response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, [
-	// 	`data=@${serverRoot}/tests/support/photo.jpg`,
-	// ]);
+	// PUT api/files/:fileId/content
 
 	response = await curl('PUT', 'api/files/root:/photo.jpg:/content', null, null, { 'X-API-AUTH': session.id }, null, {
 		uploadFile: `${serverRoot}/tests/support/photo.jpg`,
 	});
-
 	console.info('Response:', response);
 
-	// let file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
+	// GET api/files/:fileId
 
-	// console.info('Response:', file);
+	let file = await curl('GET', `api/files/${response.id}`, null, null, { 'X-API-AUTH': session.id });
+	console.info('Response:', file);
 
-	// await curl('PUT', `api/files/${response.id}`, null, {
-	// 	name: 'changed-name.jpg',
-	// }, { 'X-API-AUTH': session.id });
+	// GET api/files/:fileId/content
 
-	// file = await curl('GET', `api/files/${file.id}`, null, null, { 'X-API-AUTH': session.id });
+	response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, {
+		verbose: true,
+		output: `${serverRoot}/tests/temp/photo-downloaded.jpg`,
+	});
+	console.info(response);
 
-	// console.info('Response:', file);
-
-	// // await curl('PUT', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, [
-	// // 	`data=@${serverRoot}/tests/support/poster.png`,
-	// // ]);
-
-	// response = await curl('GET', `api/files/${response.id}/content`, null, null, { 'X-API-AUTH': session.id }, null, { verbose: true, output: `${serverRoot}/tests/temp/photo-downloaded.jpg` });
-
-	// console.info('Response:', response);
-
-	console.info(`To run this server again: ${compileCommmand} && ${startServerCommand}`);
+	console.info(`To run this server again: ${compileCommmand} && ${migrateCommand} && node ${serverCommandParams.join(' ')}`);
 
 	serverProcess.kill();
 }
