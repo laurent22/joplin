@@ -1,6 +1,5 @@
 import * as Koa from 'koa';
-import * as fs from 'fs-extra';
-import { ErrorBadRequest, ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
+import { ErrorNotFound, ErrorMethodNotAllowed } from '../../utils/errors';
 import { File } from '../../db';
 import FileController from '../../controllers/FileController';
 import { sessionIdFromHeaders } from '../../utils/requestUtils';
@@ -17,11 +16,9 @@ const route:Route = {
 				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
 			}
 
-			// if (ctx.method === 'PUT') {
-			// 	const body = { ...ctx.request.body };
-			// 	body.id = path.value;
-			// 	return fileController.updateFile(sessionIdFromHeaders(ctx.headers), body);
-			// }
+			if (ctx.method === 'PATCH') {
+				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
+			}
 
 			throw new ErrorMethodNotAllowed();
 		}
@@ -39,46 +36,13 @@ const route:Route = {
 			if (ctx.method === 'PUT') {
 				const body = await getRawBody(ctx.req);
 				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
-				// const files = ctx.request.files;
-				//console.info(ctx.request.files);
-				// if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-				// const data = files.data;
-				// const content = await fs.readFile(data.path);
-				// return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
 			}
-
-			// if (ctx.method === 'POST') {
-			// 	const files = ctx.request.files;
-			// 	console.info(files);
-			// 	// if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-			// 	// const data = files.data;
-			// 	// const props:any = ctx.request.body.props;
-
-			// 	// const file:File = {
-			// 	// 	name: data.name,
-			// 	// 	content: await fs.readFile(data.path),
-			// 	// 	mime_type: data.type,
-			// 	// 	parent_id: props.parent_id ? props.parent_id : '',
-			// 	// };
-
-			// 	// return fileController.createFile(sessionIdFromHeaders(ctx.headers), file);
-			// }
-
-			// if (ctx.method === 'PUT') {
-			// 	const files = ctx.request.files;
-			// 	if (!files || !files.data) throw new ErrorBadRequest('Missing "data" field');
-			// 	const data = files.data;
-			// 	const content = await fs.readFile(data.path);
-			// 	return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.value, content);
-			// }
 
 			throw new ErrorMethodNotAllowed();
 		}
 
 		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
-
-	// needsBodyMiddleware: true,
 
 };
 
