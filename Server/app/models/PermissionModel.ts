@@ -28,12 +28,12 @@ export default class PermissionModel extends BaseModel {
 		if (!userId || !fileId) return false;
 		const permissions = await this.filePermissions(fileId, userId);
 		for (const p of permissions) {
-			if (p[method] || p.is_owner) return true;
+			if (p[method]) return true;
 		}
 
 		const userModel = new UserModel({ userId: userId });
-		const owner:User = await userModel.load(userId);
-		if (owner.is_admin) return true;
+		const user:User = await userModel.load(userId);
+		if (user.is_admin) return true;
 
 		return false;
 	}
@@ -48,6 +48,7 @@ export default class PermissionModel extends BaseModel {
 
 	async deleteByFileId(fileId:string):Promise<void> {
 		const permissions = await this.filePermissions(fileId);
+		if (!permissions.length) return;
 		const ids = permissions.map(m => m.id);
 		super.delete(ids);
 	}

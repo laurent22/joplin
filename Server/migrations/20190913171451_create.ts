@@ -23,7 +23,6 @@ export async function up(knex: Knex): Promise<any> {
 		table.string('user_id', 32).notNullable();
 		table.integer('item_type').notNullable();
 		table.string('item_id', 32).notNullable();
-		table.integer('is_owner').defaultTo(0).notNullable();
 		table.integer('can_read').defaultTo(0).notNullable();
 		table.integer('can_write').defaultTo(0).notNullable();
 		table.integer('updated_time').notNullable();
@@ -36,6 +35,7 @@ export async function up(knex: Knex): Promise<any> {
 
 	await knex.schema.createTable('files', function(table:Knex.CreateTableBuilder) {
 		table.string('id', 32).unique().primary().notNullable();
+		table.string('owner_id', 32).notNullable();
 		table.text('name').notNullable();
 		table.binary('content').defaultTo('').notNullable();
 		table.string('mime_type', 128).defaultTo('application/octet-stream').notNullable();

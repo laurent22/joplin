@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import sqlts from '@rmp135/sql-ts';
 
 const dbFilePath:string = `${__dirname}/../../app/db.ts`;

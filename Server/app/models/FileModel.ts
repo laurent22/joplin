@@ -1,6 +1,6 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
-import { File, Permission, ItemType, databaseSchema } from '../db';
+import { File, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
@@ -20,15 +20,12 @@ export default class FileModel extends BaseModel {
 	}
 
 	async userRootFile():Promise<File> {
-		const r = await this.db(this.tableName).select('files.id').from(this.tableName).leftJoin('permissions', 'permissions.item_id', 'files.id').where({
-			'item_type': ItemType.File,
-			'user_id': this.userId,
+		const file:File = await this.db<File>(this.tableName).select(...this.defaultFields).from(this.tableName).where({
+			'owner_id': this.userId,
 			'is_root': 1,
 		}).first();
-
-		if (!r) return null;
-
-		return this.load(r.id);
+		if (file) await this.checkCanReadPermissions(file);
+		return file;
 	}
 
 	async userRootFileId():Promise<string> {
@@ -121,15 +118,11 @@ export default class FileModel extends BaseModel {
 				const parentFile:File = await this.load(parentId);
 				if (!parentFile) throw invalidParentError('Cannot load parent file');
 				if (!parentFile.is_directory) throw invalidParentError('Specified parent is not a directory');
+				await this.checkCanWritePermission(parentFile);
 			} catch (error) {
 				if (error.message.indexOf('Invalid parent') === 0) throw error;
 				throw invalidParentError(`Unknown: ${error.message}`);
 			}
-
-			const permissionModel = new PermissionModel();
-
-			const canWrite:boolean = await permissionModel.canWrite(parentId, this.userId);
-			if (!canWrite) throw invalidParentError('Cannot write to file');
 		}
 
 		if ('name' in file && !file.is_root) {
@@ -174,10 +167,20 @@ export default class FileModel extends BaseModel {
 		}, { isNew: true });
 	}
 
-	private async checkCanReadPermissions(id:string):Promise<void> {
+	private async checkCanReadPermissions(file:File):Promise<void> {
+		if (!file) throw new Error('no file specified');
+		if (file.owner_id === this.userId) return;
 		const permissionModel = new PermissionModel();
-		const canRead:boolean = await permissionModel.canRead(id, this.userId);
+		const canRead:boolean = await permissionModel.canRead(file.id, this.userId);
 		if (!canRead) throw new ErrorForbidden();
+	}
+
+	private async checkCanWritePermission(file:File):Promise<void> {
+		if (!file) throw new Error('no file specified');
+		if (file.owner_id === this.userId) return;
+		const permissionModel = new PermissionModel();
+		const canWrite:boolean = await permissionModel.canWrite(file.id, this.userId);
+		if (!canWrite) throw new ErrorForbidden();
 	}
 
 	private async pathToFiles(path:string, mustExist:boolean = true):Promise<File[]> {
@@ -209,14 +212,15 @@ export default class FileModel extends BaseModel {
 	}
 
 	async loadWithContent(id:string):Promise<any> {
-		await this.checkCanReadPermissions(id);
 		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+		await this.checkCanReadPermissions(file);
 		return file;
 	}
 
 	async load(id:string):Promise<File> {
-		await this.checkCanReadPermissions(id);
-		return super.load(id);
+		const file:File = await super.load(id);
+		await this.checkCanReadPermissions(file);
+		return file;
 	}
 
 	async save(object:File, options:SaveOptions = {}):Promise<File> {
@@ -231,27 +235,17 @@ export default class FileModel extends BaseModel {
 
 			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
 
-			// Even if there's no content, set the mime type based on the extension
-			if (isNew && !file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
+			if (isNew) {
+				// Even if there's no content, set the mime type based on the extension
+				if (!file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
 
-			// Make sure it's not NULL, which is not allowed
-			if (isNew && !file.mime_type) file.mime_type = '';
+				// Make sure it's not NULL, which is not allowed
+				if (!file.mime_type) file.mime_type = '';
+
+				file.owner_id = this.userId;
+			}
 
 			file = await super.save(file, options);
-
-			if (isNew) {
-				const permission:Permission = {
-					user_id: this.options.userId,
-					is_owner: 1,
-					item_type: ItemType.File,
-					item_id: file.id,
-					can_read: 1,
-					can_write: 1,
-				};
-
-				const permissionModel = new PermissionModel();
-				await permissionModel.save(permission);
-			}
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);
 			throw error;
@@ -263,13 +257,13 @@ export default class FileModel extends BaseModel {
 	}
 
 	async delete(id:string):Promise<void> {
-		const permissionModel = new PermissionModel();
-		const canWrite:boolean = await permissionModel.canWrite(id, this.userId);
-		if (!canWrite) throw new ErrorForbidden();
+		const file:File = await this.load(id);
+		await this.checkCanWritePermission(file);
 
 		const txIndex = await this.startTransaction();
 
 		try {
+			const permissionModel = new PermissionModel();
 			await permissionModel.deleteByFileId(id);
 			await super.delete(id);
 		} catch (error) {

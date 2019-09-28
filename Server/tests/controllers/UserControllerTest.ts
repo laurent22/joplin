@@ -1,6 +1,6 @@
 import { asyncTest, clearDatabase, createUserAndSession, checkThrowAsync } from '../testUtils';
 import UserController from '../../app/controllers/UserController';
-import { File, Permission, ItemType, User } from '../../app/db';
+import { File, User } from '../../app/db';
 import UserModel from '../../app/models/UserModel';
 import FileModel from '../../app/models/FileModel';
 import PermissionModel from '../../app/models/PermissionModel';
@@ -17,7 +17,6 @@ describe('UserController', function() {
 		const { session } = await createUserAndSession(1, true);
 
 		const controller = new UserController();
-		const permissionModel = new PermissionModel();
 
 		const newUser = await controller.createUser(session.id, { email: 'test@example.com', password: '123456' });
 
@@ -38,16 +37,6 @@ describe('UserController', function() {
 
 		expect(!!rootFile).toBe(true);
 		expect(!!rootFile.id).toBe(true);
-
-		const permissions:Array<Permission> = await permissionModel.filePermissions(rootFile.id);
-
-		expect(permissions.length).toBe(1);
-		expect(permissions[0].user_id).toBe(newUser.id);
-		expect(permissions[0].item_type).toBe(ItemType.File);
-		expect(permissions[0].item_id).toBe(rootFile.id);
-		expect(permissions[0].is_owner).toBe(1);
-		expect(permissions[0].can_read).toBe(1);
-		expect(permissions[0].can_write).toBe(1);
 	}));
 
 	it('should not create anything, neither user, root file nor permissions, if user creation fail', asyncTest(async function() {

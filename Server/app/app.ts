@@ -1,4 +1,5 @@
 require('app-module-path').addPath(`${__dirname}/..`);
+require('source-map-support').install();
 
 import * as Koa from 'koa';
 import apiSessionsRoute from './routes/api/sessions';

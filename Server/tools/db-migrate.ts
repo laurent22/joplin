@@ -1,4 +1,5 @@
 require('app-module-path').addPath(`${__dirname}/..`);
+require('source-map-support').install();
 
 import db from '../app/db';
 
@@ -18,4 +19,7 @@ db.migrate.latest(config).then(([log]) => {
 	}
 
 	db.destroy();
+}).catch(error => {
+	console.error(error);
+	process.exit(1);
 });

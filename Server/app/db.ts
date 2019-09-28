@@ -63,12 +63,12 @@ export interface Permission extends WithDates, WithUuid {
 	user_id?: string
 	item_type?: ItemType
 	item_id?: string
-	is_owner?: number
 	can_read?: number
 	can_write?: number
 }
 
 export interface File extends WithDates, WithUuid {
+	owner_id?: string
 	name?: string
 	content?: Buffer
 	mime_type?: string
@@ -98,7 +98,6 @@ export const databaseSchema:DatabaseTables = {
 		user_id: { type: 'string' },
 		item_type: { type: 'number' },
 		item_id: { type: 'string' },
-		is_owner: { type: 'number' },
 		can_read: { type: 'number' },
 		can_write: { type: 'number' },
 		updated_time: { type: 'number' },
@@ -106,6 +105,7 @@ export const databaseSchema:DatabaseTables = {
 	},
 	files: {
 		id: { type: 'string' },
+		owner_id: { type: 'string' },
 		name: { type: 'string' },
 		content: { type: 'any' },
 		mime_type: { type: 'string' },
