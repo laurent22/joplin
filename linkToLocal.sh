@@ -1,6 +1,8 @@
 #!/bin/bash
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Testing PR
+
 cd "$ROOT_DIR/CliClient/node_modules"
 rm -rf tkwidgets joplin-turndown joplin-turndown-plugin-gfm
 ln -s /mnt/d/Docs/PROGS/Node/tkwidgets/src tkwidgets
