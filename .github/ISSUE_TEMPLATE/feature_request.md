@@ -10,7 +10,9 @@ labels: 'feature request'
   Please search open issues first - many features have already been requested!
 -->
 
-🚨 A feature request that has not been accepted on the forum will be closed! 🚨
+⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
+⚠🚨 A feature request that has not been accepted on the forum will be closed ! 🚨⚠
+⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
 
 ## Has it been discussed in the forum? Link to topic.
 <!--
