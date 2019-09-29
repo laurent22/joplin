@@ -67,6 +67,16 @@ script:
       exit $testResult
     fi
 
+    # Find out if we should run the build or not. Electron-builder gets stuck when
+    # builing PRs so we disable it in this case. The Linux build should provide
+    # enough info if the app builds or not.
+    # https://github.com/electron-userland/electron-builder/issues/4263
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        exit 0
+      fi
+    fi
+
     # Prepare the Electron app and build it
     cd ../ElectronClient/app
     rsync -aP --delete ../../ReactNativeClient/lib/ lib/
