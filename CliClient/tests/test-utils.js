@@ -1,5 +1,7 @@
 /* eslint-disable require-atomic-updates */
 
+require('source-map-support').install();
+
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
@@ -20,6 +22,7 @@ const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
+const { FileApiDriverJoplinServer } = require('lib/file-api-driver-joplinServer');
 const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
@@ -30,6 +33,7 @@ const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetJoplinServer = require('lib/SyncTargetJoplinServer');
 const EncryptionService = require('lib/services/EncryptionService.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const ResourceService = require('lib/services/ResourceService.js');
@@ -37,6 +41,7 @@ const RevisionService = require('lib/services/RevisionService.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const JoplinServerApi = require('lib/JoplinServerApi');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -66,11 +71,13 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
-//const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
+const syncTargetId_ = SyncTargetRegistry.nameToId('joplinServer');
 const syncDir = `${__dirname}/../tests/sync`;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
@@ -231,6 +238,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
 	resourceServices_[id] = new ResourceService();
 	kvStores_[id] = new KvStore();
 
+	await fileApi().initialize();
 	await fileApi().clearRoot();
 }
 
@@ -317,6 +325,13 @@ function fileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi_ = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
+		const api = new JoplinServerApi({
+			baseUrl: () => 'http://localhost:3222',
+			email: () => 'admin@localhost',
+			password: () => 'admin',
+		});
+		fileApi_ = new FileApi('root:/Apps/Joplin', new FileApiDriverJoplinServer(api));
 	}
 
 	fileApi_.setLogger(logger);

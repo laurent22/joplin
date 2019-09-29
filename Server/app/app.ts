@@ -39,6 +39,8 @@ app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
 app.use(async(ctx:Koa.Context) => {
 	const match = findMatchingRoute(ctx.path, routes);
 
+	console.info('MATCH', match);
+
 	try {
 		if (match) {
 			const responseObject = await match.route.exec(match.subPath, ctx);

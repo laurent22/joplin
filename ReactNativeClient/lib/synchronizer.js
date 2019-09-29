@@ -228,7 +228,7 @@ class Synchronizer {
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... [${synchronizationId}]`);
 
-		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
+		const handleCannotSyncItem = async(ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
 			this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 		};
@@ -238,6 +238,7 @@ class Synchronizer {
 		};
 
 		try {
+			await this.api().initialize();
 			await this.api().mkdir(this.syncDirName_);
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
@@ -517,7 +518,7 @@ class Synchronizer {
 						// the client has. Very inefficient but that's the only possible workaround.
 						// It's a function so that it is only called if the driver needs these IDs. For
 						// drivers with a delta functionality it's a noop.
-						allItemIdsHandler: async () => {
+						allItemIdsHandler: async() => {
 							return BaseItem.syncedItemIds(syncTargetId);
 						},
 
@@ -531,7 +532,7 @@ class Synchronizer {
 					for (const remote of remotes) {
 						if (this.cancelling()) break;
 
-						this.downloadQueue_.push(remote.path, async () => {
+						this.downloadQueue_.push(remote.path, async() => {
 							return this.api().get(remote.path);
 						});
 					}
@@ -547,7 +548,7 @@ class Synchronizer {
 						let remote = remotes[i];
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
-						const loadContent = async () => {
+						const loadContent = async() => {
 							let task = await this.downloadQueue_.waitForResult(path); //await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;

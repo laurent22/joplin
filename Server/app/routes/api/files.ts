@@ -47,7 +47,8 @@ const route:Route = {
 
 		if (path.link === 'children') {
 			if (ctx.method === 'POST') {
-				//
+				console.info('BODY', ctx.request.body);
+				return fileController.postChild(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
 			}
 
 			throw new ErrorMethodNotAllowed();
@@ -55,6 +56,8 @@ const route:Route = {
 
 		throw new ErrorNotFound(`Invalid link: ${path.link}`);
 	},
+
+	needsBodyMiddleware: true,
 
 };
 

@@ -57,6 +57,13 @@ class FileApi {
 		this.tempDirName_ = null;
 		this.driver_.fileApi_ = this;
 		this.requestRepeatCount_ = null; // For testing purpose only - normally this value should come from the driver
+		this.initialized_ = false;
+	}
+
+	async initialize() {
+		if (this.initialized_) return;
+		this.initialized_ = true;
+		if (this.driver_.initialize) return this.driver_.initialize(this.fullPath_(''));
 	}
 
 	// Ideally all requests repeating should be done at the FileApi level to remove duplicate code in the drivers, but
