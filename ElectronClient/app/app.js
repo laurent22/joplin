@@ -898,13 +898,13 @@ class Application extends BaseApplication {
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
-					click () { bridge().openExternal('https://joplinapp.org'); },
+					click() { bridge().openExternal('https://joplinapp.org'); },
 				}, {
 					label: _('Joplin Forum'),
-					click () { bridge().openExternal('https://discourse.joplinapp.org'); },
+					click() { bridge().openExternal('https://discourse.joplinapp.org'); },
 				}, {
 					label: _('Make a donation'),
-					click () { bridge().openExternal('https://joplinapp.org/donate/'); },
+					click() { bridge().openExternal('https://joplinapp.org/donate/'); },
 				}, {
 					label: _('Check for updates...'),
 					visible: shim.isMac() ? false : true,

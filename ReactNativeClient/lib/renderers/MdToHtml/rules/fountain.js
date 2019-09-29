@@ -119,7 +119,7 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 		return self.renderToken(tokens, idx, options);
 	};
 
-	markdownIt.renderer.rules.fence = function (tokens, idx, options, env, self) {
+	markdownIt.renderer.rules.fence = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);
 		addContextAssets(context);

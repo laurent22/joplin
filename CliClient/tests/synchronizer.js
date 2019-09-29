@@ -892,10 +892,12 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		const fetcher = new ResourceFetcher(() => { return {
+		const fetcher = new ResourceFetcher(() => {
+			return {
 			// Simulate a failed download
-			get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')); }); },
-		}; });
+				get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')); }); },
+			};
+		});
 		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 
