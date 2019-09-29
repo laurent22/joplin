@@ -5,13 +5,7 @@
 * * *
 [Hacktoberfest](https://hacktoberfest.digitalocean.com/) is back this year again for our great pleasure ^^
 
-here are the rules to participate:
-
-> To qualify for the official limited edition Hacktoberfest shirt, you must register and make four pull requests (PRs) between October 1-31 (in any time zone). PRs can be made to any public repo on GitHub, not only the ones with issues labeled Hacktoberfest. This year, the first 50,000 participants who successfully complete the challenge will earn a T-shirt.
-
-To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), log in (with you GitHub account) and you are ready to get in.
-
-Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
+To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), log in (with you GitHub account) and you are ready to get in. Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
 
 Start hacking, submit the PR from the 1st of October, not before.
 
