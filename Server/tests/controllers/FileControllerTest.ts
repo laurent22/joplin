@@ -266,6 +266,34 @@ describe('FileController', function() {
 		expect(allFiles.length).toBe(beforeCount - 1);
 	}));
 
+	it('should create and delete directories', asyncTest(async function() {
+		const { user, session } = await createUserAndSession(1, true);
+
+		const fileController = new FileController();
+
+		const dir1:File = await fileController.postChild(session.id, 'root', { name: 'dir1', is_directory: 1 });
+		const dir2:File = await fileController.postChild(session.id, 'root:/dir1', { name: 'dir2', is_directory: 1 });
+
+		let dirReload2:File = await fileController.getFile(session.id, 'root:/dir1/dir2');
+		expect(dirReload2.id).toBe(dir2.id);
+
+		// Delete one directory
+		await fileController.deleteFile(session.id, 'root:/dir1/dir2');
+		let error = await checkThrowAsync(async() => fileController.getFile(session.id, 'root:/dir1/dir2'));
+		expect(error instanceof ErrorNotFound).toBe(true);
+
+		// Delete a directory and its sub-directories and files
+		const dir3:File = await fileController.postChild(session.id, 'root:/dir1', { name: 'dir3', is_directory: 1 });
+		const file1:File = await fileController.createFile(session.id, { name: 'file1', parent_id: dir1.id });
+		const file2:File = await fileController.createFile(session.id, { name: 'file2', parent_id: dir3.id });
+		await fileController.deleteFile(session.id, 'root:/dir1');
+		const fileModel = new FileModel({ userId: user.id });
+		expect(!(await fileModel.load(dir1.id))).toBe(true);
+		expect(!(await fileModel.load(dir3.id))).toBe(true);
+		expect(!(await fileModel.load(file1.id))).toBe(true);
+		expect(!(await fileModel.load(file2.id))).toBe(true);
+	}));
+
 	it('should not delete someone else file', asyncTest(async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
@@ -297,8 +325,7 @@ describe('FileController', function() {
 		expect(file.name).toBe('modified.jpg');
 
 		await fileController.deleteFile(adminSession.id, file.id);
-		const error = await checkThrowAsync(async() => await fileModel.load(file.id));
-		expect(!!error).toBe(true);
+		expect(!(await fileModel.load(file.id))).toBe(true);
 	}));
 
 	it('should update a file content', asyncTest(async function() {

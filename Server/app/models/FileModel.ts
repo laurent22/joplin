@@ -45,10 +45,19 @@ export default class FileModel extends BaseModel {
 		return r.user_id;
 	}
 
+	async specialDirId(dirname:string):Promise<string> {
+		if (dirname === 'root') return this.userRootFileId();
+		return null; // Not a special dir
+	}
+
 	async entityFromItemId(idOrPath:string, options:EntityFromItemIdOptions = {}):Promise<File> {
 		options = { mustExist: true, ...options };
 
-		if (idOrPath.indexOf(':') < 0) {
+		const specialDirId = await this.specialDirId(idOrPath);
+
+		if (specialDirId) {
+			return { id: specialDirId };
+		} else if (idOrPath.indexOf(':') < 0) {
 			return { id: idOrPath };
 		} else {
 			// When this input is a path, there can be two cases:
@@ -100,6 +109,7 @@ export default class FileModel extends BaseModel {
 			if (!file.is_root && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 		} else {
 			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if ('is_directory' in file) throw new ErrorUnprocessableEntity('cannot turn a file into a directory or vice-versa');
 		}
 
 		let parentId = file.parent_id;
@@ -141,6 +151,7 @@ export default class FileModel extends BaseModel {
 		if ('name' in object) file.name = object.name;
 		if ('parent_id' in object) file.parent_id = object.parent_id;
 		if ('mime_type' in object) file.mime_type = object.mime_type;
+		if ('is_directory' in object) file.is_directory = object.is_directory;
 
 		return file;
 	}
@@ -213,12 +224,14 @@ export default class FileModel extends BaseModel {
 
 	async loadWithContent(id:string):Promise<any> {
 		const file:File = await this.db<File>(this.tableName).select('*').where({ id: id }).first();
+		if (!file) return null;
 		await this.checkCanReadPermissions(file);
 		return file;
 	}
 
 	async load(id:string):Promise<File> {
 		const file:File = await super.load(id);
+		if (!file) return null;
 		await this.checkCanReadPermissions(file);
 		return file;
 	}
@@ -256,8 +269,14 @@ export default class FileModel extends BaseModel {
 		return file;
 	}
 
+	private async childrenIds(id:string):Promise<string[]> {
+		const output = await this.db(this.tableName).select('id').where('parent_id', id);
+		return output.map(r => r.id);
+	}
+
 	async delete(id:string):Promise<void> {
 		const file:File = await this.load(id);
+		if (!file) return;
 		await this.checkCanWritePermission(file);
 
 		const txIndex = await this.startTransaction();
@@ -265,6 +284,14 @@ export default class FileModel extends BaseModel {
 		try {
 			const permissionModel = new PermissionModel();
 			await permissionModel.deleteByFileId(id);
+
+			if (file.is_directory) {
+				const childrenIds = await this.childrenIds(file.id);
+				for (const childId of childrenIds) {
+					await this.delete(childId);
+				}
+			}
+
 			await super.delete(id);
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);

@@ -20,6 +20,10 @@ const route:Route = {
 				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
 			}
 
+			if (ctx.method === 'DELETE') {
+				return fileController.deleteFile(sessionIdFromHeaders(ctx.headers), path.id);
+			}
+
 			throw new ErrorMethodNotAllowed();
 		}
 
@@ -36,6 +40,14 @@ const route:Route = {
 			if (ctx.method === 'PUT') {
 				const body = await getRawBody(ctx.req);
 				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
+			}
+
+			throw new ErrorMethodNotAllowed();
+		}
+
+		if (path.link === 'children') {
+			if (ctx.method === 'POST') {
+				//
 			}
 
 			throw new ErrorMethodNotAllowed();

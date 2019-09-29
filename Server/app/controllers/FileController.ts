@@ -1,6 +1,7 @@
 import { File } from '../db';
 import FileModel from '../models/FileModel';
 import BaseController from './BaseController';
+import { ErrorNotFound } from '../utils/errors';
 
 export default class FileController extends BaseController {
 
@@ -49,10 +50,29 @@ export default class FileController extends BaseController {
 		return fileModel.toApiOutput(await fileModel.save(file));
 	}
 
+	async postChild(sessionId:string, fileId:string, child:File):Promise<File> {
+		const user = await this.initSession(sessionId);
+		const fileModel = new FileModel({ userId: user.id });
+		const parent:File = await fileModel.entityFromItemId(fileId);
+		child = await fileModel.fromApiInput(child);
+		child.parent_id = parent.id;
+		return fileModel.toApiOutput(await fileModel.save(child));
+	}
+
 	async deleteFile(sessionId:string, fileId:string):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		await fileModel.delete(fileId);
+		try {
+			const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });
+			if (!file.id) return;
+			await fileModel.delete(file.id);
+		} catch (error) {
+			if (error instanceof ErrorNotFound) {
+				// That's ok - a no-op
+			} else {
+				throw error;
+			}
+		}
 	}
 
 }

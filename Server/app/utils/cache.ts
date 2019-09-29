@@ -19,12 +19,18 @@ class Cache {
 	}
 
 	async setObject(key:string, object:Object):Promise<void> {
+		if (!object) return;
 		return this.setAny(key, object);
 	}
 
 	private async getAny(key:string):Promise<any> {
 		if (!this.cache[key]) return null;
-		return JSON.parse(this.cache[key].object);
+		try {
+			const output = JSON.parse(this.cache[key].object);
+			return output;
+		} catch (error) {
+			throw new Error(`Cannot unserialize object: ${key}: ${error.message}: ${this.cache[key].object}`);
+		}
 	}
 
 	async object(key:string):Promise<object> {

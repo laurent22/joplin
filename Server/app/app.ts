@@ -32,6 +32,7 @@ const koaBodyMiddleware = koaBody({
 
 app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
 	const match = findMatchingRoute(ctx.path, routes);
+	if (!match) return false;
 	return match.route.needsBodyMiddleware === true;
 }));
 
