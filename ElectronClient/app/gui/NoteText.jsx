@@ -1444,7 +1444,19 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextCode() {
-		this.wrapSelectionWithStrings('`', '`');
+		const selection = this.textOffsetSelection();
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+
+		// Look for newlines
+		let match = string.match(/\r?\n/);
+
+		if (match && match.length > 0) {
+			// Follow the same newline style
+			this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+		}
+		else {
+			this.wrapSelectionWithStrings('`', '`');
+		}
 	}
 
 	commandTemplate(value) {
