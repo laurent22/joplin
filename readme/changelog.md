@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v1.0.169](https://github.com/laurent22/joplin/releases/tag/v1.0.169) - 2019-09-27T18:35:13Z
+
+- New: Add support for Deepin desktop environment in install script ([#1884](https://github.com/laurent22/joplin/issues/1884))
+- Improved: Improves deletion fail-safe so it is based on percentage of notes deleted. And display warning on sidebar.
+- Improved: Log last requests in case of a sync error
+
 ## [v1.0.168](https://github.com/laurent22/joplin/releases/tag/v1.0.168) - 2019-09-25T21:21:38Z
 
 - New: Import Evernote notes as HTML ([#1887](https://github.com/laurent22/joplin/issues/1887))
