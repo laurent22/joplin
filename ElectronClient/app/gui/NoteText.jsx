@@ -1369,9 +1369,16 @@ class NoteTextComponent extends React.Component {
 
 			const r = this.selectionRange_;
 
+			// Because some insertion strings will have newlines, we'll need to account for them
+			const str1Split = string1.split(/\r?\n/);
+
+			// Add the number of newlines to the row
+			// and add the length of the final line to the column (for strings with no newlines this is the string length)
 			const newRange = {
-				start: { row: r.start.row, column: r.start.column + string1.length },
-				end: { row: r.end.row, column: r.end.column + string1.length },
+				start: { row: r.start.row + str1Split.length - 1,
+					column: r.start.column + str1Split[str1Split.length - 1].length },
+				end: { row: r.end.row + str1Split.length - 1,
+					column: r.end.column + str1Split[str1Split.length - 1].length },
 			};
 
 			if (replacementText) {
