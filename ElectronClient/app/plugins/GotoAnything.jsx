@@ -60,7 +60,7 @@ class Dialog extends React.PureComponent {
 		this.styles_[this.props.theme] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
-			row: {overflow: 'hidden', height:itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10},
+			row: {overflow: 'hidden', height: itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10},
 			help: Object.assign({}, theme.textStyle, { marginBottom: 10 }),
 			inputHelpWrapper: {display: 'flex', flexDirection: 'row', alignItems: 'center'},
 		};

@@ -28,7 +28,7 @@ function ConfigMenuBar(props) {
 			key={section.name}
 			iconName={Setting.sectionNameToIcon(section.name)}
 			label={Setting.sectionNameToLabel(section.name)}
-			onClick={() => { props.onSelectionChange({ section: section });}}
+			onClick={() => { props.onSelectionChange({ section: section }); }}
 		/>);
 	}
 

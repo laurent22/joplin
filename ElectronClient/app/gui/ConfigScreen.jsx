@@ -478,7 +478,7 @@ class ConfigScreenComponent extends React.Component {
 			borderTopColor: theme.dividerColor,
 		};
 
-		const screenComp = this.state.screenName ? <div style={{overflow: 'scroll', flex:1}}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div style={{overflow: 'scroll', flex: 1}}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 

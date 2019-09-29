@@ -707,10 +707,10 @@ class AppComponent extends React.Component {
 		let menuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
 			menuPosition = 'right';
 		} else {
-			sideMenuContent = <SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
 		}
 
 		const appNavInit = {
@@ -740,12 +740,12 @@ class AppComponent extends React.Component {
 				}}
 			>
 				<MenuContext style={{ flex: 1 }}>
-					<SafeAreaView style={{flex:0, backgroundColor: theme.raisedBackgroundColor}} />
-					<SafeAreaView style={{flex:1, backgroundColor: theme.backgroundColor}}>
+					<SafeAreaView style={{flex: 0, backgroundColor: theme.raisedBackgroundColor}} />
+					<SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}>
 						<AppNav screens={appNavInit} />
 					</SafeAreaView>
 					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-					<Animated.View pointerEvents='none' style={{position:'absolute', backgroundColor:'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%'}}/>
+					<Animated.View pointerEvents='none' style={{position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%'}}/>
 				</MenuContext>
 			</SideMenu>
 		);

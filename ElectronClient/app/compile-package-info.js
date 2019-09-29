@@ -22,8 +22,7 @@ let hash;
 try {
 	branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 	hash   = execSync('git log --pretty="%h" -1').toString().trim();
-}
-catch(err) {
+} catch(err) {
 	console.warn('Could not get git info', err);
 }
 if (typeof branch !== 'undefined' && typeof hash !== 'undefined') {

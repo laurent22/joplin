@@ -151,7 +151,7 @@ toolUtils.isMac = () => {
 	return process && process.platform === 'darwin';
 };
 
-toolUtils.insertContentIntoFile = async function (filePath, markerOpen, markerClose, contentToInsert) {
+toolUtils.insertContentIntoFile = async function(filePath, markerOpen, markerClose, contentToInsert) {
 	const fs = require('fs-extra');
 	let content = await fs.readFile(filePath, 'utf-8');
 	// [^]* matches any character including new lines

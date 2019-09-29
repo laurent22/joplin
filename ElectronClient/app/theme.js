@@ -96,7 +96,7 @@ const lightStyle = {
 
 	warningBackgroundColor: '#FFD08D',
 
-	htmlColor:'#222222',
+	htmlColor: '#222222',
 	htmlBackgroundColor: 'white',
 	htmlDividerColor: 'rgb(230,230,230)',
 	htmlLinkColor: 'rgb(80,130,190)',
