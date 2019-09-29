@@ -45,6 +45,7 @@ module.exports = {
 		// This error is always a false positive so far since it detects
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
+		"no-lonely-if": "error",
 
 		// -------------------------------
 		// Formatting
@@ -65,9 +66,11 @@ module.exports = {
 			"mode": "strict"
 		}],
 		"block-spacing": ["error"],
+		"brace-style": ["error", "1tbs"],
 		"no-spaced-func": ["error"],
 		"func-call-spacing": ["error"],
-		"space-before-function-paren": ["error", "never"]
+		"space-before-function-paren": ["error", "never"],
+		"object-property-newline": ["error"]
 	},
 	"plugins": [
 		"react",

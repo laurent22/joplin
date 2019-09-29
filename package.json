@@ -4,7 +4,7 @@
   "description": "Joplin root package for linting",
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts",
-    "compile": "gulp"
+    "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts"
   },
   "husky": {
     "hooks": {
