@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Joplin root package for linting",
   "scripts": {
-    "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx"
+    "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx",
+    "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx"
   },
   "husky": {
     "hooks": {

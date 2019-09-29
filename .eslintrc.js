@@ -33,14 +33,22 @@ module.exports = {
 	    "sourceType": "module",
 	},
 	'rules': {
+		// -------------------------------
+		// Code correctness
+		// -------------------------------
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
-		// Ignore all unused function arguments, because in some
-		// case they are kept to indicate the function signature.
-		//"no-unused-vars": ["error", { "argsIgnorePattern": ".*" }],
-		"@typescript-eslint/no-unused-vars": ["error"],
+		"no-unused-vars": "error",
 		"no-constant-condition": 0,
 		"no-prototype-builtins": 0,
+		// This error is always a false positive so far since it detects
+		// possible race conditions in contexts where we know it cannot happen.
+		"require-atomic-updates": 0,
+		"no-lonely-if": "error",
+
+		// -------------------------------
+		// Formatting
+		// -------------------------------
 		"space-in-parens": ["error", "never"],
 		"semi": ["error", "always"],
 		"eol-last": ["error", "always"],
@@ -49,11 +57,19 @@ module.exports = {
 		"comma-dangle": ["error", "always-multiline"],
 		"no-trailing-spaces": "error",
 		"linebreak-style": ["error", "unix"],
-		// This error is always a false positive so far since it detects
-		// possible race conditions in contexts where we know it cannot happen.
-		"require-atomic-updates": 0,
 		"prefer-template": ["error"],
-		"template-curly-spacing": ["error", "never"]
+		"template-curly-spacing": ["error", "never"],
+		"key-spacing": ["error", {
+			"beforeColon": false,
+			"afterColon": true,
+			"mode": "strict"
+		}],
+		"block-spacing": ["error"],
+		"brace-style": ["error", "1tbs"],
+		"no-spaced-func": ["error"],
+		"func-call-spacing": ["error"],
+		"space-before-function-paren": ["error", "never"],
+		"object-property-newline": ["error"]
 	},
 	"plugins": [
 		"react",

@@ -55,16 +55,29 @@ before_install:
 script:
   - |
     # Install tools
+    npm install
     cd Tools
     npm install
+    cd ..
 
     # Run test units
-    cd ../CliClient
+    cd CliClient
     npm install
     ./run_test.sh
     testResult=$?
     if [ $testResult -ne 0 ]; then
       exit $testResult
+    fi
+    cd ..
+
+    # Run linter for pull requests only - this is so that
+    # bypassing eslint is allowed for urgent fixes.
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      npm run linter-ci ./
+      testResult=$?
+      if [ $testResult -ne 0 ]; then
+        exit $testResult
+      fi
     fi
 
     # Find out if we should run the build or not. Electron-builder gets stuck when
@@ -78,6 +91,6 @@ script:
     fi
 
     # Prepare the Electron app and build it
-    cd ../ElectronClient/app
+    cd ElectronClient/app
     rsync -aP --delete ../../ReactNativeClient/lib/ lib/
     npm install && USE_HARD_LINKS=false yarn dist
