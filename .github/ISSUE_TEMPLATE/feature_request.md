@@ -6,13 +6,13 @@ labels: 'enhancement'
 
 ---
 
+⚠🚨⛔⛔⛔⛔⛔ ⬇ STOP & READ THIS ⬇ ⛔⛔⛔⛔⛔🚨⚠
+A feature request that has not been accepted on the forum will be closed!
+⚠🚨⛔⛔⛔⛔⛔ ⬆ STOP & READ THIS ⬆ ⛔⛔⛔⛔⛔🚨⚠
+
 <!--
   Please search open issues first - many features have already been requested!
 -->
-
-⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
-⚠🚨 A feature request that has not been accepted on the forum will be closed ! 🚨⚠
-⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
 
 ## Has it been discussed in the forum? Link to topic.
 <!--

@@ -6,9 +6,7 @@ labels: 'question'
 
 ---
 
-⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
-🚨 The issue tracker is not for questions. 🚨
-⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔⛔
+⚠🚨⛔ The issue tracker is not for questions. ⛔🚨⚠
 
 As it happens, support requests that are created as issues are likely to be closed. We want to make sure you are able to find the help you seek.
 
