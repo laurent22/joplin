@@ -2,7 +2,7 @@
 name: Feature request
 about: Report an accepted feature request.
 title: ''
-labels: 'feature request'
+labels: 'enhancement'
 
 ---
 
