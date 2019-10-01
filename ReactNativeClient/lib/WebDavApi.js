@@ -5,6 +5,7 @@ const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
+const http = require('http');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -17,6 +18,11 @@ class WebDavApi {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.lastRequests_ = [];
+		this.webDavAgent_ = new http.Agent({
+			keepAlive: true,
+			maxSockets: 1,
+			keepAliveMsecs: 5000,
+		});
 	}
 
 	logRequest_(request, responseText) {
@@ -31,6 +37,7 @@ class WebDavApi {
 			options.headers = Object.assign({}, options.headers);
 			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
 			delete options.method;
+			delete options.agent;
 			output.push(JSON.stringify(options));
 			return output.join(' ');
 		};
@@ -346,6 +353,7 @@ class WebDavApi {
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
+		fetchOptions.agent = this.webDavAgent_;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 
