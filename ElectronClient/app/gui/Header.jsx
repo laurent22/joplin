@@ -166,6 +166,7 @@ class HeaderComponent extends React.Component {
 			paddingTop: 1, // vertical alignment with buttons
 			paddingBottom: 0, // vertical alignment with buttons
 			height: style.fontSize * 2,
+			width: 300,
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
