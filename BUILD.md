@@ -65,7 +65,7 @@ The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might 
 
 # Building the Mobile application
 
-First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "Building Projects with Native Code" tab.
+First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
 
 Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
 
