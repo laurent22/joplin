@@ -762,6 +762,18 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					id: 'edit:codeAlt',
+					label: _('Code'),
+					screens: ['Main'],
+					visible: false,
+					accelerator: 'CommandOrControl+\'',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textCode',
+						});
+					},
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
