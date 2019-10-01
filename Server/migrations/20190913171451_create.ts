@@ -1,5 +1,6 @@
 import * as Knex from 'knex';
 import UserModel from '../app/models/UserModel';
+import ApiClientModel from '../app/models/ApiClientModel';
 
 export async function up(knex: Knex): Promise<any> {
 	await knex.schema.createTable('users', function(table:Knex.CreateTableBuilder) {
@@ -51,6 +52,14 @@ export async function up(knex: Knex): Promise<any> {
 		table.unique(['parent_id', 'name']);
 	});
 
+	await knex.schema.createTable('api_clients', function(table:Knex.CreateTableBuilder) {
+		table.string('id', 32).unique().primary().notNullable();
+		table.string('name', 32).notNullable();
+		table.string('secret', 32).notNullable();
+		table.integer('updated_time').notNullable();
+		table.integer('created_time').notNullable();
+	});
+
 	const userModel = new UserModel();
 
 	// We skip validation because at this point there's no user in the system so
@@ -60,6 +69,13 @@ export async function up(knex: Knex): Promise<any> {
 		password: 'admin',
 		is_admin: 1,
 	}, { skipValidation: true});
+
+	const apiClientModel = new ApiClientModel();
+
+	await apiClientModel.save({
+		name: 'Joplin',
+		secret: 'cmM6XMNv7mhUViGsObDq2c',
+	});
 }
 
 export async function down(knex: Knex): Promise<any> {
@@ -67,5 +83,6 @@ export async function down(knex: Knex): Promise<any> {
 	await knex.schema.dropTable('sessions');
 	await knex.schema.dropTable('permissions');
 	await knex.schema.dropTable('files');
+	await knex.schema.dropTable('api_clients');
 }
 

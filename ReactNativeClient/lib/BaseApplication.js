@@ -29,6 +29,7 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+const SyncTargetJoplinServer = require('lib/SyncTargetJoplinServer.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
@@ -45,6 +46,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 class BaseApplication {
 	constructor() {

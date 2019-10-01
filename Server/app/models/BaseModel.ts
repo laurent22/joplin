@@ -1,9 +1,10 @@
-import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema } from '../db';
+import db, { WithDates, WithUuid, File, User, Session, Permission, databaseSchema, ApiClient } from '../db';
 import * as Knex from 'knex';
 import { transactionHandler } from '../utils/dbUtils';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import cache from '../utils/cache';
+import ApiClientModel from './ApiClientModel';
 
 export interface ModelOptions {
 	userId?: string
@@ -73,7 +74,7 @@ export default abstract class BaseModel {
 		return this.db(this.tableName).select(...this.defaultFields);
 	}
 
-	async fromApiInput(object:File | User | Session | Permission):Promise<File | User | Session | Permission> {
+	async fromApiInput(object:File | User | Session | Permission | ApiClient):Promise<File | User | Session | Permission | ApiClient> {
 		return object;
 	}
 
@@ -81,18 +82,18 @@ export default abstract class BaseModel {
 		return { ...object };
 	}
 
-	async validate(object:File | User | Session | Permission, options:ValidateOptions = {}):Promise<File | User | Session | Permission> {
+	async validate(object:File | User | Session | Permission | ApiClient, options:ValidateOptions = {}):Promise<File | User | Session | Permission | ApiClient> {
 		if (!options.isNew && !(object as WithUuid).id) throw new ErrorUnprocessableEntity('id is missing');
 		return object;
 	}
 
-	async isNew(object:File | User | Session | Permission, options:SaveOptions):Promise<boolean> {
+	async isNew(object:File | User | Session | Permission | ApiClient, options:SaveOptions):Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
 		return !(object as WithUuid).id;
 	}
 
-	async save(object:File | User | Session | Permission, options:SaveOptions = {}):Promise<File | User | Session | Permission> {
+	async save(object:File | User | Session | Permission | ApiClient, options:SaveOptions = {}):Promise<File | User | Session | Permission | ApiClient> {
 		if (!object) throw new Error('Object cannot be empty');
 
 		const toSave = Object.assign({}, object);
@@ -130,7 +131,7 @@ export default abstract class BaseModel {
 		return toSave;
 	}
 
-	async load(id:string):Promise<File | User | Session | Permission> {
+	async load(id:string):Promise<File | User | Session | Permission | ApiClient> {
 		if (!id) throw new Error('id cannot be empty');
 
 		let cached:object = await cache.object(id);

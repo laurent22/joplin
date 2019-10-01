@@ -2,7 +2,7 @@ import * as Knex from 'knex';
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-let knex:Knex = require('knex')({
+const dbConfig_ = {
 	client: 'sqlite3',
 	connection: {
 		filename: `${__dirname}/../../db-${nodeEnv}.sqlite`,
@@ -12,9 +12,15 @@ let knex:Knex = require('knex')({
 	// it has a small performance overhead so only enable in testing and dev
 	asyncStackTraces: nodeEnv == 'development' || nodeEnv === 'testing',
 	// debug: nodeEnv == 'development' || nodeEnv === 'testing',
-});
+};
+
+let knex:Knex = require('knex')(dbConfig_);
 
 export default knex;
+
+export function dbConfig() {
+	return dbConfig_;
+}
 
 export enum ItemAddressingType {
 	Id = 1,
@@ -78,6 +84,11 @@ export interface File extends WithDates, WithUuid {
 	parent_id?: string
 }
 
+export interface ApiClient extends WithDates, WithUuid {
+	name?: string
+	secret?: string
+}
+
 export const databaseSchema:DatabaseTables = {
 	users: {
 		id: { type: 'string' },
@@ -113,6 +124,13 @@ export const databaseSchema:DatabaseTables = {
 		is_directory: { type: 'number' },
 		is_root: { type: 'number' },
 		parent_id: { type: 'string' },
+		updated_time: { type: 'number' },
+		created_time: { type: 'number' },
+	},
+	api_clients: {
+		id: { type: 'string' },
+		name: { type: 'string' },
+		secret: { type: 'string' },
 		updated_time: { type: 'number' },
 		created_time: { type: 'number' },
 	},

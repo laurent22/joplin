@@ -19,6 +19,7 @@ const config = {
 		'main.users': 'WithDates, WithUuid',
 		'main.permissions': 'WithDates, WithUuid',
 		'main.files': 'WithDates, WithUuid',
+		'main.api_clients': 'WithDates, WithUuid',
 	},
 };
 

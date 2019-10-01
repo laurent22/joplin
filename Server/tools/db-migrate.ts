@@ -1,7 +1,7 @@
 require('app-module-path').addPath(`${__dirname}/..`);
 require('source-map-support').install();
 
-import db from '../app/db';
+import db, { dbConfig } from '../app/db';
 
 const config = {
 	directory: `${__dirname}/../migrations`,
@@ -9,9 +9,12 @@ const config = {
 	disableTransactions: true,
 };
 
+console.info(`Using database: ${dbConfig().connection.filename}`);
 console.info(`Running migrations in: ${config.directory}`);
 
-db.migrate.latest(config).then(([log]) => {
+db.migrate.latest(config).then((event:any) => {
+	const log:string[] = event[1];
+
 	if (!log.length) {
 		console.info('Database is already up to date');
 	} else {
