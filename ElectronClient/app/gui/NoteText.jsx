@@ -1461,8 +1461,7 @@ class NoteTextComponent extends React.Component {
 		if (match && match.length > 0) {
 			// Follow the same newline style
 			this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
-		}
-		else {
+		} else {
 			this.wrapSelectionWithStrings('`', '`');
 		}
 	}

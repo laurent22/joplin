@@ -405,8 +405,7 @@ function themeStyle(theme) {
 		output = Object.assign({}, output, solarizedLightStyle);
 	} else if (theme == Setting.THEME_SOLARIZED_DARK) {
 		output = Object.assign({}, output, solarizedDarkStyle);
-	}
-	else if (theme == Setting.THEME_DRACULA) {
+	} else if (theme == Setting.THEME_DRACULA) {
 		output = Object.assign({}, output, draculaStyle);
 	}
 
