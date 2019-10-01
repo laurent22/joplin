@@ -307,7 +307,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </div>
 <h1>Markdown Guide<a name="markdown-guide" href="#markdown-guide" class="heading-anchor">🔗</a></h1>
 <p>Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.</p>
-<p>Joplin desktop and mobile applications can display both the Markdown text and the rendered HTML document.</p>
+<p>Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.</p>
 <h2>Cheat Sheet<a name="cheat-sheet" href="#cheat-sheet" class="heading-anchor">🔗</a></h2>
 <p>This is a quick summary of the Markdown syntax.</p>
 <table>
@@ -346,8 +346,8 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </tr>
 <tr>
 <td><strong>Blockquotes</strong></td>
-<td><pre>&gt; Kent.<br/>&gt; Where's the king?<br/><br/>&gt; Gent.<br/>&gt; Contending with the fretful elements</pre></td>
-<td><blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with the fretful elements</blockquote></td>
+<td><pre>&gt; Kent.<br/>&gt; Where's the king?<br/><br/>&gt; Gent.<br/>&gt; Contending with the<br/>&gt; fretful elements</pre></td>
+<td><blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote></td>
 </tr>
 <tr>
 <td><strong>List</strong></td>
@@ -366,18 +366,18 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </tr>
 <tr>
 <td><strong>Code block</strong></td>
-<td><pre>Here's some JavaScript code:<br><br>```<br>function hello() {<br>    alert('hello');<br>}<br>```<br><br>Language is normally auto-detected, but it can also be specified:<br><br>```sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>```</pre></td>
+<td><pre>Here's some JavaScript code:<br><br>```<br>function hello() {<br>    alert('hello');<br>}<br>```<br><br>Language is normally auto-detected,<br>but it can also be specified:<br><br>```sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>```</pre></td>
 <td>Here's some JavaScript code:<br><br><pre>function hello() {<br>    alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre></td>
 </tr>
 <tr>
 <td><strong>Unformatted text</strong></td>
-<td><pre>Indent with a tab or 4 spaces for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre></td>
+<td><pre>Indent with a tab or 4 spaces<br>for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre></td>
 <td>Indent with a tab or 4 spaces for unformatted text.<br><br><pre>This text will not be formatted:<br><br>Robert'); DROP TABLE students;--</pre></td>
 </tr>
 <tr>
 <td><strong>Link</strong></td>
-<td><pre>This is detected as a link: <code>https://joplinapp.org</code><br><br>And this is a link with a title: <code>[Joplin](https://joplinapp.org)</code></pre></td>
-<td>This is detected as a link: <a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link with a title: <a href="https://joplinapp.org">Joplin</a></td>
+<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link with a title:<br><br><code>[Joplin](https://joplinapp.org)</code></pre></td>
+<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link with a title:<br><br><a href="https://joplinapp.org">Joplin</a></td>
 </tr>
 <tr>
 <td><strong>Images</strong></td>

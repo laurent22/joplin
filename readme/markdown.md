@@ -2,7 +2,7 @@
 
 Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.
 
-Joplin desktop and mobile applications can display both the Markdown text and the rendered HTML document.
+Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.
 
 ## Cheat Sheet
 
@@ -15,13 +15,13 @@ This is a quick summary of the Markdown syntax.
 | **Heading 3** | <pre>### Heading 3</pre> | <h3>Heading 3</h3>
 | **Bold** | <pre>This is some `**bold text**`</pre> | This is some <strong>bold text</strong>
 | **Italic** | <pre>This is some `*italic text*`</pre> | This is some <i>italic text</i>
-| **Blockquotes** | <pre>> Kent.<br/>> Where's the king?<br/><br/>> Gent.<br/>> Contending with the fretful elements</pre> | <blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with the fretful elements</blockquote>
+| **Blockquotes** | <pre>> Kent.<br/>> Where's the king?<br/><br/>> Gent.<br/>> Contending with the<br/>> fretful elements</pre> | <blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote>
 | **List** | <pre>* Milk<br/>* Eggs<br/>* Beers<br/>    * Desperados<br/>    * Heineken<br/>* Ham</pre> | <ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul>
 | **Ordered list** | <pre>1. Introduction<br/>2. Main topic<br/>    1. First sub-topic<br/>    2. Second sub-topic<br/>3. Conclusion</pre> | <ol><li>Introduction</li><li>Main topic<ol><li>First sub-topic</li><li>Second sub-topic</li></ol></li><li>Conclusion</li></ol>
 | **Inline code** | <pre>This is \`someJavaScript()\`</pre> | This is `someJavaScript()`
-| **Code block** | <pre>Here's some JavaScript code:<br><br>\`\`\`<br>function hello() {<br>    alert('hello');<br>}<br>\`\`\`<br><br>Language is normally auto-detected, but it can also be specified:<br><br>\`\`\`sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>\`\`\`</pre> | Here's some JavaScript code:<br><br><pre>function hello() {<br>&nbsp;&nbsp;&nbsp;&nbsp;alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre>
-| **Unformatted text** | <pre>Indent with a tab or 4 spaces for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre> | Indent with a tab or 4 spaces for unformatted text.<br><br><pre>This text will not be formatted:<br><br>Robert'); DROP TABLE students;--</pre>
-| **Link** | <pre>This is detected as a link: `https://joplinapp.org`<br><br>And this is a link with a title: `[Joplin](https://joplinapp.org)`</pre> | This is detected as a link: https://joplinapp.org<br><br>And this is a link with a title: [Joplin](https://joplinapp.org)
+| **Code block** | <pre>Here's some JavaScript code:<br><br>\`\`\`<br>function hello() {<br>    alert('hello');<br>}<br>\`\`\`<br><br>Language is normally auto-detected,<br>but it can also be specified:<br><br>\`\`\`sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>\`\`\`</pre> | Here's some JavaScript code:<br><br><pre>function hello() {<br>&nbsp;&nbsp;&nbsp;&nbsp;alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre>
+| **Unformatted text** | <pre>Indent with a tab or 4 spaces<br>for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre> | Indent with a tab or 4 spaces for unformatted text.<br><br><pre>This text will not be formatted:<br><br>Robert'); DROP TABLE students;--</pre>
+| **Link** | <pre>This is detected as a link:<br><br>`https://joplinapp.org`<br><br>And this is a link with a title:<br><br>`[Joplin](https://joplinapp.org)`</pre> | This is detected as a link:<br><br>https://joplinapp.org<br><br>And this is a link with a title:<br><br>[Joplin](https://joplinapp.org)
 | **Images** | <pre>`![Joplin icon](https://git.io/JenGk)`</pre> | ![Here's Joplin icon](https://git.io/JenGk)
 | **Horizontal Rule** | <pre>One rule:<br>\*\*\*<br>Another rule:<br>\-\-\-</pre> | One rule:<hr><br>Another rule:<br><hr>
 
