@@ -31,7 +31,6 @@
 			"**/log.txt": true,
 			"**/node_modules/": true,
 			"**/package-lock.json": true,
-			"**/ReactNativeClient/lib/mime-utils.js": true,
 			"**/ReactNativeClient/locales/*": true,
 			"**/src/log.txt": true,
 			"**/yarn.lock": true,
