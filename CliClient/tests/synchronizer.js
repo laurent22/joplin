@@ -79,6 +79,7 @@ async function localNotesFoldersSameAsRemote(locals, expect) {
 			expect(remoteContent.title).toBe(dbItem.title);
 		}
 	} catch (e) {
+		console.error(e);
 		error = e;
 	}
 

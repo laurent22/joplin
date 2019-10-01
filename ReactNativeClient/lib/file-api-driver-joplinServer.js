@@ -26,8 +26,12 @@ class FileApiDriverJoplinServer {
 
 		for (const p of pieces) {
 			const subPath = `${parent}/${p}`;
-			const dir = await this.get(subPath);
-			if (!dir) await this.mkdir(subPath);
+			try {
+				await this.mkdir(subPath);
+			} catch (error) {
+				// 409 is OK - directory already exists
+				if (error.code !== 409) throw error;
+			}
 			parent = subPath;
 		}
 	}
@@ -40,17 +44,44 @@ class FileApiDriverJoplinServer {
 		return 3;
 	}
 
+	metadataToStat_(md, path) {
+		const output = {
+			path: path,
+			updated_time: md.updated_time,
+			isDir: !!md.is_directory,
+		};
+
+		// TODO - HANDLE DELETED
+		// if (md['.tag'] === 'deleted') output.isDeleted = true;
+
+		return output;
+	}
+
+	metadataToStats_(mds) {
+		const output = [];
+		for (let i = 0; i < mds.length; i++) {
+			output.push(this.metadataToStat_(mds[i], mds[i].name));
+		}
+		return output;
+	}
+
 	apiFilePath_(p) {
 		if (p !== 'root') p += ':';
 		return `api/files/${p}`;
 	}
 
 	async stat(path) {
-		return this.api().exec('GET', this.apiFilePath_(path));
+		try {
+			const response = await this.api().exec('GET', this.apiFilePath_(path));
+			return this.metadataToStat_(response);
+		} catch (error) {
+			if (error.code === 404) return null;
+			throw error;
+		}
 	}
 
 	async delta(path, options) {
-		const getDirStats = async(path) => {
+		const getDirStats = async (path) => {
 			const result = await this.list(path);
 			return result.items;
 		};
@@ -62,7 +93,7 @@ class FileApiDriverJoplinServer {
 		const results = await this.api().exec('GET', `${this.apiFilePath_(path)}/children`);
 
 		return {
-			items: results,
+			items: this.metadataToStats_(results),
 			hasMore: false, // TODO
 			context: null,
 		};
@@ -72,7 +103,7 @@ class FileApiDriverJoplinServer {
 		if (!options) options = {};
 		if (!options.responseFormat) options.responseFormat = 'text';
 		try {
-			const response = await this.api().exec('GET', this.apiFilePath_(path), null, null, options);
+			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, options);
 			return response;
 		} catch (error) {
 			if (error.code !== 404) throw error;

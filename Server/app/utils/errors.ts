@@ -45,3 +45,10 @@ export class ErrorUnprocessableEntity extends ApiError {
 		Object.setPrototypeOf(this, ErrorUnprocessableEntity.prototype);
 	}
 }
+
+export class ErrorConflict extends ApiError {
+	constructor(message:string = 'Conflict') {
+		super(message, 409);
+		Object.setPrototypeOf(this, ErrorUnprocessableEntity.prototype);
+	}
+}

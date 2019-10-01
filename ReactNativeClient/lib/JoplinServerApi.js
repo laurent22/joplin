@@ -74,19 +74,29 @@ class JoplinServerApi {
 		}
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
-		headers['Content-Type'] = 'application/json';
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
-		if (body) fetchOptions.body = JSON.stringify(body);
+
+		if (body) {
+			if (typeof body === 'object') {
+				fetchOptions.body = JSON.stringify(body);
+				fetchOptions.headers['Content-Type'] = 'application/json';
+			} else {
+				fetchOptions.body = body;
+			}
+
+			fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(fetchOptions.body)}`;
+		}
 
 		const url = `${this.baseUrl()}/${path}`;
 
 		let response = null;
 
 		// console.info('Joplin API Call', `${method} ${url}`, headers, options);
+		console.info(options);
 		console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
@@ -96,7 +106,7 @@ class JoplinServerApi {
 			// }
 			// response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
-			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
+			//if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
 			response = await shim.fetch(url, fetchOptions);
 		} else {
 			// file
@@ -118,7 +128,7 @@ class JoplinServerApi {
 		};
 
 		let responseJson_ = null;
-		const loadResponseJson = async() => {
+		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			responseJson_ = JSON.parse(responseText);

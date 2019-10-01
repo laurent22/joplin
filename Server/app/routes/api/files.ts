@@ -11,6 +11,8 @@ const route:Route = {
 	exec: async function(path:SubPath, ctx:Koa.Context) {
 		const fileController = new FileController();
 
+		// console.info(ctx.method + ' ' + path.id + (path.link ? '/' + path.link : ''));
+
 		if (!path.link) {
 			if (ctx.method === 'GET') {
 				return fileController.getFile(sessionIdFromHeaders(ctx.headers), path.id);
@@ -46,8 +48,11 @@ const route:Route = {
 		}
 
 		if (path.link === 'children') {
+			if (ctx.method === 'GET') {
+				return fileController.getChildren(sessionIdFromHeaders(ctx.headers), path.id);
+			}
+
 			if (ctx.method === 'POST') {
-				console.info('BODY', ctx.request.body);
 				return fileController.postChild(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
 			}
 

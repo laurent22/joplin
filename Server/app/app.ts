@@ -28,6 +28,9 @@ const routes:Routes = {
 const koaBodyMiddleware = koaBody({
 	multipart: true,
 	includeUnparsed: true,
+	onError: (err: Error, ctx: Koa.Context) => {
+		appLogger.error(`koaBodyMiddleware: ${ctx.method} ${ctx.path} Error: ${err.message}`);
+	},
 });
 
 app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
@@ -36,10 +39,8 @@ app.use(koaIf(koaBodyMiddleware, (ctx:Koa.Context) => {
 	return match.route.needsBodyMiddleware === true;
 }));
 
-app.use(async(ctx:Koa.Context) => {
+app.use(async (ctx:Koa.Context) => {
 	const match = findMatchingRoute(ctx.path, routes);
-
-	console.info('MATCH', match);
 
 	try {
 		if (match) {

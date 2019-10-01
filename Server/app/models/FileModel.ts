@@ -1,7 +1,7 @@
 import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, ItemType, databaseSchema } from '../db';
-import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
+import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import { splitItemPath, filePathInfo } from '../utils/routeUtils';
 
@@ -137,8 +137,8 @@ export default class FileModel extends BaseModel {
 
 		if ('name' in file && !file.is_root) {
 			const existingFile = await this.fileByName(parentId, file.name);
-			if (existingFile && options.isNew) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
-			if (existingFile && file.id === existingFile.id) throw new ErrorUnprocessableEntity(`Already a file with name "${file.name}"`);
+			if (existingFile && options.isNew) throw new ErrorConflict(`Already a file with name "${file.name}"`);
+			if (existingFile && file.id === existingFile.id) throw new ErrorConflict(`Already a file with name "${file.name}"`);
 		}
 
 		return file;
@@ -157,9 +157,13 @@ export default class FileModel extends BaseModel {
 	}
 
 	toApiOutput(object:any):any {
-		const output:File = { ...object };
-		delete output.content;
-		return output;
+		if (Array.isArray(object)) {
+			return object.map(f => this.toApiOutput(f));
+		} else {
+			const output:File = { ...object };
+			delete output.content;
+			return output;
+		}
 	}
 
 	async createRootFile():Promise<File> {
@@ -179,7 +183,7 @@ export default class FileModel extends BaseModel {
 	}
 
 	private async checkCanReadPermissions(file:File):Promise<void> {
-		if (!file) throw new Error('no file specified');
+		if (!file) throw new ErrorNotFound();
 		if (file.owner_id === this.userId) return;
 		const permissionModel = new PermissionModel();
 		const canRead:boolean = await permissionModel.canRead(file.id, this.userId);
@@ -187,7 +191,7 @@ export default class FileModel extends BaseModel {
 	}
 
 	private async checkCanWritePermission(file:File):Promise<void> {
-		if (!file) throw new Error('no file specified');
+		if (!file) throw new ErrorNotFound();
 		if (file.owner_id === this.userId) return;
 		const permissionModel = new PermissionModel();
 		const canWrite:boolean = await permissionModel.canWrite(file.id, this.userId);
@@ -267,6 +271,12 @@ export default class FileModel extends BaseModel {
 		await this.commitTransaction(txIndex);
 
 		return file;
+	}
+
+	async childrens(id:string):Promise<string[]> {
+		const parent = await this.load(id);
+		await this.checkCanReadPermissions(parent);
+		return this.db(this.tableName).select(...this.defaultFields).where('parent_id', id);
 	}
 
 	private async childrenIds(id:string):Promise<string[]> {

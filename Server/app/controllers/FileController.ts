@@ -17,13 +17,17 @@ export default class FileController extends BaseController {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.entityFromItemId(fileId);
-		return fileModel.toApiOutput(await fileModel.load(file.id));
+		const loadedFile = await fileModel.load(file.id);
+		if (!loadedFile) throw new ErrorNotFound();
+		return fileModel.toApiOutput(loadedFile);
 	}
 
 	async getFileContent(sessionId:string, fileId:string):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
-		const file:File = await fileModel.loadWithContent(fileId);
+		let file:File = await fileModel.entityFromItemId(fileId);
+		file = await fileModel.loadWithContent(file.id);
+		if (!file) throw new ErrorNotFound();
 		return file;
 	}
 
@@ -48,6 +52,13 @@ export default class FileController extends BaseController {
 		const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });
 		file.content = content;
 		return fileModel.toApiOutput(await fileModel.save(file));
+	}
+
+	async getChildren(sessionId:string, fileId:string):Promise<File[]> {
+		const user = await this.initSession(sessionId);
+		const fileModel = new FileModel({ userId: user.id });
+		const parent:File = await fileModel.entityFromItemId(fileId);
+		return fileModel.toApiOutput(await fileModel.childrens(parent.id));
 	}
 
 	async postChild(sessionId:string, fileId:string, child:File):Promise<File> {
