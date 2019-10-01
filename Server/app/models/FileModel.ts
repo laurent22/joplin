@@ -248,11 +248,11 @@ export default class FileModel extends BaseModel {
 		let file:File = { ... object };
 
 		try {
-			if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
-
 			if ('content' in file) file.size = file.content ? file.content.byteLength : 0;
 
 			if (isNew) {
+				if (!file.parent_id && !file.is_root) file.parent_id = await this.userRootFileId();
+
 				// Even if there's no content, set the mime type based on the extension
 				if (!file.is_directory) file.mime_type = mimeUtils.fromFilename(file.name);
 

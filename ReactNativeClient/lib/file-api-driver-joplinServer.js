@@ -26,12 +26,7 @@ class FileApiDriverJoplinServer {
 
 		for (const p of pieces) {
 			const subPath = `${parent}/${p}`;
-			try {
-				await this.mkdir(subPath);
-			} catch (error) {
-				// 409 is OK - directory already exists
-				if (error.code !== 409) throw error;
-			}
+			await this.mkdir(subPath);
 			parent = subPath;
 		}
 	}
@@ -130,10 +125,16 @@ class FileApiDriverJoplinServer {
 		const parentPath = this.parentPath_(path);
 		const filename = this.basename_(path);
 
-		return this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, {
-			name: filename,
-			is_directory: 1,
-		});
+		try {
+			const response = await this.api().exec('POST', `${this.apiFilePath_(parentPath)}/children`, {
+				name: filename,
+				is_directory: 1,
+			});
+			return response;
+		} catch (error) {
+			// 409 is OK - directory already exists
+			if (error.code !== 409) throw error;
+		}
 	}
 
 	async put(path, content, options = null) {

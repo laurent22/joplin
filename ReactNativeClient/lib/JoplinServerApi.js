@@ -10,10 +10,6 @@ class JoplinServerApi {
 		this.options_ = options;
 	}
 
-	// async initialize(basePath) {
-	// 	await this.mk
-	// }
-
 	setLogger(l) {
 		this.logger_ = l;
 	}
@@ -61,8 +57,6 @@ class JoplinServerApi {
 	}
 
 	async exec(method, path = '', body = null, headers = null, options = null) {
-
-		console.info('=========================================');
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = 'json';
@@ -96,17 +90,16 @@ class JoplinServerApi {
 		let response = null;
 
 		// console.info('Joplin API Call', `${method} ${url}`, headers, options);
-		console.info(options);
-		console.info(this.requestToCurl_(url, fetchOptions));
+		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-			// if (fetchOptions.path) {
-			// 	const fileStat = await shim.fsDriver().stat(fetchOptions.path);
-			// 	if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
-			// }
-			// response = await shim.uploadBlob(url, fetchOptions);
+			if (fetchOptions.path) {
+				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
+				if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
+			}
+			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
-			//if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
+			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
 			response = await shim.fetch(url, fetchOptions);
 		} else {
 			// file
@@ -115,9 +108,7 @@ class JoplinServerApi {
 
 		const responseText = await response.text();
 
-		console.info('Joplin API Response', responseText);
-
-		console.info('=========================================');
+		// console.info('Joplin API Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
 		const newError = (message, code = 0) => {
