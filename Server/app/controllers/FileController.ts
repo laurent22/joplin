@@ -5,7 +5,7 @@ import { ErrorNotFound } from '../utils/errors';
 
 export default class FileController extends BaseController {
 
-	async createFile(sessionId:string, file:File):Promise<File> {
+	async postFile(sessionId:string, file:File):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		let newFile = await fileModel.fromApiInput(file);
@@ -37,7 +37,7 @@ export default class FileController extends BaseController {
 		return fileModel.allByParent(parentId);
 	}
 
-	async updateFile(sessionId:string, fileId:string, file:File):Promise<void> {
+	async patchFile(sessionId:string, fileId:string, file:File):Promise<void> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const existingFile:File = await fileModel.entityFromItemId(fileId);
@@ -46,7 +46,7 @@ export default class FileController extends BaseController {
 		await fileModel.toApiOutput(await fileModel.save(newFile));
 	}
 
-	async updateFileContent(sessionId:string, fileId:string, content:Buffer):Promise<any> {
+	async putFileContent(sessionId:string, fileId:string, content:Buffer):Promise<any> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });

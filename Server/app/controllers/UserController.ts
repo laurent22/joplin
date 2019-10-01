@@ -4,7 +4,7 @@ import BaseController from './BaseController';
 
 export default class UserController extends BaseController {
 
-	async createUser(sessionId:string, user:User):Promise<User> {
+	async postUser(sessionId:string, user:User):Promise<User> {
 		const owner = await this.initSession(sessionId, true);
 		const userModel = new UserModel({ userId: owner.id });
 		let newUser = await userModel.fromApiInput(user);
@@ -18,7 +18,7 @@ export default class UserController extends BaseController {
 		return userModel.toApiOutput(await userModel.load(userId));
 	}
 
-	async updateUser(sessionId:string, user:User):Promise<void> {
+	async patchUser(sessionId:string, user:User):Promise<void> {
 		const owner = await this.initSession(sessionId);
 		const userModel = new UserModel({ userId: owner.id });
 		const newUser = await userModel.fromApiInput(user);

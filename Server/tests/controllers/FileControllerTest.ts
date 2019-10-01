@@ -46,7 +46,7 @@ describe('FileController', function() {
 		const fileController = new FileController();
 		const fileContent = await makeTestContent();
 
-		let newFile = await fileController.updateFileContent(
+		let newFile = await fileController.putFileContent(
 			session.id,
 			'root:/photo.jpg:',
 			fileContent,
@@ -75,7 +75,7 @@ describe('FileController', function() {
 
 		const fileController = new FileController();
 
-		const newDir = await fileController.createFile(session.id, {
+		const newDir = await fileController.postFile(session.id, {
 			is_directory: 1,
 			name: 'subdir',
 		});
@@ -83,7 +83,7 @@ describe('FileController', function() {
 		expect(!!newDir.id).toBe(true);
 		expect(newDir.is_directory).toBe(1);
 
-		const newDir2 = await fileController.createFile(session.id, {
+		const newDir2 = await fileController.postFile(session.id, {
 			is_directory: 1,
 			name: 'subdir2',
 			parent_id: newDir.id,
@@ -99,12 +99,12 @@ describe('FileController', function() {
 
 		const fileController = new FileController();
 
-		await fileController.createFile(session.id, {
+		await fileController.postFile(session.id, {
 			is_directory: 1,
 			name: 'subdir',
 		});
 
-		const newFile = await fileController.updateFileContent(
+		const newFile = await fileController.putFileContent(
 			session.id,
 			'root:/subdir/photo.jpg:',
 			await makeTestContent(),
@@ -121,7 +121,7 @@ describe('FileController', function() {
 		const fileController = new FileController();
 		const fileContent = await makeTestContent();
 
-		const error = await checkThrowAsync(async () => fileController.updateFileContent(
+		const error = await checkThrowAsync(async () => fileController.putFileContent(
 			session.id,
 			'root:/does/not/exist/photo.jpg:',
 			fileContent,
@@ -139,9 +139,9 @@ describe('FileController', function() {
 		let file3:File = await makeTestFile(3);
 
 		const fileController = new FileController();
-		file1 = await fileController.createFile(session1.id, file1);
-		file2 = await fileController.createFile(session1.id, file2);
-		file3 = await fileController.createFile(session2.id, file3);
+		file1 = await fileController.postFile(session1.id, file1);
+		file2 = await fileController.postFile(session1.id, file2);
+		file3 = await fileController.postFile(session2.id, file3);
 
 		const fileId1 = file1.id;
 		const fileId2 = file2.id;
@@ -169,7 +169,7 @@ describe('FileController', function() {
 		file.parent_id = rootFile2.id;
 		const fileController = new FileController();
 
-		const hasThrown = await checkThrowAsync(async () => fileController.createFile(session.id, file));
+		const hasThrown = await checkThrowAsync(async () => fileController.postFile(session.id, file));
 		expect(!!hasThrown).toBe(true);
 	}));
 
@@ -181,17 +181,17 @@ describe('FileController', function() {
 		let file:File = await makeTestFile();
 
 		const fileController = new FileController();
-		file = await fileController.createFile(session.id, file);
+		file = await fileController.postFile(session.id, file);
 
 		// Can't have file with empty name
-		const error = await checkThrowAsync(async () =>  fileController.updateFile(session.id, file.id, { name: '' }));
+		const error = await checkThrowAsync(async () =>  fileController.patchFile(session.id, file.id, { name: '' }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 
-		await fileController.updateFile(session.id, file.id, { name: 'modified.jpg' });
+		await fileController.patchFile(session.id, file.id, { name: 'modified.jpg' });
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
 
-		await fileController.updateFile(session.id, file.id, { mime_type: 'image/png' });
+		await fileController.patchFile(session.id, file.id, { mime_type: 'image/png' });
 		file = await fileModel.load(file.id);
 		expect(file.mime_type).toBe('image/png');
 	}));
@@ -203,12 +203,12 @@ describe('FileController', function() {
 		let file2:File = await makeTestFile(1);
 
 		const fileController = new FileController();
-		file1 = await fileController.createFile(session.id, file1);
+		file1 = await fileController.postFile(session.id, file1);
 
 		expect(!!file1.id).toBe(true);
 		expect(file1.name).toBe(file2.name);
 
-		const hasThrown = await checkThrowAsync(async () => await fileController.createFile(session.id, file2));
+		const hasThrown = await checkThrowAsync(async () => await fileController.postFile(session.id, file2));
 		expect(!!hasThrown).toBe(true);
 	}));
 
@@ -224,22 +224,22 @@ describe('FileController', function() {
 		let dir:File = await makeTestDirectory();
 
 		const fileController = new FileController();
-		file = await fileController.createFile(session1.id, file);
-		file2 = await fileController.createFile(session1.id, file2);
-		dir = await fileController.createFile(session1.id, dir);
+		file = await fileController.postFile(session1.id, file);
+		file2 = await fileController.postFile(session1.id, file2);
+		dir = await fileController.postFile(session1.id, dir);
 
 		// Can't set parent to another non-directory file
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: file2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.patchFile(session1.id, file.id, { parent_id: file2.id }));
 		expect(!!hasThrown).toBe(true);
 
 		const fileModel2 = new FileModel({ userId: user2.id });
 		const userRoot2 = await fileModel2.userRootFile();
 
 		// Can't set parent to someone else directory
-		hasThrown = await checkThrowAsync(async () => await fileController.updateFile(session1.id, file.id, { parent_id: userRoot2.id }));
+		hasThrown = await checkThrowAsync(async () => await fileController.patchFile(session1.id, file.id, { parent_id: userRoot2.id }));
 		expect(!!hasThrown).toBe(true);
 
-		await fileController.updateFile(session1.id, file.id, { parent_id: dir.id });
+		await fileController.patchFile(session1.id, file.id, { parent_id: dir.id });
 
 		file = await fileModel.load(file.id);
 
@@ -256,8 +256,8 @@ describe('FileController', function() {
 		let file1:File = await makeTestFile(1);
 		let file2:File = await makeTestFile(2);
 
-		file1 = await fileController.createFile(session.id, file1);
-		file2 = await fileController.createFile(session.id, file2);
+		file1 = await fileController.postFile(session.id, file1);
+		file2 = await fileController.postFile(session.id, file2);
 		let allFiles:File[] = await fileModel.all();
 		const beforeCount:number = allFiles.length;
 
@@ -284,8 +284,8 @@ describe('FileController', function() {
 
 		// Delete a directory and its sub-directories and files
 		const dir3:File = await fileController.postChild(session.id, 'root:/dir1', { name: 'dir3', is_directory: 1 });
-		const file1:File = await fileController.createFile(session.id, { name: 'file1', parent_id: dir1.id });
-		const file2:File = await fileController.createFile(session.id, { name: 'file2', parent_id: dir3.id });
+		const file1:File = await fileController.postFile(session.id, { name: 'file1', parent_id: dir1.id });
+		const file2:File = await fileController.postFile(session.id, { name: 'file2', parent_id: dir3.id });
 		await fileController.deleteFile(session.id, 'root:/dir1');
 		const fileModel = new FileModel({ userId: user.id });
 		expect(!(await fileModel.load(dir1.id))).toBe(true);
@@ -301,9 +301,9 @@ describe('FileController', function() {
 		const fileModel = new FileModel({ userId: user.id });
 
 		const dir1:File = await fileController.postChild(session.id, 'root', { name: 'dir1', is_directory: 1 });
-		const file1:File = await fileController.updateFileContent(session.id, 'root:/dir1/myfile.md', Buffer.from('testing'));
+		const file1:File = await fileController.putFileContent(session.id, 'root:/dir1/myfile.md', Buffer.from('testing'));
 
-		await fileController.updateFileContent(session.id, 'root:/dir1/myfile.md', Buffer.from('new content'));
+		await fileController.putFileContent(session.id, 'root:/dir1/myfile.md', Buffer.from('new content'));
 		const fileReloaded1 = await fileModel.load(file1.id);
 
 		expect(fileReloaded1.parent_id).toBe(dir1.id);
@@ -318,8 +318,8 @@ describe('FileController', function() {
 		let file1:File = await makeTestFile(1);
 		let file2:File = await makeTestFile(2);
 
-		file1 = await fileController.createFile(session1.id, file1);
-		file2 = await fileController.createFile(session2.id, file2);
+		file1 = await fileController.postFile(session1.id, file1);
+		file2 = await fileController.postFile(session2.id, file2);
 
 		const error = await checkThrowAsync(async () => await fileController.deleteFile(session1.id, file2.id));
 		expect(error instanceof ErrorForbidden).toBe(true);
@@ -333,9 +333,9 @@ describe('FileController', function() {
 
 		const fileModel = new FileModel({ userId: user.id });
 		const fileController = new FileController();
-		file = await fileController.createFile(session.id, file);
+		file = await fileController.postFile(session.id, file);
 
-		await fileController.updateFile(adminSession.id, file.id, { name: 'modified.jpg' });
+		await fileController.patchFile(adminSession.id, file.id, { name: 'modified.jpg' });
 		file = await fileModel.load(file.id);
 		expect(file.name).toBe('modified.jpg');
 
@@ -350,8 +350,8 @@ describe('FileController', function() {
 		const file2:File = await makeTestFile(2, 'png');
 
 		const fileController = new FileController();
-		let newFile = await fileController.createFile(session.id, file);
-		await fileController.updateFileContent(session.id, newFile.id, file2.content);
+		let newFile = await fileController.postFile(session.id, file);
+		await fileController.putFileContent(session.id, newFile.id, file2.content);
 
 		const modFile = await fileController.getFileContent(session.id, newFile.id);
 

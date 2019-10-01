@@ -19,7 +19,7 @@ const route:Route = {
 			}
 
 			if (ctx.method === 'PATCH') {
-				return fileController.updateFile(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
+				return fileController.patchFile(sessionIdFromHeaders(ctx.headers), path.id, ctx.request.body);
 			}
 
 			if (ctx.method === 'DELETE') {
@@ -41,7 +41,7 @@ const route:Route = {
 
 			if (ctx.method === 'PUT') {
 				const body = await getRawBody(ctx.req);
-				return fileController.updateFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
+				return fileController.putFileContent(sessionIdFromHeaders(ctx.headers), path.id, body);
 			}
 
 			throw new ErrorMethodNotAllowed();
