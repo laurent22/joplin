@@ -727,10 +727,10 @@ msgid "Select all"
 msgstr "Выбрать все"
 
 msgid "Bold"
-msgstr "Жирный"
+msgstr "Полужирный"
 
 msgid "Italic"
-msgstr "Наклонный"
+msgstr "Курсивный"
 
 msgid "Link"
 msgstr "Ссылка"
@@ -851,7 +851,7 @@ msgstr ""
 "браузера в Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Для того, чтобы использовать веб-клиппер, вам нужно сделать следующее:"
+msgstr "Для использования веб-клиппера вам нужно сделать следующее:"
 
 msgid "Step 1: Enable the clipper service"
 msgstr "Шаг 1: включите службу веб-клиппера"
@@ -861,7 +861,7 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"Эта служба позволяет расширению браузера общаться с Joplin. После ее "
+"Эта служба позволяет расширению браузера взаимодействовать с Joplin. После ее "
 "включения брандмауэр ОС может запросить разрешение на использование Joplin "
 "определенного порта."
 
@@ -1453,7 +1453,7 @@ msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
 
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV URL"
+msgstr "URL-адрес WebDAV-сервера Nextcloud"
 
 msgid "Nextcloud username"
 msgstr "Имя пользователя Nextcloud"
@@ -1462,7 +1462,7 @@ msgid "Nextcloud password"
 msgstr "Пароль Nextcloud"
 
 msgid "WebDAV URL"
-msgstr "WebDAV URL"
+msgstr "URL-адрес WebDAV"
 
 msgid "WebDAV username"
 msgstr "Имя пользователя WebDAV"
@@ -1492,7 +1492,7 @@ msgid "Auto"
 msgstr "Автоматически"
 
 msgid "Max concurrent connections"
-msgstr "Максимальное число конкурирующих соединений"
+msgstr "Максимальное число одновременных соединений"
 
 msgid "Language"
 msgstr "Язык"
@@ -1510,13 +1510,13 @@ msgid "Light"
 msgstr "Светлая"
 
 msgid "Dark"
-msgstr "Темная"
+msgstr "Тёмная"
 
 msgid "Solarised Light"
-msgstr "Ярко светлая"
+msgstr "Ярко-светлая"
 
 msgid "Solarised Dark"
-msgstr "Ярко тёмная"
+msgstr "Ярко-тёмная"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Незавершенные задачи сверху"
@@ -1768,7 +1768,7 @@ msgstr ""
 "Пожалуйста, укажите блокнот, в который должны быть импортированы заметки."
 
 msgid "Restored Notes"
-msgstr "Восстановленные Заметки"
+msgstr "Восстановленные заметки"
 
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
