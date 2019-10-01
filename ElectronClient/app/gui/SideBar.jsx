@@ -267,14 +267,18 @@ class SideBarComponent extends React.Component {
 		if (!itemId || !itemType) throw new Error('No data on element');
 
 		let deleteMessage = '';
+		let buttonLabel = '';
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const folder = await Folder.load(itemId);
 			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
+			buttonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
 			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			buttonLabel = _('Remove');
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
+			buttonLabel = _('Remove');
 		}
 
 		const menu = new Menu();
@@ -286,9 +290,12 @@ class SideBarComponent extends React.Component {
 
 		menu.append(
 			new MenuItem({
-				label: _('Delete'),
+				label: buttonLabel,
 				click: async () => {
-					const ok = bridge().showConfirmMessageBox(deleteMessage);
+					const ok = bridge().showConfirmMessageBox(deleteMessage, {
+						buttons: [buttonLabel, _('Cancel')],
+						defaultId: 1,
+					});
 					if (!ok) return;
 
 					if (itemType === BaseModel.TYPE_FOLDER) {
