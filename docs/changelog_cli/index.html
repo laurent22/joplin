@@ -34,6 +34,24 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -60,6 +78,10 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
@@ -198,9 +220,10 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -224,7 +247,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 
 <body>
 
-<div class="container">
+<div class="container page-changelog_cli">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -254,45 +277,45 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a>Joplin terminal app changelog</h1>
-<h2><a name="cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" href="#cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149">cli-v1.0.149</a> - 2019-09-27T21:18:57Z</h2>
+<h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149">cli-v1.0.149</a> - 2019-09-27T21:18:57Z<a name="cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" href="#cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support to Termux by returning a default when platform name cannot be determined (#1905)</li>
 </ul>
-<h2><a name="cli-v1-0-148-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-148-2019-09-27t18-42-36z" href="#cli-v1-0-148-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-148-2019-09-27t18-42-36z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.148">cli-v1.0.148</a> - 2019-09-27T18:42:36Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.148">cli-v1.0.148</a> - 2019-09-27T18:42:36Z<a name="cli-v1-0-148-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-148-2019-09-27t18-42-36z" href="#cli-v1-0-148-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-148-2019-09-27t18-42-36z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Improves deletion fail-safe so it is based on percentage of notes deleted. And display warning on sidebar.</li>
 <li>Improved: Log last requests in case of a sync error</li>
 </ul>
-<h2><a name="cli-v1-0-147-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-147-2019-09-25t21-26-24z" href="#cli-v1-0-147-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-147-2019-09-25t21-26-24z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.147">cli-v1.0.147</a> - 2019-09-25T21:26:24Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.147">cli-v1.0.147</a> - 2019-09-25T21:26:24Z<a name="cli-v1-0-147-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-147-2019-09-25t21-26-24z" href="#cli-v1-0-147-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-147-2019-09-25t21-26-24z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Import Evernote notes as HTML (#1887)</li>
 <li>New: Added fail-safe to prevent data from being wiped out when the sync target is empty</li>
@@ -301,11 +324,11 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>Fixed: Fixed import of notes that contain links with hashes</li>
 <li>Fixed: Fixed link issue following last update</li>
 </ul>
-<h2><a name="cli-v1-0-146-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-146-2019-09-08t19-12-41z" href="#cli-v1-0-146-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-146-2019-09-08t19-12-41z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.146">cli-v1.0.146</a> - 2019-09-08T19:12:41Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.146">cli-v1.0.146</a> - 2019-09-08T19:12:41Z<a name="cli-v1-0-146-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-146-2019-09-08t19-12-41z" href="#cli-v1-0-146-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-146-2019-09-08t19-12-41z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed regression that was making installation fail</li>
 </ul>
-<h2><a name="cli-v1-0-145-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-145-2019-09-08t16-23-02z" href="#cli-v1-0-145-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-145-2019-09-08t16-23-02z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.145">cli-v1.0.145</a> - 2019-09-08T16:23:02Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.145">cli-v1.0.145</a> - 2019-09-08T16:23:02Z<a name="cli-v1-0-145-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-145-2019-09-08t16-23-02z" href="#cli-v1-0-145-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-145-2019-09-08t16-23-02z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added headless server command (Beta) (#1860)</li>
 <li>Improved: Improved bold formatting support in Enex import (#1708)</li>
@@ -314,17 +337,17 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>Fixed: Fix typo on encryption options screen (#1823)</li>
 <li>Fixed: Fixes fatal error with cli 1.0.141 on start (#1791)</li>
 </ul>
-<h2><a name="cli-v1-0-137-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-137-2019-05-19t11-04-28z" href="#cli-v1-0-137-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-137-2019-05-19t11-04-28z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.137">cli-v1.0.137</a> - 2019-05-19T11:04:28Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.137">cli-v1.0.137</a> - 2019-05-19T11:04:28Z<a name="cli-v1-0-137-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-137-2019-05-19t11-04-28z" href="#cli-v1-0-137-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-137-2019-05-19t11-04-28z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed method to autosize resource</li>
 </ul>
-<h2><a name="cli-v1-0-136-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-136-2019-05-19t10-19-22z" href="#cli-v1-0-136-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-136-2019-05-19t10-19-22z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.136">cli-v1.0.136</a> - 2019-05-19T10:19:22Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.136">cli-v1.0.136</a> - 2019-05-19T10:19:22Z<a name="cli-v1-0-136-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-136-2019-05-19t10-19-22z" href="#cli-v1-0-136-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-136-2019-05-19t10-19-22z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Put back &quot;Fetched items&quot; message during sync</li>
 <li>Fixed: Handle missing resource blob when setting resource size</li>
 <li>Fixed: Prevent app from trying to upload resource it has not downloaded yet</li>
 </ul>
-<h2><a name="cli-v1-0-135-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-135-2019-05-13t22-59-14z" href="#cli-v1-0-135-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-135-2019-05-13t22-59-14z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.135">cli-v1.0.135</a> - 2019-05-13T22:59:14Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.135">cli-v1.0.135</a> - 2019-05-13T22:59:14Z<a name="cli-v1-0-135-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-135-2019-05-13t22-59-14z" href="#cli-v1-0-135-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-135-2019-05-13t22-59-14z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added option to disable creation of welcome items</li>
 <li>New: Support for note history (#1415) (#712)</li>
@@ -337,7 +360,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>Fixed: Prevents notes with no title to break after synchronize (#1472)</li>
 <li>Fixed: Import lists and sub-lists from Enex files with correct indentation (#1476)</li>
 </ul>
-<h2><a name="cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" href="#cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" class="heading-anchor">🔗</a><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.125">cli-v1.0.125</a> - 2019-04-29T18:38:05Z</h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.125">cli-v1.0.125</a> - 2019-04-29T18:38:05Z<a name="cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" href="#cli-v1-0-125-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-125-2019-04-29t18-38-05z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Improved support for Japanese, Chinese, Korean search queries (also applies to Goto Anything)</li>
 <li>Improved: Display warning when changing dir for filesystem sync</li>

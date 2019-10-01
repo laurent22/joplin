@@ -3,13 +3,13 @@
 [![Donate](https://joplinapp.org/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Become a patron](https://joplinapp.org/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin)
 
 * * *
-[Hacktoberfest](https://hacktoberfest.digitalocean.com/) is back this year again for our great pleasure ^^
+[Hacktoberfest 🎃](https://hacktoberfest.digitalocean.com/) is back this year again for our great pleasure ^^
 
 To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), log in (with you GitHub account) and you are ready to get in. Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
 
 Start hacking, submit the PR from the 1st of October, not before.
 
-We hope you will enjoy that event this year again like the previous one :jack_o_lantern: :tada:
+We hope you will enjoy that event this year again like the previous one 🎃🎉
 
 *PS: the 4 Pull Request don’t have to be done **only** on Joplin project, those can be done on any FOSS projects. Even PR for issue not tagged as 'hacktoberfest'*
 * * *
@@ -121,7 +121,7 @@ To import Evernote data, first export your Evernote notebooks to ENEX files as d
 
 In the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-In the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/master/readme/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
 ## Importing from Markdown files
 
@@ -129,7 +129,7 @@ Joplin can import notes from plain Markdown file. You can either import a comple
 
 In the **desktop application**, open File > Import > MD and select your Markdown file or directory.
 
-In the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/master/readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
 ## Importing from other applications
 
@@ -204,9 +204,9 @@ In the **terminal application**, to initiate the synchronisation process, type `
 
 # Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md) for more information about this feature and how to enable it.
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://github.com/laurent22/joplin/blob/master/readme/spec.md).
 
 # Note history
 
@@ -261,76 +261,13 @@ Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For 
 
 # Markdown
 
-Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
+Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md) for more information.
 
-## Links to other notes
-
-You can create a link to a note by specifying its ID in the URL. For example:
-
-	[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
-
-Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
-
-## Plugins
-
-Joplin supports a number of plugins that can be toggled on top the standard markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then enter Tools->General Options to enable the plugin. Plugins can be disabled in the same manner.
-
-| Plugin | Syntax | Description | Enabled |
-|--------|--------|-------------|---------|
-| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See Below](https://github.com/laurent22/joplin#math-notation) | yes |
-| [Mark](https://github.com/markdown-it/markdown-it-mark) | `==marked==` | Transforms into `<mark>marked</mark>` (highlighted) | yes |
-| [Footnote](https://github.com/markdown-it/markdown-it-footnote) | `Simples inline footnote ^[I'm inline!]` | See [plugin page](https://github.com/markdown-it/markdown-it-footnote) for full description | yes |
-| [TOC](https://github.com/nagaozen/markdown-it-toc-done-right) | Any of `${toc}, [[toc]], [toc], [[_toc_]]` | Adds a table of contents to the location of the toc page. Based on headings and sub-headings | no |
-| [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no |
-| [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no |
-| [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no |
-| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
-| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` :smile: | See [this list](https://gist.github.com/rxaviers/7360908) for more emoji | no |
-| [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
-| [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
-| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
-
-## Math notation
-
-Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
-
-	$$
-	EXPRESSION
-	$$
-
-For example:
-
-	$$
-	f(x) = \int_{-\infty}^\infty
-		\hat f(\xi)\,e^{2 \pi i \xi x}
-		\,d\xi
-	$$
-
-Here is an example with the Markdown and rendered result side by side:
-
-<img src="https://joplinapp.org/images/Katex.png" height="400px">
-
-## Checkboxes
-
-Checkboxes can be added like so:
-
-	- [ ] Milk
-	- [ ] Rice
-	- [ ] Eggs
-
-The checkboxes can then be ticked in the mobile and desktop applications.
-
-## HTML support
-
-It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:
-
-	This is <s>strikethrough text</s> mixed with regular **Markdown**.
-
-## Custom CSS
+# Custom CSS
 
 Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
 
-## Note templates
+# Note templates
 
 In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
 
@@ -373,7 +310,7 @@ In the desktop application, press Ctrl+G or Cmd+G and type the title of a note t
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
-Please see the [donation page](https://joplinapp.org/donate/) for information on how to support the development of Joplin.
+Please see the [donation page](https://github.com/laurent22/joplin/blob/master/readme/donate.md) for information on how to support the development of Joplin.
 
 # Community
 
@@ -442,9 +379,9 @@ Current translations:
 
 Thanks to our GitHub sponsors!
 
-|     |     |
-| :---: | :---: |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/6979755?v=4"/></br>[devonzuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars1.githubusercontent.com/u/794584?v=4"/></br>[corvus-ch](https://github.com/corvus-ch) |
+|     |     |     |
+| :---: | :---: | :---: |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/6979755?v=4"/></br>[devonzuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars1.githubusercontent.com/u/794584?v=4"/></br>[corvus-ch](https://github.com/corvus-ch) | <img width="50" src="https://avatars2.githubusercontent.com/u/5559891?v=4"/></br>[stellaktran](https://github.com/stellaktran)
 
 # Contributors
 

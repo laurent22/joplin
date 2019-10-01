@@ -34,6 +34,24 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -60,6 +78,10 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
@@ -198,9 +220,10 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -224,7 +247,7 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 
 <body>
 
-<div class="container">
+<div class="container page-debugging">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -254,54 +277,54 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="how-to-enable-debugging" href="#how-to-enable-debugging" class="heading-anchor">🔗</a>How to enable debugging</h1>
+<h1>How to enable debugging<a name="how-to-enable-debugging" href="#how-to-enable-debugging" class="heading-anchor">🔗</a></h1>
 <p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
-<h2><a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a>Desktop application</h2>
+<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --log-level debug</code></li>
 <li>Restart the application</li>
 <li>The development tools should now be opened. Click the &quot;Console&quot; tab</li>
 <li>Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.</li>
 </ul>
-<h2><a name="cli-application" href="#cli-application" class="heading-anchor">🔗</a>CLI application</h2>
+<h2>CLI application<a name="cli-application" href="#cli-application" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Start the app with <code>joplin --log-level debug</code></li>
 <li>Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)</li>
 </ul>
-<h2><a name="mobile-application" href="#mobile-application" class="heading-anchor">🔗</a>Mobile application</h2>
+<h2>Mobile application<a name="mobile-application" href="#mobile-application" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>In the options, enable Advanced Option</li>
 <li>Open the log in the top right hand corner menu and post a screenshot of any error/warning.</li>
 </ul>
-<h1><a name="creating-a-low-level-bug-report-on-android" href="#creating-a-low-level-bug-report-on-android" class="heading-anchor">🔗</a>Creating a low-level bug report on Android</h1>
+<h1>Creating a low-level bug report on Android<a name="creating-a-low-level-bug-report-on-android" href="#creating-a-low-level-bug-report-on-android" class="heading-anchor">🔗</a></h1>
 <p><a href="https://developer.android.com/studio/debug/bug-report">https://developer.android.com/studio/debug/bug-report</a></p>
 <p>To get a bugreport directly from your device, do the following:</p>
 <ul>
@@ -310,7 +333,7 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 <li>Select the type of bug report you want and tap Report.</li>
 </ul>
 <p>After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.</p>
-<h1><a name="creating-a-low-level-bug-report-on-ios" href="#creating-a-low-level-bug-report-on-ios" class="heading-anchor">🔗</a>Creating a low-level bug report on iOS</h1>
+<h1>Creating a low-level bug report on iOS<a name="creating-a-low-level-bug-report-on-ios" href="#creating-a-low-level-bug-report-on-ios" class="heading-anchor">🔗</a></h1>
 <p>Some crashes cannot be investigated using Joplin's own tools. In that case, it can be very helpful to provide a native iOS crash report.</p>
 <p>For this, please follow these instructions:</p>
 <p>You can send it to this address <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseSupport.png">https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseSupport.png</a></p>

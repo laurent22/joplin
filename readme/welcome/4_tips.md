@@ -28,7 +28,7 @@ An alarm can be associated with any to-do. It will be triggered at the given tim
 
 ## Markdown advanced tips
 
-Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions.
+Joplin uses and renders [Github-flavoured Markdown](https://joplinapp.org/markdown/) with a few variations and additions.
 
 For example, tables are supported:
 
