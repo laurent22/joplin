@@ -54,7 +54,7 @@ msgid "y"
 msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Cancelando sincronización de segundo plano... Por favor espere."
+msgstr "Cancelando sincronización en segundo plano... Por favor espere."
 
 #, javascript-format
 msgid "No such command: %s"
@@ -87,7 +87,7 @@ msgstr "Adjuntar archivo a la nota."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "No se encuentra \"%s\"."
+msgstr "No se puede encontrar \"%s\"."
 
 msgid "Displays the given note."
 msgstr "Mostrar la nota dada."
@@ -345,7 +345,7 @@ msgid "Creates a new note."
 msgstr "Crea una nueva nota."
 
 msgid "Notes can only be created within a notebook."
-msgstr "Notas solamente pueden ser creadas dentro de una libreta."
+msgstr "Solo se pueden crear notas dentro de una libreta."
 
 msgid "Creates a new to-do."
 msgstr "Crea una nueva lista de tareas."
@@ -397,10 +397,10 @@ msgstr ""
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "El servidor se está ejecutando en el puerto %d"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "El servidor no se está ejecutando."
 
 #, javascript-format
 msgid ""
@@ -1902,12 +1902,14 @@ msgid "Type new tags or select from list"
 msgstr "Escriba nuevas etiquetas o seleccionelas de la lista"
 
 msgid "Warning"
-msgstr ""
+msgstr "Advertencia"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"Para utilizar la sincronización del sistema de archivos se requieren sus permisos"
+"para escribir en el almacenamiento externo."
 
 msgid "Encryption Config"
 msgstr "Configuración de cifrado"
@@ -1925,21 +1927,22 @@ msgstr "Log"
 
 #, fuzzy
 msgid "Creating report..."
-msgstr "Creando nuevo %s..."
+msgstr "Creando reporte..."
 
 msgid "Export Debug Report"
 msgstr "Exportar informe de depuración"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Reparando indice de busqueda"
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Repara indice de busqueda"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
-msgstr ""
+msgstr "Use esto para reparar el indice de busqueda si hay un problema con la busqueda."
+"Puede tomar un largo periodo de tiempo dependiendo del número de notas."
 
 #, fuzzy
 msgid "More information"
