@@ -426,7 +426,7 @@ class Application extends BaseApplication {
 		};
 
 		const syncStatusItem = {
-			label: _('Synchronisation status'),
+			label: _('Synchronisation Status'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',
