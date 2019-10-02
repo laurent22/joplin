@@ -130,7 +130,7 @@
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
     "node-fetch": "^1.7.3",
-    "node-notifier": "^5.2.1",
+    "node-notifier": "^6.0.0",
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
     "react": "^16.4.0",
