@@ -458,7 +458,7 @@ msgid ""
 "operation."
 msgstr ""
 "Trovato un file di blocco. Se si è certi che non è in corso alcuna "
-"sincronizzazione, è possibile eliminare il file di blocco in \"% s\" e "
+"sincronizzazione, è possibile eliminare il file di blocco in \"%s\" e "
 "riprendere l'operazione."
 
 #, javascript-format
@@ -730,7 +730,7 @@ msgstr "È disponibile un aggiornamento, vuoi scaricarlo ora?"
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr "Tua versione: %s"
+msgstr "La tua versione: %s"
 
 #, javascript-format
 msgid "New version: %s"
@@ -1523,16 +1523,16 @@ msgid "Enable deflist syntax"
 msgstr ""
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "Abilita abbreviazioni"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Abilita emoji markdown"
 
 msgid "Enable ++insert++ syntax"
 msgstr "Attiva sintassi ++insert++"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Abilita estensione tavola dei contenuti"
 
 msgid "Enable Fountain syntax support"
 msgstr "Attiva supporto sintassi Fountain"
@@ -1652,7 +1652,7 @@ msgid "%d days"
 msgstr "%d giorni"
 
 msgid "Keep note history for"
-msgstr "Mantieni cronologia nota per"
+msgstr "Mantieni la cronologia note per"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1801,7 +1801,7 @@ msgid "On %s: %s"
 msgstr "Su %s: %s"
 
 msgid "Permission to use camera"
-msgstr "Permesso di usare la fotocamera"
+msgstr "Permesso per usare la fotocamera"
 
 msgid "Your permission to use your camera is required."
 msgstr "E’ richiesto il permesso di usare la fotocamera."
@@ -2050,7 +2050,7 @@ msgid "View on map"
 msgstr "Guarda sulla mappa"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "Vai all'URL"
 
 msgid "Attach..."
 msgstr "Allega..."

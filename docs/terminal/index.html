@@ -34,6 +34,24 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -60,6 +78,10 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
@@ -198,9 +220,10 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -224,7 +247,7 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 
 <body>
 
-<div class="container">
+<div class="container page-terminal">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -254,30 +277,30 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
@@ -286,7 +309,7 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 <p>Notes exported from Evernote via .enex files <a href="https://joplinapp.org/#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
 <img src="https://joplinapp.org/images/ScreenshotTerminal.png" style="max-width: 60%">
-<h1><a name="installation" href="#installation" class="heading-anchor">🔗</a>Installation</h1>
+<h1>Installation<a name="installation" href="#installation" class="heading-anchor">🔗</a></h1>
 <table>
 <thead>
 <tr>
@@ -310,14 +333,14 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 </tbody>
 </table>
 <p>To start it, type <code>joplin</code>.</p>
-<h1><a name="usage" href="#usage" class="heading-anchor">🔗</a>Usage</h1>
+<h1>Usage<a name="usage" href="#usage" class="heading-anchor">🔗</a></h1>
 <p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#shortcuts">shortcuts</a>.</p>
 <img src="https://joplinapp.org/images/ScreenshotTerminalCaptions.png" height="450px">
-<h2><a name="input-modes" href="#input-modes" class="heading-anchor">🔗</a>Input modes</h2>
+<h2>Input modes<a name="input-modes" href="#input-modes" class="heading-anchor">🔗</a></h2>
 <p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
-<h3><a name="normal-mode" href="#normal-mode" class="heading-anchor">🔗</a>Normal mode</h3>
+<h3>Normal mode<a name="normal-mode" href="#normal-mode" class="heading-anchor">🔗</a></h3>
 <p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#shortcuts">shortcuts</a> are available.</p>
-<h3><a name="command-line-mode" href="#command-line-mode" class="heading-anchor">🔗</a>Command-line mode</h3>
+<h3>Command-line mode<a name="command-line-mode" href="#command-line-mode" class="heading-anchor">🔗</a></h3>
 <p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#commands">full list of commands</a>.</p>
 <p>It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:</p>
 <table>
@@ -361,9 +384,9 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 <p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
 <pre><code>config editor &quot;subl -w&quot;
 </code></pre>
-<h2><a name="editing-a-note" href="#editing-a-note" class="heading-anchor">🔗</a>Editing a note</h2>
+<h2>Editing a note<a name="editing-a-note" href="#editing-a-note" class="heading-anchor">🔗</a></h2>
 <p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
-<h2><a name="getting-help" href="#getting-help" class="heading-anchor">🔗</a>Getting help</h2>
+<h2>Getting help<a name="getting-help" href="#getting-help" class="heading-anchor">🔗</a></h2>
 <p>The complete usage information is available from command-line mode, by typing one of these commands:</p>
 <table>
 <thead>
@@ -389,17 +412,17 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 </table>
 <p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
 <p>For general information relevant to all the applications, see also <a href="https://joplinapp.org">Joplin home page</a>.</p>
-<h1><a name="importing-notes-from-evernote" href="#importing-notes-from-evernote" class="heading-anchor">🔗</a>Importing notes from Evernote</h1>
+<h1>Importing notes from Evernote<a name="importing-notes-from-evernote" href="#importing-notes-from-evernote" class="heading-anchor">🔗</a></h1>
 <p>To import Evernote data, follow these steps:</p>
 <ul>
 <li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
 <li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
 <li>Then repeat the process for each notebook that needs to be imported.</li>
 </ul>
-<h1><a name="synchronisation" href="#synchronisation" class="heading-anchor">🔗</a>Synchronisation</h1>
+<h1>Synchronisation<a name="synchronisation" href="#synchronisation" class="heading-anchor">🔗</a></h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or OneDrive, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with Nextcloud, Dropbox (by default) and OneDrive, or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on &quot;Synchronise&quot; to start a synchronisation manually.</p>
-<h2><a name="nextcloud-synchronisation" href="#nextcloud-synchronisation" class="heading-anchor">🔗</a>Nextcloud synchronisation</h2>
+<h2>Nextcloud synchronisation<a name="nextcloud-synchronisation" href="#nextcloud-synchronisation" class="heading-anchor">🔗</a></h2>
 <p>You will need to set the <code>sync.target</code> config variable and all the <code>sync.5.path</code>, <code>sync.5.username</code> and <code>sync.5.password</code> config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:</p>
 <pre><code>:config sync.target 5
 :config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
@@ -407,23 +430,23 @@ https://github.com/laurent22/joplin/blob/master/readme/terminal.md
 :config sync.5.password YOUR_PASSWORD
 </code></pre>
 <p>If synchronisation does not work, please consult the logs in the app profile directory (<code>~/.config/joplin</code>)- it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.</p>
-<h2><a name="webdav-synchronisation" href="#webdav-synchronisation" class="heading-anchor">🔗</a>WebDAV synchronisation</h2>
+<h2>WebDAV synchronisation<a name="webdav-synchronisation" href="#webdav-synchronisation" class="heading-anchor">🔗</a></h2>
 <p>Select the &quot;WebDAV&quot; synchronisation target and follow the same instructions as for Nextcloud above.</p>
-<h2><a name="onedrive-and-dropbox-synchronisation" href="#onedrive-and-dropbox-synchronisation" class="heading-anchor">🔗</a>OneDrive and Dropbox synchronisation</h2>
+<h2>OneDrive and Dropbox synchronisation<a name="onedrive-and-dropbox-synchronisation" href="#onedrive-and-dropbox-synchronisation" class="heading-anchor">🔗</a></h2>
 <p>For Dropbox, type <code>:config sync.target 7</code>. For OneDrive, type <code>:config sync.target 3</code>. Then type <code>sync</code> to login to the service and start the synchronisation process.</p>
 <p>It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
 </code></pre>
-<h1><a name="urls" href="#urls" class="heading-anchor">🔗</a>URLs</h1>
+<h1>URLs<a name="urls" href="#urls" class="heading-anchor">🔗</a></h1>
 <p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
 <img src="https://joplinapp.org/images/UrlCut.png" width="300px">
 <p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.</p>
 <p>As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
 <img src="https://joplinapp.org/images/UrlNoCut.png" width="300px">
 <p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
-<h1><a name="attachments-resources" href="#attachments-resources" class="heading-anchor">🔗</a>Attachments / Resources</h1>
+<h1>Attachments / Resources<a name="attachments-resources" href="#attachments-resources" class="heading-anchor">🔗</a></h1>
 <p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
-<h1><a name="shell-mode" href="#shell-mode" class="heading-anchor">🔗</a>Shell mode</h1>
+<h1>Shell mode<a name="shell-mode" href="#shell-mode" class="heading-anchor">🔗</a></h1>
 <p>Commands can also be used directly from a shell. To view the list of available commands, type <code>joplin help all</code>. To reference a note, notebook or tag you can either use the ID (type <code>joplin ls -l</code> to view the ID) or by title.</p>
 <p>For example, this will create a new note &quot;My note&quot; in the notebook &quot;My notebook&quot;:</p>
 <pre><code>$ joplin mkbook &quot;My notebook&quot;
@@ -437,7 +460,7 @@ fe889 07/12/2017 17:57 My note
 <p>Give a new title to the note:</p>
 <pre><code>$ joplin set fe889 title &quot;New title&quot;
 </code></pre>
-<h1><a name="shortcuts" href="#shortcuts" class="heading-anchor">🔗</a>Shortcuts</h1>
+<h1>Shortcuts<a name="shortcuts" href="#shortcuts" class="heading-anchor">🔗</a></h1>
 <p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of default shortcuts:</p>
 <pre><code>:                 enter_command_line_mode
 TAB               focus_next
@@ -563,7 +586,7 @@ dn                mv $n &quot;&quot;
 </tr>
 </tbody>
 </table>
-<h1><a name="commands" href="#commands" class="heading-anchor">🔗</a>Commands</h1>
+<h1>Commands<a name="commands" href="#commands" class="heading-anchor">🔗</a></h1>
 <p>The following commands are available in <a href="#command-line-mode">command-line mode</a>:</p>
 <pre><code>attach &lt;note&gt; &lt;file&gt;
 
@@ -836,7 +859,7 @@ version
 
     Displays version information
 </code></pre>
-<h1><a name="license" href="#license" class="heading-anchor">🔗</a>License</h1>
+<h1>License<a name="license" href="#license" class="heading-anchor">🔗</a></h1>
 <p>Copyright (c) 2016-2019 Laurent Cozic</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>

@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
@@ -396,17 +396,20 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"Starte, stoppe oder überprüfe den API Server. Um den Port zu spezifizieren "
+"auf dem er laufen soll, setze die api.port Konfigurationsvariable. Die "
+"Befehle lauten (%s)."
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "Der Server lauft schon auf Port %d"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "Der Server lauft auf Port %d"
 
 msgid "Server is not running."
-msgstr ""
+msgstr "Der Server ist nicht gestartet."
 
 #, javascript-format
 msgid ""
@@ -701,9 +704,8 @@ msgstr "&Hilfe"
 msgid "Website and documentation"
 msgstr "Webseite und Dokumentation"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin v%s"
+msgstr "Joplin Forum"
 
 msgid "Make a donation"
 msgstr "Spenden"
@@ -821,6 +823,7 @@ msgstr ""
 
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
+"Diese Aktion wird ein neues Fenster öffnen. Aktuelle Änderungen speichern?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -850,7 +853,7 @@ msgid ""
 "continue?"
 msgstr ""
 "Durch die Deaktivierung der Verschlüsselung werden *alle* Notizen und "
-"Anhänge neu synchronisiert und unverschlüsselt an das Synchronisierungsziel "
+"Anhänge neu synchronisiert und unverschlüsselt an das Synchronisationsziel "
 "gesendet. Möchtest du fortfahren?"
 
 msgid ""
@@ -929,13 +932,13 @@ msgid "Encryption is:"
 msgstr "Die Verschlüsselung ist:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox Erweiterung"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome-Webstore"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Hole es jetzt:"
 
 # 'Nutzung', 'Gebrauch', or 'Verwendung' - depends on the context
 msgid "Usage"
@@ -1551,9 +1554,8 @@ msgstr "Aktiviere ++insert++ Syntax"
 msgid "Enable multimarkdown table extension"
 msgstr "Aktiviere multimarkdown Tabellen Erweiterung"
 
-#, fuzzy
 msgid "Enable Fountain syntax support"
-msgstr "Aktiviere ~sub~ Syntax"
+msgstr "Aktiviere Fountain Unterstützung"
 
 msgid "Show tray icon"
 msgstr "Zeige Tray-Icon"
@@ -1579,7 +1581,6 @@ msgstr "Zoomstufe der Benutzeroberfläche"
 msgid "Editor font size"
 msgstr "Schriftgröße im Editor"
 
-#, fuzzy
 msgid "Editor font"
 msgstr "Schriftgröße im Editor"
 
@@ -1651,11 +1652,16 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Störungssicher: Lösche nicht die lokalen Daten, wenn das "
+"Synchronisationsziel leer ist (oft ein Resultat von Fehlkonfiguration oder "
+"einem Programmfehler)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"Spezifiziere den Port, der vom API Server verwendet werden soll. Wenn er "
+"nicht gesetzt ist, wird ein Standardwert verwendet."
 
 msgid "Enable note history"
 msgstr "Aktiviere Notizen-Verlauf"
@@ -1693,13 +1699,11 @@ msgstr "Zusatzprogramme"
 msgid "Application"
 msgstr "Applikation"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "Die Verschlüsselung ist:"
+msgstr "Verschlüsselung"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "Web-Clipper Optionen"
+msgstr "Web Clipper"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1715,13 +1719,11 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin Export Verzeichnis"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote Export Datei"
+msgstr "Evernote Export Datei (als Markdown)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote Export Datei"
+msgstr "Evernote Export Datei (als HTML)"
 
 msgid "Json Export Directory"
 msgstr "Json Export Verzeichnis"
@@ -1830,13 +1832,11 @@ msgstr "Berechtigung zur Verwendung der Kamera"
 msgid "Your permission to use your camera is required."
 msgstr "Deine Zustimmung zur Verwendung deiner Kamera ist erforderlich."
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "Die/das momentan ausgewählte Notiz(-buch) löschen."
+msgstr "Du hast momentan keine Notizbücher."
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "Erstellt ein neues Notizbuch."
+msgstr "Notizbuch erstellen"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1896,7 +1896,7 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "Fehler. Bitte überprüfe, ob die URL, der Benutzername, das Passwort. usw. "
-"korrekt sind und das das Synchronisierungsziel erreichbar ist. Fehlermeldung:"
+"korrekt sind und das das Synchronisationsziel erreichbar ist. Fehlermeldung:"
 
 msgid "The application has been authorised!"
 msgstr "Das Programm wurde erfolgreich autorisiert!"

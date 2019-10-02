@@ -219,6 +219,7 @@ class Setting extends BaseModel {
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
 					if (platform !== 'mobile') {
+						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 					}
@@ -884,6 +885,7 @@ Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
+Setting.THEME_DRACULA = 5;
 
 Setting.FONT_DEFAULT = 0;
 Setting.FONT_MENLO = 1;

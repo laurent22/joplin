@@ -34,6 +34,24 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -60,6 +78,10 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
@@ -198,9 +220,10 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -224,7 +247,7 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 
 <body>
 
-<div class="container">
+<div class="container page-e2ee">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -254,39 +277,39 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="about-end-to-end-encryption-e2ee" href="#about-end-to-end-encryption-e2ee" class="heading-anchor">🔗</a>About End-To-End Encryption (E2EE)</h1>
+<h1>About End-To-End Encryption (E2EE)<a name="about-end-to-end-encryption-e2ee" href="#about-end-to-end-encryption-e2ee" class="heading-anchor">🔗</a></h1>
 <p>End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.</p>
 <p>The system is designed to defeat any attempts at surveillance or tampering because no third party can decipher the data being communicated or stored.</p>
 <p>There is a small overhead to using E2EE since data constantly has to be encrypted and decrypted so consider whether you really need the feature.</p>
-<h1><a name="enabling-e2ee" href="#enabling-e2ee" class="heading-anchor">🔗</a>Enabling E2EE</h1>
+<h1>Enabling E2EE<a name="enabling-e2ee" href="#enabling-e2ee" class="heading-anchor">🔗</a></h1>
 <p>Due to the decentralised nature of Joplin, E2EE needs to be manually enabled on a single device first (this will create a Master Key for encryption secured by your password) and then it must be synced with all other remaining devices. It is recommended to start with the desktop or terminal application since they generally run on more powerful devices (unlike the mobile application), and so they can encrypt the initial data faster.</p>
 <p>To enable it, please follow these steps:</p>
 <ol>
@@ -299,9 +322,9 @@ https://github.com/laurent22/joplin/blob/master/readme/e2ee.md
 </ol>
 <p>Do not manually enable encryption on multiple devices in parallel, but rather wait for the other ones to sync with the first already encrypted device. Otherwise, you may end up with multiple encryption keys (which is supported by Joplin but most probably not what you want).</p>
 <p>Once all the devices are in sync with E2EE enabled, the encryption/decryption should be mostly transparent. Occasionally you may see encrypted items but they will get decrypted in the background eventually.</p>
-<h1><a name="disabling-e2ee" href="#disabling-e2ee" class="heading-anchor">🔗</a>Disabling E2EE</h1>
+<h1>Disabling E2EE<a name="disabling-e2ee" href="#disabling-e2ee" class="heading-anchor">🔗</a></h1>
 <p>Follow the same procedure as above but instead disable E2EE on each device one by one. Again it might be simpler to do it one device at a time and to wait every time for the synchronisation to complete.</p>
-<h1><a name="technical-specification" href="#technical-specification" class="heading-anchor">🔗</a>Technical specification</h1>
+<h1>Technical specification<a name="technical-specification" href="#technical-specification" class="heading-anchor">🔗</a></h1>
 <p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="https://joplinapp.org/spec/">Encryption specification</a>.</p>
 
 <script>

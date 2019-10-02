@@ -54,16 +54,16 @@ class ResourceService extends BaseService {
 				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
 					const note = noteById(change.item_id);
 
-					if (note.encryption_applied) {
-						// If we hit an encrypted note, abort processing for now.
-						// Note will eventually get decrypted and processing can resume then.
-						// This is a limitation of the change tracking system - we cannot skip a change
-						// and keep processing the rest since we only keep track of "lastProcessedChangeId".
-						foundNoteWithEncryption = true;
-						break;
-					}
-
 					if (note) {
+						if (note.encryption_applied) {
+							// If we hit an encrypted note, abort processing for now.
+							// Note will eventually get decrypted and processing can resume then.
+							// This is a limitation of the change tracking system - we cannot skip a change
+							// and keep processing the rest since we only keep track of "lastProcessedChangeId".
+							foundNoteWithEncryption = true;
+							break;
+						}
+
 						await this.setAssociatedResources_(note);
 					} else {
 						this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);

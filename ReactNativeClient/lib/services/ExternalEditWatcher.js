@@ -51,7 +51,11 @@ class ExternalEditWatcher {
 		if (!this.watcher_) {
 			this.watcher_ = this.chokidar_.watch(fileToWatch);
 			this.watcher_.on('all', async (event, path) => {
-				this.logger().debug(`ExternalEditWatcher: Event: ${event}: ${path}`);
+				// For now, to investigate the lost content issue when using an external editor,
+				// make all the debug statement to info() so that it goes to the log file.
+				// Those that were previous debug() statements are marked as "was_debug"
+
+				/* was_debug */ this.logger().info(`ExternalEditWatcher: Event: ${event}: ${path}`);
 
 				if (event === 'unlink') {
 					// File are unwatched in the stopWatching functions below. When we receive an unlink event
@@ -197,7 +201,7 @@ class ExternalEditWatcher {
 
 				const iid = setInterval(() => {
 					if (subProcess && subProcess.pid) {
-						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
+						/* was_debug */ this.logger().info(`Started editor with PID ${subProcess.pid}`);
 						clearInterval(iid);
 						resolve();
 					}
@@ -273,7 +277,7 @@ class ExternalEditWatcher {
 			return;
 		}
 
-		this.logger().debug(`ExternalEditWatcher: Update note file: ${note.id}`);
+		/* was_debug */ this.logger().info(`ExternalEditWatcher: Update note file: ${note.id}`);
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.
