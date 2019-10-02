@@ -23,6 +23,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		this.state = {
 			passwordPromptShow: false,
 			passwordPromptAnswer: '',
+			passwordPromptConfirmAnswer: '',
 		};
 
 		shared.constructor(this);
@@ -131,6 +132,9 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			try {
 				const password = this.state.passwordPromptAnswer;
 				if (!password) throw new Error(_('Password cannot be empty'));
+				const password2 = this.state.passwordPromptConfirmAnswer;
+				if (!password2) throw new Error(_('Confirm password cannot be empty'));
+				if (password !== password2) throw new Error(_('Passwords do not match'));
 				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
@@ -141,6 +145,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={{ flex: 1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
 				<Text style={{ fontSize: theme.fontSize, color: theme.color }}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<Text>Password: </Text>
 				<TextInput
 					selectionColor={theme.textSelectionColor}
 					style={{ margin: 10, color: theme.color, borderWidth: 1, borderColor: theme.dividerColor }}
@@ -148,6 +153,16 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					value={this.state.passwordPromptAnswer}
 					onChangeText={text => {
 						this.setState({ passwordPromptAnswer: text });
+					}}
+				></TextInput>
+				<Text>Confirm Password: </Text>
+				<TextInput
+					selectionColor={theme.textSelectionColor}
+					style={{ margin: 10, color: theme.color, borderWidth: 1, borderColor: theme.dividerColor }}
+					secureTextEntry={true}
+					value={this.state.passwordPromptConfirmAnswer}
+					onChangeText={text => {
+						this.setState({ passwordPromptConfirmAnswer: text });
 					}}
 				></TextInput>
 				<View style={{ flexDirection: 'row' }}>
@@ -203,6 +218,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				this.setState({
 					passwordPromptShow: true,
 					passwordPromptAnswer: '',
+					passwordPromptConfirmAnswer: '',
 				});
 				return;
 			}
