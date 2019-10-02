@@ -27,7 +27,7 @@ This is a quick summary of the Markdown syntax.
 
 ## Joplin Extras
 
-Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
+Besides the standard Mardkown syntax, Joplin supports several additional features.
 
 ### Links to other notes
 
