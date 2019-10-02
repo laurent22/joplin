@@ -155,6 +155,13 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg == '--profile-db') {
+				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile-db <db-name>'), 'flagError');
+				matched.dbName = nextArg;
+				argv.splice(0, 2);
+				continue;
+			}
+
 			if (arg.indexOf('-psn') === 0) {
 				// Some weird flag passed by macOS - can be ignored.
 				// https://github.com/laurent22/joplin/issues/480
@@ -514,6 +521,12 @@ class BaseApplication {
 		return `${os.homedir()}/.config/${Setting.value('appName')}`;
 	}
 
+	determineDbName(initArgs) {
+		if (initArgs.dbName) return initArgs.dbName;
+
+		return 'database';
+	}
+
 	async testing() {
 		const markdownUtils = require('lib/markdownUtils');
 		const ClipperServer = require('lib/ClipperServer');
@@ -550,6 +563,8 @@ class BaseApplication {
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
+
+		const dbName = this.determineDbName(initArgs);
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
@@ -589,7 +604,7 @@ class BaseApplication {
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
-		await this.database_.open({ name: `${profileDir}/database.sqlite` });
+		await this.database_.open({ name: `${profileDir}/${dbName}.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
