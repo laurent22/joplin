@@ -24,6 +24,7 @@
     "koa-body": "^4.1.1",
     "koa-if": "^1.0.2",
     "moment": "^2.24.0",
+    "mustache": "^3.1.0",
     "nanoid": "^2.1.1",
     "query-string": "^6.8.3",
     "raw-body": "^2.4.1",
@@ -31,11 +32,12 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@types/koa": "^2.0.49",
     "@rmp135/sql-ts": "git+https://github.com/laurent22/sql-ts.git",
-    "@types/jasmine": "^3.4.0",
     "@types/co-body": "0.0.3",
     "@types/fs-extra": "^8.0.0",
+    "@types/jasmine": "^3.4.0",
+    "@types/koa": "^2.0.49",
+    "@types/mustache": "^0.8.32",
     "@types/yargs": "^13.0.2",
     "gulp": "^4.0.0",
     "gulp-sourcemaps": "^2.6.5",

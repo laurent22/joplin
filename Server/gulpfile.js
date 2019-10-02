@@ -35,8 +35,9 @@ function buildTypeScripts() {
 	}));
 }
 
-function copyLib() {
-	return gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*.js`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
+async function copyLib() {
+	await gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*.js`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
+	await gulp.src([`${projectRootDir}/Server/app/views/**/*.mustache`]).pipe(gulp.dest(`${serverRootDir}/dist/app/views`));
 }
 
 gulp.task('default', async function() {
