@@ -134,11 +134,17 @@
 					const src = absoluteUrl(imageSrc(node));
 					node.setAttribute('src', src);
 					if (!(src in imageIndexes)) imageIndexes[src] = 0;
-					const imageSize = imageSizes[src][imageIndexes[src]];
-					imageIndexes[src]++;
-					if (imageSize && convertToMarkup === 'markdown') {
-						node.width = imageSize.width;
-						node.height = imageSize.height;
+
+					if (!imageSizes[src]) {
+						// This seems to concern dynamic images that don't really such as Gravatar, etc.
+						console.warn('Found an image for which the size had not been fetched:', src);
+					} else {
+						const imageSize = imageSizes[src][imageIndexes[src]];
+						imageIndexes[src]++;
+						if (imageSize && convertToMarkup === 'markdown') {
+							node.width = imageSize.width;
+							node.height = imageSize.height;
+						}
 					}
 				}
 
