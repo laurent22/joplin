@@ -112,6 +112,14 @@ class EncryptionConfigScreenComponent extends React.Component {
 				answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			} else {
 				answer = await dialogs.prompt(_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.'), '', '', { type: 'password' });
+				if (answer) {
+					// Verify password
+					const answer2 = await dialogs.prompt(_('Verify your password by entering it again.'), '', '', { type: 'password' });
+					if (answer !== answer2) {
+						await dialogs.alert('Passwords did not match!');
+						return;
+					}
+				}
 			}
 
 			if (!answer) return;
