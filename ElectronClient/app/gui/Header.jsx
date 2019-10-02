@@ -161,7 +161,7 @@ class HeaderComponent extends React.Component {
 		const inputStyle = {
 			display: 'flex',
 			flex: 1,
-			marginLeft: 20,
+			marginLeft: 10,
 			paddingLeft: 6,
 			paddingRight: 6,
 			paddingTop: 1, // vertical alignment with buttons
