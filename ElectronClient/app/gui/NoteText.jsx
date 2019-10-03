@@ -1543,7 +1543,7 @@ class NoteTextComponent extends React.Component {
 		menu.popup(bridge().window());
 	}
 
-	createToolbarItems(note) {
+	createToolbarItems(note, editorIsVisible) {
 		const toolbarItems = [];
 		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
@@ -1578,7 +1578,7 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN) {
+		if (note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
 				tooltip: _('Bold'),
 				iconName: 'fa-bold',
@@ -1980,7 +1980,8 @@ class NoteTextComponent extends React.Component {
 			}
 		}
 
-		const toolbarItems = this.createToolbarItems(note);
+		const editorIsVisible = visiblePanes.indexOf('editor') >= 0;
+		const toolbarItems = this.createToolbarItems(note, editorIsVisible);
 
 		const toolbar = <Toolbar style={toolbarStyle} items={toolbarItems} />;
 

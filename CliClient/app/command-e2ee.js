@@ -56,7 +56,7 @@ class Command extends BaseCommand {
 				return;
 			}
 			if (password !== password2) {
-				this.stdout(_('Passwords did not match!'));
+				this.stdout(_('Passwords do not match!'));
 				return;
 			}
 			await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
