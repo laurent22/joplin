@@ -101,5 +101,12 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$version" ]]; t
 else
     echo "${COLOR_GREEN}You already have the latest version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
-echo 'Bye!'
+
+# Delete global variables
+unset COLOR_RED
+unset COLOR_GREEN
+unset COLOR_RESET
 unset version
+
+# Goodbye
+echo 'Bye!'
