@@ -2,6 +2,9 @@ const { reg } = require('lib/registry.js');
 const Folder = require('lib/models/Folder.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 const Setting = require('lib/models/Setting.js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -14,9 +17,17 @@ const saveNoteMutex_ = new Mutex();
 shared.noteExists = async function(noteId) {
 	const existingNote = await Note.load(noteId);
 	return !!existingNote;
-}
+};
 
-shared.saveNoteButton_press = async function(comp, folderId = null) {
+shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
+	options = Object.assign(
+		{},
+		{
+			autoTitle: true,
+		},
+		options
+	);
+
 	const releaseMutex = await saveNoteMutex_.acquire();
 
 	let note = Object.assign({}, comp.state.note);
@@ -37,18 +48,18 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	let isNew = !note.id;
 
-	let options = { userSideValidation: true };
+	let saveOptions = { userSideValidation: true };
 	if (!isNew) {
-		options.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
+		saveOptions.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
 	}
 
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
-	if (hasAutoTitle) {
+	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note);
-		if (options.fields && options.fields.indexOf('title') < 0) options.fields.push('title');
+		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
-	const savedNote = ('fields' in options) && !options.fields.length ? Object.assign({}, note) : await Note.save(note, options);
+	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? Object.assign({}, note) : await Note.save(note, saveOptions);
 
 	const stateNote = comp.state.note;
 
@@ -77,10 +88,14 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 
 	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
 
+	if (!options.autoTitle) newState.newAndNoTitleChangeNoteId = null;
+
 	comp.setState(newState);
 
+	// await shared.refreshAttachedResources(comp, newState.note.body);
+
 	if (isNew) {
-		Note.updateGeolocation(note.id).then((geoNote) => {
+		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
@@ -92,17 +107,14 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 				longitude: geoNote.longitude,
 				latitude: geoNote.latitude,
 				altitude: geoNote.altitude,
-			}
+			};
 
 			const modNote = Object.assign({}, stateNote, geoInfo);
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
-			comp.refreshNoteMetadata();
 		});
 	}
-
-	comp.refreshNoteMetadata();
 
 	if (isNew) {
 		// Clear the newNote item now that the note has been saved, and
@@ -114,7 +126,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null) {
 	}
 
 	releaseMutex();
-}
+};
 
 shared.saveOneProperty = async function(comp, name, value) {
 	let note = Object.assign({}, comp.state.note);
@@ -137,33 +149,60 @@ shared.saveOneProperty = async function(comp, name, value) {
 		});
 	} else {
 		note[name] = value;
-		comp.setState({	note: note });
+		comp.setState({ note: note });
 	}
-}
+};
 
 shared.noteComponent_change = function(comp, propName, propValue) {
-	let newState = {}
+	let newState = {};
 
 	let note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
 	newState.note = note;
 
 	comp.setState(newState);
-}
+};
 
-shared.refreshNoteMetadata = async function(comp, force = null) {
-	if (force !== true && !comp.state.showNoteMetadata) return;
+let resourceCache_ = {};
 
-	let noteMetadata = await Note.serializeAllProps(comp.state.note);
-	comp.setState({ noteMetadata: noteMetadata });
-}
+shared.clearResourceCache = function() {
+	resourceCache_ = {};
+};
+
+shared.attachedResources = async function(noteBody) {
+	if (!noteBody) return {};
+	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
+
+	const output = {};
+	for (let i = 0; i < resourceIds.length; i++) {
+		const id = resourceIds[i];
+
+		if (resourceCache_[id]) {
+			output[id] = resourceCache_[id];
+		} else {
+			const resource = await Resource.load(id);
+			const localState = await Resource.localState(resource);
+
+			const o = {
+				item: resource,
+				localState: localState,
+			};
+
+			// eslint-disable-next-line require-atomic-updates
+			resourceCache_[id] = o;
+			output[id] = o;
+		}
+	}
+
+	return output;
+};
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
-}
+};
 
 shared.initState = async function(comp) {
 	let note = null;
@@ -184,24 +223,71 @@ shared.initState = async function(comp) {
 		folder: folder,
 		isLoading: false,
 		fromShare: comp.props.sharedData ? true : false,
+		noteResources: await shared.attachedResources(note ? note.body : ''),
 	});
 
 	if (comp.props.sharedData) {
 		this.noteComponent_change(comp, 'body', comp.props.sharedData.value);
 	}
 
+	// eslint-disable-next-line require-atomic-updates
 	comp.lastLoadedNoteId_ = note ? note.id : null;
-}
-
-shared.showMetadata_onPress = function(comp) {
-	comp.setState({ showNoteMetadata: !comp.state.showNoteMetadata });
-	comp.refreshNoteMetadata(true);
-}
+};
 
 shared.toggleIsTodo_onPress = function(comp) {
 	let newNote = Note.toggleIsTodo(comp.state.note);
 	let newState = { note: newNote };
 	comp.setState(newState);
-}
+};
+
+shared.toggleCheckbox = function(ipcMessage, noteBody) {
+	let newBody = noteBody.split('\n');
+	const p = ipcMessage.split(':');
+	const lineIndex = Number(p[p.length - 1]);
+	if (lineIndex >= newBody.length) {
+		reg.logger().warn('Checkbox line out of bounds: ', ipcMessage);
+		return newBody.join('\n');
+	}
+
+	let line = newBody[lineIndex];
+
+	const noCrossIndex = line.trim().indexOf('- [ ] ');
+	let crossIndex = line.trim().indexOf('- [x] ');
+	if (crossIndex < 0) crossIndex = line.trim().indexOf('- [X] ');
+
+	if (noCrossIndex < 0 && crossIndex < 0) {
+		reg.logger().warn('Could not find matching checkbox for message: ', ipcMessage);
+		return newBody.join('\n');
+	}
+
+	let isCrossLine = false;
+
+	if (noCrossIndex >= 0 && crossIndex >= 0) {
+		isCrossLine = crossIndex < noCrossIndex;
+	} else {
+		isCrossLine = crossIndex >= 0;
+	}
+
+	if (!isCrossLine) {
+		line = line.replace(/- \[ \] /, '- [x] ');
+	} else {
+		line = line.replace(/- \[x\] /i, '- [ ] ');
+	}
+
+	newBody[lineIndex] = line;
+	return newBody.join('\n');
+};
+
+shared.installResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
+};
+
+shared.uninstallResourceHandling = function(refreshResourceHandler) {
+	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
+};
 
 module.exports = shared;

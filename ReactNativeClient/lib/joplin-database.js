@@ -1,6 +1,4 @@
-const { uuid } = require('lib/uuid.js');
 const { promiseChain } = require('lib/promise-utils.js');
-const { time } = require('lib/time-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
@@ -120,7 +118,6 @@ INSERT INTO version (version) VALUES (1);
 `;
 
 class JoplinDatabase extends Database {
-
 	constructor(driver) {
 		super(driver);
 		this.initialized_ = false;
@@ -150,7 +147,7 @@ class JoplinDatabase extends Database {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
-		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
+		if (!this.tableFields_[tableName]) throw new Error(`Unknown table: ${tableName}`);
 		const output = this.tableFields_[tableName].slice();
 
 		if (options.includeDescription) {
@@ -162,7 +159,47 @@ class JoplinDatabase extends Database {
 		return output;
 	}
 
-	createDefaultRow(tableName) {
+	async clearForTesting() {
+		const tableNames = [
+			'notes',
+			'folders',
+			'resources',
+			'tags',
+			'note_tags',
+			// 'master_keys',
+			'item_changes',
+			'note_resources',
+			// 'settings',
+			'deleted_items',
+			'sync_items',
+			'notes_normalized',
+			'revisions',
+			'resources_to_download',
+			'key_values',
+		];
+
+		const queries = [];
+		for (const n of tableNames) {
+			queries.push(`DELETE FROM ${n}`);
+			queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
+		}
+
+		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.2.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.3.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.4.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.5.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.6.context"');
+		queries.push('DELETE FROM settings WHERE key="sync.7.context"');
+
+		queries.push('DELETE FROM settings WHERE key="revisionService.lastProcessedChangeId"');
+		queries.push('DELETE FROM settings WHERE key="resourceService.lastProcessedChangeId"');
+		queries.push('DELETE FROM settings WHERE key="searchEngine.lastProcessedChangeId"');
+
+		await this.transactionExecBatch(queries);
+	}
+
+	createDefaultRow() {
 		const row = {};
 		const fields = this.tableFields('resource_local_states');
 		for (let i = 0; i < fields.length; i++) {
@@ -172,7 +209,7 @@ class JoplinDatabase extends Database {
 		return row;
 	}
 
-	fieldDescription(tableName, fieldName) {		
+	fieldDescription(tableName, fieldName) {
 		const sp = sprintf;
 
 		if (!this.tableDescriptions_) {
@@ -213,39 +250,41 @@ class JoplinDatabase extends Database {
 		let queries = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
-		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"').then((tableRows) => {
-			let chain = [];
-			for (let i = 0; i < tableRows.length; i++) {
-				let tableName = tableRows[i].name;
-				if (tableName == 'android_metadata') continue;
-				if (tableName == 'table_fields') continue;
-				if (tableName == 'sqlite_sequence') continue;
-				if (tableName.indexOf('notes_fts') === 0) continue;
-				chain.push(() => {
-					return this.selectAll('PRAGMA table_info("' + tableName + '")').then((pragmas) => {
-						for (let i = 0; i < pragmas.length; i++) {
-							let item = pragmas[i];
-							// In SQLite, if the default value is a string it has double quotes around it, so remove them here
-							let defaultValue = item.dflt_value;
-							if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
-								defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
+			.then(tableRows => {
+				let chain = [];
+				for (let i = 0; i < tableRows.length; i++) {
+					let tableName = tableRows[i].name;
+					if (tableName == 'android_metadata') continue;
+					if (tableName == 'table_fields') continue;
+					if (tableName == 'sqlite_sequence') continue;
+					if (tableName.indexOf('notes_fts') === 0) continue;
+					chain.push(() => {
+						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
+							for (let i = 0; i < pragmas.length; i++) {
+								let item = pragmas[i];
+								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
+								let defaultValue = item.dflt_value;
+								if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
+									defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+								}
+								let q = Database.insertQuery('table_fields', {
+									table_name: tableName,
+									field_name: item.name,
+									field_type: Database.enumId('fieldType', item.type),
+									field_default: defaultValue,
+								});
+								queries.push(q);
 							}
-							let q = Database.insertQuery('table_fields', {
-								table_name: tableName,
-								field_name: item.name,
-								field_type: Database.enumId('fieldType', item.type),
-								field_default: defaultValue,
-							});
-							queries.push(q);
-						}
+						});
 					});
-				});
-			}
+				}
 
-			return promiseChain(chain);
-		}).then(() => {
-			return this.transactionExecBatch(queries);
-		});
+				return promiseChain(chain);
+			})
+			.then(() => {
+				return this.transactionExecBatch(queries);
+			});
 	}
 
 	async upgradeDatabase(fromVersion) {
@@ -256,20 +295,20 @@ class JoplinDatabase extends Database {
 
 		// IMPORTANT:
 		//
-		// Whenever adding a new database property, some additional logic might be needed 
+		// Whenever adding a new database property, some additional logic might be needed
 		// in the synchronizer to handle this property. For example, when adding a property
 		// that should have a default value, existing remote items will not have this
 		// default value and thus might cause problems. In that case, the default value
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplin.cozic.net and try again.');
+		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.');
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 
@@ -277,14 +316,14 @@ class JoplinDatabase extends Database {
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
-			this.logger().info("Converting database to version " + targetVersion);
+			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
 
 			if (targetVersion == 1) {
 				queries = this.wrapQueries(this.sqlStringToLines(structureSql));
 			}
-			
+
 			if (targetVersion == 2) {
 				const newTableSql = `
 					CREATE TABLE deleted_items (
@@ -298,7 +337,7 @@ class JoplinDatabase extends Database {
 
 				queries.push({ sql: 'DROP TABLE deleted_items' });
 				queries.push({ sql: this.sqlStringToLines(newTableSql)[0] });
-				queries.push({ sql: "CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)" });
+				queries.push({ sql: 'CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)' });
 			}
 
 			if (targetVersion == 3) {
@@ -306,7 +345,7 @@ class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion == 4) {
-				queries.push("INSERT INTO settings (`key`, `value`) VALUES ('sync.3.context', (SELECT `value` FROM settings WHERE `key` = 'sync.context'))");
+				queries.push('INSERT INTO settings (`key`, `value`) VALUES (\'sync.3.context\', (SELECT `value` FROM settings WHERE `key` = \'sync.context\'))');
 				queries.push('DELETE FROM settings WHERE `key` = "sync.context"');
 			}
 
@@ -314,11 +353,11 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_created_time INT NOT NULL DEFAULT 0');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0');
-					queries.push('UPDATE ' + n + ' SET user_created_time = created_time');
-					queries.push('UPDATE ' + n + ' SET user_updated_time = updated_time');
-					queries.push('CREATE INDEX ' + n + '_user_updated_time ON ' + n + ' (user_updated_time)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_created_time INT NOT NULL DEFAULT 0`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0`);
+					queries.push(`UPDATE ${n} SET user_created_time = created_time`);
+					queries.push(`UPDATE ${n} SET user_updated_time = updated_time`);
+					queries.push(`CREATE INDEX ${n}_user_updated_time ON ${n} (user_updated_time)`);
 				}
 			}
 
@@ -352,9 +391,9 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
-					queries.push('CREATE INDEX ' + n + '_encryption_applied ON ' + n + ' (encryption_applied)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0`);
+					queries.push(`CREATE INDEX ${n}_encryption_applied ON ${n} (encryption_applied)`);
 				}
 
 				queries.push('ALTER TABLE sync_items ADD COLUMN force_sync INT NOT NULL DEFAULT 0');
@@ -392,7 +431,7 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX note_resources_resource_id ON note_resources (resource_id)');
 
 				queries.push({ sql: 'INSERT INTO item_changes (item_type, item_id, type, created_time) SELECT 1, id, 1, ? FROM notes', params: [Date.now()] });
-			}
+			};
 
 			if (targetVersion == 10) {
 				upgradeVersion10();
@@ -434,20 +473,22 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX resource_local_states_resource_id ON resource_local_states (resource_id)');
 				queries.push('CREATE INDEX resource_local_states_resource_fetch_status ON resource_local_states (fetch_status)');
 
-				queries = queries.concat(this.alterColumnQueries('resources', {
-					id: 'TEXT PRIMARY KEY',
-					title: 'TEXT NOT NULL DEFAULT ""',
-					mime: 'TEXT NOT NULL',
-					filename: 'TEXT NOT NULL DEFAULT ""',
-					created_time: 'INT NOT NULL',
-					updated_time: 'INT NOT NULL',
-					user_created_time: 'INT NOT NULL DEFAULT 0',
-					user_updated_time: 'INT NOT NULL DEFAULT 0',
-					file_extension: 'TEXT NOT NULL DEFAULT ""',
-					encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
-					encryption_applied: 'INT NOT NULL DEFAULT 0',
-					encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
-				}));
+				queries = queries.concat(
+					this.alterColumnQueries('resources', {
+						id: 'TEXT PRIMARY KEY',
+						title: 'TEXT NOT NULL DEFAULT ""',
+						mime: 'TEXT NOT NULL',
+						filename: 'TEXT NOT NULL DEFAULT ""',
+						created_time: 'INT NOT NULL',
+						updated_time: 'INT NOT NULL',
+						user_created_time: 'INT NOT NULL DEFAULT 0',
+						user_updated_time: 'INT NOT NULL DEFAULT 0',
+						file_extension: 'TEXT NOT NULL DEFAULT ""',
+						encryption_cipher_text: 'TEXT NOT NULL DEFAULT ""',
+						encryption_applied: 'INT NOT NULL DEFAULT 0',
+						encryption_blob_encrypted: 'INT NOT NULL DEFAULT 0',
+					})
+				);
 			}
 
 			if (targetVersion == 15) {
@@ -515,6 +556,89 @@ class JoplinDatabase extends Database {
 					END;`);
 			}
 
+			if (targetVersion == 19) {
+				const newTableSql = `
+					CREATE TABLE revisions (
+						id TEXT PRIMARY KEY,
+						parent_id TEXT NOT NULL DEFAULT "",
+						item_type INT NOT NULL,
+						item_id TEXT NOT NULL,
+						item_updated_time INT NOT NULL,
+						title_diff TEXT NOT NULL DEFAULT "",
+						body_diff TEXT NOT NULL DEFAULT "",
+						metadata_diff TEXT NOT NULL DEFAULT "",
+						encryption_cipher_text TEXT NOT NULL DEFAULT "",
+						encryption_applied INT NOT NULL DEFAULT 0,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX revisions_parent_id ON revisions (parent_id)');
+				queries.push('CREATE INDEX revisions_item_type ON revisions (item_type)');
+				queries.push('CREATE INDEX revisions_item_id ON revisions (item_id)');
+				queries.push('CREATE INDEX revisions_item_updated_time ON revisions (item_updated_time)');
+				queries.push('CREATE INDEX revisions_updated_time ON revisions (updated_time)');
+
+				queries.push('ALTER TABLE item_changes ADD COLUMN source INT NOT NULL DEFAULT 1');
+				queries.push('ALTER TABLE item_changes ADD COLUMN before_change_item TEXT NOT NULL DEFAULT ""');
+			}
+
+			if (targetVersion == 20) {
+				const newTableSql = `
+					CREATE TABLE migrations (
+						id INTEGER PRIMARY KEY,
+						number INTEGER NOT NULL,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				const timestamp = Date.now();
+				queries.push('ALTER TABLE resources ADD COLUMN `size` INT NOT NULL DEFAULT -1');
+				queries.push({ sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (20, ?, ?)', params: [timestamp, timestamp] });
+			}
+
+			if (targetVersion == 21) {
+				queries.push('ALTER TABLE sync_items ADD COLUMN item_location INT NOT NULL DEFAULT 1');
+			}
+
+			if (targetVersion == 22) {
+				const newTableSql = `
+					CREATE TABLE resources_to_download (
+						id INTEGER PRIMARY KEY,
+						resource_id TEXT NOT NULL,
+						updated_time INT NOT NULL,
+						created_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX resources_to_download_resource_id ON resources_to_download (resource_id)');
+				queries.push('CREATE INDEX resources_to_download_updated_time ON resources_to_download (updated_time)');
+			}
+
+			if (targetVersion == 23) {
+				const newTableSql = `
+					CREATE TABLE key_values (
+						id INTEGER PRIMARY KEY,
+						\`key\` TEXT NOT NULL,
+						\`value\` TEXT NOT NULL,
+						\`type\` INT NOT NULL,
+						updated_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE UNIQUE INDEX key_values_key ON key_values (key)');
+			}
+
+			if (targetVersion == 24) {
+				queries.push('ALTER TABLE notes ADD COLUMN `markup_language` INT NOT NULL DEFAULT 1'); // 1: Markdown, 2: HTML
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
@@ -528,7 +652,7 @@ class JoplinDatabase extends Database {
 			}
 
 			latestVersion = targetVersion;
-			
+
 			currentVersionIndex++;
 		}
 
@@ -560,7 +684,7 @@ class JoplinDatabase extends Database {
 			// Will throw if the database has not been created yet, but this is handled below
 			versionRow = await this.selectOne('SELECT * FROM version LIMIT 1');
 		} catch (error) {
-			if (error.message && (error.message.indexOf('no such table: version') >= 0)) {
+			if (error.message && error.message.indexOf('no such table: version') >= 0) {
 				// Ignore
 			} else {
 				console.info(error);
@@ -589,7 +713,6 @@ class JoplinDatabase extends Database {
 			});
 		}
 	}
-
 }
 
 Database.TYPE_INT = 1;

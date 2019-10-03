@@ -6,7 +6,6 @@ const BaseModel = require('lib/BaseModel.js');
 // - If last_seen_time is 0, it means the resource has never been associated with any note.
 
 class NoteResource extends BaseModel {
-
 	static tableName() {
 		return 'note_resources';
 	}
@@ -44,7 +43,7 @@ class NoteResource extends BaseModel {
 		const queries = [];
 		for (let i = 0; i < missingResources.length; i++) {
 			const id = missingResources[i].id;
-			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ["", id, 0, 0] });			
+			queries.push({ sql: 'INSERT INTO note_resources (note_id, resource_id, is_associated, last_seen_time) VALUES (?, ?, ?, ?)', params: ['', id, 0, 0] });
 		}
 		await this.db().transactionExecBatch(queries);
 	}
@@ -56,21 +55,23 @@ class NoteResource extends BaseModel {
 	static async orphanResources(expiryDelay = null) {
 		if (expiryDelay === null) expiryDelay = 1000 * 60 * 60 * 24 * 10;
 		const cutOffTime = Date.now() - expiryDelay;
-		const output = await this.modelSelectAll(`
+		const output = await this.modelSelectAll(
+			`
 			SELECT resource_id, sum(is_associated)
 			FROM note_resources
 			GROUP BY resource_id
 			HAVING sum(is_associated) <= 0
 			AND last_seen_time < ?
 			AND last_seen_time != 0
-		`, [cutOffTime]);
+		`,
+			[cutOffTime]
+		);
 		return output.map(r => r.resource_id);
 	}
 
 	static async deleteByResource(resourceId) {
 		await this.db().exec('DELETE FROM note_resources WHERE resource_id = ?', [resourceId]);
 	}
-
 }
 
 module.exports = NoteResource;

@@ -1,23 +1,12 @@
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
-const BaseItem = require('lib/models/BaseItem.js');
-const BaseModel = require('lib/BaseModel.js');
-const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
-const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
 const { basename, filename, rtrimSlashes } = require('lib/path-utils.js');
-const fs = require('fs-extra');
-const md5 = require('md5');
-const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
-const { importEnex } = require('lib/import-enex');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
-
 	async exec(result) {
 		let parentFolderId = null;
 
@@ -36,7 +25,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			this.importDirectory(sourcePath, parentFolderId);
 		} else {
 			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
-			parentFolderId = this.options_.destinationFolder.id
+			parentFolderId = this.options_.destinationFolder.id;
 			filePaths.push(sourcePath);
 		}
 
@@ -48,7 +37,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	}
 
 	async importDirectory(dirPath, parentFolderId) {
-		console.info('Import: ' + dirPath);
+		console.info(`Import: ${dirPath}`);
 
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const stats = await shim.fsDriver().readDirStats(dirPath);
@@ -58,16 +47,16 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			if (stat.isDirectory()) {
 				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
 				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
-				this.importDirectory(dirPath + '/' + basename(stat.path), folder.id);
+				this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
 			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
-				this.importFile(dirPath + '/' + stat.path, parentFolderId);
+				this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
 			}
 		}
 	}
 
 	async importFile(filePath, parentFolderId) {
 		const stat = await shim.fsDriver().stat(filePath);
-		if (!stat) throw new Error('Cannot read ' + filePath);
+		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);
 		const body = await shim.fsDriver().readFile(filePath);
 		const note = {
@@ -81,7 +70,6 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		};
 		await Note.save(note, { autoTimestamp: false });
 	}
-
 }
 
 module.exports = InteropService_Importer_Md;

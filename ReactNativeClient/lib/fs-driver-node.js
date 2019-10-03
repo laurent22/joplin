@@ -3,10 +3,9 @@ const { time } = require('lib/time-utils.js');
 const FsDriverBase = require('lib/fs-driver-base');
 
 class FsDriverNode extends FsDriverBase {
-
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
-		if (path !== null) msg += '. Path: ' + path;
+		if (path !== null) msg += `. Path: ${path}`;
 		let output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
@@ -120,7 +119,7 @@ class FsDriverNode extends FsDriverBase {
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			let stat = await this.stat(path + '/' + item);
+			let stat = await this.stat(`${path}/${item}`);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
 			stat.path = stat.path.substr(path.length + 1);
 			output.push(stat);
@@ -142,7 +141,7 @@ class FsDriverNode extends FsDriverBase {
 		try {
 			return await fs.close(handle);
 		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
+			throw this.fsErrorToJsError_(error, '');
 		}
 	}
 
@@ -181,9 +180,8 @@ class FsDriverNode extends FsDriverBase {
 		buffer = buffer.slice(0, result.bytesRead);
 		if (encoding === 'base64') return buffer.toString('base64');
 		if (encoding === 'ascii') return buffer.toString('ascii');
-		throw new Error('Unsupported encoding: ' + encoding);
+		throw new Error(`Unsupported encoding: ${encoding}`);
 	}
-
 }
 
 module.exports.FsDriverNode = FsDriverNode;

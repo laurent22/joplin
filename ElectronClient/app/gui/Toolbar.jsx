@@ -1,20 +1,17 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { reg } = require('lib/registry.js');
 const { themeStyle } = require('../theme.js');
-const { _ } = require('lib/locale.js');
 const ToolbarButton = require('./ToolbarButton.min.js');
 const ToolbarSpace = require('./ToolbarSpace.min.js');
 
 class ToolbarComponent extends React.Component {
-
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 		style.height = theme.toolbarHeight;
 		style.display = 'flex';
-		style.flexDirection  = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.flexDirection = 'row';
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 
 		const itemComps = [];
@@ -26,12 +23,15 @@ class ToolbarComponent extends React.Component {
 				key += o.title ? o.title : '';
 				const itemType = !('type' in o) ? 'button' : o.type;
 
-				if (!key) key = o.type + '_' + i;
+				if (!key) key = `${o.type}_${i}`;
 
-				const props = Object.assign({
-					key: key,
-					theme: this.props.theme,
-				}, o);
+				const props = Object.assign(
+					{
+						key: key,
+						theme: this.props.theme,
+					},
+					o
+				);
 
 				if (itemType === 'button') {
 					itemComps.push(<ToolbarButton {...props} />);
@@ -43,14 +43,13 @@ class ToolbarComponent extends React.Component {
 
 		return (
 			<div className="editor-toolbar" style={style}>
-				{ itemComps }
+				{itemComps}
 			</div>
 		);
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return { theme: state.settings.theme };
 };
 

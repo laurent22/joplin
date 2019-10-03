@@ -1,16 +1,12 @@
 const BaseModel = require('lib/BaseModel.js');
-const { promiseChain } = require('lib/promise-utils.js');
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');
-const Setting = require('lib/models/Setting.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
-const moment = require('moment');
 const BaseItem = require('lib/models/BaseItem.js');
-const lodash = require('lodash');
+const { substrWithEllipsis } = require('lib/string-utils.js');
 
 class Folder extends BaseItem {
-
 	static tableName() {
 		return 'folders';
 	}
@@ -18,23 +14,34 @@ class Folder extends BaseItem {
 	static modelType() {
 		return BaseModel.TYPE_FOLDER;
 	}
-	
+
 	static newFolder() {
 		return {
 			id: null,
 			title: '',
-		}
+		};
+	}
+
+	static fieldToLabel(field) {
+		const fieldsToLabels = {
+			title: _('title'),
+			last_note_user_updated_time: _('updated date'),
+		};
+
+		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
 	static noteIds(parentId) {
-		return this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]).then((rows) => {			
-			let output = [];
-			for (let i = 0; i < rows.length; i++) {
-				let row = rows[i];
-				output.push(row.id);
-			}
-			return output;
-		});
+		return this.db()
+			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
+			.then(rows => {
+				let output = [];
+				for (let i = 0; i < rows.length; i++) {
+					let row = rows[i];
+					output.push(row.id);
+				}
+				return output;
+			});
 	}
 
 	static async subFolderIds(parentId) {
@@ -59,7 +66,7 @@ class Folder extends BaseItem {
 		let folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
-		if (options.deleteChildren) {		
+		if (options.deleteChildren) {
 			let noteIds = await Folder.noteIds(folderId);
 			for (let i = 0; i < noteIds.length; i++) {
 				await Note.delete(noteIds[i]);
@@ -98,6 +105,62 @@ class Folder extends BaseItem {
 		};
 	}
 
+	// Folders that contain notes that have been modified recently go on top.
+	// The remaining folders, that don't contain any notes are sorted by their own user_updated_time
+	static async orderByLastModified(folders, dir = 'DESC') {
+		dir = dir.toUpperCase();
+		const sql = 'select parent_id, max(user_updated_time) content_updated_time from notes where parent_id != "" group by parent_id';
+		const rows = await this.db().selectAll(sql);
+
+		const folderIdToTime = {};
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			folderIdToTime[row.parent_id] = row.content_updated_time;
+		}
+
+		const findFolderParent = folderId => {
+			const folder = BaseModel.byId(folders, folderId);
+			if (!folder) return null; // For the rare case of notes that are associated with a no longer existing folder
+			if (!folder.parent_id) return null;
+			for (let i = 0; i < folders.length; i++) {
+				if (folders[i].id === folder.parent_id) return folders[i];
+			}
+			throw new Error('Could not find parent');
+		};
+
+		const applyChildTimeToParent = folderId => {
+			const parent = findFolderParent(folderId);
+			if (!parent) return;
+
+			if (folderIdToTime[parent.id] && folderIdToTime[parent.id] >= folderIdToTime[folderId]) {
+				// Don't change so that parent has the same time as the last updated child
+			} else {
+				folderIdToTime[parent.id] = folderIdToTime[folderId];
+			}
+
+			applyChildTimeToParent(parent.id);
+		};
+
+		for (let folderId in folderIdToTime) {
+			if (!folderIdToTime.hasOwnProperty(folderId)) continue;
+			applyChildTimeToParent(folderId);
+		}
+
+		const mod = dir === 'DESC' ? +1 : -1;
+		const output = folders.slice();
+		output.sort((a, b) => {
+			const aTime = folderIdToTime[a.id] ? folderIdToTime[a.id] : a.user_updated_time;
+			const bTime = folderIdToTime[b.id] ? folderIdToTime[b.id] : b.user_updated_time;
+
+			if (aTime < bTime) return +1 * mod;
+			if (aTime > bTime) return -1 * mod;
+
+			return 0;
+		});
+
+		return output;
+	}
+
 	static async all(options = null) {
 		let output = await super.all(options);
 		if (options && options.includeConflictFolder) {
@@ -124,32 +187,72 @@ class Folder extends BaseItem {
 		return output;
 	}
 
-	static async allAsTree(options = null) {
-		const all = await this.all(options);
+	static async allAsTree(folders = null, options = null) {
+		const all = folders ? folders : await this.all(options);
 
 		// https://stackoverflow.com/a/49387427/561309
 		function getNestedChildren(models, parentId) {
-		    const nestedTreeStructure = [];
-		    const length = models.length;
+			const nestedTreeStructure = [];
+			const length = models.length;
 
-		    for (let i = 0; i < length; i++) {
-		        const model = models[i];
+			for (let i = 0; i < length; i++) {
+				const model = models[i];
 
-		        if (model.parent_id == parentId) {
-		            const children = getNestedChildren(models, model.id);
+				if (model.parent_id == parentId) {
+					const children = getNestedChildren(models, model.id);
 
-		            if (children.length > 0) {
-		                model.children = children;
-		            }
+					if (children.length > 0) {
+						model.children = children;
+					}
 
-		            nestedTreeStructure.push(model);
-		        }
-		    }
+					nestedTreeStructure.push(model);
+				}
+			}
 
-		    return nestedTreeStructure;
+			return nestedTreeStructure;
 		}
 
 		return getNestedChildren(all, '');
+	}
+
+	static folderPath(folders, folderId) {
+		const idToFolders = {};
+		for (let i = 0; i < folders.length; i++) {
+			idToFolders[folders[i].id] = folders[i];
+		}
+
+		const path = [];
+		while (folderId) {
+			const folder = idToFolders[folderId];
+			if (!folder) break; // Shouldn't happen
+			path.push(folder);
+			folderId = folder.parent_id;
+		}
+
+		path.reverse();
+
+		return path;
+	}
+
+	static folderPathString(folders, folderId, maxTotalLength = 80) {
+		const path = this.folderPath(folders, folderId);
+
+		let currentTotalLength = 0;
+		for (let i = 0; i < path.length; i++) {
+			currentTotalLength += path[i].title.length;
+		}
+
+		let pieceLength = maxTotalLength;
+		if (currentTotalLength > maxTotalLength) {
+			pieceLength = maxTotalLength / path.length;
+		}
+
+		const output = [];
+		for (let i = 0; i < path.length; i++) {
+			output.push(substrWithEllipsis(path[i].title, 0, pieceLength));
+		}
+
+		return output.join(' / ');
 	}
 
 	static buildTree(folders) {
@@ -224,7 +327,7 @@ class Folder extends BaseItem {
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
 	// manually creating a folder. They shouldn't be done for example when the folders
-	// are being synced to avoid any strange side-effects. Technically it's possible to 
+	// are being synced to avoid any strange side-effects. Technically it's possible to
 	// have folders and notes with duplicate titles (or no title), or with reserved words.
 	static async save(o, options = null) {
 		if (!options) options = {};
@@ -232,11 +335,11 @@ class Folder extends BaseItem {
 		if (options.userSideValidation === true) {
 			if (!('duplicateCheck' in options)) options.duplicateCheck = true;
 			if (!('reservedTitleCheck' in options)) options.reservedTitleCheck = true;
-			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;			
+			if (!('stripLeftSlashes' in options)) options.stripLeftSlashes = true;
 		}
 
 		if (options.stripLeftSlashes === true && o.title) {
-			while (o.title.length && (o.title[0] == '/' || o.title[0] == "\\")) {
+			while (o.title.length && (o.title[0] == '/' || o.title[0] == '\\')) {
 				o.title = o.title.substr(1);
 			}
 		}
@@ -259,7 +362,7 @@ class Folder extends BaseItem {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
 
-		return super.save(o, options).then((folder) => {
+		return super.save(o, options).then(folder => {
 			this.dispatch({
 				type: 'FOLDER_UPDATE_ONE',
 				item: folder,
@@ -267,7 +370,6 @@ class Folder extends BaseItem {
 			return folder;
 		});
 	}
-
 }
 
 module.exports = Folder;

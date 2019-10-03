@@ -22,6 +22,10 @@ table td, table th {
 	border: 1px solid #ccc;
 }
 
+a {
+	text-decoration: none;
+}
+
 ::-webkit-scrollbar {
 	width: 7px;
 	height: 7px;
@@ -47,6 +51,18 @@ table td, table th {
 ::-webkit-scrollbar-thumb:hover {
 	background: rgba(100, 100, 100, 0.7); 
 }
+
+.fade_out {
+	-webkit-transition: 0.15s;
+	transition: 0.15s;
+	opacity: 0;
+}
+
+.fade_in {
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	opacity: 1;
+}
 /* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
    as red boxes, but since those are actually valid characters and common in imported
    Evernote data, we hide them here. */
@@ -57,14 +73,6 @@ table td, table th {
 
 .note-list .list-item:hover {
 	background-color: rgba(0,160,255,0.1) !important;
-}
-
-input::-webkit-calendar-picker-indicator {
-	background-color: rgba(0, 0, 0, 0);
-}
-
-input::-webkit-calendar-picker-indicator:hover {
-	background-color: rgba(100, 100, 100, 0.2);
 }
 
 /*.side-bar .list-item:hover,
@@ -108,6 +116,12 @@ input::-webkit-calendar-picker-indicator:hover {
 	border-radius: 5px;
 }
 
+@keyframes icon-infinite-rotation{
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .smalltalk {
 	font-family: sans-serif;
 }
@@ -115,3 +129,23 @@ input::-webkit-calendar-picker-indicator:hover {
 .note-property-box .rdt {
 	display: inline-block;
 }
+
+.help-tooltip {
+	font-family: sans-serif;
+	max-width: 200px;
+}
+
+:disabled {
+	opacity: 0.6;
+}
+
+@media screen and (max-width:550px){    
+	.header .title {
+		display: none;
+	}
+}
+
+.config-menu-bar button:focus {
+	outline: 0 none;
+}
+

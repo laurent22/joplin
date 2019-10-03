@@ -5,7 +5,6 @@ const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting');
 
 class Shared {
-
 	constructor(comp, showInfoMessageBox, showErrorMessageBox) {
 		this.comp_ = comp;
 
@@ -20,13 +19,13 @@ class Shared {
 		this.loginUrl_click = () => {
 			if (!this.comp_.state.loginUrl) return;
 			shim.openUrl(this.comp_.state.loginUrl);
-		}
+		};
 
-		this.authCodeInput_change = (event) => {
+		this.authCodeInput_change = event => {
 			this.comp_.setState({
-				authCode: typeof event === 'object' ? event.target.value : event
+				authCode: typeof event === 'object' ? event.target.value : event,
 			});
-		}
+		};
 
 		this.submit_click = async () => {
 			this.comp_.setState({ checkingAuthToken: true });
@@ -35,7 +34,7 @@ class Shared {
 			try {
 				const response = await api.execAuthToken(this.comp_.state.authCode);
 
-				Setting.setValue('sync.' + this.syncTargetId() + '.auth', response.access_token);
+				Setting.setValue(`sync.${this.syncTargetId()}.auth`, response.access_token);
 				api.setAuthToken(response.access_token);
 				await showInfoMessageBox(_('The application has been authorised!'));
 				this.comp_.props.dispatch({ type: 'NAV_BACK' });
@@ -45,7 +44,7 @@ class Shared {
 			} finally {
 				this.comp_.setState({ checkingAuthToken: false });
 			}
-		}
+		};
 	}
 
 	syncTargetId() {
@@ -67,7 +66,6 @@ class Shared {
 			loginUrl: api.loginUrl(),
 		});
 	}
-
 }
 
 module.exports = Shared;

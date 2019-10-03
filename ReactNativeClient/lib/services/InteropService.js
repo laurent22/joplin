@@ -4,19 +4,14 @@ const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
-const Tag = require('lib/models/Tag.js');
-const { basename, filename } = require('lib/path-utils.js');
-const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
-const { uuid } = require('lib/uuid.js');
 const { toTitleCase } = require('lib/string-utils');
 
 class InteropService {
-
 	constructor() {
 		this.modules_ = null;
 	}
@@ -30,21 +25,34 @@ class InteropService {
 				fileExtensions: ['jex'],
 				sources: ['file'],
 				description: _('Joplin Export File'),
-			}, {
+			},
+			{
 				format: 'md',
-				fileExtensions: ['md', 'markdown'],
+				fileExtensions: ['md', 'markdown', 'txt'],
 				sources: ['file', 'directory'],
 				isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 				description: _('Markdown'),
-			}, {
+			},
+			{
 				format: 'raw',
 				sources: ['directory'],
 				description: _('Joplin Export Directory'),
-			}, {
+			},
+			{
 				format: 'enex',
 				fileExtensions: ['enex'],
 				sources: ['file'],
-				description: _('Evernote Export File'),
+				description: _('Evernote Export File (as Markdown)'),
+				importerClass: 'InteropService_Importer_EnexToMd',
+				isDefault: true,
+			},
+			{
+				format: 'enex',
+				fileExtensions: ['enex'],
+				sources: ['file'],
+				description: _('Evernote Export File (as HTML)'),
+				// TODO: Consider doing this the same way as the multiple `md` importers are handled
+				importerClass: 'InteropService_Importer_EnexToHtml',
 			},
 		];
 
@@ -54,46 +62,57 @@ class InteropService {
 				fileExtensions: ['jex'],
 				target: 'file',
 				description: _('Joplin Export File'),
-			}, {
+			},
+			{
 				format: 'raw',
 				target: 'directory',
 				description: _('Joplin Export Directory'),
-			}, {
+			},
+			{
 				format: 'json',
 				target: 'directory',
 				description: _('Json Export Directory'),
-			}, {
+			},
+			{
 				format: 'md',
 				target: 'directory',
 				description: _('Markdown'),
 			},
 		];
 
-		importModules = importModules.map((a) => {
-			const className = 'InteropService_Importer_' + toTitleCase(a.format);
-			const output = Object.assign({}, {
-				type: 'importer',
-				path: 'lib/services/' + className,
-			}, a);
+		importModules = importModules.map(a => {
+			const className = a.importerClass || `InteropService_Importer_${toTitleCase(a.format)}`;
+			const output = Object.assign(
+				{},
+				{
+					type: 'importer',
+					path: `lib/services/${className}`,
+				},
+				a
+			);
 			if (!('isNoteArchive' in output)) output.isNoteArchive = true;
 			return output;
 		});
 
-		exportModules = exportModules.map((a) => {
-			const className = 'InteropService_Exporter_' + toTitleCase(a.format);
-			return Object.assign({}, {
-				type: 'exporter',
-				path: 'lib/services/' + className,
-			}, a);
+		exportModules = exportModules.map(a => {
+			const className = `InteropService_Exporter_${toTitleCase(a.format)}`;
+			return Object.assign(
+				{},
+				{
+					type: 'exporter',
+					path: `lib/services/${className}`,
+				},
+				a
+			);
 		});
 
 		this.modules_ = importModules.concat(exportModules);
 
-		this.modules_ = this.modules_.map((a) => {
+		this.modules_ = this.modules_.map(a => {
 			a.fullLabel = function(moduleSource = null) {
-				const label = [this.format.toUpperCase() + ' - ' + this.description];
+				const label = [`${this.format.toUpperCase()} - ${this.description}`];
 				if (moduleSource && this.sources.length > 1) {
-					label.push('(' + (moduleSource === 'file' ? _('File') : _('Directory')) + ')');
+					label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 				}
 				return label.join(' ');
 			};
@@ -103,21 +122,57 @@ class InteropService {
 		return this.modules_;
 	}
 
-	moduleByFormat_(type, format) {
+	// Find the module that matches the given type ("importer" or "exporter")
+	// and the given format. Some formats can have multiple assocated importers
+	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
+	// is returned. This is useful to auto-detect the module based on the format.
+	// For more precise matching, newModuleFromPath_ should be used.
+	findModuleByFormat_(type, format) {
 		const modules = this.modules();
+		const matches = [];
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
-			if (m.format === format && m.type === type) return modules[i];
+			if (m.format === format && m.type === type) matches.push(modules[i]);
 		}
-		return null;
+
+		const output = matches.find(m => !!m.isDefault);
+		if (output) return output;
+
+		return matches.length ? matches[0] : null;
 	}
 
-	newModule_(type, format) {
-		const module = this.moduleByFormat_(type, format);
-		if (!module) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
-		const ModuleClass = require(module.path);
+	/**
+	 * NOTE TO FUTURE SELF: It might make sense to simply move all the existing
+	 * formatters to the `newModuleFromPath_` approach, so that there's only one way
+	 * to do this mapping. This isn't a priority right now (per the convo in:
+	 * https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
+	 * we can do it if it ever becomes necessary.
+	 */
+	newModuleByFormat_(type, format) {
+		const moduleMetadata = this.findModuleByFormat_(type, format);
+		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s"', type, format));
+		const ModuleClass = require(moduleMetadata.path);
 		const output = new ModuleClass();
-		output.setMetadata(module);
+		output.setMetadata(moduleMetadata);
+		return output;
+	}
+
+	/**
+	 * The existing `newModuleByFormat_` fn would load by the input format. This
+	 * was fine when there was a 1-1 mapping of input formats to output formats,
+	 * but now that we have 2 possible outputs for an `enex` input, we need to be
+	 * explicit with which importer we want to use.
+	 *
+	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
+	 */
+	newModuleFromPath_(type, options) {
+		if (!options || !options.modulePath) {
+			throw new Error('Cannot load module without a defined path to load from.');
+		}
+		const ModuleClass = require(options.modulePath);
+		const output = new ModuleClass();
+		const moduleMetadata = this.findModuleByFormat_(type, options.format);
+		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -129,36 +184,52 @@ class InteropService {
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
 			if (type !== m.type) continue;
-			if (m.fileExtensions.indexOf(ext) >= 0) return m;
+			if (m.fileExtensions && m.fileExtensions.indexOf(ext) >= 0) return m;
 		}
 
 		return null;
 	}
 
 	async import(options) {
-		if (!await shim.fsDriver().exists(options.path)) throw new Error(_('Cannot find "%s".', options.path));
+		if (!(await shim.fsDriver().exists(options.path))) throw new Error(_('Cannot find "%s".', options.path));
 
-		options = Object.assign({}, {
-			format: 'auto',
-			destinationFolderId: null,
-			destinationFolder: null,
-		}, options);
+		options = Object.assign(
+			{},
+			{
+				format: 'auto',
+				destinationFolderId: null,
+				destinationFolder: null,
+			},
+			options
+		);
 
 		if (options.format === 'auto') {
 			const module = this.moduleByFileExtension_('importer', fileExtension(options.path));
 			if (!module) throw new Error(_('Please specify import format for %s', options.path));
+			// eslint-disable-next-line require-atomic-updates
 			options.format = module.format;
 		}
 
 		if (options.destinationFolderId) {
 			const folder = await Folder.load(options.destinationFolderId);
 			if (!folder) throw new Error(_('Cannot find "%s".', options.destinationFolderId));
+			// eslint-disable-next-line require-atomic-updates
 			options.destinationFolder = folder;
 		}
 
-		let result = { warnings: [] }
+		let result = { warnings: [] };
 
-		const importer = this.newModule_('importer', options.format);
+		// console.log('options passed to InteropService:');
+		// console.log(JSON.stringify({options}, null, 2));
+
+		let importer = null;
+
+		if (options.modulePath) {
+			importer = this.newModuleFromPath_('importer', options);
+		} else {
+			importer = this.newModuleByFormat_('importer', options.format);
+		}
+
 		await importer.init(options.path, options);
 		result = await importer.exec(result);
 
@@ -170,15 +241,15 @@ class InteropService {
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const exportFormat = options.format ? options.format : 'jex';
-		const result = { warnings: [] }
+		const result = { warnings: [] };
 		const itemsToExport = [];
 
 		const queueExportItem = (itemType, itemOrId) => {
 			itemsToExport.push({
 				type: itemType,
-				itemOrId: itemOrId
+				itemOrId: itemOrId,
 			});
-		}
+		};
 
 		let exportedNoteIds = [];
 		let resourceIds = [];
@@ -233,7 +304,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModule_('exporter', exportFormat);
+		const exporter = this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
@@ -283,7 +354,6 @@ class InteropService {
 
 		return result;
 	}
-
 }
 
 module.exports = InteropService;

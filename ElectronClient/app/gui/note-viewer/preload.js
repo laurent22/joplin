@@ -9,6 +9,10 @@ ipcRenderer.on('setHtml', (event, html, options) => {
 	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html, options: options } }, '*');
 });
 
+ipcRenderer.on('scrollToHash', (event, hash) => {
+	window.postMessage({ target: 'webview', name: 'scrollToHash', data: { hash: hash } }, '*');
+});
+
 ipcRenderer.on('setPercentScroll', (event, percent) => {
 	window.postMessage({ target: 'webview', name: 'setPercentScroll', data: { percent: percent } }, '*');
 });
@@ -17,7 +21,7 @@ ipcRenderer.on('setMarkers', (event, keywords, options) => {
 	window.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: keywords, options: options } }, '*');
 });
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', event => {
 	// Here we only deal with messages that are sent from the webview to the main Electron process
 	if (!event.data || event.data.target !== 'main') return;
 

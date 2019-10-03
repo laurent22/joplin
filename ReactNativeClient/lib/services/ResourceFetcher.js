@@ -1,16 +1,17 @@
 const Resource = require('lib/models/Resource');
-const ResourceLocalState = require('lib/models/ResourceLocalState');
+const Setting = require('lib/models/Setting');
 const BaseService = require('lib/services/BaseService');
+const ResourceService = require('lib/services/ResourceService');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const { Logger } = require('lib/logger.js');
 const EventEmitter = require('events');
+const { shim } = require('lib/shim');
 
 class ResourceFetcher extends BaseService {
-
 	constructor(fileApi = null) {
 		super();
 
-		this.dispatch = (action) => {};
+		this.dispatch = () => {};
 
 		this.setFileApi(fileApi);
 		this.logger_ = new Logger();
@@ -45,7 +46,7 @@ class ResourceFetcher extends BaseService {
 	}
 
 	setFileApi(v) {
-		if (v !== null && typeof v !== 'function') throw new Error('fileApi must be a function that returns the API. Type is ' + (typeof v));
+		if (v !== null && typeof v !== 'function') throw new Error(`fileApi must be a function that returns the API. Type is ${typeof v}`);
 		this.fileApi_ = v;
 	}
 
@@ -62,23 +63,40 @@ class ResourceFetcher extends BaseService {
 	}
 
 	updateReport() {
-		if (this.updateReportIID_) return;
-
-		this.updateReportIID_ = setTimeout(async () => {
-			const toFetchCount = await Resource.needToBeFetchedCount();
-			this.dispatch({
-				type: 'RESOURCE_FETCHER_SET',
-				toFetchCount: toFetchCount,
-			});
-			this.updateReportIID_ = null;
-		}, 2000);
+		const fetchingCount = Object.keys(this.fetchingItems_).length;
+		this.dispatch({
+			type: 'RESOURCE_FETCHER_SET',
+			fetchingCount: fetchingCount,
+			toFetchCount: fetchingCount + this.queue_.length,
+		});
 	}
 
-	queueDownload(resourceId, priority = null) {
+	async markForDownload(resourceIds) {
+		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
+
+		const fetchStatuses = await Resource.fetchStatuses(resourceIds);
+
+		const idsToKeep = [];
+		for (const status of fetchStatuses) {
+			if (status.fetch_status !== Resource.FETCH_STATUS_IDLE) continue;
+			idsToKeep.push(status.resource_id);
+		}
+
+		for (const id of idsToKeep) {
+			await Resource.markForDownload(id);
+		}
+
+		for (const id of idsToKeep) {
+			this.queueDownload_(id, 'high');
+		}
+	}
+
+	queueDownload_(resourceId, priority = null) {
 		if (priority === null) priority = 'normal';
 
 		const index = this.queuedItemIndex_(resourceId);
 		if (index >= 0) return false;
+		if (this.fetchingItems_[resourceId]) return false;
 
 		const item = { id: resourceId };
 
@@ -98,43 +116,69 @@ class ResourceFetcher extends BaseService {
 		if (this.fetchingItems_[resourceId]) return;
 		this.fetchingItems_[resourceId] = true;
 
-		const completeDownload = (emitDownloadComplete = true) => {
-			delete this.fetchingItems_[resource.id];
-			this.scheduleQueueProcess();
-			if (emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id });
-			this.updateReport();
-		}
+		this.updateReport();
 
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
+		const completeDownload = async (emitDownloadComplete = true, localResourceContentPath = '') => {
+			// 2019-05-12: This is only necessary to set the file size of the resources that come via
+			// sync. The other ones have been done using migrations/20.js. This code can be removed
+			// after a few months.
+			if (resource && resource.size < 0 && localResourceContentPath && !resource.encryption_blob_encrypted) {
+				await shim.fsDriver().waitTillExists(localResourceContentPath);
+				await ResourceService.autoSetFileSizes();
+			}
+
+			delete this.fetchingItems_[resource.id];
+			this.scheduleQueueProcess();
+
+			// Note: This downloadComplete event is not really right or useful because the resource
+			// might still be encrypted and the caller usually can't do much with this. In particular
+			// the note being displayed will refresh the resource images but since they are still
+			// encrypted it's not useful. Probably, the views should listen to DecryptionWorker events instead.
+			if (resource && emitDownloadComplete) this.eventEmitter_.emit('downloadComplete', { id: resource.id, encrypted: !!resource.encryption_blob_encrypted });
+			this.updateReport();
+		};
+
+		if (!resource) {
+			this.logger().info(`ResourceFetcher: Attempting to download a resource that does not exist (has been deleted?): ${resourceId}`);
+			await completeDownload(false);
+			return;
+		}
+
 		// Shouldn't happen, but just to be safe don't re-download the
 		// resource if it's already been downloaded.
 		if (localState.fetch_status === Resource.FETCH_STATUS_DONE) {
-			completeDownload(false);
+			await completeDownload(false);
 			return;
 		}
 
 		this.fetchingItems_[resourceId] = resource;
 
-		const localResourceContentPath = Resource.fullPath(resource);
-		const remoteResourceContentPath = this.resourceDirName_ + "/" + resource.id;
+		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
+		const remoteResourceContentPath = `${this.resourceDirName_}/${resource.id}`;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
 
 		const fileApi = await this.fileApi();
 
-		this.logger().debug('ResourceFetcher: Downloading resource: ' + resource.id);
+		this.logger().debug(`ResourceFetcher: Downloading resource: ${resource.id}`);
 
-		fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: "file" }).then(async () => {
-			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
-			this.logger().debug('ResourceFetcher: Resource downloaded: ' + resource.id);
-			completeDownload();
-		}).catch(async (error) => {
-			this.logger().error('ResourceFetcher: Could not download resource: ' + resource.id, error);
-			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
-			completeDownload();
-		});
+		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
+
+		fileApi
+			.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' })
+			.then(async () => {
+				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
+				this.logger().debug(`ResourceFetcher: Resource downloaded: ${resource.id}`);
+				await completeDownload(true, localResourceContentPath);
+			})
+			.catch(async error => {
+				this.logger().error(`ResourceFetcher: Could not download resource: ${resource.id}`, error);
+				await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_ERROR, fetch_error: error.message });
+				await completeDownload();
+			});
 	}
 
 	processQueue_() {
@@ -150,9 +194,9 @@ class ResourceFetcher extends BaseService {
 	}
 
 	async waitForAllFinished() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
-				if (!this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
+				if (!this.updateReportIID_ && !this.scheduleQueueProcessIID_ && !this.addingResources_ && !this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
 					clearInterval(iid);
 					resolve();
 				}
@@ -160,23 +204,27 @@ class ResourceFetcher extends BaseService {
 		});
 	}
 
-	async autoAddResources(limit) {
+	async autoAddResources(limit = null) {
+		if (limit === null) limit = 10;
+
 		if (this.addingResources_) return;
 		this.addingResources_ = true;
 
+		this.logger().info(`ResourceFetcher: Auto-add resources: Mode: ${Setting.value('sync.resourceDownloadMode')}`);
+
 		let count = 0;
-		const resources = await Resource.needToBeFetched(limit);
+		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
 		for (let i = 0; i < resources.length; i++) {
-			const added = this.queueDownload(resources[i].id);
+			const added = this.queueDownload_(resources[i].id);
 			if (added) count++;
 		}
 
-		this.logger().info('ResourceFetcher: Auto-added resources: ' + count);
+		this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 		this.addingResources_ = false;
 	}
 
 	async start() {
-		await ResourceLocalState.resetStartedFetchStatus();
+		await Resource.resetStartedFetchStatus();
 		this.autoAddResources(10);
 	}
 
@@ -193,10 +241,9 @@ class ResourceFetcher extends BaseService {
 	}
 
 	async fetchAll() {
-		await ResourceLocalState.resetStartedFetchStatus();
+		await Resource.resetStartedFetchStatus();
 		this.autoAddResources(null);
 	}
-
 }
 
 module.exports = ResourceFetcher;

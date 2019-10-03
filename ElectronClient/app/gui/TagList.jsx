@@ -10,21 +10,22 @@ class TagListComponent extends React.Component {
 		const tags = this.props.items;
 
 		style.display = 'flex';
-		style.flexWrap = 'wrap';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.flexDirection = 'row';
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
 
 		const tagItems = [];
 		if (tags || tags.length > 0) {
 			// Sort by id for now, but probably needs to be changed in the future.
-			tags.sort((a, b) => { return a.title < b.title ? -1 : +1; });
+			tags.sort((a, b) => {
+				return a.title < b.title ? -1 : +1;
+			});
 
 			for (let i = 0; i < tags.length; i++) {
 				const props = {
 					title: tags[i].title,
 					key: tags[i].id,
-					onDelete: this.props.onDeleteItem,
 				};
 				tagItems.push(<TagItem {...props} />);
 			}
@@ -36,13 +37,13 @@ class TagListComponent extends React.Component {
 
 		return (
 			<div className="tag-list" style={style}>
-				{ tagItems }
+				{tagItems}
 			</div>
-		)
+		);
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return { theme: state.settings.theme };
 };
 

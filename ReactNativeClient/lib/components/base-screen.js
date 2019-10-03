@@ -1,4 +1,5 @@
-const React = require('react'); const Component = React.Component;
+const React = require('react');
+
 const { StyleSheet } = require('react-native');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
@@ -14,7 +15,6 @@ const styles_ = StyleSheet.create(styleObject_);
 let rootStyles_ = {};
 
 class BaseScreenComponent extends React.Component {
-
 	styles() {
 		return styles_;
 	}
@@ -34,7 +34,6 @@ class BaseScreenComponent extends React.Component {
 		});
 		return rootStyles_[themeId];
 	}
-
 }
 
 module.exports = { BaseScreenComponent };

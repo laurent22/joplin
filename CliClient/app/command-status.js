@@ -1,12 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
-const { Database } = require('lib/database.js');
 const { app } = require('./app.js');
 const Setting = require('lib/models/Setting.js');
 const { _ } = require('lib/locale.js');
 const { ReportService } = require('lib/services/report.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'status';
 	}
@@ -15,7 +13,7 @@ class Command extends BaseCommand {
 		return _('Displays summary about the notes and notebooks.');
 	}
 
-	async action(args) {
+	async action() {
 		let service = new ReportService();
 		let report = await service.status(Setting.value('sync.target'));
 
@@ -24,7 +22,7 @@ class Command extends BaseCommand {
 
 			if (i > 0) this.stdout('');
 
-			this.stdout('# ' + section.title);
+			this.stdout(`# ${section.title}`);
 			this.stdout('');
 
 			for (let n in section.body) {
@@ -34,10 +32,13 @@ class Command extends BaseCommand {
 			}
 		}
 
-		app().gui().showConsole();
-		app().gui().maximizeConsole();
+		app()
+			.gui()
+			.showConsole();
+		app()
+			.gui()
+			.maximizeConsole();
 	}
-
 }
 
 module.exports = Command;

@@ -1,7 +1,9 @@
+ [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
+
 # General information
 
 - All the applications share the same library, which, for historical reasons, is in ReactNativeClient/lib. This library is copied to the relevant directories when building each app.
-- The translations are built by running CliClient/build-translation.sh. You normally don't need to run this if you haven't updated the translation since the compiled files are on the repository.
+- In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
 
 ## macOS dependencies
 
@@ -17,11 +19,10 @@
 
 # Building the tools
 
-Before building any of the applications, you need to build the tools:
+Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-cd Tools
-npm install
+npm install && cd Tools && npm install
 ```
 
 # Building the Electron application
@@ -58,11 +59,13 @@ If node-gyp does not works (MSBUILD: error MSB3428: Could not load the Visual C+
 
 If `yarn dist` fails, it may need administrative rights.
 
+If you get an `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info).
+
 The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might be helpful.
 
 # Building the Mobile application
 
-First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "Building Projects with Native Code" tab.
+First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
 
 Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
 

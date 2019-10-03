@@ -1,12 +1,11 @@
 const { PushNotificationIOS } = require('react-native');
 
 class AlarmServiceDriver {
-
 	constructor() {
 		this.hasPermission_ = null;
 		this.inAppNotificationHandler_ = null;
 
-		PushNotificationIOS.addEventListener('localNotification', (instance) => {
+		PushNotificationIOS.addEventListener('localNotification', instance => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
@@ -23,8 +22,8 @@ class AlarmServiceDriver {
 		return true;
 	}
 
-	notificationIsSet(alarmId) {
-		throw new Error('Available only for non-persistent alarms');	
+	notificationIsSet() {
+		throw new Error('Available only for non-persistent alarms');
 	}
 
 	setInAppNotificationHandler(v) {
@@ -36,8 +35,8 @@ class AlarmServiceDriver {
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
-		return new Promise((resolve, reject) => {
-			PushNotificationIOS.checkPermissions(async (perm) => {
+		return new Promise((resolve) => {
+			PushNotificationIOS.checkPermissions(async perm => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
 				resolve(ok);
@@ -47,18 +46,18 @@ class AlarmServiceDriver {
 
 	async requestPermissions() {
 		const newPerm = await PushNotificationIOS.requestPermissions({
-			alert:1,
-			badge:1,
-			sound:1,
+			alert: 1,
+			badge: 1,
+			sound: 1,
 		});
 		this.hasPermission_ = null;
 		return this.hasPermissions(newPerm);
 	}
 
 	async clearNotification(id) {
-		PushNotificationIOS.cancelLocalNotifications({ id: id + '' });
+		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
-	
+
 	async scheduleNotification(notification) {
 		if (!(await this.hasPermissions())) {
 			const ok = await this.requestPermissions();
@@ -67,17 +66,16 @@ class AlarmServiceDriver {
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
 		const iosNotification = {
-			id: notification.id + '',
+			id: `${notification.id}`,
 			alertTitle: notification.title,
 			fireDate: notification.date,
-			userInfo: { id: notification.id + '' },
+			userInfo: { id: `${notification.id}` },
 		};
 
 		if ('body' in notification) iosNotification.alertBody = notification.body;
 
 		PushNotificationIOS.scheduleLocalNotification(iosNotification);
 	}
-
 }
 
 module.exports = AlarmServiceDriver;

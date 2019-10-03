@@ -6,24 +6,25 @@ const globalStyle = {
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
-	backgroundColor: "#ffffff",
-	color: "#555555", // For regular text
-	colorError: "red",
-	colorWarn: "#9A5B00",
-	colorFaded: "#777777", // For less important text
+	backgroundColor: '#ffffff',
+	color: '#555555', // For regular text
+	colorError: 'red',
+	colorWarn: '#9A5B00',
+	colorFaded: '#777777', // For less important text
 	fontSizeSmaller: 14,
-	dividerColor: "#dddddd",
-	strongDividerColor: "#aaaaaa",
+	dividerColor: '#dddddd',
+	strongDividerColor: '#aaaaaa',
 	selectedColor: '#e5e5e5',
+	headerBackgroundColor: '#F0F0F0',
 	disabledOpacity: 0.2,
 	colorUrl: '#7B81FF',
-	textSelectionColor: "#0096FF",
+	textSelectionColor: '#0096FF',
 
-	raisedBackgroundColor: "#0080EF",
-	raisedColor: "#003363",
-	raisedHighlightedColor: "#ffffff",
+	raisedBackgroundColor: '#0080EF',
+	raisedColor: '#003363',
+	raisedHighlightedColor: '#ffffff',
 
-	warningBackgroundColor: "#FFD08D",
+	warningBackgroundColor: '#FFD08D',
 
 	// For WebView - must correspond to the properties above
 	htmlFontSize: '16px',
@@ -36,13 +37,15 @@ const globalStyle = {
 	htmlCodeBackgroundColor: 'rgb(243, 243, 243)',
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
+
+	codeThemeCss: 'hljs-atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
-globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
+globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
 let themeCache_ = {};
 
@@ -82,12 +85,38 @@ function addExtraStyles(style) {
 		fontSize: style.fontSize,
 	};
 
+	style.headerStyle = {
+		color: style.color,
+		fontSize: style.fontSize * 1.2,
+		fontWeight: 'bold',
+	};
+
+	style.headerWrapperStyle = {
+		backgroundColor: style.headerBackgroundColor,
+	};
+
 	return style;
+}
+
+function editorFont(fontId) {
+	// IMPORTANT: The font mapping must match the one in Setting.js
+	const fonts = {
+		[Setting.FONT_DEFAULT]: null,
+		[Setting.FONT_MENLO]: 'Menlo',
+		[Setting.FONT_COURIER_NEW]: 'Courier New',
+		[Setting.FONT_AVENIR]: 'Avenir',
+		[Setting.FONT_MONOSPACE]: 'monospace',
+	};
+	if (!fontId) {
+		console.warn('Editor font not set! Falling back to default font."');
+		fontId = Setting.FONT_DEFAULT;
+	}
+	return fonts[fontId];
 }
 
 function themeStyle(theme) {
 	if (!theme) {
-		console.warn('Theme not set!! Defaulting to Light theme');
+		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
 	}
 
@@ -103,10 +132,11 @@ function themeStyle(theme) {
 	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
+	output.headerBackgroundColor = '#2D3136';
 
-	output.raisedBackgroundColor = "#0F2051";
-	output.raisedColor = "#788BC3";
-	output.raisedHighlightedColor = "#ffffff";
+	output.raisedBackgroundColor = '#0F2051';
+	output.raisedColor = '#788BC3';
+	output.raisedHighlightedColor = '#ffffff';
 
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';
@@ -118,10 +148,12 @@ function themeStyle(theme) {
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
+	output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+
 	output.colorUrl = '#7B81FF';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);
 }
 
-module.exports = { globalStyle, themeStyle };
+module.exports = { globalStyle, themeStyle, editorFont };

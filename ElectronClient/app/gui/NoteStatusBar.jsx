@@ -2,14 +2,10 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
-const { _ } = require('lib/locale.js');
 
 class NoteStatusBarComponent extends React.Component {
-
 	style() {
 		const theme = themeStyle(this.props.theme);
-
-		const itemHeight = 34;
 
 		let style = {
 			root: Object.assign({}, theme.textStyle, {
@@ -22,18 +18,12 @@ class NoteStatusBarComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
-		const style = this.props.style;
 		const note = this.props.note;
-
-		return (
-			<div style={this.style().root}>{time.formatMsToLocal(note.user_updated_time)}</div>
-		);
+		return <div style={this.style().root}>{time.formatMsToLocal(note.user_updated_time)}</div>;
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		// notes: state.notes,
 		// folders: state.folders,

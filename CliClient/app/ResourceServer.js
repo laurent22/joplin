@@ -1,14 +1,11 @@
-const { _ } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
-const Resource = require('lib/models/Resource.js');
 const { netUtils } = require('lib/net-utils.js');
 
-const http = require("http");
-const urlParser = require("url");
+const http = require('http');
+const urlParser = require('url');
 const enableServerDestroy = require('server-destroy');
 
 class ResourceServer {
-
 	constructor() {
 		this.server_ = null;
 		this.logger_ = new Logger();
@@ -31,7 +28,7 @@ class ResourceServer {
 
 	baseUrl() {
 		if (!this.port_) return '';
-		return 'http://127.0.0.1:' + this.port_;
+		return `http://127.0.0.1:${this.port_}`;
 	}
 
 	setLinkHandler(handler) {
@@ -40,7 +37,7 @@ class ResourceServer {
 
 	async start() {
 		this.port_ = await netUtils.findAvailablePort([9167, 9267, 8167, 8267]);
-		if (!this.port_) {	
+		if (!this.port_) {
 			this.logger().error('Could not find available port to start resource server. Please report the error at https://github.com/laurent22/joplin');
 			return;
 		}
@@ -48,16 +45,15 @@ class ResourceServer {
 		this.server_ = http.createServer();
 
 		this.server_.on('request', async (request, response) => {
-
-			const writeResponse = (message) => {
+			const writeResponse = message => {
 				response.write(message);
 				response.end();
-			}
+			};
 
 			const url = urlParser.parse(request.url, true);
 			let resourceId = url.pathname.split('/');
 			if (resourceId.length < 2) {
-				writeResponse('Error: could not get resource ID from path name: ' + url.pathname);
+				writeResponse(`Error: could not get resource ID from path name: ${url.pathname}`);
 				return;
 			}
 			resourceId = resourceId[1];
@@ -66,9 +62,10 @@ class ResourceServer {
 
 			try {
 				const done = await this.linkHandler_(resourceId, response);
-				if (!done) throw new Error('Unhandled resource: ' + resourceId);
+				if (!done) throw new Error(`Unhandled resource: ${resourceId}`);
 			} catch (error) {
 				response.setHeader('Content-Type', 'text/plain');
+				// eslint-disable-next-line require-atomic-updates
 				response.statusCode = 400;
 				response.write(error.message);
 			}
@@ -76,7 +73,7 @@ class ResourceServer {
 			response.end();
 		});
 
-		this.server_.on('error', (error) => {
+		this.server_.on('error', error => {
 			this.logger().error('Resource server:', error);
 		});
 
@@ -91,7 +88,6 @@ class ResourceServer {
 		if (this.server_) this.server_.destroy();
 		this.server_ = null;
 	}
-
 }
 
 module.exports = ResourceServer;

@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
@@ -25,15 +27,14 @@ describe('Encryption', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
-		//await setupDatabaseAndSynchronizer(2);
-		//await switchClient(1);
+		await switchClient(1);
 		service =  new EncryptionService();
 		BaseItem.encryptionService_ = service;
 		Setting.setValue('encryption.enabled', true);
 		done();
 	});
 
-	it('should encode and decode header', async (done) => {
+	it('should encode and decode header', asyncTest(async () => {
 		const header = {
 			encryptionMethod: EncryptionService.METHOD_SJCL,
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
@@ -44,11 +45,9 @@ describe('Encryption', function() {
 		delete decodedHeader.length;
 
 		expect(objectsEqual(header, decodedHeader)).toBe(true);
+	}));
 
-		done();
-	});
-
-	it('should generate and decrypt a master key', async (done) => {
+	it('should generate and decrypt a master key', asyncTest(async () => {
 		const masterKey = await service.generateMasterKey('123456');
 		expect(!!masterKey.checksum).toBe(true);
 		expect(!!masterKey.content).toBe(true);
@@ -64,11 +63,9 @@ describe('Encryption', function() {
 
 		const decryptedMasterKey = await service.decryptMasterKey(masterKey, '123456');
 		expect(decryptedMasterKey.length).toBe(512);
+	}));
 
-		done();
-	});
-
-	it('should encrypt and decrypt with a master key', async (done) => {
+	it('should encrypt and decrypt with a master key', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -88,11 +85,9 @@ describe('Encryption', function() {
 		const plainText2 = await service.decryptString(cipherText2);
 
 		expect(plainText2 === veryLongSecret).toBe(true);
+	}));
 
-		done();
-	});
-
-	it('should fail to decrypt if master key not present', async (done) => {
+	it('should fail to decrypt if master key not present', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -105,28 +100,24 @@ describe('Encryption', function() {
 		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
 		expect(hasThrown).toBe(true);
-
-		done();
-	});
+	}));
 
 
-	it('should fail to decrypt if data tampered with', async (done) => {
+	it('should fail to decrypt if data tampered with', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
 		await service.loadMasterKey(masterKey, '123456', true);
 
 		let cipherText = await service.encryptString('some secret');
-		cipherText += "ABCDEFGHIJ";
+		cipherText += 'ABCDEFGHIJ';
 
 		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
 		expect(hasThrown).toBe(true);
+	}));
 
-		done();
-	});
-
-	it('should encrypt and decrypt notes and folders', async (done) => {
+	it('should encrypt and decrypt notes and folders', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
@@ -148,33 +139,29 @@ describe('Encryption', function() {
 		// Check that encrypted data is there
 		expect(!!deserialized.encryption_cipher_text).toBe(true);
 
-		encryptedNote = await Note.save(deserialized);
-		decryptedNote = await Note.decrypt(encryptedNote);
+		const encryptedNote = await Note.save(deserialized);
+		const decryptedNote = await Note.decrypt(encryptedNote);
 
 		expect(decryptedNote.title).toBe(note.title);
 		expect(decryptedNote.body).toBe(note.body);
 		expect(decryptedNote.id).toBe(note.id);
 		expect(decryptedNote.parent_id).toBe(note.parent_id);
+	}));
 
-		done();
-	});
-
-	it('should encrypt and decrypt files', async (done) => {
+	it('should encrypt and decrypt files', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
 
-		const sourcePath = __dirname + '/../tests/support/photo.jpg';
-		const encryptedPath = __dirname + '/data/photo.crypted';
-		const decryptedPath = __dirname + '/data/photo.jpg';
+		const sourcePath = `${__dirname}/../tests/support/photo.jpg`;
+		const encryptedPath = `${__dirname}/data/photo.crypted`;
+		const decryptedPath = `${__dirname}/data/photo.jpg`;
 
 		await service.encryptFile(sourcePath, encryptedPath);
 		await service.decryptFile(encryptedPath, decryptedPath);
 
 		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
-
-		done();
-	});
+	}));
 
 });

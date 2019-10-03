@@ -3,12 +3,9 @@ const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
-const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
-const BaseItem = require('lib/models/BaseItem.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'set <note> <name> [value]';
 	}
@@ -19,7 +16,7 @@ class Command extends BaseCommand {
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
 			if (f.name === 'id') continue;
-			s.push(f.name + ' (' + Database.enumName('fieldType', f.type) + ')');
+			s.push(`${f.name} (${Database.enumName('fieldType', f.type)})`);
 		}
 
 		return _('Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s', s.join(', '));
@@ -45,7 +42,6 @@ class Command extends BaseCommand {
 			await Note.save(newNote);
 		}
 	}
-
 }
 
 module.exports = Command;

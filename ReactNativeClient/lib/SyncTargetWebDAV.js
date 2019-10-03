@@ -7,7 +7,6 @@ const WebDavApi = require('lib/WebDavApi');
 const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav');
 
 class SyncTargetWebDAV extends BaseSyncTarget {
-
 	static id() {
 		return 6;
 	}
@@ -45,19 +44,19 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	static async checkConfig(options) {
 		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetWebDAV.id(), options);
 		fileApi.requestRepeatCount_ = 0;
-		
+
 		const output = {
 			ok: false,
 			errorMessage: '',
 		};
-		
+
 		try {
 			const result = await fileApi.stat('');
-			if (!result) throw new Error('WebDAV directory not found: ' + options.path());
+			if (!result) throw new Error(`WebDAV directory not found: ${options.path()}`);
 			output.ok = true;
 		} catch (error) {
 			output.errorMessage = error.message;
-			if (error.code) output.errorMessage += ' (Code ' + error.code + ')';
+			if (error.code) output.errorMessage += ` (Code ${error.code})`;
 		}
 
 		return output;
@@ -78,7 +77,6 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	async initSynchronizer() {
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
-
 }
 
 module.exports = SyncTargetWebDAV;

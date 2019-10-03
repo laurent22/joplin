@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const os = require('os');
@@ -25,31 +27,31 @@ describe('EnexToMd', function() {
 	});
 
 	it('should convert from Enex to Markdown', asyncTest(async () => {
-		const basePath = __dirname + '/enex_to_md';
+		const basePath = `${__dirname}/enex_to_md`;
 		const files = await shim.fsDriver().readDirStats(basePath);
-		
+
 		for (let i = 0; i < files.length; i++) {
 			const htmlFilename = files[i].path;
 			if (htmlFilename.indexOf('.html') < 0) continue;
 
-			const htmlPath = basePath + '/' + htmlFilename;
-			const mdPath = basePath + '/' + filename(htmlFilename) + '.md';
+			const htmlPath = `${basePath}/${htmlFilename}`;
+			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'text2.html') continue;
+			// if (htmlFilename !== 'multiline_inner_text.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
 
-			let actualMd = await enexXmlToMd('<div>' + html + '</div>', []);
-			
+			let actualMd = await enexXmlToMd(`<div>${html}</div>`, []);
+
 			if (os.EOL === '\r\n') {
-				expectedMd = expectedMd.replace(/\r\n/g, '\n')
-				actualMd = actualMd.replace(/\r\n/g, '\n')
+				expectedMd = expectedMd.replace(/\r\n/g, '\n');
+				actualMd = actualMd.replace(/\r\n/g, '\n');
 			}
 
 			if (actualMd !== expectedMd) {
 				console.info('');
-				console.info('Error converting file: ' + htmlFilename);
+				console.info(`Error converting file: ${htmlFilename}`);
 				console.info('--------------------------------- Got:');
 				console.info(actualMd.split('\n'));
 				console.info('--------------------------------- Expected:');
@@ -60,7 +62,7 @@ describe('EnexToMd', function() {
 				expect(false).toBe(true);
 				// return;
 			} else {
-				expect(true).toBe(true)
+				expect(true).toBe(true);
 			}
 		}
 	}));

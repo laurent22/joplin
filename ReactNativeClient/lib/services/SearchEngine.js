@@ -1,5 +1,4 @@
 const { Logger } = require('lib/logger.js');
-const { shim } = require('lib/shim.js');
 const ItemChange = require('lib/models/ItemChange.js');
 const Setting = require('lib/models/Setting.js');
 const Note = require('lib/models/Note.js');
@@ -7,11 +6,11 @@ const BaseModel = require('lib/BaseModel.js');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
+const { sprintf } = require('sprintf-js');
 
 class SearchEngine {
-
 	constructor() {
-		this.dispatch = (action) => {};
+		this.dispatch = () => {};
 		this.logger_ = new Logger();
 		this.db_ = null;
 		this.isIndexing_ = false;
@@ -51,7 +50,6 @@ class SearchEngine {
 		return null;
 	}
 
-
 	async rebuildIndex_() {
 		let noteIds = await this.db().selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0');
 		noteIds = noteIds.map(n => n.id);
@@ -63,7 +61,7 @@ class SearchEngine {
 
 		while (noteIds.length) {
 			const currentIds = noteIds.splice(0, 100);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + currentIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');			
+			const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${currentIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -82,9 +80,19 @@ class SearchEngine {
 		if (this.scheduleSyncTablesIID_) return;
 
 		this.scheduleSyncTablesIID_ = setTimeout(async () => {
-			await this.syncTables();
+			try {
+				await this.syncTables();
+			} catch (error) {
+				this.logger().error('SearchEngine::scheduleSyncTables: Error while syncing tables:', error);
+			}
 			this.scheduleSyncTablesIID_ = null;
 		}, 10000);
+	}
+
+	async rebuildIndex() {
+		Setting.setValue('searchEngine.lastProcessedChangeId', 0);
+		Setting.setValue('searchEngine.initialIndexingDone', false);
+		return this.syncTables();
 	}
 
 	async syncTables() {
@@ -105,57 +113,71 @@ class SearchEngine {
 
 		const startTime = Date.now();
 
+		const report = {
+			inserted: 0,
+			deleted: 0,
+		};
+
 		let lastChangeId = Setting.value('searchEngine.lastProcessedChangeId');
 
-		while (true) {
-			const changes = await ItemChange.modelSelectAll(`
-				SELECT id, item_id, type
-				FROM item_changes
-				WHERE item_type = ?
-				AND id > ?
-				ORDER BY id ASC
-				LIMIT 100
-			`, [BaseModel.TYPE_NOTE, lastChangeId]);
+		try {
+			while (true) {
+				const changes = await ItemChange.modelSelectAll(
+					`
+					SELECT id, item_id, type
+					FROM item_changes
+					WHERE item_type = ?
+					AND id > ?
+					ORDER BY id ASC
+					LIMIT 10
+				`,
+					[BaseModel.TYPE_NOTE, lastChangeId]
+				);
 
-			if (!changes.length) break;
+				if (!changes.length) break;
 
-			const noteIds = changes.map(a => a.item_id);
-			const notes = await Note.modelSelectAll('SELECT id, title, body FROM notes WHERE id IN ("' + noteIds.join('","') + '") AND is_conflict = 0 AND encryption_applied = 0');
-			const queries = [];
+				const noteIds = changes.map(a => a.item_id);
+				const notes = await Note.modelSelectAll(`SELECT id, title, body FROM notes WHERE id IN ("${noteIds.join('","')}") AND is_conflict = 0 AND encryption_applied = 0`);
+				const queries = [];
 
-			for (let i = 0; i < changes.length; i++) {
-				const change = changes[i];
+				for (let i = 0; i < changes.length; i++) {
+					const change = changes[i];
 
-				if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
-					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
-					const note = this.noteById_(notes, change.item_id);
-					if (note) {
-						const n = this.normalizeNote_(note);
-						queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+					if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
+						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+						const note = this.noteById_(notes, change.item_id);
+						if (note) {
+							const n = this.normalizeNote_(note);
+							queries.push({ sql: 'INSERT INTO notes_normalized(id, title, body) VALUES (?, ?, ?)', params: [change.item_id, n.title, n.body] });
+							report.inserted++;
+						}
+					} else if (change.type === ItemChange.TYPE_DELETE) {
+						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+						report.deleted++;
+					} else {
+						throw new Error(`Invalid change type: ${change.type}`);
 					}
-				} else if (change.type === ItemChange.TYPE_DELETE) {
-					queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
-				} else {
-					throw new Error('Invalid change type: ' + change.type);
+
+					lastChangeId = change.id;
 				}
 
-				lastChangeId = change.id;
+				await this.db().transactionExecBatch(queries);
+				Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
+				await Setting.saveAll();
 			}
-
-			await this.db().transactionExecBatch(queries);
-			Setting.setValue('searchEngine.lastProcessedChangeId', lastChangeId);
-			await Setting.saveAll();
+		} catch (error) {
+			this.logger().error('SearchEngine: Error while processing changes:', error);
 		}
 
 		await ItemChangeUtils.deleteProcessedChanges();
 
-		this.logger().info('SearchEngine: Updated FTS table in ' + (Date.now() - startTime) + 'ms');
+		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 
 		this.isIndexing_ = false;
 	}
 
 	async countRows() {
-		const sql = 'SELECT count(*) as total FROM notes_fts'
+		const sql = 'SELECT count(*) as total FROM notes_fts';
 		const row = await this.db().selectOne(sql);
 		return row && row['total'] ? row['total'] : 0;
 	}
@@ -178,7 +200,7 @@ class SearchEngine {
 		// - If there's only one term in the query string, the content with the most matches goes on top
 		// - If there are multiple terms, the result with the most occurences that are closest to each others go on top.
 		//   eg. if query is "abcd efgh", "abcd efgh" will go before "abcd XX efgh".
-		
+
 		const occurenceCount = Math.floor(offsets.length / 4);
 
 		if (termCount === 1) return occurenceCount;
@@ -214,6 +236,10 @@ class SearchEngine {
 		rows.sort((a, b) => {
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+			if (a.user_updated_time < b.user_updated_time) return +1;
+			if (a.user_updated_time > b.user_updated_time) return -1;
 			return 0;
 		});
 	}
@@ -226,7 +252,7 @@ class SearchEngine {
 
 		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = regexString.substr(0, regexString.length - 2) + '[^' + pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]') + ']' + '*?';
+			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
 			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
 		}
 
@@ -234,8 +260,8 @@ class SearchEngine {
 	}
 
 	parseQuery(query) {
-		const terms = {_:[]};
-		
+		const terms = { _: [] };
+
 		let inQuote = false;
 		let currentCol = '_';
 		let currentTerm = '';
@@ -263,7 +289,7 @@ class SearchEngine {
 
 			if (c === ':' && !inQuote) {
 				currentCol = currentTerm;
-				terms[currentCol] = [];
+				if (!terms[currentCol]) terms[currentCol] = [];
 				currentTerm = '';
 				continue;
 			}
@@ -334,23 +360,24 @@ class SearchEngine {
 
 	normalizeNote_(note) {
 		const n = Object.assign({}, note);
-		n.title = this.normalizeText_(n.title);		
+		n.title = this.normalizeText_(n.title);
 		n.body = this.normalizeText_(n.body);
 		return n;
 	}
 
 	async basicSearch(query) {
-		let p = query.split(' ');
-		let temp = [];
-		for (let i = 0; i < p.length; i++) {
-			let t = p[i].trim();
-			if (!t) continue;
-			temp.push(t);
+		query = query.replace(/\*/, '');
+		const parsedQuery = this.parseQuery(query);
+		const searchOptions = {};
+
+		for (const key of parsedQuery.keys) {
+			const term = parsedQuery.terms[key][0].value;
+			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
+			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
+			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
 		}
 
-		return await Note.previews(null, {
-			anywherePattern: '*' + temp.join('*') + '*',
-		});
+		return Note.previews(null, searchOptions);
 	}
 
 	async search(query) {
@@ -364,18 +391,17 @@ class SearchEngine {
 			return this.basicSearch(query);
 		} else {
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT id, title, offsets(notes_fts) AS offsets FROM notes_fts WHERE notes_fts MATCH ?'
+			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.orderResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {
-				this.logger().warn('Cannot execute MATCH query: ' + query + ': ' + error.message);
+				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
 				return [];
 			}
 		}
 	}
-	
 }
 
 module.exports = SearchEngine;

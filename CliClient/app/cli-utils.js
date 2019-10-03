@@ -5,7 +5,7 @@ const stringPadding = require('string-padding');
 
 const cliUtils = {};
 
-cliUtils.printArray = function(logFunction, rows, headers = null) {
+cliUtils.printArray = function(logFunction, rows) {
 	if (!rows.length) return '';
 
 	const ALIGN_LEFT = 0;
@@ -16,7 +16,7 @@ cliUtils.printArray = function(logFunction, rows, headers = null) {
 
 	for (let i = 0; i < rows.length; i++) {
 		let row = rows[i];
-		
+
 		for (let j = 0; j < row.length; j++) {
 			let item = row[j];
 			let width = item ? item.toString().length : 0;
@@ -26,7 +26,6 @@ cliUtils.printArray = function(logFunction, rows, headers = null) {
 		}
 	}
 
-	let lines = [];
 	for (let row = 0; row < rows.length; row++) {
 		let line = [];
 		for (let col = 0; col < colWidths.length; col++) {
@@ -37,7 +36,7 @@ cliUtils.printArray = function(logFunction, rows, headers = null) {
 		}
 		logFunction(line.join(' '));
 	}
-}
+};
 
 cliUtils.parseFlags = function(flags) {
 	let output = {};
@@ -56,10 +55,10 @@ cliUtils.parseFlags = function(flags) {
 		}
 	}
 	return output;
-}
+};
 
 cliUtils.parseCommandArg = function(arg) {
-	if (arg.length <= 2) throw new Error('Invalid command arg: ' + arg);
+	if (arg.length <= 2) throw new Error(`Invalid command arg: ${arg}`);
 
 	const c1 = arg[0];
 	const c2 = arg[arg.length - 1];
@@ -70,9 +69,9 @@ cliUtils.parseCommandArg = function(arg) {
 	} else if (c1 == '[' && c2 == ']') {
 		return { required: false, name: name };
 	} else {
-		throw new Error('Invalid command arg: ' + arg);
+		throw new Error(`Invalid command arg: ${arg}`);
 	}
-}
+};
 
 cliUtils.makeCommandArgs = function(cmd, argv) {
 	let cmdUsage = cmd.usage();
@@ -83,9 +82,8 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	let booleanFlags = [];
 	let aliases = {};
 	for (let i = 0; i < options.length; i++) {
-		if (options[i].length != 2) throw new Error('Invalid options: ' + options[i]);
+		if (options[i].length != 2) throw new Error(`Invalid options: ${options[i]}`);
 		let flags = options[i][0];
-		let text = options[i][1];
 
 		flags = cliUtils.parseFlags(flags);
 
@@ -125,27 +123,27 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	output.options = argOptions;
 
 	return output;
-}
+};
 
 cliUtils.promptMcq = function(message, answers) {
 	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
-		output: process.stdout
+		output: process.stdout,
 	});
 
-	message += "\n\n";
+	message += '\n\n';
 	for (let n in answers) {
 		if (!answers.hasOwnProperty(n)) continue;
-		message += _('%s: %s', n, answers[n]) + "\n";
+		message += `${_('%s: %s', n, answers[n])}\n`;
 	}
 
-	message += "\n";
+	message += '\n';
 	message += _('Your choice: ');
 
 	return new Promise((resolve, reject) => {
-		rl.question(message, (answer) => {
+		rl.question(message, answer => {
 			rl.close();
 
 			if (!(answer in answers)) {
@@ -156,7 +154,7 @@ cliUtils.promptMcq = function(message, answers) {
 			resolve(answer);
 		});
 	});
-}
+};
 
 cliUtils.promptConfirm = function(message, answers = null) {
 	if (!answers) answers = [_('Y'), _('n')];
@@ -164,23 +162,24 @@ cliUtils.promptConfirm = function(message, answers = null) {
 
 	const rl = readline.createInterface({
 		input: process.stdin,
-		output: process.stdout
+		output: process.stdout,
 	});
 
-	message += ' (' + answers.join('/') + ')';
+	message += ` (${answers.join('/')})`;
 
-	return new Promise((resolve, reject) => {
-		rl.question(message + ' ', (answer) => {
+	return new Promise((resolve) => {
+		rl.question(`${message} `, answer => {
 			const ok = !answer || answer.toLowerCase() == answers[0].toLowerCase();
 			rl.close();
 			resolve(ok);
 		});
 	});
-}
+};
 
 // Note: initialText is there to have the same signature as statusBar.prompt() so that
 // it can be a drop-in replacement, however initialText is not used (and cannot be
 // with readline.question?).
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 cliUtils.prompt = function(initialText = '', promptString = ':', options = null) {
 	if (!options) options = {};
 
@@ -189,10 +188,9 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 
 	const mutableStdout = new Writable({
 		write: function(chunk, encoding, callback) {
-			if (!this.muted)
-			process.stdout.write(chunk, encoding);
+			if (!this.muted) process.stdout.write(chunk, encoding);
 			callback();
-		}
+		},
 	});
 
 	const rl = readline.createInterface({
@@ -201,18 +199,18 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 		terminal: true,
 	});
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		mutableStdout.muted = false;
 
-		rl.question(promptString, (answer) => {
+		rl.question(promptString, answer => {
 			rl.close();
-			if (!!options.secure) this.stdout_('');
+			if (options.secure) this.stdout_('');
 			resolve(answer);
 		});
 
 		mutableStdout.muted = !!options.secure;
 	});
-}
+};
 
 let redrawStarted_ = false;
 let redrawLastLog_ = null;
@@ -220,7 +218,7 @@ let redrawLastUpdateTime_ = 0;
 
 cliUtils.setStdout = function(v) {
 	this.stdout_ = v;
-}
+};
 
 cliUtils.redraw = function(s) {
 	const now = time.unixMs();
@@ -233,8 +231,8 @@ cliUtils.redraw = function(s) {
 		redrawLastLog_ = s;
 	}
 
-   redrawStarted_ = true;
-}
+	redrawStarted_ = true;
+};
 
 cliUtils.redrawDone = function() {
 	if (!redrawStarted_) return;
@@ -245,6 +243,6 @@ cliUtils.redrawDone = function() {
 
 	redrawLastLog_ = null;
 	redrawStarted_ = false;
-}
+};
 
 module.exports = { cliUtils };

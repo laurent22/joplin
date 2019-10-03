@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -21,15 +23,15 @@ describe('services_SearchEngine', function() {
 
 		engine = new SearchEngine();
 		engine.setDb(db());
-		
+
 		done();
 	});
 
 	it('should keep the content and FTS table in sync', asyncTest(async () => {
 		let rows, n1, n2, n3;
 
-		n1 = await Note.save({ title: "a" });
-		n2 = await Note.save({ title: "b" });
+		n1 = await Note.save({ title: 'a' });
+		n2 = await Note.save({ title: 'b' });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
@@ -61,8 +63,8 @@ describe('services_SearchEngine', function() {
 	}));
 
 	it('should, after initial indexing, save the last change ID', asyncTest(async () => {
-		const n1 = await Note.save({ title: "abcd efgh" }); // 3
-		const n2 = await Note.save({ title: "abcd aaaaa abcd abcd" }); // 1
+		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
+		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
 
 		expect(Setting.value('searchEngine.initialIndexingDone')).toBe(false);
 
@@ -77,9 +79,9 @@ describe('services_SearchEngine', function() {
 
 
 	it('should order search results by relevance (1)', asyncTest(async () => {
-		const n1 = await Note.save({ title: "abcd efgh" }); // 3
-		const n2 = await Note.save({ title: "abcd aaaaa abcd abcd" }); // 1
-		const n3 = await Note.save({ title: "abcd aaaaa bbbb eeee abcd" }); // 2
+		const n1 = await Note.save({ title: 'abcd efgh' }); // 3
+		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' }); // 1
+		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' }); // 2
 
 		await engine.syncTables();
 		const rows = await engine.search('abcd');
@@ -91,15 +93,15 @@ describe('services_SearchEngine', function() {
 
 	it('should order search results by relevance (2)', asyncTest(async () => {
 		// 1
-		const n1 = await Note.save({ title: "abcd efgh", body: "XX abcd XX efgh" });
+		const n1 = await Note.save({ title: 'abcd efgh', body: 'XX abcd XX efgh' });
 		// 4
-		const n2 = await Note.save({ title: "abcd aaaaa bbbb eeee efgh" });
+		const n2 = await Note.save({ title: 'abcd aaaaa bbbb eeee efgh' });
 		// 3
-		const n3 = await Note.save({ title: "abcd aaaaa efgh" });
+		const n3 = await Note.save({ title: 'abcd aaaaa efgh' });
 		// 2
-		const n4 = await Note.save({ title: "blablablabla blabla bla abcd X efgh" });
+		const n4 = await Note.save({ title: 'blablablabla blabla bla abcd X efgh' });
 		// 5
-		const n5 = await Note.save({ title: "occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh" });
+		const n5 = await Note.save({ title: 'occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh occurence many times but very abcd spread appart spread appart spread appart spread appart spread appart efgh' });
 
 		await engine.syncTables();
 		const rows = await engine.search('abcd efgh');
@@ -111,14 +113,66 @@ describe('services_SearchEngine', function() {
 		expect(rows[4].id).toBe(n5.id);
 	}));
 
+	it('should order search results by relevance (last updated first)', asyncTest(async () => {
+		let rows;
+
+		const n1 = await Note.save({ title: 'abcd' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd' });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n1.id);
+
+		await Note.save({ id: n1.id, title: 'abcd' });
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n2.id);
+	}));
+
+	it('should order search results by relevance (completed to-dos last)', asyncTest(async () => {
+		let rows;
+
+		const n1 = await Note.save({ title: 'abcd', is_todo: 1 });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd', is_todo: 1 });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd', is_todo: 1 });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n1.id);
+
+		await Note.save({ id: n3.id, todo_completed: Date.now() });
+
+		await engine.syncTables();
+		rows = await engine.search('abcd');
+		expect(rows[0].id).toBe(n2.id);
+		expect(rows[1].id).toBe(n1.id);
+		expect(rows[2].id).toBe(n3.id);
+	}));
+
 	it('should supports various query types', asyncTest(async () => {
 		let rows;
 
-		const n1 = await Note.save({ title: "abcd efgh ijkl", body: "aaaa bbbb" });
-		const n2 = await Note.save({ title: "iiii efgh bbbb", body: "aaaa bbbb" });
-		const n3 = await Note.save({ title: "Агентство Рейтер" });
-		const n4 = await Note.save({ title: "Dog" });
-		const n5 = await Note.save({ title: "СООБЩИЛО" });
+		const n1 = await Note.save({ title: 'abcd efgh ijkl', body: 'aaaa bbbb' });
+		const n2 = await Note.save({ title: 'iiii efgh bbbb', body: 'aaaa bbbb' });
+		const n3 = await Note.save({ title: 'Агентство Рейтер' });
+		const n4 = await Note.save({ title: 'Dog' });
+		const n5 = await Note.save({ title: 'СООБЩИЛО' });
 
 		await engine.syncTables();
 
@@ -164,7 +218,7 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with or without accents', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: "père noël" });
+		const n1 = await Note.save({ title: 'père noël' });
 
 		await engine.syncTables();
 
@@ -176,7 +230,7 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Chinese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: "我是法国人" });
+		const n1 = await Note.save({ title: '我是法国人' });
 
 		await engine.syncTables();
 
@@ -186,7 +240,7 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Japanese characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: "私は日本語を話すことができません" });
+		const n1 = await Note.save({ title: '私は日本語を話すことができません' });
 
 		await engine.syncTables();
 
@@ -196,12 +250,29 @@ describe('services_SearchEngine', function() {
 
 	it('should support queries with Korean characters', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: "이것은 한국말이다" });
+		const n1 = await Note.save({ title: '이것은 한국말이다' });
 
 		await engine.syncTables();
 
 		expect((await engine.search('이것은')).length).toBe(1);
 		expect((await engine.search('말')).length).toBe(1);
+	}));
+
+	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('title:你好*')).length).toBe(1);
+		expect((await engine.search('body:你好')).length).toBe(0);
+		expect((await engine.search('title:你好 body:法国人')).length).toBe(1);
+		expect((await engine.search('title:你好 body:bla')).length).toBe(0);
+		expect((await engine.search('title:你好 我是')).length).toBe(1);
+		expect((await engine.search('title:bla 我是')).length).toBe(0);
+
+		// For non-alpha char, only the first field is looked at, the following ones are ignored
+		expect((await engine.search('title:你好 title:hello')).length).toBe(1);
 	}));
 
 	it('should parse normal query strings', asyncTest(async () => {
@@ -213,6 +284,7 @@ describe('services_SearchEngine', function() {
 			['title:abcd efgh', { _: ['efgh'], title: ['abcd'] }],
 			['title:abcd', { title: ['abcd'] }],
 			['"abcd efgh"', { _: ['abcd efgh'] }],
+			['title:abcd title:efgh', { title: ['abcd', 'efgh'] }],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -225,38 +297,11 @@ describe('services_SearchEngine', function() {
 			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
 			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
 
-			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), 'Test case (_) ' + i);
-			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), 'Test case (title) ' + i);
-			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), 'Test case (body) ' + i);
+			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
+			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);
+			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), `Test case (body) ${i}`);
 		}
 	}));
-
-	// it('should parse query strings with wildcards', asyncTest(async () => {
-	// 	let rows;
-
-	// 	const testCases = [
-	// 		['do*', ['do', 'dog', 'domino'], [] ],
-	// 		// "*" is a wildcard only when used at the end (to search for documents with the specified prefix)
-	// 		// If it's at the beginning, it's ignored, if it's in the middle, it's treated as a litteral "*".
-	// 		['*an*', ['an', 'anneau'], ['piano', 'plan'] ],
-	// 		['no*no', ['no*no'], ['nonono'] ],
-	// 	];
-
-	// 	for (let i = 0; i < testCases.length; i++) {
-	// 		const t = testCases[i];
-	// 		const input = t[0];
-	// 		const shouldMatch = t[1];
-	// 		const shouldNotMatch = t[2];
-	// 		const regex = new RegExp(engine.parseQuery(input).terms._[0].value, 'gmi');
-
-	// 		for (let j = 0; j < shouldMatch.length; j++) {
-	// 			const r = shouldMatch[j].match(regex);
-	// 			expect(!!r).toBe(true, '"' + input + '" should match "' + shouldMatch[j] + '"');
-	// 		}
-	// 	}
-
-	// 	expect(engine.parseQuery('*').termCount).toBe(0);
-	// }));
 
 	it('should handle queries with special characters', asyncTest(async () => {
 		let rows;

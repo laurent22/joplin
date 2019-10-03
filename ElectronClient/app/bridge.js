@@ -1,6 +1,5 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
-const { Logger } = require('lib/logger.js');
 
 class Bridge {
 
@@ -65,7 +64,6 @@ class Bridge {
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
 	showMessageBox_(window, options) {
 		const {dialog} = require('electron');
-		const nativeImage = require('electron').nativeImage
 		if (!window) window = this.window();
 		return dialog.showMessageBox(window, options);
 	}
@@ -77,13 +75,16 @@ class Bridge {
 		});
 	}
 
-	showConfirmMessageBox(message) {
-		const result = this.showMessageBox_(this.window(), {
+	showConfirmMessageBox(message, options = null) {
+		if (options === null) options = {};
+
+		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'question',
 			message: message,
 			cancelId: 1,
 			buttons: [_('OK'), _('Cancel')],
-		});
+		}, options));
+
 		return result === 0;
 	}
 
@@ -109,18 +110,22 @@ class Bridge {
 	}
 
 	openExternal(url) {
-		return require('electron').shell.openExternal(url)
+		return require('electron').shell.openExternal(url);
 	}
 
 	openItem(fullPath) {
-		return require('electron').shell.openItem(fullPath)
+		return require('electron').shell.openItem(fullPath);
 	}
 
 	checkForUpdates(inBackground, window, logFilePath, options) {
 		const { checkForUpdates } = require('./checkForUpdates.js');
 		checkForUpdates(inBackground, window, logFilePath, options);
 	}
-	
+
+	buildDir() {
+		return this.electronApp().buildDir();
+	}
+
 }
 
 let bridge_ = null;
@@ -134,6 +139,6 @@ function initBridge(wrapper) {
 function bridge() {
 	if (!bridge_) throw new Error('Bridge not initialized');
 	return bridge_;
-}	
+}
 
-module.exports = { bridge, initBridge }
+module.exports = { bridge, initBridge };

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
@@ -18,7 +20,7 @@ describe('models_Setting', function() {
 		const settings = {
 			'sync.5.path': 'http://example.com',
 			'sync.5.username': 'testing',
-		}
+		};
 
 		let output = Setting.subValues('sync.5', settings);
 		expect(output['path']).toBe('http://example.com');

@@ -63,7 +63,8 @@
 				"_releases",
 				"ReactNativeClient/lib/csstojs",
 				"Clipper/joplin-webclipper/popup/build",
-				"Clipper/joplin-webclipper/dist"
+				"Clipper/joplin-webclipper/dist",
+				"ReactNativeClient/lib/rnInjectedJs",
 			],
 			"path": "."
 		}

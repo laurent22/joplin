@@ -21,3 +21,6 @@ build_script:
   - yarn dist
 
 test: off
+
+# We only want to build tags
+skip_non_tags: true

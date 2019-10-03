@@ -1,14 +1,12 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('../theme.js');
-const { _ } = require('lib/locale.js');
 
 class NoteTextViewerComponent extends React.Component {
-
 	constructor() {
 		super();
 
 		this.initialized_ = false;
+		this.domReady_ = false;
 
 		this.webviewRef_ = React.createRef();
 		this.webviewListeners_ = null;
@@ -18,11 +16,16 @@ class NoteTextViewerComponent extends React.Component {
 	}
 
 	webview_domReady(event) {
-		this.props.onDomReady(event);
+		this.domReady_ = true;
+		if (this.props.onDomReady) this.props.onDomReady(event);
 	}
 
 	webview_ipcMessage(event) {
-		this.props.onIpcMessage(event);
+		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
+	}
+
+	domReady() {
+		return this.domReady_;
 	}
 
 	initWebview() {
@@ -40,6 +43,20 @@ class NoteTextViewerComponent extends React.Component {
 			const fn = this.webviewListeners_[n];
 			wv.addEventListener(n, fn);
 		}
+
+		let isAlreadyReady = false;
+		try {
+			isAlreadyReady = !this.webviewRef_.current.isLoading();
+		} catch (error) {
+			// Ignore - it means the view has not started loading, and the DOM ready event has not been emitted yet
+			// Error is "The WebView must be attached to the DOM and the dom-ready event emitted before this method can be called."
+		}
+
+		// Edge-case - the webview was already ready by the time initWebview was
+		// called - so manually call the domReady event to notify caller.
+		if (isAlreadyReady) {
+			this.webview_domReady({});
+		}
 	}
 
 	destroyWebview() {
@@ -51,13 +68,24 @@ class NoteTextViewerComponent extends React.Component {
 			const fn = this.webviewListeners_[n];
 			wv.removeEventListener(n, fn);
 		}
+
+		this.initialized_ = false;
+		this.domReady_ = false;
 	}
 
-	componentDidUpdate() {
+	tryInit() {
 		if (!this.initialized_ && this.webviewRef_.current) {
 			this.initWebview();
 			this.initialized_ = true;
 		}
+	}
+
+	componentDidMount() {
+		this.tryInit();
+	}
+
+	componentDidUpdate() {
+		this.tryInit();
 	}
 
 	componentWillUnmount() {
@@ -73,15 +101,33 @@ class NoteTextViewerComponent extends React.Component {
 	}
 
 	printToPDF(options, callback) {
-		return this.webviewRef_.current.printToPDF(options, callback);
+		// In Electron 4x, printToPDF is broken so need to use this hack:
+		// https://github.com/electron/electron/issues/16171#issuecomment-451090245
+
+		// return this.webviewRef_.current.printToPDF(options, callback);
+		return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
 	}
 
-	print(options = {}) {
-		return this.webviewRef_.current.print(options);
+	print() {
+		// In Electron 4x, print is broken so need to use this hack:
+		// https://github.com/electron/electron/issues/16219#issuecomment-451454948
+		// Note that this is not a perfect workaround since it means the options are ignored
+		// In particular it means that background images and colours won't be printed (printBackground property will be ignored)
+
+		// return this.webviewRef_.current.getWebContents().print({});
+		return this.webviewRef_.current.getWebContents().executeJavaScript('window.print()');
 	}
 
 	openDevTools() {
 		return this.webviewRef_.current.openDevTools();
+	}
+
+	closeDevTools() {
+		return this.webviewRef_.current.closeDevTools();
+	}
+
+	isDevToolsOpened() {
+		return this.webviewRef_.current.isDevToolsOpened();
 	}
 
 	// ----------------------------------------------------------------
@@ -89,23 +135,21 @@ class NoteTextViewerComponent extends React.Component {
 	// ----------------------------------------------------------------
 
 	render() {
-		return  <webview
-			ref={this.webviewRef_}
-			style={this.props.viewerStyle}
-			preload="gui/note-viewer/preload.js"
-			src="gui/note-viewer/index.html"
-			webpreferences="contextIsolation"
-		/>
+		return <webview ref={this.webviewRef_} style={this.props.viewerStyle} preload="gui/note-viewer/preload.js" src="gui/note-viewer/index.html" webpreferences="contextIsolation" />;
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
 	};
 };
 
-const NoteTextViewer = connect(mapStateToProps, null, null, { withRef: true })(NoteTextViewerComponent);
+const NoteTextViewer = connect(
+	mapStateToProps,
+	null,
+	null,
+	{ withRef: true }
+)(NoteTextViewerComponent);
 
 module.exports = NoteTextViewer;

@@ -2,24 +2,25 @@ const Setting = require('lib/models/Setting.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const ObjectUtils = require('lib/ObjectUtils');
 const { _ } = require('lib/locale.js');
+const { createSelector } = require('reselect');
 
-const shared = {}
+const shared = {};
 
 shared.init = function(comp) {
 	if (!comp.state) comp.state = {};
 	comp.state.checkSyncConfigResult = null;
 	comp.state.settings = {};
 	comp.state.changedSettingKeys = [];
-}
+};
 
 shared.checkSyncConfig = async function(comp, settings) {
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
-	const options = Setting.subValues('sync.' + syncTargetId, settings);
+	const options = Setting.subValues(`sync.${syncTargetId}`, settings);
 	comp.setState({ checkSyncConfigResult: 'checking' });
 	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });
-}
+};
 
 shared.checkSyncConfigMessages = function(comp) {
 	const result = comp.state.checkSyncConfigResult;
@@ -35,7 +36,7 @@ shared.checkSyncConfigMessages = function(comp) {
 	}
 
 	return output;
-}
+};
 
 shared.updateSettingValue = function(comp, key, value) {
 	const settings = Object.assign({}, comp.state.settings);
@@ -47,18 +48,18 @@ shared.updateSettingValue = function(comp, key, value) {
 		settings: settings,
 		changedSettingKeys: changedSettingKeys,
 	});
-}
+};
 
 shared.saveSettings = function(comp) {
 	for (let key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
 		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
-		console.info("Saving", key, comp.state.settings[key]);
+		console.info('Saving', key, comp.state.settings[key]);
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 
 	comp.setState({ changedSettingKeys: [] });
-}
+};
 
 shared.settingsToComponents = function(comp, device, settings) {
 	const keys = Setting.keys(true, device);
@@ -76,34 +77,59 @@ shared.settingsToComponents = function(comp, device, settings) {
 		settingComps.push(settingComp);
 	}
 
-	return settingComps
-}
+	return settingComps;
+};
 
-shared.settingsToComponents2 = function(comp, device, settings) {
-	const keys = Setting.keys(true, device);
-	const sectionComps = [];
-	const metadatas = [];
+const deviceSelector = (state) => state.device;
+const settingsSelector = (state) => state.settings;
 
-	for (let i = 0; i < keys.length; i++) {
-		const key = keys[i];
-		if (!Setting.isPublic(key)) continue;
+shared.settingsSections = createSelector(
+	deviceSelector,
+	settingsSelector,
+	(device, settings) => {
+		const keys = Setting.keys(true, device);
+		const metadatas = [];
 
-		const md = Setting.settingMetadata(key);
-		if (md.show && !md.show(settings)) continue;
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			if (!Setting.isPublic(key)) continue;
 
-		metadatas.push(md);
+			const md = Setting.settingMetadata(key);
+			if (md.show && !md.show(settings)) continue;
+
+			metadatas.push(md);
+		}
+
+		const output = Setting.groupMetadatasBySections(metadatas);
+
+		output.push({
+			name: 'encryption',
+			metadatas: [],
+			isScreen: true,
+		});
+
+		output.push({
+			name: 'server',
+			metadatas: [],
+			isScreen: true,
+		});
+
+		return output;
 	}
+);
 
-	const sections = Setting.groupMetadatasBySections(metadatas);
+shared.settingsToComponents2 = function(comp, device, settings, selectedSectionName = '') {
+	const sectionComps = [];
+	const sections = shared.settingsSections({ device, settings });
 
 	for (let i = 0; i < sections.length; i++) {
 		const section = sections[i];
-		const sectionComp = comp.sectionToComponent(section.name, section, settings);
+		const sectionComp = comp.sectionToComponent(section.name, section, settings, selectedSectionName === section.name);
 		if (!sectionComp) continue;
 		sectionComps.push(sectionComp);
 	}
 
-	return sectionComps
-}
+	return sectionComps;
+};
 
 module.exports = shared;

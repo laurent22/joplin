@@ -1,10 +1,19 @@
 const moment = require('moment');
 
 class Time {
-
 	constructor() {
 		this.dateFormat_ = 'DD/MM/YYYY';
 		this.timeFormat_ = 'HH:mm';
+		this.locale_ = 'en-us';
+	}
+
+	locale() {
+		return this.locale_;
+	}
+
+	setLocale(v) {
+		moment.locale(v);
+		this.locale_ = v;
 	}
 
 	dateFormat() {
@@ -24,7 +33,7 @@ class Time {
 	}
 
 	dateTimeFormat() {
-		return this.dateFormat() + ' ' + this.timeFormat();
+		return `${this.dateFormat()} ${this.timeFormat()}`;
 	}
 
 	unix() {
@@ -44,15 +53,29 @@ class Time {
 	}
 
 	unixMsToIso(ms) {
-		return moment.unix(ms / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+		return (
+			`${moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`
+		);
 	}
 
 	unixMsToIsoSec(ms) {
-		return moment.unix(ms / 1000).utc().format('YYYY-MM-DDTHH:mm:ss') + 'Z';
+		return (
+			`${moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DDTHH:mm:ss')}Z`
+		);
 	}
 
 	unixMsToLocalDateTime(ms) {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
+	}
+
+	unixMsToLocalHms(ms) {
+		return moment.unix(ms / 1000).format('HH:mm:ss');
 	}
 
 	formatMsToLocal(ms, format = null) {
@@ -64,7 +87,7 @@ class Time {
 		if (format === null) format = this.dateTimeFormat();
 		const m = moment(localDateTime, format);
 		if (m.isValid()) return m.toDate().getTime();
-		throw new Error('Invalid input for formatLocalToMs: ' + localDateTime);
+		throw new Error(`Invalid input for formatLocalToMs: ${localDateTime}`);
 	}
 
 	// Mostly used as a utility function for the DateTime Electron component
@@ -78,7 +101,7 @@ class Time {
 	}
 
 	msleep(ms) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			setTimeout(() => {
 				resolve();
 			}, ms);
@@ -88,7 +111,6 @@ class Time {
 	sleep(seconds) {
 		return this.msleep(seconds * 1000);
 	}
-
 }
 
 const time = new Time();

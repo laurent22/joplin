@@ -1,20 +1,21 @@
 const { BaseCommand } = require('./base-command.js');
 const { _ } = require('lib/locale.js');
-const { cliUtils } = require('./cli-utils.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
-const MasterKey = require('lib/models/MasterKey');
 const BaseItem = require('lib/models/BaseItem');
 const Setting = require('lib/models/Setting.js');
+const { shim } = require('lib/shim');
+const pathUtils = require('lib/path-utils.js');
+const imageType = require('image-type');
+const readChunk = require('read-chunk');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'e2ee <command> [path]';
 	}
 
 	description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status` and `target-status`.');
+		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file` and `target-status`.');
 	}
 
 	options() {
@@ -22,6 +23,7 @@ class Command extends BaseCommand {
 			// This is here mostly for testing - shouldn't be used
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
 			['-v, --verbose', 'More verbose output for the `target-status` command'],
+			['-o, --output <directory>', 'Output directory'],
 		];
 	}
 
@@ -30,13 +32,33 @@ class Command extends BaseCommand {
 
 		const options = args.options;
 
+		const askForMasterKey = async error => {
+			const masterKeyId = error.masterKeyId;
+			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
+			if (!password) {
+				this.stdout(_('Operation cancelled'));
+				return false;
+			}
+			Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
+			await EncryptionService.instance().loadMasterKeysFromSettings();
+			return true;
+		};
+
 		if (args.command === 'enable') {
 			const password = options.password ? options.password.toString() : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
 				this.stdout(_('Operation cancelled'));
 				return;
 			}
-
+			const password2 = await this.prompt(_('Confirm master password:'), { type: 'string', secure: true });
+			if (!password2) {
+				this.stdout(_('Operation cancelled'));
+				return;
+			}
+			if (password !== password2) {
+				this.stdout(_('Passwords do not match!'));
+				return;
+			}
 			await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 			return;
 		}
@@ -59,14 +81,8 @@ class Command extends BaseCommand {
 						break;
 					} catch (error) {
 						if (error.code === 'masterKeyNotLoaded') {
-							const masterKeyId = error.masterKeyId;
-							const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
-							if (!password) {
-								this.stdout(_('Operation cancelled'));
-								return;
-							}
-							Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
-							await EncryptionService.instance().loadMasterKeysFromSettings();
+							const ok = await askForMasterKey(error);
+							if (!ok) return;
 							continue;
 						}
 
@@ -85,21 +101,49 @@ class Command extends BaseCommand {
 			return;
 		}
 
+		if (args.command === 'decrypt-file') {
+			while (true) {
+				try {
+					const outputDir = options.output ? options.output : require('os').tmpdir();
+					let outFile = `${outputDir}/${pathUtils.filename(args.path)}.${Date.now()}.bin`;
+					await EncryptionService.instance().decryptFile(args.path, outFile);
+					const buffer = await readChunk(outFile, 0, 64);
+					const detectedType = imageType(buffer);
+
+					if (detectedType) {
+						const newOutFile = `${outFile}.${detectedType.ext}`;
+						await shim.fsDriver().move(outFile, newOutFile);
+						outFile = newOutFile;
+					}
+
+					this.stdout(outFile);
+					break;
+				} catch (error) {
+					if (error.code === 'masterKeyNotLoaded') {
+						const ok = await askForMasterKey(error);
+						if (!ok) return;
+						continue;
+					}
+
+					throw error;
+				}
+			}
+			return;
+		}
+
 		if (args.command === 'target-status') {
 			const fs = require('fs-extra');
-			const pathUtils = require('lib/path-utils.js');
-			const fsDriver = new (require('lib/fs-driver-node.js').FsDriverNode)();
 
 			const targetPath = args.path;
 			if (!targetPath) throw new Error('Please specify the sync target path.');
 
 			const dirPaths = function(targetPath) {
 				let paths = [];
-				fs.readdirSync(targetPath).forEach((path) => {
+				fs.readdirSync(targetPath).forEach(path => {
 					paths.push(path);
 				});
 				return paths;
-			}
+			};
 
 			let itemCount = 0;
 			let resourceCount = 0;
@@ -114,7 +158,7 @@ class Command extends BaseCommand {
 
 			for (let i = 0; i < paths.length; i++) {
 				const path = paths[i];
-				const fullPath = targetPath + '/' + path;
+				const fullPath = `${targetPath}/${path}`;
 				const stat = await fs.stat(fullPath);
 
 				// this.stdout(fullPath);
@@ -124,7 +168,7 @@ class Command extends BaseCommand {
 					for (let j = 0; j < resourcePaths.length; j++) {
 						const resourcePath = resourcePaths[j];
 						resourceCount++;
-						const fullResourcePath = fullPath + '/' + resourcePath;
+						const fullResourcePath = `${fullPath}/${resourcePath}`;
 						const isEncrypted = await EncryptionService.instance().fileIsEncrypted(fullResourcePath);
 						if (isEncrypted) {
 							encryptedResourceCount++;
@@ -158,9 +202,9 @@ class Command extends BaseCommand {
 				}
 			}
 
-			this.stdout('Encrypted items: ' + encryptedItemCount + '/' + itemCount);
-			this.stdout('Encrypted resources: ' + encryptedResourceCount + '/' + resourceCount);
-			this.stdout('Other items (never encrypted): ' + otherItemCount);
+			this.stdout(`Encrypted items: ${encryptedItemCount}/${itemCount}`);
+			this.stdout(`Encrypted resources: ${encryptedResourceCount}/${resourceCount}`);
+			this.stdout(`Other items (never encrypted): ${otherItemCount}`);
 
 			if (options.verbose) {
 				this.stdout('');
@@ -183,7 +227,6 @@ class Command extends BaseCommand {
 			return;
 		}
 	}
-
 }
 
 module.exports = Command;

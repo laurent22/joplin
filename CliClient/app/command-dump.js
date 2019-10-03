@@ -1,12 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
-const { app } = require('./app.js');
-const { _ } = require('lib/locale.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 
 class Command extends BaseCommand {
-
 	usage() {
 		return 'dump';
 	}
@@ -19,7 +16,7 @@ class Command extends BaseCommand {
 		return true;
 	}
 
-	async action(args) {
+	async action() {
 		let items = [];
 		let folders = await Folder.all();
 		for (let i = 0; i < folders.length; i++) {
@@ -35,10 +32,9 @@ class Command extends BaseCommand {
 		}
 
 		items = items.concat(tags);
-		
+
 		this.stdout(JSON.stringify(items));
 	}
-
 }
 
 module.exports = Command;

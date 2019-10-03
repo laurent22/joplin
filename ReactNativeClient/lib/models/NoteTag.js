@@ -2,7 +2,6 @@ const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 
 class NoteTag extends BaseItem {
-
 	static tableName() {
 		return 'note_tags';
 	}
@@ -13,7 +12,7 @@ class NoteTag extends BaseItem {
 
 	static async byNoteIds(noteIds) {
 		if (!noteIds.length) return [];
-		return this.modelSelectAll('SELECT * FROM note_tags WHERE note_id IN ("' + noteIds.join('","') + '")');
+		return this.modelSelectAll(`SELECT * FROM note_tags WHERE note_id IN ("${noteIds.join('","')}")`);
 	}
 
 	static async tagIdsByNoteId(noteId) {
@@ -24,7 +23,6 @@ class NoteTag extends BaseItem {
 		}
 		return output;
 	}
-
 }
 
 module.exports = NoteTag;

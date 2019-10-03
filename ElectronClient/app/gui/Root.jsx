@@ -1,6 +1,5 @@
 const React = require('react');
 const { render } = require('react-dom');
-const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
 const { _ } = require('lib/locale.js');
@@ -12,8 +11,6 @@ const { DropboxLoginScreen } = require('./DropboxLoginScreen.min.js');
 const { StatusScreen } = require('./StatusScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ConfigScreen } = require('./ConfigScreen.min.js');
-const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min.js');
-const { ClipperConfigScreen } = require('./ClipperConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('lib/WelcomeUtils');
 
@@ -21,20 +18,22 @@ const { app } = require('../app');
 
 const { bridge } = require('electron').remote.require('./bridge');
 
-async function initialize(dispatch) {
+async function initialize() {
 	this.wcsTimeoutId_ = null;
 
-	bridge().window().on('resize', function() {
-		if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
+	bridge()
+		.window()
+		.on('resize', function() {
+			if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
 
-		this.wcsTimeoutId_ = setTimeout(() => {
-			store.dispatch({
-				type: 'WINDOW_CONTENT_SIZE_SET',
-				size: bridge().windowContentSize(),
-			});
-			this.wcsTimeoutId_ = null;
-		}, 10);
-	});
+			this.wcsTimeoutId_ = setTimeout(() => {
+				store.dispatch({
+					type: 'WINDOW_CONTENT_SIZE_SET',
+					size: bridge().windowContentSize(),
+				});
+				this.wcsTimeoutId_ = null;
+			}, 10);
+		});
 
 	// Need to dispatch this to make sure the components are
 	// displayed at the right size. The windowContentSize is
@@ -52,12 +51,11 @@ async function initialize(dispatch) {
 
 	store.dispatch({
 		type: 'SIDEBAR_VISIBILITY_SET',
-		visibility: Setting.value('sidebarVisibility')
+		visibility: Setting.value('sidebarVisibility'),
 	});
 }
 
 class RootComponent extends React.Component {
-
 	async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
@@ -89,18 +87,13 @@ class RootComponent extends React.Component {
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
-			EncryptionConfig: { screen: EncryptionConfigScreen, title: () => _('Encryption Options') },
-			ClipperConfig: { screen: ClipperConfigScreen, title: () => _('Clipper Options') },
 		};
 
-		return (
-			<Navigator style={navigatorStyle} screens={screens} />
-		);
+		return <Navigator style={navigatorStyle} screens={screens} />;
 	}
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		size: state.windowContentSize,
 		appState: state.appState,
@@ -116,4 +109,4 @@ render(
 		<Root />
 	</Provider>,
 	document.getElementById('react-root')
-)
+);

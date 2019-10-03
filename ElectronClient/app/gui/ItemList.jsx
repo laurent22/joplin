@@ -1,7 +1,6 @@
 const React = require('react');
 
 class ItemList extends React.Component {
-
 	constructor() {
 		super();
 
@@ -52,7 +51,7 @@ class ItemList extends React.Component {
 
 	makeItemIndexVisible(itemIndex) {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex + 1);
-		const bottom = Math.max(0, this.state.bottomItemIndex - 1)
+		const bottom = Math.max(0, this.state.bottomItemIndex);
 
 		if (itemIndex >= top && itemIndex <= bottom) return;
 
@@ -81,8 +80,8 @@ class ItemList extends React.Component {
 		if (!this.props.itemHeight) throw new Error('itemHeight is required');
 
 		const blankItem = function(key, height) {
-			return <div key={key} style={{height:height}}></div>
-		}
+			return <div key={key} style={{ height: height }}></div>;
+		};
 
 		let itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
 
@@ -98,7 +97,7 @@ class ItemList extends React.Component {
 
 		return (
 			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown}>
-				{ itemComps }
+				{itemComps}
 			</div>
 		);
 	}

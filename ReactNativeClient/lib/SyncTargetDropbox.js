@@ -8,7 +8,6 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApiDriverDropbox } = require('lib/file-api-driver-dropbox.js');
 
 class SyncTargetDropbox extends BaseSyncTarget {
-
 	static id() {
 		return 7;
 	}
@@ -32,7 +31,10 @@ class SyncTargetDropbox extends BaseSyncTarget {
 
 	async isAuthenticated() {
 		const f = await this.fileApi();
-		return !!f.driver().api().authToken();
+		return !!f
+			.driver()
+			.api()
+			.authToken();
 	}
 
 	async api() {
@@ -48,12 +50,12 @@ class SyncTargetDropbox extends BaseSyncTarget {
 			secret: params.secret,
 		});
 
-		api.on('authRefreshed', (auth) => {
+		api.on('authRefreshed', auth => {
 			this.logger().info('Saving updated Dropbox auth.');
-			Setting.setValue('sync.' + SyncTargetDropbox.id() + '.auth', auth ? auth : null);
+			Setting.setValue(`sync.${SyncTargetDropbox.id()}.auth`, auth ? auth : null);
 		});
 
-		const authToken = Setting.value('sync.' + SyncTargetDropbox.id() + '.auth');
+		const authToken = Setting.value(`sync.${SyncTargetDropbox.id()}.auth`);
 		api.setAuthToken(authToken);
 
 		const appDir = '';
@@ -67,7 +69,6 @@ class SyncTargetDropbox extends BaseSyncTarget {
 		if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
 		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
 	}
-
 }
 
 module.exports = SyncTargetDropbox;
