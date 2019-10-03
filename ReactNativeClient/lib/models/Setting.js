@@ -886,6 +886,7 @@ Setting.THEME_DARK = 2;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
 Setting.THEME_DRACULA = 5;
+Setting.THEME_NORD = 6;
 
 Setting.FONT_DEFAULT = 0;
 Setting.FONT_MENLO = 1;
