@@ -11,14 +11,28 @@ class CameraView extends Component {
 
 		this.state = {
 			snapping: false,
+			camera: RNCamera.Constants.Type.back,
 		};
 
 		this.back_onPress = this.back_onPress.bind(this);
 		this.photo_onPress = this.photo_onPress.bind(this);
+		this.reverse_onPress = this.reverse_onPress.bind(this);
 	}
 
 	back_onPress() {
 		if (this.props.onCancel) this.props.onCancel();
+	}
+
+	reverse_onPress() {
+		if (this.state.camera == RNCamera.Constants.Type.back) {
+			this.setState({
+				camera: RNCamera.Constants.Type.front,
+			});
+		} else if (this.state.camera == RNCamera.Constants.Type.front) {
+			this.setState({
+				camera: RNCamera.Constants.Type.back,
+			});
+		}
 	}
 
 	async photo_onPress() {
@@ -47,7 +61,7 @@ class CameraView extends Component {
 					ref={ref => {
 						this.camera = ref;
 					}}
-					type={RNCamera.Constants.Type.back}
+					type={this.state.camera}
 					captureAudio={false}
 					androidCameraPermissionOptions={{
 						title: _('Permission to use camera'),
@@ -70,18 +84,31 @@ class CameraView extends Component {
 								</View>
 							</TouchableOpacity>
 						</View>
-						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end', flexDirection: 'row' }}>
-							<TouchableOpacity onPress={this.photo_onPress}>
-								<View style={{ marginBottom: 20, borderRadius: 90, width: 90, height: 90, backgroundColor: '#ffffffaa', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-									<Icon
-										name={photoIcon}
-										style={{
-											fontSize: 60,
-											color: 'black',
-										}}
-									/>
-								</View>
-							</TouchableOpacity>
+						<View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'row', width: '100%' }}>
+							<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+								<TouchableOpacity onPress={this.reverse_onPress} style={{width: '35%', marginLeft: 20}}>
+									<View style={{borderRadius: 32, width: 60, height: 60, backgroundColor: '#ffffffaa', justifyContent: 'center', alignItems: 'center', alignSelf: 'baseline' }}>
+										<Icon
+											name="md-reverse-camera"
+											style={{
+												fontSize: 40,
+												color: 'black',
+											}}
+										/>
+									</View>
+								</TouchableOpacity>
+								<TouchableOpacity onPress={this.photo_onPress} style={{width: '65%'}}>
+									<View style={{ marginBottom: 20, borderRadius: 90, width: 90, height: 90, backgroundColor: '#ffffffaa', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+										<Icon
+											name={photoIcon}
+											style={{
+												fontSize: 60,
+												color: 'black',
+											}}
+										/>
+									</View>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</RNCamera>
