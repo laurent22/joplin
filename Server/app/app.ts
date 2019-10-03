@@ -10,10 +10,12 @@ import { argv } from 'yargs';
 import { findMatchingRoute, ApiResponse } from './utils/routeUtils';
 import appLogger from './utils/appLogger';
 import koaIf from './utils/koaIf';
+import config from './config';
 
-const port = 22300;
+config.baseUrl = `http://localhost:${config.port}`;
 
-appLogger.info(`Starting server on port ${port} and PID ${process.pid}...`);
+appLogger.info(`Starting server on port ${config.port} and PID ${process.pid}...`);
+appLogger.info(`Base URL: ${config.baseUrl}`);
 
 const app = new Koa();
 
@@ -61,4 +63,4 @@ if (pidFile) {
 	fs.writeFileSync(pidFile, `${process.pid}`);
 }
 
-app.listen(port);
+app.listen(config.port);

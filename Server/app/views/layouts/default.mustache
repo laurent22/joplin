@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="{{{baseUrl}}}/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="{{{baseUrl}}}/css/bootstrap-reboot.min.css" crossorigin="anonymous">
+{{#cssFiles}}
+<link rel="stylesheet" href="{{{.}}}" crossorigin="anonymous">
+{{/cssFiles}}
+<script src="{{{baseUrl}}}/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="text-center">
+	<div>
+		{{{contentHtml}}}
+	</div>
+</body>
+</html>

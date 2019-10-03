@@ -22,7 +22,9 @@ function buildTypeScripts() {
 		'app/models/*.ts',
 		'app/routes/*.ts',
 		'app/routes/api/*.ts',
+		'app/routes/oauth2/*.ts',
 		'app/utils/*.ts',
+		'app/services/*.ts',
 		'migrations/*.ts',
 		'tests/*.ts',
 		'tests/routes/*.ts',
@@ -38,6 +40,7 @@ function buildTypeScripts() {
 async function copyLib() {
 	await gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*.js`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
 	await gulp.src([`${projectRootDir}/Server/app/views/**/*.mustache`]).pipe(gulp.dest(`${serverRootDir}/dist/app/views`));
+	await gulp.src([`${projectRootDir}/Server/public/**/*`]).pipe(gulp.dest(`${serverRootDir}/dist/public`));
 }
 
 gulp.task('default', async function() {

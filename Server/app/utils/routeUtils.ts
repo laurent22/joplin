@@ -16,6 +16,7 @@ export interface SubPath {
 	id: string
 	link: string
 	addressingType: ItemAddressingType
+	raw: string
 }
 
 export interface MatchedRoute {
@@ -78,14 +79,6 @@ export function removeFilePathPrefix(path:string):string {
 	return p[1];
 }
 
-// export interface FileId {
-
-// }
-
-// export function parseFileId(id:string):FileId {
-
-// }
-
 export function isPathBasedAddressing(fileId:string):boolean {
 	if (!fileId) return false;
 	return fileId.indexOf(':') >= 0;
@@ -102,6 +95,7 @@ export function parseSubPath(p:string):SubPath {
 		id: '',
 		link: '',
 		addressingType: ItemAddressingType.Id,
+		raw: p,
 	};
 
 	const colonIndex1 = p.indexOf(':');
@@ -151,5 +145,13 @@ export function findMatchingRoute(path:string, routes:Routes):MatchedRoute {
 		};
 	}
 
-	return null;
+	if (routes['']) {
+		return {
+			route: routes[''],
+			basePath: '',
+			subPath: parseSubPath(`/${splittedPath.join('/')}`),
+		};
+	}
+
+	throw new Error('Unreachable');
 }
