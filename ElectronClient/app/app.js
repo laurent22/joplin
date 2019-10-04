@@ -199,6 +199,8 @@ class Application extends BaseApplication {
 
 				newState = Object.assign({}, state);
 				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
+				const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+				menuItem.checked = newState.noteDevToolsVisible;
 				break;
 
 			}
@@ -913,6 +915,8 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
+					id: 'help:toggleDevTools',
+					type: 'checkbox',
 					label: _('Toggle development tools'),
 					visible: true,
 					click: () => {
