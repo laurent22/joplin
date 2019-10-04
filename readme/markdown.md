@@ -24,6 +24,39 @@ This is a quick summary of the Markdown syntax.
 | **Link** | <pre>This is detected as a link:<br><br>`https://joplinapp.org`<br><br>And this is a link with a title:<br><br>`[Joplin](https://joplinapp.org)`</pre> | This is detected as a link:<br><br>https://joplinapp.org<br><br>And this is a link with a title:<br><br>[Joplin](https://joplinapp.org)
 | **Images** | <pre>`![Joplin icon](https://git.io/JenGk)`</pre> | ![Here's Joplin icon](https://git.io/JenGk)
 | **Horizontal Rule** | <pre>One rule:<br>\*\*\*<br>Another rule:<br>\-\-\-</pre> | One rule:<hr><br>Another rule:<br><hr>
+| **Tables** | [See below](#tables) | 
+
+### Tables
+
+Tables are created using pipes `|` and and hyphens `-`. This is a Markdown tables:
+
+	| First Header  | Second Header |
+	| ------------- | ------------- |
+	| Content Cell  | Content Cell  |
+	| Content Cell  | Content Cell  |
+
+Which is rendered as:
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
+Note that there must be at least 3 dashes separating each header cell.
+
+Colons can be used to align columns:
+
+	| Tables        | Are           | Cool  |
+	| ------------- |:-------------:| -----:|
+	| col 3 is      | right-aligned | $1600 |
+	| col 2 is      | centered      |   $12 |
+
+Which is rendered as:
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
 
 ## Joplin Extras
 
