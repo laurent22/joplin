@@ -222,6 +222,7 @@ class Setting extends BaseModel {
 						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+						output[Setting.THEME_NORD] = _('Nord');
 					}
 					return output;
 				},

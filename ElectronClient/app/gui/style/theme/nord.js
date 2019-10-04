@@ -61,7 +61,7 @@ const nordStyle = {
 
 	backgroundColor2: nord[2],
 	depthColor: 'rgb(200, 200, 200, OPACITY)',
-	color2: nord[13],
+	color2: nord[8],
 	selectedColor2: nord[10],
 	colorError2: nord[11],
 

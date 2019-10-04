@@ -49,7 +49,7 @@ require('brace/theme/solarized_light');
 require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
-require('brace/theme/nord');
+// require('brace/theme/nord');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 

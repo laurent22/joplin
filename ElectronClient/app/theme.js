@@ -1,5 +1,5 @@
 const Setting = require('lib/models/Setting.js');
-const nordStyle = require('./theme_nord');
+const nordStyle = require('./gui/style/theme/nord');
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
