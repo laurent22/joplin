@@ -140,7 +140,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				if (!password) throw new Error(_('Password cannot be empty'));
 				const password2 = this.state.passwordPromptConfirmAnswer;
 				if (!password2) throw new Error(_('Confirm password cannot be empty'));
-				if (password !== password2) throw new Error(_('Passwords did not match!'));
+				if (password !== password2) throw new Error(_('Passwords do not match!'));
 				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
