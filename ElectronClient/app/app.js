@@ -197,10 +197,12 @@ class Application extends BaseApplication {
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
 
-				newState = Object.assign({}, state);
-				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
-				const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
-				menuItem.checked = newState.noteDevToolsVisible;
+				{
+					newState = Object.assign({}, state);
+					newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
+					const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+					menuItem.checked = newState.noteDevToolsVisible;
+				}
 				break;
 
 			}
