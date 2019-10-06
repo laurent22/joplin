@@ -73,9 +73,10 @@ export async function up(knex: Knex): Promise<any> {
 	const apiClientModel = new ApiClientModel();
 
 	await apiClientModel.save({
+		id: 'lVis00WF590ZVlRYiXVRWv',
 		name: 'Joplin',
-		secret: 'cmM6XMNv7mhUViGsObDq2c',
-	});
+		secret: 'sdrNUPtKNdY5Z5tF4bthqu',
+	}, { isNew: true });
 }
 
 export async function down(knex: Knex): Promise<any> {

@@ -12,6 +12,7 @@
 			"*.sublime-workspace": true,
 			"**/_mydocs/EnexSamples/*.enex": true,
 			"**/*.base64": true,
+			"**/*~": true,
 			"**/*.bundle.js": true,
 			"**/*.icns": true,
 			"**/*.jar": true,
