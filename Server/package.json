@@ -9,11 +9,10 @@
     "compile": "gulp",
     "db-migrate": "npm run compile && node dist/tools/db-migrate.js",
     "postinstall": "npm run compile && npm run generate-types",
-    "watch": "nodemon",
     "test": "rm -f db-testing.sqlite && NODE_ENV=testing npm run compile && NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json",
     "test-fast": "rm -f db-testing.sqlite &&  NODE_ENV=testing node dist/tools/db-migrate.js && NODE_ENV=testing npx jasmine --config=tests/support/jasmine.json",
-    "typescript-watch": "tsc --project ./ --outDir dist/ --watch",
-    "tsw": "npm run typescript-watch"
+    "watch-ts": "tsc --project ./ --outDir dist/ --watch",
+    "watch-assets": "npx gulp watch-assets"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
@@ -42,8 +41,8 @@
     "gulp": "^4.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
+    "gulp-watch": "^5.0.1",
     "jasmine": "^3.4.0",
-    "nodemon": "^1.19.2",
     "source-map-support": "^0.5.13",
     "typescript": "^3.6.3"
   }

@@ -106,7 +106,7 @@ async function main() {
 
 	let content = `// Auto-generated using \`npm run generate-types\`\n${typeStrings.join('\n\n')}`;
 	content += '\n\n';
-	content += `export const databaseSchema:DatabaseTables = {\n${tableStrings.join('\n')}\n}`;
+	content += `export const databaseSchema:DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 
 	insertContentIntoFile(dbFilePath, config.fileReplaceWithinMarker, config.fileReplaceWithinMarker, content);
 }

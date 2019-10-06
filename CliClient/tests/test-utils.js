@@ -74,10 +74,10 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
-// const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
+const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
-const syncTargetId_ = SyncTargetRegistry.nameToId('joplinServer');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('joplinServer');
 const syncDir = `${__dirname}/../tests/sync`;
 
 const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;

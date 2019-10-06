@@ -6,6 +6,15 @@ const tsProject = ts.createProject('tsconfig.json');
 const serverRootDir = rtrimSlashes(__dirname);
 const projectRootDir = path.dirname(serverRootDir);
 const sourcemaps = require('gulp-sourcemaps');
+const watch = require('gulp-watch');
+
+const config = {
+	assetDirs: [
+		[`${projectRootDir}/ReactNativeClient/lib/**/*.js`, `${serverRootDir}/dist/lib`],
+		[`${projectRootDir}/Server/app/views/**/*.mustache`, `${serverRootDir}/dist/app/views`],
+		[`${projectRootDir}/Server/public/**/*`, `${serverRootDir}/dist/public`],
+	],
+};
 
 function rtrimSlashes(path) {
 	return path.replace(/[/\\]+$/, '');
@@ -15,7 +24,7 @@ function createDistDir() {
 	return fs.mkdirp(`${serverRootDir}/dist`);
 }
 
-function buildTypeScripts() {
+function buildTs() {
 	return gulp.src([
 		'app/*.ts',
 		'app/controllers/*.ts',
@@ -38,13 +47,20 @@ function buildTypeScripts() {
 }
 
 async function copyLib() {
-	await gulp.src([`${projectRootDir}/ReactNativeClient/lib/**/*.js`]).pipe(gulp.dest(`${serverRootDir}/dist/lib`));
-	await gulp.src([`${projectRootDir}/Server/app/views/**/*.mustache`]).pipe(gulp.dest(`${serverRootDir}/dist/app/views`));
-	await gulp.src([`${projectRootDir}/Server/public/**/*`]).pipe(gulp.dest(`${serverRootDir}/dist/public`));
+	for (const d of config.assetDirs) {
+		await gulp.src(d[0]).pipe(gulp.dest(d[1]));
+	}
 }
 
 gulp.task('default', async function() {
 	await createDistDir();
 	await copyLib();
-	return buildTypeScripts();
+	return buildTs();
+});
+
+gulp.task('watch-assets', function() {
+	const options = { verbose: true, ignoreInitial: true };
+	for (const d of config.assetDirs) {
+		watch(d[0], options).pipe(gulp.dest(d[1]));
+	}
 });
