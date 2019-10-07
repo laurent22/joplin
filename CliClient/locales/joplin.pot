@@ -1098,7 +1098,7 @@ msgid "Delete note \"%s\"?"
 msgstr ""
 
 #, javascript-format
-msgid "Delete these %d notes?"
+msgid "Delete these %d note(s)?"
 msgstr ""
 
 msgid ""
@@ -1653,7 +1653,7 @@ msgstr ""
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
-msgid "Delete these notes?"
+msgid "Delete these note(s)?"
 msgstr ""
 
 msgid "Move to notebook..."
