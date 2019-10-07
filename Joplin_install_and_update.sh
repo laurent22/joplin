@@ -90,7 +90,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     else
       DESKTOP=$XDG_CURRENT_DESKTOP
     fi
-    DESKTOP=${desktop,,}  # convert to lower case
+    DESKTOP=${DESKTOP,,}  # convert to lower case
 
     # Create icon for Gnome
     echo 'Create Desktop icon.'
