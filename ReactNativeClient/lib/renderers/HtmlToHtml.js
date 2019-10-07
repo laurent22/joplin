@@ -1,5 +1,6 @@
 const htmlUtils = require('lib/htmlUtils');
 const utils = require('./utils');
+const noteStyle = require('./noteStyle');
 
 class HtmlToHtml {
 	constructor(options) {
@@ -26,8 +27,11 @@ class HtmlToHtml {
 			}
 		});
 
+		const cssStrings = noteStyle(theme, options);
+		const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
+
 		return {
-			html: html,
+			html: styleHtml + html,
 			cssFiles: [],
 		};
 	}
