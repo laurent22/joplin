@@ -245,7 +245,16 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'toggleSidebar') {
 			this.toggleSidebar();
 		} else if (command.name === 'showModalMessage') {
-			this.setState({ modalLayer: { visible: true, message: command.message } });
+			this.setState({
+				modalLayer: {
+					visible: true,
+					message:
+						<div className="modal-message">
+							<div id="loading-animation" />
+							<div className="text">{command.message}</div>
+						</div>,
+				},
+			});
 		} else if (command.name === 'hideModalMessage') {
 			this.setState({ modalLayer: { visible: false, message: '' } });
 		} else if (command.name === 'editAlarm') {
