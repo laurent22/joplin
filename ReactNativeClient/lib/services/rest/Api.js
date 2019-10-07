@@ -354,12 +354,28 @@ class Api {
 		return options;
 	}
 
+	defaultLoadOptions_(request) {
+		const options = {};
+		const fields = this.fields_(request, []);
+		if (fields.length) options.fields = fields;
+		return options;
+	}
+
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
 
 		if (request.method === 'GET') {
 			if (link && link === 'tags') {
 				return Tag.tagsByNoteId(id);
+			} else if (link && link === 'resources') {
+				const note = await Note.load(id);
+				const resourceIds = await Note.linkedResourceIds(note.body);
+				const output = [];
+				const loadOptions = this.defaultLoadOptions_(request);
+				for (let resourceId of resourceIds) {
+					output.push(await Resource.load(resourceId, loadOptions));
+				}
+				return output;
 			} else if (link) {
 				throw new ErrorNotFound();
 			}

@@ -150,8 +150,8 @@ class BaseModel {
 			});
 	}
 
-	static load(id) {
-		return this.loadByField('id', id);
+	static load(id, options = null) {
+		return this.loadByField('id', id, options);
 	}
 
 	static shortId(id) {
@@ -250,7 +250,8 @@ class BaseModel {
 	static loadByField(fieldName, fieldValue, options = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
-		let sql = `SELECT * FROM \`${this.tableName()}\` WHERE \`${fieldName}\` = ?`;
+		if (!options.fields) options.fields = '*';
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\` WHERE \`${fieldName}\` = ?`;
 		if (options.caseInsensitive) sql += ' COLLATE NOCASE';
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
