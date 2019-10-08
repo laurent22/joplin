@@ -196,13 +196,8 @@ class Application extends BaseApplication {
 				break;
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
-
-				{
-					newState = Object.assign({}, state);
-					newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
-					const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
-					menuItem.checked = newState.noteDevToolsVisible;
-				}
+				newState = Object.assign({}, state);
+				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
 				break;
 
 			}
@@ -252,6 +247,11 @@ class Application extends BaseApplication {
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
 			this.updateMenuItemStates();
+		}
+
+		if (action.type === 'NOTE_DEVTOOLS_TOGGLE') {
+			const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+			menuItem.checked = newState.noteDevToolsVisible;
 		}
 
 		return result;
