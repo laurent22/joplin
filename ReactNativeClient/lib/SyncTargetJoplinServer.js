@@ -1,10 +1,10 @@
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
-// const { FileApi } = require('lib/file-api.js');
+const { FileApi } = require('lib/file-api.js');
 const { Synchronizer } = require('lib/synchronizer.js');
-// const WebDavApi = require('lib/WebDavApi');
-// const { FileApiDriverWebDav } = require('lib/file-api-driver-webdav');
+const JoplinServerApi = require('lib/JoplinServerApi');
+const { FileApiDriverJoplinServer } = require('lib/file-api-driver-joplinServer');
 
 class SyncTargetJoplinServer extends BaseSyncTarget {
 
@@ -28,8 +28,23 @@ class SyncTargetJoplinServer extends BaseSyncTarget {
 		return true;
 	}
 
+	static async newFileApi_(options) {
+		const apiOptions = {
+			baseUrl: () => options.path(),
+			username: () => options.username(),
+			password: () => options.password(),
+		};
+
+		const api = new JoplinServerApi(apiOptions);
+		const driver = new FileApiDriverJoplinServer(api);
+		const fileApi = new FileApi(() => `root:/${options.directory()}`, driver);
+		fileApi.setSyncTargetId(this.id());
+		await fileApi.initialize();
+		return fileApi;
+	}
+
 	static async checkConfig(options) {
-		const fileApi = await SyncTargetJoplinServer.newFileApi_(SyncTargetJoplinServer.id(), options);
+		const fileApi = await SyncTargetJoplinServer.newFileApi_(options);
 		fileApi.requestRepeatCount_ = 0;
 
 		const output = {
@@ -39,7 +54,7 @@ class SyncTargetJoplinServer extends BaseSyncTarget {
 
 		try {
 			const result = await fileApi.stat('');
-			if (!result) throw new Error(`Sync directory not found: ${options.path()}`);
+			if (!result) throw new Error(`Sync directory not found: "${options.directory()}" on server "${options.path()}"`);
 			output.ok = true;
 		} catch (error) {
 			output.errorMessage = error.message;
@@ -50,10 +65,11 @@ class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		const fileApi = await SyncTargetJoplinServer.newFileApi_(SyncTargetJoplinServer.id(), {
+		const fileApi = await SyncTargetJoplinServer.newFileApi_({
 			path: () => Setting.value('sync.8.path'),
 			username: () => Setting.value('sync.8.username'),
 			password: () => Setting.value('sync.8.password'),
+			directory: () => Setting.value('sync.8.directory'),
 		});
 
 		fileApi.setLogger(this.logger());

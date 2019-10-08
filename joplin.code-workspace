@@ -35,6 +35,7 @@
 			"**/ReactNativeClient/locales/*": true,
 			"**/src/log.txt": true,
 			"**/yarn.lock": true,
+			"docs/images/flags/": true,
 			"CliClient/app/lib/": true,
 			"CliClient/app/src/": true,
 			"CliClient/build/": true,

@@ -25,6 +25,10 @@ class FileApiDriverJoplinServer {
 		let parent = pieces.splice(0, 1)[0];
 
 		for (const p of pieces) {
+			// Syncing with the root, which is ok, and in that
+			// case there's no sub-dir to create.
+			if (!p && pieces.length === 1) return;
+
 			const subPath = `${parent}/${p}`;
 			await this.mkdir(subPath);
 			parent = subPath;

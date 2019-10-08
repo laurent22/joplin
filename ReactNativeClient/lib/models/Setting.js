@@ -5,7 +5,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
-const { rtrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes, ltrimslashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
 
@@ -25,6 +25,45 @@ class Setting extends BaseModel {
 		const mobilePlatform = shim.mobilePlatform();
 
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+
+		const pathUsernamePassword = (syncTargetName, pathLabel, usernameLabel, usernamePassword) => {
+			const syncTargetId = SyncTargetRegistry.nameToId(syncTargetName);
+
+			return {
+				[`sync.${syncTargetId}.path`]: {
+					value: '',
+					type: Setting.TYPE_STRING,
+					section: 'sync',
+					show: settings => {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId(syncTargetName);
+					},
+					public: true,
+					label: pathLabel,
+					description: () => emptyDirWarning,
+				},
+				[`sync.${syncTargetId}.username`]: {
+					value: '',
+					type: Setting.TYPE_STRING,
+					section: 'sync',
+					show: settings => {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId(syncTargetName);
+					},
+					public: true,
+					label: usernameLabel,
+				},
+				[`sync.${syncTargetId}.password`]: {
+					value: '',
+					type: Setting.TYPE_STRING,
+					section: 'sync',
+					show: settings => {
+						return settings['sync.target'] == SyncTargetRegistry.nameToId(syncTargetName);
+					},
+					public: true,
+					label: usernamePassword,
+					secure: true,
+				},
+			};
+		};
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -65,75 +104,29 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 			},
 
-			'sync.5.path': {
-				value: '',
-				type: Setting.TYPE_STRING,
-				section: 'sync',
-				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
-				},
-				public: true,
-				label: () => _('Nextcloud WebDAV URL'),
-				description: () => emptyDirWarning,
-			},
-			'sync.5.username': {
-				value: '',
-				type: Setting.TYPE_STRING,
-				section: 'sync',
-				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
-				},
-				public: true,
-				label: () => _('Nextcloud username'),
-			},
-			'sync.5.password': {
-				value: '',
-				type: Setting.TYPE_STRING,
-				section: 'sync',
-				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('nextcloud');
-				},
-				public: true,
-				label: () => _('Nextcloud password'),
-				secure: true,
-			},
+			...pathUsernamePassword('nextcloud', () => _('Nextcloud WebDAV URL'), () => _('Nextcloud username'), () => _('Nextcloud password')),
+			...pathUsernamePassword('webdav', () => _('WebDAV URL'), () => _('WebDAV username'), () => _('WebDAV password')),
+			...pathUsernamePassword('joplinServer', () => 'Joplin Server URL', () => 'Joplin Server username', () => 'Joplin Server password'),
 
-			'sync.6.path': {
-				value: '',
+			'sync.8.directory': {
+				value: 'Apps/Joplin',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
+				},
+				filter: value => {
+					return value ? ltrimslashes(rtrimSlashes(value)) : '';
 				},
 				public: true,
-				label: () => _('WebDAV URL'),
+				label: () => 'Joplin Server Directory',
 				description: () => emptyDirWarning,
-			},
-			'sync.6.username': {
-				value: '',
-				type: Setting.TYPE_STRING,
-				section: 'sync',
-				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
-				},
-				public: true,
-				label: () => _('WebDAV username'),
-			},
-			'sync.6.password': {
-				value: '',
-				type: Setting.TYPE_STRING,
-				section: 'sync',
-				show: settings => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('webdav');
-				},
-				public: true,
-				label: () => _('WebDAV password'),
-				secure: true,
 			},
 
 			'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.auth': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.1.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.2.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.3.context': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -141,6 +134,7 @@ class Setting extends BaseModel {
 			'sync.5.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
+			'sync.8.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
 			'sync.resourceDownloadMode': {
 				value: 'always',

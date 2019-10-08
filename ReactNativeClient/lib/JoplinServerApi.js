@@ -27,7 +27,7 @@ class JoplinServerApi {
 		if (this.session_) return this.session_;
 
 		this.session_ = await this.exec('POST', 'api/sessions', {
-			email: this.options_.email(),
+			email: this.options_.username(),
 			password: this.options_.password(),
 		});
 

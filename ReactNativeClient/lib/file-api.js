@@ -84,7 +84,7 @@ class FileApi {
 	}
 
 	baseDir() {
-		return this.baseDir_;
+		return typeof this.baseDir_ === 'function' ? this.baseDir_() : this.baseDir_;
 	}
 
 	tempDirName() {
