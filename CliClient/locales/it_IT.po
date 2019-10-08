@@ -1538,7 +1538,7 @@ msgid "Enable Fountain syntax support"
 msgstr "Attiva supporto sintassi Fountain"
 
 msgid "Show tray icon"
-msgstr "Visualizza tray icon"
+msgstr "Visualizza nella barra delle applicazioni"
 
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: non funziona in tutti gli ambienti desktop."
@@ -1548,12 +1548,12 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"Questo consentirà Joplin di essere in esecuzione in background. E’ "
+"Questo consentirà a Joplin di essere in esecuzione in background. E’ "
 "raccomandata l’attivazione di questa impostazione per sincronizzare "
 "costantemente le tue note e quindi ridurre il numero di conflitti."
 
 msgid "Start application minimised in the tray icon"
-msgstr "Avvia applicazione minimizzata nell’icona del vassoio"
+msgstr "Avvia applicazione minimizzata nella barra delle applicazioni"
 
 msgid "Global zoom percentage"
 msgstr "Percentuale di zoom globale"

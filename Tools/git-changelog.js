@@ -63,6 +63,7 @@ function filterLogs(logs, platform) {
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
@@ -77,16 +78,19 @@ function formatCommitMessage(msg) {
 
 	const splitted = msg.split(':');
 
+	let subModule = '';
+
 	const isPlatformPrefix = prefix => {
 		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};
 
 	if (splitted.length) {
 		const platform = splitted[0].trim().toLowerCase();
+		if (platform === 'api') subModule = 'api';
 		if (isPlatformPrefix(platform)) {
 			splitted.splice(0, 1);
 		}
@@ -108,7 +112,7 @@ function formatCommitMessage(msg) {
 		return 'improved';
 	};
 
-	const parseCommitMessage = (msg) => {
+	const parseCommitMessage = (msg, subModule) => {
 		const parts = msg.split(':');
 
 		if (parts.length === 1) {
@@ -147,12 +151,18 @@ function formatCommitMessage(msg) {
 			type: type,
 			message: message,
 			issueNumber: issueNumber,
+			subModule: subModule,
 		};
 	};
 
-	const commitMessage = parseCommitMessage(output);
+	const commitMessage = parseCommitMessage(output, subModule);
 
-	output = `${capitalizeFirstLetter(commitMessage.type)}: ${capitalizeFirstLetter(commitMessage.message)}`;
+	const messagePieces = [];
+	messagePieces.push(`${capitalizeFirstLetter(commitMessage.type)}`);
+	if (commitMessage.subModule) messagePieces.push(`${capitalizeFirstLetter(commitMessage.subModule)}`);
+	messagePieces.push(`${capitalizeFirstLetter(commitMessage.message)}`);
+
+	output = messagePieces.join(': ');
 	if (commitMessage.issueNumber) {
 		const formattedIssueNum = `(#${commitMessage.issueNumber})`;
 		if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
