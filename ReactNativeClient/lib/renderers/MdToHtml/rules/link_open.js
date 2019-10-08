@@ -9,7 +9,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 		const isResourceUrl = !!resourceHrefInfo;
-		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
+		let title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
 
 		let resourceIdAttr = '';
 		let icon = '';
@@ -19,6 +19,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 			const result = ruleOptions.resources[resourceId];
 			const resourceStatus = utils.resourceStatus(result);
+
+			if (result && result.item) title = utils.getAttr(token.attrs, 'title', result.item.title);
 
 			if (result && resourceStatus !== 'ready') {
 				const icon = utils.resourceStatusFile(resourceStatus);
