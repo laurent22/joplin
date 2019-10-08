@@ -13,10 +13,15 @@ const route:Route = {
 			return controller.getAuthorize(ctx.request.query);
 		}
 
+		if (ctx.method === 'POST') {
+			return controller.postAuthorize(ctx.request.body);
+		}
+
 		throw new ErrorMethodNotAllowed();
 	},
 
-	// needsBodyMiddleware: true,
+	needsBodyMiddleware: true,
+	responseFormat: 'html',
 
 };
 

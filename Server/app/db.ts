@@ -63,6 +63,7 @@ export interface User extends WithDates, WithUuid {
 
 export interface Session extends WithDates, WithUuid {
 	user_id?: string
+	auth_code?: string
 }
 
 export interface Permission extends WithDates, WithUuid {
@@ -101,6 +102,7 @@ export const databaseSchema:DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
 		user_id: { type: 'string' },
+		auth_code: { type: 'string' },
 		updated_time: { type: 'number' },
 		created_time: { type: 'number' },
 	},

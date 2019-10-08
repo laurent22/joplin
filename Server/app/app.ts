@@ -52,7 +52,14 @@ app.use(async (ctx:Koa.Context) => {
 	} catch (error) {
 		appLogger.error(error);
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
-		ctx.response.body = { error: error.message };
+
+		if (match.route.responseFormat === 'html') {
+			ctx.response.set('Content-Type', 'text/html');
+			ctx.response.body = `<html>Error! ${error.message}</html>`;
+		} else {
+			ctx.response.set('Content-Type', 'application/json');
+			ctx.response.body = { error: error.message };
+		}
 	}
 });
 

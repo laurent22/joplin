@@ -6,6 +6,7 @@ const { dirname, basename } = require('lib/path-utils');
 export interface Route {
 	exec: Function,
 	needsBodyMiddleware?: boolean
+	responseFormat?: string
 }
 
 export interface Routes {
