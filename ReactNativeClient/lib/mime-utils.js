@@ -768,6 +768,9 @@ const mimeTypes = [
 	{ t: 'x-conference/x-cooltalk', e: ['ice'] },
 ];
 
+// Note: if the list above is ever updated, make sure Markdown doesn't appear twice
+mimeTypes.push({ t: 'text/markdown', e: ['md', 'markdown'] });
+
 const mime = {
 	fromFileExtension(ext) {
 		ext = ext.toLowerCase();
@@ -778,6 +781,13 @@ const mime = {
 			}
 		}
 		return null;
+	},
+
+	fromFilename(name) {
+		if (!name) return null;
+		const splitted = name.trim().split('.');
+		if (splitted.length <= 1) return null;
+		return mime.fromFileExtension(splitted[splitted.length - 1]);
 	},
 
 	toFileExtension(mimeType) {
