@@ -97,10 +97,10 @@ class FileApiDriverLocal {
 
 		try {
 			if (options.target === 'file') {
-				//output = await fs.copy(path, options.path, { overwrite: true });
+				// output = await fs.copy(path, options.path, { overwrite: true });
 				output = await this.fsDriver().copy(path, options.path);
 			} else {
-				//output = await fs.readFile(path, options.encoding);
+				// output = await fs.readFile(path, options.encoding);
 				output = await this.fsDriver().readFile(path, options.encoding);
 			}
 		} catch (error) {

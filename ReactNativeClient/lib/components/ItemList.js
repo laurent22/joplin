@@ -67,7 +67,7 @@ class ItemList extends React.Component {
 	render() {
 		const style = this.props.style ? this.props.style : {};
 
-		//if (!this.props.itemHeight) throw new Error('itemHeight is required');
+		// if (!this.props.itemHeight) throw new Error('itemHeight is required');
 
 		let itemComps = [];
 

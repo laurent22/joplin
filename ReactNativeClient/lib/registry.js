@@ -10,7 +10,7 @@ reg.syncTargets_ = {};
 
 reg.logger = () => {
 	if (!reg.logger_) {
-		//console.warn('Calling logger before it is initialized');
+		// console.warn('Calling logger before it is initialized');
 		return new Logger();
 	}
 

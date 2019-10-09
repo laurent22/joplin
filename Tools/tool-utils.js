@@ -28,7 +28,7 @@ toolUtils.downloadFile = function(url, targetPath) {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
 			file.on('finish', function() {
-				//file.close();
+				// file.close();
 				resolve();
 			});
 		}).on('error', (error) => {
@@ -74,7 +74,7 @@ toolUtils.fileExists = async function(filePath) {
 		fs.stat(filePath, function(err) {
 			if (err == null) {
 				resolve(true);
-			} else if(err.code == 'ENOENT') {
+			} else if (err.code == 'ENOENT') {
 				resolve(false);
 			} else {
 				reject(err);

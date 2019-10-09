@@ -24,6 +24,7 @@ cd "$ROOT_DIR"
 NODE_ENV=testing npm test tests-build/ArrayUtils.js && \
 NODE_ENV=testing npm test tests-build/encryption.js && \
 NODE_ENV=testing npm test tests-build/EnexToMd.js && \
+NODE_ENV=testing npm test tests-build/EnexToHtml.js && \
 NODE_ENV=testing npm test tests-build/HtmlToMd.js && \
 NODE_ENV=testing npm test tests-build/markdownUtils.js && \
 NODE_ENV=testing npm test tests-build/models_BaseItem.js && \

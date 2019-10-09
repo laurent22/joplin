@@ -6,7 +6,7 @@ class DatabaseDriverReactNative {
 	}
 
 	open(options) {
-		//SQLite.DEBUG(true);
+		// SQLite.DEBUG(true);
 		return new Promise((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },

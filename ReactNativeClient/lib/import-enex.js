@@ -10,7 +10,7 @@ const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
 const md5 = require('md5');
 
-//const Promise = require('promise');
+// const Promise = require('promise');
 const fs = require('fs-extra');
 
 function dateToTimestamp(s, zeroIfInvalid = false) {

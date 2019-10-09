@@ -45,3 +45,4 @@ Server/docs/
 Server/dist/
 Server/bin/
 Server/node_modules/
+ElectronClient/app/packageInfo.js

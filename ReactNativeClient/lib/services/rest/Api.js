@@ -568,7 +568,7 @@ class Api {
 		return output;
 	}
 
-	async downloadImage_(url /*, allowFileProtocolImages */) {
+	async downloadImage_(url /* , allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;

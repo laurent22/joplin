@@ -30,7 +30,7 @@ class NoteItemComponent extends Component {
 		let styles = {
 			listItem: {
 				flexDirection: 'row',
-				//height: 40,
+				// height: 40,
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
 				alignItems: 'flex-start',
@@ -38,7 +38,7 @@ class NoteItemComponent extends Component {
 				paddingRight: theme.marginRight,
 				paddingTop: theme.itemMarginTop,
 				paddingBottom: theme.itemMarginBottom,
-				//backgroundColor: theme.backgroundColor,
+				// backgroundColor: theme.backgroundColor,
 			},
 			listItemText: {
 				flex: 1,
