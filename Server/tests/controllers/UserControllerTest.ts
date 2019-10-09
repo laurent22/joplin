@@ -145,6 +145,10 @@ describe('UserController', function() {
 		// there is already a user with this email
 		error = await checkThrowAsync(async () => await controller.patchUser(userSession1.id, { id: user1.id, email: user2.email }));
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		// check that the email is valid
+		error = await checkThrowAsync(async () => await controller.patchUser(userSession1.id, { id: user1.id, email: 'ohno' }));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	}));
 
 	it('should delete a user', asyncTest(async function() {

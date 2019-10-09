@@ -2,14 +2,14 @@ import { ItemAddressingType } from '../db';
 
 const { ltrimSlashes, rtrimSlashes } = require('lib/path-utils');
 
-function dirname(path:string) {
+function dirname(path:string):string {
 	if (!path) throw new Error('Path is empty');
 	let s = path.split('/');
 	s.pop();
 	return s.join('/');
 }
 
-function basename(path) {
+function basename(path:string):string {
 	if (!path) throw new Error('Path is empty');
 	let s = path.split('/');
 	return s[s.length - 1];
@@ -67,7 +67,7 @@ export interface PathInfo {
 export function filePathInfo(path:string):PathInfo {
 	return {
 		basename: removeTrailingColon(basename(path)),
-		dirname: dirname(path),
+		dirname: removeTrailingColon(dirname(path)),
 	};
 }
 

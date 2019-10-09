@@ -4,6 +4,7 @@ import FileModel from '../../app/models/FileModel';
 import * as fs from 'fs-extra';
 import { File } from '../../app/db';
 import { ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../app/utils/errors';
+import { filePathInfo } from '../../app/utils/routeUtils';
 
 async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string = ''):Promise<File> {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
@@ -31,6 +32,31 @@ async function makeTestDirectory(name:string = 'Docs'):Promise<File> {
 	};
 
 	return file;
+}
+
+async function saveTestFile(sessionId:string, path:string):Promise<File> {
+	const fileController = new FileController();
+
+	return fileController.putFileContent(
+		sessionId,
+		path,
+		null,
+	);
+}
+
+async function saveTestDir(sessionId:string, path:string):Promise<File> {
+	const fileController = new FileController();
+
+	const parsed = filePathInfo(path);
+
+	return fileController.postChild(
+		sessionId,
+		parsed.dirname,
+		{
+			name: parsed.basename,
+			is_directory: 1,
+		},
+	);
 }
 
 describe('FileController', function() {
@@ -378,6 +404,18 @@ describe('FileController', function() {
 			const error = await checkThrowAsync(async () => fileController.putFileContent(session.id, `root:/${filename}`, null));
 			expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 		}
+	}));
+
+	it('should not allow a directory with the same name', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		await saveTestDir(session.id, 'root:/somedir:');
+		let error = await checkThrowAsync(async () => saveTestFile(session.id, 'root:/somedir:'));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+
+		await saveTestFile(session.id, 'root:/somefile.md:');
+		error = await checkThrowAsync(async () => saveTestDir(session.id, 'root:/somefile.md:'));
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	}));
 
 });

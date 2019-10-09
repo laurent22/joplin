@@ -52,9 +52,16 @@ export default class UserModel extends BaseModel {
 		if ('email' in user) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
+			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
 
 		return user;
+	}
+
+	private validateEmail(email:string):boolean {
+		const s = email.split('@');
+		if (s.length !== 2) return false;
+		return !!s[0].length && !!s[1].length;
 	}
 
 	async checkIsOwnerOrAdmin(userId:string):Promise<void> {

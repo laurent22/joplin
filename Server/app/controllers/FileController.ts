@@ -56,7 +56,7 @@ export default class FileController extends BaseController {
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });
 		file.content = content;
-		return fileModel.toApiOutput(await fileModel.save(file));
+		return fileModel.toApiOutput(await fileModel.save(file, { validationRules: { mustBeFile: true } }));
 	}
 
 	async getChildren(sessionId:string, fileId:string):Promise<File[]> {

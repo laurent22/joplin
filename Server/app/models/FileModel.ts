@@ -107,11 +107,21 @@ export default class FileModel extends BaseModel {
 	async validate(object:File, options:ValidateOptions = {}):Promise<File> {
 		const file:File = object;
 
+		const mustBeFile = options.rules.mustBeFile === true;
+
 		if (options.isNew) {
 			if (!file.is_root && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
+			if (file.is_directory && mustBeFile) throw new ErrorUnprocessableEntity('item must not be a directory');
 		} else {
 			if ('name' in file && !file.name) throw new ErrorUnprocessableEntity('name cannot be empty');
 			if ('is_directory' in file) throw new ErrorUnprocessableEntity('cannot turn a file into a directory or vice-versa');
+
+			if (mustBeFile && !('is_directory' in file)) {
+				const existingFile = await this.load(file.id);
+				if (existingFile.is_directory) throw new ErrorUnprocessableEntity('item must not be a directory');
+			} else {
+				if (file.is_directory) throw new ErrorUnprocessableEntity('item must not be a directory');
+			}
 		}
 
 		let parentId = file.parent_id;
