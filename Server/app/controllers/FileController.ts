@@ -5,7 +5,10 @@ import { ErrorNotFound } from '../utils/errors';
 
 export default class FileController extends BaseController {
 
-	async postFile(sessionId:string, file:File):Promise<File> {
+
+	// Note: this is only used in tests. To create files with no content
+	// or directories, use postChild()
+	async postFile_(sessionId:string, file:File):Promise<File> {
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		let newFile = await fileModel.fromApiInput(file);
@@ -47,6 +50,8 @@ export default class FileController extends BaseController {
 	}
 
 	async putFileContent(sessionId:string, fileId:string, content:Buffer):Promise<any> {
+		if (!content) content = Buffer.alloc(0);
+
 		const user = await this.initSession(sessionId);
 		const fileModel = new FileModel({ userId: user.id });
 		const file:File = await fileModel.entityFromItemId(fileId, { mustExist: false });

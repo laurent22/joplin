@@ -1,7 +1,19 @@
 import { ItemAddressingType } from '../db';
 
 const { ltrimSlashes, rtrimSlashes } = require('lib/path-utils');
-const { dirname, basename } = require('lib/path-utils');
+
+function dirname(path:string) {
+	if (!path) throw new Error('Path is empty');
+	let s = path.split('/');
+	s.pop();
+	return s.join('/');
+}
+
+function basename(path) {
+	if (!path) throw new Error('Path is empty');
+	let s = path.split('/');
+	return s[s.length - 1];
+}
 
 export interface Route {
 	exec: Function,

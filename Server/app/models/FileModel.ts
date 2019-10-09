@@ -15,6 +15,8 @@ export interface EntityFromItemIdOptions {
 
 export default class FileModel extends BaseModel {
 
+	readonly reservedCharacters = ['/', '\\', '*', '<', '>', '?', ':', '|', '#', '%'];
+
 	get tableName():string {
 		return 'files';
 	}
@@ -141,6 +143,10 @@ export default class FileModel extends BaseModel {
 			if (existingFile && file.id === existingFile.id) throw new ErrorConflict(`Already a file with name "${file.name}"`);
 		}
 
+		if ('name' in file) {
+			if (this.includesReservedCharacter(file.name)) throw new ErrorUnprocessableEntity(`File name may not contain any of these characters: ${this.reservedCharacters.join('')}`);
+		}
+
 		return file;
 	}
 
@@ -196,6 +202,10 @@ export default class FileModel extends BaseModel {
 		const permissionModel = new PermissionModel();
 		const canWrite:boolean = await permissionModel.canWrite(file.id, this.userId);
 		if (!canWrite) throw new ErrorForbidden();
+	}
+
+	private includesReservedCharacter(path:string):boolean {
+		return this.reservedCharacters.some(c => path.indexOf(c) >= 0);
 	}
 
 	private async pathToFiles(path:string, mustExist:boolean = true):Promise<File[]> {
