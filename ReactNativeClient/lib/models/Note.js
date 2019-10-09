@@ -487,7 +487,7 @@ class Note extends BaseItem {
 		 */
 		const uniqueTitle = options && options.uniqueTitle;
 
-		noteIds.forEach(async function(noteId){
+		for(const noteId of noteIds){
 			const noteOptions = {};
 
 			//If uniqueTitle is truthy, set the original note's name as root for the unique title.
@@ -497,7 +497,7 @@ class Note extends BaseItem {
 			}
 
 			await Note.duplicate(noteId, noteOptions);
-		});
+		}
 	}
 
 	static async duplicate(noteId, options = null) {
