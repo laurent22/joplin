@@ -481,6 +481,25 @@ class Note extends BaseItem {
 		return note;
 	}
 
+	static async duplicateMultipleNotes(noteIds, options = null){
+		/*
+			if options.uniqueTitle is true, a unique title for the duplicated file will be assigned.
+		 */
+		const uniqueTitle = options && options.uniqueTitle;
+
+		noteIds.forEach(async function(noteId){
+			const noteOptions = {};
+
+			//If uniqueTitle is truthy, set the original note's name as root for the unique title.
+			if(uniqueTitle){
+				const originalNote = await Note.load(noteId);
+				noteOptions.uniqueTitle = originalNote.title;
+			}
+
+			await Note.duplicate(noteId, noteOptions);
+		});
+	}
+
 	static async duplicate(noteId, options = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
