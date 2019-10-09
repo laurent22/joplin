@@ -9,16 +9,22 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		let href = utils.getAttr(token.attrs, 'href');
 		const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 		const isResourceUrl = !!resourceHrefInfo;
-		const title = isResourceUrl ? utils.getAttr(token.attrs, 'title') : href;
+		let title = utils.getAttr(token.attrs, 'title', isResourceUrl ? '' : href);
 
 		let resourceIdAttr = '';
 		let icon = '';
 		let hrefAttr = '#';
+		let mime = '';
 		if (isResourceUrl) {
 			const resourceId = resourceHrefInfo.itemId;
 
 			const result = ruleOptions.resources[resourceId];
 			const resourceStatus = utils.resourceStatus(result);
+
+			if (result && result.item) {
+				title = utils.getAttr(token.attrs, 'title', result.item.title);
+				mime = result.item.mime;
+			}
 
 			if (result && resourceStatus !== 'ready') {
 				const icon = utils.resourceStatusFile(resourceStatus);
@@ -37,7 +43,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
-		return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}'>${icon}`;
+		return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}' type='${htmlentities(mime)}'>${icon}`;
 	};
 }
 
