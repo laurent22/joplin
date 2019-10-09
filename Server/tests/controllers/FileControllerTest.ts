@@ -418,4 +418,12 @@ describe('FileController', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	}));
 
+	it('should not be possible to delete the root directory', asyncTest(async function() {
+		const { session } = await createUserAndSession(1, true);
+		const fileController = new FileController();
+
+		const error = await checkThrowAsync(async () => fileController.deleteFile(session.id, 'root'));
+		expect(error instanceof ErrorForbidden).toBe(true);
+	}));
+
 });

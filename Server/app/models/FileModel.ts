@@ -309,6 +309,8 @@ export default class FileModel extends BaseModel {
 		if (!file) return;
 		await this.checkCanWritePermission(file);
 
+		if (id === await this.userRootFileId()) throw new ErrorForbidden('the root directory may not be deleted');
+
 		const txIndex = await this.startTransaction();
 
 		try {
