@@ -20,7 +20,7 @@ As a general rule, suggestions to *improve Joplin* should be posted first in the
 
 Avoid listing multiple requests in one report in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). One issue per request makes it easier to track and discuss it.
 
-Finally, when submitting a pull request, don't forget to [test your code](#unit-tests).
+Finally, before submitting a pull request, don't forget to [test your code](#unit-tests).
 
 # Contribute to the project
 
