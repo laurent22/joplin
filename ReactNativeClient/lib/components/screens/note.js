@@ -410,7 +410,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
 		reg.logger().info(`Resizing image ${localFilePath}`);
-		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
+		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
 
 		const resizedImagePath = resizedImage.uri;
 		reg.logger().info('Resized image ', resizedImagePath);

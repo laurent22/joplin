@@ -186,7 +186,7 @@ class OneDriveApi {
 				let errorResponseText = await response.text();
 				let errorResponse = null;
 				try {
-					errorResponse = JSON.parse(errorResponseText); //await response.json();
+					errorResponse = JSON.parse(errorResponseText); // await response.json();
 				} catch (error) {
 					error.message = `OneDriveApi::exec: Cannot parse JSON error: ${errorResponseText} ${error.message}`;
 					throw error;
@@ -249,12 +249,12 @@ class OneDriveApi {
 		let response = await this.exec(method, path, query, data);
 		let errorResponseText = await response.text();
 		try {
-			let output = JSON.parse(errorResponseText); //await response.json();
+			let output = JSON.parse(errorResponseText); // await response.json();
 			return output;
 		} catch (error) {
 			error.message = `OneDriveApi::execJson: Cannot parse JSON: ${errorResponseText} ${error.message}`;
 			throw error;
-			//throw new Error('Cannot parse JSON: ' + text);
+			// throw new Error('Cannot parse JSON: ' + text);
 		}
 	}
 

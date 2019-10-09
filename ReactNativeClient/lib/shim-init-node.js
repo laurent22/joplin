@@ -255,7 +255,7 @@ function shimInit() {
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
-		//if (!('maxRetry' in options)) options.maxRetry = 5;
+		// if (!('maxRetry' in options)) options.maxRetry = 5;
 
 		const urlParse = require('url').parse;
 

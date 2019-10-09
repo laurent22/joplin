@@ -548,7 +548,7 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let task = await this.downloadQueue_.waitForResult(path); //await this.api().get(path);
+							let task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);

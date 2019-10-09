@@ -148,7 +148,7 @@ class FileApi {
 	setTimestamp(path, timestampMs) {
 		this.logger().debug(`setTimestamp ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
-		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+		// return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {

@@ -76,7 +76,7 @@ class SideMenuContentComponent extends Component {
 		styles.folderButtonSelected = Object.assign({}, styles.folderButton);
 		styles.folderButtonSelected.backgroundColor = theme.selectedColor;
 		styles.folderIcon = Object.assign({}, theme.icon);
-		styles.folderIcon.color = theme.colorFaded; //'#0072d5';
+		styles.folderIcon.color = theme.colorFaded; // '#0072d5';
 		styles.folderIcon.paddingTop = 3;
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });

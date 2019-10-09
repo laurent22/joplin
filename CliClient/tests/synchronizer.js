@@ -1027,8 +1027,8 @@ describe('Synchronizer', function() {
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as
 		// plain text to the sync target.
-		//let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
-		//expect(hasThrown).toBe(true);
+		// let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		// expect(hasThrown).toBe(true);
 
 		// Now supply the password, and decrypt the items
 		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');

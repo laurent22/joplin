@@ -96,7 +96,7 @@ class NoteBodyViewer extends Component {
 			},
 			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
-			resources: this.props.noteResources, //await shared.attachedResources(bodyToRender),
+			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};

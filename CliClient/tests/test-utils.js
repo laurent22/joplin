@@ -69,11 +69,11 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 // const syncTargetId_ = SyncTargetRegistry.nameToId("nextcloud");
 const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
-//const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
+// const syncTargetId_ = SyncTargetRegistry.nameToId('filesystem');
 // const syncTargetId_ = SyncTargetRegistry.nameToId('dropbox');
 const syncDir = `${__dirname}/../tests/sync`;
 
-const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;//400;
+const sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
 
 console.info(`Testing with sync target: ${SyncTargetRegistry.idToName(syncTargetId_)}`);
 

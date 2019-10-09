@@ -194,7 +194,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		styles.switchSettingControl = Object.assign({}, styles.settingControl);
 		delete styles.switchSettingControl.color;
-		//styles.switchSettingControl.width = '20%';
+		// styles.switchSettingControl.width = '20%';
 		styles.switchSettingControl.flex = 0;
 
 		this.styles_[themeId] = StyleSheet.create(styles);
@@ -366,7 +366,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else {
-			//throw new Error('Unsupported setting type: ' + md.type);
+			// throw new Error('Unsupported setting type: ' + md.type);
 		}
 
 		return output;

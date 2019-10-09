@@ -634,7 +634,7 @@ class AppComponent extends React.Component {
 					}, 5);
 				}
 
-			} catch(e) {
+			} catch (e) {
 				reg.logger().error('Error in ShareExtension.data', e);
 			}
 		}
