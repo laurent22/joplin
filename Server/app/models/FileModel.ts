@@ -1,4 +1,4 @@
-import BaseModel, { ValidateOptions, SaveOptions } from './BaseModel';
+import BaseModel, { ValidateOptions, SaveOptions, DeleteOptions } from './BaseModel';
 import PermissionModel from './PermissionModel';
 import { File, ItemType, databaseSchema } from '../db';
 import { ErrorForbidden, ErrorUnprocessableEntity, ErrorNotFound, ErrorBadRequest, ErrorConflict } from '../utils/errors';
@@ -304,12 +304,14 @@ export default class FileModel extends BaseModel {
 		return output.map(r => r.id);
 	}
 
-	async delete(id:string):Promise<void> {
+	async delete(id:string, options:DeleteOptions = {}):Promise<void> {
 		const file:File = await this.load(id);
 		if (!file) return;
 		await this.checkCanWritePermission(file);
 
-		if (id === await this.userRootFileId()) throw new ErrorForbidden('the root directory may not be deleted');
+		const canDeleteRoot = !!options.validationRules && !!options.validationRules.canDeleteRoot;
+
+		if (id === await this.userRootFileId() && !canDeleteRoot) throw new ErrorForbidden('the root directory may not be deleted');
 
 		const txIndex = await this.startTransaction();
 

@@ -86,7 +86,7 @@ export default class UserModel extends BaseModel {
 		try {
 			const fileModel = new FileModel({ userId: this.userId });
 			const rootFile = await fileModel.userRootFile();
-			await fileModel.delete(rootFile.id);
+			await fileModel.delete(rootFile.id, { validationRules: { canDeleteRoot: true }});
 			await super.delete(id);
 		} catch (error) {
 			await this.rollbackTransaction(txIndex);

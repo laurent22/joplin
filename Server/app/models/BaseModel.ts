@@ -16,6 +16,10 @@ export interface SaveOptions {
 	validationRules?: any,
 }
 
+export interface DeleteOptions {
+	validationRules?: any,
+}
+
 export interface ValidateOptions {
 	isNew?: boolean
 	rules?: any,

@@ -12,7 +12,7 @@ async function makeTestFile(id:number = 1, ext:string = 'jpg', parentId:string =
 	const file:File = {
 		name: id > 1 ? `${basename}-${id}.${ext}` : `${basename}.${ext}`,
 		content: await fs.readFile(`${supportDir}/${basename}.${ext}`),
-		mime_type: `image/${ext}`,
+		// mime_type: `image/${ext}`,
 		parent_id: parentId,
 	};
 
