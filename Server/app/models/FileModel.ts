@@ -74,6 +74,14 @@ export default class FileModel extends BaseModel {
 			const parentFiles = await this.pathToFiles(fileInfo.dirname);
 			const parentId = parentFiles[parentFiles.length - 1].id;
 
+			if (!fileInfo.basename) {
+				const specialDirId = await this.specialDirId(fileInfo.dirname);
+				// The path simply refers to a special directory. Can happen
+				// for example with a path like `root:/:` (which is the same
+				// as just `root`).
+				if (specialDirId) return { id: specialDirId };
+			}
+
 			// This is an existing file
 			const existingFile = await this.fileByName(parentId, fileInfo.basename);
 			if (existingFile) return { id: existingFile.id };

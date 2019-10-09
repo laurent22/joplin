@@ -426,4 +426,13 @@ describe('FileController', function() {
 		expect(error instanceof ErrorForbidden).toBe(true);
 	}));
 
+	it('should support root:/: format, which means root', asyncTest(async function() {
+		const { session, user } = await createUserAndSession(1, true);
+		const fileController = new FileController();
+		const fileModel = new FileModel({ userId: user.id });
+
+		const root = await fileController.getFile(session.id, 'root:/:');
+		expect(root.id).toBe(await fileModel.userRootFileId());
+	}));
+
 });
