@@ -1,3 +1,5 @@
+const JoplinError = require('lib/JoplinError');
+
 class SyncTargetRegistry {
 	static classById(syncTargetId) {
 		const info = SyncTargetRegistry.reg_[syncTargetId];
@@ -20,7 +22,7 @@ class SyncTargetRegistry {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].name === name) return this.reg_[n].id;
 		}
-		throw new Error(`Name not found: ${name}`);
+		throw new JoplinError(`Name not found: ${name}`, 'notFound');
 	}
 
 	static idToMetadata(id) {

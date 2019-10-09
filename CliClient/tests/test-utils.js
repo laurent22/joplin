@@ -1,7 +1,5 @@
 /* eslint-disable require-atomic-updates */
 
-require('source-map-support').install();
-
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');

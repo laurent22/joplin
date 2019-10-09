@@ -27,7 +27,14 @@ class Setting extends BaseModel {
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
 		const pathUsernamePassword = (syncTargetName, pathLabel, usernameLabel, usernamePassword) => {
-			const syncTargetId = SyncTargetRegistry.nameToId(syncTargetName);
+			let syncTargetId = null;
+
+			try {
+				syncTargetId = SyncTargetRegistry.nameToId(syncTargetName);
+			} catch (error) {
+				if (error.code === 'notFound') return null;
+				throw error;
+			}
 
 			return {
 				[`sync.${syncTargetId}.path`]: {
