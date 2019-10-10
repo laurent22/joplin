@@ -131,7 +131,7 @@ class FileApi {
 
 		this.logger().debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			let temp = [];
