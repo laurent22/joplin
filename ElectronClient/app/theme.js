@@ -400,18 +400,6 @@ function themeStyle(theme) {
 	// relevant properties
 	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
 
-	// if (theme == Setting.THEME_DARK) {
-	// 	output = Object.assign({}, output, darkStyle);
-	// } else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
-	// 	output = Object.assign({}, output, solarizedLightStyle);
-	// } else if (theme == Setting.THEME_SOLARIZED_DARK) {
-	// 	output = Object.assign({}, output, solarizedDarkStyle);
-	// } else if (theme == Setting.THEME_DRACULA) {
-	// 	output = Object.assign({}, output, draculaStyle);
-	// } else if (theme == Setting.THEME_NORD) {
-	// 	output = Object.assign({}, output, nordStyle);
-	// }
-
 	switch(theme) {
 	case Setting.THEME_DARK :
 		output = Object.assign({}, output, darkStyle); break;
