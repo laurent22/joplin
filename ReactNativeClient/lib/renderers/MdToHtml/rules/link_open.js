@@ -33,7 +33,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				href = `joplin://${resourceId}`;
 				if (resourceHrefInfo.hash) href += `#${resourceHrefInfo.hash}`;
 				resourceIdAttr = `data-resource-id='${resourceId}'`;
-				icon = '<span class="resource-icon"></span>';
+				// icon = '<span class="resource-icon"></span>';
+				icon = '<span class="resource-icon fa fa-file-pdf-o"></span>';
 			}
 		} else {
 			// If the link is a plain URL (as opposed to a resource link), set the href to the actual
