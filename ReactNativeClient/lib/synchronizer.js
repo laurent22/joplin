@@ -213,6 +213,9 @@ class Synchronizer {
 
 		const syncSteps = options.syncSteps ? options.syncSteps : ['update_remote', 'delete_remote', 'delta'];
 
+		// The default is to log errors, but when testing it's convenient to be able to catch and verify errors
+		const throwOnError = options.throwOnError === true;
+
 		const syncTargetId = this.api().syncTargetId();
 
 		this.cancelling_ = false;
@@ -237,10 +240,26 @@ class Synchronizer {
 			return `${this.resourceDirName_}/${resourceId}`;
 		};
 
+		let errorToThrow = null;
+
 		try {
 			await this.api().mkdir(this.syncDirName_);
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
+
+			const supportedSyncTargetVersion = Setting.value('syncVersion');
+			const syncTargetVersion = await this.api().get('.sync/version.txt');
+
+			if (!syncTargetVersion) {
+				await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+			} else {
+				if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
+					throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
+				} else {
+					await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+					// TODO: do upgrade job
+				}
+			}
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -709,7 +728,9 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
+			if (throwOnError) {
+				errorToThrow = error;
+			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
@@ -751,6 +772,8 @@ class Synchronizer {
 		this.dispatch({ type: 'SYNC_COMPLETED' });
 
 		this.state_ = 'idle';
+
+		if (errorToThrow) throw errorToThrow;
 
 		return outputContext;
 	}

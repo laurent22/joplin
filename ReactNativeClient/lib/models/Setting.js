@@ -31,6 +31,12 @@ class Setting extends BaseModel {
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		this.metadata_ = {
+			'clientId': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: false,
+			},
+
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
 				type: Setting.TYPE_INT,
@@ -917,6 +923,7 @@ Setting.constants_ = {
 	templateDir: '',
 	tempDir: '',
 	openDevTools: false,
+	syncVersion: 1,
 };
 
 Setting.autoSaveEnabled = true;

@@ -59,6 +59,7 @@ const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
+const { uuid } = require('lib/uuid.js');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -439,6 +440,8 @@ async function initialize(dispatch) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 		await Setting.load();
+
+		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
 		if (Setting.value('firstStart')) {
 			let locale = NativeModules.I18nManager.localeIdentifier;

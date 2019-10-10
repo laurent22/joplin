@@ -569,6 +569,9 @@ class Application extends BaseApplication {
 				'',
 				'Copyright © 2016-2019 Laurent Cozic',
 				_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
+				'',
+				_('Client ID: %s', Setting.value('clientId')),
+				_('Sync Version: %s', Setting.value('syncVersion')),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);

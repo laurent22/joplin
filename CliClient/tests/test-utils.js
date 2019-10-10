@@ -24,6 +24,7 @@ const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const { shimInit } = require('lib/shim-init-node.js');
+const { uuid } = require('lib/uuid.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
@@ -137,6 +138,7 @@ async function switchClient(id) {
 
 	await Setting.load();
 
+	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
@@ -180,6 +182,7 @@ async function setupDatabase(id = null) {
 	if (databases_[id]) {
 		await clearDatabase(id);
 		await Setting.load();
+		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 		return;
 	}
 
@@ -197,6 +200,7 @@ async function setupDatabase(id = null) {
 
 	BaseModel.db_ = databases_[id];
 	await Setting.load();
+	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 }
 
 function resourceDir(id = null) {
