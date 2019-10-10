@@ -31,9 +31,13 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "husky": "^3.0.5",
-    "lint-staged": "^9.2.1"
+    "lint-staged": "^9.2.1",
+    "source-map-support": "^0.5.13",
+    "typescript": "^3.6.3"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
     "fs-extra": "^8.1.0"
   }
 }
