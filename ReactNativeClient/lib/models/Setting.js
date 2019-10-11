@@ -411,6 +411,10 @@ class Setting extends BaseModel {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
+					'A3': _('A3'),
+					'A5': _('A5'),
+					'Tabloid': _('Tabloid'),
+					'Legal': _('Legal'),
 				};
 			}},
 			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
