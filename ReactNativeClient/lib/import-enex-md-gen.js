@@ -392,10 +392,10 @@ function isSpanStyleBold(attributes) {
 	if (style.includes('font-weight: bold;')) {
 		return true;
 	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
-		//console.debug('font-family regex matched');
+		// console.debug('font-family regex matched');
 		return true;
 	} else {
-		//console.debug('Found unsupported style(s) in span tag: %s', style);
+		// console.debug('Found unsupported style(s) in span tag: %s', style);
 		return false;
 	}
 }
@@ -700,14 +700,14 @@ function enexXmlToMdArray(stream, resources) {
 				}
 			} else if (n == 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
-					//console.debug('Found style(s) in span tag: %s', nodeAttributes.style);
+					// console.debug('Found style(s) in span tag: %s', nodeAttributes.style);
 					state.spanAttributes.push(nodeAttributes);
 					if (isSpanStyleBold(nodeAttributes)) {
-						//console.debug('Applying style found in span tag: bold')
+						// console.debug('Applying style found in span tag: bold')
 						section.lines.push('**');
 					}
 					if (isSpanStyleItalic(nodeAttributes)) {
-						//console.debug('Applying style found in span tag: italic')
+						// console.debug('Applying style found in span tag: italic')
 						section.lines.push('*');
 					}
 				}
@@ -895,11 +895,11 @@ function enexXmlToMdArray(stream, resources) {
 				let attributes = state.spanAttributes.pop();
 				if (isSpanWithStyle(attributes)) {
 					if (isSpanStyleBold(attributes)) {
-						//console.debug('Applying style found in span tag (closing): bold')
+						// console.debug('Applying style found in span tag (closing): bold')
 						section.lines.push('**');
 					}
 					if (isSpanStyleItalic(attributes)) {
-						//console.debug('Applying style found in span tag (closing): italic')
+						// console.debug('Applying style found in span tag (closing): italic')
 						section.lines.push('*');
 					}
 				}
