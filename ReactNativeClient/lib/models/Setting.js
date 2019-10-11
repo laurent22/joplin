@@ -411,10 +411,15 @@ class Setting extends BaseModel {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
-					'A4L': _('A4 (Landscape)'),
-					'LetterL': _('Letter (Landscape)'),
 				};
 			}},
+			'export.pdfPageOrientation': { value: false, type: Setting.TYPE_BOOL, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+				return {
+					false: _('Portrait'),
+					true: _('Landscape'),
+				};
+			}},
+
 
 			'net.customCertificates': {
 				value: '',
