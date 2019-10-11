@@ -395,6 +395,7 @@ function isSpanStyleBold(attributes) {
 		// console.debug('font-family regex matched');
 		return true;
 	} else {
+		// console.debug('Found unsupported style(s) in span tag: %s', style);
 		return false;
 	}
 }
