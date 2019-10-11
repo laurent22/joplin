@@ -93,6 +93,18 @@ async function fetchLatestRelease(options) {
 	};
 }
 
+function truncateText(text, length) {
+	let truncated = text.substring(0, length);
+	const lastNewLine = truncated.lastIndexOf('\n');
+	// Cut off at a line break unless we'd be cutting off half the text
+	if (lastNewLine > length / 2) {
+		truncated = `${truncated.substring(0, lastNewLine)}\n...`;
+	} else {
+		truncated = `${truncated.trim()}...`;
+	}
+	return truncated;
+}
+
 function checkForUpdates(inBackground, window, logFilePath, options) {
 	if (isCheckingForUpdate_) {
 		autoUpdateLogger_.info('checkForUpdates: Skipping check because it is already running');
@@ -126,16 +138,21 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 				buttons: [_('OK')],
 			});
 		} else {
-			const releaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
+			const fullReleaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
+			const MAX_RELEASE_NOTES_LENGTH = 1000;
+			const truncateReleaseNotes = fullReleaseNotes.length > MAX_RELEASE_NOTES_LENGTH;
+			const releaseNotes = truncateReleaseNotes ? truncateText(fullReleaseNotes, MAX_RELEASE_NOTES_LENGTH) : fullReleaseNotes;
+
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
 
 			const buttonIndex = dialog.showMessageBox(parentWindow_, {
 				type: 'info',
 				message: `${_('An update is available, do you want to download it now?')}\n\n${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
-				buttons: [_('Yes'), _('No')],
+				buttons: [_('Yes'), _('No')].concat(truncateReleaseNotes ? [_('Full Release Notes')] : []),
 			});
 
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
+			if (buttonIndex === 2) require('electron').shell.openExternal(release.pageUrl);
 		}
 	}).catch(error => {
 		autoUpdateLogger_.error(error);
