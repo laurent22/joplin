@@ -413,10 +413,10 @@ class Setting extends BaseModel {
 					'Letter': _('Letter'),
 				};
 			}},
-			'export.pdfPageOrientation': { value: false, type: Setting.TYPE_BOOL, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
-					false: _('Portrait'),
-					true: _('Landscape'),
+					'portrait': _('Portrait'),
+					'landscape': _('Landscape'),
 				};
 			}},
 
