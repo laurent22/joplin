@@ -485,13 +485,13 @@ class Note extends BaseItem {
 		/*
 			if options.uniqueTitle is true, a unique title for the duplicated file will be assigned.
 		 */
-		const uniqueTitle = options && options.uniqueTitle;
+		const ensureUniqueTitle = options && options.ensureUniqueTitle;
 
 		for(const noteId of noteIds){
 			const noteOptions = {};
 
-			//If uniqueTitle is truthy, set the original note's name as root for the unique title.
-			if(uniqueTitle){
+			//If ensureUniqueTitle is truthy, set the original note's name as root for the unique title.
+			if(ensureUniqueTitle){
 				const originalNote = await Note.load(noteId);
 				noteOptions.uniqueTitle = originalNote.title;
 			}

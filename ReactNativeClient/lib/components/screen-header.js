@@ -166,9 +166,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async duplicateButton_press() {
 		const noteIds = this.props.selectedNoteIds;
 
-		//Duplicate all selected notes. uniqueTitle is set to true to use the
+		//Duplicate all selected notes. ensureUniqueTitle is set to true to use the
 		//original note's name as a root for the new unique identifier.
-		await Note.duplicateMultipleNotes(noteIds, {uniqueTitle: true});
+		await Note.duplicateMultipleNotes(noteIds, {ensureUniqueTitle: true});
 
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 	}
