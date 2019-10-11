@@ -691,10 +691,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async noteRevisionViewer_onBack() {
-		this.setState({ showRevisions: false });
-
-		this.lastSetHtml_ = '';
-		this.scheduleReloadNote(this.props);
+		// When coming back from the revision viewer, the webview has been
+		// unmounted so will need to reload. We set webviewReady to false
+		// to make sure everything is reloaded as expected.
+		this.setState({ showRevisions: false, webviewReady: false }, () => {
+			this.lastSetHtml_ = '';
+			this.scheduleReloadNote(this.props);
+		});
 	}
 
 	title_changeText(event) {
