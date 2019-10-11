@@ -19,8 +19,7 @@ class ResourceService extends BaseService {
 		let foundNoteWithEncryption = false;
 
 		while (true) {
-			const changes = await ItemChange.modelSelectAll(
-				`
+			const changes = await ItemChange.modelSelectAll(`
 				SELECT id, item_id, type
 				FROM item_changes
 				WHERE item_type = ?
@@ -28,7 +27,7 @@ class ResourceService extends BaseService {
 				ORDER BY id ASC
 				LIMIT 10
 			`,
-				[BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]
+			[BaseModel.TYPE_NOTE, Setting.value('resourceService.lastProcessedChangeId')]
 			);
 
 			if (!changes.length) break;

@@ -39,7 +39,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = `${basePath}/${htmlFilename}`;
 			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'table_with_pipe.html') continue;
+			// if (htmlFilename !== 'anchor_local.html') continue;
 
 			const htmlToMdOptions = {};
 
@@ -48,7 +48,7 @@ describe('HtmlToMd', function() {
 				// This is straightforward when the document is still in DOM format, as with the clipper,
 				// but otherwise it would need to be somehow parsed out from the HTML. Here we just
 				// hard code the anchors that we know are in the file.
-				htmlToMdOptions.anchorNames = ['first', 'second'];
+				htmlToMdOptions.anchorNames = ['first', 'second', 'fourth'];
 			}
 
 			const html = await shim.fsDriver().readFile(htmlPath);
