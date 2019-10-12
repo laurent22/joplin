@@ -39,7 +39,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = `${basePath}/${htmlFilename}`;
 			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'anchor_local.html') continue;
+			// if (htmlFilename !== 'table_with_header.html') continue;
 
 			const htmlToMdOptions = {};
 
