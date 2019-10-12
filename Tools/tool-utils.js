@@ -4,7 +4,7 @@ toolUtils.execCommand = function(command) {
 	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout) => {
+		const child = exec(command, (error, stdout) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -13,6 +13,29 @@ toolUtils.execCommand = function(command) {
 				}
 			} else {
 				resolve(stdout.trim());
+			}
+		});
+
+		child.stdout.pipe(process.stdout);
+		child.stderr.pipe(process.stderr);
+	});
+};
+
+toolUtils.execCommandWithPipes = function(executable, args) {
+	var spawn = require('child_process').spawn;
+
+	return new Promise((resolve, reject) => {
+		const child = spawn(executable, args, { stdio: 'inherit'});
+
+		child.on('error', (error) => {
+			reject(error);
+		});
+
+		child.on('close', (code) => {
+			if (code !== 0) {
+				reject(`Ended with code ${code}`);
+			} else {
+				resolve();
 			}
 		});
 	});
