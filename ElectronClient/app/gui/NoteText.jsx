@@ -1213,7 +1213,7 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true }, (error, data) => {
+				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true, pageSize: Setting.value('export.pdfPageSize'), landscape: Setting.value('export.pdfPageOrientation') === 'landscape' }, (error, data) => {
 					restoreSettings();
 
 					if (error) {
