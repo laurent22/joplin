@@ -1,19 +1,21 @@
 All students and developers are welcome to participate in the Summer of Code program with KDE. Here's how.
 
 Contents
-1 All participants
-1.1 Programming Language
-2 Instructions for students
-2.1 General instructions
-2.2 Recommended steps
-2.3 Student proposal guidelines
-2.4 Hints
-2.5 Accepted Students
-3 Instructions for mentors
-3.1 Ideas
-3.2 Mentoring
-3.3 Signing up as a mentor
-4 Instructions for module/application maintainers
+
+1. All participants
+	1. Programming Language
+2. Instructions for students
+	1. General instructions
+	2. Recommended steps
+	3. Student proposal guidelines
+	4. Hints
+	5. Accepted Students
+3. Instructions for mentors
+	3. Ideas
+	3. Mentoring
+	3. Signing up as a mentor
+4. Instructions for module/application maintainers
+
 All participants
 Mentors, administrators and students: read Summer of Code occasionally. Also read the Summer of Code FAQ.
 
