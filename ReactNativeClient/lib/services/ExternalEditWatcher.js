@@ -77,6 +77,17 @@ class ExternalEditWatcher {
 						}
 
 						const noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+
+						// Hack to prevent very hard to replicate bug:
+						// https://github.com/laurent22/joplin/issues/1854
+						// It means that if user wants to clear the note (including title) from external editor
+						// it won't work. But it's a more acceptable bug than clearing the note when not asking
+						// for it.
+						if (!noteContent) {
+							this.logger().warn(`Watched note is empty - this is likely to be a bug so won't save: ${id}`);
+							return;
+						}
+
 						const updatedNote = await Note.unserializeForEdit(noteContent);
 						updatedNote.id = id;
 						updatedNote.parent_id = note.parent_id;
