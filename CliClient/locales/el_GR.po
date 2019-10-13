@@ -526,28 +526,30 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
+"Αλλάζει σε [σημειωματάριο] - όλες οι περαιτέρω λειτουργίες θα "
+"πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
 
 msgid "Displays version information"
-msgstr ""
+msgstr "Εμφανίζει πληροφορίες έκδοσης"
 
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr ""
+msgstr "Enum"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "Τύπος: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "Πιθανές τιμές: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "Προεπιλογή: %s."
 
 msgid "Possible keys/values:"
 msgstr ""
