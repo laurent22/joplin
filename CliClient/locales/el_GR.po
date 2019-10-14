@@ -143,7 +143,7 @@ msgstr ""
 "`decrypt`, `status`, `decrypt-file` και `target-status`."
 
 msgid "Enter master password:"
-msgstr "Πληκτρολογήστε τον κύριο κωδικό πρόσβασης:"
+msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
 
 msgid "Operation cancelled"
 msgstr "Η λειτουργία ακυρώθηκε"
@@ -549,23 +549,25 @@ msgstr "Πιθανές τιμές: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr "Προεπιλογή: %s."
+msgstr "Προεπιλογή: %s"
 
 msgid "Possible keys/values:"
-msgstr ""
+msgstr "Πιθανά πλήκτρα / τιμές:"
 
 msgid "Type `joplin help` for usage information."
-msgstr ""
+msgstr "Πληκτρολογήστε `joplin help` για πληροφορίες χρήσης."
 
 msgid "Fatal error:"
-msgstr ""
+msgstr "Ανεπανόρθωτο σφάλμα:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
+"Η εφαρμογή έχει εξουσιοδοτηθεί - μπορείτε τώρα να κλείσετε αυτήν την καρτέλα "
+"του προγράμματος περιήγησης."
 
 msgid "The application has been successfully authorised."
-msgstr ""
+msgstr "Η εφαρμογή έχει εξουσιοδοτηθεί με επιτυχία."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -574,9 +576,14 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
+"Παρακαλώ ανοίξτε την ακόλουθη διεύθυνση URL στο πρόγραμμα περιήγησής σας για "
+"να πιστοποιήσετε την εφαρμογή. Η εφαρμογή θα δημιουργήσει έναν φάκελο στο "
+"\"Apps / Joplin\" και θα διαβάζει και θα γράφει μόνο αρχεία σε αυτόν. Δεν θα "
+"έχει πρόσβαση σε αρχεία εκτός αυτού του φακέλου ούτε σε άλλα προσωπικά "
+"δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
 
 msgid "Search:"
-msgstr ""
+msgstr "Εύρεση:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -586,6 +593,13 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
+"Καλώς ήλθατε στο Joplin!\n"
+"\n"
+"Πληκτρολογίστε `:help shortcuts` για τη λίστα συντομεύσεων πληκτρολογίου ή "
+"απλά `:help` για πληροφορίες χρήσης.\n"
+"\n"
+"Για παράδειγμα, για να δημιουργήσετε ένα σημειωματάριο πατήστε `mb` ενώ για "
+"να δημιουργήσετε μια σημείωση πατήστε `mn`."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -593,244 +607,263 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
+"Ένα ή περισσότερα στοιχεία είναι κρυπτογραφημένα και ίσως χρειαστεί να "
+"δώσετε τον κωδικό πρόσβασης. Για να το κάνετε αυτό, πληκτρολογήστε `e2ee "
+"decrypt`. Αν έχετε ήδη δώσει τον κωδικό πρόσβασης, τα κρυπτογραφημένα "
+"στοιχεία αποκρυπτογραφούνται στο παρασκήνιο και θα είναι σύντομα διαθέσιμα."
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
+msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Παρακαλώ περιμένετε..."
 
 msgid "&File"
-msgstr ""
+msgstr "&Αρχείο"
 
 msgid "About Joplin"
-msgstr ""
+msgstr "Σχετικά με το Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "Προτιμήσεις..."
 
 msgid "Check for updates..."
-msgstr ""
+msgstr "Ελεγχος για ενημερώσεις..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Πρότυπα"
 
 msgid "Import"
-msgstr ""
+msgstr "Εισαγωγή"
 
 msgid "Export"
-msgstr ""
+msgstr "Εξαγωγή"
 
 msgid "Synchronise"
-msgstr ""
+msgstr "Συγχρονισμός"
 
 #, javascript-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Απόκρυψη %s"
 
 msgid "Quit"
-msgstr ""
+msgstr "Έξοδος"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Κλείσιμο παραθύρου"
 
 msgid "&Edit"
-msgstr ""
+msgstr "&Επεξεργασία"
 
 msgid "Copy"
-msgstr ""
+msgstr "Αντιγραφή"
 
 msgid "Cut"
-msgstr ""
+msgstr "Αποκοπή"
 
 msgid "Paste"
-msgstr ""
+msgstr "Επικόλληση"
 
 msgid "Select all"
-msgstr ""
+msgstr "Επιλογή όλων"
 
 msgid "Bold"
-msgstr ""
+msgstr "Έντονη γραφή"
 
 msgid "Italic"
-msgstr ""
+msgstr "Πλάγια γραφή"
 
 msgid "Link"
-msgstr ""
+msgstr "Σύνδεσμος"
 
 msgid "Code"
-msgstr ""
+msgstr "Κώδικας"
 
 msgid "Insert Date Time"
-msgstr ""
+msgstr "Εισαγωγή Ημερομηνίας Ώρας"
 
 msgid "Edit in external editor"
-msgstr ""
+msgstr "Επεξεργασία σε εξωτερικό editor"
 
 msgid "Tags"
-msgstr ""
+msgstr "Ετικέτες"
 
 msgid "Search in all the notes"
-msgstr ""
+msgstr "Αναζήτηση σε όλες τις σημειώσεις"
 
 msgid "Search in current note"
-msgstr ""
+msgstr "Αναζήτηση στην τρέχουσα σημείωση"
 
 msgid "&View"
-msgstr ""
+msgstr "&Εμφάνιση"
 
 msgid "Toggle sidebar"
-msgstr ""
+msgstr "Εναλλαγή πλευρικής μπάρας"
 
 msgid "Toggle editor layout"
-msgstr ""
+msgstr "Εναλλαγή διάταξης editor"
 
 msgid "Focus"
-msgstr ""
+msgstr "Εστίαση σε"
 
 msgid "&Tools"
-msgstr ""
+msgstr "&Εργαλεία"
 
 msgid "&Help"
-msgstr ""
+msgstr "&Βοήθεια"
 
 msgid "Website and documentation"
-msgstr ""
+msgstr "Ιστοσελίδα και εγχειρίδια"
 
 msgid "Joplin Forum"
-msgstr ""
+msgstr "Joplin φόρουμ"
 
 msgid "Make a donation"
-msgstr ""
+msgstr "Κάντε μια δωρεά"
 
 msgid "Toggle development tools"
-msgstr ""
+msgstr "Εναλλαγή εργαλείων προγραμματισμού"
 
 #, javascript-format
 msgid "Open %s"
-msgstr ""
+msgstr "Άνοιγμα %s"
 
 msgid "Exit"
-msgstr ""
+msgstr "Έξοδος"
 
 msgid "OK"
-msgstr ""
+msgstr "Εντάξει"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Άκυρο"
 
 msgid "Current version is up-to-date."
-msgstr ""
+msgstr "Η τρέχουσα έκδοση είναι ενημερωμένη."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (pre-release)"
 
 msgid "An update is available, do you want to download it now?"
-msgstr ""
+msgstr "Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr ""
+msgstr "Η έκδοσή σου: %s"
 
 #, javascript-format
 msgid "New version: %s"
-msgstr ""
+msgstr "Νέα έκδοση: %s"
 
 msgid "Yes"
-msgstr ""
+msgstr "Ναι"
 
 msgid "No"
-msgstr ""
+msgstr "Όχι"
 
 msgid "Token has been copied to the clipboard!"
-msgstr ""
+msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
 
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
+"Η υπηρεσία web clipper είναι ενεργοποιημένη και έχει ρυθμιστεί για αυτόματη "
+"εκκίνηση."
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr ""
+msgstr "Κατάσταση: Ξεκίνησε στην πόρτα %d"
 
 #, javascript-format
 msgid "Status: %s"
-msgstr ""
+msgstr "Κατάσταση: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr ""
+msgstr "Απενεργοποίηση υπηρεσίας Web Clipper"
 
 msgid "The web clipper service is not enabled."
-msgstr ""
+msgstr "Η υπηρεσία Web Clipper δεν είναι ενεργοποιημένη."
 
 msgid "Enable Web Clipper Service"
-msgstr ""
+msgstr "Ενεργοποίηση υπηρεσίας Web Clipper"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
+"Το Joplin Web Clipper επιτρέπει την αποθήκευση ιστοσελίδων και screenshots "
+"από το πρόγραμμα περιήγησης στο Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr ""
+msgstr "Για να χρησιμοποιήσετε το web clipper, πρέπει να κάνετε τα εξής:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr ""
+msgstr "Βήμα 1: Ενεργοποιήστε την υπηρεσία"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
+"Αυτή η υπηρεσία επιτρέπει στην επέκταση του προγράμματος περιήγησης να "
+"επικοινωνεί με το Joplin. Όταν την ενεργοποιήσετε, το τείχος προστασίας "
+"μπορεί να σας ζητήσει να δώσετε άδεια στο Joplin να επικοινωνεί μέσω της "
+"συγκεκριμένης πόρτας."
 
 msgid "Step 2: Install the extension"
-msgstr ""
+msgstr "Βήμα 2: Εγκαταστήστε την επέκταση"
 
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
+"Κάντε λήψη και εγκατάσταση της αντίστοιχης επέκτασης για το πρόγραμμα "
+"περιήγησής σας:"
 
 msgid "Advanced options"
-msgstr ""
+msgstr "Επιλογές για προχωρημένους"
 
 msgid "Authorisation token:"
-msgstr ""
+msgstr "Token εξουσιοδότησης:"
 
 msgid "Copy token"
-msgstr ""
+msgstr "Αντιγραφή token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
+"Αυτό το token εξουσιοδότησης απαιτείται μόνο για να επιτρέπει σε εφαρμογές "
+"τρίτων να έχουν πρόσβαση στην Joplin."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Αυτό θα ανοίξει μια νέα οθόνη. Να αποθηκευθούν οι τρέχουσες αλλαγές;"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
+msgstr "Οι σημειώσεις και οι ρυθμίσεις αποθηκεύονται στο: %s"
 
 msgid "Check synchronisation configuration"
-msgstr ""
+msgstr "Ελέγχος ρυθμίσεων συγχρονισμού"
 
 msgid "Browse..."
-msgstr ""
+msgstr "Αναζήτηση..."
 
 msgid "Back"
-msgstr ""
+msgstr "Πίσω"
 
 msgid "Apply"
-msgstr ""
+msgstr "Εφαρμογή"
 
 msgid "Submit"
-msgstr ""
+msgstr "Yποβολή"
 
 msgid "Save"
-msgstr ""
+msgstr "Αποθήκευση"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
+"Αν απενεργοποιήσετε την κρυπτογράφηση *όλες* οι σημειώσεις και τα συνημμένα "
+"σας πρόκειται να επανασυγχρονιστούν και να σταλούν χωρίς κρυπτογράφηση στον "
+"προορισμό συγχρονισμού. Θέλετε να συνεχίσετε;"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -838,284 +871,310 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
+"Αν ενεργοποιήσετε την κρυπτογράφηση *όλες* οι σημειώσεις και τα συνημμένα "
+"σας πρόκειται να επανασυγχρονιστούν και να σταλούν κρυπτογραφημένα στον "
+"προορισμό συγχρονισμού. Μην χάσετε τον κωδικό πρόσβασης γιατί, για λόγους "
+"ασφαλείας, αυτός θα είναι ο *μοναδικός* τρόπος για την αποκρυπτογράφηση των "
+"δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, πληκτρολογήστε τον "
+"κωδικό πρόσβασης παρακάτω."
 
 msgid "Disable encryption"
-msgstr ""
+msgstr "Απενεργοποίηση κρυπτογράφησης"
 
 msgid "Enable encryption"
-msgstr ""
+msgstr "Ενεργοποίηση κρυπτογράφησης"
 
 msgid "Master Keys"
-msgstr ""
+msgstr "Κύρια κλειδιά"
 
 msgid "Active"
-msgstr ""
+msgstr "Ενεργό"
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Source"
-msgstr ""
+msgstr "Πηγή"
 
 msgid "Created"
-msgstr ""
+msgstr "Δημιουργήθηκε"
 
 msgid "Updated"
-msgstr ""
+msgstr "Ενημερώθηκε"
 
 msgid "Password"
-msgstr ""
+msgstr "Κωδικός"
 
 msgid "Password OK"
-msgstr ""
+msgstr "Κωδικός OK"
 
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
+"Σημείωση: Μόνο ένα κύριο κλειδί (master key) πρόκειται να χρησιμοποιηθεί για "
+"την κρυπτογράφηση (το χαρακτηρισμένο ως \"ενεργό\"). Οποιοδήποτε από τα "
+"κλειδιά μπορεί να χρησιμοποιηθεί για αποκρυπτογράφηση, ανάλογα με τον τρόπο "
+"με τον οποίο οι σημειώσεις ή τα σημειωματάρια ήταν αρχικά κρυπτογραφημένα."
 
 msgid "Missing Master Keys"
-msgstr ""
+msgstr "Απουσία κυρίως κλειδιών"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
+"Τα κύρια κλειδιά με αυτά τα αναγνωριστικά (ID) χρησιμοποιούνται για την "
+"κρυπτογράφηση ορισμένων αντικειμένων σας, ωστόσο η εφαρμογή δεν έχει αυτή τη "
+"στιγμή πρόσβαση σε αυτά. Είναι πιθανό τελικά να ληφθούν μέσω συγχρονισμού."
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
+"Για περισσότερες πληροφορίες σχετικά με την κρυπτογράφηση End-To-End (E2EE) "
+"και συμβουλές σχετικά με τον τρόπο ενεργοποίησής της, ελέγξτε το εγχειρίδιο:"
 
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 msgid "Encryption is:"
-msgstr ""
+msgstr "Η κρυπτογράφηση είναι:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Επέκταση Firefox"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Web Store"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Λήψη τώρα:"
 
 msgid "Usage"
-msgstr ""
+msgstr "Χρήση"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
+"Θα δημιουργηθεί νέο σημειωματάριο \"% s\" και θα εισαχθεί το αρχείο \"% s\""
 
 msgid "Please create a notebook first."
-msgstr ""
+msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο."
 
 msgid "Please create a notebook first"
-msgstr ""
+msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο"
 
 msgid "Notebook title:"
-msgstr ""
+msgstr "Τίτλος σημειωματάριου:"
 
 msgid "Add or remove tags:"
-msgstr ""
+msgstr "Προσθήκη ή διαγραφή ετικετών:"
 
 msgid "Rename notebook:"
-msgstr ""
+msgstr "Μετονομασία σημειωματάριου:"
 
 msgid "Rename tag:"
-msgstr ""
+msgstr "Μετονομασία ετικέτας:"
 
 msgid "Set alarm:"
-msgstr ""
+msgstr "Ορισμός ειδοποίησης:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "Αρχείο προτύπου:"
 
 msgid "New note"
-msgstr ""
+msgstr "Νέα σημείωση"
 
 msgid "New to-do"
-msgstr ""
+msgstr "Νέο to-do"
 
 msgid "New notebook"
-msgstr ""
+msgstr "Νέο σημειωματάριο"
 
 msgid "Layout"
-msgstr ""
+msgstr "Διάταξη"
 
 msgid "Search..."
-msgstr ""
+msgstr "Αναζήτηση..."
 
 msgid "Some items cannot be synchronised."
-msgstr ""
+msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
 
 msgid "View them now"
-msgstr ""
+msgstr "Προβολή τώρα"
 
 msgid "One or more master keys need a password."
-msgstr ""
+msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
 
 msgid "Set the password"
-msgstr ""
+msgstr "Ορισμός κωδικού πρόσβασης"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
+"Δεν υπάρχουν σημειώσεις εδώ μέσα. Δημιουργήστε μία πατώντας στο \"Νέα "
+"σημείωση\"."
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
+"Δεν υπάρχει κανένα σημειωματάριο. Δημιουργήστε ένα πατώντας στο \"Νέο "
+"σημειωματάριο\"."
 
 msgid "Location"
-msgstr ""
+msgstr "Τοποθεσία"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note History"
-msgstr ""
+msgstr "Ιστορικό Σημειώσεων"
 
 msgid "Markup"
-msgstr ""
+msgstr "Markup"
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Προηγούμενες εκδόσεις αυτής της σημείωσης"
 
 msgid "Note properties"
-msgstr ""
+msgstr "Ιδιότητες σημείωσης"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
+"Η σημείωση \"%s\" έχει επαναφερθεί με επιτυχία στο σημειωματάριο \"%s\"."
 
 msgid "This note has no history"
-msgstr ""
+msgstr "Αυτή η σημείωση δεν έχει ιστορικό"
 
 msgid "Restore"
-msgstr ""
+msgstr "Επαναφορά"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Κάντε κλικ στο \"%s\" για να επαναφέρετε τη σημείωση. Θα αντιγραφεί στο "
+"σημειωματάριο που ονομάζεται \"%s\". Η τρέχουσα έκδοση της σημείωσης δεν "
+"αντικαθίσταται ή τροποποιείται."
 
 msgid "Open..."
-msgstr ""
+msgstr "Άνοιγμα..."
 
 #, javascript-format
 msgid "This file could not be opened: %s"
-msgstr ""
+msgstr "Αυτό το αρχείο δεν ήταν δυνατό να ανοιχτεί: %s"
 
 msgid "Save as..."
-msgstr ""
+msgstr "Αποθήκευση ως..."
 
 msgid "Copy path to clipboard"
-msgstr ""
+msgstr "Αντιγραφή διαδρομής στο πρόχειρο"
 
 msgid "Copy Link Address"
-msgstr ""
+msgstr "Αντιγραφή διεύθυνσης σύνδεσης"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί."
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr ""
+msgstr "Μη υποστηριζόμενος σύνδεσμος ή μήνυμα: %s"
 
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
+"Αυτή η σημείωση δεν περιέχει περιεχόμενο. Κάντε κλικ στο \"%s\" για να "
+"επεξεργαστείτε τη σημείωση στον editor."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
+msgstr "Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί ή να εξαχθεί σε PDF."
 
 msgid "PDF File"
-msgstr ""
+msgstr "Αρχείο PDF"
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr ""
+msgstr "Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
 
 msgid "strong text"
-msgstr ""
+msgstr "έντονη γραφή"
 
 msgid "emphasized text"
-msgstr ""
+msgstr "πλάγια γραφή"
 
 msgid "List item"
-msgstr ""
+msgstr "Στοιχείο λίστας"
 
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "Εισαγωγή υπερσύνδεσης"
 
 msgid "Attach file"
-msgstr ""
+msgstr "Επισύναψη αρχείου"
 
 msgid "Set alarm"
-msgstr ""
+msgstr "Ορισμός υπενθύμισης"
 
 #, javascript-format
 msgid "In: %s"
-msgstr ""
+msgstr "Στο: %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Υπερσύνδεση"
 
 msgid "Numbered List"
-msgstr ""
+msgstr "Αριθμημένη λίστα"
 
 msgid "Bulleted List"
-msgstr ""
+msgstr "Λίστα με κουκκίδες"
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Πλαίσιο ελέγχου"
 
 msgid "Heading"
-msgstr ""
+msgstr "Επικεφαλίδα"
 
 msgid "Horizontal Rule"
-msgstr ""
+msgstr "Οριζόντια Διαγράμμιση"
 
 msgid "Click to stop external editing"
-msgstr ""
+msgstr "Κάντε κλικ για να σταματήσετε την εξωτερική επεξεργασία"
 
 msgid "Watching..."
-msgstr ""
+msgstr "Παρακολούθηση..."
 
 msgid "to-do"
-msgstr ""
+msgstr "to-do"
 
 msgid "note"
-msgstr ""
+msgstr "σημείωση"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr ""
+msgstr "Δημιουργία νεου %s..."
 
 msgid "Refresh"
-msgstr ""
+msgstr "Ανανέωση"
 
 msgid "Clear"
-msgstr ""
+msgstr "Καθαρισμός"
 
 msgid "OneDrive Login"
-msgstr ""
+msgstr "Σύνδεση OneDrive"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Σύνδεση Dropbox"
 
 msgid "Options"
-msgstr ""
+msgstr "Επιλογές"
 
 msgid "Synchronisation Status"
-msgstr ""
+msgstr "Κατάσταση Συγχρονισμού"
 
 #, javascript-format
 msgid ""
@@ -1123,116 +1182,126 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
+"Διαγραφή σημειωματάριου \"%s\";\n"
+"\n"
+"Όλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν "
+"επίσης."
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr ""
+msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
 
 msgid "Delete"
-msgstr ""
+msgstr "Διαγραφή"
 
 msgid "Rename"
-msgstr ""
+msgstr "Μετονομασία"
 
 msgid "Notebooks"
-msgstr ""
+msgstr "Σημειωματάρια"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr ""
+msgstr "Αποκρυπτογράφηση αντικειμένων: %d/%d"
 
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr ""
+msgstr "Λήψη πόρων: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
 msgstr ""
+"Επιλέξτε την τοποθεσία στην οποία θα εξαχθεί η κατάσταση του συγχρονισμού"
 
 msgid "Retry"
-msgstr ""
+msgstr "Δοκιμή ξανά"
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "Προσθήκη ή αφαίρεση ετικετών"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Δημιουργία αντιγράφου"
 
 #, javascript-format
 msgid "%s - Copy"
-msgstr ""
+msgstr "%s - Αντίγραφο"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "Εναλλαγή μεταξύ σημείωσης και to-do"
 
 msgid "Switch to note type"
-msgstr ""
+msgstr "Αλλαγή σε σημείωση"
 
 msgid "Switch to to-do type"
-msgstr ""
+msgstr "Αλλαγή σε to-do"
 
 msgid "Copy Markdown link"
-msgstr ""
+msgstr "Αντιγραφή συνδέσμου Markdown"
 
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr ""
+msgstr "Διαγραφή σημείωσης \"%s\";"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr ""
+msgstr "Διαγραφή των σημειώσεων %d;"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"Πληκτρολογήστε έναν τίτλο σημείωσης για να μεταβείτε σε αυτήν. Ή "
+"πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας ή @ ακολουθούμενο από "
+"ένα σημειωματάριο."
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "Γρήγορη Μετακίνηση..."
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "Χρήση: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Άγνωστο flag: %s"
 
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 msgid "File system"
-msgstr ""
+msgstr "File system"
 
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 msgid "OneDrive"
-msgstr ""
+msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive Dev (For testing only)"
 
 msgid "WebDAV"
-msgstr ""
+msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "Άγνωστο log level: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "Άγνωστο level ID: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
+"Δεν είναι δυνατή η ανανέωση του token: δεν υπάρχουν δεδομένα ελέγχου "
+"ταυτότητας. Η επανεκκίνηση του συγχρονισμού, μπορεί να διορθώσει το πρόβλημα."
 
 msgid "Untitled"
-msgstr ""
+msgstr "Χωρίς τίτλο"
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -1242,71 +1311,77 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
+"Δεν ήταν δυνατός ο συγχρονισμός με το OneDrive.\n"
+"\n"
+"Αυτό το σφάλμα συμβαίνει συχνά όταν χρησιμοποιείτε το OneDrive for Business, "
+"το οποίο δυστυχώς δεν υποστηρίζεται.\n"
+"\n"
+"Παρακαλώ σκεφτείτε να χρησιμοποιήσετε έναν κανονικό λογαριασμό OneDrive."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr ""
+msgstr "Δεν είναι δυνατή η πρόσβαση στο %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr ""
+msgstr "Δημιουργημένα τοπικά στοιχεία: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr ""
+msgstr "Ενημερωμένα τοπικά στοιχεία: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr ""
+msgstr "Δημιουργημένα απομακρυσμένα στοιχεία: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr ""
+msgstr "Ενημερωμένα απομακρυσμένα στοιχεία: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr ""
+msgstr "Διαγραμμένα τοπικά στοιχεία: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr ""
+msgstr "Διαγραμμένα απομακρυσμένα στοιχεία: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr ""
+msgstr "Ληφθέντα στοιχεία: %d/%d."
 
 msgid "Cancelling..."
-msgstr ""
+msgstr "Ακύρωση..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr ""
+msgstr "Ολοκληρώθηκε: %s"
 
 #, javascript-format
 msgid "Last error: %s"
-msgstr ""
+msgstr "Τελευταίο σφάλμα: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "Αδρανής"
 
 msgid "In progress"
-msgstr ""
+msgstr "Σε εξέλιξη"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
+msgstr "Ο συγχρονισμός είναι ήδη σε εξέλιξη. Κατάσταση: %s"
 
 msgid "Encrypted"
-msgstr ""
+msgstr "Κρυπτογραφημένο"
 
 msgid "Encrypted items cannot be modified"
-msgstr ""
+msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
 
 msgid "title"
-msgstr ""
+msgstr "τίτλος"
 
 msgid "updated date"
-msgstr ""
+msgstr "ημερομηνία ενημέρωσης"
 
 msgid "Conflicts"
 msgstr ""
