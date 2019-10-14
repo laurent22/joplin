@@ -60,6 +60,7 @@ class MdToHtml {
 		}
 
 		const breaks_ = Setting.value('markdown.softbreaks') ? false : true;
+		const typographer_ = Setting.value('markdown.typographer') ? true : false;
 
 		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(style)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
@@ -75,6 +76,7 @@ class MdToHtml {
 
 		const markdownIt = new MarkdownIt({
 			breaks: breaks_,
+			typographer: typographer_,
 			linkify: true,
 			html: true,
 			highlight: (str, lang) => {
