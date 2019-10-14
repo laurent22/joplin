@@ -3,9 +3,6 @@
 daysUntilStale: 90
 # Number of days of inactivity before a stale issue is closed
 daysUntilClose: 7
-# After x days, lock the issue.
-daysUntilLock: 1
-lockComment: false
 # Issues with these labels will never be considered stale
 exemptLabels:
   - "good first issue"
