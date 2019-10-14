@@ -290,7 +290,7 @@ class SideBarComponent extends React.Component {
 			menu.append(
 				new MenuItem({
 					label: _('New sub-notebook'),
-					click: async () => {
+					click: () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'newSubNotebook',

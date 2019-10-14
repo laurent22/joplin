@@ -111,18 +111,9 @@ class MainScreenComponent extends React.Component {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
+								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
-							}
-
-							if (command.name === 'newSubNotebook') {
-								let subFolder = null;
-								try  {
-									subFolder = await Folder.moveToFolder(folder.id, command.activeFolderId);
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-								}
-								folder = subFolder;
 							}
 
 							if (folder) {
