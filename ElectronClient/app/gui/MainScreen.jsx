@@ -102,7 +102,7 @@ class MainScreenComponent extends React.Component {
 			} else {
 				await createNewNote(null, true);
 			}
-		} else if (command.name === 'newNotebook') {
+		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
@@ -113,6 +113,16 @@ class MainScreenComponent extends React.Component {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
+							}
+
+							if (command.name === 'newSubNotebook') {
+								let subFolder = null;
+								try  {
+									subFolder = await Folder.moveToFolder(folder.id, command.activeFolderId);
+								} catch (error) {
+									bridge().showErrorMessageBox(error.message);
+								}
+								folder = subFolder;
 							}
 
 							if (folder) {
