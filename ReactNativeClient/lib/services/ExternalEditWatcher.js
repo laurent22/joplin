@@ -195,7 +195,7 @@ class ExternalEditWatcher {
 		};
 	}
 
-	async spawn(path, args, options, onClose) {
+	async spawn(path, args, options) {
 		return new Promise((resolve, reject) => {
 
 			const wrapError = error => {
@@ -221,7 +221,9 @@ class ExternalEditWatcher {
 					clearInterval(iid);
 					reject(wrapError(error));
 				});
-				subProcess.on('close', onClose);
+				if (options.onClose) {
+					subProcess.on('close', options.onClose);
+				}
 			} catch (error) {
 				throw wrapError(error);
 			}
@@ -243,10 +245,10 @@ class ExternalEditWatcher {
 			bridge().openExternal(`file://${file}`);
 		}
 
-		return this.spawn(path, [file], {}, onClose);
+		return this.spawn(path, [file], { onClose: onClose });
 	}
 
-	async spawnCommand(path, args, options, onClose) {
+	async spawnCommand(path, args, options) {
 		// App bundles need to be opened using the `open` command.
 		// Additional args can be specified after --args, and the
 		// -n flag is needed to ensure that the app is always launched
@@ -264,7 +266,7 @@ class ExternalEditWatcher {
 			path = 'open';
 		}
 
-		return this.spawn(path, args, options, onClose);
+		return this.spawn(path, args, options);
 	}
 
 	async openAndWatch(note) {
@@ -285,7 +287,7 @@ class ExternalEditWatcher {
 			await this.spawnDefault(filePath, onClose);
 		} else {
 			cmd.args.push(filePath);
-			await this.spawnCommand(cmd.path, cmd.args, { detached: true }, onClose);
+			await this.spawnCommand(cmd.path, cmd.args, { detached: true, onClose: onClose });
 		}
 
 		this.dispatch({
