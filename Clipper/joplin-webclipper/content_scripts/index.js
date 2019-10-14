@@ -83,14 +83,18 @@
 	}
 
 	function getAnchorNames(element) {
-		const anchors = element.getElementsByTagName('a');
 		const output = [];
-		for (let i = 0; i < anchors.length; i++) {
-			const anchor = anchors[i];
-			if (anchor.id) {
-				output.push(anchor.id);
-			} else if (anchor.name) {
-				output.push(anchor.name);
+		// Anchor names are normally in A tags but can be in SPAN too
+		// https://github.com/laurent22/joplin-turndown/commit/45f4ee6bf15b8804bdc2aa1d7ecb2f8cb594b8e5#diff-172b8b2bc3ba160589d3a7eeb4913687R232
+		for (const tagName of ['a', 'span']) {
+			const anchors = element.getElementsByTagName(tagName);
+			for (let i = 0; i < anchors.length; i++) {
+				const anchor = anchors[i];
+				if (anchor.id) {
+					output.push(anchor.id);
+				} else if (anchor.name) {
+					output.push(anchor.name);
+				}
 			}
 		}
 		return output;

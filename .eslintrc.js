@@ -72,7 +72,11 @@ module.exports = {
 			"anonymous": "never",
 			"named": "never",
 			"asyncArrow": "always"
-		}]
+		}],
+		"multiline-comment-style": ["error", "separate-lines"],
+		"space-before-blocks": "error",
+		"spaced-comment": ["error", "always"],
+		"keyword-spacing": ["error", { "before": true, "after": true }]
 	},
 	"plugins": [
 		"react",

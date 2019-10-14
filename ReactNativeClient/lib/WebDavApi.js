@@ -63,7 +63,7 @@ class WebDavApi {
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
 			// Tried various things like the below, but it didn't work on React Native:
-			//return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
+			// return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
 			return base64.encode(`${this.options_.username()}:${this.options_.password()}`);
 		} catch (error) {
 			error.message = `Cannot encode username/password: ${error.message}`;

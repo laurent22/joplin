@@ -208,6 +208,11 @@ class Command extends BaseCommand {
 				lines.push('');
 				lines.push('Gets all the tags attached to this note.');
 				lines.push('');
+
+				lines.push('## GET /notes/:id/resources');
+				lines.push('');
+				lines.push('Gets all the resources attached to this note.');
+				lines.push('');
 			}
 
 			if (model.type === BaseModel.TYPE_FOLDER) {

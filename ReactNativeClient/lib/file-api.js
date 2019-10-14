@@ -131,7 +131,7 @@ class FileApi {
 
 		this.logger().debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			let temp = [];
@@ -148,7 +148,7 @@ class FileApi {
 	setTimestamp(path, timestampMs) {
 		this.logger().debug(`setTimestamp ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
-		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+		// return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {

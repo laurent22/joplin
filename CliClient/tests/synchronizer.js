@@ -1027,8 +1027,8 @@ describe('Synchronizer', function() {
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as
 		// plain text to the sync target.
-		//let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
-		//expect(hasThrown).toBe(true);
+		// let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		// expect(hasThrown).toBe(true);
 
 		// Now supply the password, and decrypt the items
 		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
@@ -1505,5 +1505,40 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		expect((await Note.all()).length).toBe(11);
 	}));
+
+	it('should not sync if client sync version is lower than target', asyncTest(async () => {
+		// This should work - syncing two clients with same supported sync target version
+		await synchronizer().start();
+		await switchClient(2);
+		await synchronizer().start();
+
+		// This should not work - syncing two clients, but one of them has not been upgraded yet to the latest sync version
+		await switchClient(1);
+		Setting.setConstant('syncVersion', 2);
+		await synchronizer().start();
+
+		await switchClient(2);
+		Setting.setConstant('syncVersion', 1);
+		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not sync when target is locked', asyncTest(async () => {
+		await synchronizer().start();
+		await synchronizer().acquireLock_();
+
+		await switchClient(2);
+		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should clear a lock if it was created by the same app as the current one', asyncTest(async () => {
+		await synchronizer().start();
+		await synchronizer().acquireLock_();
+		expect((await synchronizer().lockFiles_()).length).toBe(1);
+		await synchronizer().start({ throwOnError: true });
+		expect((await synchronizer().lockFiles_()).length).toBe(0);
+	}));
+
 
 });

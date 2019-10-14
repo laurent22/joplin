@@ -386,7 +386,7 @@ function themeStyle(theme) {
 
 		// For WebView - must correspond to the properties above
 		htmlFontSize: `${Math.round(15 * zoomRatio)}px`,
-		htmlLineHeight: '1.6em', //Math.round(20 * zoomRatio) + 'px'
+		htmlLineHeight: '1.6em', // Math.round(20 * zoomRatio) + 'px'
 
 		htmlCodeFontSize: '.9em',
 	};

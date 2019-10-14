@@ -164,14 +164,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		};
 
-		this.refreshResource = async resource => {
-			if (!this.state.note || !this.state.note.body) return;
-			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			if (resourceIds.indexOf(resource.id) >= 0 && this.refs.noteBodyViewer) {
+		this.refreshResource = async (resource, noteBody = null) => {
+			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
+			if (noteBody === null) return;
+
+			const resourceIds = await Note.linkedResourceIds(noteBody);
+			if (resourceIds.indexOf(resource.id) >= 0) {
 				shared.clearResourceCache();
-				const attachedResources = await shared.attachedResources(this.state.note.body);
+				const attachedResources = await shared.attachedResources(noteBody);
 				this.setState({ noteResources: attachedResources }, () => {
-					this.refs.noteBodyViewer.rebuildMd();
+					if (this.refs.noteBodyViewer) this.refs.noteBodyViewer.rebuildMd();
 				});
 			}
 		};
@@ -410,7 +412,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
 		reg.logger().info(`Resizing image ${localFilePath}`);
-		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); //, 0, targetPath);
+		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
 
 		const resizedImagePath = resizedImage.uri;
 		reg.logger().info('Resized image ', resizedImagePath);
@@ -512,7 +514,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		newNote.body += `\n${resourceTag}`;
 		this.setState({ note: newNote });
 
-		this.refreshResource(resource);
+		this.refreshResource(resource, newNote.body);
 
 		this.scheduleSave();
 	}

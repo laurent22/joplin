@@ -7,6 +7,9 @@ const Setting = require('lib/models/Setting');
 var katex = require('katex');
 const katexCss = require('lib/csstojs/katex.css.js');
 const md5 = require('md5');
+const mhchemModule = require('./katex_mhchem.js');
+
+katex = mhchemModule(katex);
 
 // const style = `
 // 	/*

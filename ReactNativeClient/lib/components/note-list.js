@@ -61,7 +61,7 @@ class NoteListComponent extends Component {
 	}
 
 	filterNotes(notes) {
-		const todoFilter = 'all'; //Setting.value('todoFilter');
+		const todoFilter = 'all'; // Setting.value('todoFilter');
 		if (todoFilter == 'all') return notes;
 
 		const now = time.unixMs();

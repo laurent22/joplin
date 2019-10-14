@@ -31,6 +31,12 @@ class Setting extends BaseModel {
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		this.metadata_ = {
+			'clientId': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: false,
+			},
+
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
 				type: Setting.TYPE_INT,
@@ -297,6 +303,7 @@ class Setting extends BaseModel {
 				},
 			},
 			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
+			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
 			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
 			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
 			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
@@ -401,6 +408,23 @@ class Setting extends BaseModel {
 			tagHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			folderHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			editor: { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+				return {
+					'A4': _('A4'),
+					'Letter': _('Letter'),
+					'A3': _('A3'),
+					'A5': _('A5'),
+					'Tabloid': _('Tabloid'),
+					'Legal': _('Legal'),
+				};
+			}},
+			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+				return {
+					'portrait': _('Portrait'),
+					'landscape': _('Landscape'),
+				};
+			}},
+
 
 			'net.customCertificates': {
 				value: '',
@@ -917,6 +941,7 @@ Setting.constants_ = {
 	templateDir: '',
 	tempDir: '',
 	openDevTools: false,
+	syncVersion: 1,
 };
 
 Setting.autoSaveEnabled = true;

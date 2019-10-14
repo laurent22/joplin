@@ -287,6 +287,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
 <li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
@@ -389,10 +390,70 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 <td><pre>One rule:<br>***<br>Another rule:<br>---</pre></td>
 <td>One rule:<hr><br>Another rule:<br><hr></td>
 </tr>
+<tr>
+<td><strong>Tables</strong></td>
+<td><a href="#tables">See below</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Tables<a name="tables" href="#tables" class="heading-anchor">🔗</a></h3>
+<p>Tables are created using pipes <code>|</code> and and hyphens <code>-</code>. This is a Markdown table:</p>
+<pre><code>| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+</code></pre>
+<p>Which is rendered as:</p>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
+<p>Note that there must be at least 3 dashes separating each header cell.</p>
+<p>Colons can be used to align columns:</p>
+<pre><code>| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+</code></pre>
+<p>Which is rendered as:</p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Are</th>
+<th style="text-align:right">Cool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
 </tbody>
 </table>
 <h2>Joplin Extras<a name="joplin-extras" href="#joplin-extras" class="heading-anchor">🔗</a></h2>
-<p>Joplin uses and renders <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Github-flavoured Markdown</a> with a few variations and additions. In particular:</p>
+<p>Besides the standard Mardkown syntax, Joplin supports several additional features.</p>
 <h3>Links to other notes<a name="links-to-other-notes" href="#links-to-other-notes" class="heading-anchor">🔗</a></h3>
 <p>You can create a link to a note by specifying its ID in the URL. For example:</p>
 <pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
@@ -412,7 +473,10 @@ f(x) = \int_{-\infty}^\infty
 $$
 </code></pre>
 <p>Here is an example with the Markdown and rendered result side by side:</p>
-<img src="https://joplinapp.org/images/Katex.png" height="400px">
+<img src="https://joplinapp.org/images/Katex.png" height="345px">
+<h3>Chemical equations<a name="chemical-equations" href="#chemical-equations" class="heading-anchor">🔗</a></h3>
+<p>Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the <a href="https://mhchem.github.io/MathJax-mhchem/">mhchem documentation</a> for the syntax.</p>
+<img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
 <h3>Checkboxes<a name="checkboxes" href="#checkboxes" class="heading-anchor">🔗</a></h3>
 <p>Checkboxes can be added like so:</p>
 <pre><code>- [ ] Milk

@@ -238,11 +238,7 @@ class BaseItem extends BaseModel {
 	static serialize_format(propName, propValue) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
-			propValue =
-				`${moment
-					.unix(propValue / 1000)
-					.utc()
-					.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
+			propValue = `${moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
 		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.stringify(propValue);
