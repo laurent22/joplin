@@ -145,6 +145,8 @@ class MdToHtml {
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, {
 			slugify: s => uslug(s),
+			permalink: true,
+			permalinkSpace: false,
 		});
 
 		for (let key in plugins) {
