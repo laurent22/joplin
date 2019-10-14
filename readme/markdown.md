@@ -88,7 +88,13 @@ For example:
 
 Here is an example with the Markdown and rendered result side by side:
 
-<img src="https://joplinapp.org/images/Katex.png" height="400px">
+<img src="https://joplinapp.org/images/Katex.png" height="345px">
+
+### Chemical equations
+
+Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the [mhchem documentation](https://mhchem.github.io/MathJax-mhchem/) for the syntax.
+
+<img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
 
 ### Checkboxes
 
