@@ -1384,28 +1384,30 @@ msgid "updated date"
 msgstr "ημερομηνία ενημέρωσης"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Συγχύσεις"
 
 msgid "Cannot move notebook to this location"
-msgstr ""
+msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
+"Τα σημειωματάρια δεν μπορούν να ονομαστούν  \"%s\", που είναι δεσμευμένος "
+"τίτλος."
 
 msgid "created date"
-msgstr ""
+msgstr "ημερομηνία δημιουργίας"
 
 msgid "This note does not have geolocation information."
-msgstr ""
+msgstr "Αυτή η σημείωση δεν διαθέτει πληροφορίες γεωγραφικής θέσης."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr ""
+msgstr "Δεν είναι δυνατή η αντιγραφή της σημείωσης στο σημειωματάριο \"%s\""
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr ""
+msgstr "Δεν είναι δυνατή η μετακίνηση της σημείωσης στο σημειωματάριο \"%s\""
 
 #, javascript-format
 msgid ""
@@ -1413,149 +1415,159 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
+"Προσοχή: Αν αλλάξετε αυτή τη θέση, βεβαιωθείτε ότι αντιγράφετε όλο το "
+"περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα "
+"αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
 
 msgid "Synchronisation target"
-msgstr ""
+msgstr "Στόχος συγχρονισμού"
 
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
+"Ο προορισμός συγχρονισμού. Κάθε προορισμός συγχρονισμού μπορεί να έχει "
+"πρόσθετες παραμέτρους οι οποίες ονομάζονται ως `sync.NUM.NAME` (οι οποίες "
+"αναφέρονται παρακάτω)."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr ""
+msgstr "Φάκελος για συγχρονισμό (absolute path)"
 
 msgid "Nextcloud WebDAV URL"
-msgstr ""
+msgstr "Nextcloud WebDAV URL"
 
 msgid "Nextcloud username"
-msgstr ""
+msgstr "Nextcloud username"
 
 msgid "Nextcloud password"
-msgstr ""
+msgstr "Nextcloud password"
 
 msgid "WebDAV URL"
-msgstr ""
+msgstr "WebDAV URL"
 
 msgid "WebDAV username"
-msgstr ""
+msgstr "WebDAV username"
 
 msgid "WebDAV password"
-msgstr ""
+msgstr "WebDAV password"
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Συμπεριφορά λήψης συνημμένων"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"Στη \"Χειροκίνητη\" λειτουργία, τα συνημμένα λαμβάνονται μόνο όταν κάνετε "
+"κλικ σε αυτά. Στην \"Αυτόματη\" λειτουργία, λαμβάνονται όταν ανοίγετε τη "
+"σημείωση. Στην λειτουργία \"Πάντα\", όλα τα συνημμένα λαμβάνονται είτε "
+"ανοίγετε τη σημείωση είτε όχι."
 
 msgid "Always"
-msgstr ""
+msgstr "Πάντα"
 
 msgid "Manual"
-msgstr ""
+msgstr "Χειροκίνητα"
 
 msgid "Auto"
-msgstr ""
+msgstr "Αυτόματα"
 
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Μέγιστος αριθμός ταυτόχρονων συνδέσεων"
 
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 msgid "Date format"
-msgstr ""
+msgstr "Μορφή ημερομηνίας"
 
 msgid "Time format"
-msgstr ""
+msgstr "Μορφή ώρας"
 
 msgid "Theme"
-msgstr ""
+msgstr "Θέμα"
 
 msgid "Light"
-msgstr ""
+msgstr "Light"
 
 msgid "Dark"
-msgstr ""
+msgstr "Dark"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised Light"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised Dark"
 
 msgid "Uncompleted to-dos on top"
-msgstr ""
+msgstr "Μη ολοκληρωμένα to-dos στην κορυφή"
 
 msgid "Show completed to-dos"
-msgstr ""
+msgstr "Εμφάνιση ολοκληρωμένων to-dos"
 
 msgid "Sort notes by"
-msgstr ""
+msgstr "Ταξινόμηση σημειώσεων κατά"
 
 msgid "Reverse sort order"
-msgstr ""
+msgstr "Αντίστροφη σειρά ταξινόμησης"
 
 msgid "Sort notebooks by"
-msgstr ""
+msgstr "Ταξινόμηση σημειωματάριων κατά"
 
 msgid "Save geo-location with notes"
-msgstr ""
+msgstr "Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
 
 msgid "When creating a new to-do:"
-msgstr ""
+msgstr "Κατά τη δημιουργία ενός νέου to-do:"
 
 msgid "Focus title"
-msgstr ""
+msgstr "Eστίαση στον τίτλο"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Eστίαση στο σώμα"
 
 msgid "When creating a new note:"
-msgstr ""
+msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:"
 
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Ενεργοποίηση soft breaks"
 
 msgid "Enable math expressions"
-msgstr ""
+msgstr "Ενεργοποίηση math expressions"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Ενεργοποίηση ==mark== syntax"
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Ενεργοποίηση footnotes"
 
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Ενεργοποίηση επέκτασης table of contents"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Ενεργοποίηση ~sub~ syntax"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Ενεργοποίηση ^sup^ syntax"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Ενεργοποίηση deflist syntax"
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "Ενεργοποίηση abbreviation syntax"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Ενεργοποίηση markdown emoji"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "Ενεργοποίηση ++insert++ syntax"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Ενεργοποίηση επέκτασης multimarkdown table"
 
 msgid "Enable Fountain syntax support"
-msgstr ""
+msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
 msgid "Show tray icon"
 msgstr ""
