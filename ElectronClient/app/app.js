@@ -865,8 +865,7 @@ class Application extends BaseApplication {
 							name: 'toggleSidebar',
 						});
 					},
-				},
-				{
+				}, {
 					label: _('Toggle note list'),
 					screens: ['Main'],
 					click: () => {
