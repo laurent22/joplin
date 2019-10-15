@@ -242,7 +242,14 @@ class ExternalEditWatcher {
 			path = 'xdg-open';
 		} else {
 			// Fallback on the electron open method
-			bridge().openExternal(`file://${file}`);
+			return new Promise((resolve, reject) => {
+
+				if (bridge().openExternal(`file://${file}`)) {
+					resolve();
+				} else {
+					reject(new Error('Unknown failure'));
+				}
+			});
 		}
 
 		return this.spawn(path, [file], { onClose: onClose });
