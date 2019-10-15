@@ -451,7 +451,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Toggle note list'),
-			iconName: 'fa-bars',
+			iconName: 'fa-tasks',
 			iconRotation: noteListVisibility ? 0 : 90,
 			onClick: () => {
 				this.doCommand({ name: 'toggleNoteList' });
