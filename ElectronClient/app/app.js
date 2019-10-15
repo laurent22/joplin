@@ -44,6 +44,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	windowCommand: null,
 	noteVisiblePanes: ['editor', 'viewer'],
 	sidebarVisibility: true,
+	notelistVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
@@ -154,6 +155,16 @@ class Application extends BaseApplication {
 				newState.sidebarVisibility = action.visibility;
 				break;
 
+			case 'NOTELIST_VISIBILITY_TOGGLE':
+				newState = Object.assign({}, state);
+				newState.notelistVisibility = !state.notelistVisibility;
+				break;
+
+			case 'NOTELIST_VISIBILITY_SET':
+				newState = Object.assign({}, state);
+				newState.notelistVisibility = action.visibility;
+				break;
+
 			case 'NOTE_FILE_WATCHER_ADD':
 
 				if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
@@ -243,6 +254,10 @@ class Application extends BaseApplication {
 
 		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('sidebarVisibility', newState.sidebarVisibility);
+		}
+
+		if (['NOTELIST_VISIBILITY_TOGGLE', 'NOTELIST_VISIBILITY_SET'].indexOf(action.type) >= 0) {
+			Setting.setValue('notelistVisibility', newState.notelistVisibility);
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
@@ -848,6 +863,16 @@ class Application extends BaseApplication {
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'toggleSidebar',
+						});
+					},
+				},
+				{
+					label: _('Toggle note list'),
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'toggleNoteList',
 						});
 					},
 				}, {

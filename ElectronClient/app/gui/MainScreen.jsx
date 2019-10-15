@@ -69,6 +69,12 @@ class MainScreenComponent extends React.Component {
 		});
 	}
 
+	toggleNoteList() {
+		this.props.dispatch({
+			type: 'NOTELIST_VISIBILITY_TOGGLE',
+		});
+	}
+
 	async doCommand(command) {
 		if (!command) return;
 
@@ -435,6 +441,15 @@ class MainScreenComponent extends React.Component {
 		});
 
 		headerItems.push({
+			title: _('Toggle note list'),
+			iconName: 'fa-bars',
+			iconRotation: this.props.notelistVisibility ? 0 : 90,
+			onClick: () => {
+				this.doCommand({ name: 'toggleNoteList' });
+			},
+		});
+
+		headerItems.push({
 			title: _('New note'),
 			iconName: 'fa-file-o',
 			enabled: !!folders.length && !onConflictFolder,
@@ -577,6 +592,7 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		noteVisiblePanes: state.noteVisiblePanes,
 		sidebarVisibility: state.sidebarVisibility,
+		notelistVisibility: state.notelistVisibility,
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
