@@ -139,13 +139,11 @@ msgstr "마스터 키를 넣어주세요:"
 msgid "Operation cancelled"
 msgstr "작업이 중지되었습니다"
 
-#, fuzzy
 msgid "Confirm master password:"
 msgstr "마스터 키를 넣어주세요:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "암호를 입력해야만 합니다"
+msgstr "비밀번호가 맞지 않습니다!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -589,7 +587,7 @@ msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기�
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "내보낼 노트를 찾을수 없습니다: %s"
 
 msgid "&File"
 msgstr "파일"
@@ -734,9 +732,8 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "복구된 노트들"
+msgstr "전체 릴리즈된 노트들"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "토큰이 클립보드로 복사되었습니다!"
@@ -952,9 +949,8 @@ msgstr "알람 설정:"
 msgid "Template file:"
 msgstr "템플릿 파일:"
 
-#, fuzzy
 msgid "Toggle note list"
-msgstr "노트 목록"
+msgstr "노트 목록 토글"
 
 msgid "New note"
 msgstr "새 노트"
@@ -1142,7 +1138,7 @@ msgid "Synchronisation Status"
 msgstr "동기화 상태"
 
 msgid "Remove"
-msgstr ""
+msgstr "삭제"
 
 #, javascript-format
 msgid ""
@@ -1455,7 +1451,7 @@ msgid "Dark"
 msgstr "어두움"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
 msgstr "Solarized Light"
@@ -1496,9 +1492,8 @@ msgstr "새 노트를 만들 때:"
 msgid "Enable soft breaks"
 msgstr "소프트 브레이크 허용"
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Fountain 구문 지원 허용"
+msgstr "typographer 지원 허용"
 
 msgid "Enable math expressions"
 msgstr "수학 정규식 허용"
@@ -1609,34 +1604,34 @@ msgstr ""
 "니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "PDF로 내보낼때 페이지 크기"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "타블로이드"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "PDF를 내보낼때의 페이지 방향"
 
 msgid "Portrait"
-msgstr ""
+msgstr "포트레이트"
 
 msgid "Landscape"
-msgstr ""
+msgstr "랜드스케이프"
 
 msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
@@ -2017,19 +2012,16 @@ msgid "Password:"
 msgstr "암호:"
 
 msgid "Password cannot be empty"
-msgstr "암호를 입력해야만 합니다"
+msgstr "암호가 비어져 있으면 안됩니다"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "암호를 입력해야만 합니다"
+msgstr "비밀번호 확인칸은 비어져 있으면 안됩니다"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "마스터 키를 넣어주세요:"
+msgstr "비밀번호 확인:"
 
-#, fuzzy
 msgid "Confirm password"
-msgstr "마스터 키를 넣어주세요:"
+msgstr "마스터 키를 넣어주세요"
 
 msgid "Enable"
 msgstr "활성화"
