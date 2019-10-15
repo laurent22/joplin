@@ -56,7 +56,7 @@ async function initialize() {
 
 	store.dispatch({
 		type: 'NOTELIST_VISIBILITY_SET',
-		visibility: Setting.value('notelistVisibility'),
+		visibility: Setting.value('noteListVisibility'),
 	});
 }
 

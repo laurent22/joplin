@@ -44,7 +44,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	windowCommand: null,
 	noteVisiblePanes: ['editor', 'viewer'],
 	sidebarVisibility: true,
-	notelistVisibility: true,
+	noteListVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
@@ -157,12 +157,12 @@ class Application extends BaseApplication {
 
 			case 'NOTELIST_VISIBILITY_TOGGLE':
 				newState = Object.assign({}, state);
-				newState.notelistVisibility = !state.notelistVisibility;
+				newState.noteListVisibility = !state.noteListVisibility;
 				break;
 
 			case 'NOTELIST_VISIBILITY_SET':
 				newState = Object.assign({}, state);
-				newState.notelistVisibility = action.visibility;
+				newState.noteListVisibility = action.visibility;
 				break;
 
 			case 'NOTE_FILE_WATCHER_ADD':
@@ -257,7 +257,7 @@ class Application extends BaseApplication {
 		}
 
 		if (['NOTELIST_VISIBILITY_TOGGLE', 'NOTELIST_VISIBILITY_SET'].indexOf(action.type) >= 0) {
-			Setting.setValue('notelistVisibility', newState.notelistVisibility);
+			Setting.setValue('noteListVisibility', newState.noteListVisibility);
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {

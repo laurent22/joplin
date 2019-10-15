@@ -250,6 +250,8 @@ class MainScreenComponent extends React.Component {
 			this.toggleVisiblePanes();
 		} else if (command.name === 'toggleSidebar') {
 			this.toggleSidebar();
+		} else if (command.name === 'toggleNoteList') {
+			this.toggleNoteList();
 		} else if (command.name === 'showModalMessage') {
 			this.setState({
 				modalLayer: {
@@ -336,8 +338,8 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, sidebarWidth, noteListWidth) {
-		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, sidebarWidth, noteListWidth].join('_');
+	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth) {
+		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -386,6 +388,11 @@ class MainScreenComponent extends React.Component {
 			verticalAlign: 'top',
 		};
 
+		if (isNoteListVisible === false) {
+			this.styles_.noteList.width = 0;
+			this.styles_.noteList.display = 'none';
+		}
+
 		this.styles_.noteText = {
 			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10),
 			height: rowHeight,
@@ -426,7 +433,8 @@ class MainScreenComponent extends React.Component {
 		const notes = this.props.notes;
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const noteListVisibility = this.props.noteListVisibility;
+		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
@@ -443,7 +451,7 @@ class MainScreenComponent extends React.Component {
 		headerItems.push({
 			title: _('Toggle note list'),
 			iconName: 'fa-bars',
-			iconRotation: this.props.notelistVisibility ? 0 : 90,
+			iconRotation: noteListVisibility ? 0 : 90,
 			onClick: () => {
 				this.doCommand({ name: 'toggleNoteList' });
 			},
@@ -592,7 +600,7 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		noteVisiblePanes: state.noteVisiblePanes,
 		sidebarVisibility: state.sidebarVisibility,
-		notelistVisibility: state.notelistVisibility,
+		noteListVisibility: state.noteListVisibility,
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
