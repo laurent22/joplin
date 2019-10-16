@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -137,13 +139,11 @@ msgstr "마스터 키를 넣어주세요:"
 msgid "Operation cancelled"
 msgstr "작업이 중지되었습니다"
 
-#, fuzzy
 msgid "Confirm master password:"
 msgstr "마스터 키를 넣어주세요:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "암호를 입력해야만 합니다"
+msgstr "비밀번호가 맞지 않습니다!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -587,7 +587,7 @@ msgstr "\"%s\"에 \"%s\" 포맷으로 내보내는 중입니다. 잠시만 기�
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "내보낼 노트를 찾을수 없습니다: %s"
 
 msgid "&File"
 msgstr "파일"
@@ -732,9 +732,8 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "복구된 노트들"
+msgstr "전체 릴리즈된 노트들"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "토큰이 클립보드로 복사되었습니다!"
@@ -803,7 +802,7 @@ msgstr ""
 "다."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "이는 새로운 스크린을 열 것입니다. 현재 변경 사안을 저장하시겠습니까?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -910,13 +909,13 @@ msgid "Encryption is:"
 msgstr "암호화는 다음과 같습니다:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox 확장"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome 웹 스토어"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "설치하기:"
 
 msgid "Usage"
 msgstr "사용 방법"
@@ -1136,7 +1135,7 @@ msgid "Synchronisation Status"
 msgstr "동기화 상태"
 
 msgid "Remove"
-msgstr ""
+msgstr "삭제"
 
 #, javascript-format
 msgid ""
@@ -1449,7 +1448,7 @@ msgid "Dark"
 msgstr "어두움"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
 msgstr "Solarized Light"
@@ -1490,9 +1489,8 @@ msgstr "새 노트를 만들 때:"
 msgid "Enable soft breaks"
 msgstr "소프트 브레이크 허용"
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Fountain 구문 지원 허용"
+msgstr "typographer 지원 허용"
 
 msgid "Enable math expressions"
 msgstr "수학 정규식 허용"
@@ -1553,9 +1551,8 @@ msgstr "전체 확대 비율"
 msgid "Editor font size"
 msgstr "편집기 글꼴 크기"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "편집기 글꼴 크기"
+msgstr "편집기 글꼴"
 
 msgid "Editor font family"
 msgstr "편집기 글꼴 모음"
@@ -1604,34 +1601,34 @@ msgstr ""
 "니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "PDF로 내보낼때 페이지 크기"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "타블로이드"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "PDF를 내보낼때의 페이지 방향"
 
 msgid "Portrait"
-msgstr ""
+msgstr "포트레이트"
 
 msgid "Landscape"
-msgstr ""
+msgstr "랜드스케이프"
 
 msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
@@ -1654,6 +1651,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"안전 장치: 동기화 목표가 비어 있을시 로컬 데이터를 지우시지 마세요 (종종 잘못"
+"된 설정이나 버그로 인해 발생됩니다)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -1697,13 +1696,11 @@ msgstr "플러그인"
 msgid "Application"
 msgstr "애플리케이션"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "암호화는 다음과 같습니다:"
+msgstr "암호화"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "웹 수집기 옵션"
+msgstr "웹 수집기"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1718,13 +1715,11 @@ msgstr "마크다운"
 msgid "Joplin Export Directory"
 msgstr "Joplin 내보내기 폴더"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "에버노트 내보내기 파일"
+msgstr "에버노트 내보내기 파일 (마크다운으로)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "에버노트 내보내기 파일"
+msgstr "에버노트 내보내기 파일 (HTML 으로)"
 
 msgid "Json Export Directory"
 msgstr "Json 내보내기 폴더"
@@ -2014,19 +2009,16 @@ msgid "Password:"
 msgstr "암호:"
 
 msgid "Password cannot be empty"
-msgstr "암호를 입력해야만 합니다"
+msgstr "암호가 비어져 있으면 안됩니다"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "암호를 입력해야만 합니다"
+msgstr "비밀번호 확인칸은 비어져 있으면 안됩니다"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "마스터 키를 넣어주세요:"
+msgstr "비밀번호 확인:"
 
-#, fuzzy
 msgid "Confirm password"
-msgstr "마스터 키를 넣어주세요:"
+msgstr "마스터 키를 넣어주세요"
 
 msgid "Enable"
 msgstr "활성화"
