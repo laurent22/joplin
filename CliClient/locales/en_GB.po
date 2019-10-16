@@ -866,9 +866,6 @@ msgstr ""
 msgid "Template file:"
 msgstr ""
 
-msgid "Toggle note list"
-msgstr ""
-
 msgid "New note"
 msgstr ""
 

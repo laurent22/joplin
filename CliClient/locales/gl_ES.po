@@ -962,10 +962,6 @@ msgstr "Estabelecer alarma:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Activar cifrado"
-
 msgid "New note"
 msgstr "Nova nota"
 
@@ -2145,6 +2141,10 @@ msgstr "Acceder con OneDrive"
 
 msgid "Search"
 msgstr "Buscar"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Activar cifrado"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "Comezando a editar a nota. Peche o editor para volver ao diálogo."

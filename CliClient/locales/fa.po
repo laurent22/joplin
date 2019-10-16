@@ -877,10 +877,6 @@ msgstr ""
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "لیست یادداشت"
-
 msgid "New note"
 msgstr "یادداشت جدید"
 
@@ -2018,6 +2014,10 @@ msgstr "ورود با OneDrive"
 
 msgid "Search"
 msgstr "جستجو"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "لیست یادداشت"
 
 #~ msgid "Note has been saved."
 #~ msgstr "یادداشت ذخیره شد."

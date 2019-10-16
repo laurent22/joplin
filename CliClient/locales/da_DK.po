@@ -962,10 +962,6 @@ msgstr "Indstil alarm:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Start kryptering"
-
 msgid "New note"
 msgstr "Ny note"
 
@@ -2143,6 +2139,10 @@ msgstr "Log på med OneDrive"
 
 msgid "Search"
 msgstr "Søg"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Start kryptering"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

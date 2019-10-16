@@ -971,10 +971,6 @@ msgstr "Задаване на аларма:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Списък бележки"
-
 msgid "New note"
 msgstr "Нова бележка"
 
@@ -2173,6 +2169,10 @@ msgstr "Вписване в OneDrive"
 
 msgid "Search"
 msgstr "Търсене"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Списък бележки"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

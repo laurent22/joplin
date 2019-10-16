@@ -921,10 +921,6 @@ msgstr "设置提醒："
 msgid "Template file:"
 msgstr "模版文件："
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "笔记列表"
-
 msgid "New note"
 msgstr "新建笔记"
 
@@ -2078,6 +2074,10 @@ msgstr "通过 OneDrive 登录"
 
 msgid "Search"
 msgstr "搜索"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "笔记列表"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "开始编辑笔记。关闭编辑器将回到提示符。"

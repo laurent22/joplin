@@ -949,10 +949,6 @@ msgstr "Alarm kur:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Not listesi"
-
 msgid "New note"
 msgstr "Yeni not"
 
@@ -2139,6 +2135,10 @@ msgstr "OneDrive ile giriş yapın"
 
 msgid "Search"
 msgstr "Arama"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Not listesi"
 
 #~ msgid "Note has been saved."
 #~ msgstr "Not kaydedildi."

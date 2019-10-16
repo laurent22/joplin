@@ -891,10 +891,6 @@ msgstr "Setați alarma:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Activați criptarea"
-
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
 
@@ -2035,6 +2031,10 @@ msgstr "Autentificare prin OneDrive"
 
 msgid "Search"
 msgstr "Caută"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Activați criptarea"
 
 #~ msgid "Note has been saved."
 #~ msgstr "Notița a fost salvată."

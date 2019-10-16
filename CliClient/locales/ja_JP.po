@@ -954,10 +954,6 @@ msgstr "アラームをセット："
 msgid "Template file:"
 msgstr "テンプレートファイル："
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "ノートの一覧"
-
 msgid "New note"
 msgstr "新しいノート"
 
@@ -2129,6 +2125,10 @@ msgstr "OneDriveログイン"
 
 msgid "Search"
 msgstr "検索"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "ノートの一覧"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

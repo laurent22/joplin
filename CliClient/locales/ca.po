@@ -986,10 +986,6 @@ msgstr "Estableix una alarma:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Activa el xifratge"
-
 msgid "New note"
 msgstr "Nota nova"
 
@@ -2173,6 +2169,10 @@ msgstr "Inicia sessió amb OneDrive"
 
 msgid "Search"
 msgstr "Cerca"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Activa el xifratge"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
