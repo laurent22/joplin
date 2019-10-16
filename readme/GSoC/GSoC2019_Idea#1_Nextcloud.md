@@ -26,3 +26,8 @@ That would be interesting to know what they think about such an integration and 
 - https://discourse.joplinapp.org/t/nextcloud-fanboy-quest-ce-quils-veulent/844/3
 
 I imagined they just need a joplin-api in PHP and “plug” it on the right datasource to switch between “Nextcloud native note/Qownote” to Nextcloud/Qownnote “Joplin note”.
+
+
+
+“How is WebDAV sync implemented?” appears twice. It should only be in Summer of Doc.
+
