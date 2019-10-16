@@ -7,3 +7,7 @@ sharing
 - ([Mobile - Add share menu #876](https://github.com/laurent22/joplin/issues/876))
 - [Turtl’s sharing - Choose who you share with and what they can do.](https://turtlapp.com/features/)
 - [Turtl Documentation - App architecture](https://turtlapp.com/docs/architecture)
+
+
+“Please give the ability to share from another Android app into Joplin”: This is already done
+
