@@ -138,6 +138,14 @@ msgstr "Ange huvudlösenord:"
 msgid "Operation cancelled"
 msgstr "Operation avbruten"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Ange huvudlösenord:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Lösenordet kan inte vara tomt"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -594,6 +602,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportera till \"%s\" som \"%s\" format. Vänta..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fil"
@@ -742,6 +754,9 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nej"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token har kopierats till urklipp!"
@@ -963,6 +978,10 @@ msgstr "Ställ in alarm:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Anteckningsboken"
+
 msgid "New note"
 msgstr "Ny anteckning"
 
@@ -1152,6 +1171,9 @@ msgstr "Inställningar"
 msgid "Synchronisation Status"
 msgstr "Synkroniseringstillstånd"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1161,15 +1183,15 @@ msgstr ""
 "Ta bort anteckningsboken? Alla anteckningar och delanteckningsböcker i den "
 "här anteckningsboken tas bort också."
 
+msgid "Delete"
+msgstr "Ta bort"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Ta bort den här taggen från alla anteckningar?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Ta bort den här sökningen från sidofältet?"
-
-msgid "Delete"
-msgstr "Ta bort"
 
 msgid "Rename"
 msgstr "Byt namn"
@@ -1460,6 +1482,9 @@ msgstr "Ljus"
 msgid "Dark"
 msgstr "Mörk"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1498,6 +1523,9 @@ msgid "When creating a new note:"
 msgstr "När du skapar en ny anteckning:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1611,6 +1639,36 @@ msgstr ""
 "Redigeringskommandot (kan inkludera argument) som används för att öppna en "
 "anteckning. Om inget tillhandahålls försöker det automatiskt identifiera "
 "standardredigeraren."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Anpassade TLS-certifikat"
@@ -2005,6 +2063,18 @@ msgstr "Lösenord:"
 msgid "Password cannot be empty"
 msgstr "Lösenordet kan inte vara tomt"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Lösenordet kan inte vara tomt"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Ange huvudlösenord:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Ange huvudlösenord:"
+
 msgid "Enable"
 msgstr "Aktivera"
 
@@ -2117,9 +2187,6 @@ msgstr "Sök"
 
 #~ msgid "Sidebar"
 #~ msgstr "Sidofältet"
-
-#~ msgid "Note list"
-#~ msgstr "Anteckningsboken"
 
 #~ msgid "Note title"
 #~ msgstr "Rubriken"

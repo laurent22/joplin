@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -137,6 +135,14 @@ msgstr "マスターパスワードを入力してください:"
 
 msgid "Operation cancelled"
 msgstr "操作をキャンセルしました"
+
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "マスターパスワードを入力してください:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "パスワードは空にできません"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -580,6 +586,10 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&ファイル"
 
@@ -722,6 +732,10 @@ msgstr "Yes"
 
 msgid "No"
 msgstr "No"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "ノートを削除しますか？"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
@@ -940,6 +954,10 @@ msgstr "アラームをセット："
 msgid "Template file:"
 msgstr "テンプレートファイル："
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "ノートの一覧"
+
 msgid "New note"
 msgstr "新しいノート"
 
@@ -1125,6 +1143,9 @@ msgstr "オプション"
 msgid "Synchronisation Status"
 msgstr "同期状況"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1135,15 +1156,15 @@ msgstr ""
 "\n"
 "このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 
+msgid "Delete"
+msgstr "削除"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
-
-msgid "Delete"
-msgstr "削除"
 
 msgid "Rename"
 msgstr "名前の変更"
@@ -1438,6 +1459,9 @@ msgstr "明るい"
 msgid "Dark"
 msgstr "暗い"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarised (明)"
 
@@ -1476,6 +1500,10 @@ msgstr "新しいノートを作成した際:"
 
 msgid "Enable soft breaks"
 msgstr "ソフトブレークを有効にする"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Fountain構文を有効にする"
 
 msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
@@ -1583,6 +1611,36 @@ msgid ""
 msgstr ""
 "このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は"
 "既定のエディターを自動的に検出します。"
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
@@ -1964,6 +2022,18 @@ msgstr "パスワード:"
 msgid "Password cannot be empty"
 msgstr "パスワードは空にできません"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "パスワードは空にできません"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "マスターパスワードを入力してください:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "マスターパスワードを入力してください:"
+
 msgid "Enable"
 msgstr "有効"
 
@@ -2073,9 +2143,6 @@ msgstr "検索"
 
 #~ msgid "Sidebar"
 #~ msgstr "サイドバー"
-
-#~ msgid "Note list"
-#~ msgstr "ノートの一覧"
 
 #~ msgid "Note title"
 #~ msgstr "ノートの題名："
@@ -2191,13 +2258,6 @@ msgstr "検索"
 
 #~ msgid "Searches"
 #~ msgstr "検索"
-
-#, fuzzy
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr "ノートを削除しますか？"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Evernoteノートブックファイル(.enex)のインポート"

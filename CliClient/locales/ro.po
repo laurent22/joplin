@@ -132,6 +132,14 @@ msgstr ""
 msgid "Operation cancelled"
 msgstr "Operațiunea a fost amânată"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Setați parola"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Parolă nu poate fi un câmp gol"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -528,6 +536,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fișier"
@@ -678,6 +690,9 @@ msgstr "Da"
 
 msgid "No"
 msgstr "Nu"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -876,6 +891,10 @@ msgstr "Setați alarma:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Activați criptarea"
+
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
 
@@ -1059,6 +1078,9 @@ msgstr "Opțiuni"
 msgid "Synchronisation Status"
 msgstr "Statutul sincronizării"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1066,15 +1088,15 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
 
+msgid "Delete"
+msgstr "Ștergeți"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
 msgid "Remove this search from the sidebar?"
 msgstr ""
-
-msgid "Delete"
-msgstr "Ștergeți"
 
 msgid "Rename"
 msgstr "Redenumiți"
@@ -1352,6 +1374,9 @@ msgstr "Deschisă"
 msgid "Dark"
 msgstr "Închisă"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1390,6 +1415,9 @@ msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1494,6 +1522,36 @@ msgstr "Comandă editor de text"
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
 msgstr ""
 
 msgid "Custom TLS certificates"
@@ -1863,6 +1921,18 @@ msgstr "Parolă:"
 
 msgid "Password cannot be empty"
 msgstr "Parolă nu poate fi un câmp gol"
+
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Parolă nu poate fi un câmp gol"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Parolă:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Confirmați"
 
 msgid "Enable"
 msgstr "Activați"

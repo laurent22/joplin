@@ -135,6 +135,14 @@ msgstr "أدخل كلمة المرور الرئيسة:"
 msgid "Operation cancelled"
 msgstr "ألغيت العملية"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "أدخل كلمة المرور الرئيسة:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "لا يمكن أن تكون كلمة المرور فارغة"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -575,6 +583,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&ملف"
 
@@ -718,6 +730,9 @@ msgstr "نعم"
 
 msgid "No"
 msgstr "لا"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr "تم نسخ الرمز المميز إلى الحافظة!"
@@ -933,6 +948,10 @@ msgstr "ضبط منبّه:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "قائمة ملاحظات"
+
 msgid "New note"
 msgstr "ملاحظة جديدة"
 
@@ -1119,6 +1138,10 @@ msgstr "خيارات"
 msgid "Synchronisation Status"
 msgstr "حالة المزامنة"
 
+#, fuzzy
+msgid "Remove"
+msgstr "إزالة ؟"
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1129,15 +1152,15 @@ msgstr ""
 "\n"
 "سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا الدفتر أيضاً."
 
+msgid "Delete"
+msgstr "حذف"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "إزالة الوسم \"%s\" من كل الملاحظات؟"
 
 msgid "Remove this search from the sidebar?"
 msgstr "حذف هذا البحث من الشريط الجانبي؟"
-
-msgid "Delete"
-msgstr "حذف"
 
 msgid "Rename"
 msgstr "إعادة تسمية"
@@ -1424,6 +1447,9 @@ msgstr "فاتحة"
 msgid "Dark"
 msgstr "غامقة"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1462,6 +1488,9 @@ msgid "When creating a new note:"
 msgstr "عند إنشاء ملاحظة جديدة:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1572,6 +1601,36 @@ msgid ""
 msgstr ""
 "أمر محرر النصوص (قد يتضمن معامِلات) الذي سيستخدم لفتح ملاحظة. إذا لم يجر "
 "التزويد بأي محرر فسيحاول التطبيق اكتشاف المحرِّر التلقائي آلياً."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "شهادات TLS خاصة"
@@ -1955,6 +2014,18 @@ msgstr "كلمة المرور:"
 msgid "Password cannot be empty"
 msgstr "لا يمكن أن تكون كلمة المرور فارغة"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "لا يمكن أن تكون كلمة المرور فارغة"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "أدخل كلمة المرور الرئيسة:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "أدخل كلمة المرور الرئيسة:"
+
 msgid "Enable"
 msgstr "تفعيل"
 
@@ -2065,9 +2136,6 @@ msgstr "بحث"
 #~ msgid "Sidebar"
 #~ msgstr "الشريط الجانبي"
 
-#~ msgid "Note list"
-#~ msgstr "قائمة ملاحظات"
-
 #~ msgid "Note title"
 #~ msgstr "عنوان الملاحظة"
 
@@ -2156,6 +2224,3 @@ msgstr "بحث"
 #~ msgstr ""
 #~ "المسار الذي ستتم المزامنة معه عند تفعيل مزامنة نظام الملفات. أنظر `sync."
 #~ "target`."
-
-#~ msgid "Remove?"
-#~ msgstr "إزالة ؟"

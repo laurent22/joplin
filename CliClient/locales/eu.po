@@ -139,6 +139,14 @@ msgstr "Sartu pasahitz nagusia:"
 msgid "Operation cancelled"
 msgstr " Eragiketa utzita"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Sartu pasahitz nagusia:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Pasahitza ezin utz daiteke hutsik"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -590,6 +598,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fitxategia"
@@ -742,6 +754,10 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "E"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Oharrak ezabatu?"
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -956,6 +972,10 @@ msgstr "Ezarri alarma:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Zifratua gaitu"
+
 msgid "New note"
 msgstr "Ohar berria"
 
@@ -1147,6 +1167,9 @@ msgstr "Aukerak"
 msgid "Synchronisation Status"
 msgstr "Sinkronizazioaren egoera"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1154,15 +1177,15 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr "Koadernoa ezabatu? Dituen ohar guztiak ere ezabatuko dira."
 
+msgid "Delete"
+msgstr "Ezabatu"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Kendu etiketa hori ohar guztietatik?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Kendu bilaketa hori ohar guztietatik?"
-
-msgid "Delete"
-msgstr "Ezabatu"
 
 msgid "Rename"
 msgstr "Berrizendatu"
@@ -1461,6 +1484,9 @@ msgstr "Argia"
 msgid "Dark"
 msgstr "Iluna"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1504,6 +1530,9 @@ msgid "When creating a new note:"
 msgstr "Ohar berria sortzen du."
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1614,6 +1643,36 @@ msgid ""
 msgstr ""
 "Editorea erabiliko da oharra zabaltzeko. Ez badago zehaztutakorik lehenetsia "
 "igartzen ahaleginduko da."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1995,6 +2054,18 @@ msgstr "Pasahitza:"
 msgid "Password cannot be empty"
 msgstr "Pasahitza ezin utz daiteke hutsik"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Pasahitza ezin utz daiteke hutsik"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Sartu pasahitz nagusia:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Sartu pasahitz nagusia:"
+
 msgid "Enable"
 msgstr "Gaituta"
 
@@ -2187,13 +2258,6 @@ msgstr "Bilatu"
 
 #~ msgid "Searches"
 #~ msgstr "Bilaketak"
-
-#, fuzzy
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr "Oharrak ezabatu?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Inportatu Evernote koaderno fitxategia (.enex fitxategia)."

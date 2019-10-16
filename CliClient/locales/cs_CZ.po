@@ -138,6 +138,14 @@ msgstr "Zadejte master heslo:"
 msgid "Operation cancelled"
 msgstr "Operace zrušena"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Zadejte master heslo:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Heslo nemůže být prázdné"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -580,6 +588,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Soubor"
@@ -729,6 +741,9 @@ msgstr "Ano"
 
 msgid "No"
 msgstr "Ne"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token byl zkopírován do schránky!"
@@ -946,6 +961,10 @@ msgstr "Nastavit alarm:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Seznam položek"
+
 msgid "New note"
 msgstr "Nová poznámka"
 
@@ -1132,6 +1151,9 @@ msgstr "Nastavení"
 msgid "Synchronisation Status"
 msgstr "Stav synchronizace"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1139,15 +1161,15 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr "Smazat zápisník? Budou smazány i všechny poznámky v něm obsažené."
 
+msgid "Delete"
+msgstr "Smazat"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Odebrat tag \"%s\" ze všech poznámek?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Smazat tento hledaný výraz z panelu?"
-
-msgid "Delete"
-msgstr "Smazat"
 
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -1440,6 +1462,9 @@ msgstr "Světlý"
 msgid "Dark"
 msgstr "Tmavý"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1478,6 +1503,10 @@ msgstr "Při vytváření nové poznámky:"
 
 msgid "Enable soft breaks"
 msgstr "Povolit měkké zalomení"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Povolit ~sub~ syntaxi"
 
 msgid "Enable math expressions"
 msgstr "Zapnout matematické výrazy"
@@ -1588,6 +1617,36 @@ msgid ""
 msgstr ""
 "Editor ve kterém budou otvírány poznámky. Pokud není specifikováno, aplikace "
 "se pokusí o autodetekci defaultního editoru."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Vlastní TLS certifikát"
@@ -1976,6 +2035,18 @@ msgstr "Heslo:"
 msgid "Password cannot be empty"
 msgstr "Heslo nemůže být prázdné"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Heslo nemůže být prázdné"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Zadejte master heslo:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Zadejte master heslo:"
+
 msgid "Enable"
 msgstr "Zapnout"
 
@@ -2086,9 +2157,6 @@ msgstr "Hledání"
 
 #~ msgid "Sidebar"
 #~ msgstr "Postranní lišta"
-
-#~ msgid "Note list"
-#~ msgstr "Seznam položek"
 
 #~ msgid "Note title"
 #~ msgstr "Název zápisníku"

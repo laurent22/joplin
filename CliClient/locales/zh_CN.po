@@ -134,6 +134,14 @@ msgstr "输入主密码："
 msgid "Operation cancelled"
 msgstr "操作已取消"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "输入主密码："
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "密码不可为空"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -556,6 +564,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "文件 (&F)"
 
@@ -698,6 +710,10 @@ msgstr "是"
 
 msgid "No"
 msgstr "否"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "已恢复的笔记"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token 令牌已复制到剪贴板！"
@@ -905,6 +921,10 @@ msgstr "设置提醒："
 msgid "Template file:"
 msgstr "模版文件："
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "笔记列表"
+
 msgid "New note"
 msgstr "新建笔记"
 
@@ -1088,6 +1108,9 @@ msgstr "选项"
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1098,15 +1121,15 @@ msgstr ""
 "\n"
 "所有在该笔记本内的笔记和下级笔记本也将同时被删除。"
 
+msgid "Delete"
+msgstr "删除"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "从所有笔记中删除标签“%s”？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "从边栏中删除该项搜索？"
-
-msgid "Delete"
-msgstr "删除"
 
 msgid "Rename"
 msgstr "重命名"
@@ -1393,6 +1416,9 @@ msgstr "明亮"
 msgid "Dark"
 msgstr "深邃"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarised Light风格"
 
@@ -1431,6 +1457,10 @@ msgstr "当新建笔记时："
 
 msgid "Enable soft breaks"
 msgstr "启动软中断"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "启用 Fountain 语法支持"
 
 msgid "Enable math expressions"
 msgstr "启用数学表达式"
@@ -1539,6 +1569,36 @@ msgid ""
 msgstr ""
 "该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
 "认编辑器。"
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
@@ -1911,6 +1971,18 @@ msgstr "密码："
 msgid "Password cannot be empty"
 msgstr "密码不可为空"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "密码不可为空"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "输入主密码："
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "输入主密码："
+
 msgid "Enable"
 msgstr "启用"
 
@@ -2018,9 +2090,6 @@ msgstr "搜索"
 
 #~ msgid "Sidebar"
 #~ msgstr "边栏"
-
-#~ msgid "Note list"
-#~ msgstr "笔记列表"
 
 #~ msgid "Note title"
 #~ msgstr "笔记标题"

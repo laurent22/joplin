@@ -142,6 +142,14 @@ msgstr "Wprowadź hasło główne:"
 msgid "Operation cancelled"
 msgstr "Operacja anulowana"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Wprowadź hasło główne:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Hasło nie może być puste"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -599,6 +607,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksportowanie do \"%s\" jako \"%s\". Proszę czekać..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Plik"
 
@@ -742,6 +754,10 @@ msgstr "Tak"
 
 msgid "No"
 msgstr "Nie"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Przywrócone notatki"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token został skopiowany do schowka!"
@@ -963,6 +979,10 @@ msgstr "Ustaw powiadomienie:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Lista notatek"
+
 msgid "New note"
 msgstr "Nowa notatka"
 
@@ -1152,6 +1172,9 @@ msgstr "Opcje"
 msgid "Synchronisation Status"
 msgstr "Status synchronizacji"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1163,15 +1186,15 @@ msgstr ""
 "Wszystkie notatki i notatniki podrzędne zawarte w tym notatniku także "
 "zostaną usunięte."
 
+msgid "Delete"
+msgstr "Usuń"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Usunąć wyszukiwanie z nawigatora?"
-
-msgid "Delete"
-msgstr "Usuń"
 
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -1467,6 +1490,9 @@ msgstr "Jasny"
 msgid "Dark"
 msgstr "Ciemny"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1505,6 +1531,10 @@ msgstr "Podczas tworzenia nowej notatki:"
 
 msgid "Enable soft breaks"
 msgstr "Aktywuj miękkie łamanie linii"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Aktywuj składnię ~sub~"
 
 msgid "Enable math expressions"
 msgstr "Atywuj wyrażenia matematyczne"
@@ -1619,6 +1649,36 @@ msgstr ""
 "Ścieżka edytora tekstu (może zawierać wiele argumentów) która zostanie użyta "
 "aby otwierać notatkę. Jeżeli nie zostanie podana, program spróbuje wykryć "
 "domyślny edytor."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe ceryfikaty TLS"
@@ -2009,6 +2069,18 @@ msgstr "Hasło:"
 msgid "Password cannot be empty"
 msgstr "Hasło nie może być puste"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Hasło nie może być puste"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Wprowadź hasło główne:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Wprowadź hasło główne:"
+
 msgid "Enable"
 msgstr "Aktywuj"
 
@@ -2121,9 +2193,6 @@ msgstr "Wyszukaj"
 
 #~ msgid "Sidebar"
 #~ msgstr "Nawigator"
-
-#~ msgid "Note list"
-#~ msgstr "Lista notatek"
 
 #~ msgid "Note title"
 #~ msgstr "Tytuł notatki"

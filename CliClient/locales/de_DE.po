@@ -142,6 +142,14 @@ msgstr "Master-Passwort eingeben:"
 msgid "Operation cancelled"
 msgstr "Vorgang abgebrochen"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Master-Passwort eingeben:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Passwort darf nicht leer sein"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -607,6 +615,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportiere „%s“ ins „%s“-Format. Bitte warten..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Datei"
 
@@ -750,6 +762,13 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nein"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr ""
+"Versionshinweise:\n"
+"\n"
+"%s"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token wurde in die Zwischenablage kopiert!"
@@ -975,6 +994,10 @@ msgstr "Alarm erstellen:"
 msgid "Template file:"
 msgstr "Vorlagen-Datei:"
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Notizen-Liste"
+
 msgid "New note"
 msgstr "Neue Notiz"
 
@@ -1167,6 +1190,10 @@ msgstr "Optionen"
 msgid "Synchronisation Status"
 msgstr "Synchronisations-Status"
 
+#, fuzzy
+msgid "Remove"
+msgstr "Löschen?"
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1177,15 +1204,15 @@ msgstr ""
 "\n"
 "Alle Notizen und Unternotizen darin werden ebenfalls gelöscht."
 
+msgid "Delete"
+msgstr "Löschen"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Schlagwort \"%s\" von allen Notizen entfernen?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
-
-msgid "Delete"
-msgstr "Löschen"
 
 msgid "Rename"
 msgstr "Umbenennen"
@@ -1482,6 +1509,9 @@ msgstr "Hell"
 msgid "Dark"
 msgstr "Dunkel"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarized Hell"
 
@@ -1520,6 +1550,10 @@ msgstr "Wenn eine neue Notiz erstellt wird:"
 
 msgid "Enable soft breaks"
 msgstr "Aktiviere weiche Zeilenumbrüche"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Aktiviere Fountain Unterstützung"
 
 msgid "Enable math expressions"
 msgstr "Aktiviere mathematische Ausdrücke"
@@ -1629,6 +1663,36 @@ msgid ""
 msgstr ""
 "Der Editor, mit dem Notizen geöffnet werden. Wenn keiner ausgewählt wurde, "
 "wird Joplin versuchen den Standardeditor zu erkennen."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Benutzerdefinierte TLS-Zertifikate"
@@ -2023,6 +2087,18 @@ msgstr "Passwort:"
 msgid "Password cannot be empty"
 msgstr "Passwort darf nicht leer sein"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Passwort darf nicht leer sein"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Master-Passwort eingeben:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Master-Passwort eingeben:"
+
 msgid "Enable"
 msgstr "Aktivieren"
 
@@ -2136,9 +2212,6 @@ msgstr "Suchen"
 #~ msgid "Sidebar"
 #~ msgstr "Seitenleiste"
 
-#~ msgid "Note list"
-#~ msgstr "Notizen-Liste"
-
 #~ msgid "Note title"
 #~ msgstr "Notiz-Titel"
 
@@ -2247,9 +2320,6 @@ msgstr "Suchen"
 #~ "Der Pfad, mit dem synchronisiert werden soll, wenn die Dateisystem-"
 #~ "Synchronisation aktiviert ist. Siehe `sync.target`."
 
-#~ msgid "Remove?"
-#~ msgstr "Löschen?"
-
 #~ msgid "State: %s."
 #~ msgstr "Status: %s."
 
@@ -2258,15 +2328,6 @@ msgstr "Suchen"
 
 #~ msgid "Searches"
 #~ msgstr "Suchen"
-
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Versionshinweise:\n"
-#~ "\n"
-#~ "%s"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importiert eine Evernote Notizbuch-Datei (.enex Datei)."

@@ -138,6 +138,14 @@ msgstr "Въведете главната парола:"
 msgid "Operation cancelled"
 msgstr "Действието бе отменено"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Въведете главната парола:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Паролата не може да е празна"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -590,6 +598,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Експортирам към \"%s\" във формат \"%s\". Моля изчакайте..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "Файл(&F)"
 
@@ -733,6 +745,10 @@ msgstr "Да"
 
 msgid "No"
 msgstr "Не"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Възстановени бележки"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Жетона бе копиран в клипборда!"
@@ -955,6 +971,10 @@ msgstr "Задаване на аларма:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Списък бележки"
+
 msgid "New note"
 msgstr "Нова бележка"
 
@@ -1146,6 +1166,9 @@ msgstr "Конфигурация"
 msgid "Synchronisation Status"
 msgstr "Статус на синхронизацията"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1156,15 +1179,15 @@ msgstr ""
 "\n"
 "Всички бележки и под-тетрадки също ще бъдат изтрити."
 
+msgid "Delete"
+msgstr "Изтрий"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Да премахна ли таг \"%s\" от всички бележки?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Да премахна ли това търсене от страничния панел?"
-
-msgid "Delete"
-msgstr "Изтрий"
 
 msgid "Rename"
 msgstr "Преименувай"
@@ -1457,6 +1480,9 @@ msgstr "Светла"
 msgid "Dark"
 msgstr "Тъмна"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1495,6 +1521,10 @@ msgstr "Когато се създава нова бележка:"
 
 msgid "Enable soft breaks"
 msgstr "Пусни меките краища (soft breaks)"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Пусни синтаксис ~ниско~"
 
 msgid "Enable math expressions"
 msgstr "Пусни математическите изрази"
@@ -1608,6 +1638,36 @@ msgstr ""
 "ще бъде използвана за отваряне на бележка. Ако е празно, приложението ще се "
 "опитва автоматично да засече кой е текстовия редактор по подразбиране на "
 "системата ви."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Допълнителни TLS сертификати"
@@ -2000,6 +2060,18 @@ msgstr "Парола:"
 msgid "Password cannot be empty"
 msgstr "Паролата не може да е празна"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Паролата не може да е празна"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Въведете главната парола:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Въведете главната парола:"
+
 msgid "Enable"
 msgstr "Включи"
 
@@ -2112,9 +2184,6 @@ msgstr "Търсене"
 
 #~ msgid "Sidebar"
 #~ msgstr "Страничен панел"
-
-#~ msgid "Note list"
-#~ msgstr "Списък бележки"
 
 #~ msgid "Note title"
 #~ msgstr "Заглавие на бележката"

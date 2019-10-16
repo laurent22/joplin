@@ -139,6 +139,14 @@ msgstr "Voeg hoofdsleutel in:"
 msgid "Operation cancelled"
 msgstr "Operatie geannuleerd"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Voeg hoofdsleutel in:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Wachtwoord kan niet leeg zijn"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -591,6 +599,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Bestand"
@@ -743,6 +755,10 @@ msgstr ""
 #, fuzzy
 msgid "No"
 msgstr "N"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Notities verwijderen?"
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -957,6 +973,10 @@ msgstr "Stel melding in:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Schakel encryptie in"
+
 msgid "New note"
 msgstr "Nieuwe notitie"
 
@@ -1149,6 +1169,9 @@ msgstr "Opties"
 msgid "Synchronisation Status"
 msgstr "Synchronisatie status"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1158,15 +1181,15 @@ msgstr ""
 "Notitieboek verwijderen? Alle notities in dit notitieboek zullen ook "
 "verwijderd worden."
 
+msgid "Delete"
+msgstr "Verwijderen"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Deze tag verwijderen van alle notities?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Dit item verwijderen van de zijbalk?"
-
-msgid "Delete"
-msgstr "Verwijderen"
 
 msgid "Rename"
 msgstr "Hernoem"
@@ -1461,6 +1484,9 @@ msgstr "Licht"
 msgid "Dark"
 msgstr "Donker"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1504,6 +1530,9 @@ msgid "When creating a new note:"
 msgstr "Maakt een nieuwe notitie aan."
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1614,6 +1643,36 @@ msgstr ""
 "De editor die zal gebruikt worden bij het openen van een notitie. Als er "
 "geen meegegeven wordt, zal het programma de standaard editor proberen te "
 "detecteren. "
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1997,6 +2056,18 @@ msgstr "Wachtwoord:"
 msgid "Password cannot be empty"
 msgstr "Wachtwoord kan niet leeg zijn"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Wachtwoord kan niet leeg zijn"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Voeg hoofdsleutel in:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Voeg hoofdsleutel in:"
+
 msgid "Enable"
 msgstr "Activeer"
 
@@ -2193,13 +2264,6 @@ msgstr "Zoeken"
 
 #~ msgid "Searches"
 #~ msgstr "Zoekopdrachten"
-
-#, fuzzy
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr "Notities verwijderen?"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importeer een Evernote notitieboek (.enex bestand)."

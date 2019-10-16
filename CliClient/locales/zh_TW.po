@@ -136,6 +136,14 @@ msgstr "輸入主密碼:"
 msgid "Operation cancelled"
 msgstr "操作已取消"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "輸入主密碼:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "密碼不能空白"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -556,6 +564,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "匯出到 \"%s\" 為 \"%s\" 格式。請稍候..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "檔案"
@@ -707,6 +719,9 @@ msgstr "是"
 
 msgid "No"
 msgstr "否"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -916,6 +931,10 @@ msgstr "設置提醒:"
 msgid "Template file:"
 msgstr ""
 
+#, fuzzy
+msgid "Toggle note list"
+msgstr "啟用加密"
+
 msgid "New note"
 msgstr "新增記事"
 
@@ -1100,6 +1119,9 @@ msgstr "選項"
 msgid "Synchronisation Status"
 msgstr "同步狀態"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1107,15 +1129,15 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr "決定刪除記事本？此記事本中的所有記事和子記事本也將被刪除。"
 
+msgid "Delete"
+msgstr "刪除"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "是否從所有記事中刪除此標籤？"
 
 msgid "Remove this search from the sidebar?"
 msgstr "是否從側邊欄中刪除此搜索？"
-
-msgid "Delete"
-msgstr "刪除"
 
 msgid "Rename"
 msgstr "重新命名"
@@ -1399,6 +1421,9 @@ msgstr "光亮"
 msgid "Dark"
 msgstr "暗黑"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1437,6 +1462,9 @@ msgid "When creating a new note:"
 msgstr "當新增記事時:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1546,6 +1574,36 @@ msgid ""
 msgstr ""
 "用於開啟筆記的編輯器命令 (可能包括參數)。如果沒有指明，程式將嘗試自動檢測預設"
 "的編輯器。"
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "自訂 TLS 證書"
@@ -1927,6 +1985,18 @@ msgstr "密碼:"
 
 msgid "Password cannot be empty"
 msgstr "密碼不能空白"
+
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "密碼不能空白"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "輸入主密碼:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "輸入主密碼:"
 
 msgid "Enable"
 msgstr "啟用"
