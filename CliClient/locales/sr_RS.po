@@ -974,10 +974,6 @@ msgstr "Подеси аларм:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Листа белешки"
-
 msgid "New note"
 msgstr "Нова белешка"
 
@@ -2168,6 +2164,10 @@ msgstr "Пријави се са УванДрајвом"
 
 msgid "Search"
 msgstr "Претрага"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Листа белешки"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

@@ -950,10 +950,6 @@ msgstr "알람 설정:"
 msgid "Template file:"
 msgstr "템플릿 파일:"
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "노트 목록"
-
 msgid "New note"
 msgstr "새 노트"
 
@@ -2127,6 +2123,10 @@ msgstr "OneDrive 로그인"
 
 msgid "Search"
 msgstr "검색"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "노트 목록"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "노트 편집을 시작합니다. 프롬프트로 가시려면 편집기를 종료해주세요."

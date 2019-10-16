@@ -953,10 +953,6 @@ msgstr "Postavi upozorenje:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Bilješka je promijenjena:"
-
 msgid "New note"
 msgstr "Nova bilješka"
 
@@ -2131,6 +2127,10 @@ msgstr "Prijavi se u OneDrive"
 
 msgid "Search"
 msgstr "Traži"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Bilješka je promijenjena:"
 
 #, fuzzy
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."

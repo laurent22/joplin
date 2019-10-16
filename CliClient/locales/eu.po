@@ -972,10 +972,6 @@ msgstr "Ezarri alarma:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Zifratua gaitu"
-
 msgid "New note"
 msgstr "Ohar berria"
 
@@ -2166,6 +2162,10 @@ msgstr "Login with OneDrive"
 
 msgid "Search"
 msgstr "Bilatu"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Zifratua gaitu"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "Oharra editatzearen hasiera. Itxi editorea prompt-era bueltatzeko."

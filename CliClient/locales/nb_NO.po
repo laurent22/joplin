@@ -961,10 +961,6 @@ msgstr "Angi alarm:"
 msgid "Template file:"
 msgstr "Malfiler"
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Notatliste"
-
 msgid "New note"
 msgstr "Nytt notat"
 
@@ -2139,6 +2135,10 @@ msgstr "Innlogging med OneDrive"
 
 msgid "Search"
 msgstr "Søk"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Notatliste"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

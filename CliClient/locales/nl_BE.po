@@ -973,10 +973,6 @@ msgstr "Stel melding in:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Schakel encryptie in"
-
 msgid "New note"
 msgstr "Nieuwe notitie"
 
@@ -2168,6 +2164,10 @@ msgstr "Log in met OneDrive"
 
 msgid "Search"
 msgstr "Zoeken"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Schakel encryptie in"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

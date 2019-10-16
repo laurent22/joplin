@@ -948,10 +948,6 @@ msgstr "ضبط منبّه:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "قائمة ملاحظات"
-
 msgid "New note"
 msgstr "ملاحظة جديدة"
 
@@ -2126,6 +2122,10 @@ msgstr "تسجيل الدخول عبر OneDrive"
 
 msgid "Search"
 msgstr "بحث"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "قائمة ملاحظات"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "بدء تحرير الملاحظة. أغلق المحرر للعودة إلى المحث."

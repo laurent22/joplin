@@ -988,9 +988,6 @@ msgstr "Alarm erstellen:"
 msgid "Template file:"
 msgstr "Vorlagen-Datei:"
 
-msgid "Toggle note list"
-msgstr "Notizen-Liste ein-/ausschalten"
-
 msgid "New note"
 msgstr "Neue Notiz"
 
@@ -2183,6 +2180,9 @@ msgstr "Mit OneDrive anmelden"
 
 msgid "Search"
 msgstr "Suchen"
+
+#~ msgid "Toggle note list"
+#~ msgstr "Notizen-Liste ein-/ausschalten"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

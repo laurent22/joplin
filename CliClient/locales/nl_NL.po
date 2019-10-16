@@ -973,10 +973,6 @@ msgstr "Alarm instellen:"
 msgid "Template file:"
 msgstr "Sjabloonbestand:"
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Notitielijst"
-
 msgid "New note"
 msgstr "Nieuwe notitie"
 
@@ -2166,6 +2162,10 @@ msgstr "Inloggen met OneDrive"
 
 msgid "Search"
 msgstr "Zoeken"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Notitielijst"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

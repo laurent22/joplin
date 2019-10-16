@@ -969,10 +969,6 @@ msgstr "Nastavi alarm:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Omogoči enkripcijo"
-
 msgid "New note"
 msgstr "Nova zabeležka"
 
@@ -2158,6 +2154,10 @@ msgstr "Prijavi se z OneDrive"
 
 msgid "Search"
 msgstr "Išči"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Omogoči enkripcijo"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

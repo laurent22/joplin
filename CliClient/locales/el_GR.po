@@ -7,16 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: Harris Arvanitis <xaris@tuta.io>\n"
 "Language-Team: \n"
+"Language: el_GR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "X-Generator: Poedit 2.2.4\n"
-"Last-Translator: Harris Arvanitis <xaris@tuta.io>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: el_GR\n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -147,6 +145,14 @@ msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
 
 msgid "Operation cancelled"
 msgstr "Η λειτουργία ακυρώθηκε"
+
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -616,6 +622,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Παρακαλώ περιμένετε..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Αρχείο"
 
@@ -758,6 +768,10 @@ msgstr "Ναι"
 
 msgid "No"
 msgstr "Όχι"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Ανακτημένες σημειώσεις"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
@@ -1176,6 +1190,9 @@ msgstr "Επιλογές"
 msgid "Synchronisation Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1187,15 +1204,15 @@ msgstr ""
 "Όλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν "
 "επίσης."
 
+msgid "Delete"
+msgstr "Διαγραφή"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
-
-msgid "Delete"
-msgstr "Διαγραφή"
 
 msgid "Rename"
 msgstr "Μετονομασία"
@@ -1494,6 +1511,9 @@ msgstr "Light"
 msgid "Dark"
 msgstr "Dark"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
@@ -1532,6 +1552,10 @@ msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:
 
 msgid "Enable soft breaks"
 msgstr "Ενεργοποίηση soft breaks"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
 msgid "Enable math expressions"
 msgstr "Ενεργοποίηση math expressions"
@@ -1642,6 +1666,36 @@ msgstr ""
 "Η εντολή του editor (που μπορεί να περιλαμβάνει ορίσματα) θα χρησιμοποιηθεί "
 "για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να "
 "ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Custom πιστοποιητικά TLS"
@@ -2035,6 +2089,18 @@ msgstr "Κωδικός:"
 
 msgid "Password cannot be empty"
 msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός"
+
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
 
 msgid "Enable"
 msgstr "Ενεργό"

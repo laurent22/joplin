@@ -979,10 +979,6 @@ msgstr "Ustaw powiadomienie:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Lista notatek"
-
 msgid "New note"
 msgstr "Nowa notatka"
 
@@ -2182,6 +2178,10 @@ msgstr "Zaloguj z OneDrive"
 
 msgid "Search"
 msgstr "Wyszukaj"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Lista notatek"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

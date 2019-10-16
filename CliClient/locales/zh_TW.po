@@ -931,10 +931,6 @@ msgstr "設置提醒:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "啟用加密"
-
 msgid "New note"
 msgstr "新增記事"
 
@@ -2098,6 +2094,10 @@ msgstr "以 OneDrive 登錄"
 
 msgid "Search"
 msgstr "搜尋"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "啟用加密"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "開始編輯記事。如需返回命令行，請關閉編輯器。"

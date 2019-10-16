@@ -972,10 +972,6 @@ msgstr "Установить напоминание:"
 msgid "Template file:"
 msgstr "Файл шаблона:"
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Список заметок"
-
 msgid "New note"
 msgstr "Новая заметка"
 
@@ -2162,6 +2158,10 @@ msgstr "Войти с OneDrive"
 
 msgid "Search"
 msgstr "Поиск"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Список заметок"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

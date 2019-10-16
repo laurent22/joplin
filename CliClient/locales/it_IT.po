@@ -978,10 +978,6 @@ msgstr "Imposta allarme:"
 msgid "Template file:"
 msgstr "File del modello:"
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Lista delle note"
-
 msgid "New note"
 msgstr "Nuova nota"
 
@@ -2165,6 +2161,10 @@ msgstr "Accedi a OneDrive"
 
 msgid "Search"
 msgstr "Cerca"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Lista delle note"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

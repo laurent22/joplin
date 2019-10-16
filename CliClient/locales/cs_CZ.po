@@ -961,10 +961,6 @@ msgstr "Nastavit alarm:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Seznam položek"
-
 msgid "New note"
 msgstr "Nová poznámka"
 
@@ -2147,6 +2143,10 @@ msgstr "Přihlásit se pomocí OneDrive"
 
 msgid "Search"
 msgstr "Hledání"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Seznam položek"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
