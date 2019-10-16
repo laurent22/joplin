@@ -142,13 +142,11 @@ msgstr "Master-Passwort eingeben:"
 msgid "Operation cancelled"
 msgstr "Vorgang abgebrochen"
 
-#, fuzzy
 msgid "Confirm master password:"
-msgstr "Master-Passwort eingeben:"
+msgstr "Master-Passwort bestätigen:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "Passwort darf nicht leer sein"
+msgstr "Passwörter sind nicht identisch!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -617,7 +615,7 @@ msgstr "Exportiere „%s“ ins „%s“-Format. Bitte warten..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Konnte Notizen nicht exportieren: %s"
 
 msgid "&File"
 msgstr "&Datei"
@@ -699,7 +697,7 @@ msgid "&View"
 msgstr "&Ansicht"
 
 msgid "Toggle sidebar"
-msgstr "Seitenleiste umschalten"
+msgstr "Seitenleiste ein-/ausschalten"
 
 msgid "Toggle editor layout"
 msgstr "Editor-Layout umschalten"
@@ -763,12 +761,8 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr ""
-"Versionshinweise:\n"
-"\n"
-"%s"
+msgstr "Alle Versionshinweise"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token wurde in die Zwischenablage kopiert!"
@@ -994,9 +988,8 @@ msgstr "Alarm erstellen:"
 msgid "Template file:"
 msgstr "Vorlagen-Datei:"
 
-#, fuzzy
 msgid "Toggle note list"
-msgstr "Notizen-Liste"
+msgstr "Notizen-Liste ein-/ausschalten"
 
 msgid "New note"
 msgstr "Neue Notiz"
@@ -1190,9 +1183,8 @@ msgstr "Optionen"
 msgid "Synchronisation Status"
 msgstr "Synchronisations-Status"
 
-#, fuzzy
 msgid "Remove"
-msgstr "Löschen?"
+msgstr "Entfernen"
 
 #, javascript-format
 msgid ""
@@ -1510,7 +1502,7 @@ msgid "Dark"
 msgstr "Dunkel"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
 msgstr "Solarized Hell"
@@ -1551,9 +1543,8 @@ msgstr "Wenn eine neue Notiz erstellt wird:"
 msgid "Enable soft breaks"
 msgstr "Aktiviere weiche Zeilenumbrüche"
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Aktiviere Fountain Unterstützung"
+msgstr "Aktiviere Typographie Unterstützung"
 
 msgid "Enable math expressions"
 msgstr "Aktiviere mathematische Ausdrücke"
@@ -1665,34 +1656,34 @@ msgstr ""
 "wird Joplin versuchen den Standardeditor zu erkennen."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Seitengröße für den PDF-Export"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Seitenausrichtung für den PDF-Export"
 
 msgid "Portrait"
-msgstr ""
+msgstr "Hochformat"
 
 msgid "Landscape"
-msgstr ""
+msgstr "Querformat"
 
 msgid "Custom TLS certificates"
 msgstr "Benutzerdefinierte TLS-Zertifikate"
@@ -2087,17 +2078,14 @@ msgstr "Passwort:"
 msgid "Password cannot be empty"
 msgstr "Passwort darf nicht leer sein"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "Passwort darf nicht leer sein"
+msgstr "Bestätigungs-Passwort darf nicht leer sein"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "Master-Passwort eingeben:"
+msgstr "Passwort bestätigen:"
 
-#, fuzzy
 msgid "Confirm password"
-msgstr "Master-Passwort eingeben:"
+msgstr "Passwort bestätigen"
 
 msgid "Enable"
 msgstr "Aktivieren"
