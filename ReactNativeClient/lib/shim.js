@@ -42,6 +42,7 @@ shim.platformName = function() {
 	throw new Error('Cannot determine platform');
 };
 
+// "ios" or "android", or "" if not on mobile
 shim.mobilePlatform = function() {
 	return ''; // Default if we're not on mobile (React Native)
 };
