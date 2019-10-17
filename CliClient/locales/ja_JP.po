@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -136,13 +138,11 @@ msgstr "マスターパスワードを入力してください:"
 msgid "Operation cancelled"
 msgstr "操作をキャンセルしました"
 
-#, fuzzy
 msgid "Confirm master password:"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワード(確認用):"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "パスワードは空にできません"
+msgstr "パスワードが一致しません!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -588,7 +588,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "ノートをエクスポートできませんでした: %s"
 
 msgid "&File"
 msgstr "&ファイル"
@@ -733,9 +733,8 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "ノートを削除しますか？"
+msgstr "リリースノート（完全版）"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
@@ -844,9 +843,9 @@ msgid ""
 "the data! To enable encryption, please enter your password below."
 msgstr ""
 "暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
-"ゲットに暗号化の状態で送ることを意味します。セキュリティの意味で、パスワード"
-"をなくさないでください。パスワードはデータを復号する*唯一*の方法です！ 暗号化"
-"を有効にするには、下にパスワードを入力してください。"
+"ゲットに暗号化した状態で送ることを意味します。パスワードはなくさないようにし"
+"てください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法にな"
+"るためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 
 msgid "Disable encryption"
 msgstr "暗号化を無効にする"
@@ -883,8 +882,9 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注意：\"active\"に指定されたマスターキーのみが暗号化に使用されます。暗号化に"
-"使用されたキーに応じて、いずれかのキーが暗号解除のために使用されます。"
+"注意：暗号化に使用されるのはその時点で\"アクティブ\"なマスターキーのみです。"
+"なお、復号時には対象のノートやノートブックを暗号化するときに使ったキーが使用"
+"されます。"
 
 msgid "Missing Master Keys"
 msgstr "マスターキーがありません"
@@ -902,8 +902,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"エンドツーエンド暗号化(E2EE)に関する詳細な情報とどのように有効化するのかのア"
-"ドバイスは、次のドキュメントをご覧ください:"
+"エンドツーエンド暗号化(E2EE)に関する詳細な情報と有効化の手順については、次の"
+"ドキュメントをご覧ください:"
 
 msgid "Status"
 msgstr "状態"
@@ -1140,7 +1140,7 @@ msgid "Synchronisation Status"
 msgstr "同期状況"
 
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #, javascript-format
 msgid ""
@@ -1456,7 +1456,7 @@ msgid "Dark"
 msgstr "暗い"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
 msgstr "Solarised (明)"
@@ -1497,9 +1497,8 @@ msgstr "新しいノートを作成した際:"
 msgid "Enable soft breaks"
 msgstr "ソフトブレークを有効にする"
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Fountain構文を有効にする"
+msgstr "Typographer（記号文字）を有効にする"
 
 msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
@@ -1609,34 +1608,34 @@ msgstr ""
 "既定のエディターを自動的に検出します。"
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "エクスポートするPDFのページサイズ"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "PDFページの向き"
 
 msgid "Portrait"
-msgstr ""
+msgstr "縦"
 
 msgid "Landscape"
-msgstr ""
+msgstr "横"
 
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
@@ -1659,7 +1658,7 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"フェイルセーフ: 同期先が空の場合 (設定ミスやバグに起因することが多い) にロー"
+"フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ロー"
 "カルデータを消去しないようにする"
 
 msgid ""
@@ -2018,17 +2017,14 @@ msgstr "パスワード:"
 msgid "Password cannot be empty"
 msgstr "パスワードは空にできません"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "パスワードは空にできません"
+msgstr "パスワード(確認用)は空にできません"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "マスターパスワードを入力してください:"
+msgstr "パスワード(確認用):"
 
-#, fuzzy
 msgid "Confirm password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "パスワード(確認用)"
 
 msgid "Enable"
 msgstr "有効"
