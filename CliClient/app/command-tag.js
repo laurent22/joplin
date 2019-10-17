@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('<tag-command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags (use -l for long option).');
+		return _('<tag-command> can be "add", "remove", "list", or "notetags" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).');
 	}
 
 	options() {
