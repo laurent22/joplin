@@ -2,6 +2,7 @@ const { Logger } = require('lib/logger.js');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const { shim } = require('lib/shim');
+const { _ } = require('lib/locale.js');
 const EventEmitter = require('events');
 const { splitCommandString } = require('lib/string-utils');
 const { fileExtension, basename } = require('lib/path-utils');
@@ -247,7 +248,7 @@ class ExternalEditWatcher {
 				if (bridge().openExternal(`file://${file}`)) {
 					resolve();
 				} else {
-					reject(new Error('Unknown failure'));
+					reject(new Error(_(`Could not open file: ${file}`)));
 				}
 			});
 		}
