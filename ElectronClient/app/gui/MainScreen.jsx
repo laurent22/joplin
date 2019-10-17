@@ -102,7 +102,7 @@ class MainScreenComponent extends React.Component {
 			} else {
 				await createNewNote(null, true);
 			}
-		} else if (command.name === 'newNotebook') {
+		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
@@ -111,6 +111,7 @@ class MainScreenComponent extends React.Component {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
+								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
