@@ -100,7 +100,7 @@ async function handleAutocompletionPromise(line) {
 		}
 
 		if (argName == 'tag-command') {
-			let c = filterList(['add', 'remove', 'list'], next);
+			let c = filterList(['add', 'remove', 'list', 'notetags'], next);
 			l.push(...c);
 		}
 

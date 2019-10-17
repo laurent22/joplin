@@ -75,6 +75,18 @@ class Command extends BaseCommand {
 					this.stdout(tag.title);
 				});
 			}
+		} else if (command == 'notetags') {
+			if (args.tag) {
+				let note = await app().loadItems(BaseModel.TYPE_NOTE, args.tag);
+				if (note.length < 1) throw new Error(_('Cannot find note with id "%s".', args.tag));
+				if (note.length > 1) throw new Error(_('Multiple notes match the id "%s". Please be more specific', args.tag));
+				let tags = await Tag.tagsByNoteId(note[0].id);
+				tags.map(tag => {
+					this.stdout(tag.title);
+				});
+			} else {
+				throw new Error(_('Cannot find note with id "%s".', args.tag));
+			}
 		} else {
 			throw new Error(_('Invalid command: "%s"', command));
 		}
