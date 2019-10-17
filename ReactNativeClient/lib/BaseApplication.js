@@ -448,6 +448,10 @@ class BaseApplication {
 			refreshFolders = 'now';
 		}
 
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showNoteCounts') || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshFolders = 'now';
+		}
+
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
 			DecryptionWorker.instance().scheduleStart();
 		}

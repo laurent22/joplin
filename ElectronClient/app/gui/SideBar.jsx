@@ -460,7 +460,7 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle}
+					{itemTitle} {folder.note_count}
 				</a>
 			</div>
 		);
@@ -471,6 +471,7 @@ class SideBarComponent extends React.Component {
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 
 		const anchorRef = this.anchorItemRef('tag', tag.id);
+		const noteCount = Setting.value('showNoteCounts') ? tag.note_count : '';
 
 		return (
 			<a
@@ -488,7 +489,7 @@ class SideBarComponent extends React.Component {
 					this.tagItem_click(tag);
 				}}
 			>
-				{Tag.displayTitle(tag)}
+				{Tag.displayTitle(tag)} {noteCount}
 			</a>
 		);
 	}

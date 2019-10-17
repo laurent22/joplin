@@ -105,6 +105,24 @@ class Folder extends BaseItem {
 		};
 	}
 
+	// Calculates note counts for all folders and adds the note_count attribute to each folder
+	// Note: this only calculates folder-specific notes, it doesn't include inherited notes
+	static async addNoteCounts(folders) {
+		const sql = 'SELECT parent_id, count(parent_id) note_count FROM notes WHERE parent_id != "" GROUP BY parent_id';
+		const noteCounts = await this.db().selectAll(sql);
+
+		const foldersById = {};
+		for (let i = 0; i < folders.length; i++) {
+			const folder = folders[i];
+			foldersById[folder.id] = folder;
+		}
+
+		for (let i = 0; i < noteCounts.length; i++) {
+			const row = noteCounts[i];
+			foldersById[row.parent_id].note_count = row.note_count;
+		}
+	}
+
 	// Folders that contain notes that have been modified recently go on top.
 	// The remaining folders, that don't contain any notes are sorted by their own user_updated_time
 	static async orderByLastModified(folders, dir = 'DESC') {
