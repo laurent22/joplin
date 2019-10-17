@@ -85,7 +85,7 @@ class Command extends BaseCommand {
 					this.stdout(tag.title);
 				});
 			} else {
-				throw new Error(_('Cannot find note with id "%s".', args.tag));
+				throw new Error(_('Missing required argument: note'));
 			}
 		} else {
 			throw new Error(_('Invalid command: "%s"', command));
