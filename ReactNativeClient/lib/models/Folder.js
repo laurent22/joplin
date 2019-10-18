@@ -106,7 +106,7 @@ class Folder extends BaseItem {
 	}
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
-	// Note: this only calculates folder-specific notes, it doesn't include inherited notes
+	// Note: this only calculates the overall number of nodes for this folder and all its descendants
 	static async addNoteCounts(folders) {
 		const foldersById = {};
 		folders.forEach((f) => {
@@ -118,7 +118,12 @@ class Folder extends BaseItem {
 			GROUP BY folders.id`;
 		const noteCounts = await this.db().selectAll(sql);
 		noteCounts.forEach((noteCount) => {
-			foldersById[noteCount.folder_id].note_count = noteCount.note_count;
+			let parentId = noteCount.folder_id;
+			do {
+				let folder = foldersById[parentId];
+				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
+				parentId = folder.parent_id;
+			} while (parentId);
 		});
 	}
 
