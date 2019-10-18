@@ -232,7 +232,7 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
-			showNoteCounts: { value: false, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			showNoteCounts: { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['cli'], label: () => _('Show note counts') },
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
 			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
