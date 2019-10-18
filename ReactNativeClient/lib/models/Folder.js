@@ -108,19 +108,18 @@ class Folder extends BaseItem {
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates folder-specific notes, it doesn't include inherited notes
 	static async addNoteCounts(folders) {
-		const sql = 'SELECT parent_id, count(parent_id) note_count FROM notes WHERE parent_id != "" GROUP BY parent_id';
-		const noteCounts = await this.db().selectAll(sql);
-
 		const foldersById = {};
-		for (let i = 0; i < folders.length; i++) {
-			const folder = folders[i];
-			foldersById[folder.id] = folder;
-		}
+		folders.forEach((f) => {
+			foldersById[f.id] = f;
+		});
 
-		for (let i = 0; i < noteCounts.length; i++) {
-			const row = noteCounts[i];
-			foldersById[row.parent_id].note_count = row.note_count;
-		}
+		const sql = `SELECT folders.id as folder_id, count(notes.parent_id) as note_count 
+			FROM folders LEFT JOIN notes ON notes.parent_id = folders.id 
+			GROUP BY folders.id`;
+		const noteCounts = await this.db().selectAll(sql);
+		noteCounts.forEach((noteCount) => {
+			foldersById[noteCount.folder_id].note_count = noteCount.note_count;
+		});
 	}
 
 	// Folders that contain notes that have been modified recently go on top.
