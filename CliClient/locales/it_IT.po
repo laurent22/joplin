@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "To delete a tag, untag the associated notes."
@@ -125,13 +125,12 @@ msgstr "Segna un \"Cose-da-fare\" come completato."
 msgid "Note is not a to-do: \"%s\""
 msgstr "La nota non è un \"Cose-da-fare\": \"%s\""
 
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
 "Gestisci la configurazione E2EE. I comandi sono `abilita`, `disabilita`, "
-"`decripta`, `stato` e `stato-target`."
+"`decripta`, `stato`, `decripta-file` e `stato-target`."
 
 msgid "Enter master password:"
 msgstr "Inserisci password principale:"
@@ -139,13 +138,11 @@ msgstr "Inserisci password principale:"
 msgid "Operation cancelled"
 msgstr "Operazione annullata"
 
-#, fuzzy
 msgid "Confirm master password:"
-msgstr "Inserisci password principale:"
+msgstr "Conferma password principale:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "La password non può essere vuota"
+msgstr "Le password non combaciano!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -485,7 +482,6 @@ msgstr "Scaricamento risorse…"
 msgid "Cancelling... Please wait."
 msgstr "Annullamento... Attendere per favore."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
 "[tag] from [note], or to list the notes associated with [tag]. The command "
@@ -493,7 +489,8 @@ msgid ""
 msgstr ""
 "<tag-command> può essere \"add\", \"remove\" or \"list\" per assegnare o "
 "rimuovere [tag] da [note], o per mostrare le note associate a [tag]. Il "
-"comando `tag list` può essere usato per mostrare tutte le etichette."
+"comando `tag list` può essere usato per mostrare tutte le etichette (usa -l "
+"per l’opzione lunga)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -609,7 +606,7 @@ msgstr "Esportazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Non è possibile esportare le note: %s"
 
 msgid "&File"
 msgstr "&File"
@@ -754,9 +751,8 @@ msgstr "Sì"
 msgid "No"
 msgstr "No"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "Eliminare le note?"
+msgstr "Note di rilascio complete"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Il token è stato copiato negli appunti!"
@@ -1093,10 +1089,10 @@ msgid "Error opening note in editor: %s"
 msgstr "Errore durante l'apertura della nota nell'editor: %s"
 
 msgid "strong text"
-msgstr "Testo grasseto"
+msgstr "testo grasseto"
 
 msgid "emphasized text"
-msgstr "Testo Sottolineato"
+msgstr "testo Sottolineato"
 
 msgid "List item"
 msgstr "Lista Elemento"
@@ -1167,7 +1163,7 @@ msgid "Synchronisation Status"
 msgstr "Stato della Sincronizzazione"
 
 msgid "Remove"
-msgstr ""
+msgstr "Rimuovi"
 
 #, javascript-format
 msgid ""
@@ -1523,9 +1519,8 @@ msgstr "Quando si crea una nuova nota:"
 msgid "Enable soft breaks"
 msgstr ""
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Attiva supporto sintassi Fountain"
+msgstr "Attiva supporto tipografico"
 
 msgid "Enable math expressions"
 msgstr "Attiva espressioni matematiche"
@@ -1537,7 +1532,7 @@ msgid "Enable footnotes"
 msgstr "Attiva note a piè pagina"
 
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Abilita l’estensione indice"
 
 msgid "Enable ~sub~ syntax"
 msgstr "Attiva sintassi ~sub~"
@@ -1638,7 +1633,7 @@ msgstr ""
 "automaticamente l'editor predefinito."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Dimensione pagina per l’esportazione in PDF"
 
 msgid "A4"
 msgstr ""
@@ -1659,13 +1654,13 @@ msgid "Legal"
 msgstr ""
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Orientamento pagina per l’esportazione in PDF"
 
 msgid "Portrait"
-msgstr ""
+msgstr "Verticale"
 
 msgid "Landscape"
-msgstr ""
+msgstr "Orizzontale"
 
 msgid "Custom TLS certificates"
 msgstr "Certificati TLS personalizzati"
@@ -2053,17 +2048,14 @@ msgstr "Password:"
 msgid "Password cannot be empty"
 msgstr "La password non può essere vuota"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "La password non può essere vuota"
+msgstr "La password di conferma non può essere vuota"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "Inserisci password principale:"
+msgstr "Conferma password:"
 
-#, fuzzy
 msgid "Confirm password"
-msgstr "Inserisci password principale:"
+msgstr "Conferma password"
 
 msgid "Enable"
 msgstr "Abilitato"
