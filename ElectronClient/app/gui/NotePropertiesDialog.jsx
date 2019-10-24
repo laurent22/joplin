@@ -106,7 +106,7 @@ class NotePropertiesDialog extends React.Component {
 
 		this.styles_.controlBox = {
 			marginBottom: '1em',
-			color: 'black', //This will apply for the calendar
+			color: 'black', // This will apply for the calendar
 		};
 
 		this.styles_.button = {

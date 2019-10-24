@@ -18,6 +18,26 @@ toolUtils.execCommand = function(command) {
 	});
 };
 
+toolUtils.execCommandWithPipes = function(executable, args) {
+	var spawn = require('child_process').spawn;
+
+	return new Promise((resolve, reject) => {
+		const child = spawn(executable, args, { stdio: 'inherit'});
+
+		child.on('error', (error) => {
+			reject(error);
+		});
+
+		child.on('close', (code) => {
+			if (code !== 0) {
+				reject(`Ended with code ${code}`);
+			} else {
+				resolve();
+			}
+		});
+	});
+};
+
 toolUtils.downloadFile = function(url, targetPath) {
 	const https = require('https');
 	const fs = require('fs');
@@ -28,7 +48,7 @@ toolUtils.downloadFile = function(url, targetPath) {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
 			file.on('finish', function() {
-				//file.close();
+				// file.close();
 				resolve();
 			});
 		}).on('error', (error) => {
@@ -74,7 +94,7 @@ toolUtils.fileExists = async function(filePath) {
 		fs.stat(filePath, function(err) {
 			if (err == null) {
 				resolve(true);
-			} else if(err.code == 'ENOENT') {
+			} else if (err.code == 'ENOENT') {
 				resolve(false);
 			} else {
 				reject(err);

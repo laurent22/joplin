@@ -128,6 +128,12 @@ msgstr ""
 msgid "Operation cancelled"
 msgstr ""
 
+msgid "Confirm master password:"
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr ""
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -515,6 +521,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr ""
 
@@ -656,6 +666,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "Full Release Notes"
 msgstr ""
 
 msgid "Token has been copied to the clipboard!"
@@ -1034,6 +1047,9 @@ msgstr ""
 msgid "Synchronisation Status"
 msgstr ""
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1041,14 +1057,14 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
 
+msgid "Delete"
+msgstr ""
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
-
-msgid "Delete"
 msgstr ""
 
 msgid "Rename"
@@ -1324,6 +1340,9 @@ msgstr ""
 msgid "Dark"
 msgstr ""
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1361,6 +1380,9 @@ msgid "When creating a new note:"
 msgstr ""
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 msgid "Enable math expressions"
@@ -1462,6 +1484,36 @@ msgstr ""
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
 msgstr ""
 
 msgid "Custom TLS certificates"
@@ -1812,6 +1864,15 @@ msgid "Password:"
 msgstr ""
 
 msgid "Password cannot be empty"
+msgstr ""
+
+msgid "Confirm password cannot be empty"
+msgstr ""
+
+msgid "Confirm password:"
+msgstr ""
+
+msgid "Confirm password"
 msgstr ""
 
 msgid "Enable"

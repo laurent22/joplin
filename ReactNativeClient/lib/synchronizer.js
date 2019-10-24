@@ -12,6 +12,7 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
+const { filename } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
@@ -22,6 +23,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
+		this.lockDirName_ = '.lock';
 		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
@@ -29,6 +31,7 @@ class Synchronizer {
 		this.autoStartDecryptionWorker_ = true;
 		this.maxResourceSize_ = null;
 		this.downloadQueue_ = null;
+		this.clientId_ = Setting.value('clientId');
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
@@ -50,6 +53,10 @@ class Synchronizer {
 
 	api() {
 		return this.api_;
+	}
+
+	clientId() {
+		return this.clientId_;
 	}
 
 	setLogger(l) {
@@ -190,6 +197,66 @@ class Synchronizer {
 		return state;
 	}
 
+	async acquireLock_() {
+		await this.checkLock_();
+		await this.api().put(`${this.lockDirName_}/${this.clientId()}_${Date.now()}.lock`, `${Date.now()}`);
+	}
+
+	async releaseLock_() {
+		const lockFiles = await this.lockFiles_();
+		for (const lockFile of lockFiles) {
+			const p = this.parseLockFilePath(lockFile.path);
+			if (p.clientId === this.clientId()) {
+				await this.api().delete(p.fullPath);
+			}
+		}
+	}
+
+	async lockFiles_() {
+		const output = await this.api().list(this.lockDirName_);
+		return output.items;
+	}
+
+	parseLockFilePath(path) {
+		const splitted = filename(path).split('_');
+		const fullPath = `${this.lockDirName_}/${path}`;
+		if (splitted.length !== 2) throw new Error(`Sync target appears to be locked but lock filename is invalid: ${fullPath}. Please delete it on the sync target to continue.`);
+		return {
+			clientId: splitted[0],
+			timestamp: Number(splitted[1]),
+			fullPath: fullPath,
+		};
+	}
+
+	async checkLock_() {
+		const lockFiles = await this.lockFiles_();
+		if (lockFiles.length) {
+			const lock = this.parseLockFilePath(lockFiles[0].path);
+
+			if (lock.clientId === this.clientId()) {
+				await this.releaseLock_();
+			} else {
+				throw new Error(`The sync target was locked by client ${lock.clientId} on ${time.unixMsToLocalDateTime(lock.timestamp)} and cannot be accessed. If no app is currently operating on the sync target, you can delete the files in the "${this.lockDirName_}" directory on the sync target to resume.`);
+			}
+		}
+	}
+
+	async checkSyncTargetVersion_() {
+		const supportedSyncTargetVersion = Setting.value('syncVersion');
+		const syncTargetVersion = await this.api().get('.sync/version.txt');
+
+		if (!syncTargetVersion) {
+			await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+		} else {
+			if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
+				throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
+			} else {
+				await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+				// TODO: do upgrade job
+			}
+		}
+	}
+
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -212,6 +279,9 @@ class Synchronizer {
 		const lastContext = options.context ? options.context : {};
 
 		const syncSteps = options.syncSteps ? options.syncSteps : ['update_remote', 'delete_remote', 'delta'];
+
+		// The default is to log errors, but when testing it's convenient to be able to catch and verify errors
+		const throwOnError = options.throwOnError === true;
 
 		const syncTargetId = this.api().syncTargetId();
 
@@ -237,10 +307,16 @@ class Synchronizer {
 			return `${this.resourceDirName_}/${resourceId}`;
 		};
 
+		let errorToThrow = null;
+
 		try {
 			await this.api().mkdir(this.syncDirName_);
+			await this.api().mkdir(this.lockDirName_);
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
+
+			await this.checkLock_();
+			await this.checkSyncTargetVersion_();
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -548,7 +624,7 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let task = await this.downloadQueue_.waitForResult(path); //await this.api().get(path);
+							let task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);
@@ -709,7 +785,9 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
+			if (throwOnError) {
+				errorToThrow = error;
+			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
@@ -751,6 +829,8 @@ class Synchronizer {
 		this.dispatch({ type: 'SYNC_COMPLETED' });
 
 		this.state_ = 'idle';
+
+		if (errorToThrow) throw errorToThrow;
 
 		return outputContext;
 	}

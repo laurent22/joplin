@@ -137,6 +137,14 @@ msgstr "Entrer le mot de passe maître :"
 msgid "Operation cancelled"
 msgstr "Opération annulée"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Entrer le mot de passe maître :"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Mot de passe ne peut être vide"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -592,6 +600,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
 
+#, fuzzy, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Impossible de télécharger la mise à jour : %s"
+
 msgid "&File"
 msgstr "&Fichier"
 
@@ -735,6 +747,13 @@ msgstr "Oui"
 
 msgid "No"
 msgstr "Non"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr ""
+"Notes de version :\n"
+"\n"
+"%s"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Le code d'authentification a été copié dans le presse-papiers !"
@@ -1150,6 +1169,10 @@ msgstr "Options"
 msgid "Synchronisation Status"
 msgstr "État de la synchronisation"
 
+#, fuzzy
+msgid "Remove"
+msgstr "Supprimer ?"
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1160,15 +1183,15 @@ msgstr ""
 "\n"
 "Toutes les notes et sous-carnets dans ce carnet seront également effacés."
 
+msgid "Delete"
+msgstr "Supprimer"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Enlever l’étiquette \"%s\" de toutes les notes ?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Enlever cette recherche de la barre latérale ?"
-
-msgid "Delete"
-msgstr "Supprimer"
 
 msgid "Rename"
 msgstr "Renommer"
@@ -1464,6 +1487,9 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarisé clair"
 
@@ -1502,6 +1528,10 @@ msgstr "Lors de la création d'une note :"
 
 msgid "Enable soft breaks"
 msgstr "Activer retours à la ligne \"doux\""
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Activer la syntaxe \"Fountain\""
 
 msgid "Enable math expressions"
 msgstr "Activer les expressions mathématiques"
@@ -1611,6 +1641,36 @@ msgid ""
 msgstr ""
 "La commande de l'éditeur de texte (peut inclure des options) pour ouvrir et "
 "modifier les notes. Si non-spécifiée, elle sera détectée automatiquement."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personnalisés"
@@ -1999,6 +2059,18 @@ msgstr "Mot de passe :"
 msgid "Password cannot be empty"
 msgstr "Mot de passe ne peut être vide"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Mot de passe ne peut être vide"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Entrer le mot de passe maître :"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Entrer le mot de passe maître :"
+
 msgid "Enable"
 msgstr "Activer"
 
@@ -2096,6 +2168,10 @@ msgstr "Se connecter à OneDrive"
 msgid "Search"
 msgstr "Chercher"
 
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Liste de notes"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Édition de la note en cours. Fermez l'éditeur de texte pour retourner à "
@@ -2111,9 +2187,6 @@ msgstr "Chercher"
 
 #~ msgid "Sidebar"
 #~ msgstr "Barre latérale"
-
-#~ msgid "Note list"
-#~ msgstr "Liste de notes"
 
 #~ msgid "Note title"
 #~ msgstr "Titre de la note"
@@ -2227,9 +2300,6 @@ msgstr "Chercher"
 #~ "Le chemin du répertoire avec lequel synchroniser lorsque la "
 #~ "synchronisation par système de fichier est activée. Voir `sync.target`."
 
-#~ msgid "Remove?"
-#~ msgstr "Supprimer ?"
-
 #~ msgid "State: %s."
 #~ msgstr "État : %s."
 
@@ -2245,15 +2315,6 @@ msgstr "Chercher"
 
 #~ msgid "Searches"
 #~ msgstr "Recherches"
-
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Notes de version :\n"
-#~ "\n"
-#~ "%s"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importer un carnet Evernote (fichier .enex)."
@@ -2321,9 +2382,6 @@ msgstr "Chercher"
 
 #~ msgid "WebDAV (Beta)"
 #~ msgstr "WebDAV (Bêta)"
-
-#~ msgid "Could not download the update: %s"
-#~ msgstr "Impossible de télécharger la mise à jour : %s"
 
 #~ msgid "New version downloaded - application will quit now and update..."
 #~ msgstr ""

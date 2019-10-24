@@ -15,6 +15,7 @@ const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { shim } = require('lib/shim.js');
+const { uuid } = require('lib/uuid.js');
 const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
@@ -597,6 +598,8 @@ class BaseApplication {
 		BaseModel.db_ = this.database_;
 
 		await Setting.load();
+
+		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);

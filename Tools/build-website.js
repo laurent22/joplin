@@ -449,7 +449,7 @@ function markdownToHtml(md, templateParams) {
 				const anchorName = headingTextToAnchorName(token.content, doneNames);
 				doneNames.push(anchorName);
 				const anchorTokens = createAnchorTokens(anchorName);
-				//token.children = anchorTokens.concat(token.children);
+				// token.children = anchorTokens.concat(token.children);
 				token.children = token.children.concat(anchorTokens);
 			}
 		}

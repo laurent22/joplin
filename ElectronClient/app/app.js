@@ -196,7 +196,6 @@ class Application extends BaseApplication {
 				break;
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
-
 				newState = Object.assign({}, state);
 				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
 				break;
@@ -248,6 +247,11 @@ class Application extends BaseApplication {
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
 			this.updateMenuItemStates();
+		}
+
+		if (action.type === 'NOTE_DEVTOOLS_TOGGLE') {
+			const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+			menuItem.checked = newState.noteDevToolsVisible;
 		}
 
 		return result;
@@ -418,8 +422,8 @@ class Application extends BaseApplication {
 			},
 		});
 
-		/* We need a dummy entry, otherwise the ternary operator to show a
-		 * menu item only on a specific OS does not work. */
+		// We need a dummy entry, otherwise the ternary operator to show a
+		// menu item only on a specific OS does not work.
 		const noItem = {
 			type: 'separator',
 			visible: false,
@@ -466,6 +470,18 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'newNotebook',
+				});
+			},
+		};
+
+		const newSubNotebookItem = {
+			label: _('New sub-notebook'),
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newSubNotebook',
+					activeFolderId: Setting.value('activeFolderId'),
 				});
 			},
 		};
@@ -565,6 +581,9 @@ class Application extends BaseApplication {
 				'',
 				'Copyright © 2016-2019 Laurent Cozic',
 				_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
+				'',
+				_('Client ID: %s', Setting.value('clientId')),
+				_('Sync Version: %s', Setting.value('syncVersion')),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
@@ -576,13 +595,13 @@ class Application extends BaseApplication {
 		}
 
 		const rootMenuFile = {
-			/* Using a dummy entry for macOS here, because first menu
-			 * becomes 'Joplin' and we need a nenu called 'File' later. */
+			// Using a dummy entry for macOS here, because first menu
+			// becomes 'Joplin' and we need a nenu called 'File' later.
 			label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
-			/* `&` before one of the char in the label name mean, that
-			 * <Alt + F> will open this menu. It's needed becase electron
-			 * opens the first menu on Alt press if no hotkey assigned.
-			 * Issue: https://github.com/laurent22/joplin/issues/934 */
+			// `&` before one of the char in the label name mean, that
+			// <Alt + F> will open this menu. It's needed becase electron
+			// opens the first menu on Alt press if no hotkey assigned.
+			// Issue: https://github.com/laurent22/joplin/issues/934
 			submenu: [{
 				label: _('About Joplin'),
 				visible: shim.isMac() ? true : false,
@@ -610,7 +629,8 @@ class Application extends BaseApplication {
 			},
 			shim.isMac() ? noItem : newNoteItem,
 			shim.isMac() ? noItem : newTodoItem,
-			shim.isMac() ? noItem : newNotebookItem, {
+			shim.isMac() ? noItem : newNotebookItem,
+			shim.isMac() ? noItem : newSubNotebookItem, {
 				type: 'separator',
 				visible: shim.isMac() ? false : true,
 			}, {
@@ -665,7 +685,8 @@ class Application extends BaseApplication {
 			submenu: [
 				newNoteItem,
 				newTodoItem,
-				newNotebookItem, {
+				newNotebookItem,
+				newSubNotebookItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
@@ -913,6 +934,8 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
+					id: 'help:toggleDevTools',
+					type: 'checkbox',
 					label: _('Toggle development tools'),
 					visible: true,
 					click: () => {

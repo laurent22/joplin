@@ -136,6 +136,14 @@ msgstr "Introducir contrasinal mestre:"
 msgid "Operation cancelled"
 msgstr "Operación cancelada"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Introducir contrasinal mestre:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "O contrasinal non pode estar baleiro"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -584,6 +592,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando a «%s» como formato «%s». Agarde..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Ficheiro"
@@ -735,6 +747,9 @@ msgstr "Si"
 
 msgid "No"
 msgstr "Non"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -1134,6 +1149,9 @@ msgstr "Opcións"
 msgid "Synchronisation Status"
 msgstr "Estado da sincronización"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1142,15 +1160,15 @@ msgid ""
 msgstr ""
 "Desexa eliminar o caderno? Tamén se eliminarán todas as notas deste caderno."
 
+msgid "Delete"
+msgstr "Eliminar"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Desexa eliminar esta etiqueta de todas as notas?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Desexa eliminar esta busca da barra lateral?"
-
-msgid "Delete"
-msgstr "Eliminar"
 
 msgid "Rename"
 msgstr "Renomear"
@@ -1443,6 +1461,9 @@ msgstr "Claro"
 msgid "Dark"
 msgstr "Escuro"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1482,6 +1503,9 @@ msgid "When creating a new note:"
 msgstr "Cando se crea unha nova nota:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1594,6 +1618,36 @@ msgid ""
 msgstr ""
 "Editor a usar para abrir unha nota. Se non se indica ningún tentará detectar "
 "automaticamente o editor predeterminado."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1975,6 +2029,18 @@ msgstr "Contrasinal:"
 msgid "Password cannot be empty"
 msgstr "O contrasinal non pode estar baleiro"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "O contrasinal non pode estar baleiro"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Introducir contrasinal mestre:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Introducir contrasinal mestre:"
+
 msgid "Enable"
 msgstr "Activar"
 
@@ -2075,6 +2141,10 @@ msgstr "Acceder con OneDrive"
 
 msgid "Search"
 msgstr "Buscar"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Activar cifrado"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "Comezando a editar a nota. Peche o editor para volver ao diálogo."

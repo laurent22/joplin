@@ -138,6 +138,14 @@ msgstr "Indtast Hoved kodeord:"
 msgid "Operation cancelled"
 msgstr "Udførelse annulleret"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Indtast Hoved kodeord:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Kodeord må ikke være tomt"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -582,6 +590,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fil"
@@ -733,6 +745,9 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nej"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -1133,6 +1148,9 @@ msgstr "Muligheder"
 msgid "Synchronisation Status"
 msgstr "Synkroniserings status"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1140,15 +1158,15 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr "Slet notesbog? Alle noter i notesbogen bliver også slettet."
 
+msgid "Delete"
+msgstr "Slet"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Slet denne markering fra alle noter?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Slet denne søgning fra sidebjælke?"
-
-msgid "Delete"
-msgstr "Slet"
 
 msgid "Rename"
 msgstr "Omdøb"
@@ -1441,6 +1459,9 @@ msgstr "Lyst"
 msgid "Dark"
 msgstr "Mørkt"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1480,6 +1501,9 @@ msgid "When creating a new note:"
 msgstr "Ved oprettelse af ny note:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1592,6 +1616,36 @@ msgid ""
 msgstr ""
 "Editor der bruges til at åbne note. Hvis ingen valgt/udfyldt, vil auto-"
 "funktion søge efter standard editor."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1973,6 +2027,18 @@ msgstr "Kodeord:"
 msgid "Password cannot be empty"
 msgstr "Kodeord må ikke være tomt"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Kodeord må ikke være tomt"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Indtast Hoved kodeord:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Indtast Hoved kodeord:"
+
 msgid "Enable"
 msgstr "Tænd"
 
@@ -2073,6 +2139,10 @@ msgstr "Log på med OneDrive"
 
 msgid "Search"
 msgstr "Søg"
+
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Start kryptering"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

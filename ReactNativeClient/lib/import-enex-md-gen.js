@@ -392,12 +392,18 @@ function isSpanStyleBold(attributes) {
 	if (style.includes('font-weight: bold;')) {
 		return true;
 	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
-		//console.debug('font-family regex matched');
+		// console.debug('font-family regex matched');
 		return true;
 	} else {
-		//console.debug('Found unsupported style(s) in span tag: %s', style);
+		// console.debug('Found unsupported style(s) in span tag: %s', style);
 		return false;
 	}
+}
+
+function isSpanStyleItalic(attributes) {
+	let style = attributes.style;
+	style = style.replace(/\s+/g, '');
+	return (style.toLowerCase().includes('font-style:italic;'));
 }
 
 function enexXmlToMdArray(stream, resources) {
@@ -694,10 +700,15 @@ function enexXmlToMdArray(stream, resources) {
 				}
 			} else if (n == 'span') {
 				if (isSpanWithStyle(nodeAttributes)) {
+					// console.debug('Found style(s) in span tag: %s', nodeAttributes.style);
 					state.spanAttributes.push(nodeAttributes);
 					if (isSpanStyleBold(nodeAttributes)) {
-						//console.debug('Applying style found in span tag: bold')
+						// console.debug('Applying style found in span tag: bold')
 						section.lines.push('**');
+					}
+					if (isSpanStyleItalic(nodeAttributes)) {
+						// console.debug('Applying style found in span tag: italic')
+						section.lines.push('*');
 					}
 				}
 			} else if (['font', 'sup', 'cite', 'abbr', 'small', 'tt', 'sub', 'colgroup', 'col', 'ins', 'caption', 'var', 'map', 'area'].indexOf(n) >= 0) {
@@ -884,8 +895,12 @@ function enexXmlToMdArray(stream, resources) {
 				let attributes = state.spanAttributes.pop();
 				if (isSpanWithStyle(attributes)) {
 					if (isSpanStyleBold(attributes)) {
-						//console.debug('Applying style found in span tag (closing): bold')
+						// console.debug('Applying style found in span tag (closing): bold')
 						section.lines.push('**');
+					}
+					if (isSpanStyleItalic(attributes)) {
+						// console.debug('Applying style found in span tag (closing): italic')
+						section.lines.push('*');
 					}
 				}
 			} else if (isIgnoredEndTag(n)) {

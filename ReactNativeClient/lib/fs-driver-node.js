@@ -173,7 +173,7 @@ class FsDriverNode extends FsDriverBase {
 	}
 
 	async readFileChunk(handle, length, encoding = 'base64') {
-		//let buffer = new Buffer(length);
+		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
 		const result = await fs.read(handle, buffer, 0, length, null);
 		if (!result.bytesRead) return null;

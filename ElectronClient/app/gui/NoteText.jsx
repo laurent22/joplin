@@ -691,10 +691,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async noteRevisionViewer_onBack() {
-		this.setState({ showRevisions: false });
-
-		this.lastSetHtml_ = '';
-		this.scheduleReloadNote(this.props);
+		// When coming back from the revision viewer, the webview has been
+		// unmounted so will need to reload. We set webviewReady to false
+		// to make sure everything is reloaded as expected.
+		this.setState({ showRevisions: false, webviewReady: false }, () => {
+			this.lastSetHtml_ = '';
+			this.scheduleReloadNote(this.props);
+		});
 	}
 
 	title_changeText(event) {
@@ -1210,7 +1213,7 @@ class NoteTextComponent extends React.Component {
 
 		setTimeout(() => {
 			if (target === 'pdf') {
-				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true }, (error, data) => {
+				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true, pageSize: Setting.value('export.pdfPageSize'), landscape: Setting.value('export.pdfPageOrientation') === 'landscape' }, (error, data) => {
 					restoreSettings();
 
 					if (error) {
@@ -1840,7 +1843,7 @@ class NoteTextComponent extends React.Component {
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
 		} else if (!note || !!note.encryption_applied) {
-			//|| (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
+			// || (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
 			return this.renderNoNotes(rootStyle);
 		}
 

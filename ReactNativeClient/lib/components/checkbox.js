@@ -7,7 +7,7 @@ const styles = {
 	checkboxIcon: {
 		fontSize: 20,
 		height: 22,
-		//marginRight: 10,
+		// marginRight: 10,
 	},
 };
 
@@ -57,7 +57,7 @@ class Checkbox extends Component {
 
 		if (style && style.display === 'none') return <View />;
 
-		//if (style.display) thStyle.display = style.display;
+		// if (style.display) thStyle.display = style.display;
 
 		return (
 			<TouchableHighlight onPress={() => this.onPress()} style={thStyle}>

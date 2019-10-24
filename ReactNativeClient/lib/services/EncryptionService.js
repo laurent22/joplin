@@ -273,7 +273,7 @@ class EncryptionService {
 					ks: 128, // Key size - "128 bits should be secure enough"
 					ts: 64, // ???
 					mode: 'ocb2', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
-					//"adata":"", // Associated Data - not needed?
+					// "adata":"", // Associated Data - not needed?
 					cipher: 'aes',
 				});
 			} catch (error) {

@@ -1,5 +1,29 @@
 # Joplin changelog
 
+## [v1.0.170](https://github.com/laurent22/joplin/releases/tag/v1.0.170) - 2019-10-13T22:13:04Z
+
+- New: Added support for chemical equations using mhchem for Katex
+- New: Add option to set page dimensions when printing ([#1976](https://github.com/laurent22/joplin/issues/1976))
+- New: Add checkmark to menu item, if Dev Tools are on ([#1949](https://github.com/laurent22/joplin/issues/1949))
+- New: Added Dracula theme ([#1924](https://github.com/laurent22/joplin/issues/1924)) ([#1863](https://github.com/laurent22/joplin/issues/1863))
+- New: Added concept of sync version and client ID to allow upgrading sync targets
+- Improved: Truncate update changelog when it's too long ([#1967](https://github.com/laurent22/joplin/issues/1967)) ([#1222](https://github.com/laurent22/joplin/issues/1222))
+- Improved: Support italic in span tags ([#1966](https://github.com/laurent22/joplin/issues/1966))
+- Improved: Allow a sync client to lock a sync target, so that migration operations can be performed on it
+- Improved: Give correct mime type to more file types
+- Improved: Api: Allow getting the resources of a note ([#1956](https://github.com/laurent22/joplin/issues/1956))
+- Improved: Set cancel as the default in dangerous operations ([#1934](https://github.com/laurent22/joplin/issues/1934)) ([#1662](https://github.com/laurent22/joplin/issues/1662))
+- Improved: Hide some toolbar buttons when editor hidden ([#1940](https://github.com/laurent22/joplin/issues/1940)) ([#1896](https://github.com/laurent22/joplin/issues/1896))
+- Improved: Larger search bar ([#1933](https://github.com/laurent22/joplin/issues/1933)) ([#917](https://github.com/laurent22/joplin/issues/917))
+- Improved: Use profile temp dir when exporting files ([#1932](https://github.com/laurent22/joplin/issues/1932))
+- Improved: Code button now detects multiline ([#1915](https://github.com/laurent22/joplin/issues/1915))
+- Fixed: Prevent note content from being deleted when using certain external editors (in particular Typora) ([#1854](https://github.com/laurent22/joplin/issues/1854))
+- Fixed: Display error message when notes cannot be exported ([#1970](https://github.com/laurent22/joplin/issues/1970))
+- Fixed: Note view was not reloaded after viewing revisions ([#1819](https://github.com/laurent22/joplin/issues/1819))
+- Fixed: Fixed alarms that would trigger immediately when they were set too far in future ([#1829](https://github.com/laurent22/joplin/issues/1829))
+- Fixed: Text input context menu was not working in Windows ([#1703](https://github.com/laurent22/joplin/issues/1703))
+- Fixed: App would crash if trying to index a note that has not been decrypted yet ([#1938](https://github.com/laurent22/joplin/issues/1938))
+
 ## [v1.0.169](https://github.com/laurent22/joplin/releases/tag/v1.0.169) - 2019-09-27T18:35:13Z
 
 - New: Add support for Deepin desktop environment in install script ([#1884](https://github.com/laurent22/joplin/issues/1884))
