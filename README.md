@@ -5,16 +5,16 @@
 * * *
 [Hacktoberfest 🎃](https://hacktoberfest.digitalocean.com/) is back this year again for our great pleasure ^^
 
-To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), log in (with you GitHub account) and you are ready to get in. Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
+To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), login (with your GitHub account) and you are ready to get in. Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
 
 Start hacking, submit the PR from the 1st of October, not before.
 
 We hope you will enjoy that event this year again like the previous one 🎃🎉
 
-*PS: the 4 Pull Request don’t have to be done **only** on Joplin project, those can be done on any FOSS projects. Even PR for issue not tagged as 'hacktoberfest'*
+*PS: the 4 Pull Request don’t have to be done **only** on Joplin project, those can be done on any FOSS projects. Even PR for the issue not tagged as 'hacktoberfest'*
 * * *
 
-Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
+Joplin is a free, open-source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
@@ -26,7 +26,7 @@ The application is available for Windows, Linux, macOS, Android and iOS (the ter
 
 # Installation
 
-Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS, Linux and FreeBSD). All applications have similar user interfaces and can synchronise with each other.
+Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and **terminal** (Windows, macOS, Linux and FreeBSD). All applications have similar user interfaces and can synchronise with each other.
 
 ## Desktop applications
 
@@ -49,9 +49,9 @@ Operating system | Method
 -----------------|----------------
 macOS            | `brew install joplin`
 Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important:** First, [install Node 8+](https://nodejs.org/en/download/package-manager/).<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
-Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
+Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S Joplin`. Both the CLI tool (type `Joplin`) and desktop app (type `Joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
 
-To start it, type `joplin`.
+To start it, type `Joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/terminal/).
 
@@ -64,27 +64,27 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - Applications
 
-	- [Desktop application](https://github.com/laurent22/joplin/blob/master/readme/desktop.md)
-	- [Mobile applications](https://github.com/laurent22/joplin/blob/master/readme/mobile.md)
-	- [Terminal application](https://github.com/laurent22/joplin/blob/master/readme/terminal.md)
-	- [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md)
+    - [Desktop application](https://github.com/laurent22/joplin/blob/master/readme/desktop.md)
+    - [Mobile applications](https://github.com/laurent22/joplin/blob/master/readme/mobile.md)
+    - [Terminal application](https://github.com/laurent22/joplin/blob/master/readme/terminal.md)
+    - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md)
 
 - Support
 
-	- [Joplin Forum](https://discourse.joplinapp.org)
-	- [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md)
-	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
-	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
-	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
-	- [API documentation](https://github.com/laurent22/joplin/blob/master/readme/api.md)
-	- [FAQ](https://github.com/laurent22/joplin/blob/master/readme/faq.md)
+    - [Joplin Forum](https://discourse.joplinapp.org)
+    - [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md)
+    - [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
+    - [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
+    - [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
+    - [API documentation](https://github.com/laurent22/joplin/blob/master/readme/api.md)
+    - [FAQ](https://github.com/laurent22/joplin/blob/master/readme/faq.md)
 
 - About
 
-	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/master/readme/changelog.md)
-	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md)
-	- [Stats](https://github.com/laurent22/joplin/blob/master/readme/stats.md)
-	- [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
+    - [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/master/readme/changelog.md)
+    - [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md)
+    - [Stats](https://github.com/laurent22/joplin/blob/master/readme/stats.md)
+    - [Donate](https://github.com/laurent22/joplin/blob/master/readme/donate.md)
 <!-- TOC -->
 
 # Features
@@ -106,7 +106,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Search functionality.
 - Geo-location support.
 - Supports multiple languages
-- External editor support - open notes in your favorite external editor with one click in Joplin.
+- External editor support - open notes in your favourite external editor with one click in Joplin.
 
 # Importing
 
@@ -114,11 +114,11 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 Joplin was designed as a replacement for Evernote and so can import complete Evernote notebooks, as well as notes, tags, resources (attached files) and note metadata (such as author, geo-location, etc.) via ENEX files. In terms of data, the only two things that might slightly differ are:
 
-- Recognition data - Evernote images, in particular scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note are imported into Joplin. However, should it become supported in the search tool or other parts of Joplin, it should be possible to regenerate this recognition data since the actual image would still be available.
+- Recognition data - Evernote images, in particular, scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note is imported into Joplin. However, should it become supported in the search tool or other parts of Joplin, it should be possible to regenerate this recognition data since the actual image would still be available.
 
-- Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting.
+- Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself, however, is always imported in full regardless of formatting.
 
-To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
+To import Evernote data, first, export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
 In the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
@@ -126,7 +126,7 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 ## Importing from Markdown files
 
-Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
+Joplin can import notes from a plain Markdown file. You can either import a complete directory of Markdown files or individual files.
 
 In the **desktop application**, open File > Import > MD and select your Markdown file or directory.
 
@@ -134,7 +134,7 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 ## Importing from other applications
 
-In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
+In general, the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
 
 * Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
 * Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
@@ -143,26 +143,26 @@ In general the way to import notes from any application into Joplin is to conver
 
 # Exporting
 
-Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
+Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geolocation, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
 
 # Synchronisation
 
-One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
+One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency on any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items,  is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with Nextcloud, Dropbox (by default), OneDrive or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
+Currently, synchronisation is possible with Nextcloud, Dropbox (by default), OneDrive or the local filesystem. To set up synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
 ## Nextcloud synchronisation
 
-<img src="https://joplinapp.org/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
+<img src="https://joplinapp.org/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open-source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
 
 In the **desktop application** or **mobile application**, go to the config screen and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally `https://example.com/nextcloud/remote.php/webdav/Joplin` (**make sure to create the "Joplin" directory in Nextcloud**), and set the username and password. If it does not work, please [see this explanation](https://github.com/laurent22/joplin/issues/61#issuecomment-373282608) for more details.
 
 In the **terminal application**, you will need to set the `sync.target` config variable and all the `sync.5.path`, `sync.5.username` and `sync.5.password` config variables to, respectively the Nextcloud WebDAV URL, your username and your password. This can be done from the command line mode using:
 
-	:config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
-	:config sync.5.username YOUR_USERNAME
-	:config sync.5.password YOUR_PASSWORD
-	:config sync.target 5
+    :config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
+    :config sync.5.username YOUR_USERNAME
+    :config sync.5.password YOUR_PASSWORD
+    :config sync.target 5
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
@@ -172,9 +172,9 @@ When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/
 
 In the **desktop application** or **mobile application**, select "Dropbox" as the synchronisation target in the config screen (it is selected by default). Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
-In the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing `joplin sync` from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
+In the **terminal application**, to initiate the synchronisation process, type `: sync`. You will be asked to follow a link to authorise the application. It is possible to also synchronise outside of the user interface by typing `Joplin sync` from the terminal. This can be used to set up a Cron script to synchronise at regular interval. For example, this would do it every 30 minutes:
 
-	*/30 * * * * /path/to/joplin sync
+    */30 * * * * /path/to/Joplin sync
 
 ## WebDAV synchronisation
 
@@ -201,7 +201,7 @@ When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps
 
 In the **desktop application** or **mobile application**, select "OneDrive" as the synchronisation target in the config screen. Then, to initiate the synchronisation process, click on the "Synchronise" button in the sidebar and follow the instructions.
 
-In the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
+In the **terminal application**, to initiate the synchronisation process, type `: sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
 # Encryption
 
@@ -211,7 +211,7 @@ For a more technical description, mostly relevant for development or to review t
 
 # Note history
 
-The Joplin applications automatically save previous versions of your notes at regular intervals. These versions are synced across devices and can be viewed from the desktop application. To do so, click on the "Information" button on a note, then click on "Previous version of this note". From this screen you can view the previous versions of the note as well as restore any of them.
+The Joplin applications automatically save previous versions of your notes at regular intervals. These versions are synced across devices and can be viewed from the desktop application. To do so, click on the "Information" button on a note, then click on "Previous version of this note". From this screen, you can view the previous versions of the note as well as restore any of them.
 
 This feature can be disabled from the "Note history" section in the settings, and it is also possible to change for how long the history of a note is saved.
 
@@ -234,13 +234,13 @@ Resources that are not attached to any note will be automatically deleted after 
 
 ## Downloading attachments
 
-The way the attachments are downloaded during synchronisation can be customised in the Configuration screen, under "Attachment download behaviour". The default option ("Always") is to download all the attachments, all the time, so that the data is available even when the device is offline. There is also the option to download the attachments manually (option "Manual"), by clicking on it, or automatically (Option "Auto"), in which case the attachments are downloaded only when a note is opened. These options should help saving disk space and network bandwidth, especially on mobile.
+The way the attachments are downloaded during synchronisation can be customised in the Configuration screen, under "Attachment download behaviour". The default option ("Always") is to download all the attachments, all the time so that the data is available even when the device is offline. There is also the option to download the attachments manually (option "Manual"), by clicking on it, or automatically (Option "Auto"), in which case the attachments are downloaded only when a note is opened. These options should help saving disk space and network bandwidth, especially on mobile.
 
 # Notifications
 
 In the desktop and mobile apps, an alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. How the notification will be displayed depends on the operating system since each has a different way to handle this. Please see below for the requirements for the desktop applications:
 
-- **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Task bar balloon for Windows < 8. Growl as fallback. Growl takes precedence over Windows balloons.
+- **Windows**: >= 8. Make sure the Action Center is enabled on Windows. Taskbar balloon for Windows < 8. Growl as a fallback. Growl takes precedence over Windows balloons.
 - **macOS**: >= 10.8 or Growl if earlier.
 - **Linux**: `notify-osd` or `libnotify-bin` installed (Ubuntu should have this by default). Growl otherwise
 
@@ -252,25 +252,25 @@ If for any reason the notifications do not work, please [open an issue](https://
 
 # Sub-notebooks
 
-Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For example it can be used to regroup all the notebooks related to work, to family or to a particular project under a parent notebook.
+Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For example, it can be used to regroup all the notebooks related to work, to family or a particular project under a parent notebook.
 
 ![](https://joplinapp.org/images/SubNotebooks.png)
 
-- In the **desktop application**, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the "Notebooks" header. Currently only the desktop app can be used to organise the notebooks.
-- The **mobile application** supports displaying and collapsing/expanding the tree of notebooks, however it does not currently support moving the subnotebooks to different notebooks.
+- In the **desktop application**, to create a subnotebook, drag and drop it onto another notebook. To move it back to the root, drag and drop it on the "Notebooks" header. Currently, only the desktop app can be used to organise the notebooks.
+- The **mobile application** supports displaying and collapsing/expanding the tree of notebooks, however, it does not currently support moving the subnotebooks to different notebooks.
 - The **terminal app** supports displaying the tree of subnotebooks but it does not support collapsing/expanding them or moving the subnotebooks around.
 
 # Markdown
 
-Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md) for more information.
+Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular, it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md) for more information.
 
 # Custom CSS
 
-Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
+The rendered markdown can be customized by placing a user style file in the profile directory `~/.config/Joplin-desktop/used style.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new CSS to be applied, please ensure that Joplin is not closed to the tray, but is exciting. Note that this file is used only when displaying the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing and a userstyle.css would interfere with that.
 
 # Note templates
 
-In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
+In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example, creating the file `hours.md` in the `templates` directory with the contents:
 
 ```markdown
 Date: {{date}}
@@ -291,21 +291,21 @@ The currently supported template variables are:
 
 # Searching
 
-Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
+Joplin implements the SQLite Full-Text Search (FTS4) extension. It means the content of all the notes is indexed in real-time and search queries return results very fast. Both [Simple FTS Queries](https://www.sqlite.org/fts3.html#simple_fts_queries) and [Full-Text Index Queries](https://www.sqlite.org/fts3.html#full_text_index_queries) are supported. See below for the list of supported queries:
 
 Search type | Description | Example
 ------------|-------------|---------
-Single word | Returns all the notes that contain this term. | For example, searching for `cat` will return all the notes that contain this exact word. Note: it will not return the notes that contain the substring - thus, for "cat", notes that contain "cataclysmic" or "prevaricate" will **not** be returned.
+Single-word | Returns all the notes that contain this term. | For example, searching for `cat` will return all the notes that contain this exact word. Note: it will not return the notes that contain the substring - thus, for "cat", notes that contain "cataclysmic" or "prevaricate" will **not** be returned.
 Multiples words | Returns all the notes that contain **all** these words, but not necessarily next to each other. | `dog cat` - will return any notes that contain the words "dog" and "cat" anywhere in the note, no necessarily in that order nor next to each other. It will **not** return results that contain "dog" or "cat" only.
-Phrase query | Add double quotes to return the notes that contain exactly this phrase. | `"shopping list"` - will return the notes that contain these **exact terms** next to each other and in this order. It will **not** return for example a note that contains "going shopping with my list".
+Phrase query | Add double quotes to return the notes that contain exactly this phrase. | `"shopping list"` - will return the notes that contain these **exact terms** next to each other and in this order. It will **not** return, for example, a note that contains "going shopping with my list".
 Prefix | Add a wildcard to return all the notes that contain a term with a specified prefix. | `swim*` - will return all the notes that contain eg. "swim", but also "swimming", "swimsuit", etc. IMPORTANT: The wildcard **can only be at the end** - it will be ignored at the beginning of a word (eg. `*swim`) and will be treated as a literal asterisk in the middle of a word (eg. `ast*rix`)
 Field restricted | Add either `title:` or `body:` before a note to restrict your search to just the title, or just the body. | `title:shopping`, `body:egg`
 
-Notes are sorted by "relevance". Currently it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.
+Notes are sorted by "relevance". Currently, it means the notes that contain the requested terms the most times are on top. For queries with multiple terms, it also matters how close to each other the terms are. This is a bit experimental so if you notice a search query that returns unexpected results, please report it in the forum, providing as many details as possible to replicate the issue.
 
 # Goto Anything
 
-In the desktop application, press Ctrl+G or Cmd+G and type the title of a note to jump directly to it. You can also type `#` followed by a tag or `@` followed by a notebook title.
+In the desktop application, press Ctrl+G or Cmd+G and type the title of note to jump directly to it. You can also type `#` followed by a tag or `@` followed by a notebook title.
 
 # Donations
 
@@ -315,10 +315,10 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/master/r
 
 # Community
 
-- For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplinapp.org/). It is possible to login with your GitHub account.
-- Also see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
+- For a general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplinapp.org/). It is possible to log in with your GitHub account.
+- Also, see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
 - For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
-- The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
+- The latest news is posted [on the Patreon page](https://www.patreon.com/joplin).
 - You can also follow us on <a rel="me" href="https://mastodon.social/@joplinapp">the Mastodon feed</a> or [the Twitter feed](https://twitter.com/joplinapp).
 - You can join the live community on [the JoplinApp discord server](https://discordapp.com/invite/d2HMPwE) to get help with Joplin or to discuss anything Joplin related.
 
@@ -337,7 +337,7 @@ Joplin is currently available in the languages below. If you would like to contr
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 
-To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.
+To **update, a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.
 
 Current translations:
 
@@ -418,7 +418,7 @@ Thanks to our GitHub sponsors!
 # Known bugs
 
 - Resources larger than 10 MB are not currently supported on mobile. They will crash the application so it is recommended not to attach such resources at the moment. The issue is being looked at.
-- Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
+- non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
 - It is only possible to upload files of up to 4MB to OneDrive due to a limitation of [the API](https://docs.microsoft.com/en-gb/onedrive/developer/rest-api/api/driveitem_put_content) being currently used. There is currently no plan to support OneDrive "large file" API.
 
 # License
