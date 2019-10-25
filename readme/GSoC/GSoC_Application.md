@@ -3,31 +3,31 @@
   ### Public Profile
 
   **Name**
-  OpenStreetMap
+  Joplin
 
   **Website URL**
-  <http://www.openstreetmap.org/>
+  <https://joplinapp.org/>
 
   **Tagline**
-  Creating and distributing free geographic data for the world.
+  an open source note taking and to-do application with synchronisation capabilities
 
   **Logo**
-  (Current logo, with "OpenStreetMap" text to the right)
+  (https://joplinapp.org/images/Icon512.png
 
   **Primary Open Source License**
-  GNU General Public License version 2.0 (GPL-2.0)
+  MIT License
 
   **Organization Category**
-  Data and Databases
-
+  END USER APPLICATIONS
+ 
   **Technology Tags**
-  javascript, ruby, java, c/c++
+  Node.js, Redux, terminal-kit, Electron, React Native
 
   **Topic Tags**
-  gis, geoinformatics, maps, crowdsourcing, open data
+  notes
 
   **Ideas List**
-  <https://wiki.openstreetmap.org/wiki/Google_Summer_of_Code/2019/Project_ideas>
+    <https://github.com/laurent22/joplin/blob/GSoC/readme/GSoC/GSoC2019.md>
 
   
 
