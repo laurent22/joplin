@@ -60,6 +60,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			selection: {start: 0, end: 0},
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -319,6 +320,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 	body_changeText(text) {
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
+	}
+
+	body_updateSelection(event) {
+		// For some reason the first time this event is fired is not with the set
+		// start:0, end:0, but with the end of the document so let's skip that one
+		if (this.firstSelectionUpdateSkipped_) {
+			this.setState({selection: event.nativeEvent.selection});
+		} else {
+			this.firstSelectionUpdateSkipped_ = true;
+		}
 	}
 
 	scheduleSave() {
@@ -849,7 +860,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />;
+			bodyComponent = <TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} selection={this.state.selection} onSelectionChange={event => this.body_updateSelection(event)} />;
 		}
 
 		const renderActionButton = () => {
@@ -859,9 +870,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 				title: _('Edit'),
 				icon: 'md-create',
 				onPress: () => {
-					this.setState({ mode: 'edit' });
+					this.setState({ mode: 'edit', selection: { start: 0, end: 0 } });
 
 					this.doFocusUpdate_ = true;
+					this.firstSelectionUpdateSkipped_ = false;
 				},
 			});
 
