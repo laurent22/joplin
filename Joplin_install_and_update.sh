@@ -78,7 +78,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     #-----------------------------------------------------
 
     # Download icon
-    print 'Downloading icon...'
+    print 'Downloading icon, Please wait...'
     mkdir -p ~/.local/share/icons/hicolor/512x512/apps
     wget -nv -O ~/.local/share/icons/hicolor/512x512/apps/joplin.png https://joplinapp.org/images/Icon512.png
     print "${COLOR_GREEN}OK${COLOR_RESET}"
@@ -120,10 +120,10 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     print "${COLOR_GREEN}Joplin version${COLOR_RESET}" $RELEASE_VERSION "${COLOR_GREEN}installed.${COLOR_RESET}"
 
     # Add version
-    echo $RELEASE_VERSION > ~/.joplin/VERSION
+    echo $RELEASE_VEEERSION > ~/.joplin/VERSION
 else
-    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
+    print "${COLOR_GREEN}You already have the latest version.${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
 
 # Goodbye
-print 'Bye!'
+print 'See you!'
