@@ -2,6 +2,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const utils = require('../../utils');
 const urlUtils = require('lib/urlUtils.js');
+const { shim } = require('lib/shim');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
@@ -36,13 +37,19 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				resourceIdAttr = `data-resource-id='${resourceId}'`;
 
 				let mimeClass = getClassNameForMimeType(mime);
+				let iconType = 'resource-icon';
 				if (!mime) {
 					mimeClass = 'fa-joplin';
 				} else {
 					// Fork awesome appends a -o to filetypes, I don't know why
 					mimeClass = `${mimeClass}-o`;
 				}
-				icon = `<span class="resource-icon fa ${mimeClass}"></span>`;
+				if (shim.isReactNative()) {
+					// Ideally we would use the same icons between mobile and desktop, but
+					// it has proven to be quite a challenge to get the fonts working on mobile
+					iconType = 'resource-icon-mobile';
+				}
+				icon = `<span class="${iconType} fa ${mimeClass}"></span>`;
 			}
 		} else {
 			// If the link is a plain URL (as opposed to a resource link), set the href to the actual
@@ -57,7 +64,11 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 }
 
 module.exports = function(context, ruleOptions) {
+
 	return function(md, mdOptions) {
+		if (!shim.isReactNative()) {
+			context.cssFiles['fork-awesome'] = '../../css/fork-awesome.min.css';
+		}
 		installRule(md, mdOptions, ruleOptions);
 	};
 };
