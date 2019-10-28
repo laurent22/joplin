@@ -2,6 +2,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const utils = require('../../utils');
 const urlUtils = require('lib/urlUtils.js');
+const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
 	markdownIt.renderer.rules.link_open = function(tokens, idx) {
@@ -33,8 +34,15 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				href = `joplin://${resourceId}`;
 				if (resourceHrefInfo.hash) href += `#${resourceHrefInfo.hash}`;
 				resourceIdAttr = `data-resource-id='${resourceId}'`;
-				// icon = '<span class="resource-icon"></span>';
-				icon = '<span class="resource-icon fa fa-file-pdf-o"></span>';
+
+				let mimeClass = getClassNameForMimeType(mime);
+				if (!mime) {
+					mimeClass = 'fa-joplin';
+				} else {
+					// Fork awesome appends a -o to filetypes, I don't know why
+					mimeClass = `${mimeClass}-o`;
+				}
+				icon = `<span class="resource-icon fa ${mimeClass}"></span>`;
 			}
 		} else {
 			// If the link is a plain URL (as opposed to a resource link), set the href to the actual

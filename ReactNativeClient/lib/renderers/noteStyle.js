@@ -98,7 +98,11 @@ module.exports = function(style, options) {
 			margin-bottom: 0;
 		}
 		.resource-icon {
-			margin-right: 0.4em;
+      display: inline-block;
+      position: relative;
+      top: 0.15em;
+      font-size: 1.6em;
+			margin-right: 0.2em;
 		}
 		blockquote {
 			border-left: 4px solid ${style.htmlCodeBorderColor};
