@@ -195,24 +195,8 @@ class ExternalEditWatcher {
 		};
 	}
 
-	async spawnCommand(path, args, options) {
+	async spawn(path, args, options) {
 		return new Promise((resolve, reject) => {
-			// App bundles need to be opened using the `open` command.
-			// Additional args can be specified after --args, and the
-			// -n flag is needed to ensure that the app is always launched
-			// with the arguments. Without it, if the app is already opened,
-			// it will just bring it to the foreground without opening the file.
-			// So the full command is:
-			//
-			// open -n /path/to/editor.app --args -app-flag -bla /path/to/file.md
-			//
-			if (shim.isMac() && fileExtension(path) === 'app') {
-				args = args.slice();
-				args.splice(0, 0, '--args');
-				args.splice(0, 0, path);
-				args.splice(0, 0, '-n');
-				path = 'open';
-			}
 
 			const wrapError = error => {
 				if (!error) return error;
@@ -237,10 +221,59 @@ class ExternalEditWatcher {
 					clearInterval(iid);
 					reject(wrapError(error));
 				});
+				if (options.onClose) {
+					subProcess.on('close', options.onClose);
+				}
 			} catch (error) {
 				throw wrapError(error);
 			}
 		});
+	}
+
+	async spawnDefault(file, onClose) {
+		// windows
+		let path = '';
+
+		if (shim.isWindows()) {
+			path = 'start';
+		} else if (shim.isMac()) {
+			path = 'open';
+		} else if (shim.isLinux() || shim.isFreeBSD()) {
+			path = 'xdg-open';
+		} else {
+			// Fallback on the electron open method
+			return new Promise((resolve, reject) => {
+
+				if (bridge().openExternal(`file://${file}`)) {
+					resolve();
+				} else {
+					reject(new Error(`Could not open file: ${file}`));
+				}
+			});
+		}
+
+		return this.spawn(path, [file], { onClose: onClose });
+	}
+
+	async spawnCommand(path, args, options) {
+		// App bundles need to be opened using the `open` command.
+		// Additional args can be specified after --args, and the
+		// -n flag is needed to ensure that the app is always launched
+		// with the arguments. Without it, if the app is already opened,
+		// it will just bring it to the foreground without opening the file.
+		// So the full command is:
+		//
+		// open -n /path/to/editor.app --args -app-flag -bla /path/to/file.md
+		//
+		if (shim.isMac() && fileExtension(path) === 'app') {
+			args = args.slice();
+			args.splice(0, 0, '--args');
+			args.splice(0, 0, path);
+			args.splice(0, 0, '-n');
+			path = 'open';
+		}
+
+		return this.spawn(path, args, options);
 	}
 
 	async openAndWatch(note) {
@@ -252,12 +285,16 @@ class ExternalEditWatcher {
 		const filePath = await this.writeNoteToFile_(note);
 		this.watch(filePath);
 
+		const onClose = () => {
+			this.stopWatching(note.id);
+		};
+
 		const cmd = this.textEditorCommand();
 		if (!cmd) {
-			bridge().openExternal(`file://${filePath}`);
+			await this.spawnDefault(filePath, onClose);
 		} else {
 			cmd.args.push(filePath);
-			await this.spawnCommand(cmd.path, cmd.args, { detached: true });
+			await this.spawnCommand(cmd.path, cmd.args, { detached: true, onClose: onClose });
 		}
 
 		this.dispatch({

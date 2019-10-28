@@ -474,6 +474,18 @@ class Application extends BaseApplication {
 			},
 		};
 
+		const newSubNotebookItem = {
+			label: _('New sub-notebook'),
+			screens: ['Main'],
+			click: () => {
+				this.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'newSubNotebook',
+					activeFolderId: Setting.value('activeFolderId'),
+				});
+			},
+		};
+
 		const printItem = {
 			label: _('Print'),
 			accelerator: 'CommandOrControl+P',
@@ -617,7 +629,8 @@ class Application extends BaseApplication {
 			},
 			shim.isMac() ? noItem : newNoteItem,
 			shim.isMac() ? noItem : newTodoItem,
-			shim.isMac() ? noItem : newNotebookItem, {
+			shim.isMac() ? noItem : newNotebookItem,
+			shim.isMac() ? noItem : newSubNotebookItem, {
 				type: 'separator',
 				visible: shim.isMac() ? false : true,
 			}, {
@@ -672,7 +685,8 @@ class Application extends BaseApplication {
 			submenu: [
 				newNoteItem,
 				newTodoItem,
-				newNotebookItem, {
+				newNotebookItem,
+				newSubNotebookItem, {
 					label: _('Close Window'),
 					platforms: ['darwin'],
 					accelerator: 'Command+W',

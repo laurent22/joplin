@@ -286,6 +286,21 @@ class SideBarComponent extends React.Component {
 			item = BaseModel.byId(this.props.folders, itemId);
 		}
 
+		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			menu.append(
+				new MenuItem({
+					label: _('New sub-notebook'),
+					click: () => {
+						this.props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'newSubNotebook',
+							activeFolderId: itemId,
+						});
+					},
+				})
+			);
+		}
+
 		menu.append(
 			new MenuItem({
 				label: buttonLabel,

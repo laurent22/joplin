@@ -140,6 +140,14 @@ msgstr "Унесите главну лозинку:"
 msgid "Operation cancelled"
 msgstr "Операција је обустављена"
 
+#, fuzzy
+msgid "Confirm master password:"
+msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Лозинка не може бити празна"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -594,6 +602,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Извозим у \"%s као \"%s\" формат. Молимо вас да сачекате..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Фајл"
 
@@ -738,6 +750,10 @@ msgstr "Да"
 
 msgid "No"
 msgstr "Не"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Повраћене белешке"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен је копиран у клипборд!"
@@ -1145,6 +1161,9 @@ msgstr "Опције"
 msgid "Synchronisation Status"
 msgstr "Статус синхронизације"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1155,15 +1174,15 @@ msgstr ""
 "\n"
 "Све белешке и под-бележницe унутар ове бележнице ће такође бити обрисане."
 
+msgid "Delete"
+msgstr "Обриши"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Уклонити ознаку \"%s\" из свих белешки?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Уклонити ову претраку из бочне траке?"
-
-msgid "Delete"
-msgstr "Обриши"
 
 msgid "Rename"
 msgstr "Преименуј"
@@ -1458,6 +1477,9 @@ msgstr "Светла"
 msgid "Dark"
 msgstr "Тамна"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
@@ -1496,6 +1518,10 @@ msgstr "У креирању нове белешке."
 
 msgid "Enable soft breaks"
 msgstr "Омогући меке преломе"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Омогућу ~sub~ синтаксу"
 
 msgid "Enable math expressions"
 msgstr "Омогући математичке експресије"
@@ -1607,6 +1633,36 @@ msgstr ""
 "Команда уредника текста (може имати аргументе) који ће се користити приликом "
 "отварања белешке. Уколико нису унети аргументи\n"
 "програм ће аутоматски покушати да открије подразумеваног уредника."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Прилагођени ТЛС сертификати"
@@ -1996,6 +2052,18 @@ msgstr "Лозинка:"
 msgid "Password cannot be empty"
 msgstr "Лозинка не може бити празна"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Лозинка не може бити празна"
+
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+msgid "Confirm password"
+msgstr "Унесите главну лозинку:"
+
 msgid "Enable"
 msgstr "Омогући"
 
@@ -2097,6 +2165,10 @@ msgstr "Пријави се са УванДрајвом"
 msgid "Search"
 msgstr "Претрага"
 
+#, fuzzy
+#~ msgid "Toggle note list"
+#~ msgstr "Листа белешки"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Започињете са изменом белешке. Затворите уредника да се вратите назад."
@@ -2106,9 +2178,6 @@ msgstr "Претрага"
 
 #~ msgid "Sidebar"
 #~ msgstr "Бочна трака"
-
-#~ msgid "Note list"
-#~ msgstr "Листа белешки"
 
 #~ msgid "Note title"
 #~ msgstr "Наслов белешке"
