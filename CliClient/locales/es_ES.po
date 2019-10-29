@@ -1189,6 +1189,10 @@ msgstr "Desea borrar las etiquetas pertenecientes a \"%s\" de todas las notas?"
 msgid "Remove this search from the sidebar?"
 msgstr "¿Desea eliminar esta búsqueda de la barra lateral?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nueva libreta"
+
 msgid "Rename"
 msgstr "Renombrar"
 

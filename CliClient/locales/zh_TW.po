@@ -1135,6 +1135,10 @@ msgstr "是否從所有記事中刪除此標籤？"
 msgid "Remove this search from the sidebar?"
 msgstr "是否從側邊欄中刪除此搜索？"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "新增記事本"
+
 msgid "Rename"
 msgstr "重新命名"
 

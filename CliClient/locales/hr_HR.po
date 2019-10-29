@@ -1163,6 +1163,10 @@ msgstr "Makni ovu oznaku iz svih bilješki?"
 msgid "Remove this search from the sidebar?"
 msgstr "Makni ovu pretragu iz izbornika?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nova bilježnica"
+
 msgid "Rename"
 msgstr "Preimenuj"
 

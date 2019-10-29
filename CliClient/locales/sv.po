@@ -1189,6 +1189,10 @@ msgstr "Ta bort den här taggen från alla anteckningar?"
 msgid "Remove this search from the sidebar?"
 msgstr "Ta bort den här sökningen från sidofältet?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Ny anteckningsbok"
+
 msgid "Rename"
 msgstr "Byt namn"
 

@@ -9,15 +9,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: Morten Juhl-Johansen Zölde-Fejér <mjjzf@syntaktisk."
 "dk>Language-Team:\n"
+"Language-Team: \n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Language-Team: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "For at slette et mærke, afmærk de tilhørende noter."
@@ -1164,6 +1162,10 @@ msgstr "Slet markeringen \"%s\" fra alle noter?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Slet denne søgning fra sidebjælke?"
+
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Ny notesbog"
 
 msgid "Rename"
 msgstr "Omdøb"

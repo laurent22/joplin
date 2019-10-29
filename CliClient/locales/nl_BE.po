@@ -1187,6 +1187,10 @@ msgstr "Deze tag verwijderen van alle notities?"
 msgid "Remove this search from the sidebar?"
 msgstr "Dit item verwijderen van de zijbalk?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nieuw notitieboek"
+
 msgid "Rename"
 msgstr "Hernoem"
 

@@ -1185,6 +1185,10 @@ msgstr "Rimuovere l’etichetta \"%s\" da tutte le note?"
 msgid "Remove this search from the sidebar?"
 msgstr "Rimuovere questa ricerca dalla barra laterale?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nuovo taccuino"
+
 msgid "Rename"
 msgstr "Rinomina"
 

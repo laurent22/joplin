@@ -1085,6 +1085,9 @@ msgstr ""
 msgid "Remove this search from the sidebar?"
 msgstr ""
 
+msgid "New sub-notebook"
+msgstr ""
+
 msgid "Rename"
 msgstr ""
 

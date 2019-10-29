@@ -1181,6 +1181,10 @@ msgstr "Удалить метку “%s” из всех заметок?"
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Новый блокнот"
+
 msgid "Rename"
 msgstr "Переименовать"
 

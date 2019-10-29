@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
@@ -1173,6 +1171,10 @@ msgstr "Odebrat tag \"%s\" ze všech poznámek?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Smazat tento hledaný výraz z panelu?"
+
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nový zápisník"
 
 msgid "Rename"
 msgstr "Přejmenovat"

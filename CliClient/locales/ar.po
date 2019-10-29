@@ -1158,6 +1158,10 @@ msgstr "إزالة الوسم \"%s\" من كل الملاحظات؟"
 msgid "Remove this search from the sidebar?"
 msgstr "حذف هذا البحث من الشريط الجانبي؟"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "دفتر ملاحظات جديد"
+
 msgid "Rename"
 msgstr "إعادة تسمية"
 

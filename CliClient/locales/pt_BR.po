@@ -1180,6 +1180,10 @@ msgstr "Remover a tag \"%s\" de todas as notas?"
 msgid "Remove this search from the sidebar?"
 msgstr "Remover essa pesquisa da barra lateral?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Novo caderno"
+
 msgid "Rename"
 msgstr "Renomear"
 

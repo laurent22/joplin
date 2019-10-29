@@ -1214,6 +1214,10 @@ msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις
 msgid "Remove this search from the sidebar?"
 msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Νέο σημειωματάριο"
+
 msgid "Rename"
 msgstr "Μετονομασία"
 
