@@ -1,6 +1,6 @@
 <!--
 
-Please prefix the title with the platform you are targeting:
+Please prefix the title with the platform you are targetting:
 
 - "Desktop" for the Windows/macOS/Linux app (Electron app)
 - "Mobile" for the mobile app (or "Android" / "iOS" if the pull request only applies to one of the mobile platforms)
