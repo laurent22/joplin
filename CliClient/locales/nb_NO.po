@@ -1171,6 +1171,10 @@ msgstr "Fjern denne merkelappen \"%s\" fra alle notater?"
 msgid "Remove this search from the sidebar?"
 msgstr "Fjerne dette søket fra sidepanelet?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Ny notatbok"
+
 msgid "Rename"
 msgstr "Gi nytt navn"
 

@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -1156,6 +1154,10 @@ msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
+
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "새 노트북"
 
 msgid "Rename"
 msgstr "이름 바꾸기"

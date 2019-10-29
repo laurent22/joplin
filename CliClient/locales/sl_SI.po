@@ -1183,6 +1183,10 @@ msgstr "Odstranite to oznako iz vseh zabeležk?"
 msgid "Remove this search from the sidebar?"
 msgstr "Odstranite ta iskalni niz iz stranske vrstice?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nova beležnica"
+
 msgid "Rename"
 msgstr "Preimenuj"
 

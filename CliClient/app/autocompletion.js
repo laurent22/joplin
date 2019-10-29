@@ -11,7 +11,7 @@ async function handleAutocompletionPromise(line) {
 	const names = await app().commandNames();
 	let words = getArguments(line);
 	// If there is only one word and it is not already a command name then you
-	// should look for commmands it could be
+	// should look for commands it could be
 	if (words.length == 1) {
 		if (names.indexOf(words[0]) === -1) {
 			let x = names.filter(n => n.indexOf(words[0]) === 0);

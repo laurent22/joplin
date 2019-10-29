@@ -1094,6 +1094,10 @@ msgstr ""
 msgid "Remove this search from the sidebar?"
 msgstr ""
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Adăugați un nou caiet de notițe"
+
 msgid "Rename"
 msgstr "Redenumiți"
 

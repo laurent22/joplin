@@ -1170,6 +1170,10 @@ msgstr "Desexa eliminar esta etiqueta de todas as notas?"
 msgid "Remove this search from the sidebar?"
 msgstr "Desexa eliminar esta busca da barra lateral?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Novo caderno"
+
 msgid "Rename"
 msgstr "Renomear"
 

@@ -1087,6 +1087,10 @@ msgstr ""
 msgid "Remove this search from the sidebar?"
 msgstr "این جستجو را از نواک کناری حذف شود؟"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "دفترچه جدید"
+
 msgid "Rename"
 msgstr "تغییر نام"
 

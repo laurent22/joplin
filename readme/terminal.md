@@ -322,10 +322,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             will be used to open a note. If none is provided 
 	                             it will try to auto-detect the default editor.
 	                             Type: string.
-	                             
+
 	    sync.target              Synchronisation target.
-	                             The target to synchonise to. Each sync target may 
-	                             have additional parameters which are named as 
+	                             The target to synchronise to. Each sync target may 
+	                             have additional parameters which are named as
 	                             `sync.NUM.NAME` (all documented below).
 	                             Type: Enum.
 	                             Possible values: 2 (File system), 3 (OneDrive), 4 

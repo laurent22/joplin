@@ -1160,6 +1160,10 @@ msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
 msgid "Remove this search from the sidebar?"
 msgstr "Bu aramayı kenar çubuğundan kaldır?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Yeni not defteri"
+
 msgid "Rename"
 msgstr "Yeniden adlandır"
 

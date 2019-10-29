@@ -1203,6 +1203,10 @@ msgstr "Schlagwort \"%s\" von allen Notizen entfernen?"
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Neues Notizbuch"
+
 msgid "Rename"
 msgstr "Umbenennen"
 

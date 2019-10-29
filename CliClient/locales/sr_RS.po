@@ -1184,6 +1184,10 @@ msgstr "Уклонити ознаку \"%s\" из свих белешки?"
 msgid "Remove this search from the sidebar?"
 msgstr "Уклонити ову претраку из бочне траке?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Нова бележница"
+
 msgid "Rename"
 msgstr "Преименуј"
 

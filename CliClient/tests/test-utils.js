@@ -287,7 +287,7 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 		masterKey = await MasterKey.save(masterKey);
 	} else { // Use the one already available
 		const masterKeys = await MasterKey.all();
-		if (!masterKeys.length) throw new Error('No mater key available');
+		if (!masterKeys.length) throw new Error('No master key available');
 		masterKey = masterKeys[0];
 	}
 

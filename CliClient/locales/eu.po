@@ -1183,6 +1183,10 @@ msgstr "Kendu etiketa hori ohar guztietatik?"
 msgid "Remove this search from the sidebar?"
 msgstr "Kendu bilaketa hori ohar guztietatik?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Koaderno berria"
+
 msgid "Rename"
 msgstr "Berrizendatu"
 

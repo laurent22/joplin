@@ -1195,6 +1195,10 @@ msgstr "Voleu suprimir aquesta etiqueta de totes les notes?"
 msgid "Remove this search from the sidebar?"
 msgstr "Voleu suprimir aquesta cerca de la barra laterla?"
 
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Bloc de notes nou"
+
 msgid "Rename"
 msgstr "Canvia el nom"
 
