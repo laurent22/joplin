@@ -107,7 +107,7 @@ class OneDriveApiNodeUtils {
 
 			enableServerDestroy(this.oauthServer_);
 
-			// Rather than displaying authCodeUrl directly, we go throught the local
+			// Rather than displaying authCodeUrl directly, we go through the local
 			// server. This is just so that the URL being displayed is shorter and
 			// doesn't get cut in terminals (especially those that don't handle multi
 			// lines URLs).
