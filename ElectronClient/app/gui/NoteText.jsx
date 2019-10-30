@@ -49,6 +49,7 @@ require('brace/theme/solarized_light');
 require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
+require('brace/theme/chaos');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 
@@ -1201,7 +1202,7 @@ class NoteTextComponent extends React.Component {
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: false });
+		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: true });
 		this.forceUpdate();
 
 		const restoreSettings = async () => {

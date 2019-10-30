@@ -4,6 +4,7 @@ import PopupDialog, { DialogTitle, DialogButton } from 'react-native-popup-dialo
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
+const { time } = require('lib/time-utils.js');
 
 class SelectDateTimeDialog extends React.PureComponent {
 
@@ -41,7 +42,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 	}
 
 	dateTimeFormat() {
-		return 'MM/DD/YYYY HH:mm';
+		return time.dateTimeFormat();
 	}
 
 	stringToDate(s) {
