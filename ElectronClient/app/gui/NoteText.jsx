@@ -49,6 +49,7 @@ require('brace/theme/solarized_light');
 require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
+require('brace/theme/chaos');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 
