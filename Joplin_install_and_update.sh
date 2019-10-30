@@ -53,7 +53,7 @@ print "Linux Installer and Updater"
 #-----------------------------------------------------
 
 # Get the latest version to download
-RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
+RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": *"v\K[^"]*"' | tr -d '"')
 
 # Check if it's in the latest version
 if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSION" ]]; then
