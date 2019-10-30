@@ -293,8 +293,6 @@
 		}
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
-			console.info('contentElement.scroll', lastScrollEventTime);
-
 			// If the last scroll event was done by the user, lastScrollEventTime is set and
 			// we can use that to skip the event handling. We skip it because in that case
 			// the scroll position has already been updated. Also we add a 200ms interval
