@@ -30,6 +30,11 @@ async function handleAutocompletionPromise(line) {
 	if (metadata === undefined) {
 		return line;
 	}
+
+	if (words[0] === 'tag' && words[1] === 'notetags') {
+		metadata.usage = 'tag <tag-command> <note>';
+	}
+
 	// complete an option
 	let next = words.length > 1 ? words[words.length - 1] : '';
 	let l = [];
@@ -100,7 +105,7 @@ async function handleAutocompletionPromise(line) {
 		}
 
 		if (argName == 'tag-command') {
-			let c = filterList(['add', 'remove', 'list'], next);
+			let c = filterList(['add', 'remove', 'list', 'notetags'], next);
 			l.push(...c);
 		}
 
