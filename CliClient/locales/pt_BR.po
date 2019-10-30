@@ -138,7 +138,7 @@ msgid "Operation cancelled"
 msgstr "Operação cancelada"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Entre a senha master:"
 
 #, fuzzy
@@ -476,10 +476,12 @@ msgstr "Baixando os recursos..."
 msgid "Cancelling... Please wait."
 msgstr "Cancelando... Aguarde."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> pode ser \"add\", \"remove\" ou \"list\" para atribuir ou "
 "remover [tag] de [nota], ou para listar as notas associadas a [tag]. O "
@@ -682,6 +684,10 @@ msgstr "&Visualizar"
 
 msgid "Toggle sidebar"
 msgstr "Alternar barra lateral"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Lista de notas"
 
 msgid "Toggle editor layout"
 msgstr "Alternar layout do editor"
@@ -1031,6 +1037,10 @@ msgstr "A nota \"%s\" foi restaurada com sucesso no caderno \"%s\"."
 msgid "This note has no history"
 msgstr "Esta nota não tem histórico"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Link ou mensagem não suportada: %s"
+
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1060,10 +1070,6 @@ msgstr "Copiar endereço do link"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "O anexo ainda não foi baixado ou decriptado."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Link ou mensagem não suportada: %s"
 
 #, javascript-format
 msgid ""
@@ -1485,6 +1491,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -2055,14 +2064,6 @@ msgstr "Senha não pode ser vazia"
 msgid "Confirm password cannot be empty"
 msgstr "Senha não pode ser vazia"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Entre a senha master:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Entre a senha master:"
-
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -2162,8 +2163,16 @@ msgid "Search"
 msgstr "Procurar"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Lista de notas"
+#~ msgid "Confirm master password:"
+#~ msgstr "Entre a senha master:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Entre a senha master:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Argumento requerido faltando: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "Começando a editar a nota. Feche o editor para voltar ao prompt."

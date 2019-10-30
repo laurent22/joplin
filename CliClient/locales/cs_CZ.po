@@ -138,8 +138,8 @@ msgstr "Zadejte master heslo:"
 msgid "Operation cancelled"
 msgstr "Operace zrušena"
 
-msgid "Confirm master password:"
-msgstr "Potvrďte master heslo:"
+msgid "Confirm password:"
+msgstr "Potvrďte heslo:"
 
 msgid "Passwords do not match!"
 msgstr "Hesla se neshodují!"
@@ -472,10 +472,12 @@ msgstr "Stahování zdrojů..."
 msgid "Cancelling... Please wait."
 msgstr "Zastavuji, chvíli strpení."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> může být \"add\", \"remove\" nebo \"list\" - přidat (add) či "
 "odebrat (remove) [tag] k [poznámce], nebo vypsat (list) seznam poznámek "
@@ -677,6 +679,10 @@ msgstr "Zobrazit"
 
 msgid "Toggle sidebar"
 msgstr "Přepnout postranní lištu"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Seznam položek"
 
 msgid "Toggle editor layout"
 msgstr "Změňit layout editoru"
@@ -1023,6 +1029,10 @@ msgstr "Poznámka \"%s\" byla úspěšně obnovena v zápisníku \"%s\"."
 msgid "This note has no history"
 msgstr "Tato poznámka nemá historii"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Nepodporovaný link či zpráva: %s"
+
 msgid "Restore"
 msgstr "Obnovit"
 
@@ -1053,10 +1063,6 @@ msgstr "Kopírovat adresu odkazu"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Tato příloha není ještě stažena nebo rozšifrována."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Nepodporovaný link či zpráva: %s"
 
 #, javascript-format
 msgid ""
@@ -1475,6 +1481,9 @@ msgstr "Solarised Light"
 
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
+
+msgid "Nord"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Nedokončené to-do listy nahoře"
@@ -2039,12 +2048,6 @@ msgstr "Heslo nemůže být prázdné"
 msgid "Confirm password cannot be empty"
 msgstr "Heslo pro potvrzení nemůže být prázdné"
 
-msgid "Confirm password:"
-msgstr "Potvrďte heslo:"
-
-msgid "Confirm password"
-msgstr "Potvrďte heslo"
-
 msgid "Enable"
 msgstr "Zapnout"
 
@@ -2141,9 +2144,15 @@ msgstr "Přihlásit se pomocí OneDrive"
 msgid "Search"
 msgstr "Hledání"
 
+#~ msgid "Confirm master password:"
+#~ msgstr "Potvrďte master heslo:"
+
+#~ msgid "Confirm password"
+#~ msgstr "Potvrďte heslo"
+
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Seznam položek"
+#~ msgid "Missing required argument: note"
+#~ msgstr "Chybí povinný parametr: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

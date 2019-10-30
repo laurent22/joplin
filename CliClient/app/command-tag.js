@@ -84,10 +84,10 @@ class Command extends BaseCommand {
 					this.stdout(tag.title);
 				});
 			} else {
-				throw new Error(_('Missing required argument: note'));
+				throw new Error(_('Cannot find "%s".', ''));
 			}
 		} else {
-			throw new Error(_('Cannot find "%s".', ''));
+			throw new Error(_('Invalid command: "%s"', command));
 		}
 	}
 }

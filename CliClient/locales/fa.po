@@ -131,7 +131,7 @@ msgid "Operation cancelled"
 msgstr "عملیات لغو شد"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "رمز اصلی را وارد کنید:"
 
 #, fuzzy
@@ -435,14 +435,15 @@ msgid "Cancelling... Please wait."
 msgstr "در حال لغو... لطفا منتظر بمانید."
 
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
+msgstr "پاسخ نامعتبر: %s"
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -614,6 +615,10 @@ msgstr ""
 
 msgid "Toggle sidebar"
 msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "لیست یادداشت"
 
 msgid "Toggle editor layout"
 msgstr ""
@@ -939,6 +944,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "این یادداشت هیچ تاریخچه ای ندارد"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
 msgid "Restore"
 msgstr "بازگرداندن"
 
@@ -965,10 +974,6 @@ msgid "Copy Link Address"
 msgstr ""
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
 msgstr ""
 
 #, javascript-format
@@ -1373,6 +1378,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1910,14 +1918,6 @@ msgstr "رمز نمیتواند خالی باشد"
 msgid "Confirm password cannot be empty"
 msgstr "رمز نمیتواند خالی باشد"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "رمز اصلی را وارد کنید:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "رمز اصلی را وارد کنید:"
-
 msgid "Enable"
 msgstr "فعال سازی"
 
@@ -2020,8 +2020,16 @@ msgid "Search"
 msgstr "جستجو"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "لیست یادداشت"
+#~ msgid "Confirm master password:"
+#~ msgstr "رمز اصلی را وارد کنید:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "رمز اصلی را وارد کنید:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "کمبود آرگمان در دستور: %s"
 
 #~ msgid "Note has been saved."
 #~ msgstr "یادداشت ذخیره شد."

@@ -138,8 +138,8 @@ msgstr "Inserisci password principale:"
 msgid "Operation cancelled"
 msgstr "Operazione annullata"
 
-msgid "Confirm master password:"
-msgstr "Conferma password principale:"
+msgid "Confirm password:"
+msgstr "Conferma password:"
 
 msgid "Passwords do not match!"
 msgstr "Le password non combaciano!"
@@ -482,10 +482,12 @@ msgstr "Scaricamento risorse…"
 msgid "Cancelling... Please wait."
 msgstr "Annullamento... Attendere per favore."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> può essere \"add\", \"remove\" or \"list\" per assegnare o "
 "rimuovere [tag] da [note], o per mostrare le note associate a [tag]. Il "
@@ -689,6 +691,10 @@ msgstr "&Vista"
 
 msgid "Toggle sidebar"
 msgstr "Attiva / disattiva barra laterale"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Lista delle note"
 
 msgid "Toggle editor layout"
 msgstr "Attiva / disattiva il layout dell'editor"
@@ -1035,6 +1041,10 @@ msgstr "La nota \"%s\" è stata ripristinata con successo nel taccuino \"%s\"."
 msgid "This note has no history"
 msgstr "Questa nota non ha cronologia"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Link o Messaggio non supportato: %s"
+
 msgid "Restore"
 msgstr "Ripristina"
 
@@ -1065,10 +1075,6 @@ msgstr "Copia l'indirizzo del link"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Questo allegato non è ancora stato scaricato o decriptato."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Link o Messaggio non supportato: %s"
 
 #, javascript-format
 msgid ""
@@ -1488,6 +1494,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -2055,12 +2064,6 @@ msgstr "La password non può essere vuota"
 msgid "Confirm password cannot be empty"
 msgstr "La password di conferma non può essere vuota"
 
-msgid "Confirm password:"
-msgstr "Conferma password:"
-
-msgid "Confirm password"
-msgstr "Conferma password"
-
 msgid "Enable"
 msgstr "Abilitato"
 
@@ -2158,9 +2161,15 @@ msgstr "Accedi a OneDrive"
 msgid "Search"
 msgstr "Cerca"
 
+#~ msgid "Confirm master password:"
+#~ msgstr "Conferma password principale:"
+
+#~ msgid "Confirm password"
+#~ msgstr "Conferma password"
+
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Lista delle note"
+#~ msgid "Missing required argument: note"
+#~ msgstr "Argomento richiesto mancante: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

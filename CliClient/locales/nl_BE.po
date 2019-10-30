@@ -140,7 +140,7 @@ msgid "Operation cancelled"
 msgstr "Operatie geannuleerd"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Voeg hoofdsleutel in:"
 
 #, fuzzy
@@ -479,9 +479,10 @@ msgstr "Annuleren.. Even geduld."
 
 #, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> kan \"add\", \"remove\" of \"list\" zijn om een [tag] toe te "
 "voegen aan een [note] of te verwijderen, of om alle notities geassocieerd "
@@ -689,6 +690,10 @@ msgstr ""
 
 msgid "Toggle sidebar"
 msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Schakel encryptie in"
 
 msgid "Toggle editor layout"
 msgstr ""
@@ -1038,6 +1043,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Deze notitie werd aangepast:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Link of bericht \"%s\" wordt niet ondersteund"
+
 msgid "Restore"
 msgstr ""
 
@@ -1066,10 +1075,6 @@ msgstr ""
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Link of bericht \"%s\" wordt niet ondersteund"
 
 #, javascript-format
 msgid ""
@@ -1491,6 +1496,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 #, fuzzy
@@ -2060,14 +2068,6 @@ msgstr "Wachtwoord kan niet leeg zijn"
 msgid "Confirm password cannot be empty"
 msgstr "Wachtwoord kan niet leeg zijn"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Voeg hoofdsleutel in:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Voeg hoofdsleutel in:"
-
 msgid "Enable"
 msgstr "Activeer"
 
@@ -2170,8 +2170,16 @@ msgid "Search"
 msgstr "Zoeken"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Schakel encryptie in"
+#~ msgid "Confirm master password:"
+#~ msgstr "Voeg hoofdsleutel in:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Voeg hoofdsleutel in:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Benodigde argumenten niet voorzien: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

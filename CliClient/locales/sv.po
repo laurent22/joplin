@@ -139,7 +139,7 @@ msgid "Operation cancelled"
 msgstr "Operation avbruten"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Ange huvudlösenord:"
 
 #, fuzzy
@@ -481,10 +481,12 @@ msgstr "Laddar ned resurser..."
 msgid "Cancelling... Please wait."
 msgstr "Avbryter... vänta."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> kan vara \"lägg till\", \"ta bort\" eller \"lisat\" för att "
 "tilldela eller ta bort [tag] från [note], eller för att lista anteckningarna "
@@ -690,6 +692,10 @@ msgstr "Visa"
 
 msgid "Toggle sidebar"
 msgstr "Växla sidofältet"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Anteckningsboken"
 
 msgid "Toggle editor layout"
 msgstr "Växla redigeringslayout"
@@ -1042,6 +1048,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Denna anteckning har ändrats:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Länk eller meddelande stöds inte: %s"
+
 msgid "Restore"
 msgstr ""
 
@@ -1069,10 +1079,6 @@ msgstr "Kopiera länkadress"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Denna bilaga är inte nedladdad eller ännu inte dekrypterad."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Länk eller meddelande stöds inte: %s"
 
 #, javascript-format
 msgid ""
@@ -1489,6 +1495,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -2067,14 +2076,6 @@ msgstr "Lösenordet kan inte vara tomt"
 msgid "Confirm password cannot be empty"
 msgstr "Lösenordet kan inte vara tomt"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Ange huvudlösenord:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Ange huvudlösenord:"
-
 msgid "Enable"
 msgstr "Aktivera"
 
@@ -2178,8 +2179,16 @@ msgid "Search"
 msgstr "Sök"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Anteckningsboken"
+#~ msgid "Confirm master password:"
+#~ msgstr "Ange huvudlösenord:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Ange huvudlösenord:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Saknade obligatoriskt argument: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

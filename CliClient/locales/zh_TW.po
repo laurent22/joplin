@@ -137,7 +137,7 @@ msgid "Operation cancelled"
 msgstr "操作已取消"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "輸入主密碼:"
 
 #, fuzzy
@@ -455,9 +455,10 @@ msgstr "正在取消中...請稍候。"
 
 #, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> 可以是 \"add\" (新增)，\"remove\" (刪除) 或用 \"list\" 從 [記"
 "事] 中分配或移除 [標籤]，或列出與 [標籤] 關聯的記事。而命令 `tag list` 可以用"
@@ -654,6 +655,10 @@ msgstr "檢視"
 
 msgid "Toggle sidebar"
 msgstr "顯示 / 隱藏側邊欄"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "啟用加密"
 
 msgid "Toggle editor layout"
 msgstr "切換編輯器佈局"
@@ -993,6 +998,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "此記事已被修改:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "不支援的鏈接或訊息: %s"
+
 msgid "Restore"
 msgstr ""
 
@@ -1020,10 +1029,6 @@ msgstr "複製鏈接位址"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "不支援的鏈接或訊息: %s"
 
 #, javascript-format
 msgid ""
@@ -1428,6 +1433,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1990,14 +1998,6 @@ msgstr "密碼不能空白"
 msgid "Confirm password cannot be empty"
 msgstr "密碼不能空白"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "輸入主密碼:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "輸入主密碼:"
-
 msgid "Enable"
 msgstr "啟用"
 
@@ -2100,8 +2100,16 @@ msgid "Search"
 msgstr "搜尋"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "啟用加密"
+#~ msgid "Confirm master password:"
+#~ msgstr "輸入主密碼:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "輸入主密碼:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "缺少必需參數: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "開始編輯記事。如需返回命令行，請關閉編輯器。"

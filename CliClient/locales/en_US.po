@@ -129,7 +129,7 @@ msgstr ""
 msgid "Operation cancelled"
 msgstr ""
 
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr ""
 
 msgid "Passwords do not match!"
@@ -433,9 +433,10 @@ msgid "Cancelling... Please wait."
 msgstr ""
 
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 
 #, javascript-format
@@ -611,6 +612,9 @@ msgid "&View"
 msgstr ""
 
 msgid "Toggle sidebar"
+msgstr ""
+
+msgid "Toggle note list"
 msgstr ""
 
 msgid "Toggle editor layout"
@@ -943,6 +947,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr ""
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
 msgid "Restore"
 msgstr ""
 
@@ -969,10 +977,6 @@ msgid "Copy Link Address"
 msgstr ""
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
 msgstr ""
 
 #, javascript-format
@@ -1373,6 +1377,9 @@ msgstr "Solarized Light"
 
 msgid "Solarised Dark"
 msgstr "Solarized Dark"
+
+msgid "Nord"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr ""
@@ -1902,12 +1909,6 @@ msgid "Password cannot be empty"
 msgstr ""
 
 msgid "Confirm password cannot be empty"
-msgstr ""
-
-msgid "Confirm password:"
-msgstr ""
-
-msgid "Confirm password"
 msgstr ""
 
 msgid "Enable"

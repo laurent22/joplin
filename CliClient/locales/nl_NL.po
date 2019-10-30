@@ -141,7 +141,7 @@ msgid "Operation cancelled"
 msgstr "Handeling geannuleerd"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Voer het hoofdwachtwoord in:"
 
 #, fuzzy
@@ -480,10 +480,12 @@ msgstr "Resources downloaden…"
 msgid "Cancelling... Please wait."
 msgstr "Bezig met annuleren... Even geduld."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> kan \"add\", \"remove\" of \"list\" zijn om [tag] toe te "
 "wijzen aan of te verwijderen uit [note] of om de met [tag] geassocieerde "
@@ -686,6 +688,10 @@ msgstr "Beel&d"
 
 msgid "Toggle sidebar"
 msgstr "Zijbalk tonen/verbergen"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Notitielijst"
 
 msgid "Toggle editor layout"
 msgstr "Bewerkindeling tonen/verbergen"
@@ -1036,6 +1042,10 @@ msgstr "De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
 msgid "This note has no history"
 msgstr "Deze notitie heeft geen geschiedenis"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Niet-ondersteunde link of bericht: %s"
+
 msgid "Restore"
 msgstr "Herstel"
 
@@ -1066,10 +1076,6 @@ msgstr "Linkadres kopiëren"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Deze bijlage is niet gedownload of nog niet ontsleuteld."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Niet-ondersteunde link of bericht: %s"
 
 #, javascript-format
 msgid ""
@@ -1494,6 +1500,9 @@ msgstr "Solarised Light"
 
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
+
+msgid "Nord"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
@@ -2063,14 +2072,6 @@ msgstr "Wachtwoord mag niet blanco zijn"
 msgid "Confirm password cannot be empty"
 msgstr "Wachtwoord mag niet blanco zijn"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Voer het hoofdwachtwoord in:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Voer het hoofdwachtwoord in:"
-
 msgid "Enable"
 msgstr "Inschakelen"
 
@@ -2168,8 +2169,16 @@ msgid "Search"
 msgstr "Zoeken"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Notitielijst"
+#~ msgid "Confirm master password:"
+#~ msgstr "Voer het hoofdwachtwoord in:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Voer het hoofdwachtwoord in:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Vereist argument ontbreekt: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

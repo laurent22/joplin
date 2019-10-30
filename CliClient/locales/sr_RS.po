@@ -141,7 +141,7 @@ msgid "Operation cancelled"
 msgstr "Операција је обустављена"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Унесите главну лозинку:"
 
 #, fuzzy
@@ -481,10 +481,12 @@ msgstr "Преузимам ресурсе..."
 msgid "Cancelling... Please wait."
 msgstr "Обустављам... Молимо сачекајте."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> може бити \"додај\", \"уклони\" или \"листа\" за додељивање "
 "или уклањање [ознаке]  из [белешке], или да излистате белешке повезане са "
@@ -688,6 +690,10 @@ msgstr "&Приказ"
 
 msgid "Toggle sidebar"
 msgstr "Бочна трака"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Листа белешки"
 
 msgid "Toggle editor layout"
 msgstr "Промени распоред уредника"
@@ -1034,6 +1040,10 @@ msgstr "Ова белешка \"%s\" је успешно враћена у бе�
 msgid "This note has no history"
 msgstr "Ова белешка нема историју"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Неподржана веза или порука: %s"
+
 msgid "Restore"
 msgstr "Повраћај"
 
@@ -1063,10 +1073,6 @@ msgstr "Копирај адресу везе"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Овај прилог још увек није преузет или дешифрован."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Неподржана веза или порука: %s"
 
 #, javascript-format
 msgid ""
@@ -1488,6 +1494,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -2060,14 +2069,6 @@ msgstr "Лозинка не може бити празна"
 msgid "Confirm password cannot be empty"
 msgstr "Лозинка не може бити празна"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Унесите главну лозинку:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Унесите главну лозинку:"
-
 msgid "Enable"
 msgstr "Омогући"
 
@@ -2170,8 +2171,16 @@ msgid "Search"
 msgstr "Претрага"
 
 #, fuzzy
-#~ msgid "Toggle note list"
-#~ msgstr "Листа белешки"
+#~ msgid "Confirm master password:"
+#~ msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Недостаје неопходан аргумент: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
