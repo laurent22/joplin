@@ -126,11 +126,11 @@ class Application extends BaseApplication {
 						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 						let paneOptions;
-						if (state.settings.layout === Setting.LAYOUT_EDITOR_VIEWER) {
+						if (state.settings.layoutButtonSequence === Setting.LAYOUT_EDITOR_VIEWER) {
 							paneOptions = ['editor', 'viewer'];
-						} else if (state.settings.layout === Setting.LAYOUT_EDITOR_SPLIT) {
+						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_EDITOR_SPLIT) {
 							paneOptions = ['editor', 'both'];
-						} else if (state.settings.layout === Setting.LAYOUT_VIEWER_SPLIT) {
+						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_VIEWER_SPLIT) {
 							paneOptions = ['viewer', 'both'];
 						} else {
 							paneOptions = ['editor', 'viewer', 'both'];
@@ -738,13 +738,13 @@ class Application extends BaseApplication {
 			],
 		};
 
-		const layoutOptions = Object.entries(Setting.enumOptions('layout')).map(([layoutKey, layout]) => ({
+		const layoutButtonSequenceOptions = Object.entries(Setting.enumOptions('layoutButtonSequence')).map(([layoutKey, layout]) => ({
 			label: layout,
 			screens: ['Main'],
 			type: 'checkbox',
-			checked: Setting.value('layout') == layoutKey,
+			checked: Setting.value('layoutButtonSequence') == layoutKey,
 			click: () => {
-				Setting.setValue('layout', layoutKey);
+				Setting.setValue('layoutButtonSequence', layoutKey);
 				this.refreshMenu();
 			},
 		}));
@@ -906,9 +906,9 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
-					label: _('Layouts'),
+					label: _('Layout button sequence'),
 					screens: ['Main'],
-					submenu: layoutOptions,
+					submenu: layoutButtonSequenceOptions,
 				}, {
 					label: _('Toggle note list'),
 					screens: ['Main'],

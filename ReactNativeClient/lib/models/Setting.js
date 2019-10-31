@@ -233,7 +233,7 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
-			layout: {
+			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
 				public: false,
