@@ -101,6 +101,7 @@ class NoteTextComponent extends React.Component {
 		this.selectionRange_ = null;
 		this.lastComponentUpdateNoteId_ = null;
 		this.noteSearchBar_ = React.createRef();
+		this.isPrinting_ = false;
 
 		// Complicated but reliable method to get editor content height
 		// https://github.com/ajaxorg/ace/issues/2046
@@ -1204,6 +1205,12 @@ class NoteTextComponent extends React.Component {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
 
+		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
+		if (this.isPrinting_) {
+			return;
+		}
+
+		this.isPrinting_ = true;
 		const previousBody = this.state.note.body;
 		const tempBody = `${this.title_(this.state.note.title)}\n\n${previousBody}`;
 
@@ -1235,6 +1242,7 @@ class NoteTextComponent extends React.Component {
 				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
 				restoreSettings();
 			}
+			this.isPrinting_ = false;
 		}, 100);
 	}
 
