@@ -101,8 +101,8 @@ module.exports = function(style, options) {
 			display: inline-block;
 			position: relative;
 			top: 0.15em;
-			font-size: 1.6em;
-			margin-right: 0.2em;
+			font-size: 1.4em;
+			margin-right: 0.4em;
 		}
 		.resource-icon-mobile {
 			display: inline-block;

@@ -40,6 +40,9 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 				let iconType = 'resource-icon';
 				if (!mime) {
 					mimeClass = 'fa-joplin';
+				} else if (mimeClass === 'fa-file-alt') {
+					// Special case where fork awesome has an icon that font awesome doesn't have
+					mimeClass = 'fa-file-text-o';
 				} else {
 					// Fork awesome appends a -o to filetypes, I don't know why
 					mimeClass = `${mimeClass}-o`;
