@@ -367,6 +367,18 @@ class Application extends BaseApplication {
 			output.push(itemsByCommand[n]);
 		}
 
+		// Map reserved shortcuts to their equivalent key
+		// https://github.com/cronvel/terminal-kit/issues/101
+		for (let i = 0; i < output.length; i++) {
+			const newKeys = output[i].keys.map(k => {
+				k = k.replace(/CTRL_H/g, 'BACKSPACE');
+				k = k.replace(/CTRL_I/g, 'TAB');
+				k = k.replace(/CTRL_M/g, 'ENTER');
+				return k;
+			});
+			output[i].keys = newKeys;
+		}
+
 		return output;
 	}
 
@@ -399,7 +411,7 @@ class Application extends BaseApplication {
 
 			await Setting.saveAll();
 
-			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
 			process.exit(0);
 		} else {

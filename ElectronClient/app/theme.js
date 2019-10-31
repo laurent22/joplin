@@ -1,4 +1,5 @@
 const Setting = require('lib/models/Setting.js');
+const nordStyle = require('./gui/style/theme/nord');
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
@@ -399,14 +400,17 @@ function themeStyle(theme) {
 	// relevant properties
 	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
 
-	if (theme == Setting.THEME_DARK) {
-		output = Object.assign({}, output, darkStyle);
-	} else if (theme == Setting.THEME_SOLARIZED_LIGHT) {
-		output = Object.assign({}, output, solarizedLightStyle);
-	} else if (theme == Setting.THEME_SOLARIZED_DARK) {
-		output = Object.assign({}, output, solarizedDarkStyle);
-	} else if (theme == Setting.THEME_DRACULA) {
-		output = Object.assign({}, output, draculaStyle);
+	switch (theme) {
+	case Setting.THEME_DARK :
+		output = Object.assign({}, output, darkStyle); break;
+	case Setting.THEME_SOLARIZED_LIGHT :
+		output = Object.assign({}, output, solarizedLightStyle); break;
+	case Setting.THEME_SOLARIZED_DARK :
+		output = Object.assign({}, output, solarizedDarkStyle); break;
+	case Setting.THEME_DRACULA :
+		output = Object.assign({}, output, draculaStyle); break;
+	case Setting.THEME_NORD :
+		output = Object.assign({}, output, nordStyle); break;
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles

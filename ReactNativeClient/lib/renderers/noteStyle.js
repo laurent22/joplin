@@ -22,6 +22,13 @@ module.exports = function(style, options) {
 		strong {
 			color: ${style.colorBright};
 		}
+		kbd {
+			border: 1px solid ${style.htmlCodeBorderColor};
+			box-shadow: inset 0 -1px 0 ${style.htmlCodeBorderColor};
+			padding: 2px 4px;
+			border-radius: 3px;
+			background-color: ${style.htmlCodeBackgroundColor};
+		}
 		::-webkit-scrollbar {
 			width: 7px;
 			height: 7px;

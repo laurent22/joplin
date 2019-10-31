@@ -55,7 +55,6 @@ class CameraView extends Component {
 		index++;
 		if (index >= this.state.ratios.length) index = 0;
 		Setting.setValue('camera.ratio', this.state.ratios[index]);
-		this.forceUpdate();
 	}
 
 	async photo_onPress() {

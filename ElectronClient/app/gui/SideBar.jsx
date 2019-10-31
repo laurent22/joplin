@@ -807,6 +807,7 @@ const mapStateToProps = state => {
 		resourceFetcher: state.resourceFetcher,
 		windowCommand: state.windowCommand,
 		sidebarVisibility: state.sidebarVisibility,
+		noteListVisibility: state.noteListVisibility,
 	};
 };
 

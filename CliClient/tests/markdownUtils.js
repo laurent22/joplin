@@ -23,7 +23,7 @@ describe('markdownUtils', function() {
 			['![something](/img/test.png)', '![something](https://test.com/img/test.png)'],
 			['[![something](/img/test.png)](/index.html "Home page")', '[![something](https://test.com/img/test.png)](https://test.com/index.html "Home page")'],
 			['[onelink.com](/jmp/?id=123&u=http://something.com/test)', '[onelink.com](https://test.com/jmp/?id=123&u=http://something.com/test)'],
-			['[![some text](/img/test.png)](/jmp/?s=80&l=related&u=http://example.com "some decription")', '[![some text](https://test.com/img/test.png)](https://test.com/jmp/?s=80&l=related&u=http://example.com "some decription")'],
+			['[![some text](/img/test.png)](/jmp/?s=80&l=related&u=http://example.com "some description")', '[![some text](https://test.com/img/test.png)](https://test.com/jmp/?s=80&l=related&u=http://example.com "some description")'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {

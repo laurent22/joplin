@@ -361,7 +361,7 @@ https://github.com/laurent22/joplin/blob/master/
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.308/joplin-v1.0.308.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.308/joplin-v1.0.308-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.309/joplin-v1.0.309.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.309/joplin-v1.0.309-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -524,7 +524,7 @@ If the OS-clipboard contains an image you can directly paste it in the editor vi
 <h1>Markdown<a name="markdown" href="#markdown" class="heading-anchor">🔗</a></h1>
 <p>Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the <a href="https://joplinapp.org/markdown/">Markdown Guide</a> for more information.</p>
 <h1>Custom CSS<a name="custom-css" href="#custom-css" class="heading-anchor">🔗</a></h1>
-<p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin <em><strong>must</strong></em> be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, <strong>not when printing or exporting to PDF</strong>. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.</p>
+<p>Rendered markdown can be customized by placing a userstyle file in the profile directory <code>~/.config/joplin-desktop/userstyle.css</code> (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin <em><strong>must</strong></em> be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used for both displaying the notes and printing the notes. Be aware how the CSS may look printed (for example, printing white text over a black background is usually not wanted).</p>
 <h1>Note templates<a name="note-templates" href="#note-templates" class="heading-anchor">🔗</a></h1>
 <p>In the <strong>desktop app</strong>, templates can be used to create new notes or to insert into existing ones by creating a <code>templates</code> folder in Joplin's config folder and placing Markdown template files into it. For example creating the file <code>hours.md</code> in the <code>templates</code> directory with the contents:</p>
 <pre><code class="language-markdown">Date: {{date}}
@@ -647,56 +647,63 @@ Details:
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
 <td>عبد الناصر سعيد (<a href="mailto:as@althobaity.com">as@althobaity.com</a>)</td>
-<td>83%</td>
+<td>80%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>47%</td>
+<td>45%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/ba.png" alt=""></td>
+<td>Bosnian</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po">bs_BA</a></td>
+<td>Derviš T. (<a href="mailto:dervis.t@pm.me">dervis.t@pm.me</a>)</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>91%</td>
+<td>88%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po">ca</a></td>
 <td>jmontane, 2019</td>
-<td>72%</td>
+<td>70%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
 <td>Hrvoje Mandić (<a href="mailto:trbuhom@net.hr">trbuhom@net.hr</a>)</td>
-<td>38%</td>
+<td>37%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
 <td>Lukas Helebrandt (<a href="mailto:lukas@aiya.cz">lukas@aiya.cz</a>)</td>
-<td>84%</td>
+<td>97%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
 <td>Dansk</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po">da_DK</a></td>
 <td>Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.</td>
-<td>61%</td>
+<td>98%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (<a href="mailto:ms@editorei.de">ms@editorei.de</a>)</td>
-<td>96%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -717,7 +724,7 @@ Details:
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Andros Fenollosa (andros@fenollosa.email)</td>
-<td>90%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
@@ -731,148 +738,137 @@ Details:
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
 <td>Marcos Lans (<a href="mailto:marcoslansgarza@gmail.com">marcoslansgarza@gmail.com</a>)</td>
-<td>59%</td>
+<td>57%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>95%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>47%</td>
+<td>45%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
-<td>Heimen Stoffels (<a href="mailto:vistausss@outlook.com">vistausss@outlook.com</a>)</td>
-<td>94%</td>
+<td>Robert (<a href="mailto:metbril@outlook.com">metbril@outlook.com</a>)</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po">nb_NO</a></td>
 <td>Mats Estensen (<a href="mailto:code@mxe.no">code@mxe.no</a>)</td>
-<td>84%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ir.png" alt=""></td>
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po">fa</a></td>
 <td>Mehrad Mahmoudian (<a href="mailto:mehrad@mahmoudian.me">mehrad@mahmoudian.me</a>)</td>
-<td>45%</td>
+<td>43%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po">pl_PL</a></td>
 <td></td>
-<td>90%</td>
+<td>86%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td>Rafael Teixeira (<a href="mailto:rto.tinfo@gmail.com">rto.tinfo@gmail.com</a>)</td>
-<td>93%</td>
+<td>89%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po">ro</a></td>
 <td></td>
-<td>47%</td>
+<td>45%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/si.png" alt=""></td>
 <td>Slovenian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po">sl_SI</a></td>
 <td></td>
-<td>59%</td>
+<td>56%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/se.png" alt=""></td>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po">sv</a></td>
 <td>Jonatan Nyberg (<a href="mailto:jonatan@autistici.org">jonatan@autistici.org</a>)</td>
-<td>80%</td>
+<td>77%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po">tr_TR</a></td>
 <td>Zorbey Doğangüneş (<a href="mailto:zorbeyd@gmail.com">zorbeyd@gmail.com</a>)</td>
-<td>78%</td>
+<td>75%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
+<td>ελληνικά</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po">el_GR</a></td>
+<td>Harris Arvanitis (<a href="mailto:xaris@tuta.io">xaris@tuta.io</a>)</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
 <td>Русский</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po">ru_RU</a></td>
 <td>Artyom Karlov (<a href="mailto:artyom.karlov@gmail.com">artyom.karlov@gmail.com</a>)</td>
-<td>83%</td>
+<td>94%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/rs.png" alt=""></td>
 <td>српски језик</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>90%</td>
+<td>86%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>98%</td>
+<td>94%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po">zh_TW</a></td>
 <td>penguinsam (<a href="mailto:samliu@gmail.com">samliu@gmail.com</a>)</td>
-<td>72%</td>
+<td>70%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
-<td>AWASHIRO Ikuya (<a href="mailto:ikunya@gmail.com">ikunya@gmail.com</a>)</td>
-<td>98%</td>
+<td>genneko (<a href="mailto:genneko217@gmail.com">genneko217@gmail.com</a>)</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국말</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>98%</td>
+<td>99%</td>
 </tr>
 </tbody>
 </table>
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
-<h1>Sponsors<a name="sponsors" href="#sponsors" class="heading-anchor">🔗</a></h1>
-<p>Thanks to our GitHub sponsors!</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center"></th>
-<th style="text-align:center"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/6979755?v=4"/></br><a href="https://github.com/devonzuegel">devonzuegel</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/794584?v=4"/></br><a href="https://github.com/corvus-ch">corvus-ch</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/5559891?v=4"/></br><a href="https://github.com/stellaktran">stellaktran</a></td>
-</tr>
-</tbody>
-</table>
 <h1>Contributors<a name="contributors" href="#contributors" class="heading-anchor">🔗</a></h1>
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
 <table>
@@ -897,82 +893,96 @@ Details:
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/10997189?v=4"/></br><a href="https://api.github.com/users/fmrtn">fmrtn</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/16101778?v=4"/></br><a href="https://api.github.com/users/gabcoh">gabcoh</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/1685517?v=4"/></br><a href="https://api.github.com/users/Abijeet">Abijeet</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/6557454?v=4"/></br><a href="https://api.github.com/users/innocuo">innocuo</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/10927304?v=4"/></br><a href="https://api.github.com/users/matsest">matsest</a></td>
-</tr>
-<tr>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/6319051?v=4"/></br><a href="https://api.github.com/users/abonte">abonte</a></td>
+</tr>
+<tr>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/208212?v=4"/></br><a href="https://api.github.com/users/foxmask">foxmask</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/5365582?v=4"/></br><a href="https://api.github.com/users/marcosvega91">marcosvega91</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/37639389?v=4"/></br><a href="https://api.github.com/users/petrz12">petrz12</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/6557454?v=4"/></br><a href="https://api.github.com/users/innocuo">innocuo</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/4237724?v=4"/></br><a href="https://api.github.com/users/alexdevero">alexdevero</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/3194829?v=4"/></br><a href="https://api.github.com/users/moltenform">moltenform</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/6979755?v=4"/></br><a href="https://api.github.com/users/devonzuegel">devonzuegel</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/5365582?v=4"/></br><a href="https://api.github.com/users/marcosvega91">marcosvega91</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/37639389?v=4"/></br><a href="https://api.github.com/users/petrz12">petrz12</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/3194829?v=4"/></br><a href="https://api.github.com/users/moltenform">moltenform</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/5199995?v=4"/></br><a href="https://api.github.com/users/zuphilip">zuphilip</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/31567272?v=4"/></br><a href="https://api.github.com/users/0ndrey">0ndrey</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/6734573?v=4"/></br><a href="https://api.github.com/users/stweil">stweil</a></td>
-</tr>
-<tr>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/1904967?v=4"/></br><a href="https://api.github.com/users/readingsnail">readingsnail</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/937861?v=4"/></br><a href="https://api.github.com/users/archont00">archont00</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/32770029?v=4"/></br><a href="https://api.github.com/users/bradmcl">bradmcl</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/22592201?v=4"/></br><a href="https://api.github.com/users/tfinnberg">tfinnberg</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/226708?v=4"/></br><a href="https://api.github.com/users/RaphaelKimmig">RaphaelKimmig</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/17768566?v=4"/></br><a href="https://api.github.com/users/RenatoXSR">RenatoXSR</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/36303913?v=4"/></br><a href="https://api.github.com/users/sensor-freak">sensor-freak</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/4245227?v=4"/></br><a href="https://api.github.com/users/zblesk">zblesk</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/560571?v=4"/></br><a href="https://api.github.com/users/chrisb86">chrisb86</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/339645?v=4"/></br><a href="https://api.github.com/users/jmontane">jmontane</a></td>
-</tr>
-<tr>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/4168339?v=4"/></br><a href="https://api.github.com/users/solariz">solariz</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/390889?v=4"/></br><a href="https://api.github.com/users/mmahmoudian">mmahmoudian</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/25288?v=4"/></br><a href="https://api.github.com/users/maicki">maicki</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/2136373?v=4"/></br><a href="https://api.github.com/users/mjjzf">mjjzf</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/27608187?v=4"/></br><a href="https://api.github.com/users/rt-oliveira">rt-oliveira</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/31567272?v=4"/></br><a href="https://api.github.com/users/0ndrey">0ndrey</a></td>
 </tr>
 <tr>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/559346?v=4"/></br><a href="https://api.github.com/users/metbril">metbril</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/6734573?v=4"/></br><a href="https://api.github.com/users/stweil">stweil</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/937861?v=4"/></br><a href="https://api.github.com/users/archont00">archont00</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/32770029?v=4"/></br><a href="https://api.github.com/users/bradmcl">bradmcl</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/29672555?v=4"/></br><a href="https://api.github.com/users/genneko">genneko</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/22592201?v=4"/></br><a href="https://api.github.com/users/tfinnberg">tfinnberg</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/102242?v=4"/></br><a href="https://api.github.com/users/nathanleiby">nathanleiby</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/226708?v=4"/></br><a href="https://api.github.com/users/RaphaelKimmig">RaphaelKimmig</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/17768566?v=4"/></br><a href="https://api.github.com/users/RenatoXSR">RenatoXSR</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/36303913?v=4"/></br><a href="https://api.github.com/users/sensor-freak">sensor-freak</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/4245227?v=4"/></br><a href="https://api.github.com/users/zblesk">zblesk</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/560571?v=4"/></br><a href="https://api.github.com/users/chrisb86">chrisb86</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2733783?v=4"/></br><a href="https://api.github.com/users/JOJ0">JOJ0</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/339645?v=4"/></br><a href="https://api.github.com/users/jmontane">jmontane</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/4168339?v=4"/></br><a href="https://api.github.com/users/solariz">solariz</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/390889?v=4"/></br><a href="https://api.github.com/users/mmahmoudian">mmahmoudian</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/25288?v=4"/></br><a href="https://api.github.com/users/maicki">maicki</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/2136373?v=4"/></br><a href="https://api.github.com/users/mjjzf">mjjzf</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/4497566?v=4"/></br><a href="https://api.github.com/users/rccavalcanti">rccavalcanti</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/27608187?v=4"/></br><a href="https://api.github.com/users/rt-oliveira">rt-oliveira</a></td>
+</tr>
+<tr>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/2486806?v=4"/></br><a href="https://api.github.com/users/sebastienjust">sebastienjust</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/1540054?v=4"/></br><a href="https://api.github.com/users/ShaneKilkelly">ShaneKilkelly</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/4079047?v=4"/></br><a href="https://api.github.com/users/Zorbeyd">Zorbeyd</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/35413451?v=4"/></br><a href="https://api.github.com/users/chenlhlinux">chenlhlinux</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/17399340?v=4"/></br><a href="https://api.github.com/users/pf-siedler">pf-siedler</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/17399340?v=4"/></br><a href="https://api.github.com/users/pf-siedler">pf-siedler</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/17232523?v=4"/></br><a href="https://api.github.com/users/ruuti">ruuti</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/23638148?v=4"/></br><a href="https://api.github.com/users/s1nceri7y">s1nceri7y</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/7471938?v=4"/></br><a href="https://api.github.com/users/ShuiHuo">ShuiHuo</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/11596277?v=4"/></br><a href="https://api.github.com/users/ikunya">ikunya</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/3660978?v=4"/></br><a href="https://api.github.com/users/alanfortlink">alanfortlink</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/4408379?v=4"/></br><a href="https://api.github.com/users/lex111">lex111</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/498326?v=4"/></br><a href="https://api.github.com/users/Shaxine">Shaxine</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/7034200?v=4"/></br><a href="https://api.github.com/users/bimlas">bimlas</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/105843?v=4"/></br><a href="https://api.github.com/users/chaifeng">chaifeng</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/549349?v=4"/></br><a href="https://api.github.com/users/charles-e">charles-e</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/1686759?v=4"/></br><a href="https://api.github.com/users/chrmoritz">chrmoritz</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/1686759?v=4"/></br><a href="https://api.github.com/users/chrmoritz">chrmoritz</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/28535750?v=4"/></br><a href="https://api.github.com/users/NeverMendel">NeverMendel</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/10371667?v=4"/></br><a href="https://api.github.com/users/domgoodwin">domgoodwin</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/5131923?v=4"/></br><a href="https://api.github.com/users/donbowman">donbowman</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/47756?v=4"/></br><a href="https://api.github.com/users/dflock">dflock</a></td>
+</tr>
+<tr>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/1962738?v=4"/></br><a href="https://api.github.com/users/einverne">einverne</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/628474?v=4"/></br><a href="https://api.github.com/users/Atalanttore">Atalanttore</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/16492558?v=4"/></br><a href="https://api.github.com/users/eodeluga">eodeluga</a></td>
-</tr>
-<tr>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/1714374?v=4"/></br><a href="https://api.github.com/users/FleischKarussel">FleischKarussel</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/6190183?v=4"/></br><a href="https://api.github.com/users/gmag11">gmag11</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2257024?v=4"/></br><a href="https://api.github.com/users/gusbemacbe">gusbemacbe</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/18524580?v=4"/></br><a href="https://api.github.com/users/Fvbor">Fvbor</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/3379379?v=4"/></br><a href="https://api.github.com/users/sczhg">sczhg</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2257024?v=4"/></br><a href="https://api.github.com/users/gusbemacbe">gusbemacbe</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/18524580?v=4"/></br><a href="https://api.github.com/users/Fvbor">Fvbor</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/22606250?v=4"/></br><a href="https://api.github.com/users/bennetthanna">bennetthanna</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/3379379?v=4"/></br><a href="https://api.github.com/users/sczhg">sczhg</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/1716229?v=4"/></br><a href="https://api.github.com/users/Vistaus">Vistaus</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2733783?v=4"/></br><a href="https://api.github.com/users/JOJ0">JOJ0</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/1533624?v=4"/></br><a href="https://api.github.com/users/IrvinDominin">IrvinDominin</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/19985741?v=4"/></br><a href="https://api.github.com/users/JRaiden16">JRaiden16</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/11466782?v=4"/></br><a href="https://api.github.com/users/jacobherrington">jacobherrington</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/4995433?v=4"/></br><a href="https://api.github.com/users/jaredcrowe">jaredcrowe</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/163555?v=4"/></br><a href="https://api.github.com/users/JoelRSimpson">JoelRSimpson</a></td>
@@ -992,44 +1002,58 @@ Details:
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/12831489?v=4"/></br><a href="https://api.github.com/users/mgroth0">mgroth0</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/21796?v=4"/></br><a href="https://api.github.com/users/silentmatt">silentmatt</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/51273874?v=4"/></br><a href="https://api.github.com/users/MichipX">MichipX</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/53177864?v=4"/></br><a href="https://api.github.com/users/MrTraduttore">MrTraduttore</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/9076687?v=4"/></br><a href="https://api.github.com/users/NJannasch">NJannasch</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/12369770?v=4"/></br><a href="https://api.github.com/users/Ouvill">Ouvill</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/43815417?v=4"/></br><a href="https://api.github.com/users/shorty2380">shorty2380</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/43815417?v=4"/></br><a href="https://api.github.com/users/shorty2380">shorty2380</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/6306608?v=4"/></br><a href="https://api.github.com/users/Diadlo">Diadlo</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/8766773?v=4"/></br><a href="https://api.github.com/users/Cogitri">Cogitri</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/17312341?v=4"/></br><a href="https://api.github.com/users/reinhart1010">reinhart1010</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/744655?v=4"/></br><a href="https://api.github.com/users/ruzaq">ruzaq</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/19328605?v=4"/></br><a href="https://api.github.com/users/SamuelBlickle">SamuelBlickle</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/505011?v=4"/></br><a href="https://api.github.com/users/kcrt">kcrt</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/19328605?v=4"/></br><a href="https://api.github.com/users/SamuelBlickle">SamuelBlickle</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/9937486?v=4"/></br><a href="https://api.github.com/users/SFoskitt">SFoskitt</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/1782292?v=4"/></br><a href="https://api.github.com/users/SubodhDahal">SubodhDahal</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/505011?v=4"/></br><a href="https://api.github.com/users/kcrt">kcrt</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/538584?v=4"/></br><a href="https://api.github.com/users/xissy">xissy</a></td>
+</tr>
+<tr>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/466122?v=4"/></br><a href="https://api.github.com/users/Tekki">Tekki</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/8731922?v=4"/></br><a href="https://api.github.com/users/tbroadley">tbroadley</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/114300?v=4"/></br><a href="https://api.github.com/users/Kriechi">Kriechi</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/3457339?v=4"/></br><a href="https://api.github.com/users/tkilaker">tkilaker</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/4201229?v=4"/></br><a href="https://api.github.com/users/tcyrus">tcyrus</a></td>
 </tr>
 <tr>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/4201229?v=4"/></br><a href="https://api.github.com/users/tcyrus">tcyrus</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/834914?v=4"/></br><a href="https://api.github.com/users/tobias-grasse">tobias-grasse</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/6691273?v=4"/></br><a href="https://api.github.com/users/strobeltobias">strobeltobias</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/11031696?v=4"/></br><a href="https://api.github.com/users/ymitsos">ymitsos</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/5077221?v=4"/></br><a href="https://api.github.com/users/axq">axq</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/70296?v=4"/></br><a href="https://api.github.com/users/tbergeron">tbergeron</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/6104498?v=4"/></br><a href="https://api.github.com/users/MyTheValentinus">MyTheValentinus</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/3985557?v=4"/></br><a href="https://api.github.com/users/XarisA">XarisA</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/11031696?v=4"/></br><a href="https://api.github.com/users/ymitsos">ymitsos</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/5077221?v=4"/></br><a href="https://api.github.com/users/axq">axq</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/28493662?v=4"/></br><a href="https://api.github.com/users/cdorin93">cdorin93</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/30935096?v=4"/></br><a href="https://api.github.com/users/cybertramp">cybertramp</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/9694906?v=4"/></br><a href="https://api.github.com/users/delta-emil">delta-emil</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/926263?v=4"/></br><a href="https://api.github.com/users/doc75">doc75</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2903013?v=4"/></br><a href="https://api.github.com/users/ebayer">ebayer</a></td>
 </tr>
 <tr>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/926263?v=4"/></br><a href="https://api.github.com/users/doc75">doc75</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars2.githubusercontent.com/u/2903013?v=4"/></br><a href="https://api.github.com/users/ebayer">ebayer</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/18619090?v=4"/></br><a href="https://api.github.com/users/exponentactivity">exponentactivity</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/47755037?v=4"/></br><a href="https://api.github.com/users/fabianski7">fabianski7</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/14201321?v=4"/></br><a href="https://api.github.com/users/rasperepodvipodvert">rasperepodvipodvert</a></td>
-<td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/29672555?v=4"/></br><a href="https://api.github.com/users/genneko">genneko</a></td>
+</tr>
+<tr>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/11388094?v=4"/></br><a href="https://api.github.com/users/hydrandt">hydrandt</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/4140247?v=4"/></br><a href="https://api.github.com/users/luzpaz">luzpaz</a></td>
+<td style="text-align:center"><img width="50" src="https://avatars0.githubusercontent.com/u/36965591?v=4"/></br><a href="https://api.github.com/users/daehruoydeef">daehruoydeef</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars1.githubusercontent.com/u/42961947?v=4"/></br><a href="https://api.github.com/users/pensierocrea">pensierocrea</a></td>
 <td style="text-align:center"><img width="50" src="https://avatars3.githubusercontent.com/u/10206967?v=4"/></br><a href="https://api.github.com/users/rhtenhove">rhtenhove</a></td>
 </tr>
