@@ -49,6 +49,7 @@ require('brace/theme/solarized_light');
 require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
+require('brace/theme/chaos');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 
@@ -100,6 +101,7 @@ class NoteTextComponent extends React.Component {
 		this.selectionRange_ = null;
 		this.lastComponentUpdateNoteId_ = null;
 		this.noteSearchBar_ = React.createRef();
+		this.isPrinting_ = false;
 
 		// Complicated but reliable method to get editor content height
 		// https://github.com/ajaxorg/ace/issues/2046
@@ -238,6 +240,14 @@ class NoteTextComponent extends React.Component {
 				this.selectionRange_ = null;
 			} else {
 				this.selectionRange_ = ranges[0];
+				if (process.platform === 'linux') {
+					const textRange = this.textOffsetSelection();
+					if (textRange.start != textRange.end) {
+						clipboard.writeText(this.state.note.body.slice(
+							Math.min(textRange.start, textRange.end),
+							Math.max(textRange.end, textRange.start)), 'selection');
+					}
+				}
 			}
 		};
 
@@ -1195,13 +1205,19 @@ class NoteTextComponent extends React.Component {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
 		}
 
+		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
+		if (this.isPrinting_) {
+			return;
+		}
+
+		this.isPrinting_ = true;
 		const previousBody = this.state.note.body;
 		const tempBody = `${this.title_(this.state.note.title)}\n\n${previousBody}`;
 
 		const previousTheme = Setting.value('theme');
 		Setting.setValue('theme', Setting.THEME_LIGHT);
 		this.lastSetHtml_ = '';
-		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: false });
+		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: true });
 		this.forceUpdate();
 
 		const restoreSettings = async () => {
@@ -1226,6 +1242,7 @@ class NoteTextComponent extends React.Component {
 				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
 				restoreSettings();
 			}
+			this.isPrinting_ = false;
 		}, 100);
 	}
 

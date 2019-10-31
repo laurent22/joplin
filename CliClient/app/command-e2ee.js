@@ -50,7 +50,7 @@ class Command extends BaseCommand {
 				this.stdout(_('Operation cancelled'));
 				return;
 			}
-			const password2 = await this.prompt(_('Confirm master password:'), { type: 'string', secure: true });
+			const password2 = await this.prompt(_('Confirm password:'), { type: 'string', secure: true });
 			if (!password2) {
 				this.stdout(_('Operation cancelled'));
 				return;

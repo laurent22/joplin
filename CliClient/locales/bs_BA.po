@@ -1,103 +1,107 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Yukio Usuzumi <anohigisavay@gmail.com>, 2018.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: Derviš T. <dervis.t@pm.me>\n"
 "Language-Team: \n"
-"Language: zh_CN\n"
+"Language: bs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr "移除相关笔记的标签后才可删除此标签。"
+msgstr ""
+"Da obrišete oznaku, prvo je uklonite iz bilješki kojima je dodijeljena."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "请先选择需要删除的笔记或笔记本。"
+msgstr "Prvo odaberite bilješku ili bilježnicu koju želite obrisati"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "按 Ctrl+D 或输入“exit”退出程序"
+msgstr "Pritisnite Ctrl+D ili kucajte \"exit\" da zatvorite aplikaciju"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "有多条项目符合 “%s”。请缩小您的检索范围。"
+msgstr "Više od jednog rezultata odgovara \"%s\". Molimo suzite obim pretrage."
 
 msgid "No notebook selected."
-msgstr "未选择笔记本。"
+msgstr "Nije odabrana bilježnica."
 
 msgid "No notebook has been specified."
-msgstr "未指定笔记本。"
+msgstr "Nije precizirana bilježnica"
 
 msgid "Y"
-msgstr "是"
+msgstr "Y"
 
 msgid "n"
-msgstr "否"
+msgstr "n"
 
 msgid "N"
-msgstr "否"
+msgstr "N"
 
 msgid "y"
-msgstr "是"
+msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "正在取消后台同步……请稍候。"
+msgstr "Prekidam sinhronizaciju... Pričekajte."
 
 #, javascript-format
 msgid "No such command: %s"
-msgstr "不存在该命令：%s"
+msgstr "Nepostojeća komanda: %s"
 
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "命令“%s”仅在 GUI 模式下可用"
+msgstr "Komanda \"%s\" dostupna je samo u grafičkom okruženju"
 
 msgid "Cannot change encrypted item"
-msgstr "无法更改加密项目"
+msgstr "Nije moguće promijeniti šifriranu stavku"
 
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "缺失所需参数：%s"
+msgstr "Nedostaje neophodni argument: %s"
 
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "您的选择： "
+msgstr "Vaš izbor: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr "此答案无效：%s"
+msgstr "Nevažeći odgovor: %s"
 
 msgid "Attaches the given file to the note."
-msgstr "将选定文件添加到笔记中。"
+msgstr "Prilaže datu datoteku bilješci."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr "无法找到“%s”。"
+msgstr "Ne mogu pronaći \"%s\"."
 
 msgid "Displays the given note."
-msgstr "显示选定笔记。"
+msgstr "Prikazuje datu bilješku."
 
 msgid "Displays the complete information about note."
-msgstr "显示有关笔记的完整信息。"
+msgstr "Prikazuje potpune informacije o bilješci."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。如果没有提"
-"供 [name] 或 [value] 值，它将列出当前配置。"
+"Prima ili podešava konfiguracijske vrijednosti. Ako [value] nije navedena, "
+"tada će biti prikazana vrijednost [name]. Ako ni [name] ni [value] nisu "
+"precizirane, prikazat će se trenutna konfiguracija."
 
 msgid "Also displays unset and hidden config variables."
-msgstr "同时显示未设置的与隐藏的配置变量。"
+msgstr "Prikazuje i nepodešene i skrivene konfiguracijske varijable."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -111,282 +115,295 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"复制符合 <note> 的笔记至 [notebook]。若无指定的笔记本，该笔记将被复制至当前笔"
-"记本。"
+"Kreira duplikat bilješke <note> u [notebook]. Ako bilježnica nije navedena, "
+"duplikat će biti pohranjen u trenutno otvorenu bilježnicu."
 
 msgid "Marks a to-do as done."
-msgstr "标记待办事项为完成。"
+msgstr "Označava da je zadatak obavljen."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "笔记非待办事项：“%s”"
+msgstr "Bilješka nije zadatak: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status、`decrypt-"
-"file` 和 `target-status`。"
+"Upravlja konfiguracijom šifriranja s kraja na kraj (E2EE). Komande glase: "
+"`enable` (uključi), `disable` (isključi), `decrypt` (dešifruj), `status` "
+"(stanje), `decrypt-file` (dešifruj datoteku) i `target-status` (stanje "
+"odredišta)."
 
 msgid "Enter master password:"
-msgstr "输入主密码："
+msgstr "Unesite glavnu lozinku:"
 
 msgid "Operation cancelled"
-msgstr "操作已取消"
+msgstr "Radnja je prekinuta"
 
 #, fuzzy
 msgid "Confirm password:"
-msgstr "输入主密码："
+msgstr "Unesite glavnu lozinku:"
 
 #, fuzzy
 msgid "Passwords do not match!"
-msgstr "密码不可为空"
+msgstr "Lozinka ne može biti prazna"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"开始解密，请稍候... 取决于需解密的文件数量，解密环节可能需要等待几分钟。"
+"Počinjem sa dešifrovanjem... Molim Vas da pričekate, jer proces može trajati "
+"nekoliko minuta, zavisno od količine podataka koje treba dešifrovati."
 
 msgid "Completed decryption."
-msgstr "已完成解密。"
+msgstr "Dešifrovanje završeno."
 
 msgid "Enabled"
-msgstr "已启用"
+msgstr "Uključeno"
 
 msgid "Disabled"
-msgstr "已禁用"
+msgstr "Isključeno"
 
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "加密状态：%s"
+msgstr "Šifriranje je: %s"
 
 msgid "Edit note."
-msgstr "编辑笔记。"
+msgstr "Uredi bilješku."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr "未设置指定的文本编辑器。请通过`config editor <editor-path>`设置"
+msgstr ""
+"Nije određen program za uređivanje teksta. Precizirajte ga pomoću `config "
+"editor <editor-path>`"
 
 msgid "No active notebook."
-msgstr "无活动笔记本。"
+msgstr "Nema aktivne bilježnice."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "笔记不存在：“%s”。是否创建？"
+msgstr "Bilješka ne postoji: \"%s\". Želite li je kreirati?"
 
 msgid "Exits the application."
-msgstr "退出程序。"
+msgstr "Zatvara aplikaciju."
 
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"导出 Joplin 数据到选定路径。默认导出包含笔记本、笔记、标签与资源等完整的数据"
-"库。"
+"Prenosi kopiju Joplin podataka na datu lokaciju. Čitava će baza podataka "
+"biti pohranjena, uključujući bilježnice, bilješke, oznake i resurse."
 
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "目标格式：%s"
+msgstr "Format: %s"
 
 msgid "Exports only the given note."
-msgstr "仅导出选定笔记。"
+msgstr "Prenosi samo kopiju date bilješke."
 
 msgid "Exports only the given notebook."
-msgstr "仅导出选定笔记本。"
+msgstr "Prenosi samo kopiju date bilježnice."
 
 msgid "Displays a geolocation URL for the note."
-msgstr "显示该笔记的地理定位 URL 地址。"
+msgstr "Prikazuje geografsku lokaciju bilješke."
 
 msgid "Displays usage information."
-msgstr "显示用法提示。"
+msgstr "Prikazuje informacije o korištenju."
 
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "有关如何自定义快捷键，请访问 %s"
+msgstr "Da biste saznali kako raditi sa kraticama, posjetite %s"
 
 msgid "Shortcuts are not available in CLI mode."
-msgstr "快捷键在 CLI 模式下不可用。"
+msgstr "Kratice nisu dostupne u negrafičkom okruženju."
 
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"输入 `help [command]` 来获取有关该命令的更多信息；或输入 `help all` 获取完整"
-"的用法提示。"
+"Kucajte `help [command]` za više informacija o komandi; ili kucajte `help "
+"all` za detaljne informacije o načinu korištenja."
 
 msgid "The possible commands are:"
-msgstr "可用的命令有："
+msgstr "Moguće komande glase:"
 
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"在任何命令中，某个笔记或笔记本可通过它的名称或 ID 引用，也可使用代表当前所选"
-"笔记和笔记本的快捷变量 ‘$n' 和 '$b'。`$c` 可用于引用当前所选的项目。"
+"U svakoj komandi, bilješka ili bilježnica mogu se precizirati pomoću naziva "
+"ili identifikacijskog broja, odnosno pomoću kratica za naziv `$n` i broj `"
+"$b` trenutno označene bilješke ili bilježnice. `$c` se može koristiti za "
+"trenutno označenu stavku."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "按 Tab 键或 Shift+Tab 组合键切换面板。"
+msgstr "Da pređete iz jednog okvira u drugi, pritisnite Tab ili Shift+Tab."
 
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr "通过方向键与 page up/down 键来滚动列表与文本区域（包含此控制台）。"
+msgstr ""
+"Pomoću strelica i tipki PageUp/PageDown pomjerajte liste i tekst "
+"(uključujući i ovu konzolu)"
 
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "按“TC”最大化/最小化控制台。"
+msgstr "Konzolu maksimizirate/minimizirate pritiskom na \"tc\"."
 
 msgid "To enter command line mode, press \":\""
-msgstr "按“:”键进入命令行模式"
+msgstr "Za aktiviranje komandne linije, pritisnite \":\""
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr "按 ESC 键退出命令行模式"
+msgstr "Za zatvaranje komandne linije, pritisnite ESCAPE"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表"
+msgstr "Za popis kratica i konfiguracijskih opcija kucajte `help keymap`"
 
 msgid "Imports data into Joplin."
-msgstr "导入数据到 Jolin。"
+msgstr "Unosi podatke u Joplin"
 
 #, javascript-format
 msgid "Source format: %s"
-msgstr "原数据格式：%s"
+msgstr "Izvorni format: %s"
 
 msgid "Do not ask for confirmation."
-msgstr "不再要求确认。"
+msgstr "Ne pitaj za potvrdu."
 
 #, javascript-format
 msgid "Found: %d."
-msgstr "已找到：%d条。"
+msgstr "Pronađeno: %d."
 
 #, javascript-format
 msgid "Created: %d."
-msgstr "已创建：%d条。"
+msgstr "Kreirano: %d."
 
 #, javascript-format
 msgid "Updated: %d."
-msgstr "已更新：%d条。"
+msgstr "Ažurirano: %d."
 
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "已跳过：%d条。"
+msgstr "Preskočeno: %d."
 
 #, javascript-format
 msgid "Resources: %d."
-msgstr "资源：%d。"
+msgstr "Resursi: %d."
 
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "已标签：%d条。"
+msgstr "Označeno: %d."
 
 msgid "Importing notes..."
-msgstr "正在导入笔记..."
+msgstr "Unosim bilješke..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "以下笔记已被导入：%s"
+msgstr "Bilješke su unesene: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
-msgstr "在当前笔记本中显示笔记。使用 `ls /` 显示笔记本列表。"
+msgstr ""
+"Prikazuje bilješke u trenutnoj bilježnici. Koristite komandu `ls /` da "
+"prikažete popis bilježnica."
 
 msgid "Displays only the first top <num> notes."
-msgstr "只显示最上方的 <num> 条笔记。"
+msgstr "Prikazuje samo prvih <num> bilješki."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "通过 <field> 排序项目（示例：title, updated_time, created_time）。"
+msgstr "Sortira stavke prema <field> (npr. title, updated_time, created_time)."
 
 msgid "Reverses the sorting order."
-msgstr "反转排序顺序。"
+msgstr "Inverzni redoslijed sortiranja."
 
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"仅显示指定类型的项目。可以把  `n`  用于笔记，`t` 用于待办事项，或者 `nt` 用于"
-"笔记和待办事项 (示例：`-tt` 只会显示待办事项，当使用 `-ttd` 时将会显示笔记和"
-"待办事项。"
+"Prikazuje samo stavke određenog tipa. To može biti `n` za bilješke, `t` za "
+"zadatke, ili `nt` za bilješke i zadatke (npr. `-tt` prikazuje samo zadatke, "
+"dok `-ttd` prikazuje i bilješke i zadatke.)"
 
 msgid "Either \"text\" or \"json\""
-msgstr "“text”或“json”"
+msgstr "Ili \"text\" ili \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"使用长列表格式。格式为：ID, NOTE_COUNT（仅笔记本）, DATE, TODO_CHECKED（仅待"
-"办事项）, TITLE"
+"Koristi dugi format. Format je ID, NOTE_COUNT (za bilježnice), DATE, "
+"TODO_CHECKED (za zadatke), TITLE"
 
 msgid "Please select a notebook first."
-msgstr "请先选择笔记本。"
+msgstr "Prvo odaberite bilježnicu."
 
 msgid "Creates a new notebook."
-msgstr "新建笔记本。"
+msgstr "Kreira novu bilježnicu."
 
 msgid "Creates a new note."
-msgstr "新建笔记。"
+msgstr "Kreira novu bilješku."
 
 msgid "Notes can only be created within a notebook."
-msgstr "笔记只能在笔记本内创建。"
+msgstr "Bilješke se mogu kreirati samo unutar bilježnice."
 
 msgid "Creates a new to-do."
-msgstr "新建待办事项。"
+msgstr "Kreira novi zadatak."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "移动符合 <note> 的笔记到 [notebook]。"
+msgstr "Premješta bilješke <note> u [notebook]."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "重命名选定的 <item>（笔记或笔记本）到 <name>。"
+msgstr "Mijenja naziv <item> (bilješka ili bilježnica) u <name>."
 
 msgid "Deletes the given notebook."
-msgstr "删除选定的笔记本。"
+msgstr "Briše datu bilježnicu."
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "删除笔记本（不要求确认）。"
+msgstr "Briše bilježnicu bez traženja potvrde."
 
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr "是否删除笔记本？所有在该笔记本内的笔记也将同时被删除。"
+msgstr ""
+"Obrisati bilježnicu? Sve bilješke i bilježnice unutar ove bilježnice također "
+"će biti obrisane."
 
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "删除符合 <note-pattern> 的笔记。"
+msgstr "Briše bilješke <note-pattern>."
 
 msgid "Deletes the notes without asking for confirmation."
-msgstr "删除笔记（不要求确认）。"
+msgstr "Briše bilješke bez traženja potvrde."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "有 %d 条笔记匹配。是否删除？"
+msgstr "%d bilješki odgovara upitu. Obrisati ih?"
 
 msgid "Delete note?"
-msgstr "是否删除笔记？"
+msgstr "Obrisati bilješku?"
 
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "在所有笔记内搜索给定的 <pattern>。"
+msgstr "Traži dati <pattern> u svim bilješkama."
 
 #, javascript-format
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"启动，停止或检查API服务。可以通过设置‘api.port’变量指定API服务运行在哪个端口"
-"上。执行命令（%s）。"
+"Pokreni, zaustavi ili provjeri API server. Da precizirate koji port treba "
+"koristiti, podesite api.port konfiguracijsku varijablu. Komande su (%s)."
 
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "服务已在端口%d上运行"
+msgstr "Server je već pokrenut preko porta %d"
 
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "服务正在端口%d上运行"
+msgstr "Server je u funkciji preko porta %d"
 
 msgid "Server is not running."
-msgstr "服务没有运行。"
+msgstr "Server nije pokrenut."
 
 #, javascript-format
 msgid ""
@@ -395,39 +412,44 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n"
+"Postavlja svojstvo <name> date <note> na vrijednost [value]. Moguća "
+"svojstva:\n"
 "\n"
 "%s"
 
 msgid "Displays summary about the notes and notebooks."
-msgstr "显示关于笔记与笔记本的概况。"
+msgstr "Prikazuje sažetak o bilješkama i bilježnicama."
 
 msgid "Synchronises with remote storage."
-msgstr "与远程储存同步。"
+msgstr "Sinhronizuje sa vanjskim medijem za pohranu podataka."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "同步到所提供的目标（默认为同步目标配置值）"
+msgstr ""
+"Sinhronizuj sa datim odredištem (prekonfigurisano sync.target config value)"
 
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "认证未完成（未收到认证令牌）。"
+msgstr "Ovjera nije završena (nije primljena potvrda /token/)."
 
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
+msgstr ""
+"Slijedite ove korake da dopustite Joplinu sinhronizovanje sa Dropboxom:"
 
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
+msgstr ""
+"Korak 1: otvorite ovu adresu u Vašem internet pregledniku i ovjerite "
+"aplikaciju:"
 
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "步骤二：输入 Dropbox 提供的代码："
+msgstr "Korak 2: unesite kōd koji Vam je poslao Dropbox:"
 
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "未授予 %s 的权限。请提供缺少的凭据。"
+msgstr "Nije ovjereno sa %s. Molim unesite podatke koji nedostaju."
 
 msgid "Synchronisation is already in progress."
-msgstr "已经在同步。"
+msgstr "Sinhronizovanje je u toku."
 
 #, javascript-format
 msgid ""
@@ -435,24 +457,25 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"锁定文件已被保存。如果您确认当前未在进行任何同步，可删除锁定文件“%s”后继续上"
-"一部操作。"
+"Zaključavanje datoteke već je aktivno. Ako ste sigurni da sinhronizovanje "
+"nije u toku, možete obrisati datoteku za zaključavanje u \"%s\" i nastaviti "
+"s radom."
 
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "同步目标：%s (%s)"
+msgstr "Sinhronizujem: %s (%s)"
 
 msgid "Cannot initialize synchroniser."
-msgstr "无法初始化同步。"
+msgstr "Sinhronizovanje se ne može započeti."
 
 msgid "Starting synchronisation..."
-msgstr "开始同步..."
+msgstr "Započinjem sinhronizovanje..."
 
 msgid "Downloading resources..."
-msgstr "下载资源中..."
+msgstr "Preuzimam resurse..."
 
 msgid "Cancelling... Please wait."
-msgstr "正在取消... 请稍候。"
+msgstr "Prekidam... Pričekajte."
 
 #, fuzzy
 msgid ""
@@ -461,13 +484,14 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是“add”、“remove”或者“list”， 用于从 [note] 中赋值或删除 "
-"[tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所有的标签（对"
-"于过长选项请使用 -l 参数）。"
+"<tag-command> može biti \"add\", \"remove\" ili \"list\", kojima se "
+"dodjeljuju ili uklanjaju [tag] iz [note], odnosno prikazuje popis bilješki "
+"kojima je dodijeljen [tag]. Komanda `tag list` može se koristiti za "
+"prikazivanje svih oznaka (koristite -l za detaljni prikaz)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "无效命令：“%s”"
+msgstr "Nevažeća komanda: \"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -475,55 +499,58 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是“toggle”或者“clear”。使用“toggle”命令来切换待办事项的完"
-"成状态（若目标为普通笔记则将会转换成待办事项）。使用“clear”命令来把待办事项转"
-"换到普通笔记。"
+"<todo-command> može biti \"toggle\" ili \"clear\". Koristite \"toggle\" da "
+"promijenite status zadatka iz završenog u nezavršen (ako se radi o običnoj "
+"bilješci, ona će biti preinačena u zadatak). Koristite \"clear\" da zadatak "
+"konvertujete u običnu bilješku."
 
 msgid "Marks a to-do as non-completed."
-msgstr "标记待办事项为未完成。"
+msgstr "Označava da je zadatak neobavljen."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
-msgstr "切换到 [notebook] - 所有进一步处理将在该笔记本中进行。"
+msgstr "Prelazi u [notebook] – sve dalje radnje vršit će se u ovoj bilježnici."
 
 msgid "Displays version information"
-msgstr "显示版本信息"
+msgstr "Prikazuje verziju"
 
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
 msgid "Enum"
-msgstr "枚举"
+msgstr "Enum"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr "格式：%s。"
+msgstr "Vrsta: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr "可用值: %s。"
+msgstr "Moguće vrijednosti: %s."
 
 #, javascript-format
 msgid "Default: %s"
-msgstr "默认值: %s"
+msgstr "Prekonfigurisano: %s"
 
 msgid "Possible keys/values:"
-msgstr "可用键/值："
+msgstr "Moguće stavke/vrijednosti:"
 
 msgid "Type `joplin help` for usage information."
-msgstr "输入 `joplin help` 获取用量信息。"
+msgstr "Kucajte `joplin help` za informacije o korištenju."
 
 msgid "Fatal error:"
-msgstr "严重错误："
+msgstr "Kritična greška:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "授权成功 - 您可以关闭此页面了。"
+msgstr ""
+"Aplikacija je ovjerena – možete zatvoriti ovaj odjeljak u internet "
+"pregledniku."
 
 msgid "The application has been successfully authorised."
-msgstr "已成功授予本应用程序权限。"
+msgstr "Aplikacija je uspješno ovjerena."
 
 msgid ""
 "Please open the following URL in your browser to authenticate the "
@@ -532,12 +559,14 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"请在浏览器中打开以下链接激活该应用程序。该应用会建立“Apps/Joplin”文件目录，并"
-"只会读写该目录中的文件。它没有任何权限访问此目录以外的任何文件或个人信息。也"
-"不会与第三方分享任何数据。"
+"Otvorite sljedeću adresu u Vašem internet pregledniku da ovjerite "
+"aplikaciju. Ona će kreirati direktorij na lokaciji \"Apps/Joplin\" i imat će "
+"pristup samo datotekama koje se nalaze unutar tog direktorija. Onemogućen je "
+"pristup datotekama van navedenog direktorija ili bilo kakvom drugom obliku "
+"privatnih podataka. Ništa neće biti proslijeđeno bilo kojem trećem licu."
 
 msgid "Search:"
-msgstr "搜索："
+msgstr "Pretraživanje:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -547,11 +576,13 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"欢迎使用 Joplin！\n"
+"Dobrodošli u Joplin!\n"
 "\n"
-"输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取使用信息。\n"
+"Kucajte `:help shortcuts` za prikaz kratica, ili samo `:help` za informacije "
+"o korištenju.\n"
 "\n"
-"例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
+"Naprimjer, da kreirate bilježnicu pritisnite `mb`; za kreiranje bilješke "
+"koristite `mn`."
 
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
@@ -559,262 +590,270 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"一个或多个项目当前已加密，您可能需要提供主密码。若需进行此操作请输入 `e2ee "
-"decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
+"Jedna ili više stavki trenutno su šifrirane i možda ćete trebati unijeti "
+"glavnu lozinku. Da biste to učinili, kucajte `e2ee decrypt`. Ukoliko ste već "
+"unijeli lozinku, šifrirane stavke dešifruju se u pozadini i uskoro će biti "
+"dostupne."
 
 #, javascript-format
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
+msgstr "Prenosim na \"%s\" u \"%s\" formatu. Pričekajte..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr ""
 
 msgid "&File"
-msgstr "文件 (&F)"
+msgstr "Datoteka"
 
 msgid "About Joplin"
-msgstr "关于 Joplin"
+msgstr "O Joplinu"
 
 msgid "Preferences..."
-msgstr "偏好……"
+msgstr "Postavke..."
 
 msgid "Check for updates..."
-msgstr "检查更新..."
+msgstr "Ažuriranja..."
 
 msgid "Templates"
-msgstr "模版"
+msgstr "Šabloni"
 
 msgid "Import"
-msgstr "导入"
+msgstr "Unesi"
 
 msgid "Export"
-msgstr "导出"
+msgstr "Prenesi"
 
 msgid "Synchronise"
-msgstr "同步"
+msgstr "Sinhronizuj"
 
 #, javascript-format
 msgid "Hide %s"
-msgstr "隐藏 %s"
+msgstr "Sakrij %s"
 
 msgid "Quit"
-msgstr "退出"
+msgstr "Zatvori"
 
 msgid "Close Window"
-msgstr "关闭窗口"
+msgstr "Zatvori prozor"
 
 msgid "&Edit"
-msgstr "编辑 (&E)"
+msgstr "Uredi"
 
 msgid "Copy"
-msgstr "复制"
+msgstr "Kopiraj"
 
 msgid "Cut"
-msgstr "剪切"
+msgstr "Izreži"
 
 msgid "Paste"
-msgstr "粘贴"
+msgstr "Zalijepi"
 
 msgid "Select all"
-msgstr "全选"
+msgstr "Označi sve"
 
 msgid "Bold"
-msgstr "加粗"
+msgstr "Masna slova"
 
 msgid "Italic"
-msgstr "斜体"
+msgstr "Kurziv"
 
 msgid "Link"
-msgstr "链接"
+msgstr "Veza"
 
 msgid "Code"
-msgstr "代码"
+msgstr "Kōd"
 
 msgid "Insert Date Time"
-msgstr "插入时间"
+msgstr "Unesi datum i vrijeme"
 
 msgid "Edit in external editor"
-msgstr "在外部编辑器中打开"
+msgstr "Uredi u vanjskom programu"
 
 msgid "Tags"
-msgstr "标签"
+msgstr "Oznake"
 
 msgid "Search in all the notes"
-msgstr "在所有笔记内搜索"
+msgstr "Pretraži sve bilješke"
 
 msgid "Search in current note"
-msgstr "在当前笔记内搜索"
+msgstr "Potraži u trenutnoj bilješci"
 
 msgid "&View"
-msgstr "界面 (&V)"
+msgstr "Pregled"
 
 msgid "Toggle sidebar"
-msgstr "切换边栏"
+msgstr "Pomoćni meni"
 
 #, fuzzy
 msgid "Toggle note list"
-msgstr "笔记列表"
+msgstr "Aktiviraj historiju bilješki"
 
 msgid "Toggle editor layout"
-msgstr "切换编辑器布局"
+msgstr "Izgled uređivača"
 
 msgid "Focus"
-msgstr "聚焦于"
+msgstr "Fokus"
 
 msgid "&Tools"
-msgstr "工具 (&T)"
+msgstr "Alati"
 
 msgid "&Help"
-msgstr "帮助 (&H)"
+msgstr "Pomoć"
 
 msgid "Website and documentation"
-msgstr "网站与文档"
+msgstr "Internet stranica i dokumentacija"
 
 msgid "Joplin Forum"
-msgstr "Joplin 论坛"
+msgstr "Joplin forum"
 
 msgid "Make a donation"
-msgstr "捐赠"
+msgstr "Donirajte"
 
 msgid "Toggle development tools"
-msgstr "切换开发者工具"
+msgstr "Razvojni alati"
 
 #, javascript-format
 msgid "Open %s"
-msgstr "打开 %s"
+msgstr "Otvori %s"
 
 msgid "Exit"
-msgstr "退出"
+msgstr "Izađi"
 
 msgid "OK"
-msgstr "确认"
+msgstr "Uredu"
 
 msgid "Cancel"
-msgstr "取消"
+msgstr "Otkaži"
 
 msgid "Current version is up-to-date."
-msgstr "当前版本为最新版。"
+msgstr "Trenutna je verzija ažurirana."
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s 预发行版"
+msgstr "%s (verzija pred objavljivanje)"
 
 msgid "An update is available, do you want to download it now?"
-msgstr "有更新可用，是否现在进行下载？"
+msgstr "Nova je verzija dostupna. Želite li je preuzeti?"
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr "您的版本：%s"
+msgstr "Vaša verzija: %s"
 
 #, javascript-format
 msgid "New version: %s"
-msgstr "最新版本：%s"
+msgstr "Nova verzija: %s"
 
 msgid "Yes"
-msgstr "是"
+msgstr "Da"
 
 msgid "No"
-msgstr "否"
+msgstr "Ne"
 
 #, fuzzy
 msgid "Full Release Notes"
-msgstr "已恢复的笔记"
+msgstr "Rekonstruisane bilješke"
 
 msgid "Token has been copied to the clipboard!"
-msgstr "Token 令牌已复制到剪贴板！"
+msgstr "Token je kopiran u spremnik!"
 
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "网页剪辑服务已启用且将自动启动。"
+msgstr "Web clipper servis aktiviran je i pokreće se automatski."
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "状态：在 %d 端口运行"
+msgstr "Status: pokrenut preko porta %d"
 
 #, javascript-format
 msgid "Status: %s"
-msgstr "状态：%s"
+msgstr "Status: %s"
 
 msgid "Disable Web Clipper Service"
-msgstr "禁用网页剪辑服务"
+msgstr "Isključi Web clipper servis"
 
 msgid "The web clipper service is not enabled."
-msgstr "网页剪辑未启用。"
+msgstr "Web clipper servis nije aktiviran."
 
 msgid "Enable Web Clipper Service"
-msgstr "启用网页剪辑服务"
+msgstr "Aktiviraj Web clipper servis"
 
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr "Joplin 网页剪辑可以让你将浏览器中的网页和屏幕截图保存到 Joplin。"
+msgstr ""
+"Joplin Web clipper omogućava pohranjivanje internet stranica i slika ekrana "
+"iz Vašeg internet preglednika u Joplin."
 
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用网页剪辑功能，你需要按照以下步骤："
+msgstr "Da biste mogli koristiti Web clipper, učinite sljedeće:"
 
 msgid "Step 1: Enable the clipper service"
-msgstr "步骤一：启用网页剪辑服务"
+msgstr "Korak 1: aktivirajte clipper servis"
 
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"该服务允许浏览器扩展与 Joplin 通信。当启用它时，你的防火墙可能会要求你允许 "
-"Joplin 监听一个特定的端口。"
+"Ovaj servis dopušta dodatku za internet preglednik da komunicira sa "
+"Joplinom. Kada ga aktivirate, Vaš firewall može od Vas tražiti dopuštenje da "
+"bi Joplin mogao slušati specificirani port."
 
 msgid "Step 2: Install the extension"
-msgstr "步骤二：安装扩展"
+msgstr "Korak 2: instalirajte dodatak"
 
 msgid "Download and install the relevant extension for your browser:"
-msgstr "为您的浏览器下载并安装相关的扩展："
+msgstr ""
+"Preuzmite i instalirajte odgovarajući dodatak za Vaš internet preglednik:"
 
 msgid "Advanced options"
-msgstr "高级选项"
+msgstr "Napredne opcije"
 
 msgid "Authorisation token:"
-msgstr "授权 Token 令牌："
+msgstr "Token za ovjeru:"
 
 msgid "Copy token"
-msgstr "拷贝 Token 令牌"
+msgstr "Kopiraj token"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
-msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
+msgstr ""
+"Ovaj token za ovjeru potreban je samo kako bi se trećim aplikacijama "
+"omogućio pristup Joplinu."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Otvorit će se novi prikaz. Želite li memorisati trenutne izmjene?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr "笔记与设置文件储存在：%s"
+msgstr "Bilješke i postavke pohranjene su u: %s"
 
 msgid "Check synchronisation configuration"
-msgstr "检查同步配置"
+msgstr "Provjeri postavke za sinhronizaciju"
 
 msgid "Browse..."
-msgstr "浏览..."
+msgstr "Pregledaj..."
 
 msgid "Back"
-msgstr "返回"
+msgstr "Nazad"
 
 msgid "Apply"
-msgstr "应用"
+msgstr "Primijeni"
 
 msgid "Submit"
-msgstr "提交"
+msgstr "Pošalji"
 
 msgid "Save"
-msgstr "保存"
+msgstr "Pohrani"
 
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"禁用加密会导致 *所有笔记与附件* 重新同步，并以非加密的数据形式发送到同步目"
-"标。确定继续吗？"
+"Po isključivanju šifriranja *sve* Vaše bilješke i prilozi bit će iznova "
+"sinhronizovani i poslani nešifrirani na zadatu lokaciju. Želite li nastaviti?"
 
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
@@ -822,293 +861,304 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"启用加密会导致 *所有笔记与附件* 重新同步，并以加密数据的形式发送到同步目标。"
-"请勿丢失该密码！为了安全目的，此密码是您解密数据的 *唯一方式* ！若确认启动加"
-"密，请在下方输入您的密码。"
+"Po uključivanju šifriranja *sve* Vaše bilješke i prilozi bit će iznova "
+"sinhronizovani i poslani šifrirani na zadatu lokaciju. Nemojte izgubiti "
+"lozinku jer, iz sigurnosnih razloga, samo pomoću nje možete dešifrovati Vaše "
+"podatke! Da biste aktivirali šifriranje, unesite Vašu lozinku ispod."
 
 msgid "Disable encryption"
-msgstr "禁用加密"
+msgstr "Isključi šifriranje"
 
 msgid "Enable encryption"
-msgstr "启用加密"
+msgstr "Uključi šifriranje"
 
 msgid "Master Keys"
-msgstr "主密码"
+msgstr "Glavni ključevi"
 
 msgid "Active"
-msgstr "正在使用"
+msgstr "Aktivan"
 
 msgid "ID"
 msgstr "ID"
 
 msgid "Source"
-msgstr "来源"
+msgstr "Izvor"
 
 msgid "Created"
-msgstr "创建日期"
+msgstr "Kreirano"
 
 msgid "Updated"
-msgstr "更新日期"
+msgstr "Ažurirano"
 
 msgid "Password"
-msgstr "密码"
+msgstr "Lozinka"
 
 msgid "Password OK"
-msgstr "密码可用"
+msgstr "Lozinka je tačna"
 
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"注意：仅有一个主密码会用于加密（被标记为“正在使用”的主密码）。但列出的所有密"
-"码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
+"Napomena: samo će jedan glavni ključ biti korišten za šifriranje (ključ "
+"označen kao aktivni). Bilo koji od ključeva može poslužiti za dešifrovanje, "
+"zavisno od toga kako su bilješke i bilježnice prvobitno šifrirane."
 
 msgid "Missing Master Keys"
-msgstr "缺少主密码"
+msgstr "Nedostaju glavni ključevi"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
-"能通过同步下载。"
+"Glavni ključevi sa ovim identifikacijskim podacima korišteni su za "
+"šifriranje nekih stavki, ali su trenutno nedostupni. Vjerovatno će biti "
+"preuzeti nakon što se izvrši sinhronizacija."
 
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
-msgstr "有关端到端加密（E2EE）的更多信息，以及如何启用它的建议，请查看文档："
+msgstr ""
+"Za više informacija o šifriranju s kraja na kraj (E2EE) i načinu aktiviranja "
+"pogledajte dokumentaciju:"
 
 msgid "Status"
-msgstr "状态"
+msgstr "Status"
 
 msgid "Encryption is:"
-msgstr "加密状态："
+msgstr "Šifriranje je:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Dodatak za Firefox"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Web Store"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Preuzmite sada:"
 
 msgid "Usage"
-msgstr "用法提示"
+msgstr "Korištenje"
 
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "将新建的笔记本“%s”，并将文件“%s”导入其中"
+msgstr ""
+"Kreirat će se nova bilježnica \"%s\" i u nju će biti unesena datoteka \"%s\""
 
 msgid "Please create a notebook first."
-msgstr "请先创建笔记本。"
+msgstr "Prvo kreirajte bilježnicu."
 
 msgid "Please create a notebook first"
-msgstr "请先创建笔记本"
+msgstr "Prvo kreirajte bilježnicu"
 
 msgid "Notebook title:"
-msgstr "笔记本标题："
+msgstr "Naziv bilježnice:"
 
 msgid "Add or remove tags:"
-msgstr "添加或删除标签："
+msgstr "Dodajte ili uklonite oznake:"
 
 msgid "Rename notebook:"
-msgstr "重命名笔记本："
+msgstr "Preimenujte bilježnicu:"
 
 msgid "Rename tag:"
-msgstr "重命名标签："
+msgstr "Preimenujte oznaku:"
 
 msgid "Set alarm:"
-msgstr "设置提醒："
+msgstr "Podesite zvučnu napomenu:"
 
 msgid "Template file:"
-msgstr "模版文件："
+msgstr "Šablon:"
 
 msgid "New note"
-msgstr "新建笔记"
+msgstr "Nova bilješka"
 
 msgid "New to-do"
-msgstr "新建待办事项"
+msgstr "Novi zadatak"
 
 msgid "New notebook"
-msgstr "新建笔记本"
+msgstr "Nova bilježnica"
 
 msgid "Layout"
-msgstr "布局"
+msgstr "Izgled"
 
 msgid "Search..."
-msgstr "搜索..."
+msgstr "Pretraga..."
 
 msgid "Some items cannot be synchronised."
-msgstr "一些项目无法被同步。"
+msgstr "Neke stavke nije moguće sinhronizovati."
 
 msgid "View them now"
-msgstr "立刻查看"
+msgstr "Pregledajte ih sada"
 
 msgid "One or more master keys need a password."
-msgstr "一个或多个主密钥需要密码。"
+msgstr "Jedan ili više glavnih ključeva zahtijevaju lozinku."
 
 msgid "Set the password"
-msgstr "设置密码"
+msgstr "Zadajte lozinku"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "此处没有任何笔记。点击“新建笔记”创建。"
+msgstr "Nema bilješki. Kreirajte bilješku pritisnuvši na \"Nova bilješka\"."
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "此处没有任何笔记本。点击“新建笔记本”创建。"
+msgstr ""
+"Nema bilježnica. Kreirajte bilježnicu pritisnuvši na \"Nova bilježnica\"."
 
 msgid "Location"
-msgstr "位置"
+msgstr "Lokacija"
 
 msgid "URL"
 msgstr "URL"
 
 msgid "Note History"
-msgstr "笔记历史"
+msgstr "Historija bilješke"
 
 msgid "Markup"
-msgstr "标记"
+msgstr "Markup"
 
 msgid "Previous versions of this note"
-msgstr "此笔记的早期版本"
+msgstr "Ranije verzije ove bilješke"
 
 msgid "Note properties"
-msgstr "笔记属性"
+msgstr "Svojstva bilješke"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
+msgstr ""
+"Bilješka \"%s\" uspješno je rekonstruisana i pohranjena u bilježnicu \"%s\"."
 
 msgid "This note has no history"
-msgstr "此笔记没有历史记录"
+msgstr "Bilješka nema ranijih verzija"
 
 #, javascript-format
 msgid "Unsupported link or message: %s"
-msgstr "不被支持的链接或信息：%s"
+msgstr "Nepodržana veza ili poruka: %s"
 
 msgid "Restore"
-msgstr "恢复"
+msgstr "Rekonstruiši"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
-"换或修改。"
+"Pritisnite na \"%s\" da rekonstruišete bilješku. Rezultat će biti kopiran u "
+"bilježnicu \"%s\". Trenutna verzija bilješke ostat će netaknuta."
 
 msgid "Open..."
-msgstr "打开…"
+msgstr "Otvori..."
 
 #, javascript-format
 msgid "This file could not be opened: %s"
-msgstr "该笔记本无法打开：%s"
+msgstr "Nije moguće otvoriti ovu datoteku: %s"
 
 msgid "Save as..."
-msgstr "另存为…"
+msgstr "Pohrani kao..."
 
 msgid "Copy path to clipboard"
-msgstr "复制路径到剪切板"
+msgstr "Kopiraj putanju u spremnik"
 
 msgid "Copy Link Address"
-msgstr "复制链接地址"
+msgstr "Kopiraj adresu veze"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "该附件没有下载或者尚未解密。"
+msgstr "Prilog nije preuzet ili još nije dešifrovan."
 
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
+msgstr ""
+"Bilješka je prazna. Pritisnite na \"%s\" da otvorite program za rad s "
+"tekstom i uredite bilješku."
 
 msgid "Only one note can be printed or exported to PDF at a time."
-msgstr "一次只能输出一个笔记或导出为 PDF 文件。"
+msgstr ""
+"Bilješke se mogu štampati ili pohraniti u PDF formatu samo jedna po jedna."
 
 msgid "PDF File"
-msgstr "PDF 文件"
+msgstr "PDF datoteka"
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "打开以下笔记时出现错误：%s"
+msgstr "Greška prilikom otvaranja bilješke: %s"
 
 msgid "strong text"
-msgstr "加粗文本"
+msgstr "podebljani tekst"
 
 msgid "emphasized text"
-msgstr "强调文本"
+msgstr "naglašeni tekst"
 
 msgid "List item"
-msgstr "项目列表"
+msgstr "Stavka nabrajanja"
 
 msgid "Insert Hyperlink"
-msgstr "插入超链接"
+msgstr "Unesi poveznicu"
 
 msgid "Attach file"
-msgstr "附加文件"
+msgstr "Priloži datoteku"
 
 msgid "Set alarm"
-msgstr "设置提醒"
+msgstr "Podesi zvučnu napomenu"
 
 #, javascript-format
 msgid "In: %s"
-msgstr "在: %s"
+msgstr "U: %s"
 
 msgid "Hyperlink"
-msgstr "超链接"
+msgstr "Poveznica"
 
 msgid "Numbered List"
-msgstr "有序列表"
+msgstr "Numerisano nabrajanje"
 
 msgid "Bulleted List"
-msgstr "无序列表"
+msgstr "Nabrajanje"
 
 msgid "Checkbox"
-msgstr "复选框"
+msgstr "Polje za kvačicu"
 
 msgid "Heading"
-msgstr "标题"
+msgstr "Naslov"
 
 msgid "Horizontal Rule"
-msgstr "水平线"
+msgstr "Vodoravna linija"
 
 msgid "Click to stop external editing"
-msgstr "单击以取消外部编辑"
+msgstr "Pritisnite da prekinete vanjsko uređivanje"
 
 msgid "Watching..."
-msgstr "正在监控变化..."
+msgstr "Pratim..."
 
 msgid "to-do"
-msgstr "待办事项"
+msgstr "zadatak"
 
 msgid "note"
-msgstr "笔记"
+msgstr "bilješka"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "新建 %s…"
+msgstr "Kreiram novu %s..."
 
 msgid "Refresh"
-msgstr "刷新"
+msgstr "Osvježi"
 
 msgid "Clear"
-msgstr "清除"
+msgstr "Počisti"
 
 msgid "OneDrive Login"
-msgstr "登录 OneDrive"
+msgstr "OneDrive prijava"
 
 msgid "Dropbox Login"
-msgstr "登录 Dropbox"
+msgstr "Dropbox prijava"
 
 msgid "Options"
-msgstr "选项"
+msgstr "Opcije"
 
 msgid "Synchronisation Status"
-msgstr "同步状态"
+msgstr "Status sinhronizacije"
 
 msgid "Remove"
 msgstr ""
@@ -1119,97 +1169,97 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"是否删除笔记本“%s”？\n"
+"Obrisati bilježnicu \"%s\"?\n"
 "\n"
-"所有在该笔记本内的笔记和下级笔记本也将同时被删除。"
+"Sve bilješke i bilježnice unutar ove bilježnice također će biti obrisane."
 
 msgid "Delete"
-msgstr "删除"
+msgstr "Obriši"
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "从所有笔记中删除标签“%s”？"
+msgstr "Ukloniti oznaku \"%s\" iz svih bilješki?"
 
 msgid "Remove this search from the sidebar?"
-msgstr "从边栏中删除该项搜索？"
+msgstr "Ukloniti ovu pretragu iz pomoćnog menija?"
 
 #, fuzzy
 msgid "New sub-notebook"
-msgstr "新建笔记本"
+msgstr "Nova bilježnica"
 
 msgid "Rename"
-msgstr "重命名"
+msgstr "Preimenuj"
 
 msgid "Notebooks"
-msgstr "笔记本"
+msgstr "Bilježnice"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "正在解密项目：%d/%d"
+msgstr "Dešifrujem stavke: %d/%d"
 
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "正在获取资源：%d/%d"
+msgstr "Preuzimam resurse: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
-msgstr "请选择同步状态的导出位置"
+msgstr "Navedite gdje će biti pohranjen status sinhronizacije"
 
 msgid "Retry"
-msgstr "重试"
+msgstr "Ponovi"
 
 msgid "Add or remove tags"
-msgstr "添加或删除标签"
+msgstr "Dodaj ili ukloni oznake"
 
 msgid "Duplicate"
-msgstr "创建副本"
+msgstr "Dupliciraj"
 
 #, javascript-format
 msgid "%s - Copy"
-msgstr "%s - 副本"
+msgstr "%s – Kopija"
 
 msgid "Switch between note and to-do type"
-msgstr "在笔记和待办事项类型之间切换"
+msgstr "Preinači bilješku u zadatak i obratno"
 
 msgid "Switch to note type"
-msgstr "切换到笔记"
+msgstr "Preinači u bilješku"
 
 msgid "Switch to to-do type"
-msgstr "切换到待办事项"
+msgstr "Preinači u zadatak"
 
 msgid "Copy Markdown link"
-msgstr "复制 Markdown 链接"
+msgstr "Kopiraj Markdown vezu"
 
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "是否删除笔记“%s”？"
+msgstr "Obrisati bilješku \"%s\"?"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "是否删除这 %d 条笔记？"
+msgstr "Obrisati ovih %d bilješki?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
-"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
-"记本名字。"
+"Unesite naziv bilješke da je otvorite. Ili kucajte # i naziv oznake, odnosno "
+"@ i naziv bilježnice."
 
 msgid "Goto Anything..."
-msgstr "转到某处……"
+msgstr "Pronađite bilo šta..."
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr "使用：%s"
+msgstr "Korišteno: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr "未知标记：%s"
+msgstr "Nepoznata oznaka: %s"
 
 msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "File system"
-msgstr "文件系统"
+msgstr "Datotečni sistem"
 
 msgid "Nextcloud"
 msgstr "Nextcloud"
@@ -1218,26 +1268,28 @@ msgid "OneDrive"
 msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive 开发版（仅用于测试）"
+msgstr "OneDrive Dev (samo za testiranje)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "未知日志级别：%s"
+msgstr "Nepoznat nivo izvještaja: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr "未知级别的 ID：%s"
+msgstr "Nepoznat ID nivo: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
-msgstr "无法刷新 Token 令牌：缺少认证数据。重新同步可能会修正此错误。"
+msgstr ""
+"Ne mogu osvježiti token: nedostaju podaci za ovjeru. Problem će možda biti "
+"otklonjen novim pokretanjem sinhronizacije."
 
 msgid "Untitled"
-msgstr "无标题"
+msgstr "Bez naziva"
 
 msgid ""
 "Could not synchronize with OneDrive.\n"
@@ -1247,100 +1299,101 @@ msgid ""
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
-"无法与 OneDrive 同步。\n"
+"Neuspjela sinhronizacija sa OneDriveom.\n"
 "\n"
-"这种错误通常出现在使用 OneDrive 企业版时，很遗憾它不被支持。\n"
+"Ova greška često se javlja prilikom korištenja OneDrive for Business, koji, "
+"nažalost, nije moguće podržati.\n"
 "\n"
-"请考虑使用 OneDrive 个人版。"
+"Pokušajte koristiti obični OneDrive račun."
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "无法访问 %s"
+msgstr "Ne mogu pristupiti %s"
 
 #, javascript-format
 msgid "Created local items: %d."
-msgstr "已新建本地项目: %d。"
+msgstr "Kreirano lokalnih stavki: %d."
 
 #, javascript-format
 msgid "Updated local items: %d."
-msgstr "已更新本地项目: %d。"
+msgstr "Ažurirano lokalnih stavki: %d."
 
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr "已新建远程项目: %d。"
+msgstr "Kreirano spoljašnjih stavki: %d."
 
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr "已更新远程项目: %d。"
+msgstr "Ažurirano spoljašnjih stavki: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "已删除本地项目: %d。"
+msgstr "Obrisano lokalnih stavki: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "已删除远程项目: %d。"
+msgstr "Obrisano spoljašnjih stavki: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
-msgstr "已提取项目：%d/%d."
+msgstr "Preuzeto stavki: %d/%d."
 
 msgid "Cancelling..."
-msgstr "正在取消..."
+msgstr "Prekidam..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr "已完成：%s"
+msgstr "Završeno: %s"
 
 #, javascript-format
 msgid "Last error: %s"
-msgstr "最后错误：%s"
+msgstr "Zadnja greška: %s"
 
 msgid "Idle"
-msgstr "空闲"
+msgstr "Na čekanju"
 
 msgid "In progress"
-msgstr "正在进行"
+msgstr "U toku"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
-msgstr "已经在同步。状态：%s"
+msgstr "Sinhronizovanje je u toku. Status: %s"
 
 msgid "Encrypted"
-msgstr "已加密"
+msgstr "Šifrirano"
 
 msgid "Encrypted items cannot be modified"
-msgstr "无法修改已加密的项目"
+msgstr "Šifrirane stavke ne mogu se mijenjati"
 
 msgid "title"
-msgstr "标题"
+msgstr "naziv"
 
 msgid "updated date"
-msgstr "更新日期"
+msgstr "datum ažuriranja"
 
 msgid "Conflicts"
-msgstr "冲突"
+msgstr "Sukobi"
 
 msgid "Cannot move notebook to this location"
-msgstr "无法移动笔记本到该位置"
+msgstr "Bilježnica se ne može premjestiti na ovu lokaciju"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "笔记本无法被命名为“%s”，这个标题被留作他用。"
+msgstr "Bilježnica se ne može nazvati \"%s\", jer je to rezervisani naziv."
 
 msgid "created date"
-msgstr "创建日期"
+msgstr "datum kreiranja"
 
 msgid "This note does not have geolocation information."
-msgstr "该笔记不包含地理定位信息。"
+msgstr "Ova bilješka ne sadržava informacije o geografskoj lokaciji."
 
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "无法复制笔记到笔记本“%s”"
+msgstr "Bilješka se ne može kopirati u bilježnicu \"%s\""
 
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "无法移动笔记到笔记本“%s”"
+msgstr "Bilješka se ne može premjestiti u bilježnicu \"%s\""
 
 #, javascript-format
 msgid ""
@@ -1348,236 +1401,245 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
-"有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
+"Pažnja: ako promijenite ovu lokaciju, vodite računa o tome da prije "
+"sinhronizacije kopirate sav sadržaj jer će, u protivnom, sve datoteke biti "
+"uklonjene! Za više detalja vidjeti često postavljana pitanja (FAQ):"
 
 msgid "Synchronisation target"
-msgstr "同步目标"
+msgstr "Odredište za sinhronizaciju"
 
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"所同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
+"Odredište za sinhronizaciju. Svako odredište može imati dodatne parametre "
+"imenovane kao `sync.NUM.NAME` (koji su dokumentovani ispod)."
 
 msgid "Directory to synchronise with (absolute path)"
-msgstr "待同步的目录（绝对路径）。"
+msgstr "Direktorij s kojim se sinhronizuje (apsolutna putanja)"
 
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
 msgid "Nextcloud username"
-msgstr "Nextcloud 用户名"
+msgstr "Nextcloud korisničko ime"
 
 msgid "Nextcloud password"
-msgstr "Nextcloud 密码"
+msgstr "Nextcloud lozinka"
 
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
 msgid "WebDAV username"
-msgstr "WebDAV 用户名"
+msgstr "WebDAV korisničko ime"
 
 msgid "WebDAV password"
-msgstr "WebDAV 密码"
+msgstr "WebDAV lozinka"
 
 msgid "Attachment download behaviour"
-msgstr "附件下载行为"
+msgstr "Ponašanje prilikom preuzimanja priloga"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在“手动”模式下，只有单击附件时才会下载它们。在“自动”中，当你打开笔记时，它们"
-"就会被下载下来。在“总是”中，无论你是否打开笔记，所有的附件都会被下载。"
+"\"Ručno\" znači da se prilozi preuzimaju samo kad pritisnete na njih. "
+"\"Automatski\" znači da se prilozi preuzimaju čim se bilješka otvori. "
+"\"Uvijek\" znači da se prilozi uvijek preuzimaju, bilo da je bilješka "
+"otvorena ili ne."
 
 msgid "Always"
-msgstr "总是"
+msgstr "Uvijek"
 
 msgid "Manual"
-msgstr "手动"
+msgstr "Ručno"
 
 msgid "Auto"
-msgstr "自动"
+msgstr "Automatski"
 
 msgid "Max concurrent connections"
-msgstr "最大并发连接数"
+msgstr "Maksimalan broj istovremenih konekcija"
 
 msgid "Language"
-msgstr "语言"
+msgstr "Jezik"
 
 msgid "Date format"
-msgstr "日期格式"
+msgstr "Oblik datuma"
 
 msgid "Time format"
-msgstr "时间格式"
+msgstr "Oblik vremena"
 
 msgid "Theme"
-msgstr "主题"
+msgstr "Tema"
 
 msgid "Light"
-msgstr "明亮"
+msgstr "Svijetla"
 
 msgid "Dark"
-msgstr "深邃"
+msgstr "Tamna"
 
 msgid "Dracula"
 msgstr ""
 
 msgid "Solarised Light"
-msgstr "Solarised Light风格"
+msgstr "Solarised svijetla"
 
 msgid "Solarised Dark"
-msgstr "Solarised Dark风格"
+msgstr "Solarized tamna"
 
 msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
-msgstr "将未完成的待办事项置顶"
+msgstr "Neobavljeni zadaci na vrh"
 
 msgid "Show completed to-dos"
-msgstr "显示已完成的待办事项"
+msgstr "Prikaži obavljene zadatke"
 
 msgid "Sort notes by"
-msgstr "排序笔记"
+msgstr "Sortiraj bilješke prema"
 
 msgid "Reverse sort order"
-msgstr "倒序"
+msgstr "Inverzni redoslijed sortiranja"
 
 msgid "Sort notebooks by"
-msgstr "笔记本排序依据"
+msgstr "Sortiraj bilježnice prema"
 
 msgid "Save geo-location with notes"
-msgstr "保存地理定位信息到笔记中"
+msgstr "Pohrani geografsku lokaciju u bilješkama"
 
 msgid "When creating a new to-do:"
-msgstr "当新建待办事项时："
+msgstr "Prilikom kreiranja novog zadatka:"
 
 msgid "Focus title"
-msgstr "聚焦标题"
+msgstr "Fokus na naziv"
 
 msgid "Focus body"
-msgstr "聚焦正文"
+msgstr "Fokus na tekst"
 
 msgid "When creating a new note:"
-msgstr "当新建笔记时："
+msgstr "Prilikom kreiranja nove bilješke:"
 
 msgid "Enable soft breaks"
-msgstr "启动软中断"
+msgstr "Omogući pisanje blagih prijeloma"
 
 #, fuzzy
 msgid "Enable typographer support"
-msgstr "启用 Fountain 语法支持"
+msgstr "Omogući podršku za Fountain format"
 
 msgid "Enable math expressions"
-msgstr "启用数学表达式"
+msgstr "Omogući pisanje matematskih izraza"
 
 msgid "Enable ==mark== syntax"
-msgstr "启用 ==mark== 句法"
+msgstr "Omogući pisanje ==oznaka=="
 
 msgid "Enable footnotes"
-msgstr "启用脚注"
+msgstr "Omogući pisanje fusnota"
 
 msgid "Enable table of contents extension"
-msgstr "启用目录扩展"
+msgstr "Omogući pisanje sadržaja"
 
 msgid "Enable ~sub~ syntax"
-msgstr "启用 ~sub~ 句法"
+msgstr "Omogući pisanje ~indeksa~"
 
 msgid "Enable ^sup^ syntax"
-msgstr "启用 ^sup^ 句法"
+msgstr "Omogući pisanje ^eksponenta^"
 
 msgid "Enable deflist syntax"
-msgstr "启用术语表句法"
+msgstr "Omogući pisanje deflista"
 
 msgid "Enable abbreviation syntax"
-msgstr "启用缩写句法"
+msgstr "Omogući pisanje skraćenica"
 
 msgid "Enable markdown emoji"
-msgstr "启用 markdown emoji"
+msgstr "Omogući pisanje emoji sličica"
 
 msgid "Enable ++insert++ syntax"
-msgstr "启用 ++insert++ 句法"
+msgstr "Omogući pisanje ++insert++ sintakse"
 
 msgid "Enable multimarkdown table extension"
-msgstr "启用 multimarkdown 表格扩展"
+msgstr "Omogući kreiranje tabela (multimarkdown)"
 
 msgid "Enable Fountain syntax support"
-msgstr "启用 Fountain 语法支持"
+msgstr "Omogući podršku za Fountain format"
 
 msgid "Show tray icon"
-msgstr "显示托盘图标"
+msgstr "Prikaži sličicu na sistemskoj traci (tray)"
 
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意：某些桌面环境下无效。"
+msgstr "Napomena: neće raditi na svim sistemima."
 
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"该选项允许 Joplin 在后台运行，如果你经常修改和同步笔记，推荐启用该设置来减少"
-"可能的冲突。"
+"Ovo će omogućiti Joplinu da radi u pozadini. Preporučujemo aktiviranje ove "
+"opcije kako bi Vaše bilješke bile konstantno sinhronizovane i tako se broj "
+"sukoba sveo na minimum."
 
 msgid "Start application minimised in the tray icon"
-msgstr "应用程序启动时最小化到托盘"
+msgstr ""
+"Prilikom pokretanja, aplikaciju minimiziraj u sličicu na sistemskoj traci "
+"(tray)"
 
 msgid "Global zoom percentage"
-msgstr "全局缩放比例"
+msgstr "Procenat uvećanja"
 
 msgid "Editor font size"
-msgstr "编辑器字体大小"
+msgstr "Veličina slova u uređivaču"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "编辑器字体大小"
+msgstr "Pismo u uređivaču"
 
 msgid "Editor font family"
-msgstr "编辑器字体"
+msgstr "Familija pisama u uređivaču"
 
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会设置成一款"
-"通用的等宽字体。"
+"Ovo mora biti *monospace* pismo inače neće funkcionisati kako treba. Ako je "
+"pismo pogrešno navedeno ili prazno, koristit će se prekonfigurisani "
+"monospace font."
 
 msgid "Automatically update the application"
-msgstr "自动更新程序"
+msgstr "Automatski ažuriraj aplikaciju"
 
 msgid "Get pre-releases when checking for updates"
-msgstr "检查更新时获取预发布版本"
+msgstr "Preuzmi i verzije pred objavljivanje prilikom provjere novosti"
 
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "预发布版本的详细信息，请参阅页面: %s"
+msgstr ""
+"Za više informacija vidjeti stranicu sa verzijama pred objavljivanje: %s"
 
 msgid "Synchronisation interval"
-msgstr "同步间隔"
+msgstr "Interval za sinhronizaciju"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr "%d 分钟"
+msgstr "%d minuta"
 
 #, javascript-format
 msgid "%d hour"
-msgstr "%d 小时"
+msgstr "%d sat"
 
 #, javascript-format
 msgid "%d hours"
-msgstr "%d 小时"
+msgstr "%d sati"
 
 msgid "Text editor command"
-msgstr "文本编辑器命令"
+msgstr "Komanda za uređivač teksta"
 
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
-"认编辑器。"
+"Komanda za uređivač teksta (može obuhvatiti argumente) koja će se koristiti "
+"za otvaranje bilješke. Ako nije navedena, pokušat će se utvrditi "
+"prekonfigurisani uređivač teksta."
 
 msgid "Page size for PDF export"
 msgstr ""
@@ -1610,7 +1672,7 @@ msgid "Landscape"
 msgstr ""
 
 msgid "Custom TLS certificates"
-msgstr "自定义 TLS 证书"
+msgstr "TLS certifikati"
 
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
@@ -1618,253 +1680,259 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"以逗号分隔的路径列表，可以是包含证书的目录，也可以是单独的证书路径。 例如：/"
-"my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存更"
-"改，之后再点击“检查同步配置”。"
+"Popis putanja do direktorija, odvojenih zarezima, iz kojih će se učitati "
+"certifikati ili putanja do pojedinačnih datoteka-certifikata. Naprimjer: /my/"
+"cert_dir, /other/custom.pem. Imajte na umu da ćete morati, ukoliko izvršite "
+"bilo kakve izmjene u TLS postavkama, načinjene izmjene memorisati prije "
+"pritiska na \"Provjeri konfiguraciju sinhronizovanja\"."
 
 msgid "Ignore TLS certificate errors"
-msgstr "忽略 TLS 证书错误"
+msgstr "Zanemari greške u vezi sa TLS certifikatima"
 
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Sigurnosni mehanizam: ne briši lokalne podatke kad je odredište za "
+"sinhronizaciju prazno (često usljed pogrešne konfiguracije ili propusta)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr "请设置一个API服务的端口数字。如果不指定，默认的端口会被使用。"
+msgstr ""
+"Navedite koji će port API server koristiti. Ako port nije preciziran, "
+"koristit će se prekonfigurisani."
 
 msgid "Enable note history"
-msgstr "启用笔记历史"
+msgstr "Aktiviraj historiju bilješki"
 
 msgid "days"
-msgstr "天"
+msgstr "dani"
 
 #, javascript-format
 msgid "%d days"
-msgstr "%d天"
+msgstr "%d dana"
 
 msgid "Keep note history for"
-msgstr "保留笔记历史记录"
+msgstr "Čuvaj historiju bilješki"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "无效的选项值：“%s”。可用值有：%s。"
+msgstr "Pogrešna vrijednost: \"%s\". Moguće su sljedeće vrijednosti: %s"
 
 msgid "General"
-msgstr "通用选项"
+msgstr "Opće"
 
 msgid "Synchronisation"
-msgstr "同步"
+msgstr "Sinhronizacija"
 
 msgid "Appearance"
-msgstr "外观"
+msgstr "Izgled"
 
 msgid "Note"
-msgstr "笔记"
+msgstr "Bilješka"
 
 msgid "Plugins"
-msgstr "插件"
+msgstr "Dodaci"
 
 msgid "Application"
-msgstr "应用程序"
+msgstr "Aplikacija"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "加密状态："
+msgstr "Šifriranje"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "网页剪辑选项"
+msgstr "Web clipper"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "标签“%s”已存在。请选择一个不同的名称。"
+msgstr "Oznaka \"%s\" već postoji. Izaberite drugi naziv."
 
 msgid "Joplin Export File"
-msgstr "Joplin 导出文件"
+msgstr "Joplin datoteka za prenos"
 
 msgid "Markdown"
 msgstr "Markdown"
 
 msgid "Joplin Export Directory"
-msgstr "Joplin 导出目录"
+msgstr "Joplin direktorij za prenos"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote 导出文件"
+msgstr "Evernote datoteka za prenos (kao Markdown)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote 导出文件"
+msgstr "Evernote datoteka za prenos (kao HTML)"
 
 msgid "Json Export Directory"
-msgstr "Json 导出目录"
+msgstr "Json direktorij za prenos"
 
 msgid "File"
-msgstr "文件"
+msgstr "Datoteka"
 
 msgid "Directory"
-msgstr "文件目录"
+msgstr "Direktorij"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "无法加载“%s”模块用于读取“%s”格式"
+msgstr "Ne može se učitati modul \"%s\" za format \"%s\""
 
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr "请指定 %s 的导入格式"
+msgstr "Precizirajte format za %s"
 
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
-msgstr "该项目当前已加密：%s“%s”。请等待所有项目解密后再重试。"
+msgstr ""
+"Stavka je trenutno šifrirana: %s \"%s\". Pričekajte dok se sve stavke "
+"dešifruju, pa pokušajte ponovo."
 
 msgid "There is no data to export."
-msgstr "没有可导出的数据。"
+msgstr "Nema podataka za prenos."
 
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "请指定导入笔记的目标笔记本。"
+msgstr "Navedite bilježnicu u koju će se bilješke unijeti."
 
 msgid "Restored Notes"
-msgstr "已恢复的笔记"
+msgstr "Rekonstruisane bilješke"
 
 msgid "Items that cannot be synchronised"
-msgstr "无法同步项目"
+msgstr "Stavke koje se ne mogu sinhronizovati"
 
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标题"
-"或 ID（显示在上方括号中）。"
+"Ove će stavke ostati na uređaju, ali neće biti prenesene na odredište "
+"sinhronizacije. Da biste te stavke pronašli, vršite pretragu po nazivu ili "
+"identifikacijskom broju (koji je prikazan unutar zagrada iznad)."
 
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) 无法上传到：%s"
+msgstr "%s (%s) nije moguće prenijeti: %s"
 
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "项目“%s”无法从 %s 中下载"
+msgstr "Stavka \"%s\" nije mogla biti preuzeta: %s"
 
 msgid "Items that cannot be decrypted"
-msgstr "无法解密的项目"
+msgstr "Stavke koje se ne mogu dešifrovati"
 
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin 多次解密这些项目均已失败，可能是它们太大或已经损坏导致的。这些项目会保"
-"留再设备上，但 Joplin 不会再尝试对它们进行解密。"
+"Joplin je nekoliko puta neuspješno pokušao dešifrovati ove stavke. To je "
+"vjerovatno zbog toga što su oštećene ili prevelike. Stavke će i dalje ostati "
+"na uređaju, ali Joplin više neće pokušavati da ih dešifruje."
 
 msgid "Sync status (synced items / total items)"
-msgstr "同步状态（已同步项目/项目总数）"
+msgstr "Status sinhronizacije (sinhronizovano / ukupno)"
 
 #, javascript-format
 msgid "%s: %d/%d"
-msgstr "%s：%d/%d 条"
+msgstr "%s: %d/%s"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr "总数：%d/%d 条"
+msgstr "Ukupno: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "有冲突：%d 条"
+msgstr "Sukobi: %d"
 
 #, javascript-format
 msgid "To delete: %d"
-msgstr "将删除：%d 条"
+msgstr "Za brisanje: %d"
 
 msgid "Folders"
-msgstr "文件夹"
+msgstr "Omotnice"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s：%d 条笔记"
+msgstr "%s: %d bilješki"
 
 msgid "Coming alarms"
-msgstr "临近提醒"
+msgstr "Nastupajuće zvučne napomene"
 
 #, javascript-format
 msgid "On %s: %s"
-msgstr "%s：%s"
+msgstr "U %s: %s"
 
 msgid "Permission to use camera"
-msgstr "使用摄像头的权限"
+msgstr "Dozvola za korištenje kamere"
 
 msgid "Your permission to use your camera is required."
-msgstr "您须要授予相机权限。"
+msgstr "Potrebno je Vaše dopuštenje za korištenje kamere."
 
 msgid "You currently have no notebooks."
-msgstr "你现在还没有笔记本。"
+msgstr "Trenutno nema nijedna bilježnica."
 
 msgid "Create a notebook"
-msgstr "新建笔记本"
+msgstr "Kreiraj bilježnicu"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
+msgstr "Trenutno nema bilješki. Kreirajte ih pritiskom na (+) dugme."
 
 msgid "Delete these notes?"
-msgstr "是否删除这些笔记？"
+msgstr "Obrisati ove bilješke?"
 
 msgid "Move to notebook..."
-msgstr "移动到笔记本..."
+msgstr "Premjestiti u bilježnicu..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "是否移动 %d 条笔记到笔记本“%s”？"
+msgstr "Premjestiti %d bilješki u bilježnicu \"%s\"?"
 
 msgid "Press to set the decryption password."
-msgstr "按此设置解密密码。"
+msgstr "Pritisnite da definišete lozinku za dešifrovanje."
 
 msgid "Clear alarm"
-msgstr "清除提醒"
+msgstr "Ukloni zvučnu napomenu"
 
 msgid "Save alarm"
-msgstr "保存提醒"
+msgstr "Memoriši zvučnu napomenu"
 
 msgid "Select date"
-msgstr "选择日期"
+msgstr "Odaberi datum"
 
 msgid "Confirm"
-msgstr "确认"
+msgstr "Potvrdi"
 
 #, javascript-format
 msgid "Notebook: %s"
-msgstr "笔记本：%s"
+msgstr "Bilježnica: %s"
 
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "无法重命名已加密的笔记本"
+msgstr "Šifrirane bilježnice ne mogu se preimenovati"
 
 msgid "New Notebook"
-msgstr "新笔记本"
+msgstr "Nova bilježnica"
 
 msgid "Configuration"
-msgstr "配置"
+msgstr "Konfiguracija"
 
 msgid "All notes"
-msgstr "全部笔记"
+msgstr "Sve bilješke"
 
 msgid "Checking... Please wait."
-msgstr "正在检查... 请稍候。"
+msgstr "Provjeravam... Pričekajte."
 
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "成功！同步配置看起来没问题。"
+msgstr "Uspjelo! Konfiguracija sinhronizacije izgleda ispravna."
 
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"发生错误。请检查 URL 、用户名、密码等是否正确，同步目标是否可访问。报告的错误"
-"如下："
+"Greška. Provjerite jesu li URL, korisničko ime, lozinka itd. tačni i da li "
+"je odredište za sinhronizaciju dostupno. Izvještaj o greški:"
 
 msgid "The application has been authorised!"
-msgstr "已成功授予本应用程序权限！"
+msgstr "Aplikacija je potvrđena!"
 
 #, javascript-format
 msgid ""
@@ -1874,341 +1942,228 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"无法授权本程序：\n"
+"Neuspjela ovjera aplikacije:\n"
 "\n"
 "%s\n"
 "\n"
-"请重试。"
+"Pokušajte ponovo."
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "解密项目：%s / %s"
+msgstr "Dešifrovane stavke: %s / %s"
 
 msgid "New tags:"
-msgstr "新建标签："
+msgstr "Nove oznake:"
 
 msgid "Type new tags or select from list"
-msgstr "输入新的标签或从列表中选择"
+msgstr "Unesite nove oznake ili odaberite iz popisa"
 
 msgid "Warning"
-msgstr "警告"
+msgstr "Upozorenje"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
-msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
+msgstr ""
+"Potrebno je Vaše dopuštenje za pristup eksternim uređajima za pohranu kako "
+"bi se mogla izvršiti sinhronizacija."
 
 msgid "Encryption Config"
-msgstr "加密配置"
+msgstr "Podešavanje šifriranja"
 
 msgid "Tools"
-msgstr "工具"
+msgstr "Alati"
 
 msgid "Sync Status"
-msgstr "同步的状态"
+msgstr "Status sinhronizacije"
 
 msgid "Log"
-msgstr "日志"
+msgstr "Radni dnevnik"
 
 msgid "Creating report..."
-msgstr "新建报告…"
+msgstr "Kreiram izvještaj..."
 
 msgid "Export Debug Report"
-msgstr "导出调试报告"
+msgstr "Prenosim izvještaj za korekciju grešaka"
 
 msgid "Fixing search index..."
-msgstr "正在修复搜索索引…"
+msgstr "Popravljam indeks za pretragu..."
 
 msgid "Fix search index"
-msgstr "修复搜索索引"
+msgstr "Popravi indeks za pretragu"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"如果‘搜索’功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
+"Ako se susretnete sa problemima prilikom pretraživanja, koristite ovu opciju "
+"da biste iznova kreirali indeks za pretragu. Proces može trajati dugo, "
+"zavisno od brojnosti bilješki."
 
 msgid "More information"
-msgstr "更多信息"
+msgstr "Više informacija"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"本应用程序需要下列权限才能正常运作。请在你的手机设置（应用 > Joplin > 权限）"
-"中启用它们"
+"Da bi radila kako treba, aplikaciji su potrebna sljedeća dopuštenja. "
+"Podesite ih u postavkama Vašeg telefona, u Aplikacije > Joplin > Dozvole"
 
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- 存储：允许将文件附加到笔记中并启用文件系统同步。"
+msgstr ""
+"- Uređaj za pohranjivanje: da bi se mogli koristiti prilozi i vršiti "
+"sinhronizacija."
 
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- 相机：允许拍照并将照片添加到一条笔记中。"
+msgstr "- Kamera: da bi se moglo slikati i slike priložiti u bilješke."
 
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
+msgstr ""
+"- Lokacija: da bi se mogle priložiti informacije o geografskoj lokaciji u "
+"bilješke."
 
 msgid "Joplin website"
-msgstr "Joplin 官网"
+msgstr "Joplin internet stranica"
 
 #, javascript-format
 msgid "Database v%s"
-msgstr "数据库 v%s"
+msgstr "Baza podataka v%s"
 
 #, javascript-format
 msgid "FTS enabled: %d"
-msgstr "FTS 已开启：%d"
+msgstr "FTS aktivno: %d"
 
 msgid "Login with Dropbox"
-msgstr "通过 Dropbox 登录"
+msgstr "Prijavite se preko Dropboxa"
 
 msgid "Enter code here"
-msgstr "在此输入代码"
+msgstr "Unesite kōd ovdje"
 
 #, javascript-format
 msgid "Master Key %s"
-msgstr "主密码 %s"
+msgstr "Glavni ključ %s"
 
 #, javascript-format
 msgid "Created: %s"
-msgstr "创建于：%s"
+msgstr "Kreirano: %s"
 
 msgid "Password:"
-msgstr "密码："
+msgstr "Lozinka:"
 
 msgid "Password cannot be empty"
-msgstr "密码不可为空"
+msgstr "Lozinka ne može biti prazna"
 
 #, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "密码不可为空"
+msgstr "Lozinka ne može biti prazna"
 
 msgid "Enable"
-msgstr "启用"
+msgstr "Aktiviraj"
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "该笔记本无法保存：%s"
+msgstr "Bilježnicu nije bilo moguće pohraniti: %s"
 
 msgid "Edit notebook"
-msgstr "编辑笔记本"
+msgstr "Uredi bilježnicu"
 
 msgid "Enter notebook title"
-msgstr "笔记本标题"
+msgstr "Unesi naziv za bilježnicu"
 
 msgid "Show all"
-msgstr "显示全部"
+msgstr "Prikaži sve"
 
 msgid "Errors only"
-msgstr "仅显示错误"
+msgstr "Samo greške"
 
 msgid "This note has been modified:"
-msgstr "该笔记已被修改："
+msgstr "Ova je bilješka izmijenjena:"
 
 msgid "Save changes"
-msgstr "保存更改"
+msgstr "Pohrani izmjene"
 
 msgid "Discard changes"
-msgstr "放弃更改"
+msgstr "Odbaci izmjene"
 
 #, javascript-format
 msgid "No item with ID %s"
-msgstr "没有 ID 为 %s 的项"
+msgstr "Nema stavke čiji je ID %s"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
+msgstr "Mobilna Joplin aplikacija trenutno ne podržava ovu vrstu veze: %s"
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "不支持“%s”协议链接"
+msgstr "Veze sa protokolom \"%s\" nisu podržane"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr "不支持的图片格式：%s"
+msgstr "Nepodržana vrsta slike: %s"
 
 #, javascript-format
 msgid "Updated: %s"
-msgstr "已更新：%s"
+msgstr "Ažurirano: %s"
 
 msgid "View on map"
-msgstr "查看地图"
+msgstr "Vidi na karti"
 
 msgid "Go to source URL"
-msgstr "定位到源 URL"
+msgstr "Idi do izvornog URL-a"
 
 msgid "Attach..."
-msgstr "添附…"
+msgstr "Priloži..."
 
 msgid "Choose an option"
-msgstr "选择一个选项"
+msgstr "Odaberi opciju"
 
 msgid "Take photo"
-msgstr "拍照"
+msgstr "Uslikaj"
 
 msgid "Attach photo"
-msgstr "附加照片"
+msgstr "Priloži sliku"
 
 msgid "Attach any file"
-msgstr "附加任何文件"
+msgstr "Priloži datoteku"
 
 msgid "Share"
-msgstr "分享"
+msgstr "Dijeli"
 
 msgid "Convert to note"
-msgstr "转换为笔记"
+msgstr "Preinači u bilješku"
 
 msgid "Convert to todo"
-msgstr "转换为待办事项"
+msgstr "Preinači u zadatak"
 
 msgid "Properties"
-msgstr "笔记属性"
+msgstr "Svojstva"
 
 msgid "Add body"
-msgstr "添加body内容"
+msgstr "Dodaj tekst"
 
 msgid "Edit"
-msgstr "编辑"
+msgstr "Uredi"
 
 msgid "Add title"
-msgstr "添加标题"
+msgstr "Dodaj naziv"
 
 msgid "Login with OneDrive"
-msgstr "通过 OneDrive 登录"
+msgstr "Prijavite se preko OneDrivea"
 
 msgid "Search"
-msgstr "搜索"
+msgstr "Traži"
 
 #, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "输入主密码："
+#~ msgstr "Unesite glavnu lozinku:"
 
 #, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "输入主密码："
+#~ msgstr "Unesite glavnu lozinku:"
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "缺失所需参数：%s"
-
-#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
-#~ msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
-
-#~ msgid "Note has been saved."
-#~ msgstr "笔记已被保存。"
-
-#~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
-
-#~ msgid "Sidebar"
-#~ msgstr "边栏"
-
-#~ msgid "Note title"
-#~ msgstr "笔记标题"
-
-#~ msgid "Note body"
-#~ msgstr "笔记正文"
-
-#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-#~ msgstr "从“%s”导入，导入格式为“%s”。请稍等……"
-
-#~ msgid "Synchronisation status"
-#~ msgstr "同步状态"
-
-#~ msgid "Print"
-#~ msgstr "打印"
-
-#~ msgid "General Options"
-#~ msgstr "通用选项"
-
-#~ msgid "Encryption options"
-#~ msgstr "加密选项"
-
-#~ msgid "Create note from template"
-#~ msgstr "从模版创建笔记"
-
-#~ msgid "Create to-do from template"
-#~ msgstr "从模版创建TODO列表"
-
-#~ msgid "Insert template"
-#~ msgstr "插入模版"
-
-#~ msgid "Open template directory"
-#~ msgstr "打开模版目录"
-
-#~ msgid "Refresh templates"
-#~ msgstr "刷新模版"
-
-#~ msgid "Revision: %s (%s)"
-#~ msgstr "调整： %s (%s)"
-
-#~ msgid "%s %s (%s, %s)"
-#~ msgstr "%s %s (%s, %s)"
-
-#~ msgid "Encryption Options"
-#~ msgstr "加密选项"
-
-#~ msgid "Clipper Options"
-#~ msgstr "网页剪辑选项"
-
-#~ msgid ""
-#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
-#~ msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
-
-#~ msgid "Information"
-#~ msgstr "说明"
-
-#, fuzzy
-#~ msgid "Permission to write to external storage"
-#~ msgstr "使用摄像头的权限"
-
-#~ msgid "Cancel synchronisation"
-#~ msgstr "取消同步"
-
-#~ msgid "Hide metadata"
-#~ msgstr "隐藏元数据"
-
-#~ msgid "Show metadata"
-#~ msgstr "显示元数据"
-
-#~ msgid "Delete notebook"
-#~ msgstr "删除笔记本"
-
-#~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
-#~ msgstr "单击 (+) 按钮新建笔记或笔记本。单击切换侧边栏来访问现有的笔记本。"
-
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
-
-#~ msgid "Welcome"
-#~ msgstr "欢迎"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "用半角逗号“,”分开每个标签。"
-
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "一些项目无法被解密。"
-
-#~ msgid "%s (%s): %s"
-#~ msgstr "%s (%s): %s"
-
-#~ msgid "Table of contents"
-#~ msgstr "目录"
-
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr "启用文件系统同步时要同步的路径。见 `sync.target`。"
-
-#~ msgid "State: %s."
-#~ msgstr "状态：%s。"
-
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "以此标题命名的笔记本已存在：\"%s\""
-
-#~ msgid "Searches"
-#~ msgstr "搜索历史"
+#~ msgstr "Nedostaje neophodni argument: %s"

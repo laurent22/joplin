@@ -92,6 +92,15 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for it's simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
 
+# How do I restart Joplin on Windows (so that certain changes take effect)?
+
+If `Show tray icon` is enabled, closing the Joplin window does not quit the application. To restart the application properly, one of the following has to be done to quit Joplin:
+
+- click `File` in the menu and then click `Quit`
+- right-click on the Joplin tray icon and then click `Exit`
+
+Additionally the Windows Task Manager can be used to verify whether Joplin is still around.
+
 # Why is it named Joplin?
 
 The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it fell like a good choice. And, to quote a user on Hacker News, "though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized".

@@ -87,7 +87,7 @@ class ElectronAppWrapper {
 			// user clicks on the icon in the task bar).
 
 			// On Windows and Linux, the app is closed when the window is closed *except* if the tray icon is used. In which
-			// case the app must be explicitely closed with Ctrl+Q or by right-clicking on the tray icon and selecting "Exit".
+			// case the app must be explicitly closed with Ctrl+Q or by right-clicking on the tray icon and selecting "Exit".
 
 			if (process.platform === 'darwin') {
 				if (this.willQuitApp_) {
@@ -138,7 +138,7 @@ class ElectronAppWrapper {
 	}
 
 	// This method is used in macOS only to hide the whole app (and not just the main window)
-	// including the menu bar. This follows the macOS way of hidding an app.
+	// including the menu bar. This follows the macOS way of hiding an app.
 	hide() {
 		this.electronApp_.hide();
 	}

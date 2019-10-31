@@ -161,7 +161,7 @@
 			}
 		}
 
-		let ignoreNextScrollEvent = false;
+		let lastScrollEventTime = 0;
 		ipc.setPercentScroll = (event) => {
 			const percent = event.percent;
 
@@ -170,7 +170,7 @@
 				checkScrollIID_ = null;
 			}
 
-			ignoreNextScrollEvent = true;
+			lastScrollEventTime = Date.now();
 			setPercentScroll(percent);
 		}
 
@@ -293,10 +293,18 @@
 		}
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
-			if (ignoreNextScrollEvent) {
-				ignoreNextScrollEvent = false;
+			// If the last scroll event was done by the user, lastScrollEventTime is set and
+			// we can use that to skip the event handling. We skip it because in that case
+			// the scroll position has already been updated. Also we add a 200ms interval
+			// because otherwise it's most likely a glitch where we called ipc.setPercentScroll
+			// but the scroll event listener has not been called.
+			if (lastScrollEventTime && Date.now() - lastScrollEventTime < 200) {
+				lastScrollEventTime = 0;
 				return;
 			}
+
+			lastScrollEventTime = 0;
+
 			const percent = currentPercentScroll();
 			setPercentScroll(percent);
 			
