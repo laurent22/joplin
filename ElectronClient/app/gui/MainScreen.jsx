@@ -390,6 +390,7 @@ class MainScreenComponent extends React.Component {
 		};
 
 		if (isNoteListVisible === false) {
+			this.styles_.noteList.width = 0;
 			this.styles_.noteList.display = 'none';
 			this.styles_.verticalResizer.display = 'none';
 		}
