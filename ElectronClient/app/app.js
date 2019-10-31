@@ -125,11 +125,11 @@ class Application extends BaseApplication {
 						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 						let paneOptions;
-						if (Setting.value('layout') === Setting.LAYOUT_EDITOR_VIEWER) {
+						if (state.settings.layout === Setting.LAYOUT_EDITOR_VIEWER) {
 							paneOptions = ['editor', 'viewer'];
-						} else if (Setting.value('layout') === Setting.LAYOUT_EDITOR_SPLIT) {
+						} else if (state.settings.layout === Setting.LAYOUT_EDITOR_SPLIT) {
 							paneOptions = ['editor', 'both'];
-						} else if (Setting.value('layout') === Setting.LAYOUT_VIEWER_SPLIT) {
+						} else if (state.settings.layout === Setting.LAYOUT_VIEWER_SPLIT) {
 							paneOptions = ['viewer', 'both'];
 						} else {
 							paneOptions = ['editor', 'viewer', 'both'];
