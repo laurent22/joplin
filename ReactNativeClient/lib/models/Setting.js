@@ -235,11 +235,9 @@ class Setting extends BaseModel {
 			layout: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
-				public: true,
+				public: false,
 				appTypes: ['desktop'],
 				isEnum: true,
-				label: () => _('Available Layouts'),
-				section: 'appearance',
 				options: () => ({
 					[Setting.LAYOUT_ALL]: _('%s / %s / %s', _('Editor'), _('Viewer'), _('Split View')),
 					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),

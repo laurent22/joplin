@@ -723,6 +723,17 @@ class Application extends BaseApplication {
 			],
 		};
 
+		const layoutOptions = Object.entries(Setting.enumOptions('layout')).map(([layoutKey, layout]) => ({
+			label: layout,
+			screens: ['Main'],
+			type: 'checkbox',
+			checked: Setting.value('layout') == layoutKey,
+			click: () => {
+				Setting.setValue('layout', layoutKey);
+				this.refreshMenu();
+			},
+		}));
+
 		const rootMenus = {
 			edit: {
 				id: 'edit',
@@ -876,6 +887,13 @@ class Application extends BaseApplication {
 							name: 'toggleSidebar',
 						});
 					},
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Layouts'),
+					screens: ['Main'],
+					submenu: layoutOptions,
 				}, {
 					label: _('Toggle editor layout'),
 					screens: ['Main'],
