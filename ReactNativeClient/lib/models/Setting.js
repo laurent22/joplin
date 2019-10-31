@@ -233,6 +233,19 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
+			layout: {
+				value: Setting.LAYOUT_ALL,
+				type: Setting.TYPE_INT,
+				public: false,
+				appTypes: ['desktop'],
+				isEnum: true,
+				options: () => ({
+					[Setting.LAYOUT_ALL]: _('%s / %s / %s', _('Editor'), _('Viewer'), _('Split View')),
+					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
+					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
+					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
+				}),
+			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
 			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
@@ -922,6 +935,11 @@ Setting.FONT_MENLO = 1;
 Setting.FONT_COURIER_NEW = 2;
 Setting.FONT_AVENIR = 3;
 Setting.FONT_MONOSPACE = 4;
+
+Setting.LAYOUT_ALL = 0;
+Setting.LAYOUT_EDITOR_VIEWER = 1;
+Setting.LAYOUT_EDITOR_SPLIT = 2;
+Setting.LAYOUT_VIEWER_SPLIT = 3;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';

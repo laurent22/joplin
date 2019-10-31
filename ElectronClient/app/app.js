@@ -122,19 +122,31 @@ class Application extends BaseApplication {
 			case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 				{
-					let panes = state.noteVisiblePanes.slice();
-					if (panes.length === 2) {
-						panes = ['editor'];
-					} else if (panes.indexOf('editor') >= 0) {
-						panes = ['viewer'];
-					} else if (panes.indexOf('viewer') >= 0) {
-						panes = ['editor', 'viewer'];
-					} else {
-						panes = ['editor', 'viewer'];
-					}
+					const getNextLayout = (currentLayout) => {
+						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
+
+						let paneOptions;
+						if (state.settings.layout === Setting.LAYOUT_EDITOR_VIEWER) {
+							paneOptions = ['editor', 'viewer'];
+						} else if (state.settings.layout === Setting.LAYOUT_EDITOR_SPLIT) {
+							paneOptions = ['editor', 'both'];
+						} else if (state.settings.layout === Setting.LAYOUT_VIEWER_SPLIT) {
+							paneOptions = ['viewer', 'both'];
+						} else {
+							paneOptions = ['editor', 'viewer', 'both'];
+						}
+
+						const currentLayoutIndex = paneOptions.indexOf(currentLayout);
+						const nextLayoutIndex = currentLayoutIndex === paneOptions.length - 1 ? 0 : currentLayoutIndex + 1;
+
+						let nextLayout = paneOptions[nextLayoutIndex];
+						return nextLayout === 'both' ? ['editor', 'viewer'] : [nextLayout];
+					};
 
 					newState = Object.assign({}, state);
-					newState.noteVisiblePanes = panes;
+
+					let panes = state.noteVisiblePanes.slice();
+					newState.noteVisiblePanes = getNextLayout(panes);
 				}
 				break;
 
@@ -726,6 +738,17 @@ class Application extends BaseApplication {
 			],
 		};
 
+		const layoutOptions = Object.entries(Setting.enumOptions('layout')).map(([layoutKey, layout]) => ({
+			label: layout,
+			screens: ['Main'],
+			type: 'checkbox',
+			checked: Setting.value('layout') == layoutKey,
+			click: () => {
+				Setting.setValue('layout', layoutKey);
+				this.refreshMenu();
+			},
+		}));
+
 		const rootMenus = {
 			edit: {
 				id: 'edit',
@@ -879,6 +902,13 @@ class Application extends BaseApplication {
 							name: 'toggleSidebar',
 						});
 					},
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Layouts'),
+					screens: ['Main'],
+					submenu: layoutOptions,
 				}, {
 					label: _('Toggle note list'),
 					screens: ['Main'],
