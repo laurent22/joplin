@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Marton Paulo <martonpss@gmail.com>, 2019.
 #
 msgid ""
 msgstr ""
@@ -14,7 +14,7 @@ msgstr ""
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "X-Generator: Poedit 2.2.4\n"
-"Last-Translator: \n"
+"Last-Translator: Marton Paulo <martonpss@gmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: eo\n"
 
@@ -32,7 +32,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 
 msgid "No notebook selected."
-msgstr ""
+msgstr "Neniu notlibro elektita."
 
 msgid "No notebook has been specified."
 msgstr ""
@@ -72,18 +72,18 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 msgid "Your choice: "
-msgstr "Via elekto:"
+msgstr "Via elekto: "
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr ""
+msgstr "Malvalida respondo: %s"
 
 msgid "Attaches the given file to the note."
 msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
-msgstr ""
+msgstr "Ne eblas trovi \"%s\"."
 
 msgid "Displays the given note."
 msgstr ""
@@ -126,16 +126,16 @@ msgid ""
 msgstr ""
 
 msgid "Enter master password:"
-msgstr ""
+msgstr "Entajpu ĉefan pasvorton:"
 
 msgid "Operation cancelled"
-msgstr ""
+msgstr "Operacio nuligita"
 
 msgid "Confirm master password:"
-msgstr ""
+msgstr "Konfirmi ĉefan pasvorton:"
 
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "Pasvorto ne kongruas!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -146,17 +146,17 @@ msgid "Completed decryption."
 msgstr ""
 
 msgid "Enabled"
-msgstr ""
+msgstr "Ebligita"
 
 msgid "Disabled"
-msgstr ""
+msgstr "Malebligita"
 
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr ""
 
 msgid "Edit note."
-msgstr ""
+msgstr "Redakti noton."
 
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
@@ -308,16 +308,16 @@ msgid "Please select a notebook first."
 msgstr ""
 
 msgid "Creates a new notebook."
-msgstr ""
+msgstr "Kreas novan notlibron."
 
 msgid "Creates a new note."
-msgstr ""
+msgstr "Kreas novan noton."
 
 msgid "Notes can only be created within a notebook."
-msgstr ""
+msgstr "Nur eblas krei notojn ene de notlibro."
 
 msgid "Creates a new to-do."
-msgstr ""
+msgstr "Kreas novan taskon."
 
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr ""
@@ -347,7 +347,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
 msgid "Delete note?"
-msgstr ""
+msgstr "Ĉu forigi noton?"
 
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
@@ -428,7 +428,7 @@ msgid "Downloading resources..."
 msgstr ""
 
 msgid "Cancelling... Please wait."
-msgstr ""
+msgstr "Nuligante... Atendu."
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
@@ -471,20 +471,20 @@ msgstr "Tipo: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
-msgstr ""
+msgstr "Eblaj valoroj: %s."
 
 #, javascript-format
 msgid "Default: %s"
 msgstr "Defaŭlto: %s"
 
 msgid "Possible keys/values:"
-msgstr ""
+msgstr "Eblaj valoroj/klavoj:"
 
 msgid "Type `joplin help` for usage information."
 msgstr ""
 
 msgid "Fatal error:"
-msgstr ""
+msgstr "Neriparebla eraro:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -544,44 +544,44 @@ msgid "Templates"
 msgstr ""
 
 msgid "Import"
-msgstr ""
+msgstr "Importi"
 
 msgid "Export"
-msgstr ""
+msgstr "Eksporti"
 
 msgid "Synchronise"
-msgstr ""
+msgstr "Sinkronigi"
 
 #, javascript-format
 msgid "Hide %s"
 msgstr "Kaŝi %s"
 
 msgid "Quit"
-msgstr ""
+msgstr "Eliri"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Fermi Fenestron"
 
 msgid "&Edit"
-msgstr ""
+msgstr "&Redakti"
 
 msgid "Copy"
 msgstr "Kopii"
 
 msgid "Cut"
-msgstr ""
+msgstr "Eltondi"
 
 msgid "Paste"
-msgstr ""
+msgstr "Alglui"
 
 msgid "Select all"
-msgstr ""
+msgstr "Elekti ĉiujn"
 
 msgid "Bold"
-msgstr ""
+msgstr "Grasa"
 
 msgid "Italic"
-msgstr ""
+msgstr "Kursiva"
 
 msgid "Link"
 msgstr "Ligilo"
@@ -596,7 +596,7 @@ msgid "Edit in external editor"
 msgstr ""
 
 msgid "Tags"
-msgstr ""
+msgstr "Etikedoj"
 
 msgid "Search in all the notes"
 msgstr ""
@@ -605,7 +605,7 @@ msgid "Search in current note"
 msgstr ""
 
 msgid "&View"
-msgstr ""
+msgstr "&Monti"
 
 msgid "Toggle sidebar"
 msgstr ""
@@ -614,19 +614,19 @@ msgid "Toggle editor layout"
 msgstr ""
 
 msgid "Focus"
-msgstr ""
+msgstr "Fokusi"
 
 msgid "&Tools"
-msgstr "&Ilo"
+msgstr "&Ilaro"
 
 msgid "&Help"
 msgstr "&Helpo"
 
 msgid "Website and documentation"
-msgstr ""
+msgstr "Retejo kaj dokumentado"
 
 msgid "Joplin Forum"
-msgstr ""
+msgstr "Joplin-forumo"
 
 msgid "Make a donation"
 msgstr ""
@@ -652,18 +652,18 @@ msgstr ""
 
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr ""
+msgstr "%s (antaŭeldono)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
 
 #, javascript-format
 msgid "Your version: %s"
-msgstr ""
+msgstr "Via versio: %s"
 
 #, javascript-format
 msgid "New version: %s"
-msgstr ""
+msgstr "Nova versio: %s"
 
 msgid "Yes"
 msgstr "Jes"
@@ -686,7 +686,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Status: %s"
-msgstr ""
+msgstr "Stato: %s"
 
 msgid "Disable Web Clipper Service"
 msgstr ""
@@ -779,16 +779,16 @@ msgid "Enable encryption"
 msgstr ""
 
 msgid "Master Keys"
-msgstr ""
+msgstr "Ĉefaj Klavoj"
 
 msgid "Active"
-msgstr ""
+msgstr "Aktiva"
 
 msgid "ID"
-msgstr ""
+msgstr "Identigilo"
 
 msgid "Source"
-msgstr ""
+msgstr "Fonto"
 
 msgid "Created"
 msgstr "Kreita"
@@ -800,7 +800,7 @@ msgid "Password"
 msgstr "Pasvorto"
 
 msgid "Password OK"
-msgstr ""
+msgstr "Pasvorto bone"
 
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
@@ -823,7 +823,7 @@ msgid ""
 msgstr ""
 
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
 msgid "Encryption is:"
 msgstr ""
@@ -835,10 +835,10 @@ msgid "Chrome Web Store"
 msgstr ""
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Akiri ĝin nun:"
 
 msgid "Usage"
-msgstr ""
+msgstr "Konsumado"
 
 #, javascript-format
 msgid ""
@@ -846,22 +846,22 @@ msgid ""
 msgstr ""
 
 msgid "Please create a notebook first."
-msgstr ""
+msgstr "Bonvolu krei notlibron unue."
 
 msgid "Please create a notebook first"
-msgstr ""
+msgstr "Bonvolu krei notlibron unue"
 
 msgid "Notebook title:"
-msgstr ""
+msgstr "Notlibra titolo:"
 
 msgid "Add or remove tags:"
-msgstr ""
+msgstr "Aldoni aŭ forigi etikedojn:"
 
 msgid "Rename notebook:"
-msgstr ""
+msgstr "Renomi notlibron:"
 
 msgid "Rename tag:"
-msgstr ""
+msgstr "Renomi etikedon:"
 
 msgid "Set alarm:"
 msgstr ""
@@ -870,16 +870,16 @@ msgid "Template file:"
 msgstr ""
 
 msgid "New note"
-msgstr ""
+msgstr "Nova noto"
 
 msgid "New to-do"
-msgstr ""
+msgstr "Nova tasko"
 
 msgid "New notebook"
-msgstr ""
+msgstr "Nova notlibro"
 
 msgid "Layout"
-msgstr ""
+msgstr "Aspektigo"
 
 msgid "Search..."
 msgstr "Serĉi..."
@@ -888,16 +888,16 @@ msgid "Some items cannot be synchronised."
 msgstr ""
 
 msgid "View them now"
-msgstr ""
+msgstr "Vidi ilin nun"
 
 msgid "One or more master keys need a password."
 msgstr ""
 
 msgid "Set the password"
-msgstr ""
+msgstr "Elekti pasvorton"
 
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr ""
+msgstr "Neniu noto ĉi tie. Por krei noton, alklaku \"Nova noto\"."
 
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
@@ -907,7 +907,7 @@ msgid "Location"
 msgstr "Loko"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Note History"
 msgstr ""
@@ -945,7 +945,7 @@ msgid "This file could not be opened: %s"
 msgstr ""
 
 msgid "Save as..."
-msgstr ""
+msgstr "Konservi kiel..."
 
 msgid "Copy path to clipboard"
 msgstr ""
@@ -970,7 +970,7 @@ msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
 
 msgid "PDF File"
-msgstr ""
+msgstr "PDF-dosiero"
 
 #, javascript-format
 msgid "Error opening note in editor: %s"
@@ -989,7 +989,7 @@ msgid "Insert Hyperlink"
 msgstr ""
 
 msgid "Attach file"
-msgstr ""
+msgstr "Aldoni dosieron"
 
 msgid "Set alarm"
 msgstr ""
@@ -999,7 +999,7 @@ msgid "In: %s"
 msgstr "En: %s"
 
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hiperligilo"
 
 msgid "Numbered List"
 msgstr ""
@@ -1008,7 +1008,7 @@ msgid "Bulleted List"
 msgstr ""
 
 msgid "Checkbox"
-msgstr ""
+msgstr "Markobutono"
 
 msgid "Heading"
 msgstr ""
@@ -1020,29 +1020,29 @@ msgid "Click to stop external editing"
 msgstr ""
 
 msgid "Watching..."
-msgstr ""
+msgstr "Rigardante..."
 
 msgid "to-do"
-msgstr ""
+msgstr "tasko"
 
 msgid "note"
-msgstr ""
+msgstr "noto"
 
 #, javascript-format
 msgid "Creating new %s..."
 msgstr ""
 
 msgid "Refresh"
-msgstr ""
+msgstr "Aktualigi"
 
 msgid "Clear"
-msgstr ""
+msgstr "Klariĝi"
 
 msgid "OneDrive Login"
-msgstr ""
+msgstr "OneDrive-salutnomo"
 
 msgid "Dropbox Login"
-msgstr ""
+msgstr "Dropbox-salutnomo"
 
 msgid "Options"
 msgstr "Opcioj"
@@ -1051,7 +1051,7 @@ msgid "Synchronisation Status"
 msgstr ""
 
 msgid "Remove"
-msgstr ""
+msgstr "Forigi"
 
 #, javascript-format
 msgid ""
@@ -1074,10 +1074,10 @@ msgid "New sub-notebook"
 msgstr ""
 
 msgid "Rename"
-msgstr ""
+msgstr "Renomi"
 
 msgid "Notebooks"
-msgstr ""
+msgstr "Notlibroj"
 
 #, javascript-format
 msgid "Decrypting items: %d/%d"
@@ -1091,13 +1091,13 @@ msgid "Please select where the sync status should be exported to"
 msgstr ""
 
 msgid "Retry"
-msgstr ""
+msgstr "Reprovi"
 
 msgid "Add or remove tags"
 msgstr ""
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Duobligi"
 
 #, javascript-format
 msgid "%s - Copy"
@@ -1117,11 +1117,11 @@ msgstr ""
 
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr ""
+msgstr "Forigi noton \"%s\"?"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr ""
+msgstr "Forigi tiujn %d notojn?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
@@ -1133,7 +1133,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
-msgstr ""
+msgstr "Konsumado: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
@@ -1143,19 +1143,19 @@ msgid "Dropbox"
 msgstr "Dropbox"
 
 msgid "File system"
-msgstr ""
+msgstr "Dosiera sistemo"
 
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 msgid "OneDrive"
-msgstr ""
+msgstr "OneDrive"
 
 msgid "OneDrive Dev (For testing only)"
-msgstr ""
+msgstr "OneDrive Dev (nur por testi)"
 
 msgid "WebDAV"
-msgstr ""
+msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -1219,17 +1219,17 @@ msgstr "Nuligante..."
 
 #, javascript-format
 msgid "Completed: %s"
-msgstr ""
+msgstr "Nuligita: %s"
 
 #, javascript-format
 msgid "Last error: %s"
-msgstr ""
+msgstr "Lasta eraro: %s"
 
 msgid "Idle"
-msgstr ""
+msgstr "Senokupa"
 
 msgid "In progress"
-msgstr ""
+msgstr "Farante"
 
 #, javascript-format
 msgid "Synchronisation is already in progress. State: %s"
@@ -1290,22 +1290,22 @@ msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
 msgid "Nextcloud WebDAV URL"
-msgstr ""
+msgstr "Nextcloud-WebDAV-URL"
 
 msgid "Nextcloud username"
-msgstr ""
+msgstr "Nextcloud-salutnomo"
 
 msgid "Nextcloud password"
-msgstr ""
+msgstr "Nextcloud-pasvorton"
 
 msgid "WebDAV URL"
-msgstr ""
+msgstr "WebDAV-URL"
 
 msgid "WebDAV username"
-msgstr ""
+msgstr "WebDAV-salutnomo"
 
 msgid "WebDAV password"
-msgstr ""
+msgstr "WebDAV-pasvorton"
 
 msgid "Attachment download behaviour"
 msgstr ""
@@ -1320,10 +1320,10 @@ msgid "Always"
 msgstr "Ĉiam"
 
 msgid "Manual"
-msgstr "Aŭtomata"
+msgstr ""
 
 msgid "Auto"
-msgstr ""
+msgstr "Aŭtomata"
 
 msgid "Max concurrent connections"
 msgstr ""
@@ -1377,10 +1377,10 @@ msgid "When creating a new to-do:"
 msgstr ""
 
 msgid "Focus title"
-msgstr ""
+msgstr "Fokusi titolon"
 
 msgid "Focus body"
-msgstr ""
+msgstr "Fokusi korpon"
 
 msgid "When creating a new note:"
 msgstr ""
@@ -1517,10 +1517,10 @@ msgid "Page orientation for PDF export"
 msgstr ""
 
 msgid "Portrait"
-msgstr "Portreto"
+msgstr "Vertikala"
 
 msgid "Landscape"
-msgstr "Pejzaĝo"
+msgstr "Horizontala"
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1546,7 +1546,7 @@ msgid ""
 msgstr ""
 
 msgid "Enable note history"
-msgstr ""
+msgstr "Ebligi notan historion"
 
 msgid "days"
 msgstr "tagoj"
@@ -1572,16 +1572,16 @@ msgid "Appearance"
 msgstr ""
 
 msgid "Note"
-msgstr ""
+msgstr "Notoj"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Kromprogramoj"
 
 msgid "Application"
 msgstr "Aplikaĵo"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Ĉifrado"
 
 msgid "Web Clipper"
 msgstr ""
@@ -1609,10 +1609,10 @@ msgid "Json Export Directory"
 msgstr ""
 
 msgid "File"
-msgstr ""
+msgstr "Dosiero"
 
 msgid "Directory"
-msgstr ""
+msgstr "Dosierujo"
 
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
@@ -1635,7 +1635,7 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Restaŭritaj Notoj"
 
 msgid "Items that cannot be synchronised"
 msgstr ""
@@ -1672,22 +1672,22 @@ msgstr "%s: %d/%d"
 
 #, javascript-format
 msgid "Total: %d/%d"
-msgstr ""
+msgstr "Totalo: %d/%d"
 
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr ""
+msgstr "Konfliktita: %d"
 
 #, javascript-format
 msgid "To delete: %d"
 msgstr "Forigi: %d"
 
 msgid "Folders"
-msgstr ""
+msgstr "Dosierujo"
 
 #, javascript-format
 msgid "%s: %d notes"
-msgstr ""
+msgstr "%s: %d notoj"
 
 msgid "Coming alarms"
 msgstr ""
@@ -1697,7 +1697,7 @@ msgid "On %s: %s"
 msgstr "En %s: %s"
 
 msgid "Permission to use camera"
-msgstr ""
+msgstr "Permeso por uzi kameraon"
 
 msgid "Your permission to use your camera is required."
 msgstr ""
@@ -1706,7 +1706,7 @@ msgid "You currently have no notebooks."
 msgstr ""
 
 msgid "Create a notebook"
-msgstr ""
+msgstr "Krei notlibron"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -1738,19 +1738,19 @@ msgstr "Konfirmi"
 
 #, javascript-format
 msgid "Notebook: %s"
-msgstr ""
+msgstr "Notlibro: %s"
 
 msgid "Encrypted notebooks cannot be renamed"
 msgstr ""
 
 msgid "New Notebook"
-msgstr ""
+msgstr "Nova notlibro"
 
 msgid "Configuration"
-msgstr ""
+msgstr "Agordoj"
 
 msgid "All notes"
-msgstr ""
+msgstr "Ĉiuj notoj"
 
 msgid "Checking... Please wait."
 msgstr "Kontrolante... Atendu."
@@ -1823,7 +1823,7 @@ msgid ""
 msgstr ""
 
 msgid "More information"
-msgstr "Pli informo"
+msgstr "Pli da informoj"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1850,17 +1850,17 @@ msgstr "Datumbazo v%s"
 
 #, javascript-format
 msgid "FTS enabled: %d"
-msgstr ""
+msgstr "FTS ebligita: %d"
 
 msgid "Login with Dropbox"
-msgstr ""
+msgstr "Ensaluti per Dropbox"
 
 msgid "Enter code here"
-msgstr ""
+msgstr "Entajpu kodon ĉi tie"
 
 #, javascript-format
 msgid "Master Key %s"
-msgstr ""
+msgstr "Ĉefa Klavo %s"
 
 #, javascript-format
 msgid "Created: %s"
@@ -1870,10 +1870,10 @@ msgid "Password:"
 msgstr "Pasvorto:"
 
 msgid "Password cannot be empty"
-msgstr ""
+msgstr "Pasvorto ne eblas esti malplena"
 
 msgid "Confirm password cannot be empty"
-msgstr ""
+msgstr "Konfimi pasvorton ne eblas esti malplena"
 
 msgid "Confirm password:"
 msgstr "Konfirmi pasvorton:"
@@ -1889,16 +1889,16 @@ msgid "The notebook could not be saved: %s"
 msgstr ""
 
 msgid "Edit notebook"
-msgstr ""
+msgstr "Redakti notlibron"
 
 msgid "Enter notebook title"
-msgstr ""
+msgstr "Entajpu notlibron titolon"
 
 msgid "Show all"
 msgstr "Montri ĉiujn"
 
 msgid "Errors only"
-msgstr ""
+msgstr "Nur eraroj"
 
 msgid "This note has been modified:"
 msgstr ""
@@ -1923,7 +1923,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Unsupported image type: %s"
-msgstr ""
+msgstr "Nesubtenata bilda tipo: %s"
 
 #, javascript-format
 msgid "Updated: %s"
@@ -1933,46 +1933,46 @@ msgid "View on map"
 msgstr "Vidi en mapo"
 
 msgid "Go to source URL"
-msgstr ""
+msgstr "Iri al URL-fonto"
 
 msgid "Attach..."
-msgstr ""
+msgstr "Aldoni..."
 
 msgid "Choose an option"
 msgstr "Elekti opcion"
 
 msgid "Take photo"
-msgstr ""
+msgstr "Foti"
 
 msgid "Attach photo"
-msgstr ""
+msgstr "Aldoni foton"
 
 msgid "Attach any file"
-msgstr ""
+msgstr "Aldoni ajnan dosieron"
 
 msgid "Share"
 msgstr "Konigi"
 
 msgid "Convert to note"
-msgstr ""
+msgstr "Konverti al noto"
 
 msgid "Convert to todo"
-msgstr ""
+msgstr "Konverti al tasko"
 
 msgid "Properties"
-msgstr ""
+msgstr "Atributoj"
 
 msgid "Add body"
-msgstr ""
+msgstr "Aldoni korpon"
 
 msgid "Edit"
-msgstr "Editi"
+msgstr "Redakti"
 
 msgid "Add title"
 msgstr "Aldoni titolon"
 
 msgid "Login with OneDrive"
-msgstr ""
+msgstr "Ensaluti per OneDrive"
 
 msgid "Search"
 msgstr "Serĉi"
