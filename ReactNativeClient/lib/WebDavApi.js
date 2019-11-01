@@ -5,6 +5,7 @@ const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
+const Setting = require('lib/models/Setting.js');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -350,6 +351,9 @@ class WebDavApi {
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
 		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+
+		// Set user agent to value from settings
+		headers['User-Agent'] = Setting.value('sync.user_agent');
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;

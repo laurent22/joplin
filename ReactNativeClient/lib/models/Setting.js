@@ -52,6 +52,19 @@ class Setting extends BaseModel {
 				},
 			},
 
+			'sync.user_agent': {
+				value: 'Joplin', // Default to using 'Joplin' as the default user agent
+				type: Setting.TYPE_STRING,
+				isEnum: false,
+				public: true,
+				show: true, // Show in the config
+				section: 'sync',
+				label: () => _('Synchronisation user agent'),
+				description: appType => {
+					return appType !== 'cli' ? null : _('The User Agent to use when syncing.');
+				},
+			},
+
 			'sync.2.path': {
 				value: '',
 				type: Setting.TYPE_STRING,
