@@ -98,7 +98,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     then
        : "${TMPDIR:=/tmp}"
        # This command extracts to squashfs-root by default and can't be changed...
-       # So we run in in the tmp directory and clean up after ourselves
+       # So we run it in the tmp directory and clean up after ourselves
        (cd $TMPDIR && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
        APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
        rm -rf $TMPDIR/squashfs-root

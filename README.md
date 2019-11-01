@@ -2,18 +2,6 @@
 
 [![Donate](https://joplinapp.org/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Become a patron](https://joplinapp.org/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin)
 
-* * *
-[Hacktoberfest 🎃](https://hacktoberfest.digitalocean.com/) is back this year again for our great pleasure ^^
-
-To participate go to [https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/), log in (with you GitHub account) and you are ready to get in. Next, go dive into the Joplin issues list labelled "[Hacktoberfest](https://github.com/laurent22/joplin/labels/hacktoberfest)"
-
-Start hacking, submit the PR from the 1st of October, not before.
-
-We hope you will enjoy that event this year again like the previous one 🎃🎉
-
-*PS: the 4 Pull Request don’t have to be done **only** on Joplin project, those can be done on any FOSS projects. Even PR for issue not tagged as 'hacktoberfest'*
-* * *
-
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
