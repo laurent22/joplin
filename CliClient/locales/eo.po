@@ -114,11 +114,11 @@ msgid ""
 msgstr ""
 
 msgid "Marks a to-do as done."
-msgstr ""
+msgstr "Marki taskon kiel farita."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr ""
+msgstr "Noto ne estas tasko: \"%s\""
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
@@ -163,14 +163,14 @@ msgid ""
 msgstr ""
 
 msgid "No active notebook."
-msgstr ""
+msgstr "Ne estas aktiva notlibro."
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr ""
+msgstr "Noto ne ekzistas: \"%s\". Ĉu krei ĝin?"
 
 msgid "Exits the application."
-msgstr ""
+msgstr "Eliri la aplikaĵon."
 
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
@@ -206,7 +206,7 @@ msgid ""
 msgstr ""
 
 msgid "The possible commands are:"
-msgstr ""
+msgstr "Eblaj komandoj estas:"
 
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
@@ -240,7 +240,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Source format: %s"
-msgstr ""
+msgstr "Fonta aranĝo: %s"
 
 msgid "Do not ask for confirmation."
 msgstr "Ne demandi pri konfirmo."
@@ -270,11 +270,11 @@ msgid "Tagged: %d."
 msgstr ""
 
 msgid "Importing notes..."
-msgstr ""
+msgstr "Importante notojn..."
 
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr ""
+msgstr "La notoj estis importitaj: %s"
 
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
@@ -297,7 +297,7 @@ msgid ""
 msgstr ""
 
 msgid "Either \"text\" or \"json\""
-msgstr ""
+msgstr "Aŭ \"teksto\" aŭ \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
@@ -305,7 +305,7 @@ msgid ""
 msgstr ""
 
 msgid "Please select a notebook first."
-msgstr ""
+msgstr "Bonvolu elekti noton unue."
 
 msgid "Creates a new notebook."
 msgstr "Kreas novan notlibron."
@@ -329,7 +329,7 @@ msgid "Deletes the given notebook."
 msgstr ""
 
 msgid "Deletes the notebook without asking for confirmation."
-msgstr ""
+msgstr "Forigi la notlibron sen peti konfirmon."
 
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
@@ -425,7 +425,7 @@ msgid "Starting synchronisation..."
 msgstr ""
 
 msgid "Downloading resources..."
-msgstr ""
+msgstr "Elŝutante risurcojn..."
 
 msgid "Cancelling... Please wait."
 msgstr "Nuligante... Atendu."
@@ -438,7 +438,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr ""
+msgstr "Malvalida komando: \"%s\""
 
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
@@ -538,10 +538,10 @@ msgid "Preferences..."
 msgstr "Preferoj..."
 
 msgid "Check for updates..."
-msgstr ""
+msgstr "Kontrolu ĝisdatigojn..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Modeloj"
 
 msgid "Import"
 msgstr "Importi"
@@ -599,7 +599,7 @@ msgid "Tags"
 msgstr "Etikedoj"
 
 msgid "Search in all the notes"
-msgstr ""
+msgstr "Ŝerci en ĉiuj notoj"
 
 msgid "Search in current note"
 msgstr ""
@@ -721,13 +721,13 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr ""
 
 msgid "Advanced options"
-msgstr ""
+msgstr "Altnivelaj opcioj"
 
 msgid "Authorisation token:"
 msgstr ""
 
 msgid "Copy token"
-msgstr ""
+msgstr "Kopii ĵetonon"
 
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -739,16 +739,16 @@ msgstr ""
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
-msgstr ""
+msgstr "Notoj kaj agordoj estas konservitaj en: %s"
 
 msgid "Check synchronisation configuration"
 msgstr ""
 
 msgid "Browse..."
-msgstr ""
+msgstr "Esplori..."
 
 msgid "Back"
-msgstr ""
+msgstr "Reen"
 
 msgid "Apply"
 msgstr "Apliki"
@@ -844,6 +844,7 @@ msgstr "Konsumado"
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
+"Nova notlibro \"%s\" estos kreita kaj dosiero \"%s\" estos importita al ĝi"
 
 msgid "Please create a notebook first."
 msgstr "Bonvolu krei notlibron unue."
@@ -867,7 +868,7 @@ msgid "Set alarm:"
 msgstr ""
 
 msgid "Template file:"
-msgstr ""
+msgstr "Modela dosiero:"
 
 msgid "New note"
 msgstr "Nova noto"
@@ -910,26 +911,26 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Note History"
-msgstr ""
+msgstr "Nota Historio"
 
 msgid "Markup"
-msgstr ""
+msgstr "Markado"
 
 msgid "Previous versions of this note"
 msgstr ""
 
 msgid "Note properties"
-msgstr ""
+msgstr "Notaj atributoj"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
 
 msgid "This note has no history"
-msgstr ""
+msgstr "Tiu noto ne havas historion"
 
 msgid "Restore"
-msgstr ""
+msgstr "Restaŭri"
 
 #, javascript-format
 msgid ""
@@ -1030,7 +1031,7 @@ msgstr "noto"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr ""
+msgstr "Kreante novan %s..."
 
 msgid "Refresh"
 msgstr "Aktualigi"
@@ -1059,19 +1060,22 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
+"Forigi notlibron \"%s\"?\n"
+"\n"
+"Ĉiuj notoj kaj subnotlibroj ene de tiu notlibro estos ankaŭ forigitaj."
 
 msgid "Delete"
 msgstr "Forigi"
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr ""
+msgstr "Forigi etikedon \"%s\" el ĉiuj notoj?"
 
 msgid "Remove this search from the sidebar?"
-msgstr ""
+msgstr "Forigi tiun sercôn el la flankpanelo?"
 
 msgid "New sub-notebook"
-msgstr ""
+msgstr "Nova subnotlibro"
 
 msgid "Rename"
 msgstr "Renomi"
@@ -1094,7 +1098,7 @@ msgid "Retry"
 msgstr "Reprovi"
 
 msgid "Add or remove tags"
-msgstr ""
+msgstr "Aldoni aŭ forigi etikedojn"
 
 msgid "Duplicate"
 msgstr "Duobligi"
@@ -1104,13 +1108,13 @@ msgid "%s - Copy"
 msgstr "%s - Kopii"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "Ŝalti inter nota kaj taska tipo"
 
 msgid "Switch to note type"
-msgstr ""
+msgstr "Ŝalti al nota tipo"
 
 msgid "Switch to to-do type"
-msgstr ""
+msgstr "Ŝalti al taska tipo"
 
 msgid "Copy Markdown link"
 msgstr ""
@@ -1137,7 +1141,7 @@ msgstr "Konsumado: %s"
 
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Nekonata flago: %s"
 
 msgid "Dropbox"
 msgstr "Dropbox"
@@ -1159,11 +1163,11 @@ msgstr "WebDAV"
 
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr ""
+msgstr "Nekonata protokola nivelo: %s"
 
 #, javascript-format
 msgid "Unknown level ID: %s"
-msgstr ""
+msgstr "Nekonata identigila nivelo: %s"
 
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
@@ -1184,7 +1188,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Cannot access %s"
-msgstr ""
+msgstr "Ne eblas atingi %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -1236,7 +1240,7 @@ msgid "Synchronisation is already in progress. State: %s"
 msgstr ""
 
 msgid "Encrypted"
-msgstr ""
+msgstr "Ĉifrita"
 
 msgid "Encrypted items cannot be modified"
 msgstr ""
@@ -1258,7 +1262,7 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
 msgid "created date"
-msgstr ""
+msgstr "dato kreita"
 
 msgid "This note does not have geolocation information."
 msgstr ""
@@ -1332,10 +1336,10 @@ msgid "Language"
 msgstr "Lingvo"
 
 msgid "Date format"
-msgstr ""
+msgstr "Data formato"
 
 msgid "Time format"
-msgstr ""
+msgstr "Tempa formato"
 
 msgid "Theme"
 msgstr "Temo"
@@ -1347,7 +1351,7 @@ msgid "Dark"
 msgstr "Malhela"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Drakula"
 
 msgid "Solarised Light"
 msgstr ""
@@ -1362,13 +1366,13 @@ msgid "Show completed to-dos"
 msgstr ""
 
 msgid "Sort notes by"
-msgstr ""
+msgstr "Ordigi notojn laŭ"
 
 msgid "Reverse sort order"
-msgstr ""
+msgstr "Inversa ordiga ordo"
 
 msgid "Sort notebooks by"
-msgstr ""
+msgstr "Ordigi notlibrojn laŭ"
 
 msgid "Save geo-location with notes"
 msgstr ""
@@ -1398,7 +1402,7 @@ msgid "Enable ==mark== syntax"
 msgstr ""
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Ebligi piednotojn"
 
 msgid "Enable table of contents extension"
 msgstr ""
@@ -1629,7 +1633,7 @@ msgid ""
 msgstr ""
 
 msgid "There is no data to export."
-msgstr ""
+msgstr "Ne estas datumo por eksporti."
 
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
@@ -1712,26 +1716,26 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
 msgid "Delete these notes?"
-msgstr ""
+msgstr "Forigi tiujn notojn?"
 
 msgid "Move to notebook..."
-msgstr ""
+msgstr "Movi al notlibro..."
 
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr ""
+msgstr "Movi %d notojn al notlibro \"%s\"?"
 
 msgid "Press to set the decryption password."
 msgstr ""
 
 msgid "Clear alarm"
-msgstr ""
+msgstr "Forigi alarmon"
 
 msgid "Save alarm"
-msgstr ""
+msgstr "Konservi alarmon"
 
 msgid "Select date"
-msgstr ""
+msgstr "Elekti daton"
 
 msgid "Confirm"
 msgstr "Konfirmi"
@@ -1780,10 +1784,10 @@ msgid "Decrypted items: %s / %s"
 msgstr ""
 
 msgid "New tags:"
-msgstr ""
+msgstr "Novaj etikedoj:"
 
 msgid "Type new tags or select from list"
-msgstr ""
+msgstr "Tajpu novan etikedon aŭ elektu el la listo"
 
 msgid "Warning"
 msgstr "Averto"
@@ -1797,13 +1801,13 @@ msgid "Encryption Config"
 msgstr ""
 
 msgid "Tools"
-msgstr ""
+msgstr "Ilaro"
 
 msgid "Sync Status"
 msgstr ""
 
 msgid "Log"
-msgstr ""
+msgstr "Protokolo"
 
 msgid "Creating report..."
 msgstr ""
@@ -1901,10 +1905,10 @@ msgid "Errors only"
 msgstr "Nur eraroj"
 
 msgid "This note has been modified:"
-msgstr ""
+msgstr "Tiu noto estis ŝanĝita:"
 
 msgid "Save changes"
-msgstr ""
+msgstr "Konservi la ŝanĝojn"
 
 msgid "Discard changes"
 msgstr ""
