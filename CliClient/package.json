@@ -83,7 +83,7 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "jasmine": "^2.6.0"
+    "jasmine": "^3.5.0"
   },
   "scripts": {
     "test": "jasmine"

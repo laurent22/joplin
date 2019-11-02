@@ -200,8 +200,14 @@ shim.loadCssFromJs = name => {
 	throw new Error('Not implemented');
 };
 
+let isTestingEnv_ = false;
+
 shim.isTestingEnv = () => {
-	return false;
+	return isTestingEnv_;
+};
+
+shim.setIsTestingEnv = (v) => {
+	isTestingEnv_ = v;
 };
 
 module.exports = { shim };

@@ -24,6 +24,7 @@ const BaseService = require('lib/services/BaseService.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const { shimInit } = require('lib/shim-init-node.js');
+const { shim } = require('lib/shim.js');
 const { uuid } = require('lib/uuid.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('lib/SyncTargetMemory.js');
@@ -49,7 +50,14 @@ let kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
+// The line `process.on('unhandledRejection'...` in all the test files is going to
+// make it throw this error. It's not too big a problem so disable it for now.
+// https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
+process.setMaxListeners(0);
+
 shimInit();
+
+shim.setIsTestingEnv(true);
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
