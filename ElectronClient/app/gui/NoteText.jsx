@@ -2051,7 +2051,6 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
 		const onBeforeLoad = (ace) => {
-			console.log(ace);
 			const save = () => {
 				this.saveIfNeeded();
 			};
