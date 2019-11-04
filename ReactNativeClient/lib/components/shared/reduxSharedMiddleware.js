@@ -20,7 +20,12 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		ResourceFetcher.instance().autoAddResources();
 	}
 
-	if (action.type == 'NOTE_DELETE' || action.type == 'NOTE_TAG_REMOVE' || action.type == 'TAG_UPDATE_ONE') {
+	console.info(`reduxSharedMiddleware ${action.type}`);
+	if (action.type == 'NOTE_DELETE' ||
+		action.type == 'NOTE_UPDATE_ONE' ||
+		action.type == 'NOTE_UPDATE_ALL' ||
+		action.type == 'NOTE_TAG_REMOVE' ||
+		action.type == 'TAG_UPDATE_ONE') {
 		refreshTags = true;
 	}
 
