@@ -573,7 +573,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
-		const keyboardMode = Setting.value('keyboardMode');
+		const keyboardMode = Setting.value('editor.keyboardMode');
 
 		return (
 			<div style={style}>

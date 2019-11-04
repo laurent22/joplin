@@ -36,7 +36,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_STRING,
 				public: false,
 			},
-			'keyboardMode': {
+			'editor.keyboardMode': {
 				value: 'default',
 				type: Setting.TYPE_STRING,
 				public: true,
