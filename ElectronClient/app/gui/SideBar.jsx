@@ -190,6 +190,10 @@ class SideBarComponent extends React.Component {
 				marginBottom: 10,
 				wordWrap: 'break-word',
 			},
+			noteCount: {
+				paddingLeft: 5,
+				opacity: 0.5,
+			},
 		};
 
 		style.tagItem = Object.assign({}, style.listItem);
@@ -260,10 +264,10 @@ class SideBarComponent extends React.Component {
 	}
 
 	async itemContextMenu(event) {
-		const itemId = event.target.getAttribute('data-id');
+		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
-		const itemType = Number(event.target.getAttribute('data-type'));
+		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
 
 		let deleteMessage = '';
@@ -417,12 +421,8 @@ class SideBarComponent extends React.Component {
 	}
 
 	noteCountElement(baseStyle, count) {
-		let noteCountStyle = {
-			paddingRight: 8,
-			textAlign: 'right',
-			flex: 'auto',
-		};
-		return <div style={baseStyle}><div style={noteCountStyle}>{count} {_('notes')}</div></div>;
+		let style = Object.assign({}, this.style().noteCount);
+		return <div style={style}>({count})</div>;
 	}
 
 	folderItem(folder, selected, hasChildren, depth) {
@@ -470,9 +470,8 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle}
+					{itemTitle} {noteCount}
 				</a>
-				{noteCount}
 			</div>
 		);
 	}
@@ -485,26 +484,23 @@ class SideBarComponent extends React.Component {
 		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(style, tag.note_count) : '';
 
 		return (
-			<div key={tag.id} style={style}>
-				<a
-					className="list-item"
-					href="#"
-					ref={anchorRef}
-					data-id={tag.id}
-					data-type={BaseModel.TYPE_TAG}
-					onContextMenu={event => this.itemContextMenu(event)}
-					tagid={tag.id}
-					key={tag.id}
-					style={style}
-					onDrop={this.onTagDrop_}
-					onClick={() => {
-						this.tagItem_click(tag);
-					}}
-				>
-					{Tag.displayTitle(tag)}
-				</a>
-				{noteCount}
-			</div>
+			<a
+				className="list-item"
+				href="#"
+				ref={anchorRef}
+				data-id={tag.id}
+				data-type={BaseModel.TYPE_TAG}
+				onContextMenu={event => this.itemContextMenu(event)}
+				tagid={tag.id}
+				key={tag.id}
+				style={style}
+				onDrop={this.onTagDrop_}
+				onClick={() => {
+					this.tagItem_click(tag);
+				}}
+			>
+				{Tag.displayTitle(tag)} {noteCount}
+			</a>
 		);
 	}
 
