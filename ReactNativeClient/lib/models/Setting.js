@@ -43,7 +43,6 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				isEnum: true,
 				label: () => _('Keyboard Mode'),
-				section: 'appearance',
 				options: () => {
 					let output = {};
 					output['default'] = _('Default');
