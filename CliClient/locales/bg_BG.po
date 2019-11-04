@@ -139,7 +139,7 @@ msgid "Operation cancelled"
 msgstr "Действието бе отменено"
 
 #, fuzzy
-msgid "Confirm master password:"
+msgid "Confirm password:"
 msgstr "Въведете главната парола:"
 
 #, fuzzy
@@ -478,10 +478,12 @@ msgstr "Свалям ресурси..."
 msgid "Cancelling... Please wait."
 msgstr "Отменям... Моля изчакайте."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<таг-команда> може да е \"add\", \"remove\" или \"list\" за да добавите или "
 "премахнете [таг] от [бележка], или за да изредите бележките които имат "
@@ -683,6 +685,10 @@ msgstr "Изглед(&V)"
 
 msgid "Toggle sidebar"
 msgstr "Страничен панел"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Списък бележки"
 
 msgid "Toggle editor layout"
 msgstr "Промени изгледа на редактора"
@@ -971,10 +977,6 @@ msgstr "Задаване на аларма:"
 msgid "Template file:"
 msgstr ""
 
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Списък бележки"
-
 msgid "New note"
 msgstr "Нова бележка"
 
@@ -1037,6 +1039,10 @@ msgstr "Бележка \"%s\" бе успешно създадена и слож
 msgid "This note has no history"
 msgstr "Тази бележка няма история"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Неподдържан линк или съобщение: %s"
+
 msgid "Restore"
 msgstr "Възстанови"
 
@@ -1067,10 +1073,6 @@ msgstr "Копирай адреса на линка"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Прикаченият файл не е свален или все още не е декриптиран."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Неподдържан линк или съобщение: %s"
 
 #, javascript-format
 msgid ""
@@ -1188,6 +1190,10 @@ msgstr "Да премахна ли таг \"%s\" от всички бележк�
 
 msgid "Remove this search from the sidebar?"
 msgstr "Да премахна ли това търсене от страничния панел?"
+
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Нова тетрадка"
 
 msgid "Rename"
 msgstr "Преименувай"
@@ -1487,6 +1493,9 @@ msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -2064,14 +2073,6 @@ msgstr "Паролата не може да е празна"
 msgid "Confirm password cannot be empty"
 msgstr "Паролата не може да е празна"
 
-#, fuzzy
-msgid "Confirm password:"
-msgstr "Въведете главната парола:"
-
-#, fuzzy
-msgid "Confirm password"
-msgstr "Въведете главната парола:"
-
 msgid "Enable"
 msgstr "Включи"
 
@@ -2173,6 +2174,18 @@ msgstr "Вписване в OneDrive"
 
 msgid "Search"
 msgstr "Търсене"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Въведете главната парола:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Въведете главната парола:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Липсващ задължителен параметър: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

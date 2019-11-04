@@ -1,6 +1,6 @@
 # Configuration for Lock Threads - https://github.com/dessant/lock-threads
 # Number of days of inactivity before a closed issue or pull request is locked
-daysUntilLock: 1
+daysUntilLock: 7
 # Skip issues and pull requests created before a given timestamp. Timestamp must
 # follow ISO 8601 (`YYYY-MM-DD`). Set to `false` to disable
 skipCreatedBefore: false

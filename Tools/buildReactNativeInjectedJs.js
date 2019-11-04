@@ -1,5 +1,5 @@
 // React Native WebView cannot load external JS files, however it can load
-// arbitraty JS via the injectedJavaScript property. So we use this to load external
+// arbitrary JS via the injectedJavaScript property. So we use this to load external
 // files: First here we convert the JS file to a plain string, and that string
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 

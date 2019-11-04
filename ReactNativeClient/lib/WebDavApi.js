@@ -84,7 +84,7 @@ class WebDavApi {
 		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = name => {
-			if (name.indexOf('xmlns:') !== 0) {
+			if (name.indexOf('xmlns') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
 				const p = name.split(':');
@@ -93,15 +93,23 @@ class WebDavApi {
 					if (davNamespaces.indexOf(ns) >= 0) {
 						name = `d:${p[1]}`;
 					}
+				} else if (p.length === 1 && davNamespaces.indexOf('') >= 0) {
+					// Also handle the case where the namespace alias is empty.
+					// https://github.com/laurent22/joplin/issues/2002
+					name = `d:${name}`;
 				}
 			}
+
 			return name.toLowerCase();
 		};
 
 		const attrValueProcessor = (value, name) => {
+			// The namespace is ususally specified like so: xmlns:D="DAV:" ("D" being the alias used in the tag names)
+			// In some cases, the namespace can also be empty like so: "xmlns=DAV". In this case, the tags will have
+			// no namespace so instead of <d:prop> will have just <prop>. This is handled above in nameProcessor()
 			if (value.toLowerCase() === 'dav:') {
 				const p = name.split(':');
-				davNamespaces.push(p[p.length - 1]);
+				davNamespaces.push(p.length === 2 ? p[p.length - 1] : '');
 			}
 		};
 

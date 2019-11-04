@@ -197,7 +197,7 @@ class Command extends BaseCommand {
 
 			// When using the tool in command line mode, the ResourceFetcher service is
 			// not going to be running in the background, so the resources need to be
-			// explicitely downloaded below.
+			// explicitly downloaded below.
 			if (!app().hasGui()) {
 				this.stdout(_('Downloading resources...'));
 				await ResourceFetcher.instance().fetchAll();
