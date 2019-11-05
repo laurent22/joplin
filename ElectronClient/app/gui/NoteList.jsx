@@ -29,12 +29,14 @@ class NoteListComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 
 		const itemHeight = 34;
+		const itemWidth = '100%';
 
 		let style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
 			listItem: {
+				maxwidth: itemWidth,
 				height: itemHeight,
 				boxSizing: 'border-box',
 				display: 'flex',
