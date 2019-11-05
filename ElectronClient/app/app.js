@@ -1252,7 +1252,9 @@ class Application extends BaseApplication {
 		}, 1000 * 60 * 60);
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
-			bridge().window().hide();
+			// Keep it hidden
+		} else {
+			bridge().window().show();
 		}
 
 		ResourceService.runInBackground();
