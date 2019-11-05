@@ -702,7 +702,7 @@ msgid "Toggle sidebar"
 msgstr "Seitenleiste ein-/ausschalten"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Layout Reihenfolge"
 
 msgid "Toggle note list"
 msgstr "Notizen-Liste ein-/ausschalten"
@@ -1521,24 +1521,22 @@ msgstr "Solarised Dark"
 msgid "Nord"
 msgstr "Nord"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Bearbeiten"
+msgstr "Editor"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "&Ansicht"
+msgstr "Vorschau"
 
 msgid "Split View"
-msgstr ""
+msgstr "Geteilte Ansicht"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"
