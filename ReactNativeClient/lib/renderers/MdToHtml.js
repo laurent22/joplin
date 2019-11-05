@@ -28,8 +28,12 @@ const plugins = {
 	emoji: { module: require('markdown-it-emoji') },
 	insert: { module: require('markdown-it-ins') },
 	multitable: { module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true } },
-	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul' } },
+	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: uslugify } },
 };
+
+function uslugify(s) {
+	return uslug(s);
+}
 
 class MdToHtml {
 	constructor(options = null) {
@@ -145,9 +149,7 @@ class MdToHtml {
 		if (Setting.value('markdown.plugin.fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
-		markdownIt.use(markdownItAnchor, {
-			slugify: s => uslug(s),
-		});
+		markdownIt.use(markdownItAnchor, { slugify: uslugify });
 
 		for (let key in plugins) {
 			if (Setting.value(`markdown.plugin.${key}`)) markdownIt.use(plugins[key].module, plugins[key].options);
