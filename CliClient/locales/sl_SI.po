@@ -688,6 +688,9 @@ msgstr "Pogled"
 msgid "Toggle sidebar"
 msgstr ""
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Omogoči enkripcijo"
@@ -1493,6 +1496,25 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Uredi"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Pogled"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

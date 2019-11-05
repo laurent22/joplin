@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -465,17 +467,16 @@ msgstr "リソースをダウンロード中..."
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> は\"add\", \"remove\", \"list\"のいずれかで、指定した[note]から"
-"[tag]をつけたり外したりできます。あるいは[tag]のついたノートをリストアップし"
-"ます。`tag list`で、すべてのタグを見ることができます(-lオプションでより多くの"
-"情報を表示します)。"
+"<tag-command> は\"add\", \"remove\", \"list\", \"notetags\"のいずれかで、それ"
+"ぞれ、[note]に[tag]を追加、[note]から[tag]を削除、[tag]のついたノートを一覧表"
+"示 (-lオプションでより多くの情報を表示)、[note]についているタグを一覧表示しま"
+"す。単に`tag list`とした場合はすべてのタグを一覧表示します。"
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -672,9 +673,11 @@ msgstr "&表示"
 msgid "Toggle sidebar"
 msgstr "サイドバーの表示切り替え"
 
-#, fuzzy
+msgid "Layout button sequence"
+msgstr "レイアウトボタンによる切り替え順"
+
 msgid "Toggle note list"
-msgstr "ノートの一覧"
+msgstr "ノート一覧の表示切り替え"
 
 msgid "Toggle editor layout"
 msgstr "エディターレイアウトの表示切り替え"
@@ -1166,9 +1169,8 @@ msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
 
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "新しいノートブック"
+msgstr "新しいサブノートブック"
 
 msgid "Rename"
 msgstr "名前の変更"
@@ -1473,7 +1475,24 @@ msgid "Solarised Dark"
 msgstr "Solarised (暗)"
 
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+msgid "Editor"
+msgstr "エディター"
+
+msgid "Viewer"
+msgstr "ビューアー"
+
+msgid "Split View"
+msgstr "分割ビュー"
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"

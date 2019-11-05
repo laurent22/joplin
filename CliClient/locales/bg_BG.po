@@ -686,6 +686,9 @@ msgstr "Изглед(&V)"
 msgid "Toggle sidebar"
 msgstr "Страничен панел"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Списък бележки"
@@ -1496,6 +1499,25 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Редактиране"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Изглед(&V)"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

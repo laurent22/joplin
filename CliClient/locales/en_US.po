@@ -614,6 +614,9 @@ msgstr ""
 msgid "Toggle sidebar"
 msgstr ""
 
+msgid "Layout button sequence"
+msgstr ""
+
 msgid "Toggle note list"
 msgstr ""
 
@@ -1379,6 +1382,23 @@ msgid "Solarised Dark"
 msgstr "Solarized Dark"
 
 msgid "Nord"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "Viewer"
+msgstr ""
+
+msgid "Split View"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

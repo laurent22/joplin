@@ -671,6 +671,9 @@ msgstr "&عرض"
 msgid "Toggle sidebar"
 msgstr "تبديل الشريط الجانبي"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "قائمة ملاحظات"
@@ -1463,6 +1466,25 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "تحرير"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&عرض"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

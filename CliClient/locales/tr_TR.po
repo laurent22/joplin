@@ -661,6 +661,9 @@ msgstr "İncele"
 msgid "Toggle sidebar"
 msgstr "Kenar çubuğunu aç / kapat"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Not listesi"
@@ -1467,6 +1470,25 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Düzenle"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "İncele"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

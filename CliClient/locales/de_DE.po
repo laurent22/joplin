@@ -492,17 +492,17 @@ msgstr "Lade Anhänge herunter..."
 msgid "Cancelling... Please wait."
 msgstr "Abbrechen... Bitte warten."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> kann „add“, „remove“ oder „list“ sein um [tag] zu [note] "
-"hinzuzufügen oder zu entfernen, oder um die Notizen aufzulisten die [tag] "
-"zugeordnet sind. Der Befehl `tag list` kann benutzt werden, um alle "
-"Schlagwörter anzuzeigen (nutze -l für die lange Option)."
+"<tag-command> kann „add“, „remove“, „list“, oder „notetags“ sein um [tag] zu "
+"[note] hinzuzufügen oder zu entfernen, um die Notizen aufzulisten die [tag] "
+"zugeordnet sind, oder um die Schlagwörter aufzulisten, die [note] zugeordnet "
+"sind. Der Befehl `tag list` kann benutzt werden, um alle Schlagwörter "
+"anzuzeigen (nutze -l für die lange Option)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -700,6 +700,9 @@ msgstr "&Ansicht"
 
 msgid "Toggle sidebar"
 msgstr "Seitenleiste ein-/ausschalten"
+
+msgid "Layout button sequence"
+msgstr "Layout Reihenfolge"
 
 msgid "Toggle note list"
 msgstr "Notizen-Liste ein-/ausschalten"
@@ -1208,9 +1211,8 @@ msgstr "Schlagwort \"%s\" von allen Notizen entfernen?"
 msgid "Remove this search from the sidebar?"
 msgstr "Diese Suche von der Seitenleiste entfernen?"
 
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Neues Notizbuch"
+msgstr "Neues Unternotizbuch"
 
 msgid "Rename"
 msgstr "Umbenennen"
@@ -1517,7 +1519,24 @@ msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Viewer"
+msgstr "Vorschau"
+
+msgid "Split View"
+msgstr "Geteilte Ansicht"
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Zeige unvollständige To-Dos an oberster Stelle"

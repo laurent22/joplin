@@ -710,6 +710,9 @@ msgstr "&Εμφάνιση"
 msgid "Toggle sidebar"
 msgstr "Εναλλαγή πλευρικής μπάρας"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
@@ -1531,6 +1534,25 @@ msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Επεξεργασία"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Εμφάνιση"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

@@ -691,6 +691,9 @@ msgstr "&Приказ"
 msgid "Toggle sidebar"
 msgstr "Бочна трака"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Листа белешки"
@@ -1497,6 +1500,25 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Уреди"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Приказ"
+
+msgid "Split View"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
