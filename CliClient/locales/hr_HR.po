@@ -682,6 +682,9 @@ msgstr ""
 msgid "Toggle sidebar"
 msgstr ""
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Bilješka je promijenjena:"
@@ -1469,6 +1472,24 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Uredi"
+
+msgid "Viewer"
+msgstr ""
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 #, fuzzy

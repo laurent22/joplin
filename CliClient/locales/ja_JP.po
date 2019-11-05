@@ -672,6 +672,9 @@ msgstr "&表示"
 msgid "Toggle sidebar"
 msgstr "サイドバーの表示切り替え"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "ノートの一覧"
@@ -1473,6 +1476,25 @@ msgid "Solarised Dark"
 msgstr "Solarised (暗)"
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "編集"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&表示"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

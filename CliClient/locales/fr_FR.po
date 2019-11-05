@@ -686,6 +686,9 @@ msgstr "&Affichage"
 msgid "Toggle sidebar"
 msgstr "Basculer barre latérale"
 
+msgid "Layout button sequence"
+msgstr ""
+
 msgid "Toggle note list"
 msgstr "Basculer liste de notes"
 
@@ -1499,6 +1502,25 @@ msgstr "Solarisé sombre"
 
 msgid "Nord"
 msgstr "Nord"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Édition"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Affichage"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"

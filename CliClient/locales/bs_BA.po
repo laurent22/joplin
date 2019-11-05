@@ -685,6 +685,9 @@ msgstr "Pregled"
 msgid "Toggle sidebar"
 msgstr "Pomoćni meni"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Aktiviraj historiju bilješki"
@@ -1489,6 +1492,25 @@ msgid "Solarised Dark"
 msgstr "Solarized tamna"
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Uredi"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Pregled"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

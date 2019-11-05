@@ -677,6 +677,9 @@ msgstr "&Vis"
 msgid "Toggle sidebar"
 msgstr "Slå sidebar til eller fra"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Start kryptering"
@@ -1475,6 +1478,25 @@ msgid "Solarised Dark"
 msgstr "Solarised Mørk"
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Ret"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Vis"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"

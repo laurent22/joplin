@@ -16,8 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -686,6 +684,9 @@ msgstr "&Visualizar"
 
 msgid "Toggle sidebar"
 msgstr "Alternar barra lateral"
+
+msgid "Layout button sequence"
+msgstr ""
 
 msgid "Toggle note list"
 msgstr "Alternar lista de notas"
@@ -1489,6 +1490,25 @@ msgstr "Solarizado Dark"
 
 msgid "Nord"
 msgstr "Nord"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Editar"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Visualizar"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Mostrar tarefas incompletas no topo"

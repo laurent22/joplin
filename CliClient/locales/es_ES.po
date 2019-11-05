@@ -693,6 +693,9 @@ msgstr "&Ver"
 msgid "Toggle sidebar"
 msgstr "Cambia la barra lateral"
 
+msgid "Layout button sequence"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Lista de notas"
@@ -1503,6 +1506,25 @@ msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
 msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Editor"
+msgstr "Editar"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Ver"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
