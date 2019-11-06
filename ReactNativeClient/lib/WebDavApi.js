@@ -350,6 +350,7 @@ class WebDavApi {
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
 		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
