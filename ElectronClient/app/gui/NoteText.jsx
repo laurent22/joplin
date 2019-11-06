@@ -50,6 +50,8 @@ require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
 require('brace/theme/chaos');
+require('brace/keybinding/vim');
+require('brace/keybinding/emacs');
 
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 
@@ -1830,6 +1832,10 @@ class NoteTextComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
+		var keyboardMode = this.props.keyboardMode;
+		if (keyboardMode === 'default' || !keyboardMode) {
+			keyboardMode = null;
+		}
 
 		const borderWidth = 1;
 
@@ -2044,6 +2050,16 @@ class NoteTextComponent extends React.Component {
 		delete editorRootStyle.width;
 		delete editorRootStyle.height;
 		delete editorRootStyle.fontSize;
+		const onBeforeLoad = (ace) => {
+			const save = () => {
+				this.saveIfNeeded();
+			};
+			const VimApi = ace.acequire('ace/keyboard/vim');
+			if (VimApi.CodeMirror && VimApi.CodeMirror.Vim) {
+				VimApi.CodeMirror.Vim.defineEx('write', 'w', save);
+			}
+		};
+		const onLoad = () => {};
 		const editor = (
 			<AceEditor
 				value={body}
@@ -2075,6 +2091,9 @@ class NoteTextComponent extends React.Component {
 				editorProps={{ $blockScrolling: Infinity }}
 				// This is buggy (gets outside the container)
 				highlightActiveLine={false}
+				keyboardHandler={keyboardMode}
+				onBeforeLoad={onBeforeLoad}
+				onLoad={onLoad}
 			/>
 		);
 
