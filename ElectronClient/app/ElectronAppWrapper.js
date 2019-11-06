@@ -81,9 +81,6 @@ class ElectronAppWrapper {
 			slashes: true,
 		}));
 
-		// Uncomment this to view errors if the application does not start
-		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
-
 		this.win_.on('close', (event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
