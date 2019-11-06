@@ -64,7 +64,7 @@
     "request": "^2.88.0",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
-    "sharp": "^0.22.1",
+    "sharp": "^0.23.2",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^4.0.7",
     "string-padding": "^1.0.2",
