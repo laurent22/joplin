@@ -50,6 +50,11 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			hrefAttr = href;
 		}
 
+		// A single quote is valid in a URL but we don't want any because the
+		// href is already enclosed in single quotes.
+		// https://github.com/laurent22/joplin/issues/2030
+		href = href.replace(/'/g, '%27');
+
 		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 		return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}' type='${htmlentities(mime)}'>${icon}`;
