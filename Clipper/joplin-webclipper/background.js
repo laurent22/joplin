@@ -57,6 +57,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		const imageDataUrl = await browserCaptureVisibleTabs(null);
 		const content = Object.assign({}, command.content);
 		content.image_data_url = imageDataUrl;
+		if ('url' in content) content.source_url = content.url;
 
 		const newArea = Object.assign({}, command.content.crop_rect);
 		newArea.x *= zoom;
