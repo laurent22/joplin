@@ -482,7 +482,14 @@ class Api {
 				});
 
 				const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
-				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
+				let minifiedHtml = '';
+				try {
+					minifiedHtml = minify(requestNote.body_html, minifyOptions);
+				} catch (error) {
+					console.warn('Could not minify HTML - using non-minified HTML instead', error);
+					minifiedHtml = requestNote.body_html;
+				}
+				output.body = styleTag + minifiedHtml;
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
 				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
 			} else {

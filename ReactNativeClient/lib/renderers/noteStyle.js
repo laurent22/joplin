@@ -254,7 +254,7 @@ module.exports = function(style, options) {
 				border: 1px solid #CBCBCB;
 			}
 
-			#content {
+			#joplin-container-content {
 				/* The height of the content is set dynamically by JavaScript (in updateBodyHeight) to go
 				   around various issues related to scrolling. However when printing we don't want this
 				   fixed size as that would crop the content. So we set it to auto here. "important" is
