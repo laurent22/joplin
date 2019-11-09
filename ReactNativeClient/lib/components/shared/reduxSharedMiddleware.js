@@ -20,7 +20,6 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		ResourceFetcher.instance().autoAddResources();
 	}
 
-	console.info(`reduxSharedMiddleware ${action.type}`);
 	if (action.type == 'NOTE_DELETE' ||
 		action.type == 'NOTE_UPDATE_ONE' ||
 		action.type == 'NOTE_UPDATE_ALL' ||

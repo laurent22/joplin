@@ -435,9 +435,8 @@ class SideBarComponent extends React.Component {
 		return this.anchorItemRefs[type][id];
 	}
 
-	noteCountElement(baseStyle, count) {
-		let style = Object.assign({}, this.style().noteCount);
-		return <div style={style}>({count})</div>;
+	noteCountElement(count) {
+		return <div style={this.style().noteCount}>({count})</div>;
 	}
 
 	folderItem(folder, selected, hasChildren, depth) {
@@ -466,7 +465,7 @@ class SideBarComponent extends React.Component {
 		);
 
 		const anchorRef = this.anchorItemRef('folder', folder.id);
-		const noteCount = folder.note_count ? this.noteCountElement(style, folder.note_count) : '';
+		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
 
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
@@ -496,7 +495,7 @@ class SideBarComponent extends React.Component {
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 
 		const anchorRef = this.anchorItemRef('tag', tag.id);
-		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(style, tag.note_count) : '';
+		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(tag.note_count) : '';
 
 		return (
 			<a
