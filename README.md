@@ -345,7 +345,7 @@ Current translations:
 ![](https://joplinapp.org/images/flags/country-4x3/us.png)  |  English (US)  |  [en_US](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_US.po)  |    |  100%
 ![](https://joplinapp.org/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Andros Fenollosa (andros@fenollosa.email)  |  94%
 ![](https://joplinapp.org/images/flags/country-4x3/.png)  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eo.po)  |  Marton Paulo (martonpss@gmail.com)  |  50%
-![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  98%
+![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
 ![](https://joplinapp.org/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  56%
 ![](https://joplinapp.org/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  94%
 ![](https://joplinapp.org/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  44%

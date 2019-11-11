@@ -687,13 +687,13 @@ msgid "Toggle sidebar"
 msgstr "Basculer barre latérale"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Ordre des actions du bouton de disposition"
 
 msgid "Toggle note list"
 msgstr "Basculer liste de notes"
 
 msgid "Toggle editor layout"
-msgstr "Basculer l'agencement de l'éditeur"
+msgstr "Basculer la disposition de l'éditeur"
 
 msgid "Focus"
 msgstr "Naviguer"
@@ -1413,17 +1413,16 @@ msgstr ""
 "pour plus de détails : %s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Mode de clavier"
 
-#, fuzzy
 msgid "Default"
-msgstr "Défaut : %s"
+msgstr "Défaut"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
@@ -1512,28 +1511,25 @@ msgstr "Solarisé sombre"
 msgid "Nord"
 msgstr "Nord"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "Afficher l'icône dans la zone de notifications"
+msgstr "Afficher le compte des notes"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Édition"
+msgstr "Éditeur"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "&Affichage"
+msgstr "Visionneuse"
 
 msgid "Split View"
-msgstr ""
+msgstr "Vue fractionnée"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
