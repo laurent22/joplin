@@ -440,11 +440,15 @@ class BaseApplication {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
 
-		if (action.type === 'NOTE_UPDATE_ONE') {
+		if (action.type === 'NOTE_UPDATE_ONE' || action.type === 'NOTE_DELETE') {
 			refreshFolders = true;
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshFolders = 'now';
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showNoteCounts') || action.type == 'SETTING_UPDATE_ALL')) {
 			refreshFolders = 'now';
 		}
 

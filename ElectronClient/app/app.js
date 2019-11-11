@@ -940,6 +940,14 @@ class Application extends BaseApplication {
 					screens: ['Main'],
 					submenu: sortFolderItems,
 				}, {
+					label: Setting.settingMetadata('showNoteCounts').label(),
+					type: 'checkbox',
+					checked: Setting.value('showNoteCounts'),
+					screens: ['Main'],
+					click: () => {
+						Setting.setValue('showNoteCounts', !Setting.value('showNoteCounts'));
+					},
+				}, {
 					label: Setting.settingMetadata('uncompletedTodosOnTop').label(),
 					type: 'checkbox',
 					checked: Setting.value('uncompletedTodosOnTop'),

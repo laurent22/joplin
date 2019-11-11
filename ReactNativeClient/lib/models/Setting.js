@@ -247,6 +247,7 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
+			showNoteCounts: { value: false, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
