@@ -119,6 +119,10 @@ Gets note with ID :id
 
 Gets all the tags attached to this note.
 
+## GET /notes/:id/resources
+
+Gets all the resources attached to this note.
+
 ## POST /notes
 
 Creates a new note
