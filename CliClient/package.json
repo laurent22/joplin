@@ -20,7 +20,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "1.0.149",
+  "version": "1.0.150",
   "bin": {
     "joplin": "./main.js"
   },
