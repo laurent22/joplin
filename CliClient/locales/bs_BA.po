@@ -1358,10 +1358,6 @@ msgstr "Na čekanju"
 msgid "In progress"
 msgstr "U toku"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Sinhronizovanje je u toku. Status: %s"
-
 msgid "Encrypted"
 msgstr "Šifrirano"
 
@@ -1407,6 +1403,19 @@ msgstr ""
 "Pažnja: ako promijenite ovu lokaciju, vodite računa o tome da prije "
 "sinhronizacije kopirate sav sadržaj jer će, u protivnom, sve datoteke biti "
 "uklonjene! Za više detalja vidjeti često postavljana pitanja (FAQ):"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Prekonfigurisano: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Odredište za sinhronizaciju"
@@ -1493,6 +1502,10 @@ msgstr "Solarized tamna"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Prikaži sličicu na sistemskoj traci (tray)"
 
 #, fuzzy
 msgid "Editor"
@@ -2177,6 +2190,9 @@ msgstr "Prijavite se preko OneDrivea"
 
 msgid "Search"
 msgstr "Traži"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinhronizovanje je u toku. Status: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

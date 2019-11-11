@@ -1337,10 +1337,6 @@ msgstr "خامل"
 msgid "In progress"
 msgstr "قيد التقدم"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"
-
 msgid "Encrypted"
 msgstr "مشفّر"
 
@@ -1385,6 +1381,19 @@ msgid ""
 msgstr ""
 "تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء "
 "بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "التلقائية: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "وجهة المزامنة"
@@ -1467,6 +1476,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "إظهار أيقونة لوحة النظام"
 
 #, fuzzy
 msgid "Editor"
@@ -2149,6 +2162,9 @@ msgstr "تسجيل الدخول عبر OneDrive"
 
 msgid "Search"
 msgstr "بحث"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

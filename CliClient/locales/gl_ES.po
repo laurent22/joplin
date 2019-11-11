@@ -1352,10 +1352,6 @@ msgstr "Inactivo"
 msgid "In progress"
 msgstr "En proceso"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "A sincronización xa está en proceso. Estado: %s"
-
 msgid "Encrypted"
 msgstr "Cifrado"
 
@@ -1401,6 +1397,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Predeterminado: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1484,6 +1493,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Mostrar a icona na bandexa"
 
 #, fuzzy
 msgid "Editor"
@@ -2167,6 +2180,9 @@ msgstr "Acceder con OneDrive"
 
 msgid "Search"
 msgstr "Buscar"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "A sincronización xa está en proceso. Estado: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

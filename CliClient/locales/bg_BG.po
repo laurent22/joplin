@@ -1366,10 +1366,6 @@ msgstr "В момента не прави нищо"
 msgid "In progress"
 msgstr "В момента върви"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Синхронизация вече се извършва. Статус: %s"
-
 msgid "Encrypted"
 msgstr "Криптирана"
 
@@ -1415,6 +1411,19 @@ msgstr ""
 "Внимание: Ако смените това местоположение, трябва да копирате цялото "
 "съдържание там преди да синхронизирате, иначе всички файлове ще бъдат "
 "премахнати! Вижчте ЧЗВ за повече подробности: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Стойност по подразбиране: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Цел за синхронизация"
@@ -1500,6 +1509,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Покажи иконка до часовника"
 
 #, fuzzy
 msgid "Editor"
@@ -2196,6 +2209,9 @@ msgstr "Вписване в OneDrive"
 
 msgid "Search"
 msgstr "Търсене"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Синхронизация вече се извършва. Статус: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

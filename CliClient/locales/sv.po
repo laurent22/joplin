@@ -1370,10 +1370,6 @@ msgstr "Inaktiv"
 msgid "In progress"
 msgstr "Pågår"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synkronisering pågår redan. Tillstånd: %s"
-
 msgid "Encrypted"
 msgstr "Krypterad"
 
@@ -1420,6 +1416,19 @@ msgstr ""
 "OBS! Om du ändrar denna plats så se till att du har en kopia på allt "
 "innehåll innan du synkroniserar. Annars kommer samtliga filer att raderas. "
 "Läs FAQ för mer information: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Standard: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Synkroniseringsmål"
@@ -1502,6 +1511,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Visa fältikon"
 
 #, fuzzy
 msgid "Editor"
@@ -2199,6 +2212,9 @@ msgstr "Logga in med OneDrive"
 
 msgid "Search"
 msgstr "Sök"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Synkronisering pågår redan. Tillstånd: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

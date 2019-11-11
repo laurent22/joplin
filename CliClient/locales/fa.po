@@ -1257,10 +1257,6 @@ msgstr "بیکار"
 msgid "In progress"
 msgstr "درحال انجام"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "سینک کردن در حال انجام است. وضعیت: %s"
-
 msgid "Encrypted"
 msgstr "رمزنگاری شده"
 
@@ -1303,6 +1299,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "پیشفرض: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 #, fuzzy
@@ -1384,6 +1393,9 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+msgid "Show note counts"
 msgstr ""
 
 #, fuzzy
@@ -2039,6 +2051,9 @@ msgstr "ورود با OneDrive"
 
 msgid "Search"
 msgstr "جستجو"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "سینک کردن در حال انجام است. وضعیت: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

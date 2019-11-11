@@ -1375,10 +1375,6 @@ msgstr "Ociós"
 msgid "In progress"
 msgstr "En progés"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "La sincronització ja és en procés. Estat: %s"
-
 msgid "Encrypted"
 msgstr "Xifrat"
 
@@ -1420,6 +1416,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Per defecte: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1503,6 +1512,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Mostra la icona a la safata"
 
 #, fuzzy
 msgid "Editor"
@@ -2195,6 +2208,9 @@ msgstr "Inicia sessió amb OneDrive"
 
 msgid "Search"
 msgstr "Cerca"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La sincronització ja és en procés. Estat: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

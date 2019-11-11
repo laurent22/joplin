@@ -1267,10 +1267,6 @@ msgstr ""
 msgid "In progress"
 msgstr "În progres"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
-
 msgid "Encrypted"
 msgstr "Criptat"
 
@@ -1312,6 +1308,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Modul implicit: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1393,6 +1402,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Afișați iconița coșul de gunoi"
 
 #, fuzzy
 msgid "Editor"

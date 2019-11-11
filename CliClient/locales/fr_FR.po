@@ -1366,10 +1366,6 @@ msgstr "Arrêté"
 msgid "In progress"
 msgstr "En cours"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "La synchronisation est déjà en cours. État : %s"
-
 msgid "Encrypted"
 msgstr "Chiffré"
 
@@ -1415,6 +1411,19 @@ msgstr ""
 "Attention : si vous changez cet emplacement, copiez-y tout le contenu avant "
 "de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ "
 "pour plus de détails : %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Défaut : %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
@@ -1502,6 +1511,10 @@ msgstr "Solarisé sombre"
 
 msgid "Nord"
 msgstr "Nord"
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Afficher l'icône dans la zone de notifications"
 
 #, fuzzy
 msgid "Editor"
@@ -2183,6 +2196,9 @@ msgstr "Se connecter à OneDrive"
 
 msgid "Search"
 msgstr "Chercher"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La synchronisation est déjà en cours. État : %s"
 
 #~ msgid "Confirm master password:"
 #~ msgstr "Confirmer le mot de passe maître :"

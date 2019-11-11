@@ -1353,10 +1353,6 @@ msgstr "Nečinný"
 msgid "In progress"
 msgstr "Probíhá"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synchronizace již probíhá. Stav: %s"
-
 msgid "Encrypted"
 msgstr "Zašifrováno"
 
@@ -1402,6 +1398,19 @@ msgstr ""
 "Upozornění: Pokud toto umístění změníte, před synchronizací se ujistěte, že "
 "jste do něj zkopírovali veškerý obsah, jinak budou všechny soubory "
 "odstraněny! Další podrobnosti naleznete v FAQ: % s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Default: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Cíl synchronizace"
@@ -1487,6 +1496,10 @@ msgstr "Solarised Dark"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Zobrazovat ikonu v panelu"
 
 #, fuzzy
 msgid "Editor"
@@ -2165,6 +2178,9 @@ msgstr "Přihlásit se pomocí OneDrive"
 
 msgid "Search"
 msgstr "Hledání"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Synchronizace již probíhá. Stav: %s"
 
 #~ msgid "Confirm master password:"
 #~ msgstr "Potvrďte master heslo:"

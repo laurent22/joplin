@@ -1365,10 +1365,6 @@ msgstr "Неактивно"
 msgid "In progress"
 msgstr "У току"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Синхронизација је већ у току. Стање: %s"
-
 msgid "Encrypted"
 msgstr "Шифровано"
 
@@ -1415,6 +1411,19 @@ msgstr ""
 "садржај у њу пре синхронизације, иначе ће сви фајлови бити обрисани! \n"
 "\n"
 "Видите одељак \"Често постављана питања за више детаља: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Подразумевано: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Одредиште синхронизације"
@@ -1501,6 +1510,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Прикажи иконицу апликације на траци"
 
 #, fuzzy
 msgid "Editor"
@@ -2191,6 +2204,9 @@ msgstr "Пријави се са УванДрајвом"
 
 msgid "Search"
 msgstr "Претрага"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Синхронизација је већ у току. Стање: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

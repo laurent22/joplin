@@ -1366,10 +1366,6 @@ msgstr ""
 msgid "In progress"
 msgstr ""
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Sinkronizazioa hasita dago. Egoera: %s"
-
 msgid "Encrypted"
 msgstr "Zifratuta"
 
@@ -1416,6 +1412,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Lehenetsia: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1502,6 +1511,9 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+msgid "Show note counts"
 msgstr ""
 
 #, fuzzy
@@ -2187,6 +2199,9 @@ msgstr "Login with OneDrive"
 
 msgid "Search"
 msgstr "Bilatu"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinkronizazioa hasita dago. Egoera: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

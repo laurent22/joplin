@@ -1383,10 +1383,6 @@ msgstr "Wartend"
 msgid "In progress"
 msgstr "In Bearbeitung"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synchronisation ist bereits im Gange. Status: %s"
-
 msgid "Encrypted"
 msgstr "Verschlüsselt"
 
@@ -1433,6 +1429,18 @@ msgstr ""
 "Achtung: Stelle sicher, dass Du vor der Synchronisation alle Inhalte an den "
 "neuen Ablageort kopiert hast, sonst werden alle Dateien gelöscht! Lies auch "
 "die FAQs hierzu: %s"
+
+msgid "Keyboard Mode"
+msgstr "Tastatur Modus"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Emacs"
+msgstr "Emacs"
+
+msgid "Vim"
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Synchronisationsziel"
@@ -1520,6 +1528,9 @@ msgstr "Solarised Dark"
 
 msgid "Nord"
 msgstr "Nord"
+
+msgid "Show note counts"
+msgstr "Zeige Notizenanzahl"
 
 msgid "Editor"
 msgstr "Editor"
@@ -2205,6 +2216,9 @@ msgstr "Mit OneDrive anmelden"
 
 msgid "Search"
 msgstr "Suchen"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Synchronisation ist bereits im Gange. Status: %s"
 
 #~ msgid "Confirm master password:"
 #~ msgstr "Master-Passwort bestätigen:"

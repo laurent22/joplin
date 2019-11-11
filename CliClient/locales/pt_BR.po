@@ -1355,10 +1355,6 @@ msgstr "Inativo"
 msgid "In progress"
 msgstr "Em andamento"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Sincronização já em andamento. Estado: %s"
-
 msgid "Encrypted"
 msgstr "Encriptado"
 
@@ -1405,6 +1401,19 @@ msgstr ""
 "Atenção: Se você modificar esse local, tenha certeza de copiar todo o seu "
 "conteúdo para lá antes de sincronizar, do contrário todos os seus arquivos "
 "serão removidos! Veja o FAQ para mais detalhes: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Padrão: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Alvo de sincronização"
@@ -1490,6 +1499,10 @@ msgstr "Solarizado Dark"
 
 msgid "Nord"
 msgstr "Nord"
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Exibir tray icon"
 
 #, fuzzy
 msgid "Editor"
@@ -2171,6 +2184,9 @@ msgstr "Login com OneDrive"
 
 msgid "Search"
 msgstr "Procurar"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sincronização já em andamento. Estado: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

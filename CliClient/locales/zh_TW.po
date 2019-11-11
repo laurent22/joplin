@@ -1312,10 +1312,6 @@ msgstr "閒置"
 msgid "In progress"
 msgstr "進行中"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "同步已在進行中。狀態: %s"
-
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -1357,6 +1353,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "預設: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1440,6 +1449,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "顯示系統匣圖示"
 
 #, fuzzy
 msgid "Editor"
@@ -2120,6 +2133,9 @@ msgstr "以 OneDrive 登錄"
 
 msgid "Search"
 msgstr "搜尋"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "同步已在進行中。狀態: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

@@ -1305,10 +1305,6 @@ msgstr "空闲"
 msgid "In progress"
 msgstr "正在进行"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "已经在同步。状态：%s"
-
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -1353,6 +1349,19 @@ msgid ""
 msgstr ""
 "注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
 "有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "默认值: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "同步目标"
@@ -1436,6 +1445,10 @@ msgstr "Solarised Dark风格"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "显示托盘图标"
 
 #, fuzzy
 msgid "Editor"
@@ -2101,6 +2114,9 @@ msgstr "通过 OneDrive 登录"
 
 msgid "Search"
 msgstr "搜索"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "已经在同步。状态：%s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

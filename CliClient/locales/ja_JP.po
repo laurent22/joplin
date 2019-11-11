@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -1340,10 +1338,6 @@ msgstr "待機中"
 msgid "In progress"
 msgstr "実行中"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "同期作業はすでに実行中です。状態: %s"
-
 msgid "Encrypted"
 msgstr "暗号化済"
 
@@ -1391,6 +1385,19 @@ msgstr ""
 "注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
 "ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "既定値: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "同期先"
@@ -1476,6 +1483,10 @@ msgstr "Solarised (暗)"
 
 msgid "Nord"
 msgstr "Nord"
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "トレイアイコンの表示"
 
 msgid "Editor"
 msgstr "エディター"
@@ -2145,6 +2156,9 @@ msgstr "OneDriveログイン"
 
 msgid "Search"
 msgstr "検索"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "同期作業はすでに実行中です。状態: %s"
 
 #~ msgid "Confirm master password:"
 #~ msgstr "マスターパスワード(確認用):"

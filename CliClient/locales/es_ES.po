@@ -1370,10 +1370,6 @@ msgstr "Espera"
 msgid "In progress"
 msgstr "En progreso"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "La sincronización ya está en progreso. Estado: %s"
-
 msgid "Encrypted"
 msgstr "Cifrado"
 
@@ -1420,6 +1416,19 @@ msgstr ""
 "Atención: Si cambias esta ubicación, asegúrate de copiar todo tu contenido "
 "antes de sincronizarlo, de lo contrario todos los archivos serán eliminados. "
 "Consulte las preguntas frecuentes para obtener más detalles: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Por  defecto: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Destino de sincronización"
@@ -1507,6 +1516,10 @@ msgstr "Solarised Dark"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Mostrar icono en la bandeja"
 
 #, fuzzy
 msgid "Editor"
@@ -2191,6 +2204,9 @@ msgstr "Acceder con OneDrive"
 
 msgid "Search"
 msgstr "Buscar"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La sincronización ya está en progreso. Estado: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

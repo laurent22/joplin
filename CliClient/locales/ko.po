@@ -1336,10 +1336,6 @@ msgstr "대기"
 msgid "In progress"
 msgstr "진행 중"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
-
 msgid "Encrypted"
 msgstr "암호화됨"
 
@@ -1384,6 +1380,19 @@ msgid ""
 msgstr ""
 "주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
 "세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "기본값:  %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "동기화 대상"
@@ -1469,6 +1478,10 @@ msgstr "Solarized Dark"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "트레이 아이콘 표시"
 
 #, fuzzy
 msgid "Editor"
@@ -2142,6 +2155,9 @@ msgstr "OneDrive 로그인"
 
 msgid "Search"
 msgstr "검색"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
 
 #~ msgid "Confirm master password:"
 #~ msgstr "마스터 키를 넣어주세요:"

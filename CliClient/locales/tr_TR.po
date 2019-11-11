@@ -1340,10 +1340,6 @@ msgstr "Boşta"
 msgid "In progress"
 msgstr "Devam etmekte"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
-
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
 
@@ -1389,6 +1385,19 @@ msgstr ""
 "Dikkat: Bu konumu değiştirirseniz, senkronize etmeden önce tüm içeriğinizi "
 "kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
 "fazla bilgi için SSS bölümüne bakın: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Varsayılan: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Senkronizasyon hedefi"
@@ -1471,6 +1480,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Tepsi simgesini göster"
 
 #, fuzzy
 msgid "Editor"
@@ -2161,6 +2174,9 @@ msgstr "OneDrive ile giriş yapın"
 
 msgid "Search"
 msgstr "Arama"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

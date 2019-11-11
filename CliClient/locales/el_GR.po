@@ -1397,10 +1397,6 @@ msgstr "Αδρανής"
 msgid "In progress"
 msgstr "Σε εξέλιξη"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Ο συγχρονισμός είναι ήδη σε εξέλιξη. Κατάσταση: %s"
-
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
@@ -1448,6 +1444,19 @@ msgstr ""
 "Προσοχή: Αν αλλάξετε αυτή τη θέση, βεβαιωθείτε ότι αντιγράφετε όλο το "
 "περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα "
 "αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Προεπιλογή: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Στόχος συγχρονισμού"
@@ -1535,6 +1544,10 @@ msgstr "Solarised Dark"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Εμφάνιση εικονιδίου στη γραμμή εργασιών"
 
 #, fuzzy
 msgid "Editor"
@@ -2226,6 +2239,9 @@ msgstr "Είσοδος με Onedrive"
 
 msgid "Search"
 msgstr "Εύρεση"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Ο συγχρονισμός είναι ήδη σε εξέλιξη. Κατάσταση: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

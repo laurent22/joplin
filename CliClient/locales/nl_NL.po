@@ -1370,10 +1370,6 @@ msgstr "Inactief"
 msgid "In progress"
 msgstr "Bezig"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "De synchronisatie loopt al. Status: %s"
-
 msgid "Encrypted"
 msgstr "Versleuteld"
 
@@ -1419,6 +1415,19 @@ msgstr ""
 "Let op: Als je deze locatie wijzigt, zorg dan dat je eerst alle inhoud hier "
 "naartoe kopieert voor synchronisatie. Anders worden alle bestanden "
 "verwijderd! Zie de FAQ voor meer details: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Standaard: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Synchronisatiedoel"
@@ -1506,6 +1515,10 @@ msgstr "Solarised Dark"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Systeemvakpictogram tonen"
 
 #, fuzzy
 msgid "Editor"
@@ -2189,6 +2202,9 @@ msgstr "Inloggen met OneDrive"
 
 msgid "Search"
 msgstr "Zoeken"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "De synchronisatie loopt al. Status: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

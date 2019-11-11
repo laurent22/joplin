@@ -1363,10 +1363,6 @@ msgstr "Простой"
 msgid "In progress"
 msgstr "Выполнение"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Синхронизация уже выполняется. Состояние: %s"
-
 msgid "Encrypted"
 msgstr "Зашифровано"
 
@@ -1413,6 +1409,19 @@ msgstr ""
 "Внимание: если вы измените это местоположение, обязательно скопируйте все "
 "содержимое перед синхронизацией, в противном случае все файлы будут удалены! "
 "Смотрите FAQ для получения подробной информации: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "По умолчанию: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Цель синхронизации"
@@ -1498,6 +1507,10 @@ msgstr "Ярко-тёмная"
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Показывать иконку в трее"
 
 #, fuzzy
 msgid "Editor"
@@ -2185,6 +2198,9 @@ msgstr "Войти с OneDrive"
 
 msgid "Search"
 msgstr "Поиск"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Синхронизация уже выполняется. Состояние: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"

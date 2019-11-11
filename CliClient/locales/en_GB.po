@@ -1235,10 +1235,6 @@ msgstr ""
 msgid "In progress"
 msgstr ""
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
-
 msgid "Encrypted"
 msgstr ""
 
@@ -1280,6 +1276,18 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1360,6 +1368,9 @@ msgid "Solarised Dark"
 msgstr ""
 
 msgid "Nord"
+msgstr ""
+
+msgid "Show note counts"
 msgstr ""
 
 msgid "Editor"

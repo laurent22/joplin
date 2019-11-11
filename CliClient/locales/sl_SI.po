@@ -1365,10 +1365,6 @@ msgstr "V mirovanju"
 msgid "In progress"
 msgstr "V postopku"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Sinhronizacija je že v postopku. Stanje: %s"
-
 msgid "Encrypted"
 msgstr "Enkriptirano"
 
@@ -1414,6 +1410,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Privzeto: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1497,6 +1506,10 @@ msgstr ""
 
 msgid "Nord"
 msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Pokaži ikono v območju za obvestila(opravilna vrstica)"
 
 #, fuzzy
 msgid "Editor"
@@ -2180,6 +2193,9 @@ msgstr "Prijavi se z OneDrive"
 
 msgid "Search"
 msgstr "Išči"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinhronizacija je že v postopku. Stanje: %s"
 
 #, fuzzy
 #~ msgid "Confirm master password:"
