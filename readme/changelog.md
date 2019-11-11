@@ -1,6 +1,6 @@
 # Joplin changelog
 
-## [v1.0.171](https://github.com/laurent22/joplin/releases/tag/v1.0.171) - 2019-11-11T07:52:48Z
+## [v1.0.173](https://github.com/laurent22/joplin/releases/tag/v1.0.173) - 2019-11-11T08:33:35Z
 
 - New: Add new setting to show note counts for folders and tags ([#2006](https://github.com/laurent22/joplin/issues/2006))
 - New: Add keyboard modes to editor (vim, emacs) ([#2056](https://github.com/laurent22/joplin/issues/2056)) ([#1298](https://github.com/laurent22/joplin/issues/1298))
