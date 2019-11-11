@@ -1498,7 +1498,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 39;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
@@ -1527,6 +1527,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Joplin\"",
 				);
+				MARKETING_VERSION = 10.0.39;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1548,7 +1549,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1570,6 +1571,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Joplin\"",
 				);
+				MARKETING_VERSION = 10.0.39;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
