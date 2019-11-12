@@ -175,6 +175,7 @@ class BaseApplication {
 				// If port number passed also ignore it
 				const argsToIgnore = (nextArg && /^\d+$/.test(nextArg)) ? 2 : 1;
 				argv.splice(0, argsToIgnore);
+				continue;
 			}
 
 			if (arg.length && arg[0] == '-') {
