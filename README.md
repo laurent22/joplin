@@ -334,7 +334,7 @@ Current translations:
 ---|---|---|---|---
 ![](https://joplinapp.org/images/flags/country-4x3/arableague.png)  |  Arabic  |  [ar](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po)  |  عبد الناصر سعيد (as@althobaity.com)  |  78%
 ![](https://joplinapp.org/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  44%
-![](https://joplinapp.org/images/flags/country-4x3/ba.png)  |  Bosnian  |  [bs_BA](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po)  |  Derviš T. (dervis.t@pm.me)  |  94%
+![](https://joplinapp.org/images/flags/country-4x3/ba.png)  |  Bosnian  |  [bs_BA](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po)  |  Derviš T. (dervis.t@pm.me)  |  97%
 ![](https://joplinapp.org/images/flags/country-4x3/bg.png)  |  Bulgarian  |  [bg_BG](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po)  |    |  86%
 ![](https://joplinapp.org/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2019  |  68%
 ![](https://joplinapp.org/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  36%
@@ -358,7 +358,7 @@ Current translations:
 ![](https://joplinapp.org/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  55%
 ![](https://joplinapp.org/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  76%
 ![](https://joplinapp.org/images/flags/country-4x3/tr.png)  |  Türkçe  |  [tr_TR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po)  |  Zorbey Doğangüneş (zorbeyd@gmail.com)  |  74%
-![](https://joplinapp.org/images/flags/country-4x3/gr.png)  |  ελληνικά  |  [el_GR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po)  |  Harris Arvanitis (xaris@tuta.io)  |  94%
+![](https://joplinapp.org/images/flags/country-4x3/gr.png)  |  Ελληνικά  |  [el_GR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po)  |  Harris Arvanitis (xaris@tuta.io)  |  99%
 ![](https://joplinapp.org/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  92%
 ![](https://joplinapp.org/images/flags/country-4x3/rs.png)  |  српски језик  |  [sr_RS](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po)  |    |  85%
 ![](https://joplinapp.org/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  92%

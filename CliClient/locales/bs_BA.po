@@ -18,11 +18,10 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Da obrišete oznaku, prvo je uklonite iz bilješki kojima je dodijeljena."
+msgstr "Da izbrišete oznaku, prvo je uklonite iz bilješki kojima je dodijeljena."
 
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Prvo odaberite bilješku ili bilježnicu koju želite obrisati"
+msgstr "Prvo odaberite bilješku ili bilježnicu koju želite izbrisati"
 
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Pritisnite Ctrl+D ili kucajte \"exit\" da zatvorite aplikaciju"
@@ -142,11 +141,11 @@ msgstr "Radnja je prekinuta"
 
 #, fuzzy
 msgid "Confirm password:"
-msgstr "Unesite glavnu lozinku:"
+msgstr "Potvrdite lozinku:"
 
 #, fuzzy
 msgid "Passwords do not match!"
-msgstr "Lozinka ne može biti prazna"
+msgstr "Lozinke se ne podudaraju!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -367,8 +366,8 @@ msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"Obrisati bilježnicu? Sve bilješke i bilježnice unutar ove bilježnice također "
-"će biti obrisane."
+"Izbrisati bilježnicu? Sve bilješke i bilježnice unutar ove bilježnice također "
+"će biti izbrisane."
 
 msgid "Deletes the notes matching <note-pattern>."
 msgstr "Briše bilješke <note-pattern>."
@@ -378,10 +377,10 @@ msgstr "Briše bilješke bez traženja potvrde."
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d bilješki odgovara upitu. Obrisati ih?"
+msgstr "%d bilješki odgovara upitu. Izbrisati ih?"
 
 msgid "Delete note?"
-msgstr "Obrisati bilješku?"
+msgstr "Izbrisati bilješku?"
 
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Traži dati <pattern> u svim bilješkama."
@@ -458,7 +457,7 @@ msgid ""
 "operation."
 msgstr ""
 "Zaključavanje datoteke već je aktivno. Ako ste sigurni da sinhronizovanje "
-"nije u toku, možete obrisati datoteku za zaključavanje u \"%s\" i nastaviti "
+"nije u toku, možete izbrisati datoteku za zaključavanje u \"%s\" i nastaviti "
 "s radom."
 
 #, javascript-format
@@ -484,10 +483,11 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> može biti \"add\", \"remove\" ili \"list\", kojima se "
-"dodjeljuju ili uklanjaju [tag] iz [note], odnosno prikazuje popis bilješki "
-"kojima je dodijeljen [tag]. Komanda `tag list` može se koristiti za "
-"prikazivanje svih oznaka (koristite -l za detaljni prikaz)."
+"<tag-command> može biti \"add\", \"remove\", \"list\" ili \"notetags\", "
+"kojima se dodjeljuje ili uklanja [tag] iz [note], odnosno prikazuje popis "
+"bilješki kojima je dodijeljen [tag] ili oznake koje su dodijeljene [note]. "
+"Komanda `tag list` može se koristiti za prikazivanje svih oznaka (koristite "
+"-l za detaljni prikaz)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -601,7 +601,7 @@ msgstr "Prenosim na \"%s\" u \"%s\" formatu. Pričekajte..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Neuspjelo prenošenje bilješki: %s"
 
 msgid "&File"
 msgstr "Datoteka"
@@ -622,7 +622,7 @@ msgid "Import"
 msgstr "Unesi"
 
 msgid "Export"
-msgstr "Prenesi"
+msgstr "Iznesi"
 
 msgid "Synchronise"
 msgstr "Sinhronizuj"
@@ -638,7 +638,7 @@ msgid "Close Window"
 msgstr "Zatvori prozor"
 
 msgid "&Edit"
-msgstr "Uredi"
+msgstr "Izmjena"
 
 msgid "Copy"
 msgstr "Kopiraj"
@@ -680,26 +680,26 @@ msgid "Search in current note"
 msgstr "Potraži u trenutnoj bilješci"
 
 msgid "&View"
-msgstr "Pregled"
+msgstr "Prikaz"
 
 msgid "Toggle sidebar"
 msgstr "Pomoćni meni"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Slijed u promjeni prikaza"
 
 #, fuzzy
 msgid "Toggle note list"
-msgstr "Aktiviraj historiju bilješki"
+msgstr "Popis bilješki"
 
 msgid "Toggle editor layout"
-msgstr "Izgled uređivača"
+msgstr "Prikaži uređivač"
 
 msgid "Focus"
 msgstr "Fokus"
 
 msgid "&Tools"
-msgstr "Alati"
+msgstr "Alatke"
 
 msgid "&Help"
 msgstr "Pomoć"
@@ -755,7 +755,7 @@ msgstr "Ne"
 
 #, fuzzy
 msgid "Full Release Notes"
-msgstr "Rekonstruisane bilješke"
+msgstr "Detaljne napomene o verziji"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token je kopiran u spremnik!"
@@ -985,10 +985,10 @@ msgid "New notebook"
 msgstr "Nova bilježnica"
 
 msgid "Layout"
-msgstr "Izgled"
+msgstr "Prikaz"
 
 msgid "Search..."
-msgstr "Pretraga..."
+msgstr "Pretraživanje..."
 
 msgid "Some items cannot be synchronised."
 msgstr "Neke stavke nije moguće sinhronizovati."
@@ -1143,7 +1143,7 @@ msgstr "bilješka"
 
 #, javascript-format
 msgid "Creating new %s..."
-msgstr "Kreiram novu %s..."
+msgstr "Kreiram: %s..."
 
 msgid "Refresh"
 msgstr "Osvježi"
@@ -1164,7 +1164,7 @@ msgid "Synchronisation Status"
 msgstr "Status sinhronizacije"
 
 msgid "Remove"
-msgstr ""
+msgstr "Ukloni"
 
 #, javascript-format
 msgid ""
@@ -1172,12 +1172,12 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Obrisati bilježnicu \"%s\"?\n"
+"Izbrisati bilježnicu \"%s\"?\n"
 "\n"
-"Sve bilješke i bilježnice unutar ove bilježnice također će biti obrisane."
+"Sve bilješke i bilježnice unutar ove bilježnice također će biti izbrisane."
 
 msgid "Delete"
-msgstr "Obriši"
+msgstr "Izbriši"
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
@@ -1188,7 +1188,7 @@ msgstr "Ukloniti ovu pretragu iz pomoćnog menija?"
 
 #, fuzzy
 msgid "New sub-notebook"
-msgstr "Nova bilježnica"
+msgstr "Nova podbilježnica"
 
 msgid "Rename"
 msgstr "Preimenuj"
@@ -1234,11 +1234,11 @@ msgstr "Kopiraj Markdown vezu"
 
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Obrisati bilješku \"%s\"?"
+msgstr "Izbrisati bilješku \"%s\"?"
 
 #, javascript-format
 msgid "Delete these %d notes?"
-msgstr "Obrisati ovih %d bilješki?"
+msgstr "Izbrisati ovih %d bilješki?"
 
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
@@ -1331,11 +1331,11 @@ msgstr "Ažurirano spoljašnjih stavki: %d."
 
 #, javascript-format
 msgid "Deleted local items: %d."
-msgstr "Obrisano lokalnih stavki: %d."
+msgstr "Izbrisano lokalnih stavki: %d."
 
 #, javascript-format
 msgid "Deleted remote items: %d."
-msgstr "Obrisano spoljašnjih stavki: %d."
+msgstr "Izbrisano spoljašnjih stavki: %d."
 
 #, javascript-format
 msgid "Fetched items: %d/%d."
@@ -1405,17 +1405,17 @@ msgstr ""
 "uklonjene! Za više detalja vidjeti često postavljana pitanja (FAQ):"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Način rada tastature"
 
 #, fuzzy
 msgid "Default"
-msgstr "Prekonfigurisano: %s"
+msgstr "Obični"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Odredište za sinhronizaciju"
@@ -1449,7 +1449,7 @@ msgid "WebDAV password"
 msgstr "WebDAV lozinka"
 
 msgid "Attachment download behaviour"
-msgstr "Ponašanje prilikom preuzimanja priloga"
+msgstr "Način preuzimanja priloga"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
@@ -1471,7 +1471,7 @@ msgid "Auto"
 msgstr "Automatski"
 
 msgid "Max concurrent connections"
-msgstr "Maksimalan broj istovremenih konekcija"
+msgstr "Maksimalni broj istovremenih konekcija"
 
 msgid "Language"
 msgstr "Jezik"
@@ -1492,7 +1492,7 @@ msgid "Dark"
 msgstr "Tamna"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
 msgstr "Solarised svijetla"
@@ -1501,30 +1501,30 @@ msgid "Solarised Dark"
 msgstr "Solarized tamna"
 
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
 
 #, fuzzy
 msgid "Show note counts"
-msgstr "Prikaži sličicu na sistemskoj traci (tray)"
+msgstr "Prikaži broj bilješki"
 
 #, fuzzy
 msgid "Editor"
-msgstr "Uredi"
+msgstr "Uređivač"
 
 #, fuzzy
 msgid "Viewer"
-msgstr "Pregled"
+msgstr "Preglednik"
 
 msgid "Split View"
-msgstr ""
+msgstr "Pola-pola"
 
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Neobavljeni zadaci na vrh"
@@ -1533,13 +1533,13 @@ msgid "Show completed to-dos"
 msgstr "Prikaži obavljene zadatke"
 
 msgid "Sort notes by"
-msgstr "Sortiraj bilješke prema"
+msgstr "Sortiraj bilješke"
 
 msgid "Reverse sort order"
 msgstr "Inverzni redoslijed sortiranja"
 
 msgid "Sort notebooks by"
-msgstr "Sortiraj bilježnice prema"
+msgstr "Sortiraj bilježnice"
 
 msgid "Save geo-location with notes"
 msgstr "Pohrani geografsku lokaciju u bilješkama"
@@ -1561,7 +1561,7 @@ msgstr "Omogući pisanje blagih prijeloma"
 
 #, fuzzy
 msgid "Enable typographer support"
-msgstr "Omogući podršku za Fountain format"
+msgstr "Omogući tipografsku podršku"
 
 msgid "Enable math expressions"
 msgstr "Omogući pisanje matematskih izraza"
@@ -1666,45 +1666,45 @@ msgid "%d hours"
 msgstr "%d sati"
 
 msgid "Text editor command"
-msgstr "Komanda za uređivač teksta"
+msgstr "Komanda za uređivača teksta"
 
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Komanda za uređivač teksta (može obuhvatiti argumente) koja će se koristiti "
+"Komanda za uređivača teksta (može obuhvatiti argumente) koja će se koristiti "
 "za otvaranje bilješke. Ako nije navedena, pokušat će se utvrditi "
 "prekonfigurisani uređivač teksta."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Veličina stranice za pohranjivanje u PDF"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Položaj stranice za pohranjivanje u PDF"
 
 msgid "Portrait"
-msgstr ""
+msgstr "Uspravno"
 
 msgid "Landscape"
-msgstr ""
+msgstr "Vodoravno"
 
 msgid "Custom TLS certificates"
 msgstr "TLS certifikati"
@@ -1742,7 +1742,7 @@ msgid "Enable note history"
 msgstr "Aktiviraj historiju bilješki"
 
 msgid "days"
-msgstr "dani"
+msgstr "dana"
 
 #, javascript-format
 msgid "%d days"
@@ -1913,7 +1913,7 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Trenutno nema bilješki. Kreirajte ih pritiskom na (+) dugme."
 
 msgid "Delete these notes?"
-msgstr "Obrisati ove bilješke?"
+msgstr "Izbrisati ove bilješke?"
 
 msgid "Move to notebook..."
 msgstr "Premjestiti u bilježnicu..."
@@ -2019,7 +2019,7 @@ msgid "Creating report..."
 msgstr "Kreiram izvještaj..."
 
 msgid "Export Debug Report"
-msgstr "Prenosim izvještaj za korekciju grešaka"
+msgstr "Kreiraj izvještaj za korekciju grešaka"
 
 msgid "Fixing search index..."
 msgstr "Popravljam indeks za pretragu..."
@@ -2106,7 +2106,7 @@ msgid "Edit notebook"
 msgstr "Uredi bilježnicu"
 
 msgid "Enter notebook title"
-msgstr "Unesi naziv za bilježnicu"
+msgstr "Unesite naziv za bilježnicu"
 
 msgid "Show all"
 msgstr "Prikaži sve"
@@ -2196,12 +2196,12 @@ msgstr "Traži"
 
 #, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "Unesite glavnu lozinku:"
+#~ msgstr "Potvrdite glavnu lozinku:"
 
 #, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "Unesite glavnu lozinku:"
+#~ msgstr "Potvrdite lozinku"
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "Nedostaje neophodni argument: %s"
+#~ msgstr "Nedostaje neophodni argument: bilješka"
