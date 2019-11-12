@@ -21,6 +21,7 @@ describe('models_ItemChange', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
 		searchEngine = new SearchEngine();
 		searchEngine.setDb(db());
 		done();
