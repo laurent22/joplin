@@ -121,6 +121,7 @@ class Folder extends BaseItem {
 			let parentId = noteCount.folder_id;
 			do {
 				let folder = foldersById[parentId];
+				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
 				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
 				parentId = folder.parent_id;
 			} while (parentId);
