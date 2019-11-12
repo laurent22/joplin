@@ -36,9 +36,13 @@ class InteropServiceHelper {
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 
 		const service = new InteropService();
-		const result = await service.export(exportOptions);
 
-		console.info('Export result: ', result);
+		try {
+			const result = await service.export(exportOptions);
+			console.info('Export result: ', result);
+		} catch (error) {
+			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
+		}
 
 		dispatch({
 			type: 'WINDOW_COMMAND',

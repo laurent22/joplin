@@ -42,6 +42,7 @@ shim.platformName = function() {
 	throw new Error('Cannot determine platform');
 };
 
+// "ios" or "android", or "" if not on mobile
 shim.mobilePlatform = function() {
 	return ''; // Default if we're not on mobile (React Native)
 };
@@ -199,8 +200,14 @@ shim.loadCssFromJs = name => {
 	throw new Error('Not implemented');
 };
 
+let isTestingEnv_ = false;
+
 shim.isTestingEnv = () => {
-	return false;
+	return isTestingEnv_;
+};
+
+shim.setIsTestingEnv = (v) => {
+	isTestingEnv_ = v;
 };
 
 module.exports = { shim };

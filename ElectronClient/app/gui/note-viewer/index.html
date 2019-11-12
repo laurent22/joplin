@@ -8,7 +8,7 @@
 			overflow: hidden;
 		}
 
-		#content {
+		#joplin-container-content {
 			/* Needs this in case the content contains elements with absolute positioning */
 			/* Without this they would just stay at a fixed position when scrolling */
 			position: relative;
@@ -36,10 +36,10 @@
 	</style>
 </head>
 
-<body id="body">
-	<div id="styleContainer"></div>
-	<div id="markScriptContainer"></div>
-	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+<body id="joplin-container-body">
+	<div id="joplin-container-styleContainer"></div>
+	<div id="joplin-container-markScriptContainer"></div>
+	<div id="joplin-container-content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
 
 	<script>
@@ -48,7 +48,7 @@
 	}
 
 	try {
-		const contentElement = document.getElementById('content');
+		const contentElement = document.getElementById('joplin-container-content');
 
 		const ipc = {};
 
@@ -74,7 +74,7 @@
 				const link = document.createElement('link');
 				link.rel = 'stylesheet';
 				link.href = f;
-				document.getElementById('styleContainer').appendChild(link);
+				document.getElementById('joplin-container-styleContainer').appendChild(link);
 			}
 		}
 
@@ -161,7 +161,7 @@
 			}
 		}
 
-		let ignoreNextScrollEvent = false;
+		let lastScrollEventTime = 0;
 		ipc.setPercentScroll = (event) => {
 			const percent = event.percent;
 
@@ -170,7 +170,7 @@
 				checkScrollIID_ = null;
 			}
 
-			ignoreNextScrollEvent = true;
+			lastScrollEventTime = Date.now();
 			setPercentScroll(percent);
 		}
 
@@ -205,7 +205,7 @@
 			// TODO: Add support for scriptType on mobile and CLI
 
 			if (!mark_) {
-				mark_ = new Mark(document.getElementById('content'), {
+				mark_ = new Mark(document.getElementById('joplin-container-content'), {
 					exclude: ['img'],
 					acrossElements: true,
 				});
@@ -270,7 +270,7 @@
 				};
 
 				script.src = '../../node_modules/mark.js/dist/mark.min.js';
-				document.getElementById('markScriptContainer').appendChild(script);
+				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
 				markLoaded_ = true;
 			} else {
 				setMarkers(keywords, options);
@@ -283,8 +283,8 @@
 
 		// The body element needs to have a fixed height for the content to be scrollable
 		function updateBodyHeight() {
-			document.getElementById('body').style.height = window.innerHeight + 'px';
-			document.getElementById('content').style.height = window.innerHeight + 'px';
+			document.getElementById('joplin-container-body').style.height = window.innerHeight + 'px';
+			document.getElementById('joplin-container-content').style.height = window.innerHeight + 'px';
 		}
 
 		function currentPercentScroll() {
@@ -293,10 +293,18 @@
 		}
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
-			if (ignoreNextScrollEvent) {
-				ignoreNextScrollEvent = false;
+			// If the last scroll event was done by the user, lastScrollEventTime is set and
+			// we can use that to skip the event handling. We skip it because in that case
+			// the scroll position has already been updated. Also we add a 200ms interval
+			// because otherwise it's most likely a glitch where we called ipc.setPercentScroll
+			// but the scroll event listener has not been called.
+			if (lastScrollEventTime && Date.now() - lastScrollEventTime < 200) {
+				lastScrollEventTime = 0;
 				return;
 			}
+
+			lastScrollEventTime = 0;
+
 			const percent = currentPercentScroll();
 			setPercentScroll(percent);
 			

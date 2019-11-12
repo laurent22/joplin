@@ -68,7 +68,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			item: await Tag.load(tagId),
+			item: await Tag.loadWithCount(tagId),
 		});
 
 		return output;
@@ -86,23 +86,24 @@ class Tag extends BaseItem {
 		});
 	}
 
+	static loadWithCount(tagId) {
+		let sql = 'SELECT * FROM tags_with_note_count WHERE id = ?';
+		return this.modelSelectOne(sql, [tagId]);
+	}
+
 	static async hasNote(tagId, noteId) {
 		let r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
 	}
 
-	static tagsWithNotesSql_() {
-		return 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
-	}
-
 	static async allWithNotes() {
-		return await Tag.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.tagsWithNotesSql_()})`);
+		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
 	static async searchAllWithNotes(options) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
-		options.conditions.push(`id IN (${this.tagsWithNotesSql_()})`);
+		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
 		return this.search(options);
 	}
 

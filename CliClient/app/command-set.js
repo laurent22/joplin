@@ -39,7 +39,14 @@ class Command extends BaseCommand {
 				type_: notes[i].type_,
 			};
 			newNote[propName] = propValue;
-			await Note.save(newNote);
+
+			const timestamp = Date.now();
+
+			await Note.save(newNote, {
+				autoTimestamp: false, // No auto-timestamp because user may have provided them
+				updated_time: timestamp,
+				created_time: timestamp,
+			});
 		}
 	}
 }

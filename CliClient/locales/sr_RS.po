@@ -140,6 +140,14 @@ msgstr "Унесите главну лозинку:"
 msgid "Operation cancelled"
 msgstr "Операција је обустављена"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Лозинка не може бити празна"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -473,10 +481,12 @@ msgstr "Преузимам ресурсе..."
 msgid "Cancelling... Please wait."
 msgstr "Обустављам... Молимо сачекајте."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> може бити \"додај\", \"уклони\" или \"листа\" за додељивање "
 "или уклањање [ознаке]  из [белешке], или да излистате белешке повезане са "
@@ -594,6 +604,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Извозим у \"%s као \"%s\" формат. Молимо вас да сачекате..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Фајл"
 
@@ -677,6 +691,13 @@ msgstr "&Приказ"
 msgid "Toggle sidebar"
 msgstr "Бочна трака"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Листа белешки"
+
 msgid "Toggle editor layout"
 msgstr "Промени распоред уредника"
 
@@ -738,6 +759,10 @@ msgstr "Да"
 
 msgid "No"
 msgstr "Не"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Повраћене белешке"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен је копиран у клипборд!"
@@ -1018,6 +1043,10 @@ msgstr "Ова белешка \"%s\" је успешно враћена у бе�
 msgid "This note has no history"
 msgstr "Ова белешка нема историју"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Неподржана веза или порука: %s"
+
 msgid "Restore"
 msgstr "Повраћај"
 
@@ -1047,10 +1076,6 @@ msgstr "Копирај адресу везе"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Овај прилог још увек није преузет или дешифрован."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Неподржана веза или порука: %s"
 
 #, javascript-format
 msgid ""
@@ -1145,6 +1170,9 @@ msgstr "Опције"
 msgid "Synchronisation Status"
 msgstr "Статус синхронизације"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1155,6 +1183,9 @@ msgstr ""
 "\n"
 "Све белешке и под-бележницe унутар ове бележнице ће такође бити обрисане."
 
+msgid "Delete"
+msgstr "Обриши"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Уклонити ознаку \"%s\" из свих белешки?"
@@ -1162,8 +1193,9 @@ msgstr "Уклонити ознаку \"%s\" из свих белешки?"
 msgid "Remove this search from the sidebar?"
 msgstr "Уклонити ову претраку из бочне траке?"
 
-msgid "Delete"
-msgstr "Обриши"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Нова бележница"
 
 msgid "Rename"
 msgstr "Преименуј"
@@ -1333,10 +1365,6 @@ msgstr "Неактивно"
 msgid "In progress"
 msgstr "У току"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Синхронизација је већ у току. Стање: %s"
-
 msgid "Encrypted"
 msgstr "Шифровано"
 
@@ -1383,6 +1411,19 @@ msgstr ""
 "садржај у њу пре синхронизације, иначе ће сви фајлови бити обрисани! \n"
 "\n"
 "Видите одељак \"Често постављана питања за више детаља: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Подразумевано: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Одредиште синхронизације"
@@ -1458,10 +1499,39 @@ msgstr "Светла"
 msgid "Dark"
 msgstr "Тамна"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Прикажи иконицу апликације на траци"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Уреди"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Приказ"
+
+msgid "Split View"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1496,6 +1566,10 @@ msgstr "У креирању нове белешке."
 
 msgid "Enable soft breaks"
 msgstr "Омогући меке преломе"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Омогућу ~sub~ синтаксу"
 
 msgid "Enable math expressions"
 msgstr "Омогући математичке експресије"
@@ -1607,6 +1681,36 @@ msgstr ""
 "Команда уредника текста (може имати аргументе) који ће се користити приликом "
 "отварања белешке. Уколико нису унети аргументи\n"
 "програм ће аутоматски покушати да открије подразумеваног уредника."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Прилагођени ТЛС сертификати"
@@ -1996,6 +2100,10 @@ msgstr "Лозинка:"
 msgid "Password cannot be empty"
 msgstr "Лозинка не може бити празна"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Лозинка не може бити празна"
+
 msgid "Enable"
 msgstr "Омогући"
 
@@ -2097,6 +2205,21 @@ msgstr "Пријави се са УванДрајвом"
 msgid "Search"
 msgstr "Претрага"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Синхронизација је већ у току. Стање: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Унесите главну лозинку:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Недостаје неопходан аргумент: %s"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Започињете са изменом белешке. Затворите уредника да се вратите назад."
@@ -2106,9 +2229,6 @@ msgstr "Претрага"
 
 #~ msgid "Sidebar"
 #~ msgstr "Бочна трака"
-
-#~ msgid "Note list"
-#~ msgstr "Листа белешки"
 
 #~ msgid "Note title"
 #~ msgstr "Наслов белешке"

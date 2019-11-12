@@ -59,4 +59,42 @@ describe('models_Tag', function() {
 		expect(tags.length).toBe(0);
 	}));
 
+	it('should return tags with note counts', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		await Tag.setNoteTagsByTitles(note1.id, ['un']);
+		await Tag.setNoteTagsByTitles(note2.id, ['un']);
+
+		let tags = await Tag.allWithNotes();
+		expect(tags.length).toBe(1);
+		expect(tags[0].note_count).toBe(2);
+
+		await Note.delete(note1.id);
+
+		tags = await Tag.allWithNotes();
+		expect(tags.length).toBe(1);
+		expect(tags[0].note_count).toBe(1);
+
+		await Note.delete(note2.id);
+
+		tags = await Tag.allWithNotes();
+		expect(tags.length).toBe(0);
+	}));
+
+	it('should load individual tags with note count', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		let tag = await Tag.save({ title: 'mytag'});
+		await Tag.addNote(tag.id, note1.id);
+
+		let tagWithCount = await Tag.loadWithCount(tag.id);
+		expect(tagWithCount.note_count).toBe(1);
+
+		await Tag.addNote(tag.id, note2.id);
+		tagWithCount = await Tag.loadWithCount(tag.id);
+		expect(tagWithCount.note_count).toBe(2);
+	}));
+
 });

@@ -266,7 +266,7 @@ class Synchronizer {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
+			let error = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
 		}

@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const { BaseCommand } = require('./base-command.js');
+const { splitCommandString } = require('lib/string-utils.js');
 const { uuid } = require('lib/uuid.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
@@ -53,7 +54,7 @@ class Command extends BaseCommand {
 			// -------------------------------------------------------------------------
 
 			let editorPath = textEditorPath();
-			let editorArgs = editorPath.split(' ');
+			let editorArgs = splitCommandString(editorPath);
 
 			editorPath = editorArgs[0];
 			editorArgs = editorArgs.splice(1);
@@ -71,30 +72,18 @@ class Command extends BaseCommand {
 
 			this.logger().info('Disabling fullscreen...');
 
-			app()
-				.gui()
-				.showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
-			await app()
-				.gui()
-				.forceRender();
-			const termState = app()
-				.gui()
-				.termSaveState();
+			app().gui().showModalOverlay(_('Starting to edit note. Close the editor to get back to the prompt.'));
+			await app().gui().forceRender();
+			const termState = app().gui().termSaveState();
 
 			const spawnSync = require('child_process').spawnSync;
 			const result = spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
 			if (result.error) this.stdout(_('Error opening note in editor: %s', result.error.message));
 
-			app()
-				.gui()
-				.termRestoreState(termState);
-			app()
-				.gui()
-				.hideModalOverlay();
-			app()
-				.gui()
-				.forceRender();
+			app().gui().termRestoreState(termState);
+			app().gui().hideModalOverlay();
+			app().gui().forceRender();
 
 			// -------------------------------------------------------------------------
 			// Save the note and clean up

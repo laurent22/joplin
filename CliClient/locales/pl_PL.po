@@ -142,6 +142,14 @@ msgstr "Wprowadź hasło główne:"
 msgid "Operation cancelled"
 msgstr "Operacja anulowana"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Wprowadź hasło główne:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Hasło nie może być puste"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -477,10 +485,12 @@ msgstr "Pobieranie zasobów..."
 msgid "Cancelling... Please wait."
 msgstr "Anulowanie... Proszę czekać."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> może \"add\", \"remove\" lub \"list\" aby przypisać lub usunąć "
 "[tag] z [note], lub wyświetlić listę notatek połączonych z [tag]. Komenda "
@@ -599,6 +609,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksportowanie do \"%s\" jako \"%s\". Proszę czekać..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Plik"
 
@@ -681,6 +695,13 @@ msgstr "&Wyświetl"
 msgid "Toggle sidebar"
 msgstr "Przełącz nawigator"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Lista notatek"
+
 msgid "Toggle editor layout"
 msgstr "Przełącz układ edytora"
 
@@ -742,6 +763,10 @@ msgstr "Tak"
 
 msgid "No"
 msgstr "Nie"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Przywrócone notatki"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token został skopiowany do schowka!"
@@ -1023,6 +1048,10 @@ msgstr "Notatka \"%s\" została pomyślnie przywrócona do notatnika \"%s\"."
 msgid "This note has no history"
 msgstr "Notatka nie posiada historii"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Niewspierany odnośnik lub wiadomość: %s"
+
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1053,10 +1082,6 @@ msgstr "Skopiuj adres odnośnika"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Załącznik nie został jeszcze pobrany lub deszyfrowany."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Niewspierany odnośnik lub wiadomość: %s"
 
 #, javascript-format
 msgid ""
@@ -1152,6 +1177,9 @@ msgstr "Opcje"
 msgid "Synchronisation Status"
 msgstr "Status synchronizacji"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1163,6 +1191,9 @@ msgstr ""
 "Wszystkie notatki i notatniki podrzędne zawarte w tym notatniku także "
 "zostaną usunięte."
 
+msgid "Delete"
+msgstr "Usuń"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
@@ -1170,8 +1201,9 @@ msgstr "Usunąć znacznik \"%s\" ze wszystkich notatek?"
 msgid "Remove this search from the sidebar?"
 msgstr "Usunąć wyszukiwanie z nawigatora?"
 
-msgid "Delete"
-msgstr "Usuń"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Nowy notatnik"
 
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -1341,10 +1373,6 @@ msgstr "Spoczynek"
 msgid "In progress"
 msgstr "W trakcie"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synchronizacja w toku. Stan: %s"
-
 msgid "Encrypted"
 msgstr "Zaszyfrowane"
 
@@ -1392,6 +1420,19 @@ msgstr ""
 "wszystkie dane zostaną skopiowane do jej lokacji przed synchronizacją, w "
 "innym wypadku wszystkie pliki będą usunięte! Sprawdź FAQ w celu uzyskania "
 "informacji: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Domyślne: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Serwis synchronizacji"
@@ -1467,10 +1508,39 @@ msgstr "Jasny"
 msgid "Dark"
 msgstr "Ciemny"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Pokaż ikonę w zasobniku systemowym"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Edytuj"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Wyświetl"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1505,6 +1575,10 @@ msgstr "Podczas tworzenia nowej notatki:"
 
 msgid "Enable soft breaks"
 msgstr "Aktywuj miękkie łamanie linii"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Aktywuj składnię ~sub~"
 
 msgid "Enable math expressions"
 msgstr "Atywuj wyrażenia matematyczne"
@@ -1619,6 +1693,36 @@ msgstr ""
 "Ścieżka edytora tekstu (może zawierać wiele argumentów) która zostanie użyta "
 "aby otwierać notatkę. Jeżeli nie zostanie podana, program spróbuje wykryć "
 "domyślny edytor."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Niestandardowe ceryfikaty TLS"
@@ -2009,6 +2113,10 @@ msgstr "Hasło:"
 msgid "Password cannot be empty"
 msgstr "Hasło nie może być puste"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Hasło nie może być puste"
+
 msgid "Enable"
 msgstr "Aktywuj"
 
@@ -2111,6 +2219,21 @@ msgstr "Zaloguj z OneDrive"
 msgid "Search"
 msgstr "Wyszukaj"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Synchronizacja w toku. Stan: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Wprowadź hasło główne:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Wprowadź hasło główne:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Brakujący wymagany argument: %s"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Rozpoczynanie edycji notatki. Zamknij edytor, aby powrócić do wiersza "
@@ -2121,9 +2244,6 @@ msgstr "Wyszukaj"
 
 #~ msgid "Sidebar"
 #~ msgstr "Nawigator"
-
-#~ msgid "Note list"
-#~ msgstr "Lista notatek"
 
 #~ msgid "Note title"
 #~ msgstr "Tytuł notatki"

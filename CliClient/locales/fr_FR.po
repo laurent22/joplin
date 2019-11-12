@@ -137,6 +137,12 @@ msgstr "Entrer le mot de passe maître :"
 msgid "Operation cancelled"
 msgstr "Opération annulée"
 
+msgid "Confirm password:"
+msgstr "Confirmer le mot de passe :"
+
+msgid "Passwords do not match!"
+msgstr "Les mots de passe ne correspondent pas !"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -474,14 +480,16 @@ msgid "Cancelling... Please wait."
 msgstr "Annulation... Veuillez attendre."
 
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> peut être \"add\", \"remove\" ou \"list\" pour assigner ou "
-"enlever l'étiquette [tag] de la [note], our pour lister les notes associées "
-"avec l'étiquette [tag]. La commande `tag list` peut être utilisée pour "
-"lister les étiquettes (utilisez l'option -l pour les options complètes)."
+"<tag-command> peut être \"add\", \"remove\", \"list\" ou \"notetags\" pour "
+"assigner ou enlever l'étiquette [tag] de la [note], pour lister les notes "
+"associées avec l'étiquette [tag], ou pour lister les étiquettes associées "
+"avec [note]. La commande `tag list` peut être utilisée pour lister les "
+"étiquettes (utilisez l'option -l pour les options complètes)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -592,6 +600,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exporter vers \"%s\" au format \"%s\". Veuillez patienter..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Impossible d'exporter les notes : %s"
+
 msgid "&File"
 msgstr "&Fichier"
 
@@ -674,8 +686,14 @@ msgstr "&Affichage"
 msgid "Toggle sidebar"
 msgstr "Basculer barre latérale"
 
+msgid "Layout button sequence"
+msgstr "Ordre des actions du bouton de disposition"
+
+msgid "Toggle note list"
+msgstr "Basculer liste de notes"
+
 msgid "Toggle editor layout"
-msgstr "Basculer l'agencement de l'éditeur"
+msgstr "Basculer la disposition de l'éditeur"
 
 msgid "Focus"
 msgstr "Naviguer"
@@ -735,6 +753,9 @@ msgstr "Oui"
 
 msgid "No"
 msgstr "Non"
+
+msgid "Full Release Notes"
+msgstr "Notes de version complètes"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Le code d'authentification a été copié dans le presse-papiers !"
@@ -1021,6 +1042,10 @@ msgstr "La note \"%s\" a été restaurée dans le carnet \"%s\"."
 msgid "This note has no history"
 msgstr "Cette note n'a pas d'historique"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Lien ou message non géré : %s"
+
 msgid "Restore"
 msgstr "Restaurer"
 
@@ -1051,10 +1076,6 @@ msgstr "Copier l'adresse du lien"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Cette pièce jointe n'est pas téléchargée ou pas encore déchiffrée."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Lien ou message non géré : %s"
 
 #, javascript-format
 msgid ""
@@ -1150,6 +1171,9 @@ msgstr "Options"
 msgid "Synchronisation Status"
 msgstr "État de la synchronisation"
 
+msgid "Remove"
+msgstr "Supprimer"
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1160,6 +1184,9 @@ msgstr ""
 "\n"
 "Toutes les notes et sous-carnets dans ce carnet seront également effacés."
 
+msgid "Delete"
+msgstr "Supprimer"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Enlever l’étiquette \"%s\" de toutes les notes ?"
@@ -1167,8 +1194,8 @@ msgstr "Enlever l’étiquette \"%s\" de toutes les notes ?"
 msgid "Remove this search from the sidebar?"
 msgstr "Enlever cette recherche de la barre latérale ?"
 
-msgid "Delete"
-msgstr "Supprimer"
+msgid "New sub-notebook"
+msgstr "Nouveau sous-carnet"
 
 msgid "Rename"
 msgstr "Renommer"
@@ -1339,10 +1366,6 @@ msgstr "Arrêté"
 msgid "In progress"
 msgstr "En cours"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "La synchronisation est déjà en cours. État : %s"
-
 msgid "Encrypted"
 msgstr "Chiffré"
 
@@ -1388,6 +1411,18 @@ msgstr ""
 "Attention : si vous changez cet emplacement, copiez-y tout le contenu avant "
 "de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ "
 "pour plus de détails : %s"
+
+msgid "Keyboard Mode"
+msgstr "Mode de clavier"
+
+msgid "Default"
+msgstr "Défaut"
+
+msgid "Emacs"
+msgstr "Emacs"
+
+msgid "Vim"
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
@@ -1464,11 +1499,37 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
+msgid "Dracula"
+msgstr "Dracula"
+
 msgid "Solarised Light"
 msgstr "Solarisé clair"
 
 msgid "Solarised Dark"
 msgstr "Solarisé sombre"
+
+msgid "Nord"
+msgstr "Nord"
+
+msgid "Show note counts"
+msgstr "Afficher le compte des notes"
+
+msgid "Editor"
+msgstr "Éditeur"
+
+msgid "Viewer"
+msgstr "Visionneuse"
+
+msgid "Split View"
+msgstr "Vue fractionnée"
+
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tâches non-terminées en haut"
@@ -1502,6 +1563,9 @@ msgstr "Lors de la création d'une note :"
 
 msgid "Enable soft breaks"
 msgstr "Activer retours à la ligne \"doux\""
+
+msgid "Enable typographer support"
+msgstr "Activer le typographe"
 
 msgid "Enable math expressions"
 msgstr "Activer les expressions mathématiques"
@@ -1611,6 +1675,36 @@ msgid ""
 msgstr ""
 "La commande de l'éditeur de texte (peut inclure des options) pour ouvrir et "
 "modifier les notes. Si non-spécifiée, elle sera détectée automatiquement."
+
+msgid "Page size for PDF export"
+msgstr "Taille de page pour l'export PDF"
+
+msgid "A4"
+msgstr "A4"
+
+msgid "Letter"
+msgstr "Lettre"
+
+msgid "A3"
+msgstr "A3"
+
+msgid "A5"
+msgstr "A5"
+
+msgid "Tabloid"
+msgstr "Tabloïde"
+
+msgid "Legal"
+msgstr "Légal"
+
+msgid "Page orientation for PDF export"
+msgstr "Orientation de page pour l'export PDF"
+
+msgid "Portrait"
+msgstr "Portrait"
+
+msgid "Landscape"
+msgstr "Paysage"
 
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personnalisés"
@@ -1999,6 +2093,9 @@ msgstr "Mot de passe :"
 msgid "Password cannot be empty"
 msgstr "Mot de passe ne peut être vide"
 
+msgid "Confirm password cannot be empty"
+msgstr "Le mot de passe de confirmation ne peut être vide"
+
 msgid "Enable"
 msgstr "Activer"
 
@@ -2096,6 +2193,20 @@ msgstr "Se connecter à OneDrive"
 msgid "Search"
 msgstr "Chercher"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La synchronisation est déjà en cours. État : %s"
+
+#~ msgid "Confirm master password:"
+#~ msgstr "Confirmer le mot de passe maître :"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Entrer le mot de passe maître :"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Paramètre requis manquant : %s"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Édition de la note en cours. Fermez l'éditeur de texte pour retourner à "
@@ -2111,9 +2222,6 @@ msgstr "Chercher"
 
 #~ msgid "Sidebar"
 #~ msgstr "Barre latérale"
-
-#~ msgid "Note list"
-#~ msgstr "Liste de notes"
 
 #~ msgid "Note title"
 #~ msgstr "Titre de la note"
@@ -2227,9 +2335,6 @@ msgstr "Chercher"
 #~ "Le chemin du répertoire avec lequel synchroniser lorsque la "
 #~ "synchronisation par système de fichier est activée. Voir `sync.target`."
 
-#~ msgid "Remove?"
-#~ msgstr "Supprimer ?"
-
 #~ msgid "State: %s."
 #~ msgstr "État : %s."
 
@@ -2245,15 +2350,6 @@ msgstr "Chercher"
 
 #~ msgid "Searches"
 #~ msgstr "Recherches"
-
-#~ msgid ""
-#~ "Release notes:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Notes de version :\n"
-#~ "\n"
-#~ "%s"
 
 #~ msgid "Imports an Evernote notebook file (.enex file)."
 #~ msgstr "Importer un carnet Evernote (fichier .enex)."
@@ -2321,9 +2417,6 @@ msgstr "Chercher"
 
 #~ msgid "WebDAV (Beta)"
 #~ msgstr "WebDAV (Bêta)"
-
-#~ msgid "Could not download the update: %s"
-#~ msgstr "Impossible de télécharger la mise à jour : %s"
 
 #~ msgid "New version downloaded - application will quit now and update..."
 #~ msgstr ""

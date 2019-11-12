@@ -132,6 +132,14 @@ msgstr ""
 msgid "Operation cancelled"
 msgstr "Operațiunea a fost amânată"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Parolă:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Parolă nu poate fi un câmp gol"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -428,9 +436,10 @@ msgid "Cancelling... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 
 #, javascript-format
@@ -528,6 +537,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către \"%s\" în format \"%s\". Vă rugăm să așteotați..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fișier"
@@ -615,6 +628,13 @@ msgstr "Vizualizați"
 msgid "Toggle sidebar"
 msgstr ""
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Activați criptarea"
+
 msgid "Toggle editor layout"
 msgstr ""
 
@@ -678,6 +698,9 @@ msgstr "Da"
 
 msgid "No"
 msgstr "Nu"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -937,6 +960,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Această notiță a fost modificată:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
 msgid "Restore"
 msgstr ""
 
@@ -963,10 +990,6 @@ msgid "Copy Link Address"
 msgstr "Copați adresa link-ului"
 
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
 msgstr ""
 
 #, javascript-format
@@ -1059,12 +1082,18 @@ msgstr "Opțiuni"
 msgid "Synchronisation Status"
 msgstr "Statutul sincronizării"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
+
+msgid "Delete"
+msgstr "Ștergeți"
 
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
@@ -1073,8 +1102,9 @@ msgstr ""
 msgid "Remove this search from the sidebar?"
 msgstr ""
 
-msgid "Delete"
-msgstr "Ștergeți"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Adăugați un nou caiet de notițe"
 
 msgid "Rename"
 msgstr "Redenumiți"
@@ -1237,10 +1267,6 @@ msgstr ""
 msgid "In progress"
 msgstr "În progres"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr ""
-
 msgid "Encrypted"
 msgstr "Criptat"
 
@@ -1282,6 +1308,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Modul implicit: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1352,10 +1391,39 @@ msgstr "Deschisă"
 msgid "Dark"
 msgstr "Închisă"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Afișați iconița coșul de gunoi"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Editați"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Vizualizați"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1390,6 +1458,9 @@ msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1494,6 +1565,36 @@ msgstr "Comandă editor de text"
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
 msgstr ""
 
 msgid "Custom TLS certificates"
@@ -1864,6 +1965,10 @@ msgstr "Parolă:"
 msgid "Password cannot be empty"
 msgstr "Parolă nu poate fi un câmp gol"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Parolă nu poate fi un câmp gol"
+
 msgid "Enable"
 msgstr "Activați"
 
@@ -1965,6 +2070,18 @@ msgstr "Autentificare prin OneDrive"
 
 msgid "Search"
 msgstr "Caută"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Setați parola"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Confirmați"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Lipsește argumentul necesar: %s"
 
 #~ msgid "Note has been saved."
 #~ msgstr "Notița a fost salvată."

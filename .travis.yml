@@ -60,15 +60,19 @@ script:
     npm install
     cd ..
 
-    # Run test units
-    cd CliClient
-    npm install
-    ./run_test.sh
-    testResult=$?
-    if [ $testResult -ne 0 ]; then
-      exit $testResult
+    # Run test units.
+    # Only do it for pull requests because Travis randomly fails to run them
+    # and that would break the desktop release.
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      cd CliClient
+      npm install
+      ./run_test.sh
+      testResult=$?
+      if [ $testResult -ne 0 ]; then
+        exit $testResult
+      fi
+      cd ..
     fi
-    cd ..
 
     # Run linter for pull requests only - this is so that
     # bypassing eslint is allowed for urgent fixes.
