@@ -43,8 +43,6 @@ class HtmlUtils {
 		return html.replace(imageRegex, (v, before, src, after) => {
 			const action = callback({ src: src });
 
-			console.info('src', src);
-
 			if (!action) return `<img${before}src="${src}"${after}>`;
 
 			if (action.type === 'replaceElement') {

@@ -1,5 +1,25 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.150](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150) - 2019-11-11T19:19:03Z
+
+- New: Add command to list all tags for a note (#2003) (#1974)
+- New: Added concept of sync version and client ID to allow upgrading sync targets
+- Improved: Set user-agent header to Joplin/1.0 (#2064) (#2042)
+- Improved: Update sharp tp v0.23.2 (for node 13 compatibility) (#2063)
+- Improved: Handle special shortcuts such as Ctrl+H
+- Improved: Handle WebDAV server with empty XML namespaces (#2002)
+- Improved: Allow apps to work with read-only profile
+- Improved: Support italic in span tags (#1966)
+- Improved: Allow setting user timestamps with "set" command
+- Improved: Allow a sync client to lock a sync target, so that migration operations can be performed on it
+- Improved: Give correct mime type to more file types
+- Improved: Use profile temp dir when exporting files (#1932)
+- Improved: Confirm encryption password (#1937)
+- Fixed: Handle paths with spaces for text editor (#2039)
+- Fixed: Apply default style to notes in HTML format (#1960)
+- Fixed: Fixed translation of "Synchronisation Status" (#1906)
+- Fixed: App would crash if trying to index a note that has not been decrypted yet (#1938)
+
 ## [cli-v1.0.149](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149) - 2019-09-27T21:18:57Z
 
 - New: Add support to Termux by returning a default when platform name cannot be determined (#1905)

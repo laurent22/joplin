@@ -20,7 +20,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "1.0.149",
+  "version": "1.0.150",
   "bin": {
     "joplin": "./main.js"
   },
@@ -44,8 +44,8 @@
     "html-minifier": "^3.5.15",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.17",
-    "joplin-turndown-plugin-gfm": "^1.0.9",
+    "joplin-turndown": "^4.0.19",
+    "joplin-turndown-plugin-gfm": "^1.0.11",
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "markdown-it": "^8.4.2",
@@ -64,7 +64,7 @@
     "request": "^2.88.0",
     "sax": "^1.2.2",
     "server-destroy": "^1.0.1",
-    "sharp": "^0.22.1",
+    "sharp": "^0.23.2",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^4.0.7",
     "string-padding": "^1.0.2",
@@ -83,7 +83,7 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "jasmine": "^2.6.0"
+    "jasmine": "^3.5.0"
   },
   "scripts": {
     "test": "jasmine"

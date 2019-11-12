@@ -136,6 +136,14 @@ msgstr "Introducir contrasinal mestre:"
 msgid "Operation cancelled"
 msgstr "Operación cancelada"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Introducir contrasinal mestre:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "O contrasinal non pode estar baleiro"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -468,9 +476,10 @@ msgstr "Cancelando... Agarde."
 
 #, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> pode ser «add», «remove» ou «list» para asignar ou eliminar "
 "[tag] da [note] ou para listar as notas asociadas con [tag]. A orde «list» "
@@ -584,6 +593,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Exportando a «%s» como formato «%s». Agarde..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Ficheiro"
@@ -671,6 +684,13 @@ msgstr "Vista"
 msgid "Toggle sidebar"
 msgstr ""
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Activar cifrado"
+
 msgid "Toggle editor layout"
 msgstr "Cambiar a disposición do editor"
 
@@ -735,6 +755,9 @@ msgstr "Si"
 
 msgid "No"
 msgstr "Non"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -1009,6 +1032,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Esta nota foi modificada:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Ligazón ou mensaxe incompatíbeis: %s"
+
 msgid "Restore"
 msgstr ""
 
@@ -1036,10 +1063,6 @@ msgstr ""
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Ligazón ou mensaxe incompatíbeis: %s"
 
 #, javascript-format
 msgid ""
@@ -1134,6 +1157,9 @@ msgstr "Opcións"
 msgid "Synchronisation Status"
 msgstr "Estado da sincronización"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1142,6 +1168,9 @@ msgid ""
 msgstr ""
 "Desexa eliminar o caderno? Tamén se eliminarán todas as notas deste caderno."
 
+msgid "Delete"
+msgstr "Eliminar"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Desexa eliminar esta etiqueta de todas as notas?"
@@ -1149,8 +1178,9 @@ msgstr "Desexa eliminar esta etiqueta de todas as notas?"
 msgid "Remove this search from the sidebar?"
 msgstr "Desexa eliminar esta busca da barra lateral?"
 
-msgid "Delete"
-msgstr "Eliminar"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Novo caderno"
 
 msgid "Rename"
 msgstr "Renomear"
@@ -1322,10 +1352,6 @@ msgstr "Inactivo"
 msgid "In progress"
 msgstr "En proceso"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "A sincronización xa está en proceso. Estado: %s"
-
 msgid "Encrypted"
 msgstr "Cifrado"
 
@@ -1371,6 +1397,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Predeterminado: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1443,10 +1482,39 @@ msgstr "Claro"
 msgid "Dark"
 msgstr "Escuro"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Mostrar a icona na bandexa"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Edtar"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Vista"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1482,6 +1550,9 @@ msgid "When creating a new note:"
 msgstr "Cando se crea unha nova nota:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1594,6 +1665,36 @@ msgid ""
 msgstr ""
 "Editor a usar para abrir unha nota. Se non se indica ningún tentará detectar "
 "automaticamente o editor predeterminado."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr ""
@@ -1975,6 +2076,10 @@ msgstr "Contrasinal:"
 msgid "Password cannot be empty"
 msgstr "O contrasinal non pode estar baleiro"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "O contrasinal non pode estar baleiro"
+
 msgid "Enable"
 msgstr "Activar"
 
@@ -2075,6 +2180,21 @@ msgstr "Acceder con OneDrive"
 
 msgid "Search"
 msgstr "Buscar"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "A sincronización xa está en proceso. Estado: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Introducir contrasinal mestre:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Introducir contrasinal mestre:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Falta un argumento requirido: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "Comezando a editar a nota. Peche o editor para volver ao diálogo."

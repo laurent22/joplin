@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { execCommand, githubRelease, githubOauthToken, fileExists, readline } = require('./tool-utils.js');
+const { execCommand, execCommandWithPipes, githubRelease, githubOauthToken, fileExists } = require('./tool-utils.js');
 const path = require('path');
 const fetch = require('node-fetch');
 const uriTemplate = require('uri-template');
@@ -9,16 +9,16 @@ const rnDir = `${__dirname}/../ReactNativeClient`;
 const rootDir = path.dirname(__dirname);
 const releaseDir = `${rootDir}/_releases`;
 
-function wslToWinPath(wslPath) {
-	const s = wslPath.split('/');
-	if (s.length < 3) return s.join('\\');
-	s.splice(0, 1);
-	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
-	s.splice(0, 1);
-	s[0] = `${s[0].toUpperCase()}:`;
-	while (s.length && !s[s.length - 1]) s.pop();
-	return s.join('\\');
-}
+// function wslToWinPath(wslPath) {
+// 	const s = wslPath.split('/');
+// 	if (s.length < 3) return s.join('\\');
+// 	s.splice(0, 1);
+// 	if (s[0] !== 'mnt' || s[1].length !== 1) return s.join('\\');
+// 	s.splice(0, 1);
+// 	s[0] = `${s[0].toUpperCase()}:`;
+// 	while (s.length && !s[s.length - 1]) s.pop();
+// 	return s.join('\\');
+// }
 
 function increaseGradleVersionCode(content) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, function(a, versionCode) {
@@ -97,12 +97,21 @@ async function createRelease(name, tagName, version) {
 
 		// So we need to manually run the command from DOS, and then coming back here to finish the process once it's done.
 
-		console.info('Run this command from DOS:');
-		console.info('');
-		console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
-		console.info('');
-		await readline('Press Enter when done:');
-		apkBuildCmd = ''; // Clear the command because we've already ran it
+		// console.info('Run this command from DOS:');
+		// console.info('');
+		// console.info(`cd "${wslToWinPath(rootDir)}\\ReactNativeClient\\android" && gradlew.bat ${apkBuildCmd}"`);
+		// console.info('');
+		// await readline('Press Enter when done:');
+		// apkBuildCmd = ''; // Clear the command because we've already ran it
+
+		// process.chdir(`${rnDir}/android`);
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+		// restoreDir = rootDir;
+
+		// apkBuildCmd = `/mnt/c/Windows/System32/cmd.exe /c "cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}"`;
+
+		await execCommandWithPipes('/mnt/c/Windows/System32/cmd.exe', ['/c', `cd ReactNativeClient\\android && gradlew.bat ${apkBuildCmd}`]);
+		apkBuildCmd = '';
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = `./gradlew ${apkBuildCmd}`;

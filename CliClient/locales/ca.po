@@ -142,6 +142,14 @@ msgstr "Introduïu una contrasenya mestra:"
 msgid "Operation cancelled"
 msgstr "L'operació s'ha cancel·lat"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Introduïu una contrasenya mestra:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "La contrasenya no pot ser buida"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -477,9 +485,10 @@ msgstr "S'està cancel·lant... Espereu."
 
 #, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command>pot ser «add», «remove» o «list» per a assignar o suprimir "
 "l'[etiqueta] de la [nota], o per a llistar les notes associades amb "
@@ -599,6 +608,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està exportant a «%s» com a format «%s». Espereu..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Fitxer"
@@ -686,6 +699,13 @@ msgstr "Visualització"
 msgid "Toggle sidebar"
 msgstr "Mostra o amaga la barra lateral"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Activa el xifratge"
+
 msgid "Toggle editor layout"
 msgstr "Canvia el disseny de l'editor"
 
@@ -750,6 +770,9 @@ msgstr "Sí"
 
 msgid "No"
 msgstr "No"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -1034,6 +1057,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Aquesta nota s'ha modificat:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Missatge o enllaç no suportat: %s"
+
 msgid "Restore"
 msgstr ""
 
@@ -1061,10 +1088,6 @@ msgstr "Copia l'adreça de l'enllaç"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Missatge o enllaç no suportat: %s"
 
 #, javascript-format
 msgid ""
@@ -1158,6 +1181,9 @@ msgstr "Opcions"
 msgid "Synchronisation Status"
 msgstr "Estat de la sincronització"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1167,6 +1193,9 @@ msgstr ""
 "Voleu suprimir el bloc de notes? També se suprimiran tots els sub-blocs "
 "d'aquest bloc de notes."
 
+msgid "Delete"
+msgstr "Suprimeix"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Voleu suprimir aquesta etiqueta de totes les notes?"
@@ -1174,8 +1203,9 @@ msgstr "Voleu suprimir aquesta etiqueta de totes les notes?"
 msgid "Remove this search from the sidebar?"
 msgstr "Voleu suprimir aquesta cerca de la barra laterla?"
 
-msgid "Delete"
-msgstr "Suprimeix"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Bloc de notes nou"
 
 msgid "Rename"
 msgstr "Canvia el nom"
@@ -1345,10 +1375,6 @@ msgstr "Ociós"
 msgid "In progress"
 msgstr "En progés"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "La sincronització ja és en procés. Estat: %s"
-
 msgid "Encrypted"
 msgstr "Xifrat"
 
@@ -1390,6 +1416,19 @@ msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
+msgstr ""
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Per defecte: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
 msgstr ""
 
 msgid "Synchronisation target"
@@ -1462,10 +1501,39 @@ msgstr "Clar"
 msgid "Dark"
 msgstr "Fosc"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Mostra la icona a la safata"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Edita"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "Visualització"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1500,6 +1568,9 @@ msgid "When creating a new note:"
 msgstr "En crear una nota:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1611,6 +1682,36 @@ msgstr ""
 "L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una "
 "nota. Si no se'n proporciona cap, l'editor predeterminat es detectarà "
 "automàticament."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personalitzats"
@@ -2002,6 +2103,10 @@ msgstr "Contrasenya:"
 msgid "Password cannot be empty"
 msgstr "La contrasenya no pot ser buida"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "La contrasenya no pot ser buida"
+
 msgid "Enable"
 msgstr "Activa"
 
@@ -2103,6 +2208,21 @@ msgstr "Inicia sessió amb OneDrive"
 
 msgid "Search"
 msgstr "Cerca"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La sincronització ja és en procés. Estat: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Introduïu una contrasenya mestra:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Introduïu una contrasenya mestra:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Manca un argument requerit: %s"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""

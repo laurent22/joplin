@@ -124,7 +124,11 @@ class Logger {
 				consoleObj[fn](line + this.objectsToString(...object));
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
-				Logger.fsDriver().appendFileSync(target.path, `${line + serializedObject}\n`);
+				try {
+					Logger.fsDriver().appendFileSync(target.path, `${line + serializedObject}\n`);
+				} catch (error) {
+					console.error('Cannot write to log file:', error);
+				}
 			} else if (target.type == 'database') {
 				let msg = this.objectsToString(...object);
 

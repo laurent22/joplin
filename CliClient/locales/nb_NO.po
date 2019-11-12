@@ -137,6 +137,14 @@ msgstr "Skriv inn masterpassordet:"
 msgid "Operation cancelled"
 msgstr "Operasjon avbrutt"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Skriv inn masterpassordet:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Passordet kan ikke være tomt"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -380,8 +388,9 @@ msgstr "Søker etter angitt <pattern> i alle notatene."
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
-msgstr "Start, stopp eller sjekk API-serveren. For å angi på hvilken port den skal kjøre,"
-"sett api.port konfigurasjonsvariablen. Kommandoer er (%s)."
+msgstr ""
+"Start, stopp eller sjekk API-serveren. For å angi på hvilken port den skal "
+"kjøre,sett api.port konfigurasjonsvariablen. Kommandoer er (%s)."
 
 #, javascript-format
 msgid "Server is already running on port %d"
@@ -464,10 +473,12 @@ msgstr "Laster ned ressurser..."
 msgid "Cancelling... Please wait."
 msgstr "Avbryter… Vennligst vent."
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> kan være \"legg til\", \"fjern\" eller \"vis liste\" å anvise "
 "eller fjerne [tag] fra [note], eller å liste notater forbundet med [tag]. "
@@ -581,6 +592,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Eksporterer til \"%s\" i \"%s\" format. Vennligst vent..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "&Fil"
 
@@ -663,6 +678,13 @@ msgstr "&Vis"
 msgid "Toggle sidebar"
 msgstr "Vis/skjul sidepanel"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Notatliste"
+
 msgid "Toggle editor layout"
 msgstr "Bytt editorvisning"
 
@@ -723,6 +745,10 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nei"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Gjenopprettede notater"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Bevis har blitt kopiert til utklippstavlen!"
@@ -1004,6 +1030,10 @@ msgstr "Notatet \"%s\" has blitt vellykket gjenopprettet i notatboken \"%s\"."
 msgid "This note has no history"
 msgstr "Dette notatet har ingen historikk"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Usupportert lenke eller melding: %s"
+
 msgid "Restore"
 msgstr "Gjenopprett"
 
@@ -1011,8 +1041,10 @@ msgstr "Gjenopprett"
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
-msgstr "Velg \"%s\" for å gjenopprette notatet. Det vil bli kopiert til notatboken"
-"\"%s\". Den nåværende versjonen av notatet vil ikke bli erstattet eller modifisert."
+msgstr ""
+"Velg \"%s\" for å gjenopprette notatet. Det vil bli kopiert til notatboken"
+"\"%s\". Den nåværende versjonen av notatet vil ikke bli erstattet eller "
+"modifisert."
 
 msgid "Open..."
 msgstr "Åpne..."
@@ -1032,10 +1064,6 @@ msgstr "Kopier linkadresse"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Dette vedlegget er enda ikke lastet ned eller dekryptert."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Usupportert lenke eller melding: %s"
 
 #, javascript-format
 msgid ""
@@ -1128,6 +1156,9 @@ msgstr "Generelle innstillinger"
 msgid "Synchronisation Status"
 msgstr "Synkroniseringsstatus"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1139,6 +1170,9 @@ msgstr ""
 "Alle notater og underliggende notatbøker i denne notatboken vil også bli "
 "slettet."
 
+msgid "Delete"
+msgstr "Slett"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Fjern denne merkelappen \"%s\" fra alle notater?"
@@ -1146,8 +1180,9 @@ msgstr "Fjern denne merkelappen \"%s\" fra alle notater?"
 msgid "Remove this search from the sidebar?"
 msgstr "Fjerne dette søket fra sidepanelet?"
 
-msgid "Delete"
-msgstr "Slett"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Ny notatbok"
 
 msgid "Rename"
 msgstr "Gi nytt navn"
@@ -1202,8 +1237,9 @@ msgstr "Slett disse %d notatene?"
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
-msgstr "Skriv inn tittelen på et notat for å hoppe til det. Eller skriv # etterfulgt av en merkelapp,"
-" eller @ etterfulgt av tittelen på en notatbok."
+msgstr ""
+"Skriv inn tittelen på et notat for å hoppe til det. Eller skriv # etterfulgt "
+"av en merkelapp, eller @ etterfulgt av tittelen på en notatbok."
 
 msgid "Goto Anything..."
 msgstr "Hopp til..."
@@ -1316,10 +1352,6 @@ msgstr "Inaktiv"
 msgid "In progress"
 msgstr "Pågår"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Synkronisering pågår allerede. Status: %s"
-
 msgid "Encrypted"
 msgstr "Kryptert"
 
@@ -1366,6 +1398,19 @@ msgstr ""
 "innhold dit før du synkroniserer. Hvis ikke blir alle filer fjernet! Se FAQ "
 "for flere detaljer: %s"
 
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Standard: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
+
 msgid "Synchronisation target"
 msgstr "Synkroniseringsmål"
 
@@ -1405,8 +1450,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"I \"Manuell\" modus blir vedlegg kun lastet ned når du klikker på de. "
-"I \"Auto\" blir de lastet ned når du åpner notatet. I \"Alltid\" blir "
+"I \"Manuell\" modus blir vedlegg kun lastet ned når du klikker på de. I "
+"\"Auto\" blir de lastet ned når du åpner notatet. I \"Alltid\" blir "
 "vedleggene lastet ned uansett om du åpner notatet eller ikke."
 
 msgid "Always"
@@ -1439,11 +1484,40 @@ msgstr "Lys"
 msgid "Dark"
 msgstr "Mørk"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarisert lys"
 
 msgid "Solarised Dark"
 msgstr "Solarisert mørk"
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Vis systemmenyikon"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Rediger"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "&Vis"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "Uferdige gjøremål på topp"
@@ -1477,6 +1551,10 @@ msgstr "Når du oppretter et nytt notat:"
 
 msgid "Enable soft breaks"
 msgstr "Aktiver myke linjeskift"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Aktiver Fountain syntaksstøtte"
 
 msgid "Enable math expressions"
 msgstr "Aktiver matteuttrykk"
@@ -1587,6 +1665,36 @@ msgstr ""
 "Teksteditor som skal brukes til å åpne et notat. Hvis det ikke er satt vil "
 "den prøve å automatisk velge standardprogram."
 
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
+
 msgid "Custom TLS certificates"
 msgstr "Egendefinerte TLS-sertifikater"
 
@@ -1615,8 +1723,8 @@ msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
-"Spesifiser porten som skal brukes av API-serveren. Hvis ikke satt vil "
-"en standardport brukes."
+"Spesifiser porten som skal brukes av API-serveren. Hvis ikke satt vil en "
+"standardport brukes."
 
 msgid "Enable note history"
 msgstr "Aktiver notathistorikk"
@@ -1624,6 +1732,7 @@ msgstr "Aktiver notathistorikk"
 msgid "days"
 msgstr "dager"
 
+#, javascript-format
 msgid "%d days"
 msgstr "%d dager"
 
@@ -1879,8 +1988,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"For å kunne bruke filsystemsynkronisering behøves din tillatelse til å "
-"kunne skrive til ekstern lagrging."
+"For å kunne bruke filsystemsynkronisering behøves din tillatelse til å kunne "
+"skrive til ekstern lagrging."
 
 msgid "Encryption Config"
 msgstr "Krypteringsinnstillinger"
@@ -1965,6 +2074,10 @@ msgid "Password:"
 msgstr "Passord:"
 
 msgid "Password cannot be empty"
+msgstr "Passordet kan ikke være tomt"
+
+#, fuzzy
+msgid "Confirm password cannot be empty"
 msgstr "Passordet kan ikke være tomt"
 
 msgid "Enable"
@@ -2063,6 +2176,21 @@ msgstr "Innlogging med OneDrive"
 msgid "Search"
 msgstr "Søk"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Synkronisering pågår allerede. Status: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Skriv inn masterpassordet:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Skriv inn masterpassordet:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Mangler nødvendig argument: %s"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
 #~ "Notatredigering startet. Lukk editoren for å komme tilbake til "
@@ -2073,9 +2201,6 @@ msgstr "Søk"
 
 #~ msgid "Sidebar"
 #~ msgstr "Sidepanel"
-
-#~ msgid "Note list"
-#~ msgstr "Notatliste"
 
 #~ msgid "Note title"
 #~ msgstr "Tittel på notat:"

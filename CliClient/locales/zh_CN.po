@@ -134,6 +134,14 @@ msgstr "输入主密码："
 msgid "Operation cancelled"
 msgstr "操作已取消"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "输入主密码："
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "密码不可为空"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -446,10 +454,12 @@ msgstr "下载资源中..."
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍候。"
 
+#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> 可以是“add”、“remove”或者“list”， 用于从 [note] 中赋值或删除 "
 "[tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所有的标签（对"
@@ -556,6 +566,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 msgid "&File"
 msgstr "文件 (&F)"
 
@@ -638,6 +652,13 @@ msgstr "界面 (&V)"
 msgid "Toggle sidebar"
 msgstr "切换边栏"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "笔记列表"
+
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
 
@@ -698,6 +719,10 @@ msgstr "是"
 
 msgid "No"
 msgstr "否"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "已恢复的笔记"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token 令牌已复制到剪贴板！"
@@ -964,6 +989,10 @@ msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
 msgid "This note has no history"
 msgstr "此笔记没有历史记录"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "不被支持的链接或信息：%s"
+
 msgid "Restore"
 msgstr "恢复"
 
@@ -993,10 +1022,6 @@ msgstr "复制链接地址"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "该附件没有下载或者尚未解密。"
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "不被支持的链接或信息：%s"
 
 #, javascript-format
 msgid ""
@@ -1088,6 +1113,9 @@ msgstr "选项"
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
+msgid "Remove"
+msgstr ""
+
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1098,6 +1126,9 @@ msgstr ""
 "\n"
 "所有在该笔记本内的笔记和下级笔记本也将同时被删除。"
 
+msgid "Delete"
+msgstr "删除"
+
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "从所有笔记中删除标签“%s”？"
@@ -1105,8 +1136,9 @@ msgstr "从所有笔记中删除标签“%s”？"
 msgid "Remove this search from the sidebar?"
 msgstr "从边栏中删除该项搜索？"
 
-msgid "Delete"
-msgstr "删除"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "新建笔记本"
 
 msgid "Rename"
 msgstr "重命名"
@@ -1273,10 +1305,6 @@ msgstr "空闲"
 msgid "In progress"
 msgstr "正在进行"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "已经在同步。状态：%s"
-
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -1321,6 +1349,19 @@ msgid ""
 msgstr ""
 "注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
 "有文件！ 更多详细信息请参阅常见问题解答（FAQ）：%s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "默认值: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "同步目标"
@@ -1393,11 +1434,40 @@ msgstr "明亮"
 msgid "Dark"
 msgstr "深邃"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr "Solarised Light风格"
 
 msgid "Solarised Dark"
 msgstr "Solarised Dark风格"
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "显示托盘图标"
+
+#, fuzzy
+msgid "Editor"
+msgstr "编辑"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "界面 (&V)"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
+msgstr ""
 
 msgid "Uncompleted to-dos on top"
 msgstr "将未完成的待办事项置顶"
@@ -1431,6 +1501,10 @@ msgstr "当新建笔记时："
 
 msgid "Enable soft breaks"
 msgstr "启动软中断"
+
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "启用 Fountain 语法支持"
 
 msgid "Enable math expressions"
 msgstr "启用数学表达式"
@@ -1539,6 +1613,36 @@ msgid ""
 msgstr ""
 "该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
 "认编辑器。"
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
@@ -1911,6 +2015,10 @@ msgstr "密码："
 msgid "Password cannot be empty"
 msgstr "密码不可为空"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "密码不可为空"
+
 msgid "Enable"
 msgstr "启用"
 
@@ -2007,6 +2115,21 @@ msgstr "通过 OneDrive 登录"
 msgid "Search"
 msgstr "搜索"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "已经在同步。状态：%s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "输入主密码："
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "输入主密码："
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "缺失所需参数：%s"
+
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
 
@@ -2018,9 +2141,6 @@ msgstr "搜索"
 
 #~ msgid "Sidebar"
 #~ msgstr "边栏"
-
-#~ msgid "Note list"
-#~ msgstr "笔记列表"
 
 #~ msgid "Note title"
 #~ msgstr "笔记标题"

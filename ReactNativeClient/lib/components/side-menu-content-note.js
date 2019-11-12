@@ -35,11 +35,13 @@ class SideMenuContentNoteComponent extends Component {
 				fontSize: 22,
 				color: theme.color,
 			},
+			sideButtonText: {
+				color: theme.color,
+			},
 		};
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
 		styles.sideButtonDisabled = Object.assign({}, styles.sideButton, { opacity: 0.6 });
-		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
 		return this.styles_[this.props.theme];

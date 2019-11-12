@@ -28,8 +28,12 @@ const plugins = {
 	emoji: { module: require('markdown-it-emoji') },
 	insert: { module: require('markdown-it-ins') },
 	multitable: { module: require('markdown-it-multimd-table'), options: { enableMultilineRows: true, enableRowspan: true } },
-	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul' } },
+	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: uslugify } },
 };
+
+function uslugify(s) {
+	return uslug(s);
+}
 
 class MdToHtml {
 	constructor(options = null) {
@@ -60,6 +64,7 @@ class MdToHtml {
 		}
 
 		const breaks_ = Setting.value('markdown.softbreaks') ? false : true;
+		const typographer_ = Setting.value('markdown.typographer') ? true : false;
 
 		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(style)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
@@ -75,6 +80,7 @@ class MdToHtml {
 
 		const markdownIt = new MarkdownIt({
 			breaks: breaks_,
+			typographer: typographer_,
 			linkify: true,
 			html: true,
 			highlight: (str, lang) => {
@@ -143,9 +149,7 @@ class MdToHtml {
 		if (Setting.value('markdown.plugin.fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
-		markdownIt.use(markdownItAnchor, {
-			slugify: s => uslug(s),
-		});
+		markdownIt.use(markdownItAnchor, { slugify: uslugify });
 
 		for (let key in plugins) {
 			if (Setting.value(`markdown.plugin.${key}`)) markdownIt.use(plugins[key].module, plugins[key].options);

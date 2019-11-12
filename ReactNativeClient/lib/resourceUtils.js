@@ -45,12 +45,9 @@ const attributesToStr = (attributes) =>
 		.map(([key, value]) => ` ${key}="${escapeQuotes(value)}"`)
 		.join('');
 
-const ipcProxySendToHost = (id) =>
-	`onclick="ipcProxySendToHost('joplin://${id}'); return false;"`;
-
 const attachmentElement = ({src, attributes, id}) =>
 	[
-		`<a href='#' ${attributesToStr(attributes)} ${ipcProxySendToHost(id)}>`,
+		`<a href='joplin://${id}' ${attributesToStr(attributes)}>`,
 		`  ${attributes.alt || src}`,
 		'</a>',
 	].join('');
@@ -67,7 +64,7 @@ const audioElement = ({src, alt, id}) =>
 		'	</p>',
 		'</audio>',
 		'<p>',
-		`  <a href="${src}" ${ipcProxySendToHost(id)}>`,
+		`  <a href="${src}">`,
 		`    ${alt || src || id || 'Download audio'}`,
 		'  </a>',
 		'</p>',

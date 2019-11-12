@@ -53,6 +53,11 @@ async function initialize() {
 		type: 'SIDEBAR_VISIBILITY_SET',
 		visibility: Setting.value('sidebarVisibility'),
 	});
+
+	store.dispatch({
+		type: 'NOTELIST_VISIBILITY_SET',
+		visibility: Setting.value('noteListVisibility'),
+	});
 }
 
 class RootComponent extends React.Component {

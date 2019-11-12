@@ -135,6 +135,14 @@ msgstr "Ana şifreyi girin:"
 msgid "Operation cancelled"
 msgstr "İşlem iptal edildi"
 
+#, fuzzy
+msgid "Confirm password:"
+msgstr "Ana şifreyi girin:"
+
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "Şifre boş olamaz"
+
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -451,9 +459,10 @@ msgid "Cancelling... Please wait."
 msgstr "İptal ediliyor... Lütfen bekleyin."
 
 msgid ""
-"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
-"[tag] from [note], or to list the notes associated with [tag]. The command "
-"`tag list` can be used to list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
 msgstr ""
 
 #, javascript-format
@@ -563,6 +572,10 @@ msgstr ""
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
 
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
 #, fuzzy
 msgid "&File"
 msgstr "Dosya"
@@ -648,6 +661,13 @@ msgstr "İncele"
 msgid "Toggle sidebar"
 msgstr "Kenar çubuğunu aç / kapat"
 
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Not listesi"
+
 msgid "Toggle editor layout"
 msgstr "Editör düzenini aç / kapat"
 
@@ -711,6 +731,9 @@ msgstr "Evet"
 
 msgid "No"
 msgstr "Hayır"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Anahtar panoya kopyalandı!"
@@ -998,6 +1021,10 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Bu not değiştirildi:"
 
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Desteklenmeyen bağlantı veya mesaj: %s"
+
 msgid "Restore"
 msgstr ""
 
@@ -1025,10 +1052,6 @@ msgstr "Bağlantı Adresini Kopyala"
 
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Bu ek henüz indirilmedi veya şifrelenmedi."
-
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Desteklenmeyen bağlantı veya mesaj: %s"
 
 #, javascript-format
 msgid ""
@@ -1124,6 +1147,9 @@ msgstr "Seçenekler"
 msgid "Synchronisation Status"
 msgstr "Senkronizasyon Durumu"
 
+msgid "Remove"
+msgstr ""
+
 #, fuzzy, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1132,6 +1158,9 @@ msgid ""
 msgstr ""
 "Not defterini sil? Bu defterdeki tüm notlar ve alt defterler de silinecek."
 
+msgid "Delete"
+msgstr "Sil"
+
 #, fuzzy, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
@@ -1139,8 +1168,9 @@ msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
 msgid "Remove this search from the sidebar?"
 msgstr "Bu aramayı kenar çubuğundan kaldır?"
 
-msgid "Delete"
-msgstr "Sil"
+#, fuzzy
+msgid "New sub-notebook"
+msgstr "Yeni not defteri"
 
 msgid "Rename"
 msgstr "Yeniden adlandır"
@@ -1310,10 +1340,6 @@ msgstr "Boşta"
 msgid "In progress"
 msgstr "Devam etmekte"
 
-#, javascript-format
-msgid "Synchronisation is already in progress. State: %s"
-msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
-
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
 
@@ -1359,6 +1385,19 @@ msgstr ""
 "Dikkat: Bu konumu değiştirirseniz, senkronize etmeden önce tüm içeriğinizi "
 "kopyaladığınızdan emin olun, aksi takdirde tüm dosyalar kaldırılır! Daha "
 "fazla bilgi için SSS bölümüne bakın: %s"
+
+msgid "Keyboard Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Default"
+msgstr "Varsayılan: %s"
+
+msgid "Emacs"
+msgstr ""
+
+msgid "Vim"
+msgstr ""
 
 msgid "Synchronisation target"
 msgstr "Senkronizasyon hedefi"
@@ -1430,10 +1469,39 @@ msgstr "Aydınlık"
 msgid "Dark"
 msgstr "Karanlık"
 
+msgid "Dracula"
+msgstr ""
+
 msgid "Solarised Light"
 msgstr ""
 
 msgid "Solarised Dark"
+msgstr ""
+
+msgid "Nord"
+msgstr ""
+
+#, fuzzy
+msgid "Show note counts"
+msgstr "Tepsi simgesini göster"
+
+#, fuzzy
+msgid "Editor"
+msgstr "Düzenle"
+
+#, fuzzy
+msgid "Viewer"
+msgstr "İncele"
+
+msgid "Split View"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s = %s (%s)"
+
+#, javascript-format
+msgid "%s / %s"
 msgstr ""
 
 msgid "Uncompleted to-dos on top"
@@ -1468,6 +1536,9 @@ msgid "When creating a new note:"
 msgstr "Yeni bir not oluştururken:"
 
 msgid "Enable soft breaks"
+msgstr ""
+
+msgid "Enable typographer support"
 msgstr ""
 
 #, fuzzy
@@ -1580,6 +1651,36 @@ msgid ""
 msgstr ""
 "Editör komutu (argüman içerebilir) not açmak için kullanılacaktır. Eğer "
 "sağlanmadıysa, varsayılan düzenleyiciyi otomatik olarak algılamaya çalışır."
+
+msgid "Page size for PDF export"
+msgstr ""
+
+msgid "A4"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "A3"
+msgstr ""
+
+msgid "A5"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Page orientation for PDF export"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
 
 msgid "Custom TLS certificates"
 msgstr "Özel TLS sertifikaları"
@@ -1968,6 +2069,10 @@ msgstr "Şifre:"
 msgid "Password cannot be empty"
 msgstr "Şifre boş olamaz"
 
+#, fuzzy
+msgid "Confirm password cannot be empty"
+msgstr "Şifre boş olamaz"
+
 msgid "Enable"
 msgstr "Etkinleştir"
 
@@ -2070,14 +2175,26 @@ msgstr "OneDrive ile giriş yapın"
 msgid "Search"
 msgstr "Arama"
 
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Ana şifreyi girin:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Ana şifreyi girin:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Gerekli argüman eksik gözüküyor: %s"
+
 #~ msgid "Note has been saved."
 #~ msgstr "Not kaydedildi."
 
 #~ msgid "Sidebar"
 #~ msgstr "Kenar çubuğu"
-
-#~ msgid "Note list"
-#~ msgstr "Not listesi"
 
 #~ msgid "Note title"
 #~ msgstr "Not başlığı"

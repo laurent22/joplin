@@ -18,6 +18,26 @@ toolUtils.execCommand = function(command) {
 	});
 };
 
+toolUtils.execCommandWithPipes = function(executable, args) {
+	var spawn = require('child_process').spawn;
+
+	return new Promise((resolve, reject) => {
+		const child = spawn(executable, args, { stdio: 'inherit'});
+
+		child.on('error', (error) => {
+			reject(error);
+		});
+
+		child.on('close', (code) => {
+			if (code !== 0) {
+				reject(`Ended with code ${code}`);
+			} else {
+				resolve();
+			}
+		});
+	});
+};
+
 toolUtils.downloadFile = function(url, targetPath) {
 	const https = require('https');
 	const fs = require('fs');

@@ -153,7 +153,6 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
 				<Text style={this.styles().normalText}>{_('Password:')}</Text>
 				<TextInput
-					placeholder={_('Password')}
 					selectionColor={theme.textSelectionColor}
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}
@@ -165,7 +164,6 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 				<Text style={this.styles().normalText}>{_('Confirm password:')}</Text>
 				<TextInput
-					placeholder={_('Confirm password')}
 					selectionColor={theme.textSelectionColor}
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}

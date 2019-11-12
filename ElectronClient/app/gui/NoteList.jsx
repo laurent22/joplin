@@ -30,11 +30,16 @@ class NoteListComponent extends React.Component {
 
 		const itemHeight = 34;
 
+		// Note: max-width is used to specifically prevent horizontal scrolling on Linux when the scrollbar is present in the note list.
+		// Pull request: https://github.com/laurent22/joplin/pull/2062
+		const itemWidth = '100%';
+
 		let style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
 			listItem: {
+				maxWidth: itemWidth,
 				height: itemHeight,
 				boxSizing: 'border-box',
 				display: 'flex',

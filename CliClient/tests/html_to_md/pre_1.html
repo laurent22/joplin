@@ -1,0 +1,9 @@
+<pre style="font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, Courier, monospace;">
+<span class="comment"># List issues assigned to you that are labeled "urgent"</span>
+$ <strong>hub issue</strong> -a YOUR_USER -l urgent
+
+<span class="comment"># List the URLs of at most 20 PRs based on "develop" branch:</span>
+$ <strong>hub pr list</strong> -L 20 -b develop --format='%t [%H] | %U%n'
+
+<span class="comment"># Create a GitHub release with notes from a file and copy the URL to clipboard:</span>
+$ <strong>hub release create</strong> -c -F release-notes.txt v2.3.0</pre>
