@@ -81,8 +81,10 @@ class ElectronAppWrapper {
 			slashes: true,
 		}));
 
-		// Uncomment this to view errors if the application does not start
-		if (this.env_ === 'dev') this.win_.webContents.openDevTools();
+		// Early parsing of command line option in Developer mode to open DevTools if the application does not start
+		if (this.env_ === 'dev' && process.argv.indexOf('--open-dev-tools') !== -1) {
+			this.win_.webContents.openDevTools();
+		}
 
 		this.win_.on('close', (event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
