@@ -170,6 +170,13 @@ class BaseApplication {
 				continue;
 			}
 
+			// Electron-specific flag used for debugging - ignore it
+			if (arg.includes('--remote-debugging-port')) {
+				// If port number passed also ignore it
+				const argsToIgnore = (nextArg && /^\d+$/.test(nextArg)) ? 2 : 1;
+				argv.splice(0, argsToIgnore);
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
