@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v1.0.174](https://github.com/laurent22/joplin/releases/tag/v1.0.174) - 2019-11-12T18:20:58Z
+
+- Improved: Show note count by default
+- Fixed: Do not crash when a notebook parent does not exist ([#2079](https://github.com/laurent22/joplin/issues/2079))
+- Fixed: Fix scaling of inline svg resource icons ([#2075](https://github.com/laurent22/joplin/issues/2075))
+
 ## [v1.0.173](https://github.com/laurent22/joplin/releases/tag/v1.0.173) - 2019-11-11T08:33:35Z
 
 - New: Add new setting to show note counts for folders and tags ([#2006](https://github.com/laurent22/joplin/issues/2006))
