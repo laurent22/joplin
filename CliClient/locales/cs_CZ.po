@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Pro smazání tagu jej odeberte od přiřazených poznámek."
@@ -49,7 +51,7 @@ msgid "y"
 msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Zastavuji synchronizaci, chvíli strpení."
+msgstr "Zastavuji synchronizaci, chvíli strpení..."
 
 #, javascript-format
 msgid "No such command: %s"
@@ -472,17 +474,17 @@ msgstr "Stahování zdrojů..."
 msgid "Cancelling... Please wait."
 msgstr "Zastavuji, chvíli strpení."
 
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> může být \"add\", \"remove\" nebo \"list\" - přidat (add) či "
-"odebrat (remove) [tag] k [poznámce], nebo vypsat (list) seznam poznámek "
-"přiřazených k [tagu]. Příkaz `tag list` vypíše všechny tagy. S parametrem -l "
-"pro dlouhý výpis."
+"<tag-command> může být \"add\", \"remove\", \"list\" nebo \"notetags\": "
+"přidat (\"add\") či odebrat (\"remove\") [tag] k [poznámce], vypsat (\"list"
+"\") seznam poznámek přiřazených k [tagu] nebo vypsat (\"notetags\") seznam "
+"tagů přiřazených k poznámce. Příkaz `tag list` vypíše všechny tagy (s "
+"parametrem -l pro dlouhý výpis)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -595,9 +597,8 @@ msgstr "Exportuji do \"%s\" jako formát \"%s\". Chvíli strpení..."
 msgid "Could not export notes: %s"
 msgstr "Nebylo možné exportovat poznámky: %s"
 
-#, fuzzy
 msgid "&File"
-msgstr "Soubor"
+msgstr "&Soubor"
 
 msgid "About Joplin"
 msgstr "O aplikaci Joplin"
@@ -630,9 +631,8 @@ msgstr "Ukončit"
 msgid "Close Window"
 msgstr "Zavřít akno"
 
-#, fuzzy
 msgid "&Edit"
-msgstr "Upravit"
+msgstr "Ú&pravy"
 
 msgid "Copy"
 msgstr "Kopírovat"
@@ -673,41 +673,35 @@ msgstr "Hledat ve všech poznámkách"
 msgid "Search in current note"
 msgstr "Hledat v aktuální poznámce"
 
-#, fuzzy
 msgid "&View"
-msgstr "Zobrazit"
+msgstr "&Zobrazit"
 
 msgid "Toggle sidebar"
 msgstr "Přepnout postranní lištu"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Posloupnost pro tlačítko Rozvržení"
 
-#, fuzzy
 msgid "Toggle note list"
-msgstr "Seznam položek"
+msgstr "Přepnout seznam poznámek"
 
 msgid "Toggle editor layout"
 msgstr "Změňit layout editoru"
 
-#, fuzzy
 msgid "Focus"
-msgstr "Vybrat text poznámky"
+msgstr "Přejít na"
 
-#, fuzzy
 msgid "&Tools"
-msgstr "Nástroje"
+msgstr "&Nástroje"
 
-#, fuzzy
 msgid "&Help"
-msgstr "Nápověda"
+msgstr "Nápo&věda"
 
 msgid "Website and documentation"
 msgstr "Web a dokumentace"
 
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Web Joplinu"
+msgstr "Joplin Forum"
 
 msgid "Make a donation"
 msgstr "Přispět"
@@ -936,9 +930,8 @@ msgstr "Doplněk pro Firefox"
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
-#, fuzzy
 msgid "Get it now:"
-msgstr "Získejte to hned:"
+msgstr "Získat hned:"
 
 msgid "Usage"
 msgstr "Použití: %s"
@@ -982,7 +975,7 @@ msgid "New notebook"
 msgstr "Nový zápisník"
 
 msgid "Layout"
-msgstr "Layout"
+msgstr "Rozvržení"
 
 msgid "Search..."
 msgstr "Hledat..."
@@ -1015,7 +1008,6 @@ msgstr "URL"
 msgid "Note History"
 msgstr "Historie poznámky"
 
-#, fuzzy
 msgid "Markup"
 msgstr "Markup"
 
@@ -1181,9 +1173,8 @@ msgstr "Odebrat tag \"%s\" ze všech poznámek?"
 msgid "Remove this search from the sidebar?"
 msgstr "Smazat tento hledaný výraz z panelu?"
 
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Nový zápisník"
+msgstr "Nový pod-zápisník"
 
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -1360,23 +1351,23 @@ msgid "Encrypted items cannot be modified"
 msgstr "Nelze editovat zašifrovanou položku"
 
 msgid "title"
-msgstr "bez názvu"
+msgstr "název"
 
 msgid "updated date"
-msgstr "upraveno: %d"
+msgstr "datum aktualizace"
 
 msgid "Conflicts"
 msgstr "Konflikty"
 
 msgid "Cannot move notebook to this location"
-msgstr "Poznámku nelze přesunout do zápisníku"
+msgstr "Zápisník nelze přesunout na toto umístění"
 
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Zápisník se nemůže jmenovat \"%s\", tento název je rezervován."
 
 msgid "created date"
-msgstr "vytvořeno: %d"
+msgstr "datum vytvoření"
 
 msgid "This note does not have geolocation information."
 msgstr "Tato poznámka nemá informace o poloze."
@@ -1400,17 +1391,16 @@ msgstr ""
 "odstraněny! Další podrobnosti naleznete v FAQ: % s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Mód klávesnice"
 
-#, fuzzy
 msgid "Default"
-msgstr "Default: %s"
+msgstr "Default"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Cíl synchronizace"
@@ -1495,30 +1485,27 @@ msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "Zobrazovat ikonu v panelu"
+msgstr "Zobrazit počty poznámek"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Upravit"
+msgstr "Editor"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "Zobrazit"
+msgstr "Prohlížeč"
 
 msgid "Split View"
-msgstr ""
+msgstr "Přepnout pohled"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Nedokončené to-do listy nahoře"
@@ -1535,7 +1522,6 @@ msgstr "Řadit od konce"
 msgid "Sort notebooks by"
 msgstr "Řadit poznámky podle"
 
-#, fuzzy
 msgid "Save geo-location with notes"
 msgstr "Ukládat k poznámkám informace o poloze (geolokaci)"
 
@@ -1764,9 +1750,8 @@ msgstr "Aplikace"
 msgid "Encryption"
 msgstr "Šifrování"
 
-#, fuzzy
 msgid "Web Clipper"
-msgstr "Web clipper volby"
+msgstr "Web Clipper"
 
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -1995,7 +1980,6 @@ msgstr ""
 msgid "Encryption Config"
 msgstr "Nastavení šifrování"
 
-#, fuzzy
 msgid "Tools"
 msgstr "Nástroje"
 
@@ -2047,7 +2031,7 @@ msgstr ""
 "- Fotoaparát: umožňuje pořízení fotografie a její připojení k poznámce."
 
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "Lokace: umožňuje k poznámce připojit informaci o zeměpisné poloze."
+msgstr "- Lokace: umožňuje k poznámce připojit informaci o zeměpisné poloze."
 
 msgid "Joplin website"
 msgstr "Web Joplinu"
@@ -2117,7 +2101,7 @@ msgstr "Nenalezena položka s ID %s"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu:% s"
+msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu: %s"
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
