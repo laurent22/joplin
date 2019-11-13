@@ -598,6 +598,8 @@ class Synchronizer {
 						},
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
+
+						logger: this.logger(),
 					});
 
 					let remotes = listResult.items;
