@@ -170,11 +170,9 @@ class BaseApplication {
 				continue;
 			}
 
-			// Electron-specific flag used for debugging - ignore it
-			if (arg.includes('--remote-debugging-port')) {
-				// If port number passed also ignore it
-				const argsToIgnore = (nextArg && /^\d+$/.test(nextArg)) ? 2 : 1;
-				argv.splice(0, argsToIgnore);
+			if (arg.indexOf('--remote-debugging-port=') === 0) {
+				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
+				argv.splice(0, 1);
 				continue;
 			}
 
