@@ -2,8 +2,6 @@ Joplin has a young but well proven history. It all started by single idea but is
 Joplin is about to make another big step to answers these demands by applying at Google Summer of Code.
 All students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Code program with Joplin. Here's how.
 
-###  All participants
-
 Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org). 
