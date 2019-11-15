@@ -49,12 +49,12 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 ### Recommended steps
 
-1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, and meet your fellow developers
+1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, and meet your fellow developers in the [Development category](https://discourse.joplinapp.org/c/development)
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
-3. Take a look at the [list of ideas]
-4. Come up with project that you're interested in
+3. Take a look at the [list of ideas]. You can have you own idea addeed by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+4. Come up with project that you're interested in and discusse it in [Development category](https://discourse.joplinapp.org/c/development)
 5. Write a first draft and get someone to review it
-6. Remember: you must link to work such as commits in your proposal
+6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
 7. Read [How to write a kickass proposal for GSoC](http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/)
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) ahead of the deadline
 9. Submit proof of enrollment well ahead of the deadline
@@ -67,8 +67,8 @@ A good start is finding out what the most pressing issues are in the projects in
 
 A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which student to choose, it has also an effect on Google's decision as to how many student slots are assigned to Joplin.
 
-Below is the application template.
-
+<details>
+  <summary>Below is the application template.</summary>
 **Introduction**
 
 Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.
@@ -102,6 +102,8 @@ Provide your contact information (IRC nick, email, IM, phone) and write a few se
 - If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?
 
 - After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
+ 
+</details>
 
 ### Hints
 
@@ -126,7 +128,7 @@ All students will create a report page by tool up to their choice. Keep this up-
 
 ### Ideas
 
-If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the the [Joplin Forum](https://discourse.joplinapp.org), based what your Joplin project needs.
+If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the the [Features category of the Joplin Forum](https://discourse.joplinapp.org/c/features), based what your Joplin project needs.
 
 If you wish to mentor, please read the [GSoC Mentor Guide](https://google.github.io/gsocguides/mentor/org-application) and the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq#general). Also, please contact the [staff](https://discourse.joplinapp.org/g/staff) and get the go-ahead from them before editing the ideas page, adding your idea.
 
