@@ -69,39 +69,40 @@ A project proposal is what you will be judged upon. Write a clear proposal on wh
 
 <details>
   <summary>Below is the application template.</summary>
-**Introduction**
-
-Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.
-
-**Project goals**
-
-Be short and to the point, and perhaps format it as a list. Propose a clear list of deliverables, explaining exactly what you promise to do and what you do not plan to do. “Future developments” can be mentioned, but your promise for the Google Summer of Code term is what counts.
-
-**Implementation**
-
-Be detailed. Describe what you plan to do as a solution for the problem you defined above. Include technical details, showing that you understand the technology. Illustrate key technical elements of your proposed solution in reasonable detail. Include writing unit tests throughout the coding period, as well as code documentation. These critical elements cannot be left to the last few weeks of the program. If user documentation will be required, or apidox, etc. these should be written during each week, not at the end.
-
-**Timeline**
-
-Show that you understand the problem, have a solution, have also broken it down into manageable parts, and that you have a realistic plan on how to accomplish your goal. Here you set expectations, so don’t make promises you can’t keep. A modest, realistic and detailed timeline is better than promising the impossible.
-
-If you have other commitments during GSoC, such as a job, vacation, exams, internship, seminars, or papers to write, disclose them here. GSoC should be treated like a full-time job, and we will expect approximately 40 hours of work per week. *If you have conflicts, explain how you will work around them.* If you are found to have conflicts which you did not disclose, you may be failed.
-
-Open and clear communication is of utmost importance. **Include your plans for communication in your proposal; daily if possible.** You will need to initiate weekly formal communication such as a blog post on to be agreed placed. Lack of communication will result in you being failed.
-
-**About me**
-
-Provide your contact information (IRC nick, email, IM, phone) and write a few sentences about you and why you think you are the best for this job. **Prior contributions to Joplin are required; list your commits.** Name people (other developers, students, professors) who can act as a reference for you. Mention your field of study if necessary. Now is the time to join the relevant irc/telegram channels, mail lists and blog feeds. We want you to be a part of our community, not just contribute your code.
-
-*Tell us if you are submitting proposals to other organizations, and whether or not you would choose Joplin if given the choice.*
-
-*Other things to think about:*
-
-- Are you comfortable working independently under a supervisor or mentor who is several thousand miles away, and perhaps 12 time zones away? How will you work with your mentor to track your work? Have you worked in this style before?
-
-- If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?
-
-- After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
+  
+>  **Introduction**
+>
+>  Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.
+>
+> **Project goals**
+>
+>Be short and to the point, and perhaps format it as a list. Propose a clear list of deliverables, explaining exactly what you promise to do and what you do not plan to do. “Future developments” can be mentioned, but your promise for the Google Summer of Code term is what counts.
+>
+>**Implementation**
+>
+>Be detailed. Describe what you plan to do as a solution for the problem you defined above. Include technical details, showing that you understand the technology. Illustrate key technical elements of your proposed solution in reasonable detail. Include writing unit tests throughout the coding period, as well as code documentation. These critical elements cannot be left to the last few weeks of the program. If user documentation will be required, or apidox, etc. these should be written during each week, not at the end.
+>
+>**Timeline**
+>
+>Show that you understand the problem, have a solution, have also broken it down into manageable parts, and that you have a realistic plan on how to accomplish your goal. Here you set expectations, so don’t make promises you can’t keep. A modest, realistic and detailed timeline is better than promising the impossible.
+>
+>If you have other commitments during GSoC, such as a job, vacation, exams, internship, seminars, or papers to write, disclose them here. GSoC should be treated like a full-time job, and we will expect approximately 40 hours of work per week. *If you have conflicts, explain how you will work around them.* If you are found to have conflicts which you did not disclose, you may be failed.
+>
+>Open and clear communication is of utmost importance. **Include your plans for communication in your proposal; daily if possible.** You will need to initiate weekly formal communication such as a blog post on to be agreed placed. Lack of communication will result in you being failed.
+>
+>**About me**
+>
+>Provide your contact information (IRC nick, email, IM, phone) and write a few sentences about you and why you think you are the best for this job. **Prior contributions to Joplin are required; list your commits.** Name people (other developers, students, professors) who can act as a reference for you. Mention your field of study if necessary. Now is the time to join the relevant irc/telegram channels, mail lists and blog feeds. We want you to be a part of our community, not just contribute your code.
+>
+>*Tell us if you are submitting proposals to other organizations, and whether or not you would choose Joplin if given the choice.*
+>
+>*Other things to think about:*
+>
+>- Are you comfortable working independently under a supervisor or mentor who is several thousand miles away, and perhaps 12 time zones away? How will you work with your mentor to track your work? Have you worked in this style before?
+>
+>- If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?
+>
+>- After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
  
 </details>
 
