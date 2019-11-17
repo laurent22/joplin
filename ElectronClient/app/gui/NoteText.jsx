@@ -53,6 +53,29 @@ require('brace/theme/chaos');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
 
+/* eslint-disable-next-line no-undef */
+class CustomHighlightRules extends ace.acequire(
+	'ace/mode/markdown_highlight_rules'
+).MarkdownHighlightRules {
+	constructor() {
+		super();
+		this.$rules.start.push({
+			// This is actually a highlight `mark`, but Ace has no token name for this
+			// https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
+			token: 'highlight_mark',
+			regex: '==.*?==',
+		});
+	}
+}
+
+/* eslint-disable-next-line no-undef */
+class CustomMdMode extends ace.acequire('ace/mode/markdown').Mode {
+	constructor() {
+		super();
+		this.HighlightRules = CustomHighlightRules;
+	}
+}
+
 const NOTE_TAG_BAR_FEATURE_ENABLED = false;
 
 class NoteTextComponent extends React.Component {
@@ -443,6 +466,7 @@ class NoteTextComponent extends React.Component {
 
 		const currentNoteId = this.state.note ? this.state.note.id : null;
 		if (this.lastComponentUpdateNoteId_ !== currentNoteId && this.editor_) {
+			this.editor_.editor.getSession().setMode(new CustomMdMode());
 			const undoManager = this.editor_.editor.getSession().getUndoManager();
 			undoManager.reset();
 			this.editor_.editor.getSession().setUndoManager(undoManager);
@@ -1937,7 +1961,7 @@ class NoteTextComponent extends React.Component {
 			fontSize: `${theme.editorFontSize}px`,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
-			editorTheme: theme.editorTheme,
+			editorTheme: theme.editorTheme, // Defined in theme.js
 		};
 
 		if (visiblePanes.indexOf('viewer') < 0) {
