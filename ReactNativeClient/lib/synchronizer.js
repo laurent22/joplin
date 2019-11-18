@@ -424,6 +424,11 @@ class Synchronizer {
 									const result = await Resource.fullPathForSyncUpload(local);
 									local = result.resource;
 									const localResourceContentPath = result.path;
+
+									if (local.size >= 10 * 1000* 1000) {
+										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
+									}
+
 									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 								} catch (error) {
 									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
