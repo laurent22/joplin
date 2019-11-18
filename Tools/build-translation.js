@@ -210,6 +210,7 @@ function flagImageUrl(locale) {
 	if (locale === 'nb_NO') return `${baseUrl}/country-4x3/no.png`;
 	if (locale === 'ro') return `${baseUrl}/country-4x3/ro.png`;
 	if (locale === 'fa') return `${baseUrl}/country-4x3/ir.png`;
+	if (locale === 'eo') return `${baseUrl}/esperanto.png`;
 	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
 }
 
