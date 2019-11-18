@@ -24,7 +24,8 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -455,7 +456,9 @@ function markdownToHtml(md, templateParams) {
 		}
 	});
 
-	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + scriptHtml + footerHtml;
+	const improveDocHtml = '<a href="#"><i class="fa fa-github"></i> Improve this doc</a>';
+
+	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + improveDocHtml + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
