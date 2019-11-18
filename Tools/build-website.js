@@ -239,6 +239,15 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -456,9 +465,14 @@ function markdownToHtml(md, templateParams) {
 		}
 	});
 
-	const improveDocHtml = '<a href="#"><i class="fa fa-github"></i> Improve this doc</a>';
+	const improveDocHtml = `
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>`;
 
-	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + improveDocHtml + scriptHtml + footerHtml;
+	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + Mustache.render(improveDocHtml, templateParams) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
