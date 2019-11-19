@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "タグを削除するには、関連するノートからタグを外してください。"
@@ -1041,7 +1043,7 @@ msgid "This file could not be opened: %s"
 msgstr "次のファイルは開くことができません：%s"
 
 msgid "Save as..."
-msgstr "変更を保存..."
+msgstr "名前を付けて保存..."
 
 msgid "Copy path to clipboard"
 msgstr "クリップボードにパスを保存"
@@ -1387,17 +1389,16 @@ msgstr ""
 "次のFAQをご覧ください: %s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "キーバインド"
 
-#, fuzzy
 msgid "Default"
-msgstr "既定値: %s"
+msgstr "標準"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "同期先"
@@ -1484,9 +1485,8 @@ msgstr "Solarised (暗)"
 msgid "Nord"
 msgstr "Nord"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "トレイアイコンの表示"
+msgstr "ノートの数を表示"
 
 msgid "Editor"
 msgstr "エディター"
