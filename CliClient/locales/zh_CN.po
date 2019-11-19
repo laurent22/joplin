@@ -1114,7 +1114,7 @@ msgid "Synchronisation Status"
 msgstr "同步状态"
 
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #, javascript-format
 msgid ""
@@ -1435,16 +1435,16 @@ msgid "Dark"
 msgstr "深邃"
 
 msgid "Dracula"
-msgstr ""
+msgstr "德古拉风格"
 
 msgid "Solarised Light"
-msgstr "Solarised Light风格"
+msgstr "(Solarised)明亮过曝风格"
 
 msgid "Solarised Dark"
-msgstr "Solarised Dark风格"
+msgstr "(Solarised)深邃过曝风格"
 
 msgid "Nord"
-msgstr ""
+msgstr "北极风格"
 
 #, fuzzy
 msgid "Show note counts"
@@ -1615,7 +1615,7 @@ msgstr ""
 "认编辑器。"
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "PDF导出时的页面规格"
 
 msgid "A4"
 msgstr ""
