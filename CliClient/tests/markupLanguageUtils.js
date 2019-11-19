@@ -1,16 +1,10 @@
-/* eslint-disable no-unused-vars */
-
+// testing ReactNativeClient/lib/markupLanguageUtils.js
 require('app-module-path').addPath(__dirname);
 
-const {asyncTest} = require('test-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils.js');
 const Note = require('lib/models/Note');
 const markdownUtils = require('lib/markdownUtils');
 const htmlUtils = require('lib/htmlUtils');
-
-process.on('unhandledRejection', (reason, p) => {
-	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
-});
 
 describe('markupLanguageUtils', function() {
 
@@ -24,7 +18,6 @@ describe('markupLanguageUtils', function() {
 	});
 
 	it('should call correct handler for markup language', function() {
-
 		const imageMd = '![something](http://test.com/img.png)';
 		// eslint-disable-next-line no-undef
 		spyOn(markdownUtils, 'extractImageUrls');
