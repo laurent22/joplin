@@ -17,15 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "To delete a tag, untag the associated notes."
-msgstr "Da bi mogao obrisati oznaku, skini oznaku s povezanih bilješki."
-
-msgid "Please select the note or notebook to be deleted first."
-msgstr "Odaberi bilješku ili bilježnicu za brisanje."
-
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Pritisni Ctrl+D ili napiši \"exit\" za izlazak iz aplikacije"
-
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Više od jednog rezultata odgovara \"%s\". Promijeni upit."
@@ -48,34 +39,12 @@ msgstr "N"
 msgid "y"
 msgstr "y"
 
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "Prekid sinkronizacije u pozadini... Pričekaj."
-
-#, javascript-format
-msgid "No such command: %s"
-msgstr "Ne postoji naredba: %s"
-
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Naredba \"%s\" postoji samo u inačici s grafičkim sučeljem"
-
 msgid "Cannot change encrypted item"
 msgstr ""
 
 #, javascript-format
-msgid "Missing required argument: %s"
-msgstr "Nedostaje obavezni argument: %s"
-
-#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
-
-msgid "Your choice: "
-msgstr "Tvoj izbor: "
-
-#, javascript-format
-msgid "Invalid answer: %s"
-msgstr "Nevažeći odgovor: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "Prilaže datu datoteku bilješci."
@@ -189,16 +158,6 @@ msgid ""
 msgstr ""
 "Izvozi podatke u dati direktorij. Po defaultu izvozi sve podatke uključujući "
 "bilježnice, bilješke, zadatke i resurse."
-
-#, fuzzy, javascript-format
-msgid "Destination format: %s"
-msgstr "Format datuma"
-
-msgid "Exports only the given note."
-msgstr "Izvozi samo datu bilješku."
-
-msgid "Exports only the given notebook."
-msgstr "Izvozi samo datu bilježnicu."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Prikazuje geolokacijski URL bilješke."
@@ -393,29 +352,6 @@ msgid ""
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr ""
-
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr ""
-
-msgid "Server is not running."
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-
 msgid "Displays summary about the notes and notebooks."
 msgstr "Prikazuje sažetak o bilješkama i bilježnicama."
 
@@ -424,26 +360,6 @@ msgstr "Sinkronizira sa udaljenom pohranom podataka."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Sinkroniziraj sa metom (default je polje sync.target u konfiguraciji)"
-
-#, fuzzy
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication token)."
-
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
-
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
-
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
-
-#, javascript-format
-msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
 
 msgid "Synchronisation is already in progress."
 msgstr "Sinkronizacija je već u toku."
@@ -465,12 +381,6 @@ msgstr "Ne mogu započeti sinkronizaciju."
 
 msgid "Starting synchronisation..."
 msgstr "Započinjem sinkronizaciju..."
-
-msgid "Downloading resources..."
-msgstr ""
-
-msgid "Cancelling... Please wait."
-msgstr "Prekidam... Pričekaj."
 
 #, fuzzy
 msgid ""
@@ -535,12 +445,9 @@ msgstr "Default: %s"
 msgid "Possible keys/values:"
 msgstr "Mogući ključevi/vrijednosti:"
 
-#, fuzzy
-msgid "Type `joplin help` for usage information."
-msgstr "Prikazuje informacije o korištenju."
-
-msgid "Fatal error:"
-msgstr "Fatalna greška:"
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -560,9 +467,6 @@ msgstr ""
 "stvoriti direktorij u \"Apps/Joplin\" i koristiti će samo taj direktorij za "
 "čitanje i pisanje. Aplikacija neće imati pristup osobnim podacima niti ičemu "
 "izvan tog direktorija. Nijedan se podatak neće dijeliti s trećom stranom."
-
-msgid "Search:"
-msgstr "Traži:"
 
 #, fuzzy
 msgid ""
@@ -595,71 +499,6 @@ msgstr ""
 msgid "Could not export notes: %s"
 msgstr ""
 
-#, fuzzy
-msgid "&File"
-msgstr "Datoteka"
-
-msgid "About Joplin"
-msgstr "O Joplinu"
-
-msgid "Preferences..."
-msgstr ""
-
-msgid "Check for updates..."
-msgstr ""
-
-msgid "Templates"
-msgstr ""
-
-msgid "Import"
-msgstr "Uvoz"
-
-#, fuzzy
-msgid "Export"
-msgstr "Uvoz"
-
-msgid "Synchronise"
-msgstr "Sinkroniziraj"
-
-#, javascript-format
-msgid "Hide %s"
-msgstr ""
-
-msgid "Quit"
-msgstr "Izađi"
-
-msgid "Close Window"
-msgstr ""
-
-#, fuzzy
-msgid "&Edit"
-msgstr "Uredi"
-
-msgid "Copy"
-msgstr "Kopiraj"
-
-msgid "Cut"
-msgstr "Izreži"
-
-msgid "Paste"
-msgstr "Zalijepi"
-
-#, fuzzy
-msgid "Select all"
-msgstr "Odaberi datum"
-
-msgid "Bold"
-msgstr ""
-
-msgid "Italic"
-msgstr ""
-
-msgid "Link"
-msgstr ""
-
-msgid "Code"
-msgstr ""
-
 msgid "Insert Date Time"
 msgstr ""
 
@@ -676,67 +515,11 @@ msgstr "Pretraži u svim bilješkama"
 msgid "Search in current note"
 msgstr "Pretraži u svim bilješkama"
 
-msgid "&View"
-msgstr ""
-
-msgid "Toggle sidebar"
-msgstr ""
-
-msgid "Layout button sequence"
-msgstr ""
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Bilješka je promijenjena:"
-
-msgid "Toggle editor layout"
-msgstr ""
-
-#, fuzzy
-msgid "Focus"
-msgstr "Naslov bilješke:"
-
-#, fuzzy
-msgid "&Tools"
-msgstr "Alati"
-
-#, fuzzy
-msgid "&Help"
-msgstr "Pomoć"
-
-msgid "Website and documentation"
-msgstr "Website i dokumentacija"
-
-#, fuzzy
-msgid "Joplin Forum"
-msgstr "Evernote izvozne datoteke"
-
-#, fuzzy
-msgid "Make a donation"
-msgstr "Website i dokumentacija"
-
-msgid "Toggle development tools"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "Open %s"
-msgstr "On %s: %s"
-
-msgid "Exit"
-msgstr ""
-
 msgid "OK"
 msgstr "U redu"
 
 msgid "Cancel"
 msgstr "Odustani"
-
-msgid "Current version is up-to-date."
-msgstr ""
-
-#, javascript-format
-msgid "%s (pre-release)"
-msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr ""
@@ -748,17 +531,6 @@ msgstr ""
 #, javascript-format
 msgid "New version: %s"
 msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-#, fuzzy
-msgid "No"
-msgstr "N"
-
-#, fuzzy
-msgid "Full Release Notes"
-msgstr "Obriši bilješke?"
 
 msgid "Token has been copied to the clipboard!"
 msgstr ""
@@ -821,24 +593,14 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid "This will open a new screen. Save your current changes?"
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
-#, javascript-format
-msgid "Notes and settings are stored in: %s"
-msgstr "Bilješke i postavke su pohranjene u: %s"
-
-#, fuzzy
-msgid "Check synchronisation configuration"
-msgstr "Prekini sinkronizaciju"
-
-msgid "Browse..."
+msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 
-msgid "Back"
-msgstr "Natrag"
-
-msgid "Apply"
+msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr ""
 
 msgid "Submit"
@@ -916,19 +678,6 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr ""
 
-msgid "Firefox Extension"
-msgstr ""
-
-msgid "Chrome Web Store"
-msgstr ""
-
-msgid "Get it now:"
-msgstr ""
-
-#, fuzzy
-msgid "Usage"
-msgstr "Korištenje: %s"
-
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -961,6 +710,13 @@ msgstr "Postavi upozorenje:"
 msgid "Template file:"
 msgstr ""
 
+msgid "Toggle sidebar"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Bilješka je promijenjena:"
+
 msgid "New note"
 msgstr "Nova bilješka"
 
@@ -989,13 +745,6 @@ msgstr ""
 msgid "Set the password"
 msgstr ""
 
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Ovdje nema bilješki. Stvori novu pritiskom na \"Nova bilješka\"."
-
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
-
 msgid "Location"
 msgstr ""
 
@@ -1009,12 +758,6 @@ msgstr "Bilježnice"
 msgid "Markup"
 msgstr ""
 
-msgid "Previous versions of this note"
-msgstr ""
-
-msgid "Note properties"
-msgstr ""
-
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
@@ -1023,38 +766,9 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Bilješka je promijenjena:"
 
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Nepodržana poveznica ili poruka: %s"
-
-msgid "Restore"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-
-msgid "Open..."
-msgstr ""
-
 #, fuzzy, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Bilježnicu nije moguće snimiti: %s"
-
-#, fuzzy
-msgid "Save as..."
-msgstr "Spremi promjene"
-
-msgid "Copy path to clipboard"
-msgstr ""
-
-msgid "Copy Link Address"
-msgstr ""
-
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
 
 #, javascript-format
 msgid ""
@@ -1062,87 +776,14 @@ msgid ""
 "note."
 msgstr ""
 
-msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
-
-#, fuzzy
-msgid "PDF File"
-msgstr "Datoteka"
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr ""
-
-msgid "strong text"
-msgstr ""
-
-msgid "emphasized text"
-msgstr ""
-
-msgid "List item"
-msgstr ""
-
-msgid "Insert Hyperlink"
-msgstr ""
-
-msgid "Attach file"
-msgstr "Priloži datoteku"
-
-msgid "Set alarm"
-msgstr "Postavi upozorenje"
-
-#, fuzzy, javascript-format
-msgid "In: %s"
-msgstr "%s: %s"
-
-msgid "Hyperlink"
-msgstr ""
-
-msgid "Numbered List"
-msgstr ""
-
-msgid "Bulleted List"
-msgstr ""
-
-msgid "Checkbox"
-msgstr ""
-
-msgid "Heading"
-msgstr ""
-
-msgid "Horizontal Rule"
-msgstr ""
-
-msgid "Click to stop external editing"
-msgstr ""
-
-#, fuzzy
-msgid "Watching..."
-msgstr "Prekidam..."
-
-#, fuzzy
-msgid "to-do"
-msgstr "Novi zadatak"
-
-#, fuzzy
-msgid "note"
-msgstr "Nova bilješka"
-
-#, fuzzy, javascript-format
-msgid "Creating new %s..."
-msgstr "Uvozim bilješke..."
-
-msgid "Refresh"
-msgstr "Osvježi"
-
-msgid "Clear"
-msgstr "Očisti"
-
 msgid "OneDrive Login"
 msgstr "OneDrive Login"
 
 msgid "Dropbox Login"
 msgstr ""
+
+msgid "Import"
+msgstr "Uvoz"
 
 msgid "Options"
 msgstr "Opcije"
@@ -1178,22 +819,9 @@ msgstr "Nova bilježnica"
 msgid "Rename"
 msgstr "Preimenuj"
 
-msgid "Notebooks"
-msgstr "Bilježnice"
-
-#, fuzzy, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Stvorene lokalne stavke: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Resursi: %d/%d"
-
-msgid "Please select where the sync status should be exported to"
-msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
-
-msgid "Retry"
-msgstr ""
+#, fuzzy
+msgid "Export"
+msgstr "Uvoz"
 
 msgid "Add or remove tags"
 msgstr "Dodaj ili makni oznake"
@@ -1220,21 +848,9 @@ msgstr "Zamijeni bilješku i zadatak"
 msgid "Copy Markdown link"
 msgstr ""
 
-#, fuzzy, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "Obriši bilješke?"
-
-#, fuzzy, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Obriši ove bilješke?"
-
-msgid ""
-"Type a note title to jump to it. Or type # followed by a tag name, or @ "
-"followed by a notebook name."
-msgstr ""
-
-msgid "Goto Anything..."
-msgstr ""
+#, fuzzy
+msgid "PDF File"
+msgstr "Datoteka"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1261,41 +877,6 @@ msgstr "OneDrive Dev (Samo za testiranje)"
 
 msgid "WebDAV"
 msgstr ""
-
-#, javascript-format
-msgid "Unknown log level: %s"
-msgstr "Nepoznata razina logiranja: %s"
-
-#, javascript-format
-msgid "Unknown level ID: %s"
-msgstr "Nepoznat ID razine: %s"
-
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr "Nedostaju podaci za ovjeru. Pokušaj ponovo započeti sinkronizaciju."
-
-msgid "Untitled"
-msgstr "Nenaslovljen"
-
-msgid ""
-"Could not synchronize with OneDrive.\n"
-"\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
-"\n"
-"Please consider using a regular OneDrive account."
-msgstr ""
-"Ne mogu sinkronizirati OneDrive.\n"
-"\n"
-"Ova greška se često javlja pri korištenju usluge OneDrive for Business koja "
-"nije podržana.\n"
-"\n"
-"Molimo da koristite obični OneDrive korisnički račun."
-
-#, javascript-format
-msgid "Cannot access %s"
-msgstr "Ne mogu pristupiti %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -1336,18 +917,8 @@ msgstr "Dovršeno: %s"
 msgid "Last error: %s"
 msgstr "Fatalna greška:"
 
-msgid "Idle"
-msgstr ""
-
-msgid "In progress"
-msgstr ""
-
 msgid "Encrypted"
 msgstr ""
-
-#, fuzzy
-msgid "Encrypted items cannot be modified"
-msgstr "Neke stavke se ne mogu sinkronizirati."
 
 #, fuzzy
 msgid "title"
@@ -1371,17 +942,6 @@ msgstr "Naslov \"%s\" je rezerviran i ne može se koristiti."
 #, fuzzy
 msgid "created date"
 msgstr "Stvoreno: %d."
-
-msgid "This note does not have geolocation information."
-msgstr "Ova bilješka nema geolokacijske informacije."
-
-#, javascript-format
-msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Ne mogu kopirati bilješku u bilježnicu %s"
-
-#, javascript-format
-msgid "Cannot move note to \"%s\" notebook"
-msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
 
 #, javascript-format
 msgid ""
@@ -1721,42 +1281,6 @@ msgstr ""
 msgid "Keep note history for"
 msgstr ""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
-
-#, fuzzy
-msgid "General"
-msgstr "Opcije"
-
-#, fuzzy
-msgid "Synchronisation"
-msgstr "Status sinkronizacije"
-
-msgid "Appearance"
-msgstr ""
-
-#, fuzzy
-msgid "Note"
-msgstr "Bilježnice"
-
-msgid "Plugins"
-msgstr ""
-
-#, fuzzy
-msgid "Application"
-msgstr "Izađi iz aplikacije."
-
-msgid "Encryption"
-msgstr ""
-
-msgid "Web Clipper"
-msgstr ""
-
-#, javascript-format
-msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
-
 #, fuzzy
 msgid "Joplin Export File"
 msgstr "Evernote izvozne datoteke"
@@ -1785,89 +1309,9 @@ msgstr "Datoteka"
 msgid "Directory"
 msgstr ""
 
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr ""
-
-#, javascript-format
-msgid "Please specify import format for %s"
-msgstr ""
-
-#, javascript-format
-msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
-msgstr ""
-
-msgid "There is no data to export."
-msgstr ""
-
 #, fuzzy
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
-
-msgid "Restored Notes"
-msgstr ""
-
-msgid "Items that cannot be synchronised"
-msgstr "Stavke koje se ne mogu sinkronizirati"
-
-msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "Bilježnicu nije moguće snimiti: %s"
-
-#, fuzzy, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Bilježnicu nije moguće snimiti: %s"
-
-#, fuzzy
-msgid "Items that cannot be decrypted"
-msgstr "Stavke koje se ne mogu sinkronizirati"
-
-msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
-msgstr ""
-
-msgid "Sync status (synced items / total items)"
-msgstr "Status (sinkronizirane stavke / ukupni broj stavki)"
-
-#, javascript-format
-msgid "%s: %d/%d"
-msgstr "%s: %d/%d"
-
-#, javascript-format
-msgid "Total: %d/%d"
-msgstr "Ukupno: %d/%d"
-
-#, javascript-format
-msgid "Conflicted: %d"
-msgstr "U sukobu: %d"
-
-#, javascript-format
-msgid "To delete: %d"
-msgstr "Za brisanje: %d"
-
-msgid "Folders"
-msgstr "Mape"
-
-#, fuzzy, javascript-format
-msgid "%s: %d notes"
-msgstr "%s: %d bilješki"
-
-msgid "Coming alarms"
-msgstr "Nadolazeća upozorenja"
-
-#, fuzzy, javascript-format
-msgid "On %s: %s"
-msgstr "On %s: %s"
 
 msgid "Permission to use camera"
 msgstr ""
@@ -1888,16 +1332,6 @@ msgstr "Trenutno nema bilješki. Stvori novu klikom na (+) gumb."
 
 msgid "Delete these notes?"
 msgstr "Obriši ove bilješke?"
-
-msgid "Move to notebook..."
-msgstr "Premjesti u bilježnicu..."
-
-#, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
-
-msgid "Press to set the decryption password."
-msgstr ""
 
 #, fuzzy
 msgid "Clear alarm"
@@ -1928,35 +1362,23 @@ msgstr "Nova bilježnica"
 msgid "Configuration"
 msgstr "Konfiguracija"
 
+#, fuzzy, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Stvorene lokalne stavke: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Resursi: %d/%d"
+
+msgid "Synchronise"
+msgstr "Sinkroniziraj"
+
 #, fuzzy
 msgid "All notes"
 msgstr "Nova bilješka"
 
-#, fuzzy
-msgid "Checking... Please wait."
-msgstr "Prekidam... Pričekaj."
-
-#, fuzzy
-msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Prekini sinkronizaciju"
-
-msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-
-#, fuzzy
-msgid "The application has been authorised!"
-msgstr "Aplikacija je uspješno autorizirana."
-
-#, javascript-format
-msgid ""
-"Could not authorise application:\n"
-"\n"
-"%s\n"
-"\n"
-"Please try again."
-msgstr ""
+msgid "Notebooks"
+msgstr "Bilježnice"
 
 #, fuzzy, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1975,6 +1397,10 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+
+#, fuzzy
+msgid "Check synchronisation configuration"
+msgstr "Prekini sinkronizaciju"
 
 msgid "Encryption Config"
 msgstr ""
@@ -2028,16 +1454,12 @@ msgstr ""
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 
+#, fuzzy
+msgid "Make a donation"
+msgstr "Website i dokumentacija"
+
 msgid "Joplin website"
 msgstr ""
-
-#, javascript-format
-msgid "Database v%s"
-msgstr ""
-
-#, fuzzy, javascript-format
-msgid "FTS enabled: %d"
-msgstr "Za brisanje: %d"
 
 #, fuzzy
 msgid "Login with Dropbox"
@@ -2079,12 +1501,6 @@ msgstr "Uredi bilježnicu"
 msgid "Enter notebook title"
 msgstr "Naslov bilježnice:"
 
-msgid "Show all"
-msgstr ""
-
-msgid "Errors only"
-msgstr ""
-
 msgid "This note has been modified:"
 msgstr "Bilješka je promijenjena:"
 
@@ -2098,6 +1514,9 @@ msgstr "Odbaci promjene"
 msgid "No item with ID %s"
 msgstr ""
 
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
+
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
@@ -2106,65 +1525,397 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
+#~ msgid "To delete a tag, untag the associated notes."
+#~ msgstr "Da bi mogao obrisati oznaku, skini oznaku s povezanih bilješki."
+
+#~ msgid "Please select the note or notebook to be deleted first."
+#~ msgstr "Odaberi bilješku ili bilježnicu za brisanje."
+
+#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
+#~ msgstr "Pritisni Ctrl+D ili napiši \"exit\" za izlazak iz aplikacije"
+
+#~ msgid "Cancelling background synchronisation... Please wait."
+#~ msgstr "Prekid sinkronizacije u pozadini... Pričekaj."
+
 #, javascript-format
-msgid "Unsupported image type: %s"
-msgstr "Nepodržana vrsta slike: %s"
+#~ msgid "No such command: %s"
+#~ msgstr "Ne postoji naredba: %s"
+
+#, javascript-format
+#~ msgid "The command \"%s\" is only available in GUI mode"
+#~ msgstr "Naredba \"%s\" postoji samo u inačici s grafičkim sučeljem"
+
+#, javascript-format
+#~ msgid "Missing required argument: %s"
+#~ msgstr "Nedostaje obavezni argument: %s"
+
+#~ msgid "Your choice: "
+#~ msgstr "Tvoj izbor: "
+
+#, javascript-format
+#~ msgid "Invalid answer: %s"
+#~ msgstr "Nevažeći odgovor: %s"
 
 #, fuzzy, javascript-format
-msgid "Updated: %s"
-msgstr "Ažurirano: %d."
+#~ msgid "Destination format: %s"
+#~ msgstr "Format datuma"
 
-msgid "View on map"
-msgstr "Vidi na karti"
+#~ msgid "Exports only the given note."
+#~ msgstr "Izvozi samo datu bilješku."
 
-msgid "Go to source URL"
-msgstr ""
+#~ msgid "Exports only the given notebook."
+#~ msgstr "Izvozi samo datu bilježnicu."
 
-#, fuzzy
-msgid "Attach..."
-msgstr "Traži"
-
-#, fuzzy
-msgid "Choose an option"
-msgstr "Prikaži napredne opcije"
-
-#, fuzzy
-msgid "Take photo"
-msgstr "Priloži sliku"
-
-msgid "Attach photo"
-msgstr "Priloži sliku"
-
-msgid "Attach any file"
-msgstr "Priloži datoteku"
-
-msgid "Share"
-msgstr ""
-
-msgid "Convert to note"
-msgstr "Pretvori u bilješku"
-
-msgid "Convert to todo"
-msgstr "Pretvori u zadatak"
-
-msgid "Properties"
-msgstr ""
-
-msgid "Add body"
-msgstr ""
-
-msgid "Edit"
-msgstr "Uredi"
+#, fuzzy, javascript-format
+#~ msgid ""
+#~ "Sets the property <name> of the given <note> to the given [value]. "
+#~ "Possible properties are:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Sets the property <name> of the given <note> to the given [value]. "
+#~ "Possible properties are:\n"
+#~ "\n"
+#~ "%s"
 
 #, fuzzy
-msgid "Add title"
-msgstr "Nenaslovljen"
+#~ msgid ""
+#~ "Authentication was not completed (did not receive an authentication "
+#~ "token)."
+#~ msgstr ""
+#~ "Ovjera nije dovršena (nije dobivena potvrda ovjere - authentication "
+#~ "token)."
 
-msgid "Login with OneDrive"
-msgstr "Prijavi se u OneDrive"
+#~ msgid "Cancelling... Please wait."
+#~ msgstr "Prekidam... Pričekaj."
 
-msgid "Search"
-msgstr "Traži"
+#, fuzzy
+#~ msgid "Type `joplin help` for usage information."
+#~ msgstr "Prikazuje informacije o korištenju."
+
+#~ msgid "Fatal error:"
+#~ msgstr "Fatalna greška:"
+
+#~ msgid "Search:"
+#~ msgstr "Traži:"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Datoteka"
+
+#~ msgid "About Joplin"
+#~ msgstr "O Joplinu"
+
+#~ msgid "Quit"
+#~ msgstr "Izađi"
+
+#, fuzzy
+#~ msgid "&Edit"
+#~ msgstr "Uredi"
+
+#~ msgid "Copy"
+#~ msgstr "Kopiraj"
+
+#~ msgid "Cut"
+#~ msgstr "Izreži"
+
+#~ msgid "Paste"
+#~ msgstr "Zalijepi"
+
+#, fuzzy
+#~ msgid "Select all"
+#~ msgstr "Odaberi datum"
+
+#, fuzzy
+#~ msgid "Focus"
+#~ msgstr "Naslov bilješke:"
+
+#, fuzzy
+#~ msgid "&Tools"
+#~ msgstr "Alati"
+
+#, fuzzy
+#~ msgid "&Help"
+#~ msgstr "Pomoć"
+
+#~ msgid "Website and documentation"
+#~ msgstr "Website i dokumentacija"
+
+#, fuzzy
+#~ msgid "Joplin Forum"
+#~ msgstr "Evernote izvozne datoteke"
+
+#, fuzzy, javascript-format
+#~ msgid "Open %s"
+#~ msgstr "On %s: %s"
+
+#, fuzzy
+#~ msgid "No"
+#~ msgstr "N"
+
+#, fuzzy
+#~ msgid "Full Release Notes"
+#~ msgstr "Obriši bilješke?"
+
+#, javascript-format
+#~ msgid "Notes and settings are stored in: %s"
+#~ msgstr "Bilješke i postavke su pohranjene u: %s"
+
+#~ msgid "Back"
+#~ msgstr "Natrag"
+
+#, fuzzy
+#~ msgid "Usage"
+#~ msgstr "Korištenje: %s"
+
+#~ msgid "No notes in here. Create one by clicking on \"New note\"."
+#~ msgstr "Ovdje nema bilješki. Stvori novu pritiskom na \"Nova bilješka\"."
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on \"New notebook"
+#~ "\"."
+#~ msgstr ""
+#~ "Ovdje nema bilježnica. Stvori novu pritiskom na \"Nova bilježnica\"."
+
+#, javascript-format
+#~ msgid "Unsupported link or message: %s"
+#~ msgstr "Nepodržana poveznica ili poruka: %s"
+
+#, fuzzy
+#~ msgid "Save as..."
+#~ msgstr "Spremi promjene"
+
+#~ msgid "Attach file"
+#~ msgstr "Priloži datoteku"
+
+#~ msgid "Set alarm"
+#~ msgstr "Postavi upozorenje"
+
+#, fuzzy, javascript-format
+#~ msgid "In: %s"
+#~ msgstr "%s: %s"
+
+#, fuzzy
+#~ msgid "Watching..."
+#~ msgstr "Prekidam..."
+
+#, fuzzy
+#~ msgid "to-do"
+#~ msgstr "Novi zadatak"
+
+#, fuzzy
+#~ msgid "note"
+#~ msgstr "Nova bilješka"
+
+#, fuzzy, javascript-format
+#~ msgid "Creating new %s..."
+#~ msgstr "Uvozim bilješke..."
+
+#~ msgid "Refresh"
+#~ msgstr "Osvježi"
+
+#~ msgid "Clear"
+#~ msgstr "Očisti"
+
+#~ msgid "Please select where the sync status should be exported to"
+#~ msgstr "Odaberi lokaciju za izvoz statusa sinkronizacije"
+
+#, fuzzy, javascript-format
+#~ msgid "Delete note \"%s\"?"
+#~ msgstr "Obriši bilješke?"
+
+#, fuzzy, javascript-format
+#~ msgid "Delete these %d notes?"
+#~ msgstr "Obriši ove bilješke?"
+
+#, javascript-format
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Nepoznata razina logiranja: %s"
+
+#, javascript-format
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Nepoznat ID razine: %s"
+
+#~ msgid ""
+#~ "Cannot refresh token: authentication data is missing. Starting the "
+#~ "synchronisation again may fix the problem."
+#~ msgstr "Nedostaju podaci za ovjeru. Pokušaj ponovo započeti sinkronizaciju."
+
+#~ msgid "Untitled"
+#~ msgstr "Nenaslovljen"
+
+#~ msgid ""
+#~ "Could not synchronize with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Ne mogu sinkronizirati OneDrive.\n"
+#~ "\n"
+#~ "Ova greška se često javlja pri korištenju usluge OneDrive for Business "
+#~ "koja nije podržana.\n"
+#~ "\n"
+#~ "Molimo da koristite obični OneDrive korisnički račun."
+
+#, javascript-format
+#~ msgid "Cannot access %s"
+#~ msgstr "Ne mogu pristupiti %s"
+
+#, fuzzy
+#~ msgid "Encrypted items cannot be modified"
+#~ msgstr "Neke stavke se ne mogu sinkronizirati."
+
+#~ msgid "This note does not have geolocation information."
+#~ msgstr "Ova bilješka nema geolokacijske informacije."
+
+#, javascript-format
+#~ msgid "Cannot copy note to \"%s\" notebook"
+#~ msgstr "Ne mogu kopirati bilješku u bilježnicu %s"
+
+#, javascript-format
+#~ msgid "Cannot move note to \"%s\" notebook"
+#~ msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
+
+#, javascript-format
+#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
+#~ msgstr "Nevažeća vrijednost: \"%s\". Moguće vrijednosti su: %s."
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Synchronisation"
+#~ msgstr "Status sinkronizacije"
+
+#, fuzzy
+#~ msgid "Note"
+#~ msgstr "Bilježnice"
+
+#, fuzzy
+#~ msgid "Application"
+#~ msgstr "Izađi iz aplikacije."
+
+#~ msgid "Items that cannot be synchronised"
+#~ msgstr "Stavke koje se ne mogu sinkronizirati"
+
+#, fuzzy, javascript-format
+#~ msgid "%s (%s) could not be uploaded: %s"
+#~ msgstr "Bilježnicu nije moguće snimiti: %s"
+
+#, fuzzy, javascript-format
+#~ msgid "Item \"%s\" could not be downloaded: %s"
+#~ msgstr "Bilježnicu nije moguće snimiti: %s"
+
+#, fuzzy
+#~ msgid "Items that cannot be decrypted"
+#~ msgstr "Stavke koje se ne mogu sinkronizirati"
+
+#~ msgid "Sync status (synced items / total items)"
+#~ msgstr "Status (sinkronizirane stavke / ukupni broj stavki)"
+
+#, javascript-format
+#~ msgid "%s: %d/%d"
+#~ msgstr "%s: %d/%d"
+
+#, javascript-format
+#~ msgid "Total: %d/%d"
+#~ msgstr "Ukupno: %d/%d"
+
+#, javascript-format
+#~ msgid "Conflicted: %d"
+#~ msgstr "U sukobu: %d"
+
+#, javascript-format
+#~ msgid "To delete: %d"
+#~ msgstr "Za brisanje: %d"
+
+#~ msgid "Folders"
+#~ msgstr "Mape"
+
+#, fuzzy, javascript-format
+#~ msgid "%s: %d notes"
+#~ msgstr "%s: %d bilješki"
+
+#~ msgid "Coming alarms"
+#~ msgstr "Nadolazeća upozorenja"
+
+#, fuzzy, javascript-format
+#~ msgid "On %s: %s"
+#~ msgstr "On %s: %s"
+
+#~ msgid "Move to notebook..."
+#~ msgstr "Premjesti u bilježnicu..."
+
+#, javascript-format
+#~ msgid "Move %d notes to notebook \"%s\"?"
+#~ msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
+
+#, fuzzy
+#~ msgid "Checking... Please wait."
+#~ msgstr "Prekidam... Pričekaj."
+
+#, fuzzy
+#~ msgid "Success! Synchronisation configuration appears to be correct."
+#~ msgstr "Prekini sinkronizaciju"
+
+#, fuzzy
+#~ msgid "The application has been authorised!"
+#~ msgstr "Aplikacija je uspješno autorizirana."
+
+#, fuzzy, javascript-format
+#~ msgid "FTS enabled: %d"
+#~ msgstr "Za brisanje: %d"
+
+#, javascript-format
+#~ msgid "Unsupported image type: %s"
+#~ msgstr "Nepodržana vrsta slike: %s"
+
+#, fuzzy, javascript-format
+#~ msgid "Updated: %s"
+#~ msgstr "Ažurirano: %d."
+
+#~ msgid "View on map"
+#~ msgstr "Vidi na karti"
+
+#, fuzzy
+#~ msgid "Attach..."
+#~ msgstr "Traži"
+
+#, fuzzy
+#~ msgid "Choose an option"
+#~ msgstr "Prikaži napredne opcije"
+
+#, fuzzy
+#~ msgid "Take photo"
+#~ msgstr "Priloži sliku"
+
+#~ msgid "Attach photo"
+#~ msgstr "Priloži sliku"
+
+#~ msgid "Attach any file"
+#~ msgstr "Priloži datoteku"
+
+#~ msgid "Convert to note"
+#~ msgstr "Pretvori u bilješku"
+
+#~ msgid "Convert to todo"
+#~ msgstr "Pretvori u zadatak"
+
+#~ msgid "Edit"
+#~ msgstr "Uredi"
+
+#, fuzzy
+#~ msgid "Add title"
+#~ msgstr "Nenaslovljen"
+
+#~ msgid "Login with OneDrive"
+#~ msgstr "Prijavi se u OneDrive"
+
+#~ msgid "Search"
+#~ msgstr "Traži"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "Sinkronizacija je već u toku. Stanje: %s"

@@ -16,16 +16,6 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "To delete a tag, untag the associated notes."
-msgstr ""
-"Per eliminare un'etichetta, togli l'etichetta dalle note a cui è associata."
-
-msgid "Please select the note or notebook to be deleted first."
-msgstr "Per favore seleziona la nota o il taccuino da eliminare."
-
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Premi Ctrl+D o digita \"exit\" per uscire dall'applicazione"
-
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -49,34 +39,12 @@ msgstr "N"
 msgid "y"
 msgstr "s"
 
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "Annullamento della sincronizzazione in background... Attendere prego."
-
-#, javascript-format
-msgid "No such command: %s"
-msgstr "Nessun comando: %s"
-
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Il comando \"%s\" è disponibile solo nella modalità grafica"
-
 msgid "Cannot change encrypted item"
 msgstr "Impossibile modificare l'elemento criptato"
 
 #, javascript-format
-msgid "Missing required argument: %s"
-msgstr "Argomento richiesto mancante: %s"
-
-#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
-
-msgid "Your choice: "
-msgstr "La tua scelta: "
-
-#, javascript-format
-msgid "Invalid answer: %s"
-msgstr "Risposta non valida: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "Allega il seguente file alla nota."
@@ -190,16 +158,6 @@ msgstr ""
 "Esporta i dati da Joplin nella cartella selezionata. Come impostazione "
 "predefinita verrà esportato il database completo, inclusi i taccuini, note, "
 "etichette e risorse."
-
-#, javascript-format
-msgid "Destination format: %s"
-msgstr "Formato di destinazione: %s"
-
-msgid "Exports only the given note."
-msgstr "Esporta solo la seguente nota."
-
-msgid "Exports only the given notebook."
-msgstr "Esporta solo il seguente Taccuino."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Mostra l'URL di geolocalizzazione per la nota."
@@ -396,29 +354,6 @@ msgstr ""
 "Avvia, ferma o controlla il server API. Per specificare su quale porta deve "
 "essere eseguito, setta la variabile api.config. I comandi sono (%s)."
 
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr "Il server è già in esecuzione sulla porta %d"
-
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr "Il server è in esecuzione sulla porta %d"
-
-msgid "Server is not running."
-msgstr "Il server non è in esecuzione."
-
-#, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"Imposta la proprietà <name> della <note> data al [value] specificato. Le "
-"possibili proprietà sono:\n"
-"\n"
-"%s"
-
 msgid "Displays summary about the notes and notebooks."
 msgstr "Mostra un sommario delle note e dei taccuini."
 
@@ -429,29 +364,6 @@ msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Sincronizza con l'obiettivo fornito (come predefinito il valore di "
 "configurazione sync.target)"
-
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
-"Autenticazione non completata (non è stato ricevuto alcun token di "
-"autenticazione)."
-
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
-"Per consentire a Joplin di sincronizzarsi con Dropbox, procedi come indicato "
-"di seguito:"
-
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
-"Passaggio 1: apri questa URL nel tuo browser per autorizzare l'applicazione:"
-
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Passaggio 2: inserisci il codice fornito da Dropbox:"
-
-#, javascript-format
-msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Non autenticato con %s. Si prega di fornire le credenziali mancanti."
 
 msgid "Synchronisation is already in progress."
 msgstr "La sincronizzazione è in corso."
@@ -475,12 +387,6 @@ msgstr "Non è possibile inizializzare il sincronizzatore."
 
 msgid "Starting synchronisation..."
 msgstr "Inizio sincronizzazione..."
-
-msgid "Downloading resources..."
-msgstr "Scaricamento risorse…"
-
-msgid "Cancelling... Please wait."
-msgstr "Annullamento... Attendere per favore."
 
 #, fuzzy
 msgid ""
@@ -544,11 +450,10 @@ msgstr "Predefinito: %s"
 msgid "Possible keys/values:"
 msgstr "Chiave/valore possibili:"
 
-msgid "Type `joplin help` for usage information."
-msgstr "Scrivi `joplin help` per informazioni sull'uso."
-
-msgid "Fatal error:"
-msgstr "Errore fatale:"
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
+msgstr ""
+"Tutte le potenziali porte sono in uso - prego riportare il problema a %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -571,9 +476,6 @@ msgstr ""
 "leggerà/scriverà file solo in questa cartella. Non avrà accesso a nessun "
 "file all'esterno di questa cartella o ad alcun dato personale. Nessun dato "
 "verrà condiviso con terze parti."
-
-msgid "Search:"
-msgstr "Cerca:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -610,67 +512,6 @@ msgstr "Esportazione da \"%s\" come formato \"%s\". Si prega di attendere..."
 msgid "Could not export notes: %s"
 msgstr "Non è possibile esportare le note: %s"
 
-msgid "&File"
-msgstr "&File"
-
-msgid "About Joplin"
-msgstr "Informazione su Joplin"
-
-msgid "Preferences..."
-msgstr "Preferenze..."
-
-msgid "Check for updates..."
-msgstr "Controlla aggiornamenti..."
-
-msgid "Templates"
-msgstr "Modelli"
-
-msgid "Import"
-msgstr "Importa"
-
-msgid "Export"
-msgstr "Esporta"
-
-msgid "Synchronise"
-msgstr "Sincronizza"
-
-#, javascript-format
-msgid "Hide %s"
-msgstr "Nascondi %s"
-
-msgid "Quit"
-msgstr "Esci"
-
-msgid "Close Window"
-msgstr "Chiudi finestra"
-
-msgid "&Edit"
-msgstr "&Modifica"
-
-msgid "Copy"
-msgstr "Copia"
-
-msgid "Cut"
-msgstr "Taglia"
-
-msgid "Paste"
-msgstr "Incolla"
-
-msgid "Select all"
-msgstr "Seleziona tutto"
-
-msgid "Bold"
-msgstr "Grasseto"
-
-msgid "Italic"
-msgstr "Corsivo"
-
-msgid "Link"
-msgstr "Link"
-
-msgid "Code"
-msgstr "Codice"
-
 msgid "Insert Date Time"
 msgstr "Inserisci data e ora"
 
@@ -686,62 +527,11 @@ msgstr "Cerca in tutte le note"
 msgid "Search in current note"
 msgstr "Cerca nella nota corrente"
 
-msgid "&View"
-msgstr "&Vista"
-
-msgid "Toggle sidebar"
-msgstr "Attiva / disattiva barra laterale"
-
-msgid "Layout button sequence"
-msgstr ""
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Lista delle note"
-
-msgid "Toggle editor layout"
-msgstr "Attiva / disattiva il layout dell'editor"
-
-msgid "Focus"
-msgstr "Focus"
-
-msgid "&Tools"
-msgstr "&Strumenti"
-
-msgid "&Help"
-msgstr "&Aiuto"
-
-msgid "Website and documentation"
-msgstr "Sito web e documentazione"
-
-msgid "Joplin Forum"
-msgstr "Joplin Forum"
-
-msgid "Make a donation"
-msgstr "Fai una donazione"
-
-msgid "Toggle development tools"
-msgstr "Attiva / disattiva strumenti di sviluppo"
-
-#, javascript-format
-msgid "Open %s"
-msgstr "Aprire %s"
-
-msgid "Exit"
-msgstr "Esci"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Annulla"
-
-msgid "Current version is up-to-date."
-msgstr "La versione attuale è aggiornata."
-
-#, javascript-format
-msgid "%s (pre-release)"
-msgstr "%s (pre-rilascio)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "È disponibile un aggiornamento, vuoi scaricarlo ora?"
@@ -753,15 +543,6 @@ msgstr "La tua versione: %s"
 #, javascript-format
 msgid "New version: %s"
 msgstr "Nuova versione: %s"
-
-msgid "Yes"
-msgstr "Sì"
-
-msgid "No"
-msgstr "No"
-
-msgid "Full Release Notes"
-msgstr "Note di rilascio complete"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Il token è stato copiato negli appunti!"
@@ -831,24 +612,18 @@ msgstr ""
 "Il token autorizzativo è necessario solo per permettere ad applicazioni di "
 "terze parti di accedere a Joplin."
 
-msgid "This will open a new screen. Save your current changes?"
-msgstr "Questo aprirà una nuova schermata. Salvare le tue modifiche correnti?"
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Per consentire a Joplin di sincronizzarsi con Dropbox, procedi come indicato "
+"di seguito:"
 
-#, javascript-format
-msgid "Notes and settings are stored in: %s"
-msgstr "Le note e le impostazioni sono memorizzate in: %s"
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Passaggio 1: apri questa URL nel tuo browser per autorizzare l'applicazione:"
 
-msgid "Check synchronisation configuration"
-msgstr "Controlla la configurazione della sincronizzazione"
-
-msgid "Browse..."
-msgstr "Naviga..."
-
-msgid "Back"
-msgstr "Indietro"
-
-msgid "Apply"
-msgstr "Applica"
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Passaggio 2: inserisci il codice fornito da Dropbox:"
 
 msgid "Submit"
 msgstr "Invio"
@@ -942,18 +717,6 @@ msgstr "Stato"
 msgid "Encryption is:"
 msgstr "La crittografia è:"
 
-msgid "Firefox Extension"
-msgstr ""
-
-msgid "Chrome Web Store"
-msgstr ""
-
-msgid "Get it now:"
-msgstr ""
-
-msgid "Usage"
-msgstr "Uso"
-
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -983,6 +746,13 @@ msgstr "Imposta allarme:"
 msgid "Template file:"
 msgstr "File del modello:"
 
+msgid "Toggle sidebar"
+msgstr "Attiva / disattiva barra laterale"
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Lista delle note"
+
 msgid "New note"
 msgstr "Nuova nota"
 
@@ -1010,15 +780,6 @@ msgstr "Una o più chiavi master necessitano di una password."
 msgid "Set the password"
 msgstr "Imposta la password"
 
-msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Non è presente nessuna nota. Creane una cliccando \"Nuova nota\"."
-
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"Al momento non ci sono Taccuini. Creane uno facendo clic su \"Nuovo Taccuino"
-"\"."
-
 msgid "Location"
 msgstr "Posizione"
 
@@ -1031,12 +792,6 @@ msgstr "Cronologia nota"
 msgid "Markup"
 msgstr ""
 
-msgid "Previous versions of this note"
-msgstr "Versione precedente di questa nota"
-
-msgid "Note properties"
-msgstr "Proprietà della nota"
-
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "La nota \"%s\" è stata ripristinata con successo nel taccuino \"%s\"."
@@ -1045,39 +800,8 @@ msgid "This note has no history"
 msgstr "Questa nota non ha cronologia"
 
 #, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Link o Messaggio non supportato: %s"
-
-msgid "Restore"
-msgstr "Ripristina"
-
-#, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-"Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino "
-"denominato \"%s\". La versione corrente della nota non verrà sostituita o "
-"modificata."
-
-msgid "Open..."
-msgstr "Apri..."
-
-#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Questo file non può essere aperto: %s"
-
-msgid "Save as..."
-msgstr "Salva come..."
-
-msgid "Copy path to clipboard"
-msgstr "Copia il percorso negli appunti"
-
-msgid "Copy Link Address"
-msgstr "Copia l'indirizzo del link"
-
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Questo allegato non è ancora stato scaricato o decriptato."
 
 #, javascript-format
 msgid ""
@@ -1087,83 +811,14 @@ msgstr ""
 "Questa nota non ha contenuto. Fai clic su \"%s\" per attivare l'editor e "
 "modificare la nota."
 
-msgid "Only one note can be printed or exported to PDF at a time."
-msgstr "Solo una nota alla volta può essere stampata o esportata come PDF."
-
-msgid "PDF File"
-msgstr "PDF File"
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Errore durante l'apertura della nota nell'editor: %s"
-
-msgid "strong text"
-msgstr "testo grasseto"
-
-msgid "emphasized text"
-msgstr "testo Sottolineato"
-
-msgid "List item"
-msgstr "Lista Elemento"
-
-msgid "Insert Hyperlink"
-msgstr "Inserire collegamento ipertestuale"
-
-msgid "Attach file"
-msgstr "Allega File"
-
-msgid "Set alarm"
-msgstr "Imposta Allarme"
-
-#, javascript-format
-msgid "In: %s"
-msgstr "In: %s"
-
-msgid "Hyperlink"
-msgstr "Collegamento ipertestuale"
-
-msgid "Numbered List"
-msgstr "Elenco Numerato"
-
-msgid "Bulleted List"
-msgstr "Elenco Puntato"
-
-msgid "Checkbox"
-msgstr "Casella di controllo"
-
-msgid "Heading"
-msgstr "Intestazione"
-
-msgid "Horizontal Rule"
-msgstr "Riga orizzontale"
-
-msgid "Click to stop external editing"
-msgstr "Fare clic per interrompere le modifiche esterne"
-
-msgid "Watching..."
-msgstr "Osservare..."
-
-msgid "to-do"
-msgstr "\"Cose-da-fare\""
-
-msgid "note"
-msgstr "nota"
-
-#, javascript-format
-msgid "Creating new %s..."
-msgstr "Creare nuovo %s..."
-
-msgid "Refresh"
-msgstr "Aggiorna"
-
-msgid "Clear"
-msgstr "Pulisci"
-
 msgid "OneDrive Login"
 msgstr "Login OneDrive"
 
 msgid "Dropbox Login"
 msgstr "Login Dropbox"
+
+msgid "Import"
+msgstr "Importa"
 
 msgid "Options"
 msgstr "Opzioni"
@@ -1201,23 +856,8 @@ msgstr "Nuovo taccuino"
 msgid "Rename"
 msgstr "Rinomina"
 
-msgid "Notebooks"
-msgstr "Taccuini"
-
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Decrittografia Elementi: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Recupero risorse: %d/%d"
-
-msgid "Please select where the sync status should be exported to"
-msgstr ""
-"Prego selezionare dove lo stato della sincronizzazione deve essere esportato"
-
-msgid "Retry"
-msgstr "Riprova"
+msgid "Export"
+msgstr "Esporta"
 
 msgid "Add or remove tags"
 msgstr "Aggiungi o rimuovi etichette"
@@ -1241,23 +881,8 @@ msgstr "Converti in \"Cose-da-fare\""
 msgid "Copy Markdown link"
 msgstr "Copia il link Markdown"
 
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "Eliminare la nota \"%s\"?"
-
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Eliminare queste %d note?"
-
-msgid ""
-"Type a note title to jump to it. Or type # followed by a tag name, or @ "
-"followed by a notebook name."
-msgstr ""
-"Scrivi il titolo di una nota per saltare ad essa. Oppure digita # seguito "
-"dal nome di una etichetta, oppure @ seguito dal nome di un taccuino."
-
-msgid "Goto Anything..."
-msgstr "Vai a..."
+msgid "PDF File"
+msgstr "PDF File"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1284,43 +909,6 @@ msgstr "OneDrive Dev (solo per test)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
-
-#, javascript-format
-msgid "Unknown log level: %s"
-msgstr "Livello di log sconosciuto: %s"
-
-#, javascript-format
-msgid "Unknown level ID: %s"
-msgstr "Livello ID sconosciuto: %s"
-
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr ""
-"Non è possibile aggiornare il token. mancano i dati di autenticazione. "
-"Ricominciare la sincronizzazione da capo potrebbe risolvere il problema."
-
-msgid "Untitled"
-msgstr "Senza titolo"
-
-msgid ""
-"Could not synchronize with OneDrive.\n"
-"\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
-"\n"
-"Please consider using a regular OneDrive account."
-msgstr ""
-"Impossibile sincronizzare con OneDrive.\n"
-"\n"
-"Questo errore spesso accade quando si utilizza OneDrive for Business, che "
-"purtroppo non può essere supportato.\n"
-"\n"
-"Si prega di considerare l'idea di utilizzare un account OneDrive normale."
-
-#, javascript-format
-msgid "Cannot access %s"
-msgstr "Non è possibile accedere a %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -1361,17 +949,8 @@ msgstr "Completata: %s"
 msgid "Last error: %s"
 msgstr "Ultimo Errore: %s"
 
-msgid "Idle"
-msgstr "Inattivo"
-
-msgid "In progress"
-msgstr "In corso"
-
 msgid "Encrypted"
 msgstr "Crittografato"
-
-msgid "Encrypted items cannot be modified"
-msgstr "Gli elementi crittografati non possono essere modificati"
 
 msgid "title"
 msgstr "titolo"
@@ -1391,17 +970,6 @@ msgstr "I blocchi non possono essere chiamati \"%s\". È un titolo riservato."
 
 msgid "created date"
 msgstr "data di creazione"
-
-msgid "This note does not have geolocation information."
-msgstr "Questa nota non ha informazione sulla geolocalizzazione."
-
-#, javascript-format
-msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Non posso copiare la nota nel Taccuino \"%s\""
-
-#, javascript-format
-msgid "Cannot move note to \"%s\" notebook"
-msgstr "Non posso spostare la nota nel Taccuino \"%s\""
 
 #, javascript-format
 msgid ""
@@ -1753,38 +1321,6 @@ msgstr "%d giorni"
 msgid "Keep note history for"
 msgstr "Mantieni la cronologia note per"
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Opzione non valida: \"%s\". I valori possibili sono: %s."
-
-msgid "General"
-msgstr "Generale"
-
-msgid "Synchronisation"
-msgstr "Sincronizzazione"
-
-msgid "Appearance"
-msgstr "Apparenza"
-
-msgid "Note"
-msgstr "Nota"
-
-msgid "Plugins"
-msgstr "Plugins"
-
-msgid "Application"
-msgstr "Applicazione"
-
-msgid "Encryption"
-msgstr "Crittografia"
-
-msgid "Web Clipper"
-msgstr "Web Clipper"
-
-#, javascript-format
-msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "Il tag \"%s\" esiste già. Scegliere un nome differente."
-
 msgid "Joplin Export File"
 msgstr "Esporta file di Joplin"
 
@@ -1809,95 +1345,8 @@ msgstr "File"
 msgid "Directory"
 msgstr "Cartella"
 
-#, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "Impossibile caricare il modulo \"%s\" per il formato \"%s\""
-
-#, javascript-format
-msgid "Please specify import format for %s"
-msgstr "Si prega di specificare il formato di importazione per %s"
-
-#, javascript-format
-msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
-msgstr ""
-"Questo elemento è attualmente crittografato: %s \"%s\". Attendi che tutti "
-"gli elementi siano decodificati e riprova."
-
-msgid "There is no data to export."
-msgstr "Non ci sono dati da esportare."
-
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Si prega di specificare il Taccuino in cui importare le note."
-
-msgid "Restored Notes"
-msgstr "Ripristina note"
-
-msgid "Items that cannot be synchronised"
-msgstr "Elementi che non possono essere sincronizzati"
-
-msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
-msgstr ""
-"Questi elementi rimarranno sul dispositivo ma non verranno caricati nella "
-"destinazione di sincronizzazione. Per trovare questi elementi, cercare il "
-"titolo o l'ID (che viene visualizzato tra parentesi qui sopra)."
-
-#, javascript-format
-msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) non può essere caricato: %s"
-
-#, javascript-format
-msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Elemento \"%s\" non può essere scaricato: %s"
-
-msgid "Items that cannot be decrypted"
-msgstr "Elementi che non possono essere decriptati"
-
-msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
-msgstr ""
-"Joplin ha fallito la decriptazione di questi elementi più volte, forse "
-"perché sono corrotti o troppo grandi. Questi elementi rimarranno sul "
-"dispositivo, ma Joplin non proverà più a decriptarli."
-
-msgid "Sync status (synced items / total items)"
-msgstr "Stato di sincronizzazione (Elementi sincronizzati / Elementi totali)"
-
-#, javascript-format
-msgid "%s: %d/%d"
-msgstr "%s: %d/%d"
-
-#, javascript-format
-msgid "Total: %d/%d"
-msgstr "Totale: %d %d"
-
-#, javascript-format
-msgid "Conflicted: %d"
-msgstr "In conflitto: %d"
-
-#, javascript-format
-msgid "To delete: %d"
-msgstr "Da eliminare: %d"
-
-msgid "Folders"
-msgstr "Cartelle"
-
-#, javascript-format
-msgid "%s: %d notes"
-msgstr "%s: %d note"
-
-msgid "Coming alarms"
-msgstr "Avviso imminente"
-
-#, javascript-format
-msgid "On %s: %s"
-msgstr "Su %s: %s"
 
 msgid "Permission to use camera"
 msgstr "Permesso per usare la fotocamera"
@@ -1916,16 +1365,6 @@ msgstr "Al momento non ci sono note. Creane una cliccando sul bottone (+)."
 
 msgid "Delete these notes?"
 msgstr "Eliminare queste note?"
-
-msgid "Move to notebook..."
-msgstr "Sposta sul Taccuino..."
-
-#, javascript-format
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Spostare le note %d sul Taccuino \"%s\"?"
-
-msgid "Press to set the decryption password."
-msgstr "Premere per impostare la password di decrittografia."
 
 msgid "Clear alarm"
 msgstr "Rimuovi Allarme"
@@ -1952,40 +1391,22 @@ msgstr "Nuovo Taccuino"
 msgid "Configuration"
 msgstr "Configurazione"
 
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Decrittografia Elementi: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Recupero risorse: %d/%d"
+
+msgid "Synchronise"
+msgstr "Sincronizza"
+
 msgid "All notes"
 msgstr "Tutte le note"
 
-msgid "Checking... Please wait."
-msgstr "Controllo... Attendere per favore."
-
-msgid "Success! Synchronisation configuration appears to be correct."
-msgstr ""
-"Successo! La configurazione della sincronizzazione sembra essere corretta."
-
-msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-"Errore. Prego controllare che URL, nome utente, password, etc. siano "
-"corretti e che la destinazione di sincronizzazione sia accessibile. L’errore "
-"riportato era:"
-
-msgid "The application has been authorised!"
-msgstr "L'applicazione è stata autorizzata con successo!"
-
-#, javascript-format
-msgid ""
-"Could not authorise application:\n"
-"\n"
-"%s\n"
-"\n"
-"Please try again."
-msgstr ""
-"Non è stato possibile autorizzare l’applicazione:\n"
-"\n"
-"%s\n"
-"\n"
-"Riprovare prego."
+msgid "Notebooks"
+msgstr "Taccuini"
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -2006,6 +1427,9 @@ msgid ""
 msgstr ""
 "Per usare la sincronizzazione del file system è necessario il tuo permesso "
 "di scrittura sulla memoria esterna."
+
+msgid "Check synchronisation configuration"
+msgstr "Controlla la configurazione della sincronizzazione"
 
 msgid "Encryption Config"
 msgstr "Configurazione Crittografia"
@@ -2065,16 +1489,11 @@ msgstr ""
 "- Posizione: per consentire il collegamento di informazioni sulla posizione "
 "geografica ad una nota."
 
+msgid "Make a donation"
+msgstr "Fai una donazione"
+
 msgid "Joplin website"
 msgstr "Sito web Joplin"
-
-#, javascript-format
-msgid "Database v%s"
-msgstr "Database v%s"
-
-#, javascript-format
-msgid "FTS enabled: %d"
-msgstr "FTS attivato: %d"
 
 msgid "Login with Dropbox"
 msgstr "Login Dropbox"
@@ -2112,12 +1531,6 @@ msgstr "Modifica Taccuino"
 msgid "Enter notebook title"
 msgstr "Inserisci titolo del Taccuino"
 
-msgid "Show all"
-msgstr "Mostra tutto"
-
-msgid "Errors only"
-msgstr "Solo gli errori"
-
 msgid "This note has been modified:"
 msgstr "Questa note è stata modificata:"
 
@@ -2131,6 +1544,9 @@ msgstr "Ignora modifiche"
 msgid "No item with ID %s"
 msgstr "Nessun elemento con ID %s"
 
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Questo allegato non è ancora stato scaricato o decriptato."
+
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
@@ -2140,61 +1556,646 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Collegamenti con protocollo \"%s\" non sono supportati"
 
-#, javascript-format
-msgid "Unsupported image type: %s"
-msgstr "Tipo di immagine non supportata: %s"
+#~ msgid "To delete a tag, untag the associated notes."
+#~ msgstr ""
+#~ "Per eliminare un'etichetta, togli l'etichetta dalle note a cui è "
+#~ "associata."
+
+#~ msgid "Please select the note or notebook to be deleted first."
+#~ msgstr "Per favore seleziona la nota o il taccuino da eliminare."
+
+#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
+#~ msgstr "Premi Ctrl+D o digita \"exit\" per uscire dall'applicazione"
+
+#~ msgid "Cancelling background synchronisation... Please wait."
+#~ msgstr ""
+#~ "Annullamento della sincronizzazione in background... Attendere prego."
 
 #, javascript-format
-msgid "Updated: %s"
-msgstr "Aggiornato: %s"
+#~ msgid "No such command: %s"
+#~ msgstr "Nessun comando: %s"
 
-msgid "View on map"
-msgstr "Guarda sulla mappa"
+#, javascript-format
+#~ msgid "The command \"%s\" is only available in GUI mode"
+#~ msgstr "Il comando \"%s\" è disponibile solo nella modalità grafica"
 
-msgid "Go to source URL"
-msgstr "Vai all'URL"
+#, javascript-format
+#~ msgid "Missing required argument: %s"
+#~ msgstr "Argomento richiesto mancante: %s"
 
-msgid "Attach..."
-msgstr "Allega..."
+#~ msgid "Your choice: "
+#~ msgstr "La tua scelta: "
 
-msgid "Choose an option"
-msgstr "Scegli un’opzione"
+#, javascript-format
+#~ msgid "Invalid answer: %s"
+#~ msgstr "Risposta non valida: %s"
 
-msgid "Take photo"
-msgstr "Scatta foto"
+#, javascript-format
+#~ msgid "Destination format: %s"
+#~ msgstr "Formato di destinazione: %s"
 
-msgid "Attach photo"
-msgstr "Allega foto"
+#~ msgid "Exports only the given note."
+#~ msgstr "Esporta solo la seguente nota."
 
-msgid "Attach any file"
-msgstr "Allega qualsiasi file"
+#~ msgid "Exports only the given notebook."
+#~ msgstr "Esporta solo il seguente Taccuino."
 
-msgid "Share"
-msgstr "Condividi"
+#, javascript-format
+#~ msgid "Server is already running on port %d"
+#~ msgstr "Il server è già in esecuzione sulla porta %d"
 
-msgid "Convert to note"
-msgstr "Converti in nota"
+#, javascript-format
+#~ msgid "Server is running on port %d"
+#~ msgstr "Il server è in esecuzione sulla porta %d"
 
-msgid "Convert to todo"
-msgstr "Converti in Todo"
+#~ msgid "Server is not running."
+#~ msgstr "Il server non è in esecuzione."
 
-msgid "Properties"
-msgstr "Proprietà"
+#, javascript-format
+#~ msgid ""
+#~ "Sets the property <name> of the given <note> to the given [value]. "
+#~ "Possible properties are:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Imposta la proprietà <name> della <note> data al [value] specificato. Le "
+#~ "possibili proprietà sono:\n"
+#~ "\n"
+#~ "%s"
 
-msgid "Add body"
-msgstr "Aggiungi corpo"
+#~ msgid ""
+#~ "Authentication was not completed (did not receive an authentication "
+#~ "token)."
+#~ msgstr ""
+#~ "Autenticazione non completata (non è stato ricevuto alcun token di "
+#~ "autenticazione)."
 
-msgid "Edit"
-msgstr "Modifica"
+#, javascript-format
+#~ msgid "Not authentified with %s. Please provide any missing credentials."
+#~ msgstr ""
+#~ "Non autenticato con %s. Si prega di fornire le credenziali mancanti."
 
-msgid "Add title"
-msgstr "Aggiungi titolo"
+#~ msgid "Downloading resources..."
+#~ msgstr "Scaricamento risorse…"
 
-msgid "Login with OneDrive"
-msgstr "Accedi a OneDrive"
+#~ msgid "Cancelling... Please wait."
+#~ msgstr "Annullamento... Attendere per favore."
 
-msgid "Search"
-msgstr "Cerca"
+#~ msgid "Type `joplin help` for usage information."
+#~ msgstr "Scrivi `joplin help` per informazioni sull'uso."
+
+#~ msgid "Fatal error:"
+#~ msgstr "Errore fatale:"
+
+#~ msgid "Search:"
+#~ msgstr "Cerca:"
+
+#~ msgid "&File"
+#~ msgstr "&File"
+
+#~ msgid "About Joplin"
+#~ msgstr "Informazione su Joplin"
+
+#~ msgid "Preferences..."
+#~ msgstr "Preferenze..."
+
+#~ msgid "Check for updates..."
+#~ msgstr "Controlla aggiornamenti..."
+
+#~ msgid "Templates"
+#~ msgstr "Modelli"
+
+#, javascript-format
+#~ msgid "Hide %s"
+#~ msgstr "Nascondi %s"
+
+#~ msgid "Quit"
+#~ msgstr "Esci"
+
+#~ msgid "Close Window"
+#~ msgstr "Chiudi finestra"
+
+#~ msgid "&Edit"
+#~ msgstr "&Modifica"
+
+#~ msgid "Copy"
+#~ msgstr "Copia"
+
+#~ msgid "Cut"
+#~ msgstr "Taglia"
+
+#~ msgid "Paste"
+#~ msgstr "Incolla"
+
+#~ msgid "Select all"
+#~ msgstr "Seleziona tutto"
+
+#~ msgid "Bold"
+#~ msgstr "Grasseto"
+
+#~ msgid "Italic"
+#~ msgstr "Corsivo"
+
+#~ msgid "Link"
+#~ msgstr "Link"
+
+#~ msgid "Code"
+#~ msgstr "Codice"
+
+#~ msgid "&View"
+#~ msgstr "&Vista"
+
+#~ msgid "Toggle editor layout"
+#~ msgstr "Attiva / disattiva il layout dell'editor"
+
+#~ msgid "Focus"
+#~ msgstr "Focus"
+
+#~ msgid "&Tools"
+#~ msgstr "&Strumenti"
+
+#~ msgid "&Help"
+#~ msgstr "&Aiuto"
+
+#~ msgid "Website and documentation"
+#~ msgstr "Sito web e documentazione"
+
+#~ msgid "Joplin Forum"
+#~ msgstr "Joplin Forum"
+
+#~ msgid "Toggle development tools"
+#~ msgstr "Attiva / disattiva strumenti di sviluppo"
+
+#, javascript-format
+#~ msgid "Open %s"
+#~ msgstr "Aprire %s"
+
+#~ msgid "Exit"
+#~ msgstr "Esci"
+
+#~ msgid "Current version is up-to-date."
+#~ msgstr "La versione attuale è aggiornata."
+
+#, javascript-format
+#~ msgid "%s (pre-release)"
+#~ msgstr "%s (pre-rilascio)"
+
+#~ msgid "Yes"
+#~ msgstr "Sì"
+
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Note di rilascio complete"
+
+#~ msgid "This will open a new screen. Save your current changes?"
+#~ msgstr ""
+#~ "Questo aprirà una nuova schermata. Salvare le tue modifiche correnti?"
+
+#, javascript-format
+#~ msgid "Notes and settings are stored in: %s"
+#~ msgstr "Le note e le impostazioni sono memorizzate in: %s"
+
+#~ msgid "Browse..."
+#~ msgstr "Naviga..."
+
+#~ msgid "Back"
+#~ msgstr "Indietro"
+
+#~ msgid "Apply"
+#~ msgstr "Applica"
+
+#~ msgid "Usage"
+#~ msgstr "Uso"
+
+#~ msgid "No notes in here. Create one by clicking on \"New note\"."
+#~ msgstr "Non è presente nessuna nota. Creane una cliccando \"Nuova nota\"."
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on \"New notebook"
+#~ "\"."
+#~ msgstr ""
+#~ "Al momento non ci sono Taccuini. Creane uno facendo clic su \"Nuovo "
+#~ "Taccuino\"."
+
+#~ msgid "Previous versions of this note"
+#~ msgstr "Versione precedente di questa nota"
+
+#~ msgid "Note properties"
+#~ msgstr "Proprietà della nota"
+
+#, javascript-format
+#~ msgid "Unsupported link or message: %s"
+#~ msgstr "Link o Messaggio non supportato: %s"
+
+#~ msgid "Restore"
+#~ msgstr "Ripristina"
+
+#, javascript-format
+#~ msgid ""
+#~ "Click \"%s\" to restore the note. It will be copied in the notebook named "
+#~ "\"%s\". The current version of the note will not be replaced or modified."
+#~ msgstr ""
+#~ "Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino "
+#~ "denominato \"%s\". La versione corrente della nota non verrà sostituita o "
+#~ "modificata."
+
+#~ msgid "Open..."
+#~ msgstr "Apri..."
+
+#~ msgid "Save as..."
+#~ msgstr "Salva come..."
+
+#~ msgid "Copy path to clipboard"
+#~ msgstr "Copia il percorso negli appunti"
+
+#~ msgid "Copy Link Address"
+#~ msgstr "Copia l'indirizzo del link"
+
+#~ msgid "Only one note can be printed or exported to PDF at a time."
+#~ msgstr "Solo una nota alla volta può essere stampata o esportata come PDF."
+
+#, javascript-format
+#~ msgid "Error opening note in editor: %s"
+#~ msgstr "Errore durante l'apertura della nota nell'editor: %s"
+
+#~ msgid "strong text"
+#~ msgstr "testo grasseto"
+
+#~ msgid "emphasized text"
+#~ msgstr "testo Sottolineato"
+
+#~ msgid "List item"
+#~ msgstr "Lista Elemento"
+
+#~ msgid "Insert Hyperlink"
+#~ msgstr "Inserire collegamento ipertestuale"
+
+#~ msgid "Attach file"
+#~ msgstr "Allega File"
+
+#~ msgid "Set alarm"
+#~ msgstr "Imposta Allarme"
+
+#, javascript-format
+#~ msgid "In: %s"
+#~ msgstr "In: %s"
+
+#~ msgid "Hyperlink"
+#~ msgstr "Collegamento ipertestuale"
+
+#~ msgid "Numbered List"
+#~ msgstr "Elenco Numerato"
+
+#~ msgid "Bulleted List"
+#~ msgstr "Elenco Puntato"
+
+#~ msgid "Checkbox"
+#~ msgstr "Casella di controllo"
+
+#~ msgid "Heading"
+#~ msgstr "Intestazione"
+
+#~ msgid "Horizontal Rule"
+#~ msgstr "Riga orizzontale"
+
+#~ msgid "Click to stop external editing"
+#~ msgstr "Fare clic per interrompere le modifiche esterne"
+
+#~ msgid "Watching..."
+#~ msgstr "Osservare..."
+
+#~ msgid "to-do"
+#~ msgstr "\"Cose-da-fare\""
+
+#~ msgid "note"
+#~ msgstr "nota"
+
+#, javascript-format
+#~ msgid "Creating new %s..."
+#~ msgstr "Creare nuovo %s..."
+
+#~ msgid "Refresh"
+#~ msgstr "Aggiorna"
+
+#~ msgid "Clear"
+#~ msgstr "Pulisci"
+
+#~ msgid "Please select where the sync status should be exported to"
+#~ msgstr ""
+#~ "Prego selezionare dove lo stato della sincronizzazione deve essere "
+#~ "esportato"
+
+#~ msgid "Retry"
+#~ msgstr "Riprova"
+
+#, javascript-format
+#~ msgid "Delete note \"%s\"?"
+#~ msgstr "Eliminare la nota \"%s\"?"
+
+#, javascript-format
+#~ msgid "Delete these %d notes?"
+#~ msgstr "Eliminare queste %d note?"
+
+#~ msgid ""
+#~ "Type a note title to jump to it. Or type # followed by a tag name, or @ "
+#~ "followed by a notebook name."
+#~ msgstr ""
+#~ "Scrivi il titolo di una nota per saltare ad essa. Oppure digita # seguito "
+#~ "dal nome di una etichetta, oppure @ seguito dal nome di un taccuino."
+
+#~ msgid "Goto Anything..."
+#~ msgstr "Vai a..."
+
+#, javascript-format
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Livello di log sconosciuto: %s"
+
+#, javascript-format
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Livello ID sconosciuto: %s"
+
+#~ msgid ""
+#~ "Cannot refresh token: authentication data is missing. Starting the "
+#~ "synchronisation again may fix the problem."
+#~ msgstr ""
+#~ "Non è possibile aggiornare il token. mancano i dati di autenticazione. "
+#~ "Ricominciare la sincronizzazione da capo potrebbe risolvere il problema."
+
+#~ msgid "Untitled"
+#~ msgstr "Senza titolo"
+
+#~ msgid ""
+#~ "Could not synchronize with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Impossibile sincronizzare con OneDrive.\n"
+#~ "\n"
+#~ "Questo errore spesso accade quando si utilizza OneDrive for Business, che "
+#~ "purtroppo non può essere supportato.\n"
+#~ "\n"
+#~ "Si prega di considerare l'idea di utilizzare un account OneDrive normale."
+
+#, javascript-format
+#~ msgid "Cannot access %s"
+#~ msgstr "Non è possibile accedere a %s"
+
+#~ msgid "Idle"
+#~ msgstr "Inattivo"
+
+#~ msgid "In progress"
+#~ msgstr "In corso"
+
+#~ msgid "Encrypted items cannot be modified"
+#~ msgstr "Gli elementi crittografati non possono essere modificati"
+
+#~ msgid "This note does not have geolocation information."
+#~ msgstr "Questa nota non ha informazione sulla geolocalizzazione."
+
+#, javascript-format
+#~ msgid "Cannot copy note to \"%s\" notebook"
+#~ msgstr "Non posso copiare la nota nel Taccuino \"%s\""
+
+#, javascript-format
+#~ msgid "Cannot move note to \"%s\" notebook"
+#~ msgstr "Non posso spostare la nota nel Taccuino \"%s\""
+
+#, javascript-format
+#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
+#~ msgstr "Opzione non valida: \"%s\". I valori possibili sono: %s."
+
+#~ msgid "General"
+#~ msgstr "Generale"
+
+#~ msgid "Synchronisation"
+#~ msgstr "Sincronizzazione"
+
+#~ msgid "Appearance"
+#~ msgstr "Apparenza"
+
+#~ msgid "Note"
+#~ msgstr "Nota"
+
+#~ msgid "Plugins"
+#~ msgstr "Plugins"
+
+#~ msgid "Application"
+#~ msgstr "Applicazione"
+
+#~ msgid "Encryption"
+#~ msgstr "Crittografia"
+
+#~ msgid "Web Clipper"
+#~ msgstr "Web Clipper"
+
+#, javascript-format
+#~ msgid "The tag \"%s\" already exists. Please choose a different name."
+#~ msgstr "Il tag \"%s\" esiste già. Scegliere un nome differente."
+
+#, javascript-format
+#~ msgid "Cannot load \"%s\" module for format \"%s\""
+#~ msgstr "Impossibile caricare il modulo \"%s\" per il formato \"%s\""
+
+#, javascript-format
+#~ msgid "Please specify import format for %s"
+#~ msgstr "Si prega di specificare il formato di importazione per %s"
+
+#, javascript-format
+#~ msgid ""
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
+#~ "be decrypted and try again."
+#~ msgstr ""
+#~ "Questo elemento è attualmente crittografato: %s \"%s\". Attendi che tutti "
+#~ "gli elementi siano decodificati e riprova."
+
+#~ msgid "There is no data to export."
+#~ msgstr "Non ci sono dati da esportare."
+
+#~ msgid "Restored Notes"
+#~ msgstr "Ripristina note"
+
+#~ msgid "Items that cannot be synchronised"
+#~ msgstr "Elementi che non possono essere sincronizzati"
+
+#~ msgid ""
+#~ "These items will remain on the device but will not be uploaded to the "
+#~ "sync target. In order to find these items, either search for the title or "
+#~ "the ID (which is displayed in brackets above)."
+#~ msgstr ""
+#~ "Questi elementi rimarranno sul dispositivo ma non verranno caricati nella "
+#~ "destinazione di sincronizzazione. Per trovare questi elementi, cercare il "
+#~ "titolo o l'ID (che viene visualizzato tra parentesi qui sopra)."
+
+#, javascript-format
+#~ msgid "%s (%s) could not be uploaded: %s"
+#~ msgstr "%s (%s) non può essere caricato: %s"
+
+#, javascript-format
+#~ msgid "Item \"%s\" could not be downloaded: %s"
+#~ msgstr "Elemento \"%s\" non può essere scaricato: %s"
+
+#~ msgid "Items that cannot be decrypted"
+#~ msgstr "Elementi che non possono essere decriptati"
+
+#~ msgid ""
+#~ "Joplin failed to decrypt these items multiple times, possibly because "
+#~ "they are corrupted or too large. These items will remain on the device "
+#~ "but Joplin will no longer attempt to decrypt them."
+#~ msgstr ""
+#~ "Joplin ha fallito la decriptazione di questi elementi più volte, forse "
+#~ "perché sono corrotti o troppo grandi. Questi elementi rimarranno sul "
+#~ "dispositivo, ma Joplin non proverà più a decriptarli."
+
+#~ msgid "Sync status (synced items / total items)"
+#~ msgstr ""
+#~ "Stato di sincronizzazione (Elementi sincronizzati / Elementi totali)"
+
+#, javascript-format
+#~ msgid "%s: %d/%d"
+#~ msgstr "%s: %d/%d"
+
+#, javascript-format
+#~ msgid "Total: %d/%d"
+#~ msgstr "Totale: %d %d"
+
+#, javascript-format
+#~ msgid "Conflicted: %d"
+#~ msgstr "In conflitto: %d"
+
+#, javascript-format
+#~ msgid "To delete: %d"
+#~ msgstr "Da eliminare: %d"
+
+#~ msgid "Folders"
+#~ msgstr "Cartelle"
+
+#, javascript-format
+#~ msgid "%s: %d notes"
+#~ msgstr "%s: %d note"
+
+#~ msgid "Coming alarms"
+#~ msgstr "Avviso imminente"
+
+#, javascript-format
+#~ msgid "On %s: %s"
+#~ msgstr "Su %s: %s"
+
+#~ msgid "Move to notebook..."
+#~ msgstr "Sposta sul Taccuino..."
+
+#, javascript-format
+#~ msgid "Move %d notes to notebook \"%s\"?"
+#~ msgstr "Spostare le note %d sul Taccuino \"%s\"?"
+
+#~ msgid "Press to set the decryption password."
+#~ msgstr "Premere per impostare la password di decrittografia."
+
+#~ msgid "Checking... Please wait."
+#~ msgstr "Controllo... Attendere per favore."
+
+#~ msgid "Success! Synchronisation configuration appears to be correct."
+#~ msgstr ""
+#~ "Successo! La configurazione della sincronizzazione sembra essere corretta."
+
+#~ msgid ""
+#~ "Error. Please check that URL, username, password, etc. are correct and "
+#~ "that the sync target is accessible. The reported error was:"
+#~ msgstr ""
+#~ "Errore. Prego controllare che URL, nome utente, password, etc. siano "
+#~ "corretti e che la destinazione di sincronizzazione sia accessibile. "
+#~ "L’errore riportato era:"
+
+#~ msgid "The application has been authorised!"
+#~ msgstr "L'applicazione è stata autorizzata con successo!"
+
+#, javascript-format
+#~ msgid ""
+#~ "Could not authorise application:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Please try again."
+#~ msgstr ""
+#~ "Non è stato possibile autorizzare l’applicazione:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Riprovare prego."
+
+#, javascript-format
+#~ msgid "Database v%s"
+#~ msgstr "Database v%s"
+
+#, javascript-format
+#~ msgid "FTS enabled: %d"
+#~ msgstr "FTS attivato: %d"
+
+#~ msgid "Show all"
+#~ msgstr "Mostra tutto"
+
+#~ msgid "Errors only"
+#~ msgstr "Solo gli errori"
+
+#, javascript-format
+#~ msgid "Unsupported image type: %s"
+#~ msgstr "Tipo di immagine non supportata: %s"
+
+#, javascript-format
+#~ msgid "Updated: %s"
+#~ msgstr "Aggiornato: %s"
+
+#~ msgid "View on map"
+#~ msgstr "Guarda sulla mappa"
+
+#~ msgid "Go to source URL"
+#~ msgstr "Vai all'URL"
+
+#~ msgid "Attach..."
+#~ msgstr "Allega..."
+
+#~ msgid "Choose an option"
+#~ msgstr "Scegli un’opzione"
+
+#~ msgid "Take photo"
+#~ msgstr "Scatta foto"
+
+#~ msgid "Attach photo"
+#~ msgstr "Allega foto"
+
+#~ msgid "Attach any file"
+#~ msgstr "Allega qualsiasi file"
+
+#~ msgid "Share"
+#~ msgstr "Condividi"
+
+#~ msgid "Convert to note"
+#~ msgstr "Converti in nota"
+
+#~ msgid "Convert to todo"
+#~ msgstr "Converti in Todo"
+
+#~ msgid "Properties"
+#~ msgstr "Proprietà"
+
+#~ msgid "Add body"
+#~ msgstr "Aggiungi corpo"
+
+#~ msgid "Edit"
+#~ msgstr "Modifica"
+
+#~ msgid "Add title"
+#~ msgstr "Aggiungi titolo"
+
+#~ msgid "Login with OneDrive"
+#~ msgstr "Accedi a OneDrive"
+
+#~ msgid "Search"
+#~ msgstr "Cerca"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "La sincronizzazione è già in corso. Stato: %s"
@@ -2215,10 +2216,6 @@ msgstr "Cerca"
 
 #~ msgid "Note has been saved."
 #~ msgstr "La nota è stata salvata."
-
-#~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr ""
-#~ "Tutte le potenziali porte sono in uso - prego riportare il problema a %s"
 
 #~ msgid "Sidebar"
 #~ msgstr "Barra laterale"
