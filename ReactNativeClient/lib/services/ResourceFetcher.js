@@ -131,6 +131,7 @@ class ResourceFetcher extends BaseService {
 			}
 
 			delete this.fetchingItems_[resource.id];
+			this.logger().debug(`ResourceFetcher: Removed from fetchingItems: ${resource.id}. New: ${JSON.stringify(this.fetchingItems_)}`);
 			this.scheduleQueueProcess();
 
 			// Note: This downloadComplete event is not really right or useful because the resource
