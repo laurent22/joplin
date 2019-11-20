@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/clipper.md and any manual change
+This file was auto-generated from readme/gsoc/idea2_sharing.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/clipper.md
+https://github.com/laurent22/joplin/blob/master/readme/gsoc/idea2_sharing.md
 
 -->
 
 <head>
-	<title>Web Clipper | Joplin</title>
+	<title>GSoC: Idea 2: Sharing | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -259,7 +259,7 @@ https://github.com/laurent22/joplin/blob/master/readme/clipper.md
 
 <body>
 
-<div class="container page-clipper">
+<div class="container page-idea2_sharing">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -319,42 +319,20 @@ https://github.com/laurent22/joplin/blob/master/readme/clipper.md
 </li>
 </ul>
 </div>
-<h1>Joplin Web Clipper<a name="joplin-web-clipper" href="#joplin-web-clipper" class="heading-anchor">🔗</a></h1>
-<p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the <strong>Web Clipper Options</strong> and follow the instructions.</p>
-<img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
-<h1>Troubleshooting the web clipper service<a name="troubleshooting-the-web-clipper-service" href="#troubleshooting-the-web-clipper-service" class="heading-anchor">🔗</a></h1>
-<p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
-<p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
+<h1>GSoC: Sharing<a name="gsoc-sharing" href="#gsoc-sharing" class="heading-anchor">🔗</a></h1>
 <ul>
-<li>Check that the service is started. You can check this in the Web clipper options in the desktop app.</li>
-<li>Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.</li>
-<li>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></li>
+<li><a href="https://github.com/laurent22/joplin/issues/108">Feature Request: Multiple note directories #108</a></li>
+<li>[<a href="https://github.com/laurent22/joplin/issues/1085">Feature Request] Note Sharing #1085</a></li>
+<li>[<a href="https://github.com/laurent22/joplin/issues/1293">Feature Request] Multiple synchronization targets #1293</a></li>
+<li>(<a href="https://github.com/laurent22/joplin/issues/110">Please give the ability to share from another Android app into Joplin. #110</a>)</li>
+<li>(<a href="https://github.com/laurent22/joplin/issues/876">Mobile - Add share menu #876</a>)</li>
+<li><a href="https://turtlapp.com/features/">Turtl’s sharing - Choose who you share with and what they can do.</a></li>
+<li><a href="https://turtlapp.com/docs/architecture">Turtl Documentation - App architecture</a></li>
 </ul>
-<p>If none of this work, please report it on the <a href="https://discourse.joplinapp.org/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
-<h1>Debugging the extension<a name="debugging-the-extension" href="#debugging-the-extension" class="heading-anchor">🔗</a></h1>
-<h2>In Chrome<a name="in-chrome" href="#in-chrome" class="heading-anchor">🔗</a></h2>
-<p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
-<p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
-<ul>
-<li>Debugging the popup: Right-click on the Joplin extension icon, and select &quot;Inspect popup&quot;.</li>
-<li>Debugging the background script: In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</li>
-<li>Debugging the content script: Press Ctrl+Shift+I to open the console of the current page.</li>
-</ul>
-<h2>In Firefox<a name="in-firefox" href="#in-firefox" class="heading-anchor">🔗</a></h2>
-<ul>
-<li>Open <a href="about:debugging">about:debugging</a> in Firefox.</li>
-<li>Make sure the checkox &quot;Enable add-on debugging&quot; is ticked.</li>
-<li>Scroll down to the Joplin Web Clipper extension.</li>
-<li>Click on &quot;Debugging&quot; - that should open a new console window.</li>
-</ul>
-<p>Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).</p>
-<p>Now use the extension as normal and replicate the bug you're having.</p>
-<p>Copy and paste the content of both the debugging window and the Firefox console, and post it to the <a href="https://discourse.joplinapp.org/">forum</a>.</p>
-<h1>Using the Web Clipper service<a name="using-the-web-clipper-service" href="#using-the-web-clipper-service" class="heading-anchor">🔗</a></h1>
-<p>The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the <a href="https://joplinapp.org/api/">Joplin API documentation</a>.</p>
+<p>&quot;Please give the ability to share from another Android app into Joplin&quot;: This is already done</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsoc/idea2_sharing.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

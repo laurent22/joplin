@@ -1,4 +1,4 @@
-# Nextcloud notes integration (Web client)
+# GSoC: Nextcloud notes integration (Web client)
 
 ## What is the goal of the project 
 

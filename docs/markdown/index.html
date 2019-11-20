@@ -186,7 +186,9 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -271,6 +273,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Menu">Google Summer of Code 2010</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -387,8 +390,8 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </tr>
 <tr>
 <td><strong>Link</strong></td>
-<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link with a title:<br><br><code>[Joplin](https://joplinapp.org)</code></pre></td>
-<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link with a title:<br><br><a href="https://joplinapp.org">Joplin</a></td>
+<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link anchoring text content:<br><br><code>[Joplin](https://joplinapp.org)</code><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><code>[Joplin](https://joplinapp.org &quot;Joplin project page&quot;)</code></pre></td>
+<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link anchoring text content:<br><br><a href="https://joplinapp.org">Joplin</a><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><a href="https://joplinapp.org" title="Joplin project page">Joplin</a> (<em>hint: hover over the link</em>)</td>
 </tr>
 <tr>
 <td><strong>Images</strong></td>
@@ -566,8 +569,8 @@ $$
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
-<td><code>:smile:</code> :smile:</td>
-<td>See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emoji</td>
+<td><code>:smile:</code></td>
+<td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
 <td>no</td>
 </tr>
 <tr>

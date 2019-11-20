@@ -1,29 +1,31 @@
-Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands. 
-Joplin is about to make another big step to answers these demands by applying at Google Summer of Code.
-All students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Code program with Joplin. Here's how.
+# Google Summer of Code
+
+Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.
+
+Joplin is about to make another big step to answers these demands by applying at Google Summer of Code. All students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Code program with Joplin. Here's how.
 
 Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
 
-All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org). 
+All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
 
-### Programming Language                  
+## Programming Language
 
-All application share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
+All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.
 
-The GUI's, as listed on the [Joplin's website](https://joplinapp.org/#installation)  are use
+The GUI's, as listed on the [Joplin's website](https://joplinapp.org/#installation) are:
 
 - ClL: terminal-kit
 - Desktop: Electron
 - Mobile: React Native
 
-More details can be found on 
+More details can be found on:
 
-- [How to contribute]( https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md ) 
-- [How to build]( https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools) 
+- [How to contribute](https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md)
+- [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools)
 
-Moreover there are community driven projects such as 
+Moreover there are community driven projects such as:
 
-- [Joplin  Web](https://github.com/foxmask/joplin-web)
+- [Joplin Web](https://github.com/foxmask/joplin-web)
 
 Submissions and ideas for projects in any other language should specifically mention the choice.
 
@@ -31,23 +33,27 @@ Submissions and ideas for projects in any other language should specifically men
 
 Students wishing to participate in Summer of Code must realize, that this is a important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
 
-You don't have to be a proven developer -- in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome. 
-Currently there is only [How to contribute]( https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md ) and [How to build]( https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools) but more details are bout to come on how to interact and how to commit. 
+You don't have to be a proven developer -- in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.
+
+Currently there is only [How to contribute](https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md) and [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools) but more details are bout to come on how to interact and how to commit.
 In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
 
-Before you can be accepted as a student we expect you to fix some bugs and link that work on your proposal. 
+Before you can be accepted as a student we expect you to fix some bugs and link that work on your proposal.
 
-You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. 
-Do not worry, the the timeline from Google reserves a lot of time for bonding periods but use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with #GSoC and #2020. 
-You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.  
-Moreover, we require that you come to clear agreement on how to commit, test and build. We don't see us loosing time on how to test instead accentually testing your commits. 
-**Students who neglect active communication will be failed**. 
+You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
 
-### General instructions
+Do not worry, the the timeline from Google reserves a lot of time for bonding periods but use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with #GSoC and #2020.
+
+You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.
+Moreover, we require that you come to clear agreement on how to commit, test and build. We don't see us loosing time on how to test instead accentually testing your commits.
+
+**Students who neglect active communication will be failed**.
+
+## General instructions
 
 First of all, please read the above referenced resources and the [GSoC FAQ](https://developers.google.com/open-source/gsoc/faq). Pay special attention to the **Eligibility** section of the FAQ.
 
-### Recommended steps
+## Recommended steps
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, and meet your fellow developers in the [Development category](https://discourse.joplinapp.org/c/development)
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
@@ -63,50 +69,47 @@ Coming up with an interesting idea is probably the most difficult part. It shoul
 
 A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favorably on applications from students who have already started to act like Open Source developers.
 
-### Student proposal guidelines
+## Student proposal guidelines
 
 A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which student to choose, it has also an effect on Google's decision as to how many student slots are assigned to Joplin.
 
-<details>
-  <summary>Below is the application template.</summary>
-  
->  **Introduction**
+Below is the application template:
+
+> **Introduction**
 >
->  Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.
+> Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.
 >
 > **Project goals**
 >
->Be short and to the point, and perhaps format it as a list. Propose a clear list of deliverables, explaining exactly what you promise to do and what you do not plan to do. “Future developments” can be mentioned, but your promise for the Google Summer of Code term is what counts.
+> Be short and to the point, and perhaps format it as a list. Propose a clear list of deliverables, explaining exactly what you promise to do and what you do not plan to do. “Future developments” can be mentioned, but your promise for the Google Summer of Code term is what counts.
 >
->**Implementation**
+> **Implementation**
 >
->Be detailed. Describe what you plan to do as a solution for the problem you defined above. Include technical details, showing that you understand the technology. Illustrate key technical elements of your proposed solution in reasonable detail. Include writing unit tests throughout the coding period, as well as code documentation. These critical elements cannot be left to the last few weeks of the program. If user documentation will be required, or apidox, etc. these should be written during each week, not at the end.
+> Be detailed. Describe what you plan to do as a solution for the problem you defined above. Include technical details, showing that you understand the technology. Illustrate key technical elements of your proposed solution in reasonable detail. Include writing unit tests throughout the coding period, as well as code documentation. These critical elements cannot be left to the last few weeks of the program. If user documentation will be required, or apidox, etc. these should be written during each week, not at the end.
 >
->**Timeline**
+> **Timeline**
 >
->Show that you understand the problem, have a solution, have also broken it down into manageable parts, and that you have a realistic plan on how to accomplish your goal. Here you set expectations, so don’t make promises you can’t keep. A modest, realistic and detailed timeline is better than promising the impossible.
+> Show that you understand the problem, have a solution, have also broken it down into manageable parts, and that you have a realistic plan on how to accomplish your goal. Here you set expectations, so don’t make promises you can’t keep. A modest, realistic and detailed timeline is better than promising the impossible.
 >
->If you have other commitments during GSoC, such as a job, vacation, exams, internship, seminars, or papers to write, disclose them here. GSoC should be treated like a full-time job, and we will expect approximately 40 hours of work per week. *If you have conflicts, explain how you will work around them.* If you are found to have conflicts which you did not disclose, you may be failed.
+> If you have other commitments during GSoC, such as a job, vacation, exams, internship, seminars, or papers to write, disclose them here. GSoC should be treated like a full-time job, and we will expect approximately 40 hours of work per week. *If you have conflicts, explain how you will work around them.* If you are found to have conflicts which you did not disclose, you may be failed.
 >
->Open and clear communication is of utmost importance. **Include your plans for communication in your proposal; daily if possible.** You will need to initiate weekly formal communication such as a blog post on to be agreed placed. Lack of communication will result in you being failed.
+> Open and clear communication is of utmost importance. **Include your plans for communication in your proposal; daily if possible.** You will need to initiate weekly formal communication such as a blog post on to be agreed placed. Lack of communication will result in you being failed.
 >
->**About me**
+> **About me**
 >
->Provide your contact information (IRC nick, email, IM, phone) and write a few sentences about you and why you think you are the best for this job. **Prior contributions to Joplin are required; list your commits.** Name people (other developers, students, professors) who can act as a reference for you. Mention your field of study if necessary. Now is the time to join the relevant irc/telegram channels, mail lists and blog feeds. We want you to be a part of our community, not just contribute your code.
+> Provide your contact information (IRC nick, email, IM, phone) and write a few sentences about you and why you think you are the best for this job. **Prior contributions to Joplin are required; list your commits.** Name people (other developers, students, professors) who can act as a reference for you. Mention your field of study if necessary. Now is the time to join the relevant irc/telegram channels, mail lists and blog feeds. We want you to be a part of our community, not just contribute your code.
 >
->*Tell us if you are submitting proposals to other organizations, and whether or not you would choose Joplin if given the choice.*
+> *Tell us if you are submitting proposals to other organizations, and whether or not you would choose Joplin if given the choice.*
 >
->*Other things to think about:*
+> *Other things to think about:*
 >
->- Are you comfortable working independently under a supervisor or mentor who is several thousand miles away, and perhaps 12 time zones away? How will you work with your mentor to track your work? Have you worked in this style before?
+> - Are you comfortable working independently under a supervisor or mentor who is several thousand miles away, and perhaps 12 time zones away? How will you work with your mentor to track your work? Have you worked in this style before?
 >
->- If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?
+> - If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?
 >
->- After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
- 
-</details>
+> - After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.
 
-### Hints
+## Hints
 
 **Submit your proposal early**: early submissions get more attention from developers because that they have more time to read them. The more people see your proposal, the more it will be discussed.
 
@@ -115,15 +118,15 @@ A project proposal is what you will be judged upon. Write a clear proposal on wh
 **Keep it simple**: Be concise and precise. Provide a clear, descriptive title. "My Project" is the worst possible title!
 
 **Know what you are talking about**: Do not submit proposals that cannot be accomplished over a summer or that are not related to Joplin. If your idea is unusual, be sure to explain why you have chosen Joplin to be your mentoring organization.
-There could be exceptional reason to accept proposal what cannot be finished over the sumer if either it is clearly recognisable that there will be commitment beyond the summer period or the project can be well separated in sub-project. If you want to go that way, your proposal must be very easy readable to allow us to evaluate the changes of a project going through several coding programs. 
+There could be exceptional reason to accept proposal what cannot be finished over the sumer if either it is clearly recognisable that there will be commitment beyond the summer period or the project can be well separated in sub-project. If you want to go that way, your proposal must be very easy readable to allow us to evaluate the changes of a project going through several coding programs.
 
 **Aim wide**: submit more than one proposal. You are allowed to submit to another organisation as well. If you do submit more than one proposal, tell us that and which proposal you would choose, if both were selected. Former students would advise you to do one or two kick-ass proposals rather than trying to do three.
 
-### Accepted Students
+## Accepted Students
 
 Your primary responsibility is finishing your project under the guidance of your mentors. To do that, you must submit code regularly and stay in frequent and effective communication with your mentors and team. To pass the evaluations, you must do both the communication **and** the coding plus documentation.
 
-All students will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools. 
+All students will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools.
 
 ## Instructions for mentors
 
@@ -147,3 +150,10 @@ You will subscribe to the relvant tags in the forum to discuss ideas. You will n
 
 Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.
 
+## Ideas
+
+- [Idea: Nextcloud](https://joplinapp.org/gsoc/idea1_nextcloud.html)
+- [Idea: Sharing](https://joplinapp.org/gsoc/idea2_sharing.html)
+- [Idea: Tagging](https://joplinapp.org/gsoc/idea3_tagging.html)
+- [Idea: Search](https://joplinapp.org/gsoc/idea4_search.html)
+- [Idea: Password per note](https://joplinapp.org/gsoc/idea5_password_per_note.html)

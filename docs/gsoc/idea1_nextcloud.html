@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/clipper.md and any manual change
+This file was auto-generated from readme/gsoc/idea1_nextcloud.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/clipper.md
+https://github.com/laurent22/joplin/blob/master/readme/gsoc/idea1_nextcloud.md
 
 -->
 
 <head>
-	<title>Web Clipper | Joplin</title>
+	<title>GSoC: Idea 1: Nextcloud | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -259,7 +259,7 @@ https://github.com/laurent22/joplin/blob/master/readme/clipper.md
 
 <body>
 
-<div class="container page-clipper">
+<div class="container page-idea1_nextcloud">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -319,42 +319,43 @@ https://github.com/laurent22/joplin/blob/master/readme/clipper.md
 </li>
 </ul>
 </div>
-<h1>Joplin Web Clipper<a name="joplin-web-clipper" href="#joplin-web-clipper" class="heading-anchor">🔗</a></h1>
-<p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the <strong>Web Clipper Options</strong> and follow the instructions.</p>
-<img src="https://joplinapp.org/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
-<h1>Troubleshooting the web clipper service<a name="troubleshooting-the-web-clipper-service" href="#troubleshooting-the-web-clipper-service" class="heading-anchor">🔗</a></h1>
-<p>The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.</p>
-<p>However certain things can interfer with this service and prevent it from being accessible or from starting. If something does not work, check the following:</p>
+<h1>GSoC: Nextcloud notes integration (Web client)<a name="gsoc-nextcloud-notes-integration-web-client" href="#gsoc-nextcloud-notes-integration-web-client" class="heading-anchor">🔗</a></h1>
+<h2>What is the goal of the project<a name="what-is-the-goal-of-the-project" href="#what-is-the-goal-of-the-project" class="heading-anchor">🔗</a></h2>
+<p>There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itsself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  <a href="https://joplinapp.org/#synchronisation">Synchronisation</a>.</p>
+<p>There is already the <a href="https://github.com/foxmask/joplin-web">web application</a> what may can be integrated in collaboration application</p>
+<h3>what shall be answered in the application<a name="what-shall-be-answered-in-the-application" href="#what-shall-be-answered-in-the-application" class="heading-anchor">🔗</a></h3>
+<h2>Why shall this idea be realized<a name="why-shall-this-idea-be-realized" href="#why-shall-this-idea-be-realized" class="heading-anchor">🔗</a></h2>
+<p>Allowing broader use of the application and better integration of the existing open source world, we don't want to invent the wheel twice</p>
+<h2>Who is talking about it<a name="who-is-talking-about-it" href="#who-is-talking-about-it" class="heading-anchor">🔗</a></h2>
+<p>The idea is outcome of (but not limited to) of some discussion taking place in the Forum and on GitHub:</p>
 <ul>
-<li>Check that the service is started. You can check this in the Web clipper options in the desktop app.</li>
-<li>Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.</li>
-<li>Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example <a href="https://github.com/laurent22/joplin/issues/561#issuecomment-392220191">https://github.com/laurent22/joplin/issues/561#issuecomment-392220191</a></li>
+<li><a href="https://github.com/nextcloud/notes/issues/248">Support Joplin structure and notebooks #248</a></li>
+<li><a href="https://discourse.joplinapp.org/t/joplin-web-web-application-companion-for-joplin/555">Joplin Web</a></li>
+<li><a href="https://discourse.joplinapp.org/t/new-search-engine-in-joplin/1479">New search engine in Joplin</a></li>
+<li><a href="https://discourse.joplinapp.org/t/how-is-webdav-sync-implemented/3102">How is WebDAV sync implemented?</a></li>
+<li><a href="https://github.com/laurent22/joplin/issues/228">Nextcloud notes integration (Web client)</a></li>
 </ul>
-<p>If none of this work, please report it on the <a href="https://discourse.joplinapp.org/">forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub issue tracker</a></p>
-<h1>Debugging the extension<a name="debugging-the-extension" href="#debugging-the-extension" class="heading-anchor">🔗</a></h1>
-<h2>In Chrome<a name="in-chrome" href="#in-chrome" class="heading-anchor">🔗</a></h2>
-<p>To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.</p>
-<p>To do so, first enable developer mode in <a href="chrome://extensions/">chrome://extensions/</a></p>
+<hr>
+<p>COMMENTS:</p>
+<ol>
+<li>
+<p>“Nextcloud notes integration (Web client)” is not well defined. What would be nice is a built-in Nextcloud web client for Joplin. But the top post in there is about something else that won’t be changed (explained in the FAQ: <a href="https://joplinapp.org/faq/#is-it-possible-to-use-real-file-and-folder-names-in-the-sync-target">https://joplinapp.org/faq/#is-it-possible-to-use-real-file-and-folder-names-in-the-sync-target</a>)</p>
+</li>
+<li>
+<p>That would be interesting to know what they think about such an integration and how they see it because it’s an old subject, we (the staff) are periodically debating:</p>
 <ul>
-<li>Debugging the popup: Right-click on the Joplin extension icon, and select &quot;Inspect popup&quot;.</li>
-<li>Debugging the background script: In <code>chrome://extensions/</code>, click on &quot;Inspect background script&quot;.</li>
-<li>Debugging the content script: Press Ctrl+Shift+I to open the console of the current page.</li>
+<li><a href="https://github.com/laurent22/joplin/issues/228">https://github.com/laurent22/joplin/issues/228</a></li>
+<li><a href="https://discourse.joplinapp.org/t/nextcloud-fanboy-quest-ce-quils-veulent/844/3">https://discourse.joplinapp.org/t/nextcloud-fanboy-quest-ce-quils-veulent/844/3</a></li>
 </ul>
-<h2>In Firefox<a name="in-firefox" href="#in-firefox" class="heading-anchor">🔗</a></h2>
-<ul>
-<li>Open <a href="about:debugging">about:debugging</a> in Firefox.</li>
-<li>Make sure the checkox &quot;Enable add-on debugging&quot; is ticked.</li>
-<li>Scroll down to the Joplin Web Clipper extension.</li>
-<li>Click on &quot;Debugging&quot; - that should open a new console window.</li>
-</ul>
-<p>Also press F12 to open the regular Firefox console (some messages from the Joplin extension can go there too).</p>
-<p>Now use the extension as normal and replicate the bug you're having.</p>
-<p>Copy and paste the content of both the debugging window and the Firefox console, and post it to the <a href="https://discourse.joplinapp.org/">forum</a>.</p>
-<h1>Using the Web Clipper service<a name="using-the-web-clipper-service" href="#using-the-web-clipper-service" class="heading-anchor">🔗</a></h1>
-<p>The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the <a href="https://joplinapp.org/api/">Joplin API documentation</a>.</p>
+<p>I imagined they just need a joplin-api in PHP and “plug” it on the right datasource to switch between “Nextcloud native note/Qownote” to Nextcloud/Qownnote “Joplin note”.</p>
+</li>
+<li>
+<p>“How is WebDAV sync implemented?” appears twice. It should only be in Summer of Doc.</p>
+</li>
+</ol>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/clipper.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsoc/idea1_nextcloud.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

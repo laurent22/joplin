@@ -1,4 +1,4 @@
-additinal protection per note
+# GSoC: Additinal protection per note
 
 - [[Feature request\] Password or pin protection](https://github.com/laurent22/joplin/issues/289)
 - [[Suggestion\] Add instructions to generate app-specific password enhancement](https://github.com/laurent22/joplin/issues/419)

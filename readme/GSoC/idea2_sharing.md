@@ -1,4 +1,4 @@
-sharing
+# GSoC: Sharing
 
 - [Feature Request: Multiple note directories #108](https://github.com/laurent22/joplin/issues/108)
 - [[Feature Request\] Note Sharing #1085](https://github.com/laurent22/joplin/issues/1085)
@@ -8,6 +8,5 @@ sharing
 - [Turtl’s sharing - Choose who you share with and what they can do.](https://turtlapp.com/features/)
 - [Turtl Documentation - App architecture](https://turtlapp.com/docs/architecture)
 
-
-“Please give the ability to share from another Android app into Joplin”: This is already done
+"Please give the ability to share from another Android app into Joplin": This is already done
 

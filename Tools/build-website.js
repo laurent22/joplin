@@ -190,7 +190,9 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -275,6 +277,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Menu">Google Summer of Code 2010</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -563,6 +566,13 @@ async function main() {
 		[ 'readme/api.md', 'docs/api/index.html', { title: 'REST API' } ],
 		[ 'readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' } ],
 		[ 'readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' } ],
+
+		[ 'readme/gsoc/index.md', 'docs/gsoc/index.html', { title: 'Google Summer of Code' } ],
+		[ 'readme/gsoc/idea1_nextcloud.md', 'docs/gsoc/idea1_nextcloud.html', { title: 'GSoC: Idea 1: Nextcloud' } ],
+		[ 'readme/gsoc/idea2_sharing.md', 'docs/gsoc/idea2_sharing.html', { title: 'GSoC: Idea 2: Sharing' } ],
+		[ 'readme/gsoc/idea3_tagging.md', 'docs/gsoc/idea3_tagging.html', { title: 'GSoC: Idea 3: Tagging' } ],
+		[ 'readme/gsoc/idea4_search.md', 'docs/gsoc/idea4_search.html', { title: 'GSoC: Idea 4: Search' } ],
+		[ 'readme/gsoc/idea5_password_per_note.md', 'docs/gsoc/idea5_password_per_note.html', { title: 'GSoC: Idea 5: Password per Note' } ],
 	];
 
 	const path = require('path');
