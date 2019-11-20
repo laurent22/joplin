@@ -132,7 +132,7 @@ msgstr ""
 "`decrypt`, `status`, `decrypt-file` e `target-status`."
 
 msgid "Enter master password:"
-msgstr "Entre a senha master:"
+msgstr "Digite a senha mestra:"
 
 msgid "Operation cancelled"
 msgstr "Operação cancelada"
@@ -1500,20 +1500,17 @@ msgstr "Solarizado Dark"
 msgid "Nord"
 msgstr "Nord"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "Exibir tray icon"
+msgstr "Exibir contagem de notas"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Editar"
+msgstr "Editor"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "&Visualizar"
+msgstr "Visualizador"
 
 msgid "Split View"
-msgstr ""
+msgstr "Visão Dividida"
 
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
@@ -1607,8 +1604,8 @@ msgid ""
 "reducing the number of conflicts."
 msgstr ""
 "Isso irá permitir que o Joplin continue sendo executado em segundo plano. É "
-"recomendado que você habilita essa configuração para que suas notas "
-"sejamconstantemente sincronizadas, de modo a reduzir as chances de conflitos."
+"recomendado que você habilite essa configuração para que suas notas "
+"sejam constantemente sincronizadas, de modo a reduzir as chances de conflitos."
 
 msgid "Start application minimised in the tray icon"
 msgstr "Iniciar aplicativo minimizado na barra de tarefas"
@@ -1630,7 +1627,7 @@ msgid ""
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 "Deve ser uma fonte *monospace\" ou não vai funcionar direito. Se a fonte "
-"estiver incorreta ou vazia, será usada uma fonte genérica monospace default."
+"estiver incorreta ou vazia, será usada uma fonte genérica monospace."
 
 msgid "Automatically update the application"
 msgstr "Atualizar automaticamente o aplicativo"
@@ -1746,7 +1743,7 @@ msgstr "Manter histórico de nota por"
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Valor da opção inválida: \"%s\". Os valores possíveis são: %s."
+msgstr "Valor da opção inválido: \"%s\". Os valores possíveis são: %s."
 
 msgid "General"
 msgstr "Geral"
@@ -1835,7 +1832,7 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 "Estes itens continuarão no dispositivo mas não serão enviados ao alvo de "
-"sincronização. Para encontrar esses itens, ou pesquise pelo título ou pelo "
+"sincronização. Para encontrar esses itens, pesquise pelo título ou pelo "
 "ID (que é exibido nos colchetes acima)"
 
 #, javascript-format
@@ -1855,7 +1852,7 @@ msgid ""
 "will no longer attempt to decrypt them."
 msgstr ""
 "O Joplin falhou ao tentar decriptar esses múltiplos items, possivelmente "
-"porque eles estão corruptos ou são grandes demais. Esses itens permanecerão "
+"porque eles estão corrompidos ou são grandes demais. Esses itens permanecerão "
 "no dispositivo, porém o Joplin não vai mais tentar decriptá-los."
 
 msgid "Sync status (synced items / total items)"
@@ -1892,7 +1889,7 @@ msgid "On %s: %s"
 msgstr "Em %s: %s"
 
 msgid "Permission to use camera"
-msgstr "Permissão para utilizar sua câmera"
+msgstr "Permissão para utilizar a câmera"
 
 msgid "Your permission to use your camera is required."
 msgstr "É necessária a sua permissão para utilizar sua câmera."
@@ -1904,7 +1901,7 @@ msgid "Create a notebook"
 msgstr "Criar um caderno"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Atualmente, não há notas. Crie uma, clicando no botão (+)."
+msgstr "Atualmente, não há notas. Crie uma clicando no botão (+)."
 
 msgid "Delete these notes?"
 msgstr "Excluir estas notas?"
@@ -1986,7 +1983,7 @@ msgid "New tags:"
 msgstr "Novas tags:"
 
 msgid "Type new tags or select from list"
-msgstr "Digite novsa tags, ou selecione da lista"
+msgstr "Digite novas tags ou selecione da lista"
 
 msgid "Warning"
 msgstr "Atenção"
@@ -1995,7 +1992,7 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Para usar a sincronização do sistema de arquivos, é necessária sua permissão "
+"Para usar a sincronização do sistema de arquivos, é necessário sua permissão "
 "para gravar no armazenamento externo."
 
 msgid "Encryption Config"
@@ -2037,7 +2034,7 @@ msgid ""
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "Para funcionar corretamente, o app precisa das seguintes permissões. Por "
-"favor, habilite-as nas configurações do seu telefone, em Apps >Joplin > "
+"favor, habilite-as nas configurações do seu telefone, em Apps > Joplin > "
 "Permissões"
 
 msgid ""
@@ -2070,11 +2067,11 @@ msgid "Login with Dropbox"
 msgstr "Login com Dropbox"
 
 msgid "Enter code here"
-msgstr "Entre o código aqui"
+msgstr "Digite o código aqui"
 
 #, javascript-format
 msgid "Master Key %s"
-msgstr "Chave Master %s"
+msgstr "Chave Mestra %s"
 
 #, javascript-format
 msgid "Created: %s"
@@ -2087,7 +2084,7 @@ msgid "Password cannot be empty"
 msgstr "Senha não pode ser vazia"
 
 msgid "Confirm password cannot be empty"
-msgstr "Confirme a senha não pode ser vazia"
+msgstr "Confirmação de senha não pode estar vazia"
 
 msgid "Enable"
 msgstr "Habilitar"
@@ -2100,7 +2097,7 @@ msgid "Edit notebook"
 msgstr "Editar caderno"
 
 msgid "Enter notebook title"
-msgstr "Entre o título do caderno"
+msgstr "Digite o título do caderno"
 
 msgid "Show all"
 msgstr "Exibir tudo"
@@ -2188,13 +2185,11 @@ msgstr "Procurar"
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "Sincronização já em andamento. Estado: %s"
 
-#, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "Entre a senha master:"
+#~ msgstr "Confirme a senha mestra:"
 
-#, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "Entre a senha master:"
+#~ msgstr "Confirme a senha:"
 
 #, fuzzy
 #~ msgid "Missing required argument: note"
