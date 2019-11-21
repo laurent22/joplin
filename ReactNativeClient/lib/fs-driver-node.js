@@ -82,7 +82,13 @@ class FsDriverNode extends FsDriverBase {
 	}
 
 	async mkdir(path) {
-		return fs.mkdirp(path);
+		// Note that mkdirp() does not throw an error if the directory
+		// could not be created. This would make the synchroniser to
+		// incorrectly try to sync with a non-existing dir:
+		// https://github.com/laurent22/joplin/issues/2117
+		const r = await fs.mkdirp(path);
+		if (!(await this.exists(path))) throw new Error(`Could not create directory: ${path}`);
+		return r;
 	}
 
 	async stat(path) {
