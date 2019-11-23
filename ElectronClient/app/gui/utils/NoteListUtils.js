@@ -111,10 +111,11 @@ class NoteListUtils {
 				new MenuItem({
 					label: _('Share note...'),
 					click: async () => {
+						console.info('NOTE IDS', noteIds);
 						props.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'commandShareNoteDialog',
-							noteIds: noteIds,
+							noteIds: noteIds.slice(),
 						});
 					},
 				})
