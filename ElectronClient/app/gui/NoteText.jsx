@@ -380,7 +380,7 @@ class NoteTextComponent extends React.Component {
 		return this.markupToHtml_;
 	}
 
-	async componentWillMount() {
+	async UNSAFE_componentWillMount() {
 		let note = null;
 		let noteTags = [];
 		if (this.props.newNote) {
@@ -658,7 +658,7 @@ class NoteTextComponent extends React.Component {
 		defer();
 	}
 
-	async componentWillReceiveProps(nextProps) {
+	async UNSAFE_componentWillReceiveProps(nextProps) {
 		if (this.props.newNote !== nextProps.newNote && nextProps.newNote) {
 			await this.scheduleReloadNote(nextProps);
 		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {

@@ -31,7 +31,7 @@ class ConfigScreenComponent extends React.Component {
 		this.configMenuBar_selectionChange = this.configMenuBar_selectionChange.bind(this);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
 

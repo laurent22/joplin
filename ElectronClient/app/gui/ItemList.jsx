@@ -32,11 +32,11 @@ class ItemList extends React.Component {
 		});
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.updateStateItemIndexes();
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		this.updateStateItemIndexes(newProps);
 	}
 

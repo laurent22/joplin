@@ -41,7 +41,7 @@ class MainScreenComponent extends React.Component {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			promptOptions: null,
 			modalLayer: {
@@ -53,7 +53,7 @@ class MainScreenComponent extends React.Component {
 		});
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.windowCommand) {
 			this.doCommand(newProps.windowCommand);
 		}

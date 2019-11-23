@@ -18,7 +18,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 		this.webview_.src = this.startUrl();
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			webviewUrl: this.startUrl(),
 			webviewReady: false,
