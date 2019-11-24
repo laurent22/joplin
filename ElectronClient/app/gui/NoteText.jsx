@@ -60,10 +60,13 @@ class CustomHighlightRules extends ace.acequire(
 	constructor() {
 		super();
 		this.$rules.start.push({
-			// This is actually a highlight `mark`, but Ace has no token name for this
-			// https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
+			/**
+			 * This is actually a highlight `mark`, but Ace has no token name for this
+			 * so we made up our own. Reference for common tokens here:
+			 * https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
+			 */
 			token: 'highlight_mark',
-			regex: '==.*?==',
+			regex: '==[^ ](?:.*?[^ ])?==',
 		});
 	}
 }
