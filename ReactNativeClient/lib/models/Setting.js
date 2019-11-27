@@ -1,3 +1,15 @@
+// *********************************************************************
+// **********************************************************************
+// ***                                                               ****
+// ***  Each build regenerates                                       ****
+// ***  ElectronClient/app/lib/models/Setting.js from                ****
+// ***  ReactNativeClient/lib/models/Setting.js, so only edit the    ****
+// ***  latter and not the former, otherwise you'll be confused      ****
+// ***  about why your code keeps disappearing.                      ****
+// ***                                                               ****
+// **********************************************************************
+// *********************************************************************
+
 const BaseModel = require('lib/BaseModel.js');
 const { Database } = require('lib/database.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
@@ -986,3 +998,15 @@ Setting.constants_ = {
 Setting.autoSaveEnabled = true;
 
 module.exports = Setting;
+
+// *********************************************************************
+// **********************************************************************
+// ***                                                               ****
+// ***  Each build regenerates                                       ****
+// ***  ElectronClient/app/lib/models/Setting.js from                ****
+// ***  ReactNativeClient/lib/models/Setting.js, so only edit the    ****
+// ***  latter and not the former, otherwise you'll be confused      ****
+// ***  about why your code keeps disappearing.                      ****
+// ***                                                               ****
+// **********************************************************************
+// *********************************************************************
