@@ -239,7 +239,7 @@ class WebDavApi {
 				</d:prop>
 			</d:propfind>`;
 
-		return this.exec('PROPFIND', path, body, { Depth: depth }, options);
+		return this.exec('PROPFIND', path, body, { 'Content-type': 'application/xml', Depth: depth }, options);
 	}
 
 	requestToCurl_(url, options) {

@@ -176,7 +176,12 @@ class FileApiDriverWebDav {
 	}
 
 	async put(path, content, options = null) {
-		return await this.api().exec('PUT', path, content, null, options);
+		let content_type = 'application/octet-stream';
+		if (path.endsWith('.md'))
+			content_type = 'text/markdown';
+		else if (path.endsWith('.txt'))
+			content_type = 'text/plain';
+		return await this.api().exec('PUT', path, content, { 'Content-type': content_type }, options);
 	}
 
 	async delete(path) {
