@@ -161,6 +161,8 @@ class FileApiDriverWebDav {
 			if (!path.endsWith('/')) path = `${path}/`;
 			await this.api().exec('MKCOL', path);
 		} catch (error) {
+			if (error.code === 403) return; // 403 can also mean that the collection already exists (Forbidden)
+
 			if (error.code === 405) return; // 405 means that the collection already exists (Method Not Allowed)
 
 			// 409 should only be returned if a parent path does not exists (eg. when trying to create a/b/c when a/b does not exist)
