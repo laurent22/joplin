@@ -949,6 +949,7 @@ Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 Setting.TYPE_ARRAY = 4;
 Setting.TYPE_OBJECT = 5;
+Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
