@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: Zorbey Doğangüneş <zorbeyd@gmail.com>\n"
+"Last-Translator: Hüseyin Fahri Uzun <mail@fahriuzun.com>\n"
+"Language-Team: mail@fahriuzun.com\n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
@@ -91,12 +93,14 @@ msgstr "Yapılacakları yapıldı olarak işaretler."
 
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr ""
+msgstr "Bu not yapılacaklar listesi değildir: “%s”"
 
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
+"E2EE ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`, `status`, "
+"`decrypt-file` and `target-status`."
 
 msgid "Enter master password:"
 msgstr "Ana şifreyi girin:"
@@ -104,13 +108,11 @@ msgstr "Ana şifreyi girin:"
 msgid "Operation cancelled"
 msgstr "İşlem iptal edildi"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "Ana şifreyi girin:"
+msgstr "Şifreyi doğrula:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "Şifre boş olamaz"
+msgstr "Şifre boş olamaz!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -123,7 +125,7 @@ msgid "Completed decryption."
 msgstr "Şifre çözümü tamamlandı."
 
 msgid "Enabled"
-msgstr "Aktif"
+msgstr "Etkin"
 
 msgid "Disabled"
 msgstr "Pasif"
@@ -139,7 +141,7 @@ msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 "Hiçbir metin editörü tanımlanmadı. Lütfen `config editor <editor-path>` ı "
-"kullanarak editörü ayarlayınız."
+"kullanarak editörü ayarlayınız"
 
 msgid "No active notebook."
 msgstr "Aktif not defteri yok."
@@ -169,7 +171,7 @@ msgstr "Kullanım bilgilerini görüntüler."
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
 "Kısayolları nasıl özelleştirebileceğiniz hakkında bilgi için lütfen %s "
-"adresini ziyaret edin."
+"adresini ziyaret edin"
 
 msgid "Shortcuts are not available in CLI mode."
 msgstr "CLI modunda kısayollar mevcut değil."
@@ -178,6 +180,9 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
+"`help [command]` yazarak komutlar hakkında daha fazla bilgiye "
+"ulaşabilirsiniz; yada `help all` yazarak tam kullanım bilgisine "
+"ulaşabilirsiniz."
 
 msgid "The possible commands are:"
 msgstr "Kullanılabilir komutlar:"
@@ -187,6 +192,10 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
+"Herhangi bir komutta, bir not veya note defteri başlık veya ID tarafından "
+"atfedilebilinir, veya `$n` `$b` kestirmelerini kullanalarak. Sırasıyla, "
+"güncel seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf "
+"yapılabilinir."
 
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "Bir bölmeden diğerine geçmek için Tab veya Shift+Tab tuşlarına basın."
@@ -195,6 +204,8 @@ msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
+"Liste ve metin alanlarında kaydırma için ok tuşları ve page up/down "
+"tuşlarını kullanınız (bu konsol da dahil)."
 
 msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Konsolu büyütmek/küçültmek için, \"tc\" ye basınız."
@@ -203,13 +214,13 @@ msgid "To enter command line mode, press \":\""
 msgstr "Komut satırı moduna girmek için \":\" e basın"
 
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Komut satırı modundan çıkmak için ESC tuşuna basın."
+msgstr "Komut satırı modundan çıkmak için ESC tuşuna basın"
 
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Klavye kısayolları ve yapılandırma seçenekleri listesi için `help keymap` "
-"yazın."
+"yazın"
 
 msgid "Imports data into Joplin."
 msgstr "Joplin'e veri aktarır."
@@ -275,6 +286,9 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
+"Sadece belirli tip öğeleri gösterir. Notlar için `n`,  yapılacaklar için `t` "
+"veya not ve yapılacaklar listesi için `nt` (örnek: `-tt` sadece yapılacaklar "
+"listesini gösterirken, `-ttd` not ve yapılacaklar listesini gösterir)"
 
 msgid "Either \"text\" or \"json\""
 msgstr "\"metin\" ya da \"json\""
@@ -283,6 +297,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
+"Uzun liste formatını kullan. Format: ID, NOTE_COUNT (not defterleri için), "
+"DATE, TODO_CHECKED (yapılacak listesi için), TITLE"
 
 msgid "Please select a notebook first."
 msgstr "Lütfen önce bir not defteri seçin."
@@ -300,10 +316,10 @@ msgid "Creates a new to-do."
 msgstr "Yeni bir yapılacak öğe oluşturur."
 
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr ""
+msgstr "<note> ile eşleşen tüm notları [notebook] ‘a taşı."
 
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
+msgstr "<item> öğesini <name> ile yeniden adlandırır (not veya not defteri)."
 
 msgid "Deletes the given notebook."
 msgstr "Verilen not defterini siler."
@@ -338,6 +354,8 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"API sunucu kontrolünü başlat, durdur veya kontrol et. Hangi port üzerinden "
+"çalışacağını api.port ayar değişkeni ile ayarlayınız. Komutlar (%s)."
 
 msgid "Displays summary about the notes and notebooks."
 msgstr "Notlar ve not defterleri hakkında özet görüntüler."
@@ -378,6 +396,11 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
+"<tag-command> [note] öğesine [tag] koymak yada silmek için “add”, “remove”, "
+"“list”, veya “notetags” kullanabilirsiniz, [tag] ile iliştirilmiş notları "
+"listeler veya [note] ile iliştirilmiş etiketleri listeler. `tag list` komutu "
+"ile tüm kullanılabilinir etiketleri listeleyebilirsiniz. (-l kullanarak uzun "
+"versiyona ulaşabilirsiniz)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -389,6 +412,10 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
+"<todo-command> “toggle” veya “clear” olabilir. “toggle” kullanarak yapılacak "
+"listesinin tamamlanma değerini değiştirebilirsiniz. (Eğer hedef öğe not ise "
+"yapılacaklar listesine dönüştürülür). “clear” kullanarak yapılacaklar "
+"listesini normal nota dönüştürebilirsiniz."
 
 msgid "Marks a to-do as non-completed."
 msgstr "Yapılacağı tamamlanmamış olarak işaretler."
@@ -412,7 +439,7 @@ msgstr "Enum"
 
 #, javascript-format
 msgid "Type: %s."
-msgstr ""
+msgstr "Tip: %s."
 
 #, javascript-format
 msgid "Possible values: %s."
@@ -428,6 +455,7 @@ msgstr "Mümkün tuşlar/değerler:"
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
+"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -483,7 +511,7 @@ msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Notlar dışa aktarılamadı: %s"
 
 msgid "Insert Date Time"
 msgstr "Tarih Ekle"
@@ -718,14 +746,13 @@ msgid "Set alarm:"
 msgstr "Alarm kur:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "Taslak dosyası:"
 
 msgid "Toggle sidebar"
 msgstr "Kenar çubuğunu aç / kapat"
 
-#, fuzzy
 msgid "Toggle note list"
-msgstr "Not listesi"
+msgstr "Not listesini aç/kapat"
 
 msgid "New note"
 msgstr "Yeni not"
@@ -748,9 +775,8 @@ msgstr "Bazı öğeler senkronize edilemiyor."
 msgid "View them now"
 msgstr "Şimdi onları görüntüle"
 
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "Ana şifreyi girin:"
+msgstr "Ana şifreyi girin."
 
 msgid "Set the password"
 msgstr "Şifreyi ayarla"
@@ -761,20 +787,18 @@ msgstr "Konum"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
 msgid "Note History"
-msgstr "Not listesi"
+msgstr "Not tarihçesi"
 
 msgid "Markup"
-msgstr ""
+msgstr "Düzenleme"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 
-#, fuzzy
 msgid "This note has no history"
-msgstr "Bu not değiştirildi:"
+msgstr "Bu not değiştirildi"
 
 #, javascript-format
 msgid "This file could not be opened: %s"
@@ -804,29 +828,30 @@ msgid "Synchronisation Status"
 msgstr "Senkronizasyon Durumu"
 
 msgid "Remove"
-msgstr ""
+msgstr "Sil"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Not defterini sil? Bu defterdeki tüm notlar ve alt defterler de silinecek."
+"“%s” Not defterini sil ?\n"
+"\n"
+"Not defteri içersinde ki tüm not ve alt not defterleride silinecektir."
 
 msgid "Delete"
 msgstr "Sil"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Bu etiket tüm notlardan kaldırılsın mı?"
+msgstr "“%s” etiketi tüm notlardan kaldırılsın mı?"
 
 msgid "Remove this search from the sidebar?"
 msgstr "Bu aramayı kenar çubuğundan kaldır?"
 
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Yeni not defteri"
+msgstr "Yeni alt not defteri"
 
 msgid "Rename"
 msgstr "Yeniden adlandır"
@@ -834,26 +859,24 @@ msgstr "Yeniden adlandır"
 msgid "Export"
 msgstr "Dışa aktar"
 
-#, fuzzy
 msgid "Add or remove tags"
-msgstr "Etiket ekle veya kaldır"
+msgstr "Etiketleri ekle veya kaldır"
 
-#, fuzzy
 msgid "Duplicate"
-msgstr "Tekrarla"
+msgstr "Çoğalt"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Kopyala"
 
 msgid "Switch between note and to-do type"
-msgstr ""
+msgstr "Not ve yapılacaklar tipi arasında değişim yap"
 
 msgid "Switch to note type"
-msgstr ""
+msgstr "Not tipine dönüştür"
 
 msgid "Switch to to-do type"
-msgstr ""
+msgstr "Yapılacaklar tipine dönüştür"
 
 msgid "Copy Markdown link"
 msgstr "Markdown bağlantısını kopyala"
@@ -959,17 +982,16 @@ msgstr ""
 "fazla bilgi için SSS bölümüne bakın: %s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Klavye modu"
 
-#, fuzzy
 msgid "Default"
-msgstr "Varsayılan: %s"
+msgstr "Varsayılan"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Senkronizasyon hedefi"
@@ -1003,25 +1025,28 @@ msgid "WebDAV password"
 msgstr "WebDAV şifresi"
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Ek indirme davranışı"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"“Manuel” modda, eklentiler sadece tıklanıldığında indirilir. “Otomatik” "
+"modda, notlar açıldığında indirilir. “Her zaman” modunda, tüm eklentiler "
+"notu açsanızda açmasanızda indirilir."
 
 msgid "Always"
-msgstr ""
+msgstr "Her zaman"
 
 msgid "Manual"
-msgstr ""
+msgstr "Manuel"
 
 msgid "Auto"
-msgstr ""
+msgstr "Otomatik"
 
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Maksimum aynı anda bağlantı"
 
 msgid "Language"
 msgstr "Dil"
@@ -1042,39 +1067,36 @@ msgid "Dark"
 msgstr "Karanlık"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Açık Solarize"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Koyu Solarize"
 
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "Tepsi simgesini göster"
+msgstr "Not sayacını göster"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Düzenle"
+msgstr "Düzenleyici"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "İncele"
+msgstr "Görünteleyici"
 
 msgid "Split View"
-msgstr ""
+msgstr "Görünümü böl"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Tamamlanmamış yap-list yukarıda"
@@ -1088,9 +1110,8 @@ msgstr "Notları sırala"
 msgid "Reverse sort order"
 msgstr "Sıralamayı değiştir"
 
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "Notları sırala"
+msgstr "Notları şuna göre sırala"
 
 msgid "Save geo-location with notes"
 msgstr "Coğrafi konumu notlarla kaydedin"
@@ -1108,47 +1129,46 @@ msgid "When creating a new note:"
 msgstr "Yeni bir not oluştururken:"
 
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Kelime kaydırmasını etkinleştir"
 
 msgid "Enable typographer support"
-msgstr ""
+msgstr "Dizgi desteğini etkinleştir"
 
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "Şifrelemeyi etkinleştir"
+msgstr "Matematik ifadelerini etkinleştir"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "==mark== söz dizimini etkinleştir"
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Dip notları etkinleştir"
 
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Tablo içerik eklentisini etkinleştir"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "~sub~ söz dizimini etkinleştir"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "^sup^ söz dizimini etkinleştir"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Deflist söz dizimini etkinleştir"
 
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "Kısaltma söz dizimini etkinleştir"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Markdown emoji desteğini etkinleştir"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "++insert++ söz dizimini etkinleştir"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Çoklu markdown tablo eklentisini etkinleştir"
 
 msgid "Enable Fountain syntax support"
-msgstr ""
+msgstr "Fountain söz dizimi desteğini etkinleştir"
 
 msgid "Show tray icon"
 msgstr "Tepsi simgesini göster"
@@ -1166,7 +1186,7 @@ msgstr ""
 "edilir, çakışma sayısı azalır."
 
 msgid "Start application minimised in the tray icon"
-msgstr "Uygulamayı tepsi simgesinde küçültülmüş olarak başlat."
+msgstr "Uygulamayı tepsi simgesinde küçültülmüş olarak başlat"
 
 msgid "Global zoom percentage"
 msgstr "Global yakınlaştırma yüzdesi"
@@ -1174,9 +1194,8 @@ msgstr "Global yakınlaştırma yüzdesi"
 msgid "Editor font size"
 msgstr "Editör yazı boyutu"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "Editör yazı boyutu"
+msgstr "Editör fontu"
 
 msgid "Editor font family"
 msgstr "Editör yazı tipi"
@@ -1225,34 +1244,34 @@ msgstr ""
 "sağlanmadıysa, varsayılan düzenleyiciyi otomatik olarak algılamaya çalışır."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "PDF dışa aktarımı için sayfa boyutu"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Kağıt"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "Tablo"
 
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "PDF dışa aktarımı için sayfa yönü"
 
 msgid "Portrait"
-msgstr ""
+msgstr "Dikey"
 
 msgid "Landscape"
-msgstr ""
+msgstr "Yatay"
 
 msgid "Custom TLS certificates"
 msgstr "Özel TLS sertifikaları"
@@ -1276,25 +1295,28 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Tedbir Modu: Senkronize hedefi boş olduğunda yerel verileri silme (bazen "
+"yanlış ayar ve hata sonucu olur)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"API sunucu tarafından kullanılacak portu belirleyiniz. Belirlenmez ise "
+"varsayılan bir değer kullanılır."
 
-#, fuzzy
 msgid "Enable note history"
-msgstr "Şifrelemeyi etkinleştir"
+msgstr "Not tarihçesini etkinleştir"
 
 msgid "days"
-msgstr ""
+msgstr "günler"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d gün"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Not tarihçesini şu kadar gün tut"
 
 msgid "Joplin Export File"
 msgstr "Joplin Dosya Dışa Aktarım"
@@ -1305,13 +1327,11 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Joplin Dizin Dışa Aktarım"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote Dosya Dışa Aktarım"
+msgstr "Evernote Dosya Dışa Aktarım (Markdown olarak)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote Dosya Dışa Aktarım"
+msgstr "Evernote Dosya Dışa Aktarım (HTML olarak)"
 
 msgid "Json Export Directory"
 msgstr "Json Dışa Aktarım Dizini"
@@ -1331,13 +1351,11 @@ msgstr "Kamera kullanımı için izin"
 msgid "Your permission to use your camera is required."
 msgstr "Kamera kullanımı için izniniz gerekmektedir."
 
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "Aktif not defteri yok."
+msgstr "Şuan bir note defteriniz yok."
 
-#, fuzzy
 msgid "Create a notebook"
-msgstr "Yeni bir not defteri oluşturur."
+msgstr "Yeni bir not defteri oluşturur"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Şu anda not yok. (+) butonuna tıklayarak bir tane oluşturun."
@@ -1357,15 +1375,13 @@ msgstr "Tarih seç"
 msgid "Confirm"
 msgstr "Onayla"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "Not defterleri"
+msgstr "Not defteri: %s"
 
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Şifrelenmiş öğeler değiştirilemez"
+msgstr "Şifrelenmiş not defterleri yeniden adlandırılamaz"
 
-#, fuzzy
 msgid "New Notebook"
 msgstr "Yeni not defteri"
 
@@ -1383,9 +1399,8 @@ msgstr "Kaynaklar alınıyor: %d/%d"
 msgid "Synchronise"
 msgstr "Senkronize"
 
-#, fuzzy
 msgid "All notes"
-msgstr "not"
+msgstr "Tüm notlar"
 
 msgid "Notebooks"
 msgstr "Not defterleri"
@@ -1401,12 +1416,14 @@ msgid "Type new tags or select from list"
 msgstr "Yeni etiketler yazın veya listeden seçin"
 
 msgid "Warning"
-msgstr ""
+msgstr "Dikkat"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"Dosya sistemi senkronizasyonu için, hedef depolamada sizin yazma yetkiniz "
+"gereklidir."
 
 msgid "Check synchronisation configuration"
 msgstr "Senkronizasyon yapılandırmasını kontrol et"
@@ -1414,38 +1431,36 @@ msgstr "Senkronizasyon yapılandırmasını kontrol et"
 msgid "Encryption Config"
 msgstr "Yapılandırmayı şifrele"
 
-#, fuzzy
 msgid "Tools"
 msgstr "Araçlar"
 
-#, fuzzy
 msgid "Sync Status"
-msgstr "Durum"
+msgstr "Eşitleme Durumu"
 
 msgid "Log"
 msgstr "Log"
 
-#, fuzzy
 msgid "Creating report..."
-msgstr "Yeni %s oluşturuluyor..."
+msgstr "Rapor oluşturuluyor…"
 
 msgid "Export Debug Report"
 msgstr "Hata Ayıklama Raporunu Dışa Aktar"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Arama indeksi düzeltiliyor…"
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Arama indeksini düzelt"
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Arama ile ilgili bir sorun olduğunda bunu kullanın. Not sayısına göre bu "
+"işlem uzun sürebilir."
 
-#, fuzzy
 msgid "More information"
-msgstr "Yapılandırma"
+msgstr "Daha fazla bilgi"
 
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
@@ -1494,7 +1509,6 @@ msgstr "Şifre:"
 msgid "Password cannot be empty"
 msgstr "Şifre boş olamaz"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
 msgstr "Şifre boş olamaz"
 
@@ -1508,9 +1522,8 @@ msgstr "Not defteri kaydedilemedi: %s"
 msgid "Edit notebook"
 msgstr "Not defterini düzenle"
 
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "Not defteri başlığı:"
+msgstr "Not defteri başlığı"
 
 msgid "This note has been modified:"
 msgstr "Bu not değiştirildi:"
@@ -1535,7 +1548,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "“%s” formatlı linkler desteklenmiyor"
 
 #~ msgid "To delete a tag, untag the associated notes."
 #~ msgstr ""
