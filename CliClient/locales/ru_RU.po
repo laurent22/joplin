@@ -17,6 +17,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr "Для удаления метки, открепите ее от связанных с ней заметок."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+"Пожалуйста, выберите заметку или блокнот, которые будут удалены первыми."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\""
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -40,12 +50,34 @@ msgstr "N"
 msgid "y"
 msgstr "y"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Отмена фоновой синхронизации... Пожалуйста, подождите."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Нет такой команды: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Команда \"%s\" доступна только в режиме GUI"
+
 msgid "Cannot change encrypted item"
 msgstr "Невозможно изменить зашифрованный элемент"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Отсутствует обязательный аргумент: %s"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "Ваш выбор: "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Неверный ответ: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "Прикрепляет заданный файл к заметке."
@@ -160,6 +192,16 @@ msgid ""
 msgstr ""
 "Экспортирует данные Joplin по заданному пути. По умолчанию экспортируется "
 "полная база данных, включая блокноты, заметки, метки и ресурсы."
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Целевой формат: %s"
+
+msgid "Exports only the given note."
+msgstr "Экспортирует только заданную заметку."
+
+msgid "Exports only the given notebook."
+msgstr "Экспортирует только заданный блокнот."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Отображает URL геолокации для заметки."
@@ -354,6 +396,29 @@ msgstr ""
 "Запустить, остановить или проверить сервер API. Порт сервера настраивается с "
 "помощью переменной api.port. Доступные команды: (%s)."
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Сервер уже запущен на порту %d"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Сервер запущен на порту %d"
+
+msgid "Server is not running."
+msgstr "Сервер не запущен."
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Устанавливает для свойства <name> заданной <note> заданному [value]. "
+"Возможные свойства:\n"
+"\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "Выводит общую информацию о заметках и блокнотах."
 
@@ -364,6 +429,28 @@ msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Синхронизация с заданной целью (по умолчанию используется значение "
 "конфигурации sync.target"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Чтобы разрешить Joplin синхронизироваться с Dropbox, выполните следующие "
+"действия:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Шаг 1: Откройте этот URL в вашем браузере, чтобы авторизовать приложение:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Шаг 2: Введите код, предоставленный Dropbox:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Не аутентифицировано с %s. Пожалуйста, предоставьте все недостающие данные."
 
 msgid "Synchronisation is already in progress."
 msgstr "Синхронизация уже выполняется."
@@ -387,6 +474,12 @@ msgstr "Не удалось инициировать синхронизацию.
 
 msgid "Starting synchronisation..."
 msgstr "Начало синхронизации..."
+
+msgid "Downloading resources..."
+msgstr "Загрузка ресурсов..."
+
+msgid "Cancelling... Please wait."
+msgstr "Отмена... Пожалуйста, подождите."
 
 #, fuzzy
 msgid ""
@@ -450,9 +543,11 @@ msgstr "По умолчанию: %s"
 msgid "Possible keys/values:"
 msgstr "Возможные ключи/значения:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "Все возможные порты заняты - пожалуйста, сообщите о проблеме в %s"
+msgid "Type `joplin help` for usage information."
+msgstr "Введите `joplin help` для получения информации об использовании."
+
+msgid "Fatal error:"
+msgstr "Фатальная ошибка:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -473,6 +568,9 @@ msgstr ""
 "будет осуществляться только в нем. У приложения не будет доступа к каким-"
 "либо файлам за пределами этого каталога и другим личным данным. Никакая "
 "информация не будет передана третьим лицам."
+
+msgid "Search:"
+msgstr "Поиск:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -509,6 +607,67 @@ msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста,
 msgid "Could not export notes: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "&Файл"
+
+msgid "About Joplin"
+msgstr "О Joplin"
+
+msgid "Preferences..."
+msgstr "Настройки…"
+
+msgid "Check for updates..."
+msgstr "Проверить обновления..."
+
+msgid "Templates"
+msgstr "Шаблоны"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Export"
+msgstr "Экспорт"
+
+msgid "Synchronise"
+msgstr "Синхронизировать"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "Скрыть %s"
+
+msgid "Quit"
+msgstr "Выход"
+
+msgid "Close Window"
+msgstr "Закрыть окно"
+
+msgid "&Edit"
+msgstr "&Правка"
+
+msgid "Copy"
+msgstr "Копировать"
+
+msgid "Cut"
+msgstr "Вырезать"
+
+msgid "Paste"
+msgstr "Вставить"
+
+msgid "Select all"
+msgstr "Выбрать все"
+
+msgid "Bold"
+msgstr "Полужирный"
+
+msgid "Italic"
+msgstr "Курсивный"
+
+msgid "Link"
+msgstr "Ссылка"
+
+msgid "Code"
+msgstr "Код"
+
 msgid "Insert Date Time"
 msgstr "Вставить дату и время"
 
@@ -524,11 +683,62 @@ msgstr "Поиск во всех заметках"
 msgid "Search in current note"
 msgstr "Поиск в текущей заметке"
 
+msgid "&View"
+msgstr "&Вид"
+
+msgid "Toggle sidebar"
+msgstr "Переключить боковую панель"
+
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Список заметок"
+
+msgid "Toggle editor layout"
+msgstr "Переключить вид редактора"
+
+msgid "Focus"
+msgstr "Фокус"
+
+msgid "&Tools"
+msgstr "&Сервис"
+
+msgid "&Help"
+msgstr "&Помощь"
+
+msgid "Website and documentation"
+msgstr "Сайт и документация"
+
+msgid "Joplin Forum"
+msgstr "Форум Joplin"
+
+msgid "Make a donation"
+msgstr "Пожертвовать"
+
+msgid "Toggle development tools"
+msgstr "Включить средства разработки"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "Открыть %s"
+
+msgid "Exit"
+msgstr "Выход"
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Отмена"
+
+msgid "Current version is up-to-date."
+msgstr "Текущая версия актуальна."
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (предварительный релиз)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Доступно обновление, вы хотите загрузить его сейчас?"
@@ -540,6 +750,16 @@ msgstr "Ваша версия: %s"
 #, javascript-format
 msgid "New version: %s"
 msgstr "Новая версия: %s"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "Восстановленные заметки"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопирован в буфер обмена!"
@@ -608,18 +828,24 @@ msgstr ""
 "Этот токен авторизации необходим только для разрешения сторонним приложениям "
 "получать доступ к Joplin."
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "This will open a new screen. Save your current changes?"
 msgstr ""
-"Чтобы разрешить Joplin синхронизироваться с Dropbox, выполните следующие "
-"действия:"
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
-"Шаг 1: Откройте этот URL в вашем браузере, чтобы авторизовать приложение:"
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Заметки и настройки сохранены в: %s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Шаг 2: Введите код, предоставленный Dropbox:"
+msgid "Check synchronisation configuration"
+msgstr "Проверить настройки синхронизации"
+
+msgid "Browse..."
+msgstr "Обзор..."
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Apply"
+msgstr "Применить"
 
 msgid "Submit"
 msgstr "Отправить"
@@ -713,6 +939,18 @@ msgstr "Статус"
 msgid "Encryption is:"
 msgstr "Шифрование:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
+msgid "Usage"
+msgstr "Использование: %s"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -743,13 +981,6 @@ msgstr "Установить напоминание:"
 msgid "Template file:"
 msgstr "Файл шаблона:"
 
-msgid "Toggle sidebar"
-msgstr "Переключить боковую панель"
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Список заметок"
-
 msgid "New note"
 msgstr "Новая заметка"
 
@@ -777,6 +1008,13 @@ msgstr "Для одного или нескольких мастер-ключе�
 msgid "Set the password"
 msgstr "Установить пароль"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Здесь нет заметок. Создайте новую, нажав на \"Новая заметка\"."
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "Сейчас здесь нет блокнотов. Создайте новый, нажав \"Новый блокнот\"."
+
 msgid "Location"
 msgstr "Местоположение"
 
@@ -789,6 +1027,12 @@ msgstr "История заметок"
 msgid "Markup"
 msgstr "Разметка"
 
+msgid "Previous versions of this note"
+msgstr "Предыдущая версия заметки"
+
+msgid "Note properties"
+msgstr "Свойства заметки"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Заметка “%s” была успешно восстановлена в блокнот “%s”."
@@ -797,8 +1041,38 @@ msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущей версии"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Неподдерживаемая ссылка или сообщение: %s"
+
+msgid "Restore"
+msgstr "Восстановить"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Нажмите “%s”, чтобы восстановить заметку. Она будет скопирована в блокнот "
+"“%s”. Текущая версия заметки не будет заменена или изменена."
+
+msgid "Open..."
+msgstr "Открыть..."
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Этот файл не может быть открыт: %s"
+
+msgid "Save as..."
+msgstr "Сохранить как..."
+
+msgid "Copy path to clipboard"
+msgstr "Скопировать путь в буфер обмена"
+
+msgid "Copy Link Address"
+msgstr "Скопировать ссылку"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Это вложение еще не загружено или еще не расшифровано."
 
 #, javascript-format
 msgid ""
@@ -808,14 +1082,84 @@ msgstr ""
 "Эта заметка не имеет содержания. Нажмите на \"%s\", чтобы переключиться в "
 "редактор и отредактировать ее."
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
+"Только одна заметка может быть напечатана или экспортирована в PDF за раз."
+
+msgid "PDF File"
+msgstr "Файл PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Ошибка при открытии заметки в редакторе: %s"
+
+msgid "strong text"
+msgstr "выделенный текст"
+
+msgid "emphasized text"
+msgstr "подчеркнутый текст"
+
+msgid "List item"
+msgstr "Список"
+
+msgid "Insert Hyperlink"
+msgstr "Вставить гиперссылку"
+
+msgid "Attach file"
+msgstr "Прикрепить файл"
+
+msgid "Set alarm"
+msgstr "Установить напоминание"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "В: %s"
+
+msgid "Hyperlink"
+msgstr "Гиперссылка"
+
+msgid "Numbered List"
+msgstr "Нумерованный список"
+
+msgid "Bulleted List"
+msgstr "Маркированный список"
+
+msgid "Checkbox"
+msgstr "Пометка"
+
+msgid "Heading"
+msgstr "Заголовок"
+
+msgid "Horizontal Rule"
+msgstr "Горизотальный разделитель"
+
+msgid "Click to stop external editing"
+msgstr "Нажмите, чтобы остановить внешнее редактирование"
+
+msgid "Watching..."
+msgstr "Наблюдение..."
+
+msgid "to-do"
+msgstr "задача"
+
+msgid "note"
+msgstr "заметка"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Создание новой %s..."
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Clear"
+msgstr "Очистить"
+
 msgid "OneDrive Login"
 msgstr "Вход в OneDrive"
 
 msgid "Dropbox Login"
 msgstr "Вход в Dropbox"
-
-msgid "Import"
-msgstr "Импорт"
 
 msgid "Options"
 msgstr "Настройки"
@@ -853,8 +1197,23 @@ msgstr "Новый блокнот"
 msgid "Rename"
 msgstr "Переименовать"
 
-msgid "Export"
-msgstr "Экспорт"
+msgid "Notebooks"
+msgstr "Блокноты"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Расшифровано элементов: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Получение ресурсов: %d/%d"
+
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+"Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
+
+msgid "Retry"
+msgstr "Повторить попытку"
 
 msgid "Add or remove tags"
 msgstr "Добавить или удалить метки"
@@ -878,8 +1237,23 @@ msgstr "Переключить тип на задачу"
 msgid "Copy Markdown link"
 msgstr "Копировать ссылку Markdown"
 
-msgid "PDF File"
-msgstr "Файл PDF"
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Удалить заметку \"%s\"?"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Удалить эти %d заметки?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"Введите название заметки, чтобы перейти к ней, либо введите #имя_тега или "
+"@имя_блокнота."
+
+msgid "Goto Anything..."
+msgstr "Перейти к чему угодно…"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -906,6 +1280,43 @@ msgstr "OneDrive Dev (только для тестирования)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Неизвестный уровень лога: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Неизвестный уровень ID: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Невозможно обновить токен: отсутствуют данные аутентификации. Повторный "
+"запуск синхронизации может решить проблему."
+
+msgid "Untitled"
+msgstr "Без имени"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Не удалось синхронизироваться с OneDrive.\n"
+"\n"
+"Такая ошибка часто возникает при использовании OneDrive для бизнеса, "
+"который, к сожалению, не поддерживается.\n"
+"\n"
+"Пожалуйста, рассмотрите возможность использования обычного аккаунта OneDrive."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Не удалось получить доступ %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -946,8 +1357,17 @@ msgstr "Завершено: %s"
 msgid "Last error: %s"
 msgstr "Последняя ошибка: %s"
 
+msgid "Idle"
+msgstr "Простой"
+
+msgid "In progress"
+msgstr "Выполнение"
+
 msgid "Encrypted"
 msgstr "Зашифровано"
+
+msgid "Encrypted items cannot be modified"
+msgstr "Зашифрованные элементы не могут быть изменены"
 
 msgid "title"
 msgstr "заголовок"
@@ -968,6 +1388,17 @@ msgstr ""
 
 msgid "created date"
 msgstr "дата создания"
+
+msgid "This note does not have geolocation information."
+msgstr "Эта заметка не содержит информации о геолокации."
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Не удалось скопировать заметку в блокнот \"%s\""
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Не удалось переместить заметку в блокнот \"%s\""
 
 #, javascript-format
 msgid ""
@@ -1322,6 +1753,40 @@ msgstr "%d дней"
 msgid "Keep note history for"
 msgstr "Хранить историю заметки"
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
+
+msgid "General"
+msgstr "Основные"
+
+msgid "Synchronisation"
+msgstr "Синхронизация"
+
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Note"
+msgstr "Заметки"
+
+msgid "Plugins"
+msgstr "Плагины"
+
+msgid "Application"
+msgstr "Приложение"
+
+#, fuzzy
+msgid "Encryption"
+msgstr "Шифрование:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Настройки веб-клиппера"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
+
 msgid "Joplin Export File"
 msgstr "Файл экспорта Joplin"
 
@@ -1348,9 +1813,96 @@ msgstr "Файл"
 msgid "Directory"
 msgstr "Каталог"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Пожалуйста, укажите формат импорта для %s"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Этот элемент сейчас зашифрован: %s \"%s\". Пожалуйста, дождитесь расшифровки "
+"всех элементов и попробуйте снова."
+
+msgid "There is no data to export."
+msgstr "Нет данных для экспорта."
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 "Пожалуйста, укажите блокнот, в который должны быть импортированы заметки."
+
+msgid "Restored Notes"
+msgstr "Восстановленные заметки"
+
+msgid "Items that cannot be synchronised"
+msgstr "Элементы, которые не могут быть синхронизированы"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Эти элементы останутся на устройстве, но не будут загружены в целевой объект "
+"синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
+"или ID (который указывается в скобках выше)."
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Не удается загрузить файл %s (%s): %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Не удается скачать файл “%s”: %s"
+
+msgid "Items that cannot be decrypted"
+msgstr "Элементы, которые не могут быть расшифрованы"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin не удалось расшифровать эти файлы несколько раз. Возможно они "
+"повреждены или слишком большие. Файлы останутся на устройстве без дальнейших "
+"попыток расшифровать их."
+
+msgid "Sync status (synced items / total items)"
+msgstr "Статус синхронизации (синхронизировано / всего)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Всего: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Конфликтов: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "К удалению: %d"
+
+msgid "Folders"
+msgstr "Папки"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d заметок"
+
+msgid "Coming alarms"
+msgstr "Ближайшие напоминания"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "В %s: %s"
 
 msgid "Permission to use camera"
 msgstr "Разрешение на использование камеры"
@@ -1369,6 +1921,16 @@ msgstr "Сейчас здесь нет заметок. Создайте нову
 
 msgid "Delete these notes?"
 msgstr "Удалить эти заметки?"
+
+msgid "Move to notebook..."
+msgstr "Переместить в блокнот..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Переместить %d заметок в блокнот \"%s\"?"
+
+msgid "Press to set the decryption password."
+msgstr "Нажмите, чтобы установить пароль для расшифровки."
 
 msgid "Clear alarm"
 msgstr "Очистить напоминание"
@@ -1395,22 +1957,38 @@ msgstr "Новый блокнот"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Расшифровано элементов: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Получение ресурсов: %d/%d"
-
-msgid "Synchronise"
-msgstr "Синхронизировать"
-
 msgid "All notes"
 msgstr "Все заметки"
 
-msgid "Notebooks"
-msgstr "Блокноты"
+msgid "Checking... Please wait."
+msgstr "Проверка... Пожалуйста, подождите."
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Успешно! Конфигурация синхронизации является корректной."
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и т."
+"д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
+
+msgid "The application has been authorised!"
+msgstr "Приложение было авторизовано!"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Не удалось авторизовать приложение:\n"
+"\n"
+"%s\n"
+"\n"
+"Попробуйте снова."
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1431,9 +2009,6 @@ msgid ""
 msgstr ""
 "Для использование синхронизации файловой системы, необходимо дать разрешение "
 "на запись."
-
-msgid "Check synchronisation configuration"
-msgstr "Проверить настройки синхронизации"
 
 msgid "Encryption Config"
 msgstr "Конфигурация шифрования"
@@ -1491,11 +2066,16 @@ msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Местоположение: позволяет прикрепить геолокационную информацию к заметке."
 
-msgid "Make a donation"
-msgstr "Пожертвовать"
-
 msgid "Joplin website"
 msgstr "Сайт Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "База данных v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS включен: %d"
 
 msgid "Login with Dropbox"
 msgstr "Войти с Dropbox"
@@ -1534,6 +2114,12 @@ msgstr "Редактировать блокнот"
 msgid "Enter notebook title"
 msgstr "Введите название блокнота"
 
+msgid "Show all"
+msgstr "Показать все"
+
+msgid "Errors only"
+msgstr "Только ошибки"
+
 msgid "This note has been modified:"
 msgstr "Эта заметка была изменена:"
 
@@ -1547,9 +2133,6 @@ msgstr "Отменить изменения"
 msgid "No item with ID %s"
 msgstr "Нет элементов с ID %s"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Это вложение еще не загружено или еще не расшифровано."
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
@@ -1560,638 +2143,72 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Связь с протоколом “%s” не поддерживается"
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr "Для удаления метки, открепите ее от связанных с ней заметок."
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr ""
-#~ "Пожалуйста, выберите заметку или блокнот, которые будут удалены первыми."
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\""
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "Отмена фоновой синхронизации... Пожалуйста, подождите."
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Неподдерживаемый формат изображения: %s"
 
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "Нет такой команды: %s"
+msgid "Updated: %s"
+msgstr "Обновлено: %s"
 
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "Команда \"%s\" доступна только в режиме GUI"
+msgid "View on map"
+msgstr "Посмотреть на карте"
 
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "Отсутствует обязательный аргумент: %s"
+msgid "Go to source URL"
+msgstr "Перейти к исходному URL"
 
-#~ msgid "Your choice: "
-#~ msgstr "Ваш выбор: "
+msgid "Attach..."
+msgstr "Прикрепить…"
 
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "Неверный ответ: %s"
+msgid "Choose an option"
+msgstr "Выберите"
 
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "Целевой формат: %s"
+msgid "Take photo"
+msgstr "Сделать фото"
 
-#~ msgid "Exports only the given note."
-#~ msgstr "Экспортирует только заданную заметку."
+msgid "Attach photo"
+msgstr "Прикрепить фото"
 
-#~ msgid "Exports only the given notebook."
-#~ msgstr "Экспортирует только заданный блокнот."
+msgid "Attach any file"
+msgstr "Прикрепить любой файл"
 
-#, javascript-format
-#~ msgid "Server is already running on port %d"
-#~ msgstr "Сервер уже запущен на порту %d"
+msgid "Share"
+msgstr "Поделиться"
 
-#, javascript-format
-#~ msgid "Server is running on port %d"
-#~ msgstr "Сервер запущен на порту %d"
+msgid "Convert to note"
+msgstr "Преобразовать в заметку"
 
-#~ msgid "Server is not running."
-#~ msgstr "Сервер не запущен."
+msgid "Convert to todo"
+msgstr "Преобразовать в задачу"
 
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Устанавливает для свойства <name> заданной <note> заданному [value]. "
-#~ "Возможные свойства:\n"
-#~ "\n"
-#~ "%s"
+msgid "Properties"
+msgstr "Свойства"
 
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
+msgid "Add body"
+msgstr "Добавить тело"
 
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr ""
-#~ "Не аутентифицировано с %s. Пожалуйста, предоставьте все недостающие "
-#~ "данные."
+msgid "Edit"
+msgstr "Правка"
 
-#~ msgid "Downloading resources..."
-#~ msgstr "Загрузка ресурсов..."
+msgid "Add title"
+msgstr "Добавить заголовок"
 
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "Отмена... Пожалуйста, подождите."
+msgid "Login with OneDrive"
+msgstr "Войти с OneDrive"
 
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "Введите `joplin help` для получения информации об использовании."
-
-#~ msgid "Fatal error:"
-#~ msgstr "Фатальная ошибка:"
-
-#~ msgid "Search:"
-#~ msgstr "Поиск:"
-
-#~ msgid "&File"
-#~ msgstr "&Файл"
-
-#~ msgid "About Joplin"
-#~ msgstr "О Joplin"
-
-#~ msgid "Preferences..."
-#~ msgstr "Настройки…"
-
-#~ msgid "Check for updates..."
-#~ msgstr "Проверить обновления..."
-
-#~ msgid "Templates"
-#~ msgstr "Шаблоны"
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "Скрыть %s"
-
-#~ msgid "Quit"
-#~ msgstr "Выход"
-
-#~ msgid "Close Window"
-#~ msgstr "Закрыть окно"
-
-#~ msgid "&Edit"
-#~ msgstr "&Правка"
-
-#~ msgid "Copy"
-#~ msgstr "Копировать"
-
-#~ msgid "Cut"
-#~ msgstr "Вырезать"
-
-#~ msgid "Paste"
-#~ msgstr "Вставить"
-
-#~ msgid "Select all"
-#~ msgstr "Выбрать все"
-
-#~ msgid "Bold"
-#~ msgstr "Полужирный"
-
-#~ msgid "Italic"
-#~ msgstr "Курсивный"
-
-#~ msgid "Link"
-#~ msgstr "Ссылка"
-
-#~ msgid "Code"
-#~ msgstr "Код"
-
-#~ msgid "&View"
-#~ msgstr "&Вид"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "Переключить вид редактора"
-
-#~ msgid "Focus"
-#~ msgstr "Фокус"
-
-#~ msgid "&Tools"
-#~ msgstr "&Сервис"
-
-#~ msgid "&Help"
-#~ msgstr "&Помощь"
-
-#~ msgid "Website and documentation"
-#~ msgstr "Сайт и документация"
-
-#~ msgid "Joplin Forum"
-#~ msgstr "Форум Joplin"
-
-#~ msgid "Toggle development tools"
-#~ msgstr "Включить средства разработки"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "Открыть %s"
-
-#~ msgid "Exit"
-#~ msgstr "Выход"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "Текущая версия актуальна."
-
-#, javascript-format
-#~ msgid "%s (pre-release)"
-#~ msgstr "%s (предварительный релиз)"
-
-#~ msgid "Yes"
-#~ msgstr "Да"
-
-#~ msgid "No"
-#~ msgstr "Нет"
+msgid "Search"
+msgstr "Поиск"
 
 #, fuzzy
-#~ msgid "Full Release Notes"
+#~ msgid "Share Notes"
 #~ msgstr "Восстановленные заметки"
 
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "Заметки и настройки сохранены в: %s"
-
-#~ msgid "Browse..."
-#~ msgstr "Обзор..."
-
-#~ msgid "Back"
-#~ msgstr "Назад"
-
-#~ msgid "Apply"
-#~ msgstr "Применить"
-
-#~ msgid "Usage"
-#~ msgstr "Использование: %s"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "Здесь нет заметок. Создайте новую, нажав на \"Новая заметка\"."
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr ""
-#~ "Сейчас здесь нет блокнотов. Создайте новый, нажав \"Новый блокнот\"."
-
-#~ msgid "Previous versions of this note"
-#~ msgstr "Предыдущая версия заметки"
-
-#~ msgid "Note properties"
-#~ msgstr "Свойства заметки"
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "Неподдерживаемая ссылка или сообщение: %s"
-
-#~ msgid "Restore"
-#~ msgstr "Восстановить"
-
-#, javascript-format
-#~ msgid ""
-#~ "Click \"%s\" to restore the note. It will be copied in the notebook named "
-#~ "\"%s\". The current version of the note will not be replaced or modified."
-#~ msgstr ""
-#~ "Нажмите “%s”, чтобы восстановить заметку. Она будет скопирована в блокнот "
-#~ "“%s”. Текущая версия заметки не будет заменена или изменена."
-
-#~ msgid "Open..."
-#~ msgstr "Открыть..."
-
-#~ msgid "Save as..."
-#~ msgstr "Сохранить как..."
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "Скопировать путь в буфер обмена"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "Скопировать ссылку"
-
-#~ msgid "Only one note can be printed or exported to PDF at a time."
-#~ msgstr ""
-#~ "Только одна заметка может быть напечатана или экспортирована в PDF за раз."
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "Ошибка при открытии заметки в редакторе: %s"
-
-#~ msgid "strong text"
-#~ msgstr "выделенный текст"
-
-#~ msgid "emphasized text"
-#~ msgstr "подчеркнутый текст"
-
-#~ msgid "List item"
-#~ msgstr "Список"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "Вставить гиперссылку"
-
-#~ msgid "Attach file"
-#~ msgstr "Прикрепить файл"
-
-#~ msgid "Set alarm"
-#~ msgstr "Установить напоминание"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "В: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "Гиперссылка"
-
-#~ msgid "Numbered List"
-#~ msgstr "Нумерованный список"
-
-#~ msgid "Bulleted List"
-#~ msgstr "Маркированный список"
-
-#~ msgid "Checkbox"
-#~ msgstr "Пометка"
-
-#~ msgid "Heading"
-#~ msgstr "Заголовок"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "Горизотальный разделитель"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "Нажмите, чтобы остановить внешнее редактирование"
-
-#~ msgid "Watching..."
-#~ msgstr "Наблюдение..."
-
-#~ msgid "to-do"
-#~ msgstr "задача"
-
-#~ msgid "note"
-#~ msgstr "заметка"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "Создание новой %s..."
-
-#~ msgid "Refresh"
-#~ msgstr "Обновить"
-
-#~ msgid "Clear"
-#~ msgstr "Очистить"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr ""
-#~ "Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
-
-#~ msgid "Retry"
-#~ msgstr "Повторить попытку"
-
-#, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "Удалить заметку \"%s\"?"
-
-#, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "Удалить эти %d заметки?"
-
-#~ msgid ""
-#~ "Type a note title to jump to it. Or type # followed by a tag name, or @ "
-#~ "followed by a notebook name."
-#~ msgstr ""
-#~ "Введите название заметки, чтобы перейти к ней, либо введите #имя_тега или "
-#~ "@имя_блокнота."
-
-#~ msgid "Goto Anything..."
-#~ msgstr "Перейти к чему угодно…"
-
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "Неизвестный уровень лога: %s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "Неизвестный уровень ID: %s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr ""
-#~ "Невозможно обновить токен: отсутствуют данные аутентификации. Повторный "
-#~ "запуск синхронизации может решить проблему."
-
-#~ msgid "Untitled"
-#~ msgstr "Без имени"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "Не удалось синхронизироваться с OneDrive.\n"
-#~ "\n"
-#~ "Такая ошибка часто возникает при использовании OneDrive для бизнеса, "
-#~ "который, к сожалению, не поддерживается.\n"
-#~ "\n"
-#~ "Пожалуйста, рассмотрите возможность использования обычного аккаунта "
-#~ "OneDrive."
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "Не удалось получить доступ %s"
-
-#~ msgid "Idle"
-#~ msgstr "Простой"
-
-#~ msgid "In progress"
-#~ msgstr "Выполнение"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "Зашифрованные элементы не могут быть изменены"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "Эта заметка не содержит информации о геолокации."
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "Не удалось скопировать заметку в блокнот \"%s\""
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "Не удалось переместить заметку в блокнот \"%s\""
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
-
-#~ msgid "General"
-#~ msgstr "Основные"
-
-#~ msgid "Synchronisation"
-#~ msgstr "Синхронизация"
-
-#~ msgid "Appearance"
-#~ msgstr "Внешний вид"
-
-#~ msgid "Note"
-#~ msgstr "Заметки"
-
-#~ msgid "Plugins"
-#~ msgstr "Плагины"
-
-#~ msgid "Application"
-#~ msgstr "Приложение"
-
 #, fuzzy
-#~ msgid "Encryption"
-#~ msgstr "Шифрование:"
-
-#, fuzzy
-#~ msgid "Web Clipper"
-#~ msgstr "Настройки веб-клиппера"
-
-#, javascript-format
-#~ msgid "The tag \"%s\" already exists. Please choose a different name."
-#~ msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\""
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "Пожалуйста, укажите формат импорта для %s"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "Этот элемент сейчас зашифрован: %s \"%s\". Пожалуйста, дождитесь "
-#~ "расшифровки всех элементов и попробуйте снова."
-
-#~ msgid "There is no data to export."
-#~ msgstr "Нет данных для экспорта."
-
-#~ msgid "Restored Notes"
-#~ msgstr "Восстановленные заметки"
-
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "Элементы, которые не могут быть синхронизированы"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "Эти элементы останутся на устройстве, но не будут загружены в целевой "
-#~ "объект синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по "
-#~ "названию или ID (который указывается в скобках выше)."
-
-#, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "Не удается загрузить файл %s (%s): %s"
-
-#, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "Не удается скачать файл “%s”: %s"
-
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "Элементы, которые не могут быть расшифрованы"
-
-#~ msgid ""
-#~ "Joplin failed to decrypt these items multiple times, possibly because "
-#~ "they are corrupted or too large. These items will remain on the device "
-#~ "but Joplin will no longer attempt to decrypt them."
-#~ msgstr ""
-#~ "Joplin не удалось расшифровать эти файлы несколько раз. Возможно они "
-#~ "повреждены или слишком большие. Файлы останутся на устройстве без "
-#~ "дальнейших попыток расшифровать их."
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "Статус синхронизации (синхронизировано / всего)"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s: %d/%d"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "Всего: %d/%d"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "Конфликтов: %d"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "К удалению: %d"
-
-#~ msgid "Folders"
-#~ msgstr "Папки"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s: %d заметок"
-
-#~ msgid "Coming alarms"
-#~ msgstr "Ближайшие напоминания"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "В %s: %s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "Переместить в блокнот..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "Переместить %d заметок в блокнот \"%s\"?"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "Нажмите, чтобы установить пароль для расшифровки."
-
-#~ msgid "Checking... Please wait."
-#~ msgstr "Проверка... Пожалуйста, подождите."
-
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "Успешно! Конфигурация синхронизации является корректной."
-
-#~ msgid ""
-#~ "Error. Please check that URL, username, password, etc. are correct and "
-#~ "that the sync target is accessible. The reported error was:"
-#~ msgstr ""
-#~ "Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и "
-#~ "т.д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
-
-#~ msgid "The application has been authorised!"
-#~ msgstr "Приложение было авторизовано!"
-
-#, javascript-format
-#~ msgid ""
-#~ "Could not authorise application:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Please try again."
-#~ msgstr ""
-#~ "Не удалось авторизовать приложение:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Попробуйте снова."
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "База данных v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "FTS включен: %d"
-
-#~ msgid "Show all"
-#~ msgstr "Показать все"
-
-#~ msgid "Errors only"
-#~ msgstr "Только ошибки"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "Неподдерживаемый формат изображения: %s"
-
-#, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "Обновлено: %s"
-
-#~ msgid "View on map"
-#~ msgstr "Посмотреть на карте"
-
-#~ msgid "Go to source URL"
-#~ msgstr "Перейти к исходному URL"
-
-#~ msgid "Attach..."
-#~ msgstr "Прикрепить…"
-
-#~ msgid "Choose an option"
-#~ msgstr "Выберите"
-
-#~ msgid "Take photo"
-#~ msgstr "Сделать фото"
-
-#~ msgid "Attach photo"
-#~ msgstr "Прикрепить фото"
-
-#~ msgid "Attach any file"
-#~ msgstr "Прикрепить любой файл"
-
-#~ msgid "Share"
+#~ msgid "Share Link"
 #~ msgstr "Поделиться"
 
-#~ msgid "Convert to note"
-#~ msgstr "Преобразовать в заметку"
-
-#~ msgid "Convert to todo"
-#~ msgstr "Преобразовать в задачу"
-
-#~ msgid "Properties"
-#~ msgstr "Свойства"
-
-#~ msgid "Add body"
-#~ msgstr "Добавить тело"
-
-#~ msgid "Edit"
-#~ msgstr "Правка"
-
-#~ msgid "Add title"
-#~ msgstr "Добавить заголовок"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "Войти с OneDrive"
-
-#~ msgid "Search"
-#~ msgstr "Поиск"
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr "Все возможные порты заняты - пожалуйста, сообщите о проблеме в %s"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "Синхронизация уже выполняется. Состояние: %s"

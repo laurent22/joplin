@@ -19,6 +19,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+"Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Primer seleccioneu la nota o el bloc de notes que vulgueu suprimir."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Premeu Ctrl+D o escriviu «exit» per a sortir de l'aplicació"
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -42,12 +52,34 @@ msgstr "N"
 msgid "y"
 msgstr "s"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "S'està cancel·lant la sincronització en segon pla... Espereu."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "No existeix l'ordre: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "L'ordre «%s» només és disponible en mode IGU"
+
 msgid "Cannot change encrypted item"
 msgstr "No es pot canviar l'element xifrat"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Manca un argument requerit: %s"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "La vostra tria:"
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "La resposta no és vàlida: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "Adjunta el fitxer indicat a la nota."
@@ -163,6 +195,16 @@ msgid ""
 msgstr ""
 "Exporta les dades del Joplin al camí indicat. Per defecte, exportarà tota la "
 "base de dades, incloent-hi blocs de notes, notes, etiquetes i recursos."
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Format de destinació: %s"
+
+msgid "Exports only the given note."
+msgstr "Exporta només la nota indicada."
+
+msgid "Exports only the given notebook."
+msgstr "Exporta només el bloc de notes indicat."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Motra una URL de geolocalitzacio de la nota."
@@ -357,6 +399,29 @@ msgid ""
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Estableix la propietat <name>donada<note> per al [valor] donat. Les "
+"propietats possibles són:\n"
+"\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "Mostra un resum sobre les notes i blocs de notes."
 
@@ -367,6 +432,27 @@ msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Sincronitza a la destinació indicada (de forma predeterminada al valor de "
 "configuració sync.target)"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"No s'ha completat l'autenticació (no ha rebut el testimoni d'autenticació)."
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Per a permetre que el Joplin sincronitzi amb el Dropbox, seguiu les passes "
+"següents:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "Pas 1: Obriu aquest URL al navegador i autoritzeu l'aplicació:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Pas 2: Introduïu el codi proporcionat per Dropbox:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "No esteu autenticats amb %s. Proporcioneu les credencials necessàries."
 
 msgid "Synchronisation is already in progress."
 msgstr "La sincronització és en curs."
@@ -390,6 +476,12 @@ msgstr "No es pot inicialitzar el sincronitzador."
 
 msgid "Starting synchronisation..."
 msgstr "Està començant la sincronització..."
+
+msgid "Downloading resources..."
+msgstr ""
+
+msgid "Cancelling... Please wait."
+msgstr "S'està cancel·lant... Espereu."
 
 #, fuzzy
 msgid ""
@@ -454,9 +546,11 @@ msgstr "Per defecte: %s"
 msgid "Possible keys/values:"
 msgstr "Valors o claus possibles:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgid "Type `joplin help` for usage information."
+msgstr "Escriviu «joplin help» per a obtenir informació d'ús."
+
+msgid "Fatal error:"
+msgstr "Error fatal:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -479,6 +573,9 @@ msgstr ""
 "fitxers en aquest directory. No tindrà accés a cap fitxer fora d'aquesta "
 "directori ni a cap dada personal. No es compartirà cap dada amb terceres "
 "parts."
+
+msgid "Search:"
+msgstr "Cerca:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -515,6 +612,70 @@ msgstr "S'està exportant a «%s» com a format «%s». Espereu..."
 msgid "Could not export notes: %s"
 msgstr ""
 
+#, fuzzy
+msgid "&File"
+msgstr "Fitxer"
+
+msgid "About Joplin"
+msgstr "Quant al Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "Comprova les actualitzacions..."
+
+msgid "Templates"
+msgstr ""
+
+msgid "Import"
+msgstr "Importació"
+
+msgid "Export"
+msgstr "Exportació"
+
+msgid "Synchronise"
+msgstr "Sincronitza"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "Amaga %s"
+
+msgid "Quit"
+msgstr "Surt"
+
+msgid "Close Window"
+msgstr ""
+
+#, fuzzy
+msgid "&Edit"
+msgstr "Edita"
+
+msgid "Copy"
+msgstr "Copia"
+
+msgid "Cut"
+msgstr "Retalla"
+
+msgid "Paste"
+msgstr "Enganxa"
+
+#, fuzzy
+msgid "Select all"
+msgstr "Seleccioneu una data"
+
+msgid "Bold"
+msgstr "Negreta"
+
+msgid "Italic"
+msgstr "Cursiva"
+
+msgid "Link"
+msgstr ""
+
+msgid "Code"
+msgstr "Codi"
+
 msgid "Insert Date Time"
 msgstr "Insereix la data i hora"
 
@@ -531,11 +692,68 @@ msgstr "Cerca a totes les notes"
 msgid "Search in current note"
 msgstr "Cerca a totes les notes"
 
+#, fuzzy
+msgid "&View"
+msgstr "Visualització"
+
+msgid "Toggle sidebar"
+msgstr "Mostra o amaga la barra lateral"
+
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Activa el xifratge"
+
+msgid "Toggle editor layout"
+msgstr "Canvia el disseny de l'editor"
+
+#, fuzzy
+msgid "Focus"
+msgstr "Vés al cos"
+
+#, fuzzy
+msgid "&Tools"
+msgstr "Eines"
+
+#, fuzzy
+msgid "&Help"
+msgstr "Ajuda"
+
+msgid "Website and documentation"
+msgstr "Lloc web i documentació"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Fitxer d'exportació del Joplin"
+
+msgid "Make a donation"
+msgstr "Donatius"
+
+#, fuzzy
+msgid "Toggle development tools"
+msgstr "Activa el xifratge"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "Obre %s"
+
+msgid "Exit"
+msgstr "Surt"
+
 msgid "OK"
 msgstr "D'acord"
 
 msgid "Cancel"
 msgstr "Cancel·la"
+
+msgid "Current version is up-to-date."
+msgstr "La versió actual està actualitzada"
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr ""
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Hi ha disponible una actualització. Voleu baixar-la ara?"
@@ -546,6 +764,15 @@ msgstr ""
 
 #, javascript-format
 msgid "New version: %s"
+msgstr ""
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Full Release Notes"
 msgstr ""
 
 msgid "Token has been copied to the clipboard!"
@@ -616,17 +843,24 @@ msgid ""
 "access Joplin."
 msgstr ""
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "This will open a new screen. Save your current changes?"
 msgstr ""
-"Per a permetre que el Joplin sincronitzi amb el Dropbox, seguiu les passes "
-"següents:"
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Pas 1: Obriu aquest URL al navegador i autoritzeu l'aplicació:"
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Les notes i la configuració es desen a: %s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Pas 2: Introduïu el codi proporcionat per Dropbox:"
+msgid "Check synchronisation configuration"
+msgstr "Comprova la configuració de la sincronització"
+
+msgid "Browse..."
+msgstr ""
+
+msgid "Back"
+msgstr "Enrere"
+
+msgid "Apply"
+msgstr "Aplica"
 
 msgid "Submit"
 msgstr "Tramet"
@@ -719,6 +953,19 @@ msgstr "Estat"
 msgid "Encryption is:"
 msgstr "El xifratge és:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
+#, fuzzy
+msgid "Usage"
+msgstr "Ús: %s"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -748,13 +995,6 @@ msgstr "Estableix una alarma:"
 msgid "Template file:"
 msgstr ""
 
-msgid "Toggle sidebar"
-msgstr "Mostra o amaga la barra lateral"
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Activa el xifratge"
-
 msgid "New note"
 msgstr "Nota nova"
 
@@ -783,6 +1023,15 @@ msgstr "Introduïu una contrasenya mestra:"
 msgid "Set the password"
 msgstr "Establiu la contrasenya"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "No hi ha cap nota aquí. Creeu-ne una fent clic a «Nota nova»."
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Ara mateix no hi ha cap bloc de notes. Creeu-ne un fent clic a «Bloc de "
+"notes nou»."
+
 msgid "Location"
 msgstr ""
 
@@ -795,6 +1044,13 @@ msgstr ""
 msgid "Markup"
 msgstr ""
 
+msgid "Previous versions of this note"
+msgstr ""
+
+#, fuzzy
+msgid "Note properties"
+msgstr "Títol del bloc de notes:"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
@@ -804,8 +1060,36 @@ msgid "This note has no history"
 msgstr "Aquesta nota s'ha modificat:"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Missatge o enllaç no suportat: %s"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+
+msgid "Open..."
+msgstr "Obre..."
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Aquest fitxer no s'ha pogut obrir: %s"
+
+msgid "Save as..."
+msgstr "Anomena i desa..."
+
+msgid "Copy path to clipboard"
+msgstr "Copia el camí al porta-retalls"
+
+msgid "Copy Link Address"
+msgstr "Copia l'adreça de l'enllaç"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr ""
 
 #, javascript-format
 msgid ""
@@ -815,14 +1099,83 @@ msgstr ""
 "Aquesta nota no té contingut. Feu clic a «%s» per a anar a l'editor i "
 "modificar-la."
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr ""
+
+msgid "PDF File"
+msgstr "Fitxer PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "S'ha produït un error en obrir la nota amb l'editor: %s"
+
+msgid "strong text"
+msgstr "text en negreta"
+
+msgid "emphasized text"
+msgstr "text amb èmfasi"
+
+msgid "List item"
+msgstr "Element de llista"
+
+msgid "Insert Hyperlink"
+msgstr "insereix un enllaç"
+
+msgid "Attach file"
+msgstr "Adjunta un fitxer"
+
+msgid "Set alarm"
+msgstr "Estableix una alarma"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "A: %s"
+
+msgid "Hyperlink"
+msgstr "Enllaç"
+
+msgid "Numbered List"
+msgstr "Llista numerada"
+
+msgid "Bulleted List"
+msgstr "Llista de pics"
+
+msgid "Checkbox"
+msgstr "Casella de verificació"
+
+msgid "Heading"
+msgstr "Capçalera"
+
+msgid "Horizontal Rule"
+msgstr "Línia horitzontal"
+
+msgid "Click to stop external editing"
+msgstr "Feu-hi clic per a aturar l'edició externa"
+
+msgid "Watching..."
+msgstr "S'està vigilant..."
+
+msgid "to-do"
+msgstr "Tasques pendents"
+
+msgid "note"
+msgstr "nota"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "S'està creant una %s..."
+
+msgid "Refresh"
+msgstr "Actualitza"
+
+msgid "Clear"
+msgstr "Neteja"
+
 msgid "OneDrive Login"
 msgstr "Inicia sessió al OneDrive"
 
 msgid "Dropbox Login"
 msgstr "Inicia sessió al Dropbox"
-
-msgid "Import"
-msgstr "Importació"
 
 msgid "Options"
 msgstr "Opcions"
@@ -859,8 +1212,22 @@ msgstr "Bloc de notes nou"
 msgid "Rename"
 msgstr "Canvia el nom"
 
-msgid "Export"
-msgstr "Exportació"
+msgid "Notebooks"
+msgstr "Blocs de notes"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "S'estan desxifrant els elements: %d/%d"
+
+#, fuzzy, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Elements obtinguts: %d/%d."
+
+msgid "Please select where the sync status should be exported to"
+msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
+
+msgid "Retry"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "Afegeix o suprimeix etiquetes"
@@ -886,8 +1253,21 @@ msgstr "Alterna entre el tipus nota i tasques pendents"
 msgid "Copy Markdown link"
 msgstr "Copia l'enllaç Markdown"
 
-msgid "PDF File"
-msgstr "Fitxer PDF"
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Voleu suprimir les notes?"
+
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Voleu suprimir aquestes notes?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
@@ -914,6 +1294,43 @@ msgstr "OneDrive Dev (només proves)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Nivell de registre desconegut: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "ID de nivell desconeguda: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"No es pot actualitzar el testimoni: manquen les dades d'autenticació. Si "
+"comenceu altre cop la sincronització, potser es corregeixi el problema."
+
+msgid "Untitled"
+msgstr "Sense títol"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"No s'ha pogut sincronitzar amb OneDrive.\n"
+"\n"
+"Aquest error habitualment apareix si s'usa OneDriver for Business, que "
+"malauradament no està suportat.\n"
+"\n"
+"Considereu usar un compte OneDrive habitual."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "No es pot accedir a %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -954,8 +1371,17 @@ msgstr "Finalitzat: %s"
 msgid "Last error: %s"
 msgstr "Últim error: %s"
 
+msgid "Idle"
+msgstr "Ociós"
+
+msgid "In progress"
+msgstr "En progés"
+
 msgid "Encrypted"
 msgstr "Xifrat"
+
+msgid "Encrypted items cannot be modified"
+msgstr "Els elements xifrats no es poden modificar"
 
 msgid "title"
 msgstr "títol"
@@ -975,6 +1401,17 @@ msgstr "Els blocs de notes no poden tenir el nom «%s», és un títol reservat.
 
 msgid "created date"
 msgstr "data de creació"
+
+msgid "This note does not have geolocation information."
+msgstr "Aquesta nota no té informació de geolocalització."
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "No es pot copiar la nota al bloc de notes «%s»"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "No es pot moure la nota al bloc de notes «%s»"
 
 #, javascript-format
 msgid ""
@@ -1320,6 +1757,44 @@ msgstr ""
 msgid "Keep note history for"
 msgstr ""
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
+
+#, fuzzy
+msgid "General"
+msgstr "Opcions generals"
+
+#, fuzzy
+msgid "Synchronisation"
+msgstr "Estat de la sincronització"
+
+msgid "Appearance"
+msgstr ""
+
+#, fuzzy
+msgid "Note"
+msgstr "Blocs de notes"
+
+msgid "Plugins"
+msgstr ""
+
+#, fuzzy
+msgid "Application"
+msgstr "Surt de l'aplicació"
+
+#, fuzzy
+msgid "Encryption"
+msgstr "El xifratge és:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "Opcions del desa-retalls de webs"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr ""
+
 msgid "Joplin Export File"
 msgstr "Fitxer d'exportació del Joplin"
 
@@ -1347,8 +1822,93 @@ msgstr "Fitxer"
 msgid "Directory"
 msgstr "Directori"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "No puc carregar el mòdul «%s» per al format «%s»"
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Indiqueu el format d'importació per a %s"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"L'element ara mateix és xifrat: %s«%s». Espereu que es desxifrin tots els "
+"elements i torneu-ho a intentar."
+
+msgid "There is no data to export."
+msgstr "No hi ha dades per exportar."
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Indiqueu el bloc de notes on s'haurien d'importar les notes."
+
+msgid "Restored Notes"
+msgstr ""
+
+msgid "Items that cannot be synchronised"
+msgstr "Elements que no s'han pogut sincronitzar"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Aquests elements es mantindran a l'aparell però no es pujaran a la "
+"destinació de sincronització. Per a poder trobar aquests elements, podeu "
+"cercar pel títol o la ID (que es mostra entre claus a sobre)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "Aquest fitxer no s'ha pogut obrir: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Aquest fitxer no s'ha pogut obrir: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "Elements que no s'han pogut sincronitzar"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+
+msgid "Sync status (synced items / total items)"
+msgstr "Estat de la sincronització (element sinc. / elements totals)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Total: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Conflictius: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Per suprimir: %d"
+
+msgid "Folders"
+msgstr "Carpetes"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d notes"
+
+msgid "Coming alarms"
+msgstr "Alarmes programades"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "A les %s.%s"
 
 msgid "Permission to use camera"
 msgstr ""
@@ -1369,6 +1929,16 @@ msgstr "Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
 
 msgid "Delete these notes?"
 msgstr "Voleu suprimir aquestes notes?"
+
+msgid "Move to notebook..."
+msgstr "Mou al bloc de notes..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Voleu moure %d notes al bloc de notes «%s»?"
+
+msgid "Press to set the decryption password."
+msgstr "Premeu per a establir la contrasenya de desxifratge."
 
 #, fuzzy
 msgid "Clear alarm"
@@ -1398,23 +1968,35 @@ msgstr "Bloc de notes nou"
 msgid "Configuration"
 msgstr "Configuració"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "S'estan desxifrant els elements: %d/%d"
-
-#, fuzzy, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Elements obtinguts: %d/%d."
-
-msgid "Synchronise"
-msgstr "Sincronitza"
-
 #, fuzzy
 msgid "All notes"
 msgstr "Voleu suprimir les notes?"
 
-msgid "Notebooks"
-msgstr "Blocs de notes"
+#, fuzzy
+msgid "Checking... Please wait."
+msgstr "S'està cancel·lant... Espereu."
+
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Comprova la configuració de la sincronització"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#, fuzzy
+msgid "The application has been authorised!"
+msgstr "L'aplicació s'ha autoritzat correctament."
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
 
 #, fuzzy, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1433,9 +2015,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-msgid "Check synchronisation configuration"
-msgstr "Comprova la configuració de la sincronització"
 
 msgid "Encryption Config"
 msgstr "Configuració del xifratge"
@@ -1495,11 +2074,16 @@ msgstr ""
 "- Geolocalització: per a poder ajuntar la informació de geolocalització en "
 "les notes."
 
-msgid "Make a donation"
-msgstr "Donatius"
-
 msgid "Joplin website"
 msgstr "Lloc web del Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Per suprimir: %d"
 
 msgid "Login with Dropbox"
 msgstr "Inicia sessió amb Dropbox"
@@ -1539,6 +2123,12 @@ msgstr "Edita el bloc de notes"
 msgid "Enter notebook title"
 msgstr "Títol del bloc de notes:"
 
+msgid "Show all"
+msgstr "Mostra-ho tot"
+
+msgid "Errors only"
+msgstr "Només els errors"
+
 msgid "This note has been modified:"
 msgstr "Aquesta nota s'ha modificat:"
 
@@ -1552,9 +2142,6 @@ msgstr "Descarta els canvis"
 msgid "No item with ID %s"
 msgstr "No hi ha cap element amb la ID %s"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
@@ -1564,530 +2151,73 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr ""
-#~ "Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr "Primer seleccioneu la nota o el bloc de notes que vulgueu suprimir."
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr "Premeu Ctrl+D o escriviu «exit» per a sortir de l'aplicació"
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "S'està cancel·lant la sincronització en segon pla... Espereu."
-
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "No existeix l'ordre: %s"
-
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "L'ordre «%s» només és disponible en mode IGU"
-
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "Manca un argument requerit: %s"
-
-#~ msgid "Your choice: "
-#~ msgstr "La vostra tria:"
-
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "La resposta no és vàlida: %s"
-
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "Format de destinació: %s"
-
-#~ msgid "Exports only the given note."
-#~ msgstr "Exporta només la nota indicada."
-
-#~ msgid "Exports only the given notebook."
-#~ msgstr "Exporta només el bloc de notes indicat."
-
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Estableix la propietat <name>donada<note> per al [valor] donat. Les "
-#~ "propietats possibles són:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr ""
-#~ "No s'ha completat l'autenticació (no ha rebut el testimoni "
-#~ "d'autenticació)."
-
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr ""
-#~ "No esteu autenticats amb %s. Proporcioneu les credencials necessàries."
-
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "S'està cancel·lant... Espereu."
-
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "Escriviu «joplin help» per a obtenir informació d'ús."
-
-#~ msgid "Fatal error:"
-#~ msgstr "Error fatal:"
-
-#~ msgid "Search:"
-#~ msgstr "Cerca:"
-
-#, fuzzy
-#~ msgid "&File"
-#~ msgstr "Fitxer"
-
-#~ msgid "About Joplin"
-#~ msgstr "Quant al Joplin"
-
-#~ msgid "Check for updates..."
-#~ msgstr "Comprova les actualitzacions..."
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "Amaga %s"
-
-#~ msgid "Quit"
-#~ msgstr "Surt"
-
-#, fuzzy
-#~ msgid "&Edit"
-#~ msgstr "Edita"
-
-#~ msgid "Copy"
-#~ msgstr "Copia"
-
-#~ msgid "Cut"
-#~ msgstr "Retalla"
-
-#~ msgid "Paste"
-#~ msgstr "Enganxa"
-
-#, fuzzy
-#~ msgid "Select all"
-#~ msgstr "Seleccioneu una data"
-
-#~ msgid "Bold"
-#~ msgstr "Negreta"
-
-#~ msgid "Italic"
-#~ msgstr "Cursiva"
-
-#~ msgid "Code"
-#~ msgstr "Codi"
-
-#, fuzzy
-#~ msgid "&View"
-#~ msgstr "Visualització"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "Canvia el disseny de l'editor"
-
-#, fuzzy
-#~ msgid "Focus"
-#~ msgstr "Vés al cos"
-
-#, fuzzy
-#~ msgid "&Tools"
-#~ msgstr "Eines"
-
-#, fuzzy
-#~ msgid "&Help"
-#~ msgstr "Ajuda"
-
-#~ msgid "Website and documentation"
-#~ msgstr "Lloc web i documentació"
-
-#, fuzzy
-#~ msgid "Joplin Forum"
-#~ msgstr "Fitxer d'exportació del Joplin"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "Obre %s"
-
-#~ msgid "Exit"
-#~ msgstr "Surt"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "La versió actual està actualitzada"
-
-#~ msgid "Yes"
-#~ msgstr "Sí"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "Les notes i la configuració es desen a: %s"
-
-#~ msgid "Back"
-#~ msgstr "Enrere"
-
-#~ msgid "Apply"
-#~ msgstr "Aplica"
-
-#, fuzzy
-#~ msgid "Usage"
-#~ msgstr "Ús: %s"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "No hi ha cap nota aquí. Creeu-ne una fent clic a «Nota nova»."
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr ""
-#~ "Ara mateix no hi ha cap bloc de notes. Creeu-ne un fent clic a «Bloc de "
-#~ "notes nou»."
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "Missatge o enllaç no suportat: %s"
-
-#~ msgid "Open..."
-#~ msgstr "Obre..."
-
-#~ msgid "Save as..."
-#~ msgstr "Anomena i desa..."
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "Copia el camí al porta-retalls"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "Copia l'adreça de l'enllaç"
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "S'ha produït un error en obrir la nota amb l'editor: %s"
-
-#~ msgid "strong text"
-#~ msgstr "text en negreta"
-
-#~ msgid "emphasized text"
-#~ msgstr "text amb èmfasi"
-
-#~ msgid "List item"
-#~ msgstr "Element de llista"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "insereix un enllaç"
-
-#~ msgid "Attach file"
-#~ msgstr "Adjunta un fitxer"
-
-#~ msgid "Set alarm"
-#~ msgstr "Estableix una alarma"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "A: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "Enllaç"
-
-#~ msgid "Numbered List"
-#~ msgstr "Llista numerada"
-
-#~ msgid "Bulleted List"
-#~ msgstr "Llista de pics"
-
-#~ msgid "Checkbox"
-#~ msgstr "Casella de verificació"
-
-#~ msgid "Heading"
-#~ msgstr "Capçalera"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "Línia horitzontal"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "Feu-hi clic per a aturar l'edició externa"
-
-#~ msgid "Watching..."
-#~ msgstr "S'està vigilant..."
-
-#~ msgid "to-do"
-#~ msgstr "Tasques pendents"
-
-#~ msgid "note"
-#~ msgstr "nota"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "S'està creant una %s..."
-
-#~ msgid "Refresh"
-#~ msgstr "Actualitza"
-
-#~ msgid "Clear"
-#~ msgstr "Neteja"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr "Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
+msgid "Unsupported image type: %s"
+msgstr "Tipus d'imatge no admesa: %s"
 
 #, fuzzy, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "Voleu suprimir les notes?"
+msgid "Updated: %s"
+msgstr "Actualitzades: %d."
 
-#, fuzzy, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "Voleu suprimir aquestes notes?"
+msgid "View on map"
+msgstr "Mostra-ho al mapa"
 
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "Nivell de registre desconegut: %s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "ID de nivell desconeguda: %s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr ""
-#~ "No es pot actualitzar el testimoni: manquen les dades d'autenticació. Si "
-#~ "comenceu altre cop la sincronització, potser es corregeixi el problema."
-
-#~ msgid "Untitled"
-#~ msgstr "Sense títol"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "No s'ha pogut sincronitzar amb OneDrive.\n"
-#~ "\n"
-#~ "Aquest error habitualment apareix si s'usa OneDriver for Business, que "
-#~ "malauradament no està suportat.\n"
-#~ "\n"
-#~ "Considereu usar un compte OneDrive habitual."
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "No es pot accedir a %s"
-
-#~ msgid "Idle"
-#~ msgstr "Ociós"
-
-#~ msgid "In progress"
-#~ msgstr "En progés"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "Els elements xifrats no es poden modificar"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "Aquesta nota no té informació de geolocalització."
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "No es pot copiar la nota al bloc de notes «%s»"
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "No es pot moure la nota al bloc de notes «%s»"
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr ""
-#~ "El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
+msgid "Go to source URL"
+msgstr ""
 
 #, fuzzy
-#~ msgid "General"
-#~ msgstr "Opcions generals"
+msgid "Attach..."
+msgstr "Cerca..."
 
 #, fuzzy
-#~ msgid "Synchronisation"
-#~ msgstr "Estat de la sincronització"
+msgid "Choose an option"
+msgstr "Mostra les opcions avançades"
 
 #, fuzzy
-#~ msgid "Note"
-#~ msgstr "Blocs de notes"
+msgid "Take photo"
+msgstr "Adjunta una imatge"
+
+msgid "Attach photo"
+msgstr "Adjunta una imatge"
+
+msgid "Attach any file"
+msgstr "Adjunta un fitxer"
+
+msgid "Share"
+msgstr "Comparteix"
+
+msgid "Convert to note"
+msgstr "Converteix a nota"
+
+msgid "Convert to todo"
+msgstr "Converteix a llistat de tasques pendents"
+
+msgid "Properties"
+msgstr ""
+
+msgid "Add body"
+msgstr ""
+
+msgid "Edit"
+msgstr "Edita"
 
 #, fuzzy
-#~ msgid "Application"
-#~ msgstr "Surt de l'aplicació"
+msgid "Add title"
+msgstr "títol"
+
+msgid "Login with OneDrive"
+msgstr "Inicia sessió amb OneDrive"
+
+msgid "Search"
+msgstr "Cerca"
 
 #, fuzzy
-#~ msgid "Encryption"
-#~ msgstr "El xifratge és:"
-
-#, fuzzy
-#~ msgid "Web Clipper"
-#~ msgstr "Opcions del desa-retalls de webs"
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "No puc carregar el mòdul «%s» per al format «%s»"
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "Indiqueu el format d'importació per a %s"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "L'element ara mateix és xifrat: %s«%s». Espereu que es desxifrin tots els "
-#~ "elements i torneu-ho a intentar."
-
-#~ msgid "There is no data to export."
-#~ msgstr "No hi ha dades per exportar."
-
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "Elements que no s'han pogut sincronitzar"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "Aquests elements es mantindran a l'aparell però no es pujaran a la "
-#~ "destinació de sincronització. Per a poder trobar aquests elements, podeu "
-#~ "cercar pel títol o la ID (que es mostra entre claus a sobre)."
-
-#, fuzzy, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "Aquest fitxer no s'ha pogut obrir: %s"
-
-#, fuzzy, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "Aquest fitxer no s'ha pogut obrir: %s"
-
-#, fuzzy
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "Elements que no s'han pogut sincronitzar"
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "Estat de la sincronització (element sinc. / elements totals)"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s: %d/%d"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "Total: %d/%d"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "Conflictius: %d"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "Per suprimir: %d"
-
-#~ msgid "Folders"
-#~ msgstr "Carpetes"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s: %d notes"
-
-#~ msgid "Coming alarms"
-#~ msgstr "Alarmes programades"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "A les %s.%s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "Mou al bloc de notes..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "Voleu moure %d notes al bloc de notes «%s»?"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "Premeu per a establir la contrasenya de desxifratge."
-
-#, fuzzy
-#~ msgid "Checking... Please wait."
-#~ msgstr "S'està cancel·lant... Espereu."
-
-#, fuzzy
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "Comprova la configuració de la sincronització"
-
-#, fuzzy
-#~ msgid "The application has been authorised!"
-#~ msgstr "L'aplicació s'ha autoritzat correctament."
-
-#, fuzzy, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "Per suprimir: %d"
-
-#~ msgid "Show all"
-#~ msgstr "Mostra-ho tot"
-
-#~ msgid "Errors only"
-#~ msgstr "Només els errors"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "Tipus d'imatge no admesa: %s"
-
-#, fuzzy, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "Actualitzades: %d."
-
-#~ msgid "View on map"
-#~ msgstr "Mostra-ho al mapa"
-
-#, fuzzy
-#~ msgid "Attach..."
-#~ msgstr "Cerca..."
-
-#, fuzzy
-#~ msgid "Choose an option"
-#~ msgstr "Mostra les opcions avançades"
-
-#, fuzzy
-#~ msgid "Take photo"
-#~ msgstr "Adjunta una imatge"
-
-#~ msgid "Attach photo"
-#~ msgstr "Adjunta una imatge"
-
-#~ msgid "Attach any file"
-#~ msgstr "Adjunta un fitxer"
-
-#~ msgid "Share"
+#~ msgid "Share Notes"
 #~ msgstr "Comparteix"
 
-#~ msgid "Convert to note"
-#~ msgstr "Converteix a nota"
-
-#~ msgid "Convert to todo"
-#~ msgstr "Converteix a llistat de tasques pendents"
-
-#~ msgid "Edit"
-#~ msgstr "Edita"
-
 #, fuzzy
-#~ msgid "Add title"
-#~ msgstr "títol"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "Inicia sessió amb OneDrive"
-
-#~ msgid "Search"
-#~ msgstr "Cerca"
+#~ msgid "Share Link"
+#~ msgstr "Comparteix"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "La sincronització ja és en procés. Estat: %s"
@@ -2111,10 +2241,6 @@ msgstr ""
 
 #~ msgid "Note has been saved."
 #~ msgstr "S'ha desat la nota."
-
-#, fuzzy
-#~ msgid "Note title"
-#~ msgstr "Títol del bloc de notes:"
 
 #, fuzzy
 #~ msgid "Note body"

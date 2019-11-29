@@ -16,6 +16,15 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr "タグを削除するには、関連するノートからタグを外してください。"
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "まず削除するノートかノートブックを選択してください。"
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
@@ -39,12 +48,34 @@ msgstr "N"
 msgid "y"
 msgstr "y"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "コマンドが違います：%s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "コマンド \"%s\"は、GUIのみで有効です"
+
 msgid "Cannot change encrypted item"
 msgstr "暗号化したアイテムは変更できません"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "引数が足りません：%s"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "選択： "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "無効な入力：%s"
 
 msgid "Attaches the given file to the note."
 msgstr "選択したファイルをノートに添付します。"
@@ -156,6 +187,16 @@ msgid ""
 msgstr ""
 "Joplinのデータを選択されたパスにエクスポートします。既定ではノートブック・"
 "ノート・タグ・添付データを含むすべてのデータベースを出力します。"
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "場所の形式: %s"
+
+msgid "Exports only the given note."
+msgstr "選択されたノートのみを出力する。"
+
+msgid "Exports only the given notebook."
+msgstr "選択されたノートブックのみを出力する。"
 
 msgid "Displays a geolocation URL for the note."
 msgstr "ノートの位置情報URLを表示する。"
@@ -346,6 +387,29 @@ msgstr ""
 "APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは "
 "api.port で変更できます。コマンドは (%s)。"
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "サーバーはすでにポート %d で実行中です。"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "サーバーはポート %d で実行中です。"
+
+msgid "Server is not running."
+msgstr "サーバーは実行されていません。"
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティ"
+"は：\n"
+"\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "ノートとノートブックのサマリを表示します。"
 
@@ -354,6 +418,24 @@ msgstr "リモート保存領域と同期します。"
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "指定のターゲットと同期します。(標準： sync.targetの設定値)"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "認証は完了していません(認証トークンが得られませんでした)"
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "%s では認証できません。他の資格証明書を使用してください。"
 
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
@@ -376,6 +458,12 @@ msgstr "同期プロセスを初期化できませんでした。"
 
 msgid "Starting synchronisation..."
 msgstr "同期を開始中..."
+
+msgid "Downloading resources..."
+msgstr "リソースをダウンロード中..."
+
+msgid "Cancelling... Please wait."
+msgstr "中止中...お待ちください。"
 
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
@@ -438,9 +526,11 @@ msgstr "既定値: %s"
 msgid "Possible keys/values:"
 msgstr "取り得るキー/値:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
+msgid "Type `joplin help` for usage information."
+msgstr "`joplin help`を実行して使い方を表示します。"
+
+msgid "Fatal error:"
+msgstr "致命的なエラー:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -460,6 +550,9 @@ msgstr ""
 "プリケーションは\"Apps/Joplin\"フォルダを作成し、その中のファイルのみを読み書"
 "きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
 "ません。第三者にデータが共有されることもありません。"
+
+msgid "Search:"
+msgstr "検索:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -496,6 +589,67 @@ msgstr ""
 msgid "Could not export notes: %s"
 msgstr "ノートをエクスポートできませんでした: %s"
 
+msgid "&File"
+msgstr "&ファイル"
+
+msgid "About Joplin"
+msgstr "Joplinについて"
+
+msgid "Preferences..."
+msgstr "環境設定"
+
+msgid "Check for updates..."
+msgstr "アップデートのチェック..."
+
+msgid "Templates"
+msgstr "テンプレート"
+
+msgid "Import"
+msgstr "インポート"
+
+msgid "Export"
+msgstr "エクスポート"
+
+msgid "Synchronise"
+msgstr "同期"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "%s を隠す"
+
+msgid "Quit"
+msgstr "終了"
+
+msgid "Close Window"
+msgstr "ウィンドウを閉じる"
+
+msgid "&Edit"
+msgstr "&編集"
+
+msgid "Copy"
+msgstr "コピー"
+
+msgid "Cut"
+msgstr "切り取り"
+
+msgid "Paste"
+msgstr "貼り付け"
+
+msgid "Select all"
+msgstr "すべて選択"
+
+msgid "Bold"
+msgstr "太字"
+
+msgid "Italic"
+msgstr "斜体"
+
+msgid "Link"
+msgstr "リンク"
+
+msgid "Code"
+msgstr "コード"
+
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
@@ -511,11 +665,61 @@ msgstr "すべてのノートを検索"
 msgid "Search in current note"
 msgstr "現在のノートを検索"
 
+msgid "&View"
+msgstr "&表示"
+
+msgid "Toggle sidebar"
+msgstr "サイドバーの表示切り替え"
+
+msgid "Layout button sequence"
+msgstr "レイアウトボタンによる切り替え順"
+
+msgid "Toggle note list"
+msgstr "ノート一覧の表示切り替え"
+
+msgid "Toggle editor layout"
+msgstr "エディターレイアウトの表示切り替え"
+
+msgid "Focus"
+msgstr "フォーカス"
+
+msgid "&Tools"
+msgstr "&ツール"
+
+msgid "&Help"
+msgstr "&ヘルプ"
+
+msgid "Website and documentation"
+msgstr "Webサイトとドキュメント"
+
+msgid "Joplin Forum"
+msgstr "Joplinフォーラム"
+
+msgid "Make a donation"
+msgstr "寄付する"
+
+msgid "Toggle development tools"
+msgstr "開発者ツールのオンオフを切り替える"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "%s を開く"
+
+msgid "Exit"
+msgstr "終了"
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "キャンセル"
+
+msgid "Current version is up-to-date."
+msgstr "現在のバージョンは最新版です。"
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (プレリリース)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "アップデートがあります。すぐにダウンロードしますか？"
@@ -527,6 +731,15 @@ msgstr "あなたのバージョン: %s"
 #, javascript-format
 msgid "New version: %s"
 msgstr "新バージョン: %s"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Full Release Notes"
+msgstr "リリースノート（完全版）"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
@@ -595,15 +808,24 @@ msgstr ""
 "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
 "するときにだけ使用します。"
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
+msgid "This will open a new screen. Save your current changes?"
+msgstr "新しい画面を開きます。変更を保存しますか?"
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "ノートと設定は次の場所に保存されます: %s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
+msgid "Check synchronisation configuration"
+msgstr "同期の設定を確認する"
+
+msgid "Browse..."
+msgstr "参照..."
+
+msgid "Back"
+msgstr "戻る"
+
+msgid "Apply"
+msgstr "適用"
 
 msgid "Submit"
 msgstr "入力"
@@ -694,6 +916,18 @@ msgstr "状態"
 msgid "Encryption is:"
 msgstr "暗号化の状態:"
 
+msgid "Firefox Extension"
+msgstr "Firefox 拡張機能"
+
+msgid "Chrome Web Store"
+msgstr "Chrome ウェブストア"
+
+msgid "Get it now:"
+msgstr "今すぐ取得:"
+
+msgid "Usage"
+msgstr "使い方"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -725,12 +959,6 @@ msgstr "アラームをセット："
 msgid "Template file:"
 msgstr "テンプレートファイル："
 
-msgid "Toggle sidebar"
-msgstr "サイドバーの表示切り替え"
-
-msgid "Toggle note list"
-msgstr "ノート一覧の表示切り替え"
-
 msgid "New note"
 msgstr "新しいノート"
 
@@ -758,6 +986,13 @@ msgstr "パスワードに1つ以上のマスターキーが必要です"
 msgid "Set the password"
 msgstr "パスワードの設定"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "ノートがありません。新しいノートを作成して下さい。"
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "ノートブックがありません。新しいノートブックを作成してください。"
+
 msgid "Location"
 msgstr "場所"
 
@@ -770,6 +1005,12 @@ msgstr "ノートの履歴"
 msgid "Markup"
 msgstr "マークアップ"
 
+msgid "Previous versions of this note"
+msgstr "このノートの以前のバージョン"
+
+msgid "Note properties"
+msgstr "ノートのプロパティ"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "ノート \"%s\" のノートブック \"%s\"への復元は成功しました。"
@@ -778,8 +1019,38 @@ msgid "This note has no history"
 msgstr "このノートに履歴はありません"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "次のリンクまたはメッセージはサポートしていません: %s"
+
+msgid "Restore"
+msgstr "復元"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
+"ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
+
+msgid "Open..."
+msgstr "開く..."
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "次のファイルは開くことができません：%s"
+
+msgid "Save as..."
+msgstr "名前を付けて保存..."
+
+msgid "Copy path to clipboard"
+msgstr "クリップボードにパスを保存"
+
+msgid "Copy Link Address"
+msgstr "リンクアドレスをコピー"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
 
 #, javascript-format
 msgid ""
@@ -789,14 +1060,83 @@ msgstr ""
 "このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、"
 "ノートを編集してください。"
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr "一度に印刷またはPDF出力できるノートは1つだけです。"
+
+msgid "PDF File"
+msgstr "PDF ファイル"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "次のエディターで開く際にエラー: %s"
+
+msgid "strong text"
+msgstr "文字を太字に"
+
+msgid "emphasized text"
+msgstr "文字の強調"
+
+msgid "List item"
+msgstr "リストアイテム"
+
+msgid "Insert Hyperlink"
+msgstr "ハイパーリンクの挿入"
+
+msgid "Attach file"
+msgstr "ファイルを添付する"
+
+msgid "Set alarm"
+msgstr "アラームをセット"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "内: %s"
+
+msgid "Hyperlink"
+msgstr "ハイパーリンク"
+
+msgid "Numbered List"
+msgstr "番号つきリスト"
+
+msgid "Bulleted List"
+msgstr "箇条書きリスト"
+
+msgid "Checkbox"
+msgstr "チェックボックス"
+
+msgid "Heading"
+msgstr "見出し"
+
+msgid "Horizontal Rule"
+msgstr "横線"
+
+msgid "Click to stop external editing"
+msgstr "クリックすると外部エディターでの編集を終了します"
+
+msgid "Watching..."
+msgstr "確認中..."
+
+msgid "to-do"
+msgstr "to-do"
+
+msgid "note"
+msgstr "ノート"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "新しい %s を作成中..."
+
+msgid "Refresh"
+msgstr "更新"
+
+msgid "Clear"
+msgstr "クリア"
+
 msgid "OneDrive Login"
 msgstr "OneDriveログイン"
 
 msgid "Dropbox Login"
 msgstr "Dropboxログイン"
-
-msgid "Import"
-msgstr "インポート"
 
 msgid "Options"
 msgstr "オプション"
@@ -833,8 +1173,22 @@ msgstr "新しいサブノートブック"
 msgid "Rename"
 msgstr "名前の変更"
 
-msgid "Export"
-msgstr "エクスポート"
+msgid "Notebooks"
+msgstr "ノートブック"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "復号中のアイテム: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "取得中のリソース: %d/%d"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "同期状況の出力先を選択してください"
+
+msgid "Retry"
+msgstr "再実行"
 
 msgid "Add or remove tags"
 msgstr "タグの追加と削除"
@@ -858,8 +1212,23 @@ msgstr "ToDoに切り替え"
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
 
-msgid "PDF File"
-msgstr "PDF ファイル"
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "ノート \"%s\" を削除しますか？"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "ノート \"%d\" を削除しますか？"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"ノートタイトルを入力すると、そのノートに移動します。または#につづいてタグ名も"
+"しくは@につづいてノートブック名を使うこともできます。"
+
+msgid "Goto Anything..."
+msgstr "Goto Anything..."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -886,6 +1255,43 @@ msgstr "OneDrive Dev (テスト用途のみ)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "不明なログレベル: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "不明なレベルID: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
+"で解決することがあります。"
+
+msgid "Untitled"
+msgstr "名称未設定"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"OneDriveと同期できませんでした。\n"
+"\n"
+"OneDrive for Business(未サポート)を使用中はこのエラーが起こることがありま"
+"す。\n"
+"\n"
+"通常のOneDriveアカウントの使用をご検討ください。"
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "%sにアクセスできません"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -926,8 +1332,17 @@ msgstr "完了: %s"
 msgid "Last error: %s"
 msgstr "最新のエラー: %s"
 
+msgid "Idle"
+msgstr "待機中"
+
+msgid "In progress"
+msgstr "実行中"
+
 msgid "Encrypted"
 msgstr "暗号化済"
+
+msgid "Encrypted items cannot be modified"
+msgstr "暗号化したアイテムは修正できません"
 
 msgid "title"
 msgstr "タイトル"
@@ -949,6 +1364,17 @@ msgstr ""
 
 msgid "created date"
 msgstr "作成日"
+
+msgid "This note does not have geolocation information."
+msgstr "このノートには位置情報がありません。"
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "ノートをノートブック \"%s\" にコピーできません"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "ノートをノートブック \"%s\" に移動できません"
 
 #, javascript-format
 msgid ""
@@ -1294,6 +1720,38 @@ msgstr "%d 日"
 msgid "Keep note history for"
 msgstr "ノート履歴の保存期間"
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
+
+msgid "General"
+msgstr "全般"
+
+msgid "Synchronisation"
+msgstr "同期"
+
+msgid "Appearance"
+msgstr "スタイル"
+
+msgid "Note"
+msgstr "ノート"
+
+msgid "Plugins"
+msgstr "プラグイン"
+
+msgid "Application"
+msgstr "アプリケーション"
+
+msgid "Encryption"
+msgstr "暗号化"
+
+msgid "Web Clipper"
+msgstr "Webクリッパー"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
+
 msgid "Joplin Export File"
 msgstr "Joplin エクスポートファイル"
 
@@ -1318,8 +1776,95 @@ msgstr "ファイル"
 msgid "Directory"
 msgstr "ディレクトリ"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "\"%s\" モジュール（\"%s\" フォーマット用）を読み込めません"
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "%s 用のインポートフォーマットを指定してくださあい"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"このアイテムは現在暗号化されています: %s \"%s\" すべてのアイテムの復号が終わ"
+"るまで待ち、もう一度実行してください。"
+
+msgid "There is no data to export."
+msgstr "エクスポートするデータがありません。"
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "ノートをどのノートブックにインポートするのか指定してください。"
+
+msgid "Restored Notes"
+msgstr "復元されたノート"
+
+msgid "Items that cannot be synchronised"
+msgstr "同期ができなかったアイテム"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そ"
+"のようなアイテムを探すには、タイトルまたはID(上記の括弧内に表示されている)で"
+"検索してください。"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s)はアップロードできませんでした：%s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
+
+msgid "Items that cannot be decrypted"
+msgstr "復号ができなかったアイテム"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplinはアイテムが破損もしくは大きすぎるため、これらのアイテムの復号化に複数"
+"回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinはこれらの復"
+"号化は行いません。"
+
+msgid "Sync status (synced items / total items)"
+msgstr "同期状況 (同期済/総数)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "総数: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "衝突: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "削除予定: %d"
+
+msgid "Folders"
+msgstr "フォルダー"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d ノート"
+
+msgid "Coming alarms"
+msgstr "直近のアラーム"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "日時 %s: %s"
 
 msgid "Permission to use camera"
 msgstr "カメラ使用の許可"
@@ -1338,6 +1883,16 @@ msgstr "ノートがありません。(+)ボタンを押して新しいノート
 
 msgid "Delete these notes?"
 msgstr "ノートを削除しますか？"
+
+msgid "Move to notebook..."
+msgstr "ノートブックへ移動..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "%d個のノートを\"%s\"に移動しますか？"
+
+msgid "Press to set the decryption password."
+msgstr "復号するパスワードを入力してください。"
 
 msgid "Clear alarm"
 msgstr "アラームをクリア"
@@ -1364,22 +1919,38 @@ msgstr "新しいノートブック"
 msgid "Configuration"
 msgstr "設定"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "復号中のアイテム: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "取得中のリソース: %d/%d"
-
-msgid "Synchronise"
-msgstr "同期"
-
 msgid "All notes"
 msgstr "すべてのノート"
 
-msgid "Notebooks"
-msgstr "ノートブック"
+msgid "Checking... Please wait."
+msgstr "確認中...お待ちください。"
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "成功です！ 同期の設定は正しいようです。"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"エラーです。URL、ユーザー名、パスワードなどを修正し、同期するターゲットにアク"
+"セスできるかを確認してください。次が報告されたエラーです:"
+
+msgid "The application has been authorised!"
+msgstr "アプリケーションは問題なく認証されました！"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"アプリケーションが認証できません:\n"
+"\n"
+"%s\n"
+"\n"
+"やり直してください。"
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1399,9 +1970,6 @@ msgid ""
 "external storage is required."
 msgstr ""
 "ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
-
-msgid "Check synchronisation configuration"
-msgstr "同期の設定を確認する"
 
 msgid "Encryption Config"
 msgstr "暗号化の設定"
@@ -1457,11 +2025,16 @@ msgstr "- カメラ: 撮った写真をノートに添付するのに必要で�
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
 
-msgid "Make a donation"
-msgstr "寄付する"
-
 msgid "Joplin website"
 msgstr "JoplinのWebサイト"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "データベース v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS有効:  %d"
 
 msgid "Login with Dropbox"
 msgstr "Dropboxでログイン"
@@ -1499,6 +2072,12 @@ msgstr "ノートブックの編集"
 msgid "Enter notebook title"
 msgstr "ノートブックのタイトルを入力"
 
+msgid "Show all"
+msgstr "すべて表示"
+
+msgid "Errors only"
+msgstr "エラーのみ"
+
 msgid "This note has been modified:"
 msgstr "ノートは変更されています："
 
@@ -1512,9 +2091,6 @@ msgstr "変更を破棄"
 msgid "No item with ID %s"
 msgstr "ID %s のアイテムはありません"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
@@ -1523,645 +2099,72 @@ msgstr "Joplinモバイルアプリは次のタイプのリンクをまだサポ
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "プロトコル \"%s\" でのリンクはサポートされていません"
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr "タグを削除するには、関連するノートからタグを外してください。"
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr "まず削除するノートかノートブックを選択してください。"
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr ""
-#~ "アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "サポートされていない画像の形式: %s"
 
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "コマンドが違います：%s"
+msgid "Updated: %s"
+msgstr "アップデート: %s"
 
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "コマンド \"%s\"は、GUIのみで有効です"
+msgid "View on map"
+msgstr "地図上に表示"
 
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "引数が足りません：%s"
+msgid "Go to source URL"
+msgstr "ソースURLに行く"
 
-#~ msgid "Your choice: "
-#~ msgstr "選択： "
+msgid "Attach..."
+msgstr "添付..."
 
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "無効な入力：%s"
+msgid "Choose an option"
+msgstr "オプションを選択"
 
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "場所の形式: %s"
+msgid "Take photo"
+msgstr "写真を撮影する"
 
-#~ msgid "Exports only the given note."
-#~ msgstr "選択されたノートのみを出力する。"
+msgid "Attach photo"
+msgstr "写真を添付"
 
-#~ msgid "Exports only the given notebook."
-#~ msgstr "選択されたノートブックのみを出力する。"
+msgid "Attach any file"
+msgstr "ファイルを添付"
 
-#, javascript-format
-#~ msgid "Server is already running on port %d"
-#~ msgstr "サーバーはすでにポート %d で実行中です。"
+msgid "Share"
+msgstr "共有"
 
-#, javascript-format
-#~ msgid "Server is running on port %d"
-#~ msgstr "サーバーはポート %d で実行中です。"
+msgid "Convert to note"
+msgstr "ノートに変換"
 
-#~ msgid "Server is not running."
-#~ msgstr "サーバーは実行されていません。"
+msgid "Convert to todo"
+msgstr "ToDoに変換"
 
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパ"
-#~ "ティは：\n"
-#~ "\n"
-#~ "%s"
+msgid "Properties"
+msgstr "プロパティ"
 
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr "認証は完了していません(認証トークンが得られませんでした)"
+msgid "Add body"
+msgstr "本文を追加"
 
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr "%s では認証できません。他の資格証明書を使用してください。"
+msgid "Edit"
+msgstr "編集"
 
-#~ msgid "Downloading resources..."
-#~ msgstr "リソースをダウンロード中..."
+msgid "Add title"
+msgstr "タイトルを追加"
 
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "中止中...お待ちください。"
+msgid "Login with OneDrive"
+msgstr "OneDriveログイン"
 
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "`joplin help`を実行して使い方を表示します。"
+msgid "Search"
+msgstr "検索"
 
-#~ msgid "Fatal error:"
-#~ msgstr "致命的なエラー:"
-
-#~ msgid "Search:"
-#~ msgstr "検索:"
-
-#~ msgid "&File"
-#~ msgstr "&ファイル"
-
-#~ msgid "About Joplin"
-#~ msgstr "Joplinについて"
-
-#~ msgid "Preferences..."
-#~ msgstr "環境設定"
-
-#~ msgid "Check for updates..."
-#~ msgstr "アップデートのチェック..."
-
-#~ msgid "Templates"
-#~ msgstr "テンプレート"
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "%s を隠す"
-
-#~ msgid "Quit"
-#~ msgstr "終了"
-
-#~ msgid "Close Window"
-#~ msgstr "ウィンドウを閉じる"
-
-#~ msgid "&Edit"
-#~ msgstr "&編集"
-
-#~ msgid "Copy"
-#~ msgstr "コピー"
-
-#~ msgid "Cut"
-#~ msgstr "切り取り"
-
-#~ msgid "Paste"
-#~ msgstr "貼り付け"
-
-#~ msgid "Select all"
-#~ msgstr "すべて選択"
-
-#~ msgid "Bold"
-#~ msgstr "太字"
-
-#~ msgid "Italic"
-#~ msgstr "斜体"
-
-#~ msgid "Link"
-#~ msgstr "リンク"
-
-#~ msgid "Code"
-#~ msgstr "コード"
-
-#~ msgid "&View"
-#~ msgstr "&表示"
-
-#~ msgid "Layout button sequence"
-#~ msgstr "レイアウトボタンによる切り替え順"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "エディターレイアウトの表示切り替え"
-
-#~ msgid "Focus"
-#~ msgstr "フォーカス"
-
-#~ msgid "&Tools"
-#~ msgstr "&ツール"
-
-#~ msgid "&Help"
-#~ msgstr "&ヘルプ"
-
-#~ msgid "Website and documentation"
-#~ msgstr "Webサイトとドキュメント"
-
-#~ msgid "Joplin Forum"
-#~ msgstr "Joplinフォーラム"
-
-#~ msgid "Toggle development tools"
-#~ msgstr "開発者ツールのオンオフを切り替える"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "%s を開く"
-
-#~ msgid "Exit"
-#~ msgstr "終了"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "現在のバージョンは最新版です。"
-
-#, javascript-format
-#~ msgid "%s (pre-release)"
-#~ msgstr "%s (プレリリース)"
-
-#~ msgid "Yes"
-#~ msgstr "Yes"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#~ msgid "Full Release Notes"
-#~ msgstr "リリースノート（完全版）"
-
-#~ msgid "This will open a new screen. Save your current changes?"
-#~ msgstr "新しい画面を開きます。変更を保存しますか?"
-
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "ノートと設定は次の場所に保存されます: %s"
-
-#~ msgid "Browse..."
-#~ msgstr "参照..."
-
-#~ msgid "Back"
-#~ msgstr "戻る"
-
-#~ msgid "Apply"
-#~ msgstr "適用"
-
-#~ msgid "Firefox Extension"
-#~ msgstr "Firefox 拡張機能"
-
-#~ msgid "Chrome Web Store"
-#~ msgstr "Chrome ウェブストア"
-
-#~ msgid "Get it now:"
-#~ msgstr "今すぐ取得:"
-
-#~ msgid "Usage"
-#~ msgstr "使い方"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "ノートがありません。新しいノートを作成して下さい。"
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr "ノートブックがありません。新しいノートブックを作成してください。"
-
-#~ msgid "Previous versions of this note"
-#~ msgstr "このノートの以前のバージョン"
-
-#~ msgid "Note properties"
-#~ msgstr "ノートのプロパティ"
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "次のリンクまたはメッセージはサポートしていません: %s"
-
-#~ msgid "Restore"
-#~ msgstr "復元"
-
-#, javascript-format
-#~ msgid ""
-#~ "Click \"%s\" to restore the note. It will be copied in the notebook named "
-#~ "\"%s\". The current version of the note will not be replaced or modified."
-#~ msgstr ""
-#~ "\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノート"
-#~ "ブックにコピーされます。現在のバージョンのノートの置換や変更は行われませ"
-#~ "ん。"
-
-#~ msgid "Open..."
-#~ msgstr "開く..."
-
-#~ msgid "Save as..."
-#~ msgstr "名前を付けて保存..."
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "クリップボードにパスを保存"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "リンクアドレスをコピー"
-
-#~ msgid "Only one note can be printed or exported to PDF at a time."
-#~ msgstr "一度に印刷またはPDF出力できるノートは1つだけです。"
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "次のエディターで開く際にエラー: %s"
-
-#~ msgid "strong text"
-#~ msgstr "文字を太字に"
-
-#~ msgid "emphasized text"
-#~ msgstr "文字の強調"
-
-#~ msgid "List item"
-#~ msgstr "リストアイテム"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "ハイパーリンクの挿入"
-
-#~ msgid "Attach file"
-#~ msgstr "ファイルを添付する"
-
-#~ msgid "Set alarm"
-#~ msgstr "アラームをセット"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "内: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "ハイパーリンク"
-
-#~ msgid "Numbered List"
-#~ msgstr "番号つきリスト"
-
-#~ msgid "Bulleted List"
-#~ msgstr "箇条書きリスト"
-
-#~ msgid "Checkbox"
-#~ msgstr "チェックボックス"
-
-#~ msgid "Heading"
-#~ msgstr "見出し"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "横線"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "クリックすると外部エディターでの編集を終了します"
-
-#~ msgid "Watching..."
-#~ msgstr "確認中..."
-
-#~ msgid "to-do"
-#~ msgstr "to-do"
-
-#~ msgid "note"
-#~ msgstr "ノート"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "新しい %s を作成中..."
-
-#~ msgid "Refresh"
-#~ msgstr "更新"
-
-#~ msgid "Clear"
-#~ msgstr "クリア"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr "同期状況の出力先を選択してください"
-
-#~ msgid "Retry"
-#~ msgstr "再実行"
-
-#, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "ノート \"%s\" を削除しますか？"
-
-#, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "ノート \"%d\" を削除しますか？"
-
-#~ msgid ""
-#~ "Type a note title to jump to it. Or type # followed by a tag name, or @ "
-#~ "followed by a notebook name."
-#~ msgstr ""
-#~ "ノートタイトルを入力すると、そのノートに移動します。または#につづいてタグ"
-#~ "名もしくは@につづいてノートブック名を使うこともできます。"
-
-#~ msgid "Goto Anything..."
-#~ msgstr "Goto Anything..."
-
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "不明なログレベル: %s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "不明なレベルID: %s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr ""
-#~ "トークンの更新ができませんでした。認証データがありません。同期を再度行うこ"
-#~ "とで解決することがあります。"
-
-#~ msgid "Untitled"
-#~ msgstr "名称未設定"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "OneDriveと同期できませんでした。\n"
-#~ "\n"
-#~ "OneDrive for Business(未サポート)を使用中はこのエラーが起こることがありま"
-#~ "す。\n"
-#~ "\n"
-#~ "通常のOneDriveアカウントの使用をご検討ください。"
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "%sにアクセスできません"
-
-#~ msgid "Idle"
-#~ msgstr "待機中"
-
-#~ msgid "In progress"
-#~ msgstr "実行中"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "暗号化したアイテムは修正できません"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "このノートには位置情報がありません。"
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "ノートをノートブック \"%s\" にコピーできません"
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "ノートをノートブック \"%s\" に移動できません"
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
-
-#~ msgid "General"
-#~ msgstr "全般"
-
-#~ msgid "Synchronisation"
-#~ msgstr "同期"
-
-#~ msgid "Appearance"
-#~ msgstr "スタイル"
-
-#~ msgid "Note"
-#~ msgstr "ノート"
-
-#~ msgid "Plugins"
-#~ msgstr "プラグイン"
-
-#~ msgid "Application"
-#~ msgstr "アプリケーション"
-
-#~ msgid "Encryption"
-#~ msgstr "暗号化"
-
-#~ msgid "Web Clipper"
-#~ msgstr "Webクリッパー"
-
-#, javascript-format
-#~ msgid "The tag \"%s\" already exists. Please choose a different name."
-#~ msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "\"%s\" モジュール（\"%s\" フォーマット用）を読み込めません"
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "%s 用のインポートフォーマットを指定してくださあい"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "このアイテムは現在暗号化されています: %s \"%s\" すべてのアイテムの復号が終"
-#~ "わるまで待ち、もう一度実行してください。"
-
-#~ msgid "There is no data to export."
-#~ msgstr "エクスポートするデータがありません。"
-
-#~ msgid "Restored Notes"
+#, fuzzy
+#~ msgid "Share Notes"
 #~ msgstr "復元されたノート"
 
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "同期ができなかったアイテム"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。"
-#~ "そのようなアイテムを探すには、タイトルまたはID(上記の括弧内に表示されてい"
-#~ "る)で検索してください。"
-
-#, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "%s (%s)はアップロードできませんでした：%s"
-
-#, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
-
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "復号ができなかったアイテム"
-
-#~ msgid ""
-#~ "Joplin failed to decrypt these items multiple times, possibly because "
-#~ "they are corrupted or too large. These items will remain on the device "
-#~ "but Joplin will no longer attempt to decrypt them."
-#~ msgstr ""
-#~ "Joplinはアイテムが破損もしくは大きすぎるため、これらのアイテムの復号化に複"
-#~ "数回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinはこれら"
-#~ "の復号化は行いません。"
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "同期状況 (同期済/総数)"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s: %d/%d"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "総数: %d/%d"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "衝突: %d"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "削除予定: %d"
-
-#~ msgid "Folders"
-#~ msgstr "フォルダー"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s: %d ノート"
-
-#~ msgid "Coming alarms"
-#~ msgstr "直近のアラーム"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "日時 %s: %s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "ノートブックへ移動..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "%d個のノートを\"%s\"に移動しますか？"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "復号するパスワードを入力してください。"
-
-#~ msgid "Checking... Please wait."
-#~ msgstr "確認中...お待ちください。"
-
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "成功です！ 同期の設定は正しいようです。"
-
-#~ msgid ""
-#~ "Error. Please check that URL, username, password, etc. are correct and "
-#~ "that the sync target is accessible. The reported error was:"
-#~ msgstr ""
-#~ "エラーです。URL、ユーザー名、パスワードなどを修正し、同期するターゲットに"
-#~ "アクセスできるかを確認してください。次が報告されたエラーです:"
-
-#~ msgid "The application has been authorised!"
-#~ msgstr "アプリケーションは問題なく認証されました！"
-
-#, javascript-format
-#~ msgid ""
-#~ "Could not authorise application:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Please try again."
-#~ msgstr ""
-#~ "アプリケーションが認証できません:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "やり直してください。"
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "データベース v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "FTS有効:  %d"
-
-#~ msgid "Show all"
-#~ msgstr "すべて表示"
-
-#~ msgid "Errors only"
-#~ msgstr "エラーのみ"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "サポートされていない画像の形式: %s"
-
-#, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "アップデート: %s"
-
-#~ msgid "View on map"
-#~ msgstr "地図上に表示"
-
-#~ msgid "Go to source URL"
-#~ msgstr "ソースURLに行く"
-
-#~ msgid "Attach..."
-#~ msgstr "添付..."
-
-#~ msgid "Choose an option"
-#~ msgstr "オプションを選択"
-
-#~ msgid "Take photo"
-#~ msgstr "写真を撮影する"
-
-#~ msgid "Attach photo"
-#~ msgstr "写真を添付"
-
-#~ msgid "Attach any file"
-#~ msgstr "ファイルを添付"
-
-#~ msgid "Share"
+#, fuzzy
+#~ msgid "Share Link"
 #~ msgstr "共有"
 
-#~ msgid "Convert to note"
-#~ msgstr "ノートに変換"
-
-#~ msgid "Convert to todo"
-#~ msgstr "ToDoに変換"
-
-#~ msgid "Properties"
-#~ msgstr "プロパティ"
-
-#~ msgid "Add body"
-#~ msgstr "本文を追加"
-
-#~ msgid "Edit"
-#~ msgstr "編集"
-
-#~ msgid "Add title"
-#~ msgstr "タイトルを追加"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "OneDriveログイン"
-
-#~ msgid "Search"
-#~ msgstr "検索"
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr "使用候補のポートはすべて利用中です - 問題を %s に報告してください"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "同期作業はすでに実行中です。状態: %s"
