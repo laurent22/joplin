@@ -172,7 +172,7 @@ const solarizedLightStyle = {
 	raisedBackgroundColor: '#eee8d5',
 	raisedColor: '#073642',
 
-	warningBackgroundColor: '#b58900',
+	warningBackgroundColor: '#b5890055',
 
 	htmlColor: '#657b83',
 	htmlBackgroundColor: '#fdf6e3',
@@ -209,7 +209,7 @@ const solarizedDarkStyle = {
 	raisedBackgroundColor: '#073642',
 	raisedColor: '#839496',
 
-	warningBackgroundColor: '#b58900',
+	warningBackgroundColor: '#b5890055',
 
 	htmlColor: '#93a1a1',
 	htmlBackgroundColor: '#002b36',
