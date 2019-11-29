@@ -17,6 +17,15 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr "For at slette et mærke, afmærk de tilhørende noter."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Vælg først en note eller en notesbog der skal slettes."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Tast Ctrl+D eller tast \"exit\" for at afslutte app'en"
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Mere end et emne matcher \"%s\".  Præciser din søgning."
@@ -39,12 +48,34 @@ msgstr "N"
 msgid "y"
 msgstr "j"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Annullerer baggrunds synkronisering...  Vent venligst."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Kommando findes ikke: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Kommando \"%s\" er kun til rådighed i GUI tilstand"
+
 msgid "Cannot change encrypted item"
 msgstr "Kan ikke ændre krypteret emne"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Mangler krævet argument: %s"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "Dit valg: "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Forkert svar: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "Vedhæfter valgt fil til noten."
@@ -158,6 +189,16 @@ msgid ""
 msgstr ""
 "Eksporterer Joplin data til valgt sti. Standard er eksport af hele databasen "
 "inkl. notesbøger, noter, mærker og ressourcer."
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Destinations format: %s"
+
+msgid "Exports only the given note."
+msgstr "Eksporter kun valgt note."
+
+msgid "Exports only the given notebook."
+msgstr "Eksporter kun valgt notesbog."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "Vis geolokations URL for noten."
@@ -351,6 +392,29 @@ msgstr ""
 "Start, stop eller tjek API serveren. Sæt api.port variablen for at vælge "
 "hvilken port den skal køre på. Kommandoerne er (%s)."
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Serveren kører allerede på port %d"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Serveren kører på port %d"
+
+msgid "Server is not running."
+msgstr "Serveren kører ikke."
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Sætter ejerskab <name> af valgt <note> til aktuel [value]. Mulige ejerskab "
+"er:\n"
+"\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "Viser opsummering om noter og notesbøger."
 
@@ -359,6 +423,26 @@ msgstr "Synkroniserer med fjern-lager."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Synk til valgt mål (standard er sync.target config.value)"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Godkendelse  blev ikke fuldført (modtog ikke godkendelses token)."
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"For at Joplin kan synkronisere med Dropbox, skal man igennem nedenstående "
+"trin:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "Trin 1: Åben denne  URL i din browser for at autorisere applikationen:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Trin 2: Indtast koden, som er oplyst af Dropbox:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "Ikke godkendt med %s. Indtast venligst manglende koder/info."
 
 msgid "Synchronisation is already in progress."
 msgstr "Synkronisering er allerede i gang."
@@ -381,6 +465,12 @@ msgstr "Kan ikke initialisere synkroniseringen."
 
 msgid "Starting synchronisation..."
 msgstr "Starter synkronisering."
+
+msgid "Downloading resources..."
+msgstr "Downloader resurser..."
+
+msgid "Cancelling... Please wait."
+msgstr "Annullerer...  Vent venligst."
 
 #, fuzzy
 msgid ""
@@ -443,9 +533,11 @@ msgstr "Standard: %s"
 msgid "Possible keys/values:"
 msgstr "Mulige nøgler/værdier:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgid "Type `joplin help` for usage information."
+msgstr "Tast `Joplin help` for alm. info."
+
+msgid "Fatal error:"
+msgstr "Kritisk fejl:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -465,6 +557,9 @@ msgstr ""
 "oprette en mappe i \"Apps/Joplin\" og vil kun skrive/læse filer i denne "
 "mappe. Den får ingen adgang til filer udenfor denne mappe, heller ikke til "
 "andre persondata. Ingen data deles med nogen 3.part."
+
+msgid "Search:"
+msgstr "Søg:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -500,6 +595,67 @@ msgstr "Eksporterer til \"%s\" som \"%s\"-format. Vent venligst..."
 msgid "Could not export notes: %s"
 msgstr "Kunne eksportere noterne: %s"
 
+msgid "&File"
+msgstr "&Fil"
+
+msgid "About Joplin"
+msgstr "Om Joplin"
+
+msgid "Preferences..."
+msgstr "Præferencer..."
+
+msgid "Check for updates..."
+msgstr "Checker om der er opdateringer.."
+
+msgid "Templates"
+msgstr "Skabeloner"
+
+msgid "Import"
+msgstr "Importer"
+
+msgid "Export"
+msgstr "Eksporter"
+
+msgid "Synchronise"
+msgstr "Synkroniser"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "Skjul %s"
+
+msgid "Quit"
+msgstr "Afslut"
+
+msgid "Close Window"
+msgstr "Luk vindue"
+
+msgid "&Edit"
+msgstr "&Ret"
+
+msgid "Copy"
+msgstr "Kopier"
+
+msgid "Cut"
+msgstr "Klip"
+
+msgid "Paste"
+msgstr "Indsæt"
+
+msgid "Select all"
+msgstr "Vælg alt"
+
+msgid "Bold"
+msgstr "Fremhævet"
+
+msgid "Italic"
+msgstr "Kursiv"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Code"
+msgstr "Kode"
+
 msgid "Insert Date Time"
 msgstr "Indsæt dato og tid"
 
@@ -515,11 +671,62 @@ msgstr "Søg i alle noter"
 msgid "Search in current note"
 msgstr "Søg i denne note"
 
+msgid "&View"
+msgstr "&Vis"
+
+msgid "Toggle sidebar"
+msgstr "Slå sidebar til eller fra"
+
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "Start kryptering"
+
+msgid "Toggle editor layout"
+msgstr "Skift editor layout"
+
+msgid "Focus"
+msgstr "Fokuser"
+
+msgid "&Tools"
+msgstr "&Værktøjer"
+
+msgid "&Help"
+msgstr "&Hjælp"
+
+msgid "Website and documentation"
+msgstr "Joplins hjemmeside og dokumentation"
+
+msgid "Joplin Forum"
+msgstr "Joplin forum"
+
+msgid "Make a donation"
+msgstr "Giv en donation"
+
+msgid "Toggle development tools"
+msgstr "Slå udviklingsværktøjer til eller fra"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "Åben %s"
+
+msgid "Exit"
+msgstr "Afslut"
+
 msgid "OK"
 msgstr "OK"
 
 msgid "Cancel"
 msgstr "Fortryd"
+
+msgid "Current version is up-to-date."
+msgstr "Aktuel version er nyeste."
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (pre-release)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "Opdatering er til rådighed, vil du hente den nu?"
@@ -531,6 +738,15 @@ msgstr "Din version: %s"
 #, javascript-format
 msgid "New version: %s"
 msgstr "Ny version: %s"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Full Release Notes"
+msgstr "Fulde udgivelses noter"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Din token er blevet kopieret til udklipsholderen!"
@@ -599,17 +815,24 @@ msgstr ""
 "Denne autoriseringstoken er kun nødvendig for at tillade "
 "tredjepartsprogrammer at tilgå Joplin."
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr ""
-"For at Joplin kan synkronisere med Dropbox, skal man igennem nedenstående "
-"trin:"
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Trin 1: Åben denne  URL i din browser for at autorisere applikationen:"
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Noter og indstillinger er gemt i: %s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Trin 2: Indtast koden, som er oplyst af Dropbox:"
+msgid "Check synchronisation configuration"
+msgstr "Check synkroniserings Indstillinger"
+
+msgid "Browse..."
+msgstr "Gennemse..."
+
+msgid "Back"
+msgstr "Tilbage"
+
+msgid "Apply"
+msgstr "Udfør"
 
 msgid "Submit"
 msgstr "Gem"
@@ -701,6 +924,18 @@ msgstr "Status"
 msgid "Encryption is:"
 msgstr "Kryptering er:"
 
+msgid "Firefox Extension"
+msgstr "Firefox udvidelse"
+
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+msgid "Get it now:"
+msgstr "Få den nu:"
+
+msgid "Usage"
+msgstr "Forbrug"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -730,13 +965,6 @@ msgstr "Indstil alarm:"
 msgid "Template file:"
 msgstr "Skabelonfil:"
 
-msgid "Toggle sidebar"
-msgstr "Slå sidebar til eller fra"
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "Start kryptering"
-
 msgid "New note"
 msgstr "Ny note"
 
@@ -764,6 +992,13 @@ msgstr "En eller flere hovednøgler mangler et kodeord."
 msgid "Set the password"
 msgstr "Indstil kodeord"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
+
 msgid "Location"
 msgstr "Placering"
 
@@ -776,6 +1011,12 @@ msgstr "Notehistore"
 msgid "Markup"
 msgstr "Markup"
 
+msgid "Previous versions of this note"
+msgstr "Tidligere udgaver af denne note"
+
+msgid "Note properties"
+msgstr "Note egenskaber"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
@@ -784,8 +1025,38 @@ msgid "This note has no history"
 msgstr "Denne note har ingen historie"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Ugyldigt- eller ulovligt link eller besked: %s"
+
+msgid "Restore"
+msgstr "Gendan"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Tryk på \"%s\" for at gendanne noten. Den vil blive kopieret til notesbogen "
+"\"%s\". Den nuværende version af noten vil ikke blive erstattet eller ændret."
+
+msgid "Open..."
+msgstr "Åben..."
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Denne fil kunne ikke åbnes: %s"
+
+msgid "Save as..."
+msgstr "Gem som..."
+
+msgid "Copy path to clipboard"
+msgstr "Kopier sti til udklipsholderen"
+
+msgid "Copy Link Address"
+msgstr "Kopier link"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Denne vedhæftning er ikke downloaded eller er ikke dekrypteret endnu."
 
 #, javascript-format
 msgid ""
@@ -793,14 +1064,84 @@ msgid ""
 "note."
 msgstr "Denne note er tom. Klik på \"%s\" for at starte editor og rette noten."
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr "Kun én note kan printes eller eksporteres til PDF ad gangen."
+
+msgid "PDF File"
+msgstr "PDF fil"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Fejl ved åbning af note i editor: %s"
+
+#, fuzzy
+msgid "strong text"
+msgstr "stærk tekst"
+
+msgid "emphasized text"
+msgstr "fremhævet tekst"
+
+msgid "List item"
+msgstr "Listepunkt"
+
+msgid "Insert Hyperlink"
+msgstr "Indsæt hyperlink"
+
+msgid "Attach file"
+msgstr "Vedhæft fil"
+
+msgid "Set alarm"
+msgstr "Indstil alarm"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "I: %s"
+
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+msgid "Numbered List"
+msgstr "Nummeret liste"
+
+msgid "Bulleted List"
+msgstr "Punktliste"
+
+msgid "Checkbox"
+msgstr "Afkrydsningsfelt"
+
+msgid "Heading"
+msgstr "Overskrift"
+
+msgid "Horizontal Rule"
+msgstr "Vandret linje"
+
+msgid "Click to stop external editing"
+msgstr "Klik for at stoppe ekstern redigering"
+
+msgid "Watching..."
+msgstr "Kigger..."
+
+msgid "to-do"
+msgstr "opgave"
+
+msgid "note"
+msgstr "note"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Opretter ny %s..."
+
+msgid "Refresh"
+msgstr "Opfrisk"
+
+msgid "Clear"
+msgstr "Ryd/slet"
+
 msgid "OneDrive Login"
 msgstr "OneDrive login"
 
 msgid "Dropbox Login"
 msgstr "Dropbox Login"
-
-msgid "Import"
-msgstr "Importer"
 
 msgid "Options"
 msgstr "Muligheder"
@@ -838,8 +1179,22 @@ msgstr "Ny notesbog"
 msgid "Rename"
 msgstr "Omdøb"
 
-msgid "Export"
-msgstr "Eksporter"
+msgid "Notebooks"
+msgstr "Notesbøger"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Dekrypterede emner: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Henter ressourcer: %d/%d"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "Vælg hvor sync status skal eksporteres til"
+
+msgid "Retry"
+msgstr "Prøv igen"
 
 msgid "Add or remove tags"
 msgstr "Tilføj eller slet mærker"
@@ -863,8 +1218,24 @@ msgstr "Skift til opgave"
 msgid "Copy Markdown link"
 msgstr "Kopier markdown link"
 
-msgid "PDF File"
-msgstr "PDF fil"
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Slet noten \"%s\"?"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Slet disse %d noter?"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"Skriv titlen på en note for at hoppe til den, eller skriv # efterfulgt af et "
+"mærkenavn, eller @ efterfulgt af en notesbogs navn."
+
+#, fuzzy
+msgid "Goto Anything..."
+msgstr "Gå til hvad som helst..."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -891,6 +1262,43 @@ msgstr "OneDrive Dev (kun test)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Ukendt log niveau: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Ukendt niveau ID: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Kan ikke opdatere token: Godkendelses data mangler. Prøv at starte "
+"synkronisering igen, det kan løse problemet."
+
+msgid "Untitled"
+msgstr "Samlet"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Kunne ikke synkronisere med OneDrive.\n"
+"\n"
+"Denne fejl skyldes ofte brug af OneDrive for Business, hvilket desværre ikke "
+"supporteres af Joplin.\n"
+"\n"
+"Overvej at bruge en privat OneDrive konto."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Kan ikke tilgå %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -931,8 +1339,17 @@ msgstr "Fuldført: %s"
 msgid "Last error: %s"
 msgstr "Sidste fejl: %s"
 
+msgid "Idle"
+msgstr "Ledig"
+
+msgid "In progress"
+msgstr "I gang"
+
 msgid "Encrypted"
 msgstr "Krypteret"
+
+msgid "Encrypted items cannot be modified"
+msgstr "Krypteret emner kan ikke rettes"
 
 msgid "title"
 msgstr "titel"
@@ -952,6 +1369,17 @@ msgstr "Notesbøger kan ikke få navnet \"%s\", da det er en beskyttet titel."
 
 msgid "created date"
 msgstr "oprettet den"
+
+msgid "This note does not have geolocation information."
+msgstr "Denne note har ingen geolokations oplysninger."
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Kan ikke kopiere note til \"%s\" notesbog"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Kan ikke flytte note til \"%s\" notesbog"
 
 #, javascript-format
 msgid ""
@@ -1304,6 +1732,38 @@ msgstr "%d dage"
 msgid "Keep note history for"
 msgstr "Behold note-historie i"
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Ulovlig værdi: \"%s\".  Mulige valg er: %s."
+
+msgid "General"
+msgstr "Generelt"
+
+msgid "Synchronisation"
+msgstr "Synkroniserings"
+
+msgid "Appearance"
+msgstr "Udseende"
+
+msgid "Note"
+msgstr "Note"
+
+msgid "Plugins"
+msgstr "Udvidelser"
+
+msgid "Application"
+msgstr "Program"
+
+msgid "Encryption"
+msgstr "Kryptering"
+
+msgid "Web Clipper"
+msgstr "Web-clipper"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Mærket \"%s\" eksisterer allerede. Vælg venligst et andet navn."
+
 msgid "Joplin Export File"
 msgstr "Joplin eksport fil"
 
@@ -1328,8 +1788,95 @@ msgstr "Fil"
 msgid "Directory"
 msgstr "Indeks"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "Kan ikke åbne \"%s\" modul for format \"%s\""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Specificer import format for %s"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Dette emne krypteret: %s \"%s\". Vent til alle emner er dekrypteret og prøv "
+"igen."
+
+msgid "There is no data to export."
+msgstr "Der er ingen data at eksportere."
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Angiv hvilken notesbog, noter skal importeres til."
+
+msgid "Restored Notes"
+msgstr "Gendannede noter"
+
+msgid "Items that cannot be synchronised"
+msgstr "Emner kan ikke synkroniseres"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. "
+"For at finde disse emner; enten søg efter titel eller ID (som er vist i "
+"klammer herover)"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) kunne ikke uploades: %s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Emnet \"%s\" kunne ikke downloades: %s"
+
+msgid "Items that cannot be decrypted"
+msgstr "Emner der ikke kan synkroniseres"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin kunne ikke dekryptere disse filer efter flere forsøg. De er måske "
+"korrupte eller for store. Disse emner vil forblive på enheden, men Joplin "
+"vil ikke længere prøve at dekryptere dem."
+
+msgid "Sync status (synced items / total items)"
+msgstr "Synk status (synk' emner / emner i alt)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "I alt: %d %d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Konflikter: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Til sletning: %d"
+
+msgid "Folders"
+msgstr "Mapper"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d noter"
+
+msgid "Coming alarms"
+msgstr "Kommende alarmer"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "På %s: %s"
 
 msgid "Permission to use camera"
 msgstr "Tilladelse til at bruge kameraet"
@@ -1348,6 +1895,16 @@ msgstr "Der er ingen noter. Opret note ved at klikke på (+) knappen."
 
 msgid "Delete these notes?"
 msgstr "Slet disse noter?"
+
+msgid "Move to notebook..."
+msgstr "Flyt til notesbog..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Flyt %d noter til notesbogen \"%s\"?"
+
+msgid "Press to set the decryption password."
+msgstr "Klik for at gemme dekrypterings kodeord."
 
 msgid "Clear alarm"
 msgstr "Nulstil alarm"
@@ -1374,22 +1931,38 @@ msgstr "Ny notesbog"
 msgid "Configuration"
 msgstr "Indstillinger"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Dekrypterede emner: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Henter ressourcer: %d/%d"
-
-msgid "Synchronise"
-msgstr "Synkroniser"
-
 msgid "All notes"
 msgstr "Alle noter"
 
-msgid "Notebooks"
-msgstr "Notesbøger"
+msgid "Checking... Please wait."
+msgstr "Tjekker...  Vent venligst."
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Succes! Synkroniseringsindstillinger lader til at være korrekte."
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Fejl. Sørg for at URL, brugernavn, kodeord, osv. er korrekte og at stedet du "
+"vil synkronisere til er tilgængeligt. Den rapporterede fejl var:"
+
+msgid "The application has been authorised!"
+msgstr "Denne app er succesfuldt godkendt!"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Kunne ikke autorisere programmet:\n"
+"\n"
+"%s\n"
+"\n"
+"Prøv igen."
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1410,9 +1983,6 @@ msgid ""
 msgstr ""
 "For at synkronisere til filsystemet skal du give tilladelse til at skrive "
 "til eksternt lager."
-
-msgid "Check synchronisation configuration"
-msgstr "Check synkroniserings Indstillinger"
 
 msgid "Encryption Config"
 msgstr "Krypterings indstillinger"
@@ -1469,11 +2039,16 @@ msgstr "- Kamera: Bruges til at tage et billede og vedhæfte det til en note."
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Placering: Bruges til at vedhæfte GPS-informationer til en note."
 
-msgid "Make a donation"
-msgstr "Giv en donation"
-
 msgid "Joplin website"
 msgstr "Joplins hjemmeside"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "Database v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "Fuld-tekst søgning slået til: %d"
 
 msgid "Login with Dropbox"
 msgstr "Log på med Dropbox"
@@ -1511,6 +2086,12 @@ msgstr "Rediger notesbog"
 msgid "Enter notebook title"
 msgstr "Indtast notesbogstitel"
 
+msgid "Show all"
+msgstr "Vis alt"
+
+msgid "Errors only"
+msgstr "Kun fejl"
+
 msgid "This note has been modified:"
 msgstr "Denne note er ændret:"
 
@@ -1524,9 +2105,6 @@ msgstr "Fortryd ændringer"
 msgid "No item with ID %s"
 msgstr "Intet emne med ID'en %s"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Denne vedhæftning er ikke downloaded eller er ikke dekrypteret endnu."
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
@@ -1537,644 +2115,70 @@ msgstr ""
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Links med \"%s\" protokollen er ikke understøttede"
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr "For at slette et mærke, afmærk de tilhørende noter."
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr "Vælg først en note eller en notesbog der skal slettes."
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr "Tast Ctrl+D eller tast \"exit\" for at afslutte app'en"
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "Annullerer baggrunds synkronisering...  Vent venligst."
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Ulovlig billedtype: %s"
 
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "Kommando findes ikke: %s"
-
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "Kommando \"%s\" er kun til rådighed i GUI tilstand"
-
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "Mangler krævet argument: %s"
-
-#~ msgid "Your choice: "
-#~ msgstr "Dit valg: "
-
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "Forkert svar: %s"
-
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "Destinations format: %s"
-
-#~ msgid "Exports only the given note."
-#~ msgstr "Eksporter kun valgt note."
-
-#~ msgid "Exports only the given notebook."
-#~ msgstr "Eksporter kun valgt notesbog."
-
-#, javascript-format
-#~ msgid "Server is already running on port %d"
-#~ msgstr "Serveren kører allerede på port %d"
-
-#, javascript-format
-#~ msgid "Server is running on port %d"
-#~ msgstr "Serveren kører på port %d"
-
-#~ msgid "Server is not running."
-#~ msgstr "Serveren kører ikke."
-
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Sætter ejerskab <name> af valgt <note> til aktuel [value]. Mulige "
-#~ "ejerskab er:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr "Godkendelse  blev ikke fuldført (modtog ikke godkendelses token)."
-
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr "Ikke godkendt med %s. Indtast venligst manglende koder/info."
-
-#~ msgid "Downloading resources..."
-#~ msgstr "Downloader resurser..."
-
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "Annullerer...  Vent venligst."
-
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "Tast `Joplin help` for alm. info."
-
-#~ msgid "Fatal error:"
-#~ msgstr "Kritisk fejl:"
-
-#~ msgid "Search:"
-#~ msgstr "Søg:"
-
-#~ msgid "&File"
-#~ msgstr "&Fil"
-
-#~ msgid "About Joplin"
-#~ msgstr "Om Joplin"
-
-#~ msgid "Preferences..."
-#~ msgstr "Præferencer..."
-
-#~ msgid "Check for updates..."
-#~ msgstr "Checker om der er opdateringer.."
-
-#~ msgid "Templates"
-#~ msgstr "Skabeloner"
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "Skjul %s"
-
-#~ msgid "Quit"
-#~ msgstr "Afslut"
-
-#~ msgid "Close Window"
-#~ msgstr "Luk vindue"
-
-#~ msgid "&Edit"
-#~ msgstr "&Ret"
-
-#~ msgid "Copy"
-#~ msgstr "Kopier"
-
-#~ msgid "Cut"
-#~ msgstr "Klip"
-
-#~ msgid "Paste"
-#~ msgstr "Indsæt"
-
-#~ msgid "Select all"
-#~ msgstr "Vælg alt"
-
-#~ msgid "Bold"
-#~ msgstr "Fremhævet"
-
-#~ msgid "Italic"
-#~ msgstr "Kursiv"
-
-#~ msgid "Link"
-#~ msgstr "Link"
-
-#~ msgid "Code"
-#~ msgstr "Kode"
-
-#~ msgid "&View"
-#~ msgstr "&Vis"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "Skift editor layout"
-
-#~ msgid "Focus"
-#~ msgstr "Fokuser"
-
-#~ msgid "&Tools"
-#~ msgstr "&Værktøjer"
-
-#~ msgid "&Help"
-#~ msgstr "&Hjælp"
-
-#~ msgid "Website and documentation"
-#~ msgstr "Joplins hjemmeside og dokumentation"
-
-#~ msgid "Joplin Forum"
-#~ msgstr "Joplin forum"
-
-#~ msgid "Toggle development tools"
-#~ msgstr "Slå udviklingsværktøjer til eller fra"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "Åben %s"
-
-#~ msgid "Exit"
-#~ msgstr "Afslut"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "Aktuel version er nyeste."
-
-#, javascript-format
-#~ msgid "%s (pre-release)"
-#~ msgstr "%s (pre-release)"
-
-#~ msgid "Yes"
-#~ msgstr "Ja"
-
-#~ msgid "No"
-#~ msgstr "Nej"
-
-#~ msgid "Full Release Notes"
-#~ msgstr "Fulde udgivelses noter"
-
-#~ msgid "This will open a new screen. Save your current changes?"
-#~ msgstr "Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
-
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "Noter og indstillinger er gemt i: %s"
-
-#~ msgid "Browse..."
-#~ msgstr "Gennemse..."
-
-#~ msgid "Back"
-#~ msgstr "Tilbage"
-
-#~ msgid "Apply"
-#~ msgstr "Udfør"
-
-#~ msgid "Firefox Extension"
-#~ msgstr "Firefox udvidelse"
-
-#~ msgid "Chrome Web Store"
-#~ msgstr "Chrome Web Store"
-
-#~ msgid "Get it now:"
-#~ msgstr "Få den nu:"
-
-#~ msgid "Usage"
-#~ msgstr "Forbrug"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr "Der er ingen notesbog. Opret en ved at klikke på \"Ny Notesbog\"."
-
-#~ msgid "Previous versions of this note"
-#~ msgstr "Tidligere udgaver af denne note"
-
-#~ msgid "Note properties"
-#~ msgstr "Note egenskaber"
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "Ugyldigt- eller ulovligt link eller besked: %s"
-
-#~ msgid "Restore"
-#~ msgstr "Gendan"
-
-#, javascript-format
-#~ msgid ""
-#~ "Click \"%s\" to restore the note. It will be copied in the notebook named "
-#~ "\"%s\". The current version of the note will not be replaced or modified."
-#~ msgstr ""
-#~ "Tryk på \"%s\" for at gendanne noten. Den vil blive kopieret til "
-#~ "notesbogen \"%s\". Den nuværende version af noten vil ikke blive "
-#~ "erstattet eller ændret."
-
-#~ msgid "Open..."
-#~ msgstr "Åben..."
-
-#~ msgid "Save as..."
-#~ msgstr "Gem som..."
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "Kopier sti til udklipsholderen"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "Kopier link"
-
-#~ msgid "Only one note can be printed or exported to PDF at a time."
-#~ msgstr "Kun én note kan printes eller eksporteres til PDF ad gangen."
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "Fejl ved åbning af note i editor: %s"
-
-#, fuzzy
-#~ msgid "strong text"
-#~ msgstr "stærk tekst"
-
-#~ msgid "emphasized text"
-#~ msgstr "fremhævet tekst"
-
-#~ msgid "List item"
-#~ msgstr "Listepunkt"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "Indsæt hyperlink"
-
-#~ msgid "Attach file"
-#~ msgstr "Vedhæft fil"
-
-#~ msgid "Set alarm"
-#~ msgstr "Indstil alarm"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "I: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "Hyperlink"
-
-#~ msgid "Numbered List"
-#~ msgstr "Nummeret liste"
-
-#~ msgid "Bulleted List"
-#~ msgstr "Punktliste"
-
-#~ msgid "Checkbox"
-#~ msgstr "Afkrydsningsfelt"
-
-#~ msgid "Heading"
-#~ msgstr "Overskrift"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "Vandret linje"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "Klik for at stoppe ekstern redigering"
-
-#~ msgid "Watching..."
-#~ msgstr "Kigger..."
-
-#~ msgid "to-do"
-#~ msgstr "opgave"
-
-#~ msgid "note"
-#~ msgstr "note"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "Opretter ny %s..."
-
-#~ msgid "Refresh"
-#~ msgstr "Opfrisk"
-
-#~ msgid "Clear"
-#~ msgstr "Ryd/slet"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr "Vælg hvor sync status skal eksporteres til"
-
-#~ msgid "Retry"
-#~ msgstr "Prøv igen"
-
-#, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "Slet noten \"%s\"?"
-
-#, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "Slet disse %d noter?"
-
-#~ msgid ""
-#~ "Type a note title to jump to it. Or type # followed by a tag name, or @ "
-#~ "followed by a notebook name."
-#~ msgstr ""
-#~ "Skriv titlen på en note for at hoppe til den, eller skriv # efterfulgt af "
-#~ "et mærkenavn, eller @ efterfulgt af en notesbogs navn."
-
-#, fuzzy
-#~ msgid "Goto Anything..."
-#~ msgstr "Gå til hvad som helst..."
-
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "Ukendt log niveau: %s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "Ukendt niveau ID: %s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr ""
-#~ "Kan ikke opdatere token: Godkendelses data mangler. Prøv at starte "
-#~ "synkronisering igen, det kan løse problemet."
-
-#~ msgid "Untitled"
-#~ msgstr "Samlet"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "Kunne ikke synkronisere med OneDrive.\n"
-#~ "\n"
-#~ "Denne fejl skyldes ofte brug af OneDrive for Business, hvilket desværre "
-#~ "ikke supporteres af Joplin.\n"
-#~ "\n"
-#~ "Overvej at bruge en privat OneDrive konto."
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "Kan ikke tilgå %s"
-
-#~ msgid "Idle"
-#~ msgstr "Ledig"
-
-#~ msgid "In progress"
-#~ msgstr "I gang"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "Krypteret emner kan ikke rettes"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "Denne note har ingen geolokations oplysninger."
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "Kan ikke kopiere note til \"%s\" notesbog"
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "Kan ikke flytte note til \"%s\" notesbog"
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "Ulovlig værdi: \"%s\".  Mulige valg er: %s."
-
-#~ msgid "General"
-#~ msgstr "Generelt"
-
-#~ msgid "Synchronisation"
-#~ msgstr "Synkroniserings"
-
-#~ msgid "Appearance"
-#~ msgstr "Udseende"
-
-#~ msgid "Note"
-#~ msgstr "Note"
-
-#~ msgid "Plugins"
-#~ msgstr "Udvidelser"
-
-#~ msgid "Application"
-#~ msgstr "Program"
-
-#~ msgid "Encryption"
-#~ msgstr "Kryptering"
-
-#~ msgid "Web Clipper"
-#~ msgstr "Web-clipper"
-
-#, javascript-format
-#~ msgid "The tag \"%s\" already exists. Please choose a different name."
-#~ msgstr "Mærket \"%s\" eksisterer allerede. Vælg venligst et andet navn."
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "Kan ikke åbne \"%s\" modul for format \"%s\""
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "Specificer import format for %s"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "Dette emne krypteret: %s \"%s\". Vent til alle emner er dekrypteret og "
-#~ "prøv igen."
-
-#~ msgid "There is no data to export."
-#~ msgstr "Der er ingen data at eksportere."
-
-#~ msgid "Restored Notes"
-#~ msgstr "Gendannede noter"
-
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "Emner kan ikke synkroniseres"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "Disse emner bliver på enheden, og bliver ikke overført til synk-modtager. "
-#~ "For at finde disse emner; enten søg efter titel eller ID (som er vist i "
-#~ "klammer herover)"
-
-#, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "%s (%s) kunne ikke uploades: %s"
-
-#, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "Emnet \"%s\" kunne ikke downloades: %s"
-
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "Emner der ikke kan synkroniseres"
-
-#~ msgid ""
-#~ "Joplin failed to decrypt these items multiple times, possibly because "
-#~ "they are corrupted or too large. These items will remain on the device "
-#~ "but Joplin will no longer attempt to decrypt them."
-#~ msgstr ""
-#~ "Joplin kunne ikke dekryptere disse filer efter flere forsøg. De er måske "
-#~ "korrupte eller for store. Disse emner vil forblive på enheden, men Joplin "
-#~ "vil ikke længere prøve at dekryptere dem."
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "Synk status (synk' emner / emner i alt)"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s: %d/%d"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "I alt: %d %d"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "Konflikter: %d"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "Til sletning: %d"
-
-#~ msgid "Folders"
-#~ msgstr "Mapper"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s: %d noter"
-
-#~ msgid "Coming alarms"
-#~ msgstr "Kommende alarmer"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "På %s: %s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "Flyt til notesbog..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "Flyt %d noter til notesbogen \"%s\"?"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "Klik for at gemme dekrypterings kodeord."
-
-#~ msgid "Checking... Please wait."
-#~ msgstr "Tjekker...  Vent venligst."
-
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "Succes! Synkroniseringsindstillinger lader til at være korrekte."
-
-#~ msgid ""
-#~ "Error. Please check that URL, username, password, etc. are correct and "
-#~ "that the sync target is accessible. The reported error was:"
-#~ msgstr ""
-#~ "Fejl. Sørg for at URL, brugernavn, kodeord, osv. er korrekte og at stedet "
-#~ "du vil synkronisere til er tilgængeligt. Den rapporterede fejl var:"
-
-#~ msgid "The application has been authorised!"
-#~ msgstr "Denne app er succesfuldt godkendt!"
-
-#, javascript-format
-#~ msgid ""
-#~ "Could not authorise application:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Please try again."
-#~ msgstr ""
-#~ "Kunne ikke autorisere programmet:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Prøv igen."
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "Database v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "Fuld-tekst søgning slået til: %d"
-
-#~ msgid "Show all"
-#~ msgstr "Vis alt"
-
-#~ msgid "Errors only"
-#~ msgstr "Kun fejl"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "Ulovlig billedtype: %s"
-
-#, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "Opdateret: %s"
-
-#~ msgid "View on map"
-#~ msgstr "Vis på kort"
+msgid "Updated: %s"
+msgstr "Opdateret: %s"
+
+msgid "View on map"
+msgstr "Vis på kort"
 
 # Kilde-URL er en dårlig oversættelse
-#~ msgid "Go to source URL"
-#~ msgstr "Gå til kilde-URL'en"
+msgid "Go to source URL"
+msgstr "Gå til kilde-URL'en"
 
-#~ msgid "Attach..."
-#~ msgstr "Vedhæft..."
+msgid "Attach..."
+msgstr "Vedhæft..."
 
-#~ msgid "Choose an option"
-#~ msgstr "Vælg en mulighed"
+msgid "Choose an option"
+msgstr "Vælg en mulighed"
 
-#~ msgid "Take photo"
-#~ msgstr "Tag et foto"
+msgid "Take photo"
+msgstr "Tag et foto"
 
-#~ msgid "Attach photo"
-#~ msgstr "Vedhæft foto"
+msgid "Attach photo"
+msgstr "Vedhæft foto"
 
-#~ msgid "Attach any file"
-#~ msgstr "Vedhæft fil"
+msgid "Attach any file"
+msgstr "Vedhæft fil"
 
-#~ msgid "Share"
+msgid "Share"
+msgstr "Del"
+
+msgid "Convert to note"
+msgstr "Konverter til note"
+
+msgid "Convert to todo"
+msgstr "Konverter til opgave"
+
+msgid "Properties"
+msgstr "Egenskaber"
+
+msgid "Add body"
+msgstr "Tilføj brødtekst"
+
+msgid "Edit"
+msgstr "Ret"
+
+msgid "Add title"
+msgstr "Tilføj titel"
+
+msgid "Login with OneDrive"
+msgstr "Log på med OneDrive"
+
+msgid "Search"
+msgstr "Søg"
+
+#, fuzzy
+#~ msgid "Share Notes"
+#~ msgstr "Gendannede noter"
+
+#, fuzzy
+#~ msgid "Share Link"
 #~ msgstr "Del"
-
-#~ msgid "Convert to note"
-#~ msgstr "Konverter til note"
-
-#~ msgid "Convert to todo"
-#~ msgstr "Konverter til opgave"
-
-#~ msgid "Properties"
-#~ msgstr "Egenskaber"
-
-#~ msgid "Add body"
-#~ msgstr "Tilføj brødtekst"
-
-#~ msgid "Edit"
-#~ msgstr "Ret"
-
-#~ msgid "Add title"
-#~ msgstr "Tilføj titel"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "Log på med OneDrive"
-
-#~ msgid "Search"
-#~ msgstr "Søg"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "Synkronisering er allerede i gang: Tilstand: %s"

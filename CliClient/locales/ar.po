@@ -14,6 +14,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr "لتحذف الوسم ، أزل الوسم عن الملاحظات التي وسمت به."
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "يرجى اختيار ملاحظة أو دفتر ملاحظات أولاً للتمكن من حذفها."
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "اضغط Ctrl+D أو اكتب \"خروج\" للخروج من التطبيق"
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "يوجد أكثر من عنصر يطابق \"%s\". يرجى تضييق نطاق الاستعلام الذي كتبته."
@@ -36,12 +45,34 @@ msgstr "لا"
 msgid "y"
 msgstr "نعم"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "يجري إلغاء مزامنة الخلفية... فضلاً انتظر."
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "أمر غير موجود: %s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "الأمر \"%s\" متوفر فقط في وضع الواجهة الرسومية"
+
 msgid "Cannot change encrypted item"
 msgstr "لا يمكن تغيير العنصر المشفَّر"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "المعامل المطلوب %s مفقود"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "اختيارك هو: "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "إجابة غير صحيحة: %s"
 
 msgid "Attaches the given file to the note."
 msgstr "يرفق الملف المعطى بالملاحظة."
@@ -155,6 +186,16 @@ msgid ""
 msgstr ""
 "تصدير بيانات Joplin إلى المسار المعطى. سيصدِّر التطبيق تلقائياً كامل قاعدة "
 "البيانات بما في ذلك دفاتر الملاحظات ، الملاحظات ، الوسوم والموارد."
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "التنسيق الوجهة: %s"
+
+msgid "Exports only the given note."
+msgstr "تصدير الملاحظة المعطاة فقط."
+
+msgid "Exports only the given notebook."
+msgstr "تصدير دفتر الملاحظات المعطى فقط."
 
 msgid "Displays a geolocation URL for the note."
 msgstr "عرض رابط URL للموقع الجغرافي للملاحظة."
@@ -348,6 +389,28 @@ msgid ""
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr ""
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr ""
+
+msgid "Server is not running."
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة "
+"هي:\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "يعرض موجزاً عن الملاحظات و دفاتر الملاحظات."
 
@@ -356,6 +419,26 @@ msgstr "يزامن مع المخزن البعيد."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "يزامن مع الوجهة المذكورة (قيمة الإعداد التلقائية هي sync.target)"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "لم تكتمل المصادقة (لم أستلم الرمز المميز للمصادقة)."
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "الخطوة 1: إفتح عنوان URL هذا في المستعرض للتصريح للتطبيق:"
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "الخطوة 2: أدخل الرمز المزوّد من Dropbox:"
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول "
+"المفقودة."
 
 msgid "Synchronisation is already in progress."
 msgstr "المزامنة قيد التقدم بالفعل."
@@ -378,6 +461,12 @@ msgstr "لم نتمكن من تمهيد مكوّن المزامنة."
 
 msgid "Starting synchronisation..."
 msgstr "يجري بدء المزامنة..."
+
+msgid "Downloading resources..."
+msgstr "يجري تنزيل الموارد..."
+
+msgid "Cancelling... Please wait."
+msgstr "الإلغاء جارٍ... فضلاً انتظر."
 
 #, fuzzy
 msgid ""
@@ -439,9 +528,11 @@ msgstr "التلقائية: %s"
 msgid "Possible keys/values:"
 msgstr "المفاتيح/القيم الممكنة:"
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
+msgid "Type `joplin help` for usage information."
+msgstr "أكتب `joplin help` لمعلومات الاستخدام."
+
+msgid "Fatal error:"
+msgstr "خطأ فادح:"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -461,6 +552,9 @@ msgstr ""
 "التطبيق دليلاً في \"Apps/Joplin\" ثم يقوم فقط بقراءة وكتابة الملفات في هذا "
 "الدليل. لن يكون لديه أي وصول لأي ملف خارج هذا الدليل أو لأي بيانات شخصية "
 "أخرى. لن نشارك البيانات مع أي طرف ثالث."
+
+msgid "Search:"
+msgstr "بحث:"
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -495,6 +589,67 @@ msgstr "التصدير إلى \"%s\" بتنسيق \"%s\". فضلاً انتظر.
 msgid "Could not export notes: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "&ملف"
+
+msgid "About Joplin"
+msgstr "حول Joplin"
+
+msgid "Preferences..."
+msgstr ""
+
+msgid "Check for updates..."
+msgstr "البحث جارٍ عن تحديثات..."
+
+msgid "Templates"
+msgstr ""
+
+msgid "Import"
+msgstr "استيراد"
+
+msgid "Export"
+msgstr "تصدير"
+
+msgid "Synchronise"
+msgstr "زامِن"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "أخف %s"
+
+msgid "Quit"
+msgstr "إغلاق"
+
+msgid "Close Window"
+msgstr ""
+
+msgid "&Edit"
+msgstr "ت&حرير"
+
+msgid "Copy"
+msgstr "نسخ"
+
+msgid "Cut"
+msgstr "قص"
+
+msgid "Paste"
+msgstr "لصق"
+
+msgid "Select all"
+msgstr "اختيار الكل"
+
+msgid "Bold"
+msgstr "غامق"
+
+msgid "Italic"
+msgstr "مائل"
+
+msgid "Link"
+msgstr "رابط"
+
+msgid "Code"
+msgstr "رمز"
+
 msgid "Insert Date Time"
 msgstr "إدراج التاريخ والوقت"
 
@@ -510,11 +665,64 @@ msgstr "البحث في كل الملاحظات"
 msgid "Search in current note"
 msgstr "البحث في الملاحظة الحاليّة"
 
+msgid "&View"
+msgstr "&عرض"
+
+msgid "Toggle sidebar"
+msgstr "تبديل الشريط الجانبي"
+
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "قائمة ملاحظات"
+
+msgid "Toggle editor layout"
+msgstr "تبديل تخطيط المحرّر"
+
+msgid "Focus"
+msgstr "تركيز"
+
+msgid "&Tools"
+msgstr "&أدوات"
+
+msgid "&Help"
+msgstr "م&ساعدة"
+
+msgid "Website and documentation"
+msgstr "موقع الويب و التوثيق"
+
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin نسخة %s"
+
+msgid "Make a donation"
+msgstr "تبرَّع"
+
+#, fuzzy
+msgid "Toggle development tools"
+msgstr "قائمة ملاحظات"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "افتح %s"
+
+msgid "Exit"
+msgstr "خروج"
+
 msgid "OK"
 msgstr "موافق"
 
 msgid "Cancel"
 msgstr "إلغاء"
+
+msgid "Current version is up-to-date."
+msgstr "النسخة الحالية محدَّثة."
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (ما قبل الإصدار)"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "يتوفر تحديث ، هل تريد تنزيله الآن؟"
@@ -526,6 +734,15 @@ msgstr "النسخة لديك: %s"
 #, fuzzy, javascript-format
 msgid "New version: %s"
 msgstr "النسخة الجديدة: %s"
+
+msgid "Yes"
+msgstr "نعم"
+
+msgid "No"
+msgstr "لا"
+
+msgid "Full Release Notes"
+msgstr ""
 
 msgid "Token has been copied to the clipboard!"
 msgstr "تم نسخ الرمز المميز إلى الحافظة!"
@@ -592,15 +809,24 @@ msgstr ""
 "هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى "
 "Joplin."
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "الخطوة 1: إفتح عنوان URL هذا في المستعرض للتصريح للتطبيق:"
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "الملاحظات و الإعدادات مخزّنة في: %s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "الخطوة 2: أدخل الرمز المزوّد من Dropbox:"
+msgid "Check synchronisation configuration"
+msgstr "فحص ضبط المزامنة"
+
+msgid "Browse..."
+msgstr "استعراض..."
+
+msgid "Back"
+msgstr "عودة"
+
+msgid "Apply"
+msgstr "تطبيق"
 
 msgid "Submit"
 msgstr "إرسال"
@@ -691,6 +917,18 @@ msgstr "الحالة"
 msgid "Encryption is:"
 msgstr "التشفير هو:"
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
+msgid "Usage"
+msgstr "الاستخدام"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -720,13 +958,6 @@ msgstr "ضبط منبّه:"
 msgid "Template file:"
 msgstr ""
 
-msgid "Toggle sidebar"
-msgstr "تبديل الشريط الجانبي"
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "قائمة ملاحظات"
-
 msgid "New note"
 msgstr "ملاحظة جديدة"
 
@@ -755,6 +986,14 @@ msgstr "أدخل كلمة المرور الرئيسة:"
 msgid "Set the password"
 msgstr "ضبط كلمة المرور"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "لا توجد ملاحظات هنا. أنشئ واحدةً بالضغط على \"ملاحظة جديدة\"."
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
+
 msgid "Location"
 msgstr "المكان"
 
@@ -768,6 +1007,12 @@ msgstr "قائمة ملاحظات"
 msgid "Markup"
 msgstr ""
 
+msgid "Previous versions of this note"
+msgstr ""
+
+msgid "Note properties"
+msgstr "خصائص الملاحظة"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
@@ -777,8 +1022,36 @@ msgid "This note has no history"
 msgstr "جرى تعديل هذه الملاحظة:"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "رابط أو رسالة غير مدعومان: %s"
+
+msgid "Restore"
+msgstr ""
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+
+msgid "Open..."
+msgstr "فتح..."
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+msgid "Save as..."
+msgstr "حفظ باسم..."
+
+msgid "Copy path to clipboard"
+msgstr "نسخ المسار إلى الحافظة"
+
+msgid "Copy Link Address"
+msgstr "نسخ عنوان الرابط"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "لم يجر تنزيل هذا المرفق أو فك تشفيره حتى الآن."
 
 #, javascript-format
 msgid ""
@@ -787,14 +1060,83 @@ msgid ""
 msgstr ""
 "ليس لهذه الملاحظة أي محتوى. اضغط على \"%s\" لتبديل المحرّر وتحرير الملاحظة."
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
+
+msgid "PDF File"
+msgstr "ملف PDF"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
+
+msgid "strong text"
+msgstr "نص مشدَّد"
+
+msgid "emphasized text"
+msgstr "نص مؤكد"
+
+msgid "List item"
+msgstr "عنصر قائمة"
+
+msgid "Insert Hyperlink"
+msgstr "إدراج ارتباط تشعبي"
+
+msgid "Attach file"
+msgstr "إرفاق ملف"
+
+msgid "Set alarm"
+msgstr "ضبط منبّه"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "في: %s"
+
+msgid "Hyperlink"
+msgstr "ارتباط تشعبي"
+
+msgid "Numbered List"
+msgstr "قائمة مرقّمة"
+
+msgid "Bulleted List"
+msgstr "قائمة تعداد نقطي"
+
+msgid "Checkbox"
+msgstr "خانة اختيار"
+
+msgid "Heading"
+msgstr "ترويسة"
+
+msgid "Horizontal Rule"
+msgstr "خط تسطير أفقي"
+
+msgid "Click to stop external editing"
+msgstr "اضغط لإيقاف التحرير خارج التطبيق"
+
+msgid "Watching..."
+msgstr "المراقبة جارية..."
+
+msgid "to-do"
+msgstr "قائمة مهام"
+
+msgid "note"
+msgstr "ملاحظة"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "إنشاء %s جديد ..."
+
+msgid "Refresh"
+msgstr "تحديث"
+
+msgid "Clear"
+msgstr "مسح"
+
 msgid "OneDrive Login"
 msgstr "تسجيل الدخول إلى OneDrive"
 
 msgid "Dropbox Login"
 msgstr "تسجيل الدخول إلى Dropbox"
-
-msgid "Import"
-msgstr "استيراد"
 
 msgid "Options"
 msgstr "خيارات"
@@ -833,8 +1175,22 @@ msgstr "دفتر ملاحظات جديد"
 msgid "Rename"
 msgstr "إعادة تسمية"
 
-msgid "Export"
-msgstr "تصدير"
+msgid "Notebooks"
+msgstr "دفاتر ملاحظات"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "فك تشفير العناصر: %d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "جلب الموارد: %d/%d"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
+
+msgid "Retry"
+msgstr ""
 
 msgid "Add or remove tags"
 msgstr "إضافة أو حذف وسوم"
@@ -858,8 +1214,21 @@ msgstr "التبديل إلى النوع قائمة مهام"
 msgid "Copy Markdown link"
 msgstr "نسخ رابط Markdown"
 
-msgid "PDF File"
-msgstr "ملف PDF"
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "حذف الملاحظة \"%s\" ؟"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "حذف ملاحظات %d هذه ؟"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+
+msgid "Goto Anything..."
+msgstr ""
 
 #, javascript-format
 msgid "Usage: %s"
@@ -886,6 +1255,43 @@ msgstr "OneDrive Dev (للاختبار فقط)"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "مستوى السجل غير معروف: %s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "معرّف مستوى غير معروف: %s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية "
+"قد يحل المشكلة."
+
+msgid "Untitled"
+msgstr "بدون اسم"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"لم تتم المزامنة مع OneDrive.\n"
+"\n"
+"هذا الخطأ يحدث كثيراً عند استخدام OneDrive for Business والذي للأسف لا يمكن "
+"دعمه.\n"
+"\n"
+"يرجى النظر في استخدام حساب OneDrive العادي."
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "لا يمكن الوصول إلى %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -926,8 +1332,17 @@ msgstr "مكتملة: %s"
 msgid "Last error: %s"
 msgstr "آخر خطأ: %s"
 
+msgid "Idle"
+msgstr "خامل"
+
+msgid "In progress"
+msgstr "قيد التقدم"
+
 msgid "Encrypted"
 msgstr "مشفّر"
+
+msgid "Encrypted items cannot be modified"
+msgstr "لا يمكن تعديل العناصر المشفَّرة"
 
 msgid "title"
 msgstr "العنوان"
@@ -947,6 +1362,17 @@ msgstr "لا يمكن تسمية دفتر الملاحظات بـ \"%s\" لأن�
 
 msgid "created date"
 msgstr "تاريخ الإنشاء"
+
+msgid "This note does not have geolocation information."
+msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي."
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "لا يمكن نسخ الملاحظة إلى دفتر الملاحظات \"%s\""
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات \"%s\""
 
 #, javascript-format
 msgid ""
@@ -1292,6 +1718,40 @@ msgstr ""
 msgid "Keep note history for"
 msgstr ""
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "قيمة خيار غير صحيحة: \"%s\". القيم الممكنة هي: %s."
+
+msgid "General"
+msgstr "عام"
+
+msgid "Synchronisation"
+msgstr "المزامنة"
+
+msgid "Appearance"
+msgstr "المظهر"
+
+msgid "Note"
+msgstr "ملاحظة"
+
+msgid "Plugins"
+msgstr ""
+
+msgid "Application"
+msgstr "التطبيق"
+
+#, fuzzy
+msgid "Encryption"
+msgstr "التشفير هو:"
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "خيارات Web clipper"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "الوسم \"%s\" موجود بالفعل. فضلاً إختر اسماً مختلفاً."
+
 msgid "Joplin Export File"
 msgstr "ملف تصدير Joplin"
 
@@ -1318,8 +1778,93 @@ msgstr "ملف"
 msgid "Directory"
 msgstr "دليل"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "فضلاً حدّد تنسيق الاستيراد لـ %s"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"هذا العنصر مشفَّر حالياً: %s \"%s\". فضلاً انتظر فك تشفير العناصر كلها ثم حاول "
+"ثانية."
+
+msgid "There is no data to export."
+msgstr "لا يوجد بيانات للتصدير."
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "فضلاً حدّد دفتر الملاحظات الذي ترغب استيراد الملاحظات إليه."
+
+msgid "Restored Notes"
+msgstr ""
+
+msgid "Items that cannot be synchronised"
+msgstr "العناصر التي لا يمكن مزامنتها"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي "
+"تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين "
+"قوسين)."
+
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "لم نتمكن من فتح هذا الملف: %s"
+
+#, fuzzy
+msgid "Items that cannot be decrypted"
+msgstr "العناصر التي لا يمكن مزامنتها"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+
+msgid "Sync status (synced items / total items)"
+msgstr "حالة المزامنة (العناصر المنجزة / إجمالي العناصر)"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "الإجمالي: %d/%d"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "المتعارضة: %d"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "المعدّة للحذف: %d"
+
+msgid "Folders"
+msgstr "مجلدات"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d ملاحظات"
+
+msgid "Coming alarms"
+msgstr "المنبّهات القادمة"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "في %s: %s"
 
 msgid "Permission to use camera"
 msgstr "الإذن باستخدام الكاميرا"
@@ -1340,6 +1885,16 @@ msgstr "لا توجد ملاحظات حالياً. أنشئ واحدة بالض�
 
 msgid "Delete these notes?"
 msgstr "حذف هذه الملاحظات؟"
+
+msgid "Move to notebook..."
+msgstr "النقل إلى دفتر ملاحظات..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "نقل %d ملاحظات إلى دفتر الملاحظات \"%s\" ؟"
+
+msgid "Press to set the decryption password."
+msgstr "إضغط لضبط كلمة مرور فك التشفير."
 
 msgid "Clear alarm"
 msgstr "مسح المنبّه"
@@ -1368,23 +1923,37 @@ msgstr "دفتر ملاحظات جديد"
 msgid "Configuration"
 msgstr "الضبط"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "فك تشفير العناصر: %d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "جلب الموارد: %d/%d"
-
-msgid "Synchronise"
-msgstr "زامِن"
-
 #, fuzzy
 msgid "All notes"
 msgstr "ملاحظة"
 
-msgid "Notebooks"
-msgstr "دفاتر ملاحظات"
+msgid "Checking... Please wait."
+msgstr "التحقق جارٍ... فضلاً انتظر."
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "نجاح! يبدو أن إعداد المزامنة صحيح."
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"خطأ. فضلاً تحقق من صحة عنوان URL ، اسم المستخدم ، كلمة المرور وغيرها وأن جهة "
+"المزامنة المستهدفة يمكن الوصول إليها. كان الخطأ المبلّغ عنه:"
+
+msgid "The application has been authorised!"
+msgstr "تم التصريح للتطبيق!"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"لم يتم التصريح للتطبيق:\n"
+"%s\n"
+"فضلاً حاول ثانية."
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1403,9 +1972,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-
-msgid "Check synchronisation configuration"
-msgstr "فحص ضبط المزامنة"
 
 msgid "Encryption Config"
 msgstr "ضبط التشفير"
@@ -1462,11 +2028,16 @@ msgstr "- الكاميرا: للسماح بالتقاط صورة و إرفاقه
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- المكان: للسماح بإرفاق معلومات الموقع الجغرافي مع الملاحظات."
 
-msgid "Make a donation"
-msgstr "تبرَّع"
-
 msgid "Joplin website"
 msgstr "موقع ويب Joplin"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "قاعدة البيانات v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS مفعَّلة: %d"
 
 msgid "Login with Dropbox"
 msgstr "تسجيل الدخول عبر Dropbox"
@@ -1506,6 +2077,12 @@ msgstr "تحرير دفتر الملاحظات"
 msgid "Enter notebook title"
 msgstr "عنوان دفتر الملاحظات:"
 
+msgid "Show all"
+msgstr "إظهار الكل"
+
+msgid "Errors only"
+msgstr "الأخطاء فقط"
+
 msgid "This note has been modified:"
 msgstr "جرى تعديل هذه الملاحظة:"
 
@@ -1519,9 +2096,6 @@ msgstr "تجاهل التغييرات"
 msgid "No item with ID %s"
 msgstr "لا يوجد عنصر بالمعرّف %s"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "لم يجر تنزيل هذا المرفق أو فك تشفيره حتى الآن."
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "تطبيق Joplin على الهاتف الجوال لا يدعم حالياً هذا النوع من الربط : %s"
@@ -1530,565 +2104,73 @@ msgstr "تطبيق Joplin على الهاتف الجوال لا يدعم حال�
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr "لتحذف الوسم ، أزل الوسم عن الملاحظات التي وسمت به."
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr "يرجى اختيار ملاحظة أو دفتر ملاحظات أولاً للتمكن من حذفها."
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr "اضغط Ctrl+D أو اكتب \"خروج\" للخروج من التطبيق"
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "يجري إلغاء مزامنة الخلفية... فضلاً انتظر."
-
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "أمر غير موجود: %s"
-
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "الأمر \"%s\" متوفر فقط في وضع الواجهة الرسومية"
-
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "المعامل المطلوب %s مفقود"
-
-#~ msgid "Your choice: "
-#~ msgstr "اختيارك هو: "
-
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "إجابة غير صحيحة: %s"
-
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "التنسيق الوجهة: %s"
-
-#~ msgid "Exports only the given note."
-#~ msgstr "تصدير الملاحظة المعطاة فقط."
-
-#~ msgid "Exports only the given notebook."
-#~ msgstr "تصدير دفتر الملاحظات المعطى فقط."
-
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة "
-#~ "هي:\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr "لم تكتمل المصادقة (لم أستلم الرمز المميز للمصادقة)."
-
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr ""
-#~ "لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول "
-#~ "المفقودة."
-
-#~ msgid "Downloading resources..."
-#~ msgstr "يجري تنزيل الموارد..."
-
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "الإلغاء جارٍ... فضلاً انتظر."
-
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "أكتب `joplin help` لمعلومات الاستخدام."
-
-#~ msgid "Fatal error:"
-#~ msgstr "خطأ فادح:"
-
-#~ msgid "Search:"
-#~ msgstr "بحث:"
-
-#~ msgid "&File"
-#~ msgstr "&ملف"
-
-#~ msgid "About Joplin"
-#~ msgstr "حول Joplin"
-
-#~ msgid "Check for updates..."
-#~ msgstr "البحث جارٍ عن تحديثات..."
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "أخف %s"
-
-#~ msgid "Quit"
-#~ msgstr "إغلاق"
-
-#~ msgid "&Edit"
-#~ msgstr "ت&حرير"
-
-#~ msgid "Copy"
-#~ msgstr "نسخ"
-
-#~ msgid "Cut"
-#~ msgstr "قص"
-
-#~ msgid "Paste"
-#~ msgstr "لصق"
-
-#~ msgid "Select all"
-#~ msgstr "اختيار الكل"
-
-#~ msgid "Bold"
-#~ msgstr "غامق"
-
-#~ msgid "Italic"
-#~ msgstr "مائل"
-
-#~ msgid "Link"
-#~ msgstr "رابط"
-
-#~ msgid "Code"
-#~ msgstr "رمز"
-
-#~ msgid "&View"
-#~ msgstr "&عرض"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "تبديل تخطيط المحرّر"
-
-#~ msgid "Focus"
-#~ msgstr "تركيز"
-
-#~ msgid "&Tools"
-#~ msgstr "&أدوات"
-
-#~ msgid "&Help"
-#~ msgstr "م&ساعدة"
-
-#~ msgid "Website and documentation"
-#~ msgstr "موقع الويب و التوثيق"
-
-#, fuzzy
-#~ msgid "Joplin Forum"
-#~ msgstr "Joplin نسخة %s"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "افتح %s"
-
-#~ msgid "Exit"
-#~ msgstr "خروج"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "النسخة الحالية محدَّثة."
-
-#, javascript-format
-#~ msgid "%s (pre-release)"
-#~ msgstr "%s (ما قبل الإصدار)"
-
-#~ msgid "Yes"
-#~ msgstr "نعم"
-
-#~ msgid "No"
-#~ msgstr "لا"
-
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "الملاحظات و الإعدادات مخزّنة في: %s"
-
-#~ msgid "Browse..."
-#~ msgstr "استعراض..."
-
-#~ msgid "Back"
-#~ msgstr "عودة"
-
-#~ msgid "Apply"
-#~ msgstr "تطبيق"
-
-#~ msgid "Usage"
-#~ msgstr "الاستخدام"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "لا توجد ملاحظات هنا. أنشئ واحدةً بالضغط على \"ملاحظة جديدة\"."
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr ""
-#~ "لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
-
-#~ msgid "Note properties"
-#~ msgstr "خصائص الملاحظة"
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "رابط أو رسالة غير مدعومان: %s"
-
-#~ msgid "Open..."
-#~ msgstr "فتح..."
-
-#~ msgid "Save as..."
-#~ msgstr "حفظ باسم..."
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "نسخ المسار إلى الحافظة"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "نسخ عنوان الرابط"
-
-#~ msgid "Only one note can be printed or exported to PDF at a time."
-#~ msgstr "يمكن طباعة ملاحظة واحدة فقط أو تصديرها إلى PDF كل مرة."
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
-
-#~ msgid "strong text"
-#~ msgstr "نص مشدَّد"
-
-#~ msgid "emphasized text"
-#~ msgstr "نص مؤكد"
-
-#~ msgid "List item"
-#~ msgstr "عنصر قائمة"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "إدراج ارتباط تشعبي"
-
-#~ msgid "Attach file"
-#~ msgstr "إرفاق ملف"
-
-#~ msgid "Set alarm"
-#~ msgstr "ضبط منبّه"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "في: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "ارتباط تشعبي"
-
-#~ msgid "Numbered List"
-#~ msgstr "قائمة مرقّمة"
-
-#~ msgid "Bulleted List"
-#~ msgstr "قائمة تعداد نقطي"
-
-#~ msgid "Checkbox"
-#~ msgstr "خانة اختيار"
-
-#~ msgid "Heading"
-#~ msgstr "ترويسة"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "خط تسطير أفقي"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "اضغط لإيقاف التحرير خارج التطبيق"
-
-#~ msgid "Watching..."
-#~ msgstr "المراقبة جارية..."
-
-#~ msgid "to-do"
-#~ msgstr "قائمة مهام"
-
-#~ msgid "note"
-#~ msgstr "ملاحظة"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "إنشاء %s جديد ..."
-
-#~ msgid "Refresh"
-#~ msgstr "تحديث"
-
-#~ msgid "Clear"
-#~ msgstr "مسح"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة"
-
-#, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "حذف الملاحظة \"%s\" ؟"
-
-#, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "حذف ملاحظات %d هذه ؟"
-
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "مستوى السجل غير معروف: %s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "معرّف مستوى غير معروف: %s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr ""
-#~ "لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة "
-#~ "ثانية قد يحل المشكلة."
-
-#~ msgid "Untitled"
-#~ msgstr "بدون اسم"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "لم تتم المزامنة مع OneDrive.\n"
-#~ "\n"
-#~ "هذا الخطأ يحدث كثيراً عند استخدام OneDrive for Business والذي للأسف لا "
-#~ "يمكن دعمه.\n"
-#~ "\n"
-#~ "يرجى النظر في استخدام حساب OneDrive العادي."
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "لا يمكن الوصول إلى %s"
-
-#~ msgid "Idle"
-#~ msgstr "خامل"
-
-#~ msgid "In progress"
-#~ msgstr "قيد التقدم"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "لا يمكن تعديل العناصر المشفَّرة"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي."
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "لا يمكن نسخ الملاحظة إلى دفتر الملاحظات \"%s\""
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات \"%s\""
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "قيمة خيار غير صحيحة: \"%s\". القيم الممكنة هي: %s."
-
-#~ msgid "General"
-#~ msgstr "عام"
-
-#~ msgid "Synchronisation"
-#~ msgstr "المزامنة"
-
-#~ msgid "Appearance"
-#~ msgstr "المظهر"
-
-#~ msgid "Note"
-#~ msgstr "ملاحظة"
-
-#~ msgid "Application"
-#~ msgstr "التطبيق"
-
-#, fuzzy
-#~ msgid "Encryption"
-#~ msgstr "التشفير هو:"
-
-#, fuzzy
-#~ msgid "Web Clipper"
-#~ msgstr "خيارات Web clipper"
-
-#, javascript-format
-#~ msgid "The tag \"%s\" already exists. Please choose a different name."
-#~ msgstr "الوسم \"%s\" موجود بالفعل. فضلاً إختر اسماً مختلفاً."
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "لا يمكن تحميل وحدة \"%s\" للتنسيق \"%s\""
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "فضلاً حدّد تنسيق الاستيراد لـ %s"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr ""
-#~ "هذا العنصر مشفَّر حالياً: %s \"%s\". فضلاً انتظر فك تشفير العناصر كلها ثم "
-#~ "حاول ثانية."
-
-#~ msgid "There is no data to export."
-#~ msgstr "لا يوجد بيانات للتصدير."
-
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "العناصر التي لا يمكن مزامنتها"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. "
-#~ "لكي تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض "
-#~ "أعلاه بين قوسين)."
+msgid "Unsupported image type: %s"
+msgstr "نوع صورة غير مدعوم: %s"
 
 #, fuzzy, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "لم نتمكن من فتح هذا الملف: %s"
+msgid "Updated: %s"
+msgstr "تم تحديثها: %d."
 
-#, fuzzy, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "لم نتمكن من فتح هذا الملف: %s"
+msgid "View on map"
+msgstr "عرض على الخريطة"
 
-#, fuzzy
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "العناصر التي لا يمكن مزامنتها"
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "حالة المزامنة (العناصر المنجزة / إجمالي العناصر)"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s: %d/%d"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "الإجمالي: %d/%d"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "المتعارضة: %d"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "المعدّة للحذف: %d"
-
-#~ msgid "Folders"
-#~ msgstr "مجلدات"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s: %d ملاحظات"
-
-#~ msgid "Coming alarms"
-#~ msgstr "المنبّهات القادمة"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "في %s: %s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "النقل إلى دفتر ملاحظات..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "نقل %d ملاحظات إلى دفتر الملاحظات \"%s\" ؟"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "إضغط لضبط كلمة مرور فك التشفير."
-
-#~ msgid "Checking... Please wait."
-#~ msgstr "التحقق جارٍ... فضلاً انتظر."
-
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "نجاح! يبدو أن إعداد المزامنة صحيح."
-
-#~ msgid ""
-#~ "Error. Please check that URL, username, password, etc. are correct and "
-#~ "that the sync target is accessible. The reported error was:"
-#~ msgstr ""
-#~ "خطأ. فضلاً تحقق من صحة عنوان URL ، اسم المستخدم ، كلمة المرور وغيرها وأن "
-#~ "جهة المزامنة المستهدفة يمكن الوصول إليها. كان الخطأ المبلّغ عنه:"
-
-#~ msgid "The application has been authorised!"
-#~ msgstr "تم التصريح للتطبيق!"
-
-#, javascript-format
-#~ msgid ""
-#~ "Could not authorise application:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Please try again."
-#~ msgstr ""
-#~ "لم يتم التصريح للتطبيق:\n"
-#~ "%s\n"
-#~ "فضلاً حاول ثانية."
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "قاعدة البيانات v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "FTS مفعَّلة: %d"
-
-#~ msgid "Show all"
-#~ msgstr "إظهار الكل"
-
-#~ msgid "Errors only"
-#~ msgstr "الأخطاء فقط"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "نوع صورة غير مدعوم: %s"
-
-#, fuzzy, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "تم تحديثها: %d."
-
-#~ msgid "View on map"
-#~ msgstr "عرض على الخريطة"
-
-#~ msgid "Go to source URL"
-#~ msgstr "الذهاب إلى عنوان URL المصدر"
+msgid "Go to source URL"
+msgstr "الذهاب إلى عنوان URL المصدر"
 
 #, fuzzy
-#~ msgid "Attach..."
-#~ msgstr "بحث..."
+msgid "Attach..."
+msgstr "بحث..."
 
 #, fuzzy
-#~ msgid "Choose an option"
-#~ msgstr "إظهار خيارات متقدمة"
+msgid "Choose an option"
+msgstr "إظهار خيارات متقدمة"
 
-#~ msgid "Take photo"
-#~ msgstr "التقاط صورة"
+msgid "Take photo"
+msgstr "التقاط صورة"
 
-#~ msgid "Attach photo"
-#~ msgstr "إرفاق صورة"
+msgid "Attach photo"
+msgstr "إرفاق صورة"
 
-#~ msgid "Attach any file"
-#~ msgstr "إرفاق أي ملف"
+msgid "Attach any file"
+msgstr "إرفاق أي ملف"
 
-#~ msgid "Share"
+msgid "Share"
+msgstr "مشاركة"
+
+msgid "Convert to note"
+msgstr "تحويل إلى ملاحظة"
+
+msgid "Convert to todo"
+msgstr "تحويل إلى قائمة مهام"
+
+#, fuzzy
+msgid "Properties"
+msgstr "خصائص الملاحظة"
+
+msgid "Add body"
+msgstr ""
+
+msgid "Edit"
+msgstr "تحرير"
+
+#, fuzzy
+msgid "Add title"
+msgstr "العنوان"
+
+msgid "Login with OneDrive"
+msgstr "تسجيل الدخول عبر OneDrive"
+
+msgid "Search"
+msgstr "بحث"
+
+#, fuzzy
+#~ msgid "Share Notes"
 #~ msgstr "مشاركة"
 
-#~ msgid "Convert to note"
-#~ msgstr "تحويل إلى ملاحظة"
-
-#~ msgid "Convert to todo"
-#~ msgstr "تحويل إلى قائمة مهام"
-
 #, fuzzy
-#~ msgid "Properties"
-#~ msgstr "خصائص الملاحظة"
-
-#~ msgid "Edit"
-#~ msgstr "تحرير"
-
-#, fuzzy
-#~ msgid "Add title"
-#~ msgstr "العنوان"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "تسجيل الدخول عبر OneDrive"
-
-#~ msgid "Search"
-#~ msgstr "بحث"
+#~ msgid "Share Link"
+#~ msgstr "مشاركة"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "المزامنة قيد التقدم بالفعل. الحال: %s"

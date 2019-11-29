@@ -205,6 +205,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 										bridge().openExternal('https://joplinapp.org/e2ee/');
 									}}
 									href="#"
+									style={theme.urlStyle}
 								>
 									https://joplinapp.org/e2ee/
 								</a>

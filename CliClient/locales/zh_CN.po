@@ -15,6 +15,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 
+msgid "To delete a tag, untag the associated notes."
+msgstr "移除相关笔记的标签后才可删除此标签。"
+
+msgid "Please select the note or notebook to be deleted first."
+msgstr "请先选择需要删除的笔记或笔记本。"
+
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "按 Ctrl+D 或输入“exit”退出程序"
+
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "有多条项目符合 “%s”。请缩小您的检索范围。"
@@ -37,12 +46,34 @@ msgstr "否"
 msgid "y"
 msgstr "是"
 
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "正在取消后台同步……请稍候。"
+
+#, javascript-format
+msgid "No such command: %s"
+msgstr "不存在该命令：%s"
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "命令“%s”仅在 GUI 模式下可用"
+
 msgid "Cannot change encrypted item"
 msgstr "无法更改加密项目"
 
 #, javascript-format
+msgid "Missing required argument: %s"
+msgstr "缺失所需参数：%s"
+
+#, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
+
+msgid "Your choice: "
+msgstr "您的选择： "
+
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "此答案无效：%s"
 
 msgid "Attaches the given file to the note."
 msgstr "将选定文件添加到笔记中。"
@@ -153,6 +184,16 @@ msgid ""
 msgstr ""
 "导出 Joplin 数据到选定路径。默认导出包含笔记本、笔记、标签与资源等完整的数据"
 "库。"
+
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "目标格式：%s"
+
+msgid "Exports only the given note."
+msgstr "仅导出选定笔记。"
+
+msgid "Exports only the given notebook."
+msgstr "仅导出选定笔记本。"
 
 msgid "Displays a geolocation URL for the note."
 msgstr "显示该笔记的地理定位 URL 地址。"
@@ -336,6 +377,28 @@ msgstr ""
 "启动，停止或检查API服务。可以通过设置‘api.port’变量指定API服务运行在哪个端口"
 "上。执行命令（%s）。"
 
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "服务已在端口%d上运行"
+
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "服务正在端口%d上运行"
+
+msgid "Server is not running."
+msgstr "服务没有运行。"
+
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n"
+"\n"
+"%s"
+
 msgid "Displays summary about the notes and notebooks."
 msgstr "显示关于笔记与笔记本的概况。"
 
@@ -344,6 +407,24 @@ msgstr "与远程储存同步。"
 
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "同步到所提供的目标（默认为同步目标配置值）"
+
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "认证未完成（未收到认证令牌）。"
+
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
+
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
+
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "步骤二：输入 Dropbox 提供的代码："
+
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "未授予 %s 的权限。请提供缺少的凭据。"
 
 msgid "Synchronisation is already in progress."
 msgstr "已经在同步。"
@@ -366,6 +447,12 @@ msgstr "无法初始化同步。"
 
 msgid "Starting synchronisation..."
 msgstr "开始同步..."
+
+msgid "Downloading resources..."
+msgstr "下载资源中..."
+
+msgid "Cancelling... Please wait."
+msgstr "正在取消... 请稍候。"
 
 #, fuzzy
 msgid ""
@@ -425,9 +512,11 @@ msgstr "默认值: %s"
 msgid "Possible keys/values:"
 msgstr "可用键/值："
 
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
+msgid "Type `joplin help` for usage information."
+msgstr "输入 `joplin help` 获取用量信息。"
+
+msgid "Fatal error:"
+msgstr "严重错误："
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -446,6 +535,9 @@ msgstr ""
 "请在浏览器中打开以下链接激活该应用程序。该应用会建立“Apps/Joplin”文件目录，并"
 "只会读写该目录中的文件。它没有任何权限访问此目录以外的任何文件或个人信息。也"
 "不会与第三方分享任何数据。"
+
+msgid "Search:"
+msgstr "搜索："
 
 msgid ""
 "Welcome to Joplin!\n"
@@ -478,6 +570,67 @@ msgstr "从“%s”导出，导出格式为“%s”。请稍等……"
 msgid "Could not export notes: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "文件 (&F)"
+
+msgid "About Joplin"
+msgstr "关于 Joplin"
+
+msgid "Preferences..."
+msgstr "偏好……"
+
+msgid "Check for updates..."
+msgstr "检查更新..."
+
+msgid "Templates"
+msgstr "模版"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Export"
+msgstr "导出"
+
+msgid "Synchronise"
+msgstr "同步"
+
+#, javascript-format
+msgid "Hide %s"
+msgstr "隐藏 %s"
+
+msgid "Quit"
+msgstr "退出"
+
+msgid "Close Window"
+msgstr "关闭窗口"
+
+msgid "&Edit"
+msgstr "编辑 (&E)"
+
+msgid "Copy"
+msgstr "复制"
+
+msgid "Cut"
+msgstr "剪切"
+
+msgid "Paste"
+msgstr "粘贴"
+
+msgid "Select all"
+msgstr "全选"
+
+msgid "Bold"
+msgstr "加粗"
+
+msgid "Italic"
+msgstr "斜体"
+
+msgid "Link"
+msgstr "链接"
+
+msgid "Code"
+msgstr "代码"
+
 msgid "Insert Date Time"
 msgstr "插入时间"
 
@@ -493,11 +646,62 @@ msgstr "在所有笔记内搜索"
 msgid "Search in current note"
 msgstr "在当前笔记内搜索"
 
+msgid "&View"
+msgstr "界面 (&V)"
+
+msgid "Toggle sidebar"
+msgstr "切换边栏"
+
+msgid "Layout button sequence"
+msgstr ""
+
+#, fuzzy
+msgid "Toggle note list"
+msgstr "笔记列表"
+
+msgid "Toggle editor layout"
+msgstr "切换编辑器布局"
+
+msgid "Focus"
+msgstr "聚焦于"
+
+msgid "&Tools"
+msgstr "工具 (&T)"
+
+msgid "&Help"
+msgstr "帮助 (&H)"
+
+msgid "Website and documentation"
+msgstr "网站与文档"
+
+msgid "Joplin Forum"
+msgstr "Joplin 论坛"
+
+msgid "Make a donation"
+msgstr "捐赠"
+
+msgid "Toggle development tools"
+msgstr "切换开发者工具"
+
+#, javascript-format
+msgid "Open %s"
+msgstr "打开 %s"
+
+msgid "Exit"
+msgstr "退出"
+
 msgid "OK"
 msgstr "确认"
 
 msgid "Cancel"
 msgstr "取消"
+
+msgid "Current version is up-to-date."
+msgstr "当前版本为最新版。"
+
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s 预发行版"
 
 msgid "An update is available, do you want to download it now?"
 msgstr "有更新可用，是否现在进行下载？"
@@ -509,6 +713,16 @@ msgstr "您的版本：%s"
 #, javascript-format
 msgid "New version: %s"
 msgstr "最新版本：%s"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+#, fuzzy
+msgid "Full Release Notes"
+msgstr "已恢复的笔记"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token 令牌已复制到剪贴板！"
@@ -572,15 +786,24 @@ msgid ""
 "access Joplin."
 msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
 
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "笔记与设置文件储存在：%s"
 
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "步骤二：输入 Dropbox 提供的代码："
+msgid "Check synchronisation configuration"
+msgstr "检查同步配置"
+
+msgid "Browse..."
+msgstr "浏览..."
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Apply"
+msgstr "应用"
 
 msgid "Submit"
 msgstr "提交"
@@ -666,6 +889,18 @@ msgstr "状态"
 msgid "Encryption is:"
 msgstr "加密状态："
 
+msgid "Firefox Extension"
+msgstr ""
+
+msgid "Chrome Web Store"
+msgstr ""
+
+msgid "Get it now:"
+msgstr ""
+
+msgid "Usage"
+msgstr "用法提示"
+
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -695,13 +930,6 @@ msgstr "设置提醒："
 msgid "Template file:"
 msgstr "模版文件："
 
-msgid "Toggle sidebar"
-msgstr "切换边栏"
-
-#, fuzzy
-msgid "Toggle note list"
-msgstr "笔记列表"
-
 msgid "New note"
 msgstr "新建笔记"
 
@@ -729,6 +957,13 @@ msgstr "一个或多个主密钥需要密码。"
 msgid "Set the password"
 msgstr "设置密码"
 
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "此处没有任何笔记。点击“新建笔记”创建。"
+
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "此处没有任何笔记本。点击“新建笔记本”创建。"
+
 msgid "Location"
 msgstr "位置"
 
@@ -741,6 +976,12 @@ msgstr "笔记历史"
 msgid "Markup"
 msgstr "标记"
 
+msgid "Previous versions of this note"
+msgstr "此笔记的早期版本"
+
+msgid "Note properties"
+msgstr "笔记属性"
+
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
@@ -749,8 +990,38 @@ msgid "This note has no history"
 msgstr "此笔记没有历史记录"
 
 #, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "不被支持的链接或信息：%s"
+
+msgid "Restore"
+msgstr "恢复"
+
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
+"换或修改。"
+
+msgid "Open..."
+msgstr "打开…"
+
+#, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "该笔记本无法打开：%s"
+
+msgid "Save as..."
+msgstr "另存为…"
+
+msgid "Copy path to clipboard"
+msgstr "复制路径到剪切板"
+
+msgid "Copy Link Address"
+msgstr "复制链接地址"
+
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "该附件没有下载或者尚未解密。"
 
 #, javascript-format
 msgid ""
@@ -758,14 +1029,83 @@ msgid ""
 "note."
 msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
 
+msgid "Only one note can be printed or exported to PDF at a time."
+msgstr "一次只能输出一个笔记或导出为 PDF 文件。"
+
+msgid "PDF File"
+msgstr "PDF 文件"
+
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "打开以下笔记时出现错误：%s"
+
+msgid "strong text"
+msgstr "加粗文本"
+
+msgid "emphasized text"
+msgstr "强调文本"
+
+msgid "List item"
+msgstr "项目列表"
+
+msgid "Insert Hyperlink"
+msgstr "插入超链接"
+
+msgid "Attach file"
+msgstr "附加文件"
+
+msgid "Set alarm"
+msgstr "设置提醒"
+
+#, javascript-format
+msgid "In: %s"
+msgstr "在: %s"
+
+msgid "Hyperlink"
+msgstr "超链接"
+
+msgid "Numbered List"
+msgstr "有序列表"
+
+msgid "Bulleted List"
+msgstr "无序列表"
+
+msgid "Checkbox"
+msgstr "复选框"
+
+msgid "Heading"
+msgstr "标题"
+
+msgid "Horizontal Rule"
+msgstr "水平线"
+
+msgid "Click to stop external editing"
+msgstr "单击以取消外部编辑"
+
+msgid "Watching..."
+msgstr "正在监控变化..."
+
+msgid "to-do"
+msgstr "待办事项"
+
+msgid "note"
+msgstr "笔记"
+
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "新建 %s…"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Clear"
+msgstr "清除"
+
 msgid "OneDrive Login"
 msgstr "登录 OneDrive"
 
 msgid "Dropbox Login"
 msgstr "登录 Dropbox"
-
-msgid "Import"
-msgstr "导入"
 
 msgid "Options"
 msgstr "选项"
@@ -803,8 +1143,22 @@ msgstr "新建笔记本"
 msgid "Rename"
 msgstr "重命名"
 
-msgid "Export"
-msgstr "导出"
+msgid "Notebooks"
+msgstr "笔记本"
+
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "正在解密项目：%d/%d"
+
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "正在获取资源：%d/%d"
+
+msgid "Please select where the sync status should be exported to"
+msgstr "请选择同步状态的导出位置"
+
+msgid "Retry"
+msgstr "重试"
 
 msgid "Add or remove tags"
 msgstr "添加或删除标签"
@@ -828,8 +1182,23 @@ msgstr "切换到待办事项"
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
-msgid "PDF File"
-msgstr "PDF 文件"
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "是否删除笔记“%s”？"
+
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "是否删除这 %d 条笔记？"
+
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
+"记本名字。"
+
+msgid "Goto Anything..."
+msgstr "转到某处……"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -856,6 +1225,40 @@ msgstr "OneDrive 开发版（仅用于测试）"
 
 msgid "WebDAV"
 msgstr "WebDAV"
+
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "未知日志级别：%s"
+
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "未知级别的 ID：%s"
+
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr "无法刷新 Token 令牌：缺少认证数据。重新同步可能会修正此错误。"
+
+msgid "Untitled"
+msgstr "无标题"
+
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"无法与 OneDrive 同步。\n"
+"\n"
+"这种错误通常出现在使用 OneDrive 企业版时，很遗憾它不被支持。\n"
+"\n"
+"请考虑使用 OneDrive 个人版。"
+
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "无法访问 %s"
 
 #, javascript-format
 msgid "Created local items: %d."
@@ -896,8 +1299,17 @@ msgstr "已完成：%s"
 msgid "Last error: %s"
 msgstr "最后错误：%s"
 
+msgid "Idle"
+msgstr "空闲"
+
+msgid "In progress"
+msgstr "正在进行"
+
 msgid "Encrypted"
 msgstr "已加密"
+
+msgid "Encrypted items cannot be modified"
+msgstr "无法修改已加密的项目"
 
 msgid "title"
 msgstr "标题"
@@ -917,6 +1329,17 @@ msgstr "笔记本无法被命名为“%s”，这个标题被留作他用。"
 
 msgid "created date"
 msgstr "创建日期"
+
+msgid "This note does not have geolocation information."
+msgstr "该笔记不包含地理定位信息。"
+
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "无法复制笔记到笔记本“%s”"
+
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "无法移动笔记到笔记本“%s”"
 
 #, javascript-format
 msgid ""
@@ -1260,6 +1683,40 @@ msgstr "%d天"
 msgid "Keep note history for"
 msgstr "保留笔记历史记录"
 
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "无效的选项值：“%s”。可用值有：%s。"
+
+msgid "General"
+msgstr "通用选项"
+
+msgid "Synchronisation"
+msgstr "同步"
+
+msgid "Appearance"
+msgstr "外观"
+
+msgid "Note"
+msgstr "笔记"
+
+msgid "Plugins"
+msgstr "插件"
+
+msgid "Application"
+msgstr "应用程序"
+
+#, fuzzy
+msgid "Encryption"
+msgstr "加密状态："
+
+#, fuzzy
+msgid "Web Clipper"
+msgstr "网页剪辑选项"
+
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "标签“%s”已存在。请选择一个不同的名称。"
+
 msgid "Joplin Export File"
 msgstr "Joplin 导出文件"
 
@@ -1286,8 +1743,91 @@ msgstr "文件"
 msgid "Directory"
 msgstr "文件目录"
 
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "无法加载“%s”模块用于读取“%s”格式"
+
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "请指定 %s 的导入格式"
+
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr "该项目当前已加密：%s“%s”。请等待所有项目解密后再重试。"
+
+msgid "There is no data to export."
+msgstr "没有可导出的数据。"
+
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "请指定导入笔记的目标笔记本。"
+
+msgid "Restored Notes"
+msgstr "已恢复的笔记"
+
+msgid "Items that cannot be synchronised"
+msgstr "无法同步项目"
+
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标题"
+"或 ID（显示在上方括号中）。"
+
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) 无法上传到：%s"
+
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "项目“%s”无法从 %s 中下载"
+
+msgid "Items that cannot be decrypted"
+msgstr "无法解密的项目"
+
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin 多次解密这些项目均已失败，可能是它们太大或已经损坏导致的。这些项目会保"
+"留再设备上，但 Joplin 不会再尝试对它们进行解密。"
+
+msgid "Sync status (synced items / total items)"
+msgstr "同步状态（已同步项目/项目总数）"
+
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s：%d/%d 条"
+
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "总数：%d/%d 条"
+
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "有冲突：%d 条"
+
+#, javascript-format
+msgid "To delete: %d"
+msgstr "将删除：%d 条"
+
+msgid "Folders"
+msgstr "文件夹"
+
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s：%d 条笔记"
+
+msgid "Coming alarms"
+msgstr "临近提醒"
+
+#, javascript-format
+msgid "On %s: %s"
+msgstr "%s：%s"
 
 msgid "Permission to use camera"
 msgstr "使用摄像头的权限"
@@ -1306,6 +1846,16 @@ msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 
 msgid "Delete these notes?"
 msgstr "是否删除这些笔记？"
+
+msgid "Move to notebook..."
+msgstr "移动到笔记本..."
+
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "是否移动 %d 条笔记到笔记本“%s”？"
+
+msgid "Press to set the decryption password."
+msgstr "按此设置解密密码。"
 
 msgid "Clear alarm"
 msgstr "清除提醒"
@@ -1332,22 +1882,38 @@ msgstr "新笔记本"
 msgid "Configuration"
 msgstr "配置"
 
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "正在解密项目：%d/%d"
-
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "正在获取资源：%d/%d"
-
-msgid "Synchronise"
-msgstr "同步"
-
 msgid "All notes"
 msgstr "全部笔记"
 
-msgid "Notebooks"
-msgstr "笔记本"
+msgid "Checking... Please wait."
+msgstr "正在检查... 请稍候。"
+
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "成功！同步配置看起来没问题。"
+
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"发生错误。请检查 URL 、用户名、密码等是否正确，同步目标是否可访问。报告的错误"
+"如下："
+
+msgid "The application has been authorised!"
+msgstr "已成功授予本应用程序权限！"
+
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"无法授权本程序：\n"
+"\n"
+"%s\n"
+"\n"
+"请重试。"
 
 #, javascript-format
 msgid "Decrypted items: %s / %s"
@@ -1366,9 +1932,6 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
-
-msgid "Check synchronisation configuration"
-msgstr "检查同步配置"
 
 msgid "Encryption Config"
 msgstr "加密配置"
@@ -1421,11 +1984,16 @@ msgstr "- 相机：允许拍照并将照片添加到一条笔记中。"
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
 
-msgid "Make a donation"
-msgstr "捐赠"
-
 msgid "Joplin website"
 msgstr "Joplin 官网"
+
+#, javascript-format
+msgid "Database v%s"
+msgstr "数据库 v%s"
+
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS 已开启：%d"
 
 msgid "Login with Dropbox"
 msgstr "通过 Dropbox 登录"
@@ -1464,6 +2032,12 @@ msgstr "编辑笔记本"
 msgid "Enter notebook title"
 msgstr "笔记本标题"
 
+msgid "Show all"
+msgstr "显示全部"
+
+msgid "Errors only"
+msgstr "仅显示错误"
+
 msgid "This note has been modified:"
 msgstr "该笔记已被修改："
 
@@ -1477,9 +2051,6 @@ msgstr "放弃更改"
 msgid "No item with ID %s"
 msgstr "没有 ID 为 %s 的项"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "该附件没有下载或者尚未解密。"
-
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
@@ -1488,623 +2059,72 @@ msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "不支持“%s”协议链接"
 
-#~ msgid "To delete a tag, untag the associated notes."
-#~ msgstr "移除相关笔记的标签后才可删除此标签。"
-
-#~ msgid "Please select the note or notebook to be deleted first."
-#~ msgstr "请先选择需要删除的笔记或笔记本。"
-
-#~ msgid "Press Ctrl+D or type \"exit\" to exit the application"
-#~ msgstr "按 Ctrl+D 或输入“exit”退出程序"
-
-#~ msgid "Cancelling background synchronisation... Please wait."
-#~ msgstr "正在取消后台同步……请稍候。"
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "不支持的图片格式：%s"
 
 #, javascript-format
-#~ msgid "No such command: %s"
-#~ msgstr "不存在该命令：%s"
+msgid "Updated: %s"
+msgstr "已更新：%s"
 
-#, javascript-format
-#~ msgid "The command \"%s\" is only available in GUI mode"
-#~ msgstr "命令“%s”仅在 GUI 模式下可用"
+msgid "View on map"
+msgstr "查看地图"
 
-#, javascript-format
-#~ msgid "Missing required argument: %s"
-#~ msgstr "缺失所需参数：%s"
+msgid "Go to source URL"
+msgstr "定位到源 URL"
 
-#~ msgid "Your choice: "
-#~ msgstr "您的选择： "
+msgid "Attach..."
+msgstr "添附…"
 
-#, javascript-format
-#~ msgid "Invalid answer: %s"
-#~ msgstr "此答案无效：%s"
+msgid "Choose an option"
+msgstr "选择一个选项"
 
-#, javascript-format
-#~ msgid "Destination format: %s"
-#~ msgstr "目标格式：%s"
+msgid "Take photo"
+msgstr "拍照"
 
-#~ msgid "Exports only the given note."
-#~ msgstr "仅导出选定笔记。"
+msgid "Attach photo"
+msgstr "附加照片"
 
-#~ msgid "Exports only the given notebook."
-#~ msgstr "仅导出选定笔记本。"
+msgid "Attach any file"
+msgstr "附加任何文件"
 
-#, javascript-format
-#~ msgid "Server is already running on port %d"
-#~ msgstr "服务已在端口%d上运行"
+msgid "Share"
+msgstr "分享"
 
-#, javascript-format
-#~ msgid "Server is running on port %d"
-#~ msgstr "服务正在端口%d上运行"
+msgid "Convert to note"
+msgstr "转换为笔记"
 
-#~ msgid "Server is not running."
-#~ msgstr "服务没有运行。"
+msgid "Convert to todo"
+msgstr "转换为待办事项"
 
-#, javascript-format
-#~ msgid ""
-#~ "Sets the property <name> of the given <note> to the given [value]. "
-#~ "Possible properties are:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n"
-#~ "\n"
-#~ "%s"
+msgid "Properties"
+msgstr "笔记属性"
 
-#~ msgid ""
-#~ "Authentication was not completed (did not receive an authentication "
-#~ "token)."
-#~ msgstr "认证未完成（未收到认证令牌）。"
+msgid "Add body"
+msgstr "添加body内容"
 
-#, javascript-format
-#~ msgid "Not authentified with %s. Please provide any missing credentials."
-#~ msgstr "未授予 %s 的权限。请提供缺少的凭据。"
+msgid "Edit"
+msgstr "编辑"
 
-#~ msgid "Downloading resources..."
-#~ msgstr "下载资源中..."
+msgid "Add title"
+msgstr "添加标题"
 
-#~ msgid "Cancelling... Please wait."
-#~ msgstr "正在取消... 请稍候。"
+msgid "Login with OneDrive"
+msgstr "通过 OneDrive 登录"
 
-#~ msgid "Type `joplin help` for usage information."
-#~ msgstr "输入 `joplin help` 获取用量信息。"
-
-#~ msgid "Fatal error:"
-#~ msgstr "严重错误："
-
-#~ msgid "Search:"
-#~ msgstr "搜索："
-
-#~ msgid "&File"
-#~ msgstr "文件 (&F)"
-
-#~ msgid "About Joplin"
-#~ msgstr "关于 Joplin"
-
-#~ msgid "Preferences..."
-#~ msgstr "偏好……"
-
-#~ msgid "Check for updates..."
-#~ msgstr "检查更新..."
-
-#~ msgid "Templates"
-#~ msgstr "模版"
-
-#, javascript-format
-#~ msgid "Hide %s"
-#~ msgstr "隐藏 %s"
-
-#~ msgid "Quit"
-#~ msgstr "退出"
-
-#~ msgid "Close Window"
-#~ msgstr "关闭窗口"
-
-#~ msgid "&Edit"
-#~ msgstr "编辑 (&E)"
-
-#~ msgid "Copy"
-#~ msgstr "复制"
-
-#~ msgid "Cut"
-#~ msgstr "剪切"
-
-#~ msgid "Paste"
-#~ msgstr "粘贴"
-
-#~ msgid "Select all"
-#~ msgstr "全选"
-
-#~ msgid "Bold"
-#~ msgstr "加粗"
-
-#~ msgid "Italic"
-#~ msgstr "斜体"
-
-#~ msgid "Link"
-#~ msgstr "链接"
-
-#~ msgid "Code"
-#~ msgstr "代码"
-
-#~ msgid "&View"
-#~ msgstr "界面 (&V)"
-
-#~ msgid "Toggle editor layout"
-#~ msgstr "切换编辑器布局"
-
-#~ msgid "Focus"
-#~ msgstr "聚焦于"
-
-#~ msgid "&Tools"
-#~ msgstr "工具 (&T)"
-
-#~ msgid "&Help"
-#~ msgstr "帮助 (&H)"
-
-#~ msgid "Website and documentation"
-#~ msgstr "网站与文档"
-
-#~ msgid "Joplin Forum"
-#~ msgstr "Joplin 论坛"
-
-#~ msgid "Toggle development tools"
-#~ msgstr "切换开发者工具"
-
-#, javascript-format
-#~ msgid "Open %s"
-#~ msgstr "打开 %s"
-
-#~ msgid "Exit"
-#~ msgstr "退出"
-
-#~ msgid "Current version is up-to-date."
-#~ msgstr "当前版本为最新版。"
-
-#, javascript-format
-#~ msgid "%s (pre-release)"
-#~ msgstr "%s 预发行版"
-
-#~ msgid "Yes"
-#~ msgstr "是"
-
-#~ msgid "No"
-#~ msgstr "否"
+msgid "Search"
+msgstr "搜索"
 
 #, fuzzy
-#~ msgid "Full Release Notes"
+#~ msgid "Share Notes"
 #~ msgstr "已恢复的笔记"
 
-#, javascript-format
-#~ msgid "Notes and settings are stored in: %s"
-#~ msgstr "笔记与设置文件储存在：%s"
-
-#~ msgid "Browse..."
-#~ msgstr "浏览..."
-
-#~ msgid "Back"
-#~ msgstr "返回"
-
-#~ msgid "Apply"
-#~ msgstr "应用"
-
-#~ msgid "Usage"
-#~ msgstr "用法提示"
-
-#~ msgid "No notes in here. Create one by clicking on \"New note\"."
-#~ msgstr "此处没有任何笔记。点击“新建笔记”创建。"
-
-#~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
-#~ msgstr "此处没有任何笔记本。点击“新建笔记本”创建。"
-
-#~ msgid "Previous versions of this note"
-#~ msgstr "此笔记的早期版本"
-
-#~ msgid "Note properties"
-#~ msgstr "笔记属性"
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "不被支持的链接或信息：%s"
-
-#~ msgid "Restore"
-#~ msgstr "恢复"
-
-#, javascript-format
-#~ msgid ""
-#~ "Click \"%s\" to restore the note. It will be copied in the notebook named "
-#~ "\"%s\". The current version of the note will not be replaced or modified."
-#~ msgstr ""
-#~ "单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被"
-#~ "替换或修改。"
-
-#~ msgid "Open..."
-#~ msgstr "打开…"
-
-#~ msgid "Save as..."
-#~ msgstr "另存为…"
-
-#~ msgid "Copy path to clipboard"
-#~ msgstr "复制路径到剪切板"
-
-#~ msgid "Copy Link Address"
-#~ msgstr "复制链接地址"
-
-#~ msgid "Only one note can be printed or exported to PDF at a time."
-#~ msgstr "一次只能输出一个笔记或导出为 PDF 文件。"
-
-#, javascript-format
-#~ msgid "Error opening note in editor: %s"
-#~ msgstr "打开以下笔记时出现错误：%s"
-
-#~ msgid "strong text"
-#~ msgstr "加粗文本"
-
-#~ msgid "emphasized text"
-#~ msgstr "强调文本"
-
-#~ msgid "List item"
-#~ msgstr "项目列表"
-
-#~ msgid "Insert Hyperlink"
-#~ msgstr "插入超链接"
-
-#~ msgid "Attach file"
-#~ msgstr "附加文件"
-
-#~ msgid "Set alarm"
-#~ msgstr "设置提醒"
-
-#, javascript-format
-#~ msgid "In: %s"
-#~ msgstr "在: %s"
-
-#~ msgid "Hyperlink"
-#~ msgstr "超链接"
-
-#~ msgid "Numbered List"
-#~ msgstr "有序列表"
-
-#~ msgid "Bulleted List"
-#~ msgstr "无序列表"
-
-#~ msgid "Checkbox"
-#~ msgstr "复选框"
-
-#~ msgid "Heading"
-#~ msgstr "标题"
-
-#~ msgid "Horizontal Rule"
-#~ msgstr "水平线"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "单击以取消外部编辑"
-
-#~ msgid "Watching..."
-#~ msgstr "正在监控变化..."
-
-#~ msgid "to-do"
-#~ msgstr "待办事项"
-
-#~ msgid "note"
-#~ msgstr "笔记"
-
-#, javascript-format
-#~ msgid "Creating new %s..."
-#~ msgstr "新建 %s…"
-
-#~ msgid "Refresh"
-#~ msgstr "刷新"
-
-#~ msgid "Clear"
-#~ msgstr "清除"
-
-#~ msgid "Please select where the sync status should be exported to"
-#~ msgstr "请选择同步状态的导出位置"
-
-#~ msgid "Retry"
-#~ msgstr "重试"
-
-#, javascript-format
-#~ msgid "Delete note \"%s\"?"
-#~ msgstr "是否删除笔记“%s”？"
-
-#, javascript-format
-#~ msgid "Delete these %d notes?"
-#~ msgstr "是否删除这 %d 条笔记？"
-
-#~ msgid ""
-#~ "Type a note title to jump to it. Or type # followed by a tag name, or @ "
-#~ "followed by a notebook name."
-#~ msgstr ""
-#~ "输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个"
-#~ "笔记本名字。"
-
-#~ msgid "Goto Anything..."
-#~ msgstr "转到某处……"
-
-#, javascript-format
-#~ msgid "Unknown log level: %s"
-#~ msgstr "未知日志级别：%s"
-
-#, javascript-format
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "未知级别的 ID：%s"
-
-#~ msgid ""
-#~ "Cannot refresh token: authentication data is missing. Starting the "
-#~ "synchronisation again may fix the problem."
-#~ msgstr "无法刷新 Token 令牌：缺少认证数据。重新同步可能会修正此错误。"
-
-#~ msgid "Untitled"
-#~ msgstr "无标题"
-
-#~ msgid ""
-#~ "Could not synchronize with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "无法与 OneDrive 同步。\n"
-#~ "\n"
-#~ "这种错误通常出现在使用 OneDrive 企业版时，很遗憾它不被支持。\n"
-#~ "\n"
-#~ "请考虑使用 OneDrive 个人版。"
-
-#, javascript-format
-#~ msgid "Cannot access %s"
-#~ msgstr "无法访问 %s"
-
-#~ msgid "Idle"
-#~ msgstr "空闲"
-
-#~ msgid "In progress"
-#~ msgstr "正在进行"
-
-#~ msgid "Encrypted items cannot be modified"
-#~ msgstr "无法修改已加密的项目"
-
-#~ msgid "This note does not have geolocation information."
-#~ msgstr "该笔记不包含地理定位信息。"
-
-#, javascript-format
-#~ msgid "Cannot copy note to \"%s\" notebook"
-#~ msgstr "无法复制笔记到笔记本“%s”"
-
-#, javascript-format
-#~ msgid "Cannot move note to \"%s\" notebook"
-#~ msgstr "无法移动笔记到笔记本“%s”"
-
-#, javascript-format
-#~ msgid "Invalid option value: \"%s\". Possible values are: %s."
-#~ msgstr "无效的选项值：“%s”。可用值有：%s。"
-
-#~ msgid "General"
-#~ msgstr "通用选项"
-
-#~ msgid "Synchronisation"
-#~ msgstr "同步"
-
-#~ msgid "Appearance"
-#~ msgstr "外观"
-
-#~ msgid "Note"
-#~ msgstr "笔记"
-
-#~ msgid "Plugins"
-#~ msgstr "插件"
-
-#~ msgid "Application"
-#~ msgstr "应用程序"
-
 #, fuzzy
-#~ msgid "Encryption"
-#~ msgstr "加密状态："
-
-#, fuzzy
-#~ msgid "Web Clipper"
-#~ msgstr "网页剪辑选项"
-
-#, javascript-format
-#~ msgid "The tag \"%s\" already exists. Please choose a different name."
-#~ msgstr "标签“%s”已存在。请选择一个不同的名称。"
-
-#, javascript-format
-#~ msgid "Cannot load \"%s\" module for format \"%s\""
-#~ msgstr "无法加载“%s”模块用于读取“%s”格式"
-
-#, javascript-format
-#~ msgid "Please specify import format for %s"
-#~ msgstr "请指定 %s 的导入格式"
-
-#, javascript-format
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr "该项目当前已加密：%s“%s”。请等待所有项目解密后再重试。"
-
-#~ msgid "There is no data to export."
-#~ msgstr "没有可导出的数据。"
-
-#~ msgid "Restored Notes"
-#~ msgstr "已恢复的笔记"
-
-#~ msgid "Items that cannot be synchronised"
-#~ msgstr "无法同步项目"
-
-#~ msgid ""
-#~ "These items will remain on the device but will not be uploaded to the "
-#~ "sync target. In order to find these items, either search for the title or "
-#~ "the ID (which is displayed in brackets above)."
-#~ msgstr ""
-#~ "这些项目将只保存在本设备上，不会上传到同步目标。若需查找这些项目，请搜索标"
-#~ "题或 ID（显示在上方括号中）。"
-
-#, javascript-format
-#~ msgid "%s (%s) could not be uploaded: %s"
-#~ msgstr "%s (%s) 无法上传到：%s"
-
-#, javascript-format
-#~ msgid "Item \"%s\" could not be downloaded: %s"
-#~ msgstr "项目“%s”无法从 %s 中下载"
-
-#~ msgid "Items that cannot be decrypted"
-#~ msgstr "无法解密的项目"
-
-#~ msgid ""
-#~ "Joplin failed to decrypt these items multiple times, possibly because "
-#~ "they are corrupted or too large. These items will remain on the device "
-#~ "but Joplin will no longer attempt to decrypt them."
-#~ msgstr ""
-#~ "Joplin 多次解密这些项目均已失败，可能是它们太大或已经损坏导致的。这些项目"
-#~ "会保留再设备上，但 Joplin 不会再尝试对它们进行解密。"
-
-#~ msgid "Sync status (synced items / total items)"
-#~ msgstr "同步状态（已同步项目/项目总数）"
-
-#, javascript-format
-#~ msgid "%s: %d/%d"
-#~ msgstr "%s：%d/%d 条"
-
-#, javascript-format
-#~ msgid "Total: %d/%d"
-#~ msgstr "总数：%d/%d 条"
-
-#, javascript-format
-#~ msgid "Conflicted: %d"
-#~ msgstr "有冲突：%d 条"
-
-#, javascript-format
-#~ msgid "To delete: %d"
-#~ msgstr "将删除：%d 条"
-
-#~ msgid "Folders"
-#~ msgstr "文件夹"
-
-#, javascript-format
-#~ msgid "%s: %d notes"
-#~ msgstr "%s：%d 条笔记"
-
-#~ msgid "Coming alarms"
-#~ msgstr "临近提醒"
-
-#, javascript-format
-#~ msgid "On %s: %s"
-#~ msgstr "%s：%s"
-
-#~ msgid "Move to notebook..."
-#~ msgstr "移动到笔记本..."
-
-#, javascript-format
-#~ msgid "Move %d notes to notebook \"%s\"?"
-#~ msgstr "是否移动 %d 条笔记到笔记本“%s”？"
-
-#~ msgid "Press to set the decryption password."
-#~ msgstr "按此设置解密密码。"
-
-#~ msgid "Checking... Please wait."
-#~ msgstr "正在检查... 请稍候。"
-
-#~ msgid "Success! Synchronisation configuration appears to be correct."
-#~ msgstr "成功！同步配置看起来没问题。"
-
-#~ msgid ""
-#~ "Error. Please check that URL, username, password, etc. are correct and "
-#~ "that the sync target is accessible. The reported error was:"
-#~ msgstr ""
-#~ "发生错误。请检查 URL 、用户名、密码等是否正确，同步目标是否可访问。报告的"
-#~ "错误如下："
-
-#~ msgid "The application has been authorised!"
-#~ msgstr "已成功授予本应用程序权限！"
-
-#, javascript-format
-#~ msgid ""
-#~ "Could not authorise application:\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "Please try again."
-#~ msgstr ""
-#~ "无法授权本程序：\n"
-#~ "\n"
-#~ "%s\n"
-#~ "\n"
-#~ "请重试。"
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "数据库 v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "FTS 已开启：%d"
-
-#~ msgid "Show all"
-#~ msgstr "显示全部"
-
-#~ msgid "Errors only"
-#~ msgstr "仅显示错误"
-
-#, javascript-format
-#~ msgid "Unsupported image type: %s"
-#~ msgstr "不支持的图片格式：%s"
-
-#, javascript-format
-#~ msgid "Updated: %s"
-#~ msgstr "已更新：%s"
-
-#~ msgid "View on map"
-#~ msgstr "查看地图"
-
-#~ msgid "Go to source URL"
-#~ msgstr "定位到源 URL"
-
-#~ msgid "Attach..."
-#~ msgstr "添附…"
-
-#~ msgid "Choose an option"
-#~ msgstr "选择一个选项"
-
-#~ msgid "Take photo"
-#~ msgstr "拍照"
-
-#~ msgid "Attach photo"
-#~ msgstr "附加照片"
-
-#~ msgid "Attach any file"
-#~ msgstr "附加任何文件"
-
-#~ msgid "Share"
+#~ msgid "Share Link"
 #~ msgstr "分享"
 
-#~ msgid "Convert to note"
-#~ msgstr "转换为笔记"
-
-#~ msgid "Convert to todo"
-#~ msgstr "转换为待办事项"
-
-#~ msgid "Properties"
-#~ msgstr "笔记属性"
-
-#~ msgid "Add body"
-#~ msgstr "添加body内容"
-
-#~ msgid "Edit"
-#~ msgstr "编辑"
-
-#~ msgid "Add title"
-#~ msgstr "添加标题"
-
-#~ msgid "Login with OneDrive"
-#~ msgstr "通过 OneDrive 登录"
-
-#~ msgid "Search"
-#~ msgstr "搜索"
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "已经在同步。状态：%s"
