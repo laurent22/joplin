@@ -2066,7 +2066,7 @@ msgid "Password cannot be empty"
 msgstr "Passordet kan ikke være tomt"
 
 msgid "Confirm password cannot be empty"
-msgstr "Bekreftet passord kan ikke vært tomt"
+msgstr "Bekreftet passord kan ikke være tomt"
 
 msgid "Enable"
 msgstr "Aktiver"
