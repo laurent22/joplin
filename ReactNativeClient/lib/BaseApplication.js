@@ -612,7 +612,7 @@ class BaseApplication {
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const dir = Setting.value('profileDir');
-		const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
+		const filename = Setting.custom_css_files.JOPLIN_APP;
 		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
