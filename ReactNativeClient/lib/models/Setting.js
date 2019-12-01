@@ -1012,8 +1012,8 @@ Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
 
 Setting.custom_css_files = {
-	JOPLIN_APP: 'userstyle.css',
-	RENDERED_MARKDOWN: 'userchrome.css',
+	JOPLIN_APP: 'userchrome.css',
+	RENDERED_MARKDOWN: 'userstyle.css',
 };
 
 
