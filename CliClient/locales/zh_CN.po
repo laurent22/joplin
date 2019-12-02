@@ -1448,7 +1448,7 @@ msgstr "北极风格"
 
 #, fuzzy
 msgid "Show note counts"
-msgstr "显示托盘图标"
+msgstr "显示笔记数量"
 
 #, fuzzy
 msgid "Editor"
