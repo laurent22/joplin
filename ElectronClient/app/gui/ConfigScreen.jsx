@@ -426,7 +426,7 @@ class ConfigScreenComponent extends React.Component {
 						<label>{md.label()}</label>
 					</div>
 					<button style={buttonStyle} onClick={md.onClick}>
-						Edit
+						{_('Edit')}
 					</button>
 					{descriptionComp}
 				</div>
