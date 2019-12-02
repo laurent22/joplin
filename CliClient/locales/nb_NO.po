@@ -477,10 +477,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> kan være \"add\", \"remove\", \"list\" eller \"notetags\" for
-å sette eller fjerne [tag] fra [note], eller å liste notater forbundet med [tag]. "
-"Kommandoen `tag list` kan brukes til å vise alle merkelappene. (bruk -l for full "
-"visning."
+"<tag-command> kan være \"add\", \"remove\", \"list\" eller \"notetags\" forå "
+"sette eller fjerne [tag] fra [note], eller å liste notater forbundet med "
+"[tag]. Kommandoen `tag list` kan brukes til å vise alle merkelappene. (bruk -"
+"l for full visning."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -1502,6 +1502,7 @@ msgstr "Visning"
 msgid "Split View"
 msgstr "Splitvisning"
 
+#, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
