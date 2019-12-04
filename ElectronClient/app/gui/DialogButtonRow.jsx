@@ -25,7 +25,7 @@ function DialogButtonRow(props) {
 
 	buttonComps.push(
 		<button key="ok" style={theme.buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
-			{_('Apply')}
+			{_('OK')}
 		</button>
 	);
 

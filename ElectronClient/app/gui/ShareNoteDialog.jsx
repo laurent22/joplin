@@ -4,36 +4,45 @@ const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Note = require('lib/models/Note');
+const { reg } = require('lib/registry.js');
 
 function ShareNoteDialog(props) {
+	console.info('Render ShareNoteDialog');
+
 	const [notes, setNotes] = useState({});
-	const [fetchingNoteStatus, setFetchingNoteStatus] = useState('idle');
 
 	const theme = themeStyle(props.theme);
 
 	useEffect(() => {
-		if (fetchingNoteStatus !== 'idle') return;
-		setFetchingNoteStatus('started');
-
 		async function fetchNotes() {
 			const result = [];
 			for (let noteId of props.noteIds) {
 				result.push(await Note.load(noteId));
 			}
-			setFetchingNoteStatus('done');
 			setNotes(result);
 		}
+
 		fetchNotes();
-	});
+	}, [props.noteIds]);
 
 	const buttonRow_click = () => {
 
 	};
 
+	const shareLinkButton_click = async () => {
+		const result = await reg.joplinServerApi().exec('POST', 'shares', { syncTargetId: '0123456789012345678922', noteId: notes[0].id });
+		console.info(result);
+	};
+
+	const removeNoteButton_click = () => {
+
+	};
+
 	const renderNote = (note) => {
+		const removeButton = <button onClick={() => removeNoteButton_click({ noteId: note.id })}><i style={theme.icon} className={'fa fa-times'}></i></button>;
 		return (
-			<div>
-				{note.title}
+			<div key={note.id}>
+				{note.title} {removeButton}
 			</div>
 		);
 	};
@@ -51,6 +60,7 @@ function ShareNoteDialog(props) {
 			<div style={theme.dialogBox}>
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}
+				<button style={theme.buttonStyle} onClick={shareLinkButton_click}>{_('Share Link to Note(s)')}</button>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click}/>
 			</div>
 		</div>
