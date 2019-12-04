@@ -23,11 +23,13 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^16.9.15",
+    "@types/react-dom": "^16.9.4",
     "eslint": "^6.1.0",
     "eslint-plugin-react": "^7.14.3",
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.3"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^2.2.0",
