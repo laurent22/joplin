@@ -89,12 +89,22 @@ https://github.com/laurent22/joplin/blob/master/
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -150,6 +160,9 @@ https://github.com/laurent22/joplin/blob/master/
 	}
 	.header a h1 {
 		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
 	}
 	.content {
 		padding-left: 2em;
@@ -263,8 +276,8 @@ https://github.com/laurent22/joplin/blob/master/
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -273,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Menu">Google Summer of Code 2020</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -320,6 +333,9 @@ https://github.com/laurent22/joplin/blob/master/
 </ul>
 </div>
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a></p>
+<hr>
+<p>🌞 <a href="https://joplinapp.org/gsoc/">Joplin is applying for Google Summer of Code 2020</a> 🌞</p>
+<hr>
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
@@ -367,7 +383,7 @@ https://github.com/laurent22/joplin/blob/master/
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.310/joplin-v1.0.310.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.310/joplin-v1.0.310-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.311/joplin-v1.0.311.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.311/joplin-v1.0.311-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -730,7 +746,7 @@ Details:
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Andros Fenollosa (andros@fenollosa.email)</td>
-<td>94%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
@@ -827,8 +843,8 @@ Details:
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po">tr_TR</a></td>
-<td>Zorbey Doğangüneş (<a href="mailto:zorbeyd@gmail.com">zorbeyd@gmail.com</a>)</td>
-<td>74%</td>
+<td>Hüseyin Fahri Uzun (<a href="mailto:mail@fahriuzun.com">mail@fahriuzun.com</a>)</td>
+<td>92%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
@@ -856,7 +872,7 @@ Details:
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>92%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
@@ -870,7 +886,7 @@ Details:
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td>genneko (<a href="mailto:genneko217@gmail.com">genneko217@gmail.com</a>)</td>
-<td>99%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
