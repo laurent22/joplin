@@ -24,6 +24,10 @@ class ConfigScreenComponent extends React.Component {
 			await shared.checkSyncConfig(this, this.state.settings);
 		};
 
+		this.checkNextcloudApp_ = async () => {
+			await shared.checkNextcloudApp(this, this.state.settings);
+		};
+
 		this.rowStyle_ = {
 			marginBottom: 10,
 		};
@@ -117,10 +121,10 @@ class ConfigScreenComponent extends React.Component {
 
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
-				const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
 				const statusComp = !messages.length ? null : (
 					<div style={statusStyle}>
 						{messages[0]}
@@ -133,6 +137,43 @@ class ConfigScreenComponent extends React.Component {
 						<button disabled={this.state.checkSyncConfigResult === 'checking'} style={theme.buttonStyle} onClick={this.checkSyncConfig_}>
 							{_('Check synchronisation configuration')}
 						</button>
+						{statusComp}
+					</div>
+				);
+			}
+
+			if (syncTargetMd.name === 'nextcloud') {
+				const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
+
+				let status = _('Unknown');
+				let errorMessage = null;
+
+				if (this.state.checkNextcloudAppResult === 'checking') {
+					status = _('Checking...');
+				} else if (syncTarget) {
+					if (syncTarget.uuid) status = _('OK');
+					if (syncTarget.error) {
+						status = _('Error');
+						errorMessage = syncTarget.error;
+					}
+				}
+
+				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' ? null : (
+					<div style={statusStyle}>
+						<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
+						<pre>{errorMessage}</pre>
+					</div>
+				);
+
+				settingComps.push(
+					<div key="nextcloud_app_check" style={this.rowStyle_}>
+						<span style={theme.textStyle}>Joplin Nextcloud App status: </span><span style={theme.textStyle}>{status}</span>
+						&nbsp;&nbsp;
+						<button disabled={this.state.checkNextcloudAppResult === 'checking'} style={theme.buttonStyle} onClick={this.checkNextcloudApp_}>
+							{_('Check Status')}
+						</button>
+						&nbsp;&nbsp;
+						<a style={theme.urlStyle} href="#">[{_('Help')}]</a>
 						{statusComp}
 					</div>
 				);

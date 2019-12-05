@@ -23,17 +23,21 @@ function DialogButtonRow(props) {
 
 	const buttonComps = [];
 
-	buttonComps.push(
-		<button key="ok" style={theme.buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
-			{_('OK')}
-		</button>
-	);
+	if (props.okButtonShow !== false) {
+		buttonComps.push(
+			<button key="ok" style={theme.buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
+				{_('OK')}
+			</button>
+		);
+	}
 
-	buttonComps.push(
-		<button key="cancel" style={Object.assign({}, theme.buttonStyle, { marginLeft: 10 })} onClick={cancelButton_click}>
-			{_('Cancel')}
-		</button>
-	);
+	if (props.cancelButtonShow !== false) {
+		buttonComps.push(
+			<button key="cancel" style={Object.assign({}, theme.buttonStyle, { marginLeft: 10 })} onClick={cancelButton_click}>
+				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}
+			</button>
+		);
+	}
 
 	return <div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>;
 }

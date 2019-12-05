@@ -162,6 +162,8 @@ class Setting extends BaseModel {
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
+			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+
 			'sync.resourceDownloadMode': {
 				value: 'always',
 				type: Setting.TYPE_STRING,

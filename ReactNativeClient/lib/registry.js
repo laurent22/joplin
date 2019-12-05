@@ -2,7 +2,6 @@ const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
-const JoplinServerApi = require('lib/JoplinServerApi.js');
 const { _ } = require('lib/locale.js');
 
 const reg = {};
@@ -34,6 +33,10 @@ reg.showErrorMessageBox = message => {
 reg.resetSyncTarget = (syncTargetId = null) => {
 	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 	delete reg.syncTargets_[syncTargetId];
+};
+
+reg.syncTargetNextcloud = () => {
+	return reg.syncTarget(SyncTargetRegistry.nameToId('nextcloud'));
 };
 
 reg.syncTarget = (syncTargetId = null) => {
@@ -178,18 +181,6 @@ reg.setDb = v => {
 
 reg.db = () => {
 	return reg.db_;
-};
-
-reg.joplinServerApi = () => {
-	if (!reg.joplinServerApi_) {
-		reg.joplinServerApi_ = new JoplinServerApi({
-			baseUrl: () => 'http://nextcloud.local/index.php/apps/joplin/api',
-			username: () => 'admin',
-			password: () => 'admin',
-		});
-	}
-
-	return reg.joplinServerApi_;
 };
 
 module.exports = { reg };
