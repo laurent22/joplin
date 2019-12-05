@@ -617,7 +617,7 @@ class Application extends BaseApplication {
 				console.info(gitInfo);
 			}
 			bridge().showInfoMessageBox(message.join('\n'), {
-				icon: `${bridge().electronApp().buildDir()}/icons/32x32.png`,
+				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
 			});
 		}
 

@@ -177,7 +177,6 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 WebDAV-compatible services that are known to work with Joplin:
 
 - [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
-- [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
