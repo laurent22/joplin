@@ -5,6 +5,14 @@
 - All the applications share the same library, which, for historical reasons, is in ReactNativeClient/lib. This library is copied to the relevant directories when building each app.
 - In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
 
+# TypeScript
+
+Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). Even if you don't write TypeScript code, you will need to build the existing .ts and .tsx files. This is done from the root of the project, by running `npm run typescript-compile`.
+
+If you are modifying TypeScript code, the best is to have the compiler watch for changes from a terminal. To do so, run `npm run typescript-watch`.
+
+All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. If you create a new TypeScript file, make sure you add the generated .js file to .gitignore. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
+
 ## macOS dependencies
 
 	brew install yarn node
@@ -22,7 +30,7 @@
 Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-npm install && cd Tools && npm install
+npm install && npm run typescript-compile && cd Tools && npm install
 ```
 
 # Building the Electron application

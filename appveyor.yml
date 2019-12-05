@@ -13,6 +13,8 @@ install:
   - yarn
 
 build_script:
+  - npm install
+  - npm run typescript-compile
   - ps: cd Tools
   - npm install
   - ps: cd ..\ElectronClient\app
