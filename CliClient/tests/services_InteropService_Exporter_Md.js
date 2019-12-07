@@ -123,10 +123,10 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 
-		// Create a file with the path of note1
-		await shim.fsDriver().copy(`${__dirname}/../tests/support/photo.jpg`, `${exportDir}/folder1/note1.md`);
-
 		await exporter.processItem(Folder, folder1);
+		// Create a file with the path of note1 before processing note1
+		await shim.fsDriver().writeFile(`${exportDir}/folder1/note1.md`, 'Note content', 'utf-8');
+
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
 		expect(Object.keys(exporter.context().notePaths).length).toBe(1, 'There should be 1 note paths in the context.');
