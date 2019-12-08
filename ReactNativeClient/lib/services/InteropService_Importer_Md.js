@@ -1,6 +1,8 @@
+const path = require('path')
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
 const { basename, filename, rtrimSlashes } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
@@ -68,7 +70,21 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			user_updated_time: stat.mtime.getTime(),
 			user_created_time: stat.birthtime.getTime(),
 		};
-		await Note.save(note, { autoTimestamp: false });
+
+		//TODO
+		// - only do this for links which could be valid local paths (not urls)
+		const noteResult = await Note.save(note, { autoTimestamp: false });
+		const regex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))?\)/g;
+		let match;
+		while ((match = regex.exec(noteResult.body)) !== null) {
+			console.log("ATTEMPTING TO ATTACH FILE: ", match[1], "AT POSITION: ", match.index)
+			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
+			const resource = await shim.createResourceFromPath(attachmentPath);
+			const newNoteBody = noteResult.body.replace(match[0], Resource.markdownTag(resource))
+			noteResult.body = newNoteBody
+			await Note.save(noteResult, { autoTimestamp: false });
+		}
+
 	}
 }
 
