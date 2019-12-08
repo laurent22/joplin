@@ -20,7 +20,6 @@ const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
-const { bridge } = require('electron').remote.require('./bridge');
 
 class Setting extends BaseModel {
 	static tableName() {
@@ -433,19 +432,19 @@ class Setting extends BaseModel {
 				onClick: () => {
 					const dir = Setting.value('profileDir');
 					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
-					bridge().openExternal(`file://${dir}/${filename}`);
+					shim.openUrl(`file://${dir}/${filename}`);
 				},
 				type: Setting.TYPE_BUTTON,
 				public: true,
 				appTypes: ['desktop'],
-				label: () => _('Custom stylesheet for rendered markdown'),
+				label: () => _('Custom stylesheet for rendered Markdown'),
 				section: 'appearance',
 			},
 			'style.customCss.joplinApp': {
 				onClick: () => {
 					const dir = Setting.value('profileDir');
 					const filename = Setting.custom_css_files.JOPLIN_APP;
-					bridge().openExternal(`file://${dir}/${filename}`);
+					shim.openUrl(`file://${dir}/${filename}`);
 				},
 				type: Setting.TYPE_BUTTON,
 				public: true,
