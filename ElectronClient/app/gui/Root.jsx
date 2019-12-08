@@ -81,8 +81,8 @@ class RootComponent extends React.Component {
 
 	render() {
 		const navigatorStyle = {
-			width: this.props.size.width,
-			height: this.props.size.height,
+			width: this.props.size.width / this.props.zoomFactor,
+			height: this.props.size.height / this.props.zoomFactor,
 		};
 
 		const screens = {
@@ -101,6 +101,7 @@ class RootComponent extends React.Component {
 const mapStateToProps = state => {
 	return {
 		size: state.windowContentSize,
+		zoomFactor: state.windowContentZoomFactor,
 		appState: state.appState,
 	};
 };

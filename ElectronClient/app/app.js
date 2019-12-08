@@ -22,7 +22,7 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
-const { shell } = require('electron');
+const { shell, webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
@@ -46,6 +46,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	sidebarVisibility: true,
 	noteListVisibility: true,
 	windowContentSize: bridge().windowContentSize(),
+	windowContentZoomFactor: 1,
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
 	noteDevToolsVisible: false,
@@ -107,6 +108,18 @@ class Application extends BaseApplication {
 
 				newState = Object.assign({}, state);
 				newState.windowContentSize = action.size;
+				break;
+
+			case 'WINDOW_CONTENT_ZOOM_FACTOR_SET':
+
+				{
+					const MIN = 0.3;
+					const MAX = 3;
+					const zoomFactor = Math.max(MIN, Math.min(MAX, action.zoomFactor));
+					newState = Object.assign({}, state);
+					newState.windowContentZoomFactor = zoomFactor;
+					webFrame.setZoomFactor(zoomFactor);
+				}
 				break;
 
 			case 'WINDOW_COMMAND':
@@ -970,6 +983,36 @@ class Application extends BaseApplication {
 					label: _('Focus'),
 					screens: ['Main'],
 					submenu: focusItems,
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Actual Size'),
+					click: () => {
+						this.store().dispatch({
+							type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
+							zoomFactor: 1,
+						});
+					},
+					accelerator: 'CommandOrControl+0',
+				}, {
+					label: _('Zoom In'),
+					click: () => {
+						this.store().dispatch({
+							type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
+							zoomFactor: webFrame.getZoomFactor() + 0.1,
+						});
+					},
+					accelerator: 'CommandOrControl+=',
+				}, {
+					label: _('Zoom Out'),
+					click: () => {
+						this.store().dispatch({
+							type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
+							zoomFactor: webFrame.getZoomFactor() - 0.1,
+						});
+					},
+					accelerator: 'CommandOrControl+-',
 				}],
 			},
 			tools: {
