@@ -1,4 +1,5 @@
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -61,30 +62,28 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);
 		const body = await shim.fsDriver().readFile(filePath);
+		let updatedBody = body;
+		const mdImageTagRegex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))?\)/g;
+		let match;
+		while ((match = mdImageTagRegex.exec(body)) !== null) {
+			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
+			if (fs.existsSync(attachmentPath)) {
+				console.info("Attempting to attach file: ", match[1], "at position: ", match.index)
+				const resource = await shim.createResourceFromPath(attachmentPath);
+				updatedBody = updatedBody.replace(match[0], Resource.markdownTag(resource))
+			}
+		}
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: body,
+			body: updatedBody,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
 			user_created_time: stat.birthtime.getTime(),
 		};
 
-		//TODO
-		// - only do this for links which could be valid local paths (not urls)
-		const noteResult = await Note.save(note, { autoTimestamp: false });
-		const regex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))?\)/g;
-		let match;
-		while ((match = regex.exec(noteResult.body)) !== null) {
-			console.log("ATTEMPTING TO ATTACH FILE: ", match[1], "AT POSITION: ", match.index)
-			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
-			const resource = await shim.createResourceFromPath(attachmentPath);
-			const newNoteBody = noteResult.body.replace(match[0], Resource.markdownTag(resource))
-			noteResult.body = newNoteBody
-			await Note.save(noteResult, { autoTimestamp: false });
-		}
-
+		await Note.save(note, { autoTimestamp: false });
 	}
 }
 
