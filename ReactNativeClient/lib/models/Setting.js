@@ -20,7 +20,6 @@ const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
-const fs = require('fs');
 
 class Setting extends BaseModel {
 	static tableName() {
@@ -436,7 +435,7 @@ class Setting extends BaseModel {
 					const filepath = `${dir}/${filename}`;
 					const defaultContents = '/* For styling the rendered Markdown */';
 
-					this.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(filepath, defaultContents);
 				},
 				type: Setting.TYPE_BUTTON,
 				public: true,
@@ -447,11 +446,11 @@ class Setting extends BaseModel {
 			'style.customCss.joplinApp': {
 				onClick: () => {
 					const dir = Setting.value('profileDir');
-					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
+					const filename = Setting.custom_css_files.JOPLIN_APP;
 					const filepath = `${dir}/${filename}`;
-					const defaultContents = '/* For styling the entire Joplin app, except the rendered Markdown */';
+					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
 
-					this.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(filepath, defaultContents);
 				},
 				type: Setting.TYPE_BUTTON,
 				public: true,
@@ -979,20 +978,6 @@ class Setting extends BaseModel {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
-	}
-
-	static openOrCreateFile(filepath, defaultContents) {
-		// If the file doesn't exist, create it
-		if (!fs.existsSync(filepath)) {
-			fs.writeFile(filepath, defaultContents, 'utf-8', (error) => {
-				if (error) {
-					console.error(`error: ${error}`);
-				}
-			});
-		}
-
-		// Open the file
-		shim.openUrl(`file://${filepath}`);
 	}
 }
 
