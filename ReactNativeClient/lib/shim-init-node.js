@@ -358,7 +358,9 @@ function shimInit() {
 
 	shim.openUrl = url => {
 		const { bridge } = require('electron').remote.require('./bridge');
-		bridge().openExternal(url);
+		// Returns true if it opens the file successfully; returns false if it could
+		// not find the file.
+		return bridge().openExternal(url);
 	};
 
 	shim.waitForFrame = () => {};
