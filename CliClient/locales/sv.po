@@ -36,16 +36,16 @@ msgid "No notebook has been specified."
 msgstr "Ingen anteckningsbok har angivits."
 
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 msgid "n"
-msgstr ""
+msgstr "n"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "y"
-msgstr ""
+msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Avbryter bakgrundssynkronisering... vänta."
@@ -606,7 +606,7 @@ msgstr "Exportera till \"%s\" som \"%s\" format. Vänta..."
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Kunde inte exportera anteckning(ar): %s"
 
 #, fuzzy
 msgid "&File"
@@ -616,13 +616,13 @@ msgid "About Joplin"
 msgstr "Om Joplin"
 
 msgid "Preferences..."
-msgstr ""
+msgstr "Inställningar..."
 
 msgid "Check for updates..."
 msgstr "Sök efter uppdateringar..."
 
 msgid "Templates"
-msgstr ""
+msgstr "Mallar"
 
 msgid "Import"
 msgstr "Importera"
@@ -641,7 +641,7 @@ msgid "Quit"
 msgstr "Avsluta"
 
 msgid "Close Window"
-msgstr ""
+msgstr "Stäng fönster"
 
 #, fuzzy
 msgid "&Edit"
@@ -694,7 +694,7 @@ msgid "Toggle sidebar"
 msgstr "Växla sidofältet"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Layout knappsekvens"
 
 #, fuzzy
 msgid "Toggle note list"
@@ -719,14 +719,14 @@ msgstr "Webbplats och dokumentation"
 
 #, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin v%s"
+msgstr "Joplin Forum"
 
 msgid "Make a donation"
-msgstr "Gör en donation"
+msgstr "Lämna en donation"
 
 #, fuzzy
 msgid "Toggle development tools"
-msgstr "Anteckningsboken"
+msgstr "Utvecklingsverktyg"
 
 #, javascript-format
 msgid "Open %s"
@@ -742,7 +742,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 msgid "Current version is up-to-date."
-msgstr "Nuvarande version är uppdaterad."
+msgstr "Nuvarande version är den senaste."
 
 #, javascript-format
 msgid "%s (pre-release)"
@@ -766,7 +766,7 @@ msgid "No"
 msgstr "Nej"
 
 msgid "Full Release Notes"
-msgstr ""
+msgstr "Versionsanteckningar"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Token har kopierats till urklipp!"
@@ -776,11 +776,11 @@ msgstr "Web clipper-tjänsten är aktiverad och inställd för automatisk start.
 
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "Tillstånd: Startad på port %d"
+msgstr "Status: Startad på port %d"
 
 #, javascript-format
 msgid "Status: %s"
-msgstr "Tillstånd: %s"
+msgstr "Status: %s"
 
 msgid "Disable Web Clipper Service"
 msgstr "Inaktivera Web Clipper-tjänsten"
@@ -810,7 +810,7 @@ msgid ""
 "to a particular port."
 msgstr ""
 "Denna tjänst tillåter webbläsarens tillägg att kommunicera med Joplin. När "
-"du aktiverar den kan din brandvägg be dig ge tillstånd till Joplin att "
+"du aktiverar den kan din brandvägg be dig ge Joplin tillstånd att "
 "lyssna på en viss port."
 
 msgid "Step 2: Install the extension"
@@ -823,7 +823,7 @@ msgid "Advanced options"
 msgstr "Avancerade alternativ"
 
 msgid "Authorisation token:"
-msgstr "Auktoriserings token:"
+msgstr "Auktoriseringstoken:"
 
 msgid "Copy token"
 msgstr "Kopiera token"
@@ -836,7 +836,7 @@ msgstr ""
 "integrera med Joplin."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Detta öppnar en ny skärm. Vill du spara dina ändringar?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -921,7 +921,7 @@ msgstr ""
 "krypterades."
 
 msgid "Missing Master Keys"
-msgstr "Saknade huvudnycklar"
+msgstr "Huvudnyckel saknas"
 
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
@@ -940,19 +940,19 @@ msgstr ""
 "aktiverar det finns i dokumentationen:"
 
 msgid "Status"
-msgstr "Tillstånd"
+msgstr "Status"
 
 msgid "Encryption is:"
 msgstr "Kryptering är:"
 
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox tillägg"
 
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Webbutik"
 
 msgid "Get it now:"
-msgstr ""
+msgstr "Skaffe det nu:"
 
 msgid "Usage"
 msgstr "Användning"
@@ -986,7 +986,7 @@ msgid "Set alarm:"
 msgstr "Ställ in alarm:"
 
 msgid "Template file:"
-msgstr ""
+msgstr "Mallfil"
 
 msgid "New note"
 msgstr "Ny anteckning"
@@ -1039,14 +1039,14 @@ msgid "Markup"
 msgstr ""
 
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Tidigare version av denna anteckning"
 
 msgid "Note properties"
 msgstr "Anteckningens egenskaper"
 
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "Anteckningen \"%s\" har återskapats till anteckningsboken \"%s\"."
 
 #, fuzzy
 msgid "This note has no history"
@@ -1057,13 +1057,15 @@ msgid "Unsupported link or message: %s"
 msgstr "Länk eller meddelande stöds inte: %s"
 
 msgid "Restore"
-msgstr ""
+msgstr "Återställ"
 
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
+msgstr "Klicka på \"%s\" för att återställa denna anteckning. "
+"Den blir kopierad till anteckningsboken "\%s\". Nuvarande version "
+"av anteckningen kommer inte bli utbytt eller ändrad."
 
 msgid "Open..."
 msgstr "Öppna..."
@@ -1094,7 +1096,7 @@ msgstr ""
 
 msgid "Only one note can be printed or exported to PDF at a time."
 msgstr ""
-"Endast en anteckning i taget kan bli utskriven eller exporterad till PDF."
+"Endast en anteckning i taget kan skrivas ut eller exporterad till PDF."
 
 msgid "PDF File"
 msgstr "PDF-fil"
@@ -1175,10 +1177,10 @@ msgid "Options"
 msgstr "Inställningar"
 
 msgid "Synchronisation Status"
-msgstr "Synkroniseringstillstånd"
+msgstr "Synkroniseringsstatus"
 
 msgid "Remove"
-msgstr ""
+msgstr "Ta bort"
 
 #, fuzzy, javascript-format
 msgid ""
@@ -1186,8 +1188,8 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Ta bort anteckningsboken? Alla anteckningar och delanteckningsböcker i den "
-"här anteckningsboken tas bort också."
+"Ta bort anteckningsboken \"%s\"?\n" Alla anteckningar och delanteckningsböcker i den "
+"här anteckningsboken kommer tas bort."
 
 msgid "Delete"
 msgstr "Ta bort"
@@ -1218,10 +1220,10 @@ msgid "Fetching resources: %d/%d"
 msgstr "Hämtar resurser: %d/%d"
 
 msgid "Please select where the sync status should be exported to"
-msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
+msgstr "Välj vart synkroniseringsstatus ska exporteras"
 
 msgid "Retry"
-msgstr ""
+msgstr "Försök igen"
 
 msgid "Add or remove tags"
 msgstr "Lägg till eller ta bort taggar"
@@ -1259,9 +1261,11 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"Skriv titeln på en anteckning för att hoppa till den. Eller skriv # följt "
+"av namnet på en tagg, eller @ följt av namnet på en anteckningsbok."
 
 msgid "Goto Anything..."
-msgstr ""
+msgstr "Gå till..."
 
 #, javascript-format
 msgid "Usage: %s"
@@ -1419,17 +1423,17 @@ msgstr ""
 "Läs FAQ för mer information: %s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Tangentbordsläge"
 
 #, fuzzy
 msgid "Default"
 msgstr "Standard: %s"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "Synkroniseringsmål"
@@ -1438,7 +1442,7 @@ msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Målet att synkronisera till. Varje synkroniseringsmål kan ha ytterligare "
+"Mål att synkronisera till. Varje synkroniseringsmål kan ha ytterligare "
 "parametrar som heter `sync.NUM.NAME` (alla dokumenterade nedan)."
 
 msgid "Directory to synchronise with (absolute path)"
@@ -1463,7 +1467,7 @@ msgid "WebDAV password"
 msgstr "WebDAV-lösenord"
 
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Beteende för nedladdning av bilaga"
 
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
@@ -1472,16 +1476,16 @@ msgid ""
 msgstr ""
 
 msgid "Always"
-msgstr ""
+msgstr "Alltid"
 
 msgid "Manual"
-msgstr ""
+msgstr "Manuell"
 
 msgid "Auto"
-msgstr ""
+msgstr "Automatiskt"
 
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Max antal samtidiga anslutningar"
 
 msgid "Language"
 msgstr "Språk"
@@ -1502,16 +1506,16 @@ msgid "Dark"
 msgstr "Mörk"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Drakula"
 
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solariserad ljus"
 
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solariserad mörk"
 
 msgid "Nord"
-msgstr ""
+msgstr "Norr"
 
 #, fuzzy
 msgid "Show note counts"
@@ -1526,7 +1530,7 @@ msgid "Viewer"
 msgstr "Visa"
 
 msgid "Split View"
-msgstr ""
+msgstr "Delad vy"
 
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
@@ -1534,7 +1538,7 @@ msgstr "%s = %s (%s)"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "Inte slutförda att-göra högst upp"
@@ -1568,47 +1572,47 @@ msgid "When creating a new note:"
 msgstr "När du skapar en ny anteckning:"
 
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Aktivera mjuka pauser"
 
 msgid "Enable typographer support"
-msgstr ""
+msgstr "Aktivera typografstöd"
 
 #, fuzzy
 msgid "Enable math expressions"
-msgstr "Aktivera kryptering"
+msgstr "Aktivera matematiska uttryck"
 
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Aktivera ==mark== syntaxen"
 
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Aktiera fotnoter"
 
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Aktivera innehållsförteckning"
 
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Aktivera ~sub~ syntaxen"
 
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Aktivera ^sup^ syntaxen"
 
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Aktivera deflist syntaxen"
 
-msgid "Enable abbreviation syntax"
-msgstr ""
+msgid "Enable abbreviation syntaxen"
+msgstr "Aktivera förkortningssyntaxen"
 
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "Aktivera markdown emojis"
 
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "Aktivera ++insert++ syntaxen"
 
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "Aktivera förälning med flera markeringstabeller "
 
 msgid "Enable Fountain syntax support"
-msgstr ""
+msgstr "Aktivera Fountain syntaxstöd"
 
 msgid "Show tray icon"
 msgstr "Visa fältikon"
@@ -1686,34 +1690,34 @@ msgstr ""
 "standardredigeraren."
 
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "sidstorlek för PDF-export"
 
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 msgid "Letter"
-msgstr ""
+msgstr "Brev"
 
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 msgid "Legal"
-msgstr ""
+msgstr "legal"
 
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Sidorientering fr PDF-export"
 
 msgid "Portrait"
-msgstr ""
+msgstr "Porträtt"
 
 msgid "Landscape"
-msgstr ""
+msgstr "Landskap"
 
 msgid "Custom TLS certificates"
 msgstr "Anpassade TLS-certifikat"
@@ -1748,14 +1752,14 @@ msgid "Enable note history"
 msgstr "Aktivera kryptering"
 
 msgid "days"
-msgstr ""
+msgstr "dagar"
 
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d dagar"
 
 msgid "Keep note history for"
-msgstr ""
+msgstr "Spara anteckningshistorik för "
 
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -1775,7 +1779,7 @@ msgid "Note"
 msgstr "Anteckning"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 msgid "Application"
 msgstr "Avslutar programmet"
@@ -1841,7 +1845,7 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Ange anteckningsboken som anteckningarna ska importeras till."
 
 msgid "Restored Notes"
-msgstr ""
+msgstr "Återskapade anteckningar"
 
 msgid "Items that cannot be synchronised"
 msgstr "Objekt som inte kan synkroniseras"
@@ -1872,9 +1876,12 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
+"Joplin misslyckades att avkryptera dessa objekt fleragånger, det kan bero på "
+" att objektet är skadat eller för stora. Dessa objekt kommer att finnas kvar "
+" på enheten, men Joplin kommer inte längre att försöka avkryptera dessa."
 
 msgid "Sync status (synced items / total items)"
-msgstr "Synkroniseringstillstånd (synkroniserade objekt / totalt antal objekt)"
+msgstr "Synkroniseringsstatus (synkroniserade objekt / totalt antal objekt)"
 
 #, javascript-format
 msgid "%s: %d/%d"
@@ -2010,12 +2017,14 @@ msgid "Type new tags or select from list"
 msgstr "Skriv nya taggar eller välj från listan"
 
 msgid "Warning"
-msgstr ""
+msgstr "Varning"
 
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"För att använda filsystemsynkronisering krävs ditt tillstånd för att skriva "
+" till extern lagring"
 
 msgid "Encryption Config"
 msgstr "Kryptering-konfiguration"
@@ -2026,7 +2035,7 @@ msgstr "Verktyg"
 
 #, fuzzy
 msgid "Sync Status"
-msgstr "Tillstånd"
+msgstr "Synkroniseringsstatus"
 
 msgid "Log"
 msgstr "Logg"
@@ -2039,15 +2048,17 @@ msgid "Export Debug Report"
 msgstr "Exportera felsökningsrapport"
 
 msgid "Fixing search index..."
-msgstr ""
+msgstr "Ordnar sökindex..."
 
 msgid "Fix search index"
-msgstr ""
+msgstr "Ordna sökindex... "
 
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Använd detta för att bygga om sökindexet om det finns problem med sökningen. "
+" Det kan ta lång tid beroende på antalet anteckningar."
 
 #, fuzzy
 msgid "More information"
@@ -2152,7 +2163,7 @@ msgstr ""
 
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Länkar med protokoll \"%s\" stöds inte"
 
 #, javascript-format
 msgid "Unsupported image type: %s"
@@ -2199,7 +2210,7 @@ msgid "Properties"
 msgstr "Anteckningens egenskaper"
 
 msgid "Add body"
-msgstr ""
+msgstr "Lägg till text"
 
 msgid "Edit"
 msgstr "Redigera"
@@ -2215,136 +2226,136 @@ msgid "Search"
 msgstr "Sök"
 
 #, fuzzy
-#~ msgid "Share Notes"
-#~ msgstr "Dela"
+msgid "Share Notes"
+msgstr "Dela anteckning"
 
 #, fuzzy
-#~ msgid "Share Link"
-#~ msgstr "Dela"
+msgid "Share Link"
+msgstr "Dela länk"
 
-#~ msgid "Synchronisation is already in progress. State: %s"
-#~ msgstr "Synkronisering pågår redan. Tillstånd: %s"
-
-#, fuzzy
-#~ msgid "Confirm master password:"
-#~ msgstr "Ange huvudlösenord:"
+msgid "Synchronisation is already in progress. State: %s"
+msgstr "Synkronisering pågår redan. Tillstånd: %s"
 
 #, fuzzy
-#~ msgid "Confirm password"
-#~ msgstr "Ange huvudlösenord:"
+msgid "Confirm master password:"
+msgstr "Ange huvudlösenord:"
 
 #, fuzzy
-#~ msgid "Missing required argument: note"
-#~ msgstr "Saknade obligatoriskt argument: %s"
-
-#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
-#~ msgstr ""
-#~ "Börjar redigera anteckning. Stäng redigeraren för att komma tillbaka till "
-#~ "prompten."
-
-#~ msgid "Note has been saved."
-#~ msgstr "Anteckning har sparats."
-
-#~ msgid "Sidebar"
-#~ msgstr "Sidofältet"
-
-#~ msgid "Note title"
-#~ msgstr "Rubriken"
-
-#~ msgid "Note body"
-#~ msgstr "Texten"
-
-#~ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-#~ msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
-
-#~ msgid "Synchronisation status"
-#~ msgstr "Synkroniseringstillstånd"
-
-#~ msgid "Print"
-#~ msgstr "Skriv ut"
-
-#~ msgid "General Options"
-#~ msgstr "Allmänna inställningar"
-
-#~ msgid "Encryption options"
-#~ msgstr "Krypteringsinställningar"
+msgid "Confirm password"
+msgstr "Ange huvudlösenord:"
 
 #, fuzzy
-#~ msgid "Insert template"
-#~ msgstr "Infoga datumtid"
+msgid "Missing required argument: note"
+msgstr "Saknade obligatoriskt argument: %s"
+
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+"Börjar redigera anteckning. Stäng redigeraren för att komma tillbaka till "
+"prompten."
+
+msgid "Note has been saved."
+msgstr "Anteckning har sparats."
+
+msgid "Sidebar"
+msgstr "Sidofältet"
+
+msgid "Note title"
+msgstr "Rubriken"
+
+msgid "Note body"
+msgstr "Texten"
+
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
+
+msgid "Synchronisation status"
+msgstr "Synkroniseringsstatus"
+
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "General Options"
+msgstr "Allmänna inställningar"
+
+msgid "Encryption options"
+msgstr "Krypteringsinställningar"
 
 #, fuzzy
-#~ msgid "Open template directory"
-#~ msgstr "Joplin-exporteringskatalog"
+msgid "Insert template"
+msgstr "Infoga datumtid"
 
 #, fuzzy
-#~ msgid "Revision: %s (%s)"
-#~ msgstr "%s %s (%s)"
-
-#~ msgid "%s %s (%s, %s)"
-#~ msgstr "%s %s (%s, %s)"
-
-#~ msgid "Encryption Options"
-#~ msgstr "Krypteringsinställningar"
-
-#~ msgid "Clipper Options"
-#~ msgstr "Clipper-inställningar"
+msgid "Open template directory"
+msgstr "Joplin-exporteringskatalog"
 
 #, fuzzy
-#~ msgid "Information"
-#~ msgstr "Konfiguration"
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+msgid "Encryption Options"
+msgstr "Krypteringsinställningar"
+
+msgid "Clipper Options"
+msgstr "Clipper-inställningar"
 
 #, fuzzy
-#~ msgid "Permission to write to external storage"
-#~ msgstr "Tillåtelse att använda kameran"
+msgid "Information"
+msgstr "Konfiguration"
 
-#~ msgid "Cancel synchronisation"
-#~ msgstr "Avbryt synkronisering"
+#, fuzzy
+msgid "Permission to write to external storage"
+msgstr "Tillåtelse att använda kameran"
 
-#~ msgid "Hide metadata"
-#~ msgstr "Dölj metadata"
+msgid "Cancel synchronisation"
+msgstr "Avbryt synkronisering"
 
-#~ msgid "Show metadata"
-#~ msgstr "Visa metadata"
+msgid "Hide metadata"
+msgstr "Dölj metadata"
 
-#~ msgid "Delete notebook"
-#~ msgstr "Ta bort anteckningsbok"
+msgid "Show metadata"
+msgstr "Visa metadata"
 
-#~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
-#~ msgstr ""
-#~ "Klicka på (+)-knappen för att skapa en ny anteckning eller "
-#~ "anteckningsbok. Klicka på sidomenyn för att få tillgång till dina "
-#~ "befintliga anteckningsböcker."
+msgid "Delete notebook"
+msgstr "Ta bort anteckningsbok"
 
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr ""
-#~ "Du har för närvarande ingen anteckningsbok. Skapa en genom att klicka på "
-#~ "(+)-knappen."
+msgid ""
+"Click on the (+) button to create a new note or notebook. Click on the "
+"side menu to access your existing notebooks."
+msgstr ""
+"Klicka på (+)-knappen för att skapa en ny anteckning eller "
+"anteckningsbok. Klicka på sidomenyn för att få tillgång till dina "
+"befintliga anteckningsböcker."
 
-#~ msgid "Welcome"
-#~ msgstr "Välkommen"
+msgid ""
+"You currently have no notebook. Create one by clicking on (+) button."
+msgstr ""
+"Du har för närvarande ingen anteckningsbok. Skapa en genom att klicka på "
+"(+)-knappen."
 
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "Separera varje tagg med ett komma."
+msgid "Welcome"
+msgstr "Välkommen"
 
-#~ msgid "Some items cannot be decrypted."
-#~ msgstr "Några objekt kan inte dekrypteras."
+msgid "Separate each tag by a comma."
+msgstr "Separera varje tagg med ett komma."
 
-#~ msgid "%s (%s): %s"
-#~ msgstr "%s (%s): %s"
+msgid "Some items cannot be decrypted."
+msgstr "Några objekt kan inte dekrypteras."
 
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr ""
-#~ "Sökvägen att synkronisera med när synkronisering av filsystem är "
-#~ "aktiverat. Se `sync.target`."
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
 
-#~ msgid "State: %s."
-#~ msgstr "Tillstånd: %s."
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+"Sökvägen att synkronisera med när synkronisering av filsystem är "
+"aktiverat. Se `sync.target`."
 
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "En anteckningsbok med denna titel finns redan: \"%s\""
+msgid "State: %s."
+msgstr "Tillstånd: %s."
+
+msgid "A notebook with this title already exists: \"%s\""
+msgstr "En anteckningsbok med denna titel finns redan: \"%s\""

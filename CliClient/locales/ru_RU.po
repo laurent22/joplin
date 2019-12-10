@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr "Для удаления метки, открепите ее от связанных с ней заметок."
@@ -139,13 +141,11 @@ msgstr "Введите мастер-пароль:"
 msgid "Operation cancelled"
 msgstr "Операция отменена"
 
-#, fuzzy
 msgid "Confirm password:"
-msgstr "Введите мастер-пароль:"
+msgstr "Подтвердите пароль:"
 
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "Пароль не может быть пустым"
+msgstr "Пароли не соответствуют!"
 
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
@@ -605,7 +605,7 @@ msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста,
 
 #, javascript-format
 msgid "Could not export notes: %s"
-msgstr ""
+msgstr "Невозможно экспортировать заметки: %s"
 
 msgid "&File"
 msgstr "&Файл"
@@ -692,7 +692,6 @@ msgstr "Переключить боковую панель"
 msgid "Layout button sequence"
 msgstr ""
 
-#, fuzzy
 msgid "Toggle note list"
 msgstr "Список заметок"
 
@@ -757,9 +756,8 @@ msgstr "Да"
 msgid "No"
 msgstr "Нет"
 
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "Восстановленные заметки"
+msgstr "Полное примечание к выпуску"
 
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопирован в буфер обмена!"
@@ -829,7 +827,7 @@ msgstr ""
 "получать доступ к Joplin."
 
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Будет открыто новое окно. Сохранить текущие изменения?"
 
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
@@ -1168,7 +1166,7 @@ msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #, javascript-format
 msgid ""
@@ -1190,9 +1188,8 @@ msgstr "Удалить метку “%s” из всех заметок?"
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Новый блокнот"
+msgstr "Новый вложенный блокнот"
 
 msgid "Rename"
 msgstr "Переименовать"
@@ -1497,7 +1494,7 @@ msgid "Dark"
 msgstr "Тёмная"
 
 msgid "Dracula"
-msgstr ""
+msgstr "Дракула"
 
 msgid "Solarised Light"
 msgstr "Ярко-светлая"
@@ -1506,22 +1503,19 @@ msgid "Solarised Dark"
 msgstr "Ярко-тёмная"
 
 msgid "Nord"
-msgstr ""
+msgstr "Север"
 
-#, fuzzy
 msgid "Show note counts"
-msgstr "Показывать иконку в трее"
+msgstr "Показывать число заметок"
 
-#, fuzzy
 msgid "Editor"
-msgstr "Правка"
+msgstr "Редактор"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "&Вид"
+msgstr "Просмотрщик"
 
 msgid "Split View"
-msgstr ""
+msgstr "Разделение"
 
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
@@ -1564,9 +1558,8 @@ msgstr "При создании новой заметки:"
 msgid "Enable soft breaks"
 msgstr "Включить мягкие отступы"
 
-#, fuzzy
 msgid "Enable typographer support"
-msgstr "Включить поддержку Fountain"
+msgstr "Включить поддержку typographer "
 
 msgid "Enable math expressions"
 msgstr "Включить математические выражения"
@@ -1628,9 +1621,8 @@ msgstr "Глобальный масштаб в процентах"
 msgid "Editor font size"
 msgstr "Размер шрифта редактора"
 
-#, fuzzy
 msgid "Editor font"
-msgstr "Размер шрифта редактора"
+msgstr "Шрифт редактора"
 
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
@@ -1732,6 +1724,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Защита от сбоев: Не очищать локальные данные, когда цель синхронизации "
+"пустая (обычно случается из-за ошибки настроек или в приложении)"
 
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
@@ -1775,9 +1769,8 @@ msgstr "Плагины"
 msgid "Application"
 msgstr "Приложение"
 
-#, fuzzy
 msgid "Encryption"
-msgstr "Шифрование:"
+msgstr "Шифрование"
 
 #, fuzzy
 msgid "Web Clipper"
@@ -1796,13 +1789,11 @@ msgstr "Markdown"
 msgid "Joplin Export Directory"
 msgstr "Каталог экспорта Joplin"
 
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Файл экспорта Evernote"
+msgstr "Файл экспорта Evernote (Markdown)"
 
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Файл экспорта Evernote"
+msgstr "Файл экспорта Evernote (HTML)"
 
 msgid "Json Export Directory"
 msgstr "Каталог экспорта Joplin"
@@ -2097,9 +2088,8 @@ msgstr "Пароль:"
 msgid "Password cannot be empty"
 msgstr "Пароль не может быть пустым"
 
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "Пароль не может быть пустым"
+msgstr "Подтверждение пароля не может быть пустым"
 
 msgid "Enable"
 msgstr "Включено"
