@@ -471,4 +471,19 @@ function themeStyle(theme) {
 	return themeCache_[cacheKey];
 }
 
-module.exports = { themeStyle };
+const cachedStyles_ = {};
+
+function buildStyle(cacheKey, themeId, callback) {
+	if (cachedStyles_[cacheKey]) cachedStyles_[cacheKey].style;
+
+	const s = callback(themeStyle(themeId));
+
+	cachedStyles_[cacheKey] = {
+		style: s,
+		timestamp: Date.now(),
+	};
+
+	return cachedStyles_[cacheKey].style;
+}
+
+module.exports = { themeStyle, buildStyle };

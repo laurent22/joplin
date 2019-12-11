@@ -80,6 +80,15 @@ class Synchronizer {
 		return this.encryptionService_;
 	}
 
+	async waitForSyncToFinish() {
+		if (this.state() === 'idle') return;
+
+		while (true) {
+			await time.sleep(1);
+			if (this.state() === 'idle') return;
+		}
+	}
+
 	static reportToLines(report) {
 		let lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
