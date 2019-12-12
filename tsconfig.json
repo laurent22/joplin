@@ -16,10 +16,12 @@
 		"jsx": "react",
 	},
     "include": [
-        "ReactNativeClient/lib/**/*.ts",
-        "ReactNativeClient/lib/**/*.tsx",
+        "ReactNativeClient/**/*.ts",
+        "ReactNativeClient/**/*.tsx",
         "ElectronClient/**/*.ts",
         "ElectronClient/**/*.tsx",
+        "CliClient/**/*.ts",
+        "CliClient/**/*.tsx",
 	],
 	"exclude": [
 		"**/node_modules",

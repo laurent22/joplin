@@ -22,7 +22,7 @@ All TypeScript files are generated next to the .ts or .tsx file. So for example,
 ## Linux and Windows (WSL) dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
-- Install node v8.x (check with `node --version`) - https://nodejs.org/en/
+- Install node v10.x (check with `node --version`) - https://nodejs.org/en/
 - If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`
 
 # Building the tools
@@ -30,14 +30,15 @@ All TypeScript files are generated next to the .ts or .tsx file. So for example,
 Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-npm install && npm run typescript-compile && cd Tools && npm install
+npm install && cd Tools && npm install
 ```
 
 # Building the Electron application
 
 ```
+rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/
+npm run typescript-compile
 cd ElectronClient/app
-rsync --delete -a ../../ReactNativeClient/lib/ lib/
 npm install
 yarn dist
 ```
@@ -55,10 +56,9 @@ From `/ElectronClient` you can also run `run.sh` to run the app for testing.
 ## Building Electron application on Windows
 
 ```
-cd Tools
-npm install
-cd ..\ElectronClient\app
-xcopy /C /I /H /R /Y /S ..\..\ReactNativeClient\lib lib
+xcopy /C /I /H /R /Y /S ReactNativeClient\lib ElectronClient\app\lib
+npm run typescript-compile
+cd ElectronClient\app
 npm install
 yarn dist
 ```
@@ -75,7 +75,15 @@ The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might 
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
 
-Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` or `react-native run-android`.
+Then:
+
+```
+npm run typescript-compile
+cd ReactNativeClient
+npm install
+react-native run-ios
+# Or: react-native run-android
+```
 
 # Building the Terminal application
 
@@ -83,7 +91,6 @@ Then, from `/ReactNativeClient`, run `npm install`, then `react-native run-ios` 
 cd CliClient
 npm install
 ./build.sh
-rsync --delete -aP ../ReactNativeClient/locales/ build/locales/
 ```
 
 Run `run.sh` to start the application for testing.
