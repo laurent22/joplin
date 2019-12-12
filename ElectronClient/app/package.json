@@ -9,7 +9,8 @@
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
     "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && node electronRebuild.js",
-    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
+    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "install-141": "npm install --toolset=v141"
   },
   "repository": {
     "type": "git",

@@ -1,18 +1,25 @@
-const React = require('react');
-const { useState, useEffect } = React;
-const { _ } = require('lib/locale.js');
+// const React = require('react');
+// const { useState, useEffect } = React;
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import JoplinServerApi from '../lib/JoplinServerApi';
+
+const { _, _n } = require('lib/locale.js');
 const { themeStyle, buildStyle } = require('../theme.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const { reg } = require('lib/registry.js');
-
-import JoplinServerApi from '../lib/JoplinServerApi';
+const { clipboard } = require('electron');
 
 interface ShareNoteDialogProps {
 	theme: number,
 	noteIds: Array<string>,
 	onClose: Function,
+}
+
+interface SharesMap {
+	[key: string]: any;
 }
 
 function styles_(props:ShareNoteDialogProps) {
@@ -44,6 +51,10 @@ function styles_(props:ShareNoteDialogProps) {
 				color: theme.color,
 				fontSize: '1.4em',
 			},
+			copyShareLinkButton: {
+				...theme.buttonStyle,
+				marginBottom: 10,
+			},
 		};
 	});
 }
@@ -51,12 +62,12 @@ function styles_(props:ShareNoteDialogProps) {
 export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	console.info('Render ShareNoteDialog');
 
-	const [notes, setNotes] = useState({});
-	const [publicLinksState, setPublicLinksState] = useState('unknown');
-	const [publicLinks, setPublicLinks] = useState({});
+	const [notes, setNotes] = useState<any[]>([]);
+	const [sharesState, setSharesState] = useState<string>('unknown');
+	const [shares, setShares] = useState<SharesMap>({});
 
+	const noteCount = notes.length;
 	const theme = themeStyle(props.theme);
-
 	const styles = styles_(props);
 
 	useEffect(() => {
@@ -79,12 +90,18 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		props.onClose();
 	};
 
+	const copyLinksToClipboard = (shares:SharesMap) => {
+		const links = [];
+		for (const n in shares) links.push(shares[n]._url);
+		clipboard.writeText(links.join('\n'));
+	}
+
 	const shareLinkButton_click = async () => {
 		let hasSynced = false;
 		let tryToSync = false;
 		while (true) {
 			try {
-				setPublicLinksState('creating');
+				setSharesState('creating');
 
 				if (tryToSync) {
 					const synchronizer = await reg.syncTarget().synchronizer();
@@ -96,23 +113,21 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 				const api = await appApi();
 				const syncTargetId = api.syncTargetId(Setting.toPlainObject());
+				const newShares = Object.assign({}, shares);
 
 				for (const note of notes) {
 					const result = await api.exec('POST', 'shares', {
 						syncTargetId: syncTargetId,
 						noteId: note.id,
 					});
-					const newPublicLinks = Object.assign({}, publicLinks);
-					newPublicLinks[note.id] = result;
-					setPublicLinks(newPublicLinks);
+					newShares[note.id] = result;
 				}
 
-				// TODO: Make share controller return object with Share URL included.
-				// http://..../api/notes/:sync_target_id/:note_id?t=:share_id
+				setShares(newShares);
 
-				// TODO: Copy that link to clipboard
-				
-				setPublicLinksState('created');
+				copyLinksToClipboard(newShares);
+
+				setSharesState('created');
 			} catch (error) {
 				if (error.code === 404 && !hasSynced) {
 					reg.logger().info('ShareNoteDialog: Note does not exist on server - trying to sync it.', error);
@@ -122,7 +137,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 				reg.logger().error('ShareNoteDialog: Cannot share note:', error);
 
-				setPublicLinksState('idle');
+				setSharesState('idle');
 				alert(JoplinServerApi.connectionErrorMessage(error));
 			}
 
@@ -162,6 +177,12 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		return <div style={styles.noteList}>{noteComps}</div>;
 	};
 
+	const statusMessage = (sharesState:string):string => {
+		if (sharesState === 'creating') return _n('Generating link...', 'Generating links...', noteCount);
+		if (sharesState === 'created') return _n('Link has been copied to clipboard!', 'Links have been copied to clipboard!', noteCount);
+		return '';
+	}
+
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
 
@@ -170,7 +191,8 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}
-				<button disabled={publicLinksState === 'creating'} style={theme.buttonStyle} onClick={shareLinkButton_click}>{_('Copy Shareable Link(s)')}</button>
+				<button disabled={sharesState === 'creating'} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
+				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>
