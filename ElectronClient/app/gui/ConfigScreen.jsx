@@ -24,8 +24,17 @@ class ConfigScreenComponent extends React.Component {
 			await shared.checkSyncConfig(this, this.state.settings);
 		};
 
-		this.checkNextcloudApp_ = async () => {
+		this.checkNextcloudAppButton_click = async () => {
+			this.setState({ showNextcloudAppLog: true });
 			await shared.checkNextcloudApp(this, this.state.settings);
+		};
+
+		this.showLogButton_click = () => {
+			this.setState({ showNextcloudAppLog: true });
+		};
+
+		this.nextcloudAppHelpLink_click = () => {
+			bridge().openExternal('https://joplinapp.org/nextcloud_app');
 		};
 
 		this.rowStyle_ = {
@@ -97,14 +106,21 @@ class ConfigScreenComponent extends React.Component {
 
 	sectionToComponent(key, section, settings, selected) {
 		const theme = themeStyle(this.props.theme);
-		const settingComps = [];
+		// const settingComps = [];
 
-		for (let i = 0; i < section.metadatas.length; i++) {
-			const md = section.metadatas[i];
+		const createSettingComponents = (advanced) => {
+			const output = [];
+			for (let i = 0; i < section.metadatas.length; i++) {
+				const md = section.metadatas[i];
+				if (!!md.advanced !== advanced) continue;
+				const settingComp = this.settingToComponent(md.key, settings[md.key]);
+				output.push(settingComp);
+			}
+			return output;
+		};
 
-			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			settingComps.push(settingComp);
-		}
+		const settingComps = createSettingComponents(false);
+		const advancedSettingComps = createSettingComponents(true);
 
 		const sectionStyle = {
 			marginTop: 20,
@@ -158,32 +174,52 @@ class ConfigScreenComponent extends React.Component {
 					}
 				}
 
-				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' ? null : (
+				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
 					<div style={statusStyle}>
 						<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
 						<pre>{errorMessage}</pre>
 					</div>
 				);
 
+				const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
+					<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
+				);
+
+				const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
+
 				settingComps.push(
 					<div key="nextcloud_app_check" style={this.rowStyle_}>
-						<span style={theme.textStyle}>Joplin Nextcloud App status: </span><span style={theme.textStyle}>{status}</span>
+						<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
 						&nbsp;&nbsp;
-						<button disabled={this.state.checkNextcloudAppResult === 'checking'} style={theme.buttonStyle} onClick={this.checkNextcloudApp_}>
+						{showLogButton}
+						&nbsp;&nbsp;
+						<button disabled={this.state.checkNextcloudAppResult === 'checking'} style={theme.buttonStyle} onClick={this.checkNextcloudAppButton_click}>
 							{_('Check Status')}
 						</button>
 						&nbsp;&nbsp;
-						<a style={theme.urlStyle} href="#">[{_('Help')}]</a>
+						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
 						{statusComp}
 					</div>
 				);
 			}
 		}
 
+		let advancedSettingsButton = null;
+		let advancedSettingsSectionStyle = { display: 'none' };
+
+		if (advancedSettingComps.length) {
+			const iconName = this.state.showAdvancedSettings ? 'fa fa-toggle-up' : 'fa fa-toggle-down';
+			const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
+			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{fontSize: 14}} className={iconName}></i> {_('Show Advanced Settings')}</button>;
+			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+		}
+
 		return (
 			<div key={key} style={sectionStyle}>
 				{noteComp}
 				<div>{settingComps}</div>
+				{advancedSettingsButton}
+				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>
 			</div>
 		);
 	}

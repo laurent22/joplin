@@ -13,6 +13,14 @@ shared.init = function(comp) {
 	comp.state.checkNextcloudAppResult = null;
 	comp.state.settings = {};
 	comp.state.changedSettingKeys = [];
+	comp.state.showNextcloudAppLog = false;
+	comp.state.showAdvancedSettings = false;
+};
+
+shared.advancedSettingsButton_click = (comp) => {
+	comp.setState(state => {
+		return { showAdvancedSettings: !state.showAdvancedSettings };
+	});
 };
 
 shared.checkSyncConfig = async function(comp, settings) {

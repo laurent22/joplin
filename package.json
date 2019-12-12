@@ -14,7 +14,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "npm run linter",
       "git add"
     ]
