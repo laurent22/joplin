@@ -63,7 +63,7 @@ globalStyle.buttonStyle = {
 	border: '1px solid',
 	minHeight: 26,
 	minWidth: 80,
-	maxWidth: 160,
+	maxWidth: 220,
 	paddingLeft: 12,
 	paddingRight: 12,
 	paddingTop: 6,
@@ -471,4 +471,19 @@ function themeStyle(theme) {
 	return themeCache_[cacheKey];
 }
 
-module.exports = { themeStyle };
+const cachedStyles_ = {};
+
+function buildStyle(cacheKey, themeId, callback) {
+	if (cachedStyles_[cacheKey]) cachedStyles_[cacheKey].style;
+
+	const s = callback(themeStyle(themeId));
+
+	cachedStyles_[cacheKey] = {
+		style: s,
+		timestamp: Date.now(),
+	};
+
+	return cachedStyles_[cacheKey].style;
+}
+
+module.exports = { themeStyle, buildStyle };

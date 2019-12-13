@@ -162,11 +162,14 @@ class Setting extends BaseModel {
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
+			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+
 			'sync.resourceDownloadMode': {
 				value: 'always',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				public: true,
+				advanced: true,
 				isEnum: true,
 				appTypes: ['mobile', 'desktop'],
 				label: () => _('Attachment download behaviour'),
@@ -180,7 +183,7 @@ class Setting extends BaseModel {
 				},
 			},
 
-			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
+			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
 			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
 			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
@@ -497,6 +500,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
+				advanced: true,
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
@@ -508,6 +512,7 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': {
 				value: false,
 				type: Setting.TYPE_BOOL,
+				advanced: true,
 				section: 'sync',
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
@@ -517,7 +522,7 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 			},
 
-			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
+			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, advanced: true, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
 
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },

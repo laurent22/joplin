@@ -9,7 +9,8 @@
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
     "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && node electronRebuild.js",
-    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
+    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "install-141": "npm install --toolset=v141"
   },
   "repository": {
     "type": "git",
@@ -133,10 +134,10 @@
     "node-notifier": "^6.0.0",
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
-    "react": "^16.4.0",
+    "react": "^16.12.0",
     "react-ace": "^6.1.4",
     "react-datetime": "^2.14.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.12.0",
     "react-redux": "^5.0.7",
     "react-select": "^2.4.3",
     "react-tooltip": "^3.10.0",

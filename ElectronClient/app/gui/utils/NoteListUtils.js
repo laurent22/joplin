@@ -107,6 +107,20 @@ class NoteListUtils {
 				})
 			);
 
+			menu.append(
+				new MenuItem({
+					label: _('Share note...'),
+					click: async () => {
+						console.info('NOTE IDS', noteIds);
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandShareNoteDialog',
+							noteIds: noteIds.slice(),
+						});
+					},
+				})
+			);
+
 			const exportMenu = new Menu();
 
 			const ioService = new InteropService();
