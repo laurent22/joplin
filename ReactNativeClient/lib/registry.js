@@ -35,6 +35,10 @@ reg.resetSyncTarget = (syncTargetId = null) => {
 	delete reg.syncTargets_[syncTargetId];
 };
 
+reg.syncTargetNextcloud = () => {
+	return reg.syncTarget(SyncTargetRegistry.nameToId('nextcloud'));
+};
+
 reg.syncTarget = (syncTargetId = null) => {
 	if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 	if (reg.syncTargets_[syncTargetId]) return reg.syncTargets_[syncTargetId];

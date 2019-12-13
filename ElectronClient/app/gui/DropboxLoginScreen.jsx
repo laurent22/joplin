@@ -13,7 +13,7 @@ class DropboxLoginScreenComponent extends React.Component {
 		this.shared_ = new Shared(this, msg => bridge().showInfoMessageBox(msg), msg => bridge().showErrorMessageBox(msg));
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.shared_.refreshUrl();
 	}
 

@@ -71,7 +71,7 @@ class HeaderComponent extends React.Component {
 		};
 	}
 
-	async componentWillReceiveProps(nextProps) {
+	async UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.windowCommand) {
 			this.doCommand(nextProps.windowCommand);
 		}

@@ -317,4 +317,9 @@ function _(s, ...args) {
 	}
 }
 
-module.exports = { _, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+function _n(singular, plural, n, ...args) {
+	if (n > 1) return _(plural, ...args);
+	return _(singular, ...args);
+}
+
+module.exports = { _, _n, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

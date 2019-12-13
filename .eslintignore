@@ -46,3 +46,7 @@ Server/dist/
 Server/bin/
 Server/node_modules/
 ElectronClient/app/packageInfo.js
+
+# Ignore files generated from TypeScript files
+ElectronClient/app/gui/ShareNoteDialog.js
+ReactNativeClient/lib/JoplinServerApi.js

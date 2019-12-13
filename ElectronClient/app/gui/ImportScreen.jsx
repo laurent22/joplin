@@ -8,7 +8,7 @@ const { filename, basename } = require('lib/path-utils.js');
 const { importEnex } = require('lib/import-enex');
 
 class ImportScreenComponent extends React.Component {
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			doImport: true,
 			filePath: this.props.filePath,
@@ -16,7 +16,7 @@ class ImportScreenComponent extends React.Component {
 		});
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.filePath) {
 			this.setState(
 				{
