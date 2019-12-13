@@ -410,6 +410,43 @@ class Setting extends BaseModel {
 					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
+
+			// TODO: Is there a better way to do this? The goal here is to simply have
+			// a way to display a link to the customizable stylesheets, not for it to
+			// serve as a customizable Setting. But because the Setting page is auto-
+			// generated from this list of settings, there wasn't a really elegant way
+			// to do that directly in the React markup.
+			'style.customCss.renderedMarkdown': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = '/* For styling the rendered Markdown */';
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for rendered Markdown'),
+				section: 'appearance',
+			},
+			'style.customCss.joplinApp': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.JOPLIN_APP;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for Joplin-wide app styles'),
+				section: 'appearance',
+			},
+
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
@@ -937,6 +974,7 @@ Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 Setting.TYPE_ARRAY = 4;
 Setting.TYPE_OBJECT = 5;
+Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
@@ -965,6 +1003,12 @@ Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.custom_css_files = {
+	JOPLIN_APP: 'userchrome.css',
+	RENDERED_MARKDOWN: 'userstyle.css',
+};
+
 
 // Contains constants that are set by the application and
 // cannot be modified by the user:

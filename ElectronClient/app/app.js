@@ -28,6 +28,7 @@ const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const TemplateUtils = require('lib/TemplateUtils');
+const CssUtils = require('lib/CssUtils');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -1224,8 +1225,8 @@ class Application extends BaseApplication {
 			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		const cssString = await this.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
-
+		// Loads custom Markdown preview styles
+		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({
 			type: 'LOAD_CUSTOM_CSS',
 			css: cssString,
