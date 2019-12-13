@@ -118,7 +118,6 @@ class Application extends BaseApplication {
 					const zoomFactor = Math.max(MIN, Math.min(MAX, action.zoomFactor));
 					newState = Object.assign({}, state);
 					newState.windowContentZoomFactor = zoomFactor;
-					webFrame.setZoomFactor(zoomFactor);
 				}
 				break;
 
@@ -292,6 +291,10 @@ class Application extends BaseApplication {
 		if (action.type === 'NOTE_DEVTOOLS_TOGGLE') {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 			menuItem.checked = newState.noteDevToolsVisible;
+		}
+
+		if (action.type === 'WINDOW_CONTENT_ZOOM_FACTOR_SET') {
+			webFrame.setZoomFactor(newState.windowContentZoomFactor);
 		}
 
 		return result;
