@@ -413,6 +413,24 @@ class ConfigScreenComponent extends React.Component {
 					{descriptionComp}
 				</div>
 			);
+		} else if (md.type === Setting.TYPE_BUTTON) {
+			const theme = themeStyle(this.props.theme);
+			const buttonStyle = Object.assign({}, theme.buttonStyle, {
+				display: 'inline-block',
+				marginRight: 10,
+			});
+
+			return (
+				<div key={key} style={rowStyle}>
+					<div style={labelStyle}>
+						<label>{md.label()}</label>
+					</div>
+					<button style={buttonStyle} onClick={md.onClick}>
+						{_('Edit')}
+					</button>
+					{descriptionComp}
+				</div>
+			);
 		} else {
 			console.warn(`Type not implemented: ${key}`);
 		}
