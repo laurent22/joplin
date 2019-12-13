@@ -94,7 +94,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		const links = [];
 		for (const n in shares) links.push(shares[n]._url);
 		clipboard.writeText(links.join('\n'));
-	}
+	};
 
 	const shareLinkButton_click = async () => {
 		let hasSynced = false;
@@ -181,7 +181,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		if (sharesState === 'creating') return _n('Generating link...', 'Generating links...', noteCount);
 		if (sharesState === 'created') return _n('Link has been copied to clipboard!', 'Links have been copied to clipboard!', noteCount);
 		return '';
-	}
+	};
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
