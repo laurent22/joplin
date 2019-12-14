@@ -579,6 +579,7 @@ async function main() {
 		[ 'readme/api.md', 'docs/api/index.html', { title: 'REST API' } ],
 		[ 'readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' } ],
 		[ 'readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' } ],
+		[ 'readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' } ],
 
 		[ 'readme/gsoc/index.md', 'docs/gsoc/index.html', { title: 'Google Summer of Code' } ],
 		[ 'readme/gsoc/idea1_nextcloud.md', 'docs/gsoc/idea1_nextcloud.html', { title: 'GSoC: Idea 1: Nextcloud' } ],
