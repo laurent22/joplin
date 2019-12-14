@@ -15,29 +15,50 @@ class Command extends BaseCommand {
 
 	options() {
 		return [['-v, --verbose', _('Also displays unset and hidden config variables.')],
-			['--export', _('Writes the variables to STDOUT in plain text including secure variables.')],
-			['--import', _('Reads the variables from STDIN in plain text in the format [name]=[value] and sets them as if you had individually called config [name] [value].')],
-			['--import-file <file>', _('Reads the variables from <file> in plain text in the format [name]=[value] and sets them as if you had individually called config [name] [value].')]];
+			['--export', _('Writes all settings to STDOUT as JSON including secure variables.')],
+			['--import', _('Reads in JSON formatted settings from STDIN.')],
+			['--import-file <file>', _('Reads in settings from <file>. <file> must contain valid JSON.')]];
 	}
-	async __importSettings(fileStream) {
-		return new Promise((resolve) => {
-			const readline = require('readline');
+	async __importSettings(inputStream) {
+		return new Promise((resolve, reject) => {
+			// being defensive and not attempting to settle twice
+			let isSettled = false;
+			const chunks = [];
 
-			const rl = readline.createInterface({
-				input: fileStream,
+			inputStream.on('readable', () => {
+				let chunk;
+				while ((chunk = inputStream.read()) !== null) {
+					chunks.push(chunk);
+				}
 			});
 
-			rl.on('line', (line) => {
-				line = line ? line.trim() : '';
-				if (!line) {
-					return;
+			inputStream.on('end', () => {
+				let json = chunks.join('');
+				let settingsObj;
+				try {
+					settingsObj = JSON.parse(json);
+				} catch (err) {
+					isSettled = true;
+					return reject(new Error(`Invalid JSON passed to config --import: \n${err.message}.`));
 				}
-				const [name, value] = line.split('=');
-				Setting.setValue(name, value);
-			})
-				.on('close', () => {
+				if (settingsObj) {
+					Object.entries(settingsObj)
+						.forEach(([key, value]) => {
+							Setting.setValue(key, value);
+						});
+				}
+				if (!isSettled) {
+					isSettled = true;
 					resolve();
-				});
+				}
+			});
+
+			inputStream.on('error', (error) => {
+				if (!isSettled) {
+					isSettled = true;
+					reject(error);
+				}
+			});
 		});
 	}
 	async action(args) {
@@ -52,10 +73,6 @@ class Command extends BaseCommand {
 			if (typeof value === 'object' || Array.isArray(value)) value = JSON.stringify(value);
 			if (md.secure && value && !isExport) value = '********';
 
-			if (isExport) {
-				// No spaces as this will cause problems
-				return _('%s=%s', name, value);
-			}
 			if (Setting.isEnum(name)) {
 				return _('%s = %s (%s)', name, value, Setting.enumOptionsDoc(name));
 			} else {
@@ -63,38 +80,43 @@ class Command extends BaseCommand {
 			}
 		};
 
-		if (!isImport && !args.name && !args.value) {
+		if (isExport || (!isImport && !args.value)) {
 			let keys = Setting.keys(!verbose, 'cli');
 			keys.sort();
-			for (let i = 0; i < keys.length; i++) {
-				const value = Setting.value(keys[i]);
-				if (!verbose && !value) continue;
-				this.stdout(renderKeyValue(keys[i]));
-			}
-			app()
-				.gui()
-				.showConsole();
-			app()
-				.gui()
-				.maximizeConsole();
-			return;
-		}
 
-		if (!isImport && args.name && !args.value) {
-			this.stdout(renderKeyValue(args.name));
+			if (isExport) {
+				const resultObj = keys.reduce((acc, key) => {
+					const value = Setting.value(key);
+					if (!verbose && !value) return acc;
+					acc[key] = value;
+					return acc;
+				}, {});
+				// Printing the object in "pretty" format so it's easy to read/edit
+				this.stdout(JSON.stringify(resultObj, null, 2));
+			} else if (!args.name) {
+				for (let i = 0; i < keys.length; i++) {
+					const value = Setting.value(keys[i]);
+					if (!verbose && !value) continue;
+					this.stdout(renderKeyValue(keys[i]));
+				}
+			} else {
+				this.stdout(renderKeyValue(args.name));
+			}
+
 			app()
 				.gui()
 				.showConsole();
 			app()
 				.gui()
 				.maximizeConsole();
+
 			return;
 		}
 
 		if (isImport) {
 			let fileStream = process.stdin;
 			if (importFile) {
-				fileStream = fs.createReadStream(importFile, {autoClose: true});
+				fileStream = fs.createReadStream(importFile, { autoClose: true });
 			}
 			await this.__importSettings(fileStream);
 		} else {
