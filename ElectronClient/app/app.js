@@ -1177,6 +1177,11 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
+		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
+		const dir = Setting.value('profileDir');
+		const filename = Setting.custom_css_files.JOPLIN_APP;
+		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 

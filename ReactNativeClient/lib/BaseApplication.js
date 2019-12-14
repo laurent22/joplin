@@ -39,7 +39,6 @@ const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
-const CssUtils = require('lib/CssUtils');
 
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -609,11 +608,6 @@ class BaseApplication {
 		BaseModel.db_ = this.database_;
 
 		await Setting.load();
-
-		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
-		const dir = Setting.value('profileDir');
-		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
