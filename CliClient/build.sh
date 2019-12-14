@@ -9,7 +9,7 @@ rsync -a --delete "$ROOT_DIR/../ReactNativeClient/locales/" "$BUILD_DIR/locales/
 cp "$ROOT_DIR/package.json" "$BUILD_DIR"
 
 cd $ROOT_DIR/..
-npm run typescript-compile
+npm run tsc
 cd $ROOT_DIR
 
 chmod 755 "$BUILD_DIR/main.js"

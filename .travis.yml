@@ -60,7 +60,7 @@ script:
 
     # Install tools
     npm install
-    npm run typescript-compile
+    npm run tsc
     cd Tools
     npm install
     cd ..

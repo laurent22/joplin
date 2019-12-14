@@ -5,8 +5,8 @@
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "typescript-compile": "tsc",
-    "typescript-watch": "tsc --watch"
+    "tsc": "tsc",
+    "tsc-watch": "tsc --watch"
   },
   "husky": {
     "hooks": {

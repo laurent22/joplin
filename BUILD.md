@@ -7,9 +7,9 @@
 
 # TypeScript
 
-Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). Even if you don't write TypeScript code, you will need to build the existing .ts and .tsx files. This is done from the root of the project, by running `npm run typescript-compile`.
+Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). Even if you don't write TypeScript code, you will need to build the existing .ts and .tsx files. This is done from the root of the project, by running `npm run tsc`.
 
-If you are modifying TypeScript code, the best is to have the compiler watch for changes from a terminal. To do so, run `npm run typescript-watch`.
+If you are modifying TypeScript code, the best is to have the compiler watch for changes from a terminal. To do so, run `npm run tsc-watch`.
 
 All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. If you create a new TypeScript file, make sure you add the generated .js file to .gitignore. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
@@ -37,7 +37,7 @@ npm install && cd Tools && npm install
 
 ```
 rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/
-npm run typescript-compile
+npm run tsc
 cd ElectronClient/app
 npm install
 yarn dist
@@ -57,7 +57,7 @@ From `/ElectronClient` you can also run `run.sh` to run the app for testing.
 
 ```
 xcopy /C /I /H /R /Y /S ReactNativeClient\lib ElectronClient\app\lib
-npm run typescript-compile
+npm run tsc
 cd ElectronClient\app
 npm install
 yarn dist
@@ -78,7 +78,7 @@ First you need to setup React Native to build projects with native code. For thi
 Then:
 
 ```
-npm run typescript-compile
+npm run tsc
 cd ReactNativeClient
 npm install
 react-native run-ios
