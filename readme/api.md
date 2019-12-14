@@ -1,3 +1,15 @@
+
+> joplin@1.0.0 tsc /Users/laurent/src/joplin
+> tsc
+
+TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js
+TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js.map
+TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js
+TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js.map
+TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js
+TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js.map
+TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js
+TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js.map
 # Joplin API
 
 When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.
