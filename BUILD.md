@@ -36,7 +36,7 @@ npm install && cd Tools && npm install
 # Building the Electron application
 
 ```
-rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/
+npm run copyLib
 npm run tsc
 cd ElectronClient/app
 npm install

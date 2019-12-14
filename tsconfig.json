@@ -16,12 +16,9 @@
 		"jsx": "react",
 	},
     "include": [
-        "ReactNativeClient/**/*.ts",
-        "ReactNativeClient/**/*.tsx",
-        "ElectronClient/**/*.ts",
-        "ElectronClient/**/*.tsx",
-        "CliClient/**/*.ts",
-        "CliClient/**/*.tsx",
+        "ReactNativeClient/**/*",
+        "ElectronClient/**/*",
+        "CliClient/**/*",
 	],
 	"exclude": [
 		"**/node_modules",

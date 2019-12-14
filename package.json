@@ -6,7 +6,8 @@
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "tsc": "tsc",
-    "tsc-watch": "tsc --watch"
+    "tsc-watch": "tsc --watch",
+    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/"
   },
   "husky": {
     "hooks": {
