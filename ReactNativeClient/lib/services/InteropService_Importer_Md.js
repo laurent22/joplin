@@ -9,6 +9,18 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 
+/**
+ * mdImageTagRegex matches markdown image tags.
+ * !\[ and \] matches start of tag containing alt text.
+ * Within this the [^\]]* matches multiple characters not in this set;
+ * in this case the set is "]" - so match anything that is not this char.
+ * We need this to avoid overshooting if another "]" follows after the
+ * match.
+ * \(.*?\) to match the part of the tag containing the link, and make this
+ * a named capture group "filename".
+ */
+const mdImageTagRegex = /!\[[^\]]*\]\((?<filename>.*?)\)/g;
+
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
 		let parentFolderId = null;
@@ -57,22 +69,26 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		}
 	}
 
+	async importLocalImages(filePath, md) {
+		let updated = md;
+		let match;
+		while ((match = mdImageTagRegex.exec(md)) !== null) {
+			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
+			if (fs.existsSync(attachmentPath)) {
+				console.info("Attempting to attach file ", match[1], "at position ", match.index)
+				const resource = await shim.createResourceFromPath(attachmentPath);
+				updated = updated.replace(match[0], Resource.markdownTag(resource))
+			}
+		}
+		return updated;
+	}
+
 	async importFile(filePath, parentFolderId) {
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);
 		const body = await shim.fsDriver().readFile(filePath);
-		let updatedBody = body;
-		const mdImageTagRegex = /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))?\)/g;
-		let match;
-		while ((match = mdImageTagRegex.exec(body)) !== null) {
-			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
-			if (fs.existsSync(attachmentPath)) {
-				console.info("Attempting to attach file: ", match[1], "at position: ", match.index)
-				const resource = await shim.createResourceFromPath(attachmentPath);
-				updatedBody = updatedBody.replace(match[0], Resource.markdownTag(resource))
-			}
-		}
+		let updatedBody = await this.importLocalImages(filePath, body);
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
@@ -83,7 +99,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			user_created_time: stat.birthtime.getTime(),
 		};
 
-		await Note.save(note, { autoTimestamp: false });
+		return await Note.save(note, { autoTimestamp: false });
 	}
 }
 
