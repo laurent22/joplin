@@ -1001,18 +1001,20 @@ class Application extends BaseApplication {
 				}, {
 					label: _('Zoom In'),
 					click: () => {
+						const currentZoomFactor = this.store().getState().windowContentZoomFactor;
 						this.store().dispatch({
 							type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
-							zoomFactor: webFrame.getZoomFactor() + 0.1,
+							zoomFactor: currentZoomFactor + 0.1,
 						});
 					},
 					accelerator: 'CommandOrControl+=',
 				}, {
 					label: _('Zoom Out'),
 					click: () => {
+						const currentZoomFactor = this.store().getState().windowContentZoomFactor;
 						this.store().dispatch({
 							type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
-							zoomFactor: webFrame.getZoomFactor() - 0.1,
+							zoomFactor: currentZoomFactor - 0.1,
 						});
 					},
 					accelerator: 'CommandOrControl+-',
