@@ -115,7 +115,8 @@ class Application extends BaseApplication {
 				{
 					const MIN = 0.3;
 					const MAX = 3;
-					const zoomFactor = Math.max(MIN, Math.min(MAX, action.zoomFactor));
+					const zoomFactor = Math.round(Math.max(MIN, Math.min(MAX, action.zoomFactor)) * 100) / 100;
+
 					newState = Object.assign({}, state);
 					newState.windowContentZoomFactor = zoomFactor;
 				}
@@ -261,6 +262,17 @@ class Application extends BaseApplication {
 			this.updateEditorFont();
 		}
 
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'windowContentZoomFactor' || action.type == 'SETTING_UPDATE_ALL') {
+			const zoomFactor = (action.value || action.settings.windowContentZoomFactor) / 100;
+
+			if (zoomFactor !== store.getState().windowContentZoomFactor) {
+				this.store().dispatch({
+					type: 'WINDOW_CONTENT_ZOOM_FACTOR_SET',
+					zoomFactor: zoomFactor,
+				});
+			}
+		}
+
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
@@ -295,6 +307,7 @@ class Application extends BaseApplication {
 
 		if (action.type === 'WINDOW_CONTENT_ZOOM_FACTOR_SET') {
 			webFrame.setZoomFactor(newState.windowContentZoomFactor);
+			Setting.setValue('windowContentZoomFactor', newState.windowContentZoomFactor * 100);
 		}
 
 		return result;
