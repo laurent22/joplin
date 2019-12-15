@@ -75,9 +75,15 @@ class HeaderComponent extends React.Component {
 		if (nextProps.windowCommand) {
 			this.doCommand(nextProps.windowCommand);
 		}
+	}
 
-		if (nextProps.zoomFactor !== this.props.zoomFactor || nextProps.size !== this.props.size) {
-			const mediaQuery = window.matchMedia(`(max-width: ${550 * nextProps.zoomFactor}px)`);
+	componentDidUpdate(prevProps) {
+		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
+			this.resetSearch();
+		}
+
+		if (this.props.zoomFactor !== prevProps.zoomFactor || this.props.size !== prevProps.size) {
+			const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
 			const showButtonLabels = !mediaQuery.matches;
 
 			if (this.state.showButtonLabels !== showButtonLabels) {
@@ -85,12 +91,6 @@ class HeaderComponent extends React.Component {
 					showButtonLabels: !mediaQuery.matches,
 				});
 			}
-		}
-	}
-
-	componentDidUpdate(prevProps) {
-		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
-			this.resetSearch();
 		}
 	}
 
