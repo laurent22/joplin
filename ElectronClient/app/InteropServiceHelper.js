@@ -32,6 +32,8 @@ class InteropServiceHelper {
 		const exportOptions = {};
 		exportOptions.path = path;
 		exportOptions.format = module.format;
+		exportOptions.modulePath = module.path;
+		exportOptions.target = module.target;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;
 		if (options.sourceNoteIds) exportOptions.sourceNoteIds = options.sourceNoteIds;
 

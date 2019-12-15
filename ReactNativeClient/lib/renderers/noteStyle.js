@@ -254,6 +254,16 @@ module.exports = function(style, options) {
 			opacity: 0.5;
 		}
 
+		.exported-note-title {
+			font-size: 2.2em;
+			font-weight: bold;
+			margin-bottom: 1em;
+		}
+
+		.exported-note {
+			padding: 1em;
+		}
+
 		@media print {
 			body {
 				height: auto !important;

@@ -61,6 +61,7 @@ class InteropService {
 				format: 'jex',
 				fileExtensions: ['jex'],
 				target: 'file',
+				canDoMultiExport: true,
 				description: _('Joplin Export File'),
 			},
 			{
@@ -77,6 +78,17 @@ class InteropService {
 				format: 'md',
 				target: 'directory',
 				description: _('Markdown'),
+			},
+			{
+				format: 'html',
+				target: 'file',
+				canDoMultiExport: false,
+				description: _('HTML File'),
+			},
+			{
+				format: 'html',
+				target: 'directory',
+				description: _('HTML Directory'),
 			},
 		];
 
@@ -127,12 +139,18 @@ class InteropService {
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
 	// is returned. This is useful to auto-detect the module based on the format.
 	// For more precise matching, newModuleFromPath_ should be used.
-	findModuleByFormat_(type, format) {
+	findModuleByFormat_(type, format, target = null) {
 		const modules = this.modules();
 		const matches = [];
 		for (let i = 0; i < modules.length; i++) {
 			const m = modules[i];
-			if (m.format === format && m.type === type) matches.push(modules[i]);
+			if (m.format === format && m.type === type) {
+				if (target === null) {
+					matches.push(m);
+				} else if (target === m.target) {
+					matches.push(m);
+				}
+			}
 		}
 
 		const output = matches.find(m => !!m.isDefault);
@@ -171,7 +189,7 @@ class InteropService {
 		}
 		const ModuleClass = require(options.modulePath);
 		const output = new ModuleClass();
-		const moduleMetadata = this.findModuleByFormat_(type, options.format);
+		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
 		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
@@ -237,10 +255,12 @@ class InteropService {
 	}
 
 	async export(options) {
+		options = Object.assign({}, options);
+		if (!options.format) options.format = 'jex';
+
 		const exportPath = options.path ? options.path : null;
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
-		const exportFormat = options.format ? options.format : 'jex';
 		const result = { warnings: [] };
 		const itemsToExport = [];
 
@@ -304,7 +324,7 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
 		}
 
-		const exporter = this.newModuleByFormat_('exporter', exportFormat);
+		const exporter = this.newModuleFromPath_('exporter', options);// this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
@@ -345,6 +365,7 @@ class InteropService {
 
 					await exporter.processItem(ItemClass, item);
 				} catch (error) {
+					console.error(error);
 					result.warnings.push(error.message);
 				}
 			}
