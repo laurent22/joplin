@@ -37,16 +37,16 @@ msgid "No notebook has been specified."
 msgstr "특정된 노트북이 없습니다."
 
 msgid "Y"
-msgstr "Y"
+msgstr "예"
 
 msgid "n"
-msgstr "n"
+msgstr "아니오"
 
 msgid "N"
-msgstr "N"
+msgstr "예"
 
 msgid "y"
-msgstr "y"
+msgstr "아니오"
 
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
@@ -307,7 +307,7 @@ msgstr "맨 처음 <num> 노트만 표시합니다."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
+"항목을 <field>별로 정렬합니다 (예시: 제목, 업데이트된 시간, 생성 시간)."
 
 msgid "Reverses the sorting order."
 msgstr "정렬 순서를 바꿉니다."
@@ -327,8 +327,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
-"TODO_CHECKED (할 일에 해당), TITLE 입니다"
+"긴 목록 포맷을 사용합니다. 포맷은 계정, 노트 수 (노트북에 해당), 날짜, "
+"할 일, 제목 입니다"
 
 msgid "Please select a notebook first."
 msgstr "노트북을 먼저 선택해주세요."
@@ -474,8 +474,8 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용하실 수 있"
-"습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태"
+"확인할 때 <tag-command>로 \"추가\", \"삭제\" 또는 \"목록\" 을 사용하실 수 있"
+"습니다. 또한 `태그 목록` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태"
 "그인 옵션 -l 을 사용하실수 있습니다)."
 
 #, javascript-format
@@ -488,9 +488,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle"
+"<todo-command>로 \"토글\" 이나 \"삭제\"를 사용하실 수 있습니다. \"토글"
 "\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용"
-"됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear"
+"됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"삭제"
 "\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
 
 msgid "Marks a to-do as non-completed."
@@ -672,7 +672,7 @@ msgid "Toggle sidebar"
 msgstr "사이드바 표시 전환"
 
 msgid "Layout button sequence"
-msgstr ""
+msgstr "레이아웃 버튼 순서"
 
 #, fuzzy
 msgid "Toggle note list"
@@ -865,7 +865,7 @@ msgid "Active"
 msgstr "활성"
 
 msgid "ID"
-msgstr "ID"
+msgstr "계정"
 
 msgid "Source"
 msgstr "원본"
@@ -975,7 +975,7 @@ msgid "Some items cannot be synchronised."
 msgstr "일부 항목들은 동기화할 수 없습니다."
 
 msgid "View them now"
-msgstr "지금 보여주기"
+msgstr "지금 나타내기"
 
 msgid "One or more master keys need a password."
 msgstr "하나 혹은 그 이상의 마스터 키 비밀번호를 입력해주세요."
@@ -1382,17 +1382,17 @@ msgstr ""
 "세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "키보드 모드"
 
 #, fuzzy
 msgid "Default"
 msgstr "기본값:  %s"
 
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 msgid "Synchronisation target"
 msgstr "동기화 대상"
@@ -1441,7 +1441,7 @@ msgid "Always"
 msgstr "항상"
 
 msgid "Manual"
-msgstr "수동"
+msgstr "설명서"
 
 msgid "Auto"
 msgstr "자동"
@@ -1462,10 +1462,10 @@ msgid "Theme"
 msgstr "테마"
 
 msgid "Light"
-msgstr "밝음"
+msgstr "밝게"
 
 msgid "Dark"
-msgstr "어두움"
+msgstr "어둡게"
 
 msgid "Dracula"
 msgstr "Dracula"
@@ -1477,11 +1477,11 @@ msgid "Solarised Dark"
 msgstr "Solarized Dark"
 
 msgid "Nord"
-msgstr ""
+msgstr "노드"
 
 #, fuzzy
 msgid "Show note counts"
-msgstr "트레이 아이콘 표시"
+msgstr "노트 수 보이기""
 
 #, fuzzy
 msgid "Editor"
@@ -1492,7 +1492,7 @@ msgid "Viewer"
 msgstr "보기"
 
 msgid "Split View"
-msgstr ""
+msgstr "뷰 나누기"
 
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
@@ -1589,7 +1589,7 @@ msgstr ""
 "수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
 
 msgid "Start application minimised in the tray icon"
-msgstr "트레이에 최소화 된 채로 Joplin 실행"
+msgstr "트레이 아이콘에 최소화 된 채로 Joplin 실행"
 
 msgid "Global zoom percentage"
 msgstr "전체 확대 비율"
@@ -1607,8 +1607,8 @@ msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"반드시 모노스페이스 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거"
-"나 올바르지 않을 경우, 기본적으로 제공되는 모노스페이스 글꼴을 기본값으로 사"
+"반드시 monospace 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거"
+"나 올바르지 않을 경우, 기본적으로 제공되는 monospace 글꼴을 기본값으로 사"
 "용합니다."
 
 msgid "Automatically update the application"
@@ -1662,7 +1662,7 @@ msgid "A5"
 msgstr "A5"
 
 msgid "Tabloid"
-msgstr "타블로이드"
+msgstr "Tabloid"
 
 msgid "Legal"
 msgstr "Legal"
@@ -1674,7 +1674,7 @@ msgid "Portrait"
 msgstr "포트레이트"
 
 msgid "Landscape"
-msgstr "랜드스케이프"
+msgstr "Landscape"
 
 msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
@@ -1860,7 +1860,7 @@ msgid "%s: %d notes"
 msgstr "%s: %d 노트"
 
 msgid "Coming alarms"
-msgstr "다가오는 예정된 알람"
+msgstr "예정된 알람"
 
 #, javascript-format
 msgid "On %s: %s"
@@ -2041,7 +2041,7 @@ msgid "Login with Dropbox"
 msgstr "Dropbox로 로그인"
 
 msgid "Enter code here"
-msgstr "여기에 코드를 입력하세요"
+msgstr "코드를 입력하세요"
 
 #, javascript-format
 msgid "Master Key %s"
@@ -2077,7 +2077,7 @@ msgid "Show all"
 msgstr "모두 표시"
 
 msgid "Errors only"
-msgstr "오류들만 보기"
+msgstr "오류 보기"
 
 msgid "This note has been modified:"
 msgstr "노트가 변경되었습니다:"
@@ -2090,7 +2090,7 @@ msgstr "변경 사항 버리기"
 
 #, javascript-format
 msgid "No item with ID %s"
-msgstr "ID %s에 해당하는 항목이 없습니다"
+msgstr "계정 %s에 해당하는 항목이 없습니다"
 
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
