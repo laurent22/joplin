@@ -2,7 +2,7 @@
 
 * * *
 
-🌞 [Joplin is applying for Google Summer of Code 2020](https://joplinapp.org/gsoc/) 🌞
+🌞 [Joplin is applying for Google Summer of Code 2020](https://joplinapp.org/gsoc2020/) 🌞
 
 * * *
 
