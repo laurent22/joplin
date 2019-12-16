@@ -582,11 +582,11 @@ async function main() {
 		[ 'readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' } ],
 
 		[ 'readme/gsoc/index.md', 'docs/gsoc/index.html', { title: 'Google Summer of Code' } ],
-		[ 'readme/gsoc/idea1_nextcloud.md', 'docs/gsoc/idea1_nextcloud.html', { title: 'GSoC: Idea: Nextcloud' } ],
-		[ 'readme/gsoc/idea2_collaboration.md', 'docs/gsoc/idea2_collaboration.html', { title: 'GSoC: Idea: Collaboration' } ],
-		[ 'readme/gsoc/idea3_hierarchical_tags.md', 'docs/gsoc/idea3_hierarchical_tags.html', { title: 'GSoC: Idea: Hiearchical Tags' } ],
-		[ 'readme/gsoc/idea4_search.md', 'docs/gsoc/idea4_search.html', { title: 'GSoC: Idea: Search' } ],
-		[ 'readme/gsoc/idea6_mobile_sharing.md', 'docs/gsoc/idea6_mobile_sharing.html', { title: 'GSoC: Idea: Mobile Sharing' } ],
+		[ 'readme/gsoc/idea_nextcloud.md', 'docs/gsoc/idea_nextcloud.html', { title: 'GSoC: Idea: Nextcloud' } ],
+		[ 'readme/gsoc/idea_collaboration.md', 'docs/gsoc/idea_collaboration.html', { title: 'GSoC: Idea: Collaboration' } ],
+		[ 'readme/gsoc/idea_hierarchical_tags.md', 'docs/gsoc/idea_hierarchical_tags.html', { title: 'GSoC: Idea: Hiearchical Tags' } ],
+		[ 'readme/gsoc/idea_search.md', 'docs/gsoc/idea_search.html', { title: 'GSoC: Idea: Search' } ],
+		[ 'readme/gsoc/idea_mobile_sharing.md', 'docs/gsoc/idea_mobile_sharing.html', { title: 'GSoC: Idea: Mobile Sharing' } ],
 		[ 'readme/gsoc/idea_ocr.md', 'docs/gsoc/idea_ocr.html', { title: 'GSoC: Idea: OCR Support' } ],
 	];
 
