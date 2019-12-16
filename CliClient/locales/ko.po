@@ -39,16 +39,16 @@ msgid "No notebook has been specified."
 msgstr "특정된 노트북이 없습니다."
 
 msgid "Y"
-msgstr "예"
+msgstr "Y"
 
 msgid "n"
-msgstr "아니오"
+msgstr "n"
 
 msgid "N"
-msgstr "아니오"
+msgstr "N"
 
 msgid "y"
-msgstr "예"
+msgstr "y"
 
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
@@ -329,8 +329,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북), DATE, "
-"TODO_CHECKED(할 일), TITLE 입니다"
+"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
+"TODO_CHECKED (할 일에 해당), TITLE 입니다"
 
 msgid "Please select a notebook first."
 msgstr "노트북을 먼저 선택해주세요."
@@ -475,9 +475,9 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 을 사용하실 수 있"
-"습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태"
-"그인 옵션 -l 을 사용하실수 있습니다)."
+"확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 "
+"사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 "
+"있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
@@ -675,9 +675,8 @@ msgstr "사이드바 표시 전환"
 msgid "Layout button sequence"
 msgstr "레이아웃 버튼 순서"
 
-#, fuzzy
 msgid "Toggle note list"
-msgstr "노트 목록"
+msgstr "Toggle 노트 목록"
 
 msgid "Toggle editor layout"
 msgstr "편집기 배치 형태 전환"
@@ -1165,7 +1164,6 @@ msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
 
-#, fuzzy
 msgid "New sub-notebook"
 msgstr "새 노트북"
 
@@ -1385,7 +1383,6 @@ msgstr ""
 msgid "Keyboard Mode"
 msgstr "키보드 모드"
 
-#, fuzzy
 msgid "Default"
 msgstr "기본값:  %s"
 
@@ -1480,28 +1477,25 @@ msgstr "Solarized Dark"
 msgid "Nord"
 msgstr "노드"
 
-#, fuzzy
 msgid "Show note counts"
 msgstr "노트 수 보이기\""
 
-#, fuzzy
 msgid "Editor"
 msgstr "편집"
 
-#, fuzzy
 msgid "Viewer"
-msgstr "보기"
+msgstr "뷰어"
 
 msgid "Split View"
 msgstr "뷰 나누기"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s = %s (%s)"
 
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 msgid "Uncompleted to-dos on top"
 msgstr "완료되지 않은 '할 일'을 맨 위에"
