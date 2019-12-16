@@ -1,4 +1,4 @@
-# Google Summer of Code
+# Google Summer of Code 2020
 
 Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.
 
@@ -14,14 +14,14 @@ All applications share the same back-end written in JavaScript (Node.js), with R
 
 The GUI's, as listed on the [Joplin's website](https://joplinapp.org/#installation) are:
 
-- ClL: terminal-kit
+- CLI: terminal-kit
 - Desktop: Electron
 - Mobile: React Native
 
 More details can be found on:
 
 - [How to contribute](https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md)
-- [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools)
+- [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md)
 
 Moreover there are community driven projects such as:
 
@@ -35,19 +35,19 @@ Students wishing to participate in Summer of Code must realize, that this is a i
 
 You don't have to be a proven developer -- in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.
 
-Currently there is only [How to contribute](https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md) and [How to build](https://github.com/laurent22/joplin/blob/master/BUILD.md#building-the-tools) but more details are bout to come on how to interact and how to commit.
 In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.
 
-Before you can be accepted as a student we expect you to fix some bugs and link that work on your proposal.
+Before you can be accepted as a student we expect you to fix some bugs or implement some small feature and link that work on your proposal. You may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues) to find some simple tasks. See the [good first issues](https://github.com/laurent22/joplin/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) which are a good way to make yourself familiar with the code base.
 
 You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.
 
-Do not worry, the the timeline from Google reserves a lot of time for bonding periods but use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with #GSoC and #2020.
+Do not worry, the timeline from Google reserves a lot of time for bonding periods but use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with #GSoC and #2020.
 
 You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.
-Moreover, we require that you come to clear agreement on how to commit, test and build. We don't see us loosing time on how to test instead accentually testing your commits.
 
-**Students who neglect active communication will be failed**.
+Moreover, we require that you come to clear agreement on how to commit, test and build.
+
+Students who neglect active communication will be failed!
 
 ## General instructions
 
@@ -57,17 +57,17 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, and meet your fellow developers in the [Development category](https://discourse.joplinapp.org/c/development)
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
-3. Take a look at the [list of ideas]. You can have you own idea addeed by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
-4. Come up with project that you're interested in and discusse it in [Development category](https://discourse.joplinapp.org/c/development)
+3. Take a look at the [list of ideas](https://joplinapp.org/gsoc/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+4. Come up with project that you're interested in and discuss it in [Development category](https://discourse.joplinapp.org/c/development)
 5. Write a first draft and get someone to review it
 6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
 7. Read [How to write a kickass proposal for GSoC](http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/)
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) ahead of the deadline
-9. Submit proof of enrollment well ahead of the deadline
+9. Submit proof of enrolment well ahead of the deadline
 
 Coming up with an interesting idea is probably the most difficult part. It should be something interesting for Joplin, for Open Source in general and for you. And it must be something that you can realistically achieve in the time available to you.
 
-A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favorably on applications from students who have already started to act like Open Source developers.
+A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favourably on applications from students who have already started to act like Open Source developers.
 
 ## Student proposal guidelines
 
@@ -113,12 +113,12 @@ Below is the application template:
 
 **Submit your proposal early**: early submissions get more attention from developers because that they have more time to read them. The more people see your proposal, the more it will be discussed.
 
-**Do not leave it all to the last minute**: while it is Google that is operating the webserver, it would be wise to expect a last-minute overload on the server. So, be sure you send your application and proof of enrollment before the final rush. Also, applications submitted very late will get the least attention from mentors, so you may get a lower vote because of that. Submitting a draft early will give time for feedback from prospective mentors.
+**Do not leave it all to the last minute**: while it is Google that is operating the webserver, it would be wise to expect a last-minute overload on the server. So, be sure you send your application and proof of enrolment before the final rush. Also, applications submitted very late will get the least attention from mentors, so you may get a lower vote because of that. Submitting a draft early will give time for feedback from prospective mentors.
 
 **Keep it simple**: Be concise and precise. Provide a clear, descriptive title. "My Project" is the worst possible title!
 
 **Know what you are talking about**: Do not submit proposals that cannot be accomplished over a summer or that are not related to Joplin. If your idea is unusual, be sure to explain why you have chosen Joplin to be your mentoring organization.
-There could be exceptional reason to accept proposal what cannot be finished over the sumer if either it is clearly recognisable that there will be commitment beyond the summer period or the project can be well separated in sub-project. If you want to go that way, your proposal must be very easy readable to allow us to evaluate the changes of a project going through several coding programs.
+There could be exceptional reason to accept proposal what cannot be finished over the summer if either it is clearly recognisable that there will be commitment beyond the summer period or the project can be well separated in sub-project. If you want to go that way, your proposal must be very easy readable to allow us to evaluate the changes of a project going through several coding programs.
 
 **Aim wide**: submit more than one proposal. You are allowed to submit to another organisation as well. If you do submit more than one proposal, tell us that and which proposal you would choose, if both were selected. Former students would advise you to do one or two kick-ass proposals rather than trying to do three.
 
@@ -140,13 +140,13 @@ Your idea proposal should be a brief description of what the project is, what th
 
 ### Mentoring
 
-Anyone developer can be a mentor if you meet the GSoC eligiibity requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
+Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
 
 Before subscribing yourself as a mentor, please make sure that  the [staff](https://discourse.joplinapp.org/g/staff) is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.
 
 Prospective mentors should read the [mentoring guide](http://www.booki.cc/gsoc-mentoring). Also, Federico Mena-Quintero has written some helpful information based on his experiences in previous years. [His HOWTO](https://people.gnome.org/~federico/docs/summer-of-code-mentoring-howto/index.html) has some useful suggestions for anyone planning to mentor this year.
 
-You will subscribe to the relvant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the coding period.
+You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the coding period.
 
 Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.
 

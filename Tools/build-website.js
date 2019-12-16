@@ -290,7 +290,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -581,14 +581,8 @@ async function main() {
 		[ 'readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' } ],
 		[ 'readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' } ],
 
-		[ 'readme/gsoc/index.md', 'docs/gsoc/index.html', { title: 'Google Summer of Code' } ],
-		[ 'readme/gsoc/idea_nextcloud.md', 'docs/gsoc/idea_nextcloud.html', { title: 'GSoC: Idea: Nextcloud' } ],
-		[ 'readme/gsoc/idea_collaboration.md', 'docs/gsoc/idea_collaboration.html', { title: 'GSoC: Idea: Collaboration' } ],
-		[ 'readme/gsoc/idea_hierarchical_tags.md', 'docs/gsoc/idea_hierarchical_tags.html', { title: 'GSoC: Idea: Hiearchical Tags' } ],
-		[ 'readme/gsoc/idea_search.md', 'docs/gsoc/idea_search.html', { title: 'GSoC: Idea: Search' } ],
-		[ 'readme/gsoc/idea_mobile_sharing.md', 'docs/gsoc/idea_mobile_sharing.html', { title: 'GSoC: Idea: Mobile Sharing' } ],
-		[ 'readme/gsoc/idea_ocr.md', 'docs/gsoc/idea_ocr.html', { title: 'GSoC: Idea: OCR Support' } ],
-		[ 'readme/gsoc/idea_multi_profiles.md', 'docs/gsoc/idea_multi_profiles.html', { title: 'GSoC: Idea: Multi-Profile Support' } ],
+		[ 'readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' } ],
+		[ 'readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas.html', { title: 'GSoC: Project Ideas' } ],
 	];
 
 	const path = require('path');
