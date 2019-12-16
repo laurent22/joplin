@@ -588,6 +588,7 @@ async function main() {
 		[ 'readme/gsoc/idea_search.md', 'docs/gsoc/idea_search.html', { title: 'GSoC: Idea: Search' } ],
 		[ 'readme/gsoc/idea_mobile_sharing.md', 'docs/gsoc/idea_mobile_sharing.html', { title: 'GSoC: Idea: Mobile Sharing' } ],
 		[ 'readme/gsoc/idea_ocr.md', 'docs/gsoc/idea_ocr.html', { title: 'GSoC: Idea: OCR Support' } ],
+		[ 'readme/gsoc/idea_multi_profiles.md', 'docs/gsoc/idea_multi_profiles.html', { title: 'GSoC: Idea: Multi-Profile Support' } ],
 	];
 
 	const path = require('path');
