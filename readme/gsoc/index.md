@@ -152,10 +152,6 @@ Finally, know that we will never assign you to a project you do not want to work
 
 ## Ideas
 
-- [Idea: Nextcloud](https://joplinapp.org/gsoc/idea_nextcloud.html)
-- [Idea: Collaboration](https://joplinapp.org/gsoc/idea_collaboration.html)
-- [Idea: Hierarchical Tags](https://joplinapp.org/gsoc/idea_hierarchical_tags.html)
-- [Idea: Search](https://joplinapp.org/gsoc/idea_search.html)
-- [Idea: Mobile Sharing](https://joplinapp.org/gsoc/idea_mobile_sharing.html)
-- [Idea: OCR Support](https://joplinapp.org/gsoc/idea_ocr.html)
-- [Idea: Multi-profile support](https://joplinapp.org/gsoc/idea_multi_profiles.html)
+Please see below for a list of project ideas:
+
+https://joplinapp.org/gsoc/ideas.html
