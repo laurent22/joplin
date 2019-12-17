@@ -148,3 +148,17 @@ Skills Required: JavaScript
 Potential Mentor(s):
 
 More info: [Search engine improvements](https://github.com/laurent22/joplin/issues/1877)
+
+## 8. WYSIWYG Editor
+
+The current editor shows the Markdown text on the left side and the rendered HTML on the right side (a split view). We would like to add another editor option, which would be a WYSIWYG editor, where the user can directly edit formatted text. This would not replace the split view but rather be an alternative editor and the user can choose either split view or WYSIWYG.
+
+Expected Outcome: To add a WYSIWYG editor to the desktop app.
+
+Difficulty Level: High
+
+Skills Required: JavaScript; React
+
+Potential Mentor(s):
+
+More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
