@@ -7,9 +7,9 @@ xcopy /C /I /H /R /Y /S /Q %script_dir%\..\ReactNativeClient\lib %script_dir%\ap
 REM if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem Note that TypeScript must be installed globally for this to work
-cd %script_dir%\..
-call tsc
-if %errorlevel% neq 0 exit /b %errorlevel%
+REM cd %script_dir%\..
+REM call tsc
+REM if %errorlevel% neq 0 exit /b %errorlevel%
 
 cd %script_dir%\app
 call npm run compile

@@ -1,5 +1,3 @@
-// const React = require('react');
-// const { useState, useEffect } = React;
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import JoplinServerApi from '../lib/JoplinServerApi';
@@ -9,6 +7,7 @@ const { themeStyle, buildStyle } = require('../theme.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
+const BaseItem = require('lib/models/BaseItem');
 const { reg } = require('lib/registry.js');
 const { clipboard } = require('electron');
 
@@ -39,6 +38,7 @@ function styles_(props:ShareNoteDialogProps) {
 				marginBottom: 5,
 			},
 			noteTitle: {
+				...theme.textStyle,
 				flex: 1,
 				display: 'flex',
 				color: theme.color,
@@ -96,24 +96,30 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		clipboard.writeText(links.join('\n'));
 	};
 
+	const synchronize = async () => {
+		const synchronizer = await reg.syncTarget().synchronizer();
+		await synchronizer.waitForSyncToFinish();
+		await reg.scheduleSync(0);
+	};
+
 	const shareLinkButton_click = async () => {
 		let hasSynced = false;
 		let tryToSync = false;
 		while (true) {
 			try {
-				setSharesState('creating');
-
 				if (tryToSync) {
-					const synchronizer = await reg.syncTarget().synchronizer();
-					await synchronizer.waitForSyncToFinish();
-					await reg.scheduleSync(0);
+					setSharesState('synchronizing');
+					await synchronize();
 					tryToSync = false;
 					hasSynced = true;
 				}
 
+				setSharesState('creating');
+
 				const api = await appApi();
 				const syncTargetId = api.syncTargetId(Setting.toPlainObject());
 				const newShares = Object.assign({}, shares);
+				let sharedStatusChanged = false;
 
 				for (const note of notes) {
 					const result = await api.exec('POST', 'shares', {
@@ -121,9 +127,18 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 						noteId: note.id,
 					});
 					newShares[note.id] = result;
+
+					const changed = await BaseItem.updateShareStatus(note, true);
+					if (changed) sharedStatusChanged = true;
 				}
 
 				setShares(newShares);
+
+				if (sharedStatusChanged) {
+					setSharesState('synchronizing');
+					await synchronize();
+					setSharesState('creating');
+				}
 
 				copyLinksToClipboard(newShares);
 
@@ -178,10 +193,13 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	};
 
 	const statusMessage = (sharesState:string):string => {
+		if (sharesState === 'synchronizing') return _('Synchronising...');
 		if (sharesState === 'creating') return _n('Generating link...', 'Generating links...', noteCount);
 		if (sharesState === 'created') return _n('Link has been copied to clipboard!', 'Links have been copied to clipboard!', noteCount);
 		return '';
 	};
+
+	const encryptionWarningMessage = !Setting.value('encryption.enabled') ? null : <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}</div>;
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
@@ -191,7 +209,8 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}
-				<button disabled={sharesState === 'creating'} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
+				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
+				{encryptionWarningMessage}
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
