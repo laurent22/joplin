@@ -43,6 +43,7 @@ class InteropServiceHelper {
 			const result = await service.export(exportOptions);
 			console.info('Export result: ', result);
 		} catch (error) {
+			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 		}
 

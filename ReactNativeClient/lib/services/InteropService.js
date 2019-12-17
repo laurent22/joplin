@@ -184,10 +184,13 @@ class InteropService {
 	 * https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	 */
 	newModuleFromPath_(type, options) {
-		if (!options || !options.modulePath) {
-			throw new Error('Cannot load module without a defined path to load from.');
+		let modulePath = options && options.modulePath ? options.modulePath : '';
+
+		if (!modulePath) {
+			const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+			modulePath = moduleMetadata.path;
 		}
-		const ModuleClass = require(options.modulePath);
+		const ModuleClass = require(modulePath);
 		const output = new ModuleClass();
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
 		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above

@@ -4,6 +4,7 @@ const noteStyle = require('./noteStyle');
 
 class HtmlToHtml {
 	constructor(options) {
+		if (!options) options = {};
 		this.resourceBaseUrl_ = 'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
 	}
 
