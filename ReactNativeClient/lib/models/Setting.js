@@ -1028,7 +1028,7 @@ Setting.constants_ = {
 	profileDir: '',
 	templateDir: '',
 	tempDir: '',
-	openDevTools: false,
+	flagOpenDevTools: false,
 	syncVersion: 1,
 };
 

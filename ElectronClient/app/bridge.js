@@ -43,6 +43,14 @@ class Bridge {
 		return this.window().setSize(width, height);
 	}
 
+	openDevTools() {
+		return this.window().webContents.openDevTools();
+	}
+
+	closeDevTools() {
+		return this.window().webContents.closeDevTools();
+	}
+
 	showSaveDialog(options) {
 		const {dialog} = require('electron');
 		if (!options) options = {};

@@ -49,7 +49,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
-	noteDevToolsVisible: false,
+	devToolsVisible: false,
 });
 
 class Application extends BaseApplication {
@@ -221,7 +221,12 @@ class Application extends BaseApplication {
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
 				newState = Object.assign({}, state);
-				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
+				newState.devToolsVisible = !newState.devToolsVisible;
+				break;
+
+			case 'NOTE_DEVTOOLS_SET':
+				newState = Object.assign({}, state);
+				newState.devToolsVisible = action.value;
 				break;
 
 			}
@@ -231,6 +236,14 @@ class Application extends BaseApplication {
 		}
 
 		return super.reducer(newState, action);
+	}
+
+	toggleDevTools(visible) {
+		if (visible) {
+			bridge().openDevTools();
+		} else {
+			bridge().closeDevTools();
+		}
 	}
 
 	async generalMiddleware(store, next, action) {
@@ -274,12 +287,12 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
-			this.updateMenuItemStates();
+			this.updateMenuItemStates(newState);
 		}
 
-		if (action.type === 'NOTE_DEVTOOLS_TOGGLE') {
-			const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
-			menuItem.checked = newState.noteDevToolsVisible;
+		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
+			this.toggleDevTools(newState.devToolsVisible);
+			this.updateMenuItemStates(newState);
 		}
 
 		return result;
@@ -1105,11 +1118,13 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
-	async updateMenuItemStates() {
+	async updateMenuItemStates(state = null) {
 		if (!this.lastMenuScreen_) return;
-		if (!this.store()) return;
+		if (!this.store() && !state) return;
 
-		const selectedNoteIds = this.store().getState().selectedNoteIds;
+		if (!state) state = this.store().getState();
+
+		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
@@ -1117,6 +1132,9 @@ class Application extends BaseApplication {
 			if (!menuItem) continue;
 			menuItem.enabled = !!note && note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN;
 		}
+
+		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+		menuItem.checked = state.devToolsVisible;
 	}
 
 	updateTray() {
@@ -1187,8 +1205,8 @@ class Application extends BaseApplication {
 
 		reg.setShowErrorMessageBoxHandler((message) => { bridge().showErrorMessageBox(message); });
 
-		if (Setting.value('openDevTools')) {
-			bridge().window().webContents.openDevTools();
+		if (Setting.value('flagOpenDevTools')) {
+			bridge().openDevTools();
 		}
 
 		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
@@ -1242,6 +1260,11 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',
 			templates: templates,
+		});
+
+		this.store().dispatch({
+			type: 'NOTE_DEVTOOLS_SET',
+			value: Setting.value('flagOpenDevTools'),
 		});
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update

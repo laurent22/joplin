@@ -160,7 +160,7 @@ class NoteTextViewerComponent extends React.Component {
 	// ----------------------------------------------------------------
 
 	render() {
-		const viewerStyle = Object.assign({}, this.props.viewerStyle, { borderTop: 'none' });
+		const viewerStyle = Object.assign({}, this.props.viewerStyle, { borderTop: 'none', borderRight: 'none', borderBottom: 'none' });
 		return <iframe className="noteTextViewer" ref={this.webviewRef_} style={viewerStyle} src="gui/note-viewer/index.html"></iframe>;
 	}
 }

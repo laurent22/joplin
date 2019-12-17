@@ -455,19 +455,6 @@ class NoteTextComponent extends React.Component {
 	}
 
 	componentDidUpdate() {
-		// if (Setting.value('env') === 'dev' && this.webviewRef()) {
-		// 	this.webviewRef().openDevTools();
-		// 	return;
-		// }
-
-		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
-			if (this.props.noteDevToolsVisible) {
-				this.webviewRef().openDevTools();
-			} else {
-				this.webviewRef().closeDevTools();
-			}
-		}
-
 		const currentNoteId = this.state.note ? this.state.note.id : null;
 		if (this.lastComponentUpdateNoteId_ !== currentNoteId && this.editor_) {
 			this.editor_.editor.getSession().setMode(new CustomMdMode());

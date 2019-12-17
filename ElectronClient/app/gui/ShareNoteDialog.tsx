@@ -210,8 +210,8 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 				<div style={theme.dialogTitle}>{_('Share Notes')}</div>
 				{renderNoteList(notes)}
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
-				{encryptionWarningMessage}
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>
+				{encryptionWarningMessage}
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>

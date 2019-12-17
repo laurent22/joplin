@@ -605,7 +605,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible} />
+				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}
 			</div>
@@ -629,7 +629,6 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
-		noteDevToolsVisible: state.noteDevToolsVisible,
 		templates: state.templates,
 	};
 };
