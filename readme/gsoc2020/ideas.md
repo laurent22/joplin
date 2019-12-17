@@ -14,7 +14,7 @@ Becoming accepted as a Google Summer of Code student is quite competitive. Accep
 
 The applications should support multiple profiles so that, for example, one can have a "work" profile and a "personal" profile. This will also make it easier to share notes: for example a "work project" profile could be created and shared with co-workers via sync.
 
-We want to offer this feature by allowing the user to select a profile from the app (eg. "work" or "personal", then switch to it. Switching would be done by restarting the app and loading the selected profile.
+We want to offer this feature by allowing the user to select a profile from the app (eg. "work" or "personal"), then switch to it. Switching would be done by restarting the app and loading the selected profile.
 
 Expected Outcome: The user should be able to select a profile and switch to it.
 
@@ -103,7 +103,7 @@ More info: [GitHub: Nextcloud notes integration (Web client)](https://github.com
 
 ## 5. OCR support
 
-It is possible to add support for OCR content in Joplin via the [http://tesseract.projectnaptha.com/](Tesseract library). A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.
+It is possible to add support for OCR content in Joplin via the [Tesseract library](http://tesseract.projectnaptha.com/). A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.
 
 Expected Outcome: A service on the desktop app that extract text from images and attach it to the note.
 
