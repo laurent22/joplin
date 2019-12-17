@@ -1266,7 +1266,7 @@ class NoteTextComponent extends React.Component {
 						pageSize: Setting.value('export.pdfPageSize'),
 						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
 					});
-					shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
 				} catch (error) {
 					console.error(error);
 					bridge().showErrorMessageBox(error.message);

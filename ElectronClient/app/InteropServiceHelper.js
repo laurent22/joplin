@@ -43,14 +43,17 @@ class InteropServiceHelper {
 			win = bridge().newBrowserWindow(windowOptions);
 
 			return new Promise((resolve, reject) => {
-				win.webContents.on('did-finish-load', () => {
+				win.webContents.on('did-finish-load', async () => {
 
 					if (target === 'pdf') {
-						win.webContents.printToPDF(options, (error, data) => {
-							cleanup();
-							if (error) reject(error);
+						try {
+							const data = await win.webContents.printToPDF(options);
 							resolve(data);
-						});
+						} catch (error) {
+							reject(error);
+						} finally {
+							cleanup();
+						}
 					} else {
 						win.webContents.print(options, (success) => {
 							// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+

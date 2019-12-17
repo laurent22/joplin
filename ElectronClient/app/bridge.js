@@ -47,7 +47,7 @@ class Bridge {
 		const {dialog} = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
-		const filePath = dialog.showSaveDialog(this.window(), options);
+		const filePath = dialog.showSaveDialogSync(this.window(), options);
 		if (filePath) {
 			this.lastSelectedPath_ = filePath;
 		}
@@ -59,7 +59,7 @@ class Bridge {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		const filePaths = dialog.showOpenDialog(this.window(), options);
+		const filePaths = dialog.showOpenDialogSync(this.window(), options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPath_ = dirname(filePaths[0]);
 		}
@@ -70,7 +70,7 @@ class Bridge {
 	showMessageBox_(window, options) {
 		const {dialog} = require('electron');
 		if (!window) window = this.window();
-		return dialog.showMessageBox(window, options);
+		return dialog.showMessageBoxSync(window, options);
 	}
 
 	showErrorMessageBox(message) {
