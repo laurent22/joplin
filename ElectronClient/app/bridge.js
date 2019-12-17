@@ -1,5 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
+const { BrowserWindow } = require('electron');
 
 class Bridge {
 
@@ -19,6 +20,10 @@ class Bridge {
 
 	window() {
 		return this.electronWrapper_.window();
+	}
+
+	newBrowserWindow(options) {
+		return new BrowserWindow(options);
 	}
 
 	windowContentSize() {

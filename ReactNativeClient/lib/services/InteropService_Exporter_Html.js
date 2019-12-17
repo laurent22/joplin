@@ -10,6 +10,7 @@ const MarkupToHtml = require('lib/renderers/MarkupToHtml.js');
 const dataurl	 = require('dataurl');
 const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
+const { escapeHtml } = require('lib/string-utils.js');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -104,10 +105,23 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 			const bodyMd = await this.processNoteResources_(item);
 			const result = this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, { resources: this.resources_, plainResourceRendering: true });
 			const noteContent = [];
-			if (item.title) noteContent.push(`<div class="exported-note-title">${item.title}</div>`);
+			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
 			if (result.html) noteContent.push(result.html);
 
-			await shim.fsDriver().writeFile(noteFilePath, `<div class="exported-note">${noteContent.join('\n\n')}</div>`, 'utf-8');
+			const fullHtml = `
+				<!DOCTYPE html>
+				<html>
+					<head>
+						<meta charset="UTF-8">
+						<title>${escapeHtml(item.title)}</title>
+					</head>
+					<body>
+						<div class="exported-note">${noteContent.join('\n\n')}</div>
+					</body>
+				</html>
+			`;
+
+			await shim.fsDriver().writeFile(noteFilePath, fullHtml, 'utf-8');
 		}
 	}
 

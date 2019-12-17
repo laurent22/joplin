@@ -1,8 +1,87 @@
 const { _ } = require('lib/locale');
 const { bridge } = require('electron').remote.require('./bridge');
 const InteropService = require('lib/services/InteropService');
+const Setting = require('lib/models/Setting');
+const md5 = require('md5');
+const url = require('url');
+const { shim } = require('lib/shim');
+// const { BrowserWindow } = require('electron');
 
 class InteropServiceHelper {
+
+	static async exportNoteToHtmlFile(noteId) {
+		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
+		const exportOptions = {};
+		exportOptions.path = tempFile;
+		exportOptions.format = 'html';
+		exportOptions.target = 'file';
+		exportOptions.sourceNoteIds = [noteId];
+
+		const service = new InteropService();
+
+		const result = await service.export(exportOptions);
+		console.info('Export HTML result: ', result);
+		return tempFile;
+	}
+
+	static async exportNoteTo_(target, noteId, options = {}) {
+		let win = null;
+		let htmlFile = null;
+
+		const cleanup = () => {
+			if (win) win.destroy();
+			if (htmlFile) shim.fsDriver().remove(htmlFile);
+		};
+
+		try {
+			htmlFile = await this.exportNoteToHtmlFile(noteId);
+
+			const windowOptions = {
+				show: true,
+			};
+
+			win = bridge().newBrowserWindow(windowOptions);
+
+			return new Promise((resolve, reject) => {
+				win.webContents.on('did-finish-load', () => {
+
+					if (target === 'pdf') {
+						win.webContents.printToPDF(options, (error, data) => {
+							cleanup();
+							if (error) reject(error);
+							resolve(data);
+						});
+					} else {
+						win.webContents.print(options, (success) => {
+							// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
+							// It calls the callback right away with "false" even if the document hasn't be print yet.
+
+							cleanup();
+							if (!success) reject(new Error('Could not print'));
+							resolve();
+						});
+					}
+				});
+
+				win.loadURL(url.format({
+					pathname: htmlFile,
+					protocol: 'file:',
+					slashes: true,
+				}));
+			});
+		} catch (error) {
+			cleanup();
+			throw error;
+		}
+	}
+
+	static async exportNoteToPdf(noteId, options = {}) {
+		return this.exportNoteTo_('pdf', noteId, options);
+	}
+
+	static async printNote(noteId, options = {}) {
+		return this.exportNoteTo_('printer', noteId, options);
+	}
 
 	static async export(dispatch, module, options = null) {
 		if (!options) options = {};

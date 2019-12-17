@@ -5,10 +5,6 @@ class NoteTextViewerComponent extends React.Component {
 	constructor() {
 		super();
 
-		this.state = {
-			'html': '',
-		};
-
 		this.initialized_ = false;
 		this.domReady_ = false;
 
