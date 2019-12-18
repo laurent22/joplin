@@ -71,6 +71,23 @@ If you get an `error MSB8020: The build tools for v140 cannot be found.` try to 
 
 The [building\_win32\_tips on this page](./readme/building_win32_tips.md) might be helpful.
 
+## Troubleshooting desktop application
+
+> The application window doesn't open or is white
+
+This is an indication that there's an early initialisation error. Try this:
+
+- In ElectronAppWrapper, set `debugEarlyBugs` to `true`. This will force the window to show up and should open the console next to it, which should display any error.
+- In more rare cases, an already open instance of Joplin can create strange low-level bugs that will display no error but will result in this white window. A non-dev instance of Joplin, or a dev instance that wasn't properly closed might cause this. So make sure you close everything and try again. Perhaps even other Electron apps running (Skype, Slack, etc.) could cause this?
+- Also try to delete node_modules and rebuild.
+- If all else fail, switch your computer off and on again, to make sure you start clean.
+
+> How to work on the app from Windows?
+
+You should not use WSL at all because this is a GUI app that lives outside of WSL, and the WSL layer can cause all kind of very hard to debug issues. It can also lock files in node_modules that cannot be unlocked when the app crashes (you need to restart your computer). Likewise, don't run the TypeScript watch command from WSL.
+
+So everything should be done from a Windows Command prompt running as Administrator. You can use `run.bat` to run the app in dev mode.
+
 # Building the Mobile application
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
