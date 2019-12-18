@@ -26,7 +26,7 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	async isAuthenticated() {
-		return this.api().auth();
+		return !!this.api().auth();
 	}
 
 	syncTargetId() {
@@ -44,7 +44,7 @@ class SyncTargetOneDrive extends BaseSyncTarget {
 	api() {
 		if (this.api_) return this.api_;
 
-		const isPublic = Setting.value('appType') != 'cli';
+		const isPublic = Setting.value('appType') != 'cli' && Setting.value('appType') != 'desktop';
 
 		this.api_ = new OneDriveApi(this.oneDriveParameters().id, this.oneDriveParameters().secret, isPublic);
 		this.api_.setLogger(this.logger());
