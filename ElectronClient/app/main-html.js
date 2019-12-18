@@ -30,6 +30,34 @@ const EncryptionService = require('lib/services/EncryptionService');
 const { bridge } = require('electron').remote.require('./bridge');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 
+if (bridge().env() === 'dev') {
+	const newConsole = function(oldConsole) {
+		const output = {};
+		const fnNames = ['assert', 'clear', 'context', 'count', 'countReset', 'debug', 'dir', 'dirxml', 'error', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'memory', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'trace', 'warn'];
+		for (const fnName of fnNames) {
+			if (fnName === 'warn') {
+				output.warn = function(...text) {
+					const s = [...text].join('');
+					// React spams the console with walls of warnings even outside of strict mode, and even after having renamed
+					// unsafe methods to UNSAFE_xxxx, so we need to hack the console to remove them...
+					if (s.indexOf('Warning: componentWillReceiveProps has been renamed, and is not recommended for use') === 0) return;
+					if (s.indexOf('Warning: componentWillUpdate has been renamed, and is not recommended for use.') === 0) return;
+					oldConsole.warn(...text);
+				};
+			} else {
+				output[fnName] = function(...text) {
+					return oldConsole[fnName](...text);
+				};
+			}
+		}
+		return output;
+	}(window.console);
+
+	window.console = newConsole;
+}
+
+console.info(`Environment: ${bridge().env()}`);
+
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;

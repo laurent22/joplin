@@ -14,6 +14,10 @@ class Bridge {
 		return this.electronWrapper_;
 	}
 
+	env() {
+		return this.electronWrapper_.env();
+	}
+
 	processArgv() {
 		return process.argv;
 	}
