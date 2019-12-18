@@ -19,6 +19,8 @@ class InteropService {
 	modules() {
 		if (this.modules_) return this.modules_;
 
+		// - canDoMultiExport: Tells whether the format can package multiple notes into one file. Default: true.
+
 		let importModules = [
 			{
 				format: 'jex',

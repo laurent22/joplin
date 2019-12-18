@@ -385,13 +385,15 @@ class Application extends BaseApplication {
 		for (let i = 0; i < ioModules.length; i++) {
 			const module = ioModules[i];
 			if (module.type === 'exporter') {
-				exportItems.push({
-					label: module.fullLabel(),
-					screens: ['Main'],
-					click: async () => {
-						await InteropServiceHelper.export(this.dispatch.bind(this), module);
-					},
-				});
+				if (module.canDoMultiExport !== false) {
+					exportItems.push({
+						label: module.fullLabel(),
+						screens: ['Main'],
+						click: async () => {
+							await InteropServiceHelper.export(this.dispatch.bind(this), module);
+						},
+					});
+				}
 			} else {
 				for (let j = 0; j < module.sources.length; j++) {
 					const moduleSource = module.sources[j];
