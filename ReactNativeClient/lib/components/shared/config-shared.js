@@ -55,6 +55,8 @@ shared.checkSyncConfigMessages = function(comp) {
 };
 
 shared.checkNextcloudApp = async function(comp, settings) {
+	if (settings['sync.target'] !== 5) return;
+
 	comp.setState({ checkNextcloudAppResult: 'checking' });
 	let result = null;
 	const appApi = await reg.syncTargetNextcloud().appApi();

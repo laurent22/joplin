@@ -58,7 +58,17 @@ class FileApiDriverWebDav {
 			}
 		}
 
-		const lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');
+		let lastModifiedString = null;
+
+		try {
+			lastModifiedString = this.api().resourcePropByName(resource, 'string', 'd:getlastmodified');
+		} catch (error) {
+			if (error.code === 'stringNotFound') {
+				// OK - the logic to handle this is below
+			} else {
+				throw error;
+			}
+		}
 
 		// Note: Not all WebDAV servers return a getlastmodified date (eg. Seafile, which doesn't return the
 		// property for folders) so we can only throw an error if it's a file.

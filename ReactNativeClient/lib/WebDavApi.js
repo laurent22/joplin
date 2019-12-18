@@ -195,6 +195,8 @@ class WebDavApi {
 		}
 
 		if (outputType === 'string') {
+			if (!output) throw new JoplinError(`String property not found: ${propName}: ${JSON.stringify(resource)}`, 'stringNotFound');
+
 			// If the XML has not attribute the value is directly a string
 			// If the XML node has attributes, the value is under "_".
 			// Eg for this XML, the string will be under {"_":"Thu, 01 Feb 2018 17:24:05 GMT"}:
