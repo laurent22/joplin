@@ -133,7 +133,11 @@ export default class JoplinServerApi {
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
-			return JSON.parse(responseText);
+			try {
+				return JSON.parse(responseText);
+			} catch (error) {
+				throw new Error(`Cannot parse JSON: ${responseText.substr(0, 8192)}`);
+			}
 		};
 
 		const newError = (message:string, code:number = 0) => {
@@ -145,11 +149,13 @@ export default class JoplinServerApi {
 			try {
 				json = await loadResponseJson();
 			} catch (error) {
-				throw newError(`Unknown error: ${responseText.substr(0, 4096)}`, response.status);
+				throw newError(`Unknown error: ${responseText.substr(0, 8192)}`, response.status);
 			}
 
 			const trace = json.stacktrace ? `\n${json.stacktrace}` : '';
-			throw newError(json.error + trace, response.status);
+			let message = json.error;
+			if (!message) message = responseText.substr(0, 8192);
+			throw newError(message + trace, response.status);
 		}
 
 		const output = await loadResponseJson();
