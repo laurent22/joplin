@@ -87,7 +87,7 @@ async function createPotFile(potFilePath, sources) {
 	baseArgs.push('--copyright-holder="Laurent Cozic"');
 	baseArgs.push('--package-name=Joplin-CLI');
 	baseArgs.push('--package-version=1.0.0');
-	baseArgs.push('--no-location');
+	// baseArgs.push('--no-location');
 	baseArgs.push('--keyword=_n:1,2');
 
 	for (let i = 0; i < sources.length; i++) {
