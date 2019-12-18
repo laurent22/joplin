@@ -51,6 +51,9 @@ class ItemList extends React.Component {
 
 	makeItemIndexVisible(itemIndex) {
 		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex + 1);
+		const bottom = Math.max(0, this.state.bottomItemIndex);
+
+		if (itemIndex >= (top - 1) && itemIndex <= (bottom - 1)) return;
 
 		let scrollTop = 0;
 		if (itemIndex < top) {
