@@ -49,7 +49,7 @@ msgstr "Es wurde kein Notizbuch festgelegt."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
-msgstr "J"
+msgstr "Y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
@@ -62,7 +62,7 @@ msgstr "N"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
-msgstr "j"
+msgstr "y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -1136,49 +1136,44 @@ msgid "Check synchronisation configuration"
 msgstr "Überprüfen der Synchronisationseinstellungen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "Unbekanntes Argument: %s"
+msgstr "Unbekannt"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "Breche ab…"
+msgstr "Überprüfe..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
-#, fuzzy
 msgid "Error"
-msgstr "Nur Fehler"
+msgstr "Fehler"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Die Joplin Nextcloud Applikation ist entweder nicht installiert oder falsch "
+"konfiguriert, Bitte schaue Dir die komplette Fehlermeldung an:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "Zeige Alles"
+msgstr "Zeige Protokoll"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Joplin Nextcloud Applikations-Status:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "Synchronisationsstatus"
+msgstr "Überprüfe Status"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "&Hilfe"
+msgstr "Hilfe"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "Erweiterte Optionen"
+msgstr "Zeige Erweiterte Einstellungen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1626,44 +1621,41 @@ msgid "Synchronisation Status"
 msgstr "Synchronisations-Status"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Synchronisation"
+msgstr "Synchronisiere..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Erstelle neue %s..."
-msgstr[1] "Erstelle neue %s..."
+msgstr[0] "Erstelle Link..."
+msgstr[1] "Erstelle Links..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Token wurde in die Zwischenablage kopiert!"
-msgstr[1] "Token wurde in die Zwischenablage kopiert!"
+msgstr[0] "Der Link wurde in die Zwischenablage kopiert!"
+msgstr[1] "Die Links wurden in die Zwischenablage kopiert!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Achtung: Wenn eine Notiz geteilt wird, wird sie auf dem Server nicht mehr "
+"verschlüsselt sein."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "Wiederhergestellte Notizen"
+msgstr "Teile Notizen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Teilen"
-msgstr[1] "Teilen"
+msgstr[0] "Kopiere teilbaren Link"
+msgstr[1] "Kopiere teilbare Links"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "Schliessen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:276
 msgid "Remove"
@@ -1768,9 +1760,8 @@ msgid "Copy Markdown link"
 msgstr "Markdown-Link kopieren"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:112
-#, fuzzy
 msgid "Share note..."
-msgstr "Wiederhergestellte Notizen"
+msgstr "Teile Notiz..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:146
 msgid "PDF File"
@@ -2557,14 +2548,12 @@ msgid "Json Export Directory"
 msgstr "Json Export Verzeichnis"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:88
-#, fuzzy
 msgid "HTML File"
-msgstr "Datei"
+msgstr "HTML Datei"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:93
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Verzeichnis"
+msgstr "HTML Verzeichnis"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:129
 msgid "File"
