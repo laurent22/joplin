@@ -2193,7 +2193,7 @@ msgstr "Invierte el orden"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:294
 msgid "Sort notebooks by"
-msgstr "Ordenar notas por"
+msgstr "Ordenar libretas por"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
 msgid "Save geo-location with notes"
