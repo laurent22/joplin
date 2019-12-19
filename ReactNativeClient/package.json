@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "node ../Tools/copycss.js && node ../Tools/buildReactNativeInjectedJs.js && npx jetify"
+    "postinstall": "node ../Tools/buildReactNativeInjectedJs.js && npx jetify && npm run encodeAssets",
+    "encodeAssets": "node encodeAssets.js"
   },
   "dependencies": {
     "@react-native-community/slider": "^1.1.3",
@@ -18,6 +19,7 @@
     "events": "^1.1.1",
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
+    "joplin-renderer": "^1.0.2",
     "jsc-android": "241213.1.0",
     "markdown-it": "^8.4.0",
     "md5": "^2.2.1",
@@ -67,6 +69,8 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
+    "app-module-path": "^2.2.0",
+    "fs-extra": "^8.1.0",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "^16.8.3"
