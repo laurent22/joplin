@@ -6,16 +6,16 @@ const NoteTextViewer = require('./NoteTextViewer.min');
 const HelpButton = require('./HelpButton.min');
 const BaseModel = require('lib/BaseModel');
 const Revision = require('lib/models/Revision');
-const Note = require('lib/models/Note');
 const urlUtils = require('lib/urlUtils');
 const Setting = require('lib/models/Setting');
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
-const MarkupToHtml = require('lib/renderers/MarkupToHtml');
+const { MarkupToHtml } = require('joplin-renderer');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
 const { bridge } = require('electron').remote.require('./bridge');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 class NoteRevisionViewerComponent extends React.PureComponent {
 	constructor() {
@@ -101,7 +101,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 	async reloadNote() {
 		let noteBody = '';
-		let markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
+		let markupLanguage = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		if (!this.state.revisions.length || !this.state.currentRevId) {
 			noteBody = _('This note has no history');
 			this.setState({ note: null });
@@ -116,18 +116,18 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 
 		const theme = themeStyle(this.props.theme);
 
-		const markupToHtml = new MarkupToHtml({
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 
-		const result = markupToHtml.render(markupLanguage, noteBody, theme, {
+		const result = await markupToHtml.render(markupLanguage, noteBody, theme, {
 			codeTheme: theme.codeThemeCss,
 			userCss: this.props.customCss ? this.props.customCss : '',
 			resources: await shared.attachedResources(noteBody),
 			postMessageSyntax: 'ipcProxySendToHost',
 		});
 
-		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, { cssFiles: result.cssFiles });
+		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, { cssFiles: result.cssFiles, pluginAssets: result.pluginAssets });
 	}
 
 	async webview_ipcMessage(event) {
