@@ -303,7 +303,7 @@ msgstr "Muestra información de uso."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Para información de cómo personalizar los atajos por favor visite %s"
+msgstr "Para información de cómo personalizar los atajos, por favor visite %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
@@ -994,7 +994,7 @@ msgstr "La versión actual está actualizada."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:146
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (pre-lanzamiento)"
+msgstr "%s (prelanzamiento)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 msgid "An update is available, do you want to download it now?"
@@ -1736,7 +1736,7 @@ msgstr "Cambiar entre nota y lista de tareas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch to note type"
-msgstr "Cambiar a  nota"
+msgstr "Cambiar a nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:87
 msgid "Switch to to-do type"
@@ -2322,7 +2322,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:449
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Hoja de estilos (completa) para personalizar Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:453
 msgid "Automatically update the application"
@@ -2330,12 +2330,12 @@ msgstr "Actualizar la aplicación automáticamente"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:454
 msgid "Get pre-releases when checking for updates"
-msgstr "Obtenga pre-lanzamientos cuando busque actualizaciones"
+msgstr "Obtenga prelanzamientos cuando busque actualizaciones"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:454
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "Ver la página de pre-lanzamiento para más detalles: %s"
+msgstr "Ver la página de prelanzamiento para más detalles: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:462
 msgid "Synchronisation interval"
@@ -2996,7 +2996,7 @@ msgstr "Ver en un mapa"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:643
 msgid "Go to source URL"
-msgstr "Ir a  origen URL"
+msgstr "Ir a origen URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach..."
@@ -3287,4 +3287,4 @@ msgstr "Buscar"
 
 #, fuzzy
 #~ msgid "File system synchronisation target directory"
-#~ msgstr "Sincronización de sistema de archivos  en directorio objetivo"
+#~ msgstr "Sincronización de sistema de archivos en directorio objetivo"
