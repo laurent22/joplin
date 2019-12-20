@@ -326,7 +326,8 @@ Joplin is currently available in the languages below. If you would like to contr
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
-- From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseTranslation.png).
+- From then you can translate the file.
+- Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 
