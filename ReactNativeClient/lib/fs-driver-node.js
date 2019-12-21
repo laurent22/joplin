@@ -162,7 +162,8 @@ class FsDriverNode extends FsDriverBase {
 
 	async readDir(path) {
 		try {
-			return fs.readdirSync(path, {withFileTypes: true}).map(e => e.name);
+			// return fs.readdirSync(path, {withFileTypes: true}).map(e => e.name); // From Node v10
+			return fs.readdirSync(path); // For Node v8
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
