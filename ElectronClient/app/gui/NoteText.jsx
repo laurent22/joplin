@@ -41,6 +41,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 const TemplateUtils = require('lib/TemplateUtils');
+const prettier = require('prettier');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -1720,6 +1721,17 @@ class NoteTextComponent extends React.Component {
 				iconName: 'fa-calendar-plus-o',
 				onClick: () => {
 					return this.commandDateTime();
+				},
+			});
+
+			toolbarItems.push({
+				tooltip: _('Format note'),
+				iconName: 'fa-align-left',
+				onClick: () => {
+					const note = this.state.note;
+					const prettifiedBody = prettier.format(note.body, {parser: 'markdown'});
+					this.setState({note: {...note, body: prettifiedBody}});
+					this.scheduleSave();
 				},
 			});
 

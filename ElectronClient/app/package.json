@@ -133,6 +133,7 @@
     "mustache": "^3.0.1",
     "node-fetch": "^1.7.3",
     "node-notifier": "^6.0.0",
+    "prettier": "^1.19.1",
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
     "react": "^16.12.0",
