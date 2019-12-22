@@ -87,6 +87,7 @@ class NoteListComponent extends React.Component {
 		const menu = NoteListUtils.makeContextMenu(noteIds, {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
+			watchedNoteFiles: this.props.watchedNoteFiles,
 		});
 
 		menu.popup(bridge().window());
@@ -113,6 +114,15 @@ class NoteListComponent extends React.Component {
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
+				});
+			}
+		};
+
+		const onTitleDoubleClick = async (event, item) => {
+			if (this.props.watchedNoteFiles.indexOf(item.id) < 0) {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandStartExternalEditing',
 				});
 			}
 		};
@@ -238,6 +248,9 @@ class NoteListComponent extends React.Component {
 					style={listItemTitleStyle}
 					onClick={event => {
 						onTitleClick(event, item);
+					}}
+					onDoubleClick={event => {
+						onTitleDoubleClick(event, item);
 					}}
 					onDragStart={event => onDragStart(event)}
 					data-id={item.id}

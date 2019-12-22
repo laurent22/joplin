@@ -49,6 +49,34 @@ class NoteListUtils {
 				})
 			);
 
+			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
+				menu.append(
+					new MenuItem({
+						label: _('Edit in external editor'),
+						enabled: noteIds.length === 1,
+						click: async () => {
+							props.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'commandStartExternalEditing',
+							});
+						},
+					})
+				);
+			} else {
+				menu.append(
+					new MenuItem({
+						label: _('Stop watching external editor'),
+						enabled: noteIds.length === 1,
+						click: async () => {
+							props.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'commandStopExternalEditing',
+							});
+						},
+					})
+				);
+			}
+
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem({

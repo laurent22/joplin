@@ -1121,6 +1121,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandDateTime;
 			} else if (command.name === 'commandStartExternalEditing') {
 				fn = this.commandStartExternalEditing;
+			} else if (command.name === 'commandStopExternalEditing') {
+				fn = this.commandStopExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
@@ -1817,6 +1819,7 @@ class NoteTextComponent extends React.Component {
 		const menu = NoteListUtils.makeContextMenu(this.props.selectedNoteIds, {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
+			watchedNoteFiles: this.props.watchedNoteFiles,
 		});
 
 		const buttonStyle = Object.assign({}, theme.buttonStyle, {
