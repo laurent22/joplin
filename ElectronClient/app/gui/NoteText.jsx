@@ -4,7 +4,6 @@ const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
-const Tag = require('lib/models/Tag.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
 const InteropServiceHelper = require('../InteropServiceHelper.js');
@@ -80,7 +79,7 @@ class CustomMdMode extends ace.acequire('ace/mode/markdown').Mode {
 	}
 }
 
-const NOTE_TAG_BAR_FEATURE_ENABLED = false;
+const NOTE_TAG_BAR_FEATURE_ENABLED = true;
 
 class NoteTextComponent extends React.Component {
 	constructor() {
@@ -535,7 +534,6 @@ class NoteTextComponent extends React.Component {
 		let note = null;
 		let loadingNewNote = true;
 		let parentFolder = null;
-		let noteTags = [];
 		let scrollPercent = 0;
 
 		if (props.newNote) {
@@ -550,7 +548,6 @@ class NoteTextComponent extends React.Component {
 			if (!scrollPercent) scrollPercent = 0;
 
 			loadingNewNote = stateNoteId !== noteId;
-			noteTags = await Tag.tagsByNoteId(noteId);
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
 			if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
@@ -629,7 +626,6 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
-			noteTags: noteTags,
 			showRevisions: false,
 		};
 
@@ -649,22 +645,6 @@ class NoteTextComponent extends React.Component {
 		this.lastSetMarkersOptions_ = {};
 
 		this.setState(newState);
-
-		// https://github.com/laurent22/joplin/pull/893#discussion_r228025210
-		// @Abijeet: Had to add this check. If not, was going into an infinite loop where state was getting updated repeatedly.
-		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
-		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
-		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
-		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
-		// selected note tags accordingly.
-		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
-			if (!this.props.newNote) {
-				this.props.dispatch({
-					type: 'SET_NOTE_TAGS',
-					items: noteTags,
-				});
-			}
-		}
 
 		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
 
@@ -715,6 +695,18 @@ class NoteTextComponent extends React.Component {
 		}
 
 		return false;
+	}
+
+	canDisplayTagBar() {
+		if (!NOTE_TAG_BAR_FEATURE_ENABLED) {
+			return false;
+		}
+
+		if (!this.state.noteTags || this.state.noteTags.length === 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 	async noteRevisionViewer_onBack() {
@@ -1932,10 +1924,10 @@ class NoteTextComponent extends React.Component {
 		const searchBarHeight = this.state.showLocalSearch ? 35 : 0;
 
 		let bottomRowHeight = 0;
-		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
+		if (this.canDisplayTagBar()) {
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
 		} else {
-			toolbarStyle.marginBottom = 10;
+			toolbarStyle.marginBottom = tagStyle.marginBottom,
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
 		}
 
@@ -2053,7 +2045,7 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const tagList = !NOTE_TAG_BAR_FEATURE_ENABLED ? null : <TagList style={tagStyle} items={this.state.noteTags} />;
+		const tagList = this.canDisplayTagBar() ? <TagList style={tagStyle} items={this.state.noteTags} /> : null;
 
 		const titleBarMenuButton = (
 			<IconButton
