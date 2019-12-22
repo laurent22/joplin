@@ -1728,9 +1728,10 @@ class NoteTextComponent extends React.Component {
 				tooltip: _('Format note'),
 				iconName: 'fa-align-left',
 				onClick: () => {
-					const note = this.state.note;
+					let note = Object.assign({}, this.state.note);
 					const prettifiedBody = prettier.format(note.body, {parser: 'markdown'});
-					this.setState({note: {...note, body: prettifiedBody}});
+					note = Object.assign(note, {body: prettifiedBody});
+					this.setState({note: note});
 					this.scheduleSave();
 				},
 			});
