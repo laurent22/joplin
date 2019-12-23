@@ -339,7 +339,6 @@ class Setting extends BaseModel {
 			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
 			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
 			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
-			'markdown.plugin.imageSize': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable editing image size from editor') },
 			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension') },
 			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax') },
 			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax') },

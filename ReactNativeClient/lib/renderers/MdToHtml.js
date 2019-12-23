@@ -21,7 +21,6 @@ const markdownItAnchor = require('markdown-it-anchor');
 const plugins = {
 	mark: { module: require('markdown-it-mark') },
 	footnote: { module: require('markdown-it-footnote') },
-	imageSize: { module: require('markdown-it-imsize') },
 	sub: { module: require('markdown-it-sub') },
 	sup: { module: require('markdown-it-sup') },
 	deflist: { module: require('markdown-it-deflist') },
@@ -146,12 +145,12 @@ class MdToHtml {
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
 		markdownIt.use(rules.html_image(context, ruleOptions));
-		// markdownIt.use(require('markdown-it-imsize'), { autofill: true });
 		if (Setting.value('markdown.plugin.katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		if (Setting.value('markdown.plugin.fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
+		markdownIt.use(require('markdown-it-imsize'));
 
 		for (let key in plugins) {
 			if (Setting.value(`markdown.plugin.${key}`)) markdownIt.use(plugins[key].module, plugins[key].options);
