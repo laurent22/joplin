@@ -210,7 +210,6 @@ module.exports = function(style, options) {
 		}
 		img {
 			max-width: 100%;
-			height: auto;
 		}
 		.inline-code {
 			border: 1px solid ${style.htmlCodeBorderColor};
