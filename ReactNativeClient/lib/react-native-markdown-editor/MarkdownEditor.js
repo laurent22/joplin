@@ -174,7 +174,7 @@ export default class MarkdownEditor extends React.Component {
 						style={{ padding: 8, borderRightWidth: 1, borderColor: FOREGROUND_COLOR }}>
 						<Image
 							style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
-							source={require('../static/visibility.png')}
+							source={require('./static/visibility.png')}
 							resizeMode={'cover'}
 						/>
 					</TouchableOpacity>
