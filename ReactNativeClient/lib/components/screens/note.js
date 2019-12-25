@@ -852,6 +852,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			bodyComponent = <MarkdownEditor
 				editorFont={editorFont(this.props.editorFont)}
 				style={this.styles().bodyTextInput}
+				previewStyles={this.styles().noteBodyViewer}
 				value={note.body}
 				saveText={text => this.saveText(text)}
 				blurOnSubmit={false}
@@ -859,7 +860,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 				placeholder={_('Add body')}
 				placeholderTextColor={theme.colorFaded}
 			/>;
-			// TODO: Look here
 		}
 
 		const renderActionButton = () => {

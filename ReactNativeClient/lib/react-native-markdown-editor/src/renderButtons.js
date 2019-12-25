@@ -3,6 +3,7 @@ import { FlatList, TouchableOpacity, Text } from 'react-native';
 
 import Formats from './Formats';
 
+// TODO: Support custom themes
 const FOREGROUND_COLOR = 'rgba(82, 194, 175, 1)';
 const defaultStyles = { padding: 8, color: FOREGROUND_COLOR, fontSize: 16 };
 

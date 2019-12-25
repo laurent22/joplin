@@ -1,3 +1,7 @@
+/**
+ * Inspired by https://github.com/kunall17/react-native-markdown-editor
+ */
+
 import React from 'react';
 import {
 	View,
@@ -10,21 +14,12 @@ import {
 	ScrollView,
 } from 'react-native';
 import { MarkdownView } from 'react-native-markdown-view';
-const { editorFont } = require('lib/components/global-style.js');
 
 import { renderFormatButtons } from './renderButtons';
 
+// TODO: Support custom themes
 const FOREGROUND_COLOR = 'rgba(82, 194, 175, 1)';
 const styles = StyleSheet.create({
-	composeText: {
-		borderColor: FOREGROUND_COLOR,
-		borderWidth: 1,
-		flexDirection: 'column',
-		flex: 1,
-		padding: 4,
-		paddingLeft: 8,
-		fontSize: 16,
-	},
 	buttonContainer: {
 		flex: 0,
 		flexDirection: 'row',
@@ -33,10 +28,11 @@ const styles = StyleSheet.create({
 		padding: 8,
 	},
 	preview: {
-		flex: 0.2,
+		flex: 0.3,
 		padding: 5,
 		borderWidth: 1,
 		borderColor: FOREGROUND_COLOR,
+		backgroundColor: 'white',
 	},
 	screen: {
 		flex: 1,
@@ -45,23 +41,6 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 });
-
-const markdownStyles = {
-	heading1: {
-		fontSize: 24,
-		color: 'purple',
-	},
-	link: {
-		color: 'pink',
-	},
-	mailTo: {
-		color: 'orange',
-	},
-	text: {
-		color: '#555555',
-	},
-};
-
 
 export default class MarkdownEditor extends React.Component {
 	constructor(props) {
@@ -162,10 +141,9 @@ export default class MarkdownEditor extends React.Component {
 		return (
 			<View style={styles.preview}>
 				<ScrollView removeClippedSubviews>
-					<MarkdownView styles={markdownStyles}>
+					<MarkdownView style={{/* TODO: handle inconsistent rendering + handle theme */}}>
 						{this.state.text === '' ? 'Markdown preview here' : this.state.text}
 					</MarkdownView>
-					{/* TODO: */}
 				</ScrollView>
 			</View>
 		);
@@ -179,7 +157,6 @@ export default class MarkdownEditor extends React.Component {
 			<WrapperView behavior="padding" style={styles.screen}>
 				<TextInput
 					{...this.props}
-					style={{...styles.composeText, fontFamily: editorFont(this.props.editorFont)}}
 					multiline
 					autoCapitalize="sentences"
 					underlineColorAndroid="transparent"

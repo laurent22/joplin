@@ -2,13 +2,7 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const {
-	ListView,
-	Text,
-	StyleSheet,
-	Button,
-	View,
-} = require('react-native');
+const { ListView, Text, StyleSheet, Button, View } = require('react-native');
 const { _ } = require('lib/locale.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { time } = require('lib/time-utils.js');
@@ -137,7 +131,6 @@ class NoteListComponent extends Component {
 
 const NoteList = connect(state => {
 	return {
-		editorFont: [state.settings['style.editor.fontFamily']], // TODO: Remove me
 		items: state.notes,
 		folders: state.folders,
 		notesSource: state.notesSource,
