@@ -85,47 +85,48 @@ export default class MarkdownEditor extends React.Component {
 			const prevLine = prevLines[prevLines.length - 1];
 
 			const insertListLine = (bullet) => ([
-				prevLines.join('\n'), // previous text
-				`\n${bullet} `, // current line with new bullet point
-				input.slice(cursor, input.length), // following text
+				prevLines.join('\n'), // Previous text
+				`\n${bullet} `, // Current line with new bullet point
+				input.slice(cursor, input.length), // Following text
 			].join(''));
 
-			console.log({
-				isOnNewline,
-				prevLines: JSON.stringify(prevLines),
-				prevLine,
-			});
+			const insertedEndListLine = [
+				// Previous text (all but last bullet line, which we remove)
+				prevLines.slice(0, prevLines.length - 1).join('\n') ,
+				'\n\n', // Two newlines to get out of the list
+				input.slice(cursor, input.length), // Following text
+			].join('');
 
 			// Add new ordered list line item
-			const prevLineIsUnorderedList = (
-				prevLine.startsWith('- ') && !prevLine.startsWith('- [ ')
-				&& prevLine !== '- '
-			);
-			if (prevLineIsUnorderedList) {
-				result = insertListLine('-');
+			if (prevLine.startsWith('- ') && !prevLine.startsWith('- [ ')) {
+				// If the bullet on the previous line isn't empty, add a new bullet.
+				if (prevLine.trim() !== '-') {
+					result = insertListLine('-');
+				} else {
+					result = insertedEndListLine;
+				}
 			}
-			// TODO: End the ordered list on enter on an empty line: `- `
 
 			// Add new checklist line item
-			const prevLineIsChecklist = (
-				(prevLine.startsWith('- [ ] ') || prevLine.startsWith('- [x] ')) &&
-				prevLine !== '- [ ] ' && prevLine !== '- [x] '
-			);
-			if (prevLineIsChecklist) {
-				result = insertListLine('- [ ]');
+			if ((prevLine.startsWith('- [ ] ') || prevLine.startsWith('- [x] '))) {
+				// If the bullet on the previous line isn't empty, add a new bullet.
+				if (prevLine.trim() !== '- [ ]' && prevLine.trim() !== '- [x]') {
+					result = insertListLine('- [ ]');
+				} else {
+					result = insertedEndListLine;
+				}
 			}
-
-			// TODO: End the checklist on enter on an empty list line: `- [ ] `
 
 			// Add new ordered list item
-			// Checks that the previous line starts with a numbered list & has content
-			const prevLineIsOrderedList = /^\d+\. .+/.test(prevLine);
-			if (prevLineIsOrderedList) {
+			if (/^\d+\./.test(prevLine)) {
+				// If the bullet on the previous line isn't empty, add a new bullet.
 				const digit = Number(prevLine.match(/^\d+/)[0]);
-				result = insertListLine(`${digit + 1}.`);
+				if (prevLine.trim() !== `${digit}.`) {
+					result = insertListLine(`${digit + 1}.`);
+				} else {
+					result = insertedEndListLine;
+				}
 			}
-
-			// TODO: End the checklist on enter on an empty ordered list line: `3. `
 		}
 		console.log(input.split('\n'));
 		this.setState({ text: result });
