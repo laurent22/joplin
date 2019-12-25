@@ -31,11 +31,11 @@ class EncryptionConfigScreenComponent extends React.Component {
 		return shared.refreshStats(this);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.initState(this.props);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.initState(nextProps);
 	}
 
@@ -205,6 +205,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 										bridge().openExternal('https://joplinapp.org/e2ee/');
 									}}
 									href="#"
+									style={theme.urlStyle}
 								>
 									https://joplinapp.org/e2ee/
 								</a>

@@ -102,6 +102,7 @@ user_updated_time | int | When the note was last updated. It may differ from upd
 encryption_cipher_text | text |    
 encryption_applied | int |    
 markup_language | int |    
+is_shared | int |    
 body_html | text | Note body, in HTML format
 base_url | text | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`.
 image_data_url | text | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format.
@@ -174,6 +175,7 @@ user_updated_time | int | When the folder was last updated. It may differ from u
 encryption_cipher_text | text |    
 encryption_applied | int |    
 parent_id | text |    
+is_shared | int |    
 
 ## GET /folders
 
@@ -220,6 +222,7 @@ encryption_cipher_text | text |
 encryption_applied | int |    
 encryption_blob_encrypted | int |    
 size | int |    
+is_shared | int |    
 
 ## GET /resources
 
@@ -265,6 +268,7 @@ user_created_time | int | When the tag was created. It may differ from created_t
 user_updated_time | int | When the tag was last updated. It may differ from updated_time as it can be manually set by the user.
 encryption_cipher_text | text |    
 encryption_applied | int |    
+is_shared | int |    
 
 ## GET /tags
 

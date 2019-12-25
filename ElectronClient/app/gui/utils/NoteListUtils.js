@@ -107,6 +107,20 @@ class NoteListUtils {
 				})
 			);
 
+			menu.append(
+				new MenuItem({
+					label: _('Share note...'),
+					click: async () => {
+						console.info('NOTE IDS', noteIds);
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandShareNoteDialog',
+							noteIds: noteIds.slice(),
+						});
+					},
+				})
+			);
+
 			const exportMenu = new Menu();
 
 			const ioService = new InteropService();
@@ -114,6 +128,7 @@ class NoteListUtils {
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
+				if (noteIds.length > 1 && module.canDoMultiExport === false) continue;
 
 				exportMenu.append(
 					new MenuItem({

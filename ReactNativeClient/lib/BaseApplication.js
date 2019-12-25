@@ -132,7 +132,7 @@ class BaseApplication {
 			}
 
 			if (arg == '--open-dev-tools') {
-				Setting.setConstant('openDevTools', true);
+				Setting.setConstant('flagOpenDevTools', true);
 				argv.splice(0, 1);
 				continue;
 			}

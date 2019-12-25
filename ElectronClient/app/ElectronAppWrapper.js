@@ -34,6 +34,9 @@ class ElectronAppWrapper {
 	}
 
 	createWindow() {
+		// Set to true to view errors if the application does not start
+		const debugEarlyBugs = this.env_ === 'dev' && false;
+
 		const windowStateKeeper = require('electron-window-state');
 
 		const stateOptions = {
@@ -56,9 +59,10 @@ class ElectronAppWrapper {
 			webPreferences: {
 				nodeIntegration: true,
 			},
+			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
-			show: false,
+			show: debugEarlyBugs,
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
@@ -81,8 +85,11 @@ class ElectronAppWrapper {
 			slashes: true,
 		}));
 
-		// Uncomment this to view errors if the application does not start
-		// if (this.env_ === 'dev') this.win_.webContents.openDevTools();
+		// Note that on Windows, calling openDevTools() too early results in a white window with no error message.
+		// Waiting for one of the ready events might work but they might not be triggered if there's an error, so
+		// the easiest is to use a timeout. Keep in mind that if you get a white window on Windows it might be due
+		// to this line though.
+		if (debugEarlyBugs) setTimeout(() => this.win_.webContents.openDevTools(), 3000);
 
 		this.win_.on('close', (event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)

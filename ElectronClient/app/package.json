@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.174",
+  "version": "1.0.176",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
     "postinstall": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts && node electronRebuild.js",
-    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts"
+    "compile": "node compile.js && node compile-package-info.js && node ../../Tools/copycss.js --copy-fonts",
+    "install-141": "npm install --toolset=v141"
   },
   "repository": {
     "type": "git",
@@ -73,9 +74,9 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^4.1.4",
-    "electron-builder": "20.38.5",
-    "electron-rebuild": "^1.8.5"
+    "electron": "^7.1.5",
+    "electron-builder": "^21.2.0",
+    "electron-rebuild": "^1.8.8"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -89,6 +90,7 @@
     "chokidar": "^3.0.0",
     "clean-html": "^1.5.0",
     "compare-versions": "^3.2.1",
+    "dataurl": "^0.1.0",
     "diacritics": "^1.3.0",
     "diff-match-patch": "^1.0.4",
     "electron-context-menu": "^0.15.0",
@@ -108,7 +110,7 @@
     "joplin-turndown": "^4.0.19",
     "joplin-turndown-plugin-gfm": "^1.0.11",
     "jssha": "^2.3.1",
-    "katex": "^0.10.0",
+    "katex": "^0.11.1",
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.15",
     "mark.js": "^8.11.1",
@@ -133,10 +135,10 @@
     "node-notifier": "^6.0.0",
     "promise": "^8.0.1",
     "query-string": "^5.1.1",
-    "react": "^16.4.0",
+    "react": "^16.12.0",
     "react-ace": "^6.1.4",
     "react-datetime": "^2.14.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.12.0",
     "react-redux": "^5.0.7",
     "react-select": "^2.4.3",
     "react-tooltip": "^3.10.0",
@@ -147,7 +149,7 @@
     "server-destroy": "^1.0.1",
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^4.0.6",
+    "sqlite3": "^4.1.1",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.1",
     "syswide-cas": "^5.1.0",

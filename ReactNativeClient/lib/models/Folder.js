@@ -148,7 +148,11 @@ class Folder extends BaseItem {
 			for (let i = 0; i < folders.length; i++) {
 				if (folders[i].id === folder.parent_id) return folders[i];
 			}
-			throw new Error('Could not find parent');
+
+			// In some rare cases, some folders may not have a parent, for example
+			// if it has not been downloaded via sync yet.
+			// https://github.com/laurent22/joplin/issues/2088
+			return null;
 		};
 
 		const applyChildTimeToParent = folderId => {

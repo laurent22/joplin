@@ -17,7 +17,7 @@ staleLabel: stale
 # Comment to post when marking an issue as stale. Set to `false` to disable
 markComment: >
   Hey there, it looks like there has been no activity on this issue recently. Has the issue been fixed, or does it still require the community's attention? This issue may be closed if no further activity occurs.
-  You may also label this issue as "backlog" and I will leave it open.
+  You may comment on the issue and I will leave it open.
   Thank you for your contributions.
 # Comment to post when closing a stale issue. Set to `false` to disable
 closeComment: >
