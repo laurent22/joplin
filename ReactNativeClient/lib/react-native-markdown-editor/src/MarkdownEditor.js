@@ -87,6 +87,7 @@ export default class MarkdownEditor extends React.Component {
 				prevLines: JSON.stringify(prevLines),
 				prevLine,
 			});
+
 			const prevLineIsUnorderedList = (
 				prevLine.startsWith('- ') &&
 				!prevLine.startsWith('- [ ')
@@ -99,7 +100,7 @@ export default class MarkdownEditor extends React.Component {
 					input.slice(cursor, input.length), // following text
 				].join('');
 			}
-			// TODO: make this into ol handler
+
 			const prevLineIsChecklist = (
 				(prevLine.startsWith('- [ ] ') || prevLine.startsWith('- [x] ')) &&
 				prevLine !== '- [ ] ' && prevLine !== '- [x] '
@@ -108,6 +109,17 @@ export default class MarkdownEditor extends React.Component {
 				result = [
 					prevLines.join('\n'), // previous text
 					'\n- [ ] ', // current line
+					input.slice(cursor, input.length), // following text
+				].join('');
+			}
+
+			// Checks that the previous line starts with a numbered list & has content
+			const prevLineIsOrderedList = /^\d+\. .+/.test(prevLine);
+			if (prevLineIsOrderedList) {
+				const digit = Number(prevLine.match(/^\d+/)[0]);
+				result = [
+					prevLines.join('\n'), // previous text
+					`\n${digit + 1}. `, // current line
 					input.slice(cursor, input.length), // following text
 				].join('');
 			}
