@@ -72,31 +72,29 @@ export default class MarkdownEditor extends React.Component {
 	textInput: TextInput;
 
 	changeText = (selection: {start: number, end: number}) => (input: string) => {
-		console.log('changeText');
 		console.log({selection});
-		// // if (selection.start === selection.end || true) {
-		// //   const cursor = selection.start
-		// //   console.log(input.slice(cursor, cursor + 1))
-		// // }
-		this.setState({ text: input });
+		var result = input;
+		const cursor = selection.start;
+		const isNewline = '\n' === input.slice(cursor - 1, cursor);
+		if (isNewline) {
+			const precedingLines = input.slice(0, cursor - 1).split('\n');
+			const previousLine = precedingLines[precedingLines.length - 1];
+			console.log({
+				isNewline,
+				precedingLines: JSON.stringify(precedingLines),
+				previousLine,
+			});
+			if (previousLine.startsWith('- ') && previousLine !== '- ') {
+				console.log('add a bullet!');
+				result = `${precedingLines.join('\n')}\n- ${input.slice(cursor, input.length)}`;
+			}
+			// const prevLineIsUnorderedList =
+		}
+		console.log(input.split('\n'));
+		this.setState({ text: result });
 		// this.saveText(text)
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
 	};
-
-	// handleChange = (event) => {
-	//   // const {name, type, value} = event.nativeEvent;
-	//   // let processedData = value;
-	//   // console.log('before')
-	//   // // console.log({event, baz: 'qux'})
-	//   // console.log('after')
-	//   // // if(type==='text') {
-	//   // //   processedData = value.toUpperCase();
-	//   // // } else if (type==='number') {
-	//   // //   processedData = value * 2;
-	//   // // }
-	//   this.setState({text: event.nativeEvent.text})
-	// }
-
 
 	onSelectionChange = event => {
 		// console.log('selection change:', {event});

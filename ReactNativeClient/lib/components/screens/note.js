@@ -2,7 +2,7 @@ const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
-const Foo = require('lib/react-native-markdown-editor/main');
+const {MarkdownEditor} = require('lib/react-native-markdown-editor/main');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -850,7 +850,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <Foo.MarkdownEditor ref="noteBodyTextField" />;
+			bodyComponent = <MarkdownEditor ref="noteBodyTextField" />;
 			// bodyComponent = <TextInput
 			// 	autoCapitalize="sentences"
 			// 	style={this.styles().bodyTextInput}
