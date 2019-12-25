@@ -106,8 +106,9 @@ class NoteListComponent extends Component {
 
 	render() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
+		console.log(this.props.editorFont);
 
-		return <MarkdownEditor />;
+		return <MarkdownEditor editorFont={this.props.editorFont} />;
 
 		// if (this.state.dataSource.getRowCount()) {
 		// 	return (
@@ -139,6 +140,7 @@ class NoteListComponent extends Component {
 
 const NoteList = connect(state => {
 	return {
+		editorFont: [state.settings['style.editor.fontFamily']], // TODO: Remove me
 		items: state.notes,
 		folders: state.folders,
 		notesSource: state.notesSource,

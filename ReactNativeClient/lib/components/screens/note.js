@@ -203,7 +203,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		console.log(editorFont(this.props.editorFont));
 		let styles = {
 			bodyTextInput: {
 				flex: 1,
