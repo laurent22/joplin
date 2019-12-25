@@ -85,7 +85,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
 - Note history (revisions)
-- Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
+- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
@@ -179,7 +179,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
-- [NextCloud](https://nextcloud.com/)
+- [Nextcloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
