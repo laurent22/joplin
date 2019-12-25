@@ -203,6 +203,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
+		console.log(editorFont(this.props.editorFont));
 		let styles = {
 			bodyTextInput: {
 				flex: 1,
@@ -850,7 +851,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <MarkdownEditor ref="noteBodyTextField" />;
+			bodyComponent = <MarkdownEditor ref="noteBodyTextField" editorFont={editorFont(this.props.editorFont)} />;
 			// bodyComponent = <TextInput
 			// 	autoCapitalize="sentences"
 			// 	style={this.styles().bodyTextInput}

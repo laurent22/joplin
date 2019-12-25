@@ -9,6 +9,7 @@ import {
 	Image,
 	ScrollView,
 } from 'react-native';
+const { editorFont } = require('lib/components/global-style.js');
 
 import { renderFormatButtons } from './renderButtons';
 
@@ -77,18 +78,37 @@ export default class MarkdownEditor extends React.Component {
 		const cursor = selection.start;
 		const isNewline = '\n' === input.slice(cursor - 1, cursor);
 		if (isNewline) {
-			const precedingLines = input.slice(0, cursor - 1).split('\n');
-			const previousLine = precedingLines[precedingLines.length - 1];
+			const prevLines = input.slice(0, cursor - 1).split('\n');
+			const prevLine = prevLines[prevLines.length - 1];
 			console.log({
 				isNewline,
-				precedingLines: JSON.stringify(precedingLines),
-				previousLine,
+				prevLines: JSON.stringify(prevLines),
+				prevLine,
 			});
-			if (previousLine.startsWith('- ') && previousLine !== '- ') {
-				console.log('add a bullet!');
-				result = `${precedingLines.join('\n')}\n- ${input.slice(cursor, input.length)}`;
+			const prevLineIsUnorderedList = (
+				prevLine.startsWith('- ') &&
+				!prevLine.startsWith('- [ ')
+				&& prevLine !== '- '
+			);
+			if (prevLineIsUnorderedList) {
+				result = [
+					prevLines.join('\n'), // previous text
+					'\n- ', // current line
+					input.slice(cursor, input.length), // following text
+				].join('');
 			}
-			// const prevLineIsUnorderedList =
+			// TODO: make this into ol handler
+			const prevLineIsChecklist = (
+				(prevLine.startsWith('- [ ] ') || prevLine.startsWith('- [x] ')) &&
+				prevLine !== '- [ ] ' && prevLine !== '- [x] '
+			);
+			if (prevLineIsChecklist) {
+				result = [
+					prevLines.join('\n'), // previous text
+					'\n- [ ] ', // current line
+					input.slice(cursor, input.length), // following text
+				].join('');
+			}
 		}
 		console.log(input.split('\n'));
 		this.setState({ text: result });
@@ -138,10 +158,11 @@ export default class MarkdownEditor extends React.Component {
 		const WrapperView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 		const { Formats, markdownButton } = this.props;
 		const { text, selection, showPreview } = this.state;
+		console.log({editorFont: editorFont(this.props.editorFont)});
 		return (
 			<WrapperView behavior="padding" style={styles.screen}>
 				<TextInput
-					style={styles.composeText}
+					style={{...styles.composeText, fontFamily: editorFont(this.props.editorFont)}}
 					multiline
 					underlineColorAndroid="transparent"
 					onChangeText={this.changeText(selection)}
