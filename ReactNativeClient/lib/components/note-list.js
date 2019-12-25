@@ -1,16 +1,16 @@
-const {MarkdownEditor} = require('lib/react-native-markdown-editor/main');
+
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const {
 	ListView,
-	// Text,
-	// StyleSheet,
-	// Button,
-	// View
+	Text,
+	StyleSheet,
+	Button,
+	View,
 } = require('react-native');
-// const { _ } = require('lib/locale.js');
-// const { NoteItem } = require('lib/components/note-item.js');
+const { _ } = require('lib/locale.js');
+const { NoteItem } = require('lib/components/note-item.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
 
@@ -105,36 +105,33 @@ class NoteListComponent extends Component {
 	}
 
 	render() {
-		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
-		console.log(this.props.editorFont);
-
-		return <MarkdownEditor editorFont={this.props.editorFont} />;
-
-		// if (this.state.dataSource.getRowCount()) {
-		// 	return (
-		// 		<ListView
-		// 			ref={ref => (this.rootRef_ = ref)}
-		// 			dataSource={this.state.dataSource}
-		// 			renderRow={note => {
-		// 				return <NoteItem note={note} />;
-		// 			}}
-		// 			enableEmptySections={true}
-		// 		/>
-		// 	);
-		// } else {
-		// 	if (!this.props.folders.length) {
-		// 		const noItemMessage = _('You currently have no notebooks.');
-		// 		return (
-		// 			<View style={this.styles().noNotebookView}>
-		// 				<Text style={this.styles().noItemMessage}>{noItemMessage}</Text>
-		// 				<Button title={_('Create a notebook')} onPress={this.createNotebookButton_click} />
-		// 			</View>
-		// 		);
-		// 	} else {
-		// 		const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
-		// 		return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
-		// 	}
-		// }
+		if (this.state.dataSource.getRowCount()) {
+			return (
+				<ListView
+					ref={ref => (this.rootRef_ = ref)}
+					dataSource={this.state.dataSource}
+					renderRow={note => {
+						return <NoteItem note={note} />;
+					}}
+					// `enableEmptySections` is to fix this warning:
+					// https://github.com/FaridSafi/react-native-gifted-listview/issues/39
+					enableEmptySections={true}
+				/>
+			);
+		} else {
+			if (!this.props.folders.length) {
+				const noItemMessage = _('You currently have no notebooks.');
+				return (
+					<View style={this.styles().noNotebookView}>
+						<Text style={this.styles().noItemMessage}>{noItemMessage}</Text>
+						<Button title={_('Create a notebook')} onPress={this.createNotebookButton_click} />
+					</View>
+				);
+			} else {
+				const noItemMessage = _('There are currently no notes. Create one by clicking on the (+) button.');
+				return <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>;
+			}
+		}
 	}
 }
 

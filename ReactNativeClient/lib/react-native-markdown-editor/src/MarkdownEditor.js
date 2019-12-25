@@ -67,7 +67,7 @@ export default class MarkdownEditor extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			text: props.defaultText || '',
+			text: props.value,
 			selection: { start: 0, end: 0 },
 			showPreview: props.showPreview ? props.showPreview : false,
 		};
@@ -129,7 +129,7 @@ export default class MarkdownEditor extends React.Component {
 		}
 		console.log(input.split('\n'));
 		this.setState({ text: result });
-		// this.saveText(text)
+		this.props.saveText(result);
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
 	};
 
@@ -178,11 +178,12 @@ export default class MarkdownEditor extends React.Component {
 		return (
 			<WrapperView behavior="padding" style={styles.screen}>
 				<TextInput
+					{...this.props}
 					style={{...styles.composeText, fontFamily: editorFont(this.props.editorFont)}}
 					multiline
+					autoCapitalize="sentences"
 					underlineColorAndroid="transparent"
 					onChangeText={this.changeText(selection)}
-					// onChange={this.onChange}
 					onSelectionChange={this.onSelectionChange}
 					value={text}
 					placeholder={'Write a long message'}

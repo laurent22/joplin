@@ -317,7 +317,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	body_changeText(text) {
+	saveText(text) {
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
@@ -751,7 +751,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.state.mode === 'view') fieldToFocus = '';
 
 		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
-		// if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
 	}
 
 	async folderPickerOptions_valueChanged(itemValue) {
@@ -850,19 +849,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <MarkdownEditor ref="noteBodyTextField" editorFont={editorFont(this.props.editorFont)} />;
-			// bodyComponent = <TextInput
-			// 	autoCapitalize="sentences"
-			// 	style={this.styles().bodyTextInput}
-			// 	ref="noteBodyTextField"
-			// 	multiline={true}
-			// 	value={note.body}
-			// 	onChangeText={text => this.body_changeText(text)}
-			// 	blurOnSubmit={false}
-			// 	selectionColor={theme.textSelectionColor}
-			// 	placeholder={_('Add body')}
-			// 	placeholderTextColor={theme.colorFaded}
-			// />;
+			bodyComponent = <MarkdownEditor
+				editorFont={editorFont(this.props.editorFont)}
+				style={this.styles().bodyTextInput}
+				value={note.body}
+				saveText={text => this.saveText(text)}
+				blurOnSubmit={false}
+				selectionColor={theme.textSelectionColor}
+				placeholder={_('Add body')}
+				placeholderTextColor={theme.colorFaded}
+			/>;
 			// TODO: Look here
 		}
 
