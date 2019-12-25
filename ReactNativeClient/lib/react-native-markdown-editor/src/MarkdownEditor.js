@@ -9,6 +9,7 @@ import {
 	Image,
 	ScrollView,
 } from 'react-native';
+import { MarkdownView } from 'react-native-markdown-view';
 const { editorFont } = require('lib/components/global-style.js');
 
 import { renderFormatButtons } from './renderButtons';
@@ -45,21 +46,21 @@ const styles = StyleSheet.create({
 	},
 });
 
-// const markdownStyles = {
-// 	heading1: {
-// 		fontSize: 24,
-// 		color: 'purple',
-// 	},
-// 	link: {
-// 		color: 'pink',
-// 	},
-// 	mailTo: {
-// 		color: 'orange',
-// 	},
-// 	text: {
-// 		color: '#555555',
-// 	},
-// };
+const markdownStyles = {
+	heading1: {
+		fontSize: 24,
+		color: 'purple',
+	},
+	link: {
+		color: 'pink',
+	},
+	mailTo: {
+		color: 'orange',
+	},
+	text: {
+		color: '#555555',
+	},
+};
 
 
 export default class MarkdownEditor extends React.Component {
@@ -74,8 +75,6 @@ export default class MarkdownEditor extends React.Component {
 	textInput: TextInput;
 
 	changeText = (selection: {start: number, end: number}) => (input: string) => {
-		console.log({selection, input: input.length, state: this.state.text.length});
-
 		var result = input;
 		const cursor = selection.start;
 		const isOnNewline = '\n' === input.slice(cursor - 1, cursor);
@@ -163,9 +162,9 @@ export default class MarkdownEditor extends React.Component {
 		return (
 			<View style={styles.preview}>
 				<ScrollView removeClippedSubviews>
-					{/* <MarkdownView styles={markdownStyles}>
+					<MarkdownView styles={markdownStyles}>
 						{this.state.text === '' ? 'Markdown preview here' : this.state.text}
-					</MarkdownView> */}
+					</MarkdownView>
 					{/* TODO: */}
 				</ScrollView>
 			</View>
