@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
 // 	},
 // };
 
+
 export default class MarkdownEditor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -82,6 +83,13 @@ export default class MarkdownEditor extends React.Component {
 		if (isOnNewline && !isDeletion) {
 			const prevLines = input.slice(0, cursor - 1).split('\n');
 			const prevLine = prevLines[prevLines.length - 1];
+
+			const insertListLine = (bullet) => ([
+				prevLines.join('\n'), // previous text
+				`\n${bullet} `, // current line with new bullet point
+				input.slice(cursor, input.length), // following text
+			].join(''));
+
 			console.log({
 				isOnNewline,
 				prevLines: JSON.stringify(prevLines),
@@ -94,11 +102,7 @@ export default class MarkdownEditor extends React.Component {
 				&& prevLine !== '- '
 			);
 			if (prevLineIsUnorderedList) {
-				result = [
-					prevLines.join('\n'), // previous text
-					'\n- ', // current line with new bullet point
-					input.slice(cursor, input.length), // following text
-				].join('');
+				result = insertListLine('-');
 			}
 			// TODO: End the ordered list on enter on an empty line: `- `
 
@@ -108,11 +112,7 @@ export default class MarkdownEditor extends React.Component {
 				prevLine !== '- [ ] ' && prevLine !== '- [x] '
 			);
 			if (prevLineIsChecklist) {
-				result = [
-					prevLines.join('\n'), // previous text
-					'\n- [ ] ', // current line with new checklist box
-					input.slice(cursor, input.length), // following text
-				].join('');
+				result = insertListLine('- [ ]');
 			}
 
 			// TODO: End the checklist on enter on an empty list line: `- [ ] `
@@ -122,11 +122,7 @@ export default class MarkdownEditor extends React.Component {
 			const prevLineIsOrderedList = /^\d+\. .+/.test(prevLine);
 			if (prevLineIsOrderedList) {
 				const digit = Number(prevLine.match(/^\d+/)[0]);
-				result = [
-					prevLines.join('\n'), // previous text
-					`\n${digit + 1}. `, // current line with new count
-					input.slice(cursor, input.length), // following text
-				].join('');
+				result = insertListLine(`${digit + 1}.`);
 			}
 
 			// TODO: End the checklist on enter on an empty ordered list line: `3. `
