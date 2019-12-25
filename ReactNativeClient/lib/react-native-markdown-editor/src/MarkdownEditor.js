@@ -73,15 +73,17 @@ export default class MarkdownEditor extends React.Component {
 	textInput: TextInput;
 
 	changeText = (selection: {start: number, end: number}) => (input: string) => {
-		console.log({selection});
+		console.log({selection, input: input.length, state: this.state.text.length});
+
 		var result = input;
 		const cursor = selection.start;
-		const isNewline = '\n' === input.slice(cursor - 1, cursor);
-		if (isNewline) {
+		const isOnNewline = '\n' === input.slice(cursor - 1, cursor);
+		const isDeletion = input.length < this.state.text.length;
+		if (isOnNewline && !isDeletion) {
 			const prevLines = input.slice(0, cursor - 1).split('\n');
 			const prevLine = prevLines[prevLines.length - 1];
 			console.log({
-				isNewline,
+				isOnNewline,
 				prevLines: JSON.stringify(prevLines),
 				prevLine,
 			});
@@ -158,7 +160,6 @@ export default class MarkdownEditor extends React.Component {
 		const WrapperView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 		const { Formats, markdownButton } = this.props;
 		const { text, selection, showPreview } = this.state;
-		console.log({editorFont: editorFont(this.props.editorFont)});
 		return (
 			<WrapperView behavior="padding" style={styles.screen}>
 				<TextInput
