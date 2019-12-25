@@ -1,5 +1,7 @@
 import { isStringWebLink, replaceBetween } from './utils';
-import { writeTextHereString, writeUrlTextHere } from './placeholderStrings';
+
+export const writeUrlTextHere = 'https://example.com';
+export const writeTextHereString = 'Write some text here';
 
 // eslint-disable-next-line no-unused-vars
 export default ({ getState, item, setState }) => {
