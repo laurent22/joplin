@@ -1,5 +1,5 @@
 /**
- * Inspired by https://github.com/kunall17/react-native-markdown-editor
+ * Inspired by https://github.com/kunall17/MarkdownEditor
  */
 
 import React from 'react';
@@ -175,7 +175,7 @@ export default class MarkdownEditor extends React.Component {
 						<Image
 							style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
 							source={require('./static/visibility.png')}
-							resizeMode={'cover'}
+							resizeMode="cover"
 						/>
 					</TouchableOpacity>
 					{renderFormatButtons(
