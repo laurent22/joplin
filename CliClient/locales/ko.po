@@ -309,7 +309,7 @@ msgstr "맨 처음 <num> 노트만 표시합니다."
 
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"항목을 <field>별로 정렬합니다 (예시: title, update_time, created_time)."
+"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
 
 msgid "Reverses the sorting order."
 msgstr "정렬 순서를 바꿉니다."
