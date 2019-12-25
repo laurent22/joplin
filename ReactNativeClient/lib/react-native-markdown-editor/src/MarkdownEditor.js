@@ -88,19 +88,21 @@ export default class MarkdownEditor extends React.Component {
 				prevLine,
 			});
 
+			// Add new ordered list line item
 			const prevLineIsUnorderedList = (
-				prevLine.startsWith('- ') &&
-				!prevLine.startsWith('- [ ')
+				prevLine.startsWith('- ') && !prevLine.startsWith('- [ ')
 				&& prevLine !== '- '
 			);
 			if (prevLineIsUnorderedList) {
 				result = [
 					prevLines.join('\n'), // previous text
-					'\n- ', // current line
+					'\n- ', // current line with new bullet point
 					input.slice(cursor, input.length), // following text
 				].join('');
 			}
+			// TODO: End the ordered list on enter on an empty line: `- `
 
+			// Add new checklist line item
 			const prevLineIsChecklist = (
 				(prevLine.startsWith('- [ ] ') || prevLine.startsWith('- [x] ')) &&
 				prevLine !== '- [ ] ' && prevLine !== '- [x] '
@@ -108,21 +110,26 @@ export default class MarkdownEditor extends React.Component {
 			if (prevLineIsChecklist) {
 				result = [
 					prevLines.join('\n'), // previous text
-					'\n- [ ] ', // current line
+					'\n- [ ] ', // current line with new checklist box
 					input.slice(cursor, input.length), // following text
 				].join('');
 			}
 
+			// TODO: End the checklist on enter on an empty list line: `- [ ] `
+
+			// Add new ordered list item
 			// Checks that the previous line starts with a numbered list & has content
 			const prevLineIsOrderedList = /^\d+\. .+/.test(prevLine);
 			if (prevLineIsOrderedList) {
 				const digit = Number(prevLine.match(/^\d+/)[0]);
 				result = [
 					prevLines.join('\n'), // previous text
-					`\n${digit + 1}. `, // current line
+					`\n${digit + 1}. `, // current line with new count
 					input.slice(cursor, input.length), // following text
 				].join('');
 			}
+
+			// TODO: End the checklist on enter on an empty ordered list line: `3. `
 		}
 		console.log(input.split('\n'));
 		this.setState({ text: result });
