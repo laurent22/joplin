@@ -94,7 +94,8 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			paddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+			paddingBottom: this.props.paddingBottom || '0',
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,

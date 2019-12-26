@@ -11,11 +11,9 @@ import {
 	KeyboardAvoidingView,
 	TouchableOpacity,
 	Image,
-	ScrollView,
 } from 'react-native';
-import { MarkdownView } from 'react-native-markdown-view';
-
 import { renderFormatButtons } from './renderButtons';
+import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
 
 // TODO: Support custom themes
 const FOREGROUND_COLOR = 'rgba(82, 194, 175, 1)';
@@ -24,21 +22,10 @@ const styles = StyleSheet.create({
 		flex: 0,
 		flexDirection: 'row',
 	},
-	inlinePadding: {
-		padding: 8,
-	},
-	preview: {
-		flex: 0.3,
-		padding: 5,
-		borderWidth: 1,
-		borderColor: FOREGROUND_COLOR,
-		backgroundColor: 'white',
-	},
-	screen: {
+	screen: { // Wrapper around the editor and the preview
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'stretch',
-		backgroundColor: 'white',
 	},
 });
 
@@ -124,12 +111,7 @@ export default class MarkdownEditor extends React.Component {
 	}
 
 	getState = () => {
-		this.setState({
-			selection: {
-				start: 1,
-				end: 1,
-			},
-		});
+		this.setState({selection: {start: 1, end: 1}});
 		return this.state;
 	};
 
@@ -139,13 +121,7 @@ export default class MarkdownEditor extends React.Component {
 
 	renderPreview = () => {
 		return (
-			<View style={styles.preview}>
-				<ScrollView removeClippedSubviews>
-					<MarkdownView style={{/* TODO: handle inconsistent rendering + handle theme */}}>
-						{this.state.text === '' ? 'Markdown preview here' : this.state.text}
-					</MarkdownView>
-				</ScrollView>
-			</View>
+			<NoteBodyViewer {...this.props.noteBodyViewer} />
 		);
 	};
 
@@ -163,7 +139,6 @@ export default class MarkdownEditor extends React.Component {
 					onChangeText={this.changeText(selection)}
 					onSelectionChange={this.onSelectionChange}
 					value={text}
-					placeholder={'Write a long message'}
 					ref={textInput => (this.textInput = textInput)}
 					selection={selection}
 				/>

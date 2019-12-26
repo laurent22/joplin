@@ -18,6 +18,7 @@ module.exports = function(style, options) {
 			background-color: ${style.htmlBackgroundColor};
 			font-family: ${fontFamily};
 			padding-bottom: ${options.paddingBottom};
+			padding-top: ${options.paddingTop};
 		}
 		strong {
 			color: ${style.colorBright};

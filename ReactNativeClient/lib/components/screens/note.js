@@ -2,7 +2,7 @@ const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
-const {MarkdownEditor} = require('lib/MarkdownEditor/index.js');
+const { MarkdownEditor } = require('lib/MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -203,6 +203,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
+		// TODO: Clean up these style names and nesting
 		let styles = {
 			bodyTextInput: {
 				flex: 1,
@@ -218,8 +219,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				paddingTop: theme.marginTop,
-				paddingBottom: theme.marginBottom,
+			},
+			noteBodyViewerPreview: {
+				borderTopColor: theme.dividerColor,
+				borderTopWidth: 1,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
 			},
 			checkbox: {
 				color: theme.color,
@@ -825,6 +830,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						ref="noteBodyViewer"
 						style={this.styles().noteBodyViewer}
 						webViewStyle={theme}
+						// Extra bottom padding to make it possible to scroll past the
+						// action button (so that it doesn't overlap the text)
+						paddingBottom='3.8em'
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
@@ -847,6 +855,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			// autoFocus={fieldToFocus === 'body'}
 
+			// Currently keyword highlighting is supported only when FTS is available.
+			let keywords = [];
+			if (this.props.searchQuery && !!this.props.ftsEnabled) {
+				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
+				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
+
+			const onCheckboxChange = newBody => {
+				this.saveOneProperty('body', newBody);
+			};
+
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 			bodyComponent = <MarkdownEditor
@@ -859,6 +878,33 @@ class NoteScreenComponent extends BaseScreenComponent {
 				selectionColor={theme.textSelectionColor}
 				placeholder={_('Add body')}
 				placeholderTextColor={theme.colorFaded}
+				noteBodyViewer={{
+					onJoplinLinkClick: this.onJoplinLinkClick_,
+					ref: 'noteBodyViewer',
+					style: {
+						...this.styles().noteBodyViewer,
+						...this.styles().noteBodyViewerPreview,
+					},
+					webViewStyle: theme,
+					note: note,
+					noteResources: this.state.noteResources,
+					highlightedKeywords: keywords,
+					theme: this.props.theme,
+					noteHash: this.props.noteHash,
+					onCheckboxChange: newBody => {
+						onCheckboxChange(newBody);
+					},
+					onMarkForDownload: this.onMarkForDownload,
+					onLoadEnd: () => {
+						setTimeout(() => {
+							this.setState({ HACK_webviewLoadingState: 1 });
+							setTimeout(() => {
+								this.setState({ HACK_webviewLoadingState: 0 });
+							}, 50);
+						}, 5);
+					},
+				}}
+
 			/>;
 		}
 

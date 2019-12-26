@@ -52,6 +52,7 @@ class MdToHtml {
 		if (!options) options = {};
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
+		if (!options.paddingTop) options.paddingTop = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
