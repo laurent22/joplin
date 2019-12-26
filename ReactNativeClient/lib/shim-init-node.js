@@ -358,7 +358,23 @@ function shimInit() {
 
 	shim.openUrl = url => {
 		const { bridge } = require('electron').remote.require('./bridge');
-		bridge().openExternal(url);
+		// Returns true if it opens the file successfully; returns false if it could
+		// not find the file.
+		return bridge().openExternal(url);
+	};
+
+	shim.openOrCreateFile = (filepath, defaultContents) => {
+		// If the file doesn't exist, create it
+		if (!fs.existsSync(filepath)) {
+			fs.writeFile(filepath, defaultContents, 'utf-8', (error) => {
+				if (error) {
+					console.error(`error: ${error}`);
+				}
+			});
+		}
+
+		// Open the file
+		return shim.openUrl(`file://${filepath}`);
 	};
 
 	shim.waitForFrame = () => {};

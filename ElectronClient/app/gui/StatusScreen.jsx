@@ -16,7 +16,7 @@ class StatusScreenComponent extends React.Component {
 		};
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.resfreshScreen();
 	}
 

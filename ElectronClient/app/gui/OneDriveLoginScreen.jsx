@@ -1,108 +1,76 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
+const Setting = require('lib/models/Setting');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
+const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
 
 class OneDriveLoginScreenComponent extends React.Component {
 	constructor() {
 		super();
-		this.webview_ = null;
-		this.authCode_ = null;
+
+		this.state = {
+			authLog: [],
+		};
 	}
 
-	refresh_click() {
-		if (!this.webview_) return;
-		this.webview_.src = this.startUrl();
-	}
+	async componentDidMount() {
+		const log = (s) => {
+			this.setState(state => {
+				const authLog = state.authLog.slice();
+				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
+				return { authLog: authLog };
+			});
+		};
 
-	componentWillMount() {
-		this.setState({
-			webviewUrl: this.startUrl(),
-			webviewReady: false,
+		const syncTargetId = Setting.value('sync.target');
+		const syncTarget = reg.syncTarget(syncTargetId);
+		const oneDriveApiUtils = new OneDriveApiNodeUtils(syncTarget.api());
+		const auth = await oneDriveApiUtils.oauthDance({
+			log: (s) => log(s),
 		});
-	}
 
-	componentDidMount() {
-		this.webview_.addEventListener('dom-ready', this.webview_domReady.bind(this));
-	}
+		Setting.setValue(`sync.${syncTargetId}.auth`, auth ? JSON.stringify(auth) : null);
+		syncTarget.api().setAuth(auth);
 
-	componentWillUnmount() {
-		this.webview_.addEventListener('dom-ready', this.webview_domReady.bind(this));
-	}
-
-	webview_domReady() {
-		this.setState({ webviewReady: true });
-
-		this.webview_.addEventListener('did-navigate', async event => {
-			const url = event.url;
-
-			if (this.authCode_) return;
-
-			const urlParse = require('url').parse;
-			const parsedUrl = urlParse(url.trim(), true);
-
-			if (!('code' in parsedUrl.query)) return;
-
-			this.authCode_ = parsedUrl.query.code;
-
-			try {
-				await reg
-					.syncTarget()
-					.api()
-					.execTokenRequest(this.authCode_, this.redirectUrl(), true);
-				this.props.dispatch({ type: 'NAV_BACK' });
-				reg.scheduleSync(0);
-			} catch (error) {
-				bridge().showErrorMessageBox(`Could not login to OneDrive. Please try again.\n\n${error.message}\n\n${url.match(/.{1,64}/g).join('\n')}`);
-			}
-
-			this.authCode_ = null;
-		});
+		if (!auth) {
+			log(_('Authentication was not completed (did not receive an authentication token).'));
+		} else {
+			reg.scheduleSync(0);
+		}
 	}
 
 	startUrl() {
-		return reg
-			.syncTarget()
-			.api()
-			.authCodeUrl(this.redirectUrl());
+		return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
 	}
 
 	redirectUrl() {
-		return reg
-			.syncTarget()
-			.api()
-			.nativeClientRedirectUrl();
+		return reg.syncTarget().api().nativeClientRedirectUrl();
 	}
 
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
-
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 
-		const webviewStyle = {
-			width: this.props.style.width,
-			height: this.props.style.height - theme.headerHeight,
-			overflow: 'hidden',
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-		};
-
-		const headerButtons = [
-			{
-				title: _('Refresh'),
-				onClick: () => this.refresh_click(),
-				iconName: 'fa-refresh',
-			},
-		];
+		const logComps = [];
+		for (const l of this.state.authLog) {
+			if (l.text.indexOf('http:') === 0) {
+				logComps.push(<a key={l.key} style={theme.urlStyle} href="#" onClick={() => { bridge().openExternal(l.text); }}>{l.text}</a>);
+			} else {
+				logComps.push(<p key={l.key} style={theme.textStyle}>{l.text}</p>);
+			}
+		}
 
 		return (
 			<div>
-				<Header style={headerStyle} buttons={headerButtons} />
-				<webview src={this.startUrl()} style={webviewStyle} nodeintegration="1" ref={elem => (this.webview_ = elem)} />
+				<Header style={headerStyle}/>
+				<div style={{padding: 10}}>
+					{logComps}
+				</div>
 			</div>
 		);
 	}

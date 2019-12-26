@@ -1,7 +1,11 @@
 {
 	"folders": [
 		{
+			"name": "Joplin",
 			"path": ".",
+		}, {
+			"name": "Joplin Nextcloud App",
+			"path": "D:/Web/www/nextcloud/apps/joplin",
 		},
 	],
 	"settings": {

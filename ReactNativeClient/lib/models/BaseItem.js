@@ -329,7 +329,7 @@ class BaseItem extends BaseModel {
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -714,6 +714,25 @@ class BaseItem extends BaseModel {
 
 			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("${ids.join('","')}")`);
 		}
+	}
+
+	static async updateShareStatus(item, isShared) {
+		if (!item.id || !item.type_) throw new Error('Item must have an ID and a type');
+		if (!!item.is_shared === !!isShared) return false;
+		const ItemClass = this.getClassByItemType(item.type_);
+
+		// No auto-timestamp because sharing a note is not seen as an update
+		await ItemClass.save({
+			id: item.id,
+			is_shared: isShared ? 1 : 0,
+			updated_time: Date.now(),
+		}, { autoTimestamp: false });
+
+		// The timestamps have not been changed but still need the note to be synced
+		// so we force-sync it.
+		// await this.forceSync(item.id);
+
+		return true;
 	}
 
 	static async forceSync(itemId) {
