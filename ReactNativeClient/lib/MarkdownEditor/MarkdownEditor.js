@@ -130,7 +130,7 @@ export default class MarkdownEditor extends React.Component {
 		const { Formats, markdownButton } = this.props;
 		const { text, selection, showPreview } = this.state;
 		return (
-			<WrapperView behavior="padding" style={styles.screen}>
+			<WrapperView style={styles.screen}>
 				<TextInput
 					{...this.props}
 					multiline
