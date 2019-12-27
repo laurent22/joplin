@@ -711,6 +711,38 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
+	deleteAllFoldersButton() {
+		const style = Object.assign({}, this.style().button, { marginBottom: 5, backgroundColor: 'red' });
+		const iconName = 'fa-exclamation-triangle';
+		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
+
+		const icon = <i style={iconStyle} className={`fa ${iconName}`} />;
+		return (
+			<a
+				className="synchronize-button"
+				style={style}
+				href="#"
+				key="delete_all_folders_button"
+				onClick={() => {
+					alert(
+						`Deleting all ${this.props.folders.length} notebooks:`,
+						JSON.stringify(this.props.folders, null, 2)
+					);
+					this.props.folders.map(async folder => {
+						try {
+							await Folder.delete(folder.id);
+						} catch (error) {
+							console.error({error});
+						}
+					});
+				}}
+			>
+				{icon}
+				Delete all {this.props.folders.length} notebooks
+			</a>
+		);
+	}
+
 	render() {
 		const style = Object.assign({}, this.style().root, this.props.style, {
 			overflowX: 'hidden',
@@ -793,6 +825,10 @@ class SideBarComponent extends React.Component {
 				<div style={{ flex: 0 }}>
 					{syncReportComp}
 					{syncButton}
+					{
+						// Dangerous! For development only
+						this.deleteAllFoldersButton()
+					}
 				</div>
 			</div>
 		);
