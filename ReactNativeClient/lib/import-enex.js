@@ -404,7 +404,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				}
 				if (noteResource.dataEncoding == 'base64') {
 					try {
-						decodedData = Buffer.from(noteResource.data, 'base64');
+						//  TODO: Look! This actually worked??? Maybe put in a dummy string if too long, or just throw
+						decodedData = Buffer.from('noteResource.data', 'base64');
 					} catch (error) {
 						importOptions.onError(error);
 					}
