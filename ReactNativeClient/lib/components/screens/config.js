@@ -14,6 +14,7 @@ const NavService = require('lib/services/NavService.js');
 const VersionInfo = require('react-native-version-info').default;
 const { ReportService } = require('lib/services/report.js');
 const { time } = require('lib/time-utils');
+const { shim } = require('lib/shim');
 const SearchEngine = require('lib/services/SearchEngine');
 const RNFS = require('react-native-fs');
 
@@ -31,6 +32,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.state = {
 			creatingReport: false,
+			profileExportStatus: 'idle',
+			profileExportPath: '',
 		};
 
 		shared.init(this);
@@ -81,6 +84,53 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			this.setState({ fixingSearchIndex: true });
 			await SearchEngine.instance().rebuildIndex();
 			this.setState({ fixingSearchIndex: false });
+		};
+
+		this.exportProfileButtonPress_ = async () => {
+			const p = this.state.profileExportPath ? this.state.profileExportPath : `${RNFS.ExternalStorageDirectoryPath}/JoplinProfileExport`;
+			this.setState({
+				profileExportStatus: 'prompt',
+				profileExportPath: p,
+			});
+		};
+
+		this.exportProfileButtonPress2_ = async () => {
+			this.setState({ profileExportStatus: 'exporting' });
+
+			const dbPath = '/data/data/net.cozic.joplin/databases';
+
+			try {
+				await shim.fsDriver().mkdir(this.state.profileExportPath);
+				await shim.fsDriver().mkdir(`${this.state.profileExportPath}/resources`);
+
+				{
+					const files = await shim.fsDriver().readDirStats(dbPath);
+
+					for (const file of files) {
+						const source = `${dbPath}/${file.path}`;
+						const dest = `${this.state.profileExportPath}/${file.path}`;
+						reg.logger().info(`Copying profile: ${source} => ${dest}`);
+						await shim.fsDriver().copy(source, dest);
+					}
+				}
+
+				{
+					const files = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
+
+					for (const file of files) {
+						const source = `${Setting.value('resourceDir')}/${file.path}`;
+						const dest = `${this.state.profileExportPath}/resources/${file.path}`;
+						reg.logger().info(`Copying profile: ${source} => ${dest}`);
+						await shim.fsDriver().copy(source, dest);
+					}
+				}
+
+				alert('Profile has been exported!');
+			} catch (error) {
+				alert(`Could not export files: ${error.message}`);
+			} finally  {
+				this.setState({ profileExportStatus: 'idle' });
+			}
 		};
 
 		this.logButtonPress_ = () => {
@@ -383,6 +433,22 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
 		settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
 		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
+
+		if (shim.mobilePlatform() === 'android') {
+			settingComps.push(this.renderButton('export_data', this.state.profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile'), this.exportProfileButtonPress_, { disabled: this.state.profileExportStatus === 'exporting', description: _('For debugging purpose only: export your profile to an external SD card.') }));
+
+			if (this.state.profileExportStatus === 'prompt') {
+				const profileExportPrompt = (
+					<View style={this.styles().settingContainer}>
+						<Text style={this.styles().settingText}>Path:</Text>
+						<TextInput style={{marginRight: 20}} onChange={(event) => this.setState({profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
+					</View>
+				);
+
+				settingComps.push(profileExportPrompt);
+			}
+		}
 
 		settingComps.push(this.renderHeader('moreInfo', _('More information')));
 

@@ -32,7 +32,7 @@ Linux          | <a href='https://github.com/laurent22/joplin/releases/download/
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.312/joplin-v1.0.312.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.312/joplin-v1.0.312-32bit.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.314/joplin-v1.0.314.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.314/joplin-v1.0.314-32bit.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -85,7 +85,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
 - Note history (revisions)
-- Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
+- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
@@ -179,7 +179,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
-- [NextCloud](https://nextcloud.com/)
+- [Nextcloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
@@ -326,7 +326,8 @@ Joplin is currently available in the languages below. If you would like to contr
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
-- From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseTranslation.png).
+- From then you can translate the file.
+- Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 
