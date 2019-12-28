@@ -55,6 +55,10 @@ class InteropService {
 				description: _('Evernote Export File (as HTML)'),
 				// TODO: Consider doing this the same way as the multiple `md` importers are handled
 				importerClass: 'InteropService_Importer_EnexToHtml',
+				// This hotkey is mostly for development purposes. If there's a
+				// more-frequently used action that would benefit from this hotkey,
+				// feel free to take it.
+				accelerator: 'CommandOrControl+Shift+I',
 			},
 		];
 

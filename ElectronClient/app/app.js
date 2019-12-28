@@ -400,6 +400,7 @@ class Application extends BaseApplication {
 					importItems.push({
 						label: module.fullLabel(moduleSource),
 						screens: ['Main'],
+						accelerator: module.accelerator,
 						click: async () => {
 							let path = null;
 
