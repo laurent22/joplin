@@ -198,8 +198,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Status');
 	}
 
-	warningBox_press() {
-		NavService.go('EncryptionConfig');
+	warningBox_press(event) {
+		NavService.go(event.screen);
+	}
+
+	renderWarningBox(screen, message) {
+		return (
+			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
+				<Text style={{ flex: 1 }}>{message}</Text>
+			</TouchableOpacity>
+		);
 	}
 
 	render() {
@@ -390,11 +398,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 			}
 		};
 
-		const warningComp = this.props.showMissingMasterKeyMessage ? (
-			<TouchableOpacity style={this.styles().warningBox} onPress={() => this.warningBox_press()} activeOpacity={0.8}>
-				<Text style={{ flex: 1 }}>{_('Press to set the decryption password.')}</Text>
-			</TouchableOpacity>
-		) : null;
+		const warningComps = [];
+
+		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
+		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
@@ -450,7 +457,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{sortButtonComp}
 					{menuComp}
 				</View>
-				{warningComp}
+				{warningComps}
 				<DialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
@@ -474,6 +481,7 @@ const ScreenHeader = connect(state => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		hasDisabledSyncItems: state.hasDisabledSyncItems,
 	};
 })(ScreenHeaderComponent);
 
