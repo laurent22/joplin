@@ -238,20 +238,24 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					// Notes in enex files always have a created timestamp but not always an
 					// updated timestamp (it the note has never been modified). For sync
 					// we require an updated_time property, so set it to create_time in that case
-					if (!note.updated_time) note.updated_time = note.created_time;
+					if (!note.updated_time) note.updated_time = note.created_time || 1567138069000;
 
-					const result = await saveNoteToStorage(note, importOptions.fuzzyMatching);
-
-					if (result.noteUpdated) {
-						progressState.updated++;
-					} else if (result.noteCreated) {
-						progressState.created++;
-					} else if (result.noteSkipped) {
-						progressState.skipped++;
+					try {
+						const result = await saveNoteToStorage(note, importOptions.fuzzyMatching);
+						if (result.noteUpdated) {
+							progressState.updated++;
+						} else if (result.noteCreated) {
+							progressState.created++;
+						} else if (result.noteSkipped) {
+							progressState.skipped++;
+						}
+						progressState.resourcesCreated += result.resourcesCreated;
+						progressState.notesTagged += result.notesTagged;
+						importOptions.onProgress(progressState);
+					} catch (error) {
+						console.warn('Could not save note to storage. Continuing.', error);
 					}
-					progressState.resourcesCreated += result.resourcesCreated;
-					progressState.notesTagged += result.notesTagged;
-					importOptions.onProgress(progressState);
+
 				}
 			} catch (error) {
 				console.error(error);
@@ -383,6 +387,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			} else if (n == 'resource') {
 				let decodedData = null;
 				let resourceId = noteResource.id;
+
+				console.log({...noteResource, data: 'REMOVED'});
+				console.log(JSON.stringify(noteResource).length);
+				console.log(Object.keys(noteResource));
+				if (noteResource.data.length > 100_000_000) {
+					console.error(`Data length is too big! ${noteResource.data.length} characters`);
+					return;
+				}
 				if (noteResource.dataEncoding == 'base64') {
 					try {
 						decodedData = Buffer.from(noteResource.data, 'base64');
