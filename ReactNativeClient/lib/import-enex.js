@@ -289,14 +289,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					note.title = text;
 				} else if (n == 'created') {
 					note.created_time = dateToTimestamp(text);
-					console.log({
-						created_time: note.created_time,
-					});
 				} else if (n == 'updated') {
 					note.updated_time = dateToTimestamp(text);
-					console.log({
-						updated_time: note.updated_time,
-					});
 				} else if (n == 'tag') {
 					note.tags.push(text);
 				} else if (n == 'note') {
@@ -394,19 +388,11 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				let decodedData = null;
 				let resourceId = noteResource.id;
 
-				console.log({...noteResource, data: 'REMOVED'});
-				console.log(JSON.stringify(noteResource).length);
-				console.log(Object.keys(noteResource));
-				// if (noteResource.data.length > 100_000_000) {
-				// 	console.error(`Data length is too big! ${noteResource.data.length} characters`);
-				// 	noteResource = null;
-				// 	return;
-				// }
 				if (noteResource.dataEncoding == 'base64') {
 					const longTask = () => new Promise(resolve => {
 						try {
 							//  TODO: Look! This actually worked??? Maybe put in a dummy string if too long, or just throw
-							decodedData = Buffer.from('noteResource.data', 'base64');
+							decodedData = Buffer.from(noteResource.data, 'base64');
 							resolve(decodedData);
 						} catch (error) {
 							importOptions.onError(error); // TODO: Move
@@ -414,15 +400,16 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 						}
 					});
 
-					const timeout = (cb, interval) => () => new Promise(resolve => setTimeout(() => cb(resolve), interval));
+					const timeout = (cb, interval, _noteResource) => () =>
+						new Promise(resolve => setTimeout(() => cb(resolve, _noteResource), interval));
 
-					const onTimeout = timeout(resolve => {
+					const onTimeout = timeout((resolve, _noteResource) => {
 						// TODO: Log the file name, date, and any other useful metadata
-						console.warn('\n\n\nThe \'maybeLongTask\' ran too long!\n\n\n\n');
+						console.warn(`\n\n\nThe 'maybeLongTask' ran too long! \n${JSON.stringify({..._noteResource, data: 'ABRIDGED'})}\n\n\n\n`);
 						resolve('The \'maybeLongTask\' ran too long!');
-					}, 10);
+					}, 100, noteResource); // 10_000ms = 10 seconds
 
-					Promise.race([longTask, onTimeout].map(f => f())).then(console.log);
+					Promise.race([longTask, onTimeout].map(f => f()));
 
 				} else if (noteResource.dataEncoding) {
 					importOptions.onError(new Error(`Cannot decode resource with encoding: ${noteResource.dataEncoding}`));
