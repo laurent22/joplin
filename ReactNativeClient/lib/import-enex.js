@@ -289,8 +289,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					note.title = text;
 				} else if (n == 'created') {
 					note.created_time = dateToTimestamp(text);
+					console.log({
+						created_time: note.created_time,
+					});
 				} else if (n == 'updated') {
 					note.updated_time = dateToTimestamp(text);
+					console.log({
+						updated_time: note.updated_time,
+					});
 				} else if (n == 'tag') {
 					note.tags.push(text);
 				} else if (n == 'note') {
@@ -393,6 +399,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				console.log(Object.keys(noteResource));
 				if (noteResource.data.length > 100_000_000) {
 					console.error(`Data length is too big! ${noteResource.data.length} characters`);
+					noteResource = null;
 					return;
 				}
 				if (noteResource.dataEncoding == 'base64') {
