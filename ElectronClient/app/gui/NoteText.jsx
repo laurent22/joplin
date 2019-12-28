@@ -843,7 +843,11 @@ class NoteTextComponent extends React.Component {
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
 				const localState = await Resource.localState(item);
 				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
-					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
+					if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+						bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+					} else {
+						bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+					}
 					return;
 				}
 				const filePath = Resource.fullPath(item);
