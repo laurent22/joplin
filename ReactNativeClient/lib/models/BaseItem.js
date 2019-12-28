@@ -7,7 +7,6 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const { _ } = require('lib/locale.js');
 const moment = require('moment');
-const markdownUtils = require('lib/markdownUtils');
 
 class BaseItem extends BaseModel {
 	static useUuid() {
@@ -761,7 +760,7 @@ class BaseItem extends BaseModel {
 
 		const output = [];
 		output.push('[');
-		output.push(markdownUtils.escapeLinkText(item.title));
+		output.push(item.title);
 		output.push(']');
 		output.push(`(:/${item.id})`);
 		return output.join('');
