@@ -118,15 +118,6 @@ class NoteListComponent extends React.Component {
 			}
 		};
 
-		const onTitleDoubleClick = async (event, item) => {
-			if (this.props.watchedNoteFiles.indexOf(item.id) < 0) {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandStartExternalEditing',
-				});
-			}
-		};
-
 		const onDragStart = event => {
 			let noteIds = [];
 
@@ -248,9 +239,6 @@ class NoteListComponent extends React.Component {
 					style={listItemTitleStyle}
 					onClick={event => {
 						onTitleClick(event, item);
-					}}
-					onDoubleClick={event => {
-						onTitleDoubleClick(event, item);
 					}}
 					onDragStart={event => onDragStart(event)}
 					data-id={item.id}

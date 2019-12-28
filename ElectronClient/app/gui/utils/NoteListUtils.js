@@ -65,7 +65,7 @@ class NoteListUtils {
 			} else {
 				menu.append(
 					new MenuItem({
-						label: _('Stop watching external editor'),
+						label: _('Stop external editing'),
 						enabled: noteIds.length === 1,
 						click: async () => {
 							props.dispatch({
