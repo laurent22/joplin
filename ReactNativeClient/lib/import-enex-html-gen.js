@@ -56,7 +56,7 @@ function enexXmlToHtml_(stream, resources) {
 		}
 	};
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const options = {};
 		const strict = false;
 		var saxStream = require('sax').createStream(strict, options);
@@ -110,7 +110,19 @@ function enexXmlToHtml_(stream, resources) {
 					}
 
 					if (!found) {
-						reject(`Hash with no associated resource: ${hash}`);
+						// TODO: Match this behavior in MD importer too
+						console.warn(`Hash with no associated resource: ${hash}. Logging into note.`);
+						var today = new Date();
+						var date = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+						var time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+						const style = 'color: rgb(200,0,0); font-weight: bold; background: rgba(255,0,0,.08); padding: 4px 8px; border-radius: 5px';
+						section.lines.push([
+							`<pre style="${style}">`,
+							'Evernote import failure:  ENEX to HTML importer <br/>',
+							`Hash with no associated resource:  ${hash} <br/>`,
+							`Import date:  ${date} ${time} <br/>`,
+							'</pre>',
+						].join(''));
 					}
 				}
 

@@ -397,18 +397,33 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				console.log({...noteResource, data: 'REMOVED'});
 				console.log(JSON.stringify(noteResource).length);
 				console.log(Object.keys(noteResource));
-				if (noteResource.data.length > 100_000_000) {
-					console.error(`Data length is too big! ${noteResource.data.length} characters`);
-					noteResource = null;
-					return;
-				}
+				// if (noteResource.data.length > 100_000_000) {
+				// 	console.error(`Data length is too big! ${noteResource.data.length} characters`);
+				// 	noteResource = null;
+				// 	return;
+				// }
 				if (noteResource.dataEncoding == 'base64') {
-					try {
-						//  TODO: Look! This actually worked??? Maybe put in a dummy string if too long, or just throw
-						decodedData = Buffer.from('noteResource.data', 'base64');
-					} catch (error) {
-						importOptions.onError(error);
-					}
+					const longTask = () => new Promise(resolve => {
+						try {
+							//  TODO: Look! This actually worked??? Maybe put in a dummy string if too long, or just throw
+							decodedData = Buffer.from('noteResource.data', 'base64');
+							resolve(decodedData);
+						} catch (error) {
+							importOptions.onError(error); // TODO: Move
+							throw (error);
+						}
+					});
+
+					const timeout = (cb, interval) => () => new Promise(resolve => setTimeout(() => cb(resolve), interval));
+
+					const onTimeout = timeout(resolve => {
+						// TODO: Log the file name, date, and any other useful metadata
+						console.warn('\n\n\nThe \'maybeLongTask\' ran too long!\n\n\n\n');
+						resolve('The \'maybeLongTask\' ran too long!');
+					}, 10);
+
+					Promise.race([longTask, onTimeout].map(f => f())).then(console.log);
+
 				} else if (noteResource.dataEncoding) {
 					importOptions.onError(new Error(`Cannot decode resource with encoding: ${noteResource.dataEncoding}`));
 					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
