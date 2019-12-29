@@ -13,7 +13,12 @@ class InteropService_Importer_EnexToHtml extends InteropService_Importer_Base {
 			folder = await Folder.save({ title: folderTitle });
 		}
 
-		await importEnex(folder.id, this.sourcePath_, {...this.options_, outputFormat: 'html'});
+		const warnings = await importEnex(folder.id, this.sourcePath_, {
+			...this.options_,
+			outputFormat: 'html',
+		});
+
+		result.warnings = warnings;
 
 		return result;
 	}

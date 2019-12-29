@@ -195,6 +195,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let notes = [];
 		// let noteCountSoFar = 0;
 		let processingNotes = false;
+		let warnings = [];
 
 		stream.on('error', error => {
 			reject(new Error(error.toString()));
@@ -398,12 +399,12 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							decodedData = Buffer.from(noteResource.data, 'base64');
 						} else {
 							const filename = noteResource.filename;
-							console.warn(
+							warnings = [...warnings, (
 								`${filename} is too large to import into "${note.title}". ` +
 								'Skipping its import, which will leave an inline error in ' +
 								'the note.\n\n' +
 								`filename: ${filename}\n` + `note: ${note.title}`
-							);
+							)];
 							decodedData = Buffer('File was too big to import.');
 						}
 						console.log('Would have resolved here');
@@ -455,9 +456,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			let iid = setInterval(() => {
 				processNotes().then(allDone => {
 					if (allDone) {
-						console.log('all done!');
+						warnings.map((warning) => console.warn(warning)); // Don't log the index
 						clearTimeout(iid);
-						resolve();
+						resolve({warnings});
 					}
 				});
 			}, 500);

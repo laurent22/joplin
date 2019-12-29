@@ -429,7 +429,16 @@ class Application extends BaseApplication {
 							const importOptions = {
 								path,
 								format: module.format,
-								onProgress: console.log,
+								onProgress: progressState => {
+									let line = [];
+									line.push(_('Found: %d.', progressState.loaded));
+									line.push(_('Created: %d.', progressState.created));
+									if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
+									if (progressState.skipped) line.push(_('Skipped: %d.', progressState.skipped));
+									if (progressState.resourcesCreated) line.push(_('Resources: %d.', progressState.resourcesCreated));
+									if (progressState.notesTagged) line.push(_('Tagged: %d.', progressState.notesTagged));
+									console.log(...line);
+								},
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
