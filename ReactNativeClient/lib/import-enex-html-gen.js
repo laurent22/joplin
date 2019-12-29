@@ -115,14 +115,17 @@ function enexXmlToHtml_(stream, resources) {
 						var today = new Date();
 						var date = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
 						var time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-						const style = 'color: rgb(200,0,0); font-weight: bold; background: rgba(255,0,0,.08); padding: 4px 8px; border-radius: 5px';
-						section.lines.push([
-							`<pre style="${style}">`,
-							'Evernote import failure:  ENEX to HTML importer <br/>',
-							`Hash with no associated resource:  ${hash} <br/>`,
-							`Import date:  ${date} ${time} <br/>`,
-							'</pre>',
-						].join(''));
+						const style = (
+							'color: rgb(200,0,0); font-weight: bold; background: rgba(255,0,0,.08); ' +
+							'padding: 4px 8px; border-radius: 5px; white-space: normal;'
+						);
+						section.lines.push(
+							`<pre style="${style}">` +
+							'Evernote import failure:  ENEX to HTML importer <br/>' +
+							`Hash with no associated resource:  ${hash} <br/>` +
+							`Import date:  ${date} ${time}` +
+							'</pre>'
+						);
 					}
 				}
 

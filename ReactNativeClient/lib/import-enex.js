@@ -193,7 +193,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let noteResourceAttributes = null;
 		let noteResourceRecognition = null;
 		let notes = [];
-		// let noteCountSoFar = 0;
 		let processingNotes = false;
 		let warnings = [];
 
@@ -219,7 +218,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				stream.pause();
 
 				while (notes.length) {
-					// noteCountSoFar++
 					let note = notes.shift();
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
@@ -394,10 +392,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (noteResource.dataEncoding == 'base64') {
 					try {
 						// Only load into buffer if the resource is not way too big. Once it
-						// gets too big, the whole app freezes up. The 10_000_000 number was
+						// gets too big, the whole app freezes up. The 100_000_000 number was
 						// chosen somewhat randomly, simply to be smaller than the file that
 						// I found to cause the problem.
-						if (noteResource.data.length < 10_000_000) {
+						if (noteResource.data.length < 100_000_000) {
 							decodedData = Buffer.from(noteResource.data, 'base64');
 						} else {
 							const filename = noteResource.filename;
@@ -410,7 +408,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							decodedData = Buffer('File was too big to import.');
 						}
 						console.log('Would have resolved here');
-						// resolve(decodedData);
 					} catch (error) {
 						importOptions.onError(error); // TODO: Move
 						throw (error);
