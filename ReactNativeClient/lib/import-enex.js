@@ -239,7 +239,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					// Notes in enex files always have a created timestamp but not always an
 					// updated timestamp (it the note has never been modified). For sync
 					// we require an updated_time property, so set it to create_time in that case
-					if (!note.updated_time) note.updated_time = note.created_time || 1567138069000;
+					if (!note.updated_time) note.updated_time = note.created_time;
 
 					try {
 						const result = await saveNoteToStorage(note, importOptions.fuzzyMatching);
