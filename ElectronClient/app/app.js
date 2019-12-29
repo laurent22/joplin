@@ -429,6 +429,7 @@ class Application extends BaseApplication {
 							const importOptions = {
 								path,
 								format: module.format,
+								importOptions: console.log,
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
@@ -441,14 +442,14 @@ class Application extends BaseApplication {
 							try {
 								const result = await service.import(importOptions);
 								console.info('Import result: ', result);
+								this.dispatch({
+									type: 'WINDOW_COMMAND',
+									name: 'hideModalMessage',
+								});
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
 
-							this.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'hideModalMessage',
-							});
 						},
 					});
 				}

@@ -193,6 +193,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		let noteResourceAttributes = null;
 		let noteResourceRecognition = null;
 		let notes = [];
+		// let noteCountSoFar = 0;
 		let processingNotes = false;
 
 		stream.on('error', error => {
@@ -217,6 +218,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				stream.pause();
 
 				while (notes.length) {
+					// noteCountSoFar++
 					let note = notes.shift();
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
@@ -389,12 +391,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				let resourceId = noteResource.id;
 
 				if (noteResource.dataEncoding == 'base64') {
-					// const longTask = () => new Promise(resolve => {
 					try {
 						// Only load into buffer if the resource is not way too big. Once it
 						// gets too big, the whole app freezes up.
 						if (noteResource.data.length < 10_000_000) {
-							//  TODO: Look! This actually worked??? Maybe put in a dummy string if too long, or just throw
 							decodedData = Buffer.from(noteResource.data, 'base64');
 						} else {
 							const filename = noteResource.filename;
@@ -406,23 +406,12 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							);
 							decodedData = Buffer('File was too big to import.');
 						}
-						resolve(decodedData);
+						console.log('Would have resolved here');
+						// resolve(decodedData);
 					} catch (error) {
 						importOptions.onError(error); // TODO: Move
 						throw (error);
 					}
-					// });
-
-					// const timeout = (cb, interval, _noteResource) => () =>
-					// 	new Promise(resolve => setTimeout(() => cb(resolve, _noteResource), interval));
-
-					// const onTimeout = timeout((resolve, _noteResource) => {
-					// 	// TODO: Log the file name, date, and any other useful metadata
-					// 	console.warn(`\n\n\nThe 'maybeLongTask' ran too long! \n${JSON.stringify({..._noteResource, data: 'ABRIDGED'})}\n\n\n\n`);
-					// 	resolve('The \'maybeLongTask\' ran too long!');
-					// }, 100, noteResource); // 10_000ms = 10 seconds
-
-					// Promise.race([longTask, onTimeout].map(f => f()));
 
 				} else if (noteResource.dataEncoding) {
 					importOptions.onError(new Error(`Cannot decode resource with encoding: ${noteResource.dataEncoding}`));
@@ -466,6 +455,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			let iid = setInterval(() => {
 				processNotes().then(allDone => {
 					if (allDone) {
+						console.log('all done!');
 						clearTimeout(iid);
 						resolve();
 					}
