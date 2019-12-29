@@ -39,7 +39,6 @@ class Command extends BaseCommand {
 		// onProgress/onError supported by Enex import only
 
 		importOptions.onProgress = progressState => {
-			console.log('in onProgres!!!');
 			let line = [];
 			line.push(_('Found: %d.', progressState.loaded));
 			line.push(_('Created: %d.', progressState.created));

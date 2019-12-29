@@ -394,7 +394,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				if (noteResource.dataEncoding == 'base64') {
 					try {
 						// Only load into buffer if the resource is not way too big. Once it
-						// gets too big, the whole app freezes up.
+						// gets too big, the whole app freezes up. The 10_000_000 number was
+						// chosen somewhat randomly, simply to be smaller than the file that
+						// I found to cause the problem.
 						if (noteResource.data.length < 10_000_000) {
 							decodedData = Buffer.from(noteResource.data, 'base64');
 						} else {
