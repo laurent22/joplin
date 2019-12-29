@@ -58,6 +58,7 @@ class NoteListUtils {
 							props.dispatch({
 								type: 'WINDOW_COMMAND',
 								name: 'commandStartExternalEditing',
+								noteId: noteIds[0],
 							});
 						},
 					})
@@ -71,6 +72,7 @@ class NoteListUtils {
 							props.dispatch({
 								type: 'WINDOW_COMMAND',
 								name: 'commandStopExternalEditing',
+								noteId: noteIds[0],
 							});
 						},
 					})

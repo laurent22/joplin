@@ -1119,10 +1119,6 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandTextLink;
 			} else if (command.name === 'insertDateTime') {
 				fn = this.commandDateTime;
-			} else if (command.name === 'commandStartExternalEditing') {
-				fn = this.commandStartExternalEditing;
-			} else if (command.name === 'commandStopExternalEditing') {
-				fn = this.commandStopExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
@@ -1302,18 +1298,23 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async commandStartExternalEditing() {
-		try {
-			await this.saveIfNeeded(true, {
-				autoTitle: false,
-			});
-			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
-		} catch (error) {
-			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
-		}
+		await this.saveIfNeeded(true, {
+			autoTitle: false,
+		});
+
+		this.props.dispatch({
+			type: 'WINDOW_COMMAND',
+			name: 'commandStartExternalEditing',
+			noteId: this.state.note.id,
+		});
 	}
 
 	async commandStopExternalEditing() {
-		ExternalEditWatcher.instance().stopWatching(this.state.note.id);
+		this.props.dispatch({
+			type: 'WINDOW_COMMAND',
+			name: 'commandStopExternalEditing',
+			noteId: this.state.note.id,
+		});
 	}
 
 	async commandSetTags() {
