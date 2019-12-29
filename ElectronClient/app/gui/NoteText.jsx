@@ -15,7 +15,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MarkupToHtml = require('lib/renderers/MarkupToHtml');
+const { MarkupToHtml } = require('joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -41,6 +41,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 const TemplateUtils = require('lib/TemplateUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -111,6 +112,7 @@ class NoteTextComponent extends React.Component {
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
 			lastRenderCssFiles: [],
+			lastRenderPluginAssets: [],
 			lastKeys: [],
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState),
@@ -401,9 +403,11 @@ class NoteTextComponent extends React.Component {
 
 	markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
-		this.markupToHtml_ = new MarkupToHtml({
+
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
+
 		return this.markupToHtml_;
 	}
 
@@ -1048,10 +1052,10 @@ class NoteTextComponent extends React.Component {
 
 		if (bodyToRender === null) {
 			bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
-			markupLanguage = this.state.note ? this.state.note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+			markupLanguage = this.state.note ? this.state.note.markup_language : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
 
-		if (!markupLanguage) markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
+		if (!markupLanguage) markupLanguage = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 		const resources = await shared.attachedResources(bodyToRender);
 
@@ -1072,11 +1076,11 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 		}
 
-		const result = this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
+		const result = await this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
 
 		this.setState({
 			bodyHtml: result.html,
-			lastRenderCssFiles: result.cssFiles,
+			lastRenderPluginAssets: result.pluginAssets,
 		});
 	}
 
@@ -1630,7 +1634,7 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
+		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
 				tooltip: _('Bold'),
 				iconName: 'fa-bold',
@@ -1858,7 +1862,7 @@ class NoteTextComponent extends React.Component {
 		const style = this.props.style;
 		const note = this.state.note;
 		const body = note && note.body ? note.body : '';
-		const markupLanguage = note ? note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+		const markupLanguage = note ? note.markup_language : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
@@ -1999,7 +2003,7 @@ class NoteTextComponent extends React.Component {
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			if (htmlHasChanged) {
 				let options = {
-					cssFiles: this.state.lastRenderCssFiles,
+					pluginAssets: this.state.lastRenderPluginAssets,
 					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);

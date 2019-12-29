@@ -6,11 +6,11 @@ const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
-const MarkupToHtml = require('lib/renderers/MarkupToHtml.js');
 const dataurl	 = require('dataurl');
 const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
 const { escapeHtml } = require('lib/string-utils.js');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -27,7 +27,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
-		this.markupToHtml_ = new MarkupToHtml();
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 		this.resources_ = [];
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
@@ -103,7 +103,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 			}
 
 			const bodyMd = await this.processNoteResources_(item);
-			const result = this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, { resources: this.resources_, plainResourceRendering: true });
+			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, { resources: this.resources_, plainResourceRendering: true });
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
 			if (result.html) noteContent.push(result.html);

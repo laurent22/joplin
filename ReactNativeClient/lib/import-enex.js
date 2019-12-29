@@ -4,6 +4,7 @@ const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
+const { MarkupToHtml } = require('joplin-renderer');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const { time } = require('lib/time-utils.js');
@@ -224,8 +225,8 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					delete note.bodyXml;
 
 					note.markup_language = importOptions.outputFormat === 'html' ?
-						Note.MARKUP_LANGUAGE_HTML :
-						Note.MARKUP_LANGUAGE_MARKDOWN;
+						MarkupToHtml.MARKUP_LANGUAGE_HTML :
+						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 					// console.info('*************************************************************************');
 					// console.info(body);

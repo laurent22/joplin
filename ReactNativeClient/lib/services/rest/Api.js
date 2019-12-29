@@ -22,6 +22,7 @@ const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
+const { MarkupToHtml } = require('joplin-renderer');
 
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
@@ -491,7 +492,7 @@ class Api {
 				}
 				output.body = styleTag + minifiedHtml;
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
-				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			} else {
 				// Convert to Markdown
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
@@ -501,7 +502,7 @@ class Api {
 					baseUrl: baseUrl,
 					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 				});
-				output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 			}
 		}
 
@@ -520,7 +521,7 @@ class Api {
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
 		if ('markup_language' in requestNote) output.markup_language = Database.formatValue(Database.TYPE_INT, requestNote.markup_language);
 
-		if (!output.markup_language) output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+		if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 		return output;
 	}
@@ -664,7 +665,7 @@ class Api {
 	replaceImageUrlsByResources_(markupLanguage, md, urls, imageSizes) {
 		const imageSizesIndexes = {};
 
-		if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
+		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 			return htmlUtils.replaceImageUrls(md, imageUrl => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return imageUrl;

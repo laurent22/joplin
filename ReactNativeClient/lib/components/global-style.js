@@ -38,7 +38,7 @@ const globalStyle = {
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
 
-	codeThemeCss: 'hljs-atom-one-light.css',
+	codeThemeCss: 'atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;

@@ -2,11 +2,15 @@
 	"folders": [
 		{
 			"name": "Joplin",
-			"path": ".",
-		}, {
-			"name": "Joplin Nextcloud App",
-			"path": "D:/Web/www/nextcloud/apps/joplin",
+			"path": "."
 		},
+		{
+			"name": "Joplin Nextcloud App",
+			"path": "D:/Web/www/nextcloud/apps/joplin"
+		},
+		{
+			"path": "D:/Docs/PROGS/Node/joplin-renderer"
+		}
 	],
 	"settings": {
 		"files.exclude": {
