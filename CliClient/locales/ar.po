@@ -7,37 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: عبد الناصر سعيد <as@althobaity.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: العربية\n"
+"Last-Translator: أحمد باشا إبراهيم <fi_ahmed_bacha@esi.dz>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && "
+"n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
-msgstr "لتحذف الوسم ، أزل الوسم عن الملاحظات التي وسمت به."
+msgstr "لتحذف الوسم، أزل الوسم عن الملاحظات التي وسمت به."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
 msgid "Please select the note or notebook to be deleted first."
-msgstr "يرجى اختيار ملاحظة أو دفتر ملاحظات أولاً للتمكن من حذفها."
+msgstr "يرجى اختيار الملاحظة أو دفتر الملاحظات المراد حذفه أولاً."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "اضغط Ctrl+D أو اكتب \"خروج\" للخروج من التطبيق"
+msgstr "اضغط Ctrl+D أو اكتب \"exit\" للخروج من التطبيق"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "يوجد أكثر من عنصر يطابق \"%s\". يرجى تضييق نطاق الاستعلام الذي كتبته."
+msgstr "أكثر من عنصر واحد يطابق \"%s\". يرجى تضييق الاستعلام الخاص بك."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
-msgstr "لم تختر أي دفتر ملاحظات."
+msgstr "لم يتم اختيار دفتر ملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
 msgid "No notebook has been specified."
-msgstr "لم يجر تحديد أي دفتر ملاحظات."
+msgstr "لم يتم تحديد دفتر ملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
@@ -180,13 +185,12 @@ msgid "Note is not a to-do: \"%s\""
 msgstr "الملاحظة: \"%s\" ليست قائمة مهام"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"يدير ضبط التشفير من الطرف للطرف (E2EE). الأوامر هي `enable`، `disable`، "
-"`decrypt`، `status`، `target-status`."
+"يدير ترتيبات (E2EE). الأوامر هي `enable`، `disable`، `decrypt`، `status`، "
+"`target-status`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
@@ -201,23 +205,21 @@ msgstr "ألغيت العملية"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
-#, fuzzy
 msgid "Confirm password:"
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "تأكيد كلمة المرور:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "لا يمكن أن تكون كلمة المرور فارغة"
+msgstr "كلمات المرور غير متطابقة!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
+"Starting decryption... Please wait as it may take several minutes depending on "
+"how much there is to decrypt."
 msgstr ""
-"بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب "
-"كمية البيانات المطلوب فك تشفيرها."
+"بدء فك التشفير جارٍ... يرجى الانتظار حيث قد تستغرق العملية عدة دقائق بحسب كمية "
+"البيانات المطلوب فك تشفيرها."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
@@ -266,8 +268,8 @@ msgstr "الخروج من التطبيق."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete "
+"database including notebooks, notes, tags and resources."
 msgstr ""
 "تصدير بيانات Joplin إلى المسار المعطى. سيصدِّر التطبيق تلقائياً كامل قاعدة "
 "البيانات بما في ذلك دفاتر الملاحظات ، الملاحظات ، الوسوم والموارد."
@@ -304,8 +306,8 @@ msgstr "الاختصارات غير متوفرة في وضع واجهة سطر �
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
+"Type `help [command]` for more information about a command; or type `help all` "
+"for the complete usage information."
 msgstr ""
 "أكتب `help [command]` للمزيد من المعلومات عن أمر ما ، أو `help all` لمعلومات "
 "الاستخدام الكاملة."
@@ -316,9 +318,9 @@ msgstr "الأوامر الممكنة هي:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
 msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
+"In any command, a note or notebook can be referred to by title or ID, or using "
+"the shortcuts `$n` or `$b` for, respectively, the currently selected note or "
+"notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "في أي أمر ، يمكن الإشارة إلى ملاحظة أو دفتر ملاحظات بعنوانه أو بمعرّفه ، أو "
 "باستخدام الاختصارات `$n` أو `$b` التي تشير ، على الترتيب ، إلى الملاحظة أو "
@@ -331,8 +333,8 @@ msgstr "للتنقل من جزء إلى آخر اضغط Tab أو Shift+Tab."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including "
+"this console)."
 msgstr ""
 "استخدم أزرار الأسهم و Page Up/Page Down للتمرير في القوائم ومناطق النص (بما "
 "فيها وحدة التحكم هذه)."
@@ -350,8 +352,7 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr "للخروج من وضع سطر الأوامر ، اضغط ESCAPE"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
 
@@ -416,8 +417,8 @@ msgstr "جرى استيراد الملاحظات: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of "
+"notebooks."
 msgstr ""
 "يعرض الملاحظات في الدفتر الحالي. استخدم `ls /` لعرض قائمة دفاتر الملاحظات."
 
@@ -437,12 +438,12 @@ msgstr "يعكس طريقة الترتيب."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for "
+"to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, "
+"while `-ttd` would display notes and to-dos."
 msgstr ""
-"يعرض العناصر من النوع/الأنواع المحددة فقط. يمكن أن يكون `n` للملاحظات ، أو "
-"`t` لقوائم المهام أو `nt` للملاحظات و قوائم المهام (مثلاً ، `-tt` ستعرض قوائم "
+"يعرض العناصر من النوع/الأنواع المحددة فقط. يمكن أن يكون `n` للملاحظات ، أو `t` "
+"لقوائم المهام أو `nt` للملاحظات و قوائم المهام (مثلاً ، `-tt` ستعرض قوائم "
 "المهام فقط ، بينما ستعرض `-ttd` الملاحظات و قوائم المهام."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
@@ -500,8 +501,8 @@ msgstr "يحذف دفتر الملاحظات دون طلب تأكيد."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
 msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
+"Delete notebook? All notes and sub-notebooks within this notebook will also be "
+"deleted."
 msgstr ""
 "حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا "
 "الدفتر أيضاً."
@@ -534,21 +535,23 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"ابدأ، أوقف أو تحقق من خادم API. لتحديد أي منفذ يجب تشغيله، قم بتعيين متغير "
+"تكوين api.port. الأوامر هي (%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "الخادم قيد التشغيل بالفعل على المنفذ %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "الخادم قيد التشغيل على المنفذ %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
-msgstr ""
+msgstr "الخادم لا يعمل."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
@@ -558,8 +561,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة "
-"هي:\n"
+"يضبط الخاصية <name> للـ <note> المعطاة على [value] معطاة. الخصائص الممكنة هي:\n"
 "%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
@@ -614,9 +616,8 @@ msgstr "المزامنة قيد التقدم بالفعل."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"Lock file is already being hold. If you know that no synchronisation is taking "
+"place, you may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
 "ملف القفل هو قيد الحجز بالفعل. بإمكانك حذف ملف القفل في \"%s\" واستئناف "
 "العملية إن كنت تعلم أنه لا توجد مزامنة تجري حالياً."
@@ -643,17 +644,16 @@ msgid "Cancelling... Please wait."
 msgstr "الإلغاء جارٍ... فضلاً انتظر."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
-#, fuzzy
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign "
+"or remove [tag] from [note], to list notes associated with [tag], or to list "
+"tags associated with [note]. The command `tag list` can be used to list all "
+"the tags (use -l for long option)."
 msgstr ""
-"<tag-command> (أمر-وسم) يمكن أن يكون \"add\" (أضف) ، \"remove\" (أزل) أو "
-"\"list\" (أسرد) ، وذلك لإضافة [وسم] أو إزالته من [ملاحظة] أو لسرد الملاحظات "
-"المرتبطة بال [وسم]. الأمر`tag list` يمكن استخدامه لسرد كل الوسوم (استخدم -l "
-"لخيار الوسوم الطويلة)."
+"<tag-command> (أمر-وسم) يمكن أن يكون \"add\" (أضف) ، \"remove\" (أزل) أو \"list"
+"\" (أسرد) ، وذلك لإضافة [وسم] أو إزالته من [ملاحظة] أو لسرد الملاحظات المرتبطة "
+"بال [وسم]. الأمر`tag list` يمكن استخدامه لسرد كل الوسوم (استخدم -l لخيار "
+"الوسوم الطويلة)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
@@ -662,10 +662,10 @@ msgstr "أمر غير صالح:\"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle "
+"the given to-do between completed and uncompleted state (If the target is a "
+"regular note it will be converted to a to-do). Use \"clear\" to convert the to-"
+"do back to a regular note."
 msgstr ""
 "يمكن أن يكون <todo-command> (أمر قائمة المهام) \"toggle\" (تبديل) أو \"clear"
 "\" (مسح) فقط. استخدم \"toggle\" لتبديل حال قائمة المهام المعطاة بين مكتملة و "
@@ -730,8 +730,8 @@ msgstr "بحث:"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for "
+"usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
@@ -744,14 +744,14 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master "
+"password. To do so please type `e2ee decrypt`. If you have already supplied "
+"the password, the encrypted items are being decrypted in the background and "
+"will be available soon."
 msgstr ""
 "عنصر أو أكثر هو مشفّر حالياً وقد تحتاج إلى إدخال كلمة مرور رئيسة. فضلاً أكتب "
-"`e2ee decrypt` لفعل هذا. إن كنت قد أدخلت كلمة المرور فعلاً فإن فك تشفير "
-"العناصر المشفَّرة جارٍ في الخلفية وستكون متوفرة قريباً."
+"`e2ee decrypt` لفعل هذا. إن كنت قد أدخلت كلمة المرور فعلاً فإن فك تشفير العناصر "
+"المشفَّرة جارٍ في الخلفية وستكون متوفرة قريباً."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:643
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:726
@@ -765,7 +765,7 @@ msgstr "حول Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:656
 msgid "Preferences..."
-msgstr ""
+msgstr "تفضيلات..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:666
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1008
@@ -775,7 +775,7 @@ msgstr "البحث جارٍ عن تحديثات..."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:680
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:740
 msgid "Templates"
-msgstr ""
+msgstr "قوالب"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:687
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:745
@@ -807,11 +807,11 @@ msgstr "إغلاق"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:733
 msgid "Close Window"
-msgstr ""
+msgstr "إغلاق النافذة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:771
 msgid "&Edit"
-msgstr "ت&حرير"
+msgstr "&تعديل"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:774
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:796
@@ -888,13 +888,12 @@ msgstr "تبديل الشريط الجانبي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:925
 msgid "Layout button sequence"
-msgstr ""
+msgstr "نسق زر التسلسل"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:929
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:468
-#, fuzzy
 msgid "Toggle note list"
-msgstr "قائمة ملاحظات"
+msgstr "تبديل قائمة الملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:938
 msgid "Toggle editor layout"
@@ -910,16 +909,15 @@ msgstr "&أدوات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:996
 msgid "&Help"
-msgstr "م&ساعدة"
+msgstr "&مساعدة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:998
 msgid "Website and documentation"
 msgstr "موقع الويب و التوثيق"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1002
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Joplin نسخة %s"
+msgstr "منتدى Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1005
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:421
@@ -927,9 +925,8 @@ msgid "Make a donation"
 msgstr "تبرَّع"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1017
-#, fuzzy
 msgid "Toggle development tools"
-msgstr "قائمة ملاحظات"
+msgstr "تبديل أدوات التطوير"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1151
 #, javascript-format
@@ -986,12 +983,12 @@ msgid "An update is available, do you want to download it now?"
 msgstr "يتوفر تحديث ، هل تريد تنزيله الآن؟"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Your version: %s"
 msgstr "النسخة لديك: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "New version: %s"
 msgstr "النسخة الجديدة: %s"
 
@@ -1005,7 +1002,7 @@ msgstr "لا"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "Full Release Notes"
-msgstr ""
+msgstr "ملاحظات الإصدار الكامل"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
@@ -1013,7 +1010,7 @@ msgstr "تم نسخ الرمز المميز إلى الحافظة!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "خدمة Web clipper مفعَّلة ومضبوطة على البدء التلقائي"
+msgstr "خدمة Web Clipper مفعَّلة ومضبوطة على البدء التلقائي."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
@@ -1086,12 +1083,11 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى "
-"Joplin."
+"هذا الرمز المميز للتصريح مطلوب فقط للسماح لتطبيقات طرف ثالث للوصول إلى Joplin."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "هذا سيفتح شاشة جديدة. حفظ التغييرات الحالية الخاصة بك؟"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
 #, javascript-format
@@ -1104,49 +1100,44 @@ msgid "Check synchronisation configuration"
 msgstr "فحص ضبط المزامنة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "علامة غير معروفة: %s"
+msgstr "مجهول"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "الإلغاء جارٍ..."
+msgstr "تدقيق..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
-#, fuzzy
 msgid "Error"
-msgstr "الأخطاء فقط"
+msgstr "خطأ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
+"The Joplin Nextcloud App is either not installed or misconfigured. Please see "
+"the full error message below:"
 msgstr ""
+"تطبيق Joplin Nextcloud إما غير مثبت أو تم تكوينه بشكل خاطئ. يرجى الاطلاع على "
+"رسالة الخطأ الكاملة أدناه:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "إظهار الكل"
+msgstr "إظهار السجل"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "حالة تطبيق Joplin Nextcloud:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "الحالة"
+msgstr "تحقق من الحالة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "م&ساعدة"
+msgstr "مساعدة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "خيارات متقدمة"
+msgstr "أظهر الاعدادات المتقدمة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1180,25 +1171,24 @@ msgstr "حفظ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
-"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"دون تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
+"تعطيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل دون "
+"تشفير إلى وجهة المزامنة. هل ترغب الاستمرار؟"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent encrypted to the sync target. Do not lose the password "
+"as, for security purposes, this will be the *only* way to decrypt the data! To "
+"enable encryption, please enter your password below."
 msgstr ""
 "تفعيل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل "
-"مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون "
-"هي الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه "
-"لتفعيل التشفير."
+"مشفرة إلى وجهة المزامنة. لمصلحة أمن معلوماتك ، لا تضِع كلمة المرور ، فستكون هي "
+"الطريقة *الوحيدة* لفك تشفير البيانات! فضلاً أدخل كلمة مرور خاصة بك أدناه لتفعيل "
+"التشفير."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
@@ -1249,12 +1239,12 @@ msgstr "كلمة المرور صحيحة"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+"as \"active\"). Any of the keys might be used for decryption, depending on how "
+"the notes or notebooks were originally encrypted."
 msgstr ""
-"لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط"
-"\"). يمكن استخدام أي من المفاتيح لفك التشفير ، وهذا بحسب الطريقة التي شفرت "
-"بها سابقاً الملاحظة أو دفتر الملاحظات."
+"لاحِظ: سيجري استخدام مفتاح رئيس واحد فقط للتشفير (المفتاح المعلَّم أنه \"نشط\"). "
+"يمكن استخدام أي من المفاتيح لفك التشفير ، وهذا بحسب الطريقة التي شفرت بها "
+"سابقاً الملاحظة أو دفتر الملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
@@ -1264,13 +1254,13 @@ msgstr "المفاتيح الرئيسة مفقودة"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
 msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
+"The master keys with these IDs are used to encrypt some of your items, however "
+"the application does not currently have access to them. It is likely they will "
+"eventually be downloaded via synchronisation."
 msgstr ""
-"تم استخدام المفاتيح الرئيسة ذات المعرّفات التالية لتشفير بعض العناصر لديك ، "
-"إلا أن التطبيق لم يتمكن من الوصول إليها حالياً. من المحتمل أن يجري تنزيلها "
-"فيما بعد عبر المزامنة."
+"تم استخدام المفاتيح الرئيسة ذات المعرّفات التالية لتشفير بعض العناصر لديك ، إلا "
+"أن التطبيق لم يتمكن من الوصول إليها حالياً. من المحتمل أن يجري تنزيلها فيما بعد "
+"عبر المزامنة."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
@@ -1278,8 +1268,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"يرجى الرجوع إلى التوثيق للمزيد من المعلومات عن التشفير من الطرف للطرف (E2EE) "
-"و طرق تفعيله."
+"لمزيد من المعلومات حول التشفير من طرف إلى طرف (E2EE) ونصيحة حول كيفية تمكينه "
+"يرجى مراجعة الوثائق:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
@@ -1293,15 +1283,15 @@ msgstr "التشفير هو:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "إضافة Firefox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "متجر كروم الالكتروني"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "احصل عليها الآن:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:210
 msgid "Usage"
@@ -1343,7 +1333,7 @@ msgstr "ضبط منبّه:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:326
 msgid "Template file:"
-msgstr ""
+msgstr "ملف نموذجي:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:477
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:69
@@ -1378,9 +1368,8 @@ msgid "View them now"
 msgstr "عرضها الآن"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:568
-#, fuzzy
 msgid "One or more master keys need a password."
-msgstr "أدخل كلمة المرور الرئيسة:"
+msgstr "مفتاح رئيسي واحد أو أكثر يحتاج إلى كلمة مرور."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:578
 msgid "Set the password"
@@ -1393,8 +1382,7 @@ msgstr "لا توجد ملاحظات هنا. أنشئ واحدةً بالضغط 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:417
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr ""
-"لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
+msgstr "لا يوجد دفتر ملاحظات حالياً. أنشئ واحداً بالضغط على \"دفتر ملاحظات جديد\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
 msgid "Location"
@@ -1406,17 +1394,16 @@ msgstr "عنوان URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:951
-#, fuzzy
 msgid "Note History"
-msgstr "قائمة ملاحظات"
+msgstr "تاريخ الملاحظة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:32
 msgid "Markup"
-msgstr ""
+msgstr "ترميز"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:295
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "الإصدارات السابقة من هذه الملاحظة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:372
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1735
@@ -1426,12 +1413,11 @@ msgstr "خصائص الملاحظة"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr ""
+msgstr "تمت استعادة الملاحظة \"%s\" بنجاح إلى دفتر الملاحظات \"%s\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:100
-#, fuzzy
 msgid "This note has no history"
-msgstr "جرى تعديل هذه الملاحظة:"
+msgstr "هذه المذكرة ليس لها تاريخ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:139
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:853
@@ -1441,14 +1427,16 @@ msgstr "رابط أو رسالة غير مدعومان: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:174
 msgid "Restore"
-msgstr ""
+msgstr "استعادة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:175
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s"
+"\". The current version of the note will not be replaced or modified."
 msgstr ""
+"انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن "
+"يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:770
 msgid "Open..."
@@ -1584,49 +1572,55 @@ msgid "Synchronisation Status"
 msgstr "حالة المزامنة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "المزامنة"
+msgstr "مزامنة..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "إنشاء %s جديد ..."
-msgstr[1] "إنشاء %s جديد ..."
+msgstr[0] "جارٍ إنشاء الرابط..."
+msgstr[1] "جارٍ إنشاء الرابط..."
+msgstr[2] "جارٍ إنشاء الرابطين..."
+msgstr[3] "جارٍ إنشاء الروابط..."
+msgstr[4] "جارٍ إنشاء الروابط..."
+msgstr[5] "جارٍ إنشاء الروابط..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "تم نسخ الرمز المميز إلى الحافظة!"
-msgstr[1] "تم نسخ الرمز المميز إلى الحافظة!"
+msgstr[0] "تم نسخ الرابط إلى الحافظة!"
+msgstr[1] "تم نسخ الرابط إلى الحافظة!"
+msgstr[2] "تم نسخ الرابطين إلى الحافظة!"
+msgstr[3] "تم نسخ الروابط إلى الحافظة!"
+msgstr[4] "تم نسخ الروابط إلى الحافظة!"
+msgstr[5] "تم نسخ الروابط إلى الحافظة!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
+msgstr "ملاحظة: عند مشاركة ملاحظة ، لن يتم تشفيرها على الخادم."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "مشاركة"
+msgstr "مشاركة ملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "مشاركة"
-msgstr[1] "مشاركة"
+msgstr[0] "نسخ رابط قابل للمشاركة"
+msgstr[1] "نسخ رابط قابل للمشاركة"
+msgstr[2] "نسخ رابطان قابلان للمشاركة"
+msgstr[3] "نسخ روابط قابلة للمشاركة"
+msgstr[4] "نسخ روابط قابلة للمشاركة"
+msgstr[5] "نسخ روابط قابلة للمشاركة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "إغلاق"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:276
-#, fuzzy
 msgid "Remove"
-msgstr "إزالة ؟"
+msgstr "إزالة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:279
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
@@ -1659,9 +1653,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "حذف هذا البحث من الشريط الجانبي؟"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:297
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "دفتر ملاحظات جديد"
+msgstr "دفتر ملاحظات فرعي جديد"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:332
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:382
@@ -1693,7 +1686,7 @@ msgstr "فضلاً اختر أين سيتم تصدير حالة المزامنة
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
 msgid "Retry"
-msgstr ""
+msgstr "إعادة المحاولة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:26
 msgid "Add or remove tags"
@@ -1727,9 +1720,8 @@ msgid "Copy Markdown link"
 msgstr "نسخ رابط Markdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:112
-#, fuzzy
 msgid "Share note..."
-msgstr "مشاركة"
+msgstr "مشاركة ملاحظة..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:146
 msgid "PDF File"
@@ -1750,10 +1742,12 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
+"اكتب عنوان الملاحظة للانتقال إليها. أو اكتب # متبوعًا باسم الوسم، أو @ متبوعًا "
+"باسم دفتر الملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
 msgid "Goto Anything..."
-msgstr ""
+msgstr "اذهب إلى أي شيء..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:122
@@ -1770,11 +1764,15 @@ msgstr "علامة غير معروفة: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to the Joplin Nextcloud app. Please check the configuration "
+"in the Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
+"لا يمكن الاتصال بتطبيق Joplin Nextcloud. يرجى التحقق من التكوين في شاشة تكوين "
+"التزامن. الخطأ الكامل كان:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -1811,8 +1809,7 @@ msgid "Unknown level ID: %s"
 msgstr "معرّف مستوى غير معروف: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr "تم التصريح للتطبيق - يمكنك الآن إغلاق تبويب المستعرض هذا."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
@@ -1821,24 +1818,24 @@ msgstr "جرى التصريح للتطبيق بنجاح."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
 msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"Please open the following URL in your browser to authenticate the application. "
+"The application will create a directory in \"Apps/Joplin\" and will only read "
+"and write files in this directory. It will have no access to any files outside "
+"this directory nor to any other personal data. No data will be shared with any "
+"third party."
 msgstr ""
 "فضلاً افتح عنوان URL التالي في المستعرض لديك لتمكين التطبيق من المصادقة سينشئ "
 "التطبيق دليلاً في \"Apps/Joplin\" ثم يقوم فقط بقراءة وكتابة الملفات في هذا "
-"الدليل. لن يكون لديه أي وصول لأي ملف خارج هذا الدليل أو لأي بيانات شخصية "
-"أخرى. لن نشارك البيانات مع أي طرف ثالث."
+"الدليل. لن يكون لديه أي وصول لأي ملف خارج هذا الدليل أو لأي بيانات شخصية أخرى. "
+"لن نشارك البيانات مع أي طرف ثالث."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية "
-"قد يحل المشكلة."
+"لا يمكن تحديث الرمز المميز: بيانات المصادقة مفقودة. بدء المزامنة مرة ثانية قد "
+"يحل المشكلة."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
@@ -1851,8 +1848,8 @@ msgstr "بدون اسم"
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
+"This error often happens when using OneDrive for Business, which unfortunately "
+"cannot be supported.\n"
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
@@ -1977,29 +1974,28 @@ msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
 msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
+"Attention: If you change this location, make sure you copy all your content to "
+"it before syncing, otherwise all files will be removed! See the FAQ for more "
+"details: %s"
 msgstr ""
 "تنبيه: إذا غيرت هذا المكان ، تأكد من نسخ كافة المحتويات لديك إليه قبل البدء "
 "بالمزامنة ، وإلا فسيتم حذف كل الملفات! أنظر الأسئلة المتكررة لتفاصيل أكثر: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "وضع لوحة المفاتيح"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
-#, fuzzy
 msgid "Default"
-msgstr "التلقائية: %s"
+msgstr "تلقائي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
@@ -2043,30 +2039,33 @@ msgstr "كلمة مرور WebDAV"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "سلوك تحميل المرفقات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In "
+"\"Auto\", they are downloaded when you open the note. In \"Always\", all the "
+"attachments are downloaded whether you open the note or not."
 msgstr ""
+"في الوضع \"يدوي\"، يتم تنزيل المرفقات فقط عند النقر عليها. في \"تلقائي\"، يتم "
+"تنزيلها عند فتح الملاحظة. في \"دائمًا\"، يتم تنزيل جميع المرفقات سواء قمت بفتح "
+"الملاحظة أم لا."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
 msgid "Always"
-msgstr ""
+msgstr "دائمًا"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
 msgid "Manual"
-msgstr ""
+msgstr "يدوي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
 msgid "Auto"
-msgstr ""
+msgstr "تلقائي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "الاتصالات المتزامنة القصوى"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
 msgid "Language"
@@ -2094,56 +2093,53 @@ msgstr "غامقة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:245
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Solarised Light"
-msgstr ""
+msgstr "Solarised Light"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Solarised Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-#, fuzzy
 msgid "Show note counts"
-msgstr "إظهار أيقونة لوحة النظام"
+msgstr "إظهار عدد الملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#, fuzzy
 msgid "Editor"
-msgstr "تحرير"
+msgstr "محرر"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#, fuzzy
 msgid "Viewer"
-msgstr "&عرض"
+msgstr "عارض"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Split View"
-msgstr ""
+msgstr "عرض منقسم"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Uncompleted to-dos on top"
@@ -2163,9 +2159,8 @@ msgid "Reverse sort order"
 msgstr "عكس طريقة الترتيب"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:294
-#, fuzzy
 msgid "Sort notebooks by"
-msgstr "ترتيب الملاحظات حسب"
+msgstr "فرز دفاتر الملاحظات حسب"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:306
 msgid "Save geo-location with notes"
@@ -2191,60 +2186,59 @@ msgstr "عند إنشاء ملاحظة جديدة:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:337
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "تمكين الاستراحات الناعمة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:338
 msgid "Enable typographer support"
-msgstr ""
+msgstr "تمكين دعم صائغ الحروف"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:339
-#, fuzzy
 msgid "Enable math expressions"
-msgstr "تفعيل التشفير"
+msgstr "تمكين العبارات الرياضية"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "تمكين بناء الجملة ==علامة=="
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
 msgid "Enable footnotes"
-msgstr ""
+msgstr "تمكين الحواشي السفلية"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:342
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "تمكين إضافة جدول المحتويات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "تمكين بناء جملة ~منخفض~"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "تمكين بناء جملة ^مرتفع^"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:345
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "تمكين بناء جملة قوائم التعريفات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:346
 msgid "Enable abbreviation syntax"
-msgstr ""
+msgstr "تمكين بناء جملة الاختصار"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:347
 msgid "Enable markdown emoji"
-msgstr ""
+msgstr "تمكين بناء جملة ترميز رمز تعبيري"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:348
 msgid "Enable ++insert++ syntax"
-msgstr ""
+msgstr "تمكين بناء جملة إدراج"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:349
 msgid "Enable multimarkdown table extension"
-msgstr ""
+msgstr "تمكين إضافة جداول التراميز المتعددة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:350
 msgid "Enable Fountain syntax support"
-msgstr ""
+msgstr "تمكين دعم بناء جملة Fountain"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Show tray icon"
@@ -2252,7 +2246,7 @@ msgstr "إظهار أيقونة لوحة النظام"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid "Note: Does not work in all desktop environments."
-msgstr "لاحِظ: لا تعمل في كل بيئات سطح المكتب."
+msgstr "ملاحظة: لا تعمل في كل بيئات سطح المكتب."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid ""
@@ -2276,9 +2270,8 @@ msgid "Editor font size"
 msgstr "حجم خط المحرّر"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:385
-#, fuzzy
 msgid "Editor font"
-msgstr "حجم خط المحرّر"
+msgstr "خط المحرّر"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:409
 msgid "Editor font family"
@@ -2289,12 +2282,12 @@ msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن يعمل بشكل صحيح. إذا كان الخط "
-"غير صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
+"لابد أن يكون نوع الخط أحادي المسافة وإلا فلن يعمل بشكل صحيح. إذا كان الخط غير "
+"صحيح أو فارغاً فسيستخدم خط أحادي المسافة عام تلقائياً."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:449
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "ورقة أنماط مخصصة لأنماط التطبيق على نطاق Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:453
 msgid "Automatically update the application"
@@ -2345,43 +2338,43 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:481
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "حجم الصفحة لتصدير PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
 msgid "Letter"
-msgstr ""
+msgstr "رسالة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:485
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
 msgid "Tabloid"
-msgstr ""
+msgstr "صحيفة شعبية"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
 msgid "Legal"
-msgstr ""
+msgstr "قانوني"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "اتجاه الصفحة لتصدير PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:493
 msgid "Portrait"
-msgstr ""
+msgstr "طولي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Landscape"
-msgstr ""
+msgstr "عرضي"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "Custom TLS certificates"
@@ -2389,15 +2382,15 @@ msgstr "شهادات TLS خاصة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
 msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"Comma-separated list of paths to directories to load the certificates from, or "
+"path to individual cert files. For example: /my/cert_dir, /other/custom.pem. "
+"Note that if you make changes to the TLS settings, you must save your changes "
+"before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"قائمة مفصولة بفواصل ، بالمسارات إلى الأدلة التي سيجري تحميل الشهادات منها ، "
-"أو المسار إلى الملفات المستقلة للشهادات. على سبيل المثال : /my/cert_dir, /"
-"other/custom.pem. لاحظ أنه يجب أن تحفظ تغييراتك قبل الضغط على \"فحص ضبط "
-"المزامنة\" ، إن كنت قمت بتغييرات في إعدادات TLS."
+"قائمة مفصولة بفواصل ، بالمسارات إلى الأدلة التي سيجري تحميل الشهادات منها ، أو "
+"المسار إلى الملفات المستقلة للشهادات. على سبيل المثال : /my/cert_dir, /other/"
+"custom.pem. لاحظ أنه يجب أن تحفظ تغييراتك قبل الضغط على \"فحص ضبط المزامنة\" ، "
+"إن كنت قمت بتغييرات في إعدادات TLS."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:522
 msgid "Ignore TLS certificate errors"
@@ -2408,30 +2401,33 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"آمن من الفشل: لا تقم بمسح البيانات المحلية عندما يكون هدف المزامنة فارغًا "
+"(غالبًا ما يكون نتيجة لحدوث خطأ في التكوين أو خلل برمجي)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:528
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
+"Specify the port that should be used by the API server. If not set, a default "
+"will be used."
 msgstr ""
+"حدد المنفذ الذي يجب استخدامه بواسطة خادم API. إذا لم يتم تعيينه، سيتم استخدام "
+"تلقائي."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
-#, fuzzy
 msgid "Enable note history"
-msgstr "تفعيل التشفير"
+msgstr "تمكين تاريخ الملاحظة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
 msgid "days"
-msgstr ""
+msgstr "أيام"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d أيام"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:548
 msgid "Keep note history for"
-msgstr ""
+msgstr "الاحتفاظ بتاريخ الملاحظة لـ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:663
 #, javascript-format
@@ -2456,21 +2452,19 @@ msgstr "ملاحظة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:949
 msgid "Plugins"
-msgstr ""
+msgstr "المكونات الإضافية"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:950
 msgid "Application"
 msgstr "التطبيق"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:952
-#, fuzzy
 msgid "Encryption"
-msgstr "التشفير هو:"
+msgstr "التشفير"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:953
-#, fuzzy
 msgid "Web Clipper"
-msgstr "خيارات Web clipper"
+msgstr "Web Clipper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:168
 #, javascript-format
@@ -2493,28 +2487,24 @@ msgid "Joplin Export Directory"
 msgstr "دليل تصدير بيانات Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "ملف Evernote المصدَّر"
+msgstr "ملف تصدير Evernote (بتنسيق Markdown)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "ملف Evernote المصدَّر"
+msgstr "ملف تصدير Evernote (بتنسيق HTML)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
 msgstr "دليل تصدير بيانات JSON"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:88
-#, fuzzy
 msgid "HTML File"
-msgstr "ملف"
+msgstr "ملف HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:93
-#, fuzzy
 msgid "HTML Directory"
-msgstr "دليل"
+msgstr "دليل HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:129
 msgid "File"
@@ -2553,7 +2543,7 @@ msgstr "فضلاً حدّد دفتر الملاحظات الذي ترغب است
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
 msgid "Restored Notes"
-msgstr ""
+msgstr "الملاحظات المستعادة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:119
 msgid "Items that cannot be synchronised"
@@ -2565,31 +2555,31 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي "
-"تجد هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين "
-"قوسين)."
+"ستبقى هذه العناصر على الجهاز إلا أنها لن يجري رفعها إلى وجهة المزامنة. لكي تجد "
+"هذه العناصر ، عليك إما البحث عن العنوان أو المعرِّف (وهو معروض أعلاه بين قوسين)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:128
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "لم نتمكن من فتح هذا الملف: %s"
+msgstr "%s (%s) لم يتم الإمكان من تحميله: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "لم نتمكن من فتح هذا الملف: %s"
+msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:140
-#, fuzzy
 msgid "Items that cannot be decrypted"
-msgstr "العناصر التي لا يمكن مزامنتها"
+msgstr "العناصر التي لا يمكن فك تشفيرها"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are "
+"corrupted or too large. These items will remain on the device but Joplin will "
+"no longer attempt to decrypt them."
 msgstr ""
+"فشل Joplin في فك تشفير هذه العناصر عدة مرات، ربما لأنها تالفة أو كبيرة جدًا. "
+"ستبقى هذه العناصر على الجهاز ولكن Joplin لن تحاول فك تشفيرها."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:161
 msgid "Sync status (synced items / total items)"
@@ -2642,14 +2632,12 @@ msgid "Your permission to use your camera is required."
 msgstr "إذنك باستخدام كاميرا الجوال مطلوب."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:116
-#, fuzzy
 msgid "You currently have no notebooks."
-msgstr "لا يوجد دفتر ملاحظات نشط."
+msgstr "ليس لديك حاليا دفاتر ملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:120
-#, fuzzy
 msgid "Create a notebook"
-msgstr "ينشئ دفتر ملاحظات جديد."
+msgstr "إنشاء دفتر ملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:124
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -2689,17 +2677,15 @@ msgid "Confirm"
 msgstr "تأكيد"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:124
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Notebook: %s"
-msgstr "دفاتر ملاحظات"
+msgstr "دفتر ملاحظات: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:130
-#, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "لا يمكن تعديل العناصر المشفَّرة"
+msgstr "دفاتر الملاحظات المشفرة لا يمكن إعادة تسميتها"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:309
-#, fuzzy
 msgid "New Notebook"
 msgstr "دفتر ملاحظات جديد"
 
@@ -2710,9 +2696,8 @@ msgstr "الضبط"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:356
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
-#, fuzzy
 msgid "All notes"
-msgstr "ملاحظة"
+msgstr "جميع الملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
@@ -2762,13 +2747,15 @@ msgstr "أكتب وسوماً جديدة أو اخترها من القائمة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:48
 msgid "Warning"
-msgstr ""
+msgstr "تحذير"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:48
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"لاستخدام مزامنة نظام الملفات، يجب الحصول على إذن الكتابة إلى وحدة التخزين "
+"الخارجية."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:269
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
@@ -2776,14 +2763,12 @@ msgid "Encryption Config"
 msgstr "ضبط التشفير"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:380
-#, fuzzy
 msgid "Tools"
-msgstr "&أدوات"
+msgstr "أدوات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:382
-#, fuzzy
 msgid "Sync Status"
-msgstr "الحالة"
+msgstr "حالة المزامنة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:383
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:108
@@ -2791,9 +2776,8 @@ msgid "Log"
 msgstr "السجل"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:384
-#, fuzzy
 msgid "Creating report..."
-msgstr "إنشاء %s جديد ..."
+msgstr "إنشاء تقرير ..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:384
 msgid "Export Debug Report"
@@ -2801,27 +2785,28 @@ msgstr "تصدير تقرير إصلاح الأخطاء"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:385
 msgid "Fixing search index..."
-msgstr ""
+msgstr "جارٍ إصلاح فهرس البحث ..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:385
 msgid "Fix search index"
-msgstr ""
+msgstr "إصلاح فهرس البحث"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:385
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may "
+"take a long time depending on the number of notes."
 msgstr ""
+"استخدم هذا لإعادة إنشاء فهرس البحث إذا كانت هناك مشكلة في البحث. قد يستغرق "
+"الأمر وقتًا طويلًا اعتمادًا على عدد الملاحظات."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:387
-#, fuzzy
 msgid "More information"
-msgstr "الضبط"
+msgstr "معلومات اكثر"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:397
 msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
+"To work correctly, the app needs the following permissions. Please enable them "
+"in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "يحتاج التطبيق للأذونات التالية كي يعمل بشكل صحيح. فضلاً فعّلها في إعدادات "
 "هاتفك ، في التطبيقات > Joplin > الأذونات"
@@ -2884,13 +2869,12 @@ msgid "Password cannot be empty"
 msgstr "لا يمكن أن تكون كلمة المرور فارغة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "لا يمكن أن تكون كلمة المرور فارغة"
+msgstr "تأكيد كلمة المرور لا يمكن أن تكون فارغة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
 msgid "Enable"
-msgstr "تفعيل"
+msgstr "تمكين"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
@@ -2902,9 +2886,8 @@ msgid "Edit notebook"
 msgstr "تحرير دفتر الملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
-#, fuzzy
 msgid "Enter notebook title"
-msgstr "عنوان دفتر الملاحظات:"
+msgstr "أدخل عنوان دفتر الملاحظات"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:113
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
@@ -2945,7 +2928,7 @@ msgstr "تطبيق Joplin على الهاتف الجوال لا يدعم حال�
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "الروابط مع البروتوكول \"%s\" غير مدعومة"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:485
 #, javascript-format
@@ -2953,9 +2936,9 @@ msgid "Unsupported image type: %s"
 msgstr "نوع صورة غير مدعوم: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:632
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "تم تحديثها: %d."
+msgstr "تم تحديثها: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:636
 msgid "View on map"
@@ -2966,14 +2949,12 @@ msgid "Go to source URL"
 msgstr "الذهاب إلى عنوان URL المصدر"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
-#, fuzzy
 msgid "Attach..."
-msgstr "بحث..."
+msgstr "إرفاق..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
-#, fuzzy
 msgid "Choose an option"
-msgstr "إظهار خيارات متقدمة"
+msgstr "إختر خيار"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Take photo"
@@ -3000,18 +2981,16 @@ msgid "Convert to todo"
 msgstr "تحويل إلى قائمة مهام"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
-#, fuzzy
 msgid "Properties"
-msgstr "خصائص الملاحظة"
+msgstr "الخصائص"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:852
 msgid "Add body"
-msgstr ""
+msgstr "أضف الجسم"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:887
-#, fuzzy
 msgid "Add title"
-msgstr "العنوان"
+msgstr "أضف العنوان"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
 msgid "Login with OneDrive"
@@ -3117,14 +3096,13 @@ msgstr "بحث"
 #~ msgstr "حذف دفتر الملاحظات"
 
 #~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
+#~ "Click on the (+) button to create a new note or notebook. Click on the side "
+#~ "menu to access your existing notebooks."
 #~ msgstr ""
 #~ "اضغط على زر (+) لتنشئ ملاحظة أو دفتر ملاحظات جديداً. اضغط على القائمة "
 #~ "الجانبية للوصول إلى دفاتر ملاحظاتك القائمة."
 
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgid "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr "ليس لديك دفاتر ملاحظات حالياً. أنشئ واحدة بالضغط على زر (+)."
 
 #~ msgid "Welcome"
