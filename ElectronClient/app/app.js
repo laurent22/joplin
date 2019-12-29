@@ -429,7 +429,7 @@ class Application extends BaseApplication {
 							const importOptions = {
 								path,
 								format: module.format,
-								importOptions: console.log,
+								onProgress: console.log,
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
