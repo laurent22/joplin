@@ -407,7 +407,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 							)];
 							decodedData = Buffer('File was too big to import.');
 						}
-						console.log('Would have resolved here');
 					} catch (error) {
 						importOptions.onError(error); // TODO: Move
 						throw (error);
