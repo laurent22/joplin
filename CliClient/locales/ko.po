@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -640,8 +642,6 @@ msgstr "리소스 다운로드 중..."
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
@@ -649,9 +649,9 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\" 또는 \"list\" 를 사용하실 수 있"
-"습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태"
-"그인 옵션 -l 을 사용하실수 있습니다)."
+"확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 "
+"사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 "
+"있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
@@ -888,13 +888,10 @@ msgstr "사이드바 표시 전환"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:925
 msgid "Layout button sequence"
-msgstr ""
+msgstr "레이아웃 버튼 순서"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:929
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:468
-#, fuzzy
 msgid "Toggle note list"
-msgstr "노트 목록"
+msgstr "Toggle 노트 목록"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:938
 msgid "Toggle editor layout"
@@ -1373,7 +1370,7 @@ msgstr "일부 항목들은 동기화할 수 없습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:561
 msgid "View them now"
-msgstr "지금 보여주기"
+msgstr "지금 나타내기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:568
 msgid "One or more master keys need a password."
@@ -1651,8 +1648,6 @@ msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:297
-#, fuzzy
 msgid "New sub-notebook"
 msgstr "새 노트북"
 
@@ -1981,20 +1976,18 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "키보드 모드"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
-#, fuzzy
 msgid "Default"
 msgstr "기본값:  %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
@@ -2084,11 +2077,11 @@ msgstr "테마"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:242
 msgid "Light"
-msgstr "밝음"
+msgstr "밝게"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
 msgid "Dark"
-msgstr "어두움"
+msgstr "어둡게"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:245
 msgid "Dracula"
@@ -2104,44 +2097,29 @@ msgstr "Solarized Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Nord"
-msgstr ""
+msgstr "노드"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-#, fuzzy
 msgid "Show note counts"
-msgstr "트레이 아이콘 표시"
+msgstr "노트 수 보이기\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#, fuzzy
-msgid "Editor"
-msgstr "편집"
-
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#, fuzzy
 msgid "Viewer"
-msgstr "보기"
+msgstr "뷰어"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Split View"
-msgstr ""
+msgstr "뷰 나누기"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#, fuzzy, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Uncompleted to-dos on top"
@@ -2261,7 +2239,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
 msgid "Start application minimised in the tray icon"
-msgstr "트레이에 최소화 된 채로 Joplin 실행"
+msgstr "트레이 아이콘에 최소화 된 채로 Joplin 실행"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
 msgid "Global zoom percentage"
@@ -2284,9 +2262,9 @@ msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"반드시 모노스페이스 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거"
-"나 올바르지 않을 경우, 기본적으로 제공되는 모노스페이스 글꼴을 기본값으로 사"
-"용합니다."
+"반드시 monospace 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
+"올바르지 않을 경우, 기본적으로 제공되는 monospace 글꼴을 기본값으로 사용합니"
+"다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:449
 msgid "Custom stylesheet for Joplin-wide app styles"
@@ -2361,7 +2339,7 @@ msgstr "A5"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
 msgid "Tabloid"
-msgstr "타블로이드"
+msgstr "Tabloid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
 msgid "Legal"
@@ -2377,7 +2355,7 @@ msgstr "포트레이트"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Landscape"
-msgstr "랜드스케이프"
+msgstr "Landscape"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "Custom TLS certificates"
@@ -2623,7 +2601,7 @@ msgstr "%s: %d 노트"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 msgid "Coming alarms"
-msgstr "다가오는 예정된 알람"
+msgstr "예정된 알람"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:196
 #, javascript-format
@@ -2856,7 +2834,7 @@ msgstr "Dropbox로 로그인"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Enter code here"
-msgstr "여기에 코드를 입력하세요"
+msgstr "코드를 입력하세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
 #, javascript-format
@@ -2911,7 +2889,7 @@ msgstr "모두 표시"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
 msgid "Errors only"
-msgstr "오류들만 보기"
+msgstr "오류 보기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "This note has been modified:"
