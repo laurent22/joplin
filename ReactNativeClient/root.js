@@ -80,6 +80,8 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
+import PluginAssetsLoader from './PluginAssetsLoader';
+
 let storeDispatch = function() {};
 
 const logReducerAction = function(action) {
@@ -460,6 +462,9 @@ async function initialize(dispatch) {
 		if (Setting.value('env') === 'dev') {
 			Setting.setValue('welcome.enabled', false);
 		}
+
+		PluginAssetsLoader.instance().setLogger(mainLogger);
+		await PluginAssetsLoader.instance().importAssets();
 
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.revisionService_ = RevisionService.instance();

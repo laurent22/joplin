@@ -38,7 +38,13 @@ class FsDriverRN extends FsDriverBase {
 		if (!options) options = {};
 		if (!('recursive' in options)) options.recursive = false;
 
-		let items = await RNFS.readDir(path);
+		let items = [];
+		try {
+			items = await RNFS.readDir(path);
+		} catch (error) {
+			throw new Error(`Could not read directory: ${path}: ${error.message}`);
+		}
+
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];

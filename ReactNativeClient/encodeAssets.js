@@ -1,10 +1,11 @@
 require('app-module-path').addPath(`${__dirname}`);
 
 const fs = require('fs-extra');
-const { dirname } = require('lib/path-utils');
+const { dirname, fileExtension } = require('lib/path-utils');
+const md5 = require('md5');
 
 const rootDir = __dirname;
-const outputDir = `${rootDir}/rendererAssets`;
+const outputDir = `${rootDir}/pluginAssets`;
 
 var walk = function(dir) {
 	var results = [];
@@ -23,13 +24,23 @@ var walk = function(dir) {
 
 async function encodeFile(sourcePath, destPath) {
 	const buffer = await fs.readFile(sourcePath);
+	const hash = md5(buffer.toString('base64'));
 	const js = `module.exports = \`${buffer.toString('base64')}\`;`;
 	const outputPath = `${outputDir}/${destPath}.base64.js`;
 	await fs.mkdirp(dirname(outputPath));
 	await fs.writeFile(outputPath, js);
+
+	const ext = fileExtension(sourcePath).toLowerCase();
+	let mime = 'application/octet-stream';
+	if (ext === 'js') mime = 'application/javascript';
+	if (ext === 'css') mime = 'text/css';
+
 	return {
 		encoding: 'base64',
 		name: destPath,
+		encodedName: `${destPath}.base64.js`,
+		mime: mime,
+		hash: hash,
 	};
 }
 
@@ -45,12 +56,16 @@ async function main() {
 		encodedFiles.push(await encodeFile(file, destFile));
 	}
 
+	const hashes = [];
 	const indexJs = [];
 	for (const file of encodedFiles) {
-		indexJs.push(`'${file.name}': { data: require('./${file.name}'), encoding: '${file.encoding}' },`);
+		indexJs.push(`'${file.name}': { data: require('./${file.encodedName}'), mime: '${file.mime}', encoding: '${file.encoding}' },`);
+		hashes.push(file.hash);
 	}
 
-	await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\n${indexJs.join('\n')}\n};`);
+	const hash = md5(hashes.join(''));
+
+	await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\nhash:"${hash}", files: {\n${indexJs.join('\n')}\n}\n};`);
 }
 
 main().catch((error) => {
