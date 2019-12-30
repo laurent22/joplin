@@ -311,7 +311,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			if (n == 'note') {
 				note = {
 					resources: [],
-					tags: [],
+					tags: ['enex import', `enex to ${importOptions.outputFormat} import`],
 				};
 			} else if (n == 'resource-attributes') {
 				noteResourceAttributes = {};
