@@ -1119,6 +1119,10 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandTextLink;
 			} else if (command.name === 'insertDateTime') {
 				fn = this.commandDateTime;
+			} else if (command.name === 'commandStartExternalEditing') {
+				fn = this.commandStartExternalEditing;
+			} else if (command.name === 'commandStopExternalEditing') {
+				fn = this.commandStopExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
