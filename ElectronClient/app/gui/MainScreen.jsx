@@ -376,13 +376,13 @@ class MainScreenComponent extends React.Component {
 			backgroundColor: theme.warningBackgroundColor,
 		};
 
+		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+
 		this.styles_.verticalResizer = {
 			width: 5,
-			height: height,
+			height: rowHeight,
 			display: 'inline-block',
 		};
-
-		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.sideBar = {
 			width: sidebarWidth - this.styles_.verticalResizer.width,
