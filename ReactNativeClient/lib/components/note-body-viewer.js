@@ -6,6 +6,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
+const { assetsToHeaders } = require('joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 
@@ -92,26 +93,13 @@ class NoteBodyViewer extends Component {
 			}, 10);
 		`);
 
-		// TODO: The joplin-renderer package should take care of creating the <link> and <script> tags to reduce duplicate code
-		//       Calling app would then ensure that the CSS files, etc. are in the correct location.
-		const headers = [];
-		for (let i = 0; i < result.pluginAssets.length; i++) {
-			const asset = result.pluginAssets[i];
-			if (asset.mime === 'text/css') {
-				headers.push(`<link rel="stylesheet" href="pluginAssets/${asset.name}">`);
-			} else if (asset.mime === 'application/javascript') {
-				// NOT TESTED!!
-				headers.push(`<script type="application/javascript" src="pluginAssets/${asset.name}"></script>`);
-			}
-		}
-
 		html =
 			`
 			<!DOCTYPE html>
 			<html>
 				<head>
 					<meta name="viewport" content="width=device-width, initial-scale=1">
-					${headers.join('\n')}
+					${assetsToHeaders(result.pluginAssets)}
 				</head>
 				<body>
 					${html}

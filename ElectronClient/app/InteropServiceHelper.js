@@ -5,7 +5,6 @@ const Setting = require('lib/models/Setting');
 const md5 = require('md5');
 const url = require('url');
 const { shim } = require('lib/shim');
-// const { BrowserWindow } = require('electron');
 
 class InteropServiceHelper {
 

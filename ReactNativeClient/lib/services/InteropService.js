@@ -83,6 +83,7 @@ class InteropService {
 			},
 			{
 				format: 'html',
+				fileExtensions: ['html', 'htm'],
 				target: 'file',
 				canDoMultiExport: false,
 				description: _('HTML File'),

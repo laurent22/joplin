@@ -4,13 +4,12 @@ const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
-const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
-const dataurl	 = require('dataurl');
 const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
 const { escapeHtml } = require('lib/string-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const { assetsToHeaders } = require('joplin-renderer');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -58,21 +57,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
 		for (let i = 0; i < linkedResourceIds.length; i++) {
 			const id = linkedResourceIds[i];
-			const resource = await Resource.load(id);
-			let resourceContent = '';
-			const isImage = Resource.isSupportedImageMimeType(resource.mime);
-
-			if (!isImage) {
-				resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
-			} else {
-				const buffer = await shim.fsDriver().readFile(resourcePaths[id], 'Buffer');
-
-				resourceContent = dataurl.convert({
-					data: buffer,
-					mimetype: resource.mime,
-				});
-			}
-
+			const resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
 			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), resourceContent);
 		}
 
@@ -110,22 +95,12 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
 			// We need to export all the plugin assets too and refer them from the header
 			// The source path is a bit hard-coded but shouldn't change.
-			// TODO: The joplin-renderer package should take care of creating the <link> and <script> tags to reduce duplicate code
-			//       Calling app would then ensure that the CSS files, etc. are in the correct location.
-			const headers = [];
 			for (let i = 0; i < result.pluginAssets.length; i++) {
 				const asset = result.pluginAssets[i];
 				const filePath = `${dirname(dirname(__dirname))}/gui/note-viewer/pluginAssets/${asset.name}`;
 				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
 				await shim.fsDriver().mkdir(dirname(destPath));
 				await shim.fsDriver().copy(filePath, destPath);
-
-				if (asset.mime === 'text/css') {
-					headers.push(`<link rel="stylesheet" href="pluginAssets/${asset.name}">`);
-				} else if (asset.mime === 'application/javascript') {
-					// NOT TESTED!!
-					headers.push(`<script type="application/javascript" src="pluginAssets/${asset.name}"></script>`);
-				}
 			}
 
 			const fullHtml = `
@@ -133,7 +108,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 				<html>
 					<head>
 						<meta charset="UTF-8">
-						${headers.join('\n')}
+						${assetsToHeaders(result.pluginAssets)}
 						<title>${escapeHtml(item.title)}</title>
 					</head>
 					<body>
@@ -147,11 +122,9 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 	}
 
 	async processResource(resource, filePath) {
-		if (!Resource.isSupportedImageMimeType(resource.mime)) {
-			const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
-			await shim.fsDriver().copy(filePath, destResourcePath);
-			this.resources_.push(resource);
-		}
+		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
+		await shim.fsDriver().copy(filePath, destResourcePath);
+		this.resources_.push(resource);
 	}
 
 	async close() {}

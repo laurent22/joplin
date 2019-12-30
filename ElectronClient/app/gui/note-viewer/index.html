@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head id="joplin-container-root-head">
 	<meta charset="UTF-8">
 
 	<style>
@@ -65,27 +65,7 @@
 				ipc[callName](callData);
 			}
 		}));
-
-		// TODO: The joplin-renderer package should take care of creating the <link> and <script> tags to reduce duplicate code
-		//       Calling app would then ensure that the CSS files, etc. are in the correct location.
-		const loadedPluginAssets_ = {}
-		function loadPluginAssets(assets) {
-			if (!assets) return;
-
-			for (let i = 0; i < assets.length; i++) {
-				const asset = assets[i];
-				if (loadedPluginAssets_[asset.name]) continue;
-				loadedPluginAssets_[asset.name] = true;
-
-				if (asset.mime === 'text/css') {
-					const link = document.createElement('link');
-					link.rel = 'stylesheet';
-					link.href = 'pluginAssets/' + asset.name;
-					document.getElementById('joplin-container-styleContainer').appendChild(link);
-				}
-			}
-		}
-
+		
 		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
 		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
 		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
@@ -162,10 +142,10 @@
 				}, 1);
 			}
 
-			// loadCssFiles(event.options.cssFiles);
+			const pluginAssetsContainer = document.createElement('div');
+			pluginAssetsContainer.innerHTML = event.options.pluginAssetsHeadersHtml;
+			document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
 
-			loadPluginAssets(event.options.pluginAssets);
-			
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
 			}
