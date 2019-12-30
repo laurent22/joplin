@@ -57,7 +57,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, and meet your fellow developers in the [Development category](https://discourse.joplinapp.org/c/development)
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
-3. Take a look at the [list of ideas](https://joplinapp.org/gsoc/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2020/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Development category](https://discourse.joplinapp.org/c/development)
 5. Write a first draft and get someone to review it
 6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
