@@ -7,6 +7,7 @@ const eventManager = require('../../eventManager');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Note = require('lib/models/Note');
+const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { substrWithEllipsis } = require('lib/string-utils');
 
 class NoteListUtils {
@@ -55,11 +56,7 @@ class NoteListUtils {
 						label: _('Edit in external editor'),
 						enabled: noteIds.length === 1,
 						click: async () => {
-							props.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'commandStartExternalEditing',
-								noteId: noteIds[0],
-							});
+							this.startExternalEditing(noteIds[0]);
 						},
 					})
 				);
@@ -69,11 +66,7 @@ class NoteListUtils {
 						label: _('Stop external editing'),
 						enabled: noteIds.length === 1,
 						click: async () => {
-							props.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'commandStopExternalEditing',
-								noteId: noteIds[0],
-							});
+							this.stopExternalEditing(noteIds[0]);
 						},
 					})
 				);
@@ -221,6 +214,20 @@ class NoteListUtils {
 		if (!ok) return;
 		await Note.batchDelete(noteIds);
 	}
+
+	static async startExternalEditing(noteId) {
+		try {
+			const note = await Note.load(noteId);
+			ExternalEditWatcher.instance().openAndWatch(note);
+		} catch (error) {
+			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
+		}
+	}
+
+	static async stopExternalEditing(noteId) {
+		ExternalEditWatcher.instance().stopWatching(noteId);
+	}
+
 }
 
 module.exports = NoteListUtils;

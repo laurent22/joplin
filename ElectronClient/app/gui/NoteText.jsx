@@ -1301,20 +1301,11 @@ class NoteTextComponent extends React.Component {
 		await this.saveIfNeeded(true, {
 			autoTitle: false,
 		});
-
-		this.props.dispatch({
-			type: 'WINDOW_COMMAND',
-			name: 'commandStartExternalEditing',
-			noteId: this.state.note.id,
-		});
+		NoteListUtils.startExternalEditing(this.state.note.id);
 	}
 
 	async commandStopExternalEditing() {
-		this.props.dispatch({
-			type: 'WINDOW_COMMAND',
-			name: 'commandStopExternalEditing',
-			noteId: this.state.note.id,
-		});
+		NoteListUtils.stopExternalEditing(this.state.note.id);
 	}
 
 	async commandSetTags() {

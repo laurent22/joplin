@@ -19,7 +19,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
-const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -175,17 +174,6 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
-
-		} else if (command.name === 'commandStartExternalEditing') {
-			try {
-				const note = await Note.load(command.noteId);
-				await ExternalEditWatcher.instance().openAndWatch(note);
-			} catch (error) {
-				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
-			}
-		} else if (command.name === 'commandStopExternalEditing') {
-			ExternalEditWatcher.instance().stopWatching(command.noteId);
-
 		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
 
