@@ -143,6 +143,10 @@ class Bridge {
 		return this.electronApp().buildDir();
 	}
 
+	screen() {
+		return require('electron').screen;
+	}
+
 }
 
 let bridge_ = null;

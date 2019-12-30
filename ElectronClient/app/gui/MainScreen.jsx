@@ -380,7 +380,9 @@ class MainScreenComponent extends React.Component {
 
 		this.styles_.verticalResizer = {
 			width: 5,
-			height: rowHeight,
+			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
+			// making the whole window scroll vertically. So we remove 10 extra pixels here.
+			height: rowHeight - 10,
 			display: 'inline-block',
 		};
 
