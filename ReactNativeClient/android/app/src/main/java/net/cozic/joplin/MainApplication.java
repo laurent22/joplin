@@ -2,6 +2,7 @@ package net.cozic.joplin;
 
 import android.app.Application;
 import com.facebook.react.ReactApplication;
+import com.reactNativeQuickActions.AppShortcutsPackage;
 import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
 				new MainReactPackage(),
+            new AppShortcutsPackage(),
 				new ReactSliderPackage(),
 				new RNCWebViewPackage(),
 				new ReactNativePushNotificationPackage(),
