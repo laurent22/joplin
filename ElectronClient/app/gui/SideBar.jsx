@@ -712,14 +712,21 @@ class SideBarComponent extends React.Component {
 	}
 
 	deleteAllFoldersButton() {
-		const style = Object.assign({}, this.style().button, { marginBottom: 5, backgroundColor: 'red' });
+		const style = Object.assign({}, this.style().button, {
+			marginBottom: 5,
+			backgroundColor: 'red',
+			// To use this dev/debug feature, update this attribute to `display: flex`
+			// in userchrome.css in order to see the `Delete all folders` button.
+			display: 'none',
+		});
 		const iconName = 'fa-exclamation-triangle';
 		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
 
 		const icon = <i style={iconStyle} className={`fa ${iconName}`} />;
 		return (
 			<a
-				className="synchronize-button"
+				className="delete-all-folders-button"
+				id="delete-all-folders-button"
 				style={style}
 				href="#"
 				key="delete_all_folders_button"
