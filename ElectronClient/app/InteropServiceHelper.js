@@ -37,7 +37,7 @@ class InteropServiceHelper {
 			htmlFile = await this.exportNoteToHtmlFile(noteId);
 
 			const windowOptions = {
-				show: true,
+				show: false,
 			};
 
 			win = bridge().newBrowserWindow(windowOptions);

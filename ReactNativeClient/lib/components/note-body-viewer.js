@@ -92,6 +92,8 @@ class NoteBodyViewer extends Component {
 			}, 10);
 		`);
 
+		// TODO: The joplin-renderer package should take care of creating the <link> and <script> tags to reduce duplicate code
+		//       Calling app would then ensure that the CSS files, etc. are in the correct location.
 		const headers = [];
 		for (let i = 0; i < result.pluginAssets.length; i++) {
 			const asset = result.pluginAssets[i];

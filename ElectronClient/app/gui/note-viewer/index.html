@@ -66,6 +66,8 @@
 			}
 		}));
 
+		// TODO: The joplin-renderer package should take care of creating the <link> and <script> tags to reduce duplicate code
+		//       Calling app would then ensure that the CSS files, etc. are in the correct location.
 		const loadedPluginAssets_ = {}
 		function loadPluginAssets(assets) {
 			if (!assets) return;
