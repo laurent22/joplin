@@ -162,6 +162,13 @@ function enexXmlToHtml_(stream, resources) {
 	});
 }
 
+const beautifyHtml = (html) => {
+	return new Promise((resolve) => {
+		const options = {wrap: 0};
+		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
+	});
+};
+
 async function enexXmlToHtml(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
 	let result = await enexXmlToHtml_(stream, resources, options);
@@ -174,12 +181,5 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 		console.warn(error);
 	}
 }
-
-const beautifyHtml = (html) => {
-	return new Promise((resolve) => {
-		const options = {wrap: 0};
-		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
-	});
-};
 
 module.exports = {enexXmlToHtml};

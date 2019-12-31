@@ -89,20 +89,27 @@ describe('EnexToHtml', function() {
 		}],
 	});
 
-	it('fails when not given a matching resource', asyncTest(async () => {
-		// To test the promise-unexpectedly-resolved case, add `audioResource` to the array.
-		const resources = [];
-		const inputFile = fileWithPath('en-media--image.enex');
-		const enexInput = await shim.fsDriver().readFile(inputFile);
-		const promisedOutput = enexXmlToHtml(enexInput, resources);
+	// This one is very similar to the above tests, but differs in the fact that
+	// it has to mock the date to pass (because the warning inserted into the html
+	// includes the note)
+	it('insert warning into html when resource not found', asyncTest(async () => {
+		jasmine.clock().install();
+		jasmine.clock().mockDate(new Date(2013, 9, 23));
 
-		promisedOutput.then(() => {
-			// Promise should not be resolved
-			expect(false).toEqual(true);
-		}, (reason) => {
-			expect(reason)
-				.toBe('Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9');
-		});
+		const options = {
+			testName: 'missing-resource',
+			resources: [],
+		};
+		const inputFile = fileWithPath(`${options.testName}.enex`);
+		const outputFile = fileWithPath(`${options.testName}.html`);
+
+		const enexInput = await shim.fsDriver().readFile(inputFile);
+		const expectedOutput = await shim.fsDriver().readFile(outputFile);
+		const actualOutput = await enexXmlToHtml(enexInput, options.resources);
+
+		expect(actualOutput).toEqual(expectedOutput);
+
+		jasmine.clock().uninstall();
 	}));
 
 });
