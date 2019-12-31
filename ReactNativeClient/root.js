@@ -249,7 +249,9 @@ const appReducer = (state = appDefaultState, action) => {
 
 				newState.selectedNoteHash = '';
 
+				// ~~Probably has to do with this~~
 				if ('noteId' in action) {
+					// Commenting this out doesn't work, but going back from the note does work.
 					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
 				}
 
@@ -371,7 +373,7 @@ function resourceFetcher_downloadComplete(event) {
 	}
 }
 
-async function initialize(dispatch) {
+async function initialize(dispatch, state) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -542,7 +544,7 @@ async function initialize(dispatch) {
 			});
 		}
 
-		setUpQuickActions(dispatch);
+		setUpQuickActions(dispatch, folderId, state);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -612,7 +614,8 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
-			await initialize(this.props.dispatch);
+			// TODO: Maybe it's weird that it's in the initializer?
+			await initialize(this.props.dispatch, this.props.state);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -781,6 +784,7 @@ const mapStateToProps = (state) => {
 		routeName: state.route.routeName,
 		theme: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
+		state,
 	};
 };
 
