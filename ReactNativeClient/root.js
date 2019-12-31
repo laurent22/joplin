@@ -91,18 +91,7 @@ const MigrationService = require('lib/services/MigrationService');
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 import QuickActions from 'react-native-quick-actions';
-
-QuickActions.setShortcutItems([
-	{
-		type: 'contacts', // Required
-		title: 'Listar contatos', // Optional, if empty, `type` will be used instead
-		subtitle: 'Ver amigos',
-		icon: Platform.OS === 'ios' ? 'Rocket' : 'rocket_icon', // Pass any of UIApplicationShortcutIconType<name>
-		userInfo: {
-			url: 'app://contacts', // provide custom data, like in-app url you want to open
-		},
-	},
-]);
+const { _ } = require('lib/locale.js');
 
 let storeDispatch = function() {};
 
@@ -556,24 +545,33 @@ async function initialize(dispatch) {
 			});
 		}
 
+		// TODO: Add translations _()
+
+		QuickActions.setShortcutItems([
+			{type: 'New note', title: _('New note'), icon: 'Compose'},
+			{type: 'New to-do', title: _('New to-do'), icon: 'Add'},
+			// TODO: Add Search
+			// {type: 'Search', icon: 'Search'},
+		]);
+
 		DeviceEventEmitter.addListener('quickActionShortcut', data => {
 			console.log('DeviceEventEmitter.addListener(\'quickActionShortcut\'');
 			console.log(data);
 
-			console.log('now going to dispatch newNote...');
+			if (data.type === 'New note') {
+				console.log('now going to dispatch newNote...');
 
-			dispatch({
-				type: 'NAV_GO',
-				routeName: 'Note',
-				noteId: null,
-				// folderId: this.props.parentFolderId,
-				itemType: 'note',
-			});
-		});
+				dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					noteId: null,
+					itemType: 'note',
+				});
+			}
 
-		QuickActions.popInitialAction().then(data => {
-			console.log('QuickActions.popInitialAction');
-			console.log(data);
+			if (data.type === 'New to-do') {
+				console.log('now going to dispatch newToDo...');
+			}
 		});
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
