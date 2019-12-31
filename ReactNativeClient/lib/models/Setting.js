@@ -289,6 +289,7 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_BOOL,
 				public: true,
 				section: 'note',
+				appTypes: ['desktop'],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
