@@ -65,6 +65,12 @@ To run the test units, you must have an instance of the cli app running. In a fi
 > rsync -aP ./ReactNativeClient/locales/ ./CliClient/build/locales/
 > ```
 
+> If you get an error like `Error: Cannot find module './path/to/node_sqlite3.node'`, that likely means you need to install sqlite:
+>
+> ```sh
+> npm install sqlite3 --build-from-source
+> ```
+
 Then run the tests in a second window. To run all the test units:
 
     ./run_test.sh
