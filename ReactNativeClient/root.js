@@ -1,5 +1,13 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated } = require('react-native');
+const {
+	AppState,
+	Keyboard,
+	NativeModules,
+	BackHandler,
+	Platform,
+	Animated,
+	DeviceEventEmitter,
+} = require('react-native');
 const { SafeAreaView } = require('react-navigation');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -81,6 +89,20 @@ const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
 import PluginAssetsLoader from './PluginAssetsLoader';
+
+import QuickActions from 'react-native-quick-actions';
+
+QuickActions.setShortcutItems([
+	{
+		type: 'contacts', // Required
+		title: 'Listar contatos', // Optional, if empty, `type` will be used instead
+		subtitle: 'Ver amigos',
+		icon: Platform.OS === 'ios' ? 'Rocket' : 'rocket_icon', // Pass any of UIApplicationShortcutIconType<name>
+		userInfo: {
+			url: 'app://contacts', // provide custom data, like in-app url you want to open
+		},
+	},
+]);
 
 let storeDispatch = function() {};
 
@@ -533,6 +555,26 @@ async function initialize(dispatch) {
 				folderId: folder.id,
 			});
 		}
+
+		DeviceEventEmitter.addListener('quickActionShortcut', data => {
+			console.log('DeviceEventEmitter.addListener(\'quickActionShortcut\'');
+			console.log(data);
+
+			console.log('now going to dispatch newNote...');
+
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: null,
+				// folderId: this.props.parentFolderId,
+				itemType: 'note',
+			});
+		});
+
+		QuickActions.popInitialAction().then(data => {
+			console.log('QuickActions.popInitialAction');
+			console.log(data);
+		});
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
