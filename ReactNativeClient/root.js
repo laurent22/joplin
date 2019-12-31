@@ -553,9 +553,7 @@ async function initialize(dispatch) {
 		]);
 
 		DeviceEventEmitter.addListener('quickActionShortcut', data => {
-
 			if (data.type === 'New note') {
-
 				dispatch({
 					type: 'NAV_GO',
 					routeName: 'Note',
