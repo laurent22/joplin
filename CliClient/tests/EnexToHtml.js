@@ -96,6 +96,10 @@ describe('EnexToHtml', function() {
 		jasmine.clock().install();
 		jasmine.clock().mockDate(new Date(2013, 9, 23));
 
+		// This is to make eslint happy:
+		/* global spyOn */
+		spyOn(console, 'warn');
+
 		const options = {
 			testName: 'missing-resource',
 			resources: [],
@@ -108,6 +112,10 @@ describe('EnexToHtml', function() {
 		const actualOutput = await enexXmlToHtml(enexInput, options.resources);
 
 		expect(actualOutput).toEqual(expectedOutput);
+		expect(console.warn).toHaveBeenCalledWith(
+			'Hash with no associated resource: 89ce7da62c6b2832929a6964237e98e9. ' +
+			'Logging into note.'
+		);
 
 		jasmine.clock().uninstall();
 	}));
