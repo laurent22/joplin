@@ -556,6 +556,7 @@ async function initialize(dispatch) {
 			if (data.type === 'New note') {
 				dispatch({
 					type: 'NAV_GO',
+					noteId: null,
 					routeName: 'Note',
 					itemType: 'note',
 				});
@@ -564,6 +565,7 @@ async function initialize(dispatch) {
 			if (data.type === 'New to-do') {
 				dispatch({
 					type: 'NAV_GO',
+					noteId: null,
 					routeName: 'Note',
 					itemType: 'todo',
 				});
