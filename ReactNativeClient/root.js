@@ -222,9 +222,13 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
+					console.log(JSON.stringify({
+						'currentRoute.routeName': currentRoute.routeName,
+						'action.routeName': action.routeName,
+					}, null, 2));
+					// If the route *name* is the same (even if the other parameters are different), we
+					// overwrite the last route in the history with the current one. If the route name
+					// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
 					// nothing
 					} else {
@@ -240,6 +244,10 @@ const appReducer = (state = appDefaultState, action) => {
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
 					let n = navHistory[i];
+					console.log(JSON.stringify({
+						'n.routeName': n.routeName,
+						'action.routeName': action.routeName,
+					}, null, 2));
 					if (n.routeName == action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
@@ -800,4 +808,4 @@ class Root extends React.Component {
 	}
 }
 
-module.exports = { Root };
+module.exports = { Root, DEFAULT_ROUTE };

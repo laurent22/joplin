@@ -911,6 +911,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 }
 
 const NoteScreen = connect(state => {
+	console.log('Going to 1-note screen');
 	console.log('noteId:', state.selectedNoteIds.length ? state.selectedNoteIds[0] : null);
 	return {
 		// Making this null didn't work

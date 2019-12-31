@@ -96,6 +96,7 @@ stateUtils.parentItem = function(state) {
 };
 
 stateUtils.lastSelectedNoteIds = function(state) {
+	// Commenting this out doesn't fix i
 	const parent = stateUtils.parentItem(state);
 	if (!parent) return [];
 	const output = state.lastSelectedNotesIds[parent.type][parent.id];
@@ -247,6 +248,7 @@ function recordLastSelectedNoteIds(state, noteIds) {
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
 	return Object.assign({}, state, {
+		// Commenting this out doesn't fix it
 		lastSelectedNotesIds: newOnes,
 	});
 }
