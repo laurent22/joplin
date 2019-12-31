@@ -545,8 +545,6 @@ async function initialize(dispatch) {
 			});
 		}
 
-		// TODO: Add translations _()
-
 		QuickActions.setShortcutItems([
 			{type: 'New note', title: _('New note'), icon: 'Compose'},
 			{type: 'New to-do', title: _('New to-do'), icon: 'Add'},
@@ -555,22 +553,22 @@ async function initialize(dispatch) {
 		]);
 
 		DeviceEventEmitter.addListener('quickActionShortcut', data => {
-			console.log('DeviceEventEmitter.addListener(\'quickActionShortcut\'');
-			console.log(data);
 
 			if (data.type === 'New note') {
-				console.log('now going to dispatch newNote...');
 
 				dispatch({
 					type: 'NAV_GO',
 					routeName: 'Note',
-					noteId: null,
 					itemType: 'note',
 				});
 			}
 
 			if (data.type === 'New to-do') {
-				console.log('now going to dispatch newToDo...');
+				dispatch({
+					type: 'NAV_GO',
+					routeName: 'Note',
+					itemType: 'todo',
+				});
 			}
 		});
 	} catch (error) {
