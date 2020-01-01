@@ -222,10 +222,6 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-					console.log(JSON.stringify({
-						'currentRoute.routeName': currentRoute.routeName,
-						'action.routeName': action.routeName,
-					}, null, 2));
 					// If the route *name* is the same (even if the other parameters are different), we
 					// overwrite the last route in the history with the current one. If the route name
 					// is different, we push a new history entry.
@@ -244,10 +240,6 @@ const appReducer = (state = appDefaultState, action) => {
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
 					let n = navHistory[i];
-					console.log(JSON.stringify({
-						'n.routeName': n.routeName,
-						'action.routeName': action.routeName,
-					}, null, 2));
 					if (n.routeName == action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
@@ -257,9 +249,7 @@ const appReducer = (state = appDefaultState, action) => {
 
 				newState.selectedNoteHash = '';
 
-				// ~~Probably has to do with this~~
 				if ('noteId' in action) {
-					// Commenting this out doesn't work, but going back from the note does work.
 					newState.selectedNoteIds = action.noteId ? [action.noteId] : [];
 				}
 
@@ -381,7 +371,7 @@ function resourceFetcher_downloadComplete(event) {
 	}
 }
 
-async function initialize(dispatch, state) {
+async function initialize(dispatch) {
 	shimInit();
 
 	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -552,7 +542,7 @@ async function initialize(dispatch, state) {
 			});
 		}
 
-		setUpQuickActions(dispatch, folderId, state);
+		setUpQuickActions(dispatch, folderId);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -622,8 +612,7 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
-			// TODO: Maybe it's weird that it's in the initializer?
-			await initialize(this.props.dispatch, this.props.state);
+			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
 				type: 'APP_STATE_SET',

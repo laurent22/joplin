@@ -7,28 +7,23 @@ export default (dispatch, folderId/* , state*/) => {
 	QuickActions.setShortcutItems([
 		{type: 'New note', title: _('New note'), icon: 'Compose'},
 		{type: 'New to-do', title: _('New to-do'), icon: 'Add'},
-		// TODO: Add Search
-		// {type: 'Search', icon: 'Search'},
 	]);
 
 	DeviceEventEmitter.addListener('quickActionShortcut', data => {
-		// console.log('JSON.stringify(state, null, 2):');
-		// console.log(JSON.stringify(state, null, 2));
-
-		// dispatch({ type: 'NOTE_SELECTION_END' });
-		// dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		// Momentarily go back to `All notes` home screen to reset state
+		// Momentarily go back to `All notes` home screen to reset state.
+		// This hack is needed because otherwise you get this problem:
+		// The first time you create a note from the quick-action menu, it works
+		// perfectly. But if you do it again immediately later, it re-opens the
+		// page to that first note you made rather than creating an entirely new
+		// note. If you navigate around enough (which I think changes the redux
+		// state sufficiently or something), then it'll work again.
 		dispatch({
 			type: 'NAV_GO',
 			routeName: 'Notes',
 			smartFilterId: 'c3176726992c11e9ac940492261af972',
 		});
 
-		// setTimeout(() => { // This didn't work
 		if (data.type === 'New note') {
-			console.log('create new note with folderId =', folderId);
-
 			dispatch({
 				type: 'NAV_GO',
 				noteId: null,
@@ -47,6 +42,5 @@ export default (dispatch, folderId/* , state*/) => {
 				itemType: 'todo',
 			});
 		}
-		// }, 100);
 	});
 };

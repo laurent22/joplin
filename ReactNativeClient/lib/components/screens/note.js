@@ -130,6 +130,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
+						// TODO: Maybe similar to this?
 						// Easier to just go back, then go to the note since
 						// the Note screen doesn't handle reloading a different note
 
@@ -911,10 +912,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 }
 
 const NoteScreen = connect(state => {
-	console.log('Going to 1-note screen');
-	console.log('noteId:', state.selectedNoteIds.length ? state.selectedNoteIds[0] : null);
 	return {
-		// Making this null didn't work
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
 		folderId: state.selectedFolderId,

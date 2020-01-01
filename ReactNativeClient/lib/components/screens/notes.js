@@ -16,8 +16,6 @@ const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
-// TODO: Note screen here
-
 class NotesScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
 		return { header: null };
