@@ -797,4 +797,4 @@ class Root extends React.Component {
 	}
 }
 
-module.exports = { Root, DEFAULT_ROUTE };
+module.exports = { Root };
