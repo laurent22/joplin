@@ -10,16 +10,16 @@ export default (dispatch, folderId/* , state*/) => {
 	]);
 
 	DeviceEventEmitter.addListener('quickActionShortcut', data => {
-		// Momentarily go back to reset state, similar to what happens in
-		// onJoplinLinkClick_(). Easier to just go back, then go to the note since
-		// the Note screen doesn't handle reloading a different note.
-		// This hack is needed because otherwise you get this problem:
+		// This dispatch is to momentarily go back to reset state, similar to what
+		// happens in onJoplinLinkClick_(). Easier to just go back, then go to the
+		// note since the Note screen doesn't handle reloading a different note.
+		//
+		// This hack is necessary because otherwise you get this problem:
 		// The first time you create a note from the quick-action menu, it works
 		// perfectly. But if you do it again immediately later, it re-opens the
 		// page to that first note you made rather than creating an entirely new
 		// note. If you navigate around enough (which I think changes the redux
 		// state sufficiently or something), then it'll work again.
-
 		dispatch({type: 'NAV_BACK'});
 
 		if (data.type === 'New note') {
