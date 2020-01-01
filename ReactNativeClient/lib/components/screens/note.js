@@ -130,9 +130,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
-						// TODO: Maybe similar to this?
 						// Easier to just go back, then go to the note since
-						// the Note screen doesn't handle reloading a different note
+						// the Note screen doesn't handle reloading a different note.
+						// Similar to creating a new note via QuickActions.
 
 						this.props.dispatch({
 							type: 'NAV_BACK',
