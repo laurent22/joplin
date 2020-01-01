@@ -461,6 +461,7 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'exportPdf',
+					noteId: null,
 				});
 			},
 		});
