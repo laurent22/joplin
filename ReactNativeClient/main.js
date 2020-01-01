@@ -15,36 +15,11 @@ YellowBox.ignoreWarnings([
 ]);
 const { Root } = require('./root.js');
 
-// import {Platform, DeviceEventEmitter} from 'react-native';
-// import QuickActions from 'react-native-quick-actions';
-
-// QuickActions.setShortcutItems([
-// 	{
-// 		type: 'contacts', // Required
-// 		title: 'Listar contatos', // Optional, if empty, `type` will be used instead
-// 		subtitle: 'Ver amigos',
-// 		icon: Platform.OS === 'ios' ? 'Rocket' : 'rocket_icon', // Pass any of UIApplicationShortcutIconType<name>
-// 		userInfo: {
-// 			url: 'app://contacts', // provide custom data, like in-app url you want to open
-// 		},
-// 	},
-// ]);
-
-// DeviceEventEmitter.addListener('quickActionShortcut', data => {
-// 	console.log(data);
-// });
-
-// QuickActions.popInitialAction().then(data => {
-// 	console.log(data);
-// });
-
 function main() {
 	AppRegistry.registerComponent('Joplin', () => Root);
 	console.ignoredYellowBox = ['Remote debugger'];
 	// Note: The final part of the initialization process is in
 	// AppComponent.componentDidMount(), when the application is ready.
-
-
 }
 
 module.exports = { main };

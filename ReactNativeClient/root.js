@@ -781,7 +781,6 @@ const mapStateToProps = (state) => {
 		routeName: state.route.routeName,
 		theme: state.settings.theme,
 		noteSideMenuOptions: state.noteSideMenuOptions,
-		state,
 	};
 };
 
