@@ -3,7 +3,7 @@ import {DeviceEventEmitter} from 'react-native';
 import QuickActions from 'react-native-quick-actions';
 const { _ } = require('lib/locale.js');
 
-export default (dispatch, folderId/* , state*/) => {
+export default (dispatch, folderId) => {
 	QuickActions.setShortcutItems([
 		{type: 'New note', title: _('New note'), icon: 'Compose'},
 		{type: 'New to-do', title: _('New to-do'), icon: 'Add'},
