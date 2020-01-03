@@ -9,17 +9,6 @@ const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const { fileExtension } = require('lib/path-utils');
 
-/**
- * mdImageTagRegex matches markdown image tags.
- * !\[ and \] matches start of tag containing alt text.
- * Within this the [^\]]* matches multiple characters not in this set;
- * in this case the set is "]" - so match anything that is not this char.
- * We need this to avoid overshooting if another "]" follows after the
- * match.
- * \(.*?\) to match the part of the tag containing the link, and make this
- * a named capture group "filename".
- */
-const mdImageTagRegex = /!\[[^\]]*\]\((?<filename>.*?)\)/g;
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
@@ -69,13 +58,26 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		}
 	}
 
+	/**
+	 * Parse text for links, attempt to find local file, if found create Joplin resource
+	 * and update link accordingly.
+	 *
+	 * mdImageTagRegex matches markdown image tags.
+	 * !\[ and \] matches start of tag containing alt text.
+	 * Within this the [^\]]* matches multiple characters not in this set;
+	 * in this case the set is "]" - so match anything that is not this char.
+	 * We need this to avoid overshooting if another "]" follows after the
+	 * match.
+	 * \(.*?\) to match the part of the tag containing the link.
+	 */
 	async importLocalImages(filePath, md) {
+		const mdImageTagRegex = /!\[[^\]]*\]\((.*?)\)/g;
 		let updated = md;
 		let match;
 		while ((match = mdImageTagRegex.exec(md)) !== null) {
 			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
 			if (fs.existsSync(attachmentPath)) {
-				console.info("Attempting to attach file ", match[1], "at position ", match.index)
+				console.info(`Attempting to attach to note from ${filePath}, file: ${match[1]}, at position ${match.index}`)
 				const resource = await shim.createResourceFromPath(attachmentPath);
 				updated = updated.replace(match[0], Resource.markdownTag(resource))
 			}
@@ -99,7 +101,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			user_created_time: stat.birthtime.getTime(),
 		};
 
-		return await Note.save(note, { autoTimestamp: false });
+		return Note.save(note, { autoTimestamp: false });
 	}
 }
 
