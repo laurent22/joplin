@@ -1,10 +1,15 @@
 # About End-To-End Encryption (E2EE)
 
-End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.
+End-to-end encryption (E2EE) is a system where only the owner of the data (i.e. notes, notebooks, tags or resources) can read it. 
+The data is encrypted with a master key (password). It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data.
 
 The system is designed to defeat any attempts at surveillance or tampering because no third party can decipher the data being communicated or stored.
 
 There is a small overhead to using E2EE since data constantly has to be encrypted and decrypted so consider whether you really need the feature.
+
+# E2EE and WebDAV SSL
+
+If the data is saved on a server using  SSL (HTTPS or WebDAV over HTTPS), the data is already secure from eavesdroppers. However, the data is not encrypted on the server, owner of the server (Onedrive, Nextcloud, Dropbox...) and potential hackers might have access to the unencrypted data. Adding E2EE will ensure that the data even if accessed can't be retrieved.
 
 # Enabling E2EE
 
