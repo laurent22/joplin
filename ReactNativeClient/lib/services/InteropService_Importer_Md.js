@@ -75,11 +75,11 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		let updated = md;
 		let match;
 		while ((match = mdImageTagRegex.exec(md)) !== null) {
-			const attachmentPath = path.resolve(path.dirname(filePath), match[1])
+			const attachmentPath = path.resolve(path.dirname(filePath), match[1]);
 			if (fs.existsSync(attachmentPath)) {
-				console.info(`Attempting to attach to note from ${filePath}, file: ${match[1]}, at position ${match.index}`)
+				console.info(`Attempting to attach to note from ${filePath}, file: ${match[1]}, at position ${match.index}`);
 				const resource = await shim.createResourceFromPath(attachmentPath);
-				updated = updated.replace(match[0], Resource.markdownTag(resource))
+				updated = updated.replace(match[0], Resource.markdownTag(resource));
 			}
 		}
 		return updated;
