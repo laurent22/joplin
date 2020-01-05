@@ -33,6 +33,13 @@
             ]
         }
     ],
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Alt+Shift+J"
+            }
+        }
+    },
     "background": {
         "scripts": [
             "background.js"
