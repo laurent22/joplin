@@ -38,6 +38,34 @@
             "suggested_key": {
                 "default": "Alt+Shift+J"
             }
+        },
+        "clipCompletePage": {
+            "suggested_key": {
+                "default": "Alt+Shift+C"
+            },
+            "description": "Clip complete page (uses last selected notebook)"
+
+        },
+        "clipCompletePageHtml": {
+            "suggested_key": {
+            },
+            "description": "Clip complete page (HTML) (uses last selected notebook)"
+
+        },
+        "clipSimplifiedPage": {
+            "suggested_key": {
+            },
+            "description": "Clip simplified page (uses last selected notebook)"
+        },
+        "clipUrl": {
+            "suggested_key": {
+            },
+            "description": "Clip url (uses last selected notebook)"
+        },
+        "clipSelection": {
+            "suggested_key": {
+            },
+            "description": "Clip selection (uses last selected notebook)"
         }
     },
     "background": {

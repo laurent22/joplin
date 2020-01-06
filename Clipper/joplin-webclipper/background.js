@@ -76,3 +76,60 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		});
 	}
 });
+
+async function getActiveTabs() {
+	const options = { active: true, currentWindow: true };
+	if (browserSupportsPromises_) return browser_.tabs.query(options);
+
+	return new Promise((resolve) => {
+		browser_.tabs.query(options, (tabs) => {
+			resolve(tabs);
+		});
+	});
+}
+
+async function sendClipMessage(clipType) {
+	const tabs = await getActiveTabs();
+	if (!tabs || !tabs.length) {
+		console.warn('No active tabs');
+		return;
+	}
+	const tabId = tabs[0].id;
+	// send a message to the content script on the active tab (assuming it's there)
+	const message = {
+		useDefaultSettings: true,
+	};
+	switch (clipType) {
+	case 'clipCompletePage':
+		message.name = 'completePageHtml';
+		message.preProcessFor = 'markdown';
+		break;
+	case 'clipCompletePageHtml':
+		message.name = 'completePageHtml';
+		message.preProcessFor = 'html';
+		break;
+	case 'clipSimplifiedPage':
+		message.name = 'simplifiedPageHtml';
+		break;
+	case 'clipUrl':
+		message.name = 'pageUrl';
+		break;
+	case 'clipSelection':
+		message.name = 'selectedHtml';
+		break;
+	default:
+		break;
+	}
+	if (message.name) {
+		browser_.tabs.sendMessage(tabId, message);
+	}
+}
+
+browser.commands.onCommand.addListener(function(command) {
+	// We could enumerate these twice, but since we're in here first,
+	// why not save ourselves the trouble with this convention
+	console.log('Rah');
+	if (command.startsWith('clip')) {
+		sendClipMessage(command);
+	}
+});

@@ -266,6 +266,8 @@
 
 	async function prepareCommandResponse(command) {
 		console.info(`Got command: ${command.name}`);
+		const useDefaultSettings = command.useDefaultSettings || false;
+		command.useDefaultSettings = undefined;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
@@ -283,6 +285,7 @@
 				source_command: Object.assign({}, command),
 				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
+				useDefaultSettings: useDefaultSettings,
 			};
 		};
 
