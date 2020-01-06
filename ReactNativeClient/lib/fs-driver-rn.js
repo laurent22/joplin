@@ -11,7 +11,7 @@ class FsDriverRN extends FsDriverBase {
 	}
 
 	writeFile(path, string, encoding = 'base64') {
-		return RNFS.writeFile(path, string, encoding);
+		return RNFS.unlink(path).then(() => { RNFS.writeFile(path, string, encoding)); });
 	}
 
 	// same as rm -rf
