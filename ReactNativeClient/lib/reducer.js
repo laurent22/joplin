@@ -153,13 +153,16 @@ function handleItemDelete(state, action) {
 	let newItems = [];
 	const items = state[listKey];
 
+	// remove the item and find the new indexes for the selected items
 	for (let i = 0; i < items.length; i++) {
 		let item = items[i];
 		if (isSelected) {
+			// the selected item is deleted so select the following item
 			if (selectedItemKeys[0] == item.id) {
 				previousIndexes.push(newItems.length);
 			}
 		} else {
+			// the selected item is not deleted so store its new location
 			if (selectedItemKeys.includes(item.id)) {
 				previousIndexes.push(newItems.length);
 			}
@@ -170,19 +173,25 @@ function handleItemDelete(state, action) {
 		newItems.push(item);
 	}
 
-	for (let i = 0; i < previousIndexes.length; i++) {
-		if (previousIndexes[i] >= newItems.length) {
-			previousIndexes = [newItems.length - 1];
-			break;
+	if (newItems.length == 0) {
+		// no remaining items so no selection
+		previousIndexes = [];
+
+	}  else if (previousIndexes.length == 0) {
+		// no selection exists so select the first item
+		previousIndexes.push(0);
+
+	} else {
+		// when the items at end of list are deleted then select the end remaining item
+		for (let i = 0; i < previousIndexes.length; i++) {
+			if (previousIndexes[i] >= newItems.length) {
+				previousIndexes = [newItems.length - 1];
+				break;
+			}
 		}
 	}
 
-	if (newItems.length == 0) {
-		previousIndexes = [];
-	}  else if (previousIndexes.length == 0) {
-		previousIndexes.push(0);
-	}
-
+	// update the state accordingly
 	let newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 

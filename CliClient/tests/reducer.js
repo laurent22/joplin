@@ -102,16 +102,23 @@ describe('Reducer', function() {
 
 	// tests for NOTE_DELETE
 	it('should delete selected note', asyncTest(async () => {
+		// create 1 folder
 		let folders = await createNTestFolders(1);
+		// create 5 notes
 		let notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 3rd note
 		let state = initTestState(folders, 0, notes, [2]);
 
 		// test action
+		// delete the third note
 		state = reducer(state, {type: 'NOTE_DELETE', id: notes[2].id});
 
+		// expect that the third note is missing, and the 4th note is now selected
 		let expected = createExpectedState(notes, [0,1,3,4], [3]);
 
+		// check the ids of all the remaining notes
 		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		// check the ids of the selected notes
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
