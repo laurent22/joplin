@@ -1,17 +1,22 @@
 const RNFS = require('react-native-fs');
 const FsDriverBase = require('lib/fs-driver-base');
+const RNFetchBlob = require('rn-fetch-blob').default;
 
 class FsDriverRN extends FsDriverBase {
 	appendFileSync() {
 		throw new Error('Not implemented');
 	}
 
-	appendFile(path, string, encoding = 'base64') {
-		return RNFS.appendFile(path, string, encoding);
+	// Encoding can be either "utf8" or "base64"
+	appendFile(path, content, encoding = 'base64') {
+		return RNFS.appendFile(path, content, encoding);
 	}
 
-	writeFile(path, string, encoding = 'base64') {
-		return RNFS.writeFile(path, string, encoding);
+	// Encoding can be either "utf8" or "base64"
+	writeFile(path, content, encoding = 'base64') {
+		// We need to use rn-fetch-blob here due to this bug:
+		// https://github.com/itinance/react-native-fs/issues/700
+		return RNFetchBlob.fs.writeFile(path, content, encoding);
 	}
 
 	// same as rm -rf
