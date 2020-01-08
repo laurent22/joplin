@@ -104,7 +104,7 @@
     "html-entities": "^1.2.1",
     "html-minifier": "^4.0.0",
     "image-type": "^3.0.0",
-    "joplin-renderer": "^1.0.6",
+    "joplin-renderer": "^1.0.7",
     "joplin-turndown": "^4.0.19",
     "joplin-turndown-plugin-gfm": "^1.0.11",
     "jssha": "^2.3.1",
