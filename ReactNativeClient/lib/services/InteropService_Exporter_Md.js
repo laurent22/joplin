@@ -1,5 +1,5 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { filename, fileExtension, basename, dirname, friendlySafeFilename } = require('lib/path-utils.js');
+const { basename, friendlySafeFilename } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
@@ -28,27 +28,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			}
 			if (!item.parent_id) return output;
 			item = await Folder.load(item.parent_id);
-		}
-	}
-
-	async findUniqueFilenameFromPathListAndFS(name, itemPaths) {
-		let counter = 1;
-
-		const relativeDir = dirname(name);
-		let nameNoExt = filename(name, true);
-		let extension = fileExtension(name);
-		if (extension) extension = `.${extension}`;
-		let nameToTry = nameNoExt + extension;
-
-		let filesInDir = await shim.fsDriver().readDir(`${this.destDir_}/${relativeDir}`);
-		filesInDir = filesInDir.map(fp => `${relativeDir}/${fp}`);
-		while (true) {
-			const exists = itemPaths.includes(nameToTry) || filesInDir.includes(nameToTry);
-			if (!exists) return nameToTry;
-			nameToTry = `${nameNoExt} (${counter})${extension}`;
-			counter++;
-			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
-			if (counter >= 10000) throw new Error('Cannot find unique title');
 		}
 	}
 
@@ -93,6 +72,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 	async prepareForProcessingItemType(type, itemsToExport) {
 		if (type === BaseModel.TYPE_NOTE) {
+			// Create unique file path for the note
 			const context = {
 				notePaths: {},
 			};
@@ -107,9 +87,16 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 				if (!note) continue;
 
 				let notePath = `${await this.makeDirPath_(note)}${friendlySafeFilename(note.title, null, true)}.md`;
-				notePath = await this.findUniqueFilenameFromPathListAndFS(notePath, Object.values(context.notePaths));
+				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths));
 				context.notePaths[note.id] = notePath;
 			}
+
+			// Strip the absolute path to export dir and keep only the relative paths
+			const destDir = this.destDir_;
+			Object.keys(context.notePaths).map(function(id) {
+				context.notePaths[id] = context.notePaths[id].substr(destDir.length + 1);
+			});
+
 			this.updateContext(context);
 		}
 	}

@@ -113,10 +113,6 @@ class FsDriverRN extends FsDriverBase {
 		return RNFS.readFile(path, encoding);
 	}
 
-	async readDir(path) {
-		return RNFS.readDir(path).map(e => e.name);
-	}
-
 	// Always overwrite destination
 	async copy(source, dest) {
 		let retry = false;
