@@ -23,6 +23,7 @@ const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('joplin-renderer');
+const { uuid } = require('lib/uuid');
 
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
@@ -586,8 +587,10 @@ class Api {
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = `.${fileExt}`;
-		let imagePath = `${tempDir}/${safeFilename(name)}${fileExt}`;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = `${tempDir}/${safeFilename(name)}_${md5(`${Math.random()}_${Date.now()}`).substr(0, 10)}${fileExt}`;
+
+		// Append a UUID because simply checking if the file exists is not enough since
+		// multiple resources can be downloaded at the same time (race condition).
+		let imagePath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
 
 		try {
 			if (isDataUrl) {
