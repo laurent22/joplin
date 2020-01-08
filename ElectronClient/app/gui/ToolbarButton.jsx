@@ -26,6 +26,7 @@ class ToolbarButton extends React.Component {
 
 		const finalStyle = Object.assign({}, style, {
 			opacity: isEnabled ? 1 : 0.4,
+			height: theme.toolbarHeight,
 		});
 
 		return (

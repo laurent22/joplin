@@ -8,9 +8,9 @@ class ToolbarComponent extends React.Component {
 	render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
-		style.height = theme.toolbarHeight;
 		style.display = 'flex';
 		style.flexDirection = 'row';
+		style.flexWrap = 'wrap';
 		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 
