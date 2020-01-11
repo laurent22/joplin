@@ -52,9 +52,11 @@
 	cursor: pointer;
 	align-items: center;
 	min-height: 31px;
+	text-decoration: none;
 }
 
-.App a.Button:hover {
+.App a.Button:hover,
+.App a.Button:focus {
 	background-color: #1E89E6;
 }
 
