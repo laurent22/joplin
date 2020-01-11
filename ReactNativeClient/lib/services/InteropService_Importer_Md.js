@@ -5,6 +5,7 @@ const Resource = require('lib/models/Resource.js');
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
+const {extractImageUrls} = require('lib/markdownUtils');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
@@ -57,29 +58,20 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	/**
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
-	 *
-	 * mdImageTagRegex matches markdown image tags.
-	 * !\[ and \] matches start of tag containing alt text.
-	 * Within this the [^\]]* matches multiple characters not in this set;
-	 * in this case the set is "]" - so match anything that is not this char.
-	 * We need this to avoid overshooting if another "]" follows after the
-	 * match.
-	 * \(.*?\) to match the part of the tag containing the link.
 	 */
 	async importLocalImages(filePath, md) {
-		const mdImageTagRegex = /!\[[^\]]*\]\((.*?)\)/g;
 		let updated = md;
-		let match;
-		while ((match = mdImageTagRegex.exec(md)) !== null) {
-			const attachmentPath = filename(`${dirname(filePath)}/${match[1]}`, true);
-			const pathWithExtension =  `${attachmentPath}.${fileExtension(match[1])}`;
+		const imageLinks = extractImageUrls(md);
+		await Promise.all(imageLinks.map(async (link) => {
+			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
+			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);
 			const isDir = stat ? stat.isDirectory() : false;
 			if (stat && !isDir) {
 				const resource = await shim.createResourceFromPath(pathWithExtension);
-				updated = updated.replace(match[0], Resource.markdownTag(resource));
+				updated = updated.replace(link, `:/${resource.id}`);
 			}
-		}
+		}));
 		return updated;
 	}
 
