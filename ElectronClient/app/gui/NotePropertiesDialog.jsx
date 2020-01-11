@@ -26,6 +26,7 @@ class NotePropertiesDialog extends React.Component {
 			id: _('ID'),
 			user_created_time: _('Created'),
 			user_updated_time: _('Updated'),
+			todo_completed: _('Completed'),
 			location: _('Location'),
 			source_url: _('URL'),
 			revisionsLink: _('Note History'),
@@ -71,6 +72,11 @@ class NotePropertiesDialog extends React.Component {
 
 		formNote.user_updated_time = time.formatMsToLocal(note.user_updated_time);
 		formNote.user_created_time = time.formatMsToLocal(note.user_created_time);
+
+		if (note.todo_completed) {
+			formNote.todo_completed = time.formatMsToLocal(note.todo_completed);
+		}
+
 		formNote.source_url = note.source_url;
 
 		formNote.location = '';
@@ -89,6 +95,11 @@ class NotePropertiesDialog extends React.Component {
 		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
+
+		if (formNote.todo_completed) {
+			note.todo_completed = time.formatMsToLocal(formNote.todo_completed);
+		}
+
 		note.source_url = formNote.source_url;
 
 		return note;
@@ -338,7 +349,7 @@ class NotePropertiesDialog extends React.Component {
 			return dms.format('DDMMss', { decimalPlaces: 0 });
 		}
 
-		if (['user_updated_time', 'user_created_time'].indexOf(key) >= 0) {
+		if (['user_updated_time', 'user_created_time', 'todo_completed'].indexOf(key) >= 0) {
 			return time.formatMsToLocal(note[key]);
 		}
 
