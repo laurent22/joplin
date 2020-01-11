@@ -1,10 +1,13 @@
 # Markdown
 
-lorem ipsum ![alt text here](joplin_logos.png)
+lorem ipsum ![alt text here](../support/photo.jpg)
 - [ ] check!
 - [ ] boxes!
 
-![alt text here](joplin_logos.png)ipsum lorem
+![alt text here](../support/photo.jpg)ipsum lorem
 
 **strong text**
 ![does not exist](does_not_exist.png) lorem ipsum
+
+**some directory**
+![a directory](../support) lorem ipsum
