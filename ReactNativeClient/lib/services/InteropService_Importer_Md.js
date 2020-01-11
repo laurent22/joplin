@@ -72,7 +72,6 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
 				const linkPatternEscaped = lo.escapeRegExp(`](${link})`);
 				const reg = new RegExp(linkPatternEscaped, 'g');
-				console.log(reg)
 				updated = updated.replace(reg, `](:/${resource.id})`);
 			}
 		}));
