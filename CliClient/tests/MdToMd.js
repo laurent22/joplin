@@ -19,6 +19,14 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const inexistentLinkUnchanged = note.body.includes(tagNonExistentFile);
 		expect(inexistentLinkUnchanged).toBe(true);
 	});
+	it('should only create 1 resource for duplicate links, all tags should be updated', async function() {
+		const note = await importer.importFile(`${__dirname}/md_to_md/sample-duplicate-links.md`, 'notebook');
+		let items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(1);
+		const reg = new RegExp(items[0].id, 'g');
+		const matched = note.body.match(reg);
+		expect(matched.length).toBe(2);
+	});
 	it('should import linked files and modify tags appropriately when link is also in alt text', async function() {
 		const note = await importer.importFile(`${__dirname}/md_to_md/sample-link-in-alt-text.md`, 'notebook');
 		let items = await Note.linkedItems(note.body);

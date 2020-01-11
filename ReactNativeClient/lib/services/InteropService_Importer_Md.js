@@ -1,3 +1,4 @@
+const lo = require('lodash');
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -60,7 +61,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	 */
 	async importLocalImages(filePath, md) {
 		let updated = md;
-		const imageLinks = extractImageUrls(md);
+		const imageLinks = lo.uniq(extractImageUrls(md));
 		await Promise.all(imageLinks.map(async (link) => {
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
@@ -69,7 +70,10 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			if (stat && !isDir) {
 				const resource = await shim.createResourceFromPath(pathWithExtension);
 				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
-				updated = updated.replace(`](${link})`, `](:/${resource.id})`);
+				const linkPatternEscaped = lo.escapeRegExp(`](${link})`);
+				const reg = new RegExp(linkPatternEscaped, 'g');
+				console.log(reg)
+				updated = updated.replace(reg, `](:/${resource.id})`);
 			}
 		}));
 		return updated;
