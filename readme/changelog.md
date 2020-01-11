@@ -1,5 +1,24 @@
 # Joplin changelog
 
+## [v1.0.177](https://github.com/laurent22/joplin/releases/tag/v1.0.177) - 2019-12-30T14:40:40Z
+
+This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.
+
+- New: Allow exporting a note as HTML
+- Improved: Extract note renderer to separate package ([#2206](https://github.com/laurent22/joplin/issues/2206))
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update Katex to 0.11.1 ([#2201](https://github.com/laurent22/joplin/issues/2201))
+- Improved: Improved Nextcloud API error handling
+- Improved: Updated OneDrive login to remove webview dependency
+- Improved: Decrypt notes that are meant to be shared
+- Improved: Make it easier to view early errors when the app starts
+- Improved: Upgrade to Electron 7
+- Improved: Render note using iframe instead of deprecated webview
+- Fixed: Fix Goto Anything scrolling issue ([#2199](https://github.com/laurent22/joplin/issues/2199)) ([#2122](https://github.com/laurent22/joplin/issues/2122))
+- Fixed: Prevent app from crashing when pressing focus shortcut from search bar ([#2157](https://github.com/laurent22/joplin/issues/2157))
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) ([#2091](https://github.com/laurent22/joplin/issues/2091))
+- Fixed: Fix notifications on Windows 7 ([#2144](https://github.com/laurent22/joplin/issues/2144))
+
 ## [v1.0.176](https://github.com/laurent22/joplin/releases/tag/v1.0.176) - 2019-12-14T10:36:44Z
 
 - New: Add ability to share a note publicly using Nextcloud ([#2173](https://github.com/laurent22/joplin/issues/2173))

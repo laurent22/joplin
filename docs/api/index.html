@@ -332,18 +332,6 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 </li>
 </ul>
 </div>
-<blockquote>
-<p>joplin@1.0.0 tsc /Users/laurent/src/joplin<br>
-tsc</p>
-</blockquote>
-<p>TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js.map<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js.map<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js.map<br>
-TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js.map</p>
 <h1>Joplin API<a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a></h1>
 <p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.</p>
 <p>In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
@@ -528,6 +516,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td></td>
 </tr>
 <tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
 <td>body_html</td>
 <td>text</td>
 <td>Note body, in HTML format</td>
@@ -643,6 +636,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>text</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /folders<a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a></h2>
@@ -734,6 +732,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /resources<a name="get-resources" href="#get-resources" class="heading-anchor">🔗</a></h2>
@@ -800,6 +803,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 <tr>
 <td>encryption_applied</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>is_shared</td>
 <td>int</td>
 <td></td>
 </tr>

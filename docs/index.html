@@ -339,7 +339,7 @@ https://github.com/laurent22/joplin/blob/master/
 <p><img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/LinuxIcons/256x256.png" align="left" /> <strong>Joplin</strong> is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in <a href="#markdown">Markdown format</a>.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing">can be imported</a> into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various cloud services including <a href="https://nextcloud.com/">Nextcloud</a>, Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p>The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A <a href="https://joplinapp.org/clipper/">Web Clipper</a>, to save web pages and screenshots from your browser, is also available for <a href="https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB">Chrome</a>.</p>
+<p>The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A <a href="https://joplinapp.org/clipper/">Web Clipper</a>, to save web pages and screenshots from your browser, is also available for <a href="https://addons.mozilla.org/firefox/addon/joplin-web-clipper/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB">Chrome</a>.</p>
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 <h1>Installation<a name="installation" href="#installation" class="heading-anchor">🔗</a></h1>
 <p>Three types of applications are available: for the <strong>desktop</strong> (Windows, macOS and Linux), for <strong>mobile</strong> (Android and iOS) and for <strong>terminal</strong> (Windows, macOS, Linux and FreeBSD). All applications have similar user interfaces and can synchronise with each other.</p>
@@ -383,7 +383,7 @@ https://github.com/laurent22/joplin/blob/master/
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.312/joplin-v1.0.312.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.312/joplin-v1.0.312-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.315/joplin-v1.0.315.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.0.315/joplin-v1.0.315-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -407,7 +407,7 @@ https://github.com/laurent22/joplin/blob/master/
 </tr>
 <tr>
 <td>Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>)</td>
-<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 8+</a>.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
+<td><strong>Important:</strong> First, <a href="https://nodejs.org/en/download/package-manager/">install Node 10+</a>.<br/><br/><code>NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin</code><br/><code>sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin</code><br><br>By default, the application binary will be installed under <code>~/.joplin-bin</code>. You may change this directory if needed. Alternatively, if your npm permissions are setup as described <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory">here</a> (Option 2) then simply running <code>npm -g install joplin</code> would work.</td>
 </tr>
 <tr>
 <td>Arch Linux</td>
@@ -425,7 +425,7 @@ https://github.com/laurent22/joplin/blob/master/
 <li><a href="https://joplinapp.org/clipper/">Web Clipper</a> for Firefox and Chrome.</li>
 <li>End To End Encryption (E2EE)</li>
 <li>Note history (revisions)</li>
-<li>Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.</li>
+<li>Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.</li>
 <li>Import Enex files (Evernote export format) and Markdown files.</li>
 <li>Export JEX files (Joplin Export format) and raw files.</li>
 <li>Support notes, to-dos, tags and notebooks.</li>
@@ -496,7 +496,7 @@ https://github.com/laurent22/joplin/blob/master/
 <li><a href="https://www.fastmail.com/">Fastmail</a></li>
 <li><a href="https://www.strato.fr/stockage-en-ligne/">HiDrive</a> from Strato. <a href="https://github.com/laurent22/joplin/issues/309">Setup help</a></li>
 <li><a href="https://nginx.org/en/docs/http/ngx_http_dav_module.html">Nginx WebDAV Module</a></li>
-<li><a href="https://nextcloud.com/">NextCloud</a></li>
+<li><a href="https://nextcloud.com/">Nextcloud</a></li>
 <li><a href="https://owncloud.org/">OwnCloud</a></li>
 <li><a href="https://www.seafile.com/">Seafile</a></li>
 <li><a href="https://www.transip.nl/stack/">Stack</a></li>
@@ -647,7 +647,8 @@ Details:
 <li><a href="https://poedit.net/">Download Poedit</a>, the translation editor, and install it.</li>
 <li><a href="https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot">Download the file to be translated</a>.</li>
 <li>In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change &quot;Country&quot; and &quot;Language&quot; to your own country and language.</li>
-<li>From then you can translate the file. Once it is done, please either <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> or send the file to <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseTranslation.png">this address</a>.</li>
+<li>From then you can translate the file.</li>
+<li>Once it is done, please <a href="https://github.com/laurent22/joplin/pulls">open a pull request</a> and add the file to it.</li>
 </ul>
 <p>This translation will apply to the three applications - desktop, mobile and terminal.</p>
 <p>To <strong>update a translation</strong>, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.</p>
@@ -669,63 +670,63 @@ Details:
 <td>Arabic</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po">ar</a></td>
 <td>عبد الناصر سعيد (<a href="mailto:as@althobaity.com">as@althobaity.com</a>)</td>
-<td>78%</td>
+<td>75%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/basque_country.png" alt=""></td>
 <td>Basque</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po">eu</a></td>
 <td>juan.abasolo@ehu.eus</td>
-<td>44%</td>
+<td>42%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ba.png" alt=""></td>
 <td>Bosnian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po">bs_BA</a></td>
 <td>Derviš T. (<a href="mailto:dervis.t@pm.me">dervis.t@pm.me</a>)</td>
-<td>97%</td>
+<td>94%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/bg.png" alt=""></td>
 <td>Bulgarian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po">bg_BG</a></td>
 <td></td>
-<td>86%</td>
+<td>83%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/catalonia.png" alt=""></td>
 <td>Catalan</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po">ca</a></td>
 <td>jmontane, 2019</td>
-<td>68%</td>
+<td>66%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/hr.png" alt=""></td>
 <td>Croatian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po">hr_HR</a></td>
 <td>Hrvoje Mandić (<a href="mailto:trbuhom@net.hr">trbuhom@net.hr</a>)</td>
-<td>36%</td>
+<td>35%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" alt=""></td>
 <td>Czech</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po">cs_CZ</a></td>
 <td>Lukas Helebrandt (<a href="mailto:lukas@aiya.cz">lukas@aiya.cz</a>)</td>
-<td>100%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" alt=""></td>
 <td>Dansk</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po">da_DK</a></td>
 <td>Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.</td>
-<td>96%</td>
+<td>93%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" alt=""></td>
 <td>Deutsch</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po">de_DE</a></td>
 <td>Michael Sonntag (<a href="mailto:ms@editorei.de">ms@editorei.de</a>)</td>
-<td>100%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gb.png" alt=""></td>
@@ -746,112 +747,119 @@ Details:
 <td>Español</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po">es_ES</a></td>
 <td>Andros Fenollosa (andros@fenollosa.email)</td>
-<td>99%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/esperanto.png" alt=""></td>
 <td>Esperanto</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/eo.po">eo</a></td>
 <td>Marton Paulo (<a href="mailto:martonpss@gmail.com">martonpss@gmail.com</a>)</td>
-<td>50%</td>
+<td>48%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/fr.png" alt=""></td>
 <td>Français</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po">fr_FR</a></td>
 <td>Laurent Cozic</td>
-<td>100%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/es/galicia.png" alt=""></td>
 <td>Galician</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po">gl_ES</a></td>
 <td>Marcos Lans (<a href="mailto:marcoslansgarza@gmail.com">marcoslansgarza@gmail.com</a>)</td>
-<td>56%</td>
+<td>54%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/it.png" alt=""></td>
 <td>Italiano</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po">it_IT</a></td>
 <td></td>
-<td>94%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/be.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po">nl_BE</a></td>
 <td></td>
-<td>44%</td>
+<td>43%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/nl.png" alt=""></td>
 <td>Nederlands</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po">nl_NL</a></td>
 <td>Robert (<a href="mailto:metbril@outlook.com">metbril@outlook.com</a>)</td>
-<td>94%</td>
+<td>91%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/no.png" alt=""></td>
 <td>Norwegian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po">nb_NO</a></td>
 <td>Mats Estensen (<a href="mailto:code@mxe.no">code@mxe.no</a>)</td>
-<td>94%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ir.png" alt=""></td>
 <td>Persian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po">fa</a></td>
 <td>Mehrad Mahmoudian (<a href="mailto:mehrad@mahmoudian.me">mehrad@mahmoudian.me</a>)</td>
-<td>42%</td>
+<td>41%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/pl.png" alt=""></td>
 <td>Polski</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po">pl_PL</a></td>
 <td></td>
-<td>85%</td>
+<td>82%</td>
+</tr>
+<tr>
+<td><img src="https://joplinapp.org/images/flags/country-4x3/pt.png" alt=""></td>
+<td>Português</td>
+<td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_PT.po">pt_PT</a></td>
+<td>Diogo Caveiro (<a href="mailto:diogocaveiro.pro@outlook.com">diogocaveiro.pro@outlook.com</a>)</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/br.png" alt=""></td>
 <td>Português (Brasil)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po">pt_BR</a></td>
 <td>Marton Paulo (<a href="mailto:martonpss@gmail.com">martonpss@gmail.com</a>)</td>
-<td>98%</td>
+<td>95%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ro.png" alt=""></td>
 <td>Română</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po">ro</a></td>
 <td></td>
-<td>44%</td>
+<td>42%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/si.png" alt=""></td>
 <td>Slovenian</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po">sl_SI</a></td>
 <td></td>
-<td>55%</td>
+<td>53%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/se.png" alt=""></td>
 <td>Svenska</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po">sv</a></td>
 <td>Jonatan Nyberg (<a href="mailto:jonatan@autistici.org">jonatan@autistici.org</a>)</td>
-<td>76%</td>
+<td>73%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tr.png" alt=""></td>
 <td>Türkçe</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po">tr_TR</a></td>
 <td>Hüseyin Fahri Uzun (<a href="mailto:mail@fahriuzun.com">mail@fahriuzun.com</a>)</td>
-<td>92%</td>
+<td>89%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/gr.png" alt=""></td>
 <td>Ελληνικά</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po">el_GR</a></td>
 <td>Harris Arvanitis (<a href="mailto:xaris@tuta.io">xaris@tuta.io</a>)</td>
-<td>99%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/ru.png" alt=""></td>
@@ -865,35 +873,35 @@ Details:
 <td>српски језик</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po">sr_RS</a></td>
 <td></td>
-<td>85%</td>
+<td>82%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cn.png" alt=""></td>
 <td>中文 (简体)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po">zh_CN</a></td>
 <td></td>
-<td>93%</td>
+<td>90%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/tw.png" alt=""></td>
 <td>中文 (繁體)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po">zh_TW</a></td>
 <td>penguinsam (<a href="mailto:samliu@gmail.com">samliu@gmail.com</a>)</td>
-<td>68%</td>
+<td>66%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/jp.png" alt=""></td>
 <td>日本語</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po">ja_JP</a></td>
 <td>genneko (<a href="mailto:genneko217@gmail.com">genneko217@gmail.com</a>)</td>
-<td>100%</td>
+<td>96%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/kr.png" alt=""></td>
 <td>한국말</td>
 <td><a href="https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po">ko</a></td>
 <td></td>
-<td>97%</td>
+<td>93%</td>
 </tr>
 </tbody>
 </table>
