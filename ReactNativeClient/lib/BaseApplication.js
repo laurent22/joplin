@@ -450,16 +450,14 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL')
-		{
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
-				action.key.indexOf('folders.sortOrder') === 0 ||
-				action.key == 'showNoteCounts' ||
-				action.key == 'showCompletedTodos' ))
-		{
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
