@@ -149,22 +149,22 @@ function handleItemDelete(state, action) {
 	const selectedItemKeys = isSingular ? [state[selectedItemKey]] : state[selectedItemKey];
 	const isSelected = selectedItemKeys.includes(action.id);
 
-	let previousIndexes = [];
-	let newItems = [];
 	const items = state[listKey];
+	let newItems = [];
+	let newSelectedIndexes = [];
 
-	// remove the item and find the new indexes for the selected items
 	for (let i = 0; i < items.length; i++) {
 		let item = items[i];
 		if (isSelected) {
 			// the selected item is deleted so select the following item
+			// if multiple items are selected then just use the first one
 			if (selectedItemKeys[0] == item.id) {
-				previousIndexes.push(newItems.length);
+				newSelectedIndexes.push(newItems.length);
 			}
 		} else {
-			// the selected item is not deleted so store its new location
+			// the selected item/s is not deleted so keep it selected
 			if (selectedItemKeys.includes(item.id)) {
-				previousIndexes.push(newItems.length);
+				newSelectedIndexes.push(newItems.length);
 			}
 		}
 		if (item.id == action.id) {
@@ -174,30 +174,27 @@ function handleItemDelete(state, action) {
 	}
 
 	if (newItems.length == 0) {
-		// no remaining items so no selection
-		previousIndexes = [];
+		newSelectedIndexes = []; // no remaining items so no selection
 
-	}  else if (previousIndexes.length == 0) {
-		// no selection exists so select the first item
-		previousIndexes.push(0);
+	}  else if (newSelectedIndexes.length == 0) {
+		newSelectedIndexes.push(0); // no selection exists so select the top
 
 	} else {
-		// when the items at end of list are deleted then select the end remaining item
-		for (let i = 0; i < previousIndexes.length; i++) {
-			if (previousIndexes[i] >= newItems.length) {
-				previousIndexes = [newItems.length - 1];
+		// when the items at end of list are deleted then select the end
+		for (let i = 0; i < newSelectedIndexes.length; i++) {
+			if (newSelectedIndexes[i] >= newItems.length) {
+				newSelectedIndexes = [newItems.length - 1];
 				break;
 			}
 		}
 	}
 
-	// update the state accordingly
 	let newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
 	const newIds = [];
-	for (let i = 0; i < previousIndexes.length; i++) {
-		newIds.push(newItems[previousIndexes[i]].id);
+	for (let i = 0; i < newSelectedIndexes.length; i++) {
+		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
 	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
 

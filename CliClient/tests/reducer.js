@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
-const { setupDatabase, allSyncTargetItemsEncrypted, kvStore, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, checkThrowAsync, asyncTest } = require('test-utils.js');
+const {setupDatabaseAndSynchronizer, switchClient, asyncTest } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-
 const { reducer, defaultState, stateUtils} = require('lib/reducer.js');
 
 async function createNTestFolders(n) {
@@ -230,6 +229,37 @@ describe('Reducer', function() {
 		state = reducer(state, {type: 'NOTE_DELETE', id: notes[3].id});
 
 		let expected = createExpectedState(notes, [0,1,2,4], [1,2]);
+
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+	}));
+
+	it('should delete notes at end', asyncTest(async () => {
+		let folders = await createNTestFolders(1);
+		let notes = await createNTestNotes(5, folders[0]);
+		let state = initTestState(folders, 0, notes, [3,4]);
+
+		// test action
+		state = reducer(state, {type: 'NOTE_DELETE', id: notes[3].id});
+		state = reducer(state, {type: 'NOTE_DELETE', id: notes[4].id});
+
+		let expected = createExpectedState(notes, [0,1,2], [2]);
+
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+	}));
+
+	it('should delete notes when non-contiguous selection', asyncTest(async () => {
+		let folders = await createNTestFolders(1);
+		let notes = await createNTestNotes(5, folders[0]);
+		let state = initTestState(folders, 0, notes, [0,2,4]);
+
+		// test action
+		state = reducer(state, {type: 'NOTE_DELETE', id: notes[0].id});
+		state = reducer(state, {type: 'NOTE_DELETE', id: notes[2].id});
+		state = reducer(state, {type: 'NOTE_DELETE', id: notes[4].id});
+
+		let expected = createExpectedState(notes, [1,3], [1]);
 
 		expect(getIds(state.notes)).toEqual(getIds(expected.items));
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
