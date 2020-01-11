@@ -1,7 +1,6 @@
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
-const Resource = require('lib/models/Resource.js');
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
@@ -69,7 +68,8 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			const isDir = stat ? stat.isDirectory() : false;
 			if (stat && !isDir) {
 				const resource = await shim.createResourceFromPath(pathWithExtension);
-				updated = updated.replace(link, `:/${resource.id}`);
+				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
+				updated = updated.replace(`](${link})`, `](:/${resource.id})`);
 			}
 		}));
 		return updated;

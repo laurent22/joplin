@@ -19,6 +19,11 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const inexistentLinkUnchanged = note.body.includes(tagNonExistentFile);
 		expect(inexistentLinkUnchanged).toBe(true);
 	});
+	it('should import linked files and modify tags appropriately when link is also in alt text', async function() {
+		const note = await importer.importFile(`${__dirname}/md_to_md/sample-link-in-alt-text.md`, 'notebook');
+		let items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(1);
+	});
 	it('should passthrough unchanged if no links present', async function() {
 		const note = await importer.importFile(`${__dirname}/md_to_md/sample-no-links.md`, 'notebook');
 		let items = await Note.linkedItems(note.body);
