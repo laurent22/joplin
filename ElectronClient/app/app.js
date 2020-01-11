@@ -1152,7 +1152,7 @@ class Application extends BaseApplication {
 				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
 				{ label: _('Hide %s', app.electronApp().getName()), click: () => { app.window().hide(); } },
 				{ type: 'separator' },
-				{ label: _('Exit'), click: () => { app.quit(); } },
+				{ label: _('Quit'), click: () => { app.quit(); } },
 			]);
 			app.createTray(contextMenu);
 		}
