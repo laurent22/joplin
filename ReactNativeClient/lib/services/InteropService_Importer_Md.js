@@ -80,11 +80,16 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const title = filename(filePath);
 		const body = await shim.fsDriver().readFile(filePath);
-		let updatedBody = await this.importLocalImages(filePath, body);
+		let updatedBody;
+		try {
+			updatedBody = await this.importLocalImages(filePath, body);
+		} catch (error) {
+			// console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
+		}
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: updatedBody,
+			body: updatedBody || body,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),

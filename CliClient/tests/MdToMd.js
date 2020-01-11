@@ -19,9 +19,10 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const inexistentLinkUnchanged = note.body.includes(tagNonExistentFile);
 		expect(inexistentLinkUnchanged).toBe(true);
 	});
-	it('should not result in linked items if no links present', async function() {
+	it('should passthrough unchanged if no links present', async function() {
 		const note = await importer.importFile(`${__dirname}/md_to_md/sample-no-links.md`, 'notebook');
 		let items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(0);
+		expect(note.body).toContain('Unidentified vessel travelling at sub warp speed, bearing 235.7. Fluctuations in energy readings from it, Captain. All transporters off.');
 	});
 });
