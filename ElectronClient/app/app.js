@@ -1150,6 +1150,7 @@ class Application extends BaseApplication {
 		} else {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
+				{ label: _('Hide %s', app.electronApp().getName()), click: () => { app.window().hide(); } },
 				{ type: 'separator' },
 				{ label: _('Exit'), click: () => { app.quit(); } },
 			]);
