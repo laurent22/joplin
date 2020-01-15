@@ -689,12 +689,20 @@ class NoteTextComponent extends React.Component {
 		if (newTags.length !== oldTags.length) return true;
 
 		for (let i = 0; i < newTags.length; ++i) {
+			let found = false;
 			let currNewTag = newTags[i];
 			for (let j = 0; j < oldTags.length; ++j) {
 				let currOldTag = oldTags[j];
-				if (currOldTag.id === currNewTag.id && currOldTag.updated_time !== currNewTag.updated_time) {
-					return true;
+				if (currOldTag.id === currNewTag.id) {
+					found = true;
+					if (currOldTag.updated_time !== currNewTag.updated_time) {
+						return true;
+					}
+					break;
 				}
+			}
+			if (!found) {
+				return true;
 			}
 		}
 
