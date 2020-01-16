@@ -2125,7 +2125,22 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: `1px solid ${theme.dividerColor}` }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
+			<NoteSearchBar
+				ref={this.noteSearchBar_}
+				style={{
+					display: 'flex',
+					height: searchBarHeight,
+					width: innerWidth,
+					borderTop: `1px solid ${theme.dividerColor}`,
+				}}
+				resultCount={this.state.localSearch.resultCount}
+				onChange={this.noteSearchBar_change}
+				onNext={this.noteSearchBar_next}
+				onPrevious={this.noteSearchBar_previous}
+				onClose={this.noteSearchBar_close}
+			/>
+		);
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>
