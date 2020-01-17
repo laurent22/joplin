@@ -164,3 +164,15 @@ Skills Required: JavaScript; React
 Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
+
+# 9. Custom keyboard shortcuts
+
+The CLI application allows setting custom keyboard shortcuts, however this feature is currently missing from the desktop application. We would like to let the user set shortcuts for the menu items in particular, but also potentially any other Joplin action. There should be a shortcut editor in the Config panel to do this.
+
+Expected Outcome: To add support for custom shortcuts and allow editing them in the config screen
+
+Difficulty Level: Easy
+
+Skills Required: JavaScript; React
+
+Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
