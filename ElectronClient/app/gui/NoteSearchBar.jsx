@@ -9,7 +9,7 @@ class NoteSearchBarComponent extends React.Component {
 
 		this.state = {
 			query: '',
-			backgroundColor: undefined,
+			resultCount: 0,
 		};
 
 		this.searchInput_change = this.searchInput_change.bind(this);
@@ -114,16 +114,15 @@ class NoteSearchBarComponent extends React.Component {
 		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click);
 		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click);
 
-		const theme = themeStyle(this.props.theme);
 		if (this.props.resultCount !== undefined) {
-			if (this.state.query.length > 0 && this.props.resultCount === 0) {
-				this.state.backgroundColor = theme.warningBackgroundColor;
-			} else {
-				this.state.backgroundColor = theme.backgroundColor;
-			}
+			this.state.resultCount = this.props.resultCount;
 		}
-		if (this.state.backgroundColor === undefined) {
+
+		const theme = themeStyle(this.props.theme);
+		if (this.state.query.length === 0 || this.state.resultCount > 0) {
 			this.state.backgroundColor = theme.backgroundColor;
+		} else {
+			this.state.backgroundColor = theme.warningBackgroundColor;
 		}
 
 		return (
