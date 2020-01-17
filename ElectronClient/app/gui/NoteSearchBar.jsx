@@ -119,10 +119,9 @@ class NoteSearchBarComponent extends React.Component {
 		}
 
 		const theme = themeStyle(this.props.theme);
-		if (this.state.query.length === 0 || this.state.resultCount > 0) {
-			this.state.backgroundColor = theme.backgroundColor;
-		} else {
-			this.state.backgroundColor = theme.warningBackgroundColor;
+		let backgroundColor = theme.backgroundColor;
+		if (this.state.query.length > 0 && this.state.resultCount === 0) {
+			backgroundColor = theme.warningBackgroundColor;
 		}
 
 		return (
@@ -136,7 +135,7 @@ class NoteSearchBarComponent extends React.Component {
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"
 						type="text"
-						style={{ width: 200, marginRight: 5, backgroundColor: this.state.backgroundColor }}
+						style={{ width: 200, marginRight: 5, backgroundColor: backgroundColor }}
 					/>
 					{nextButton}
 					{previousButton}
