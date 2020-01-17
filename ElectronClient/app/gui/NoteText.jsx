@@ -1918,10 +1918,14 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
-			fontSize: theme.fontSize,
+			fontSize: theme.titleEditorFontSize,
+			fontWeight: 'bold',
 		};
 
-		const toolbarStyle = {};
+		const toolbarStyle = {
+			marginTop: 3,
+			marginBottom: 0,
+		};
 
 		const tagStyle = {
 			marginBottom: 10,
@@ -1932,10 +1936,10 @@ class NoteTextComponent extends React.Component {
 
 		let bottomRowHeight = 0;
 		if (this.canDisplayTagBar()) {
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom - tagStyle.height - tagStyle.marginBottom;
 		} else {
 			toolbarStyle.marginBottom = tagStyle.marginBottom,
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom;
 		}
 
 		bottomRowHeight -= searchBarHeight;

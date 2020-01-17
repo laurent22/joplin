@@ -13,7 +13,7 @@ class ToolbarButton extends React.Component {
 		let icon = null;
 		if (this.props.iconName) {
 			const iconStyle = {
-				fontSize: Math.round(theme.fontSize * 1.5),
+				fontSize: Math.round(theme.fontSize * 1.25),
 				color: theme.color,
 			};
 			if (title) iconStyle.marginRight = 5;

@@ -19,8 +19,10 @@ const globalStyle = {
 	headerHeight: 35,
 	headerButtonHPadding: 6,
 
-	toolbarHeight: 35,
+	toolbarHeight: 30,
 	tagItemPadding: 3,
+
+	htmlFontSize: 15,
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -386,10 +388,11 @@ function themeStyle(theme) {
 		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),
 
 		// For WebView - must correspond to the properties above
-		htmlFontSize: `${Math.round(15 * zoomRatio)}px`,
+		htmlFontSize: `${Math.round(globalStyle.htmlFontSize * zoomRatio)}px`,
 		htmlLineHeight: '1.6em', // Math.round(20 * zoomRatio) + 'px'
-
 		htmlCodeFontSize: '.9em',
+
+		titleEditorFontSize: Math.round(globalStyle.htmlFontSize * 1.45 * zoomRatio),
 	};
 
 	let output = {};
