@@ -24,7 +24,7 @@ Platforms: Desktop and/or mobile (at the student's choice)
 
 Skills Required: JavaScript; React; React Native (for mobile)
 
-Potential Mentor(s):
+Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
 
 More info: [GitHub issue](https://github.com/laurent22/joplin/issues/591), [Forum Thread](https://discourse.joplinapp.org/t/can-i-run-a-second-instance-of-joplin/110)
 
@@ -44,7 +44,7 @@ Platforms: Desktop and/or mobile (at the student's choice)
 
 Skills Required: JavaScript; React; React Native (for mobile)
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [Forum thread about Joplin Web API for Nextcloud](https://discourse.joplinapp.org/t/joplin-api-in-nextcloud-prototype/)
 
@@ -60,7 +60,7 @@ Platforms: Desktop, Mobile and Terminal
 
 Skills Required: JavaScript; React; React Native (for mobile)
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [GitHub issue](https://github.com/laurent22/joplin/issues/375)
 
@@ -76,7 +76,7 @@ Platforms: Mobile (iOS and Android)
 
 Skills Required: JavaScript; React; React Native
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [Mobile - Add share menu #876](https://github.com/laurent22/joplin/issues/876)
 
@@ -97,7 +97,7 @@ Difficulty Level: High
 
 Skills Required: PHP (for the Nextcloud app). For the front-end it can be plain HTML (no JS), or React.
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [GitHub: Nextcloud notes integration (Web client)](https://github.com/laurent22/joplin/issues/228)
 
@@ -111,7 +111,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 ## 6. Password-protected notes
 
@@ -123,13 +123,15 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript; React
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 ## 7. Search
 
 The current search engine is built on top of SQLite FTS. An index of the notes is built and this is what is used by FTS when searching.
 
 While it works relatively well, there is still room for improvement. In particular we would like to implement the following:
+
+- Allow boolean searches - search for "A and B", or "A or B", etc.
 
 - Remove the need for wildcard queries - for example instead of typing "search*", it will be possible to simply type "search" and results that contain "search" or "searching" will be included. Those that contain the exact match will come first.
 
@@ -145,7 +147,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
 
 More info: [Search engine improvements](https://github.com/laurent22/joplin/issues/1877)
 
@@ -159,6 +161,6 @@ Difficulty Level: High
 
 Skills Required: JavaScript; React
 
-Potential Mentor(s):
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
