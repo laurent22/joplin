@@ -1,4 +1,3 @@
-const lo = require('lodash');
 const InteropService_Importer_Base = require('lib/services/InteropService_Importer_Base');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -6,6 +5,8 @@ const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('li
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
 const {extractImageUrls} = require('lib/markdownUtils');
+const {unique} = require('lib/ArrayUtils');
+const { pregQuote } = require('lib/string-utils-common');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async exec(result) {
@@ -61,7 +62,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	 */
 	async importLocalImages(filePath, md) {
 		let updated = md;
-		const imageLinks = lo.uniq(extractImageUrls(md));
+		const imageLinks = unique(extractImageUrls(md));
 		await Promise.all(imageLinks.map(async (link) => {
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
@@ -70,7 +71,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 			if (stat && !isDir) {
 				const resource = await shim.createResourceFromPath(pathWithExtension);
 				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
-				const linkPatternEscaped = lo.escapeRegExp(`](${link})`);
+				const linkPatternEscaped = pregQuote(`](${link})`);
 				const reg = new RegExp(linkPatternEscaped, 'g');
 				updated = updated.replace(reg, `](:/${resource.id})`);
 			}
