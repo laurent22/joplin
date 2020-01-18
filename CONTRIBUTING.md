@@ -79,6 +79,10 @@ To run just one particular file:
 
     ./run_test.sh markdownUtils # Don't add the .js extension
 
+To filter tests:
+
+    ./run_test.sh "should handle conflict" # Will run all the test units that contain "should handle conflict" in their description
+
 ## About abandoned pull requests
 
 It happens that a pull request is started but not finished and despite our attempts to contact the contributor, we don’t hear from them again.
