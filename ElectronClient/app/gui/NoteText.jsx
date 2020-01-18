@@ -90,6 +90,8 @@ class NoteTextComponent extends React.Component {
 			query: '',
 			selectedIndex: 0,
 			resultCount: 0,
+			lastQuery: '',
+			lastResultCount: 0,
 		};
 
 		this.state = {
@@ -311,6 +313,9 @@ class NoteTextComponent extends React.Component {
 				localSearch: {
 					query: query,
 					selectedIndex: 0,
+					resultCount: undefined,
+					lastQuery: this.state.localSearch.query,
+					lastResultCount: this.state.localSearch.resultCount,
 					timestamp: Date.now(),
 				},
 			});
@@ -1165,7 +1170,9 @@ class NoteTextComponent extends React.Component {
 		if (this.state.showLocalSearch) {
 			this.noteSearchBar_.current.wrappedInstance.focus();
 		} else {
-			this.setState({ showLocalSearch: true });
+			this.setState({
+				showLocalSearch: true,
+				localSearch: Object.assign({}, this.localSearchDefaultState) });
 		}
 
 		this.props.dispatch({
@@ -2134,7 +2141,8 @@ class NoteTextComponent extends React.Component {
 					width: innerWidth,
 					borderTop: `1px solid ${theme.dividerColor}`,
 				}}
-				resultCount={this.state.localSearch.resultCount}
+				queryLength={this.state.localSearch.resultCount === undefined ? this.state.localSearch.lastQuery.length : this.state.localSearch.query.length}
+				resultCount={this.state.localSearch.resultCount === undefined ? this.state.localSearch.lastResultCount : this.state.localSearch.resultCount}
 				onChange={this.noteSearchBar_change}
 				onNext={this.noteSearchBar_next}
 				onPrevious={this.noteSearchBar_previous}
