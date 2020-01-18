@@ -143,6 +143,10 @@ class Note extends BaseItem {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
+	static async linkedNoteIds(body) {
+		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
+	}
+
 	static async replaceResourceInternalToExternalLinks(body) {
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');

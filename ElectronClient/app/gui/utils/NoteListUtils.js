@@ -171,6 +171,7 @@ class NoteListUtils {
 							props.dispatch({
 								type: 'WINDOW_COMMAND',
 								name: 'exportPdf',
+								noteId: noteIds[0],
 							});
 						},
 					})

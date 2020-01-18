@@ -341,6 +341,8 @@ class InteropService {
 		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
 			const type = typeOrder[typeOrderIndex];
 
+			await exporter.prepareForProcessingItemType(type, itemsToExport);
+
 			for (let i = 0; i < itemsToExport.length; i++) {
 				const itemType = itemsToExport[i].type;
 

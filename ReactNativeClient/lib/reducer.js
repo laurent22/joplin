@@ -136,38 +136,69 @@ function folderSetCollapsed(state, action) {
 // When deleting a note, tag or folder
 function handleItemDelete(state, action) {
 	const map = {
-		FOLDER_DELETE: ['folders', 'selectedFolderId'],
-		NOTE_DELETE: ['notes', 'selectedNoteIds'],
-		TAG_DELETE: ['tags', 'selectedTagId'],
-		SEARCH_DELETE: ['searches', 'selectedSearchId'],
+		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
+		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
+		TAG_DELETE: ['tags', 'selectedTagId', true],
+		SEARCH_DELETE: ['searches', 'selectedSearchId', true],
 	};
 
 	const listKey = map[action.type][0];
 	const selectedItemKey = map[action.type][1];
+	const isSingular = map[action.type][2];
 
-	let previousIndex = 0;
-	let newItems = [];
+	const selectedItemKeys = isSingular ? [state[selectedItemKey]] : state[selectedItemKey];
+	const isSelected = selectedItemKeys.includes(action.id);
+
 	const items = state[listKey];
+	let newItems = [];
+	let newSelectedIndexes = [];
+
 	for (let i = 0; i < items.length; i++) {
 		let item = items[i];
+		if (isSelected) {
+			// the selected item is deleted so select the following item
+			// if multiple items are selected then just use the first one
+			if (selectedItemKeys[0] == item.id) {
+				newSelectedIndexes.push(newItems.length);
+			}
+		} else {
+			// the selected item/s is not deleted so keep it selected
+			if (selectedItemKeys.includes(item.id)) {
+				newSelectedIndexes.push(newItems.length);
+			}
+		}
 		if (item.id == action.id) {
-			previousIndex = i;
 			continue;
 		}
 		newItems.push(item);
 	}
 
+	if (newItems.length == 0) {
+		newSelectedIndexes = []; // no remaining items so no selection
+
+	}  else if (newSelectedIndexes.length == 0) {
+		newSelectedIndexes.push(0); // no selection exists so select the top
+
+	} else {
+		// when the items at end of list are deleted then select the end
+		for (let i = 0; i < newSelectedIndexes.length; i++) {
+			if (newSelectedIndexes[i] >= newItems.length) {
+				newSelectedIndexes = [newItems.length - 1];
+				break;
+			}
+		}
+	}
+
 	let newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
-	if (previousIndex >= newItems.length) {
-		previousIndex = newItems.length - 1;
+	const newIds = [];
+	for (let i = 0; i < newSelectedIndexes.length; i++) {
+		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
+	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	const newId = previousIndex >= 0 ? newItems[previousIndex].id : null;
-	newState[selectedItemKey] = action.type === 'NOTE_DELETE' ? [newId] : newId;
-
-	if (!newId && newState.notesParentType !== 'Folder') {
+	if ((newIds.length == 0) && newState.notesParentType !== 'Folder') {
 		newState.notesParentType = 'Folder';
 	}
 
