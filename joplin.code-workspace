@@ -82,6 +82,14 @@
 			"ReactNativeClient/node_modules/": true,
 			"Server/db*.sqlite/": true,
 			"Server/dist/": true,
-		}
+		},
+		"spellright.language": [
+			"en"
+		],
+		"spellright.documentTypes": [
+			"markdown",
+			"latex",
+			"plaintext"
+		]
 	},
 }

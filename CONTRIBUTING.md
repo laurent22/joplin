@@ -78,3 +78,13 @@ Then run the tests in a second window. To run all the test units:
 To run just one particular file:
 
     ./run_test.sh markdownUtils # Don't add the .js extension
+
+## About abandoned pull requests
+
+It happens that a pull request is started but not finished and despite our attempts to contact the contributor, we don’t hear from them again.
+
+In that case we will not merge the pull request, even if only small changes are missing. Our policy is simply to close the pull request. Why? Because an unfinished pull request essentially means giving us work and moving on. We would rather not encourage this behaviour.
+
+Also, please note that since we have spent time reviewing the pull request and proposing solutions, we reserve the right to re-use that knowledge to create a new pull request, potentially based on your changes.
+
+We’d much prefer that you complete the pull request though, so we’ll be sure to ping you a few times before that!

@@ -123,7 +123,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript; React
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [PackElend](https://github.com/PackElend), [laurent22](https://github.com/laurent22/)
 
 ## 7. Search
 
@@ -147,7 +147,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript
 
-Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [Search engine improvements](https://github.com/laurent22/joplin/issues/1877)
 
@@ -161,7 +161,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript; React
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [PackElend](https://github.com/PackElend), [laurent22](https://github.com/laurent22/)
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
 
