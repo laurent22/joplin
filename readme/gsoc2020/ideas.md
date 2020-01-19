@@ -76,7 +76,7 @@ Platforms: Mobile (iOS and Android)
 
 Skills Required: JavaScript; React; React Native
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
 
 More info: [Mobile - Add share menu #876](https://github.com/laurent22/joplin/issues/876)
 
@@ -111,7 +111,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
 
 ## 6. Password-protected notes
 
@@ -161,7 +161,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript; React
 
-Potential Mentor(s): [PackElend](https://github.com/PackElend), [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [PackElend](https://github.com/PackElend), [laurent22](https://github.com/laurent22/)
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
 
