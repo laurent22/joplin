@@ -1918,7 +1918,7 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
-			fontSize: theme.titleEditorFontSize,
+			fontSize: Math.round(parseInt(theme.htmlFontSize,10) * 1.45),
 			fontWeight: 'bold',
 		};
 
