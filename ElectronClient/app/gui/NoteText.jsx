@@ -1919,7 +1919,6 @@ class NoteTextComponent extends React.Component {
 			border: '1px solid',
 			borderColor: theme.dividerColor,
 			fontSize: Math.round(parseInt(theme.htmlFontSize,10) * 1.45),
-			fontWeight: 'bold',
 		};
 
 		const toolbarStyle = {
