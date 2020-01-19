@@ -19,7 +19,7 @@ const globalStyle = {
 	headerHeight: 35,
 	headerButtonHPadding: 6,
 
-	toolbarHeight: 30,
+	toolbarHeight: 35,
 	tagItemPadding: 3,
 };
 
