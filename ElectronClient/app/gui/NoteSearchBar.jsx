@@ -11,8 +11,6 @@ class NoteSearchBarComponent extends React.Component {
 			query: '',
 		};
 
-		this.backgroundColor = undefined;
-
 		this.searchInput_change = this.searchInput_change.bind(this);
 		this.searchInput_keyDown = this.searchInput_keyDown.bind(this);
 		this.previousButton_click = this.previousButton_click.bind(this);
@@ -116,15 +114,9 @@ class NoteSearchBarComponent extends React.Component {
 		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click);
 
 		const theme = themeStyle(this.props.theme);
-		if (this.props.resultCount !== undefined) {
-			if (this.props.resultCount === 0 && this.state.query.length >  0) {
-				this.backgroundColor = theme.warningBackgroundColor;
-			} else {
-				this.backgroundColor = theme.backgroundColor;
-			}
-		}
-		if (this.backgroundColor === undefined) {
-			this.backgroundColor = theme.backgroundColor;
+		let backgroundColor = theme.backgroundColor;
+		if (this.props.resultCount === 0 && this.props.query.length >  0) {
+			backgroundColor = theme.warningBackgroundColor;
 		}
 
 		return (
@@ -138,7 +130,7 @@ class NoteSearchBarComponent extends React.Component {
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"
 						type="text"
-						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor }}
+						style={{ width: 200, marginRight: 5, backgroundColor: backgroundColor }}
 					/>
 					{nextButton}
 					{previousButton}
