@@ -35,7 +35,7 @@ class NoteSearchBarComponent extends React.Component {
 		this.refs.searchInput.focus();
 	}
 
-	buttonIconComponent(iconName, clickHandler) {
+	buttonIconComponent(iconName, clickHandler, isEnabled) {
 		const theme = themeStyle(this.props.theme);
 
 		const searchButton = {
@@ -51,6 +51,7 @@ class NoteSearchBarComponent extends React.Component {
 			display: 'flex',
 			fontSize: Math.round(theme.fontSize) * 1.2,
 			color: theme.color,
+			opacity: isEnabled ? 1.0 : theme.disabledOpacity,
 		};
 
 		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
@@ -109,15 +110,30 @@ class NoteSearchBarComponent extends React.Component {
 	}
 
 	render() {
-		const closeButton = this.buttonIconComponent('fa-times', this.closeButton_click);
-		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click);
-		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click);
-
 		const theme = themeStyle(this.props.theme);
 		let backgroundColor = theme.backgroundColor;
+		let buttonEnabled = true;
+
 		if (this.props.resultCount === 0 && this.props.query.length >  0) {
 			backgroundColor = theme.warningBackgroundColor;
+			buttonEnabled = false;
 		}
+
+		const closeButton = this.buttonIconComponent('fa-times', this.closeButton_click, true);
+		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click, buttonEnabled);
+		const nextButton = this.buttonIconComponent('fa-chevron-down', this.nextButton_click, buttonEnabled);
+
+		const textStyle = Object.assign({
+			fontSize: theme.fontSize,
+			fontFamily: theme.fontFamily,
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+		});
+		const matchesFoundString = (this.props.query.length > 0) ? (
+			<div style={textStyle}>
+				{this.props.resultCount === 1 ?_('%d match found', this.props.resultCount) : _('%d matches found', this.props.resultCount)}
+			</div>
+		) : null;
 
 		return (
 			<div style={this.props.style}>
@@ -134,6 +150,7 @@ class NoteSearchBarComponent extends React.Component {
 					/>
 					{nextButton}
 					{previousButton}
+					{matchesFoundString}
 				</div>
 			</div>
 		);
