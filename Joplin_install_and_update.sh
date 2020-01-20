@@ -39,14 +39,14 @@ fi
 #-----------------------------------------------------
 
 # Title
-print "     _             _ _       "
-print "    | | ___  _ __ | (_)_ __  "
-print " _  | |/ _ \| '_ \| | | '_ \ "
-print "| |_| | (_) | |_) | | | | | |"
-print " \___/ \___/| .__/|_|_|_| |_|"
-print "            |_|"
-print ""
-print "Linux Installer and Updater"
+echo "     _             _ _       "
+echo "    | | ___  _ __ | (_)_ __  "
+echo " _  | |/ _ \| '_ \| | | '_ \ "
+echo "| |_| | (_) | |_) | | | | | |"
+echo " \___/ \___/| .__/|_|_|_| |_|"
+echo "            |_|"
+echo ""
+echo "Linux Installer and Updater"
 
 #-----------------------------------------------------
 # Download Joplin
@@ -117,12 +117,12 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     # Finish
     #-----------------------------------------------------
     # Informs the user that it has been installed and cleans variables
-    print "${COLOR_GREEN}Joplin version${COLOR_RESET}" $RELEASE_VERSION "${COLOR_GREEN}installed.${COLOR_RESET}"
+    print "${COLOR_GREEN}Joplin version${COLOR_RESET} $RELEASE_VERSION ${COLOR_GREEN}installed.${COLOR_RESET}"
 
     # Add version
     echo $RELEASE_VERSION > ~/.joplin/VERSION
 else
-    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
+    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} $RELEASE_VERSION ${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
 
 # Goodbye
