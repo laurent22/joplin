@@ -131,6 +131,23 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching');
 		lines.push('');
+		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
+		lines.push('');
+		lines.push('For example, to retrieve the notebook named "recipes": **GET /search?query=recipes&type=folder**');
+		lines.push('To retrieve all the tags that start with "project-": **GET /search?query=project-*&type=tag**');
+		lines.push('');
+
+		lines.push('# Item type IDs');
+		lines.push('');
+		lines.push('Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:');
+		lines.push('');
+		lines.push('Name | Value');
+		lines.push('---- | -----');
+		for (const t of BaseModel.typeEnum_) {
+			const value = t[1];
+			lines.push(`${BaseModel.modelTypeToName(value)} | ${value}   `);
+		}
+		lines.push('');
 
 		for (let i = 0; i < models.length; i++) {
 			const model = models[i];

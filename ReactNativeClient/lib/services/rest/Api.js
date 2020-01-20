@@ -247,7 +247,21 @@ class Api {
 		const query = request.query.query;
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
-		return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+
+		if (queryType !== BaseItem.TYPE_NOTE) {
+			const ModelClass = BaseItem.getClassByItemType(queryType);
+			const options = {};
+			const fields = this.fields_(request, []);
+			if (fields.length) options.fields = fields;
+			const sqlQueryPart = query.replace(/\*/g, '%');
+			options.where = 'title LIKE ?';
+			options.whereParams = [sqlQueryPart];
+			options.caseInsensitive = true;
+			return await ModelClass.all(options);
+		} else {
+			return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		}
 	}
 
 	async action_folders(request, id = null, link = null) {

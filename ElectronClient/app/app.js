@@ -1190,6 +1190,39 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	// async createManyNotes() {
+	// 	return;
+	// 	const folderIds = [];
+
+	// 	const randomFolderId = (folderIds) => {
+	// 		if (!folderIds.length) return '';
+	// 		const idx = Math.floor(Math.random() * folderIds.length);
+	// 		if (idx > folderIds.length - 1) throw new Error('Invalid index ' + idx + ' / ' + folderIds.length);
+	// 		return folderIds[idx];
+	// 	}
+
+	// 	let rootFolderCount = 0;
+	// 	let folderCount = 100;
+
+	// 	for (let i = 0; i < folderCount; i++) {
+	// 		let parentId = '';
+
+	// 		if (Math.random() >= 0.9 || rootFolderCount >= folderCount / 10) {
+	// 			parentId = randomFolderId(folderIds);
+	// 		} else {
+	// 			rootFolderCount++;
+	// 		}
+
+	// 		const folder = await Folder.save({ title: 'folder' + i, parent_id: parentId });
+	// 		folderIds.push(folder.id);
+	// 	}
+
+	// 	for (let i = 0; i < 10000; i++) {
+	// 		const parentId = randomFolderId(folderIds);
+	// 		Note.save({ title: 'note' + i, parent_id: parentId });
+	// 	}
+	// }
+
 	async start(argv) {
 		const electronIsDev = require('electron-is-dev');
 
