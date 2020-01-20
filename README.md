@@ -184,8 +184,8 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
-- [Zimbra](https://www.zimbra.com/)
 - [Yandex Disk](https://disk.yandex.ru/download?src=Yandex.Sidebar#pc)
+- [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation
 
