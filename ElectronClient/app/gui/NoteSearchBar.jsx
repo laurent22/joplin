@@ -109,6 +109,16 @@ class NoteSearchBarComponent extends React.Component {
 		this.refs.searchInput.focus();
 	}
 
+	getMatchesFoundString() {
+		if (this.props.resultCount === 0) {
+			return _('No matches found');
+		}
+		if (this.props.resultCount === 1) {
+			return _('%d match found', this.props.resultCount);
+		}
+		return _('%d matches found', this.props.resultCount);
+	}
+
 	render() {
 		const theme = themeStyle(this.props.theme);
 		let backgroundColor = theme.backgroundColor;
@@ -130,9 +140,9 @@ class NoteSearchBarComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 		});
 		const matchesFoundString = (this.props.query.length > 0) ? (
-			<div style={textStyle}>
-				{this.props.resultCount === 1 ?_('%d match found', this.props.resultCount) : _('%d matches found', this.props.resultCount)}
-			</div>
+			<div style={textStyle}> {
+				this.getMatchesFoundString()
+			} </div>
 		) : null;
 
 		return (
