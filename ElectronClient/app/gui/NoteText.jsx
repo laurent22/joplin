@@ -89,7 +89,7 @@ class NoteTextComponent extends React.Component {
 		this.localSearchDefaultState = {
 			query: '',
 			selectedIndex: 0,
-			resultCount: 0,
+			result: { query: '', count: 0 },
 		};
 
 		this.state = {
@@ -312,6 +312,10 @@ class NoteTextComponent extends React.Component {
 					query: query,
 					selectedIndex: 0,
 					timestamp: Date.now(),
+					result: {
+						query: this.state.localSearch.result.query,
+						count: this.state.localSearch.result.count,
+					},
 				},
 			});
 		};
@@ -320,8 +324,8 @@ class NoteTextComponent extends React.Component {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.selectedIndex += inc;
 			ls.timestamp = Date.now();
-			if (ls.selectedIndex < 0) ls.selectedIndex = ls.resultCount - 1;
-			if (ls.selectedIndex >= ls.resultCount) ls.selectedIndex = 0;
+			if (ls.selectedIndex < 0) ls.selectedIndex = ls.result.count - 1;
+			if (ls.selectedIndex >= ls.result.count) ls.selectedIndex = 0;
 
 			this.setState({ localSearch: ls });
 		};
@@ -764,7 +768,8 @@ class NoteTextComponent extends React.Component {
 			reg.logger().error(s.join(':'));
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
-			ls.resultCount = arg0;
+			ls.result.query = ls.query;
+			ls.result.count = arg0;
 			this.setState({ localSearch: ls });
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
@@ -1175,7 +1180,9 @@ class NoteTextComponent extends React.Component {
 		if (this.state.showLocalSearch) {
 			this.noteSearchBar_.current.wrappedInstance.focus();
 		} else {
-			this.setState({ showLocalSearch: true });
+			this.setState({
+				showLocalSearch: true,
+				localSearch: Object.assign({}, this.localSearchDefaultState) });
 		}
 
 		this.props.dispatch({
@@ -2139,7 +2146,23 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: `1px solid ${theme.dividerColor}` }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
+			<NoteSearchBar
+				ref={this.noteSearchBar_}
+				style={{
+					display: 'flex',
+					height: searchBarHeight,
+					width: innerWidth,
+					borderTop: `1px solid ${theme.dividerColor}`,
+				}}
+				query={this.state.localSearch.result.query}
+				resultCount={this.state.localSearch.result.count}
+				onChange={this.noteSearchBar_change}
+				onNext={this.noteSearchBar_next}
+				onPrevious={this.noteSearchBar_previous}
+				onClose={this.noteSearchBar_close}
+			/>
+		);
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>
