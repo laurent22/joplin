@@ -2157,6 +2157,7 @@ class NoteTextComponent extends React.Component {
 				}}
 				query={this.state.localSearch.result.query}
 				resultCount={this.state.localSearch.result.count}
+				selectedIndex={this.state.localSearch.selectedIndex}
 				onChange={this.noteSearchBar_change}
 				onNext={this.noteSearchBar_next}
 				onPrevious={this.noteSearchBar_previous}

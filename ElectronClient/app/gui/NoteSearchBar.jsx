@@ -87,6 +87,13 @@ class NoteSearchBarComponent extends React.Component {
 
 			if (this.props.onClose) this.props.onClose();
 		}
+
+		if (event.keyCode === 70) {
+			// F key
+			if (event.ctrlKey) {
+				event.target.select();
+			}
+		}
 	}
 
 	previousButton_click() {
@@ -114,9 +121,9 @@ class NoteSearchBarComponent extends React.Component {
 			return _('No matches found');
 		}
 		if (this.props.resultCount === 1) {
-			return _('%d match found', this.props.resultCount);
+			return _('1 of 1 match');
 		}
-		return _('%d matches found', this.props.resultCount);
+		return _('%d of %d matches', this.props.selectedIndex + 1, this.props.resultCount);
 	}
 
 	render() {
@@ -136,7 +143,7 @@ class NoteSearchBarComponent extends React.Component {
 		const textStyle = Object.assign({
 			fontSize: theme.fontSize,
 			fontFamily: theme.fontFamily,
-			color: theme.color,
+			color: theme.colorFaded,
 			backgroundColor: theme.backgroundColor,
 		});
 		const matchesFoundString = (this.props.query.length > 0) ? (
