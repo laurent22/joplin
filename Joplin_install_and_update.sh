@@ -66,7 +66,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     mkdir -p ~/.joplin/
 
     # Download the latest version
-    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION-x86_64.AppImage 
+    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION.AppImage
 
     # Gives execution privileges
     chmod +x ~/.joplin/Joplin.AppImage
@@ -103,11 +103,11 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
        APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
        rm -rf $TMPDIR/squashfs-root
        # Only delete the desktop file if it will be replaced
-       rm -f ~/.local/share/applications/appimagekit-joplin.desktop 
+       rm -f ~/.local/share/applications/appimagekit-joplin.desktop
 
        # On some systems this directory doesn't exist by default
        mkdir -p ~/.local/share/applications
-       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop 
+       echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
        print "${COLOR_GREEN}OK${COLOR_RESET}"
     else
        print "${COLOR_RED}NOT DONE${COLOR_RESET}"
