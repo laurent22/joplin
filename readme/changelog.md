@@ -1,5 +1,21 @@
 # Joplin changelog
 
+## [v1.0.178](https://github.com/laurent22/joplin/releases/tag/v1.0.178) - 2020-01-20T19:06:45Z
+
+- New: Add ability to search by folder or tag title
+- New: Add option to disable auto-matching braces ([#2251](https://github.com/laurent22/joplin/issues/2251))
+- New: Display selected tags under a note title ([#2217](https://github.com/laurent22/joplin/issues/2217))
+- New: Add external editor actions to the note context menu. ([#2214](https://github.com/laurent22/joplin/issues/2214))
+- Improved: When importing MD files create resources for local linked files ([#2262](https://github.com/laurent22/joplin/issues/2262))
+- Improved: Update Electron to 7.1.9 ([#2314](https://github.com/laurent22/joplin/issues/2314))
+- Improved: Show completed date in note properties ([#2292](https://github.com/laurent22/joplin/issues/2292))
+- Improved: Maintain selection when non-selected note is deleted ([#2290](https://github.com/laurent22/joplin/issues/2290))
+- Improved: Don't count completed to-dos in note counts when they are not shown ([#2288](https://github.com/laurent22/joplin/issues/2288))
+- Improved: Replace note links with relative paths in MD Exporter ([#2161](https://github.com/laurent22/joplin/issues/2161))
+- Fixed: Fix pdf export when mouse over non-selected note in notelist. ([#2255](https://github.com/laurent22/joplin/issues/2255)) ([#2254](https://github.com/laurent22/joplin/issues/2254))
+- Fixed: Fixed regression in HTML note rendering
+- Fixed: Fixed export to HTML, PDF and printing
+
 ## [v1.0.177](https://github.com/laurent22/joplin/releases/tag/v1.0.177) - 2019-12-30T14:40:40Z
 
 This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.
