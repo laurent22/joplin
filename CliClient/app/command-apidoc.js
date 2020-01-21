@@ -133,8 +133,9 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
 		lines.push('');
-		lines.push('For example, to retrieve the notebook named "recipes": **GET /search?query=recipes&type=folder**');
-		lines.push('To retrieve all the tags that start with "project-": **GET /search?query=project-*&type=tag**');
+		lines.push('For example, to retrieve the notebook named `recipes`: **GET /search?query=recipes&type=folder**');
+		lines.push('');
+		lines.push('To retrieve all the tags that start with `project-`: **GET /search?query=project-*&type=tag**');
 		lines.push('');
 
 		lines.push('# Item type IDs');
