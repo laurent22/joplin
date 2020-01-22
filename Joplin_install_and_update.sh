@@ -66,7 +66,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     mkdir -p ~/.joplin/
 
     # Download the latest version
-    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION-x86_64.AppImage 
+    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION.AppImage 
 
     # Gives execution privileges
     chmod +x ~/.joplin/Joplin.AppImage
