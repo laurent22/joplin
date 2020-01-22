@@ -1662,8 +1662,8 @@ msgstr[1] "Δημιουργία νεου %s..."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Ο σύνδεσμος έχει αντιγραφεί στο Πρόχειρο!"
-msgstr[1] "Το Token έχει αντιγραφεί στο πρόχειρο!"
+msgstr[0] "Ο σύνδεσμος έχει αντιγραφεί στο πρόχειρο!"
+msgstr[1] "Ο σύνδεσμοι έχει αντιγραφεί στο πρόχειρο!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
