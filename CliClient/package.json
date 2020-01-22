@@ -44,7 +44,7 @@
     "html-minifier": "^3.5.15",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
-    "joplin-renderer": "^1.0.5",
+    "joplin-renderer": "^1.0.8",
     "joplin-turndown": "^4.0.19",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "jssha": "^2.3.0",
