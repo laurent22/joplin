@@ -127,7 +127,7 @@ Joplin supports a number of plugins that can be toggled on top the standard Mark
 | [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no |
 | [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no |
 | [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no |
-| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
+| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language<br/>The HTML specification | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
 | [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |

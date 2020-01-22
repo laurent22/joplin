@@ -10,7 +10,7 @@ const urlUtils = require('lib/urlUtils');
 const Setting = require('lib/models/Setting');
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml, assetsToHeaders } = require('joplin-renderer');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
@@ -127,7 +127,11 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			postMessageSyntax: 'ipcProxySendToHost',
 		});
 
-		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, { cssFiles: result.cssFiles, pluginAssets: result.pluginAssets });
+		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, {
+			cssFiles: result.cssFiles,
+			pluginAssets: result.pluginAssets,
+			pluginAssetsHeadersHtml: assetsToHeaders(result.pluginAssets),
+		});
 	}
 
 	async webview_ipcMessage(event) {
@@ -196,7 +200,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			</div>
 		);
 
-		const viewer = <NoteTextViewer viewerStyle={{ display: 'flex', flex: 1 }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
+		const viewer = <NoteTextViewer viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
 
 		return (
 			<div style={style.root}>

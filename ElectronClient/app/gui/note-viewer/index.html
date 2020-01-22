@@ -142,9 +142,11 @@
 				}, 1);
 			}
 
-			const pluginAssetsContainer = document.createElement('div');
-			pluginAssetsContainer.innerHTML = event.options.pluginAssetsHeadersHtml;
-			document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
+			if (event.options.pluginAssetsHeadersHtml) {
+				const pluginAssetsContainer = document.createElement('div');
+				pluginAssetsContainer.innerHTML = event.options.pluginAssetsHeadersHtml;
+				document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
+			}
 
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
