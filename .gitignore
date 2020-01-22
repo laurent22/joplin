@@ -44,3 +44,9 @@ ElectronClient/app/gui/note-viewer/fonts/
 ElectronClient/app/gui/note-viewer/lib.js
 Tools/commit_hook.txt
 .vscode/*
+*.map
+
+# Ignore files generated from TypeScript files
+ElectronClient/app/gui/ShareNoteDialog.js
+ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/PluginAssetsLoader.js

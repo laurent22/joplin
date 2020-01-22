@@ -245,7 +245,14 @@ async function basicDelta(path, getDirStatFn, options) {
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
+	const logger = options && options.logger ? options.logger : new Logger();
+
 	const context = basicDeltaContextFromOptions_(options);
+
+	if (context.timestamp > Date.now()) {
+		logger.warn(`BasicDelta: Context timestamp is greater than current time: ${context.timestamp}`);
+		logger.warn('BasicDelta: Sync will continue but it is likely that nothing will be synced');
+	}
 
 	let newContext = {
 		timestamp: context.timestamp,
@@ -267,6 +274,13 @@ async function basicDelta(path, getDirStatFn, options) {
 
 	let output = [];
 
+	const updateReport = {
+		timestamp: context.timestamp,
+		older: 0,
+		newer: 0,
+		equal: 0,
+	};
+
 	// Find out which files have been changed since the last time. Note that we keep
 	// both the timestamp of the most recent change, *and* the items that exactly match
 	// this timestamp. This to handle cases where an item is modified while this delta
@@ -281,16 +295,23 @@ async function basicDelta(path, getDirStatFn, options) {
 
 		if (stat.isDir) continue;
 
-		if (stat.updated_time < context.timestamp) continue;
+		if (stat.updated_time < context.timestamp) {
+			updateReport.older++;
+			continue;
+		}
 
 		// Special case for items that exactly match the timestamp
 		if (stat.updated_time === context.timestamp) {
-			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) continue;
+			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
+				updateReport.equal++;
+				continue;
+			}
 		}
 
 		if (stat.updated_time > newContext.timestamp) {
 			newContext.timestamp = stat.updated_time;
 			newContext.filesAtTimestamp = [];
+			updateReport.newer++;
 		}
 
 		newContext.filesAtTimestamp.push(stat.path);
@@ -298,6 +319,8 @@ async function basicDelta(path, getDirStatFn, options) {
 
 		if (output.length >= outputLimit) break;
 	}
+
+	logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
 
 	if (!newContext.deletedItemsProcessed) {
 		// Find out which items have been deleted on the sync target by comparing the items

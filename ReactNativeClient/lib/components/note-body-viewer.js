@@ -1,13 +1,16 @@
 const React = require('react');
 const Component = React.Component;
-const { Platform, View } = require('react-native');
+const { Platform, View, Text } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
-const MdToHtml = require('lib/renderers/MdToHtml.js');
+const { assetsToHeaders } = require('joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
+
+import Async from 'react-async';
 
 class NoteBodyViewer extends Component {
 	constructor() {
@@ -15,19 +18,121 @@ class NoteBodyViewer extends Component {
 		this.state = {
 			resources: {},
 			webViewLoaded: false,
+			bodyHtml: '',
 		};
 
 		this.isMounted_ = false;
+
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
+
+		this.reloadNote = this.reloadNote.bind(this);
 	}
 
-	UNSAFE_componentWillMount() {
-		this.mdToHtml_ = new MdToHtml();
+	componentDidMount() {
 		this.isMounted_ = true;
 	}
 
 	componentWillUnmount() {
-		this.mdToHtml_ = null;
+		this.markupToHtml_ = null;
 		this.isMounted_ = false;
+	}
+
+	async reloadNote() {
+		const note = this.props.note;
+		const theme = themeStyle(this.props.theme);
+
+		const bodyToRender = note ? note.body : '';
+
+		const mdOptions = {
+			onResourceLoaded: () => {
+				if (this.resourceLoadedTimeoutId_) {
+					clearTimeout(this.resourceLoadedTimeoutId_);
+					this.resourceLoadedTimeoutId_ = null;
+				}
+
+				this.resourceLoadedTimeoutId_ = setTimeout(() => {
+					this.resourceLoadedTimeoutId_ = null;
+					this.forceUpdate();
+				}, 100);
+			},
+			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			highlightedKeywords: this.props.highlightedKeywords,
+			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
+			codeTheme: theme.codeThemeCss,
+			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
+		};
+
+		let result = await this.markupToHtml_.render(note.markup_language, bodyToRender, this.props.webViewStyle, mdOptions);
+		let html = result.html;
+
+		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
+
+		const injectedJs = [];
+		injectedJs.push(shim.injectedJs('webviewLib'));
+		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
+		injectedJs.push(`
+			const readyStateCheckInterval = setInterval(function() {
+			    if (document.readyState === "complete") {
+			    	clearInterval(readyStateCheckInterval);
+			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
+
+			    	const hash = "${this.props.noteHash}";
+			    	// Gives it a bit of time before scrolling to the anchor
+			    	// so that images are loaded.
+			    	if (hash) {
+				    	setTimeout(() => { 
+					    	const e = document.getElementById(hash);
+							if (!e) {
+								console.warn('Cannot find hash', hash);
+								return;
+							}
+							e.scrollIntoView();
+						}, 500);
+					}
+			    }
+			}, 10);
+		`);
+
+		html =
+			`
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta name="viewport" content="width=device-width, initial-scale=1">
+					${assetsToHeaders(result.pluginAssets)}
+				</head>
+				<body>
+					${html}
+				</body>
+			</html>
+		`;
+
+		// On iOS scalesPageToFit work like this:
+		//
+		// Find the widest image, resize it *and everything else* by x% so that
+		// the image fits within the viewport. The problem is that it means if there's
+		// a large image, everything is going to be scaled to a very small size, making
+		// the text unreadable.
+		//
+		// On Android:
+		//
+		// Find the widest elements and scale them (and them only) to fit within the viewport
+		// It means it's going to scale large images, but the text will remain at the normal
+		// size.
+		//
+		// That means we can use scalesPageToFix on Android but not on iOS.
+		// The weird thing is that on iOS, scalesPageToFix=false along with a CSS
+		// rule "img { max-width: 100% }", works like scalesPageToFix=true on Android.
+		// So we use scalesPageToFix=false on iOS along with that CSS rule.
+
+		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
+		return {
+			source: {
+				html: html,
+				baseUrl: `file://${Setting.value('resourceDir')}/`,
+			},
+			injectedJs: injectedJs,
+		};
 	}
 
 	onLoadEnd() {
@@ -70,80 +175,18 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
-		// this.mdToHtml_.clearCache();
 		this.forceUpdate();
 	}
 
 	render() {
-		const note = this.props.note;
-		const style = this.props.style;
+		// Note: useWebKit={false} is needed to go around this bug:
+		// https://github.com/react-native-community/react-native-webview/issues/376
+		// However, if we add the <meta> tag as described there, it is no longer necessary and WebKit can be used!
+		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-501991406
+		//
+		// However, on iOS, due to the bug below, we cannot use WebKit:
+		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-503754654
 
-		const theme = themeStyle(this.props.theme);
-
-		const bodyToRender = note ? note.body : '';
-
-		const mdOptions = {
-			onResourceLoaded: () => {
-				if (this.resourceLoadedTimeoutId_) {
-					clearTimeout(this.resourceLoadedTimeoutId_);
-					this.resourceLoadedTimeoutId_ = null;
-				}
-
-				this.resourceLoadedTimeoutId_ = setTimeout(() => {
-					this.resourceLoadedTimeoutId_ = null;
-					this.forceUpdate();
-				}, 100);
-			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
-			highlightedKeywords: this.props.highlightedKeywords,
-			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
-			codeTheme: theme.codeThemeCss,
-			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
-		};
-
-		let result = this.mdToHtml_.render(bodyToRender, this.props.webViewStyle, mdOptions);
-		let html = result.html;
-
-		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
-
-		const injectedJs = [this.mdToHtml_.injectedJavaScript()];
-		injectedJs.push(shim.injectedJs('webviewLib'));
-		injectedJs.push('webviewLib.initialize({ postMessage: msg => { return window.ReactNativeWebView.postMessage(msg); } });');
-		injectedJs.push(`
-			const readyStateCheckInterval = setInterval(function() {
-			    if (document.readyState === "complete") {
-			    	clearInterval(readyStateCheckInterval);
-			    	if ("${resourceDownloadMode}" === "manual") webviewLib.setupResourceManualDownload();
-
-			    	const hash = "${this.props.noteHash}";
-			    	// Gives it a bit of time before scrolling to the anchor
-			    	// so that images are loaded.
-			    	if (hash) {
-				    	setTimeout(() => { 
-					    	const e = document.getElementById(hash);
-							if (!e) {
-								console.warn('Cannot find hash', hash);
-								return;
-							}
-							e.scrollIntoView();
-						}, 500);
-					}
-			    }
-			}, 10);
-		`);
-
-		html =
-			`
-			<!DOCTYPE html>
-			<html>
-				<head>
-					<meta name="viewport" content="width=device-width, initial-scale=1">
-				</head>
-				<body>
-					${html}
-				</body>
-			</html>
-		`;
 
 		let webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
 		// On iOS, the onLoadEnd() event is never fired so always
@@ -153,68 +196,49 @@ class NoteBodyViewer extends Component {
 			webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 		}
 
-		// On iOS scalesPageToFit work like this:
-		//
-		// Find the widest image, resize it *and everything else* by x% so that
-		// the image fits within the viewport. The problem is that it means if there's
-		// a large image, everything is going to be scaled to a very small size, making
-		// the text unreadable.
-		//
-		// On Android:
-		//
-		// Find the widest elements and scale them (and them only) to fit within the viewport
-		// It means it's going to scale large images, but the text will remain at the normal
-		// size.
-		//
-		// That means we can use scalesPageToFix on Android but not on iOS.
-		// The weird thing is that on iOS, scalesPageToFix=false along with a CSS
-		// rule "img { max-width: 100% }", works like scalesPageToFix=true on Android.
-		// So we use scalesPageToFix=false on iOS along with that CSS rule.
-
-		// `baseUrl` is where the images will be loaded from. So images must use a path relative to resourceDir.
-		const source = {
-			html: html,
-			baseUrl: `file://${Setting.value('resourceDir')}/`,
-		};
-
-		// Note: useWebKit={false} is needed to go around this bug:
-		// https://github.com/react-native-community/react-native-webview/issues/376
-		// However, if we add the <meta> tag as described there, it is no longer necessary and WebKit can be used!
-		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-501991406
-		//
-		// However, on iOS, due to the bug below, we cannot use WebKit:
-		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-503754654
-
 		return (
-			<View style={style}>
-				<WebView
-					useWebKit={Platform.OS !== 'ios'}
-					style={webViewStyle}
-					source={source}
-					injectedJavaScript={injectedJs.join('\n')}
-					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
-					mixedContentMode="always"
-					allowFileAccess={true}
-					onLoadEnd={() => this.onLoadEnd()}
-					onError={() => reg.logger().error('WebView error')}
-					onMessage={event => {
-						// Since RN 58 (or 59) messages are now escaped twice???
-						let msg = unescape(unescape(event.nativeEvent.data));
-
-						console.info('Got IPC message: ', msg);
-
-						if (msg.indexOf('checkboxclick:') === 0) {
-							const newBody = shared.toggleCheckbox(msg, this.props.note.body);
-							if (this.props.onCheckboxChange) this.props.onCheckboxChange(newBody);
-						} else if (msg.indexOf('markForDownload:') === 0) {
-							msg = msg.split(':');
-							const resourceId = msg[1];
-							if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
-						} else {
-							this.props.onJoplinLinkClick(msg);
+			<View style={this.props.style}>
+				<Async promiseFn={this.reloadNote}>
+					{({ data, error, isPending }) => {
+						if (error) {
+							console.error(error);
+							return <Text>{error.message}</Text>;
 						}
+
+						if (isPending) return null;
+
+						return (
+							<WebView
+								useWebKit={Platform.OS !== 'ios'}
+								style={webViewStyle}
+								source={data.source}
+								injectedJavaScript={data.injectedJs.join('\n')}
+								originWhitelist={['file://*', './*', 'http://*', 'https://*']}
+								mixedContentMode="always"
+								allowFileAccess={true}
+								onLoadEnd={() => this.onLoadEnd()}
+								onError={() => reg.logger().error('WebView error')}
+								onMessage={event => {
+									// Since RN 58 (or 59) messages are now escaped twice???
+									let msg = unescape(unescape(event.nativeEvent.data));
+
+									console.info('Got IPC message: ', msg);
+
+									if (msg.indexOf('checkboxclick:') === 0) {
+										const newBody = shared.toggleCheckbox(msg, this.props.note.body);
+										if (this.props.onCheckboxChange) this.props.onCheckboxChange(newBody);
+									} else if (msg.indexOf('markForDownload:') === 0) {
+										msg = msg.split(':');
+										const resourceId = msg[1];
+										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
+									} else {
+										this.props.onJoplinLinkClick(msg);
+									}
+								}}
+							/>
+						);
 					}}
-				/>
+				</Async>
 			</View>
 		);
 	}

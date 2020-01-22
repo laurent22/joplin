@@ -13,6 +13,8 @@ class NoteTextViewerComponent extends React.Component {
 
 		this.webview_domReady = this.webview_domReady.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
+		this.webview_load = this.webview_load.bind(this);
+		this.webview_message = this.webview_message.bind(this);
 	}
 
 	webview_domReady(event) {
@@ -22,6 +24,22 @@ class NoteTextViewerComponent extends React.Component {
 
 	webview_ipcMessage(event) {
 		if (this.props.onIpcMessage) this.props.onIpcMessage(event);
+	}
+
+	webview_load() {
+		this.webview_domReady();
+	}
+
+	webview_message(event) {
+		if (!event.data || event.data.target !== 'main') return;
+
+		const callName = event.data.name;
+		const args = event.data.args;
+
+		if (this.props.onIpcMessage) this.props.onIpcMessage({
+			channel: callName,
+			args: args,
+		});
 	}
 
 	domReady() {
@@ -35,6 +53,7 @@ class NoteTextViewerComponent extends React.Component {
 			this.webviewListeners_ = {
 				'dom-ready': this.webview_domReady.bind(this),
 				'ipc-message': this.webview_ipcMessage.bind(this),
+				'load': this.webview_load.bind(this),
 			};
 		}
 
@@ -44,19 +63,7 @@ class NoteTextViewerComponent extends React.Component {
 			wv.addEventListener(n, fn);
 		}
 
-		let isAlreadyReady = false;
-		try {
-			isAlreadyReady = !this.webviewRef_.current.isLoading();
-		} catch (error) {
-			// Ignore - it means the view has not started loading, and the DOM ready event has not been emitted yet
-			// Error is "The WebView must be attached to the DOM and the dom-ready event emitted before this method can be called."
-		}
-
-		// Edge-case - the webview was already ready by the time initWebview was
-		// called - so manually call the domReady event to notify caller.
-		if (isAlreadyReady) {
-			this.webview_domReady({});
-		}
+		this.webviewRef_.current.contentWindow.addEventListener('message', this.webview_message);
 	}
 
 	destroyWebview() {
@@ -68,6 +75,8 @@ class NoteTextViewerComponent extends React.Component {
 			const fn = this.webviewListeners_[n];
 			wv.removeEventListener(n, fn);
 		}
+
+		this.webviewRef_.current.contentWindow.removeEventListener('message', this.webview_message);
 
 		this.initialized_ = false;
 		this.domReady_ = false;
@@ -96,16 +105,32 @@ class NoteTextViewerComponent extends React.Component {
 	// Wrap WebView functions
 	// ----------------------------------------------------------------
 
-	send(channel, arg0 = null, arg1 = null, arg2 = null, arg3 = null) {
-		return this.webviewRef_.current.send(channel, arg0, arg1, arg2, arg3);
+	send(channel, arg0 = null, arg1 = null) {
+		const win = this.webviewRef_.current.contentWindow;
+
+		if (channel === 'setHtml') {
+			win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
+		}
+
+		if (channel === 'scrollToHash') {
+			win.postMessage({ target: 'webview', name: 'scrollToHash', data: { hash: arg0 } }, '*');
+		}
+
+		if (channel === 'setPercentScroll') {
+			win.postMessage({ target: 'webview', name: 'setPercentScroll', data: { percent: arg0 } }, '*');
+		}
+
+		if (channel === 'setMarkers') {
+			win.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: arg0, options: arg1 } }, '*');
+		}
 	}
 
-	printToPDF(options, callback) {
+	printToPDF() { // options, callback) {
 		// In Electron 4x, printToPDF is broken so need to use this hack:
 		// https://github.com/electron/electron/issues/16171#issuecomment-451090245
 
 		// return this.webviewRef_.current.printToPDF(options, callback);
-		return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
+		// return this.webviewRef_.current.getWebContents().printToPDF(options, callback);
 	}
 
 	print() {
@@ -119,15 +144,15 @@ class NoteTextViewerComponent extends React.Component {
 	}
 
 	openDevTools() {
-		return this.webviewRef_.current.openDevTools();
+		// return this.webviewRef_.current.openDevTools();
 	}
 
 	closeDevTools() {
-		return this.webviewRef_.current.closeDevTools();
+		// return this.webviewRef_.current.closeDevTools();
 	}
 
 	isDevToolsOpened() {
-		return this.webviewRef_.current.isDevToolsOpened();
+		// return this.webviewRef_.current.isDevToolsOpened();
 	}
 
 	// ----------------------------------------------------------------
@@ -135,7 +160,8 @@ class NoteTextViewerComponent extends React.Component {
 	// ----------------------------------------------------------------
 
 	render() {
-		return <webview ref={this.webviewRef_} style={this.props.viewerStyle} preload="gui/note-viewer/preload.js" src="gui/note-viewer/index.html" webpreferences="contextIsolation" />;
+		const viewerStyle = Object.assign({}, this.props.viewerStyle, { borderTop: 'none', borderRight: 'none', borderBottom: 'none' });
+		return <iframe className="noteTextViewer" ref={this.webviewRef_} style={viewerStyle} src="gui/note-viewer/index.html"></iframe>;
 	}
 }
 

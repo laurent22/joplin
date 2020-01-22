@@ -131,6 +131,7 @@ class ResourceFetcher extends BaseService {
 			}
 
 			delete this.fetchingItems_[resource.id];
+			this.logger().debug(`ResourceFetcher: Removed from fetchingItems: ${resource.id}. New: ${JSON.stringify(this.fetchingItems_)}`);
 			this.scheduleQueueProcess();
 
 			// Note: This downloadComplete event is not really right or useful because the resource
@@ -221,6 +222,9 @@ class ResourceFetcher extends BaseService {
 
 		this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 		this.addingResources_ = false;
+
+		const errorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
+		if (errorCount) this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 	}
 
 	async start() {

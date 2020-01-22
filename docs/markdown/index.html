@@ -20,7 +20,8 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -88,12 +89,22 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -150,6 +161,9 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -185,7 +199,9 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -234,6 +250,15 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -251,8 +276,8 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -261,6 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -377,8 +403,8 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </tr>
 <tr>
 <td><strong>Link</strong></td>
-<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link with a title:<br><br><code>[Joplin](https://joplinapp.org)</code></pre></td>
-<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link with a title:<br><br><a href="https://joplinapp.org">Joplin</a></td>
+<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link anchoring text content:<br><br><code>[Joplin](https://joplinapp.org)</code><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><code>[Joplin](https://joplinapp.org &quot;Joplin project page&quot;)</code></pre></td>
+<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link anchoring text content:<br><br><a href="https://joplinapp.org">Joplin</a><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><a href="https://joplinapp.org" title="Joplin project page">Joplin</a> (<em>hint: hover over the link</em>)</td>
 </tr>
 <tr>
 <td><strong>Images</strong></td>
@@ -501,6 +527,12 @@ $$
 </thead>
 <tbody>
 <tr>
+<td>Soft breaks</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">breaks</a> markdown-it demo</td>
+<td>Joplin uses hard breaks by default, which means that a line break is rendered as <code>&lt;br&gt;</code>. Enable soft breaks for traditional markdown line-break behaviour.</td>
+<td>no</td>
+</tr>
+<tr>
 <td>Typographer</td>
 <td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">typographer</a> markdown-it demo</td>
 <td>Does typographic replacements, (c) -&gt; © and so on</td>
@@ -556,8 +588,8 @@ $$
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
-<td><code>:smile:</code> :smile:</td>
-<td>See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emoji</td>
+<td><code>:smile:</code></td>
+<td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
 <td>no</td>
 </tr>
 <tr>
@@ -581,6 +613,11 @@ $$
 </tbody>
 </table>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/markdown.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled

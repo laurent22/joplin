@@ -14,7 +14,7 @@ class PromptDialog extends React.Component {
 		this.answerInput_ = React.createRef();
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
@@ -22,7 +22,7 @@ class PromptDialog extends React.Component {
 		this.focusInput_ = true;
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if ('visible' in newProps && newProps.visible !== this.props.visible) {
 			this.setState({ visible: newProps.visible });
 			if (newProps.visible) this.focusInput_ = true;

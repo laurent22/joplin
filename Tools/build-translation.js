@@ -87,7 +87,8 @@ async function createPotFile(potFilePath, sources) {
 	baseArgs.push('--copyright-holder="Laurent Cozic"');
 	baseArgs.push('--package-name=Joplin-CLI');
 	baseArgs.push('--package-version=1.0.0');
-	baseArgs.push('--no-location');
+	// baseArgs.push('--no-location');
+	baseArgs.push('--keyword=_n:1,2');
 
 	for (let i = 0; i < sources.length; i++) {
 		let args = baseArgs.slice();
@@ -95,7 +96,8 @@ async function createPotFile(potFilePath, sources) {
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
 		if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-		const result = await execCommand(`${xgettextPath} ${args.join(' ')}`);
+		const cmd = `${xgettextPath} ${args.join(' ')}`;
+		const result = await execCommand(cmd);
 		if (result) console.error(result);
 		await removePoHeaderDate(potFilePath);
 	}
@@ -127,6 +129,7 @@ function buildIndex(locales, stats) {
 		delete stat.locale;
 		delete stat.translatorName;
 		delete stat.languageName;
+		delete stat.untranslatedCount;
 		output.push(`stats['${locale}'] = ${JSON.stringify(stat)};`);
 	}
 
@@ -171,9 +174,12 @@ async function translationStatus(isDefault, poFile) {
 	const result = await execCommand(command);
 	const matches = result.match(/Translated:\s*?(\d+)\s*\((.+?)%\)/);
 	if (!matches || matches.length < 3) throw new Error(`Cannot extract status: ${command}:\n${result}`);
-
 	const percentDone = Number(matches[2]);
 	if (isNaN(percentDone)) throw new Error(`Cannot extract percent translated: ${command}:\n${result}`);
+
+	const untranslatedMatches = result.match(/Untranslated:\s*?(\d+)/);
+	if (!untranslatedMatches) throw new Error(`Cannot extract untranslated: ${command}:\n${result}`);
+	const untranslatedCount = Number(untranslatedMatches[1]);
 
 	let translatorName = '';
 	const content = await fs.readFile(poFile, 'utf-8');
@@ -188,14 +194,12 @@ async function translationStatus(isDefault, poFile) {
 	translatorName = translatorName.replace(/ </, ' (');
 	translatorName = translatorName.replace(/>/, ')');
 
-	let isAlways100 = false;
-	if (poFile.endsWith('en_US.po')) {
-		isAlways100 = true;
-	}
+	const isAlways100 = poFile.endsWith('en_US.po');
 
 	return {
 		percentDone: isDefault || isAlways100 ? 100 : percentDone,
 		translatorName: translatorName,
+		untranslatedCount: untranslatedCount,
 	};
 }
 
@@ -210,6 +214,7 @@ function flagImageUrl(locale) {
 	if (locale === 'nb_NO') return `${baseUrl}/country-4x3/no.png`;
 	if (locale === 'ro') return `${baseUrl}/country-4x3/ro.png`;
 	if (locale === 'fa') return `${baseUrl}/country-4x3/ir.png`;
+	if (locale === 'eo') return `${baseUrl}/esperanto.png`;
 	return `${baseUrl}/country-4x3/${countryCodeOnly(locale).toLowerCase()}.png`;
 }
 
@@ -239,9 +244,13 @@ async function updateReadmeWithStats(stats) {
 }
 
 async function main() {
+	const argv = require('yargs').argv;
+
 	let potFilePath = `${cliLocalesDir}/joplin.pot`;
 	let jsonLocalesDir = `${cliDir}/build/locales`;
 	const defaultLocale = 'en_GB';
+
+	const oldPotStatus = await translationStatus(false, potFilePath);
 
 	await createPotFile(potFilePath, [
 		`${cliDir}/app/*.js`,
@@ -257,6 +266,19 @@ async function main() {
 		`${rnDir}/lib/components/shared/*.js`,
 		`${rnDir}/lib/components/screens/*.js`,
 	]);
+
+	const newPotStatus = await translationStatus(false, potFilePath);
+
+	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
+
+	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
+	if (deletedCount >= 10) {
+		if (argv['skip-missing-strings-check']) {
+			console.info(`${deletedCount} strings have been deleted, but proceeding anyway due to --skip-missing-strings-check flag`);
+		} else {
+			throw new Error(`${deletedCount} strings have been deleted - aborting as it could be a bug. To override, use the --skip-missing-strings-check flag.`);
+		}
+	}
 
 	await execCommand(`cp "${potFilePath}" ` + `"${cliLocalesDir}/${defaultLocale}.po"`);
 
@@ -296,4 +318,5 @@ async function main() {
 
 main().catch((error) => {
 	console.error(error);
+	process.exit(1);
 });

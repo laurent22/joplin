@@ -162,11 +162,14 @@ class Setting extends BaseModel {
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
+			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+
 			'sync.resourceDownloadMode': {
 				value: 'always',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				public: true,
+				advanced: true,
 				isEnum: true,
 				appTypes: ['mobile', 'desktop'],
 				label: () => _('Attachment download behaviour'),
@@ -180,7 +183,7 @@ class Setting extends BaseModel {
 				},
 			},
 
-			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
+			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
 			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
 			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
@@ -281,6 +284,14 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
+			'editor.autoMatchingBraces': {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				public: true,
+				section: 'note',
+				appTypes: ['desktop'],
+				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
+			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {
 				value: 'title',
@@ -331,8 +342,14 @@ class Setting extends BaseModel {
 					};
 				},
 			},
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
-			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
+
+			// Deprecated - use markdown.plugin.*
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
+			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
+			// Deprecated
+
+			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
+			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
 			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
 			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
 			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
@@ -410,6 +427,43 @@ class Setting extends BaseModel {
 					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
+
+			// TODO: Is there a better way to do this? The goal here is to simply have
+			// a way to display a link to the customizable stylesheets, not for it to
+			// serve as a customizable Setting. But because the Setting page is auto-
+			// generated from this list of settings, there wasn't a really elegant way
+			// to do that directly in the React markup.
+			'style.customCss.renderedMarkdown': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = '/* For styling the rendered Markdown */';
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for rendered Markdown'),
+				section: 'appearance',
+			},
+			'style.customCss.joplinApp': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.JOPLIN_APP;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for Joplin-wide app styles'),
+				section: 'appearance',
+			},
+
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
@@ -460,6 +514,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
+				advanced: true,
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
@@ -471,6 +526,7 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': {
 				value: false,
 				type: Setting.TYPE_BOOL,
+				advanced: true,
 				section: 'sync',
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
@@ -480,7 +536,7 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 			},
 
-			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
+			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, advanced: true, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
 
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
@@ -806,12 +862,14 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	static subValues(baseKey, settings) {
+	static subValues(baseKey, settings, options = null) {
+		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
 		let output = {};
 		for (let key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
-				const subKey = key.substr(baseKey.length + 1);
+				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
 				output[subKey] = settings[key];
 			}
 		}
@@ -937,6 +995,7 @@ Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 Setting.TYPE_ARRAY = 4;
 Setting.TYPE_OBJECT = 5;
+Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
@@ -966,6 +1025,12 @@ Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
 
+Setting.custom_css_files = {
+	JOPLIN_APP: 'userchrome.css',
+	RENDERED_MARKDOWN: 'userstyle.css',
+};
+
+
 // Contains constants that are set by the application and
 // cannot be modified by the user:
 Setting.constants_ = {
@@ -979,7 +1044,7 @@ Setting.constants_ = {
 	profileDir: '',
 	templateDir: '',
 	tempDir: '',
-	openDevTools: false,
+	flagOpenDevTools: false,
 	syncVersion: 1,
 };
 

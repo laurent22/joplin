@@ -24,7 +24,8 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -92,12 +93,22 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -154,6 +165,9 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -189,7 +203,9 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -238,6 +254,15 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -255,8 +280,8 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -265,6 +290,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -455,7 +481,14 @@ function markdownToHtml(md, templateParams) {
 		}
 	});
 
-	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + scriptHtml + footerHtml;
+	const improveDocHtml = `
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>`;
+
+	return Mustache.render(headerHtml, templateParams) + markdownIt.render(md) + Mustache.render(improveDocHtml, templateParams) + scriptHtml + footerHtml;
 }
 
 let tocMd_ = null;
@@ -546,6 +579,10 @@ async function main() {
 		[ 'readme/api.md', 'docs/api/index.html', { title: 'REST API' } ],
 		[ 'readme/prereleases.md', 'docs/prereleases/index.html', { title: 'Pre-releases' } ],
 		[ 'readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' } ],
+		[ 'readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' } ],
+
+		[ 'readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' } ],
+		[ 'readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas.html', { title: 'GSoC: Project Ideas' } ],
 	];
 
 	const path = require('path');

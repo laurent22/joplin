@@ -6,6 +6,7 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
+const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
 const Tag = require('lib/models/Tag.js');
@@ -24,6 +25,7 @@ class MainScreenComponent extends React.Component {
 		super();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
+		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
 	}
@@ -40,7 +42,11 @@ class MainScreenComponent extends React.Component {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
-	componentWillMount() {
+	shareNoteDialog_close() {
+		this.setState({ shareNoteDialogOptions: {} });
+	}
+
+	UNSAFE_componentWillMount() {
 		this.setState({
 			promptOptions: null,
 			modalLayer: {
@@ -48,10 +54,11 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
+			shareNoteDialogOptions: {},
 		});
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.windowCommand) {
 			this.doCommand(newProps.windowCommand);
 		}
@@ -247,6 +254,13 @@ class MainScreenComponent extends React.Component {
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
+		} else if (command.name === 'commandShareNoteDialog') {
+			this.setState({
+				shareNoteDialogOptions: {
+					noteIds: command.noteIds,
+					visible: true,
+				},
+			});
 		} else if (command.name === 'toggleVisiblePanes') {
 			this.toggleVisiblePanes();
 		} else if (command.name === 'toggleSidebar') {
@@ -362,13 +376,15 @@ class MainScreenComponent extends React.Component {
 			backgroundColor: theme.warningBackgroundColor,
 		};
 
+		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+
 		this.styles_.verticalResizer = {
 			width: 5,
-			height: height,
+			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
+			// making the whole window scroll vertically. So we remove 10 extra pixels here.
+			height: rowHeight - 10,
 			display: 'inline-block',
 		};
-
-		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.sideBar = {
 			width: sidebarWidth - this.styles_.verticalResizer.width,
@@ -573,6 +589,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
+		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
 
 		return (
@@ -580,6 +597,7 @@ class MainScreenComponent extends React.Component {
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
@@ -589,7 +607,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible} />
+				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}
 			</div>
@@ -613,7 +631,6 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
-		noteDevToolsVisible: state.noteDevToolsVisible,
 		templates: state.templates,
 	};
 };

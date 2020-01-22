@@ -87,6 +87,7 @@ class NoteListComponent extends React.Component {
 		const menu = NoteListUtils.makeContextMenu(noteIds, {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
+			watchedNoteFiles: this.props.watchedNoteFiles,
 		});
 
 		menu.popup(bridge().window());

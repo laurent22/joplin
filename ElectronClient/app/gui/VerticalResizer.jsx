@@ -1,5 +1,5 @@
 const React = require('react');
-const electron = require('electron');
+const { bridge } = require('electron').remote.require('./bridge');
 
 class VerticalResizer extends React.PureComponent {
 	constructor() {
@@ -32,7 +32,7 @@ class VerticalResizer extends React.PureComponent {
 
 		event.dataTransfer.dropEffect = 'none';
 
-		const cursor = electron.screen.getCursorScreenPoint();
+		const cursor = bridge().screen().getCursorScreenPoint();
 
 		this.setState({
 			drag: {
@@ -52,7 +52,7 @@ class VerticalResizer extends React.PureComponent {
 		// const e = event.nativeEvent;
 		// if (!e.buttons || (!e.clientX && !e.clientY && !e.screenX && !e.screenY)) return;
 
-		const cursor = electron.screen.getCursorScreenPoint();
+		const cursor = bridge().screen().getCursorScreenPoint();
 		const newX = cursor.x;
 		const delta = newX - this.state.drag.lastX;
 		if (!delta) return;

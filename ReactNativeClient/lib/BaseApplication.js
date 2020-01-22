@@ -132,7 +132,7 @@ class BaseApplication {
 			}
 
 			if (arg == '--open-dev-tools') {
-				Setting.setConstant('openDevTools', true);
+				Setting.setConstant('flagOpenDevTools', true);
 				argv.splice(0, 1);
 				continue;
 			}
@@ -166,6 +166,12 @@ class BaseApplication {
 
 			if (arg === '--enable-logging') {
 				// Electron-specific flag used for debugging - ignore it
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.indexOf('--remote-debugging-port=') === 0) {
+				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
 				argv.splice(0, 1);
 				continue;
 			}
@@ -444,11 +450,14 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showNoteCounts') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head id="joplin-container-root-head">
 	<meta charset="UTF-8">
 
 	<style>
@@ -65,19 +65,7 @@
 				ipc[callName](callData);
 			}
 		}));
-
-		const loadedCssFiles_ = {};
-		function loadCssFiles(cssFiles) {
-			for (let i = 0; i < cssFiles.length; i++) {
-				const f = cssFiles[i];
-				if (loadedCssFiles_[f]) continue;
-				const link = document.createElement('link');
-				link.rel = 'stylesheet';
-				link.href = f;
-				document.getElementById('joplin-container-styleContainer').appendChild(link);
-			}
-		}
-
+		
 		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
 		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
 		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
@@ -154,8 +142,10 @@
 				}, 1);
 			}
 
-			loadCssFiles(event.options.cssFiles);
-			
+			const pluginAssetsContainer = document.createElement('div');
+			pluginAssetsContainer.innerHTML = event.options.pluginAssetsHeadersHtml;
+			document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
+
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
 			}

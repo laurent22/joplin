@@ -20,7 +20,8 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -88,12 +89,22 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -150,6 +161,9 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -185,7 +199,9 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -234,6 +250,15 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -251,8 +276,8 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -261,6 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -307,6 +333,63 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </ul>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.178">v1.0.178</a> - 2020-01-20T19:06:45Z<a name="v1-0-178-https-github-com-laurent22-joplin-releases-tag-v1-0-178-2020-01-20t19-06-45z" href="#v1-0-178-https-github-com-laurent22-joplin-releases-tag-v1-0-178-2020-01-20t19-06-45z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add ability to search by folder or tag title</li>
+<li>New: Add option to disable auto-matching braces (<a href="https://github.com/laurent22/joplin/issues/2251">#2251</a>)</li>
+<li>New: Display selected tags under a note title (<a href="https://github.com/laurent22/joplin/issues/2217">#2217</a>)</li>
+<li>New: Add external editor actions to the note context menu. (<a href="https://github.com/laurent22/joplin/issues/2214">#2214</a>)</li>
+<li>Improved: When importing MD files create resources for local linked files (<a href="https://github.com/laurent22/joplin/issues/2262">#2262</a>)</li>
+<li>Improved: Update Electron to 7.1.9 (<a href="https://github.com/laurent22/joplin/issues/2314">#2314</a>)</li>
+<li>Improved: Show completed date in note properties (<a href="https://github.com/laurent22/joplin/issues/2292">#2292</a>)</li>
+<li>Improved: Maintain selection when non-selected note is deleted (<a href="https://github.com/laurent22/joplin/issues/2290">#2290</a>)</li>
+<li>Improved: Don't count completed to-dos in note counts when they are not shown (<a href="https://github.com/laurent22/joplin/issues/2288">#2288</a>)</li>
+<li>Improved: Replace note links with relative paths in MD Exporter (<a href="https://github.com/laurent22/joplin/issues/2161">#2161</a>)</li>
+<li>Fixed: Fix pdf export when mouse over non-selected note in notelist. (<a href="https://github.com/laurent22/joplin/issues/2255">#2255</a>) (<a href="https://github.com/laurent22/joplin/issues/2254">#2254</a>)</li>
+<li>Fixed: Fixed regression in HTML note rendering</li>
+<li>Fixed: Fixed export to HTML, PDF and printing</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.177">v1.0.177</a> - 2019-12-30T14:40:40Z<a name="v1-0-177-https-github-com-laurent22-joplin-releases-tag-v1-0-177-2019-12-30t14-40-40z" href="#v1-0-177-https-github-com-laurent22-joplin-releases-tag-v1-0-177-2019-12-30t14-40-40z" class="heading-anchor">🔗</a></h2>
+<p>This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.</p>
+<ul>
+<li>New: Allow exporting a note as HTML</li>
+<li>Improved: Extract note renderer to separate package (<a href="https://github.com/laurent22/joplin/issues/2206">#2206</a>)</li>
+<li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
+<li>Improved: Update Katex to 0.11.1 (<a href="https://github.com/laurent22/joplin/issues/2201">#2201</a>)</li>
+<li>Improved: Improved Nextcloud API error handling</li>
+<li>Improved: Updated OneDrive login to remove webview dependency</li>
+<li>Improved: Decrypt notes that are meant to be shared</li>
+<li>Improved: Make it easier to view early errors when the app starts</li>
+<li>Improved: Upgrade to Electron 7</li>
+<li>Improved: Render note using iframe instead of deprecated webview</li>
+<li>Fixed: Fix Goto Anything scrolling issue (<a href="https://github.com/laurent22/joplin/issues/2199">#2199</a>) (<a href="https://github.com/laurent22/joplin/issues/2122">#2122</a>)</li>
+<li>Fixed: Prevent app from crashing when pressing focus shortcut from search bar (<a href="https://github.com/laurent22/joplin/issues/2157">#2157</a>)</li>
+<li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (<a href="https://github.com/laurent22/joplin/issues/2091">#2091</a>)</li>
+<li>Fixed: Fix notifications on Windows 7 (<a href="https://github.com/laurent22/joplin/issues/2144">#2144</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.176">v1.0.176</a> - 2019-12-14T10:36:44Z<a name="v1-0-176-https-github-com-laurent22-joplin-releases-tag-v1-0-176-2019-12-14t10-36-44z" href="#v1-0-176-https-github-com-laurent22-joplin-releases-tag-v1-0-176-2019-12-14t10-36-44z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add ability to share a note publicly using Nextcloud (<a href="https://github.com/laurent22/joplin/issues/2173">#2173</a>)</li>
+<li>Improved: Allow for custom Joplin theme and Ace editor styles (<a href="https://github.com/laurent22/joplin/issues/2099">#2099</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.175">v1.0.175</a> - 2019-12-08T11:48:47Z<a name="v1-0-175-https-github-com-laurent22-joplin-releases-tag-v1-0-175-2019-12-08t11-48-47z" href="#v1-0-175-https-github-com-laurent22-joplin-releases-tag-v1-0-175-2019-12-08t11-48-47z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add warning message when user tries to upload a file 10MB or larger (<a href="https://github.com/laurent22/joplin/issues/2102">#2102</a>) (<a href="https://github.com/laurent22/joplin/issues/2097">#2097</a>)</li>
+<li>Improved: Improved text editor syntax highlighting (<a href="https://github.com/laurent22/joplin/issues/2100">#2100</a>)</li>
+<li>Improved: Improved logging during sync to allow finding bugs more easily</li>
+<li>Improved: Allow Electron debugging flag  (<a href="https://github.com/laurent22/joplin/issues/2084">#2084</a>)</li>
+<li>Improved: Updated application icons</li>
+<li>Fixed: Restaured translations that had been accidentally deleted (<a href="https://github.com/laurent22/joplin/issues/2126">#2126</a>)</li>
+<li>Fixed: Fixed warning boxes in solarized theme (<a href="https://github.com/laurent22/joplin/issues/1826">#1826</a>)</li>
+<li>Fixed: Prevent sync from happening if target dir could not be created, in local sync (<a href="https://github.com/laurent22/joplin/issues/2117">#2117</a>)</li>
+<li>Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (<a href="https://github.com/laurent22/joplin/issues/2088">#2088</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.174">v1.0.174</a> - 2019-11-12T18:20:58Z<a name="v1-0-174-https-github-com-laurent22-joplin-releases-tag-v1-0-174-2019-11-12t18-20-58z" href="#v1-0-174-https-github-com-laurent22-joplin-releases-tag-v1-0-174-2019-11-12t18-20-58z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Show note count by default</li>
+<li>Fixed: Do not crash when a notebook parent does not exist (<a href="https://github.com/laurent22/joplin/issues/2079">#2079</a>)</li>
+<li>Fixed: Fix scaling of inline svg resource icons (<a href="https://github.com/laurent22/joplin/issues/2075">#2075</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.173">v1.0.173</a> - 2019-11-11T08:33:35Z<a name="v1-0-173-https-github-com-laurent22-joplin-releases-tag-v1-0-173-2019-11-11t08-33-35z" href="#v1-0-173-https-github-com-laurent22-joplin-releases-tag-v1-0-173-2019-11-11t08-33-35z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add new setting to show note counts for folders and tags (<a href="https://github.com/laurent22/joplin/issues/2006">#2006</a>)</li>
@@ -1249,6 +1332,11 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.20">v0.10.20</a> - 2017-11-17T17:18:25Z<a name="v0-10-20-https-github-com-laurent22-joplin-releases-tag-v0-10-20-2017-11-17t17-18-25z" href="#v0-10-20-https-github-com-laurent22-joplin-releases-tag-v0-10-20-2017-11-17t17-18-25z" class="heading-anchor">🔗</a></h2>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.19">v0.10.19</a> - 2017-11-20T18:59:48Z<a name="v0-10-19-https-github-com-laurent22-joplin-releases-tag-v0-10-19-2017-11-20t18-59-48z" href="#v0-10-19-https-github-com-laurent22-joplin-releases-tag-v0-10-19-2017-11-20t18-59-48z" class="heading-anchor">🔗</a></h2>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/changelog.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled

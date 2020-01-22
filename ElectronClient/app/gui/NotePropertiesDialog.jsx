@@ -2,6 +2,7 @@ const React = require('react');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
+const DialogButtonRow = require('./DialogButtonRow.min');
 const Datetime = require('react-datetime');
 const Note = require('lib/models/Note');
 const formatcoords = require('formatcoords');
@@ -11,10 +12,8 @@ class NotePropertiesDialog extends React.Component {
 	constructor() {
 		super();
 
-		this.okButton_click = this.okButton_click.bind(this);
-		this.cancelButton_click = this.cancelButton_click.bind(this);
-		this.onKeyDown = this.onKeyDown.bind(this);
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
+		this.buttonRow_click = this.buttonRow_click.bind(this);
 		this.okButton = React.createRef();
 
 		this.state = {
@@ -27,6 +26,7 @@ class NotePropertiesDialog extends React.Component {
 			id: _('ID'),
 			user_created_time: _('Created'),
 			user_updated_time: _('Updated'),
+			todo_completed: _('Completed'),
 			location: _('Location'),
 			source_url: _('URL'),
 			revisionsLink: _('Note History'),
@@ -72,6 +72,11 @@ class NotePropertiesDialog extends React.Component {
 
 		formNote.user_updated_time = time.formatMsToLocal(note.user_updated_time);
 		formNote.user_created_time = time.formatMsToLocal(note.user_created_time);
+
+		if (note.todo_completed) {
+			formNote.todo_completed = time.formatMsToLocal(note.todo_completed);
+		}
+
 		formNote.source_url = note.source_url;
 
 		formNote.location = '';
@@ -90,6 +95,11 @@ class NotePropertiesDialog extends React.Component {
 		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
+
+		if (formNote.todo_completed) {
+			note.todo_completed = time.formatMsToLocal(formNote.todo_completed);
+		}
+
 		note.source_url = formNote.source_url;
 
 		return note;
@@ -153,25 +163,13 @@ class NotePropertiesDialog extends React.Component {
 		}
 	}
 
-	okButton_click() {
-		this.closeDialog(true);
-	}
-
-	cancelButton_click() {
-		this.closeDialog(false);
+	buttonRow_click(event) {
+		this.closeDialog(event.buttonName === 'ok');
 	}
 
 	revisionsLink_click() {
 		this.closeDialog(false);
 		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
-	}
-
-	onKeyDown(event) {
-		if (event.keyCode === 13) {
-			this.closeDialog(true);
-		} else if (event.keyCode === 27) {
-			this.closeDialog(false);
-		}
 	}
 
 	editPropertyButtonClick(key, initialValue) {
@@ -218,15 +216,12 @@ class NotePropertiesDialog extends React.Component {
 	async cancelProperty() {
 		return new Promise((resolve) => {
 			this.okButton.current.focus();
-			this.setState(
-				{
-					editedKey: null,
-					editedValue: null,
-				},
-				() => {
-					resolve();
-				}
-			);
+			this.setState({
+				editedKey: null,
+				editedValue: null,
+			}, () => {
+				resolve();
+			});
 		});
 	}
 
@@ -354,7 +349,7 @@ class NotePropertiesDialog extends React.Component {
 			return dms.format('DDMMss', { decimalPlaces: 0 });
 		}
 
-		if (['user_updated_time', 'user_created_time'].indexOf(key) >= 0) {
+		if (['user_updated_time', 'user_created_time', 'todo_completed'].indexOf(key) >= 0) {
 			return time.formatMsToLocal(note[key]);
 		}
 
@@ -363,20 +358,7 @@ class NotePropertiesDialog extends React.Component {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const styles = this.styles(this.props.theme);
 		const formNote = this.state.formNote;
-
-		const buttonComps = [];
-		buttonComps.push(
-			<button key="ok" style={styles.button} onClick={this.okButton_click} ref={this.okButton} onKeyDown={this.onKeyDown}>
-				{_('Apply')}
-			</button>
-		);
-		buttonComps.push(
-			<button key="cancel" style={styles.button} onClick={this.cancelButton_click}>
-				{_('Cancel')}
-			</button>
-		);
 
 		const noteComps = [];
 
@@ -393,7 +375,7 @@ class NotePropertiesDialog extends React.Component {
 				<div style={theme.dialogBox}>
 					<div style={theme.dialogTitle}>{_('Note properties')}</div>
 					<div>{noteComps}</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>
+					<DialogButtonRow theme={this.props.theme} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
 				</div>
 			</div>
 		);

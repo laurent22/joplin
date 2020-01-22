@@ -4,9 +4,9 @@ const BaseItem = require('lib/models/BaseItem.js');
 const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
-const Tag = require('lib/models/Tag.js');
 const { time } = require('lib/time-utils.js');
 const Setting = require('lib/models/Setting.js');
+const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { IconButton } = require('./IconButton.min.js');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
@@ -14,7 +14,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const MarkupToHtml = require('lib/renderers/MarkupToHtml');
+const { MarkupToHtml, assetsToHeaders } = require('joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -40,6 +40,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
 const NoteRevisionViewer = require('./NoteRevisionViewer.min');
 const TemplateUtils = require('lib/TemplateUtils');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
 
 require('brace/mode/markdown');
 // https://ace.c9.io/build/kitchen-sink.html
@@ -53,7 +54,33 @@ require('brace/theme/chaos');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
 
-const NOTE_TAG_BAR_FEATURE_ENABLED = false;
+/* eslint-disable-next-line no-undef */
+class CustomHighlightRules extends ace.acequire(
+	'ace/mode/markdown_highlight_rules'
+).MarkdownHighlightRules {
+	constructor() {
+		super();
+		if (Setting.value('markdown.plugin.mark')) {
+			this.$rules.start.push({
+				// This is actually a highlight `mark`, but Ace has no token name for
+				// this so we made up our own. Reference for common tokens here:
+				// https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode#common-tokens
+				token: 'highlight_mark',
+				regex: '==[^ ](?:.*?[^ ])?==',
+			});
+		}
+	}
+}
+
+/* eslint-disable-next-line no-undef */
+class CustomMdMode extends ace.acequire('ace/mode/markdown').Mode {
+	constructor() {
+		super();
+		this.HighlightRules = CustomHighlightRules;
+	}
+}
+
+const NOTE_TAG_BAR_FEATURE_ENABLED = true;
 
 class NoteTextComponent extends React.Component {
 	constructor() {
@@ -84,6 +111,7 @@ class NoteTextComponent extends React.Component {
 			newAndNoTitleChangeNoteId: null,
 			bodyHtml: '',
 			lastRenderCssFiles: [],
+			lastRenderPluginAssets: [],
 			lastKeys: [],
 			showLocalSearch: false,
 			localSearch: Object.assign({}, this.localSearchDefaultState),
@@ -374,13 +402,15 @@ class NoteTextComponent extends React.Component {
 
 	markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
-		this.markupToHtml_ = new MarkupToHtml({
+
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
+
 		return this.markupToHtml_;
 	}
 
-	async componentWillMount() {
+	async UNSAFE_componentWillMount() {
 		let note = null;
 		let noteTags = [];
 		if (this.props.newNote) {
@@ -428,21 +458,9 @@ class NoteTextComponent extends React.Component {
 	}
 
 	componentDidUpdate() {
-		// if (Setting.value('env') === 'dev' && this.webviewRef()) {
-		// 	this.webviewRef().openDevTools();
-		// 	return;
-		// }
-
-		if (this.webviewRef() && this.props.noteDevToolsVisible !== this.webviewRef().isDevToolsOpened()) {
-			if (this.props.noteDevToolsVisible) {
-				this.webviewRef().openDevTools();
-			} else {
-				this.webviewRef().closeDevTools();
-			}
-		}
-
 		const currentNoteId = this.state.note ? this.state.note.id : null;
 		if (this.lastComponentUpdateNoteId_ !== currentNoteId && this.editor_) {
+			this.editor_.editor.getSession().setMode(new CustomMdMode());
 			const undoManager = this.editor_.editor.getSession().getUndoManager();
 			undoManager.reset();
 			this.editor_.editor.getSession().setUndoManager(undoManager);
@@ -520,7 +538,6 @@ class NoteTextComponent extends React.Component {
 		let note = null;
 		let loadingNewNote = true;
 		let parentFolder = null;
-		let noteTags = [];
 		let scrollPercent = 0;
 
 		if (props.newNote) {
@@ -535,7 +552,6 @@ class NoteTextComponent extends React.Component {
 			if (!scrollPercent) scrollPercent = 0;
 
 			loadingNewNote = stateNoteId !== noteId;
-			noteTags = await Tag.tagsByNoteId(noteId);
 			this.lastLoadedNoteId_ = noteId;
 			note = noteId ? await Note.load(noteId) : null;
 			if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
@@ -614,7 +630,6 @@ class NoteTextComponent extends React.Component {
 			webviewReady: webviewReady,
 			folder: parentFolder,
 			lastKeys: [],
-			noteTags: noteTags,
 			showRevisions: false,
 		};
 
@@ -635,22 +650,6 @@ class NoteTextComponent extends React.Component {
 
 		this.setState(newState);
 
-		// https://github.com/laurent22/joplin/pull/893#discussion_r228025210
-		// @Abijeet: Had to add this check. If not, was going into an infinite loop where state was getting updated repeatedly.
-		// Since I'm updating the state, the componentWillReceiveProps was getting triggered again, where nextProps.newNote was still true, causing reloadNote to trigger again and again.
-		// Notes from Laurent: The selected note tags are part of the global Redux state because they need to be updated whenever tags are changed or deleted
-		// anywhere in the app. Thus it's not possible simple to load the tags here (as we won't have a way to know if they're updated afterwards).
-		// Perhaps a better way would be to move that code in the middleware, check for TAGS_DELETE, TAGS_UPDATE, etc. actions and update the
-		// selected note tags accordingly.
-		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
-			if (!this.props.newNote) {
-				this.props.dispatch({
-					type: 'SET_NOTE_TAGS',
-					items: noteTags,
-				});
-			}
-		}
-
 		// if (newState.note) await shared.refreshAttachedResources(this, newState.note.body);
 
 		await this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
@@ -658,7 +657,7 @@ class NoteTextComponent extends React.Component {
 		defer();
 	}
 
-	async componentWillReceiveProps(nextProps) {
+	async UNSAFE_componentWillReceiveProps(nextProps) {
 		if (this.props.newNote !== nextProps.newNote && nextProps.newNote) {
 			await this.scheduleReloadNote(nextProps);
 		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
@@ -690,16 +689,36 @@ class NoteTextComponent extends React.Component {
 		if (newTags.length !== oldTags.length) return true;
 
 		for (let i = 0; i < newTags.length; ++i) {
+			let found = false;
 			let currNewTag = newTags[i];
 			for (let j = 0; j < oldTags.length; ++j) {
 				let currOldTag = oldTags[j];
-				if (currOldTag.id === currNewTag.id && currOldTag.updated_time !== currNewTag.updated_time) {
-					return true;
+				if (currOldTag.id === currNewTag.id) {
+					found = true;
+					if (currOldTag.updated_time !== currNewTag.updated_time) {
+						return true;
+					}
+					break;
 				}
+			}
+			if (!found) {
+				return true;
 			}
 		}
 
 		return false;
+	}
+
+	canDisplayTagBar() {
+		if (!NOTE_TAG_BAR_FEATURE_ENABLED) {
+			return false;
+		}
+
+		if (!this.state.noteTags || this.state.noteTags.length === 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 	async noteRevisionViewer_onBack() {
@@ -828,7 +847,11 @@ class NoteTextComponent extends React.Component {
 			if (item.type_ === BaseModel.TYPE_RESOURCE) {
 				const localState = await Resource.localState(item);
 				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
-					bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet.'));
+					if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+						bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+					} else {
+						bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+					}
 					return;
 				}
 				const filePath = Resource.fullPath(item);
@@ -915,6 +938,8 @@ class NoteTextComponent extends React.Component {
 	}
 
 	webview_domReady() {
+
+		console.info('webview_domReady', this.webviewRef_.current);
 		if (!this.webviewRef_.current) return;
 
 		this.setState({
@@ -1027,10 +1052,10 @@ class NoteTextComponent extends React.Component {
 
 		if (bodyToRender === null) {
 			bodyToRender = this.state.note && this.state.note.body ? this.state.note.body : '';
-			markupLanguage = this.state.note ? this.state.note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+			markupLanguage = this.state.note ? this.state.note.markup_language : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
 
-		if (!markupLanguage) markupLanguage = Note.MARKUP_LANGUAGE_MARKDOWN;
+		if (!markupLanguage) markupLanguage = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 		const resources = await shared.attachedResources(bodyToRender);
 
@@ -1051,11 +1076,11 @@ class NoteTextComponent extends React.Component {
 			bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 		}
 
-		const result = this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
+		const result = await this.markupToHtml().render(markupLanguage, bodyToRender, theme, mdOptions);
 
 		this.setState({
 			bodyHtml: result.html,
-			lastRenderCssFiles: result.cssFiles,
+			lastRenderPluginAssets: result.pluginAssets,
 		});
 	}
 
@@ -1086,9 +1111,11 @@ class NoteTextComponent extends React.Component {
 		if (!command) return;
 
 		let fn = null;
+		let args = null;
 
 		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
+			args = {noteId: command.noteId};
 		} else if (command.name === 'print') {
 			fn = this.commandPrint;
 		}
@@ -1104,6 +1131,8 @@ class NoteTextComponent extends React.Component {
 				fn = this.commandDateTime;
 			} else if (command.name === 'commandStartExternalEditing') {
 				fn = this.commandStartExternalEditing;
+			} else if (command.name === 'commandStopExternalEditing') {
+				fn = this.commandStopExternalEditing;
 			} else if (command.name === 'showLocalSearch') {
 				fn = this.commandShowLocalSearch;
 			} else if (command.name === 'textCode') {
@@ -1138,7 +1167,7 @@ class NoteTextComponent extends React.Component {
 
 		requestAnimationFrame(() => {
 			fn = fn.bind(this);
-			fn();
+			fn(args);
 		});
 	}
 
@@ -1197,11 +1226,6 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
-	// helper function to style the title for printing
-	title_(title) {
-		return `<div style="font-size: 2em; font-weight: bold; border-bottom: 1px solid rgb(230,230,230); padding-bottom: .3em;">${title}</div><br>`;
-	}
-
 	async printTo_(target, options) {
 		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
 			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
@@ -1213,53 +1237,69 @@ class NoteTextComponent extends React.Component {
 		}
 
 		this.isPrinting_ = true;
-		const previousBody = this.state.note.body;
-		const tempBody = `${this.title_(this.state.note.title)}\n\n${previousBody}`;
 
-		const previousTheme = Setting.value('theme');
-		Setting.setValue('theme', Setting.THEME_LIGHT);
-		this.lastSetHtml_ = '';
-		await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: true });
-		this.forceUpdate();
+		// const previousBody = this.state.note.body;
+		// const tempBody = `${this.state.note.title}\n\n${previousBody}`;
 
-		const restoreSettings = async () => {
-			Setting.setValue('theme', previousTheme);
-			this.lastSetHtml_ = '';
-			await this.updateHtml(this.state.note.markup_language, previousBody);
-			this.forceUpdate();
-		};
+		// const previousTheme = Setting.value('theme');
+		// Setting.setValue('theme', Setting.THEME_LIGHT);
+		// this.lastSetHtml_ = '';
+		// await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: true });
+		// this.forceUpdate();
 
-		setTimeout(() => {
+		// const restoreSettings = async () => {
+		// 	Setting.setValue('theme', previousTheme);
+		// 	this.lastSetHtml_ = '';
+		// 	await this.updateHtml(this.state.note.markup_language, previousBody);
+		// 	this.forceUpdate();
+		// };
+
+		// Need to save because the interop service reloads the note from the database
+		await this.saveIfNeeded();
+
+		setTimeout(async () => {
 			if (target === 'pdf') {
-				this.webviewRef_.current.wrappedInstance.printToPDF({ printBackground: true, pageSize: Setting.value('export.pdfPageSize'), landscape: Setting.value('export.pdfPageOrientation') === 'landscape' }, (error, data) => {
-					restoreSettings();
-
-					if (error) {
-						bridge().showErrorMessageBox(error.message);
-					} else {
-						shim.fsDriver().writeFile(options.path, data, 'buffer');
-					}
-				});
+				try {
+					const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
+						printBackground: true,
+						pageSize: Setting.value('export.pdfPageSize'),
+						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+					});
+					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
 			} else if (target === 'printer') {
-				this.webviewRef_.current.wrappedInstance.print({ printBackground: true });
-				restoreSettings();
+				try {
+					await InteropServiceHelper.printNote(options.noteId, {
+						printBackground: true,
+					});
+				} catch (error) {
+					console.error(error);
+					bridge().showErrorMessageBox(error.message);
+				}
+
+				// restoreSettings();
 			}
 			this.isPrinting_ = false;
 		}, 100);
 	}
 
-	async commandSavePdf() {
+	async commandSavePdf(args) {
 		try {
-			if (!this.state.note) throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
+			if (!this.state.note && !args.noteId) throw new Error(_('Only one note can be exported to PDF at a time.'));
+
+			const note = (!args.noteId ? this.state.note : await Note.load(args.noteId));
 
 			const path = bridge().showSaveDialog({
 				filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-				defaultPath: safeFilename(this.state.note.title),
+				defaultPath: safeFilename(note.title),
 			});
 
 			if (!path) return;
 
-			await this.printTo_('pdf', { path: path });
+			await this.printTo_('pdf', { path: path, noteId: args.noteId });
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}
@@ -1267,25 +1307,23 @@ class NoteTextComponent extends React.Component {
 
 	async commandPrint() {
 		try {
-			await this.printTo_('printer');
+			if (!this.state.note) throw new Error(_('Only one note can be printed at a time.'));
+
+			await this.printTo_('printer', { noteId: this.state.note.id });
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}
 	}
 
 	async commandStartExternalEditing() {
-		try {
-			await this.saveIfNeeded(true, {
-				autoTitle: false,
-			});
-			await ExternalEditWatcher.instance().openAndWatch(this.state.note);
-		} catch (error) {
-			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
-		}
+		await this.saveIfNeeded(true, {
+			autoTitle: false,
+		});
+		NoteListUtils.startExternalEditing(this.state.note.id);
 	}
 
 	async commandStopExternalEditing() {
-		ExternalEditWatcher.instance().stopWatching(this.state.note.id);
+		NoteListUtils.stopExternalEditing(this.state.note.id);
 	}
 
 	async commandSetTags() {
@@ -1600,7 +1638,7 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
+		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
 				tooltip: _('Bold'),
 				iconName: 'fa-bold',
@@ -1791,6 +1829,7 @@ class NoteTextComponent extends React.Component {
 		const menu = NoteListUtils.makeContextMenu(this.props.selectedNoteIds, {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
+			watchedNoteFiles: this.props.watchedNoteFiles,
 		});
 
 		const buttonStyle = Object.assign({}, theme.buttonStyle, {
@@ -1828,7 +1867,7 @@ class NoteTextComponent extends React.Component {
 		const style = this.props.style;
 		const note = this.state.note;
 		const body = note && note.body ? note.body : '';
-		const markupLanguage = note ? note.markup_language : Note.MARKUP_LANGUAGE_MARKDOWN;
+		const markupLanguage = note ? note.markup_language : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
@@ -1906,10 +1945,10 @@ class NoteTextComponent extends React.Component {
 		const searchBarHeight = this.state.showLocalSearch ? 35 : 0;
 
 		let bottomRowHeight = 0;
-		if (NOTE_TAG_BAR_FEATURE_ENABLED) {
+		if (this.canDisplayTagBar()) {
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
 		} else {
-			toolbarStyle.marginBottom = 10;
+			toolbarStyle.marginBottom = tagStyle.marginBottom,
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
 		}
 
@@ -1937,7 +1976,7 @@ class NoteTextComponent extends React.Component {
 			fontSize: `${theme.editorFontSize}px`,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
-			editorTheme: theme.editorTheme,
+			editorTheme: theme.editorTheme, // Defined in theme.js
 		};
 
 		if (visiblePanes.indexOf('viewer') < 0) {
@@ -1969,7 +2008,8 @@ class NoteTextComponent extends React.Component {
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			if (htmlHasChanged) {
 				let options = {
-					cssFiles: this.state.lastRenderCssFiles,
+					pluginAssets: this.state.lastRenderPluginAssets,
+					pluginAssetsHeadersHtml: assetsToHeaders(this.state.lastRenderPluginAssets),
 					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
@@ -2027,7 +2067,7 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const tagList = !NOTE_TAG_BAR_FEATURE_ENABLED ? null : <TagList style={tagStyle} items={this.state.noteTags} />;
+		const tagList = this.canDisplayTagBar() ? <TagList style={tagStyle} items={this.state.noteTags} /> : null;
 
 		const titleBarMenuButton = (
 			<IconButton
@@ -2085,6 +2125,8 @@ class NoteTextComponent extends React.Component {
 				onSelectionChange={this.aceEditor_selectionChange}
 				onFocus={this.aceEditor_focus}
 				readOnly={visiblePanes.indexOf('editor') < 0}
+				// Enable/Disable the autoclosing braces
+				setOptions={{ behavioursEnabled: Setting.value('editor.autoMatchingBraces') }}
 				// Disable warning: "Automatically scrolling cursor into view after
 				// selection change this will be disabled in the next version set
 				// editor.$blockScrolling = Infinity to disable this message"

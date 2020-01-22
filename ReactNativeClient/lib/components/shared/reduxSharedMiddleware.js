@@ -28,6 +28,26 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		refreshTags = true;
 	}
 
+	if (action.type === 'NOTE_SELECT' ||
+		action.type === 'NOTE_SELECT_TOGGLE' ||
+		action.type === 'NOTE_SET_NEW_ONE') {
+		let noteTags = [];
+
+		// We don't need to show tags unless only one note is selected.
+		// For new notes, the old note is still selected, but we don't want to show any tags.
+		if (action.type !== 'NOTE_SET_NEW_ONE' &&
+			newState.selectedNoteIds &&
+			newState.selectedNoteIds.length === 1) {
+			noteTags = await Tag.tagsByNoteId(newState.selectedNoteIds[0]);
+		}
+
+		store.dispatch({
+			type: 'SET_NOTE_TAGS',
+			items: noteTags,
+		});
+	}
+
+
 	if (refreshTags) {
 		store.dispatch({
 			type: 'TAG_UPDATE_ALL',
@@ -37,3 +57,4 @@ const reduxSharedMiddleware = async function(store, next, action) {
 };
 
 module.exports = reduxSharedMiddleware;
+

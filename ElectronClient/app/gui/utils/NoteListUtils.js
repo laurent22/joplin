@@ -7,6 +7,7 @@ const eventManager = require('../../eventManager');
 const InteropService = require('lib/services/InteropService');
 const InteropServiceHelper = require('../../InteropServiceHelper.js');
 const Note = require('lib/models/Note');
+const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { substrWithEllipsis } = require('lib/string-utils');
 
 class NoteListUtils {
@@ -48,6 +49,28 @@ class NoteListUtils {
 					},
 				})
 			);
+
+			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
+				menu.append(
+					new MenuItem({
+						label: _('Edit in external editor'),
+						enabled: noteIds.length === 1,
+						click: async () => {
+							this.startExternalEditing(noteIds[0]);
+						},
+					})
+				);
+			} else {
+				menu.append(
+					new MenuItem({
+						label: _('Stop external editing'),
+						enabled: noteIds.length === 1,
+						click: async () => {
+							this.stopExternalEditing(noteIds[0]);
+						},
+					})
+				);
+			}
 
 			if (noteIds.length <= 1) {
 				menu.append(
@@ -107,6 +130,20 @@ class NoteListUtils {
 				})
 			);
 
+			menu.append(
+				new MenuItem({
+					label: _('Share note...'),
+					click: async () => {
+						console.info('NOTE IDS', noteIds);
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandShareNoteDialog',
+							noteIds: noteIds.slice(),
+						});
+					},
+				})
+			);
+
 			const exportMenu = new Menu();
 
 			const ioService = new InteropService();
@@ -114,6 +151,7 @@ class NoteListUtils {
 			for (let i = 0; i < ioModules.length; i++) {
 				const module = ioModules[i];
 				if (module.type !== 'exporter') continue;
+				if (noteIds.length > 1 && module.canDoMultiExport === false) continue;
 
 				exportMenu.append(
 					new MenuItem({
@@ -133,6 +171,7 @@ class NoteListUtils {
 							props.dispatch({
 								type: 'WINDOW_COMMAND',
 								name: 'exportPdf',
+								noteId: noteIds[0],
 							});
 						},
 					})
@@ -176,6 +215,20 @@ class NoteListUtils {
 		if (!ok) return;
 		await Note.batchDelete(noteIds);
 	}
+
+	static async startExternalEditing(noteId) {
+		try {
+			const note = await Note.load(noteId);
+			ExternalEditWatcher.instance().openAndWatch(note);
+		} catch (error) {
+			bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));
+		}
+	}
+
+	static async stopExternalEditing(noteId) {
+		ExternalEditWatcher.instance().stopWatching(noteId);
+	}
+
 }
 
 module.exports = NoteListUtils;

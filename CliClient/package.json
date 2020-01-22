@@ -25,7 +25,7 @@
     "joplin": "./main.js"
   },
   "engines": {
-    "node": ">=8.7.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
@@ -44,8 +44,9 @@
     "html-minifier": "^3.5.15",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
+    "joplin-renderer": "^1.0.5",
     "joplin-turndown": "^4.0.19",
-    "joplin-turndown-plugin-gfm": "^1.0.11",
+    "joplin-turndown-plugin-gfm": "^1.0.12",
     "jssha": "^2.3.0",
     "levenshtein": "^1.0.5",
     "markdown-it": "^8.4.2",
@@ -66,7 +67,7 @@
     "server-destroy": "^1.0.1",
     "sharp": "^0.23.2",
     "sprintf-js": "^1.1.1",
-    "sqlite3": "^4.0.7",
+    "sqlite3": "^4.1.1",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.0",
     "strip-ansi": "^4.0.0",

@@ -221,6 +221,10 @@ class SideBarComponent extends React.Component {
 				if (item) {
 					const anchorRef = this.anchorItemRefs[item.type][item.id];
 					if (anchorRef) anchorRef.current.focus();
+				} else {
+					const anchorRef = this.firstAnchorItemRef('folder');
+					console.info('anchorRef', anchorRef);
+					if (anchorRef) anchorRef.current.focus();
 				}
 			}
 		} else if (command.name === 'synchronize') {
@@ -417,13 +421,6 @@ class SideBarComponent extends React.Component {
 		});
 	}
 
-	// searchItem_click(search) {
-	// 	this.props.dispatch({
-	// 		type: "SEARCH_SELECT",
-	// 		id: search ? search.id : null,
-	// 	});
-	// }
-
 	async sync_click() {
 		await shared.synchronize_press(this);
 	}
@@ -433,6 +430,18 @@ class SideBarComponent extends React.Component {
 		if (this.anchorItemRefs[type][id]) return this.anchorItemRefs[type][id];
 		this.anchorItemRefs[type][id] = React.createRef();
 		return this.anchorItemRefs[type][id];
+	}
+
+	firstAnchorItemRef(type) {
+		const refs = this.anchorItemRefs[type];
+		if (!refs) return null;
+
+		const n = `${type}s`;
+		const item = this.props[n] && this.props[n].length ? this.props[n][0] : null;
+		console.info('props', this.props[n], item);
+		if (!item) return null;
+
+		return refs[item.id];
 	}
 
 	noteCountElement(count) {
@@ -590,8 +599,6 @@ class SideBarComponent extends React.Component {
 			return { type: 'folder', id: this.props.selectedFolderId };
 		} else if (this.props.notesParentType === 'Tag' && this.props.selectedTagId) {
 			return { type: 'tag', id: this.props.selectedTagId };
-		} else if (this.props.notesParentType === 'Search' && this.props.selectedSearchId) {
-			return { type: 'search', id: this.props.selectedSearchId };
 		}
 
 		return null;

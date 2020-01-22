@@ -23,7 +23,7 @@ class ItemList extends React.Component {
 		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
 		const visibleItemCount = this.visibleItemCount(props);
 
-		let bottomItemIndex = topItemIndex + visibleItemCount;
+		let bottomItemIndex = topItemIndex + (visibleItemCount - 1);
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
 
 		this.setState({
@@ -32,11 +32,11 @@ class ItemList extends React.Component {
 		});
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.updateStateItemIndexes();
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		this.updateStateItemIndexes(newProps);
 	}
 
@@ -50,7 +50,7 @@ class ItemList extends React.Component {
 	}
 
 	makeItemIndexVisible(itemIndex) {
-		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex + 1);
+		const top = Math.min(this.props.items.length - 1, this.state.topItemIndex);
 		const bottom = Math.max(0, this.state.bottomItemIndex);
 
 		if (itemIndex >= top && itemIndex <= bottom) return;

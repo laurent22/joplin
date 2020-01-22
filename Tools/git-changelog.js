@@ -119,6 +119,7 @@ function formatCommitMessage(msg) {
 			return {
 				type: detectType(msg),
 				message: msg.trim(),
+				subModule: subModule,
 			};
 		}
 
