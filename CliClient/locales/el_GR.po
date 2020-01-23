@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -166,14 +168,17 @@ msgstr "Εμφανίζει επίσης μη ορισμένες και κρυφ�
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Writes all settings to STDOUT as JSON including secure variables."
 msgstr ""
+"Γράφει όλες τις ρυθμίσεις στο STDOUT ως JSON συμπεριλαμβανομένων των ασφαλών "
+"μεταβλητών."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:19
 msgid "Reads in JSON formatted settings from STDIN."
-msgstr ""
+msgstr "Διαβάζει με μορφοποιημένες ρυθμίσεις JSON από το STDIN."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:20
 msgid "Reads in settings from <file>. <file> must contain valid JSON."
 msgstr ""
+"Διαβάζει τις ρυθμίσεις από το  <file>. Το <file> πρέπει να είναι έγκυρο JSON."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:77
 #, javascript-format
@@ -1156,50 +1161,45 @@ msgid "Check synchronisation configuration"
 msgstr "Ελέγχος ρυθμίσεων συγχρονισμού"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "Άγνωστο flag: %s"
+msgstr "Άγνωστο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "Ακύρωση..."
+msgstr "Έλεγχος..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "Μόνο σφάλματα"
+msgstr "Σφάλμα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Η εφαρμογή Joplin δεν έχει εγκατασταθεί ή έχει ρυθμιστεί εσφαλμένα. Δείτε το "
+"πλήρες μήνυμα σφάλματος παρακάτω:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "Εμφάνιση όλων"
+msgstr "Εμφάνιση αρχείου καταγραφής"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Κατάσταση εφαρμογής Joplin:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "Κατάσταση Συγχρονισμού"
+msgstr "Έλεγχος Κατάστασης"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "&Βοήθεια"
+msgstr "Βοήθεια"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "Επιλογές για προχωρημένους"
+msgstr "Εμφάνιση επιλογών για προχωρημένους"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1535,12 +1535,11 @@ msgstr "Αντιγραφή διεύθυνσης σύνδεσης"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:821
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:823
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί."
+msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1046
 #, javascript-format
@@ -1651,44 +1650,41 @@ msgid "Synchronisation Status"
 msgstr "Κατάσταση Συγχρονισμού"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Συγχρονισμός"
+msgstr "Συγχρονισμός..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Δημιουργία νεου %s..."
+msgstr[0] "Δημιουργία συνδέσμου..."
 msgstr[1] "Δημιουργία νεου %s..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Το Token έχει αντιγραφεί στο πρόχειρο!"
-msgstr[1] "Το Token έχει αντιγραφεί στο πρόχειρο!"
+msgstr[0] "Ο σύνδεσμος έχει αντιγραφεί στο πρόχειρο!"
+msgstr[1] "Ο σύνδεσμοι έχει αντιγραφεί στο πρόχειρο!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Σημείωση: Όταν μια σημείωση είναι κοινόχρηστη, δεν θα κρυπτογραφείται πλέον "
+"στο διακομιστή."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "Ανακτημένες σημειώσεις"
+msgstr "Κοινοποίηση Σημειώσεων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Κοινοποίηση"
-msgstr[1] "Κοινοποίηση"
+msgstr[0] "Αντιγραφή Συνδέσμου Κοινοποίησης"
+msgstr[1] "Αντιγραφή Συνδέσμων Κοινοποίησης"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "Κλείσιμο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
@@ -1777,9 +1773,8 @@ msgid "%s - Copy"
 msgstr "%s - Αντίγραφο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Κάντε κλικ για να σταματήσετε την εξωτερική επεξεργασία"
+msgstr "Διακοπή εξωτερικής επεξεργασίας"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -1799,9 +1794,8 @@ msgid "Copy Markdown link"
 msgstr "Αντιγραφή συνδέσμου Markdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
-#, fuzzy
 msgid "Share note..."
-msgstr "Ανακτημένες σημειώσεις"
+msgstr "Κοινοποίηση σημείωσης..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
 msgid "PDF File"
@@ -1855,6 +1849,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Δεν ήταν δυνατή η σύνδεση στην εφαρμογή Joplin. Ελέγξτε τις παραμέτρους στην "
+"οθόνη ρυθμίσεων συγχρονισμού. Το πλήρες σφάλμα ήταν:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2061,16 +2059,15 @@ msgstr "Δεν είναι δυνατή η μετακίνηση της σημεί
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Δεν έγινε λήψη"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Λήψη πόρων.."
+msgstr "Λήψη"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Έχουν ληφθεί"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2259,7 +2256,7 @@ msgstr "Ταξινόμηση σημειώσεων κατά"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
@@ -2397,7 +2394,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
 msgid "Automatically update the application"
@@ -2612,14 +2609,12 @@ msgid "Json Export Directory"
 msgstr "Φάκελος εξαγωγής Json"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "Αρχείο"
+msgstr "Αρχείο HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Φάκελος"
+msgstr "Φάκελος HTML"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2701,34 +2696,32 @@ msgstr ""
 "αποκρυπτογραφήσει."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "Επισύναψη αρχείου"
+msgstr "Επισυναπτόμενα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Μεταφορτωμένα και αποκρυπτογραφημένα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Μεταφορτωμένα και κρυπτογραφημένα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Το στοιχείο \"%s\" δεν μπορεί να κατέβει: %s"
+msgstr "Συνημμένα που δεν ήταν δυνατή η λήψη τους"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s): %s"
-msgstr "%s %s (%s)"
+msgstr "%s (%s): %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
 msgid "Sync status (synced items / total items)"
@@ -2812,9 +2805,10 @@ msgid "Press to set the decryption password."
 msgstr "Πατήστε για να ορίσετε τον κωδικό αποκρυπτογράφησης."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
+msgstr ""
+"Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Πατήστε για "
+"περισσότερες πληροφορίες."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2917,9 +2911,8 @@ msgstr ""
 "άδειά σας για εγγραφή στον εξωτερικό χώρο αποθήκευσης."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
-#, fuzzy
 msgid "Information"
-msgstr "Περισσότερες πληροφορίες"
+msgstr "Πληροφορίες"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
@@ -2965,18 +2958,18 @@ msgstr ""
 "αριθμό των σημειώσεων."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "Εισαγωγή σημειώσεων..."
+msgstr "Γίνεται εξαγωγή προφίλ..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Αρχείο εξαγωγής Joplin"
+msgstr "Εξαγωγή προφίλ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
+"Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια "
+"εξωτερική κάρτα SD."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
