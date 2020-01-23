@@ -257,6 +257,16 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('이것은')).length).toBe(1);
 		expect((await engine.search('말')).length).toBe(1);
 	}));
+	
+	it('should support queries with Thai characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+		
+		await engine.syncTables();
+		
+		expect((await engine.search('นี่คือค')).length).toBe(1);
+		expect((await engine.search('ไทย')).length).toBe(1);
+	}));
 
 	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
 		let rows;
