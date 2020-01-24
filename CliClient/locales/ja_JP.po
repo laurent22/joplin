@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -156,15 +158,15 @@ msgstr "未設定または非表示の設定項目も表示します。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Writes all settings to STDOUT as JSON including secure variables."
-msgstr ""
+msgstr "すべての設定（パスワード等を含む）をJSON形式で標準出力に書き出します。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:19
 msgid "Reads in JSON formatted settings from STDIN."
-msgstr ""
+msgstr "標準入力からJSON形式の設定を読み込みます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:20
 msgid "Reads in settings from <file>. <file> must contain valid JSON."
-msgstr ""
+msgstr "<file> からJSON形式の設定を読み込みます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:77
 #, javascript-format
@@ -1481,12 +1483,11 @@ msgstr "リンクアドレスをコピー"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:821
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "この添付ファイルをダウンロードするときにエラーが発生しました:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:823
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません。"
+msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1046
 #, javascript-format
@@ -1714,9 +1715,8 @@ msgid "%s - Copy"
 msgstr "%s - コピー"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "クリックすると外部エディターでの編集を終了します"
+msgstr "外部エディターでの編集を終了"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -1997,16 +1997,15 @@ msgstr "ノートをノートブック \"%s\" に移動できません"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "未ダウンロード"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "リソースをダウンロード中..."
+msgstr "ダウンロード中"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "ダウンロード済み"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2193,7 +2192,7 @@ msgstr "ノートのソート方法"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
@@ -2626,29 +2625,27 @@ msgstr ""
 "号化は行いません。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "ファイルを添付する"
+msgstr "添付ファイル"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "ダウンロード済み（復号済み）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "ダウンロード済み（未復号）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
+msgstr "ダウンロードできなかった添付ファイル"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2735,9 +2732,8 @@ msgid "Press to set the decryption password."
 msgstr "復号するパスワードを入力してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "いくつかの項目は同期されませんでした。"
+msgstr "いくつかの項目は同期されませんでした。詳細はクリック。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2885,18 +2881,16 @@ msgstr ""
 "ノートの数に依存して、時間がかかる場合があります。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "ノートのインポート中..."
+msgstr "プロファイルのエクスポート中..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Joplin エクスポートファイル"
+msgstr "プロファイルをエクスポート"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
