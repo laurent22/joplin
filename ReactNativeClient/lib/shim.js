@@ -71,22 +71,6 @@ shim.isPortable = function() {
 	return typeof process !== 'undefined' && typeof process.env === 'object' && !!process.env.PORTABLE_EXECUTABLE_DIR;
 };
 
-shim.appVersion = function() {
-	if (shim.isReactNative()) {
-		const p = require('react-native-version-info');
-		return p.appVersion;
-	}
-	if (shim.isElectron()) {
-		const p = require('../packageInfo.js');
-		return p.version;
-	}
-	if (shim.isNode()) {
-		const p = require('../package.json');
-		return p.version;
-	}
-	throw new Error('Cannot determine platform');
-};
-
 // Node requests can go wrong is so many different ways and with so
 // many different error messages... This handler inspects the error
 // and decides whether the request can safely be repeated or not.
