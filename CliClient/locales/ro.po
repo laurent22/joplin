@@ -17,527 +17,515 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
 "%100<=19) ? 1 : 2);\n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Pentru a șterge o eticheta, ștergeți eticheta respectivă din cadrul "
 "notițelor aferente."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:455
 #, fuzzy
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Selectați prima dată un caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:719
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Apăsați Ctrl+D ori scrieți \"exit\" pentru a ieși din aplicație"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
 msgstr "Niciun caiet de notițe nu a fost selectat."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:97
 msgid "No notebook has been specified."
 msgstr "Niciun caiet de notițe nu a fost specificat."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
 msgstr "Y"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "n"
 msgstr "n"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
 msgid "N"
 msgstr "N"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
 msgstr "y"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:169
 #, fuzzy
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:254
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Nu există o asemenea comandă: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Comanda \"%s\" este disponibilă doar în modul GUI"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
 msgstr "Nu se poate schimba itemul criptat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:108
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Lipsește argumentul necesar: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:139
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:143
 msgid "Your choice: "
 msgstr "Alegerea dumneavoastră: "
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:150
 #, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Răspuns invalid: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
 msgstr "Atașează fișierul în notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:20
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:34
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:38
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:66
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-search.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-set.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-use.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Nu poate fi găsit \"%s\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:13
 msgid "Displays the given note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:17
 msgid "Displays the complete information about note."
 msgstr "Afișează informațiile complete despre notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
-msgid "Writes all settings to STDOUT as JSON including secure variables."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:19
-msgid "Reads in JSON formatted settings from STDIN."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:20
-msgid "Reads in settings from <file>. <file> must contain valid JSON."
-msgstr ""
-
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:79
 #, javascript-format
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:81
 #, javascript-format
 msgid "%s = %s"
 msgstr "%s = %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
 msgstr "Marcați o sarcină ca fiind terminată."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notița nu este o sarcină: \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:18
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:37
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:48
 msgid "Enter master password:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:50
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:55
 msgid "Operation cancelled"
 msgstr "Operațiunea a fost amânată"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
 #, fuzzy
 msgid "Confirm password:"
 msgstr "Parolă:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:59
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "Parolă nu poate fi un câmp gol"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
 msgstr "Decriptare completă."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Enabled"
 msgstr "Activat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:479
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:479
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "Criptarea este: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:17
 msgid "Edit note."
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
 msgstr "Niciun caiet de notițe activ."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notița nu există: \"%s\". Doriți să o creați?"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-exit.js:11
 msgid "Exits the application."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:13
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
 msgstr "Format la destinație: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 #, fuzzy
 msgid "Exports only the given notebook."
 msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:13
 msgid "Displays usage information."
 msgstr "Afișați informațiile de utilizare."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Scurtăturile nu sunt disponibile în modul CLI."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:73
 msgid "The possible commands are:"
 msgstr "Comenzile posibile sunt:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:77
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "Pentru a vă muta dintr-un panou în altul, apăsați Tab ori Shift+Tab."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
 msgstr "Pentru a maximiza/minimiza consola, apăsați \"tc\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
 msgstr "Pentru a intra în linia de comandă, apăsați \":\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
 msgstr "Importați date în Joplin."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:24
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Formatul sursei: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:24
 msgid "Do not ask for confirmation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:69
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Găsit: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:70
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:44
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Creat: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:71
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:45
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Actualizat: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:72
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Sărite: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:73
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:47
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Resurse: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:74
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Etichetate: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:61
 msgid "Importing notes..."
 msgstr "Se importă notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:66
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Notițele au fost importante: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Displays only the first top <num> notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Reverses the sorting order."
 msgstr "Inversează ordinea sortării."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Either \"text\" or \"json\""
 msgstr "Fie \"text\", fie \"json\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:56
 msgid "Please select a notebook first."
 msgstr "Selectați prima dată un caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Creați caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:12
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mknote.js:12
 msgid "Creates a new note."
 msgstr "Creați o nouă notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mknote.js:16
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mktodo.js:16
 msgid "Notes can only be created within a notebook."
 msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
 msgstr "Creează o nouă sarcină."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Șterge caietele de notițe fără a mai cere confirmarea."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
 msgid "Delete note?"
 msgstr "Ștergeți notița?"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:14
 #, javascript-format
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
@@ -546,56 +534,56 @@ msgid ""
 "%s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/OneDriveLoginScreen.min.js:40
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:91
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:42
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:86
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:42
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:47
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:47
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Pasul 1: Deschideți adresa URL în navigatorul dumneavoastră web pentru a "
 "autoriza aplicația:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:57
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:57
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pasul 2: Introduceți codul oferit de Dropbox:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
 msgstr "Sincronizarea este deja în progres."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -603,28 +591,28 @@ msgid ""
 "operation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:177
 msgid "Cannot initialize synchroniser."
 msgstr "Nu se poate inițializa sincronizatorul."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
 msgstr "Se începe sincronizarea..."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:14
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
@@ -632,12 +620,12 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Comandă invalidă: \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-todo.js:14
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
 "toggle the given to-do between completed and uncompleted state (If the "
@@ -645,61 +633,61 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
 msgstr "Marcați o sarcină ca fiind necompletă."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-use.js:12
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Afișează informații despre versiune"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:56
 msgid "Enum"
 msgstr "Enum"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:56
 #, javascript-format
 msgid "Type: %s."
 msgstr "Tip: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
 msgstr "Valori posibile: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:71
 #, javascript-format
 msgid "Default: %s"
 msgstr "Modul implicit: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
 msgstr "Posibile chei/valori:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/main.js:77
 msgid "Type `joplin help` for usage information."
 msgstr "Tastați `joplin help` pentru informații de utilizare."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/main.js:79
 msgid "Fatal error:"
 msgstr "Eroare fatală:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
 msgstr "Căutați:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
@@ -716,7 +704,7 @@ msgstr ""
 "De exemplu, creați un caiet de notițe apăsând 'mb'; pentru a crea o notă "
 "apăsați 'mn'."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
 "master password. To do so please type `e2ee decrypt`. If you have already "
@@ -724,446 +712,447 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:645
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:728
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:645
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:728
 #, fuzzy
 msgid "&File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:651
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1031
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:651
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1031
 msgid "About Joplin"
 msgstr "Despre Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:658
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:658
 msgid "Preferences..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:668
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1010
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:668
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1010
 msgid "Check for updates..."
 msgstr "Verificați actualizările..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:682
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:742
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:682
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:742
 msgid "Templates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:689
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:747
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:90
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:689
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:747
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:90
 msgid "Import"
 msgstr "Importați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:693
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:750
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:379
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:181
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:693
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:750
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:379
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:181
 msgid "Export"
 msgstr "Exportați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:699
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:699
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
 msgid "Synchronise"
 msgstr "Sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:714
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:714
 #, javascript-format
 msgid "Hide %s"
 msgstr "Ascundeți %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:721
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:721
 msgid "Quit"
 msgstr "Ieșiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:735
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:735
 msgid "Close Window"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:773
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:773
 #, fuzzy
 msgid "&Edit"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:776
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:792
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:776
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:800
 msgid "Copy"
 msgstr "Copiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:781
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:781
 msgid "Cut"
 msgstr "Tăiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:786
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:786
 msgid "Paste"
 msgstr "Lipește"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:791
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:791
 #, fuzzy
 msgid "Select all"
 msgstr "Selectați data"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:799
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1589
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:799
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1605
 msgid "Bold"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:810
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1597
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:810
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1613
 msgid "Italic"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:821
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:821
 msgid "Link"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:832
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1617
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:832
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1633
 msgid "Code"
 msgstr "Cod"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:846
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1677
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:846
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1693
 msgid "Insert Date Time"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:860
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1700
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:56
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:860
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1716
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:56
 msgid "Edit in external editor"
 msgstr "Editați într-un editor extern"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:871
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1534
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1709
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:755
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:871
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1550
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1725
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:290
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:755
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Etichete"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:889
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:889
 msgid "Search in all the notes"
 msgstr "Căutați în toate notițele"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:900
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:900
 #, fuzzy
 msgid "Search in current note"
 msgstr "Căutați în toate notițele"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:912
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:912
 #, fuzzy
 msgid "&View"
 msgstr "Vizualizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:914
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:461
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:914
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:461
 msgid "Toggle sidebar"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:927
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:927
 msgid "Layout button sequence"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:931
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:470
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:931
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:470
 #, fuzzy
 msgid "Toggle note list"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:940
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:940
 #, fuzzy
 msgid "Toggle editor layout"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:988
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:988
 msgid "Focus"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:994
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:994
 #, fuzzy
 msgid "&Tools"
 msgstr "Unelte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:998
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:998
 #, fuzzy
 msgid "&Help"
 msgstr "Ajutor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1000
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1000
 msgid "Website and documentation"
 msgstr "Website și documentație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1004
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1004
 #, fuzzy
 msgid "Joplin Forum"
 msgstr "Website Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1007
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1007
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
 msgid "Make a donation"
 msgstr "Faceți o donație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1019
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1019
 #, fuzzy
 msgid "Toggle development tools"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1153
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1153
 #, javascript-format
 msgid "Open %s"
 msgstr "Deschideți %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1155
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1155
 msgid "Exit"
 msgstr "Ieșiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:102
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:112
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:138
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:180
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:749
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:30
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:233
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:102
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:112
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:138
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:749
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:233
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
 msgid "OK"
 msgstr "OK"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:102
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:38
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:238
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:316
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:154
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:163
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:102
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:38
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:238
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:316
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:154
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:163
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Cancel"
 msgstr "Anulați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:137
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:137
 msgid "Current version is up-to-date."
 msgstr "Versiunea curentă este actualizată."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:146
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:146
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 msgid "An update is available, do you want to download it now?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 #, javascript-format
 msgid "Your version: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 #, javascript-format
 msgid "New version: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "Yes"
 msgstr "Da"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "No"
 msgstr "Nu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "Full Release Notes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:69
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:76
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:82
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:82
 #, javascript-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:88
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:88
 msgid "Disable Web Clipper Service"
 msgstr "Dezactivați Web Clipper Service"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:94
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:94
 msgid "The web clipper service is not enabled."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:99
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:99
 msgid "Enable Web Clipper Service"
 msgstr "Activați Web Clipper Service"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:122
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:122
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:127
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:135
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:140
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:140
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:154
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:154
 msgid "Step 2: Install the extension"
 msgstr "Pasul 2: Instalați extensia"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:159
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:174
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:174
 #, fuzzy
 msgid "Advanced options"
 msgstr "Afișați opțiunile avansate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:179
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:189
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:195
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:195
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:165
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:165
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
 msgid "Check synchronisation configuration"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
 msgid "Unknown"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
 #, fuzzy
 msgid "Checking..."
 msgstr "Se amână..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
 #, fuzzy
 msgid "Error"
 msgstr "Doar erori"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
 #, fuzzy
 msgid "Show Log"
 msgstr "Afișați tot"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
 #, fuzzy
 msgid "Check Status"
 msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
 #, fuzzy
 msgid "Help"
 msgstr "Ajutor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
 #, fuzzy
 msgid "Show Advanced Settings"
 msgstr "Afișați opțiunile avansate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:637
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:637
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
 msgid "Edit"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:255
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:184
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1570
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Header.min.js:255
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:188
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1586
 msgid "Back"
 msgstr "Înapoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:756
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:756
 msgid "Apply"
 msgstr "Aplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:67
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:67
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
 msgid "Submit"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:104
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:104
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
 msgid "Save"
 msgstr "Salvați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target. Do not lose the "
@@ -1171,192 +1160,192 @@ msgid ""
 "the data! To enable encryption, please enter your password below."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
 msgid "Disable encryption"
 msgstr "Dezactivați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
 msgid "Enable encryption"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:184
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:184
 msgid "Master Keys"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:198
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:198
 msgid "Active"
 msgstr "Activ"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:203
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:284
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:203
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:284
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:26
 msgid "ID"
 msgstr "ID"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:208
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:208
 msgid "Source"
 msgstr "Sursă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:213
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:213
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:27
 msgid "Created"
 msgstr "Creat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:218
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:28
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:218
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:28
 msgid "Updated"
 msgstr "Actualizat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:223
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:223
 msgid "Password"
 msgstr "Parolă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:228
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:228
 msgid "Password OK"
 msgstr "Parolă OK"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
 msgid "Missing Master Keys"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
 msgid "Status"
 msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:332
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:332
 msgid "Encryption is:"
 msgstr "Criptarea este:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:210
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Header.min.js:210
 #, fuzzy
 msgid "Usage"
 msgstr "Utilizare: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:62
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:62
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:108
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:108
 msgid "Please create a notebook first."
 msgstr "Creați un caiet de sarcini prima dată."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:114
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:114
 msgid "Please create a notebook first"
 msgstr "Creați un caiet de sarcini prima dată"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:121
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:121
 msgid "Notebook title:"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:160
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:160
 msgid "Add or remove tags:"
 msgstr "Adăugați ori eliminați etichete:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:181
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:181
 msgid "Rename notebook:"
 msgstr "Redenumiți caietul de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:202
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:202
 msgid "Rename tag:"
 msgstr "Redenumiți eticheta:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:295
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:295
 msgid "Set alarm:"
 msgstr "Setați alarma:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:326
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:326
 msgid "Template file:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:479
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:69
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:479
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:69
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:488
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:60
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:488
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:60
 msgid "New to-do"
 msgstr "Adăugați o nouă sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:497
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:497
 msgid "New notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:505
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1046
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:505
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 msgid "Layout"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:514
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteSearchBar.min.js:123
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:514
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteSearchBar.min.js:123
 msgid "Search..."
 msgstr "Caută..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:553
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:553
 msgid "Some items cannot be synchronised."
 msgstr "Câțiva itemi nu pot fi sincronizați."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:563
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:563
 msgid "View them now"
 msgstr "Vizualizați-le acum"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:570
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:570
 msgid "One or more master keys need a password."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:580
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:580
 msgid "Set the password"
 msgstr "Setați parola"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
 #, fuzzy
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe butonnul "
 "(+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
 #, fuzzy
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
@@ -1364,204 +1353,214 @@ msgstr ""
 "Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe butonnul "
 "(+)."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
+#, fuzzy
+msgid "Completed"
+msgstr "Completat: %s"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
 msgid "URL"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:967
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:967
 #, fuzzy
 msgid "Note History"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:295
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:312
 msgid "Previous versions of this note"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:372
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1733
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:389
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1749
 #, fuzzy
 msgid "Note properties"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:75
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:100
 #, fuzzy
 msgid "This note has no history"
 msgstr "Această notiță a fost modificată:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:139
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:853
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:861
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:174
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:178
 msgid "Restore"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:175
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:179
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:766
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:774
 msgid "Open..."
 msgstr "Deschideți..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:769
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:777
 #, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:774
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:782
 msgid "Save as..."
 msgstr "Salvați ca..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:785
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:793
 msgid "Copy path to clipboard"
 msgstr "Copiați locația în clipboard"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:799
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:807
 msgid "Copy Link Address"
 msgstr "Copați adresa link-ului"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:821
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
 msgid "There was an error downloading this attachment:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:823
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1046
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1455
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1471
 msgid "strong text"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1459
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1475
 msgid "emphasized text"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1493
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1497
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1504
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1509
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1513
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1520
 msgid "List item"
 msgstr "Listați item"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1516
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1532
 msgid "Insert Hyperlink"
 msgstr "Introduceți hyperlink"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1527
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1625
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1543
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1641
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:282
 msgid "Attach file"
 msgstr "Atașați fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1542
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1727
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1558
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1743
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:299
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
 msgid "Set alarm"
 msgstr "Setați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1556
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1572
 #, javascript-format
 msgid "In: %s"
 msgstr "În: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1609
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1625
 msgid "Hyperlink"
 msgstr "Hyperlink"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1637
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1653
 msgid "Numbered List"
 msgstr "Listă numerotată"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1645
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1661
 msgid "Bulleted List"
 msgstr "Listă cu puncte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1653
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1669
 msgid "Checkbox"
 msgstr "Căsuță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1661
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1677
 msgid "Heading"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1669
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1685
 msgid "Horizontal Rule"
 msgstr "Linie orizontală"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1691
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1707
 msgid "Click to stop external editing"
 msgstr "Faceți click pentru a opri editarea în aplicația externă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1692
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1708
 #, fuzzy
 msgid "Watching..."
 msgstr "Se amână..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2006
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 msgid "to-do"
 msgstr "sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2006
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 msgid "note"
 msgstr "notiță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2006
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Se crează un %s..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:243
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:243
 #, fuzzy
 msgid "Clear"
 msgstr "Setați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:88
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:88
 msgid "OneDrive Login"
 msgstr "Autentificare OneDrive"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:89
 msgid "Dropbox Login"
 msgstr "Autentificare Dropbox"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:91
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:91
 msgid "Options"
 msgstr "Opțiuni"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:92
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:92
 msgid "Synchronisation Status"
 msgstr "Statutul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
 #, fuzzy
 msgid "Synchronising..."
 msgstr "Statusul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
 #, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
@@ -1569,24 +1568,24 @@ msgstr[0] "Se crează un %s..."
 msgstr[1] "Se crează un %s..."
 msgstr[2] "Se crează un %s..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
 #, fuzzy
 msgid "Share Notes"
 msgstr "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
 #, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
@@ -1594,16 +1593,16 @@ msgstr[0] "Distribuie"
 msgstr[1] "Distribuie"
 msgstr[2] "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:283
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:283
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1611,147 +1610,147 @@ msgid ""
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:284
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:188
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:310
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:144
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:284
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:188
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:310
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:144
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
 msgid "Delete"
 msgstr "Ștergeți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:287
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:287
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:289
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:289
 msgid "Remove this search from the sidebar?"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
 #, fuzzy
 msgid "New sub-notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:127
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:127
 msgid "Rename"
 msgstr "Redenumiți"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:738
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:360
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:738
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:360
 msgid "Notebooks"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:773
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:322
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:773
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:322
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Se decriptează itemi: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:778
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:327
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:778
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:327
 #, fuzzy, javascript-format
 msgid "Fetching resources: %d/%d"
 msgstr "Resurse: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:33
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:87
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
 msgid "Retry"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
 msgstr "Adăugați ori eliminați etichete"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:41
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:316
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:41
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:316
 #, fuzzy
 msgid "Duplicate"
 msgstr "Duplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:46
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Copiați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
 #, fuzzy
 msgid "Stop external editing"
 msgstr "Faceți click pentru a opri editarea în aplicația externă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:101
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:101
 #, fuzzy
 msgid "Switch to note type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:110
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:110
 #, fuzzy
 msgid "Switch to to-do type"
 msgstr "Schimbați între notiță și sarcină"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:120
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:120
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
 msgid "Copy Markdown link"
 msgstr "Copiați link-ul Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
 #, fuzzy
 msgid "Share note..."
 msgstr "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
 msgid "PDF File"
 msgstr "Fișier PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:205
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:205
 #, fuzzy, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Ștergeți notițele?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:207
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:207
 #, fuzzy, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste notițe?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:224
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:224
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "Eroare deschidere notiță în editor: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:339
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:339
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
 msgid "Goto Anything..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:109
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:122
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:153
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:109
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:122
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:153
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Utilizare: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:180
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
 "Could not connect to the Joplin Nextcloud app. Please check the "
@@ -1760,50 +1759,50 @@ msgid ""
 "%s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
 msgid "File system"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (Doar pentru teste)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:176
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/logger.js:176
 #, javascript-format
 msgid "Unknown log level: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:185
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/logger.js:185
 #, javascript-format
 msgid "Unknown level ID: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
 msgid "The application has been successfully authorised."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
 msgid ""
 "Please open the following URL in your browser to authenticate the "
 "application. The application will create a directory in \"Apps/Joplin\" and "
@@ -1812,20 +1811,20 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:99
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:99
 msgid "Untitled"
 msgstr "Fără denumire"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:137
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/registry.js:137
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1835,130 +1834,130 @@ msgid ""
 "Please consider using a regular OneDrive account."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:126
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:126
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "Nu se poate accesa %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Creare itemi locali: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Itemi locali actualizați: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Itemi locali șterși: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
 msgid "Cancelling..."
 msgstr "Se amână..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Completat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Ultima eroare: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
 msgid "Idle"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
 msgid "In progress"
 msgstr "În progres"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
 msgid "Encrypted items cannot be modified"
 msgstr "Itemii criptați nu pot fi editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:23
 msgid "title"
 msgstr "titlu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
 msgid "updated date"
 msgstr "data actualizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
 msgid "Conflicts"
 msgstr "Conflicte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
 msgid "Cannot move notebook to this location"
 msgstr "Nu se poate muta caietul de notițe în această locație"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "created date"
 msgstr "data creării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:104
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:104
 msgid "This note does not have geolocation information."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:431
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:431
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:442
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:442
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
 msgid "Downloading"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -1966,407 +1965,407 @@ msgid ""
 "more details: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 #, fuzzy
 msgid "Default"
 msgstr "Modul implicit: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
 msgid "Nextcloud WebDAV URL"
 msgstr "URL NextCloud WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
 msgid "Nextcloud username"
 msgstr "Nume utilizator Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
 msgid "Nextcloud password"
 msgstr "Parolă Nextcloud"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
 msgid "WebDAV URL"
 msgstr "URL-ul WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
 msgid "WebDAV username"
 msgstr "Nume utilizator WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
 msgid "WebDAV password"
 msgstr "Parolă WebDAV"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
 msgid "Attachment download behaviour"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
 msgid "Always"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
 msgid "Manual"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
 msgid "Auto"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
 msgid "Max concurrent connections"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
 msgid "Language"
 msgstr "Limbă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
 msgid "Date format"
 msgstr "Format dată"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:223
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:223
 msgid "Time format"
 msgstr "Format timp"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:238
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:238
 msgid "Theme"
 msgstr "Temă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:242
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:242
 msgid "Light"
 msgstr "Deschisă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
 msgid "Dark"
 msgstr "Închisă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:245
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:245
 msgid "Dracula"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Solarised Light"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
 msgid "Solarised Dark"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Nord"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
 #, fuzzy
 msgid "Show note counts"
 msgstr "Afișați iconița coșul de gunoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #, fuzzy
 msgid "Editor"
 msgstr "Editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, fuzzy
 msgid "Viewer"
 msgstr "Vizualizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Split View"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s = %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Uncompleted to-dos on top"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
 msgid "Show completed to-dos"
 msgstr "Arătați sarcinile terminate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
 msgid "Sort notes by"
 msgstr "Sortați notițele după"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
 msgid "Reverse sort order"
 msgstr "Inversați ordinea sortării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:302
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:302
 #, fuzzy
 msgid "Sort notebooks by"
 msgstr "Sortați notițele după"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:314
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:314
 msgid "Save geo-location with notes"
 msgstr "Salvați geo-locația în  notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:322
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:322
 msgid "When creating a new to-do:"
 msgstr "Când este creată o nouă sarcină:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
 msgid "Focus title"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
 msgid "Focus body"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:337
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:337
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:351
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:351
 msgid "Enable soft breaks"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:352
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:352
 msgid "Enable typographer support"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:353
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:353
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
 msgid "Enable ==mark== syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
 msgid "Enable footnotes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
 msgid "Enable table of contents extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
 msgid "Enable ~sub~ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Enable ^sup^ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Enable deflist syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
 msgid "Enable abbreviation syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
 msgid "Enable markdown emoji"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Enable ++insert++ syntax"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid "Enable Fountain syntax support"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
 msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
 msgid "Start application minimised in the tray icon"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:390
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:390
 msgid "Global zoom percentage"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:391
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:391
 #, fuzzy
 msgid "Editor font size"
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:399
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:399
 #, fuzzy
 msgid "Editor font"
 msgstr "Editează notiță."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:423
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:423
 msgid "Editor font family"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:425
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:425
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
 msgid "Automatically update the application"
 msgstr "Actualizați automat aplicația"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:476
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:476
 msgid "Synchronisation interval"
 msgstr "Intervalul de sincronizare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:480
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:481
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:482
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:480
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:481
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:482
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minute"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
 #, javascript-format
 msgid "%d hour"
 msgstr "%d oră"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:485
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:485
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ore"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Text editor command"
 msgstr "Comandă editor de text"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 msgid "Page size for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
 msgid "A4"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
 msgid "Letter"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:499
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:499
 msgid "A3"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
 msgid "A5"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
 msgid "Tabloid"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
 msgid "Legal"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page orientation for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "Portrait"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Landscape"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:523
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:523
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2374,372 +2373,372 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:539
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:539
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:542
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:542
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
 #, fuzzy
 msgid "Enable note history"
 msgstr "Activați criptarea"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 msgid "days"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 #, javascript-format
 msgid "%d days"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:562
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:562
 msgid "Keep note history for"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:677
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:677
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:961
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:961
 #, fuzzy
 msgid "General"
 msgstr "Opțiuni Generale"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:962
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:962
 #, fuzzy
 msgid "Synchronisation"
 msgstr "Statusul sincronizării"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:963
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:963
 msgid "Appearance"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:964
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:964
 #, fuzzy
 msgid "Note"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:965
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:965
 msgid "Plugins"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:966
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:966
 #, fuzzy
 msgid "Application"
 msgstr "Duplicați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:968
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:968
 #, fuzzy
 msgid "Encryption"
 msgstr "Criptarea este:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:969
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:969
 msgid "Web Clipper"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:168
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:168
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
 msgid "Joplin Export File"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
 msgid "Markdown"
 msgstr "Markdown"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
 msgid "Joplin Export Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
 msgid "Evernote Export File (as Markdown)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
 msgid "Evernote Export File (as HTML)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
 #, fuzzy
 msgid "HTML File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
 msgid "HTML Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
 msgstr "Fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "Directory"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
 msgstr "Nu există date de exportat."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
 msgid "Restored Notes"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
 msgstr "Itemii nu pot fi sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
 #, fuzzy, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
 #, fuzzy
 msgid "Items that cannot be decrypted"
 msgstr "Itemii nu pot fi sincronizați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
 #, fuzzy
 msgid "Attachments"
 msgstr "Atașați fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
 #, fuzzy, javascript-format
 msgid "%s: %d"
 msgstr "%s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
 #, fuzzy
 msgid "Attachments that could not be downloaded"
 msgstr "Acest fișier nu a putut fi deschis: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
 msgid "Sync status (synced items / total items)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Total: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "În conflict: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
 #, javascript-format
 msgid "To delete: %d"
 msgstr "De șters: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
 msgid "Folders"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
 msgid "Coming alarms"
 msgstr "Alarmele următoare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
 #, javascript-format
 msgid "On %s: %s"
 msgstr "Pe %s: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:178
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:178
 msgid "Permission to use camera"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:179
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:179
 msgid "Your permission to use your camera is required."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:116
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:116
 #, fuzzy
 msgid "You currently have no notebooks."
 msgstr "Niciun caiet de notițe activ."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:120
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:120
 #, fuzzy
 msgid "Create a notebook"
 msgstr "Creați caiet de notițe."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:124
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:124
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:179
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:179
 msgid "Delete these notes?"
 msgstr "Ștergeți aceste notițe?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:346
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:346
 msgid "Move to notebook..."
 msgstr "Mutați în caietul de notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:385
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:385
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Mutați %d notițe în caietul de notițe \"%s\"?"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
 msgid "Press to set the decryption password."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
 #, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Câțiva itemi nu pot fi sincronizați."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 #, fuzzy
 msgid "Clear alarm"
 msgstr "Setați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
 msgid "Save alarm"
 msgstr "Salvați alarma"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
 msgid "Select date"
 msgstr "Selectați data"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
 msgid "Confirm"
 msgstr "Confirmați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:124
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:124
 #, fuzzy, javascript-format
 msgid "Notebook: %s"
 msgstr "Caiete de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:130
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:130
 #, fuzzy
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Itemii criptați nu pot fi editați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:309
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:309
 #, fuzzy
 msgid "New Notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
 msgid "Configuration"
 msgstr "Configurare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:356
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:356
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
 #, fuzzy
 msgid "All notes"
 msgstr "notiță"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
 #, fuzzy
 msgid "Checking... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
 msgid ""
 "Could not authorise application:\n"
@@ -2749,300 +2748,300 @@ msgid ""
 "Please try again."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
 #, fuzzy, javascript-format
 msgid "Decrypted items: %s / %s"
 msgstr "Se decriptează itemi: %d/%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:161
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:161
 msgid "New tags:"
 msgstr "Etichete noi:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:175
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:175
 msgid "Type new tags or select from list"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 msgid "Warning"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
 #, fuzzy
 msgid "Information"
 msgstr "Configurare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
 msgid "Encryption Config"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
 #, fuzzy
 msgid "Tools"
 msgstr "Unelte"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
 #, fuzzy
 msgid "Sync Status"
 msgstr "Status"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:108
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:108
 msgid "Log"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 #, fuzzy
 msgid "Creating report..."
 msgstr "Se crează un %s..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 msgid "Export Debug Report"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fixing search index..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fix search index"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 #, fuzzy
 msgid "Exporting profile..."
 msgstr "Se importă notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 #, fuzzy
 msgid "Export profile"
 msgstr "Exportați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 #, fuzzy
 msgid "More information"
 msgstr "Configurare"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
 msgid "Joplin website"
 msgstr "Website Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
 #, fuzzy, javascript-format
 msgid "FTS enabled: %d"
 msgstr "De șters: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
 msgid "Login with Dropbox"
 msgstr "Autentificați-vă cu Dropbox"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Enter code here"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
 #, javascript-format
 msgid "Master Key %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
 #, javascript-format
 msgid "Created: %s"
 msgstr "Creat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
 msgid "Password:"
 msgstr "Parolă:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Password cannot be empty"
 msgstr "Parolă nu poate fi un câmp gol"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
 #, fuzzy
 msgid "Confirm password cannot be empty"
 msgstr "Parolă nu poate fi un câmp gol"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
 msgid "Enable"
 msgstr "Activați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
 msgid "The notebook could not be saved: %s"
 msgstr "Caietul de notițe nu a puut fi salvat: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "Editați caietul de notițe"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
 #, fuzzy
 msgid "Enter notebook title"
 msgstr "Titlul caietului de notițe:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:113
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:113
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
 msgid "Refresh"
 msgstr "Reîncărcați"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
 msgid "Show all"
 msgstr "Afișați tot"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
 msgid "Errors only"
 msgstr "Doar erori"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "This note has been modified:"
 msgstr "Această notiță a fost modificată:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Save changes"
 msgstr "Salvați schimbările"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Discard changes"
 msgstr "Renunțați la schimbări"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Niciun item cu ID-ul %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
 #, fuzzy, javascript-format
 msgid "Updated: %s"
 msgstr "Actualizat: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
 msgid "View on map"
 msgstr "Vizualizați pe hartă"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
 msgid "Go to source URL"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
 #, fuzzy
 msgid "Attach..."
 msgstr "Caută..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 #, fuzzy
 msgid "Choose an option"
 msgstr "Afișați opțiunile avansate"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 #, fuzzy
 msgid "Take photo"
 msgstr "Atașează imagine"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach photo"
 msgstr "Atașează imagine"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach any file"
 msgstr "Atașați orice fișier"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
 msgid "Share"
 msgstr "Distribuie"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 #, fuzzy
 msgid "Convert to note"
 msgstr "Mutați în caietul de notițe..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 msgid "Convert to todo"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Properties"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
 msgid "Add body"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
 #, fuzzy
 msgid "Add title"
 msgstr "titlu"
 
 # vezi context
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
 msgid "Login with OneDrive"
 msgstr "Autentificare prin OneDrive"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:161
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:161
 msgid "Search"
 msgstr "Caută"
 
