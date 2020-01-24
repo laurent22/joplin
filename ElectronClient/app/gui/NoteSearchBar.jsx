@@ -116,22 +116,12 @@ class NoteSearchBarComponent extends React.Component {
 		this.refs.searchInput.focus();
 	}
 
-	getMatchesFoundString() {
-		if (this.props.resultCount === 0) {
-			return _('No matches found');
-		}
-		if (this.props.resultCount === 1) {
-			return _('1 of 1 match');
-		}
-		return _('%d of %d matches', this.props.selectedIndex + 1, this.props.resultCount);
-	}
-
 	render() {
 		const theme = themeStyle(this.props.theme);
 		let backgroundColor = theme.backgroundColor;
 		let buttonEnabled = true;
 
-		if (this.props.resultCount === 0 && this.props.query.length >  0) {
+		if (this.props.resultCount === 0 && this.props.resultQuery.length >  0) {
 			backgroundColor = theme.warningBackgroundColor;
 			buttonEnabled = false;
 		}
@@ -146,10 +136,10 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.colorFaded,
 			backgroundColor: theme.backgroundColor,
 		});
-		const matchesFoundString = (this.props.query.length > 0) ? (
-			<div style={textStyle}> {
-				this.getMatchesFoundString()
-			} </div>
+		const matchesFoundString = (this.props.resultQuery.length > 0 && this.props.resultCount > 0) ? (
+			<div style={textStyle}>
+				{`${this.props.selectedIndex + 1} / ${this.props.resultCount}`}
+			</div>
 		) : null;
 
 		return (
