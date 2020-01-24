@@ -8,13 +8,16 @@ const { shim } = require('lib/shim');
 
 class InteropServiceHelper {
 
-	static async exportNoteToHtmlFile(noteId) {
+	static async exportNoteToHtmlFile(noteId, exportOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
-		const exportOptions = {};
-		exportOptions.path = tempFile;
-		exportOptions.format = 'html';
-		exportOptions.target = 'file';
-		exportOptions.sourceNoteIds = [noteId];
+
+		exportOptions = Object.assign({}, {
+			path: tempFile,
+			format: 'html',
+			target: 'file',
+			sourceNoteIds: [noteId],
+			customCss: '',
+		}, exportOptions);
 
 		const service = new InteropService();
 
@@ -33,7 +36,11 @@ class InteropServiceHelper {
 		};
 
 		try {
-			htmlFile = await this.exportNoteToHtmlFile(noteId);
+			const exportOptions = {
+				customCss: options.customCss ? options.customCss : '',
+			};
+
+			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
 			const windowOptions = {
 				show: false,
