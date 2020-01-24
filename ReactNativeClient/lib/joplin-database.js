@@ -2,6 +2,7 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
+const { shim } = require('lib/shim.js');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -315,8 +316,7 @@ class JoplinDatabase extends Database {
 		// version of the database, so that migration is not run in this case.
 		if (currentVersionIndex < 0) {
 			this.logger().error(`Cannot convert database from version ${fromVersion} to ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
-			const p = require('../package.json');
-			throw new Error(`Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\n${p.name} version: ${p.version}\nProfile version: ${fromVersion}\nExpected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
+			throw new Error(`Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\nJoplin version: ${shim.appVersion()}\nProfile version: ${fromVersion}\nExpected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
 		}
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
