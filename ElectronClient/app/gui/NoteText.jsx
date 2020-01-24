@@ -1264,6 +1264,7 @@ class NoteTextComponent extends React.Component {
 						printBackground: true,
 						pageSize: Setting.value('export.pdfPageSize'),
 						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+						customCss: this.props.customCss,
 					});
 					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
 				} catch (error) {
@@ -1274,6 +1275,7 @@ class NoteTextComponent extends React.Component {
 				try {
 					await InteropServiceHelper.printNote(options.noteId, {
 						printBackground: true,
+						customCss: this.props.customCss,
 					});
 				} catch (error) {
 					console.error(error);

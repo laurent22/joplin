@@ -7,7 +7,7 @@ class InteropService_Exporter_Base {
 		this.context_ = {};
 	}
 
-	async init(destDir) {}
+	async init(destDir, options = {}) {}
 	async prepareForProcessingItemType(type, itemsToExport) {}
 	async processItem(ItemClass, item) {}
 	async processResource(resource, filePath) {}
