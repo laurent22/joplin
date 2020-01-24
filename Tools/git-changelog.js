@@ -223,6 +223,7 @@ async function findFirstRelevantTag(baseTag) {
 	while (true) {
 		try {
 			const logs = await gitLog(tag);
+			console.info(logs);process.exit();
 			if (logs.length) return tag;
 		} catch (error) {
 			if (error.message.indexOf('unknown revision') >= 0) {
