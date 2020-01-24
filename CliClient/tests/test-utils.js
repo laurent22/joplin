@@ -299,7 +299,7 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey(masterKey, '123456', true);
+	await service.loadMasterKey_(masterKey, '123456', true);
 
 	return masterKey;
 }
@@ -370,8 +370,12 @@ function asyncTest(callback) {
 		try {
 			await callback();
 		} catch (error) {
-			console.error(error);
-			expect('good').toBe('not good', 'Test has thrown an exception - see above error');
+			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
+				// OK - will be reported by Jasmine
+			} else {
+				console.error(error);
+				expect(0).toBe(1, 'Test has thrown an exception - see above error');
+			}
 		} finally {
 			done();
 		}

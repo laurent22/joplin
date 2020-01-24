@@ -6,21 +6,28 @@
 
 require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, githubUsername } = require('./tool-utils.js');
 
 async function gitLog(sinceTag) {
-	let lines = await execCommand(`git log --pretty=format:"%H:%s" ${sinceTag}..HEAD`);
+	let lines = await execCommand(`git log --pretty=format:"%H::::DIV::::%ae::::DIV::::%an::::DIV::::%s" ${sinceTag}..HEAD`);
 	lines = lines.split('\n');
 
 	const output = [];
 	for (const line of lines) {
-		const splitted = line.split(':');
+		const splitted = line.split('::::DIV::::');
 		const commit = splitted[0];
-		const message = line.substr(commit.length + 1).trim();
+		const authorEmail = splitted[1];
+		const authorName = splitted[2];
+		const message = splitted[3].trim();
 
 		output.push({
 			commit: commit,
 			message: message,
+			author: {
+				email: authorEmail,
+				name: authorName,
+				login: await githubUsername(authorEmail),
+			},
 		});
 	}
 
@@ -73,7 +80,7 @@ function filterLogs(logs, platform) {
 	return output;
 }
 
-function formatCommitMessage(msg) {
+function formatCommitMessage(msg, author) {
 	let output = '';
 
 	const splitted = msg.split(':');
@@ -169,6 +176,20 @@ function formatCommitMessage(msg) {
 		if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
 	}
 
+	let authorMd = null;
+	if (author && (author.login || author.name) && author.login !== 'laurent22') {
+		if (author.login) {
+			const escapedLogin = author.login.replace(/\]/g, '');
+			authorMd = `[@${escapedLogin}](https://github.com/${encodeURI(author.login)})`;
+		} else {
+			authorMd = `${author.name}`;
+		}
+	}
+
+	if (authorMd) {
+		output = output.replace(/\((#[0-9]+)\)$/, `($1 by ${authorMd})`);
+	}
+
 	return output;
 }
 
@@ -176,7 +197,7 @@ function createChangeLog(logs) {
 	const output = [];
 
 	for (const log of logs) {
-		output.push(formatCommitMessage(log.message));
+		output.push(formatCommitMessage(log.message, log.author));
 	}
 
 	return output;
