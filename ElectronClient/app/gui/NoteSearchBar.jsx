@@ -7,10 +7,6 @@ class NoteSearchBarComponent extends React.Component {
 	constructor() {
 		super();
 
-		this.state = {
-			query: '',
-		};
-
 		this.searchInput_change = this.searchInput_change.bind(this);
 		this.searchInput_keyDown = this.searchInput_keyDown.bind(this);
 		this.previousButton_click = this.previousButton_click.bind(this);
@@ -65,7 +61,6 @@ class NoteSearchBarComponent extends React.Component {
 
 	searchInput_change(event) {
 		const query = event.currentTarget.value;
-		this.setState({ query: query });
 		this.triggerOnChange(query);
 	}
 
@@ -121,7 +116,9 @@ class NoteSearchBarComponent extends React.Component {
 		let backgroundColor = theme.backgroundColor;
 		let buttonEnabled = true;
 
-		if (this.props.resultCount === 0 && this.props.resultQuery.length >  0) {
+		const query = this.props.query ? this.props.query : '';
+
+		if (this.props.resultCount === 0 && query.length >  0 && !this.props.searching) {
 			backgroundColor = theme.warningBackgroundColor;
 			buttonEnabled = false;
 		}
@@ -136,7 +133,7 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.colorFaded,
 			backgroundColor: theme.backgroundColor,
 		});
-		const matchesFoundString = (this.props.resultQuery.length > 0 && this.props.resultCount > 0) ? (
+		const matchesFoundString = (query.length > 0 && this.props.resultCount > 0) ? (
 			<div style={textStyle}>
 				{`${this.props.selectedIndex + 1} / ${this.props.resultCount}`}
 			</div>
@@ -148,7 +145,7 @@ class NoteSearchBarComponent extends React.Component {
 					{closeButton}
 					<input
 						placeholder={_('Search...')}
-						value={this.state.query}
+						value={query}
 						onChange={this.searchInput_change}
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"

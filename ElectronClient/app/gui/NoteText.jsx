@@ -89,8 +89,8 @@ class NoteTextComponent extends React.Component {
 		this.localSearchDefaultState = {
 			query: '',
 			selectedIndex: 0,
-			resultQuery: '',
 			resultCount: 0,
+			searching: false,
 		};
 
 		this.state = {
@@ -313,8 +313,8 @@ class NoteTextComponent extends React.Component {
 					query: query,
 					selectedIndex: 0,
 					timestamp: Date.now(),
-					resultQuery: this.state.localSearch.resultQuery,
 					resultCount: this.state.localSearch.resultCount,
+					searching: true,
 				},
 			});
 		};
@@ -767,8 +767,8 @@ class NoteTextComponent extends React.Component {
 			reg.logger().error(s.join(':'));
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
-			ls.resultQuery = ls.query;
 			ls.resultCount = arg0;
+			ls.searching = false;
 			this.setState({ localSearch: ls });
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
@@ -2154,7 +2154,8 @@ class NoteTextComponent extends React.Component {
 					width: innerWidth,
 					borderTop: `1px solid ${theme.dividerColor}`,
 				}}
-				resultQuery={this.state.localSearch.resultQuery}
+				query={this.state.localSearch.query}
+				searching={this.state.localSearch.searching}
 				resultCount={this.state.localSearch.resultCount}
 				selectedIndex={this.state.localSearch.selectedIndex}
 				onChange={this.noteSearchBar_change}
