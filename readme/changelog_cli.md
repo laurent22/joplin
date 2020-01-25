@@ -1,5 +1,23 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.153](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153) - 2020-01-24T23:16:32Z
+
+- New: Added new, more secure encryption methods, so that they can be switched to at a later time
+- New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)
+- New: Added more logging for resource fetching to try to debug issue
+- New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)
+- Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)
+- Improved: Upgrade sqlite (#2248 by Devon Zuegel)
+- Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update CliClient node dependency to 10+ (#2177 by [@joeltaylor](https://github.com/joeltaylor))
+- Improved: Allow exporting a note as HTML
+- Improved: Improved logging during sync to allow finding bugs more easily
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)
+- Fixed: Restaured translations that had been accidentally deleted (#2126)
+- Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)
+- Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)
+
 ## [cli-v1.0.150](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150) - 2019-11-11T19:19:03Z
 
 - New: Add command to list all tags for a note (#2003) (#1974)

@@ -26,7 +26,7 @@ async function gitLog(sinceTag) {
 			author: {
 				email: authorEmail,
 				name: authorName,
-				login: await githubUsername(authorEmail),
+				login: await githubUsername(authorEmail, authorName),
 			},
 		});
 	}
