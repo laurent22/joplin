@@ -26,7 +26,7 @@ async function gitLog(sinceTag) {
 			author: {
 				email: authorEmail,
 				name: authorName,
-				login: await githubUsername(authorEmail),
+				login: await githubUsername(authorEmail, authorName),
 			},
 		});
 	}
@@ -223,7 +223,6 @@ async function findFirstRelevantTag(baseTag) {
 	while (true) {
 		try {
 			const logs = await gitLog(tag);
-			console.info(logs);process.exit();
 			if (logs.length) return tag;
 		} catch (error) {
 			if (error.message.indexOf('unknown revision') >= 0) {
