@@ -12,6 +12,8 @@ class NoteSearchBarComponent extends React.Component {
 		this.previousButton_click = this.previousButton_click.bind(this);
 		this.nextButton_click = this.nextButton_click.bind(this);
 		this.closeButton_click = this.closeButton_click.bind(this);
+
+		this.backgroundColor = undefined;
 	}
 
 	style() {
@@ -112,16 +114,20 @@ class NoteSearchBarComponent extends React.Component {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
-		let backgroundColor = theme.backgroundColor;
-		let buttonEnabled = true;
-
 		const query = this.props.query ? this.props.query : '';
 
-		if (this.props.resultCount === 0 && query.length >  0 && !this.props.searching) {
-			backgroundColor = theme.warningBackgroundColor;
-			buttonEnabled = false;
+		const theme = themeStyle(this.props.theme);
+		if (!this.props.searching) {
+			if (this.props.resultCount === 0 && query.length >  0) {
+				this.backgroundColor = theme.warningBackgroundColor;
+			} else {
+				this.backgroundColor = theme.backgroundColor;
+			}
 		}
+		if (this.backgroundColor === undefined) {
+			this.backgroundColor = theme.backgroundColor;
+		}
+		let buttonEnabled = (this.backgroundColor === theme.backgroundColor);
 
 		const closeButton = this.buttonIconComponent('fa-times', this.closeButton_click, true);
 		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click, buttonEnabled);
@@ -150,7 +156,7 @@ class NoteSearchBarComponent extends React.Component {
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"
 						type="text"
-						style={{ width: 200, marginRight: 5, backgroundColor: backgroundColor }}
+						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor }}
 					/>
 					{nextButton}
 					{previousButton}
