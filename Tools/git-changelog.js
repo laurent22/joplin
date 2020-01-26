@@ -80,7 +80,9 @@ function filterLogs(logs, platform) {
 	return output;
 }
 
-function formatCommitMessage(msg, author) {
+function formatCommitMessage(msg, author, options) {
+	options = Object.assign({}, { publishFormat: 'full' }, options);
+
 	let output = '';
 
 	const splitted = msg.split(':');
@@ -171,33 +173,40 @@ function formatCommitMessage(msg, author) {
 	messagePieces.push(`${capitalizeFirstLetter(commitMessage.message)}`);
 
 	output = messagePieces.join(': ');
-	if (commitMessage.issueNumber) {
-		const formattedIssueNum = `(#${commitMessage.issueNumber})`;
-		if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
-	}
 
-	let authorMd = null;
-	if (author && (author.login || author.name) && author.login !== 'laurent22') {
-		if (author.login) {
-			const escapedLogin = author.login.replace(/\]/g, '');
-			authorMd = `[@${escapedLogin}](https://github.com/${encodeURI(author.login)})`;
-		} else {
-			authorMd = `${author.name}`;
+	if (options.publishFormat === 'full') {
+		if (commitMessage.issueNumber) {
+			const formattedIssueNum = `(#${commitMessage.issueNumber})`;
+			if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
+		}
+
+		let authorMd = null;
+		if (author && (author.login || author.name) && author.login !== 'laurent22') {
+			if (author.login) {
+				const escapedLogin = author.login.replace(/\]/g, '');
+				authorMd = `[@${escapedLogin}](https://github.com/${encodeURI(author.login)})`;
+			} else {
+				authorMd = `${author.name}`;
+			}
+		}
+
+		if (authorMd) {
+			output = output.replace(/\((#[0-9]+)\)$/, `($1 by ${authorMd})`);
 		}
 	}
 
-	if (authorMd) {
-		output = output.replace(/\((#[0-9]+)\)$/, `($1 by ${authorMd})`);
+	if (options.publishFormat !== 'full') {
+		output = output.replace(/\((#[0-9]+)\)$/, '');
 	}
 
 	return output;
 }
 
-function createChangeLog(logs) {
+function createChangeLog(logs, options) {
 	const output = [];
 
 	for (const log of logs) {
-		output.push(formatCommitMessage(log.message, log.author));
+		output.push(formatCommitMessage(log.message, log.author, options));
 	}
 
 	return output;
@@ -251,7 +260,9 @@ async function main() {
 
 	const filteredLogs = filterLogs(logsSinceTags, platform);
 
-	let changelog = createChangeLog(filteredLogs);
+	let publishFormat = 'full';
+	if (['android', 'ios'].indexOf(platform) >= 0) publishFormat = 'simple';
+	let changelog = createChangeLog(filteredLogs, { publishFormat: publishFormat });
 
 	const changelogFixes = [];
 	const changelogImproves = [];
