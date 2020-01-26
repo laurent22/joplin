@@ -312,6 +312,27 @@ class Setting extends BaseModel {
 			},
 			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			trackLocation: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
+
+			'search.sortOrder.field': {
+				value: 'best_match',
+				type: Setting.TYPE_STRING,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Sort search results by'),
+				options: () => {
+					const SearchEngine = require('lib/services/SearchEngine');
+					const searchSortFields = ['best_match', 'user_updated_time', 'title'];
+					const options = {};
+					for (let i = 0; i < searchSortFields.length; i++) {
+						options[searchSortFields[i]] = toTitleCase(SearchEngine.fieldToLabel(searchSortFields[i]));
+					}
+					return options;
+				},
+			},
+			'search.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+
 			newTodoFocus: {
 				value: 'title',
 				type: Setting.TYPE_STRING,

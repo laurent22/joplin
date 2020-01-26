@@ -2,10 +2,10 @@ const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
 
 class SearchEngineUtils {
-	static async notesForQuery(query, options = null) {
+	static async notesForQuery(query, options = null, seOptions = null) {
 		if (!options) options = {};
 
-		const results = await SearchEngine.instance().search(query);
+		const results = await SearchEngine.instance().search(query, seOptions);
 		const noteIds = results.map(n => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not

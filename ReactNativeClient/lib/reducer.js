@@ -85,6 +85,15 @@ stateUtils.foldersOrder = function(stateSettings) {
 	]);
 };
 
+stateUtils.searchOrder = function(stateSettings) {
+	return cacheEnabledOutput('searchOrder', [
+		{
+			by: stateSettings['search.sortOrder.field'],
+			dir: stateSettings['search.sortOrder.reverse'] ? 'DESC' : 'ASC',
+		},
+	]);
+};
+
 stateUtils.parentItem = function(state) {
 	const t = state.notesParentType;
 	let id = null;

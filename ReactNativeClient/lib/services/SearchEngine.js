@@ -7,6 +7,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
+const { _ } = require('lib/locale.js');
 
 class SearchEngine {
 	constructor() {
@@ -20,6 +21,16 @@ class SearchEngine {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new SearchEngine();
 		return this.instance_;
+	}
+
+	static fieldToLabel(field) {
+		const fieldsToLabels = {
+			title: _('title'),
+			user_updated_time: _('updated date'),
+			user_created_time: _('created date'),
+			best_match: _('best match'),
+		};
+		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
 	setLogger(logger) {
@@ -219,12 +230,12 @@ class SearchEngine {
 		}
 
 		// Divide the number of occurences by the spread so even if a note has many times the searched terms
-		// but these terms are very spread appart, they'll be given a lower weight than a note that has the
+		// but these terms are very spread apart, they'll be given a lower weight than a note that has the
 		// terms once or twice but just next to each others.
 		return occurenceCount / spread;
 	}
 
-	orderResults_(rows, parsedQuery) {
+	orderByBestMatch_(rows, parsedQuery) {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const offsets = row.offsets.split(' ').map(o => Number(o));
@@ -242,6 +253,43 @@ class SearchEngine {
 			if (a.user_updated_time > b.user_updated_time) return -1;
 			return 0;
 		});
+	}
+
+	orderByTitle_(rows) {
+		rows.sort((a, b) => {
+			if (a.title < b.title) return +1;
+			if (a.title > b.title) return -1;
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+			if (a.user_updated_time < b.user_updated_time) return +1;
+			if (a.user_updated_time > b.user_updated_time) return -1;
+			return 0;
+		});
+	}
+
+	orderByUpdatedTime_(rows) {
+		rows.sort((a, b) => {
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+			if (a.user_updated_time < b.user_updated_time) return +1;
+			if (a.user_updated_time > b.user_updated_time) return -1;
+			return 0;
+		});
+	}
+
+	orderResults_(rows, parsedQuery, order) {
+		if (order.by === 'best_match') {
+			this.orderByBestMatch_(rows, parsedQuery);
+		} else if (order.by === 'title') {
+			this.orderByTitle_(rows);
+		} else if (order.by === 'updated_time') {
+			this.orderByUpdatedTime_(rows);
+		} else {
+			this.logger().warn(`Unimplemented search order: ${order}`);
+		}
+		if (order.dir === 'ASC') {
+			rows = rows.reverse();
+		}
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
@@ -380,7 +428,7 @@ class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	async search(query) {
+	async search(query, options=null) {
 		query = this.normalizeText_(query);
 		query = query.replace(/-/g, ' '); // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
@@ -394,7 +442,12 @@ class SearchEngine {
 			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
-				this.orderResults_(rows, parsedQuery);
+				let order = { by: 'best_match', dir: 'DESC' };
+				if (options.order && options.order.length > 0) {
+					order.by = options.order[0].by;
+					order.dir = options.order[0].dir;
+				}
+				this.orderResults_(rows, parsedQuery, order);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);

@@ -241,7 +241,10 @@ class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				let seOptions = {
+					order: stateUtils.searchOrder(state.settings),
+				};
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, null, seOptions);
 			}
 		}
 
@@ -431,6 +434,10 @@ class BaseApplication {
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('notes.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+			refreshNotes = true;
+		}
+
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('search.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
 

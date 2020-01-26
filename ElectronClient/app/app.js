@@ -350,6 +350,7 @@ class Application extends BaseApplication {
 
 		const sortNoteItems = sortNoteFolderItems('notes');
 		const sortFolderItems = sortNoteFolderItems('folders');
+		const sortSearchItems = sortNoteFolderItems('search');
 
 		const focusItems = [];
 
@@ -957,6 +958,10 @@ class Application extends BaseApplication {
 					label: Setting.settingMetadata('folders.sortOrder.field').label(),
 					screens: ['Main'],
 					submenu: sortFolderItems,
+				}, {
+					label: Setting.settingMetadata('search.sortOrder.field').label(),
+					screens: ['Main'],
+					submenu: sortSearchItems,
 				}, {
 					label: Setting.settingMetadata('showNoteCounts').label(),
 					type: 'checkbox',
