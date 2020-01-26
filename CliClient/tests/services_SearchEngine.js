@@ -165,6 +165,186 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n3.id);
 	}));
 
+	it('should order search results by best match', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd efgh' });
+		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' });
+		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' });
+
+		await engine.syncTables();
+		const options = { order: [{by: 'best_match', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n2.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n1.id);
+	}));
+
+	it('should order search results by best match (reversed)', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd efgh' });
+		const n2 = await Note.save({ title: 'abcd aaaaa abcd abcd' });
+		const n3 = await Note.save({ title: 'abcd aaaaa bbbb eeee abcd' });
+
+		await engine.syncTables();
+		const options = { order: [{by: 'best_match', dir: 'DESC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n2.id);
+	}));
+
+	it('should order search results by updated time (recent first)', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd 33' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd 11' });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd 22' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'updated_time', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n1.id);
+	}));
+
+	it('should order search results by updated time reversed (recent last)', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd 33' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd 11' });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd 22' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'updated_time', dir: 'DESC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n2.id);
+		expect(rows[2].id).toBe(n3.id);
+	}));
+
+	it('should order search results by updated time with completed todos last', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd', is_todo: 1, todo_completed: Date.now() });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd', is_todo: 1 });
+		await sleep(0.1);
+		const n4 = await Note.save({ title: 'abcd' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'updated_time', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n4.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n1.id);
+		expect(rows[3].id).toBe(n2.id);
+	}));
+
+	it('should order search results by title (alphabetical)', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd c' });
+		const n2 = await Note.save({ title: 'abcd a a' });
+		const n3 = await Note.save({ title: 'abcd a b' });
+		const n4 = await Note.save({ title: 'abcd b a' });
+
+		await engine.syncTables();
+		const options = { order: [{by: 'title', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n2.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n4.id);
+		expect(rows[3].id).toBe(n1.id);
+	}));
+
+	it('should order search results by title (reverse alphabetical)', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd c' });
+		const n2 = await Note.save({ title: 'abcd a a' });
+		const n3 = await Note.save({ title: 'abcd a b' });
+		const n4 = await Note.save({ title: 'abcd b a' });
+
+		await engine.syncTables();
+		const options = { order: [{by: 'title', dir: 'DESC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n4.id);
+		expect(rows[2].id).toBe(n3.id);
+		expect(rows[3].id).toBe(n2.id);
+	}));
+
+	it('should order search results by title then incomplete todos', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd a' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd d', is_todo: 1 });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd c' });
+		await sleep(0.1);
+		const n4 = await Note.save({ title: 'abcd c', is_todo: 1, todo_completed: Date.now() });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'title', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n1.id);
+		expect(rows[1].id).toBe(n3.id);
+		expect(rows[2].id).toBe(n4.id);
+		expect(rows[3].id).toBe(n2.id);
+	}));
+
+	it('should order search results by title then updated time', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd a' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd b' });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd a' });
+		await sleep(0.1);
+		const n4 = await Note.save({ title: 'abcd b' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'title', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n3.id);
+		expect(rows[1].id).toBe(n1.id);
+		expect(rows[2].id).toBe(n4.id);
+		expect(rows[3].id).toBe(n2.id);
+	}));
+
+	it('should order search results by title then incomplete todos then updated time', asyncTest(async () => {
+		const n1 = await Note.save({ title: 'abcd b' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'abcd b', is_todo: 1 });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'abcd b' });
+		await sleep(0.1);
+		const n4 = await Note.save({ title: 'abcd b', is_todo: 1, todo_completed: Date.now() });
+		await sleep(0.1);
+		const n5 = await Note.save({ title: 'abcd a', is_todo: 1 });
+		await sleep(0.1);
+		const n6 = await Note.save({ title: 'abcd a' });
+		await sleep(0.1);
+
+		await engine.syncTables();
+		const options = { order: [{by: 'title', dir: 'ASC'}] };
+		const rows = await engine.search('abcd', options);
+
+		expect(rows[0].id).toBe(n6.id);
+		expect(rows[1].id).toBe(n5.id);
+		expect(rows[2].id).toBe(n3.id);
+		expect(rows[3].id).toBe(n2.id);
+		expect(rows[4].id).toBe(n1.id);
+		expect(rows[5].id).toBe(n4.id);
+	}));
+
 	it('should supports various query types', asyncTest(async () => {
 		let rows;
 
