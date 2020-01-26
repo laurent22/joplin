@@ -323,7 +323,7 @@ class Setting extends BaseModel {
 				label: () => _('Sort search results by'),
 				options: () => {
 					const SearchEngine = require('lib/services/SearchEngine');
-					const searchSortFields = ['best_match', 'user_updated_time', 'title'];
+					const searchSortFields = ['best_match', 'title', 'user_updated_time'];
 					const options = {};
 					for (let i = 0; i < searchSortFields.length; i++) {
 						options[searchSortFields[i]] = toTitleCase(SearchEngine.fieldToLabel(searchSortFields[i]));
