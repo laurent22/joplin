@@ -33,7 +33,7 @@ Before building any of the applications, you need to build the tools and pre-com
 npm install && cd Tools && npm install
 ```
 
-# Building the Electron application
+## Building the Electron application on Linux and macOS
 
 ```
 npm run copyLib
