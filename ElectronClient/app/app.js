@@ -1,7 +1,6 @@
 require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
-const BaseModel = require('lib/BaseModel');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
@@ -630,7 +629,7 @@ class Application extends BaseApplication {
 				'',
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
-				_('Profile Version: %s', BaseModel.db().version()),
+				_('Profile Version: %s', reg.db().version()),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
