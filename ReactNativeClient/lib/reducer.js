@@ -676,6 +676,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Search';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':
