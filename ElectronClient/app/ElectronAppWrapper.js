@@ -187,7 +187,7 @@ class ElectronAppWrapper {
 	createTray(contextMenu) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
-			this.tray_.setToolTip(this.electronApp_.getName());
+			this.tray_.setToolTip(this.electronApp_.name);
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
