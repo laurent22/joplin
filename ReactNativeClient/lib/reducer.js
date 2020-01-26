@@ -548,6 +548,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Tag';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'TAG_UPDATE_ONE':
