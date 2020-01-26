@@ -257,8 +257,8 @@ class SearchEngine {
 
 	orderByTitle_(rows) {
 		rows.sort((a, b) => {
-			if (a.title < b.title) return +1;
-			if (a.title > b.title) return -1;
+			if (a.title > b.title) return +1;
+			if (a.title < b.title) return -1;
 			if (a.is_todo && a.todo_completed) return +1;
 			if (b.is_todo && b.todo_completed) return -1;
 			if (a.user_updated_time < b.user_updated_time) return +1;
@@ -287,7 +287,7 @@ class SearchEngine {
 		} else {
 			this.logger().warn(`Unimplemented search order: ${order}`);
 		}
-		if (order.dir === 'ASC') {
+		if (order.dir === 'DESC') {
 			rows = rows.reverse();
 		}
 	}
@@ -442,8 +442,8 @@ class SearchEngine {
 			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
-				let order = { by: 'best_match', dir: 'DESC' };
-				if (options.order && options.order.length > 0) {
+				let order = { by: 'best_match', dir: 'ASC' };
+				if (options && options.order && options.order.length > 0) {
 					order.by = options.order[0].by;
 					order.dir = options.order[0].dir;
 				}
