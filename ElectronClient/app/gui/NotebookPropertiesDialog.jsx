@@ -239,16 +239,17 @@ class NotebookPropertiesDialog extends React.Component {
 				);
 			}
 		} else {
-			let displayedValue = value;
-
-			controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
-
-			if (['title', 'icon', 'id'].indexOf(key) < 0) {
-				editCompHandler = () => {
-					this.editPropertyButtonClick(key, value);
-				};
-				editCompIcon = 'fa-edit';
-			}
+			// This part I'm struggling a bit with and just need a breather on
+			//			let displayedValue = value;
+			//
+			//			controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
+			//
+			//			if (['title', 'icon', 'id'].indexOf(key) < 0) {
+			//				editCompHandler = () => {
+			//					this.editPropertyButtonClick(key, value);
+			//				};
+			//				editCompIcon = 'fa-edit';
+			//			}
 		}
 
 		if (editCompHandler) {
