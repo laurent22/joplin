@@ -174,28 +174,6 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
-		} else if (command.name === 'renameFolder') {
-			const folder = await Folder.load(command.id);
-
-			if (folder) {
-				this.setState({
-					promptOptions: {
-						label: _('Rename notebook:'),
-						value: folder.title,
-						onClose: async answer => {
-							if (answer !== null) {
-								try {
-									folder.title = answer;
-									await Folder.save(folder, { fields: ['title'], userSideValidation: true });
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-								}
-							}
-							this.setState({ promptOptions: null });
-						},
-					},
-				});
-			}
 		} else if (command.name === 'renameTag') {
 			const tag = await Tag.load(command.id);
 			if (tag) {
@@ -250,6 +228,14 @@ class MainScreenComponent extends React.Component {
 			this.setState({
 				notePropertiesDialogOptions: {
 					noteId: command.noteId,
+					visible: true,
+					onRevisionLinkClick: command.onRevisionLinkClick,
+				},
+			});
+		} else if (command.name === 'commandNotebookProperties') {
+			this.setState({
+				notebookPropertiesDialogOptions: {
+					notebookId: command.notebookId,
 					visible: true,
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
