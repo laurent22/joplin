@@ -19,6 +19,7 @@ class Folder extends BaseItem {
 		return {
 			id: null,
 			title: '',
+			icon: '',
 		};
 	}
 
@@ -29,6 +30,14 @@ class Folder extends BaseItem {
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
+	}
+
+	static fieldToIcon(field) {
+		const fieldsToIcons = {
+			icon: _('icon'),
+		};
+
+		return field in fieldsToIcons ? fieldsToIcons[field] : field;
 	}
 
 	static noteIds(parentId) {
