@@ -1914,11 +1914,12 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
-			color: theme.color,
+			color: theme.h1Style.color,
+			fontSize: theme.h1Style.fontSize * 1.25,
+			fontWeight: theme.h1Style.fontWeight,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
-			fontSize: Math.round(parseInt(theme.htmlFontSize,10) * 1.45),
 		};
 
 		const toolbarStyle = {
