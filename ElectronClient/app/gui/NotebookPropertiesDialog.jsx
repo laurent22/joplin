@@ -3,7 +3,7 @@ const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const DateTime = require('react-datetme');
+const DateTime = require('react-datetime');
 const Notebook = require('lib/models/Folder');
 const { bridge } = require('electron').remote.require('./bridge');
 
