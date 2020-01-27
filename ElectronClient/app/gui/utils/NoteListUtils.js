@@ -25,12 +25,11 @@ class NoteListUtils {
 			menu.append(
 				new MenuItem({
 					label: _('Add or remove tags'),
-					enabled: noteIds.length === 1,
 					click: async () => {
 						props.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
-							noteId: noteIds[0],
+							noteIds: noteIds,
 						});
 					},
 				})

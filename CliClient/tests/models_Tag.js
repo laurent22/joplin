@@ -97,4 +97,44 @@ describe('models_Tag', function() {
 		expect(tagWithCount.note_count).toBe(2);
 	}));
 
+	it('should add tags by title', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let taga = await Tag.save({ title: 'mytaga'});
+		let tagb = await Tag.save({ title: 'mytagb'});
+		let tagc = await Tag.save({ title: 'mytagc'});
+		let tagd = await Tag.save({ title: 'mytagd'});
+
+		let note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
+		let note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma note 2', parent_id: folder1.id });
+		let note3 = await Note.save({ title: 'ma note 3', parent_id: folder1.id });
+
+		await Tag.addNote(taga.id, note1.id);
+
+		await Tag.addNote(taga.id, note2.id);
+		await Tag.addNote(tagb.id, note2.id);
+
+		await Tag.addNote(taga.id, note3.id);
+		await Tag.addNote(tagb.id, note3.id);
+		await Tag.addNote(tagc.id, note3.id);
+
+		let commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
+		expect(commonTags.length).toBe(0);
+
+		commonTags = await Tag.commonTagsByNoteIds([note1.id, note2.id, note3.id]);
+		expect(commonTags.length).toBe(1);
+		expect(commonTags[0].id).toBe(taga.id);
+
+		commonTags = await Tag.commonTagsByNoteIds([note2.id, note3.id]);
+		expect(commonTags.length).toBe(2);
+		expect(commonTags[0].id).toBe(taga.id);
+		expect(commonTags[1].id).toBe(tagb.id);
+
+		commonTags = await Tag.commonTagsByNoteIds([note3.id]);
+		expect(commonTags.length).toBe(3);
+		expect(commonTags[0].id).toBe(taga.id);
+		expect(commonTags[1].id).toBe(tagb.id);
+		expect(commonTags[2].id).toBe(tagc.id);
+	}));
+
 });

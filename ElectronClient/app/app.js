@@ -873,12 +873,10 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+Alt+T',
 					click: () => {
 						const selectedNoteIds = this.store().getState().selectedNoteIds;
-						if (selectedNoteIds.length !== 1) return;
-
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
-							noteId: selectedNoteIds[0],
+							noteIds: selectedNoteIds,
 						});
 					},
 				}, {

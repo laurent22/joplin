@@ -1334,7 +1334,7 @@ class NoteTextComponent extends React.Component {
 		this.props.dispatch({
 			type: 'WINDOW_COMMAND',
 			name: 'setTags',
-			noteId: this.state.note.id,
+			noteIds: [this.state.note.id],
 		});
 	}
 
