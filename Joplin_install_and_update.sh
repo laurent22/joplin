@@ -11,7 +11,7 @@ SILENT=false
 
 print() {
     if [[ "$SILENT" == false ]] ; then
-        echo $1
+        echo "$1"
     fi
 }
 
