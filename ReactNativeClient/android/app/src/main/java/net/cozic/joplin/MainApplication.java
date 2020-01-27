@@ -40,7 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
 				new MainReactPackage(),
-            new AppShortcutsPackage(),
+				new AppShortcutsPackage(),
 				new ReactSliderPackage(),
 				new RNCWebViewPackage(),
 				new ReactNativePushNotificationPackage(),
