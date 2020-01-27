@@ -35,6 +35,8 @@ npm install && cd Tools && npm install
 
 # Building the Electron application
 
+## Linux and macOS
+
 ```
 npm run copyLib
 npm run tsc
@@ -53,7 +55,9 @@ That will create the executable file in the `dist` directory.
 
 From `/ElectronClient` you can also run `run.sh` to run the app for testing.
 
-## Building Electron application on Windows
+## Windows
+
+Run the following commands on Windows Command prompt running as Administrator:
 
 ```
 xcopy /C /I /H /R /Y /S ReactNativeClient\lib ElectronClient\app\lib
