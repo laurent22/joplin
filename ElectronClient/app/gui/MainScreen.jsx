@@ -244,7 +244,6 @@ class MainScreenComponent extends React.Component {
 				notebookPropertiesDialogOptions: {
 					folderId: command.folderId,
 					visible: true,
-					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
 		} else if (command.name === 'commandShareNoteDialog') {
@@ -591,7 +590,7 @@ class MainScreenComponent extends React.Component {
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{notebookPropertiesDialogOptions.visible && <NotebookPropertiesDialog theme={this.props.theme} folderId={notebookPropertiesDialogOptions.folderId} onClose={this.notebookPropertiesDialog_close} onRevisionLinkClick={notebookPropertiesDialogOptions.onRevisionLinkClick} />}
+				{notebookPropertiesDialogOptions.visible && <NotebookPropertiesDialog theme={this.props.theme} folderId={notebookPropertiesDialogOptions.folderId} onClose={this.notebookPropertiesDialog_close} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
