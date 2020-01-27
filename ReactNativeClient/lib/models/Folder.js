@@ -4,6 +4,7 @@ const Note = require('lib/models/Note.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
 const BaseItem = require('lib/models/BaseItem.js');
+const lodash = require('lodash');
 const { substrWithEllipsis } = require('lib/string-utils.js');
 
 class Folder extends BaseItem {
@@ -26,18 +27,51 @@ class Folder extends BaseItem {
 	static fieldToLabel(field) {
 		const fieldsToLabels = {
 			title: _('title'),
+			icon: _('icon'),
 			last_note_user_updated_time: _('updated date'),
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static fieldToIcon(field) {
-		const fieldsToIcons = {
-			icon: _('icon'),
-		};
+	static async serializeForEdit(folder) {
+		return this.replaceResourceInternalToExternalLinks(await super.serialize(folder, ['title','icon']));
+	}
 
-		return field in fieldsToIcons ? fieldsToIcons[field] : field;
+	static async unserializeForEdit(content) {
+		content += `\n\ntype_: ${BaseModel.TYPE_FOLDER}`;
+		let output = await super.unserialize(content);
+		if (!output.title) output.title = '';
+		if (!output.icon) output.icon = '';
+		output.icon = await this.replaceResourceExternalToInternalLinks(output.icon);
+		return output;
+	}
+
+	static async serializeAllProps(folder) {
+		let fieldNames = this.fieldNames();
+		fieldNames.push('type_');
+		lodash.pull(fieldNames, 'title', 'icon');
+		return super.serialize(folder, fieldNames);
+	}
+
+	static minimalSerializeForDisplay(folder) {
+		let f = Object.assign({}, folder);
+
+		let fieldNames = this.fieldNames();
+
+		if (!f.is_conflict) lodash.pull(fieldNames, 'is_conflict');
+
+		lodash.pull(fieldNames, 'type_');
+		lodash.pull(fieldNames, 'title');
+		lodash.pull(fieldNames, 'icon');
+		lodash.pull(fieldNames, 'updated_time');
+
+		return super.serialize(f, fieldNames);
+	}
+
+	static defaultTitle(folder) {
+		if (!folder.title) return 'Undefined';
+		return folder.title;
 	}
 
 	static noteIds(parentId) {
