@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -1433,9 +1435,8 @@ msgstr ""
 "\"Neues Notizbuch\" drückst."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Abgeschlossen: %s"
+msgstr "Abgeschlossen"
 
 # Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
@@ -1520,10 +1521,9 @@ msgid "There was an error downloading this attachment:"
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
-"Dieser Anhang wurde nicht heruntergeladen oder noch nicht entschlüsselt."
+"Dieser Anhang wurde nicht heruntergeladen oder noch nicht entschlüsselt"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 #, javascript-format
@@ -1761,9 +1761,8 @@ msgid "%s - Copy"
 msgstr "%s - Kopieren"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Klicken Sie hier, um die externe Bearbeitung anzuhalten"
+msgstr "Stoppe externe Bearbeitung"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -2041,16 +2040,15 @@ msgstr "Kann Notiz nicht zu Notizbuch \"%s\" verschieben"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Nicht heruntergeladen"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Lade Anhänge herunter..."
+msgstr "Lade herunter"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Heruntergeladen"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2680,29 +2678,27 @@ msgstr ""
 "entschlüsseln."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "Datei anhängen"
+msgstr "Anhänge"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Heruntergeladen und entschlüsselt"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Heruntergeladen und verschlüsselt"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Eintrag \"%s\" konnte nicht heruntergeladen werden: %s"
+msgstr "Anhänge konnten nicht heruntergeladen werden"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2791,9 +2787,10 @@ msgid "Press to set the decryption password."
 msgstr "Tippe hier, um das Entschlüsselungspasswort festzulegen."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Manche Objekte können nicht synchronisiert werden."
+msgstr ""
+"Manche Einträge können nicht synchronisiert werden. Drücke um mehr "
+"Informationen zu erhalten."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2944,14 +2941,12 @@ msgstr ""
 "etwas dauern."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "Importiere Notizen..."
+msgstr "Exportiere Profil..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Joplin Export Datei"
+msgstr "Exportiere Profil"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
