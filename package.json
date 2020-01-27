@@ -37,6 +37,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
+    "@types/react-native": "^0.61.4",
     "joplin-renderer": "^1.0.6"
   }
 }
