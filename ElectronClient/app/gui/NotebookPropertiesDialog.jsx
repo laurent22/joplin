@@ -23,6 +23,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 		this.keyToLabel_ = {
 			id: _('ID'),
+			title: _('Name'),
 			user_created_time: _('Created'),
 			user_updated_time: _('Updated'),
 			source_url: _('URL'),
