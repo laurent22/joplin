@@ -88,7 +88,7 @@ const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
 import PluginAssetsLoader from './PluginAssetsLoader';
-import setUpQuickActions from './lib/QuickActions';
+import setUpQuickActions from './QuickActions';
 
 let storeDispatch = function() {};
 
