@@ -242,7 +242,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'commandNotebookProperties') {
 			this.setState({
 				notebookPropertiesDialogOptions: {
-					notebookId: command.notebookId,
+					folderId: command.folderId,
 					visible: true,
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
