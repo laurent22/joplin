@@ -340,7 +340,7 @@ class SideBarComponent extends React.Component {
 					click: async () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'properties',
+							name: 'commandNotebookProperties',
 							id: itemId,
 						});
 					},
