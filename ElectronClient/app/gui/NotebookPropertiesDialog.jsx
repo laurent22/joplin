@@ -64,6 +64,16 @@ class NotebookPropertiesDialog extends React.Component {
 		return formNotebook;
 	}
 
+	formNotebookToNotebook(formNotebook) {
+		const notebook = {};
+		notebook.user_created_time = time.formatLocalToMs(formNotebook.user_created_time);
+		notebook.user_updated_time = time.formatLocalToMs(formNotebook.user_updated_time);
+
+		notebook.source_url = formNotebook.source_url;
+
+		return notebook;
+	}
+
 	styles(themeId) {
 		const styleKey = themeId;
 		if (styleKey === this.styleKey_) return this.styles_;
@@ -74,7 +84,7 @@ class NotebookPropertiesDialog extends React.Component {
 		this.styleKey_ = styleKey;
 
 		this.styles_.controlBox = {
-			marginBottom: 'iem',
+			marginBottom: '1em',
 			color: 'black', // This will apply for the calendar
 			display: 'flex',
 			flexDirection: 'row',
@@ -115,7 +125,16 @@ class NotebookPropertiesDialog extends React.Component {
 
 	async closeDialog(applyChanges) {
 		if (applyChanges) {
-			// fill in code as I implement other features
+			await this.saveProperty();
+			const notebook = this.formNotebookToNotebook(this.state.formNotebook);
+			notebook.updated_time = Date.now();
+			await Notebook.save(notebook, { autoTimestamp: false });
+		} else {
+			await this.cancelProperty();
+		}
+
+		if (this.props.onClose) {
+			this.props.onClose();
 		}
 	}
 
