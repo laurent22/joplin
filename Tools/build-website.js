@@ -308,7 +308,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 
 const footerHtml = `
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>
