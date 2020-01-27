@@ -243,7 +243,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 			controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
 
-			if ('title', 'icon', 'id') {
+			if (['title', 'icon', 'id'].indexOf(key) < 0) {
 				editCompHandler = () => {
 					this.editPropertyButtonClick(key, value);
 				};
