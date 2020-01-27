@@ -31,7 +31,7 @@ class NotebookPropertiesDialog extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadNotebook(this.props.notebookId);
+		this.loadNotebook(this.props.folderId);
 	}
 
 	componentDidUpdate() {
@@ -40,11 +40,11 @@ class NotebookPropertiesDialog extends React.Component {
 		}
 	}
 
-	async loadNotebook(notebookId) {
-		if (!notebookId) {
+	async loadNotebook(folderId) {
+		if (!folderId) {
 			this.setState({ formNotebook: null });
 		} else {
-			const notebook = await Notebook.load(notebookId);
+			const notebook = await Notebook.load(folderId);
 			const formNotebook = this.notebookToFormNotebook(notebook);
 			this.setState({ formNotebook: formNotebook });
 		}
