@@ -4,14 +4,12 @@ const { themeStyle } = require('../theme.js');
 const { time } = require('lib/time-utils.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const DateTime = require('react-datetime');
-const Notebook = require('lib/models/Folder');
-const { bridge } = require('electron').remote.require('./bridge');
+const Folder = require('lib/models/Folder');
 
 class NotebookPropertiesDialog extends React.Component {
 	constructor() {
 		super();
 
-		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.buttonRow_click = this.buttonRow_click.bind(this);
 		this.okButton = React.createRef();
 
@@ -24,10 +22,8 @@ class NotebookPropertiesDialog extends React.Component {
 		this.keyToLabel_ = {
 			id: _('ID'),
 			title: _('Name'),
-			user_created_time: _('Created'),
-			user_updated_time: _('Updated'),
-			source_url: _('URL'),
-			revisionsLink: _('Notebook History'),
+			last_note_user_updated_time: _('Updated Date'),
+			icon: _('Icon'),
 		};
 	}
 
@@ -45,7 +41,7 @@ class NotebookPropertiesDialog extends React.Component {
 		if (!folderId) {
 			this.setState({ formNotebook: null });
 		} else {
-			const notebook = await Notebook.load(folderId);
+			const notebook = await Folder.load(folderId);
 			const formNotebook = this.notebookToFormNotebook(notebook);
 			this.setState({ formNotebook: formNotebook });
 		}
@@ -57,9 +53,6 @@ class NotebookPropertiesDialog extends React.Component {
 		formNotebook.user_updated_time = time.formatMsToLocal(notebook.user_updated_time);
 		formNotebook.user_created_time = time.formatMsToLocal(notebook.user_created_time);
 
-		formNotebook.source_url = notebook.source_url;
-
-		formNotebook.revisionsLink = notebook.id;
 		formNotebook.id = notebook.id;
 
 		return formNotebook;
@@ -69,8 +62,6 @@ class NotebookPropertiesDialog extends React.Component {
 		const notebook = {};
 		notebook.user_created_time = time.formatLocalToMs(formNotebook.user_created_time);
 		notebook.user_updated_time = time.formatLocalToMs(formNotebook.user_updated_time);
-
-		notebook.source_url = formNotebook.source_url;
 
 		return notebook;
 	}
@@ -129,7 +120,7 @@ class NotebookPropertiesDialog extends React.Component {
 			await this.saveProperty();
 			const notebook = this.formNotebookToNotebook(this.state.formNotebook);
 			notebook.updated_time = Date.now();
-			await Notebook.save(notebook, { autoTimestamp: false });
+			await Folder.save(notebook, { autoTimestamp: false });
 		} else {
 			await this.cancelProperty();
 		}
@@ -141,11 +132,6 @@ class NotebookPropertiesDialog extends React.Component {
 
 	buttonRow_click(event) {
 		this.closeDialog(event.buttonName === 'ok');
-	}
-
-	revisionsLink_click() {
-		this.closeDialog(false);
-		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
 	}
 
 	editPropertyButtonClick(key, initialValue) {
@@ -257,25 +243,9 @@ class NotebookPropertiesDialog extends React.Component {
 		} else {
 			let displayedValue = value;
 
-			if ('source_url') {
-				let url = '';
-				if (key === 'source_url') url = value;
-				controlComp = (
-					<a href="#" onClick={() => bridge().openExternal(url)} style={theme.urlStyle}>
-						{displayedValue}
-					</a>
-				);
-			} else if (key === 'revisionsLink') {
-				controlComp = (
-					<a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>
-						{_('Previous versions of this notebook')}
-					</a>
-				);
-			} else {
-				controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
-			}
+			controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
 
-			if (['id', 'revisionsLink'].indexOf(key) < 0) {
+			if ('title', 'icon', 'id') {
 				editCompHandler = () => {
 					this.editPropertyButtonClick(key, value);
 				};
