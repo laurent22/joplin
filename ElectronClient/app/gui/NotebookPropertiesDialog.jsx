@@ -22,7 +22,7 @@ class NotebookPropertiesDialog extends React.Component {
 		this.keyToLabel_ = {
 			id: _('ID'),
 			title: _('Name'),
-			last_note_user_updated_time: _('Updated Date'),
+			last_note_user_updated_time: _('Updated'),
 			icon: _('Icon'),
 		};
 	}
@@ -50,8 +50,7 @@ class NotebookPropertiesDialog extends React.Component {
 	notebookToFormNotebook(notebook) {
 		const formNotebook = {};
 
-		formNotebook.user_updated_time = time.formatMsToLocal(notebook.user_updated_time);
-		formNotebook.user_created_time = time.formatMsToLocal(notebook.user_created_time);
+		formNotebook.last_note_user_updated_time = time.formatMsToLocal(notebook.last_note_user_updated_time);
 
 		formNotebook.id = notebook.id;
 
@@ -60,8 +59,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 	formNotebookToNotebook(formNotebook) {
 		const notebook = {};
-		notebook.user_created_time = time.formatLocalToMs(formNotebook.user_created_time);
-		notebook.user_updated_time = time.formatLocalToMs(formNotebook.user_updated_time);
+		notebook.last_note_user_updated_time = time.formatLocalToMs(formNotebook.last_note_user_updated_time);
 
 		return notebook;
 	}
@@ -100,7 +98,7 @@ class NotebookPropertiesDialog extends React.Component {
 			padding: '.14em',
 			display: 'flex',
 			alignItems: 'center',
-			justifyContent: 'cneter',
+			justifyContent: 'center',
 			marginLeft: '0.5em',
 		};
 
@@ -276,7 +274,7 @@ class NotebookPropertiesDialog extends React.Component {
 	}
 
 	formatValue(key, notebook) {
-		if (['user_updated_time', 'user_created_time'].indexOf(key) >= 0) {
+		if ('last_note_user_updated_time') {
 			return time.formatMsToLocal(notebook[key]);
 		}
 
