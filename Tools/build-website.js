@@ -561,7 +561,7 @@ function makeHomePageMd() {
 async function main() {
 	tocMd();
 
-	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, {});
+	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
 
 	const sources = [
 		[ 'readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' } ],
