@@ -97,7 +97,7 @@ describe('models_Tag', function() {
 		expect(tagWithCount.note_count).toBe(2);
 	}));
 
-	it('should add tags by title', asyncTest(async () => {
+	it('should get common tags for set of notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let taga = await Tag.save({ title: 'mytaga'});
 		let tagb = await Tag.save({ title: 'mytagb'});
@@ -118,7 +118,16 @@ describe('models_Tag', function() {
 		await Tag.addNote(tagb.id, note3.id);
 		await Tag.addNote(tagc.id, note3.id);
 
-		let commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
+		let commonTags = await Tag.commonTagsByNoteIds(null);
+		expect(commonTags.length).toBe(0);
+
+		commonTags = await Tag.commonTagsByNoteIds(undefined);
+		expect(commonTags.length).toBe(0);
+
+		commonTags = await Tag.commonTagsByNoteIds([]);
+		expect(commonTags.length).toBe(0);
+
+		commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
 		let commonTagIds = commonTags.map(t => t.id);
 		expect(commonTagIds.length).toBe(0);
 
