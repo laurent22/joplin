@@ -333,6 +333,24 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </ul>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153">cli-v1.0.153</a> - 2020-01-24T23:16:32Z<a name="cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" href="#cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added new, more secure encryption methods, so that they can be switched to at a later time</li>
+<li>New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)</li>
+<li>New: Added more logging for resource fetching to try to debug issue</li>
+<li>New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)</li>
+<li>Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)</li>
+<li>Improved: Upgrade sqlite (#2248 by Devon Zuegel)</li>
+<li>Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)</li>
+<li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
+<li>Improved: Update CliClient node dependency to 10+ (#2177 by <a href="https://github.com/joeltaylor">@joeltaylor</a>)</li>
+<li>Improved: Allow exporting a note as HTML</li>
+<li>Improved: Improved logging during sync to allow finding bugs more easily</li>
+<li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (#2091)</li>
+<li>Fixed: Restaured translations that had been accidentally deleted (#2126)</li>
+<li>Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)</li>
+<li>Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150">cli-v1.0.150</a> - 2019-11-11T19:19:03Z<a name="cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" href="#cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add command to list all tags for a note (#2003) (#1974)</li>
@@ -453,7 +471,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>
