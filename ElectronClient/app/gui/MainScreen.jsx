@@ -175,7 +175,7 @@ class MainScreenComponent extends React.Component {
 								const addTags = endTagTitles.filter(value => !startTagsTitles.includes(value));
 								const delTags = startTagsTitles.filter(value => !endTagTitles.includes(value));
 
-								// update the tags for each selected note
+								// apply the tag additions and deletions to each selected note
 								for (let i = 0; i < command.noteIds.length; i++) {
 									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
 									let tagTitles = tags.map(a => { return a.title; });
