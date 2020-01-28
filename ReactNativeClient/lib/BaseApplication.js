@@ -445,11 +445,10 @@ class BaseApplication {
 		if (action.type == 'NOTE_TAG_REMOVE') {
 			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
-					newState.notesParentType = 'Folder';
 					this.refreshCurrentFolder();
-				} else {
-					refreshNotes = true;
+					refreshNotesUseSelectedNoteId = true;
 				}
+				refreshNotes = true;
 			}
 		}
 
