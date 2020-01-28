@@ -119,22 +119,26 @@ describe('models_Tag', function() {
 		await Tag.addNote(tagc.id, note3.id);
 
 		let commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
-		expect(commonTags.length).toBe(0);
+		let commonTagIds = commonTags.map(t => t.id);
+		expect(commonTagIds.length).toBe(0);
 
 		commonTags = await Tag.commonTagsByNoteIds([note1.id, note2.id, note3.id]);
-		expect(commonTags.length).toBe(1);
-		expect(commonTags[0].id).toBe(taga.id);
+		commonTagIds = commonTags.map(t => t.id);
+		expect(commonTagIds.length).toBe(1);
+		expect(commonTagIds.includes(taga.id)).toBe(true);
 
 		commonTags = await Tag.commonTagsByNoteIds([note2.id, note3.id]);
-		expect(commonTags.length).toBe(2);
-		expect(commonTags[0].id).toBe(taga.id);
-		expect(commonTags[1].id).toBe(tagb.id);
+		commonTagIds = commonTags.map(t => t.id);
+		expect(commonTagIds.length).toBe(2);
+		expect(commonTagIds.includes(taga.id)).toBe(true);
+		expect(commonTagIds.includes(tagb.id)).toBe(true);
 
 		commonTags = await Tag.commonTagsByNoteIds([note3.id]);
+		commonTagIds = commonTags.map(t => t.id);
 		expect(commonTags.length).toBe(3);
-		expect(commonTags[0].id).toBe(taga.id);
-		expect(commonTags[1].id).toBe(tagb.id);
-		expect(commonTags[2].id).toBe(tagc.id);
+		expect(commonTagIds.includes(taga.id)).toBe(true);
+		expect(commonTagIds.includes(tagb.id)).toBe(true);
+		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	}));
 
 });
