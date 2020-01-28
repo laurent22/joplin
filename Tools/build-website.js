@@ -306,13 +306,15 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	{{{tocHtml}}}
 `;
 
-const footerHtml = `
+const footerHtmlTemplate = `
 <div class="footer">
-Copyright (c) 2016-2020 Laurent Cozic
+Copyright (c) 2016-YYYY Laurent Cozic
 </div>
 </body>
 </html>
 `;
+
+const footerHtml = footerHtmlTemplate.replace('YYYY', new Date().getFullYear());
 
 // const screenshotHtml = `
 // <table class="screenshots">
