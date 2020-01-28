@@ -7,18 +7,19 @@ The [Joplin Forum](https://discourse.joplinapp.org/) is the community driven pla
 File bugs in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Please follow these guidelines:
 
 - Search existing issues first, make sure yours hasn't already been reported.
+- Please follow the template.
 - Consider [enabling debug mode](https://joplinapp.org/debugging/) so that you can provide as much details as possible when reporting the issue.
-- Stay on topic, but describe the issue in detail so that others can reproduce it.
+- Stay on topic, but describe the issue in detail so that others can **reproduce** it.
 - **Provide a screenshot** if possible. A screenshot showing the problem is often more useful than a paragraph describing it.
 - For web clipper bugs, **please provide the URL causing the issue**. Sometimes the clipper works in one page but not in another so it is important to know what URL has a problem.
 
 # Feature requests
 
-Please check that your request has not already been posted in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). If it has, **up-voting the issue** increases the chances it'll be noticed and implemented in the future. "+1" comments are not tracked.
+Feature requests **must be opened and discussed on the [forum](https://discourse.joplinapp.org/c/features)**. After they have been accepted, they can be added to the GitHub tracker.
 
-As a general rule, suggestions to *improve Joplin* should be posted first in the [Joplin Forum](https://discourse.joplinapp.org/) for discussion.
+Please check that your request has not already been posted on the forum or the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). If it has, **up-voting the issue or topic** increases the chances it'll be noticed and implemented in the future. "+1" comments are not tracked.
 
-Avoid listing multiple requests in one report in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). One issue per request makes it easier to track and discuss it.
+Avoid listing multiple requests in one topic. One topic per request makes it easier to track and discuss it.
 
 Finally, when submitting a pull request, don't forget to [test your code](#unit-tests).
 
