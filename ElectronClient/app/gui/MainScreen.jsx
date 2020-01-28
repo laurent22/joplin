@@ -244,7 +244,6 @@ class MainScreenComponent extends React.Component {
 				notebookPropertiesDialogOptions: {
 					folderId: command.folderId,
 					visible: true,
-					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
 		} else if (command.name === 'commandShareNoteDialog') {
