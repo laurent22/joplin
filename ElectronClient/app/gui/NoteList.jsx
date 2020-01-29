@@ -293,20 +293,44 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
+	newNoteIndex_(keyCode, noteIndex) {
+		let newNoteIndex = noteIndex;
+
+		if (keyCode === 38) {
+			newNoteIndex = newNoteIndex - 1;
+		}
+		if (keyCode === 40) {
+			newNoteIndex = newNoteIndex + 1;
+		}
+		if (keyCode === 33) {
+			newNoteIndex = newNoteIndex - (this.itemListRef.current.visibleItemCount() - 1);
+		}
+		if (keyCode === 34) {
+			newNoteIndex = newNoteIndex + (this.itemListRef.current.visibleItemCount() - 1);
+		}
+		if (keyCode === 36) {
+			newNoteIndex = 0;
+		}
+		if (keyCode === 35) {
+			newNoteIndex = this.props.notes.length - 1;
+		}
+
+		if (newNoteIndex < 0) newNoteIndex = 0;
+		if (newNoteIndex > this.props.notes.length - 1) newNoteIndex = this.props.notes.length - 1;
+
+		return newNoteIndex;
+	}
+
 	async onKeyDown(event) {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
 
-		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38)) {
-			// DOWN / UP
+		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
-			const inc = keyCode === 38 ? -1 : +1;
 
-			noteIndex += inc;
-
-			if (noteIndex < 0) noteIndex = 0;
-			if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
+			noteIndex = this.newNoteIndex_(keyCode, noteIndex);
 
 			const newSelectedNote = this.props.notes[noteIndex];
 
