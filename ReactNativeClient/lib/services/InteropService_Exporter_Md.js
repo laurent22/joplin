@@ -115,7 +115,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 				let dirPath = `${await this.makeDirPath_(notebook)}${friendlySafeFilename(notebook.title, null, true)}.md`;
 				dirPath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${dirPath}`, Object.values(context.dirPaths));
-				context.notePaths[notebook.id] = dirPath;
 			}
 
 			// Stip the absolute path to export dir and keep only the relative paths
@@ -135,14 +134,12 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
 			let notebookTitle = await this.replaceItemIdsByRelativePaths_(item.title);
 			let notebookIcon = await this.replaceItemIdsByRelativePaths_(item.icon);
-			let notebookId = await this.replaceItemIdsByRelativePaths_(item.id); // don't know how necessary this is just yet
-
 			if (this.createdDirs_.indexOf(dirPath) < 0) {
 				await shim.fsDriver().mkdir(dirPath);
 				this.createdDirs_.push(dirPath);
 			}
 
-			const modNotebook = Object.assign({}, item, { title: notebookTitle, icon: notebookIcon , id: notebookId });
+			const modNotebook = Object.assign({}, item, { title: notebookTitle, icon: notebookIcon });
 			const notebookContent = await Folder.serializeForEdit(modNotebook);
 			await shim.fsDriver().writeFile(dirPath, notebookContent, 'utf-8');
 		} else if (item.type_ === BaseModel.TYPE_NOTE) {
