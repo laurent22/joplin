@@ -363,7 +363,7 @@ class NoteListComponent extends React.Component {
 			}
 		}
 
-		if (event.keyCode === 65 && event.ctrlKey) {
+		if (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) {
 			// Ctrl+A key
 			event.preventDefault();
 
