@@ -98,32 +98,6 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			});
 
 			this.updateContext(context);
-		} else if (type === BaseModel.TYPE_FOLDER) {
-			// create unique file path for the notebook
-			const context = {
-				dirPaths: {},
-			};
-			for (let i = 0; i < itemsToExport.length; i++) {
-				const itemType = itemsToExport[i].type;
-
-				if (itemType !== type) continue;
-
-				const itemOrId = itemsToExport[i].itemOrId;
-				const notebook = typeof itemOrId === 'object' ? itemOrId : await Folder.load(itemOrId);
-
-				if (!notebook) continue;
-
-				let dirPath = `${await this.makeDirPath_(notebook)}${friendlySafeFilename(notebook.title, null, true)}.md`;
-				dirPath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${dirPath}`, Object.values(context.dirPaths));
-			}
-
-			// Stip the absolute path to export dir and keep only the relative paths
-			const destDir = this.destDir_;
-			Object.keys(context.notePaths).map(function(id) {
-				context.notePaths[id] = context.dirPaths[id].substr(destDir.length + 1);
-			});
-
-			this.updateContext(context);
 		}
 	}
 
@@ -132,16 +106,12 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 		if (item.type_ === BaseModel.TYPE_FOLDER) {
 			const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
-			let notebookTitle = await this.replaceItemIdsByRelativePaths_(item.title);
-			let notebookIcon = await this.replaceItemIdsByRelativePaths_(item.icon);
+
 			if (this.createdDirs_.indexOf(dirPath) < 0) {
 				await shim.fsDriver().mkdir(dirPath);
 				this.createdDirs_.push(dirPath);
 			}
 
-			const modNotebook = Object.assign({}, item, { title: notebookTitle, icon: notebookIcon });
-			const notebookContent = await Folder.serializeForEdit(modNotebook);
-			await shim.fsDriver().writeFile(dirPath, notebookContent, 'utf-8');
 		} else if (item.type_ === BaseModel.TYPE_NOTE) {
 			const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 			let noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
