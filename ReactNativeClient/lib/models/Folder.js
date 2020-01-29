@@ -36,12 +36,13 @@ class Folder extends BaseItem {
 	}
 
 	static async serializeForEdit(folder) {
-		return this.replaceResourceInternalToExternalLinks(await super.serialize(folder, ['title','icon']));
+		return this.replaceResourceInternalToExternalLinks(await super.serialize(folder, ['id', 'title','icon']));
 	}
 
 	static async unserializeForEdit(content) {
 		content += `\n\ntype_: ${BaseModel.TYPE_FOLDER}`;
 		let output = await super.unserialize(content);
+		if (!output.icon) output.icon = '';
 		if (!output.title) output.title = '';
 		if (!output.icon) output.icon = '';
 		output.icon = await this.replaceResourceExternalToInternalLinks(output.icon);
@@ -51,7 +52,7 @@ class Folder extends BaseItem {
 	static async serializeAllProps(folder) {
 		let fieldNames = this.fieldNames();
 		fieldNames.push('type_');
-		lodash.pull(fieldNames, 'title', 'icon');
+		lodash.pull(fieldNames, 'id', 'title', 'icon');
 		return super.serialize(folder, fieldNames);
 	}
 
@@ -63,6 +64,7 @@ class Folder extends BaseItem {
 		if (!f.is_conflict) lodash.pull(fieldNames, 'is_conflict');
 
 		lodash.pull(fieldNames, 'type_');
+		lodash.pull(fieldNames, 'icon');
 		lodash.pull(fieldNames, 'title');
 		lodash.pull(fieldNames, 'icon');
 		lodash.pull(fieldNames, 'updated_time');
@@ -73,6 +75,11 @@ class Folder extends BaseItem {
 	static defaultTitle(folder) {
 		if (!folder.title) return 'Undefined';
 		return folder.title;
+	}
+
+	static defaultIcon(folder) {
+		if (!folder.icon) return 'fa-book';
+		return folder.icon;
 	}
 
 	static noteIds(parentId) {
