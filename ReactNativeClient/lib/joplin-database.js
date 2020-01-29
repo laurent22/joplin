@@ -315,7 +315,6 @@ class JoplinDatabase extends Database {
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
 		if (currentVersionIndex < 0) {
-			this.logger().error(`Cannot convert database from version ${fromVersion} to ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
 			throw new Error(`Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\nJoplin version: ${shim.appVersion()}\nProfile version: ${fromVersion}\nExpected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
 		}
 
