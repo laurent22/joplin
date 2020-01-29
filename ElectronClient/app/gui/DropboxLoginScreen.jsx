@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');

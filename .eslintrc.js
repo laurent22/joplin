@@ -6,6 +6,11 @@ module.exports = {
 	},
 	"parser": "@typescript-eslint/parser",
 	'extends': ['eslint:recommended'],
+	"settings": {
+		'react': {
+			'version': '16.12',
+		},
+	},
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly',
