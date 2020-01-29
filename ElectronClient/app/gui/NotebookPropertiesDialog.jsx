@@ -18,6 +18,7 @@ class NotebookPropertiesDialog extends React.Component {
 		};
 
 		this.keyToLabel_ = {
+			id: _('ID'),
 			title: _('Name'),
 			icon: _('Icon'),
 		};
@@ -54,6 +55,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 	formNotebookToNotebook(formNotebook) {
 		const notebook = {};
+		notebook.id = formNotebook.id;
 		notebook.title = formNotebook.title;
 		notebook.icon = formNotebook.icon;
 
@@ -200,7 +202,7 @@ class NotebookPropertiesDialog extends React.Component {
 					style={styles.input}
 				/>
 			);
-		} else if (['title', 'icon'].indexOf(key) < 0) {
+		} else if (['id', 'title', 'icon'].indexOf(key) < 0) {
 			editCompHandler = () => {
 				this.editPropertyButtonClick(key, value);
 			};
