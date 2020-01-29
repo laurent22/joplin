@@ -26,6 +26,7 @@ class Folder extends BaseItem {
 
 	static fieldToLabel(field) {
 		const fieldsToLabels = {
+			id: _('id'),
 			title: _('title'),
 			icon: _('icon'),
 			last_note_user_updated_time: _('updated date'),
