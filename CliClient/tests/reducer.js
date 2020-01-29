@@ -19,7 +19,7 @@ async function createNTestFolders(n) {
 async function createNTestNotes(n, folder) {
 	let notes = [];
 	for (let i = 0; i < n; i++) {
-		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		let note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
 		notes.push(note);
 	}
 	return notes;
@@ -36,11 +36,12 @@ async function createNTestTags(n) {
 
 function initTestState(folders, selectedFolderIndex, notes, selectedIndexes, tags=null, selectedTagIndex=null) {
 	let state = defaultState;
-	if (folders != null) {
-		state = reducer(state,  { type: 'FOLDER_UPDATE_ALL', items: folders });
-	}
+
 	if (selectedFolderIndex != null) {
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[selectedFolderIndex].id });
+	}
+	if (folders != null) {
+		state = reducer(state, { type: 'FOLDER_UPDATE_ALL', items: folders });
 	}
 	if (notes != null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
@@ -347,4 +348,28 @@ describe('Reducer', function() {
 		expect(getIds(state.tags)).toEqual(getIds(expected.items));
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
+
+	it('should select all notes', asyncTest(async () => {
+		let folders = await createNTestFolders(2);
+		let notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(3, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
+
+		let expected = createExpectedState(notes, [0,1,2], [0]);
+
+		expect(state.notes.length).toEqual(expected.items.length);
+		expect(getIds(state.notes.slice(0,4))).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+
+		// test action
+		state = reducer(state, {type: 'NOTE_SELECT_ALL'});
+
+		expected = createExpectedState(notes.slice(0,3), [0,1,2], [0,1,2]);
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+	}));
+
 });

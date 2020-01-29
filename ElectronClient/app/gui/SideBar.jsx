@@ -678,6 +678,11 @@ class SideBarComponent extends React.Component {
 				id: selectedItem.id,
 			});
 		}
+
+		if (keyCode === 65 && event.ctrlKey) {
+			// Ctrl+A key
+			event.preventDefault();
+		}
 	}
 
 	onHeaderClick_(key, event) {
