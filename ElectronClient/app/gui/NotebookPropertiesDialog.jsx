@@ -1,9 +1,7 @@
 const React = require('react');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
-const { time } = require('lib/time-utils.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
-const DateTime = require('react-datetime');
 const Folder = require('lib/models/Folder');
 
 class NotebookPropertiesDialog extends React.Component {
@@ -20,9 +18,7 @@ class NotebookPropertiesDialog extends React.Component {
 		};
 
 		this.keyToLabel_ = {
-			id: _('ID'),
 			title: _('Name'),
-			last_note_user_updated_time: _('Updated'),
 			icon: _('Icon'),
 		};
 	}
@@ -50,16 +46,16 @@ class NotebookPropertiesDialog extends React.Component {
 	notebookToFormNotebook(notebook) {
 		const formNotebook = {};
 
-		formNotebook.last_note_user_updated_time = time.formatMsToLocal(notebook.last_note_user_updated_time);
-
-		formNotebook.id = notebook.id;
+		formNotebook.title = notebook.title;
+		formNotebook.icon = notebook.icon;
 
 		return formNotebook;
 	}
 
 	formNotebookToNotebook(formNotebook) {
 		const notebook = {};
-		notebook.last_note_user_updated_time = time.formatLocalToMs(formNotebook.last_note_user_updated_time);
+		notebook.title = formNotebook.title;
+		notebook.icon = formNotebook.icon;
 
 		return notebook;
 	}
@@ -75,7 +71,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 		this.styles_.controlBox = {
 			marginBottom: '1em',
-			color: 'black', // This will apply for the calendar
+			color: 'black',
 			display: 'flex',
 			flexDirection: 'row',
 			alignItems: 'center',
@@ -117,7 +113,6 @@ class NotebookPropertiesDialog extends React.Component {
 		if (applyChanges) {
 			await this.saveProperty();
 			const notebook = this.formNotebookToNotebook(this.state.formNotebook);
-			notebook.updated_time = Date.now();
 			await Folder.save(notebook, { autoTimestamp: false });
 		} else {
 			await this.cancelProperty();
@@ -139,11 +134,7 @@ class NotebookPropertiesDialog extends React.Component {
 		});
 
 		setTimeout(() => {
-			if (this.refs.editField.openCalendar) {
-				this.refs.editField.openCalendar();
-			} else {
-				this.refs.editField.focus();
-			}
+			this.refs.editField.focus();
 		}, 100);
 	}
 
@@ -152,13 +143,7 @@ class NotebookPropertiesDialog extends React.Component {
 
 		return new Promise((resolve) => {
 			const newFormNotebook = Object.assign({}, this.state.formNotebook);
-
-			if (this.state.editedKey.indexOf('_time') >= 0) {
-				const dt = time.anythingToDateTime(this.state.editedValue, new Date());
-				newFormNotebook[this.state.editedKey] = time.formatMsToLocal(dt.getTime());
-			} else {
-				newFormNotebook[this.state.editedKey] = this.state.editedValue;
-			}
+			newFormNotebook[this.state.editedKey] = this.state.editedValue;
 
 			this.setState(
 				{
@@ -203,53 +188,23 @@ class NotebookPropertiesDialog extends React.Component {
 		};
 
 		if (this.state.editedKey === key) {
-			if (key.indexOf('_time') >= 0) {
-				controlComp = (
-					<DateTime
-						ref="editField"
-						defaultValue={value}
-						dateFormat={time.dateFormat()}
-						timeFormat={time.timeFormat()}
-						inputProps={{
-							onKeyDown: event => onKeyDown(event, key),
-							style: styles.input,
-						}}
-						onChange={momentObject => {
-							this.setState({ editedValue: momentObject });
-						}}
-					/>
-				);
-
-				editCompHandler = () => {
-					this.saveProperty();
-				};
-				editCompIcon = 'fa-save';
-			} else {
-				controlComp = (
-					<input
-						defaultValue={value}
-						type="text"
-						ref="editField"
-						onChange={event => {
-							this.setState({ editedValue: event.target.value });
-						}}
-						onKeyDown={event => onKeyDown(event)}
-						style={styles.input}
-					/>
-				);
-			}
-		} else {
-			// This part I'm struggling a bit with and just need a breather on
-			//			let displayedValue = value;
-			//
-			//			controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
-			//
-			//			if (['title', 'icon', 'id'].indexOf(key) < 0) {
-			//				editCompHandler = () => {
-			//					this.editPropertyButtonClick(key, value);
-			//				};
-			//				editCompIcon = 'fa-edit';
-			//			}
+			controlComp = (
+				<input
+					defaultValue={value}
+					type="text"
+					ref="editField"
+					onChange={event => {
+						this.setState({ editedValue: event.target.value });
+					}}
+					onKeyDown={event => onKeyDown(event)}
+					style={styles.input}
+				/>
+			);
+		} else if (['title', 'icon'].indexOf(key) < 0) {
+			editCompHandler = () => {
+				this.editPropertyButtonClick(key, value);
+			};
+			editCompIcon = 'fa-edit';
 		}
 
 		if (editCompHandler) {
@@ -259,7 +214,6 @@ class NotebookPropertiesDialog extends React.Component {
 				</a>
 			);
 		}
-
 		return (
 			<div key={key} style={this.styles_.controlBox} className="notebook-property-box">
 				{labelComp}
@@ -275,10 +229,6 @@ class NotebookPropertiesDialog extends React.Component {
 	}
 
 	formatValue(key, notebook) {
-		if ('last_note_user_updated_time') {
-			return time.formatMsToLocal(notebook[key]);
-		}
-
 		return notebook[key];
 	}
 
@@ -299,7 +249,7 @@ class NotebookPropertiesDialog extends React.Component {
 		return (
 			<div style={theme.dialogModalLayer}>
 				<div style={theme.dialogBox}>
-					<div style={theme.dialogTitle}>{_('Notebook properties')}</div>
+					<div style={theme.dialogTitle}>{_('Notebook Properties')}</div>
 					<div>{notebookComps}</div>
 					<DialogButtonRow theme={this.props.theme} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
 				</div>
