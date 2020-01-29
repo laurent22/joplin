@@ -40,11 +40,13 @@ If you want to start contributing to the project's code, please follow these gui
 
 Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/master/BUILD.md) for more details.
 
-## Coding style
+### Coding style
 
 Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `npm install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `npm install` at the root of the repository.
 
-## Unit tests
+For new React components, please use [React Hooks](https://reactjs.org/docs/hooks-intro.html). For new code in general, please use TypeScript (unless you are modifying a file that was originally in JavaScript).
+
+### Unit tests
 
 When submitting a pull request for a new feature or bug fix, please add unit tests for your code. Unit testing GUI changes is not always possible so it is not required, but any change in a file under /lib for example should be unit tested.
 

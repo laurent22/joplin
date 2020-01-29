@@ -44,7 +44,11 @@ module.exports = {
 		// This error is always a false positive so far since it detects
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
-		// "no-lonely-if": "error",
+
+		// -------------------------------
+		// Coding style preferences
+		// -------------------------------
+		"enforce-react-hooks/enforce-react-hooks": 2,
 
 		// -------------------------------
 		// Formatting
@@ -81,5 +85,6 @@ module.exports = {
 	"plugins": [
 		"react",
 		"@typescript-eslint",
+		"enforce-react-hooks",
 	],
 };
