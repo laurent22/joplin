@@ -47,6 +47,7 @@ class NotebookPropertiesDialog extends React.Component {
 	notebookToFormNotebook(notebook) {
 		const formNotebook = {};
 
+		formNotebook.id = notebook.id;
 		formNotebook.title = notebook.title;
 		formNotebook.icon = notebook.icon;
 
