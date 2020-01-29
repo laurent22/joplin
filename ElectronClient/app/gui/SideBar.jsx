@@ -679,7 +679,7 @@ class SideBarComponent extends React.Component {
 			});
 		}
 
-		if (keyCode === 65 && event.ctrlKey) {
+		if (keyCode === 65 && (event.ctrlKey || event.metaKey)) {
 			// Ctrl+A key
 			event.preventDefault();
 		}
