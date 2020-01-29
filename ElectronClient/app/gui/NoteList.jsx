@@ -293,32 +293,31 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	newNoteIndex_(keyCode, ctrlKey, metaKey, noteIndex) {
-		let newNoteIndex = noteIndex;
+	scrollNoteIndex_(keyCode, ctrlKey, metaKey, noteIndex) {
 
 		if (keyCode === 33) {
-			newNoteIndex = newNoteIndex - (this.itemListRef.current.visibleItemCount() - 1);
+			noteIndex -= (this.itemListRef.current.visibleItemCount() - 1);
 		}
 		if (keyCode === 34) {
-			newNoteIndex = newNoteIndex + (this.itemListRef.current.visibleItemCount() - 1);
+			noteIndex += (this.itemListRef.current.visibleItemCount() - 1);
 		}
 		if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
-			newNoteIndex = this.props.notes.length - 1;
+			noteIndex = this.props.notes.length - 1;
 		}
 		if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
-			newNoteIndex = 0;
+			noteIndex = 0;
 		}
 		if (keyCode === 38 && !metaKey) {
-			newNoteIndex = newNoteIndex - 1;
+			noteIndex -= 1;
 		}
 		if (keyCode === 40 && !metaKey) {
-			newNoteIndex = newNoteIndex + 1;
+			noteIndex += 1;
 		}
 
-		if (newNoteIndex < 0) newNoteIndex = 0;
-		if (newNoteIndex > this.props.notes.length - 1) newNoteIndex = this.props.notes.length - 1;
+		if (noteIndex < 0) noteIndex = 0;
+		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
 
-		return newNoteIndex;
+		return noteIndex;
 	}
 
 	async onKeyDown(event) {
@@ -330,7 +329,7 @@ class NoteListComponent extends React.Component {
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
 
-			noteIndex = this.newNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
+			noteIndex = this.scrollNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = this.props.notes[noteIndex];
 
