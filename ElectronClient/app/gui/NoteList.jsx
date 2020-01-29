@@ -293,26 +293,26 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	newNoteIndex_(keyCode, noteIndex) {
+	newNoteIndex_(keyCode, ctrlKey, metaKey, noteIndex) {
 		let newNoteIndex = noteIndex;
 
-		if (keyCode === 38) {
-			newNoteIndex = newNoteIndex - 1;
-		}
-		if (keyCode === 40) {
-			newNoteIndex = newNoteIndex + 1;
-		}
 		if (keyCode === 33) {
 			newNoteIndex = newNoteIndex - (this.itemListRef.current.visibleItemCount() - 1);
 		}
 		if (keyCode === 34) {
 			newNoteIndex = newNoteIndex + (this.itemListRef.current.visibleItemCount() - 1);
 		}
-		if (keyCode === 36) {
+		if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
+			newNoteIndex = this.props.notes.length - 1;
+		}
+		if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
 			newNoteIndex = 0;
 		}
-		if (keyCode === 35) {
-			newNoteIndex = this.props.notes.length - 1;
+		if (keyCode === 38 && !metaKey) {
+			newNoteIndex = newNoteIndex - 1;
+		}
+		if (keyCode === 40 && !metaKey) {
+			newNoteIndex = newNoteIndex + 1;
 		}
 
 		if (newNoteIndex < 0) newNoteIndex = 0;
@@ -330,7 +330,7 @@ class NoteListComponent extends React.Component {
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
 
-			noteIndex = this.newNoteIndex_(keyCode, noteIndex);
+			noteIndex = this.newNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = this.props.notes[noteIndex];
 
