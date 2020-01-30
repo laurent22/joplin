@@ -47,6 +47,7 @@ Server/bin/
 Server/node_modules/
 ElectronClient/app/packageInfo.js
 ReactNativeClient/pluginAssets/
+ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 
 # Ignore files generated from TypeScript files
 ElectronClient/app/gui/ShareNoteDialog.js

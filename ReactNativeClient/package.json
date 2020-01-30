@@ -19,7 +19,6 @@
     "events": "^1.1.1",
     "form-data": "^2.1.4",
     "html-entities": "^1.2.1",
-    "joplin-renderer": "^1.0.8",
     "jsc-android": "241213.1.0",
     "markdown-it": "^8.4.0",
     "md5": "^2.2.1",

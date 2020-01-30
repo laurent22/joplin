@@ -2,7 +2,7 @@ const markdownUtils = require('lib/markdownUtils');
 const htmlUtils = require('lib/htmlUtils');
 const Setting = require('lib/models/Setting');
 const Resource = require('lib/models/Resource');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class MarkupLanguageUtils {
 	lib_(language) {

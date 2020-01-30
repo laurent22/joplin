@@ -11,7 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class Note extends BaseItem {
 	static tableName() {

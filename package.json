@@ -7,7 +7,8 @@
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "tsc": "tsc",
     "tsc-watch": "tsc --watch",
-    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/"
+    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/",
+    "postinstall": "cd ReactNativeClient && cd lib && cd joplin-renderer && npm i"
   },
   "husky": {
     "hooks": {
