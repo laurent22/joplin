@@ -66,7 +66,7 @@ class InteropServiceHelper {
 							// It calls the callback right away with "false" even if the document hasn't be print yet.
 
 							cleanup();
-							if (!success && reason !== 'cancelled') reject(new Error('Could not print', reason));
+							if (!success && reason !== 'cancelled') reject(new Error('Could not print: '.concat(reason)));
 							resolve();
 						});
 					}
