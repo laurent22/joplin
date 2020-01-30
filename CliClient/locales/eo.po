@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Marton Paulo <martonpss@gmail.com>, 2019.
+# Marton Paulo, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Marton Paulo <martonpss@gmail.com>\n"
+"Last-Translator: Marton Paulo\n"
 "Language-Team: \n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
