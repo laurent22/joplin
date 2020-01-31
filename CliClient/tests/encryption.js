@@ -41,7 +41,7 @@ describe('Encryption', function() {
 		};
 
 		const encodedHeader = service.encodeHeader_(header);
-		const decodedHeader = service.decodeHeader_(encodedHeader);
+		const decodedHeader = service.decodeHeaderBytes_(encodedHeader);
 		delete decodedHeader.length;
 
 		expect(objectsEqual(header, decodedHeader)).toBe(true);
@@ -54,14 +54,14 @@ describe('Encryption', function() {
 
 		let hasThrown = false;
 		try {
-			await service.decryptMasterKey(masterKey, 'wrongpassword');
+			await service.decryptMasterKey_(masterKey, 'wrongpassword');
 		} catch (error) {
 			hasThrown = true;
 		}
 
 		expect(hasThrown).toBe(true);
 
-		const decryptedMasterKey = await service.decryptMasterKey(masterKey, '123456');
+		const decryptedMasterKey = await service.decryptMasterKey_(masterKey, '123456');
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
@@ -69,7 +69,7 @@ describe('Encryption', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey(masterKey, '123456', true);
+		await service.loadMasterKey_(masterKey, '123456', true);
 
 		const cipherText = await service.encryptString('some secret');
 		const plainText = await service.decryptString(cipherText);
@@ -87,11 +87,37 @@ describe('Encryption', function() {
 		expect(plainText2 === veryLongSecret).toBe(true);
 	}));
 
+	it('should decrypt various encryption methods', asyncTest(async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await service.loadMasterKey_(masterKey, '123456', true);
+
+		{
+			const cipherText = await service.encryptString('some secret', {
+				encryptionMethod: EncryptionService.METHOD_SJCL_2,
+			});
+			const plainText = await service.decryptString(cipherText);
+			expect(plainText).toBe('some secret');
+			const header = await service.decodeHeaderString(cipherText);
+			expect(header.encryptionMethod).toBe(EncryptionService.METHOD_SJCL_2);
+		}
+
+		{
+			const cipherText = await service.encryptString('some secret', {
+				encryptionMethod: EncryptionService.METHOD_SJCL_3,
+			});
+			const plainText = await service.decryptString(cipherText);
+			expect(plainText).toBe('some secret');
+			const header = await service.decodeHeaderString(cipherText);
+			expect(header.encryptionMethod).toBe(EncryptionService.METHOD_SJCL_3);
+		}
+	}));
+
 	it('should fail to decrypt if master key not present', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey(masterKey, '123456', true);
+		await service.loadMasterKey_(masterKey, '123456', true);
 
 		const cipherText = await service.encryptString('some secret');
 
@@ -107,7 +133,7 @@ describe('Encryption', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey(masterKey, '123456', true);
+		await service.loadMasterKey_(masterKey, '123456', true);
 
 		let cipherText = await service.encryptString('some secret');
 		cipherText += 'ABCDEFGHIJ';
@@ -120,7 +146,7 @@ describe('Encryption', function() {
 	it('should encrypt and decrypt notes and folders', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey(masterKey, '123456', true);
+		await service.loadMasterKey_(masterKey, '123456', true);
 
 		let folder = await Folder.save({ title: 'folder' });
 		let note = await Note.save({ title: 'encrypted note', body: 'something', parent_id: folder.id });
@@ -151,7 +177,7 @@ describe('Encryption', function() {
 	it('should encrypt and decrypt files', asyncTest(async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey(masterKey, '123456', true);
+		await service.loadMasterKey_(masterKey, '123456', true);
 
 		const sourcePath = `${__dirname}/../tests/support/photo.jpg`;
 		const encryptedPath = `${__dirname}/data/photo.crypted`;
@@ -163,5 +189,35 @@ describe('Encryption', function() {
 		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
+
+	// it('should upgrade master key encryption mode', asyncTest(async () => {
+	// 	let masterKey = await service.generateMasterKey('123456', {
+	// 		encryptionMethod: EncryptionService.METHOD_SJCL_2,
+	// 	});
+	// 	masterKey = await MasterKey.save(masterKey);
+	// 	Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
+	// 	Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+
+	// 	await sleep(0.01);
+
+	// 	await service.loadMasterKeysFromSettings();
+
+	// 	masterKeyNew = await MasterKey.load(masterKey.id);
+
+	// 	// Check that the master key has been upgraded
+
+	// 	expect(masterKeyNew.created_time).toBe(masterKey.created_time);
+	// 	expect(masterKeyNew.updated_time === masterKey.updated_time).toBe(false);
+	// 	expect(masterKeyNew.content === masterKey.content).toBe(false);
+	// 	expect(masterKeyNew.encryption_method === masterKey.encryption_method).toBe(false);
+	// 	expect(masterKeyNew.checksum === masterKey.checksum).toBe(false);
+	// 	expect(masterKeyNew.encryption_method).toBe(service.defaultMasterKeyEncryptionMethod_);
+
+	// 	// Check that encryption still works
+
+	// 	const cipherText = await service.encryptString('some secret');
+	// 	const plainText = await service.decryptString(cipherText);
+	// 	expect(plainText).toBe('some secret');
+	// }));
 
 });

@@ -1,4 +1,7 @@
 #!/bin/bash
+echo "Deprecated! Use `node Tools/release-cli.js`"
+exit 1
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

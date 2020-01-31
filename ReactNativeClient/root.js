@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated } = require('react-native');
 const { SafeAreaView } = require('react-navigation');
@@ -79,6 +81,8 @@ const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
+
+import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
 
@@ -460,6 +464,9 @@ async function initialize(dispatch) {
 		if (Setting.value('env') === 'dev') {
 			Setting.setValue('welcome.enabled', false);
 		}
+
+		PluginAssetsLoader.instance().setLogger(mainLogger);
+		await PluginAssetsLoader.instance().importAssets();
 
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.revisionService_ = RevisionService.instance();

@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
@@ -279,8 +281,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
 		}
-
-		this.focusUpdate();
 	}
 
 	onMarkForDownload(event) {
@@ -772,8 +772,19 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ titleTextInputHeight: height });
 	}
 
+	scheduleFocusUpdate() {
+		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+
+		this.focusUpdateIID_ = setTimeout(() => {
+			this.focusUpdateIID_ = null;
+			this.focusUpdate();
+		}, 100);
+	}
+
 	focusUpdate() {
-		this.scheduleFocusUpdateIID_ = null;
+		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		this.focusUpdateIID_ = null;
+
 		if (!this.state.note) return;
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';

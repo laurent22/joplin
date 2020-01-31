@@ -1,5 +1,40 @@
 # Joplin changelog
 
+## [v1.0.178](https://github.com/laurent22/joplin/releases/tag/v1.0.178) - 2020-01-20T19:06:45Z
+
+- New: Add ability to search by folder or tag title
+- New: Add option to disable auto-matching braces ([#2251](https://github.com/laurent22/joplin/issues/2251))
+- New: Display selected tags under a note title ([#2217](https://github.com/laurent22/joplin/issues/2217))
+- New: Add external editor actions to the note context menu. ([#2214](https://github.com/laurent22/joplin/issues/2214))
+- Improved: When importing MD files create resources for local linked files ([#2262](https://github.com/laurent22/joplin/issues/2262))
+- Improved: Update Electron to 7.1.9 ([#2314](https://github.com/laurent22/joplin/issues/2314))
+- Improved: Show completed date in note properties ([#2292](https://github.com/laurent22/joplin/issues/2292))
+- Improved: Maintain selection when non-selected note is deleted ([#2290](https://github.com/laurent22/joplin/issues/2290))
+- Improved: Don't count completed to-dos in note counts when they are not shown ([#2288](https://github.com/laurent22/joplin/issues/2288))
+- Improved: Replace note links with relative paths in MD Exporter ([#2161](https://github.com/laurent22/joplin/issues/2161))
+- Fixed: Fix pdf export when mouse over non-selected note in notelist. ([#2255](https://github.com/laurent22/joplin/issues/2255)) ([#2254](https://github.com/laurent22/joplin/issues/2254))
+- Fixed: Fixed regression in HTML note rendering
+- Fixed: Fixed export to HTML, PDF and printing
+
+## [v1.0.177](https://github.com/laurent22/joplin/releases/tag/v1.0.177) - 2019-12-30T14:40:40Z
+
+This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.
+
+- New: Allow exporting a note as HTML
+- Improved: Extract note renderer to separate package ([#2206](https://github.com/laurent22/joplin/issues/2206))
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update Katex to 0.11.1 ([#2201](https://github.com/laurent22/joplin/issues/2201))
+- Improved: Improved Nextcloud API error handling
+- Improved: Updated OneDrive login to remove webview dependency
+- Improved: Decrypt notes that are meant to be shared
+- Improved: Make it easier to view early errors when the app starts
+- Improved: Upgrade to Electron 7
+- Improved: Render note using iframe instead of deprecated webview
+- Fixed: Fix Goto Anything scrolling issue ([#2199](https://github.com/laurent22/joplin/issues/2199)) ([#2122](https://github.com/laurent22/joplin/issues/2122))
+- Fixed: Prevent app from crashing when pressing focus shortcut from search bar ([#2157](https://github.com/laurent22/joplin/issues/2157))
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) ([#2091](https://github.com/laurent22/joplin/issues/2091))
+- Fixed: Fix notifications on Windows 7 ([#2144](https://github.com/laurent22/joplin/issues/2144))
+
 ## [v1.0.176](https://github.com/laurent22/joplin/releases/tag/v1.0.176) - 2019-12-14T10:36:44Z
 
 - New: Add ability to share a note publicly using Nextcloud ([#2173](https://github.com/laurent22/joplin/issues/2173))

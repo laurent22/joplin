@@ -290,7 +290,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -306,13 +306,15 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 	{{{tocHtml}}}
 `;
 
-const footerHtml = `
+const footerHtmlTemplate = `
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-YYYY Laurent Cozic
 </div>
 </body>
 </html>
 `;
+
+const footerHtml = footerHtmlTemplate.replace('YYYY', new Date().getFullYear());
 
 // const screenshotHtml = `
 // <table class="screenshots">
@@ -561,7 +563,7 @@ function makeHomePageMd() {
 async function main() {
 	tocMd();
 
-	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, {});
+	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
 
 	const sources = [
 		[ 'readme/changelog.md', 'docs/changelog/index.html', { title: 'Changelog (Desktop App)' } ],
@@ -581,12 +583,8 @@ async function main() {
 		[ 'readme/markdown.md', 'docs/markdown/index.html', { title: 'Markdown Guide' } ],
 		[ 'readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' } ],
 
-		[ 'readme/gsoc/index.md', 'docs/gsoc/index.html', { title: 'Google Summer of Code' } ],
-		[ 'readme/gsoc/idea1_nextcloud.md', 'docs/gsoc/idea1_nextcloud.html', { title: 'GSoC: Idea 1: Nextcloud' } ],
-		[ 'readme/gsoc/idea2_sharing.md', 'docs/gsoc/idea2_sharing.html', { title: 'GSoC: Idea 2: Sharing' } ],
-		[ 'readme/gsoc/idea3_tagging.md', 'docs/gsoc/idea3_tagging.html', { title: 'GSoC: Idea 3: Tagging' } ],
-		[ 'readme/gsoc/idea4_search.md', 'docs/gsoc/idea4_search.html', { title: 'GSoC: Idea 4: Search' } ],
-		[ 'readme/gsoc/idea5_password_per_note.md', 'docs/gsoc/idea5_password_per_note.html', { title: 'GSoC: Idea 5: Password per Note' } ],
+		[ 'readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' } ],
+		[ 'readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas.html', { title: 'GSoC: Project Ideas' } ],
 	];
 
 	const path = require('path');

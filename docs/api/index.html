@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -332,18 +332,6 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 </li>
 </ul>
 </div>
-<blockquote>
-<p>joplin@1.0.0 tsc /Users/laurent/src/joplin<br>
-tsc</p>
-</blockquote>
-<p>TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/ReactNativeClient/lib/JoplinServerApi.js.map<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/lib/JoplinServerApi.js.map<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js<br>
-TSFILE: /Users/laurent/src/joplin/ElectronClient/app/gui/ShareNoteDialog.js.map<br>
-TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js<br>
-TSFILE: /Users/laurent/src/joplin/CliClient/build/lib/JoplinServerApi.js.map</p>
 <h1>Joplin API<a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a></h1>
 <p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.</p>
 <p>In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
@@ -396,6 +384,77 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <p>Call <strong>GET /ping</strong> to check if the service is available. It should return &quot;JoplinClipperServer&quot; if it works.</p>
 <h1>Searching<a name="searching" href="#searching" class="heading-anchor">🔗</a></h1>
 <p>Call <strong>GET /search?query=YOUR_QUERY</strong> to search for notes. This end-point supports the <code>field</code> parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: <a href="https://joplinapp.org/#searching">https://joplinapp.org/#searching</a></p>
+<p>To retrieve non-notes items, such as notebooks or tags, add a <code>type</code> parameter and set it to the required <a href="#item-type-id">item type name</a>. In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use <code>*</code> as a wildcard. This is convenient for example to retrieve notebooks or tags by title.</p>
+<p>For example, to retrieve the notebook named &quot;recipes&quot;: <strong>GET /search?query=recipes&amp;type=folder</strong><br>
+To retrieve all the tags that start with &quot;project-&quot;: <strong>GET /search?query=project-*&amp;type=tag</strong></p>
+<h1>Item type IDs<a name="item-type-ids" href="#item-type-ids" class="heading-anchor">🔗</a></h1>
+<p>Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>note</td>
+<td>1</td>
+</tr>
+<tr>
+<td>folder</td>
+<td>2</td>
+</tr>
+<tr>
+<td>setting</td>
+<td>3</td>
+</tr>
+<tr>
+<td>resource</td>
+<td>4</td>
+</tr>
+<tr>
+<td>tag</td>
+<td>5</td>
+</tr>
+<tr>
+<td>note_tag</td>
+<td>6</td>
+</tr>
+<tr>
+<td>search</td>
+<td>7</td>
+</tr>
+<tr>
+<td>alarm</td>
+<td>8</td>
+</tr>
+<tr>
+<td>master_key</td>
+<td>9</td>
+</tr>
+<tr>
+<td>item_change</td>
+<td>10</td>
+</tr>
+<tr>
+<td>note_resource</td>
+<td>11</td>
+</tr>
+<tr>
+<td>resource_local_state</td>
+<td>12</td>
+</tr>
+<tr>
+<td>revision</td>
+<td>13</td>
+</tr>
+<tr>
+<td>migration</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
 <h1>Notes<a name="notes" href="#notes" class="heading-anchor">🔗</a></h1>
 <h2>Properties<a name="properties" href="#properties" class="heading-anchor">🔗</a></h2>
 <table>
@@ -528,6 +587,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td></td>
 </tr>
 <tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
 <td>body_html</td>
 <td>text</td>
 <td>Note body, in HTML format</td>
@@ -643,6 +707,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>text</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /folders<a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a></h2>
@@ -734,6 +803,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /resources<a name="get-resources" href="#get-resources" class="heading-anchor">🔗</a></h2>
@@ -803,6 +877,11 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /tags<a name="get-tags" href="#get-tags" class="heading-anchor">🔗</a></h2>
@@ -858,7 +937,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
@@ -87,6 +89,7 @@ class NoteListComponent extends React.Component {
 		const menu = NoteListUtils.makeContextMenu(noteIds, {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
+			watchedNoteFiles: this.props.watchedNoteFiles,
 		});
 
 		menu.popup(bridge().window());

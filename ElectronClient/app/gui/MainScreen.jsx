@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { Header } = require('./Header.min.js');
@@ -376,13 +378,15 @@ class MainScreenComponent extends React.Component {
 			backgroundColor: theme.warningBackgroundColor,
 		};
 
+		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+
 		this.styles_.verticalResizer = {
 			width: 5,
-			height: height,
+			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
+			// making the whole window scroll vertically. So we remove 10 extra pixels here.
+			height: rowHeight - 10,
 			display: 'inline-block',
 		};
-
-		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.sideBar = {
 			width: sidebarWidth - this.styles_.verticalResizer.width,
@@ -605,7 +609,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible} />
+				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}
 			</div>
@@ -629,7 +633,6 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
-		noteDevToolsVisible: state.noteDevToolsVisible,
 		templates: state.templates,
 	};
 };

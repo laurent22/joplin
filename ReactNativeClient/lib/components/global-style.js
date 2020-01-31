@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const Setting = require('lib/models/Setting.js');
 const { Platform } = require('react-native');
 
@@ -38,7 +40,7 @@ const globalStyle = {
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
 
-	codeThemeCss: 'hljs-atom-one-light.css',
+	codeThemeCss: 'atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;

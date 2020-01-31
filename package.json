@@ -7,7 +7,8 @@
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "tsc": "tsc",
     "tsc-watch": "tsc --watch",
-    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/"
+    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/app/lib/",
+    "postinstall": "cd ReactNativeClient && cd lib && cd joplin-renderer && npm i"
   },
   "husky": {
     "hooks": {
@@ -31,7 +32,8 @@
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "eslint": "^6.1.0",
-    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-enforce-react-hooks": "github:osdnk/eslint-enforce-react-hooks",
+    "eslint-plugin-react": "^7.18.0",
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"

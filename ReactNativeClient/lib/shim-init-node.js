@@ -378,6 +378,15 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {};
+
+	shim.appVersion = () => {
+		if (shim.isElectron()) {
+			const p = require('../packageInfo.js');
+			return p.version;
+		}
+		const p = require('../package.json');
+		return p.version;
+	};
 }
 
 module.exports = { shimInit };

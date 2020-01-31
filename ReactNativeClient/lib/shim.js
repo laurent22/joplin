@@ -197,11 +197,11 @@ shim.waitForFrame = () => {
 	throw new Error('Not implemented');
 };
 
-shim.injectedJs = name => '';
-
-shim.loadCssFromJs = name => {
+shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
+
+shim.injectedJs = name => '';
 
 let isTestingEnv_ = false;
 

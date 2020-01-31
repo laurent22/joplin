@@ -286,7 +286,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -333,6 +333,40 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </ul>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.178">v1.0.178</a> - 2020-01-20T19:06:45Z<a name="v1-0-178-https-github-com-laurent22-joplin-releases-tag-v1-0-178-2020-01-20t19-06-45z" href="#v1-0-178-https-github-com-laurent22-joplin-releases-tag-v1-0-178-2020-01-20t19-06-45z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add ability to search by folder or tag title</li>
+<li>New: Add option to disable auto-matching braces (<a href="https://github.com/laurent22/joplin/issues/2251">#2251</a>)</li>
+<li>New: Display selected tags under a note title (<a href="https://github.com/laurent22/joplin/issues/2217">#2217</a>)</li>
+<li>New: Add external editor actions to the note context menu. (<a href="https://github.com/laurent22/joplin/issues/2214">#2214</a>)</li>
+<li>Improved: When importing MD files create resources for local linked files (<a href="https://github.com/laurent22/joplin/issues/2262">#2262</a>)</li>
+<li>Improved: Update Electron to 7.1.9 (<a href="https://github.com/laurent22/joplin/issues/2314">#2314</a>)</li>
+<li>Improved: Show completed date in note properties (<a href="https://github.com/laurent22/joplin/issues/2292">#2292</a>)</li>
+<li>Improved: Maintain selection when non-selected note is deleted (<a href="https://github.com/laurent22/joplin/issues/2290">#2290</a>)</li>
+<li>Improved: Don't count completed to-dos in note counts when they are not shown (<a href="https://github.com/laurent22/joplin/issues/2288">#2288</a>)</li>
+<li>Improved: Replace note links with relative paths in MD Exporter (<a href="https://github.com/laurent22/joplin/issues/2161">#2161</a>)</li>
+<li>Fixed: Fix pdf export when mouse over non-selected note in notelist. (<a href="https://github.com/laurent22/joplin/issues/2255">#2255</a>) (<a href="https://github.com/laurent22/joplin/issues/2254">#2254</a>)</li>
+<li>Fixed: Fixed regression in HTML note rendering</li>
+<li>Fixed: Fixed export to HTML, PDF and printing</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.177">v1.0.177</a> - 2019-12-30T14:40:40Z<a name="v1-0-177-https-github-com-laurent22-joplin-releases-tag-v1-0-177-2019-12-30t14-40-40z" href="#v1-0-177-https-github-com-laurent22-joplin-releases-tag-v1-0-177-2019-12-30t14-40-40z" class="heading-anchor">🔗</a></h2>
+<p>This is to test the Electron framework upgrade and the switch to a separate note renderer. If you find any bug please report on the forum or GitHub tracker.</p>
+<ul>
+<li>New: Allow exporting a note as HTML</li>
+<li>Improved: Extract note renderer to separate package (<a href="https://github.com/laurent22/joplin/issues/2206">#2206</a>)</li>
+<li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
+<li>Improved: Update Katex to 0.11.1 (<a href="https://github.com/laurent22/joplin/issues/2201">#2201</a>)</li>
+<li>Improved: Improved Nextcloud API error handling</li>
+<li>Improved: Updated OneDrive login to remove webview dependency</li>
+<li>Improved: Decrypt notes that are meant to be shared</li>
+<li>Improved: Make it easier to view early errors when the app starts</li>
+<li>Improved: Upgrade to Electron 7</li>
+<li>Improved: Render note using iframe instead of deprecated webview</li>
+<li>Fixed: Fix Goto Anything scrolling issue (<a href="https://github.com/laurent22/joplin/issues/2199">#2199</a>) (<a href="https://github.com/laurent22/joplin/issues/2122">#2122</a>)</li>
+<li>Fixed: Prevent app from crashing when pressing focus shortcut from search bar (<a href="https://github.com/laurent22/joplin/issues/2157">#2157</a>)</li>
+<li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (<a href="https://github.com/laurent22/joplin/issues/2091">#2091</a>)</li>
+<li>Fixed: Fix notifications on Windows 7 (<a href="https://github.com/laurent22/joplin/issues/2144">#2144</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.176">v1.0.176</a> - 2019-12-14T10:36:44Z<a name="v1-0-176-https-github-com-laurent22-joplin-releases-tag-v1-0-176-2019-12-14t10-36-44z" href="#v1-0-176-https-github-com-laurent22-joplin-releases-tag-v1-0-176-2019-12-14t10-36-44z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add ability to share a note publicly using Nextcloud (<a href="https://github.com/laurent22/joplin/issues/2173">#2173</a>)</li>
@@ -1334,7 +1368,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

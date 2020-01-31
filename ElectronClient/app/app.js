@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const MasterKey = require('lib/models/MasterKey');
 const Note = require('lib/models/Note');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 const { _, setLocale } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
 const fs = require('fs-extra');
@@ -49,7 +50,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	windowContentSize: bridge().windowContentSize(),
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
-	noteDevToolsVisible: false,
+	devToolsVisible: false,
 });
 
 class Application extends BaseApplication {
@@ -221,7 +222,12 @@ class Application extends BaseApplication {
 
 			case 'NOTE_DEVTOOLS_TOGGLE':
 				newState = Object.assign({}, state);
-				newState.noteDevToolsVisible = !newState.noteDevToolsVisible;
+				newState.devToolsVisible = !newState.devToolsVisible;
+				break;
+
+			case 'NOTE_DEVTOOLS_SET':
+				newState = Object.assign({}, state);
+				newState.devToolsVisible = action.value;
 				break;
 
 			}
@@ -231,6 +237,14 @@ class Application extends BaseApplication {
 		}
 
 		return super.reducer(newState, action);
+	}
+
+	toggleDevTools(visible) {
+		if (visible) {
+			bridge().openDevTools();
+		} else {
+			bridge().closeDevTools();
+		}
 	}
 
 	async generalMiddleware(store, next, action) {
@@ -274,12 +288,12 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
-			this.updateMenuItemStates();
+			this.updateMenuItemStates(newState);
 		}
 
-		if (action.type === 'NOTE_DEVTOOLS_TOGGLE') {
-			const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
-			menuItem.checked = newState.noteDevToolsVisible;
+		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
+			this.toggleDevTools(newState.devToolsVisible);
+			this.updateMenuItemStates(newState);
 		}
 
 		return result;
@@ -372,13 +386,15 @@ class Application extends BaseApplication {
 		for (let i = 0; i < ioModules.length; i++) {
 			const module = ioModules[i];
 			if (module.type === 'exporter') {
-				exportItems.push({
-					label: module.fullLabel(),
-					screens: ['Main'],
-					click: async () => {
-						await InteropServiceHelper.export(this.dispatch.bind(this), module);
-					},
-				});
+				if (module.canDoMultiExport !== false) {
+					exportItems.push({
+						label: module.fullLabel(),
+						screens: ['Main'],
+						click: async () => {
+							await InteropServiceHelper.export(this.dispatch.bind(this), module);
+						},
+					});
+				}
 			} else {
 				for (let j = 0; j < module.sources.length; j++) {
 					const moduleSource = module.sources[j];
@@ -446,6 +462,7 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'exportPdf',
+					noteId: null,
 				});
 			},
 		});
@@ -1105,18 +1122,23 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
-	async updateMenuItemStates() {
+	async updateMenuItemStates(state = null) {
 		if (!this.lastMenuScreen_) return;
-		if (!this.store()) return;
+		if (!this.store() && !state) return;
 
-		const selectedNoteIds = this.store().getState().selectedNoteIds;
+		if (!state) state = this.store().getState();
+
+		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
-			menuItem.enabled = !!note && note.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN;
+			menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
+
+		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
+		menuItem.checked = state.devToolsVisible;
 	}
 
 	updateTray() {
@@ -1128,7 +1150,7 @@ class Application extends BaseApplication {
 			app.destroyTray();
 		} else {
 			const contextMenu = Menu.buildFromTemplate([
-				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
+				{ label: _('Open %s', app.electronApp().name), click: () => { app.window().show(); } },
 				{ type: 'separator' },
 				{ label: _('Exit'), click: () => { app.quit(); } },
 			]);
@@ -1168,6 +1190,39 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	// async createManyNotes() {
+	// 	return;
+	// 	const folderIds = [];
+
+	// 	const randomFolderId = (folderIds) => {
+	// 		if (!folderIds.length) return '';
+	// 		const idx = Math.floor(Math.random() * folderIds.length);
+	// 		if (idx > folderIds.length - 1) throw new Error('Invalid index ' + idx + ' / ' + folderIds.length);
+	// 		return folderIds[idx];
+	// 	}
+
+	// 	let rootFolderCount = 0;
+	// 	let folderCount = 100;
+
+	// 	for (let i = 0; i < folderCount; i++) {
+	// 		let parentId = '';
+
+	// 		if (Math.random() >= 0.9 || rootFolderCount >= folderCount / 10) {
+	// 			parentId = randomFolderId(folderIds);
+	// 		} else {
+	// 			rootFolderCount++;
+	// 		}
+
+	// 		const folder = await Folder.save({ title: 'folder' + i, parent_id: parentId });
+	// 		folderIds.push(folder.id);
+	// 	}
+
+	// 	for (let i = 0; i < 10000; i++) {
+	// 		const parentId = randomFolderId(folderIds);
+	// 		Note.save({ title: 'note' + i, parent_id: parentId });
+	// 	}
+	// }
+
 	async start(argv) {
 		const electronIsDev = require('electron-is-dev');
 
@@ -1187,8 +1242,8 @@ class Application extends BaseApplication {
 
 		reg.setShowErrorMessageBoxHandler((message) => { bridge().showErrorMessageBox(message); });
 
-		if (Setting.value('openDevTools')) {
-			bridge().window().webContents.openDevTools();
+		if (Setting.value('flagOpenDevTools')) {
+			bridge().openDevTools();
 		}
 
 		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
@@ -1242,6 +1297,11 @@ class Application extends BaseApplication {
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',
 			templates: templates,
+		});
+
+		this.store().dispatch({
+			type: 'NOTE_DEVTOOLS_SET',
+			value: Setting.value('flagOpenDevTools'),
 		});
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update

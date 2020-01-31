@@ -539,7 +539,7 @@ describe('Synchronizer', function() {
 		let context2 = await synchronizer().start();
 		if (withEncryption) {
 			const masterKey_2 = await MasterKey.load(masterKey.id);
-			await encryptionService().loadMasterKey(masterKey_2, '123456', true);
+			await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
 			let t = await Tag.load(tag.id);
 			await Tag.decrypt(t);
 		}
@@ -743,7 +743,7 @@ describe('Synchronizer', function() {
 		expect(masterKey_2.content).toBe(masterKey.content);
 		expect(masterKey_2.checksum).toBe(masterKey.checksum);
 		// Now load the master key we got from client 1 and try to decrypt
-		await encryptionService().loadMasterKey(masterKey_2, '123456', true);
+		await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
 		// Get the decrypted items back
 		await Folder.decrypt(folder1_2);
 		await Note.decrypt(note1_2);
@@ -1540,5 +1540,43 @@ describe('Synchronizer', function() {
 		expect((await synchronizer().lockFiles_()).length).toBe(0);
 	}));
 
+	it('should not encrypt notes that are shared', asyncTest(async () => {
+		Setting.setValue('encryption.enabled', true);
+		await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		const origNote2 = Object.assign({}, note2);
+		await BaseItem.updateShareStatus(note2, true);
+		note2 = await Note.load(note2.id);
+
+		// Sharing a note should not modify the timestamps
+		expect(note2.user_updated_time).toBe(origNote2.user_updated_time);
+		expect(note2.user_created_time).toBe(origNote2.user_created_time);
+
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		// The shared note should be decrypted
+		let note2_2 = await Note.load(note2.id);
+		expect(note2_2.title).toBe('deux');
+		expect(note2_2.is_shared).toBe(1);
+
+		// The non-shared note should be encrypted
+		let note1_2 = await Note.load(note1.id);
+		expect(note1_2.title).toBe('');
+	}));
 
 });

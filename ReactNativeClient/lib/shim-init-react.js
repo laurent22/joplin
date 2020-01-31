@@ -16,11 +16,6 @@ const injectedJs = {
 	webviewLib: require('lib/rnInjectedJs/webviewLib'),
 };
 
-const cssToJs = {
-	'hljs-atom-one-dark-reasonable.css': require('lib/csstojs/hljs-atom-one-dark-reasonable.css.js'),
-	'hljs-atom-one-light.css': require('lib/csstojs/hljs-atom-one-light.css.js'),
-};
-
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.setInterval = PoorManIntervals.setInterval;
@@ -149,6 +144,11 @@ function shimInit() {
 		return Platform.OS;
 	};
 
+	shim.appVersion = () => {
+		const p = require('react-native-version-info').default;
+		return p.appVersion;
+	};
+
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
 	// only really works with images. It does not resize the image either.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
@@ -186,11 +186,6 @@ function shimInit() {
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name];
-	};
-
-	shim.loadCssFromJs = function(name) {
-		if (!(name in cssToJs)) throw new Error(`Cannot find csstojs file (add it to "cssToJs" object): ${name}`);
-		return cssToJs[name];
 	};
 }
 

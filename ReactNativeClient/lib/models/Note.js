@@ -11,6 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -140,6 +141,10 @@ class Note extends BaseItem {
 
 	static async linkedResourceIds(body) {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
+	}
+
+	static async linkedNoteIds(body) {
+		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
 	}
 
 	static async replaceResourceInternalToExternalLinks(body) {
@@ -624,16 +629,13 @@ class Note extends BaseItem {
 	}
 
 	static markupLanguageToLabel(markupLanguageId) {
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
 	}
 }
 
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
-
-Note.MARKUP_LANGUAGE_MARKDOWN = 1;
-Note.MARKUP_LANGUAGE_HTML = 2;
 
 module.exports = Note;

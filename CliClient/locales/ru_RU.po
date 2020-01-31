@@ -16,216 +16,309 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
-msgstr "Для удаления метки, открепите ее от связанных с ней заметок."
+msgstr "Для удаления метки открепите ее от всех связанных с ней заметок."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:455
 msgid "Please select the note or notebook to be deleted first."
-msgstr ""
-"Пожалуйста, выберите заметку или блокнот, которые будут удалены первыми."
+msgstr "Пожалуйста, сначала выберите заметку или блокнот для удаления."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:719
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Для выхода из приложения нажмите Ctrl+D или введите \"exit\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"Более одного элемента соответствуют \"%s\". Пожалуйста, уточните ваш запрос."
+"Более одного элемента соответствуют выражению \"%s\". Пожалуйста, уточните "
+"ваш запрос."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
 msgstr "Блокнот не выбран."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:97
 msgid "No notebook has been specified."
 msgstr "Блокнот не указан."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
 msgstr "Y"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "n"
 msgstr "n"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
 msgid "N"
 msgstr "N"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
 msgstr "y"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Отмена фоновой синхронизации... Пожалуйста, подождите."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:254
 #, javascript-format
 msgid "No such command: %s"
 msgstr "Нет такой команды: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Команда \"%s\" доступна только в режиме GUI"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
 msgstr "Невозможно изменить зашифрованный элемент"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:108
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr "Отсутствует обязательный аргумент: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:139
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:143
 msgid "Your choice: "
 msgstr "Ваш выбор: "
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/cli-utils.js:150
 #, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Неверный ответ: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
 msgstr "Прикрепляет заданный файл к заметке."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:20
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:34
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:38
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:66
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-search.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-set.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-use.js:21
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Не удалось найти \"%s\"."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:13
 msgid "Displays the given note."
 msgstr "Отображает заданную заметку."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cat.js:17
 msgid "Displays the complete information about note."
 msgstr "Отображает полную информацию о заметке."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Выводит или задает параметр конфигурации. Если [value] не указано, выведет "
-"значение [name]. Если не указаны ни [name], ни [value], выведет текущую "
-"конфигурацию."
+"Выводит или задает значение параметра конфигурации. Если значение [value] не "
+"указано - выведет текущее значение параметра [name]. Если не указаны ни имя "
+"[name], ни значение [value] - выведет всю текущую конфигурацию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
-msgstr "Также показывает неустановленные или скрытые переменные конфигурации."
+msgstr "Также выводит не установленные и скрытые параметры конфигурации."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:79
 #, javascript-format
 msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-config.js:81
 #, javascript-format
 msgid "%s = %s"
 msgstr "%s = %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-cp.js:13
 msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Дублирует заметки, содержащие <note>, в [notebook]. Если блокнот не указан, "
-"заметки продублируются в текущем."
+"Дублирует заметки соответствующие выражению <note> в блокнот [notebook]. "
+"Если блокнот не указан - заметки дублируются в текущем блокноте."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
 msgstr "Отмечает задачу как выполненную."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Заметка не является задачей: «%s»"
+msgstr "Заметка не является задачей: \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:18
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"Управляет конфигурацией E2EE. Команды: `enable`, `disable`, `decrypt`, "
-"`status`,'decrypt-file' и `target-status`."
+"Управляет конфигурацией E2EE. Доступные команды: `enable`, `disable`, "
+"`decrypt`, `status`, `decrypt-file` и `target-status`."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:37
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:48
 msgid "Enter master password:"
 msgstr "Введите мастер-пароль:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:50
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:55
 msgid "Operation cancelled"
 msgstr "Операция отменена"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
 msgid "Confirm password:"
 msgstr "Подтвердите пароль:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:59
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
 msgid "Passwords do not match!"
-msgstr "Пароли не соответствуют!"
+msgstr "Пароли не совпадают!"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Запуск расшифровки... Пожалуйста, подождите. Время расшифровки зависит от "
-"объема расшифровываемых данных."
+"Запуск расшифровки... Пожалуйста, подождите. Расшифровка может занять "
+"несколько минут в зависимости от объема данных."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
 msgstr "Расшифровка завершена."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Enabled"
 msgstr "Включено"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:479
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Disabled"
 msgstr "Отключено"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "Шифрование: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:17
 msgid "Edit note."
 msgstr "Редактировать заметку."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:30
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Текстовый редактор не определен. Задайте его, используя `config editor "
-"<editor-path>`"
+"Текстовый редактор не задан. Задайте его командой `config editor <editor-"
+"path>`"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
 msgstr "Нет активного блокнота."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Заметка не существует: \"%s\". Создать?"
+msgstr "Не существует заметки: \"%s\". Создать?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-exit.js:11
 msgid "Exits the application."
 msgstr "Выйти из приложения."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:13
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Экспортирует данные Joplin по заданному пути. По умолчанию экспортируется "
+"Экспортирует данные Joplin в указанный каталог. По умолчанию экспортируется "
 "полная база данных, включая блокноты, заметки, метки и ресурсы."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
 msgstr "Целевой формат: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given note."
 msgstr "Экспортирует только заданную заметку."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given notebook."
 msgstr "Экспортирует только заданный блокнот."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Отображает URL геолокации для заметки."
+msgstr "Отображает URL-адрес географического местоположения для заметки."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:13
 msgid "Displays usage information."
-msgstr "Отображает информацию об использовании."
+msgstr "Отображает справочную информацию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Информацию по настройке ярлыков можно получить, посетив %s"
+msgstr "Информацию по настройке сочетаний клавиш можно получить на странице %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Ярлыки недоступны в режиме командной строки."
+msgstr "Сочетания клавиш недоступны в режиме командной строки."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Введите `help [команда]` для получения информации о команде или `help all` "
-"для получения полной информации по использованию."
+"Введите `help [command]` для получения справочной информации о команде "
+"[command] или `help all` для получения полной справочной информации."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:73
 msgid "The possible commands are:"
 msgstr "Доступные команды:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:77
 msgid ""
 "In any command, a note or notebook can be referred to by title or ID, or "
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
@@ -236,177 +329,234 @@ msgstr ""
 "блокнот соответственно. С помощью `$c` можно ссылаться на текущий выбранный "
 "элемент."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Чтобы переключаться между панелями, нажимайте Tab или Shift+Tab."
+msgstr "Для переключения между панелями используйте Tab или Shift+Tab."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Используйте стрелки и клавиши page up/page down для прокрутки списков и "
-"текстовых областей (включая эту консоль)."
+"Используйте стрелки и клавиши page up/down для прокрутки списков и текстовых "
+"областей (включая эту консоль)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Чтобы развернуть/свернуть консоль, нажимайте \"tc\"."
+msgstr "Чтобы развернуть/свернуть консоль используйте комбинацию \"tc\"."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "Чтобы войти в режим командной строки, нажмите \":\""
+msgstr "Для входа в режим командной строки нажмите \":\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Чтобы выйти из режима командной строки, нажмите ESCAPE"
+msgstr "Для выхода из режима командной строки нажмите ESCAPE"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-help.js:84
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Чтобы получить список сочетаний клавиш и настроек конфигурации введите `help "
 "keymap`"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
 msgstr "Импортирует данные в Joplin."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:24
 #, javascript-format
 msgid "Source format: %s"
 msgstr "Исходный формат: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:24
 msgid "Do not ask for confirmation."
 msgstr "Не запрашивать подтверждение."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Найдено: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:44
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Создано: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:45
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Обновлено: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:46
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Пропущено: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:47
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Ресурсов: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:48
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "С метками: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:61
 msgid "Importing notes..."
 msgstr "Импорт заметок..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-import.js:66
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "Импортировано заметок: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:18
 msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Выводит заметки текущего блокнота. Используйте `ls /` для вывода списка "
-"блокнотов."
+"Выводит заметки текущего блокнота. Для вывода списка блокнотов используйте "
+"`ls /`."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Displays only the first top <num> notes."
 msgstr "Выводит только первые <num> заметок."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Сортирует элементы по <field> (напр. title, updated_time, created_time)."
+"Сортирует элементы по полю <field> (напр. title, updated_time, created_time)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Reverses the sorting order."
 msgstr "Меняет порядок сортировки."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Отображает только элементы указанного типа(ов). Может быть `n` для заметок, "
-"`t` для задач или `nt` для заметок и задач (напр. `-tt` выведет только "
-"задачи, в то время как `-ttd` выведет заметки и задачи)."
+"Отображает только элементы заданного типа(ов). Поддерживаемые типы: `n` для "
+"заметок, `t` для задач или `nt` для заметок и задач (напр. `-tt` выведет "
+"только задачи, в то время как `-ttd` выведет и заметки и задачи)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Either \"text\" or \"json\""
-msgstr "Также \"text\" или \"json\""
+msgstr "Или \"text\" или \"json\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Использовать формат длинного списка. Форматом является ID, NOTE_COUNT (для "
+"Использовать расширенный формат списка. Поля формата: ID, NOTE_COUNT (для "
 "блокнотов), DATE, TODO_CHECKED (для задач), TITLE"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ls.js:56
 msgid "Please select a notebook first."
 msgstr "Сначала выберите блокнот."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Создает новый блокнот."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mknote.js:12
 msgid "Creates a new note."
 msgstr "Создает новую заметку."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mknote.js:16
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mktodo.js:16
 msgid "Notes can only be created within a notebook."
 msgstr "Заметки могут быть созданы только в блокноте."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
 msgstr "Создает новую задачу."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Перемещает заметки, содержащие <note> в [notebook]."
+msgstr ""
+"Перемещает заметки соответствующие выражению <note> в блокнот [notebook]."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Переименовывает заданный <item> (заметку или блокнот) в <name>."
+msgstr "Переименовывает элемент <item> (заметку или блокнот) в <name>."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
 msgstr "Удаляет заданный блокнот."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Удаляет блокнот без запроса подтверждения."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmbook.js:26
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"Удалить блокнот? Все заметки и вложенные блокноты в этом блокноте также "
-"будут удалены."
+"Удалить блокнот? Все содержимое блокнота, включая заметки и вложенные "
+"блокноты, будет удалено."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Удаляет заметки, соответствующие <note-pattern>."
+msgstr "Удаляет заметки, соответствующие выражению <note-pattern>."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
 msgstr "Удаляет заметки без запроса подтверждения."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d заметок соответствуют этому шаблону. Удалить их?"
+msgstr "%d заметок соответствуют указанному выражению. Удалить их?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
 msgid "Delete note?"
 msgstr "Удалить заметку?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Запросы для заданного <pattern> во всех заметках."
+msgstr "Осуществляет поиск по шаблону <pattern> во всех заметках."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:14
 #, javascript-format
 msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
 "Запустить, остановить или проверить сервер API. Порт сервера настраивается с "
-"помощью переменной api.port. Доступные команды: (%s)."
+"помощью параметра конфигурации api.port. Доступные команды: (%s)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr "Сервер уже запущен на порту %d"
+msgstr "Сервер уже запущен. Порт: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "Сервер запущен на порту %d"
+msgstr "Сервер запущен. Порт: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:43
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
 msgstr "Сервер не запущен."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
 msgid ""
 "Sets the property <name> of the given <note> to the given [value]. Possible "
@@ -414,164 +564,184 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Устанавливает для свойства <name> заданной <note> заданному [value]. "
-"Возможные свойства:\n"
+"Устанавливает значение [value] для свойства <name> заметки <note>. Доступные "
+"свойства:\n"
 "\n"
 "%s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
 msgstr "Выводит общую информацию о заметках и блокнотах."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
 msgstr "Синхронизирует с удаленным хранилищем."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Синхронизация с заданной целью (по умолчанию используется значение "
-"конфигурации sync.target"
+"конфигурации sync.target)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:91
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Аутентификация не была завершена (не получен токен аутентификации)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:86
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:42
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 "Чтобы разрешить Joplin синхронизироваться с Dropbox, выполните следующие "
 "действия:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:47
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Шаг 1: Откройте этот URL в вашем браузере, чтобы авторизовать приложение:"
+"Шаг 1: Для авторизации приложения откройте следующую ссылку в вашем браузере:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:57
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Шаг 2: Введите код, предоставленный Dropbox:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
-"Не аутентифицировано с %s. Пожалуйста, предоставьте все недостающие данные."
+"Не удалось аутентифицироваться с %s. Пожалуйста, предоставьте недостающие "
+"данные."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
 msgstr "Синхронизация уже выполняется."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Файл блокировки уже установлен. Если вам известно, что синхронизация не "
-"производится, вы можете удалить файл блокировки в \"%s\" и возобновить "
+"Файл блокировки уже существует. Если вы уверены, что синхронизация не "
+"выполняется - вы можете вручную удалить файл блокировки \"%s\" и возобновить "
 "операцию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr "Цель синхронизации: %s (%s)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:177
 msgid "Cannot initialize synchroniser."
-msgstr "Не удалось инициировать синхронизацию."
+msgstr "Не удалось инициализировать модуль синхронизации."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:179
 msgid "Starting synchronisation..."
 msgstr "Начало синхронизации..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
 msgstr "Загрузка ресурсов..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
 msgstr "Отмена... Пожалуйста, подождите."
 
-#, fuzzy
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:14
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> может быть \"add\", \"remove\" или \"list\", чтобы назначить "
-"или убрать [tag] с [note], или чтобы вывести список заметок, ассоциированых "
-"с [tag]. Команда `tag list` может быть использована для вывода списка всех "
-"меток."
+"<tag-command> может принимать значения \"add\", \"remove\", \"list\" или "
+"\"notetags\", позволяющие, соответственно: добавить или убрать метку [tag] с "
+"заметки [note]; вывести список заметок, ассоциированных с меткой [tag]; "
+"вывести список меток, ассоциированных с заметкой [note]. Команда `tag list` "
+"выводит список всех меток."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Неверная команда: \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-todo.js:14
 msgid ""
 "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
 "toggle the given to-do between completed and uncompleted state (If the "
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> может быть \"toggle\" или \"clear\". \"toggle\" используется "
-"для переключения статуса заданной задачи на завершенную или незавершенную "
-"(если применить к обычной заметке, она будет преобразована в задачу). \"clear"
-"\" используется для преобразования задачи обратно в обычную заметку."
+"<todo-command> может принимать значения \"toggle\" или \"clear\". \"toggle\" "
+"переключает статус выбранной задачи (с завершенной на незавершенную и "
+"наоборот). При применении к обычной заметке - заметка преобразуется в "
+"задачу. \"clear\" преобразует выбранную задачу в обычную заметку."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
 msgstr "Помечает задачу как незавершенную."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-use.js:12
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Переключает на [блокнот] — все дальнейшие операции будут происходить в этом "
-"блокноте."
+"Совершает переход в блокнот [notebook]. Все дальнейшие операции будут "
+"совершены в этом блокноте."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Отображает информацию о версии"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:56
 msgid "Enum"
 msgstr "Enum"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:56
 #, javascript-format
 msgid "Type: %s."
 msgstr "Тип: %s."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:57
 #, javascript-format
 msgid "Possible values: %s."
 msgstr "Возможные значения: %s."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:71
 #, javascript-format
 msgid "Default: %s"
 msgstr "По умолчанию: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
 msgstr "Возможные ключи/значения:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/main.js:77
 msgid "Type `joplin help` for usage information."
-msgstr "Введите `joplin help` для получения информации об использовании."
+msgstr "Введите `joplin help` для получения справочной информации."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/main.js:79
 msgid "Fatal error:"
 msgstr "Фатальная ошибка:"
 
-msgid ""
-"The application has been authorised - you may now close this browser tab."
-msgstr "Приложение авторизовано — можно закрыть вкладку браузера."
-
-msgid "The application has been successfully authorised."
-msgstr "Приложение успешно авторизовано."
-
-msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
-msgstr ""
-"Откройте следующую ссылку в вашем браузере для аутентификации приложения. "
-"Приложением будет создан каталог \"Apps/Joplin\". Чтение и запись файлов "
-"будет осуществляться только в нем. У приложения не будет доступа к каким-"
-"либо файлам за пределами этого каталога и другим личным данным. Никакая "
-"информация не будет передана третьим лицам."
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
 msgid "Search:"
 msgstr "Поиск:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
@@ -583,205 +753,307 @@ msgstr ""
 "Добро пожаловать в Joplin!\n"
 "\n"
 "Введите `:help shortcuts` для просмотра списка клавиатурных сочетаний или "
-"просто `:help` для просмотра информации об использовании.\n"
+"просто `:help` для просмотра справочной информации.\n"
 "\n"
-"Например, для создания блокнота нужно ввести `mb`, для создания заметки — "
-"`mn`."
+"Например, для создания блокнота введите `mb`, для создания заметки - `mn`."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 msgid ""
 "One or more items are currently encrypted and you may need to supply a "
 "master password. To do so please type `e2ee decrypt`. If you have already "
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Один или несколько элементов зашифрованы, и для их расшифровки может "
-"потребоваться пароль. Для этого введите `e2ee decrypt`. Если пароль уже был "
-"вами предоставлен, зашифрованные элементы расшифруются в фоновом режиме и "
-"вскоре станут доступны."
+"Один или несколько элементов зашифрованы. Для расшифровки может "
+"потребоваться мастер-пароль. Для начала расшифровки введите `e2ee decrypt`. "
+"Если мастер-пароль уже был введен - зашифрованные элементы уже "
+"расшифровываются в фоновом режиме и вскоре будут доступны."
 
-#, javascript-format
-msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
-
-#, javascript-format
-msgid "Could not export notes: %s"
-msgstr "Невозможно экспортировать заметки: %s"
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:645
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:728
 msgid "&File"
 msgstr "&Файл"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:651
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1031
 msgid "About Joplin"
 msgstr "О Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:658
 msgid "Preferences..."
 msgstr "Настройки…"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:668
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1010
 msgid "Check for updates..."
 msgstr "Проверить обновления..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:682
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:742
 msgid "Templates"
 msgstr "Шаблоны"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:689
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:747
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:90
 msgid "Import"
 msgstr "Импорт"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:693
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:750
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:379
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:181
 msgid "Export"
 msgstr "Экспорт"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:699
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
 msgid "Synchronise"
 msgstr "Синхронизировать"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:714
 #, javascript-format
 msgid "Hide %s"
 msgstr "Скрыть %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:721
 msgid "Quit"
 msgstr "Выход"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:735
 msgid "Close Window"
 msgstr "Закрыть окно"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:773
 msgid "&Edit"
 msgstr "&Правка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:776
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:800
 msgid "Copy"
 msgstr "Копировать"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:781
 msgid "Cut"
 msgstr "Вырезать"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:786
 msgid "Paste"
 msgstr "Вставить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:791
 msgid "Select all"
 msgstr "Выбрать все"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:799
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1605
 msgid "Bold"
 msgstr "Полужирный"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:810
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1613
 msgid "Italic"
 msgstr "Курсивный"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:821
 msgid "Link"
 msgstr "Ссылка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:832
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1633
 msgid "Code"
 msgstr "Код"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:846
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1693
 msgid "Insert Date Time"
 msgstr "Вставить дату и время"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:860
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1716
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:56
 msgid "Edit in external editor"
 msgstr "Редактировать во внешнем редакторе"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:871
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1550
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1725
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:290
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:755
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Метки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:889
 msgid "Search in all the notes"
 msgstr "Поиск во всех заметках"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:900
 msgid "Search in current note"
 msgstr "Поиск в текущей заметке"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:912
 msgid "&View"
 msgstr "&Вид"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:914
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:461
 msgid "Toggle sidebar"
 msgstr "Переключить боковую панель"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:927
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Порядок переключения вида"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:931
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:470
 msgid "Toggle note list"
-msgstr "Список заметок"
+msgstr "Переключить список заметок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:940
 msgid "Toggle editor layout"
 msgstr "Переключить вид редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:988
 msgid "Focus"
 msgstr "Фокус"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:994
 msgid "&Tools"
 msgstr "&Сервис"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:998
 msgid "&Help"
 msgstr "&Помощь"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1000
 msgid "Website and documentation"
 msgstr "Сайт и документация"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1004
 msgid "Joplin Forum"
 msgstr "Форум Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1007
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
 msgid "Make a donation"
 msgstr "Пожертвовать"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1019
 msgid "Toggle development tools"
 msgstr "Включить средства разработки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1153
 #, javascript-format
 msgid "Open %s"
 msgstr "Открыть %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:1155
 msgid "Exit"
 msgstr "Выход"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:102
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:112
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:138
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:749
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:30
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:233
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
 msgid "OK"
 msgstr "OK"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/bridge.js:102
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:38
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:238
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:316
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:705
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:154
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:163
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:335
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Cancel"
 msgstr "Отмена"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:137
 msgid "Current version is up-to-date."
-msgstr "Текущая версия актуальна."
+msgstr "Установлена последняя версия."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:146
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (предварительный релиз)"
+msgstr "%s (предварительный выпуск)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 msgid "An update is available, do you want to download it now?"
-msgstr "Доступно обновление, вы хотите загрузить его сейчас?"
+msgstr "Доступно обновление, хотите загрузить его сейчас?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 #, javascript-format
 msgid "Your version: %s"
 msgstr "Ваша версия: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
 #, javascript-format
 msgid "New version: %s"
 msgstr "Новая версия: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "Yes"
 msgstr "Да"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "No"
 msgstr "Нет"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
 msgid "Full Release Notes"
-msgstr "Полное примечание к выпуску"
+msgstr "Описание установленной версии"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопирован в буфер обмена!"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:69
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Служба веб-клиппера включена и настроена на автоматический запуск."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:76
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "Статус: запущен. Порт %d"
+msgstr "Статус: запущен. Порт: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:82
 #, javascript-format
 msgid "Status: %s"
 msgstr "Статус: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:88
 msgid "Disable Web Clipper Service"
 msgstr "Отключить службу веб-клиппера"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:94
 msgid "The web clipper service is not enabled."
 msgstr "Служба веб-клиппера не включена."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:99
 msgid "Enable Web Clipper Service"
 msgstr "Включить службу веб-клиппера"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:122
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -789,12 +1061,15 @@ msgstr ""
 "Веб-клиппер Joplin позволяет сохранять веб-страницы и скриншоты из вашего "
 "браузера в Joplin."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Для использования веб-клиппера вам нужно сделать следующее:"
+msgstr "Для использования веб-клиппера сделайте следующее:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:135
 msgid "Step 1: Enable the clipper service"
-msgstr "Шаг 1: включите службу веб-клиппера"
+msgstr "Шаг 1: Включите службу веб-клиппера"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:140
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -804,62 +1079,131 @@ msgstr ""
 "ее включения брандмауэр ОС может запросить разрешение на использование "
 "Joplin определенного порта."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:154
 msgid "Step 2: Install the extension"
-msgstr "Шаг 2: установите расширение"
+msgstr "Шаг 2: Установите расширение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:159
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Скачайте и установите расширение для вашего браузера:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:174
 msgid "Advanced options"
 msgstr "Расширенные настройки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:179
 msgid "Authorisation token:"
 msgstr "Токен авторизации:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:189
 msgid "Copy token"
 msgstr "Скопировать токен"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:195
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Этот токен авторизации необходим только для разрешения сторонним приложениям "
-"получать доступ к Joplin."
+"Данный токен используется только для авторизации доступа сторонних "
+"приложений к Joplin."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Будет открыто новое окно. Сохранить текущие изменения?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Заметки и настройки сохранены в: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:165
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
 msgid "Check synchronisation configuration"
 msgstr "Проверить настройки синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
+msgid "Checking..."
+msgstr "Проверка..."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
+msgid "Error"
+msgstr "Ошибка"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Приложение Joplin Nextcloud не установлено или не настроено. Полный текст "
+"ошибки:"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
+msgid "Show Log"
+msgstr "Показать журнал"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
+msgid "Joplin Nextcloud App status:"
+msgstr "Статус приложения Joplin Nextcloud:"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
+msgid "Check Status"
+msgstr "Проверить статус"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
+msgid "Help"
+msgstr "Помощь"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
+msgid "Show Advanced Settings"
+msgstr "Показать расширенные настройки"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
 msgstr "Обзор..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:637
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+msgid "Edit"
+msgstr "Правка"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Header.min.js:255
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:188
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1586
 msgid "Back"
 msgstr "Назад"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:756
 msgid "Apply"
 msgstr "Применить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:67
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
 msgid "Submit"
 msgstr "Отправить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:104
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
 msgid "Save"
 msgstr "Сохранить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
 "Отключение шифрования означает, что *все* ваши заметки и вложения будут "
-"пересинхронизированы и отправлены в расшифрованном виде к цели "
-"синхронизации. Вы хотите продолжить?"
+"расшифрованы и отправлены в незашифрованом виде к цели синхронизации. Вы "
+"хотите продолжить?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target. Do not lose the "
@@ -867,54 +1211,75 @@ msgid ""
 "the data! To enable encryption, please enter your password below."
 msgstr ""
 "Включение шифрования означает, что *все* ваши заметки и вложения будут "
-"пересинхронизированы и отправлены в зашифрованном виде к цели синхронизации. "
-"Не теряйте пароль, так как в целях безопасности *только* с его помощью можно "
-"будет расшифровать данные! Чтобы включить шифрование, введите ваш пароль "
-"ниже."
+"зашифрованы и отправлены в зашифрованном виде к цели синхронизации. Не "
+"теряйте пароль, так как в целях безопасности расшифровка данных будет "
+"возможна *только* с его помощью! Чтобы включить шифрование, введите ваш "
+"пароль ниже."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
 msgid "Disable encryption"
 msgstr "Отключить шифрование"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
 msgid "Enable encryption"
 msgstr "Включить шифрование"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:184
 msgid "Master Keys"
 msgstr "Мастер-ключи"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:198
 msgid "Active"
 msgstr "Активен"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:203
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:284
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:26
 msgid "ID"
 msgstr "ID"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:208
 msgid "Source"
 msgstr "Источник"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:213
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:27
 msgid "Created"
 msgstr "Создан"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:218
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:28
 msgid "Updated"
 msgstr "Обновлен"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:223
 msgid "Password"
 msgstr "Пароль"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:228
 msgid "Password OK"
 msgstr "Пароль OK"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
 msgid ""
 "Note: Only one master key is going to be used for encryption (the one marked "
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Внимание: Для шифрования может быть использован только один мастер-ключ "
+"Внимание: для шифрования может быть использован только один мастер-ключ "
 "(отмеченный как \"active\"). Для расшифровки может использоваться любой из "
 "ключей, в зависимости от того, как изначально были зашифрованы заметки или "
 "блокноты."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
 msgid "Missing Master Keys"
 msgstr "Недостающие мастер-ключи"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
 "however the application does not currently have access to them. It is likely "
@@ -924,127 +1289,180 @@ msgstr ""
 "элементов, однако у приложения сейчас нет к ним доступа. Скорее всего, они "
 "загрузятся при синхронизации."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
 msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
 "Для получения дополнительной информации о сквозном шифровании (E2EE) и "
-"советах о том, как его включить, пожалуйста, обратитесь к документации:"
+"советов о том, как его включить, пожалуйста, обратитесь к документации:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
 msgid "Status"
 msgstr "Статус"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:332
 msgid "Encryption is:"
 msgstr "Шифрование:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Расширение Firefox"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Интернет-магазин Chrome"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "Загрузить сейчас:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Header.min.js:210
 msgid "Usage"
-msgstr "Использование: %s"
+msgstr "Использование"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:62
 #, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 "Будет создан новый блокнот \"%s\" и в него будет импортирован файл \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:108
 msgid "Please create a notebook first."
 msgstr "Пожалуйста, сначала создайте блокнот."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:114
 msgid "Please create a notebook first"
 msgstr "Пожалуйста, сначала создайте блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:121
 msgid "Notebook title:"
 msgstr "Название блокнота:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:160
 msgid "Add or remove tags:"
 msgstr "Добавить или удалить метки:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:181
 msgid "Rename notebook:"
 msgstr "Переименовать блокнот:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:202
 msgid "Rename tag:"
 msgstr "Переименовать метку:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:295
 msgid "Set alarm:"
 msgstr "Установить напоминание:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:326
 msgid "Template file:"
 msgstr "Файл шаблона:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:479
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:69
 msgid "New note"
 msgstr "Новая заметка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:488
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:60
 msgid "New to-do"
 msgstr "Новая задача"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:497
 msgid "New notebook"
 msgstr "Новый блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:505
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 msgid "Layout"
-msgstr "Разметка"
+msgstr "Вид редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:514
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteSearchBar.min.js:123
 msgid "Search..."
 msgstr "Поиск..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:553
 msgid "Some items cannot be synchronised."
 msgstr "Некоторые элементы не могут быть синхронизированы."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:563
 msgid "View them now"
-msgstr "Просмотреть их сейчас"
+msgstr "Просмотреть сейчас"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:570
 msgid "One or more master keys need a password."
 msgstr "Для одного или нескольких мастер-ключей требуется пароль."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:580
 msgid "Set the password"
 msgstr "Установить пароль"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Здесь нет заметок. Создайте новую, нажав на \"Новая заметка\"."
+msgstr "Заметки отсутствуют. Создайте новую, нажав на \"Новая заметка\"."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:418
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Сейчас здесь нет блокнотов. Создайте новый, нажав \"Новый блокнот\"."
+msgstr "Блокноты отсутствуют. Создайте новый, нажав на \"Новый блокнот\"."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
+#, fuzzy
+msgid "Completed"
+msgstr "Завершено: %s"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
 msgstr "Местоположение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
 msgid "URL"
 msgstr "URL"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:32
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:967
 msgid "Note History"
 msgstr "История заметок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
 msgstr "Разметка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:312
 msgid "Previous versions of this note"
 msgstr "Предыдущая версия заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:389
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1749
 msgid "Note properties"
 msgstr "Свойства заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:75
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Заметка “%s” была успешно восстановлена в блокнот “%s”."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
-msgstr "Эта заметка не имеет предыдущей версии"
+msgstr "Эта заметка не имеет предыдущих версий"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:143
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:861
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "Неподдерживаемая ссылка или сообщение: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:178
 msgid "Restore"
 msgstr "Восстановить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:179
 #, javascript-format
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1053,121 +1471,194 @@ msgstr ""
 "Нажмите “%s”, чтобы восстановить заметку. Она будет скопирована в блокнот "
 "“%s”. Текущая версия заметки не будет заменена или изменена."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:774
 msgid "Open..."
 msgstr "Открыть..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:777
 #, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "Этот файл не может быть открыт: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:782
 msgid "Save as..."
 msgstr "Сохранить как..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:793
 msgid "Copy path to clipboard"
 msgstr "Скопировать путь в буфер обмена"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:807
 msgid "Copy Link Address"
 msgstr "Скопировать ссылку"
 
-msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Это вложение еще не загружено или еще не расшифровано."
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
+msgid "There was an error downloading this attachment:"
+msgstr "Произошла ошибка при загрузке вложения:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Это вложение еще не загружено или еще не расшифровано"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Эта заметка не имеет содержания. Нажмите на \"%s\", чтобы переключиться в "
-"редактор и отредактировать ее."
+"Эта пустая заметка. Нажмите на \"%s\", чтобы переключиться в редактор и "
+"отредактировать ее."
 
-msgid "Only one note can be printed or exported to PDF at a time."
-msgstr ""
-"Только одна заметка может быть напечатана или экспортирована в PDF за раз."
-
-msgid "PDF File"
-msgstr "Файл PDF"
-
-#, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Ошибка при открытии заметки в редакторе: %s"
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1471
 msgid "strong text"
+msgstr "полужирный текст"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1475
+msgid "emphasized text"
 msgstr "выделенный текст"
 
-msgid "emphasized text"
-msgstr "подчеркнутый текст"
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1509
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1513
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1520
 msgid "List item"
-msgstr "Список"
+msgstr "Элемент списка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1532
 msgid "Insert Hyperlink"
 msgstr "Вставить гиперссылку"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1543
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1641
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:282
 msgid "Attach file"
 msgstr "Прикрепить файл"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1558
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1743
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:299
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
 msgid "Set alarm"
 msgstr "Установить напоминание"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1572
 #, javascript-format
 msgid "In: %s"
 msgstr "В: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1625
 msgid "Hyperlink"
 msgstr "Гиперссылка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1653
 msgid "Numbered List"
 msgstr "Нумерованный список"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1661
 msgid "Bulleted List"
 msgstr "Маркированный список"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1669
 msgid "Checkbox"
-msgstr "Пометка"
+msgstr "Флажок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1677
 msgid "Heading"
 msgstr "Заголовок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1685
 msgid "Horizontal Rule"
 msgstr "Горизотальный разделитель"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1707
 msgid "Click to stop external editing"
-msgstr "Нажмите, чтобы остановить внешнее редактирование"
+msgstr "Нажмите, чтобы выйти из внешнего редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1708
 msgid "Watching..."
 msgstr "Наблюдение..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 msgid "to-do"
 msgstr "задача"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 msgid "note"
 msgstr "заметка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Создание новой %s..."
 
-msgid "Refresh"
-msgstr "Обновить"
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:243
 msgid "Clear"
 msgstr "Очистить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:88
 msgid "OneDrive Login"
 msgstr "Вход в OneDrive"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:89
 msgid "Dropbox Login"
 msgstr "Вход в Dropbox"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:91
 msgid "Options"
 msgstr "Настройки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Root.min.js:92
 msgid "Synchronisation Status"
 msgstr "Статус синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
+msgid "Synchronising..."
+msgstr "Синхронизация..."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Создание ссылки..."
+msgstr[1] "Создание ссылок..."
+msgstr[2] "Создание ссылок..."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Ссылка скопирована в буфер обмена!"
+msgstr[1] "Ссылки скопированы в буфер обмена!"
+msgstr[2] "Ссылки скопированы в буфер обмена!"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Примечание: если вы поделились заметкой - она будет храниться на сервере в "
+"незашифрованном виде."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
+msgid "Share Notes"
+msgstr "Поделиться заметками"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Скопировать общедоступную ссылку"
+msgstr[1] "Скопировать общедоступные ссылки"
+msgstr[2] "Скопировать общедоступные ссылки"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
+msgid "Close"
+msgstr "Закрыть"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
 msgstr "Удалить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:283
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
 #, javascript-format
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1176,126 +1667,230 @@ msgid ""
 msgstr ""
 "Удалить блокнот “%s”?\n"
 "\n"
-"Все заметки и вложенные блокноты в этом блокноте также будут удалены."
+"Все заметки и вложенные блокноты также будут удалены."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:284
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:188
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:211
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:310
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:144
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
 msgid "Delete"
 msgstr "Удалить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:287
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Удалить метку “%s” из всех заметок?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:289
 msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
 msgid "New sub-notebook"
 msgstr "Новый вложенный блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:127
 msgid "Rename"
 msgstr "Переименовать"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:738
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:360
 msgid "Notebooks"
 msgstr "Блокноты"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:773
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:322
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Расшифровано элементов: %d/%d"
+msgstr "Расшифровка элементов: %d/%d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:778
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:327
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Получение ресурсов: %d/%d"
+msgstr "Загрузка ресурсов: %d/%d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
 msgstr ""
-"Пожалуйста, выберите, куда должен быть экспортирован статус синхронизации"
+"Пожалуйста, выберите куда должен быть экспортирован статус синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:87
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
 msgid "Retry"
 msgstr "Повторить попытку"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
 msgstr "Добавить или удалить метки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:41
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:316
 msgid "Duplicate"
-msgstr "Дубликат"
+msgstr "Создать дубликат"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:46
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Копия"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
+msgid "Stop external editing"
+msgstr "Выйти из внешнего редактора"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
 msgstr "Переключить между заметкой и задачей"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:101
 msgid "Switch to note type"
-msgstr "Переключить тип на заметку"
+msgstr "Конвертировать в заметку"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:110
 msgid "Switch to to-do type"
-msgstr "Переключить тип на задачу"
+msgstr "Конвертировать в задачу"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:120
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
 msgid "Copy Markdown link"
 msgstr "Копировать ссылку Markdown"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
+msgid "Share note..."
+msgstr "Поделиться заметкой..."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
+msgid "PDF File"
+msgstr "Файл PDF"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:205
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "Удалить заметку \"%s\"?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:207
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "Удалить эти %d заметки?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:224
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Ошибка при открытии заметки в редакторе: %s"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:339
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
-"Введите название заметки, чтобы перейти к ней, либо введите #имя_тега или "
+"Введите название заметки чтобы перейти к ней, либо введите #имя_метки или "
 "@имя_блокнота."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
 msgid "Goto Anything..."
 msgstr "Перейти к чему угодно…"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:109
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:122
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:153
 #, javascript-format
 msgid "Usage: %s"
 msgstr "Использовано: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:180
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Неизвестный флаг: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Не удалось установить соединение с сервисом Joplin Nextcloud. Пожалуйста "
+"проверьте настройки синхронизации. Полный текст ошибки:\n"
+"%s"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
 msgstr "Dropbox"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
 msgid "File system"
 msgstr "Файловая система"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
 msgid "OneDrive"
 msgstr "OneDrive"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
 msgid "OneDrive Dev (For testing only)"
 msgstr "OneDrive Dev (только для тестирования)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
 msgid "WebDAV"
 msgstr "WebDAV"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/logger.js:176
 #, javascript-format
 msgid "Unknown log level: %s"
-msgstr "Неизвестный уровень лога: %s"
+msgstr "Неизвестный уровень детализации журнала: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/logger.js:185
 #, javascript-format
 msgid "Unknown level ID: %s"
 msgstr "Неизвестный уровень ID: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "Приложение авторизовано - можно закрыть вкладку браузера."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "Приложение успешно авторизовано."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Откройте следующую ссылку в вашем браузере для аутентификации приложения. "
+"Приложением будет создан отдельный каталог \"Apps/Joplin\", в котором будет "
+"происходить работа с файлами. У приложения не будет доступа ни к каким-либо "
+"файлам за пределами этого каталога ни к каким-либо другим личным данным. "
+"Никакая информация не будет передана третьим лицам."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
 "Невозможно обновить токен: отсутствуют данные аутентификации. Повторный "
-"запуск синхронизации может решить проблему."
+"запуск синхронизации может решить эту проблему."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:99
 msgid "Untitled"
 msgstr "Без имени"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/registry.js:137
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
@@ -1311,118 +1906,163 @@ msgstr ""
 "\n"
 "Пожалуйста, рассмотрите возможность использования обычного аккаунта OneDrive."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:126
 #, javascript-format
 msgid "Cannot access %s"
-msgstr "Не удалось получить доступ %s"
+msgstr "Не удалось получить доступ к %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Создано локальных элементов: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Обновлено локальных элементов: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
 #, javascript-format
 msgid "Created remote items: %d."
-msgstr "Создано удаленных элементов: %d."
+msgstr "Создано элементов в хранилище: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
 #, javascript-format
 msgid "Updated remote items: %d."
-msgstr "Обновлено удаленных элементов: %d."
+msgstr "Обновлено элементов в хранилище: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Удалено локальных элементов: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Удалено удаленных элементов: %d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "Получено элементов: %d/%d."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
 msgid "Cancelling..."
 msgstr "Отмена..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Завершено: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Последняя ошибка: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
 msgid "Idle"
 msgstr "Простой"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
 msgid "In progress"
 msgstr "Выполнение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
 msgid "Encrypted"
 msgstr "Зашифровано"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:23
 msgid "title"
 msgstr "заголовок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
 msgid "updated date"
 msgstr "дата обновления"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
 msgid "Conflicts"
 msgstr "Конфликты"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
 msgid "Cannot move notebook to this location"
-msgstr "Не удается переместить блокнот в это расположение"
+msgstr "Не удается переместить блокнот в указанное местоположение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "created date"
 msgstr "дата создания"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:104
 msgid "This note does not have geolocation information."
-msgstr "Эта заметка не содержит информации о геолокации."
+msgstr "Эта заметка не содержит информации о географическом местоположении."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:431
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Не удалось скопировать заметку в блокнот \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Note.js:442
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не удалось переместить заметку в блокнот \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
+msgid "Not downloaded"
+msgstr "Не загружено"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
+msgid "Downloading"
+msgstr "Загрузка"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
+msgid "Downloaded"
+msgstr "Загружено"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Внимание: если вы измените это местоположение, обязательно скопируйте все "
-"содержимое перед синхронизацией, в противном случае все файлы будут удалены! "
-"Смотрите FAQ для получения подробной информации: %s"
+"Внимание: если вы измените это местоположение, обязательно скопируйте в "
+"новое местоположение все свои данные перед синхронизацией, в противном "
+"случае все файлы будут удалены! Смотрите FAQ для получения подробной "
+"информации: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Режим работы клавиатуры"
 
-#, fuzzy
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 msgid "Default"
 msgstr "По умолчанию: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
 msgstr "Цель синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
 msgid ""
 "The target to synchonise to. Each sync target may have additional parameters "
 "which are named as `sync.NUM.NAME` (all documented below)."
@@ -1430,533 +2070,752 @@ msgstr ""
 "Цель синхронизации. Каждая цель синхронизации может иметь дополнительные "
 "параметры, именованные как `sync.NUM.NAME` (все документировано ниже)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Каталог синхронизации (абсолютный путь)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
 msgid "Nextcloud WebDAV URL"
 msgstr "URL-адрес WebDAV-сервера Nextcloud"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
 msgid "Nextcloud username"
 msgstr "Имя пользователя Nextcloud"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
 msgid "Nextcloud password"
 msgstr "Пароль Nextcloud"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
 msgid "WebDAV URL"
 msgstr "URL-адрес WebDAV"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
 msgid "WebDAV username"
 msgstr "Имя пользователя WebDAV"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
 msgid "WebDAV password"
 msgstr "Пароль WebDAV"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
 msgid "Attachment download behaviour"
-msgstr "Правило загрузок вложений"
+msgstr "Режим загрузки вложений"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"В режиме “Ручной” вложения скачиваются, если на них кликнуть. В режиме "
-"“Автоматически”, вложения скачиваются при открытии заметки. В режиме "
-"“Всегда” все заметки скачиваются всегда."
+"В режиме “Ручной” вложения загружаются толко если на них кликнуть. В режиме "
+"“Автоматически” вложения загружаются при открытии заметки. В режиме “Всегда” "
+"вложения загружаются не зависимо от того была заметка открыта или нет."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
 msgid "Always"
 msgstr "Всегда"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
 msgid "Manual"
 msgstr "Ручной"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
 msgid "Auto"
 msgstr "Автоматически"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
 msgid "Max concurrent connections"
 msgstr "Максимальное число одновременных соединений"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
 msgid "Language"
 msgstr "Язык"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
 msgid "Date format"
 msgstr "Формат даты"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:223
 msgid "Time format"
 msgstr "Формат времени"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:238
 msgid "Theme"
 msgstr "Тема"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:242
 msgid "Light"
 msgstr "Светлая"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
 msgid "Dark"
 msgstr "Тёмная"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:245
 msgid "Dracula"
 msgstr "Дракула"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Solarised Light"
 msgstr "Ярко-светлая"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
 msgid "Solarised Dark"
 msgstr "Ярко-тёмная"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Nord"
 msgstr "Север"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
 msgid "Show note counts"
 msgstr "Показывать число заметок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 msgid "Editor"
 msgstr "Редактор"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Viewer"
 msgstr "Просмотрщик"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Split View"
-msgstr "Разделение"
+msgstr "Раздельный вид"
 
-#, fuzzy, javascript-format
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Uncompleted to-dos on top"
 msgstr "Незавершенные задачи сверху"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
 msgid "Show completed to-dos"
-msgstr "Показать незавершенные задачи"
+msgstr "Показать завершенные задачи"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
 msgid "Sort notes by"
 msgstr "Сортировать заметки по"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Автоматическое закрытие скобок, кавычек и т. д."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
 msgid "Reverse sort order"
 msgstr "Обратный порядок сортировки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:302
 msgid "Sort notebooks by"
 msgstr "Сортировать блокноты по"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:314
 msgid "Save geo-location with notes"
-msgstr "Сохранять информацию о геолокации в заметках"
+msgstr "Сохранять информацию о географическом местоположении в заметках"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:322
 msgid "When creating a new to-do:"
 msgstr "При создании новой задачи:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
 msgid "Focus title"
 msgstr "Фокус на названии"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
 msgid "Focus body"
 msgstr "Фокус на содержимом"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:337
 msgid "When creating a new note:"
 msgstr "При создании новой заметки:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:351
 msgid "Enable soft breaks"
 msgstr "Включить мягкие отступы"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:352
 msgid "Enable typographer support"
-msgstr "Включить поддержку typographer "
+msgstr "Включить поддержку typographer"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:353
 msgid "Enable math expressions"
 msgstr "Включить математические выражения"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
 msgid "Enable ==mark== syntax"
 msgstr "Включить синтаксис ==mark=="
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
 msgid "Enable footnotes"
 msgstr "Включить постраничные сноски"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
 msgid "Enable table of contents extension"
-msgstr "Включить расширение содержания"
+msgstr "Включить расширение поддержки оглавления"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
 msgid "Enable ~sub~ syntax"
 msgstr "Включить синтаксис ~sub~"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Enable ^sup^ syntax"
 msgstr "Включить синтаксис ^sup^"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Enable deflist syntax"
 msgstr "Включить синтаксис deflist"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
 msgid "Enable abbreviation syntax"
 msgstr "Включить синтаксис аббревиатур"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
 msgid "Enable markdown emoji"
-msgstr "Включить markdown emoji"
+msgstr "Включить эмодзи markdown"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Enable ++insert++ syntax"
 msgstr "Включить синтаксис ++insert++"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
 msgid "Enable multimarkdown table extension"
 msgstr "Включить расширение таблиц multimarkdown"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid "Enable Fountain syntax support"
-msgstr "Включить поддержку Fountain"
+msgstr "Включить поддержку синтаксиса Fountain"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
 msgid "Show tray icon"
 msgstr "Показывать иконку в трее"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid "Note: Does not work in all desktop environments."
-msgstr "Примечание: работает не во всех средах рабочего стола."
+msgstr "Примечание: работает не во всех окружениях рабочего стола."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
 "Это позволит Joplin работать в фоновом режиме. Рекомендуется включить этот "
-"параметр, чтобы ваши заметки синхронизировались постоянно, таким образом, "
-"уменьшая количество конфликтов."
+"параметр, чтобы ваши заметки синхронизировались постоянно, что уменьшит "
+"количество возможных конфликтов."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
 msgid "Start application minimised in the tray icon"
 msgstr "Запускать приложение свернутым в трее"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:390
 msgid "Global zoom percentage"
 msgstr "Глобальный масштаб в процентах"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:391
 msgid "Editor font size"
 msgstr "Размер шрифта редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:399
 msgid "Editor font"
 msgstr "Шрифт редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:423
 msgid "Editor font family"
 msgstr "Семейство шрифтов редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:425
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
-"Это должен быть моноширинный шрифт или он не будет работать корректно. Если "
-"название некорректно или пустое, будет использован шрифт по умолчанию."
+"Для корректной работы должно быть указано название *моноширинного* шрифта. "
+"Если название шрифта не указано или указано некорректно - будет использован "
+"шрифт по умолчанию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Пользовательская таблица стилей для приложения"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
 msgid "Automatically update the application"
 msgstr "Автоматически обновлять приложение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
 msgid "Get pre-releases when checking for updates"
-msgstr "Получать предварительные релизы при проверке обновлений"
+msgstr "Получать предварительные выпуски при проверке обновлений"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:468
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 "См. страницу предварительных выпусков для получения более подробной "
 "информации: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:476
 msgid "Synchronisation interval"
-msgstr "Интервал синхронизации"
+msgstr "Период синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:480
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:481
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:482
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d минут"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
 #, javascript-format
 msgid "%d hour"
 msgstr "%d час"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:485
 #, javascript-format
 msgid "%d hours"
 msgstr "%d часов"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Text editor command"
 msgstr "Команда текстового редактора"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Редактор, в котором будут открываться заметки (может включать аргументы). "
-"Если не задан, будет произведена попытка автоматического определения "
-"редактора по умолчанию."
+"Команда запуска внешнего текстового редактора (может включать аргументы "
+"командной строки). Если команда не задана - будет произведена попытка "
+"автоматического определения редактора по умолчанию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Размер страницы при экспорте в PDF"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:499
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Ориентация страницы при экспорте в PDF"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "Portrait"
-msgstr ""
+msgstr "Вертикально"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Landscape"
-msgstr ""
+msgstr "Горизонтально"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:523
 msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Разделенный запятыми список путей к каталогам для загрузки сертификатов из "
-"отдельных файлов сертификатов или путей к ним. Например: /my/cert_dir, /"
-"other/custom. Обратите внимание, что если вы вносите изменения в настройки "
-"TLS, вы должны сохранить их перед нажатием на \"Проверить настройки "
-"синхронизации\"."
+"Разделенный запятыми список путей к файлам сертификатов (поддерживаются как "
+"каталоги так и абсолютные пути к отдельным файлам). Например: /my/cert_dir, /"
+"other/custom.pem. Обратите внимание, что если вы вносите изменения в "
+"настройки TLS, вы должны сохранить внесенные изменения перед нажатием на "
+"\"Проверить настройки синхронизации\"."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:536
 msgid "Ignore TLS certificate errors"
 msgstr "Игнорировать ошибки сертификата TLS"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:539
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
 "Защита от сбоев: Не очищать локальные данные, когда цель синхронизации "
-"пустая (обычно случается из-за ошибки настроек или в приложении)"
+"пустая (обычно случается из-за ошибки приложения или настроек)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:542
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
-"Укажите порт для работы сервера API. Если не указано, будет использовано "
-"значение по умолчанию."
+"Укажите порт для использования сервером API. Если порт не указан - будет "
+"использовано значение по умолчанию."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
 msgid "Enable note history"
 msgstr "Включить историю заметок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 msgid "days"
 msgstr "дни"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 #, javascript-format
 msgid "%d days"
 msgstr "%d дней"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:562
 msgid "Keep note history for"
 msgstr "Хранить историю заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:677
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неверное значение параметра: \"%s\". Доступные значения: %s."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:961
 msgid "General"
 msgstr "Основные"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:962
 msgid "Synchronisation"
 msgstr "Синхронизация"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:963
 msgid "Appearance"
 msgstr "Внешний вид"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:964
 msgid "Note"
 msgstr "Заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:965
 msgid "Plugins"
 msgstr "Плагины"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:966
 msgid "Application"
 msgstr "Приложение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:968
 msgid "Encryption"
 msgstr "Шифрование"
 
-#, fuzzy
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:969
 msgid "Web Clipper"
 msgstr "Настройки веб-клиппера"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:168
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Метка \"%s\" уже существует. Пожалуйста, выберите другое имя."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
 msgid "Joplin Export File"
 msgstr "Файл экспорта Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
 msgid "Markdown"
 msgstr "Markdown"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
 msgid "Joplin Export Directory"
 msgstr "Каталог экспорта Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
 msgid "Evernote Export File (as Markdown)"
 msgstr "Файл экспорта Evernote (Markdown)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
 msgid "Evernote Export File (as HTML)"
 msgstr "Файл экспорта Evernote (HTML)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
 msgstr "Каталог экспорта Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+msgid "HTML File"
+msgstr "HTML файл"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+msgid "HTML Directory"
+msgstr "HTML каталог"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
 msgstr "Файл"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "Directory"
 msgstr "Каталог"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
 msgstr "Не удалось загрузить модуль \"%s\" для формата \"%s\""
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
 msgstr "Пожалуйста, укажите формат импорта для %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
 msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-"Этот элемент сейчас зашифрован: %s \"%s\". Пожалуйста, дождитесь расшифровки "
-"всех элементов и попробуйте снова."
+"Этот элемент зашифрован: %s \"%s\". Пожалуйста, дождитесь расшифровки всех "
+"элементов и попробуйте снова."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
 msgstr "Нет данных для экспорта."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 "Пожалуйста, укажите блокнот, в который должны быть импортированы заметки."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
 msgid "Restored Notes"
 msgstr "Восстановленные заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Эти элементы останутся на устройстве, но не будут загружены в целевой объект "
+"Данные элементы останутся на устройстве, но не будут выгружены в цель "
 "синхронизации. Чтобы найти эти элементы, воспользуйтесь поиском по названию "
-"или ID (который указывается в скобках выше)."
+"или ID (указан в квадратных скобках выше)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "Не удается загрузить файл %s (%s): %s"
+msgstr "Не удается выгрузить файл %s (%s): %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "Не удается скачать файл “%s”: %s"
+msgstr "Не удается загрузить файл “%s”: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
 msgstr "Элементы, которые не могут быть расшифрованы"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin не удалось расшифровать эти файлы несколько раз. Возможно они "
-"повреждены или слишком большие. Файлы останутся на устройстве без дальнейших "
-"попыток расшифровать их."
+"Joplin не удалось расшифровать данные элементы после нескольких попыток. "
+"Возможно они повреждены или слишком большие. Данные элементы останутся на "
+"устройстве без дальнейших попыток расшифровать их."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+msgid "Attachments"
+msgstr "Вложения"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+msgid "Downloaded and decrypted"
+msgstr "Загружено и расшифровано"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+msgid "Downloaded and encrypted"
+msgstr "Загружено и зашифровано"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+msgid "Attachments that could not be downloaded"
+msgstr "Не удается загрузить следующие вложения"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
 msgid "Sync status (synced items / total items)"
-msgstr "Статус синхронизации (синхронизировано / всего)"
+msgstr "Статус синхронизации элементов (синхронизировано / всего)"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Всего: %d/%d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Конфликтов: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
 #, javascript-format
 msgid "To delete: %d"
 msgstr "К удалению: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
 msgid "Folders"
-msgstr "Папки"
+msgstr "Каталоги"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d заметок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
 msgid "Coming alarms"
 msgstr "Ближайшие напоминания"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
 #, javascript-format
 msgid "On %s: %s"
 msgstr "В %s: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:178
 msgid "Permission to use camera"
 msgstr "Разрешение на использование камеры"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:179
 msgid "Your permission to use your camera is required."
 msgstr "Необходимо ваше разрешение на использование камеры."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:116
 msgid "You currently have no notebooks."
-msgstr "Сейчас у вас нет блокнотов."
+msgstr "Блокноты отсутствуют."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:120
 msgid "Create a notebook"
 msgstr "Создать новый блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:124
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr "Сейчас здесь нет заметок. Создайте новую, нажав кнопку (+)."
+msgstr "Заметки отсутствуют. Создайте новую, нажав кнопку (+)."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:179
 msgid "Delete these notes?"
 msgstr "Удалить эти заметки?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:346
 msgid "Move to notebook..."
 msgstr "Переместить в блокнот..."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:385
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Переместить %d заметок в блокнот \"%s\"?"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:403
 msgid "Press to set the decryption password."
 msgstr "Нажмите, чтобы установить пароль для расшифровки."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr ""
+"Некоторые элементы не могут быть синхронизированы. Нажмите для получения "
+"дополнительной информации."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
 msgstr "Очистить напоминание"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
 msgid "Save alarm"
 msgstr "Сохранить напоминание"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
 msgid "Select date"
 msgstr "Выбрать дату"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
 msgid "Confirm"
 msgstr "Подтвердить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:124
 #, javascript-format
 msgid "Notebook: %s"
-msgstr "Блокноты: %s"
+msgstr "Блокнот: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:130
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Невозможно переименовать зашифрованные блокноты"
+msgstr "Зашифрованные блокноты не могут быть переименованы"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:309
 msgid "New Notebook"
 msgstr "Новый блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
 msgid "Configuration"
 msgstr "Конфигурация"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:356
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
 msgid "All notes"
 msgstr "Все заметки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
 msgstr "Проверка... Пожалуйста, подождите."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Успешно! Конфигурация синхронизации является корректной."
+msgstr "Успешно! Синхронизация настроена правильно."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -1964,9 +2823,11 @@ msgstr ""
 "Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и т."
 "д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
-msgstr "Приложение было авторизовано!"
+msgstr "Приложение успешно авторизовано!"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
 #, javascript-format
 msgid ""
 "Could not authorise application:\n"
@@ -1979,70 +2840,107 @@ msgstr ""
 "\n"
 "%s\n"
 "\n"
-"Попробуйте снова."
+"Попробуйте еще раз."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Расшифровано элементов: %s / %s"
+msgstr "Расшифрованные элементы: %s / %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:161
 msgid "New tags:"
 msgstr "Новые метки:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:175
 msgid "Type new tags or select from list"
 msgstr "Введите новые метки или выберите из списка"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 msgid "Warning"
 msgstr "Предупрежение"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Для использование синхронизации файловой системы, необходимо дать разрешение "
-"на запись."
+"Для использование синхронизации файловой системы необходимо дать разрешение "
+"на запись во внешнее хранилище."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
+msgid "Information"
+msgstr "Информация"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
 msgid "Encryption Config"
 msgstr "Конфигурация шифрования"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
 msgid "Tools"
 msgstr "Инструменты"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
 msgid "Sync Status"
-msgstr "Синхронизировать статус"
+msgstr "Статус синхронизации"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:108
 msgid "Log"
 msgstr "Журнал"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 msgid "Creating report..."
 msgstr "Создание отчета…"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 msgid "Export Debug Report"
 msgstr "Экспортировать отладочный отчет"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fixing search index..."
 msgstr "Исправление индекса поиска…"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fix search index"
 msgstr "Исправить индекс поиска"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Используйте это, чтобы перестроить индекс поиска, если возникли проблемы с "
-"поиском. Это может занять много времени в зависимости от количества заметок."
+"Используйте эту опцию для перестроения индекса поиска, если с поиском "
+"возникли проблемы. Процесс перестроения индекса может занять много времени в "
+"зависимости от количества заметок."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "Exporting profile..."
+msgstr "Экспортирование профиля..."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "Export profile"
+msgstr "Экспорт профиля"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "Только для отладки: экспорт вашего профиля на внешнюю SD карту."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
-msgstr "Больше информации"
+msgstr "Дополнительная информация"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "Для корректной работы приложению необходимы следующие разрешения. "
-"Пожалуйста, включите их в настройках телефона, в Приложения > Joplin> "
-"Разрешения"
+"Пожалуйста, включите их в настройках телефона в разделе Приложения > Joplin "
+"> Разрешения"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -2050,152 +2948,218 @@ msgstr ""
 "- Хранилище: чтобы разрешить прикрепление файлов к заметкам и включить "
 "синхронизацию файловой системы."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Камера: позволяет сделать снимок и прикрепить его к заметке."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Местоположение: позволяет прикрепить геолокационную информацию к заметке."
+"- Местоположение: позволяет прикрепить информацию о географическом "
+"местоположении к заметке."
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
 msgid "Joplin website"
 msgstr "Сайт Joplin"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
 #, javascript-format
 msgid "Database v%s"
 msgstr "База данных v%s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "FTS включен: %d"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
 msgid "Login with Dropbox"
 msgstr "Войти с Dropbox"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Enter code here"
 msgstr "Введите код здесь"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Мастер-ключ %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
 #, javascript-format
 msgid "Created: %s"
 msgstr "Создано: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
 msgid "Password:"
 msgstr "Пароль:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Password cannot be empty"
 msgstr "Пароль не может быть пустым"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
 msgid "Confirm password cannot be empty"
 msgstr "Подтверждение пароля не может быть пустым"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
 msgid "Enable"
-msgstr "Включено"
+msgstr "Включить"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
 #, javascript-format
 msgid "The notebook could not be saved: %s"
 msgstr "Блокнот не может быть сохранен: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "Редактировать блокнот"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
 msgid "Enter notebook title"
 msgstr "Введите название блокнота"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:113
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+msgid "Refresh"
+msgstr "Обновить"
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
 msgid "Show all"
 msgstr "Показать все"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:121
 msgid "Errors only"
 msgstr "Только ошибки"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "This note has been modified:"
 msgstr "Эта заметка была изменена:"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Save changes"
 msgstr "Сохранить изменения"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Discard changes"
 msgstr "Отменить изменения"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Нет элементов с ID %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Это вложение еще не загружено или еще не расшифровано."
+
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
-"Мобильное приложение Joplin в настоящее время не поддерживает этот тип "
+"Мобильное приложение Joplin в настоящее время не поддерживает данный тип "
 "ссылки: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "Связь с протоколом “%s” не поддерживается"
+msgstr "Ссылки с протоколом “%s” не поддерживаются"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Неподдерживаемый формат изображения: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Обновлено: %s"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
 msgid "View on map"
 msgstr "Посмотреть на карте"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
 msgid "Go to source URL"
 msgstr "Перейти к исходному URL"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
 msgid "Attach..."
 msgstr "Прикрепить…"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Choose an option"
 msgstr "Выберите"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Take photo"
 msgstr "Сделать фото"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach photo"
 msgstr "Прикрепить фото"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach any file"
 msgstr "Прикрепить любой файл"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
 msgid "Share"
 msgstr "Поделиться"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 msgid "Convert to note"
 msgstr "Преобразовать в заметку"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Properties"
 msgstr "Свойства"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
 msgid "Add body"
-msgstr "Добавить тело"
+msgstr "Добавить текст заметки"
 
-msgid "Edit"
-msgstr "Правка"
-
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
 msgid "Add title"
 msgstr "Добавить заголовок"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
 msgid "Login with OneDrive"
 msgstr "Войти с OneDrive"
 
+#: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:161
 msgid "Search"
 msgstr "Поиск"
 
-#, fuzzy
-#~ msgid "Share Notes"
-#~ msgstr "Восстановленные заметки"
+#~ msgid "Writes all settings to STDOUT as JSON including secure variables."
+#~ msgstr ""
+#~ "Выводит в стандартный поток вывода все настройки в формате JSON (включая "
+#~ "конфиденциальные переменные)."
 
-#, fuzzy
-#~ msgid "Share Link"
-#~ msgstr "Поделиться"
+#~ msgid "Reads in JSON formatted settings from STDIN."
+#~ msgstr "Считывает конфигурацию в формате JSON из потока стандартного ввода."
+
+#~ msgid "Reads in settings from <file>. <file> must contain valid JSON."
+#~ msgstr ""
+#~ "Загружает настройки из файла <file>. <file> должен содержать данные в "
+#~ "формате JSON."
+
+#~ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "Экспорт в \"%s\" в формате \"%s\". Пожалуйста, подождите..."
+
+#~ msgid "Could not export notes: %s"
+#~ msgstr "Невозможно экспортировать заметки: %s"
+
+#~ msgid "Only one note can be printed or exported to PDF at a time."
+#~ msgstr ""
+#~ "Только одна заметка может быть напечатана или экспортирована в PDF за раз."
 
 #~ msgid "All potential ports are in use - please report the issue at %s"
 #~ msgstr "Все возможные порты заняты - пожалуйста, сообщите о проблеме в %s"
@@ -2280,9 +3244,6 @@ msgstr "Поиск"
 #~ "Обнаружен неизвестный тип файла - пожалуйста, обновите Joplin до "
 #~ "последней версии"
 
-#~ msgid "Information"
-#~ msgstr "Информация"
-
 #, fuzzy
 #~ msgid "Permission to write to external storage"
 #~ msgstr "Разрешение на использование камеры"
@@ -2318,9 +3279,6 @@ msgstr "Поиск"
 
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "Некоторые элементы не могут быть расшифрованы."
-
-#~ msgid "%s (%s): %s"
-#~ msgstr "%s (%s): %s"
 
 #~ msgid ""
 #~ "The path to synchronise with when file system synchronisation is enabled. "
