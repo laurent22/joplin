@@ -37,6 +37,7 @@ const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
+import PopupDialog, { DialogButton } from 'react-native-popup-dialog';
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -60,6 +61,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			isSearchTextInputFocused: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -570,6 +572,26 @@ class NoteScreenComponent extends BaseScreenComponent {
 		});
 	}
 
+	search_onPress() {
+		this.searchPopupDialog.show();
+	}
+
+	searchText_onChange(text) {
+		// on input text chnage pass to redux search query
+		this.props.dispatch({
+			type: 'SEARCH_QUERY',
+			query: text,
+		});
+	}
+
+	closeSearchPopup_onPress() {
+		// on close search text popup make isSearchTextInputFocused false
+		// to activate the SelectDateTimeDialog
+		this.searchPopupDialog.dismiss(() => {
+			this.setState({ isSearchTextInputFocused: false });
+		});
+	}
+
 	properties_onPress() {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
@@ -691,6 +713,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 			title: _('Share'),
 			onPress: () => {
 				this.share_onPress();
+			},
+		});
+		output.push({
+			title: _('Search'),
+			onPress: () => {
+				this.search_onPress();
+				// NavService.go('Search')
 			},
 		});
 		if (isSaved)
@@ -890,6 +919,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const searchTextDialog = (
+			<PopupDialog
+				dismissOnTouchOutside={false}
+				dismissOnHardwareBackPress={false}
+				width={0.9}
+				height={50} ref={(searchPopupDialog) => { this.searchPopupDialog = searchPopupDialog; }}>
+
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: -5, marginLeft: 2}}>
+					<TextInput style={{width: '80%'}} autoFocus placeholder={_('Search text')} onBlur={() => this.setState({ isSearchTextInputFocused: false })} onFocus={() => this.setState({ isSearchTextInputFocused: true })} onChangeText={(text) => this.searchText_onChange(text)} />
+					<DialogButton text={_('Close')} textStyle={{ fontSize: 12 }} align="center" onPress={() => this.closeSearchPopup_onPress()} key="closeButton" />
+				</View>
+
+			</PopupDialog>
+		);
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
@@ -897,7 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{bodyComponent}
 				{actionButtonComp}
 
-				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				{ (this.state.isSearchTextInputFocused) ? null : <SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} /> }
 
 				<DialogBox
 					ref={dialogbox => {
@@ -905,6 +949,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 				/>
 				{noteTagDialog}
+				{searchTextDialog}
 			</View>
 		);
 	}

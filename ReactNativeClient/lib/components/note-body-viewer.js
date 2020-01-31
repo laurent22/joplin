@@ -45,6 +45,11 @@ class NoteBodyViewer extends Component {
 		}, 100);
 	}
 
+	componentWillReceiveProps() {
+		// force update whenever props received
+		this.forceUpdate();
+	}
+
 	shouldComponentUpdate(nextProps, nextState) {
 		const safeGetNoteProp = (props, propName) => {
 			if (!props) return null;
