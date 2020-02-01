@@ -457,17 +457,24 @@ class SideBarComponent extends React.Component {
 		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
+		let folderIconStyle = {
+			visibility: 'visible',
+			paddingLeft: 5 + depth * 10,
+		};
+
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
 		let expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 			paddingLeft: 8 + depth * 10,
 		};
 
+		const folderIconName = folder.icon != '' ? folder.icon : 'fa-book';
+		const folderIcon = <i style={folderIconStyle} className={`fa ${folderIconName}`}></i>;
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
 		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
-				{expandIcon}
+				{expandIcon}{folderIcon}
 			</a>
 		) : (
 			<span style={expandLinkStyle}>{expandIcon}</span>
