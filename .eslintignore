@@ -53,3 +53,4 @@ ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ElectronClient/app/gui/ShareNoteDialog.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js
+ElectronClient/app/gui/NotebookPropertiesDialog.js
