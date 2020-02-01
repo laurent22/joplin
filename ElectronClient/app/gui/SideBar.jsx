@@ -336,12 +336,12 @@ class SideBarComponent extends React.Component {
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
 				new MenuItem({
-					label: _('Rename'),
+					label: _('Properties'),
 					click: async () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'renameFolder',
-							id: itemId,
+							name: 'openNotebookProperties',
+							folderId: itemId,
 						});
 					},
 				})
