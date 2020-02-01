@@ -338,7 +338,7 @@ class SideBarComponent extends React.Component {
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
 				new MenuItem({
-					label: _('Properties'),
+					label: _('Properties'), //
 					click: async () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',
@@ -459,12 +459,19 @@ class SideBarComponent extends React.Component {
 		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
+		let folderIconStyle = {
+			visibility: 'visible',
+			paddingLeft: 5 + depth * 10,
+		};
+
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
 		let expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 			paddingLeft: 8 + depth * 10,
 		};
 
+		const folderIconName = folder.icon != '' ? folder.icon : 'fa-book';
+		const folderIcon = <i style={folderIconStyle} className={`fa ${folderIconName}`}></i>;
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
 		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
@@ -495,7 +502,7 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle} {noteCount}
+					{folderIcon} {itemTitle} {noteCount}
 				</a>
 			</div>
 		);
