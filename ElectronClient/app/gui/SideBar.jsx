@@ -336,7 +336,7 @@ class SideBarComponent extends React.Component {
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
 				new MenuItem({
-					label: _('Properties'),
+					label: _('Properties'), //
 					click: async () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',

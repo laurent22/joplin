@@ -17,7 +17,7 @@ export default function NotebookPropertiesDialog(props: NotebookPropertiesDialog
 	console.info('Render NotebookPropertiesDialog');
 
 	const [notebook, setNotebook] = useState<any>({});
-	const [icon, setIcon] = useState<string>('fa fa-book');
+	const [icon, setIcon] = useState<string>('fa fa-book'); //
 	const [loaded, setLoaded] = useState<boolean>(false);
 
 	const theme = themeStyle(props.theme);

@@ -239,7 +239,7 @@ class MainScreenComponent extends React.Component {
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
-		} else if (command.name === 'openNotebookProperties') {
+		} else if (command.name === 'openNotebookProperties') {  //
 			this.setState({
 				notebookPropertiesDialogOptions: {
 					folderId: command.folderId,
