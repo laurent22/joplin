@@ -19,6 +19,7 @@ class Folder extends BaseItem {
 		return {
 			id: null,
 			title: '',
+			icon: '',
 		};
 	}
 
