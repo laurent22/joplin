@@ -474,7 +474,7 @@ class SideBarComponent extends React.Component {
 		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
-				{expandIcon}{folderIcon}
+				{expandIcon}
 			</a>
 		) : (
 			<span style={expandLinkStyle}>{expandIcon}</span>
@@ -500,7 +500,7 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle} {noteCount}
+					{folderIcon} {itemTitle} {noteCount}
 				</a>
 			</div>
 		);
