@@ -1398,7 +1398,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	editorPasteText() {
-		this.wrapSelectionWithStrings('', '', '', clipboard.readText());
+		this.wrapSelectionWithStrings(clipboard.readText(), '', '', '');
 	}
 
 	selectionRangePreviousLine() {
@@ -1417,7 +1417,7 @@ class NoteTextComponent extends React.Component {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = '') {
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null) {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.textOffsetSelection();
@@ -1426,7 +1426,7 @@ class NoteTextComponent extends React.Component {
 
 		if (selection && selection.start !== selection.end) {
 			const s1 = this.state.note.body.substr(0, selection.start);
-			const s2 = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
+			const s2 = replacementText !== null ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
 			const s3 = this.state.note.body.substr(selection.end);
 			newBody = s1 + string1 + s2 + string2 + s3;
 
@@ -1444,7 +1444,7 @@ class NoteTextComponent extends React.Component {
 					column: r.end.column + str1Split[str1Split.length - 1].length },
 			};
 
-			if (replacementText) {
+			if (replacementText !== null) {
 				const diff = replacementText.length - (selection.end - selection.start);
 				newRange.end.column += diff;
 			}
@@ -1460,7 +1460,7 @@ class NoteTextComponent extends React.Component {
 				editor.focus();
 			});
 		} else {
-			let middleText = replacementText ? replacementText : defaultText;
+			let middleText = replacementText !== null ? replacementText : defaultText;
 			const textOffset = this.currentTextOffset();
 			const s1 = this.state.note.body.substr(0, textOffset);
 			const s2 = this.state.note.body.substr(textOffset);
