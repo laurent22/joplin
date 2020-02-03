@@ -100,7 +100,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
        # This command extracts to squashfs-root by default and can't be changed...
        # So we run it in the tmp directory and clean up after ourselves
        (cd $TMPDIR && ~/.joplin/Joplin.AppImage --appimage-extract joplin.desktop &> /dev/null)
-       APPIMAGE_VERSION=$(grep "^X-AppImage-BuildId=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d " " -f 1)
+       APPIMAGE_VERSION=$(grep "^X-AppImage-Version=" $TMPDIR/squashfs-root/joplin.desktop | head -n 1 | cut -d "=" -f 2)
        rm -rf $TMPDIR/squashfs-root
        # Only delete the desktop file if it will be replaced
        rm -f ~/.local/share/applications/appimagekit-joplin.desktop
