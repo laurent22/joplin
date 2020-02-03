@@ -2,6 +2,7 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
+const { shim } = require('lib/shim.js');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -313,7 +314,13 @@ class JoplinDatabase extends Database {
 
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.');
+		if (currentVersionIndex < 0) {
+			throw new Error(
+				'Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\n'
+				+ `Joplin version: ${shim.appVersion()}\n`
+				+ `Profile version: ${fromVersion}\n`
+				+ `Expected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
+		}
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 

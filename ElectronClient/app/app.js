@@ -629,6 +629,7 @@ class Application extends BaseApplication {
 				'',
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
+				_('Profile Version: %s', reg.db().version()),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
