@@ -1413,17 +1413,6 @@ class NoteTextComponent extends React.Component {
 		return this.lineAtRow(row);
 	}
 
-	selectionRangeLines() {
-		if (!this.selectionRange_) return '';
-		const firstRow = this.selectionRange_.start.row;
-		const lastRow = this.selectionRange_.end.row;
-		let lines = [];
-		for (let i = firstRow; i < lastRow; i++) {
-			lines[i] = this.lineAtRow(i);
-		}
-		return lines;
-	}
-
 	textOffsetSelection() {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
@@ -1550,9 +1539,11 @@ class NoteTextComponent extends React.Component {
 	}
 
 	addListItem(string1, string2 = '', defaultText = '', byLine=false) {
-		const currentLines = this.selectionRangeLines();
 		let newLine = '\n';
-		if (currentLines.length === 0) newLine = '';
+		const range = this.selectionRange_;
+		if (!range || (range.start.row === range.end.row && !this.selectionRangeCurrentLine())) {
+			newLine = '';
+		}
 		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText, '', byLine);
 	}
 
