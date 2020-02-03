@@ -1425,16 +1425,14 @@ class NoteTextComponent extends React.Component {
 		let newBody = this.state.note.body;
 
 		if (selection && selection.start !== selection.end) {
-			const s1 = this.state.note.body.substr(0, selection.start);
-			const s2 = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
-			const s3 = this.state.note.body.substr(selection.end);
+			const selLines = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
+			let selStrings = byLine ? selLines.split(/\r?\n/) : [selLines];
 
-			newBody = s1;
-			let s2Split = byLine ? s2.split(/\r?\n/) : [s2];
-			for (let i = 0; i < s2Split.length; i++) {
-				newBody += string1 + s2Split[i] + string2;
+			newBody = this.state.note.body.substr(0, selection.start);
+			for (let i = 0; i < selStrings.length; i++) {
+				newBody += string1 + selStrings[i] + string2;
 			}
-			newBody += s3;
+			newBody += this.state.note.body.substr(selection.end);
 
 			const r = this.selectionRange_;
 
