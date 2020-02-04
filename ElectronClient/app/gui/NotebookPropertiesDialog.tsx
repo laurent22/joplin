@@ -7,25 +7,25 @@ const DialogButtonRow = require('./DialogButtonRow.min');
 
 const Folder = require('lib/models/Folder.js');
 
-interface NotebookPropertiesDialogProps {
+interface FolderPropertiesDialogProps {
 	theme: number,
 	folderId: string,
 	onClose: Function,
 }
 
-export default function NotebookPropertiesDialog(props: NotebookPropertiesDialogProps) {
+export default function FolderPropertiesDialog(props: FolderPropertiesDialogProps) {
 	console.info('Render NotebookPropertiesDialog');
 
-	const [folder, formFolder] = useState<any>({});
+	const [formFolder, setFormFolder] = useState<any>({});
 
 	const theme = themeStyle(props.theme);
 
 	useEffect(() => {
 		async function fetchFolder() {
 			if (!props.folderId) {
-				formFolder({folder: null});
+				setFormFolder({folder: null});
 			} else {
-				formFolder(await Folder.load(props.folderId));
+				setFormFolder(await Folder.load(props.folderId));
 			}
 		}
 
@@ -37,12 +37,8 @@ export default function NotebookPropertiesDialog(props: NotebookPropertiesDialog
 		props.onClose();
 	};
 
-	const saveTitle = async () => {
-		await Folder.save({id: folder.id, title: folder.title, userValidation: true});
-	};
-
-	const saveIcon = async () => {
-		await Folder.save({id: folder.id, icon: folder.icon, userValidation: true});
+	const saveFolder = async () => {
+		await Folder.save({id: formFolder.id, title: formFolder.title, icon: formFolder.icon}, {userValidation: true});
 	};
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
@@ -52,13 +48,13 @@ export default function NotebookPropertiesDialog(props: NotebookPropertiesDialog
 		<div style={theme.dialogModalLayer}>
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Notebook Properties')}</div>
-				<label style={theme.textStyle}>{_('Name:   ')}</label>
-				<input defaultValue={folder.title} onChange={event => folder.title = event.target.value} />
-				<button onClick={saveTitle}>{_('Save')}</button>
+				<label style={theme.textStyle}>{_('Name: ')}</label>
+				<input defaultValue={formFolder.title} onChange={event => formFolder.title = event.target.value} />
+				<button onClick={saveFolder}>{_('Save')}</button>
 				<br />
 				<label style={theme.textStyle}>{_('Icon: ')}</label>
-				<input defaultValue={folder.icon} onChange={event => folder.icon = event.target.value} />
-				<button onClick={saveIcon}>{_('Save')}</button>
+				<input defaultValue={formFolder.icon} onChange={event => formFolder.icon = event.target.value} />
+				<button onClick={saveFolder}>{_('Save')}</button>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>
