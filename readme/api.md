@@ -74,8 +74,9 @@ Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point suppor
 
 To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
 
-For example, to retrieve the notebook named "recipes": **GET /search?query=recipes&type=folder**
-To retrieve all the tags that start with "project-": **GET /search?query=project-*&type=tag**
+For example, to retrieve the notebook named `recipes`: **GET /search?query=recipes&type=folder**
+
+To retrieve all the tags that start with `project-`: **GET /search?query=project-*&type=tag**
 
 # Item type IDs
 
