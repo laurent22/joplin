@@ -24,4 +24,4 @@ const injectCustomStyles = async cssFilePath => {
 	document.head.appendChild(styleTag);
 };
 
-module.exports = {loadCustomCss, injectCustomStyles};
+module.exports = { loadCustomCss, injectCustomStyles };

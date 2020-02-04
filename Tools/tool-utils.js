@@ -25,7 +25,7 @@ toolUtils.execCommandWithPipes = function(executable, args) {
 	var spawn = require('child_process').spawn;
 
 	return new Promise((resolve, reject) => {
-		const child = spawn(executable, args, { stdio: 'inherit'});
+		const child = spawn(executable, args, { stdio: 'inherit' });
 
 		child.on('error', (error) => {
 			reject(error);

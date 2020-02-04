@@ -279,7 +279,7 @@ describe('services_rest_Api', function() {
 		const response = await api.route('GET', 'notes', { token: 'mytoken' });
 		expect(response.length).toBe(0);
 
-		hasThrown = await checkThrowAsync(async () => await api.route('POST', 'notes', null, JSON.stringify({title: 'testing'})));
+		hasThrown = await checkThrowAsync(async () => await api.route('POST', 'notes', null, JSON.stringify({ title: 'testing' })));
 		expect(hasThrown).toBe(true);
 	}));
 

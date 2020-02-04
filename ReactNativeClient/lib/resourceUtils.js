@@ -45,17 +45,17 @@ const attributesToStr = (attributes) =>
 		.map(([key, value]) => ` ${key}="${escapeQuotes(value)}"`)
 		.join('');
 
-const attachmentElement = ({src, attributes, id}) =>
+const attachmentElement = ({ src, attributes, id }) =>
 	[
 		`<a href='joplin://${id}' ${attributesToStr(attributes)}>`,
 		`  ${attributes.alt || src}`,
 		'</a>',
 	].join('');
 
-const imgElement = ({src, attributes}) =>
+const imgElement = ({ src, attributes }) =>
 	`<img src="${src}" ${attributesToStr(attributes)} />`;
 
-const audioElement = ({src, alt, id}) =>
+const audioElement = ({ src, alt, id }) =>
 	[
 		'<audio controls preload="none" style="width:480px;">',
 		`	<source src="${src}" type="audio/mp4" />`,

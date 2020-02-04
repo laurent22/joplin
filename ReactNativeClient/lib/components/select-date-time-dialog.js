@@ -81,7 +81,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 				width={0.9}
 				height={350}
 			>
-				<View style={{flex: 1, margin: 20, alignItems: 'center'}}>
+				<View style={{ flex: 1, margin: 20, alignItems: 'center' }}>
 					<DatePicker
 						date={this.state.date}
 						mode="datetime"
@@ -90,7 +90,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 						confirmBtnText={_('Confirm')}
 						cancelBtnText={_('Cancel')}
 						onDateChange={(date) => { this.setState({ date: this.stringToDate(date) }); }}
-						style={{width: 300}}
+						style={{ width: 300 }}
 						customStyles={{
 							btnConfirm: {
 								paddingVertical: 0,

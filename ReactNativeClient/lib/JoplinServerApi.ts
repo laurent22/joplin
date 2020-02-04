@@ -3,7 +3,7 @@ const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
-const {_ } = require('lib/locale');
+const { _ } = require('lib/locale');
 
 interface JoplinServerApiOptions {
 	username: Function,

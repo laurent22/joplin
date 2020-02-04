@@ -12,7 +12,7 @@ async function gitHubContributors(page) {
 		request.get({
 			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'},
+			headers: { 'User-Agent': 'Joplin Readme Updater' },
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);

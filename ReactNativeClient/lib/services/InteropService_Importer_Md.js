@@ -4,8 +4,8 @@ const Note = require('lib/models/Note.js');
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
-const {extractImageUrls} = require('lib/markdownUtils');
-const {unique} = require('lib/ArrayUtils');
+const { extractImageUrls } = require('lib/markdownUtils');
+const { unique } = require('lib/ArrayUtils');
 const { pregQuote } = require('lib/string-utils-common');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {

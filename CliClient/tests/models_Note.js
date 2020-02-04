@@ -90,13 +90,13 @@ describe('models_Note', function() {
 	}));
 
 	it('should serialize and unserialize without modifying data', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1'});
+		let folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [
-			[ {title: '', body: 'Body and no title\nSecond line\nThird Line', parent_id: folder1.id},
+			[ { title: '', body: 'Body and no title\nSecond line\nThird Line', parent_id: folder1.id },
 				'', 'Body and no title\nSecond line\nThird Line'],
-			[ {title: 'Note title', body: 'Body and title', parent_id: folder1.id},
+			[ { title: 'Note title', body: 'Body and title', parent_id: folder1.id },
 				'Note title', 'Body and title'],
-			[ {title: 'Title and no body', body: '', parent_id: folder1.id},
+			[ { title: 'Title and no body', body: '', parent_id: folder1.id },
 				'Title and no body', ''],
 		];
 

@@ -212,7 +212,7 @@ class ConfigScreenComponent extends React.Component {
 		if (advancedSettingComps.length) {
 			const iconName = this.state.showAdvancedSettings ? 'fa fa-toggle-up' : 'fa fa-toggle-down';
 			const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
-			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{fontSize: 14}} className={iconName}></i> {_('Show Advanced Settings')}</button>;
+			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{ fontSize: 14 }} className={iconName}></i> {_('Show Advanced Settings')}</button>;
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
@@ -575,7 +575,7 @@ class ConfigScreenComponent extends React.Component {
 			borderTopColor: theme.dividerColor,
 		};
 
-		const screenComp = this.state.screenName ? <div style={{overflow: 'scroll', flex: 1}}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 

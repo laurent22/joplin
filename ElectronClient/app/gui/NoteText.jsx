@@ -1117,7 +1117,7 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
-			args = {noteId: command.noteId};
+			args = { noteId: command.noteId };
 		} else if (command.name === 'print') {
 			fn = this.commandPrint;
 		}
