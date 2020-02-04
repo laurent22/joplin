@@ -7,75 +7,59 @@ const DialogButtonRow = require('./DialogButtonRow.min');
 
 const Folder = require('lib/models/Folder.js');
 
-interface NotebookPropertiesDialogProps {
+interface FolderPropertiesDialogProps {
 	theme: number,
 	folderId: string,
 	onClose: Function,
 }
 
-export default function NotebookPropertiesDialog(props: NotebookPropertiesDialogProps) {
-	console.info('Render NotebookPropertiesDialog');
+export default function FolderPropertiesDialog(props: FolderPropertiesDialogProps) {
+	console.info('Render FolderPropertiesDialog');
 
-	const [notebook, setNotebook] = useState<any>({});
-	const [icon, setIcon] = useState<string>('fa fa-book'); //
-	const [loaded, setLoaded] = useState<boolean>(false);
+	const [folder, formFolder] = useState<any>({});
 
 	const theme = themeStyle(props.theme);
 
 	useEffect(() => {
-		async function fetchNotebook() {
+		async function fetchFolder() {
 			if (!props.folderId) {
-				setNotebook({notebook: null});
+				formFolder({folder: null});
 			} else {
-				const n = await Folder.load(props.folderId);
-				const nb = formNotebook(n);
-				setNotebook(nb);
+				formFolder(await Folder.load(props.folderId));
 			}
 		}
 
-		fetchNotebook();
+		fetchFolder();
 	}, [props.folderId]);
 
-	const formNotebook = (targetNotebook:any) => {
-		if (!loaded) {
-			const nb = Object.assign({}, targetNotebook, {
-				icon: targetNotebook.icon,
-			});
-			setIcon(nb.icon);
-			setLoaded(true);
-			return nb;
-		}
-	};
 
 	const buttonRow_click = () => {
 		props.onClose();
 	};
 
-	// having issues wrapping my head around saving folder information to the database
-	const saveNotebook = async () => {
-		console.info('Saving Notebook Now');
-		if (!notebook) {
-			console.error('Notebook saving failed in the NotebookPropertiesDialog');
-		} else {
-			const nb = await Folder.save(notebook, {userSideValidation: true});
-			setNotebook(nb);
-		}
-		props.onClose();
+	const saveTitle = async () => {
+		await Folder.save({id: folder.id, title: folder.title, userValidation: true});
+	};
+
+	const saveIcon = async () => {
+		await Folder.save({id: folder.id, icon: folder.icon, userValidation: true});
 	};
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
 
-	console.info('Icon: %s', icon);
-
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={rootStyle}>
 				<div style={theme.dialogTitle}>{_('Notebook Properties')}</div>
+				<label style={theme.textStyle}>{_('Name:   ')}</label>
+				<input defaultValue={folder.title} onChange={event => folder.title = event.target.value} />
+				<button onClick={saveTitle}>{_('Save')}</button>
+				<br />
 				<label style={theme.textStyle}>{_('Icon: ')}</label>
-				<input defaultValue={notebook.icon} onChange={event => setIcon(event.target.value)} />
-				<button onClick={saveNotebook}>{_('Save')}</button>
-				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Cancel')}/>
+				<input defaultValue={folder.icon} onChange={event => folder.icon = event.target.value} />
+				<button onClick={saveIcon}>{_('Save')}</button>
+				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>
 		</div>
 	);

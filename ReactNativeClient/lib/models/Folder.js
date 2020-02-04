@@ -19,13 +19,14 @@ class Folder extends BaseItem {
 		return {
 			id: null,
 			title: '',
-			icon: '', //
+			icon: 'fa-book',
 		};
 	}
 
 	static fieldToLabel(field) {
 		const fieldsToLabels = {
 			title: _('title'),
+			icon: _('icon'),
 			last_note_user_updated_time: _('updated date'),
 		};
 
