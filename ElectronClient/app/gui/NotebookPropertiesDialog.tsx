@@ -7,14 +7,14 @@ const DialogButtonRow = require('./DialogButtonRow.min');
 
 const Folder = require('lib/models/Folder.js');
 
-interface FolderPropertiesDialogProps {
+interface NotebookPropertiesDialogProps {
 	theme: number,
 	folderId: string,
 	onClose: Function,
 }
 
-export default function FolderPropertiesDialog(props: FolderPropertiesDialogProps) {
-	console.info('Render FolderPropertiesDialog');
+export default function NotebookPropertiesDialog(props: NotebookPropertiesDialogProps) {
+	console.info('Render NotebookPropertiesDialog');
 
 	const [folder, formFolder] = useState<any>({});
 
