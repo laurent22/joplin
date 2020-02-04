@@ -364,6 +364,15 @@ class NoteListComponent extends React.Component {
 				});
 			}
 		}
+
+		if (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) {
+			// Ctrl+A key
+			event.preventDefault();
+
+			this.props.dispatch({
+				type: 'NOTE_SELECT_ALL',
+			});
+		}
 	}
 
 	focusNoteId_(noteId) {
