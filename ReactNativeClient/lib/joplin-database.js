@@ -7,6 +7,7 @@ const structureSql = `
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
 	title TEXT NOT NULL DEFAULT "",
+	icon TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
 	updated_time INT NOT NULL
 );
