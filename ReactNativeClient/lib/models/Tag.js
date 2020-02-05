@@ -112,6 +112,21 @@ class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
 	}
 
+	static async commonTagsByNoteIds(noteIds) {
+		if (!noteIds || noteIds.length === 0) {
+			return [];
+		}
+		let commonTagIds = await NoteTag.tagIdsByNoteId(noteIds[0]);
+		for (let i = 1; i < noteIds.length; i++) {
+			const tagIds = await NoteTag.tagIdsByNoteId(noteIds[i]);
+			commonTagIds = commonTagIds.filter(value => tagIds.includes(value));
+			if (commonTagIds.length === 0) {
+				break;
+			}
+		}
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
+	}
+
 	static async loadByTitle(title) {
 		return this.loadByField('title', title, { caseInsensitive: true });
 	}
