@@ -30,6 +30,7 @@
     "@types/react-dom": "^16.9.0",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "countable": "^3.0.1",
     "eslint": "^6.1.0",
     "eslint-plugin-react": "^7.18.0",
     "fs-extra": "^8.1.0",
