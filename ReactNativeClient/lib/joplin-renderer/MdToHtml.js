@@ -28,6 +28,7 @@ const plugins = {
 	insert: { module: require('markdown-it-ins') },
 	multitable: { module: require('markdown-it-multimd-table'), options: { multiline: true, rowspan: true, headerless: true } },
 	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: uslugify } },
+	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
 };
 const defaultNoteStyle = require('./defaultNoteStyle');
 
