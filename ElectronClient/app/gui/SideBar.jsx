@@ -461,7 +461,8 @@ class SideBarComponent extends React.Component {
 
 		let folderIconStyle = {
 			visibility: 'visible',
-			paddingLeft: 5 + depth * 10,
+			paddingLeft: 5,
+			paddingRight: 5,
 		};
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
@@ -470,7 +471,7 @@ class SideBarComponent extends React.Component {
 			paddingLeft: 8 + depth * 10,
 		};
 
-		const folderIconName = folder.icon != '' ? folder.icon : 'fa-book';
+		const folderIconName = folder.icon !== '' ? folder.icon : 'fa-book';
 		const folderIcon = <i style={folderIconStyle} className={`fa ${folderIconName}`}></i>;
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
 		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
