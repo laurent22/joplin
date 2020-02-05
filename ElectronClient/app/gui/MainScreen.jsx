@@ -144,8 +144,8 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'setTags') {
-			const tags = await Tag.tagsByNoteId(command.noteId);
-			const noteTags = tags
+			const tags = await Tag.commonTagsByNoteIds(command.noteIds);
+			const startTags = tags
 				.map(a => {
 					return { value: a.id, label: a.title };
 				})
@@ -163,14 +163,29 @@ class MainScreenComponent extends React.Component {
 				promptOptions: {
 					label: _('Add or remove tags:'),
 					inputType: 'tags',
-					value: noteTags,
+					value: startTags,
 					autocomplete: tagSuggestions,
 					onClose: async answer => {
 						if (answer !== null) {
-							const tagTitles = answer.map(a => {
+							const endTagTitles = answer.map(a => {
 								return a.label.trim();
 							});
-							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
+							if (command.noteIds.length === 1) {
+								await Tag.setNoteTagsByTitles(command.noteIds[0], endTagTitles);
+							} else {
+								const startTagTitles = startTags.map(a => { return a.label.trim(); });
+								const addTags = endTagTitles.filter(value => !startTagTitles.includes(value));
+								const delTags = startTagTitles.filter(value => !endTagTitles.includes(value));
+
+								// apply the tag additions and deletions to each selected note
+								for (let i = 0; i < command.noteIds.length; i++) {
+									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
+									let tagTitles = tags.map(a => { return a.title; });
+									tagTitles = tagTitles.concat(addTags);
+									tagTitles = tagTitles.filter(value => !delTags.includes(value));
+									await Tag.setNoteTagsByTitles(command.noteIds[i], tagTitles);
+								}
+							}
 						}
 						this.setState({ promptOptions: null });
 					},
