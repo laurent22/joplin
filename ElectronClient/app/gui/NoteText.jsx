@@ -1425,7 +1425,7 @@ class NoteTextComponent extends React.Component {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = '') {
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = '', byLine=false) {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.textOffsetSelection();
@@ -1433,10 +1433,14 @@ class NoteTextComponent extends React.Component {
 		let newBody = this.state.note.body;
 
 		if (selection && selection.start !== selection.end) {
-			const s1 = this.state.note.body.substr(0, selection.start);
-			const s2 = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
-			const s3 = this.state.note.body.substr(selection.end);
-			newBody = s1 + string1 + s2 + string2 + s3;
+			const selectedLines = replacementText ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
+			let selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
+
+			newBody = this.state.note.body.substr(0, selection.start);
+			for (let i = 0; i < selectedStrings.length; i++) {
+				newBody += string1 + selectedStrings[i] + string2;
+			}
+			newBody += this.state.note.body.substr(selection.end);
 
 			const r = this.selectionRange_;
 
@@ -1540,26 +1544,30 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
-	addListItem(string1, string2 = '', defaultText = '') {
-		const currentLine = this.selectionRangeCurrentLine();
+	addListItem(string1, string2 = '', defaultText = '', byLine=false) {
 		let newLine = '\n';
-		if (!currentLine) newLine = '';
-		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText);
+		const range = this.selectionRange_;
+		if (!range || (range.start.row === range.end.row && !this.selectionRangeCurrentLine())) {
+			newLine = '';
+		}
+		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText, '', byLine);
 	}
 
 	commandTextCheckbox() {
-		this.addListItem('- [ ] ', '', _('List item'));
+		this.addListItem('- [ ] ', '', _('List item'), true);
 	}
 
 	commandTextListUl() {
-		this.addListItem('- ', '', _('List item'));
+		this.addListItem('- ', '', _('List item'), true);
 	}
 
+	// Converting multiple lines to a numbered list will use the same number on each line
+	// Not ideal, but the rendered text will still be correct.
 	commandTextListOl() {
 		let bulletNumber = markdownUtils.olLineNumber(this.selectionRangeCurrentLine());
 		if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(this.selectionRangePreviousLine());
 		if (!bulletNumber) bulletNumber = 0;
-		this.addListItem(`${bulletNumber + 1}. `, '', _('List item'));
+		this.addListItem(`${bulletNumber + 1}. `, '', _('List item'), true);
 	}
 
 	commandTextHeading() {
