@@ -89,6 +89,7 @@ class Bridge {
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
+			buttons: [_('OK')],
 		});
 	}
 

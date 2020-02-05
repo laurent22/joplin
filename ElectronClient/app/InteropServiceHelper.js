@@ -61,12 +61,12 @@ class InteropServiceHelper {
 							cleanup();
 						}
 					} else {
-						win.webContents.print(options, (success) => {
+						win.webContents.print(options, (success, reason) => {
 							// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
 							// It calls the callback right away with "false" even if the document hasn't be print yet.
 
 							cleanup();
-							if (!success) reject(new Error('Could not print'));
+							if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
 							resolve();
 						});
 					}
