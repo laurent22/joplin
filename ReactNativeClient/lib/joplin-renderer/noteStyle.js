@@ -14,6 +14,7 @@ module.exports = function(style, options) {
 		body {
 			font-size: ${style.htmlFontSize};
 			color: ${style.htmlColor};
+			word-wrap: break-word;
 			line-height: ${style.htmlLineHeight};
 			background-color: ${style.htmlBackgroundColor};
 			font-family: ${fontFamily};
