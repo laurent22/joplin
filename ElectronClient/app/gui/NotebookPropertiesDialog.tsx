@@ -64,7 +64,7 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	useEffect(() => {
 		async function fetchFolder() {
 			if (!props.folderId) {
-				setFormFolder({folder: null});
+				throw new Error('FolderID is not set. This Notebook is not valid!!!');
 			} else {
 				setFormFolder(await Folder.load(props.folderId));
 			}
