@@ -116,4 +116,17 @@ describe('models_Note', function() {
 		}
 	}));
 
+	it('should reset fields for a duplicate', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1'});
+		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+
+		let duplicatedNote = await Note.duplicate(note1.id);
+
+		expect(duplicatedNote !== note1).toBe(true);
+		expect(duplicatedNote.created_time !== note1.created_time).toBe(true);
+		expect(duplicatedNote.updated_time !== note1.updated_time).toBe(true);
+		expect(duplicatedNote.user_created_time !== note1.user_created_time).toBe(true);
+		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
+	}));
+
 });
