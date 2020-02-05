@@ -385,8 +385,8 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <h1>Searching<a name="searching" href="#searching" class="heading-anchor">🔗</a></h1>
 <p>Call <strong>GET /search?query=YOUR_QUERY</strong> to search for notes. This end-point supports the <code>field</code> parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: <a href="https://joplinapp.org/#searching">https://joplinapp.org/#searching</a></p>
 <p>To retrieve non-notes items, such as notebooks or tags, add a <code>type</code> parameter and set it to the required <a href="#item-type-id">item type name</a>. In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use <code>*</code> as a wildcard. This is convenient for example to retrieve notebooks or tags by title.</p>
-<p>For example, to retrieve the notebook named &quot;recipes&quot;: <strong>GET /search?query=recipes&amp;type=folder</strong><br>
-To retrieve all the tags that start with &quot;project-&quot;: <strong>GET /search?query=project-*&amp;type=tag</strong></p>
+<p>For example, to retrieve the notebook named <code>recipes</code>: <strong>GET /search?query=recipes&amp;type=folder</strong></p>
+<p>To retrieve all the tags that start with <code>project-</code>: <strong>GET /search?query=project-*&amp;type=tag</strong></p>
 <h1>Item type IDs<a name="item-type-ids" href="#item-type-ids" class="heading-anchor">🔗</a></h1>
 <p>Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:</p>
 <table>

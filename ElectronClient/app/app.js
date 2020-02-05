@@ -408,7 +408,7 @@ class Application extends BaseApplication {
 
 							if (moduleSource === 'file') {
 								path = bridge().showOpenDialog({
-									filters: [{ name: module.description, extensions: module.fileExtensions}],
+									filters: [{ name: module.description, extensions: module.fileExtensions }],
 								});
 							} else {
 								path = bridge().showOpenDialog({

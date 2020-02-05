@@ -21,8 +21,8 @@ let branch;
 let hash;
 try {
 	// Use stdio: 'pipe' so that execSync doesn't print error directly to stdout
-	branch = execSync('git rev-parse --abbrev-ref HEAD', {stdio: 'pipe' }).toString().trim();
-	hash   = execSync('git log --pretty="%h" -1', {stdio: 'pipe' }).toString().trim();
+	branch = execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim();
+	hash   = execSync('git log --pretty="%h" -1', { stdio: 'pipe' }).toString().trim();
 } catch (err) {
 	// Don't display error object as it's a "fatal" error, but
 	// not for us, since is it not critical information

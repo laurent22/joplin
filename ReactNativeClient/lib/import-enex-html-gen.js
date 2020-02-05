@@ -11,7 +11,7 @@ function addResourceTag(lines, resource, attributes) {
 	const src = `:/${resource.id}`;
 
 	if (resourceUtils.isImageMimeType(resource.mime)) {
-		lines.push(resourceUtils.imgElement({src, attributes}));
+		lines.push(resourceUtils.imgElement({ src, attributes }));
 	} else if (resource.mime === 'audio/x-m4a') {
 		/**
 		 * TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
@@ -162,9 +162,9 @@ async function enexXmlToHtml(xmlString, resources, options = {}) {
 
 const beautifyHtml = (html) => {
 	return new Promise((resolve) => {
-		const options = {wrap: 0};
+		const options = { wrap: 0 };
 		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
 	});
 };
 
-module.exports = {enexXmlToHtml};
+module.exports = { enexXmlToHtml };

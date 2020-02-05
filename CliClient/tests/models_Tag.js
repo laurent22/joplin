@@ -86,7 +86,7 @@ describe('models_Tag', function() {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
-		let tag = await Tag.save({ title: 'mytag'});
+		let tag = await Tag.save({ title: 'mytag' });
 		await Tag.addNote(tag.id, note1.id);
 
 		let tagWithCount = await Tag.loadWithCount(tag.id);

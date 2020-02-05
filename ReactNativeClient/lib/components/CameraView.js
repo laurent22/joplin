@@ -99,7 +99,7 @@ class CameraView extends Component {
 
 		return (
 			<TouchableOpacity onPress={onPress} style={Object.assign({}, style)}>
-				<View style={{borderRadius: 32, width: 60, height: 60, borderColor: '#00000040', borderWidth: 1, borderStyle: 'solid', backgroundColor: '#ffffff77', justifyContent: 'center', alignItems: 'center', alignSelf: 'baseline' }}>
+				<View style={{ borderRadius: 32, width: 60, height: 60, borderColor: '#00000040', borderWidth: 1, borderStyle: 'solid', backgroundColor: '#ffffff77', justifyContent: 'center', alignItems: 'center', alignSelf: 'baseline' }}>
 					{ icon }
 				</View>
 			</TouchableOpacity>
@@ -152,7 +152,7 @@ class CameraView extends Component {
 		const displayRatios = shim.mobilePlatform() === 'android' && this.state.ratios.length > 1;
 
 		const reverseCameraButton = this.renderButton(this.reverse_onPress, 'md-reverse-camera', { flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 20 });
-		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{fontWeight: 'bold', fontSize: 20}}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
+		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
 
 		let cameraRatio = '4:3';
 		const cameraProps = {};

@@ -92,6 +92,7 @@ class NoteTextComponent extends React.Component {
 			query: '',
 			selectedIndex: 0,
 			resultCount: 0,
+			searching: false,
 		};
 
 		this.state = {
@@ -314,6 +315,8 @@ class NoteTextComponent extends React.Component {
 					query: query,
 					selectedIndex: 0,
 					timestamp: Date.now(),
+					resultCount: this.state.localSearch.resultCount,
+					searching: true,
 				},
 			});
 		};
@@ -767,6 +770,7 @@ class NoteTextComponent extends React.Component {
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;
+			ls.searching = false;
 			this.setState({ localSearch: ls });
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
@@ -1117,7 +1121,7 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
-			args = {noteId: command.noteId};
+			args = { noteId: command.noteId };
 		} else if (command.name === 'print') {
 			fn = this.commandPrint;
 		}
@@ -1177,7 +1181,9 @@ class NoteTextComponent extends React.Component {
 		if (this.state.showLocalSearch) {
 			this.noteSearchBar_.current.wrappedInstance.focus();
 		} else {
-			this.setState({ showLocalSearch: true });
+			this.setState({
+				showLocalSearch: true,
+				localSearch: Object.assign({}, this.localSearchDefaultState) });
 		}
 
 		this.props.dispatch({
@@ -1932,14 +1938,17 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
-			color: theme.color,
+			color: theme.textStyle.color,
+			fontSize: theme.textStyle.fontSize * 1.25 *1.5,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
-			fontSize: theme.fontSize,
 		};
 
-		const toolbarStyle = {};
+		const toolbarStyle = {
+			marginTop: 3,
+			marginBottom: 0,
+		};
 
 		const tagStyle = {
 			marginBottom: 10,
@@ -1950,10 +1959,10 @@ class NoteTextComponent extends React.Component {
 
 		let bottomRowHeight = 0;
 		if (this.canDisplayTagBar()) {
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom - tagStyle.height - tagStyle.marginBottom;
 		} else {
 			toolbarStyle.marginBottom = tagStyle.marginBottom,
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom;
 		}
 
 		bottomRowHeight -= searchBarHeight;
@@ -2143,7 +2152,25 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: `1px solid ${theme.dividerColor}` }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
+			<NoteSearchBar
+				ref={this.noteSearchBar_}
+				style={{
+					display: 'flex',
+					height: searchBarHeight,
+					width: innerWidth,
+					borderTop: `1px solid ${theme.dividerColor}`,
+				}}
+				query={this.state.localSearch.query}
+				searching={this.state.localSearch.searching}
+				resultCount={this.state.localSearch.resultCount}
+				selectedIndex={this.state.localSearch.selectedIndex}
+				onChange={this.noteSearchBar_change}
+				onNext={this.noteSearchBar_next}
+				onPrevious={this.noteSearchBar_previous}
+				onClose={this.noteSearchBar_close}
+			/>
+		);
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>

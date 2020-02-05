@@ -44,7 +44,7 @@ Platforms: Desktop and/or mobile (at the student's choice)
 
 Skills Required: JavaScript; React; React Native (for mobile)
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [Roeland Jago Douma](mailto:roeland.douma@nextcloud.com), [laurent22](https://github.com/laurent22/)
 
 More info: [Forum thread about Joplin Web API for Nextcloud](https://discourse.joplinapp.org/t/joplin-api-in-nextcloud-prototype/)
 
@@ -97,7 +97,7 @@ Difficulty Level: High
 
 Skills Required: PHP (for the Nextcloud app). For the front-end it can be plain HTML (no JS), or React.
 
-Potential Mentor(s): [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [Roeland Jago Douma](mailto:roeland.douma@nextcloud.com), [laurent22](https://github.com/laurent22/)
 
 More info: [GitHub: Nextcloud notes integration (Web client)](https://github.com/laurent22/joplin/issues/228)
 
