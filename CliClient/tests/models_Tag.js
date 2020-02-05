@@ -99,10 +99,10 @@ describe('models_Tag', function() {
 
 	it('should get common tags for set of notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1' });
-		let taga = await Tag.save({ title: 'mytaga'});
-		let tagb = await Tag.save({ title: 'mytagb'});
-		let tagc = await Tag.save({ title: 'mytagc'});
-		let tagd = await Tag.save({ title: 'mytagd'});
+		let taga = await Tag.save({ title: 'mytaga' });
+		let tagb = await Tag.save({ title: 'mytagb' });
+		let tagc = await Tag.save({ title: 'mytagc' });
+		let tagd = await Tag.save({ title: 'mytagd' });
 
 		let note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
 		let note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });
