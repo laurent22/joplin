@@ -16,7 +16,7 @@ interface FolderPropertiesDialogProps {
 function styles_(props:FolderPropertiesDialogProps) {
 	return buildStyle('FolderPropertiesDialog', props.theme, (theme: any) => {
 		return {
-			formFolder: {
+			folderLabel: {
 				...theme.textStyle,
 				flex: 1,
 				display: 'flex',
@@ -31,12 +31,23 @@ function styles_(props:FolderPropertiesDialogProps) {
 				color: theme.color,
 				fontSize: '1.4em',
 			},
-			form: {
+			titleForm: {
 				display: 'inline-block',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 				border: '1px solid',
 				borderColor: theme.dividerColor,
+				marginLeft: '3em',
+				width: '6em',
+			},
+			iconForm: {
+				display: 'inline-block',
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				border: '1px solid',
+				borderColor: theme.dividerColor,
+				marginLeft: '3.6em',
+				width: '6em',
 			},
 		};
 	});
@@ -74,21 +85,43 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	const rootStyle = Object.assign({}, theme.dialogBox);
 	rootStyle.width = '50%';
 
-	let titleComp =
-		<label style={styles.formFolder}>{_('Name: ')}
-			<input defaultValue={formFolder.title} onChange={event => formFolder.title = event.target.value} style={styles.form} />
-			<button onClick={saveFolder} style={styles.folderSaveButton}>
-				<i style={styles.folderSaveButtonIcon} className={'fa fa-save'}></i>
+	let titleComp = (
+		<label
+			style={styles.folderLabel}>
+			{_('Name: ')}
+			<input
+				defaultValue={formFolder.title}
+				onChange={event => formFolder.title = event.target.value}
+				style={styles.titleForm} />
+			<button
+				onClick={saveFolder}
+				style={styles.folderSaveButton}>
+				<i
+					style={styles.folderSaveButtonIcon}
+					className={'fa fa-save'}>
+				</i>
 			</button>
-		</label>;
+		</label>
+	);
 
-	let iconComp =
-		<label style={styles.formFolder}>{_('Icon: ')}
-			<input defaultValue={formFolder.icon} onChange={event => formFolder.icon = event.target.value} style={styles.form} />
-			<button onClick={saveFolder} style={styles.folderSaveButton}>
-				<i style={styles.folderSaveButtonIcon} className={'fa fa-save'}></i>
+	let iconComp = (
+		<label
+			style={styles.folderLabel}>
+			{_('Icon: ')}
+			<input
+				defaultValue={formFolder.icon}
+				onChange={event => formFolder.icon = event.target.value}
+				style={styles.iconForm} />
+			<button
+				onClick={saveFolder}
+				style={styles.folderSaveButton}>
+				<i
+					style={styles.folderSaveButtonIcon}
+					className={'fa fa-save'}>
+				</i>
 			</button>
-		</label>;
+		</label>
+	);
 
 	return (
 		<div style={theme.dialogModalLayer}>
