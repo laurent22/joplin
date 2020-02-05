@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { connect } = require('react-redux');
@@ -168,7 +170,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		// Duplicate all selected notes. ensureUniqueTitle is set to true to use the
 		// original note's name as a root for the new unique identifier.
-		await Note.duplicateMultipleNotes(noteIds, {ensureUniqueTitle: true});
+		await Note.duplicateMultipleNotes(noteIds, { ensureUniqueTitle: true });
 
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 	}

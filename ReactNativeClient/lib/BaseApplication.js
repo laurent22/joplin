@@ -176,6 +176,14 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {

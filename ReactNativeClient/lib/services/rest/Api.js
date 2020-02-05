@@ -22,7 +22,7 @@ const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 const { uuid } = require('lib/uuid');
 
 class ApiError extends Error {

@@ -345,8 +345,8 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
-			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
 			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
@@ -502,13 +502,13 @@ class Setting extends BaseModel {
 					'Tabloid': _('Tabloid'),
 					'Legal': _('Legal'),
 				};
-			}},
+			} },
 			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
 				};
-			}},
+			} },
 
 
 			'net.customCertificates': {

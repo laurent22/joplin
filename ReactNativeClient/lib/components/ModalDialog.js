@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { Text, Modal, View, StyleSheet, Button } = require('react-native');
 const { themeStyle } = require('lib/components/global-style.js');

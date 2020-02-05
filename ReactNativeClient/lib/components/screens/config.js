@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
 const { connect } = require('react-redux');
@@ -441,7 +443,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer}>
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{marginRight: 20}} onChange={(event) => this.setState({profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<TextInput style={{ marginRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);

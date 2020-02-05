@@ -9,7 +9,7 @@ const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
 const { escapeHtml } = require('lib/string-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-const { assetsToHeaders } = require('joplin-renderer');
+const { assetsToHeaders } = require('lib/joplin-renderer');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 

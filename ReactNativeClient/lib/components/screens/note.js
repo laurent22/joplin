@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');

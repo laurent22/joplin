@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -119,9 +121,9 @@ class ClipperConfigScreenComponent extends React.Component {
 						<div style={stepBoxStyle}>
 							<p style={theme.h1Style}>{_('Step 2: Install the extension')}</p>
 							<p style={theme.textStyle}>{_('Download and install the relevant extension for your browser:')}</p>
-							<div style={{display: 'flex', flexDirection: 'row'}}>
+							<div style={{ display: 'flex', flexDirection: 'row' }}>
 								<ExtensionBadge theme={this.props.theme} type="firefox" url="https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/"/>
-								<ExtensionBadge style={{marginLeft: 10}} theme={this.props.theme} type="chrome" url="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek"/>
+								<ExtensionBadge style={{ marginLeft: 10 }} theme={this.props.theme} type="chrome" url="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek"/>
 							</div>
 						</div>
 
