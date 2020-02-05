@@ -117,7 +117,7 @@ describe('models_Note', function() {
 	}));
 
 	it('should reset fields for a duplicate', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1'});
+		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
 		let duplicatedNote = await Note.duplicate(note1.id);
