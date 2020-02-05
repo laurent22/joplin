@@ -124,9 +124,10 @@ class ElectronAppWrapper {
 		// automatically (the listeners will be removed when the window is closed)
 		// and restore the maximized or full screen state
 		windowState.manage(this.win_);
-		// Ensure the window is hidden, as windowStateKeeper may make the window
+		
+		// HACK: Ensure the window is hidden, as `windowState.manage` may make the window
 		// visible with isMaximized set to true in window-state-${this.env_}.json.
-		// Fix: https://github.com/laurent22/joplin/issues/2365
+		// https://github.com/laurent22/joplin/issues/2365
 		if (!windowOptions.show) {
 			this.win_.hide();
 		}
