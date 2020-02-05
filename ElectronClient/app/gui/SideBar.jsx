@@ -459,7 +459,8 @@ class SideBarComponent extends React.Component {
 
 		let folderIconStyle = {
 			visibility: 'visible',
-			paddingLeft: 5 + depth * 10,
+			paddingLeft: 5,
+			paddingRight: 5,
 		};
 
 		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
