@@ -1824,7 +1824,7 @@ class NoteTextComponent extends React.Component {
 				this.props.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'commandContentProperties',
-					text: this.rawEditor().session.getValue()
+					text: this.rawEditor().session.getValue(),
 				});
 			},
 		});

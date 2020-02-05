@@ -286,7 +286,7 @@ class MainScreenComponent extends React.Component {
 				noteContentPropertiesDialogOptions: {
 					visible: true,
 					text: command.text,
-				}
+				},
 			});
 		} else if (command.name === 'commandShareNoteDialog') {
 			this.setState({
