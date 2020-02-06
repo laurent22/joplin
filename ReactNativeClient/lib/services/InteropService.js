@@ -196,7 +196,7 @@ class InteropService {
 		const ModuleClass = require(modulePath);
 		const output = new ModuleClass();
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
-		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
+		output.setMetadata({ options, ...moduleMetadata }); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 

@@ -408,7 +408,7 @@ class Application extends BaseApplication {
 
 							if (moduleSource === 'file') {
 								path = bridge().showOpenDialog({
-									filters: [{ name: module.description, extensions: module.fileExtensions}],
+									filters: [{ name: module.description, extensions: module.fileExtensions }],
 								});
 							} else {
 								path = bridge().showOpenDialog({
@@ -874,12 +874,10 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+Alt+T',
 					click: () => {
 						const selectedNoteIds = this.store().getState().selectedNoteIds;
-						if (selectedNoteIds.length !== 1) return;
-
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
-							noteId: selectedNoteIds[0],
+							noteIds: selectedNoteIds,
 						});
 					},
 				}, {
@@ -1132,7 +1130,7 @@ class Application extends BaseApplication {
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
-		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
+		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
 			menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;

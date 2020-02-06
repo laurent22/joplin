@@ -118,6 +118,9 @@ class NoteSearchBarComponent extends React.Component {
 	render() {
 		const query = this.props.query ? this.props.query : '';
 
+		// backgroundColor needs to cached to a local variable to prevent the
+		// colour from blinking.
+		// For more info: https://github.com/laurent22/joplin/pull/2329#issuecomment-578376835
 		const theme = themeStyle(this.props.theme);
 		if (!this.props.searching) {
 			if (this.props.resultCount === 0 && query.length >  0) {

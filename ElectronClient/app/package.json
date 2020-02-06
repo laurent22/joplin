@@ -1,6 +1,6 @@
 {
   "name": "Joplin",
-  "version": "1.0.179",
+  "version": "1.0.181",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
@@ -75,7 +75,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "electron": "^7.1.9",
-    "electron-builder": "^21.2.0",
+    "electron-builder": "20.15.0",
     "electron-rebuild": "^1.8.8"
   },
   "optionalDependencies": {

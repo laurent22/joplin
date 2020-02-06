@@ -68,6 +68,8 @@ module.exports = {
 		"linebreak-style": ["error", "unix"],
 		"prefer-template": ["error"],
 		"template-curly-spacing": ["error", "never"],
+		"object-curly-spacing": ["error", "always"],
+		"array-bracket-spacing": ["error", "never"],
 		"key-spacing": ["error", {
 			"beforeColon": false,
 			"afterColon": true,

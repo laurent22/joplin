@@ -295,20 +295,49 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
+	scrollNoteIndex_(keyCode, ctrlKey, metaKey, noteIndex) {
+
+		if (keyCode === 33) {
+			// Page Up
+			noteIndex -= (this.itemListRef.current.visibleItemCount() - 1);
+
+		} else if (keyCode === 34) {
+			// Page Down
+			noteIndex += (this.itemListRef.current.visibleItemCount() - 1);
+
+		} else if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
+			// CTRL+End, CMD+Down
+			noteIndex = this.props.notes.length - 1;
+
+		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
+			// CTRL+Home, CMD+Up
+			noteIndex = 0;
+
+		} else if (keyCode === 38 && !metaKey) {
+			// Up
+			noteIndex -= 1;
+
+		} else if (keyCode === 40 && !metaKey) {
+			// Down
+			noteIndex += 1;
+		}
+
+		if (noteIndex < 0) noteIndex = 0;
+		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
+
+		return noteIndex;
+	}
+
 	async onKeyDown(event) {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
 
-		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38)) {
-			// DOWN / UP
+		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
-			const inc = keyCode === 38 ? -1 : +1;
 
-			noteIndex += inc;
-
-			if (noteIndex < 0) noteIndex = 0;
-			if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
+			noteIndex = this.scrollNoteIndex_(keyCode, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = this.props.notes[noteIndex];
 
@@ -363,6 +392,15 @@ class NoteListComponent extends React.Component {
 					target: 'noteTitle',
 				});
 			}
+		}
+
+		if (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) {
+			// Ctrl+A key
+			event.preventDefault();
+
+			this.props.dispatch({
+				type: 'NOTE_SELECT_ALL',
+			});
 		}
 	}
 

@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const {dirname } = require('../pathUtils');
+const { dirname } = require('../pathUtils');
 
 const rootDir = dirname(__dirname);
 const assetsDir = `${rootDir}/assets`;

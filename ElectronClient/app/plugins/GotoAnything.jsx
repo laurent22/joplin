@@ -62,9 +62,9 @@ class Dialog extends React.PureComponent {
 		this.styles_[this.props.theme] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
-			row: {overflow: 'hidden', height: itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10},
+			row: { overflow: 'hidden', height: itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10 },
 			help: Object.assign({}, theme.textStyle, { marginBottom: 10 }),
-			inputHelpWrapper: {display: 'flex', flexDirection: 'row', alignItems: 'center'},
+			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
 
 		const rowTextStyle = {
@@ -254,7 +254,7 @@ class Dialog extends React.PureComponent {
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
-				<div style={style.rowTitle} dangerouslySetInnerHTML={{__html: titleHtml}}></div>
+				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{pathComp}
 			</div>
 		);

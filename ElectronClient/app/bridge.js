@@ -56,7 +56,7 @@ class Bridge {
 	}
 
 	showSaveDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		const filePath = dialog.showSaveDialogSync(this.window(), options);
@@ -67,7 +67,7 @@ class Bridge {
 	}
 
 	showOpenDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		if (!('createDirectory' in options)) options.createDirectory = true;
@@ -80,7 +80,7 @@ class Bridge {
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
 	showMessageBox_(window, options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, options);
 	}
@@ -89,6 +89,7 @@ class Bridge {
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
+			buttons: [_('OK')],
 		});
 	}
 
