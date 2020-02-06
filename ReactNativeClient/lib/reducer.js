@@ -394,6 +394,11 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
+		case 'NOTE_SELECT_ALL':
+			newState = Object.assign({}, state);
+			newState.selectedNoteIds = newState.notes.map(n => n.id);
+			break;
+
 		case 'FOLDER_SELECT':
 			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
 			break;
@@ -548,6 +553,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Tag';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'TAG_UPDATE_ONE':
@@ -675,6 +681,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Search';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':

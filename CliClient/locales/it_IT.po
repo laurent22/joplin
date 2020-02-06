@@ -657,17 +657,16 @@ msgid "Cancelling... Please wait."
 msgstr "Annullamento... Attendere per favore."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:14
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
 "assign or remove [tag] from [note], to list notes associated with [tag], or "
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> può essere \"add\", \"remove\" or \"list\" per assegnare o "
-"rimuovere [tag] da [note], o per mostrare le note associate a [tag]. Il "
-"comando `tag list` può essere usato per mostrare tutte le etichette (usa -l "
-"per l’opzione lunga)."
+"<tag-command> può essere \"add\", \"remove\", \"list\", or \"notetags\" per "
+"assegnare o rimuovere [tag] da [note], per mostrare le note associate a "
+"[tag], oppure mostrare i tag associati a [note]. Il comando `tag list` può "
+"essere usato per mostrare tutte le etichette (usa -l per l’opzione lunga)."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
@@ -912,9 +911,8 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:931
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:470
-#, fuzzy
 msgid "Toggle note list"
-msgstr "Lista delle note"
+msgstr "Attiva lista delle note"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:940
 msgid "Toggle editor layout"
@@ -1126,20 +1124,17 @@ msgid "Check synchronisation configuration"
 msgstr "Controlla la configurazione della sincronizzazione"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "Etichetta sconosciuta: %s"
+msgstr "Sconosciuto"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "Annullamento..."
+msgstr "Controllo…"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "Solo gli errori"
+msgstr "Errore"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
@@ -1148,28 +1143,24 @@ msgid ""
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "Mostra tutto"
+msgstr "Mostra log"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "Stato sincronizzazione"
+msgstr "Controlla stato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "&Aiuto"
+msgstr "Aiuto"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "Opzioni avanzate"
+msgstr "Mostra opzioni avanzate"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1423,9 +1414,8 @@ msgstr ""
 "\"."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Completata: %s"
+msgstr "Completato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1505,12 +1495,11 @@ msgstr "Copia l'indirizzo del link"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Errore nel scaricare questo allegato:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Questo allegato non è ancora stato scaricato o decriptato."
+msgstr "Questo allegato non è ancora stato scaricato o decriptato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 #, javascript-format
@@ -1626,23 +1615,20 @@ msgid "Synchronisation Status"
 msgstr "Stato della Sincronizzazione"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Sincronizzazione"
+msgstr "Sincronizzazione..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Creare nuovo %s..."
-msgstr[1] "Creare nuovo %s..."
+msgstr[0] "Generazione link..."
+msgstr[1] "Generazione links..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Il token è stato copiato negli appunti!"
-msgstr[1] "Il token è stato copiato negli appunti!"
+msgstr[0] "Il link è stato copiato negli appunti!"
+msgstr[1] "I link sono stati copiati negli appunti!"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
@@ -1650,16 +1636,14 @@ msgid ""
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "Ripristina note"
+msgstr "Condividi note"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Condividi"
-msgstr[1] "Condividi"
+msgstr[0] "Copia link condivisibile"
+msgstr[1] "Copia link condivisibili"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
@@ -1700,9 +1684,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "Rimuovere questa ricerca dalla barra laterale?"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Nuovo taccuino"
+msgstr "Nuovo sotto-taccuino"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
@@ -1752,9 +1735,8 @@ msgid "%s - Copy"
 msgstr "%s - Copia"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Fare clic per interrompere le modifiche esterne"
+msgstr "Interrompi modifiche esterne"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -1774,9 +1756,8 @@ msgid "Copy Markdown link"
 msgstr "Copia il link Markdown"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
-#, fuzzy
 msgid "Share note..."
-msgstr "Ripristina note"
+msgstr "Condividi note..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
 msgid "PDF File"
@@ -2033,16 +2014,15 @@ msgstr "Non posso spostare la nota nel Taccuino \"%s\""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Non scaricato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Scaricamento risorse…"
+msgstr "Scaricamento"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Scaricato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2060,9 +2040,8 @@ msgid "Keyboard Mode"
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
-#, fuzzy
 msgid "Default"
-msgstr "Predefinito: %s"
+msgstr "Predefinito"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
@@ -2183,23 +2162,20 @@ msgid "Nord"
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-#, fuzzy
 msgid "Show note counts"
-msgstr "Visualizza nella barra delle applicazioni"
+msgstr "Visualizza conteggio note"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#, fuzzy
 msgid "Editor"
-msgstr "Modifica"
+msgstr "Editor"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#, fuzzy
 msgid "Viewer"
-msgstr "&Vista"
+msgstr "Visualizzatore"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
@@ -2208,9 +2184,9 @@ msgid "Split View"
 msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
@@ -2583,14 +2559,12 @@ msgid "Json Export Directory"
 msgstr "Cartella di esportazione JSON"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "File"
+msgstr "File HTML"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Cartella"
+msgstr "Cartella HTML"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2670,29 +2644,27 @@ msgstr ""
 "dispositivo, ma Joplin non proverà più a decriptarli."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "Allega File"
+msgstr "Allegati"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Scaricato e decriptato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Scaricato e criptato"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Elemento \"%s\" non può essere scaricato: %s"
+msgstr "Allegati che non possono essere scaricati"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2779,9 +2751,10 @@ msgid "Press to set the decryption password."
 msgstr "Premere per impostare la password di decrittografia."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Alcuni elementi non possono essere sincronizzati."
+msgstr ""
+"Alcuni elementi non possono essere sincronizzati. Premi per maggiori "
+"informazioni."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2932,14 +2905,12 @@ msgstr ""
 "ricerca. Potrebbe richiedere molto tempo, dipende dal numero di note."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "Importazione delle note..."
+msgstr "Esportazione profilo..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Esporta file di Joplin"
+msgstr "Esporta profilo"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."

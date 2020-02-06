@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
@@ -361,6 +363,15 @@ class NoteListComponent extends React.Component {
 					target: 'noteTitle',
 				});
 			}
+		}
+
+		if (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) {
+			// Ctrl+A key
+			event.preventDefault();
+
+			this.props.dispatch({
+				type: 'NOTE_SELECT_ALL',
+			});
 		}
 	}
 

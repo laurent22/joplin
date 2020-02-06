@@ -6,7 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const MasterKey = require('lib/models/MasterKey');
 const Note = require('lib/models/Note');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 const { _, setLocale } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
 const fs = require('fs-extra');
@@ -408,7 +408,7 @@ class Application extends BaseApplication {
 
 							if (moduleSource === 'file') {
 								path = bridge().showOpenDialog({
-									filters: [{ name: module.description, extensions: module.fileExtensions}],
+									filters: [{ name: module.description, extensions: module.fileExtensions }],
 								});
 							} else {
 								path = bridge().showOpenDialog({
@@ -629,6 +629,7 @@ class Application extends BaseApplication {
 				'',
 				_('Client ID: %s', Setting.value('clientId')),
 				_('Sync Version: %s', Setting.value('syncVersion')),
+				_('Profile Version: %s', reg.db().version()),
 			];
 			if (gitInfo) {
 				message.push(`\n${gitInfo}`);
@@ -873,12 +874,10 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+Alt+T',
 					click: () => {
 						const selectedNoteIds = this.store().getState().selectedNoteIds;
-						if (selectedNoteIds.length !== 1) return;
-
 						this.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
-							noteId: selectedNoteIds[0],
+							noteIds: selectedNoteIds,
 						});
 					},
 				}, {
@@ -1131,7 +1130,7 @@ class Application extends BaseApplication {
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
-		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'setTags', 'showLocalSearch']) {
+		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
 			menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
@@ -1150,7 +1149,7 @@ class Application extends BaseApplication {
 			app.destroyTray();
 		} else {
 			const contextMenu = Menu.buildFromTemplate([
-				{ label: _('Open %s', app.electronApp().getName()), click: () => { app.window().show(); } },
+				{ label: _('Open %s', app.electronApp().name), click: () => { app.window().show(); } },
 				{ type: 'separator' },
 				{ label: _('Exit'), click: () => { app.quit(); } },
 			]);

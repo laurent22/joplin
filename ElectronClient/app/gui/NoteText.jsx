@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -14,7 +16,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const { MarkupToHtml, assetsToHeaders } = require('joplin-renderer');
+const { MarkupToHtml, assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -90,6 +92,7 @@ class NoteTextComponent extends React.Component {
 			query: '',
 			selectedIndex: 0,
 			resultCount: 0,
+			searching: false,
 		};
 
 		this.state = {
@@ -312,6 +315,8 @@ class NoteTextComponent extends React.Component {
 					query: query,
 					selectedIndex: 0,
 					timestamp: Date.now(),
+					resultCount: this.state.localSearch.resultCount,
+					searching: true,
 				},
 			});
 		};
@@ -765,6 +770,7 @@ class NoteTextComponent extends React.Component {
 		} else if (msg === 'setMarkerCount') {
 			const ls = Object.assign({}, this.state.localSearch);
 			ls.resultCount = arg0;
+			ls.searching = false;
 			this.setState({ localSearch: ls });
 		} else if (msg.indexOf('markForDownload:') === 0) {
 			const s = msg.split(':');
@@ -1115,7 +1121,7 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
-			args = {noteId: command.noteId};
+			args = { noteId: command.noteId };
 		} else if (command.name === 'print') {
 			fn = this.commandPrint;
 		}
@@ -1175,7 +1181,9 @@ class NoteTextComponent extends React.Component {
 		if (this.state.showLocalSearch) {
 			this.noteSearchBar_.current.wrappedInstance.focus();
 		} else {
-			this.setState({ showLocalSearch: true });
+			this.setState({
+				showLocalSearch: true,
+				localSearch: Object.assign({}, this.localSearchDefaultState) });
 		}
 
 		this.props.dispatch({
@@ -1334,7 +1342,7 @@ class NoteTextComponent extends React.Component {
 		this.props.dispatch({
 			type: 'WINDOW_COMMAND',
 			name: 'setTags',
-			noteId: this.state.note.id,
+			noteIds: [this.state.note.id],
 		});
 	}
 
@@ -1417,7 +1425,7 @@ class NoteTextComponent extends React.Component {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null) {
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null, byLine = false) {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.textOffsetSelection();
@@ -1425,10 +1433,14 @@ class NoteTextComponent extends React.Component {
 		let newBody = this.state.note.body;
 
 		if (selection && selection.start !== selection.end) {
-			const s1 = this.state.note.body.substr(0, selection.start);
-			const s2 = replacementText !== null ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
-			const s3 = this.state.note.body.substr(selection.end);
-			newBody = s1 + string1 + s2 + string2 + s3;
+			const selectedLines = replacementText !== null ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
+			let selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
+
+			newBody = this.state.note.body.substr(0, selection.start);
+			for (let i = 0; i < selectedStrings.length; i++) {
+				newBody += string1 + selectedStrings[i] + string2;
+			}
+			newBody += this.state.note.body.substr(selection.end);
 
 			const r = this.selectionRange_;
 
@@ -1532,26 +1544,30 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
-	addListItem(string1, string2 = '', defaultText = '') {
-		const currentLine = this.selectionRangeCurrentLine();
+	addListItem(string1, string2 = '', defaultText = '', byLine=false) {
 		let newLine = '\n';
-		if (!currentLine) newLine = '';
-		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText);
+		const range = this.selectionRange_;
+		if (!range || (range.start.row === range.end.row && !this.selectionRangeCurrentLine())) {
+			newLine = '';
+		}
+		this.wrapSelectionWithStrings(newLine + string1, string2, defaultText, null, byLine);
 	}
 
 	commandTextCheckbox() {
-		this.addListItem('- [ ] ', '', _('List item'));
+		this.addListItem('- [ ] ', '', _('List item'), true);
 	}
 
 	commandTextListUl() {
-		this.addListItem('- ', '', _('List item'));
+		this.addListItem('- ', '', _('List item'), true);
 	}
 
+	// Converting multiple lines to a numbered list will use the same number on each line
+	// Not ideal, but the rendered text will still be correct.
 	commandTextListOl() {
 		let bulletNumber = markdownUtils.olLineNumber(this.selectionRangeCurrentLine());
 		if (!bulletNumber) bulletNumber = markdownUtils.olLineNumber(this.selectionRangePreviousLine());
 		if (!bulletNumber) bulletNumber = 0;
-		this.addListItem(`${bulletNumber + 1}. `, '', _('List item'));
+		this.addListItem(`${bulletNumber + 1}. `, '', _('List item'), true);
 	}
 
 	commandTextHeading() {
@@ -1930,14 +1946,17 @@ class NoteTextComponent extends React.Component {
 			paddingLeft: 8,
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
-			color: theme.color,
+			color: theme.textStyle.color,
+			fontSize: theme.textStyle.fontSize * 1.25 *1.5,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
-			fontSize: theme.fontSize,
 		};
 
-		const toolbarStyle = {};
+		const toolbarStyle = {
+			marginTop: 3,
+			marginBottom: 0,
+		};
 
 		const tagStyle = {
 			marginBottom: 10,
@@ -1948,10 +1967,10 @@ class NoteTextComponent extends React.Component {
 
 		let bottomRowHeight = 0;
 		if (this.canDisplayTagBar()) {
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - tagStyle.height - tagStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom - tagStyle.height - tagStyle.marginBottom;
 		} else {
 			toolbarStyle.marginBottom = tagStyle.marginBottom,
-			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom;
 		}
 
 		bottomRowHeight -= searchBarHeight;
@@ -2141,7 +2160,25 @@ class NoteTextComponent extends React.Component {
 			/>
 		);
 
-		const noteSearchBarComp = !this.state.showLocalSearch ? null : <NoteSearchBar ref={this.noteSearchBar_} style={{ display: 'flex', height: searchBarHeight, width: innerWidth, borderTop: `1px solid ${theme.dividerColor}` }} onChange={this.noteSearchBar_change} onNext={this.noteSearchBar_next} onPrevious={this.noteSearchBar_previous} onClose={this.noteSearchBar_close} />;
+		const noteSearchBarComp = !this.state.showLocalSearch ? null : (
+			<NoteSearchBar
+				ref={this.noteSearchBar_}
+				style={{
+					display: 'flex',
+					height: searchBarHeight,
+					width: innerWidth,
+					borderTop: `1px solid ${theme.dividerColor}`,
+				}}
+				query={this.state.localSearch.query}
+				searching={this.state.localSearch.searching}
+				resultCount={this.state.localSearch.resultCount}
+				selectedIndex={this.state.localSearch.selectedIndex}
+				onChange={this.noteSearchBar_change}
+				onNext={this.noteSearchBar_next}
+				onPrevious={this.noteSearchBar_previous}
+				onClose={this.noteSearchBar_close}
+			/>
+		);
 
 		return (
 			<div style={rootStyle} onDrop={this.onDrop_}>

@@ -48,7 +48,7 @@ async function main() {
 	await fs.mkdirp(outputDir);
 
 	const encodedFiles = [];
-	const sourceAssetDir = `${rootDir}/node_modules/joplin-renderer/assets`;
+	const sourceAssetDir = `${rootDir}/lib/joplin-renderer/assets`;
 	const files = walk(sourceAssetDir);
 
 	for (const file of files) {

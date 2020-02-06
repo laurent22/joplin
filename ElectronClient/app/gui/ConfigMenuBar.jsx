@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const styleSelector = require('./style/ConfigMenuBar');
 const Setting = require('lib/models/Setting');

@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
@@ -677,6 +679,11 @@ class SideBarComponent extends React.Component {
 				type: 'FOLDER_TOGGLE',
 				id: selectedItem.id,
 			});
+		}
+
+		if (keyCode === 65 && (event.ctrlKey || event.metaKey)) {
+			// Ctrl+A key
+			event.preventDefault();
 		}
 	}
 

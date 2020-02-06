@@ -386,7 +386,7 @@ class SearchEngine {
 
 		const st = scriptType(query);
 
-		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko'].indexOf(st) >= 0) {
+		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			return this.basicSearch(query);
 		} else {

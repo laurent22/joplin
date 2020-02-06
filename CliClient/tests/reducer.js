@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
-const {setupDatabaseAndSynchronizer, switchClient, asyncTest } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { reducer, defaultState, stateUtils} = require('lib/reducer.js');
+const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
 
 async function createNTestFolders(n) {
 	let folders = [];
@@ -19,7 +19,7 @@ async function createNTestFolders(n) {
 async function createNTestNotes(n, folder) {
 	let notes = [];
 	for (let i = 0; i < n; i++) {
-		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		let note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
 		notes.push(note);
 	}
 	return notes;
@@ -36,11 +36,12 @@ async function createNTestTags(n) {
 
 function initTestState(folders, selectedFolderIndex, notes, selectedIndexes, tags=null, selectedTagIndex=null) {
 	let state = defaultState;
-	if (folders != null) {
-		state = reducer(state,  { type: 'FOLDER_UPDATE_ALL', items: folders });
-	}
+
 	if (selectedFolderIndex != null) {
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[selectedFolderIndex].id });
+	}
+	if (folders != null) {
+		state = reducer(state, { type: 'FOLDER_UPDATE_ALL', items: folders });
 	}
 	if (notes != null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
@@ -63,7 +64,7 @@ function initTestState(folders, selectedFolderIndex, notes, selectedIndexes, tag
 }
 
 function createExpectedState(items, keepIndexes, selectedIndexes) {
-	let expected = { items: [], selectedIds: []};
+	let expected = { items: [], selectedIds: [] };
 
 	for (let i = 0; i < selectedIndexes.length; i++) {
 		expected.selectedIds.push(items[selectedIndexes[i]].id);
@@ -110,7 +111,7 @@ describe('Reducer', function() {
 
 		// test action
 		// delete the third note
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[2].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
 
 		// expect that the third note is missing, and the 4th note is now selected
 		let expected = createExpectedState(notes, [0,1,3,4], [3]);
@@ -127,7 +128,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [1]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[0].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[0].id });
 
 		let expected = createExpectedState(notes, [1,2,3,4], [1]);
 
@@ -141,7 +142,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [0]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[0].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[0].id });
 
 		let expected = createExpectedState(notes, [], []);
 
@@ -155,7 +156,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [4]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[4].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[4].id });
 
 		let expected = createExpectedState(notes, [0,1,2,3], [3]);
 
@@ -169,7 +170,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [3]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[1].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[1].id });
 
 		let expected = createExpectedState(notes, [0,2,3,4], [3]);
 
@@ -183,7 +184,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [1]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[3].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[3].id });
 
 		let expected = createExpectedState(notes, [0,1,2,4], [1]);
 
@@ -197,8 +198,8 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [1,2]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[1].id});
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[2].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[1].id });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
 
 		let expected = createExpectedState(notes, [0,3,4], [3]);
 
@@ -212,7 +213,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [3,4]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[1].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[1].id });
 
 		let expected = createExpectedState(notes, [0,2,3,4], [3,4]);
 
@@ -226,7 +227,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [1,2]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[3].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[3].id });
 
 		let expected = createExpectedState(notes, [0,1,2,4], [1,2]);
 
@@ -240,8 +241,8 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [3,4]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[3].id});
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[4].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[3].id });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[4].id });
 
 		let expected = createExpectedState(notes, [0,1,2], [2]);
 
@@ -255,9 +256,9 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 0, notes, [0,2,4]);
 
 		// test action
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[0].id});
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[2].id});
-		state = reducer(state, {type: 'NOTE_DELETE', id: notes[4].id});
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[0].id });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[4].id });
 
 		let expected = createExpectedState(notes, [1,3], [1]);
 
@@ -272,7 +273,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 2, notes, [2]);
 
 		// test action
-		state = reducer(state, {type: 'FOLDER_DELETE', id: folders[2].id});
+		state = reducer(state, { type: 'FOLDER_DELETE', id: folders[2].id });
 
 		let expected = createExpectedState(folders, [0,1,3,4], [3]);
 
@@ -286,7 +287,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 1, notes, [2]);
 
 		// test action
-		state = reducer(state, {type: 'FOLDER_DELETE', id: folders[2].id});
+		state = reducer(state, { type: 'FOLDER_DELETE', id: folders[2].id });
 
 		let expected = createExpectedState(folders, [0,1,3,4], [1]);
 
@@ -300,7 +301,7 @@ describe('Reducer', function() {
 		let state = initTestState(folders, 4, notes, [2]);
 
 		// test action
-		state = reducer(state, {type: 'FOLDER_DELETE', id: folders[2].id});
+		state = reducer(state, { type: 'FOLDER_DELETE', id: folders[2].id });
 
 		let expected = createExpectedState(folders, [0,1,3,4], [4]);
 
@@ -314,7 +315,7 @@ describe('Reducer', function() {
 		let state = initTestState(null, null, null, null, tags, [2]);
 
 		// test action
-		state = reducer(state, {type: 'TAG_DELETE', id: tags[2].id});
+		state = reducer(state, { type: 'TAG_DELETE', id: tags[2].id });
 
 		let expected = createExpectedState(tags, [0,1,3,4], [3]);
 
@@ -327,7 +328,7 @@ describe('Reducer', function() {
 		let state = initTestState(null, null, null, null, tags, [2]);
 
 		// test action
-		state = reducer(state, {type: 'TAG_DELETE', id: tags[4].id});
+		state = reducer(state, { type: 'TAG_DELETE', id: tags[4].id });
 
 		let expected = createExpectedState(tags, [0,1,2,3], [2]);
 
@@ -340,11 +341,35 @@ describe('Reducer', function() {
 		let state = initTestState(null, null, null, null, tags, [2]);
 
 		// test action
-		state = reducer(state, {type: 'TAG_DELETE', id: tags[0].id});
+		state = reducer(state, { type: 'TAG_DELETE', id: tags[0].id });
 
 		let expected = createExpectedState(tags, [1,2,3,4], [2]);
 
 		expect(getIds(state.tags)).toEqual(getIds(expected.items));
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
+
+	it('should select all notes', asyncTest(async () => {
+		let folders = await createNTestFolders(2);
+		let notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(3, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
+
+		let expected = createExpectedState(notes, [0,1,2], [0]);
+
+		expect(state.notes.length).toEqual(expected.items.length);
+		expect(getIds(state.notes.slice(0,4))).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+
+		// test action
+		state = reducer(state, { type: 'NOTE_SELECT_ALL' });
+
+		expected = createExpectedState(notes.slice(0,3), [0,1,2], [0,1,2]);
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+	}));
+
 });
