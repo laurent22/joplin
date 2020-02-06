@@ -157,7 +157,12 @@ class MainScreenComponent extends React.Component {
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags.map(a => {
 				return { value: a.id, label: a.title };
-			});
+			})
+				.sort((a, b) => {
+				// sensitivity accent will treat accented characters as differemt
+				// but treats caps as equal
+					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
+				});
 
 			this.setState({
 				promptOptions: {
