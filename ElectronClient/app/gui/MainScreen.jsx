@@ -45,7 +45,7 @@ class MainScreenComponent extends React.Component {
 	}
 
 	notebookPropertiesDialog_close() {
-		this.setState({notebookPropertiesDialogOptions: {}});
+		this.setState({ notebookPropertiesDialogOptions: {} });
 	}
 
 	shareNoteDialog_close() {

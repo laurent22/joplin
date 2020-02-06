@@ -79,7 +79,7 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	};
 
 	const saveFolder = async () => {
-		await Folder.save({id: formFolder.id, title: formFolder.title, icon: formFolder.icon}, {userValidation: true});
+		await Folder.save({ id: formFolder.id, title: formFolder.title, icon: formFolder.icon }, { userValidation: true });
 	};
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
