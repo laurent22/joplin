@@ -445,7 +445,7 @@ class BaseApplication {
 		if (action.type == 'NOTE_TAG_REMOVE') {
 			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
-					this.refreshCurrentFolder();
+					await this.refreshCurrentFolder();
 					refreshNotesUseSelectedNoteId = true;
 				}
 				refreshNotes = true;
