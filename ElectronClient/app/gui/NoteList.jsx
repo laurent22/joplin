@@ -296,21 +296,26 @@ class NoteListComponent extends React.Component {
 	scrollNoteIndex_(keyCode, ctrlKey, metaKey, noteIndex) {
 
 		if (keyCode === 33) {
+			// Page Up
 			noteIndex -= (this.itemListRef.current.visibleItemCount() - 1);
-		}
-		if (keyCode === 34) {
+
+		} else if (keyCode === 34) {
+			// Page Down
 			noteIndex += (this.itemListRef.current.visibleItemCount() - 1);
-		}
-		if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
+
+		} else if ((keyCode === 35 && ctrlKey) || (keyCode === 40 && metaKey)) {
+			// CTRL+End, CMD+Down
 			noteIndex = this.props.notes.length - 1;
-		}
-		if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
+
+		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
+			// CTRL+Home, CMD+Up
 			noteIndex = 0;
-		}
-		if (keyCode === 38 && !metaKey) {
+		} else if (keyCode === 38 && !metaKey) {
+			// Up
 			noteIndex -= 1;
-		}
-		if (keyCode === 40 && !metaKey) {
+
+		} else if (keyCode === 40 && !metaKey) {
+			// Down
 			noteIndex += 1;
 		}
 
