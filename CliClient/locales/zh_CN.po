@@ -200,15 +200,13 @@ msgstr "操作已取消"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:53
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
-#, fuzzy
 msgid "Confirm password:"
-msgstr "输入主密码："
+msgstr "确认密码："
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:59
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "密码不可为空"
+msgstr "密码不符合！"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
@@ -876,9 +874,8 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:931
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:470
-#, fuzzy
 msgid "Toggle note list"
-msgstr "笔记列表"
+msgstr "切换笔记列表"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/app.js:940
 msgid "Toggle editor layout"
@@ -987,9 +984,8 @@ msgid "No"
 msgstr "否"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
-#, fuzzy
 msgid "Full Release Notes"
-msgstr "已恢复的笔记"
+msgstr "完整的发行说明"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
@@ -1072,7 +1068,7 @@ msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "这将打开一个新屏幕。是否保存当前更改？"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
 #, javascript-format
@@ -1085,48 +1081,41 @@ msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "未知标记：%s"
+msgstr "未知"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "正在取消..."
+msgstr "正在检查..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "仅显示错误"
+msgstr "错误"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
-msgstr ""
+msgstr "没有安装Joplin Nextcloud应用程序或配置错误。 请查看下面的完整错误消息："
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "显示全部"
+msgstr "显示日志"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Joplin Nextcloud的状态"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "同步的状态"
+msgstr "检查状态"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
 msgstr "帮助 (&H)"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
 msgstr "高级选项"
 
@@ -1270,15 +1259,15 @@ msgstr "加密状态："
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox扩展"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome网上商店"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "立即获取"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/Header.min.js:210
 msgid "Usage"
@@ -1453,10 +1442,9 @@ msgstr "复制链接地址"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "下载此附件时出错："
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "该附件没有下载或者尚未解密。"
 
@@ -1572,44 +1560,39 @@ msgid "Synchronisation Status"
 msgstr "同步状态"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "同步"
+msgstr "正在同步..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "新建 %s…"
-msgstr[1] "新建 %s…"
+msgstr[0] "生成链接..."
+msgstr[1] "生成链接..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Token 令牌已复制到剪贴板！"
-msgstr[1] "Token 令牌已复制到剪贴板！"
+msgstr[0] "链接已复制到剪贴板！"
+msgstr[1] "链接已复制到剪贴板！"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
+msgstr "注意：共享笔记后，便不再在服务器上对其进行加密。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "已恢复的笔记"
+msgstr "共享笔记"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "分享"
-msgstr[1] "分享"
+msgstr[0] "复制共享链接"
+msgstr[1] "复制共享链接"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "关闭"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
@@ -1646,9 +1629,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "从边栏中删除该项搜索？"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "新建笔记本"
+msgstr "新的子笔记本"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
@@ -1697,9 +1679,8 @@ msgid "%s - Copy"
 msgstr "%s - 副本"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "单击以取消外部编辑"
+msgstr "取消外部编辑"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -1719,9 +1700,8 @@ msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
-#, fuzzy
 msgid "Share note..."
-msgstr "已恢复的笔记"
+msgstr "分享笔记..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
 msgid "PDF File"
@@ -1773,7 +1753,9 @@ msgid ""
 "configuration in the Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "无法连接到Joplin Nextcloud应用。 请在“同步配置”中检查配置。 完整的错误信息是：\n"
+"\n"
+"%s"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -1971,16 +1953,15 @@ msgstr "无法移动笔记到笔记本“%s”"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "未下载"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "下载资源中..."
+msgstr "下载中..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "已下载"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -1994,20 +1975,19 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "键盘模式"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
-#, fuzzy
 msgid "Default"
-msgstr "默认值: %s"
+msgstr "默认值:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
@@ -2118,21 +2098,18 @@ msgid "Nord"
 msgstr "北极风格"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
-#, fuzzy
 msgid "Show note counts"
-msgstr "显示托盘图标"
+msgstr "显示笔记数"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
-#, fuzzy
 msgid "Editor"
 msgstr "编辑"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#, fuzzy
 msgid "Viewer"
 msgstr "界面 (&V)"
 
@@ -2140,19 +2117,19 @@ msgstr "界面 (&V)"
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Split View"
-msgstr ""
+msgstr "拆分视图"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:261
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s / %s / %s"
-msgstr "%s = %s (%s)"
+msgstr "%s / %s / %s"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:262
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:263
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Uncompleted to-dos on top"
@@ -2168,7 +2145,7 @@ msgstr "排序笔记"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "自动配对花括号，括号，引号等"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
@@ -2208,7 +2185,7 @@ msgstr "启动软中断"
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:352
 #, fuzzy
 msgid "Enable typographer support"
-msgstr "启用 Fountain 语法支持"
+msgstr "启用 typographer 支持"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:353
 msgid "Enable math expressions"
@@ -2288,9 +2265,8 @@ msgid "Editor font size"
 msgstr "编辑器字体大小"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:399
-#, fuzzy
 msgid "Editor font"
-msgstr "编辑器字体大小"
+msgstr "编辑器字体"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:423
 msgid "Editor font family"
@@ -2306,7 +2282,7 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "自定义样式表，适用于整个Joplin"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
 msgid "Automatically update the application"
@@ -2361,23 +2337,23 @@ msgstr "PDF导出时的页面规格"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
 msgid "Letter"
-msgstr ""
+msgstr "信件"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:499
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
 msgid "Tabloid"
-msgstr ""
+msgstr "小报"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
 msgid "Legal"
@@ -2385,15 +2361,15 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "PDF导出的页面方向"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "Portrait"
-msgstr ""
+msgstr "肖像"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Landscape"
-msgstr ""
+msgstr "景观"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:523
 msgid "Custom TLS certificates"
@@ -2418,7 +2394,7 @@ msgstr "忽略 TLS 证书错误"
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
-msgstr ""
+msgstr "注意：当同步目标为空时（通常是配置错误或bug），请勿删除本地数据"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:542
 msgid ""
@@ -2473,9 +2449,8 @@ msgid "Application"
 msgstr "应用程序"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:968
-#, fuzzy
 msgid "Encryption"
-msgstr "加密状态："
+msgstr "加密"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:969
 #, fuzzy
@@ -2503,28 +2478,24 @@ msgid "Joplin Export Directory"
 msgstr "Joplin 导出目录"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote 导出文件"
+msgstr "Evernote 导出文件（Markdown）"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote 导出文件"
+msgstr "Evernote 导出文件（HTML）"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
 msgid "Json Export Directory"
 msgstr "Json 导出目录"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "文件"
+msgstr "HTML文件"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "文件目录"
+msgstr "HTML文件目录"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2600,29 +2571,27 @@ msgstr ""
 "留再设备上，但 Joplin 不会再尝试对它们进行解密。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
 msgstr "附加文件"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "下载并解密"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "下载并加密"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "项目“%s”无法从 %s 中下载"
+msgstr "无法下载的附件"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2709,9 +2678,8 @@ msgid "Press to set the decryption password."
 msgstr "按此设置解密密码。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "一些项目无法被同步。"
+msgstr "某些项目无法同步。 点击以获取更多信息。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2857,18 +2825,16 @@ msgstr ""
 "如果‘搜索’功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "正在导入笔记..."
+msgstr "正在导出配置文件..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Joplin 导出文件"
+msgstr "导出配置文件"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "仅用于调试目的：将您的配置文件导出到外部SD卡。"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
@@ -2939,7 +2905,6 @@ msgid "Password cannot be empty"
 msgstr "密码不可为空"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
-#, fuzzy
 msgid "Confirm password cannot be empty"
 msgstr "密码不可为空"
 
@@ -3087,17 +3052,14 @@ msgstr "搜索"
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "已经在同步。状态：%s"
 
-#, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "输入主密码："
+#~ msgstr "确认主密码："
 
-#, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "输入主密码："
+#~ msgstr "确认密码："
 
-#, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "缺失所需参数：%s"
+#~ msgstr "缺少必要参数：笔记"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr "开始编辑笔记。关闭编辑器将回到提示符。"
@@ -3160,9 +3122,8 @@ msgstr "搜索"
 #~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
 #~ msgstr "已下载项目为未知类型，请将 Joplin 升级到最新版本"
 
-#, fuzzy
 #~ msgid "Permission to write to external storage"
-#~ msgstr "使用摄像头的权限"
+#~ msgstr "写入外部存储的权限"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "取消同步"

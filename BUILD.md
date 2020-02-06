@@ -30,7 +30,7 @@ All TypeScript files are generated next to the .ts or .tsx file. So for example,
 Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-npm install && cd Tools && npm install
+npm install && cd Tools && npm install && cd ..
 ```
 
 # Building the Electron application

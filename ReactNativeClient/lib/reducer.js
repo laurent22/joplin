@@ -394,6 +394,11 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
+		case 'NOTE_SELECT_ALL':
+			newState = Object.assign({}, state);
+			newState.selectedNoteIds = newState.notes.map(n => n.id);
+			break;
+
 		case 'FOLDER_SELECT':
 			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
 			break;

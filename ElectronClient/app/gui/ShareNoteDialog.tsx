@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import JoplinServerApi from '../lib/JoplinServerApi';

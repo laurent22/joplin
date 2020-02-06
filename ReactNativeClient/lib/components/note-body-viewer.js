@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const Component = React.Component;
 const { Platform, View, Text } = require('react-native');
@@ -6,7 +8,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
-const { assetsToHeaders } = require('joplin-renderer');
+const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 

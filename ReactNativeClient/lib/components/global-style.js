@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const Setting = require('lib/models/Setting.js');
 const { Platform } = require('react-native');
 
