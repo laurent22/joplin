@@ -310,6 +310,7 @@ class NoteListComponent extends React.Component {
 		} else if ((keyCode === 36 && ctrlKey) || (keyCode === 38 && metaKey)) {
 			// CTRL+Home, CMD+Up
 			noteIndex = 0;
+
 		} else if (keyCode === 38 && !metaKey) {
 			// Up
 			noteIndex -= 1;
