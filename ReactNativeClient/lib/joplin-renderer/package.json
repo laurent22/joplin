@@ -14,8 +14,6 @@
     "jasmine": "^3.5.0"
   },
   "dependencies": {
-    "//": "NOTE: due to a bug in electron-builder, the dependencies are currently copied in each client package.json: https://github.com/electron-userland/electron-builder/issues/3185",
-    "///": "Any added or modified dependency should however be listed here so that the package can be installed independently",
     "base-64": "^0.1.0",
     "font-awesome-filetypes": "^2.1.0",
     "fs-extra": "^8.1.0",
