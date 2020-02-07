@@ -1,5 +1,5 @@
 const InteropService_Exporter_Base = require('lib/services/InteropService_Exporter_Base');
-const { basename, friendlySafeFilename } = require('lib/path-utils.js');
+const { basename, dirname, friendlySafeFilename } = require('lib/path-utils.js');
 const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
@@ -119,6 +119,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 			let noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
 			const modNote = Object.assign({}, item, { body: noteBody });
 			const noteContent = await Note.serializeForEdit(modNote);
+			await shim.fsDriver().mkdir(dirname(noteFilePath));
 			await shim.fsDriver().writeFile(noteFilePath, noteContent, 'utf-8');
 		}
 	}
