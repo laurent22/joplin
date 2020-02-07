@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -1113,50 +1115,45 @@ msgid "Check synchronisation configuration"
 msgstr "Zkontrolujte nastavení synchronizace"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "Neznámý flag: %s"
+msgstr "Neznámý/á"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "Zastavuji..."
+msgstr "Kontroluji..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "Pouze chyby"
+msgstr "Chyba"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Joplin Nextcloud aplikace není nainstalována nebo je špatně nakonfigurována. "
+"Prosím zkontrolujte celou chybovou zprávu:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "Zobrazit vše"
+msgstr "Zobrazit log"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Stav aplikace Joplin Nextcloud:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "Status synchronizace"
+msgstr "Zkontrolovat stav"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "Nápo&věda"
+msgstr "Nápověda"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "Ukázat pokročilé volby"
+msgstr "Ukázat pokročilá nastavení"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1404,9 +1401,8 @@ msgid ""
 msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na \"Nový zápisník\"."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Dokončeno: %s"
+msgstr "Dokončeno"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1486,12 +1482,11 @@ msgstr "Kopírovat adresu odkazu"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Při stahování této přílohy došlo k chybě:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Tato příloha není ještě stažena nebo rozšifrována."
+msgstr "Tato příloha ještě není stažena nebo dešifrována"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1054
 #, javascript-format
@@ -1605,47 +1600,42 @@ msgid "Synchronisation Status"
 msgstr "Stav synchronizace"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:163
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Synchronizace"
+msgstr "Synchronizuji..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:165
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Vytvářím %s..."
+msgstr[0] "Vytvářím odkaz..."
 msgstr[1] "Vytvářím %s..."
 msgstr[2] "Vytvářím %s..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:167
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Token byl zkopírován do schránky!"
-msgstr[1] "Token byl zkopírován do schránky!"
-msgstr[2] "Token byl zkopírován do schránky!"
+msgstr[0] "Odkaz byl zkopírován do schránky!"
+msgstr[1] "Odkazy byly zkopírovány do schránky!"
+msgstr[2] "Odkazy byly zkopírovány do schránky!"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:170
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
+msgstr "Poznámka: pokud je poznámka sdílena, už nebude na serveru šifrována."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:175
-#, fuzzy
 msgid "Share Notes"
-msgstr "Obnovené Poznámky"
+msgstr "Sdílet poznámky"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:177
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Sdílet"
-msgstr[1] "Sdílet"
-msgstr[2] "Sdílet"
+msgstr[0] "Kopírovat odkaz ke sdílení"
+msgstr[1] "Kopírovat odkazy ke sdílení"
+msgstr[2] "Kopírovat odkazy ke sdílení"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
@@ -1732,9 +1722,8 @@ msgid "%s - Copy"
 msgstr "%s - Kopírovat"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:66
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Kliknutím ukončíte externí úpravy"
+msgstr "Ukončit externí úpravy"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:78
 msgid "Switch between note and to-do type"
@@ -1754,9 +1743,8 @@ msgid "Copy Markdown link"
 msgstr "Vytvořit Markdown odkaz"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:135
-#, fuzzy
 msgid "Share note..."
-msgstr "Obnovené Poznámky"
+msgstr "Sdílet poznámku..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:169
 msgid "PDF File"
@@ -1809,6 +1797,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Nemohu se připojit k aplikaci Joplin Nextcloud. Prosím zkontrolujte "
+"nastavení synchronizace. Celá chyba:\n"
+"\n"
+"%s"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2010,16 +2002,15 @@ msgstr "Poznámku nelze přesunout do \"%s\" zápisníku"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Nestaženo"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Stahování zdrojů..."
+msgstr "Stahování"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Staženo"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2206,7 +2197,7 @@ msgstr "Řadit poznámky podle"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:293
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Automaticky zdvojit uvozovky, závorky, apod."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:295
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:313
@@ -2342,7 +2333,7 @@ msgstr ""
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:463
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Vlastní styly pro aplikaci Joplin"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:467
 msgid "Automatically update the application"
@@ -2555,14 +2546,12 @@ msgid "Json Export Directory"
 msgstr "Složka pro JSON export"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "Soubor"
+msgstr "HTML soubor"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Adresář"
+msgstr "HTML adresář"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2642,29 +2631,27 @@ msgstr ""
 "již nebude pokoušet je dešifrovat."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "Přiložit soubor"
+msgstr "Přílohy"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Staženo a dešifrováno"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Staženo a zašifrováno"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Soubor \"%s\" se nepodařilo stáhnout: %s"
+msgstr "Nepodařilo se stáhnout přílohy"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2751,9 +2738,8 @@ msgid "Press to set the decryption password."
 msgstr "Stiskněte pro zadání hesla k dešifrování."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Některé položky nelze synchronizovat."
+msgstr "Některé položky nelze synchronizovat. Zmáčkněte pro více informací."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2856,9 +2842,8 @@ msgstr ""
 "zápisu do externího úložiště."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
-#, fuzzy
 msgid "Information"
-msgstr "Nastavení"
+msgstr "Informace"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
@@ -2904,18 +2889,16 @@ msgstr ""
 "poznámek."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "Importuji poznámky..."
+msgstr "Exportuji profil..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Soubor Joplin Export"
+msgstr "Exportovat profil"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "Pouze pro účely ladění: exportovat profil na externí SD kartu."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
