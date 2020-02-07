@@ -9,6 +9,11 @@ const markdownUtils = {
 		return text.replace(/(\[|\]|\(|\))/g, '_');
 	},
 
+	// Titles for markdown links only need escaping for [ and ]
+	escapeTitleText(text) {
+		return text.replace(/(\[|\])/g, '\\$1');
+	},
+
 	escapeLinkUrl(url) {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');

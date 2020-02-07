@@ -761,7 +761,7 @@ class BaseItem extends BaseModel {
 
 		const output = [];
 		output.push('[');
-		output.push(markdownUtils.escapeLinkText(item.title));
+		output.push(markdownUtils.escapeTitleText(item.title));
 		output.push(']');
 		output.push(`(:/${item.id})`);
 		return output.join('');
