@@ -1518,7 +1518,7 @@ msgstr "Link-Adresse kopieren"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:829
 msgid "There was an error downloading this attachment:"
-msgstr "Es gab einen Fehler beim Herunterladen des Anhangs: "
+msgstr "Es gab einen Fehler beim Herunterladen des Anhangs:"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:831
 msgid "This attachment is not downloaded or not decrypted yet"
@@ -1600,7 +1600,7 @@ msgstr "Klicken Sie hier, um die externe Bearbeitung anzuhalten"
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1708
 msgid "Watching..."
-msgstr "Zuschauend…"
+msgstr "Zuschauend..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2022
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ElectronClient/app/gui/NoteText2.min.js:323
@@ -1973,7 +1973,7 @@ msgstr "Geladene Objekte: %d/%d."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
 msgid "Cancelling..."
-msgstr "Breche ab…"
+msgstr "Breche ab..."
 
 #: /mnt/c/Users/laurent/src/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
 #, javascript-format
