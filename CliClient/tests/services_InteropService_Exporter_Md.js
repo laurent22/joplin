@@ -170,6 +170,37 @@ describe('services_InteropService_Exporter_Md', function() {
 		expect(await shim.fsDriver().exists(`${exportDir}/_resources/${Resource.filename(resource2)}`)).toBe(true, 'Resource file should be copied to _resources directory.');
 	}));
 
+	it('should create folders in fs', asyncTest(async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir);
+
+		const itemsToExport = [];
+		const queueExportItem = (itemType, itemOrId) => {
+			itemsToExport.push({
+				type: itemType,
+				itemOrId: itemOrId,
+			});
+		};
+
+		let folder1 = await Folder.save({ title: 'folder1' });
+
+		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queueExportItem(BaseModel.TYPE_NOTE, note2);
+
+		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
+		queueExportItem(BaseModel.TYPE_FOLDER, folder3.id);
+
+		await exporter.processItem(Folder, folder2);
+		await exporter.processItem(Folder, folder3);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+		await exporter.processItem(Note, note2);
+
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1`)).toBe(true, 'Folder should be created in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder2`)).toBe(true, 'Folder should be created in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder3`)).toBe(true, 'Folder should be created in filesystem.');
+	}));
+
 	it('should save notes in fs', asyncTest(async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir);
@@ -197,9 +228,6 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder3.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 
-		await exporter.processItem(Folder, folder1);
-		await exporter.processItem(Folder, folder2);
-		await exporter.processItem(Folder, folder3);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 		await exporter.processItem(Note, note1);
 		await exporter.processItem(Note, note2);
