@@ -128,7 +128,6 @@ async function sendClipMessage(clipType) {
 browser.commands.onCommand.addListener(function(command) {
 	// We could enumerate these twice, but since we're in here first,
 	// why not save ourselves the trouble with this convention
-	console.log('Rah');
 	if (command.startsWith('clip')) {
 		sendClipMessage(command);
 	}
