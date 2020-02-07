@@ -91,7 +91,7 @@ async function getActiveTabs() {
 async function sendClipMessage(clipType) {
 	const tabs = await getActiveTabs();
 	if (!tabs || !tabs.length) {
-		console.warn('No active tabs');
+		console.error('No active tabs');
 		return;
 	}
 	const tabId = tabs[0].id;
