@@ -1246,10 +1246,6 @@ class NoteTextComponent extends React.Component {
 		// Need to save because the interop service reloads the note from the database
 		await this.saveIfNeeded();
 
-		await new Promise(resolve => {
-			setTimeout(resolve, 100);
-		});
-
 		if (target === 'pdf') {
 			try {
 				const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
@@ -1274,6 +1270,9 @@ class NoteTextComponent extends React.Component {
 				bridge().showErrorMessageBox(error.message);
 			}
 		}
+
+		time.msleep(100);
+
 		this.isPrinting_ = false;
 	}
 
@@ -1299,26 +1298,13 @@ class NoteTextComponent extends React.Component {
 
 			if (!path) return;
 
-			let titles = [];
 			for (let i = 0; i < noteIds.length; i++) {
 				const note = await Note.load(noteIds[i]);
-				let pdfPath = path;
+				const folder = Folder.byId(this.props.folders, note.parent_id);
 
-				// find a unique name if multiple notes are saved
-				if (noteIds.length > 1) {
-					let title = note.title;
-					for (let j = 1; j < 1000; j++) {
-						if (!titles.includes(title)) {
-							break;
-						} else if (j === 1000) {
-							throw new Error('Cannot find unique filename');
-						}
-						title = `${note.title} (${j})`;
-					}
-					titles.push(title);
+				const pdfPath = (noteIds.length === 1) ? path :
+					await shim.fsDriver().findUniqueFilename(`${path}/${note.title} - ${folder.title}.pdf`);
 
-					pdfPath += `/${title}.pdf`;
-				}
 				await this.printTo_('pdf', { path: pdfPath, noteId: note.id });
 			}
 		} catch (error) {
