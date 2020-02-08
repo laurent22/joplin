@@ -2030,7 +2030,7 @@ class NoteTextComponent extends React.Component {
 			if (htmlHasChanged) {
 				let options = {
 					pluginAssets: this.state.lastRenderPluginAssets,
-					pluginAssetsHeadersHtml: assetsToHeaders(this.state.lastRenderPluginAssets),
+					pluginAssetsHeaders: assetsToHeaders(this.state.lastRenderPluginAssets),
 					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);

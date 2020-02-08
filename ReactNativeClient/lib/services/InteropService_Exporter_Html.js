@@ -114,7 +114,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 				<html>
 					<head>
 						<meta charset="UTF-8">
-						${assetsToHeaders(result.pluginAssets)}
+						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 						<title>${escapeHtml(item.title)}</title>
 					</head>
 					<body>

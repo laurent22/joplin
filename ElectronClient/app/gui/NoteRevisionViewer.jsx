@@ -132,7 +132,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, {
 			cssFiles: result.cssFiles,
 			pluginAssets: result.pluginAssets,
-			pluginAssetsHeadersHtml: assetsToHeaders(result.pluginAssets),
+			pluginAssetsHeaders: assetsToHeaders(result.pluginAssets),
 		});
 	}
 
