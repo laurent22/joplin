@@ -5,8 +5,9 @@ const checkboxStyle = `
 	   (otherwise they are too far right), but keep it for their children to allow
 	   nested lists. Make sure this value matches the UL margin. */
 
-	#rendered-md > ul > li.md-checkbox {
-		margin-left: -1.7em;
+	.md-checkbox .checkbox-wrapper {
+		display: flex;
+		align-items: center;
 	}
 
 	li.md-checkbox {
@@ -14,7 +15,8 @@ const checkboxStyle = `
 	}
 
 	li.md-checkbox input[type=checkbox] {
-		margin-right: 1em;
+		margin-left: -1.71em;
+		margin-right: 0.7em;
 	}
 `;
 
@@ -38,6 +40,10 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 		return true;
 	`;
 
+	token = new Token('checkbox_wrapper_open', 'div', 1);
+	token.attrs = [['class', 'checkbox-wrapper']];
+	tokens.push(token);
+
 	token = new Token('checkbox_input', 'input', 0);
 	token.attrs = [['type', 'checkbox'], ['id', id], ['onclick', js]];
 	if (checked) token.attrs.push(['checked', 'true']);
@@ -57,7 +63,10 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 }
 
 function createSuffixTokens(Token) {
-	return [new Token('label_close', 'label', -1)];
+	return [
+		new Token('label_close', 'label', -1),
+		new Token('checkbox_wrapper_close', 'div', -1),
+	];
 }
 
 function installRule(markdownIt, mdOptions, ruleOptions, context) {
