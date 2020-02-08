@@ -62,3 +62,5 @@ android/app/.classpath
 android/app/.project
 android/app/.settings/
 android/app/src/debug/res/
+
+pluginAssets/
