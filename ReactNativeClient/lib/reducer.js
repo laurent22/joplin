@@ -399,6 +399,12 @@ const reducer = (state = defaultState, action) => {
 			newState.selectedNoteIds = newState.notes.map(n => n.id);
 			break;
 
+		case 'SMART_FILTER_SELECT':
+			newState = Object.assign({}, state);
+			newState.notesParentType = 'SmartFilter';
+			newState.selectedSmartFilterId = action.id;
+			break;
+
 		case 'FOLDER_SELECT':
 			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
 			break;

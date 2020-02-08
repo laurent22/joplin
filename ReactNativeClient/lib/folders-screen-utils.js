@@ -50,6 +50,10 @@ class FoldersScreenUtils {
 			this.refreshFolders();
 		}, 1000);
 	}
+
+	static cancelTimers() {
+		if (this.scheduleRefreshFoldersIID_) clearTimeout(this.scheduleRefreshFoldersIID_);
+	}
 }
 
 module.exports = { FoldersScreenUtils };
