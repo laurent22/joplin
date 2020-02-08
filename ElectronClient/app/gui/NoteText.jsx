@@ -1276,6 +1276,10 @@ class NoteTextComponent extends React.Component {
 		this.isPrinting_ = false;
 	}
 
+	pdfFileName_(note, folder) {
+		return safeFilename(`${note.title} - ${folder.title}.pdf`, null, true);
+	}
+
 	async commandSavePdf(args) {
 		try {
 			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
@@ -1285,9 +1289,11 @@ class NoteTextComponent extends React.Component {
 			let path = null;
 			if (noteIds.length === 1) {
 				const note = await Note.load(noteIds[0]);
+				const folder = Folder.byId(this.props.folders, note.parent_id);
+
 				path = bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: `${safeFilename(note.title)}.pdf`,
+					defaultPath: this.pdfFileName_(note, folder),
 				});
 
 			} else {
@@ -1303,7 +1309,7 @@ class NoteTextComponent extends React.Component {
 				const folder = Folder.byId(this.props.folders, note.parent_id);
 
 				const pdfPath = (noteIds.length === 1) ? path :
-					await shim.fsDriver().findUniqueFilename(`${path}/${note.title} - ${folder.title}.pdf`);
+					await shim.fsDriver().findUniqueFilename(`${path}/${this.pdfFileName_(note, folder)}`);
 
 				await this.printTo_('pdf', { path: pdfPath, noteId: note.id });
 			}
