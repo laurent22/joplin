@@ -1270,9 +1270,7 @@ class NoteTextComponent extends React.Component {
 				bridge().showErrorMessageBox(error.message);
 			}
 		}
-
 		time.msleep(100);
-
 		this.isPrinting_ = false;
 	}
 
