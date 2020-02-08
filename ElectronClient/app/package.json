@@ -8,7 +8,7 @@
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
     "publish": "build -p always",
-    "postinstall": "node compile.js && node compile-package-info.js && node electronRebuild.js",
+    "postinstall": "node compile.js && node compile-package-info.js && node copyPluginAssets.js && node electronRebuild.js",
     "compile": "node compile.js && node compile-package-info.js",
     "install-141": "npm install --toolset=v141"
   },
