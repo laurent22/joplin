@@ -266,14 +266,13 @@
 
 	async function prepareCommandResponse(command) {
 		console.info(`Got command: ${command.name}`);
-		const useDefaultSettings = command.useDefaultSettings || false;
-		command.useDefaultSettings = undefined;
+		const shouldSendToJoplin = command.shouldSendToJoplin || false;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
 		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
-				name: 'clippedContent',
+				name: shouldSendToJoplin ? 'sendContentToJoplin' : 'clippedContent',
 				title: title,
 				html: html,
 				base_url: baseUrl(),
@@ -285,7 +284,6 @@
 				source_command: Object.assign({}, command),
 				convert_to: convertToMarkup,
 				stylesheets: stylesheets,
-				useDefaultSettings: useDefaultSettings,
 			};
 		};
 

@@ -16,6 +16,22 @@ class Bridge {
 		this.clipperServerPort_ = null;
 		this.clipperServerPortStatus_ = 'searching';
 
+		function convertCommandToContent(command) {
+			return {
+				title: command.title,
+				body_html: command.html,
+				base_url: command.base_url,
+				source_url: command.url,
+				parent_id: command.parent_id,
+				tags: command.tags || '',
+				image_sizes: command.image_sizes || {},
+				anchor_names: command.anchor_names || [],
+				source_command: command.source_command,
+				convert_to: command.convert_to,
+				stylesheets: command.stylesheets,
+			};
+		}
+
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command:', command);
 
@@ -27,28 +43,18 @@ class Bridge {
 			}
 
 			if (command.name === 'clippedContent') {
-				const content = {
-					title: command.title,
-					body_html: command.html,
-					base_url: command.base_url,
-					source_url: command.url,
-					parent_id: command.parent_id,
-					tags: command.tags || '',
-					image_sizes: command.image_sizes || {},
-					anchor_names: command.anchor_names || [],
-					source_command: command.source_command,
-					convert_to: command.convert_to,
-					stylesheets: command.stylesheets,
-				};
+				const content = convertCommandToContent(command);
+				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
+			}
 
+			if (command.name === 'sendContentToJoplin') {
+				const content = convertCommandToContent(command);
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
 
-				if (command.useDefaultSettings) {
-					const state = this.store_.getState();
-					content.parent_id = state.selectedFolderId;
-					if (content.parent_id) {
-						this.sendContentToJoplin(content);
-					}
+				const state = this.store_.getState();
+				content.parent_id = state.selectedFolderId;
+				if (content.parent_id) {
+					this.sendContentToJoplin(content);
 				}
 			}
 

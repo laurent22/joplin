@@ -97,7 +97,7 @@ async function sendClipMessage(clipType) {
 	const tabId = tabs[0].id;
 	// send a message to the content script on the active tab (assuming it's there)
 	const message = {
-		useDefaultSettings: true,
+		shouldSendToJoplin: true,
 	};
 	switch (clipType) {
 	case 'clipCompletePage':
@@ -125,7 +125,7 @@ async function sendClipMessage(clipType) {
 	}
 }
 
-browser.commands.onCommand.addListener(function(command) {
+browser_.commands.onCommand.addListener(function(command) {
 	// We could enumerate these twice, but since we're in here first,
 	// why not save ourselves the trouble with this convention
 	if (command.startsWith('clip')) {
