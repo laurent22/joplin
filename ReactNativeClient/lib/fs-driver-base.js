@@ -38,7 +38,7 @@ class FsDriverBase {
 			nameToTry = `${nameNoExt} (${counter})${extension}`;
 			counter++;
 			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
-			if (counter >= 10000) throw new Error('Cannot find unique title');
+			if (counter >= 1001) throw new Error('Cannot find unique filename');
 		}
 	}
 
