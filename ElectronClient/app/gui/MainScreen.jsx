@@ -122,16 +122,16 @@ class MainScreenComponent extends React.Component {
 			} else {
 				await createNewNote(null, true);
 			}
-		} else if (command.name === 'newFolder' || (command.name === 'newSubFolder' && command.activeFolderId)) {
+		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
 			this.setState({
 				promptOptions: {
-					label: _('Folder title:'),
+					label: _('Notebook title:'),
 					onClose: async answer => {
 						if (answer) {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
-								if (command.name === 'newSubFolder') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
+								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
@@ -486,10 +486,10 @@ class MainScreenComponent extends React.Component {
 		});
 
 		headerItems.push({
-			title: _('New folder'),
+			title: _('New notebook'),
 			iconName: 'fa-book',
 			onClick: () => {
-				this.doCommand({ name: 'newFolder' });
+				this.doCommand({ name: 'newNotebook' });
 			},
 		});
 
