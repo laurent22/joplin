@@ -1,8 +1,8 @@
 /* eslint-disable enforce-react-hooks/enforce-react-hooks */
 
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated } = require('react-native');
-const { SafeAreaView } = require('react-navigation');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View } = require('react-native');
+const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -751,12 +751,13 @@ class AppComponent extends React.Component {
 				}}
 			>
 				<MenuContext style={{ flex: 1 }}>
-					<SafeAreaView style={{ flex: 0, backgroundColor: theme.raisedBackgroundColor }} />
-					<SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-						<AppNav screens={appNavInit} />
+					<SafeAreaView style={{ flex: 1 }}>
+						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+							<AppNav screens={appNavInit} />
+						</View>
+						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%' }}/>
 					</SafeAreaView>
-					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-					<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%' }}/>
 				</MenuContext>
 			</SideMenu>
 		);

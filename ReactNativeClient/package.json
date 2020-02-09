@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "node ../Tools/buildReactNativeInjectedJs.js && npx jetify && npm run encodeAssets",
-    "encodeAssets": "node encodeAssets.js"
+    "encodeAssets": "node encodeAssets.js",
+    "log-ios": "react-native-log-ios \"Joplin\"",
+    "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
   },
   "dependencies": {
     "@react-native-community/slider": "^2.0.8",
@@ -55,6 +57,7 @@
     "react-native-fs": "^2.11.17",
     "react-native-image-picker": "^0.26.7",
     "react-native-image-resizer": "^1.0.0",
+    "react-native-log-ios": "^1.5.0",
     "react-native-material-dropdown": "^0.5.2",
     "react-native-popup-dialog": "^0.9.35",
     "react-native-popup-menu": "^0.10.0",
@@ -65,7 +68,6 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-version-info": "^0.5.1",
     "react-native-webview": "^5.12.0",
-    "react-navigation": "^1.0.0-beta.21",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
     "reselect": "^4.0.0",
