@@ -443,6 +443,16 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
+		}
+
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
