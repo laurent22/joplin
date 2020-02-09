@@ -1824,12 +1824,21 @@ class NoteTextComponent extends React.Component {
 				this.props.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'commandContentProperties',
-					text: this.rawEditor().session.getValue(),
+					text: this.getSessionText(),
+					lines: this.getSessionLines(),
 				});
 			},
 		});
 
 		return toolbarItems;
+	}
+
+	getSessionText() {
+		return this.rawEditor().session.getValue();
+	}
+
+	getSessionLines() {
+		return this.rawEditor().session.getLength();
 	}
 
 	renderNoNotes(rootStyle) {

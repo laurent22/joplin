@@ -342,6 +342,14 @@ function addExtraStyles(style) {
 		justifyContent: 'center',
 	};
 
+	style.controlBox = {
+		marginBottom: '1em',
+		color: 'black', // This will apply for the calendar
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+	};
+
 	style.dialogBox = {
 		backgroundColor: style.backgroundColor,
 		padding: 16,
