@@ -14,6 +14,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 
+Icon.loadFont();
+
 class SearchScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
 		return { header: null };

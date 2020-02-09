@@ -12,6 +12,8 @@ const { _ } = require('lib/locale.js');
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
 
+Icon.loadFont();
+
 class SideMenuContentComponent extends Component {
 	constructor() {
 		super();

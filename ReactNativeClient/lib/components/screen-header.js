@@ -17,6 +17,8 @@ const { Dropdown } = require('lib/components/Dropdown.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 
+Icon.loadFont();
+
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
 // are widder and to give more room to the picker component which has a larger

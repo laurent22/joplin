@@ -56,7 +56,7 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
-const ShareExtension = require('react-native-share-extension').default;
+// const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
@@ -614,40 +614,40 @@ class AppComponent extends React.Component {
 		}
 
 		if (Platform.OS !== 'ios') {
-			try {
-				const { type, value } = await ShareExtension.data();
+			// try {
+			// 	const { type, value } = await ShareExtension.data();
 
-				// reg.logger().info('Got share data:', type, value);
+			// 	// reg.logger().info('Got share data:', type, value);
 
-				if (type != '' && this.props.selectedFolderId) {
-					const newNote = await Note.save({
-						title: Note.defaultTitleFromBody(value),
-						body: value,
-						parent_id: this.props.selectedFolderId,
-					});
+			// 	if (type != '' && this.props.selectedFolderId) {
+			// 		const newNote = await Note.save({
+			// 			title: Note.defaultTitleFromBody(value),
+			// 			body: value,
+			// 			parent_id: this.props.selectedFolderId,
+			// 		});
 
-					// This is a bit hacky, but the surest way to go to
-					// the needed note. We go back one screen in case there's
-					// already a note open - if we don't do this, the dispatch
-					// below will do nothing (because routeName wouldn't change)
-					// Then we wait a bit for the state to be set correctly, and
-					// finally we go to the new note.
-					this.props.dispatch({
-						type: 'NAV_BACK',
-					});
+			// 		// This is a bit hacky, but the surest way to go to
+			// 		// the needed note. We go back one screen in case there's
+			// 		// already a note open - if we don't do this, the dispatch
+			// 		// below will do nothing (because routeName wouldn't change)
+			// 		// Then we wait a bit for the state to be set correctly, and
+			// 		// finally we go to the new note.
+			// 		this.props.dispatch({
+			// 			type: 'NAV_BACK',
+			// 		});
 
-					setTimeout(() => {
-						this.props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Note',
-							noteId: newNote.id,
-						});
-					}, 5);
-				}
+			// 		setTimeout(() => {
+			// 			this.props.dispatch({
+			// 				type: 'NAV_GO',
+			// 				routeName: 'Note',
+			// 				noteId: newNote.id,
+			// 			});
+			// 		}, 5);
+			// 	}
 
-			} catch (e) {
-				reg.logger().error('Error in ShareExtension.data', e);
-			}
+			// } catch (e) {
+			// 	reg.logger().error('Error in ShareExtension.data', e);
+			// }
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);

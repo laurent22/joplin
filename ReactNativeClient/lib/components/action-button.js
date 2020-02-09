@@ -8,6 +8,8 @@ const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 
+Icon.loadFont();
+
 const styles = StyleSheet.create({
 	actionButtonIcon: {
 		fontSize: 20,

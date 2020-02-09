@@ -35,7 +35,7 @@ const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
-const ShareExtension = require('react-native-share-extension').default;
+// const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
@@ -305,9 +305,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		if (Platform.OS !== 'ios' && this.state.fromShare) {
-			ShareExtension.close();
-		}
+		// if (Platform.OS !== 'ios' && this.state.fromShare) {
+		// 	ShareExtension.close();
+		// }
 	}
 
 	title_changeText(text) {

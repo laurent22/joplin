@@ -3,7 +3,7 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { ListView, Text, StyleSheet, Button, View } = require('react-native');
+const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
 const { _ } = require('lib/locale.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { time } = require('lib/time-utils.js');
@@ -12,13 +12,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 class NoteListComponent extends Component {
 	constructor() {
 		super();
-		const ds = new ListView.DataSource({
-			rowHasChanged: (r1, r2) => {
-				return r1 !== r2;
-			},
-		});
+
 		this.state = {
-			dataSource: ds,
 			items: [],
 			selectedItemIds: [],
 		};
@@ -82,37 +77,23 @@ class NoteListComponent extends Component {
 		return output;
 	}
 
-	UNSAFE_componentWillMount() {
-		const newDataSource = this.state.dataSource.cloneWithRows(this.filterNotes(this.props.items));
-		this.setState({ dataSource: newDataSource });
-	}
-
 	UNSAFE_componentWillReceiveProps(newProps) {
-		// https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
-		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(this.filterNotes(newProps.items)),
-		});
-
 		// Make sure scroll position is reset when switching from one folder to another or to a tag list.
 		if (this.rootRef_ && newProps.notesSource != this.props.notesSource) {
-			this.rootRef_.scrollTo({ x: 0, y: 0, animated: false });
+			this.rootRef_.scrollToOffset({ offset: 0, animated: false });
 		}
 	}
 
 	render() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
-		if (this.state.dataSource.getRowCount()) {
-			return (
-				<ListView
-					ref={ref => (this.rootRef_ = ref)}
-					dataSource={this.state.dataSource}
-					renderRow={note => {
-						return <NoteItem note={note} />;
-					}}
-					enableEmptySections={true}
-				/>
-			);
+		if (this.props.items.length) {
+			return <FlatList
+				ref={ref => (this.rootRef_ = ref)}
+				data={this.props.items}
+				renderItem={({ item }) => <NoteItem note={item} />}
+				keyExtractor={item => item.id}
+			/>;
 		} else {
 			if (!this.props.folders.length) {
 				const noItemMessage = _('You currently have no notebooks.');

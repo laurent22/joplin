@@ -10,6 +10,8 @@ const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim');
 const Setting = require('lib/models/Setting');
 
+Icon.loadFont();
+
 class CameraView extends Component {
 	constructor() {
 		super();

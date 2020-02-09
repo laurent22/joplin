@@ -1,28 +1,19 @@
 package net.cozic.joplin;
 
 import android.app.Application;
+import android.util.Log;
+import com.facebook.react.PackageList;
+import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
+import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.slider.ReactSliderPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
-import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
-import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.rnfs.RNFSPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import org.pgsqlite.SQLitePluginPackage;
-import org.reactnative.camera.RNCameraPackage;
 import java.lang.reflect.Field;
-import com.alinz.parkerdan.shareextension.SharePackage;
-import cx.evermeet.versioninfo.RNVersionInfoPackage;
+// import com.alinz.parkerdan.shareextension.SharePackage;
 import java.util.Arrays;
 import java.util.List;
 import android.database.CursorWindow;
@@ -37,6 +28,15 @@ public class MainApplication extends Application implements ReactApplication {
 
 		@Override
 		protected List<ReactPackage> getPackages() {
+
+			// Was added in RN 60.x:
+			//
+			// @SuppressWarnings("UnnecessaryLocalVariable")
+			// List<ReactPackage> packages = new PackageList(this).getPackages();
+			// // Packages that cannot be autolinked yet can be added manually here, for example:
+			// // packages.add(new MyReactNativePackage());
+			// return packages;
+
 			return Arrays.<ReactPackage>asList(
 				new MainReactPackage(),
 				new ReactSliderPackage(),
@@ -51,7 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNFSPackage(),
 				new SQLitePluginPackage(),
 				new VectorIconsPackage(),
-				new SharePackage(),
+				// new SharePackage(),
 				new RNCameraPackage(),
 				new RNVersionInfoPackage()
 			);

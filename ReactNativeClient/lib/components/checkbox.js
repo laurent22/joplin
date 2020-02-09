@@ -4,6 +4,7 @@ const React = require('react');
 const Component = React.Component;
 const { View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
+Icon.loadFont();
 
 const styles = {
 	checkboxIcon: {

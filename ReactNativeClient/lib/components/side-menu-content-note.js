@@ -7,6 +7,8 @@ const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
+Icon.loadFont();
+
 class SideMenuContentNoteComponent extends Component {
 	constructor() {
 		super();

@@ -11,6 +11,8 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const ModalDialog = require('lib/components/ModalDialog');
 const naturalCompare = require('string-natural-compare');
 
+Icon.loadFont();
+
 class NoteTagsDialogComponent extends React.Component {
 	constructor() {
 		super();
