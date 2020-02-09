@@ -50,6 +50,6 @@ ReactNativeClient/pluginAssets/
 
 # Ignore files generated from TypeScript files
 ElectronClient/app/gui/ShareNoteDialog.js
-ElectronClient/app/gui/NotebookPropertiesDialog.js
+ElectronClient/app/gui/FolderPropertiesDialog.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js

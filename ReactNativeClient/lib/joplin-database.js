@@ -7,7 +7,6 @@ const structureSql = `
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
 	title TEXT NOT NULL DEFAULT "",
-	icon TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
 	updated_time INT NOT NULL
 );
@@ -308,7 +307,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -664,6 +663,10 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 27) {
 				queries.push(this.addMigrationFile(27));
+			}
+
+			if (targetVersion == 28) {
+				queries.push('ALTER TABLE folders ADD COLUMN `icon` TEXT NOT NULL DEFAULT ""'); // 1: Folder, 2: Icon
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

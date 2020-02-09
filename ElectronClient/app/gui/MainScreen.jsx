@@ -6,7 +6,7 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
-const NotebookPropertiesDialog = require('./NotebookPropertiesDialog.js').default;
+const FolderPropertiesDialog = require('./FolderPropertiesDialog.js').default;
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -26,7 +26,7 @@ class MainScreenComponent extends React.Component {
 		super();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
-		this.notebookPropertiesDialog_close = this.notebookPropertiesDialog_close.bind(this);
+		this.folderPropertiesDialog_close = this.folderPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
@@ -44,8 +44,8 @@ class MainScreenComponent extends React.Component {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
-	notebookPropertiesDialog_close() {
-		this.setState({ notebookPropertiesDialogOptions: {} });
+	folderPropertiesDialog_close() {
+		this.setState({ folderPropertiesDialogOptions: {} });
 	}
 
 	shareNoteDialog_close() {
@@ -60,7 +60,7 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
-			notebookPropertiesDialogOptions: {},
+			folderPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
 		});
 	}
@@ -112,26 +112,26 @@ class MainScreenComponent extends React.Component {
 
 		if (command.name === 'newNote') {
 			if (!this.props.folders.length) {
-				bridge().showErrorMessageBox(_('Please create a notebook first.'));
+				bridge().showErrorMessageBox(_('Please create a folder first.'));
 			} else {
 				await createNewNote(null, false);
 			}
 		} else if (command.name === 'newTodo') {
 			if (!this.props.folders.length) {
-				bridge().showErrorMessageBox(_('Please create a notebook first'));
+				bridge().showErrorMessageBox(_('Please create a folder first'));
 			} else {
 				await createNewNote(null, true);
 			}
-		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
+		} else if (command.name === 'newFolder' || (command.name === 'newSubFolder' && command.activeFolderId)) {
 			this.setState({
 				promptOptions: {
-					label: _('Notebook title:'),
+					label: _('Folder title:'),
 					onClose: async answer => {
 						if (answer) {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
-								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
+								if (command.name === 'newSubFolder') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
@@ -239,9 +239,9 @@ class MainScreenComponent extends React.Component {
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
-		} else if (command.name === 'openNotebookProperties') {
+		} else if (command.name === 'openFolderProperties') {
 			this.setState({
-				notebookPropertiesDialogOptions: {
+				folderPropertiesDialogOptions: {
 					folderId: command.folderId,
 					visible: true,
 				},
@@ -486,10 +486,10 @@ class MainScreenComponent extends React.Component {
 		});
 
 		headerItems.push({
-			title: _('New notebook'),
+			title: _('New folder'),
 			iconName: 'fa-book',
 			onClick: () => {
-				this.doCommand({ name: 'newNotebook' });
+				this.doCommand({ name: 'newFolder' });
 			},
 		});
 
@@ -581,7 +581,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
-		const notebookPropertiesDialogOptions = this.state.notebookPropertiesDialogOptions;
+		const folderPropertiesDialogOptions = this.state.folderPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
 
@@ -590,7 +590,7 @@ class MainScreenComponent extends React.Component {
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{notebookPropertiesDialogOptions.visible && <NotebookPropertiesDialog theme={this.props.theme} folderId={notebookPropertiesDialogOptions.folderId} onClose={this.notebookPropertiesDialog_close} />}
+				{folderPropertiesDialogOptions.visible && <FolderPropertiesDialog theme={this.props.theme} folderId={folderPropertiesDialogOptions.folderId} onClose={this.folderPropertiesDialog_close} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />

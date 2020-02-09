@@ -6,6 +6,7 @@ const { themeStyle, buildStyle } = require('../theme.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 
 const Folder = require('lib/models/Folder.js');
+const { bridge } = require('electron').remote.require('./bridge');
 
 interface FolderPropertiesDialogProps {
 	theme: number,
@@ -31,22 +32,13 @@ function styles_(props:FolderPropertiesDialogProps) {
 				color: theme.color,
 				fontSize: '1.4em',
 			},
-			titleForm: {
+			folderInput: {
 				display: 'inline-block',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 				border: '1px solid',
 				borderColor: theme.dividerColor,
 				marginLeft: '3em',
-				width: '6em',
-			},
-			iconForm: {
-				display: 'inline-block',
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-				border: '1px solid',
-				borderColor: theme.dividerColor,
-				marginLeft: '3.6em',
 				width: '6em',
 			},
 		};
@@ -63,10 +55,10 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 
 	useEffect(() => {
 		async function fetchFolder() {
-			if (!props.folderId) {
-				throw new Error('FolderID is not set. This Notebook is not valid!!!');
-			} else {
+			try {
 				setFormFolder(await Folder.load(props.folderId));
+			} catch (error) {
+				bridge().showErrorMessageBox(error.message);
 			}
 		}
 
@@ -79,7 +71,11 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	};
 
 	const saveFolder = async () => {
-		await Folder.save({ id: formFolder.id, title: formFolder.title, icon: formFolder.icon }, { userValidation: true });
+		try {
+			await Folder.save({ id: formFolder.id, title: formFolder.title, icon: formFolder.icon }, { userValidation: true });
+		} catch (error) {
+			bridge().showErrorMessageBox(error.message);
+		}
 	};
 
 	const rootStyle = Object.assign({}, theme.dialogBox);
@@ -88,11 +84,11 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	let titleComp = (
 		<label
 			style={styles.folderLabel}>
-			{_('Name: ')}
+			{_('Name:')}
 			<input
 				defaultValue={formFolder.title}
 				onChange={event => formFolder.title = event.target.value}
-				style={styles.titleForm} />
+				style={styles.folderInput} />
 			<button
 				onClick={saveFolder}
 				style={styles.folderSaveButton}>
@@ -107,11 +103,11 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 	let iconComp = (
 		<label
 			style={styles.folderLabel}>
-			{_('Icon: ')}
+			{_('Icon:')}
 			<input
 				defaultValue={formFolder.icon}
 				onChange={event => formFolder.icon = event.target.value}
-				style={styles.iconForm} />
+				style={styles.folderInput} />
 			<button
 				onClick={saveFolder}
 				style={styles.folderSaveButton}>
