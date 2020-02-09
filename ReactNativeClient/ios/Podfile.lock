@@ -103,6 +103,8 @@ PODS:
     - React-Core (= 0.60.6)
   - rn-fetch-blob (0.12.0):
     - React-Core
+  - RNCPushNotificationIOS (1.0.5):
+    - React
   - RNFileViewer (1.0.1):
     - React
   - RNFS (2.11.17):
@@ -143,6 +145,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
+  - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNFileViewer (from `../node_modules/react-native-file-viewer/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
@@ -212,6 +215,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/WebSocket"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
+  RNCPushNotificationIOS:
+    :path: "../node_modules/@react-native-community/push-notification-ios"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer/ios"
   RNFS:
@@ -254,6 +259,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 7655d72dfb919dd6d8e135ca108a5a2bd9fcd7b4
   React-RCTWebSocket: 7cd2c8d0f8ddd680dc76404defba7ab1f56b83af
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNCPushNotificationIOS: 30ed75aa2981a4ee00b8a2c46599ff18a9c7fcf6
   RNFileViewer: 5047ecf40477339723cc08abd55b5ebcefcef4b5
   RNFS: 416676c3a9ae404454bade10e3d78147c7c33a40
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c

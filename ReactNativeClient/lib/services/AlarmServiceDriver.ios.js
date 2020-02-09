@@ -1,21 +1,21 @@
-// const { PushNotificationIOS } = require('react-native');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 class AlarmServiceDriver {
 	constructor() {
 		this.hasPermission_ = null;
 		this.inAppNotificationHandler_ = null;
 
-		// PushNotificationIOS.addEventListener('localNotification', instance => {
-		// 	if (!this.inAppNotificationHandler_) return;
+		PushNotificationIOS.addEventListener('localNotification', instance => {
+			if (!this.inAppNotificationHandler_) return;
 
-		// 	if (!instance || !instance._data || !instance._data.id) {
-		// 		console.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
-		// 		return;
-		// 	}
+			if (!instance || !instance._data || !instance._data.id) {
+				console.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
+				return;
+			}
 
-		// 	const id = instance._data.id;
-		// 	this.inAppNotificationHandler_(id);
-		// });
+			const id = instance._data.id;
+			this.inAppNotificationHandler_(id);
+		});
 	}
 
 	hasPersistentNotifications() {
@@ -36,28 +36,26 @@ class AlarmServiceDriver {
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
 		return new Promise((resolve) => {
-			this.hasPermission_ = true;
-			resolve(true);
-			// PushNotificationIOS.checkPermissions(async perm => {
-			// 	const ok = await this.hasPermissions(perm);
-			// 	this.hasPermission_ = ok;
-			// 	resolve(ok);
-			// });
+			PushNotificationIOS.checkPermissions(async perm => {
+				const ok = await this.hasPermissions(perm);
+				this.hasPermission_ = ok;
+				resolve(ok);
+			});
 		});
 	}
 
 	async requestPermissions() {
-		// const newPerm = await PushNotificationIOS.requestPermissions({
-		// 	alert: 1,
-		// 	badge: 1,
-		// 	sound: 1,
-		// });
-		// this.hasPermission_ = null;
-		// return this.hasPermissions(newPerm);
+		const newPerm = await PushNotificationIOS.requestPermissions({
+			alert: 1,
+			badge: 1,
+			sound: 1,
+		});
+		this.hasPermission_ = null;
+		return this.hasPermissions(newPerm);
 	}
 
-	async clearNotification(/* id */) {
-		// PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
+	async clearNotification(id) {
+		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
 	async scheduleNotification(notification) {
@@ -70,13 +68,13 @@ class AlarmServiceDriver {
 		const iosNotification = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,
-			fireDate: notification.date,
+			fireDate: notification.date.toISOString(),
 			userInfo: { id: `${notification.id}` },
 		};
 
 		if ('body' in notification) iosNotification.alertBody = notification.body;
 
-		// PushNotificationIOS.scheduleLocalNotification(iosNotification);
+		PushNotificationIOS.scheduleLocalNotification(iosNotification);
 	}
 }
 
