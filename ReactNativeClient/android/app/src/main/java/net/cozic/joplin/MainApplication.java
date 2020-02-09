@@ -31,30 +31,11 @@ public class MainApplication extends Application implements ReactApplication {
 
 			// Was added in RN 60.x:
 			//
-			// @SuppressWarnings("UnnecessaryLocalVariable")
-			// List<ReactPackage> packages = new PackageList(this).getPackages();
-			// // Packages that cannot be autolinked yet can be added manually here, for example:
-			// // packages.add(new MyReactNativePackage());
-			// return packages;
-
-			return Arrays.<ReactPackage>asList(
-				new MainReactPackage(),
-				new ReactSliderPackage(),
-				new RNCWebViewPackage(),
-				new ReactNativePushNotificationPackage(),
-				new ImageResizerPackage(),
-				new RNFileViewerPackage(),
-				new RNSecureRandomPackage(),
-				new ImagePickerPackage(),
-				new ReactNativeDocumentPicker(),
-				new RNFetchBlobPackage(),
-				new RNFSPackage(),
-				new SQLitePluginPackage(),
-				new VectorIconsPackage(),
-				// new SharePackage(),
-				new RNCameraPackage(),
-				new RNVersionInfoPackage()
-			);
+			@SuppressWarnings("UnnecessaryLocalVariable")
+			List<ReactPackage> packages = new PackageList(this).getPackages();
+			// Packages that cannot be autolinked yet can be added manually here, for example:
+			// packages.add(new MyReactNativePackage());
+			return packages;
 		}
 	};
 
