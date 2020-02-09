@@ -21,25 +21,6 @@ function styles_(props:FolderPropertiesDialogProps) {
 				...theme.textStyle,
 				flex: 1,
 				display: 'flex',
-				fontWeight: 'bold',
-				color: theme.color,
-			},
-			folderSaveButton: {
-				background: 'none',
-				border: 'none',
-			},
-			folderSaveButtonIcon: {
-				color: theme.color,
-				fontSize: '1.4em',
-			},
-			folderInput: {
-				display: 'inline-block',
-				color: theme.color,
-				backgroundColor: theme.backgroundColor,
-				border: '1px solid',
-				borderColor: theme.dividerColor,
-				marginLeft: '3em',
-				width: '6em',
 			},
 		};
 	});
@@ -88,12 +69,12 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 			<input
 				defaultValue={formFolder.title}
 				onChange={event => formFolder.title = event.target.value}
-				style={styles.folderInput} />
+				style={theme.inputStyle} />
 			<button
 				onClick={saveFolder}
-				style={styles.folderSaveButton}>
+				style={theme.button}>
 				<i
-					style={styles.folderSaveButtonIcon}
+					style={theme.buttonIconStyle}
 					className={'fa fa-save'}>
 				</i>
 			</button>
@@ -107,12 +88,12 @@ export default function FolderPropertiesDialog(props: FolderPropertiesDialogProp
 			<input
 				defaultValue={formFolder.icon}
 				onChange={event => formFolder.icon = event.target.value}
-				style={styles.folderInput} />
+				style={theme.inputStyle} />
 			<button
 				onClick={saveFolder}
-				style={styles.folderSaveButton}>
+				style={theme.button}>
 				<i
-					style={styles.folderSaveButtonIcon}
+					style={theme.buttonIconStyle}
 					className={'fa fa-save'}>
 				</i>
 			</button>
