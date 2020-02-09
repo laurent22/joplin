@@ -756,7 +756,7 @@ class AppComponent extends React.Component {
 							<AppNav screens={appNavInit} />
 						</View>
 						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%' }}/>
+						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 					</SafeAreaView>
 				</MenuContext>
 			</SideMenu>
