@@ -52,6 +52,9 @@ module.exports = function(style, options) {
 		}
 
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
+		/* Disabled, because it also applies to non-direct descendants of #rendered-md and also not a very elegant solution */
+		
+		/*
 		#rendered-md h1:first-child,
 		#rendered-md h2:first-child,
 		#rendered-md h3:first-child,
@@ -65,6 +68,7 @@ module.exports = function(style, options) {
 			margin-top: 0;
 			padding-top: 0;
 		}
+		*/
 		
 		p, h1, h2, h3, h4, h5, h6, ul, table {
 			margin-top: .6em;

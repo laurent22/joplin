@@ -47,6 +47,8 @@
 		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
 	}
 
+	let pluginAssetsAdded_ = {};
+
 	try {
 		const contentElement = document.getElementById('joplin-container-content');
 
@@ -91,6 +93,22 @@
 
 		function restorePercentScroll() {
 			setPercentScroll(percentScroll_);
+		}
+
+		// Note that this function keeps track of what's been added so as not to add the same CSS files multiple times
+		// It also means that once an asset has been added it is never removed from the view, which in many case is
+		// desirable, but still something to keep in mind.
+		function addPluginAssets(assets) {
+			if (!assets) return;
+
+			for (let name in assets) {
+				if (pluginAssetsAdded_[name]) continue;
+				pluginAssetsAdded_[name] = true;
+
+				const pluginAssetsContainer = document.createElement('div');
+				pluginAssetsContainer.innerHTML = assets[name];
+				document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
+			}
 		}
 
 		ipc.scrollToHash = (event) => {
@@ -142,11 +160,7 @@
 				}, 1);
 			}
 
-			if (event.options.pluginAssetsHeadersHtml) {
-				const pluginAssetsContainer = document.createElement('div');
-				pluginAssetsContainer.innerHTML = event.options.pluginAssetsHeadersHtml;
-				document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
-			}
+			addPluginAssets(event.options.pluginAssetsHeaders);
 
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();

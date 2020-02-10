@@ -62,7 +62,7 @@ class Setting extends BaseModel {
 					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
-					return SyncTargetRegistry.idAndLabelPlainObject();
+					return SyncTargetRegistry.idAndLabelPlainObject(platform);
 				},
 			},
 

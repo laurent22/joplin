@@ -45,6 +45,7 @@ async function encodeFile(sourcePath, destPath) {
 }
 
 async function main() {
+	await fs.remove(outputDir);
 	await fs.mkdirp(outputDir);
 
 	const encodedFiles = [];

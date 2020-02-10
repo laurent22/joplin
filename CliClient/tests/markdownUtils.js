@@ -49,4 +49,19 @@ describe('markdownUtils', function() {
 		}
 	}));
 
+	it('escape a markdown link (title)', asyncTest(async () => {
+
+		const testCases = [
+			['Helmut K. C. Tessarek', 'Helmut K. C. Tessarek'],
+			['Helmut (K. C.) Tessarek', 'Helmut (K. C.) Tessarek'],
+			['Helmut [K. C.] Tessarek', 'Helmut \\[K. C.\\] Tessarek'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.escapeTitleText(md)).toBe(expected);
+		}
+	}));
+
 });

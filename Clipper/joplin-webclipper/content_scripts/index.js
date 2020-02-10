@@ -325,9 +325,18 @@
 
 			hardcodePreStyles(document);
 			preProcessDocument(document);
-			const range = window.getSelection().getRangeAt(0);
+
 			const container = document.createElement('div');
-			container.appendChild(range.cloneContents());
+			const rangeCount = window.getSelection().rangeCount;
+
+			// Even when the user makes only one selection, Firefox might report multiple selections
+			// so we need to process them all.
+			// Fixes https://github.com/laurent22/joplin/issues/2294
+			for (let i = 0; i < rangeCount; i++) {
+				const range = window.getSelection().getRangeAt(i);
+				container.appendChild(range.cloneContents());
+			}
+
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);

@@ -35,11 +35,15 @@ class SyncTargetRegistry {
 		return this.idToMetadata(id).name;
 	}
 
-	static idAndLabelPlainObject() {
+	static idAndLabelPlainObject(os) {
 		let output = {};
 		for (let n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
-			output[n] = this.reg_[n].label;
+			const info = this.reg_[n];
+			if (info.classRef.unsupportedPlatforms().indexOf(os) >= 0) {
+				continue;
+			}
+			output[n] = info.label;
 		}
 		return output;
 	}

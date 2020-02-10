@@ -50,3 +50,28 @@ function loadPluginAssets(assets) {
 	}
 }
 ```
+
+## Development
+
+### Adding asset files
+
+A plugin (or rule) can have any number of assets, such as CSS or font files, associated with it. To add an asset to a plugin, follow these steps:
+
+- Add the file under `/assets/PLUGIN_NAME/your-asset-file.css`
+- Register this file within the plugin using `context.pluginAssets[PLUGIN_NAME] = [{ name: 'your-asset-file.css' }]`
+
+See katex.js for an example of how this is done.
+
+### Adding inline CSS
+
+A plugin can ask for some CSS to be included inline in the rendered HTML. This is convenient as it means no extra file needs to be packaged. Use this syntax to do this:
+
+```
+context.pluginAssets[PLUGIN_NAME] = [
+	{
+		inline: true,
+		text: ".my-css { background-color: 'green' }",
+		mime: 'text/css',
+	},
+];
+```

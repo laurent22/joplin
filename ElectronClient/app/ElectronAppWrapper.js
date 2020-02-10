@@ -39,7 +39,7 @@ class ElectronAppWrapper {
 
 	createWindow() {
 		// Set to true to view errors if the application does not start
-		const debugEarlyBugs = this.env_ === 'dev' && false;
+		const debugEarlyBugs = this.env_ === 'dev';
 
 		const windowStateKeeper = require('electron-window-state');
 

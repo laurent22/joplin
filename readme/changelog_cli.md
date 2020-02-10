@@ -1,5 +1,14 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.154](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154) - 2020-02-07T23:22:24Z
+
+- New: Added new date format YYYY.MM.DD (#2318 by XSAkos)
+- Improved: Reset time fields when duplicating a note (#2428 by [@tekdel](https://github.com/tekdel))
+- Improved: More info for "unknown profile version" error message (#2361 by [@mic704b](https://github.com/mic704b))
+- Improved: Handle Thai language in search (#2387) (#2279 by Kirtan Purohit)
+- Fixed: Fix escaping of title when generating a markdown link (#2456) (#2085 by Helmut K. C. Tessarek)
+- Fixed: Fix console messages being displayed in GUI (#2457 by Helmut K. C. Tessarek)
+
 ## [cli-v1.0.153](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153) - 2020-01-24T23:16:32Z
 
 - New: Added new, more secure encryption methods, so that they can be switched to at a later time

@@ -33,7 +33,7 @@ shim.isMac = () => {
 };
 
 shim.platformName = function() {
-	if (shim.isReactNative()) return 'mobile';
+	if (shim.isReactNative()) return shim.mobilePlatform();
 	if (shim.isMac()) return 'darwin';
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';

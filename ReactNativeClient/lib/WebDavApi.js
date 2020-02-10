@@ -364,8 +364,8 @@ class WebDavApi {
 
 		let response = null;
 
-		console.info('WebDAV Call', `${method} ${url}`, headers, options);
-		console.info(this.requestToCurl_(url, fetchOptions));
+		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
+		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			if (fetchOptions.path) {
