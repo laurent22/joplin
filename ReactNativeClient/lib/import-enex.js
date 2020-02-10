@@ -4,12 +4,15 @@ const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const Resource = require('lib/models/Resource.js');
+const Setting = require('lib/models/Setting.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const { time } = require('lib/time-utils.js');
 const Levenshtein = require('levenshtein');
 const md5 = require('md5');
+const { Base64Decode } = require('base64-stream');
+const md5File = require('md5-file');
 
 // const Promise = require('promise');
 const fs = require('fs-extra');
@@ -35,8 +38,28 @@ function extractRecognitionObjId(recognitionXml) {
 	return r && r.length >= 2 ? r[1] : null;
 }
 
-async function filePutContents(filePath, content) {
-	await fs.writeFile(filePath, content);
+async function decodeBase64File(sourceFile, destFile) {
+	return new Promise(function(resolve, reject) {
+		const sourceStream = fs.createReadStream(sourceFile);
+		const destStream = fs.createWriteStream(destFile);
+		sourceStream.pipe(new Base64Decode()).pipe(destStream);
+
+		sourceStream.on('end', () => resolve());
+		sourceStream.on('error', (error) => reject(error));
+	});
+}
+
+async function md5FileAsync(filePath) {
+	return new Promise((resolve, reject) => {
+		md5File(filePath, (error, hash) => {
+			if (error) {
+				reject(error);
+				return;
+			}
+
+			resolve(hash);
+		});
+	});
 }
 
 function removeUndefinedProperties(note) {
@@ -82,14 +105,51 @@ async function fuzzyMatch(note) {
 	return null;
 }
 
-async function saveNoteResources(note) {
+// At this point we have the resource has it's been parsed from the XML, but additional
+// processing needs to be done to get the final resource file, its size, MD5, etc.
+async function processNoteResource(resource) {
+	if (resource.dataEncoding == 'base64') {
+		const decodedFilePath = `${resource.dataFilePath}.decoded`;
+		await decodeBase64File(resource.dataFilePath, decodedFilePath);
+		resource.dataFilePath = decodedFilePath;
+	} else if (resource.dataEncoding) {
+		throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
+	}
+
+	const stats = fs.statSync(resource.dataFilePath);
+	resource.size = stats.size;
+
+	if (!resource.id) {
+		// If no resource ID is present, the resource ID is actually the MD5 of the data.
+		// This ID will match the "hash" attribute of the corresponding <en-media> tag.
+		// resourceId = md5(decodedData);
+		resource.id = await md5FileAsync(resource.dataFilePath);
+	}
+
+	if (!resource.id || !resource.size) {
+		const debugTemp = Object.assign({}, resource);
+		debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
+		throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
+	}
+
+	return resource;
+}
+
+async function saveNoteResources(note, importOptions) {
 	let resourcesCreated = 0;
 	for (let i = 0; i < note.resources.length; i++) {
 		let resource = note.resources[i];
-		if (!resource.id) continue;
+
+		try {
+			resource = await processNoteResource(resource);
+		} catch (error) {
+			importOptions.onError(error);
+			continue;
+		}
 
 		let toSave = Object.assign({}, resource);
-		delete toSave.data;
+		delete toSave.dataFilePath;
+		delete toSave.dataEncoding;
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
@@ -97,7 +157,7 @@ async function saveNoteResources(note) {
 		let existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await filePutContents(Resource.fullPath(toSave), resource.data);
+		await fs.move(resource.dataFilePath, Resource.fullPath(toSave), { overwrite: true });
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -119,10 +179,14 @@ async function saveNoteTags(note) {
 	return notesTagged;
 }
 
-async function saveNoteToStorage(note, fuzzyMatching = false) {
+async function saveNoteToStorage(note, importOptions) {
+	importOptions = Object.assign({}, {
+		fuzzyMatching: false,
+	}, importOptions);
+
 	note = Note.filter(note);
 
-	let existingNote = fuzzyMatching ? await fuzzyMatch(note) : null;
+	let existingNote = importOptions.fuzzyMatching ? await fuzzyMatch(note) : null;
 
 	let result = {
 		noteCreated: false,
@@ -132,7 +196,7 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 		notesTagged: 0,
 	};
 
-	let resourcesCreated = await saveNoteResources(note);
+	let resourcesCreated = await saveNoteResources(note, importOptions);
 	result.resourcesCreated += resourcesCreated;
 
 	let notesTagged = await saveNoteTags(note);
@@ -241,7 +305,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 					// we require an updated_time property, so set it to create_time in that case
 					if (!note.updated_time) note.updated_time = note.created_time;
 
-					const result = await saveNoteToStorage(note, importOptions.fuzzyMatching);
+					const result = await saveNoteToStorage(note, importOptions);
 
 					if (result.noteUpdated) {
 						progressState.updated++;
@@ -276,11 +340,20 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				noteResourceAttributes[n] = text;
 			} else if (noteResource) {
 				if (n == 'data') {
-					let attr = currentNodeAttributes();
-					noteResource.dataEncoding = attr.encoding;
+					if (!noteResource.dataEncoding) {
+						let attr = currentNodeAttributes();
+						noteResource.dataEncoding = attr.encoding;
+					}
+
+					if (!noteResource.dataFilePath) {
+						noteResource.dataFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.base64`;
+					}
+
+					fs.appendFileSync(noteResource.dataFilePath, text);
+				} else {
+					if (!(n in noteResource)) noteResource[n] = '';
+					noteResource[n] += text;
 				}
-				if (!(n in noteResource)) noteResource[n] = '';
-				noteResource[n] += text;
 			} else if (note) {
 				if (n == 'title') {
 					note.title = text;
@@ -336,7 +409,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			}
 		});
 
-		saxStream.on('closetag', function(n) {
+		saxStream.on('closetag', async function(n) {
 			nodes.pop();
 
 			if (n == 'note') {
@@ -372,56 +445,16 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				note.source = noteAttributes.source ? `evernote.${noteAttributes.source}` : 'evernote';
 				note.source_url = noteAttributes['source-url'] ? noteAttributes['source-url'] : '';
 
-				// if (noteAttributes['reminder-time']) {
-				// 	console.info('======================================================');
-				// 	console.info(noteAttributes);
-				// 	console.info('------------------------------------------------------');
-				// 	console.info(note);
-				// 	console.info('======================================================');
-				// }
-
 				noteAttributes = null;
 			} else if (n == 'resource') {
-				let decodedData = null;
-				let resourceId = noteResource.id;
-				if (noteResource.dataEncoding == 'base64') {
-					try {
-						decodedData = Buffer.from(noteResource.data, 'base64');
-					} catch (error) {
-						importOptions.onError(error);
-					}
-				} else if (noteResource.dataEncoding) {
-					importOptions.onError(new Error(`Cannot decode resource with encoding: ${noteResource.dataEncoding}`));
-					decodedData = noteResource.data; // Just put the encoded data directly in the file so it can, potentially, be manually decoded later
-				}
-
-				if (!resourceId && decodedData) {
-					// If no resource ID is present, the resource ID is actually the MD5 of the data.
-					// This ID will match the "hash" attribute of the corresponding <en-media> tag.
-					resourceId = md5(decodedData);
-				}
-
-				if (!resourceId || !noteResource.data) {
-					const debugTemp = Object.assign({}, noteResource);
-					debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
-					importOptions.onError(new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`));
-				} else {
-					let size = 0;
-					if (decodedData) {
-						size = 'byteLength' in decodedData ? decodedData.byteLength : decodedData.length;
-					}
-
-					let r = {
-						id: resourceId,
-						data: decodedData,
-						mime: noteResource.mime,
-						title: noteResource.filename ? noteResource.filename : '',
-						filename: noteResource.filename ? noteResource.filename : '',
-						size: size,
-					};
-
-					note.resources.push(r);
-				}
+				note.resources.push({
+					id: noteResource.id,
+					dataFilePath: noteResource.dataFilePath,
+					dataEncoding: noteResource.dataEncoding,
+					mime: noteResource.mime,
+					title: noteResource.filename ? noteResource.filename : '',
+					filename: noteResource.filename ? noteResource.filename : '',
+				});
 
 				noteResource = null;
 			}
