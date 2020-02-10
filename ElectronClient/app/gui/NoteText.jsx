@@ -1270,12 +1270,11 @@ class NoteTextComponent extends React.Component {
 				bridge().showErrorMessageBox(error.message);
 			}
 		}
-		time.msleep(100);
 		this.isPrinting_ = false;
 	}
 
 	pdfFileName_(note, folder) {
-		return safeFilename(`${note.title} - ${folder.title}.pdf`, null, true);
+		return safeFilename(`${note.title} - ${folder.title}.pdf`, 255, true);
 	}
 
 	async commandSavePdf(args) {

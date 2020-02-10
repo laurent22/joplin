@@ -37,8 +37,11 @@ class FsDriverBase {
 			if (!exists) return nameToTry;
 			nameToTry = `${nameNoExt} (${counter})${extension}`;
 			counter++;
-			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
-			if (counter >= 1001) throw new Error('Cannot find unique filename');
+			if (counter >= 1000) {
+				nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
+				await time.msleep(10);
+			}
+			if (counter >= 1100) throw new Error('Cannot find unique filename');
 		}
 	}
 
