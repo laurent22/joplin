@@ -165,7 +165,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [PackElend](htt
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
 
-# 9. Custom keyboard shortcuts
+## 9. Custom keyboard shortcuts
 
 The CLI application allows setting custom keyboard shortcuts, however this feature is currently missing from the desktop application. We would like to let the user set shortcuts for the menu items in particular, but also potentially any other Joplin action. There should be a shortcut editor in the Config panel to do this.
 
@@ -174,5 +174,21 @@ Expected Outcome: To add support for custom shortcuts and allow editing them in 
 Difficulty Level: Easy
 
 Skills Required: JavaScript; React
+
+Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
+
+## 10. Quick Linking
+
+Joplin currently allows notes to be linked to each other using the note ID. You can obtain a Markdown link fairly quickly in the Desktop UI by right clicking on a note in the note list, and clicking "Copy Markdown link". This can then be pasted in another note. This system is okay, but better systems exist in other software.
+
+A good example of quick linking between pages is the method used by Confluence. [https://confluence.atlassian.com/doc/autocomplete-for-links-files-macros-and-mentions-249858190.html](This Atlassian documentation) has a good description of how it works on Confluence. While typing a note, you type **\[** and immediately start typing the name of the note you want to link. An autocomplete box drops down from the cursor with a list of pages matching what is currently typed. You can use arrow keys and the enter key to select a page. Pressing enter will immediately link that page. Typing the rest of the page and closing with **\]** will link the page if it is a valid page name. An invalid page name will literally result in \[some invalid page name\] in the note. Adding this to Joplin will greatly improve the ease with which you can link between notes, and enable Joplin to be more easily used a Wiki style journal.
+
+See [https://github.com/laurent22/joplin/issues/1449](here) (Github Issue) and [https://discourse.joplinapp.org/t/internal-url-hyperlink/4435](here) (forum post) for existing discussions on this.
+
+Expected Outcome: Quick-linking functionality is added to Joplin so that a quick method for linking between notes exists.
+
+Difficulty Level: Medium
+
+Skills Required: Javascript; React
 
 Potential Mentor(s): [tessus](https://github.com/tessus), [laurent22](https://github.com/laurent22/)
