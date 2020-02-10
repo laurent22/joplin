@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jasmine --config=tests/support/jasmine.json",
-    "buildAssets": "node Tools/buildAssets.js"
+    "buildAssets": "node Tools/buildAssets.js",
+    "postinstall": "npm run buildAssets"
   },
   "author": "",
   "license": "MIT",

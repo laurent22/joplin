@@ -19,6 +19,7 @@ async function main() {
 	await copyFile(`${rootDir}/node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2`, 'katex/fonts/KaTeX_Math-Italic.woff2');
 	await copyFile(`${rootDir}/node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2`, 'katex/fonts/KaTeX_Size1-Regular.woff2');
 	await copyFile(`${rootDir}/node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2`, 'katex/fonts/KaTeX_Size2-Regular.woff2');
+	await copyFile(`${rootDir}/node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2`, 'katex/fonts/KaTeX_AMS-Regular.woff2');
 
 	await copyFile(`${rootDir}/node_modules/highlight.js/styles/atom-one-light.css`, 'highlight.js/atom-one-light.css');
 	await copyFile(`${rootDir}/node_modules/highlight.js/styles/atom-one-dark-reasonable.css`, 'highlight.js/atom-one-dark-reasonable.css');
