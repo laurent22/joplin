@@ -195,6 +195,7 @@ module.exports = function(context) {
 			{ name: 'fonts/KaTeX_Math-Italic.woff2' },
 			{ name: 'fonts/KaTeX_Size1-Regular.woff2' },
 			{ name: 'fonts/KaTeX_Size2-Regular.woff2' },
+			{ name: 'fonts/KaTeX_Size4-Regular.woff2' },
 			{ name: 'fonts/KaTeX_AMS-Regular.woff2' },
 		];
 	};
