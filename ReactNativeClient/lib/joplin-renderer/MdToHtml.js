@@ -11,6 +11,7 @@ const rules = {
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
+	mermaid: require('./MdToHtml/rules/mermaid').default,
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
@@ -201,6 +202,7 @@ class MdToHtml {
 		markdownIt.use(rules.html_image(context, ruleOptions));
 		if (this.pluginEnabled('katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		if (this.pluginEnabled('fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
+		if (this.pluginEnabled('mermaid')) markdownIt.use(rules.mermaid(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
@@ -226,7 +228,11 @@ class MdToHtml {
 
 		const output = {
 			html: html,
-			pluginAssets: pluginAssets.files,
+			pluginAssets: pluginAssets.files.map(f => {
+				return Object.assign({}, f, {
+					path: `pluginAssets/${f.name}`,
+				});
+			}),
 		};
 
 		// Fow now, we keep only the last entry in the cache

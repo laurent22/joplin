@@ -50,3 +50,4 @@ Tools/commit_hook.txt
 ElectronClient/app/gui/ShareNoteDialog.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js

@@ -131,6 +131,7 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
+    "mermaid": "^8.4.6",
     "moment": "^2.22.2",
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",

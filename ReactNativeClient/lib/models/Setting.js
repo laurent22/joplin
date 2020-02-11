@@ -363,6 +363,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax') },
 			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension') },
 			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Fountain syntax support') },
+			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Mermaid diagrams support') },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html

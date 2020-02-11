@@ -12,7 +12,7 @@ const urlUtils = require('lib/urlUtils');
 const Setting = require('lib/models/Setting');
 const RevisionService = require('lib/services/RevisionService');
 const shared = require('lib/components/shared/note-screen-shared.js');
-const { MarkupToHtml, assetsToHeaders } = require('lib/joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 const { time } = require('lib/time-utils.js');
 const ReactTooltip = require('react-tooltip');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
@@ -132,7 +132,6 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		this.viewerRef_.current.wrappedInstance.send('setHtml', result.html, {
 			cssFiles: result.cssFiles,
 			pluginAssets: result.pluginAssets,
-			pluginAssetsHeaders: assetsToHeaders(result.pluginAssets),
 		});
 	}
 

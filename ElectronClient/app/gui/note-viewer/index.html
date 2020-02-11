@@ -37,7 +37,7 @@
 </head>
 
 <body id="joplin-container-body">
-	<div id="joplin-container-styleContainer"></div>
+	<div id="joplin-container-pluginAssetsContainer"></div>
 	<div id="joplin-container-markScriptContainer"></div>
 	<div id="joplin-container-content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
@@ -101,13 +101,24 @@
 		function addPluginAssets(assets) {
 			if (!assets) return;
 
+			const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
+
 			for (let name in assets) {
 				if (pluginAssetsAdded_[name]) continue;
 				pluginAssetsAdded_[name] = true;
 
-				const pluginAssetsContainer = document.createElement('div');
-				pluginAssetsContainer.innerHTML = assets[name];
-				document.getElementById('joplin-container-styleContainer').appendChild(pluginAssetsContainer);
+				const asset = assets[name];
+
+				if (asset.mime === 'application/javascript') {
+					const script = document.createElement('script');
+					script.src = asset.path;
+					pluginAssetsContainer.appendChild(script);
+				} else if (asset.mime === 'text/css') {
+					const link = document.createElement('link');
+					link.rel = 'stylesheet';
+					link.href = asset.path;
+					pluginAssetsContainer.appendChild(link);
+				}
 			}
 		}
 
@@ -160,11 +171,13 @@
 				}, 1);
 			}
 
-			addPluginAssets(event.options.pluginAssetsHeaders);
+			addPluginAssets(event.options.pluginAssets);
 
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
 			}
+
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}
 
 		let lastScrollEventTime = 0;
@@ -373,6 +386,5 @@
 		throw error;
 	}
 	</script>
-
 </body>
 </html>

@@ -23,6 +23,9 @@ async function main() {
 
 	await copyFile(`${rootDir}/node_modules/highlight.js/styles/atom-one-light.css`, 'highlight.js/atom-one-light.css');
 	await copyFile(`${rootDir}/node_modules/highlight.js/styles/atom-one-dark-reasonable.css`, 'highlight.js/atom-one-dark-reasonable.css');
+
+	await copyFile(`${rootDir}/node_modules/mermaid/dist/mermaid.min.js`, 'mermaid/mermaid.min.js');
+	await copyFile(`${rootDir}/MdToHtml/rules/mermaid_render.js`, 'mermaid/mermaid_render.js');
 }
 
 main().catch((error) => {

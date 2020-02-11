@@ -98,6 +98,24 @@ Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin 
 
 <img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
 
+### Diagrams
+
+You can create diagrams in Joplin using the [Mermaid syntax](https://mermaidjs.github.io/). To add such a graph, wrap the Mermaid script inside a "\`\`\`mermaid" code block like this:
+
+	```mermaid
+	graph TD;
+	    A-->B;
+	    A-->C;
+	    B-->D;
+	    C-->D;
+	```
+
+This is how it would look with the Markdown on the left, and rendered graph on the right:
+
+![Mermaid support in Joplin](https://joplin.cozic.net/images/Mermaid.png)
+
+Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
+
 ### Checkboxes
 
 Checkboxes can be added like so:

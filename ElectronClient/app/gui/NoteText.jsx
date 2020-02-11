@@ -16,7 +16,7 @@ const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
-const { MarkupToHtml, assetsToHeaders } = require('lib/joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('electron').remote.require('./bridge');
 const { themeStyle } = require('../theme.js');
@@ -2030,7 +2030,6 @@ class NoteTextComponent extends React.Component {
 			if (htmlHasChanged) {
 				let options = {
 					pluginAssets: this.state.lastRenderPluginAssets,
-					pluginAssetsHeaders: assetsToHeaders(this.state.lastRenderPluginAssets),
 					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);

@@ -41,6 +41,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
+    "mermaid": "^8.4.6",
     "moment": "^2.24.0",
     "prop-types": "^15.6.0",
     "punycode": "^2.1.1",
