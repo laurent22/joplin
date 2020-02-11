@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
+    "dist-deb": "node_modules/.bin/electron-packager . Joplin --platform linux --arch x64 --out dist && node_modules/.bin/electron-installer-debian --src dist/Joplin-linux-x64/  --dest dist/ --arch amd64",
     "publish": "build -p always",
     "postinstall": "patch-package && node compile.js && node compile-package-info.js && node copyPluginAssets.js && node electronRebuild.js",
     "compile": "node compile.js && node compile-package-info.js",
@@ -76,6 +77,8 @@
     "babel-preset-react": "^6.24.1",
     "electron": "^7.1.9",
     "electron-builder": "22.3.2",
+    "electron-installer-debian": "^3.0.0",
+    "electron-packager": "^14.2.1",
     "electron-rebuild": "^1.8.8",
     "patch-package": "^6.2.0"
   },
