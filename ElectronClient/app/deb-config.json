@@ -1,0 +1,18 @@
+{
+  "src": "dist/Joplin-linux-x64",
+  "dest": "dist/",
+  "arch": "amd64",
+  "icon": {
+	  "16x16": "../../Assets/LinuxIcons/16x16.png",
+	  "24x24": "../../Assets/LinuxIcons/24x24.png",
+	  "32x32": "../../Assets/LinuxIcons/32x32.png",
+	  "48x48": "../../Assets/LinuxIcons/48x48.png",
+	  "72x72": "../../Assets/LinuxIcons/72x72.png",
+	  "96x96": "../../Assets/LinuxIcons/96x96.png",
+	  "128x128": "../../Assets/LinuxIcons/128x128.png",
+	  "144x144": "../../Assets/LinuxIcons/144x144.png",
+	  "256x256": "../../Assets/LinuxIcons/256x256.png",
+	  "512x512": "../../Assets/LinuxIcons/512x512.png",
+	  "1024x1024": "../../Assets/LinuxIcons/1024x1024.png"
+  }
+}
