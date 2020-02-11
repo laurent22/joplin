@@ -240,14 +240,13 @@ class Setting extends BaseModel {
 				options: () => {
 					let output = {};
 					output[Setting.THEME_LIGHT] = _('Light');
-					output[Setting.THEME_DARK] = _('Dark');					
+					output[Setting.THEME_DARK] = _('Dark');
 					if (platform !== 'mobile') {
 						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 						output[Setting.THEME_NORD] = _('Nord');
-					}
-					else {
+					} else {
 						output[Setting.THEME_OLED_DARK] = _('OLED dark');
 					}
 					return output;
