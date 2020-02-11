@@ -1121,7 +1121,7 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'exportPdf') {
 			fn = this.commandSavePdf;
-			args = { noteId: command.noteId };
+			args = { noteIds: command.noteIds };
 		} else if (command.name === 'print') {
 			fn = this.commandPrint;
 		}
@@ -1235,81 +1235,81 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async printTo_(target, options) {
-		if (this.props.selectedNoteIds.length !== 1 || !this.webviewRef_.current) {
-			throw new Error(_('Only one note can be printed or exported to PDF at a time.'));
-		}
-
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (this.isPrinting_) {
+			console.log(`Printing ${options.path} to ${target} disallowed, already printing.`);
 			return;
 		}
 
 		this.isPrinting_ = true;
 
-		// const previousBody = this.state.note.body;
-		// const tempBody = `${this.state.note.title}\n\n${previousBody}`;
-
-		// const previousTheme = Setting.value('theme');
-		// Setting.setValue('theme', Setting.THEME_LIGHT);
-		// this.lastSetHtml_ = '';
-		// await this.updateHtml(this.state.note.markup_language, tempBody, { useCustomCss: true });
-		// this.forceUpdate();
-
-		// const restoreSettings = async () => {
-		// 	Setting.setValue('theme', previousTheme);
-		// 	this.lastSetHtml_ = '';
-		// 	await this.updateHtml(this.state.note.markup_language, previousBody);
-		// 	this.forceUpdate();
-		// };
-
 		// Need to save because the interop service reloads the note from the database
 		await this.saveIfNeeded();
 
-		setTimeout(async () => {
-			if (target === 'pdf') {
-				try {
-					const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
-						printBackground: true,
-						pageSize: Setting.value('export.pdfPageSize'),
-						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
-						customCss: this.props.customCss,
-					});
-					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
-				} catch (error) {
-					console.error(error);
-					bridge().showErrorMessageBox(error.message);
-				}
-			} else if (target === 'printer') {
-				try {
-					await InteropServiceHelper.printNote(options.noteId, {
-						printBackground: true,
-						customCss: this.props.customCss,
-					});
-				} catch (error) {
-					console.error(error);
-					bridge().showErrorMessageBox(error.message);
-				}
-
-				// restoreSettings();
+		if (target === 'pdf') {
+			try {
+				const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
+					printBackground: true,
+					pageSize: Setting.value('export.pdfPageSize'),
+					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+					customCss: this.props.customCss,
+				});
+				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+			} catch (error) {
+				console.error(error);
+				bridge().showErrorMessageBox(error.message);
 			}
-			this.isPrinting_ = false;
-		}, 100);
+		} else if (target === 'printer') {
+			try {
+				await InteropServiceHelper.printNote(options.noteId, {
+					printBackground: true,
+					customCss: this.props.customCss,
+				});
+			} catch (error) {
+				console.error(error);
+				bridge().showErrorMessageBox(error.message);
+			}
+		}
+		this.isPrinting_ = false;
+	}
+
+	pdfFileName_(note, folder) {
+		return safeFilename(`${note.title} - ${folder.title}.pdf`, 255, true);
 	}
 
 	async commandSavePdf(args) {
 		try {
-			if (!this.state.note && !args.noteId) throw new Error(_('Only one note can be exported to PDF at a time.'));
+			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
 
-			const note = (!args.noteId ? this.state.note : await Note.load(args.noteId));
+			let noteIds = args.noteIds ? args.noteIds : [this.state.note.id];
 
-			const path = bridge().showSaveDialog({
-				filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-				defaultPath: safeFilename(note.title),
-			});
+			let path = null;
+			if (noteIds.length === 1) {
+				const note = await Note.load(noteIds[0]);
+				const folder = Folder.byId(this.props.folders, note.parent_id);
+
+				path = bridge().showSaveDialog({
+					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
+					defaultPath: this.pdfFileName_(note, folder),
+				});
+
+			} else {
+				path = bridge().showOpenDialog({
+					properties: ['openDirectory', 'createDirectory'],
+				});
+			}
 
 			if (!path) return;
 
-			await this.printTo_('pdf', { path: path, noteId: note.id });
+			for (let i = 0; i < noteIds.length; i++) {
+				const note = await Note.load(noteIds[i]);
+				const folder = Folder.byId(this.props.folders, note.parent_id);
+
+				const pdfPath = (noteIds.length === 1) ? path :
+					await shim.fsDriver().findUniqueFilename(`${path}/${this.pdfFileName_(note, folder)}`);
+
+				await this.printTo_('pdf', { path: pdfPath, noteId: note.id });
+			}
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 		}

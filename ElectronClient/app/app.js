@@ -459,10 +459,11 @@ class Application extends BaseApplication {
 			label: `PDF - ${_('PDF File')}`,
 			screens: ['Main'],
 			click: async () => {
+				const selectedNoteIds = this.store().getState().selectedNoteIds;
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'exportPdf',
-					noteId: null,
+					noteIds: selectedNoteIds,
 				});
 			},
 		});
