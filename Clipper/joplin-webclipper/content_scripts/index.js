@@ -266,7 +266,7 @@
 
 	async function prepareCommandResponse(command) {
 		console.info(`Got command: ${command.name}`);
-		const shouldSendToJoplin = command.shouldSendToJoplin || false;
+		const shouldSendToJoplin = !!command.shouldSendToJoplin;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
