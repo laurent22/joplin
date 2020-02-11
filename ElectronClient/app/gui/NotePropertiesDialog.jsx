@@ -292,7 +292,7 @@ class NotePropertiesDialog extends React.Component {
 			if (key === 'location') {
 				try {
 					const dms = formatcoords(value);
-					displayedValue = dms.format('DDMMss', { decimalPlaces: 0 });
+					displayedValue = dms.format('DD MM ss X', { latLonSeparator: ', ', decimalPlaces: 2 });
 				} catch (error) {
 					displayedValue = '';
 				}
