@@ -109,9 +109,14 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 
 	async reloadResources(sorting: ActiveSorting) {
 		this.setState({ isLoading: true });
-		const resources = await Resource.modelSelectAll(
-			`SELECT title, id, size, file_extension FROM resources ORDER BY ${
-				getSortingOrderColumn(sorting.order)} ${sorting.type} LIMIT ${MAX_RESOURCES}`);
+		const resources = await Resource.all({
+			order: [{
+				by: getSortingOrderColumn(sorting.order),
+				dir: sorting.type,
+			}],
+			limit: MAX_RESOURCES,
+			fields: ['title', 'id', 'size', 'file_extension'],
+		});
 		this.setState({ resources, isLoading: false });
 	}
 
@@ -119,10 +124,10 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		this.reloadResources(this.state.sorting);
 	}
 
-	onResourceDelete(resource: Resource) {
-		Resource.batchDelete([resource.id])
+	async onResourceDelete(resource: Resource) {
+		await Resource.delete(resource.id)
 			.catch((error: Error) => {
-				bridge().showErrorMessageBox(_('Resource deletion failed: %s', error));
+				bridge().showErrorMessageBox(error.message);
 			})
 			.finally(() => {
 				this.reloadResources(this.state.sorting);
@@ -133,7 +138,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const resourcePath = Resource.fullPath(resource);
 		const ok = bridge().openExternal(`file://${resourcePath}`);
 		if (!ok) {
-			bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
+			bridge().showErrorMessageBox(`This file could not be opened: ${resourcePath}`);
 		}
 	}
 
@@ -158,10 +163,10 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		return <div>
 			<Header style={headerStyle} />
 			<div style={{ ...style, margin: '20px', overflow: 'scroll' }}>
-				{this.state.isLoading && <div>{_('Please wait')}...</div>}
+				{this.state.isLoading && <div>{_('Please wait...')}</div>}
 				{!this.state.isLoading &&<div>
 					{!this.state.resources && <div>
-						{_('No Resources!')}
+						{_('No resources!')}
 					</div>
 					}
 					{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
