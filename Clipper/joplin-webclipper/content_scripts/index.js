@@ -266,12 +266,13 @@
 
 	async function prepareCommandResponse(command) {
 		console.info(`Got command: ${command.name}`);
+		const shouldSendToJoplin = !!command.shouldSendToJoplin;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
 		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
-				name: 'clippedContent',
+				name: shouldSendToJoplin ? 'sendContentToJoplin' : 'clippedContent',
 				title: title,
 				html: html,
 				base_url: baseUrl(),
