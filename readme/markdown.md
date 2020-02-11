@@ -4,6 +4,8 @@ Markdown is a simple way to format text that looks great on any device. It doesn
 
 Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.
 
+Joplin follows the [CommonMark](https://spec.commonmark.org/) specification, with additional features added via plugins.
+
 ## Cheat Sheet
 
 This is a quick summary of the Markdown syntax.
@@ -115,6 +117,8 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 ### Plugins
 
 Joplin supports a number of plugins that can be toggled on top the standard Markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
+
+Note that the functionalities added by these plugins are not part of the CommonMark spec, so while they will all with in Joplin it is not guaranteed that they will work on other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
 
 | Plugin | Syntax | Description | Enabled |
 |--------|--------|-------------|---------|
