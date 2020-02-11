@@ -247,7 +247,7 @@ class Setting extends BaseModel {
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 						output[Setting.THEME_NORD] = _('Nord');
 					} else {
-						output[Setting.THEME_OLED_DARK] = _('OLED dark');
+						output[Setting.THEME_OLED_DARK] = _('OLED rk');
 					}
 					return output;
 				},
