@@ -247,6 +247,8 @@ class Setting extends BaseModel {
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 						output[Setting.THEME_NORD] = _('Nord');
+					} else {
+						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
 					}
 					return output;
 				},
@@ -1001,6 +1003,7 @@ Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
+Setting.THEME_OLED_DARK = 22;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
 Setting.THEME_DRACULA = 5;

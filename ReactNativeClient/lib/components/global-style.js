@@ -126,6 +126,37 @@ function themeStyle(theme) {
 
 	let output = Object.assign({}, globalStyle);
 	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
+	else if (theme == Setting.THEME_OLED_DARK) {
+		output.backgroundColor = '#000000';
+		output.color = '#dddddd';
+		output.colorFaded = '#777777';
+		output.dividerColor = '#555555';
+		output.strongDividerColor = '#888888';
+		output.selectedColor = '#333333';
+		output.textSelectionColor = '#00AEFF';
+		output.headerBackgroundColor = '#2D3136';
+
+		output.raisedBackgroundColor = '#0F2051';
+		output.raisedColor = '#788BC3';
+		output.raisedHighlightedColor = '#ffffff';
+
+		output.htmlColor = 'rgb(220,220,220)';
+		output.htmlBackgroundColor = 'rgb(29,32,36)';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+
+		output.htmlDividerColor = '#3D444E';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+		output.htmlCodeColor = '#ffffff';
+		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
+		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
+
+		output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+
+		output.colorUrl = '#7B81FF';
+
+		themeCache_[theme] = output;
+		return addExtraStyles(themeCache_[theme]);
+	}
 
 	output.backgroundColor = '#1D2024';
 	output.color = '#dddddd';
