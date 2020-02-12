@@ -33,6 +33,11 @@ class BaseSyncTarget {
 		return this.db_;
 	}
 
+	// If [] is returned it means all platforms are supported
+	static unsupportedPlatforms() {
+		return [];
+	}
+
 	async isAuthenticated() {
 		return false;
 	}
@@ -122,6 +127,6 @@ class BaseSyncTarget {
 	}
 }
 
-BaseSyncTarget.dispatch = action => {};
+BaseSyncTarget.dispatch = () => {};
 
 module.exports = BaseSyncTarget;

@@ -10,6 +10,8 @@ const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
+const urlUtils = require('lib/urlUtils.js');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -31,7 +33,7 @@ class Note extends BaseItem {
 	}
 
 	static async unserializeForEdit(content) {
-		content += '\n\ntype_: ' + BaseModel.TYPE_NOTE;
+		content += `\n\ntype_: ${BaseModel.TYPE_NOTE}`;
 		let output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
@@ -114,27 +116,9 @@ class Note extends BaseItem {
 	static linkedItemIds(body) {
 		if (!body || body.length <= 32) return [];
 
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b)
-		let matches = body.match(/\(:\/[a-zA-Z0-9]{32}\)/g);
-		if (!matches) matches = [];
-		matches = matches.map(m => m.substr(3, 32));
-
-		// For example: ![](:/fcca2938a96a22570e8eae2565bc6b0b "Some title")
-		let matches2 = body.match(/\(:\/[a-zA-Z0-9]{32}\s(.*?)\)/g);
-		if (!matches2) matches2 = [];
-		matches2 = matches2.map(m => m.substr(3, 32));
-		matches = matches.concat(matches2);
-
-		// For example: <img src=":/fcca2938a96a22570e8eae2565bc6b0b"/>
-		const imgRegex = /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi;
-		const imgMatches = [];
-		while (true) {
-			const m = imgRegex.exec(body);
-			if (!m) break;
-			imgMatches.push(m[1]);
-		}
-
-		return ArrayUtils.unique(matches.concat(imgMatches));
+		const links = urlUtils.extractResourceUrls(body);
+		const itemIds = links.map(l => l.itemId);
+		return ArrayUtils.unique(itemIds);
 	}
 
 	static async linkedItems(body) {
@@ -159,6 +143,10 @@ class Note extends BaseItem {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
+	static async linkedNoteIds(body) {
+		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
+	}
+
 	static async replaceResourceInternalToExternalLinks(body) {
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
@@ -168,18 +156,18 @@ class Note extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 			const resourcePath = Resource.relativePath(resource);
-			body = body.replace(new RegExp(':/' + id, 'gi'), resourcePath);
+			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
 
 		return body;
 	}
 
 	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = pregQuote(Resource.baseRelativeDirectoryPath() + '/') + '[a-zA-Z0-9.]+';
+		const reString = `${pregQuote(`${Resource.baseRelativeDirectoryPath()}/`)}[a-zA-Z0-9.]+`;
 		const re = new RegExp(reString, 'gi');
 		body = body.replace(re, match => {
 			const id = Resource.pathToId(match);
-			return ':/' + id;
+			return `:/${id}`;
 		});
 		return body;
 	}
@@ -262,7 +250,7 @@ class Note extends BaseItem {
 		if (!folderId) throw new Error('folderId is undefined');
 
 		let options = {
-			conditions: ['`' + field + '` = ?'],
+			conditions: [`\`${field}\` = ?`],
 			conditionsParams: [value],
 			fields: '*',
 		};
@@ -351,7 +339,7 @@ class Note extends BaseItem {
 
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null };
-		return this.modelSelectOne('SELECT ' + this.previewFieldsSql(options.fields) + ' FROM notes WHERE is_conflict = 0 AND id = ?', [noteId]);
+		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
 	static async search(options = null) {
@@ -391,7 +379,7 @@ class Note extends BaseItem {
 			this.logger().info('Waiting for geolocation update...');
 			await time.sleep(1);
 			if (startWait + 1000 * 20 < time.unixMs()) {
-				this.logger().warn('Failed to update geolocation for: timeout: ' + noteId);
+				this.logger().warn(`Failed to update geolocation for: timeout: ${noteId}`);
 				return;
 			}
 		}
@@ -406,7 +394,7 @@ class Note extends BaseItem {
 			try {
 				geoData = await shim.Geolocation.currentPosition();
 			} catch (error) {
-				this.logger().error('Could not get lat/long for note ' + noteId + ': ', error);
+				this.logger().error(`Could not get lat/long for note ${noteId}: `, error);
 				geoData = null;
 			}
 
@@ -418,7 +406,7 @@ class Note extends BaseItem {
 			this.geolocationCache_ = geoData;
 		}
 
-		this.logger().info('Updating lat/long of note ' + noteId);
+		this.logger().info(`Updating lat/long of note ${noteId}`);
 
 		let note = await Note.load(noteId);
 		if (!note) return; // Race condition - note has been deleted in the meantime
@@ -498,15 +486,36 @@ class Note extends BaseItem {
 		return note;
 	}
 
+	static async duplicateMultipleNotes(noteIds, options = null) {
+		// if options.uniqueTitle is true, a unique title for the duplicated file will be assigned.
+		const ensureUniqueTitle = options && options.ensureUniqueTitle;
+
+		for (const noteId of noteIds) {
+			const noteOptions = {};
+
+			// If ensureUniqueTitle is truthy, set the original note's name as root for the unique title.
+			if (ensureUniqueTitle) {
+				const originalNote = await Note.load(noteId);
+				noteOptions.uniqueTitle = originalNote.title;
+			}
+
+			await Note.duplicate(noteId, noteOptions);
+		}
+	}
+
 	static async duplicate(noteId, options = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
 
 		const originalNote = await Note.load(noteId);
-		if (!originalNote) throw new Error('Unknown note: ' + noteId);
+		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		let newNote = Object.assign({}, originalNote);
-		delete newNote.id;
+		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
+
+		for (let field of fieldsToReset) {
+			delete newNote[field];
+		}
 
 		for (let n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
@@ -523,7 +532,7 @@ class Note extends BaseItem {
 
 	static async noteIsOlderThan(noteId, date) {
 		const n = await this.db().selectOne('SELECT updated_time FROM notes WHERE id = ?', [noteId]);
-		if (!n) throw new Error('No such note: ' + noteId);
+		if (!n) throw new Error(`No such note: ${noteId}`);
 		return n.updated_time < date;
 	}
 
@@ -624,16 +633,13 @@ class Note extends BaseItem {
 	}
 
 	static markupLanguageToLabel(markupLanguageId) {
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
-		throw new Error('Invalid markup language ID: ' + markupLanguageId);
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
+		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
 	}
 }
 
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
-
-Note.MARKUP_LANGUAGE_MARKDOWN = 1;
-Note.MARKUP_LANGUAGE_HTML = 2;
 
 module.exports = Note;

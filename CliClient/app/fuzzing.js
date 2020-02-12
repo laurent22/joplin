@@ -9,9 +9,9 @@ const lodash = require('lodash');
 const exec = require('child_process').exec;
 const fs = require('fs-extra');
 
-const baseDir = dirname(__dirname) + '/tests/fuzzing';
-const syncDir = baseDir + '/sync';
-const joplinAppPath = __dirname + '/main.js';
+const baseDir = `${dirname(__dirname)}/tests/fuzzing`;
+const syncDir = `${baseDir}/sync`;
+const joplinAppPath = `${__dirname}/main.js`;
 let syncDurations = [];
 
 const fsDriver = new FsDriverNode();
@@ -29,7 +29,7 @@ process.on('unhandledRejection', (reason, p) => {
 function createClient(id) {
 	return {
 		id: id,
-		profileDir: baseDir + '/client' + id,
+		profileDir: `${baseDir}/client${id}`,
 	};
 }
 
@@ -41,7 +41,7 @@ async function createClients() {
 		promises.push(fs.remove(client.profileDir));
 		promises.push(
 			execCommand(client, 'config sync.target 2').then(() => {
-				return execCommand(client, 'config sync.2.path ' + syncDir);
+				return execCommand(client, `config sync.2.path ${syncDir}`);
 			})
 		);
 		output.push(client);
@@ -2064,12 +2064,12 @@ function randomWord() {
 }
 
 function execCommand(client, command, options = {}) {
-	let exePath = 'node ' + joplinAppPath;
-	let cmd = exePath + ' --update-geolocation-disabled --env dev --log-level debug --profile ' + client.profileDir + ' ' + command;
-	logger.info(client.id + ': ' + command);
+	let exePath = `node ${joplinAppPath}`;
+	let cmd = `${exePath} --update-geolocation-disabled --env dev --log-level debug --profile ${client.profileDir} ${command}`;
+	logger.info(`${client.id}: ${command}`);
 
 	if (options.killAfter) {
-		logger.info('Kill after: ' + options.killAfter);
+		logger.info(`Kill after: ${options.killAfter}`);
 	}
 
 	return new Promise((resolve, reject) => {
@@ -2100,7 +2100,7 @@ async function clientItems(client) {
 	try {
 		return JSON.parse(itemsJson);
 	} catch (error) {
-		throw new Error('Cannot parse JSON: ' + itemsJson);
+		throw new Error(`Cannot parse JSON: ${itemsJson}`);
 	}
 }
 
@@ -2136,13 +2136,13 @@ async function execRandomCommand(client) {
 				if (!item) return;
 
 				if (item.type_ == 1) {
-					return execCommand(client, 'rm -f ' + item.id);
+					return execCommand(client, `rm -f ${item.id}`);
 				} else if (item.type_ == 2) {
-					return execCommand(client, 'rm -r -f ' + item.id);
+					return execCommand(client, `rm -r -f ${item.id}`);
 				} else if (item.type_ == 5) {
 					// tag
 				} else {
-					throw new Error('Unknown type: ' + item.type_);
+					throw new Error(`Unknown type: ${item.type_}`);
 				}
 			},
 			30,
@@ -2168,7 +2168,7 @@ async function execRandomCommand(client) {
 				let item = randomNote(items);
 				if (!item) return;
 
-				return execCommand(client, 'set ' + item.id + ' title "' + randomWord() + '"');
+				return execCommand(client, `set ${item.id} title "${randomWord()}"`);
 			},
 			50,
 		],
@@ -2180,9 +2180,9 @@ async function execRandomCommand(client) {
 				if (!note) return;
 
 				let tag = randomTag(items);
-				let tagTitle = !tag || Math.random() >= 0.9 ? 'tag-' + randomWord() : tag.title;
+				let tagTitle = !tag || Math.random() >= 0.9 ? `tag-${randomWord()}` : tag.title;
 
-				return execCommand(client, 'tag add ' + tagTitle + ' ' + note.id);
+				return execCommand(client, `tag add ${tagTitle} ${note.id}`);
 			},
 			50,
 		],
@@ -2211,7 +2211,7 @@ function averageSyncDuration() {
 
 function randomNextCheckTime() {
 	let output = time.unixMs() + 1000 + Math.random() * 1000 * 120;
-	logger.info('Next sync check: ' + time.unixMsToIso(output) + ' (' + Math.round((output - time.unixMs()) / 1000) + ' sec.)');
+	logger.info(`Next sync check: ${time.unixMsToIso(output)} (${Math.round((output - time.unixMs()) / 1000)} sec.)`);
 	return output;
 }
 
@@ -2274,7 +2274,7 @@ async function compareClientItems(clientItems) {
 		let items = clientItems[i];
 		itemCounts.push(items.length);
 	}
-	logger.info('Item count: ' + itemCounts.join(', '));
+	logger.info(`Item count: ${itemCounts.join(', ')}`);
 
 	let missingItems = findMissingItems(clientItems[0], clientItems[1]);
 	if (missingItems[0].length || missingItems[1].length) {
@@ -2290,7 +2290,7 @@ async function compareClientItems(clientItems) {
 		for (let clientId = 1; clientId < clientItems.length; clientId++) {
 			let item2 = findItem(clientItems[clientId], item1.id);
 			if (!item2) {
-				logger.error('Item not found on client ' + clientId + ':');
+				logger.error(`Item not found on client ${clientId}:`);
 				logger.error(item1);
 				process.exit(1);
 			}
@@ -2312,7 +2312,7 @@ async function compareClientItems(clientItems) {
 	}
 }
 
-async function main(argv) {
+async function main() {
 	await fs.remove(syncDir);
 
 	let clients = await createClients();
@@ -2329,12 +2329,12 @@ async function main(argv) {
 
 		execRandomCommand(clients[clientId])
 			.catch(error => {
-				logger.info('Client ' + clientId + ':');
+				logger.info(`Client ${clientId}:`);
 				logger.error(error);
 			})
 			.then(r => {
 				if (r) {
-					logger.info('Client ' + clientId + ':\n' + r.trim());
+					logger.info(`Client ${clientId}:\n${r.trim()}`);
 				}
 				clients[clientId].activeCommandCount--;
 			});

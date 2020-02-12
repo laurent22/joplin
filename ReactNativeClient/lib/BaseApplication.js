@@ -15,6 +15,7 @@ const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { shim } = require('lib/shim.js');
+const { uuid } = require('lib/uuid.js');
 const { _, setLocale } = require('lib/locale.js');
 const reduxSharedMiddleware = require('lib/components/shared/reduxSharedMiddleware');
 const os = require('os');
@@ -38,13 +39,6 @@ const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
-
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 class BaseApplication {
 	constructor() {
@@ -131,7 +125,7 @@ class BaseApplication {
 			}
 
 			if (arg == '--open-dev-tools') {
-				Setting.setConstant('openDevTools', true);
+				Setting.setConstant('flagOpenDevTools', true);
 				argv.splice(0, 1);
 				continue;
 			}
@@ -169,6 +163,20 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg.indexOf('--remote-debugging-port=') === 0) {
+				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
@@ -196,7 +204,7 @@ class BaseApplication {
 		process.exit(code);
 	}
 
-	async refreshNotes(state, useSelectedNoteId = false) {
+	async refreshNotes(state, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -248,6 +256,7 @@ class BaseApplication {
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
 				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+				hash: noteHash,
 			});
 		} else {
 			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
@@ -284,7 +293,7 @@ class BaseApplication {
 		}
 	}
 
-	async decryptionWorker_resourceMetadataButNotBlobDecrypted(event) {
+	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
 		this.scheduleAutoAddResources();
 	}
 
@@ -325,6 +334,60 @@ class BaseApplication {
 		return middleware;
 	}
 
+	async applySettingsSideEffects(action = null) {
+		const sideEffects = {
+			'dateFormat': async () => {
+				time.setLocale(Setting.value('locale'));
+				time.setDateFormat(Setting.value('dateFormat'));
+				time.setTimeFormat(Setting.value('timeFormat'));
+			},
+			'net.ignoreTlsErrors': async () => {
+				process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
+			},
+			'net.customCertificates': async () => {
+				const caPaths = Setting.value('net.customCertificates').split(',');
+				for (let i = 0; i < caPaths.length; i++) {
+					const f = caPaths[i].trim();
+					if (!f) continue;
+					syswidecas.addCAs(f);
+				}
+			},
+			'encryption.enabled': async () => {
+				if (this.hasGui()) {
+					await EncryptionService.instance().loadMasterKeysFromSettings();
+					DecryptionWorker.instance().scheduleStart();
+					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+					this.dispatch({
+						type: 'MASTERKEY_REMOVE_NOT_LOADED',
+						ids: loadedMasterKeyIds,
+					});
+
+					// Schedule a sync operation so that items that need to be encrypted
+					// are sent to sync target.
+					reg.scheduleSync();
+				}
+			},
+			'sync.interval': async () => {
+				if (this.hasGui()) reg.setupRecurrentSync();
+			},
+		};
+
+		sideEffects['timeFormat'] = sideEffects['dateFormat'];
+		sideEffects['locale'] = sideEffects['dateFormat'];
+		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+
+		if (action) {
+			const effect = sideEffects[action.key];
+			if (effect) await effect();
+		} else {
+			for (const key in sideEffects) {
+				await sideEffects[key]();
+			}
+		}
+	}
+
 	async generalMiddleware(store, next, action) {
 		// this.logger().debug('Reducer action', this.reducerActionToString(action));
 
@@ -334,6 +397,7 @@ class BaseApplication {
 		let refreshFolders = false;
 		// let refreshTags = false;
 		let refreshNotesUseSelectedNoteId = false;
+		let refreshNotesHash = '';
 
 		await reduxSharedMiddleware(store, next, action);
 
@@ -353,7 +417,10 @@ class BaseApplication {
 			this.currentFolder_ = newState.selectedFolderId ? await Folder.load(newState.selectedFolderId) : null;
 			refreshNotes = true;
 
-			if (action.type === 'FOLDER_AND_NOTE_SELECT') refreshNotesUseSelectedNoteId = true;
+			if (action.type === 'FOLDER_AND_NOTE_SELECT') {
+				refreshNotesUseSelectedNoteId = true;
+				refreshNotesHash = action.hash;
+			}
 		}
 
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
@@ -376,68 +443,33 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
-		// if (action.type == 'NOTE_DELETE') {
-		// 	refreshTags = true;
-		// }
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
+		}
 
 		if (refreshNotes) {
-			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId);
+			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
 
-		// if (refreshTags) {
-		// 	this.dispatch({
-		// 		type: 'TAG_UPDATE_ALL',
-		// 		items: await Tag.allWithNotes(),
-		// 	});
-		// }
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat' || action.key == 'locale')) || action.type == 'SETTING_UPDATE_ALL') {
-			time.setLocale(Setting.value('locale'));
-			time.setDateFormat(Setting.value('dateFormat'));
-			time.setTimeFormat(Setting.value('timeFormat'));
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.ignoreTlsErrors') || action.type == 'SETTING_UPDATE_ALL') {
-			// https://stackoverflow.com/questions/20082893/unable-to-verify-leaf-signature
-			process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = Setting.value('net.ignoreTlsErrors') ? '0' : '1';
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'net.customCertificates') || action.type == 'SETTING_UPDATE_ALL') {
-			const caPaths = Setting.value('net.customCertificates').split(',');
-			for (let i = 0; i < caPaths.length; i++) {
-				const f = caPaths[i].trim();
-				if (!f) continue;
-				syswidecas.addCAs(f);
-			}
-		}
-
-		if ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('encryption.') === 0) || action.type == 'SETTING_UPDATE_ALL') {
-			if (this.hasGui()) {
-				await EncryptionService.instance().loadMasterKeysFromSettings();
-				DecryptionWorker.instance().scheduleStart();
-				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
-
-				this.dispatch({
-					type: 'MASTERKEY_REMOVE_NOT_LOADED',
-					ids: loadedMasterKeyIds,
-				});
-
-				// Schedule a sync operation so that items that need to be encrypted
-				// are sent to sync target.
-				reg.scheduleSync();
-			}
-		}
-
-		if (action.type === 'NOTE_UPDATE_ONE') {
+		if (action.type === 'NOTE_UPDATE_ONE' || action.type === 'NOTE_DELETE') {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if ((this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval') || action.type == 'SETTING_UPDATE_ALL') {
-			reg.setupRecurrentSync();
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
+			refreshFolders = 'now';
 		}
 
 		if (this.hasGui() && action.type === 'SYNC_GOT_ENCRYPTED_ITEM') {
@@ -446,6 +478,12 @@ class BaseApplication {
 
 		if (this.hasGui() && action.type === 'SYNC_CREATED_RESOURCE') {
 			ResourceFetcher.instance().autoAddResources();
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE') {
+			await this.applySettingsSideEffects(action);
+		} else if (action.type == 'SETTING_UPDATE_ALL') {
+			await this.applySettingsSideEffects();
 		}
 
 		if (refreshFolders) {
@@ -496,9 +534,9 @@ class BaseApplication {
 	determineProfileDir(initArgs) {
 		if (initArgs.profileDir) return initArgs.profileDir;
 
-		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return process.env.PORTABLE_EXECUTABLE_DIR + '/JoplinProfile';
+		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 
-		return os.homedir() + '/.config/' + Setting.value('appName');
+		return `${os.homedir()}/.config/${Setting.value('appName')}`;
 	}
 
 	async testing() {
@@ -535,15 +573,22 @@ class BaseApplication {
 
 		const profileDir = this.determineProfileDir(initArgs);
 		const resourceDirName = 'resources';
-		const resourceDir = profileDir + '/' + resourceDirName;
-		const tempDir = profileDir + '/tmp';
+		const resourceDir = `${profileDir}/${resourceDirName}`;
+		const tempDir = `${profileDir}/tmp`;
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('templateDir', profileDir + '/templates');
+		Setting.setConstant('templateDir', `${profileDir}/templates`);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+
+		SyncTargetRegistry.addClass(SyncTargetFilesystem);
+		SyncTargetRegistry.addClass(SyncTargetOneDrive);
+		if (Setting.value('env') === 'dev') SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 		await shim.fsDriver().remove(tempDir);
 
@@ -554,29 +599,29 @@ class BaseApplication {
 		// Clean up any remaining watched files (they start with "edit-")
 		await shim.fsDriver().removeAllThatStartWith(profileDir, 'edit-');
 
-		const extraFlags = await this.readFlagsFromFile(profileDir + '/flags.txt');
+		const extraFlags = await this.readFlagsFromFile(`${profileDir}/flags.txt`);
 		initArgs = Object.assign(initArgs, extraFlags);
 
-		this.logger_.addTarget('file', { path: profileDir + '/log.txt' });
+		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
 		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
-		reg.dispatch = o => {};
+		reg.dispatch = () => {};
 
-		this.dbLogger_.addTarget('file', { path: profileDir + '/log-database.txt' });
+		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
 
 		if (Setting.value('env') === 'dev') {
 			this.dbLogger_.setLevel(Logger.LEVEL_INFO);
 		}
 
-		this.logger_.info('Profile directory: ' + profileDir);
+		this.logger_.info(`Profile directory: ${profileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
-		await this.database_.open({ name: profileDir + '/database.sqlite' });
+		await this.database_.open({ name: `${profileDir}/database.sqlite` });
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
@@ -585,9 +630,11 @@ class BaseApplication {
 
 		await Setting.load();
 
+		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info('First start: detected locale as ' + locale);
+			reg.logger().info(`First start: detected locale as ${locale}`);
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', 0);

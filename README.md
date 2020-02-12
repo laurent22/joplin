@@ -1,14 +1,18 @@
-# Joplin
-
 [![Donate](https://joplinapp.org/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) [![Become a patron](https://joplinapp.org/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin)
 
-Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
+* * *
+
+🌞 [Joplin is applying for Google Summer of Code 2020](https://joplinapp.org/gsoc2020/) 🌞
+
+* * *
+
+<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various cloud services including [Nextcloud](https://nextcloud.com/), Dropbox, OneDrive, WebDAV or the file system (for example with a network directory). When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
+The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
 <div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
 
@@ -20,15 +24,15 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download | Alternative
 -----------------|--------|-------------------
-Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-Setup-1.0.165.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/JoplinPortable.exe'>Portable version</a><br><br>The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
-macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-1.0.165.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew: `brew cask install joplin`
-Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.165/Joplin-1.0.165-x86_64.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash`
+Windows (32 and 64-bit)         | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.179/Joplin-Setup-1.0.179.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a> | Or get the <a href='https://github.com/laurent22/joplin/releases/download/v1.0.179/JoplinPortable.exe'>Portable version</a><br><br>The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+macOS          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.179/Joplin-1.0.179.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a> | You can also use Homebrew: `brew cask install joplin`
+Linux          | <a href='https://github.com/laurent22/joplin/releases/download/v1.0.179/Joplin-1.0.179.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a> | An Arch Linux package [is also available](#terminal-application).<br><br>If it works with your distribution (it has been tested on Ubuntu, Fedora, Gnome and Mint), the recommended way is to use this script as it will handle the desktop icon too:<br><br> `wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh \| bash`
 
 ## Mobile applications
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or [Download APK File](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.299/joplin-v1.0.299.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.318/joplin-v1.0.318.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.318/joplin-v1.0.318-32bit.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -36,8 +40,8 @@ iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'
 Operating system | Method
 -----------------|----------------
 macOS            | `brew install joplin`
-Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important:** First, [install Node 8+](https://nodejs.org/en/download/package-manager/). Node 8 is LTS but not yet available everywhere so you might need to manually install it.<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
-Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
+Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important:** First, [install Node 10+](https://nodejs.org/en/download/package-manager/).<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
+Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
 
 To start it, type `joplin`.
 
@@ -60,6 +64,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Support
 
 	- [Joplin Forum](https://discourse.joplinapp.org)
+	- [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md)
 	- [How to enable end-to-end encryption](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/master/readme/spec.md)
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
@@ -80,7 +85,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - [Web Clipper](https://github.com/laurent22/joplin/blob/master/readme/clipper.md) for Firefox and Chrome.
 - End To End Encryption (E2EE)
 - Note history (revisions)
-- Synchronisation with various services, including NextCloud, Dropbox, WebDAV and OneDrive.
+- Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
@@ -109,7 +114,7 @@ To import Evernote data, first export your Evernote notebooks to ENEX files as d
 
 In the **desktop application**, open File > Import > ENEX and select your file. The notes will be imported into a new separate notebook. If needed they can then be moved to a different notebook, or the notebook can be renamed, etc.
 
-In the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/master/readme/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
 ## Importing from Markdown files
 
@@ -117,7 +122,7 @@ Joplin can import notes from plain Markdown file. You can either import a comple
 
 In the **desktop application**, open File > Import > MD and select your Markdown file or directory.
 
-In the **terminal application**, in [command-line mode](https://joplinapp.org/terminal/#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
+In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/master/readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
 ## Importing from other applications
 
@@ -170,16 +175,16 @@ Select the "WebDAV" synchronisation target and follow the same instructions as f
 WebDAV-compatible services that are known to work with Joplin:
 
 - [Apache WebDAV Module](https://httpd.apache.org/docs/current/mod/mod_dav.html)
-- [Box.com](https://www.box.com/)
 - [DriveHQ](https://www.drivehq.com)
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
-- [NextCloud](https://nextcloud.com/)
+- [Nextcloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
+- [Yandex Disk](https://disk.yandex.ru/download?src=Yandex.Sidebar#pc)
 - [Zimbra](https://www.zimbra.com/)
 
 ## OneDrive synchronisation
@@ -192,9 +197,9 @@ In the **terminal application**, to initiate the synchronisation process, type `
 
 # Encryption
 
-Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/e2ee/) for more information about this feature and how to enable it.
+Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://github.com/laurent22/joplin/blob/master/readme/e2ee.md) for more information about this feature and how to enable it.
 
-For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://joplinapp.org/spec/).
+For a more technical description, mostly relevant for development or to review the method being used, please see the [Encryption specification](https://github.com/laurent22/joplin/blob/master/readme/spec.md).
 
 # Note history
 
@@ -249,76 +254,15 @@ Sub-notebooks allow organising multiple notebooks into a tree of notebooks. For 
 
 # Markdown
 
-Joplin uses and renders [Github-flavoured Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) with a few variations and additions. In particular:
+Joplin uses and renders a Github-flavoured Markdown with a few variations and additions. In particular it adds math formula support, interactive checkboxes and support for note links. Joplin also supports Markdown plugins which allow enabling and disabling various advanced Markdown features. Have a look at the [Markdown Guide](https://github.com/laurent22/joplin/blob/master/readme/markdown.md) for more information.
 
-## Links to other notes
+# Custom CSS
 
-You can create a link to a note by specifying its ID in the URL. For example:
+Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used for both displaying the notes and printing the notes. Be aware how the CSS may look printed (for example, printing white text over a black background is usually not wanted).
 
-	[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
+Editor styles can be customized by placing a custom editor style file in the profile directory `~/.config/joplin-desktop/userchrome.css`.
 
-Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
-
-## Plugins
-
-Joplin supports a number of plugins that can be toggled on top the standard markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then enter Tools->General Options to enable the plugin. Plugins can be disabled in the same manner.
-
-| Plugin | Syntax | Description | Enabled |
-|--------|--------|-------------|---------|
-| [Katex](https://katex.org) | `$$math expr$$` or `$math$` | [See Below](https://github.com/laurent22/joplin#math-notation) | yes |
-| [Mark](https://github.com/markdown-it/markdown-it-mark) | `==marked==` | Transforms into `<mark>marked</mark>` (highlighted) | yes |
-| [Footnote](https://github.com/markdown-it/markdown-it-footnote) | `Simples inline footnote ^[I'm inline!]` | See [plugin page](https://github.com/markdown-it/markdown-it-footnote) for full description | yes |
-| [TOC](https://github.com/nagaozen/markdown-it-toc-done-right) | Any of `${toc}, [[toc]], [toc], [[_toc_]]` | Adds a table of contents to the location of the toc page. Based on headings and sub-headings | no |
-| [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no |
-| [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no |
-| [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no |
-| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
-| [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` :smile: | See [this list](https://gist.github.com/rxaviers/7360908) for more emoji | no |
-| [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
-| [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
-| [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
-
-## Math notation
-
-Math expressions can be added using the [KaTeX notation](https://khan.github.io/KaTeX/). To add an inline equation, wrap the expression in `$EXPRESSION$`, eg. `$\sqrt{3x-1}+(1+x)^2$`. To create an expression block, wrap it as follow:
-
-	$$
-	EXPRESSION
-	$$
-
-For example:
-
-	$$
-	f(x) = \int_{-\infty}^\infty
-		\hat f(\xi)\,e^{2 \pi i \xi x}
-		\,d\xi
-	$$
-
-Here is an example with the Markdown and rendered result side by side:
-
-<img src="https://joplinapp.org/images/Katex.png" height="400px">
-
-## Checkboxes
-
-Checkboxes can be added like so:
-
-	- [ ] Milk
-	- [ ] Rice
-	- [ ] Eggs
-
-The checkboxes can then be ticked in the mobile and desktop applications.
-
-## HTML support
-
-It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:
-
-	This is <s>strikethrough text</s> mixed with regular **Markdown**.
-
-## Custom CSS
-
-Rendered markdown can be customized by placing a userstyle file in the profile directory `~/.config/joplin-desktop/userstyle.css` (This path might be different on your device - check at the top of the Config screen for the exact path). This file supports standard CSS syntax. Joplin ***must*** be restarted for the new css to be applied, please ensure that Joplin is not closing to the tray, but is actually exiting. Note that this file is used only when display the notes, **not when printing or exporting to PDF**. This is because printing has a lot more restrictions (for example, printing white text over a black background is usually not wanted), so special rules are applied to make it look good when printing, and a userstyle.css would interfer with that.
-
-## Note templates
+# Note templates
 
 In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
 
@@ -361,13 +305,14 @@ In the desktop application, press Ctrl+G or Cmd+G and type the title of a note t
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
 
-Please see the [donation page](https://joplinapp.org/donate/) for information on how to support the development of Joplin.
+Please see the [donation page](https://github.com/laurent22/joplin/blob/master/readme/donate.md) for information on how to support the development of Joplin.
 
 # Community
 
 - For general discussion about Joplin, user support, software development questions, and to discuss new features, go to the [Joplin Forum](https://discourse.joplinapp.org/). It is possible to login with your GitHub account.
 - Also see here for information about [the latest releases and general news](https://discourse.joplinapp.org/c/news).
-- For bug reports and feature requests, go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues).
+- For bug reports go to the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues). Please follow the template accordingly.
+- Feature requests must not be opened on GitHub unless they have been discussed and accepted on the forum.
 - The latest news are posted [on the Patreon page](https://www.patreon.com/joplin).
 - You can also follow us on <a rel="me" href="https://mastodon.social/@joplinapp">the Mastodon feed</a> or [the Twitter feed](https://twitter.com/joplinapp).
 - You can join the live community on [the JoplinApp discord server](https://discordapp.com/invite/d2HMPwE) to get help with Joplin or to discuss anything Joplin related.
@@ -383,7 +328,8 @@ Joplin is currently available in the languages below. If you would like to contr
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated](https://raw.githubusercontent.com/laurent22/joplin/master/CliClient/locales/joplin.pot).
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
-- From then you can translate the file. Once it is done, please either [open a pull request](https://github.com/laurent22/joplin/pulls) or send the file to [this address](https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseTranslation.png).
+- From then you can translate the file.
+- Once it is done, please [open a pull request](https://github.com/laurent22/joplin/pulls) and add the file to it.
 
 This translation will apply to the three applications - desktop, mobile and terminal.
 
@@ -394,36 +340,40 @@ Current translations:
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 &nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done
 ---|---|---|---|---
-![](https://joplinapp.org/images/flags/country-4x3/arableague.png)  |  Arabic  |  [ar](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po)  |  عبد الناصر سعيد (as@althobaity.com)  |  85%
-![](https://joplinapp.org/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  47%
-![](https://joplinapp.org/images/flags/country-4x3/bg.png)  |  Bulgarian  |  [bg_BG](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po)  |    |  94%
-![](https://joplinapp.org/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2018  |  69%
-![](https://joplinapp.org/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  38%
-![](https://joplinapp.org/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  85%
-![](https://joplinapp.org/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  62%
-![](https://joplinapp.org/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Michael Sonntag (ms@editorei.de)  |  99%
+![](https://joplinapp.org/images/flags/country-4x3/arableague.png)  |  Arabic  |  [ar](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ar.po)  |  أحمد باشا إبراهيم (fi_ahmed_bacha@esi.dz)  |  97%
+![](https://joplinapp.org/images/flags/es/basque_country.png)  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eu.po)  |  juan.abasolo@ehu.eus  |  41%
+![](https://joplinapp.org/images/flags/country-4x3/ba.png)  |  Bosnian  |  [bs_BA](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bs_BA.po)  |  Derviš T. (dervis.t@pm.me)  |  91%
+![](https://joplinapp.org/images/flags/country-4x3/bg.png)  |  Bulgarian  |  [bg_BG](https://github.com/laurent22/joplin/blob/master/CliClient/locales/bg_BG.po)  |    |  81%
+![](https://joplinapp.org/images/flags/es/catalonia.png)  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ca.po)  |  jmontane, 2019  |  64%
+![](https://joplinapp.org/images/flags/country-4x3/hr.png)  |  Croatian  |  [hr_HR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/hr_HR.po)  |  Hrvoje Mandić (trbuhom@net.hr)  |  34%
+![](https://joplinapp.org/images/flags/country-4x3/cz.png)  |  Czech  |  [cs_CZ](https://github.com/laurent22/joplin/blob/master/CliClient/locales/cs_CZ.po)  |  Lukas Helebrandt (lukas@aiya.cz)  |  100%
+![](https://joplinapp.org/images/flags/country-4x3/dk.png)  |  Dansk  |  [da_DK](https://github.com/laurent22/joplin/blob/master/CliClient/locales/da_DK.po)  |  Morten Juhl-Johansen Zölde-Fejér (mjjzf@syntaktisk.  |  90%
+![](https://joplinapp.org/images/flags/country-4x3/de.png)  |  Deutsch  |  [de_DE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/de_DE.po)  |  Fabian (fab4x@mailbox.org)  |  100%
 ![](https://joplinapp.org/images/flags/country-4x3/gb.png)  |  English (UK)  |  [en_GB](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_GB.po)  |    |  100%
 ![](https://joplinapp.org/images/flags/country-4x3/us.png)  |  English (US)  |  [en_US](https://github.com/laurent22/joplin/blob/master/CliClient/locales/en_US.po)  |    |  100%
-![](https://joplinapp.org/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Andros Fenollosa (andros@fenollosa.email)  |  92%
-![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  99%
-![](https://joplinapp.org/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  61%
-![](https://joplinapp.org/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  92%
-![](https://joplinapp.org/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  48%
-![](https://joplinapp.org/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Heimen Stoffels (vistausss@outlook.com)  |  94%
-![](https://joplinapp.org/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (code@mxe.no)  |  86%
-![](https://joplinapp.org/images/flags/country-4x3/ir.png)  |  Persian  |  [fa](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po)  |  Mehrad Mahmoudian (mehrad@mahmoudian.me)  |  46%
-![](https://joplinapp.org/images/flags/country-4x3/pl.png)  |  Polski  |  [pl_PL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po)  |    |  92%
-![](https://joplinapp.org/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Renato Nunes Bastos (rnbastos@gmail.com)  |  91%
-![](https://joplinapp.org/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  48%
-![](https://joplinapp.org/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  60%
-![](https://joplinapp.org/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  82%
-![](https://joplinapp.org/images/flags/country-4x3/tr.png)  |  Türkçe  |  [tr_TR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po)  |  Zorbey Doğangüneş (zorbeyd@gmail.com)  |  80%
-![](https://joplinapp.org/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  85%
-![](https://joplinapp.org/images/flags/country-4x3/rs.png)  |  српски језик  |  [sr_RS](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po)  |    |  92%
-![](https://joplinapp.org/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  93%
-![](https://joplinapp.org/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  penguinsam (samliu@gmail.com)  |  74%
-![](https://joplinapp.org/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  AWASHIRO Ikuya (ikunya@gmail.com)  |  80%
-![](https://joplinapp.org/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  98%
+![](https://joplinapp.org/images/flags/country-4x3/es.png)  |  Español  |  [es_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/es_ES.po)  |  Andros Fenollosa (andros@fenollosa.email)  |  93%
+![](https://joplinapp.org/images/flags/esperanto.png)  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/master/CliClient/locales/eo.po)  |  Marton Paulo  |  47%
+![](https://joplinapp.org/images/flags/country-4x3/fr.png)  |  Français  |  [fr_FR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fr_FR.po)  |  Laurent Cozic  |  100%
+![](https://joplinapp.org/images/flags/es/galicia.png)  |  Galician  |  [gl_ES](https://github.com/laurent22/joplin/blob/master/CliClient/locales/gl_ES.po)  |  Marcos Lans (marcoslansgarza@gmail.com)  |  53%
+![](https://joplinapp.org/images/flags/country-4x3/it.png)  |  Italiano  |  [it_IT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/it_IT.po)  |    |  94%
+![](https://joplinapp.org/images/flags/country-4x3/be.png)  |  Nederlands  |  [nl_BE](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_BE.po)  |    |  42%
+![](https://joplinapp.org/images/flags/country-4x3/nl.png)  |  Nederlands  |  [nl_NL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nl_NL.po)  |  Robert (metbril@outlook.com)  |  88%
+![](https://joplinapp.org/images/flags/country-4x3/no.png)  |  Norwegian  |  [nb_NO](https://github.com/laurent22/joplin/blob/master/CliClient/locales/nb_NO.po)  |  Mats Estensen (code@mxe.no)  |  93%
+![](https://joplinapp.org/images/flags/country-4x3/ir.png)  |  Persian  |  [fa](https://github.com/laurent22/joplin/blob/master/CliClient/locales/fa.po)  |  Mehrad Mahmoudian (mehrad@mahmoudian.me)  |  40%
+![](https://joplinapp.org/images/flags/country-4x3/pl.png)  |  Polski  |  [pl_PL](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pl_PL.po)  |    |  79%
+![](https://joplinapp.org/images/flags/country-4x3/pt.png)  |  Português  |  [pt_PT](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_PT.po)  |  Diogo Caveiro (diogocaveiro.pro@outlook.com)  |  96%
+![](https://joplinapp.org/images/flags/country-4x3/br.png)  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/pt_BR.po)  |  Marton Paulo  |  92%
+![](https://joplinapp.org/images/flags/country-4x3/ro.png)  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ro.po)  |    |  41%
+![](https://joplinapp.org/images/flags/country-4x3/si.png)  |  Slovenian  |  [sl_SI](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sl_SI.po)  |    |  52%
+![](https://joplinapp.org/images/flags/country-4x3/se.png)  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sv.po)  |  Jonatan Nyberg (jonatan@autistici.org)  |  71%
+![](https://joplinapp.org/images/flags/country-4x3/tr.png)  |  Türkçe  |  [tr_TR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/tr_TR.po)  |  Hüseyin Fahri Uzun (mail@fahriuzun.com)  |  97%
+![](https://joplinapp.org/images/flags/country-4x3/gr.png)  |  Ελληνικά  |  [el_GR](https://github.com/laurent22/joplin/blob/master/CliClient/locales/el_GR.po)  |  Harris Arvanitis (xaris@tuta.io)  |  99%
+![](https://joplinapp.org/images/flags/country-4x3/ru.png)  |  Русский  |  [ru_RU](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ru_RU.po)  |  Artyom Karlov (artyom.karlov@gmail.com)  |  99%
+![](https://joplinapp.org/images/flags/country-4x3/rs.png)  |  српски језик  |  [sr_RS](https://github.com/laurent22/joplin/blob/master/CliClient/locales/sr_RS.po)  |    |  79%
+![](https://joplinapp.org/images/flags/country-4x3/cn.png)  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_CN.po)  |    |  99%
+![](https://joplinapp.org/images/flags/country-4x3/tw.png)  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/master/CliClient/locales/zh_TW.po)  |  Ethan Chen (ethan42411@gmail.com)  |  97%
+![](https://joplinapp.org/images/flags/country-4x3/jp.png)  |  日本語  |  [ja_JP](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ja_JP.po)  |  genneko (genneko217@gmail.com)  |  99%
+![](https://joplinapp.org/images/flags/country-4x3/kr.png)  |  한국말  |  [ko](https://github.com/laurent22/joplin/blob/master/CliClient/locales/ko.po)  |    |  93%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Contributors
@@ -432,25 +382,32 @@ Current translations:
 |     |     |     |     |     |
 | :---: | :---: | :---: | :---: | :---: |
 | <img width="50" src="https://avatars0.githubusercontent.com/u/1285584?v=4"/></br>[laurent22](https://api.github.com/users/laurent22) | <img width="50" src="https://avatars3.githubusercontent.com/u/223439?v=4"/></br>[tessus](https://api.github.com/users/tessus) | <img width="50" src="https://avatars3.githubusercontent.com/u/2179547?v=4"/></br>[CalebJohn](https://api.github.com/users/CalebJohn) | <img width="50" src="https://avatars3.githubusercontent.com/u/4553672?v=4"/></br>[tanrax](https://api.github.com/users/tanrax) | <img width="50" src="https://avatars0.githubusercontent.com/u/8701534?v=4"/></br>[rtmkrlv](https://api.github.com/users/rtmkrlv) |
-| <img width="50" src="https://avatars3.githubusercontent.com/u/10997189?v=4"/></br>[fmrtn](https://api.github.com/users/fmrtn) | <img width="50" src="https://avatars3.githubusercontent.com/u/16101778?v=4"/></br>[gabcoh](https://api.github.com/users/gabcoh) | <img width="50" src="https://avatars2.githubusercontent.com/u/1685517?v=4"/></br>[Abijeet](https://api.github.com/users/Abijeet) | <img width="50" src="https://avatars2.githubusercontent.com/u/6557454?v=4"/></br>[innocuo](https://api.github.com/users/innocuo) | <img width="50" src="https://avatars3.githubusercontent.com/u/10927304?v=4"/></br>[matsest](https://api.github.com/users/matsest) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/5365582?v=4"/></br>[marcosvega91](https://api.github.com/users/marcosvega91) | <img width="50" src="https://avatars3.githubusercontent.com/u/37639389?v=4"/></br>[petrz12](https://api.github.com/users/petrz12) | <img width="50" src="https://avatars3.githubusercontent.com/u/208212?v=4"/></br>[foxmask](https://api.github.com/users/foxmask) | <img width="50" src="https://avatars1.githubusercontent.com/u/4237724?v=4"/></br>[alexdevero](https://api.github.com/users/alexdevero) | <img width="50" src="https://avatars0.githubusercontent.com/u/3194829?v=4"/></br>[moltenform](https://api.github.com/users/moltenform) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/5199995?v=4"/></br>[zuphilip](https://api.github.com/users/zuphilip) | <img width="50" src="https://avatars0.githubusercontent.com/u/6319051?v=4"/></br>[abonte](https://api.github.com/users/abonte) | <img width="50" src="https://avatars2.githubusercontent.com/u/31567272?v=4"/></br>[0ndrey](https://api.github.com/users/0ndrey) | <img width="50" src="https://avatars1.githubusercontent.com/u/6734573?v=4"/></br>[stweil](https://api.github.com/users/stweil) | <img width="50" src="https://avatars3.githubusercontent.com/u/32770029?v=4"/></br>[bradmcl](https://api.github.com/users/bradmcl) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/226708?v=4"/></br>[RaphaelKimmig](https://api.github.com/users/RaphaelKimmig) | <img width="50" src="https://avatars0.githubusercontent.com/u/17768566?v=4"/></br>[RenatoXSR](https://api.github.com/users/RenatoXSR) | <img width="50" src="https://avatars1.githubusercontent.com/u/36303913?v=4"/></br>[sensor-freak](https://api.github.com/users/sensor-freak) | <img width="50" src="https://avatars2.githubusercontent.com/u/4245227?v=4"/></br>[zblesk](https://api.github.com/users/zblesk) | <img width="50" src="https://avatars2.githubusercontent.com/u/560571?v=4"/></br>[chrisb86](https://api.github.com/users/chrisb86) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/4168339?v=4"/></br>[solariz](https://api.github.com/users/solariz) | <img width="50" src="https://avatars0.githubusercontent.com/u/390889?v=4"/></br>[mmahmoudian](https://api.github.com/users/mmahmoudian) | <img width="50" src="https://avatars1.githubusercontent.com/u/25288?v=4"/></br>[maicki](https://api.github.com/users/maicki) | <img width="50" src="https://avatars3.githubusercontent.com/u/2136373?v=4"/></br>[mjjzf](https://api.github.com/users/mjjzf) | <img width="50" src="https://avatars0.githubusercontent.com/u/2486806?v=4"/></br>[sebastienjust](https://api.github.com/users/sebastienjust) |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/4079047?v=4"/></br>[Zorbeyd](https://api.github.com/users/Zorbeyd) | <img width="50" src="https://avatars0.githubusercontent.com/u/35413451?v=4"/></br>[chenlhlinux](https://api.github.com/users/chenlhlinux) | <img width="50" src="https://avatars0.githubusercontent.com/u/17399340?v=4"/></br>[pf-siedler](https://api.github.com/users/pf-siedler) | <img width="50" src="https://avatars1.githubusercontent.com/u/17232523?v=4"/></br>[ruuti](https://api.github.com/users/ruuti) | <img width="50" src="https://avatars2.githubusercontent.com/u/23638148?v=4"/></br>[s1nceri7y](https://api.github.com/users/s1nceri7y) |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/22592201?v=4"/></br>[tfinnberg](https://api.github.com/users/tfinnberg) | <img width="50" src="https://avatars1.githubusercontent.com/u/7471938?v=4"/></br>[ShuiHuo](https://api.github.com/users/ShuiHuo) | <img width="50" src="https://avatars2.githubusercontent.com/u/11596277?v=4"/></br>[ikunya](https://api.github.com/users/ikunya) | <img width="50" src="https://avatars1.githubusercontent.com/u/498326?v=4"/></br>[Shaxine](https://api.github.com/users/Shaxine) | <img width="50" src="https://avatars2.githubusercontent.com/u/7034200?v=4"/></br>[bimlas](https://api.github.com/users/bimlas) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/105843?v=4"/></br>[chaifeng](https://api.github.com/users/chaifeng) | <img width="50" src="https://avatars2.githubusercontent.com/u/549349?v=4"/></br>[charles-e](https://api.github.com/users/charles-e) | <img width="50" src="https://avatars3.githubusercontent.com/u/1686759?v=4"/></br>[chrmoritz](https://api.github.com/users/chrmoritz) | <img width="50" src="https://avatars0.githubusercontent.com/u/5131923?v=4"/></br>[donbowman](https://api.github.com/users/donbowman) | <img width="50" src="https://avatars2.githubusercontent.com/u/47756?v=4"/></br>[dflock](https://api.github.com/users/dflock) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/10997189?v=4"/></br>[fmrtn](https://api.github.com/users/fmrtn) | <img width="50" src="https://avatars3.githubusercontent.com/u/16101778?v=4"/></br>[gabcoh](https://api.github.com/users/gabcoh) | <img width="50" src="https://avatars2.githubusercontent.com/u/1685517?v=4"/></br>[Abijeet](https://api.github.com/users/Abijeet) | <img width="50" src="https://avatars3.githubusercontent.com/u/10927304?v=4"/></br>[matsest](https://api.github.com/users/matsest) | <img width="50" src="https://avatars0.githubusercontent.com/u/6319051?v=4"/></br>[abonte](https://api.github.com/users/abonte) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/208212?v=4"/></br>[foxmask](https://api.github.com/users/foxmask) | <img width="50" src="https://avatars2.githubusercontent.com/u/6557454?v=4"/></br>[innocuo](https://api.github.com/users/innocuo) | <img width="50" src="https://avatars1.githubusercontent.com/u/4237724?v=4"/></br>[alexdevero](https://api.github.com/users/alexdevero) | <img width="50" src="https://avatars1.githubusercontent.com/u/6979755?v=4"/></br>[devonzuegel](https://api.github.com/users/devonzuegel) | <img width="50" src="https://avatars2.githubusercontent.com/u/5365582?v=4"/></br>[marcosvega91](https://api.github.com/users/marcosvega91) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/37639389?v=4"/></br>[petrz12](https://api.github.com/users/petrz12) | <img width="50" src="https://avatars0.githubusercontent.com/u/3194829?v=4"/></br>[moltenform](https://api.github.com/users/moltenform) | <img width="50" src="https://avatars0.githubusercontent.com/u/5199995?v=4"/></br>[zuphilip](https://api.github.com/users/zuphilip) | <img width="50" src="https://avatars1.githubusercontent.com/u/1904967?v=4"/></br>[readingsnail](https://api.github.com/users/readingsnail) | <img width="50" src="https://avatars2.githubusercontent.com/u/31567272?v=4"/></br>[0ndrey](https://api.github.com/users/0ndrey) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/559346?v=4"/></br>[metbril](https://api.github.com/users/metbril) | <img width="50" src="https://avatars1.githubusercontent.com/u/6734573?v=4"/></br>[stweil](https://api.github.com/users/stweil) | <img width="50" src="https://avatars3.githubusercontent.com/u/937861?v=4"/></br>[archont00](https://api.github.com/users/archont00) | <img width="50" src="https://avatars3.githubusercontent.com/u/32770029?v=4"/></br>[bradmcl](https://api.github.com/users/bradmcl) | <img width="50" src="https://avatars1.githubusercontent.com/u/29672555?v=4"/></br>[genneko](https://api.github.com/users/genneko) |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/22592201?v=4"/></br>[tfinnberg](https://api.github.com/users/tfinnberg) | <img width="50" src="https://avatars3.githubusercontent.com/u/102242?v=4"/></br>[nathanleiby](https://api.github.com/users/nathanleiby) | <img width="50" src="https://avatars0.githubusercontent.com/u/226708?v=4"/></br>[RaphaelKimmig](https://api.github.com/users/RaphaelKimmig) | <img width="50" src="https://avatars0.githubusercontent.com/u/17768566?v=4"/></br>[RenatoXSR](https://api.github.com/users/RenatoXSR) | <img width="50" src="https://avatars1.githubusercontent.com/u/36303913?v=4"/></br>[sensor-freak](https://api.github.com/users/sensor-freak) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/4245227?v=4"/></br>[zblesk](https://api.github.com/users/zblesk) | <img width="50" src="https://avatars2.githubusercontent.com/u/560571?v=4"/></br>[chrisb86](https://api.github.com/users/chrisb86) | <img width="50" src="https://avatars2.githubusercontent.com/u/2733783?v=4"/></br>[JOJ0](https://api.github.com/users/JOJ0) | <img width="50" src="https://avatars2.githubusercontent.com/u/339645?v=4"/></br>[jmontane](https://api.github.com/users/jmontane) | <img width="50" src="https://avatars2.githubusercontent.com/u/4168339?v=4"/></br>[solariz](https://api.github.com/users/solariz) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/390889?v=4"/></br>[mmahmoudian](https://api.github.com/users/mmahmoudian) | <img width="50" src="https://avatars1.githubusercontent.com/u/25288?v=4"/></br>[maicki](https://api.github.com/users/maicki) | <img width="50" src="https://avatars3.githubusercontent.com/u/2136373?v=4"/></br>[mjjzf](https://api.github.com/users/mjjzf) | <img width="50" src="https://avatars3.githubusercontent.com/u/4497566?v=4"/></br>[rccavalcanti](https://api.github.com/users/rccavalcanti) | <img width="50" src="https://avatars3.githubusercontent.com/u/27608187?v=4"/></br>[rt-oliveira](https://api.github.com/users/rt-oliveira) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/2486806?v=4"/></br>[sebastienjust](https://api.github.com/users/sebastienjust) | <img width="50" src="https://avatars0.githubusercontent.com/u/1540054?v=4"/></br>[ShaneKilkelly](https://api.github.com/users/ShaneKilkelly) | <img width="50" src="https://avatars1.githubusercontent.com/u/4079047?v=4"/></br>[Zorbeyd](https://api.github.com/users/Zorbeyd) | <img width="50" src="https://avatars0.githubusercontent.com/u/35413451?v=4"/></br>[chenlhlinux](https://api.github.com/users/chenlhlinux) | <img width="50" src="https://avatars0.githubusercontent.com/u/17399340?v=4"/></br>[pf-siedler](https://api.github.com/users/pf-siedler) |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/17232523?v=4"/></br>[ruuti](https://api.github.com/users/ruuti) | <img width="50" src="https://avatars2.githubusercontent.com/u/23638148?v=4"/></br>[s1nceri7y](https://api.github.com/users/s1nceri7y) | <img width="50" src="https://avatars1.githubusercontent.com/u/7471938?v=4"/></br>[ShuiHuo](https://api.github.com/users/ShuiHuo) | <img width="50" src="https://avatars2.githubusercontent.com/u/11596277?v=4"/></br>[ikunya](https://api.github.com/users/ikunya) | <img width="50" src="https://avatars1.githubusercontent.com/u/3660978?v=4"/></br>[alanfortlink](https://api.github.com/users/alanfortlink) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/4408379?v=4"/></br>[lex111](https://api.github.com/users/lex111) | <img width="50" src="https://avatars1.githubusercontent.com/u/498326?v=4"/></br>[Shaxine](https://api.github.com/users/Shaxine) | <img width="50" src="https://avatars2.githubusercontent.com/u/7034200?v=4"/></br>[bimlas](https://api.github.com/users/bimlas) | <img width="50" src="https://avatars0.githubusercontent.com/u/105843?v=4"/></br>[chaifeng](https://api.github.com/users/chaifeng) | <img width="50" src="https://avatars2.githubusercontent.com/u/549349?v=4"/></br>[charles-e](https://api.github.com/users/charles-e) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/1686759?v=4"/></br>[chrmoritz](https://api.github.com/users/chrmoritz) | <img width="50" src="https://avatars2.githubusercontent.com/u/28535750?v=4"/></br>[NeverMendel](https://api.github.com/users/NeverMendel) | <img width="50" src="https://avatars0.githubusercontent.com/u/10371667?v=4"/></br>[domgoodwin](https://api.github.com/users/domgoodwin) | <img width="50" src="https://avatars0.githubusercontent.com/u/5131923?v=4"/></br>[donbowman](https://api.github.com/users/donbowman) | <img width="50" src="https://avatars2.githubusercontent.com/u/47756?v=4"/></br>[dflock](https://api.github.com/users/dflock) |
 | <img width="50" src="https://avatars3.githubusercontent.com/u/1962738?v=4"/></br>[einverne](https://api.github.com/users/einverne) | <img width="50" src="https://avatars0.githubusercontent.com/u/628474?v=4"/></br>[Atalanttore](https://api.github.com/users/Atalanttore) | <img width="50" src="https://avatars1.githubusercontent.com/u/16492558?v=4"/></br>[eodeluga](https://api.github.com/users/eodeluga) | <img width="50" src="https://avatars2.githubusercontent.com/u/1714374?v=4"/></br>[FleischKarussel](https://api.github.com/users/FleischKarussel) | <img width="50" src="https://avatars0.githubusercontent.com/u/6190183?v=4"/></br>[gmag11](https://api.github.com/users/gmag11) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/2257024?v=4"/></br>[gusbemacbe](https://api.github.com/users/gusbemacbe) | <img width="50" src="https://avatars0.githubusercontent.com/u/18524580?v=4"/></br>[Fvbor](https://api.github.com/users/Fvbor) | <img width="50" src="https://avatars3.githubusercontent.com/u/3379379?v=4"/></br>[sczhg](https://api.github.com/users/sczhg) | <img width="50" src="https://avatars1.githubusercontent.com/u/1716229?v=4"/></br>[Vistaus](https://api.github.com/users/Vistaus) | <img width="50" src="https://avatars3.githubusercontent.com/u/11466782?v=4"/></br>[jacobherrington](https://api.github.com/users/jacobherrington) |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/29855366?v=4"/></br>[jcgerhard](https://api.github.com/users/jcgerhard) | <img width="50" src="https://avatars1.githubusercontent.com/u/4995433?v=4"/></br>[jaredcrowe](https://api.github.com/users/jaredcrowe) | <img width="50" src="https://avatars2.githubusercontent.com/u/339645?v=4"/></br>[jmontane](https://api.github.com/users/jmontane) | <img width="50" src="https://avatars0.githubusercontent.com/u/163555?v=4"/></br>[JoelRSimpson](https://api.github.com/users/JoelRSimpson) | <img width="50" src="https://avatars1.githubusercontent.com/u/23194385?v=4"/></br>[jony0008](https://api.github.com/users/jony0008) |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/6048003?v=4"/></br>[joybinchen](https://api.github.com/users/joybinchen) | <img width="50" src="https://avatars1.githubusercontent.com/u/1560189?v=4"/></br>[y-usuzumi](https://api.github.com/users/y-usuzumi) | <img width="50" src="https://avatars0.githubusercontent.com/u/1660460?v=4"/></br>[xuhcc](https://api.github.com/users/xuhcc) | <img width="50" src="https://avatars3.githubusercontent.com/u/7824233?v=4"/></br>[kklas](https://api.github.com/users/kklas) | <img width="50" src="https://avatars2.githubusercontent.com/u/2599210?v=4"/></br>[lboullo0](https://api.github.com/users/lboullo0) |
-| <img width="50" src="https://avatars1.githubusercontent.com/u/1562062?v=4"/></br>[dbinary](https://api.github.com/users/dbinary) | <img width="50" src="https://avatars3.githubusercontent.com/u/5699725?v=4"/></br>[mvonmaltitz](https://api.github.com/users/mvonmaltitz) | <img width="50" src="https://avatars3.githubusercontent.com/u/5788516?v=4"/></br>[Marmo](https://api.github.com/users/Marmo) | <img width="50" src="https://avatars2.githubusercontent.com/u/12831489?v=4"/></br>[mgroth0](https://api.github.com/users/mgroth0) | <img width="50" src="https://avatars0.githubusercontent.com/u/51273874?v=4"/></br>[MichipX](https://api.github.com/users/MichipX) |
-| <img width="50" src="https://avatars3.githubusercontent.com/u/9076687?v=4"/></br>[NJannasch](https://api.github.com/users/NJannasch) | <img width="50" src="https://avatars2.githubusercontent.com/u/12369770?v=4"/></br>[Ouvill](https://api.github.com/users/Ouvill) | <img width="50" src="https://avatars3.githubusercontent.com/u/43815417?v=4"/></br>[shorty2380](https://api.github.com/users/shorty2380) | <img width="50" src="https://avatars3.githubusercontent.com/u/6306608?v=4"/></br>[Diadlo](https://api.github.com/users/Diadlo) | <img width="50" src="https://avatars0.githubusercontent.com/u/8766773?v=4"/></br>[Cogitri](https://api.github.com/users/Cogitri) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/559346?v=4"/></br>[metbril](https://api.github.com/users/metbril) | <img width="50" src="https://avatars1.githubusercontent.com/u/744655?v=4"/></br>[ruzaq](https://api.github.com/users/ruzaq) | <img width="50" src="https://avatars2.githubusercontent.com/u/505011?v=4"/></br>[kcrt](https://api.github.com/users/kcrt) | <img width="50" src="https://avatars1.githubusercontent.com/u/538584?v=4"/></br>[xissy](https://api.github.com/users/xissy) | <img width="50" src="https://avatars3.githubusercontent.com/u/466122?v=4"/></br>[Tekki](https://api.github.com/users/Tekki) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/8731922?v=4"/></br>[tbroadley](https://api.github.com/users/tbroadley) | <img width="50" src="https://avatars1.githubusercontent.com/u/114300?v=4"/></br>[Kriechi](https://api.github.com/users/Kriechi) | <img width="50" src="https://avatars0.githubusercontent.com/u/3457339?v=4"/></br>[tkilaker](https://api.github.com/users/tkilaker) | <img width="50" src="https://avatars1.githubusercontent.com/u/4201229?v=4"/></br>[tcyrus](https://api.github.com/users/tcyrus) | <img width="50" src="https://avatars2.githubusercontent.com/u/834914?v=4"/></br>[tobias-grasse](https://api.github.com/users/tobias-grasse) |
-| <img width="50" src="https://avatars3.githubusercontent.com/u/6691273?v=4"/></br>[strobeltobias](https://api.github.com/users/strobeltobias) | <img width="50" src="https://avatars2.githubusercontent.com/u/11031696?v=4"/></br>[ymitsos](https://api.github.com/users/ymitsos) | <img width="50" src="https://avatars3.githubusercontent.com/u/28493662?v=4"/></br>[cdorin93](https://api.github.com/users/cdorin93) | <img width="50" src="https://avatars3.githubusercontent.com/u/30935096?v=4"/></br>[cybertramp](https://api.github.com/users/cybertramp) | <img width="50" src="https://avatars3.githubusercontent.com/u/9694906?v=4"/></br>[delta-emil](https://api.github.com/users/delta-emil) |
-| <img width="50" src="https://avatars0.githubusercontent.com/u/926263?v=4"/></br>[doc75](https://api.github.com/users/doc75) | <img width="50" src="https://avatars2.githubusercontent.com/u/2903013?v=4"/></br>[ebayer](https://api.github.com/users/ebayer) | <img width="50" src="https://avatars0.githubusercontent.com/u/14201321?v=4"/></br>[rasperepodvipodvert](https://api.github.com/users/rasperepodvipodvert) | <img width="50" src="https://avatars1.githubusercontent.com/u/11388094?v=4"/></br>[hydrandt](https://api.github.com/users/hydrandt) | <img width="50" src="https://avatars1.githubusercontent.com/u/42961947?v=4"/></br>[pensierocrea](https://api.github.com/users/pensierocrea) |
-| <img width="50" src="https://avatars3.githubusercontent.com/u/10206967?v=4"/></br>[rhtenhove](https://api.github.com/users/rhtenhove) | <img width="50" src="https://avatars3.githubusercontent.com/u/14062932?v=4"/></br>[simonsan](https://api.github.com/users/simonsan) | <img width="50" src="https://avatars0.githubusercontent.com/u/10956653?v=4"/></br>[tcassaert](https://api.github.com/users/tcassaert) | <img width="50" src="https://avatars0.githubusercontent.com/u/2216902?v=4"/></br>[xcffl](https://api.github.com/users/xcffl) |  |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/2257024?v=4"/></br>[gusbemacbe](https://api.github.com/users/gusbemacbe) | <img width="50" src="https://avatars0.githubusercontent.com/u/18524580?v=4"/></br>[Fvbor](https://api.github.com/users/Fvbor) | <img width="50" src="https://avatars0.githubusercontent.com/u/22606250?v=4"/></br>[bennetthanna](https://api.github.com/users/bennetthanna) | <img width="50" src="https://avatars3.githubusercontent.com/u/3379379?v=4"/></br>[sczhg](https://api.github.com/users/sczhg) | <img width="50" src="https://avatars1.githubusercontent.com/u/1716229?v=4"/></br>[Vistaus](https://api.github.com/users/Vistaus) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/1533624?v=4"/></br>[IrvinDominin](https://api.github.com/users/IrvinDominin) | <img width="50" src="https://avatars0.githubusercontent.com/u/19985741?v=4"/></br>[JRaiden16](https://api.github.com/users/JRaiden16) | <img width="50" src="https://avatars3.githubusercontent.com/u/11466782?v=4"/></br>[jacobherrington](https://api.github.com/users/jacobherrington) | <img width="50" src="https://avatars1.githubusercontent.com/u/4995433?v=4"/></br>[jaredcrowe](https://api.github.com/users/jaredcrowe) | <img width="50" src="https://avatars0.githubusercontent.com/u/163555?v=4"/></br>[JoelRSimpson](https://api.github.com/users/JoelRSimpson) |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/23194385?v=4"/></br>[jony0008](https://api.github.com/users/jony0008) | <img width="50" src="https://avatars1.githubusercontent.com/u/6048003?v=4"/></br>[joybinchen](https://api.github.com/users/joybinchen) | <img width="50" src="https://avatars1.githubusercontent.com/u/1560189?v=4"/></br>[y-usuzumi](https://api.github.com/users/y-usuzumi) | <img width="50" src="https://avatars0.githubusercontent.com/u/1660460?v=4"/></br>[xuhcc](https://api.github.com/users/xuhcc) | <img width="50" src="https://avatars3.githubusercontent.com/u/7824233?v=4"/></br>[kklas](https://api.github.com/users/kklas) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/2599210?v=4"/></br>[lboullo0](https://api.github.com/users/lboullo0) | <img width="50" src="https://avatars1.githubusercontent.com/u/1562062?v=4"/></br>[dbinary](https://api.github.com/users/dbinary) | <img width="50" src="https://avatars3.githubusercontent.com/u/5699725?v=4"/></br>[mvonmaltitz](https://api.github.com/users/mvonmaltitz) | <img width="50" src="https://avatars3.githubusercontent.com/u/5788516?v=4"/></br>[Marmo](https://api.github.com/users/Marmo) | <img width="50" src="https://avatars2.githubusercontent.com/u/12831489?v=4"/></br>[mgroth0](https://api.github.com/users/mgroth0) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/21796?v=4"/></br>[silentmatt](https://api.github.com/users/silentmatt) | <img width="50" src="https://avatars0.githubusercontent.com/u/51273874?v=4"/></br>[MichipX](https://api.github.com/users/MichipX) | <img width="50" src="https://avatars1.githubusercontent.com/u/53177864?v=4"/></br>[MrTraduttore](https://api.github.com/users/MrTraduttore) | <img width="50" src="https://avatars3.githubusercontent.com/u/9076687?v=4"/></br>[NJannasch](https://api.github.com/users/NJannasch) | <img width="50" src="https://avatars2.githubusercontent.com/u/12369770?v=4"/></br>[Ouvill](https://api.github.com/users/Ouvill) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/43815417?v=4"/></br>[shorty2380](https://api.github.com/users/shorty2380) | <img width="50" src="https://avatars3.githubusercontent.com/u/6306608?v=4"/></br>[Diadlo](https://api.github.com/users/Diadlo) | <img width="50" src="https://avatars0.githubusercontent.com/u/8766773?v=4"/></br>[Cogitri](https://api.github.com/users/Cogitri) | <img width="50" src="https://avatars2.githubusercontent.com/u/17312341?v=4"/></br>[reinhart1010](https://api.github.com/users/reinhart1010) | <img width="50" src="https://avatars1.githubusercontent.com/u/744655?v=4"/></br>[ruzaq](https://api.github.com/users/ruzaq) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/19328605?v=4"/></br>[SamuelBlickle](https://api.github.com/users/SamuelBlickle) | <img width="50" src="https://avatars2.githubusercontent.com/u/9937486?v=4"/></br>[SFoskitt](https://api.github.com/users/SFoskitt) | <img width="50" src="https://avatars2.githubusercontent.com/u/1782292?v=4"/></br>[SubodhDahal](https://api.github.com/users/SubodhDahal) | <img width="50" src="https://avatars2.githubusercontent.com/u/505011?v=4"/></br>[kcrt](https://api.github.com/users/kcrt) | <img width="50" src="https://avatars1.githubusercontent.com/u/538584?v=4"/></br>[xissy](https://api.github.com/users/xissy) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/466122?v=4"/></br>[Tekki](https://api.github.com/users/Tekki) | <img width="50" src="https://avatars0.githubusercontent.com/u/8731922?v=4"/></br>[tbroadley](https://api.github.com/users/tbroadley) | <img width="50" src="https://avatars1.githubusercontent.com/u/114300?v=4"/></br>[Kriechi](https://api.github.com/users/Kriechi) | <img width="50" src="https://avatars0.githubusercontent.com/u/3457339?v=4"/></br>[tkilaker](https://api.github.com/users/tkilaker) | <img width="50" src="https://avatars1.githubusercontent.com/u/4201229?v=4"/></br>[tcyrus](https://api.github.com/users/tcyrus) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/834914?v=4"/></br>[tobias-grasse](https://api.github.com/users/tobias-grasse) | <img width="50" src="https://avatars3.githubusercontent.com/u/6691273?v=4"/></br>[strobeltobias](https://api.github.com/users/strobeltobias) | <img width="50" src="https://avatars2.githubusercontent.com/u/70296?v=4"/></br>[tbergeron](https://api.github.com/users/tbergeron) | <img width="50" src="https://avatars2.githubusercontent.com/u/6104498?v=4"/></br>[MyTheValentinus](https://api.github.com/users/MyTheValentinus) | <img width="50" src="https://avatars0.githubusercontent.com/u/3985557?v=4"/></br>[XarisA](https://api.github.com/users/XarisA) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/11031696?v=4"/></br>[ymitsos](https://api.github.com/users/ymitsos) | <img width="50" src="https://avatars3.githubusercontent.com/u/5077221?v=4"/></br>[axq](https://api.github.com/users/axq) | <img width="50" src="https://avatars3.githubusercontent.com/u/28493662?v=4"/></br>[cdorin93](https://api.github.com/users/cdorin93) | <img width="50" src="https://avatars3.githubusercontent.com/u/30935096?v=4"/></br>[cybertramp](https://api.github.com/users/cybertramp) | <img width="50" src="https://avatars3.githubusercontent.com/u/9694906?v=4"/></br>[delta-emil](https://api.github.com/users/delta-emil) |
+| <img width="50" src="https://avatars0.githubusercontent.com/u/926263?v=4"/></br>[doc75](https://api.github.com/users/doc75) | <img width="50" src="https://avatars2.githubusercontent.com/u/2903013?v=4"/></br>[ebayer](https://api.github.com/users/ebayer) | <img width="50" src="https://avatars1.githubusercontent.com/u/18619090?v=4"/></br>[exponentactivity](https://api.github.com/users/exponentactivity) | <img width="50" src="https://avatars0.githubusercontent.com/u/47755037?v=4"/></br>[fabianski7](https://api.github.com/users/fabianski7) | <img width="50" src="https://avatars0.githubusercontent.com/u/14201321?v=4"/></br>[rasperepodvipodvert](https://api.github.com/users/rasperepodvipodvert) |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/11388094?v=4"/></br>[hydrandt](https://api.github.com/users/hydrandt) | <img width="50" src="https://avatars0.githubusercontent.com/u/4140247?v=4"/></br>[luzpaz](https://api.github.com/users/luzpaz) | <img width="50" src="https://avatars0.githubusercontent.com/u/36965591?v=4"/></br>[daehruoydeef](https://api.github.com/users/daehruoydeef) | <img width="50" src="https://avatars1.githubusercontent.com/u/42961947?v=4"/></br>[pensierocrea](https://api.github.com/users/pensierocrea) | <img width="50" src="https://avatars3.githubusercontent.com/u/10206967?v=4"/></br>[rhtenhove](https://api.github.com/users/rhtenhove) |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/14062932?v=4"/></br>[simonsan](https://api.github.com/users/simonsan) | <img width="50" src="https://avatars2.githubusercontent.com/u/5004545?v=4"/></br>[stellarpower](https://api.github.com/users/stellarpower) | <img width="50" src="https://avatars1.githubusercontent.com/u/12995773?v=4"/></br>[sumomo-99](https://api.github.com/users/sumomo-99) | <img width="50" src="https://avatars0.githubusercontent.com/u/10956653?v=4"/></br>[tcassaert](https://api.github.com/users/tcassaert) | <img width="50" src="https://avatars0.githubusercontent.com/u/2216902?v=4"/></br>[xcffl](https://api.github.com/users/xcffl) |
+| <img width="50" src="https://avatars1.githubusercontent.com/u/1308646?v=4"/></br>[zhangmx](https://api.github.com/users/zhangmx) |  |  |  |  |
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
 
 # Known bugs

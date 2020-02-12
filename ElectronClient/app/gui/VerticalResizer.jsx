@@ -1,5 +1,7 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
-const electron = require('electron');
+const { bridge } = require('electron').remote.require('./bridge');
 
 class VerticalResizer extends React.PureComponent {
 	constructor() {
@@ -32,7 +34,7 @@ class VerticalResizer extends React.PureComponent {
 
 		event.dataTransfer.dropEffect = 'none';
 
-		const cursor = electron.screen.getCursorScreenPoint();
+		const cursor = bridge().screen().getCursorScreenPoint();
 
 		this.setState({
 			drag: {
@@ -44,7 +46,7 @@ class VerticalResizer extends React.PureComponent {
 		if (this.props.onDragStart) this.props.onDragStart({});
 	}
 
-	onDrag(event) {
+	onDrag() {
 		// If we got a drag event with no buttons pressed, it's the last drag event
 		// that we should ignore, because it's sometimes use to put the dragged element
 		// back to its original position (if there was no valid drop target), which we don't want.
@@ -52,7 +54,7 @@ class VerticalResizer extends React.PureComponent {
 		// const e = event.nativeEvent;
 		// if (!e.buttons || (!e.clientX && !e.clientY && !e.screenX && !e.screenY)) return;
 
-		const cursor = electron.screen.getCursorScreenPoint();
+		const cursor = bridge().screen().getCursorScreenPoint();
 		const newX = cursor.x;
 		const delta = newX - this.state.drag.lastX;
 		if (!delta) return;
@@ -67,7 +69,7 @@ class VerticalResizer extends React.PureComponent {
 		);
 	}
 
-	onDragEnd(event) {
+	onDragEnd() {
 		document.removeEventListener('dragover', this.document_onDragOver);
 	}
 

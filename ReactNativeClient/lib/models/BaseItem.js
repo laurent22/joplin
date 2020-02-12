@@ -26,7 +26,7 @@ class BaseItem extends BaseModel {
 			}
 		}
 
-		throw new Error('Invalid class name: ' + className);
+		throw new Error(`Invalid class name: ${className}`);
 	}
 
 	static async findUniqueItemTitle(title) {
@@ -35,9 +35,9 @@ class BaseItem extends BaseModel {
 		while (true) {
 			const item = await this.loadByField('title', titleToTry);
 			if (!item) return titleToTry;
-			titleToTry = title + ' (' + counter + ')';
+			titleToTry = `${title} (${counter})`;
 			counter++;
-			if (counter >= 100) titleToTry = title + ' (' + new Date().getTime() + ')';
+			if (counter >= 100) titleToTry = `${title} (${new Date().getTime()})`;
 			if (counter >= 1000) throw new Error('Cannot find unique title');
 		}
 	}
@@ -47,12 +47,12 @@ class BaseItem extends BaseModel {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className == name) {
 				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
-				if (!classRef) throw new Error('Class has not been loaded: ' + name);
+				if (!classRef) throw new Error(`Class has not been loaded: ${name}`);
 				return BaseItem.syncItemDefinitions_[i].classRef;
 			}
 		}
 
-		throw new Error('Invalid class name: ' + name);
+		throw new Error(`Invalid class name: ${name}`);
 	}
 
 	static getClassByItemType(itemType) {
@@ -62,7 +62,7 @@ class BaseItem extends BaseModel {
 			}
 		}
 
-		throw new Error('Invalid item type: ' + itemType);
+		throw new Error(`Invalid item type: ${itemType}`);
 	}
 
 	static async syncedCount(syncTarget) {
@@ -78,8 +78,8 @@ class BaseItem extends BaseModel {
 	static systemPath(itemOrId, extension = null) {
 		if (extension === null) extension = 'md';
 
-		if (typeof itemOrId === 'string') return itemOrId + '.' + extension;
-		else return itemOrId.id + '.' + extension;
+		if (typeof itemOrId === 'string') return `${itemOrId}.${extension}`;
+		else return `${itemOrId.id}.${extension}`;
 	}
 
 	static isSystemPath(path) {
@@ -103,7 +103,7 @@ class BaseItem extends BaseModel {
 				let d = BaseItem.syncItemDefinitions_[i];
 				if (Number(item) == d.type) return this.getClass(d.className);
 			}
-			throw new JoplinError('Unknown type: ' + item, 'unknownItemType');
+			throw new JoplinError(`Unknown type: ${item}`, 'unknownItemType');
 		}
 	}
 
@@ -150,7 +150,7 @@ class BaseItem extends BaseModel {
 		let output = [];
 		for (let i = 0; i < classes.length; i++) {
 			const ItemClass = this.getClass(classes[i]);
-			const sql = 'SELECT * FROM ' + ItemClass.tableName() + ' WHERE id IN ("' + ids.join('","') + '")';
+			const sql = `SELECT * FROM ${ItemClass.tableName()} WHERE id IN ("${ids.join('","')}")`;
 			const models = await ItemClass.modelSelectAll(sql);
 			output = output.concat(models);
 		}
@@ -185,7 +185,7 @@ class BaseItem extends BaseModel {
 		// since no other client have (or should have) them.
 		let conflictNoteIds = [];
 		if (this.modelType() == BaseModel.TYPE_NOTE) {
-			const conflictNotes = await this.db().selectAll('SELECT id FROM notes WHERE id IN ("' + ids.join('","') + '") AND is_conflict = 1');
+			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ("${ids.join('","')}") AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map(n => {
 				return n.id;
 			});
@@ -238,11 +238,7 @@ class BaseItem extends BaseModel {
 	static serialize_format(propName, propValue) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
-			propValue =
-				moment
-					.unix(propValue / 1000)
-					.utc()
-					.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+			propValue = `${moment.unix(propValue / 1000).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
 		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.stringify(propValue);
@@ -304,7 +300,7 @@ class BaseItem extends BaseModel {
 				value = this.serialize_format(key, item[key]);
 			}
 
-			output.props.push(key + ': ' + value);
+			output.props.push(`${key}: ${value}`);
 		}
 
 		let temp = [];
@@ -333,7 +329,7 @@ class BaseItem extends BaseModel {
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported()) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -364,7 +360,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static async decrypt(item) {
-		if (!item.encryption_cipher_text) throw new Error('Item is not encrypted: ' + item.id);
+		if (!item.encryption_cipher_text) throw new Error(`Item is not encrypted: ${item.id}`);
 
 		const ItemClass = this.itemClass(item);
 		const plainText = await this.encryptionService().decryptString(item.encryption_cipher_text);
@@ -395,7 +391,7 @@ class BaseItem extends BaseModel {
 				}
 
 				let p = line.indexOf(':');
-				if (p < 0) throw new Error('Invalid property format: ' + line + ': ' + content);
+				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
 				let key = line.substr(0, p).trim();
 				let value = line.substr(p + 1).trim();
 				output[key] = value;
@@ -404,7 +400,7 @@ class BaseItem extends BaseModel {
 			}
 		}
 
-		if (!output.type_) throw new Error('Missing required property: type_: ' + content);
+		if (!output.type_) throw new Error(`Missing required property: type_: ${content}`);
 		output.type_ = Number(output.type_);
 
 		if (body.length) {
@@ -481,10 +477,10 @@ class BaseItem extends BaseModel {
 
 			if (className === 'Resource') {
 				const blobDownloadedButEncryptedSql = 'encryption_blob_encrypted = 1 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = 2))';
-				whereSql = ['(encryption_applied = 1 OR (' + blobDownloadedButEncryptedSql + ')'];
+				whereSql = [`(encryption_applied = 1 OR (${blobDownloadedButEncryptedSql})`];
 			}
 
-			if (exclusions.length) whereSql.push('id NOT IN ("' + exclusions.join('","') + '")');
+			if (exclusions.length) whereSql.push(`id NOT IN ("${exclusions.join('","')}")`);
 
 			const sql = sprintf(
 				`
@@ -529,7 +525,7 @@ class BaseItem extends BaseModel {
 			if (className == 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
 
-			extraWhere = extraWhere.length ? 'AND ' + extraWhere.join(' AND ') : '';
+			extraWhere = extraWhere.length ? `AND ${extraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target
 
@@ -619,7 +615,7 @@ class BaseItem extends BaseModel {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].type == type) return BaseItem.syncItemDefinitions_[i].className;
 		}
-		throw new Error('Invalid type: ' + type);
+		throw new Error(`Invalid type: ${type}`);
 	}
 
 	static async syncDisabledItems(syncTargetId) {
@@ -653,7 +649,7 @@ class BaseItem extends BaseModel {
 			},
 			{
 				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, syncDisabledReason + ''],
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
 			},
 		];
 	}
@@ -680,10 +676,10 @@ class BaseItem extends BaseModel {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
 
-			let selectSql = 'SELECT id FROM ' + ItemClass.tableName();
+			let selectSql = `SELECT id FROM ${ItemClass.tableName()}`;
 			if (ItemClass.modelType() == this.TYPE_NOTE) selectSql += ' WHERE is_conflict = 0';
 
-			queries.push('DELETE FROM sync_items WHERE item_location = ' + BaseItem.SYNC_ITEM_LOCATION_LOCAL + ' AND item_type = ' + ItemClass.modelType() + ' AND item_id NOT IN (' + selectSql + ')');
+			queries.push(`DELETE FROM sync_items WHERE item_location = ${BaseItem.SYNC_ITEM_LOCATION_LOCAL} AND item_type = ${ItemClass.modelType()} AND item_id NOT IN (${selectSql})`);
 		}
 
 		await this.db().transactionExecBatch(queries);
@@ -691,7 +687,7 @@ class BaseItem extends BaseModel {
 
 	static displayTitle(item) {
 		if (!item) return '';
-		if (item.encryption_applied) return '🔑 ' + _('Encrypted');
+		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
 		return item.title ? item.title : _('Untitled');
 	}
 
@@ -716,8 +712,27 @@ class BaseItem extends BaseModel {
 			});
 			if (!ids.length) continue;
 
-			await this.db().exec('UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("' + ids.join('","') + '")');
+			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN ("${ids.join('","')}")`);
 		}
+	}
+
+	static async updateShareStatus(item, isShared) {
+		if (!item.id || !item.type_) throw new Error('Item must have an ID and a type');
+		if (!!item.is_shared === !!isShared) return false;
+		const ItemClass = this.getClassByItemType(item.type_);
+
+		// No auto-timestamp because sharing a note is not seen as an update
+		await ItemClass.save({
+			id: item.id,
+			is_shared: isShared ? 1 : 0,
+			updated_time: Date.now(),
+		}, { autoTimestamp: false });
+
+		// The timestamps have not been changed but still need the note to be synced
+		// so we force-sync it.
+		// await this.forceSync(item.id);
+
+		return true;
 	}
 
 	static async forceSync(itemId) {
@@ -746,9 +761,9 @@ class BaseItem extends BaseModel {
 
 		const output = [];
 		output.push('[');
-		output.push(markdownUtils.escapeLinkText(item.title));
+		output.push(markdownUtils.escapeTitleText(item.title));
 		output.push(']');
-		output.push('(:/' + item.id + ')');
+		output.push(`(:/${item.id})`);
 		return output.join('');
 	}
 }

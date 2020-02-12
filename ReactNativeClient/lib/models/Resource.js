@@ -9,6 +9,7 @@ const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
+const { _ } = require('lib/locale.js');
 
 class Resource extends BaseItem {
 	static tableName() {
@@ -31,7 +32,16 @@ class Resource extends BaseItem {
 
 	static fetchStatuses(resourceIds) {
 		if (!resourceIds.length) return [];
-		return this.db().selectAll('SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("' + resourceIds.join('","') + '")');
+		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
+	}
+
+	static errorFetchStatuses() {
+		return this.db().selectAll(`
+			SELECT title AS resource_title, resource_id, fetch_error
+			FROM resource_local_states
+			LEFT JOIN resources ON resources.id = resource_local_states.resource_id
+			WHERE fetch_status = ?
+		`, [Resource.FETCH_STATUS_ERROR]);
 	}
 
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
@@ -40,12 +50,16 @@ class Resource extends BaseItem {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
 		sql.push('ORDER BY updated_time DESC');
-		if (limit !== null) sql.push('LIMIT ' + limit);
+		if (limit !== null) sql.push(`LIMIT ${limit}`);
 		return this.modelSelectAll(sql.join(' '), [Resource.FETCH_STATUS_IDLE]);
 	}
 
 	static async resetStartedFetchStatus() {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
+	}
+
+	static resetErrorStatus(resourceId) {
+		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
 	}
 
 	static fsDriver() {
@@ -58,7 +72,7 @@ class Resource extends BaseItem {
 		if (!output) output = resource.id;
 		let extension = resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? '.' + extension : '';
+		extension = extension ? `.${extension}` : '';
 		return output + extension;
 	}
 
@@ -73,16 +87,16 @@ class Resource extends BaseItem {
 	static filename(resource, encryptedBlob = false) {
 		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? '.' + extension : '';
+		extension = extension ? `.${extension}` : '';
 		return resource.id + extension;
 	}
 
 	static relativePath(resource, encryptedBlob = false) {
-		return Setting.value('resourceDirName') + '/' + this.filename(resource, encryptedBlob);
+		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
 	static fullPath(resource, encryptedBlob = false) {
-		return Setting.value('resourceDir') + '/' + this.filename(resource, encryptedBlob);
+		return `${Setting.value('resourceDir')}/${this.filename(resource, encryptedBlob)}`;
 	}
 
 	static async isReady(resource) {
@@ -106,7 +120,7 @@ class Resource extends BaseItem {
 
 		const plainTextPath = this.fullPath(decryptedItem);
 		const encryptedPath = this.fullPath(decryptedItem, true);
-		const noExtPath = pathUtils.dirname(encryptedPath) + '/' + pathUtils.filename(encryptedPath);
+		const noExtPath = `${pathUtils.dirname(encryptedPath)}/${pathUtils.filename(encryptedPath)}`;
 
 		// When the resource blob is downloaded by the synchroniser, it's initially a file with no
 		// extension (since it's encrypted, so we don't know its extension). So here rename it
@@ -123,7 +137,7 @@ class Resource extends BaseItem {
 				// As the identifier is invalid it most likely means that this is not encrypted data
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
-				this.logger().warn('Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ' + item.id);
+				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
 				this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
@@ -154,7 +168,7 @@ class Resource extends BaseItem {
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new JoplinError('File not found:' + error.toString(), 'fileNotFound');
+			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
 			throw error;
 		}
 
@@ -170,17 +184,17 @@ class Resource extends BaseItem {
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push('](:/' + resource.id + ')');
+			lines.push(`](:/${resource.id})`);
 		} else {
 			lines.push('[');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
-			lines.push('](:/' + resource.id + ')');
+			lines.push(`](:/${resource.id})`);
 		}
 		return lines.join('');
 	}
 
 	static internalUrl(resource) {
-		return ':/' + resource.id;
+		return `:/${resource.id}`;
 	}
 
 	static pathToId(path) {
@@ -200,7 +214,7 @@ class Resource extends BaseItem {
 	}
 
 	static urlToId(url) {
-		if (!this.isResourceUrl(url)) throw new Error('Not a valid resource URL: ' + url);
+		if (!this.isResourceUrl(url)) throw new Error(`Not a valid resource URL: ${url}`);
 		return url.substr(2);
 	}
 
@@ -249,10 +263,33 @@ class Resource extends BaseItem {
 	}
 
 	static async downloadedButEncryptedBlobCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [Resource.FETCH_STATUS_DONE]);
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)
+		`, [Resource.FETCH_STATUS_DONE]);
 
 		return r ? r.total : 0;
 	}
+
+	static async downloadStatusCounts(status) {
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ?
+		`, [status]);
+
+		return r ? r.total : 0;
+	}
+
+	static fetchStatusToLabel(status) {
+		if (status === Resource.FETCH_STATUS_IDLE) return _('Not downloaded');
+		if (status === Resource.FETCH_STATUS_STARTED) return _('Downloading');
+		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
+		if (status === Resource.FETCH_STATUS_ERROR) return _('Error');
+		throw new Error(`Invalid status: ${status}`);
+	}
+
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;

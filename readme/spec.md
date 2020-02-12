@@ -32,7 +32,7 @@ Data    |  ("Length" bytes) (ASCII)
 
 ## Master Keys
 
-The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encyption method](https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263).
+The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encryption method](https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263).
 
 These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.
 
@@ -63,3 +63,5 @@ Enabling/disabling E2EE while two clients are in sync might have an unintuitive 
 - If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user *must* manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.
 
 - Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.
+
+- Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See [Delete E2EE Master Keys](https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906) for more info.

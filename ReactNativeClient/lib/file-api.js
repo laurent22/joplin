@@ -5,11 +5,19 @@ const BaseItem = require('lib/models/BaseItem.js');
 const JoplinError = require('lib/JoplinError');
 const ArrayUtils = require('lib/ArrayUtils');
 const { time } = require('lib/time-utils.js');
+const { sprintf } = require('sprintf-js');
 
 function requestCanBeRepeated(error) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
+	// The target is explicitely rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget') return false;
+
+	// We don't repeat failSafe errors because it's an indication of an issue at the
+	// server-level issue which usually cannot be fixed by repeating the request.
+	// Also we print the previous requests and responses to the log in this case,
+	// so not repeating means there will be less noise in the log.
+	if (errorCode === 'failSafe') return false;
 
 	return true;
 }
@@ -60,6 +68,14 @@ class FileApi {
 		return 0;
 	}
 
+	lastRequests() {
+		return this.driver_.lastRequests ? this.driver_.lastRequests() : [];
+	}
+
+	clearLastRequests() {
+		if (this.driver_.clearLastRequests) this.driver_.clearLastRequests();
+	}
+
 	baseDir() {
 		return this.baseDir_;
 	}
@@ -107,14 +123,15 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 	async list(path = '', options = null) {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
 
-		this.logger().debug('list ' + this.baseDir());
+		this.logger().debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			let temp = [];
@@ -129,18 +146,18 @@ class FileApi {
 
 	// Deprectated
 	setTimestamp(path, timestampMs) {
-		this.logger().debug('setTimestamp ' + this.fullPath_(path));
+		this.logger().debug(`setTimestamp ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
-		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+		// return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {
-		this.logger().debug('mkdir ' + this.fullPath_(path));
+		this.logger().debug(`mkdir ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	async stat(path) {
-		this.logger().debug('stat ' + this.fullPath_(path));
+		this.logger().debug(`stat ${this.fullPath_(path)}`);
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath_(path)), this.requestRepeatCount());
 
@@ -158,28 +175,28 @@ class FileApi {
 	get(path, options = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
-		this.logger().debug('get ' + this.fullPath_(path));
+		this.logger().debug(`get ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.get(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 
 	async put(path, content, options = null) {
-		this.logger().debug('put ' + this.fullPath_(path), options);
+		this.logger().debug(`put ${this.fullPath_(path)}`, options);
 
 		if (options && options.source === 'file') {
-			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError('File not found: ' + options.path, 'fileNotFound');
+			if (!(await this.fsDriver().exists(options.path))) throw new JoplinError(`File not found: ${options.path}`, 'fileNotFound');
 		}
 
 		return tryAndRepeat(() => this.driver_.put(this.fullPath_(path), content, options), this.requestRepeatCount());
 	}
 
 	delete(path) {
-		this.logger().debug('delete ' + this.fullPath_(path));
+		this.logger().debug(`delete ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.delete(this.fullPath_(path)), this.requestRepeatCount());
 	}
 
 	// Deprectated
 	move(oldPath, newPath) {
-		this.logger().debug('move ' + this.fullPath_(oldPath) + ' => ' + this.fullPath_(newPath));
+		this.logger().debug(`move ${this.fullPath_(oldPath)} => ${this.fullPath_(newPath)}`);
 		return tryAndRepeat(() => this.driver_.move(this.fullPath_(oldPath), this.fullPath_(newPath)), this.requestRepeatCount());
 	}
 
@@ -193,7 +210,7 @@ class FileApi {
 	}
 
 	delta(path, options = null) {
-		this.logger().debug('delta ' + this.fullPath_(path));
+		this.logger().debug(`delta ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath_(path), options), this.requestRepeatCount());
 	}
 }
@@ -228,7 +245,14 @@ async function basicDelta(path, getDirStatFn, options) {
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
+	const logger = options && options.logger ? options.logger : new Logger();
+
 	const context = basicDeltaContextFromOptions_(options);
+
+	if (context.timestamp > Date.now()) {
+		logger.warn(`BasicDelta: Context timestamp is greater than current time: ${context.timestamp}`);
+		logger.warn('BasicDelta: Sync will continue but it is likely that nothing will be synced');
+	}
 
 	let newContext = {
 		timestamp: context.timestamp,
@@ -250,6 +274,13 @@ async function basicDelta(path, getDirStatFn, options) {
 
 	let output = [];
 
+	const updateReport = {
+		timestamp: context.timestamp,
+		older: 0,
+		newer: 0,
+		equal: 0,
+	};
+
 	// Find out which files have been changed since the last time. Note that we keep
 	// both the timestamp of the most recent change, *and* the items that exactly match
 	// this timestamp. This to handle cases where an item is modified while this delta
@@ -264,16 +295,23 @@ async function basicDelta(path, getDirStatFn, options) {
 
 		if (stat.isDir) continue;
 
-		if (stat.updated_time < context.timestamp) continue;
+		if (stat.updated_time < context.timestamp) {
+			updateReport.older++;
+			continue;
+		}
 
 		// Special case for items that exactly match the timestamp
 		if (stat.updated_time === context.timestamp) {
-			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) continue;
+			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
+				updateReport.equal++;
+				continue;
+			}
 		}
 
 		if (stat.updated_time > newContext.timestamp) {
 			newContext.timestamp = stat.updated_time;
 			newContext.filesAtTimestamp = [];
+			updateReport.newer++;
 		}
 
 		newContext.filesAtTimestamp.push(stat.path);
@@ -281,6 +319,8 @@ async function basicDelta(path, getDirStatFn, options) {
 
 		if (output.length >= outputLimit) break;
 	}
+
+	logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
 
 	if (!newContext.deletedItemsProcessed) {
 		// Find out which items have been deleted on the sync target by comparing the items
@@ -298,6 +338,15 @@ async function basicDelta(path, getDirStatFn, options) {
 				});
 			}
 		}
+
+		const percentDeleted = itemIds.length ? deletedItems.length / itemIds.length : 0;
+
+		// If more than 90% of the notes are going to be deleted, it's most likely a
+		// configuration error or bug. For example, if the user moves their Nextcloud
+		// directory, or if a network drive gets disconnected and returns an empty dir
+		// instead of an error. In that case, we don't wipe out the user data, unless
+		// they have switched off the fail-safe.
+		if (options.wipeOutFailSafe && percentDeleted >= 0.90) throw new JoplinError(sprintf('Fail-safe: Sync was interrupted because %d%% of the data (%d items) is about to be deleted. To override this behaviour disable the fail-safe in the sync settings.', Math.round(percentDeleted * 100), deletedItems.length), 'failSafe');
 
 		output = output.concat(deletedItems);
 	}

@@ -50,17 +50,17 @@ class FileApiDriverMemory {
 
 	async setTimestamp(path, timestampMs) {
 		let item = this.itemByPath(path);
-		if (!item) return Promise.reject(new Error('File not found: ' + path));
+		if (!item) return Promise.reject(new Error(`File not found: ${path}`));
 		item.updated_time = timestampMs;
 	}
 
-	async list(path, options) {
+	async list(path) {
 		let output = [];
 
 		for (let i = 0; i < this.items_.length; i++) {
 			let item = this.items_[i];
 			if (item.path == path) continue;
-			if (item.path.indexOf(path + '/') === 0) {
+			if (item.path.indexOf(`${path}/`) === 0) {
 				let s = item.path.substr(path.length + 1);
 				if (s.split('/').length === 1) {
 					let it = Object.assign({}, item);
@@ -80,7 +80,7 @@ class FileApiDriverMemory {
 	async get(path, options) {
 		let item = this.itemByPath(path);
 		if (!item) return Promise.resolve(null);
-		if (item.isDir) return Promise.reject(new Error(path + ' is a directory, not a file'));
+		if (item.isDir) return Promise.reject(new Error(`${path} is a directory, not a file`));
 
 		let output = null;
 		if (options.target === 'file') {
@@ -128,7 +128,7 @@ class FileApiDriverMemory {
 
 	async move(oldPath, newPath) {
 		let sourceItem = this.itemByPath(oldPath);
-		if (!sourceItem) return Promise.reject(new Error('Path not found: ' + oldPath));
+		if (!sourceItem) return Promise.reject(new Error(`Path not found: ${oldPath}`));
 		this.delete(newPath); // Overwrite if newPath already exists
 		sourceItem.path = newPath;
 	}

@@ -16,7 +16,7 @@ class Command extends BaseCommand {
 		return true;
 	}
 
-	async action(args) {
+	async action() {
 		let items = [];
 		let folders = await Folder.all();
 		for (let i = 0; i < folders.length; i++) {

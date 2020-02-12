@@ -60,7 +60,7 @@ function renderCommandHelp(cmd, width = null) {
 
 			if ('value' in md) {
 				if (md.type === Setting.TYPE_STRING) {
-					defaultString = md.value ? '"' + md.value + '"' : null;
+					defaultString = md.value ? `"${md.value}"` : null;
 				} else if (md.type === Setting.TYPE_INT) {
 					defaultString = (md.value ? md.value : 0).toString();
 				} else if (md.type === Setting.TYPE_BOOL) {

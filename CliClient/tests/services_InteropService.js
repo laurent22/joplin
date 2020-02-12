@@ -22,13 +22,13 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 function exportDir() {
-	return __dirname + '/export';
+	return `${__dirname}/export`;
 }
 
 function fieldsEqual(model1, model2, fieldNames) {
 	for (let i = 0; i < fieldNames.length; i++) {
 		const f = fieldNames[i];
-		expect(model1[f]).toBe(model2[f], 'For key ' + f);
+		expect(model1[f]).toBe(model2[f], `For key ${f}`);
 	}
 }
 
@@ -48,7 +48,7 @@ describe('services_InteropService', function() {
 		const service = new InteropService();
 		let folder1 = await Folder.save({ title: 'folder1' });
 		folder1 = await Folder.load(folder1.id);
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 
 		await service.export({ path: filePath });
 
@@ -84,7 +84,7 @@ describe('services_InteropService', function() {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 
 		await service.export({ path: filePath });
 
@@ -123,7 +123,7 @@ describe('services_InteropService', function() {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 
 		await service.export({ path: filePath });
 
@@ -139,7 +139,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import tags', asyncTest(async () => {
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let tag1 = await Tag.save({ title: 'mon tag' });
@@ -179,10 +179,10 @@ describe('services_InteropService', function() {
 
 	it('should export and import resources', asyncTest(async () => {
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		let resourceIds = await Note.linkedResourceIds(note1.body);
 		let resource1 = await Resource.load(resourceIds[0]);
@@ -215,7 +215,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import single notes', asyncTest(async () => {
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
@@ -235,7 +235,7 @@ describe('services_InteropService', function() {
 
 	it('should export and import single folders', asyncTest(async () => {
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
@@ -256,7 +256,7 @@ describe('services_InteropService', function() {
 	it('should export and import folder and its sub-folders', asyncTest(async () => {
 
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder2.id });
@@ -290,10 +290,10 @@ describe('services_InteropService', function() {
 
 	it('should export and import links to notes', asyncTest(async () => {
 		const service = new InteropService();
-		const filePath = exportDir() + '/test.jex';
+		const filePath = `${exportDir()}/test.jex`;
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'ma deuxième note', body: 'Lien vers première note : ' + Note.markdownTag(note1), parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma deuxième note', body: `Lien vers première note : ${Note.markdownTag(note1)}`, parent_id: folder1.id });
 
 		await service.export({ path: filePath, sourceFolderIds: [folder1.id] });
 
@@ -324,7 +324,7 @@ describe('services_InteropService', function() {
 		// verify that the json files exist and can be parsed
 		const items = [folder1, note1];
 		for (let i = 0; i < items.length; i++) {
-			const jsonFile = filePath + '/' + items[i].id + '.json';
+			const jsonFile = `${filePath}/${items[i].id}.json`;
 			let json = await fs.readFile(jsonFile, 'utf-8');
 			let obj = JSON.parse(json);
 			expect(obj.id).toBe(items[i].id);
@@ -332,6 +332,35 @@ describe('services_InteropService', function() {
 			expect(obj.title).toBe(items[i].title);
 			expect(obj.body).toBe(items[i].body);
 		}
+	}));
+
+	it('should export selected notes in md format', asyncTest(async () => {
+		const service = new InteropService();
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note11 = await Note.save({ title: 'title note11', parent_id: folder1.id });
+		note11 = await Note.load(note11.id);
+		let note12 = await Note.save({ title: 'title note12', parent_id: folder1.id });
+		note12 = await Note.load(note12.id);
+
+		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		folder2 = await Folder.load(folder2.id);
+		let note21 = await Note.save({ title: 'title note21', parent_id: folder2.id });
+		note21 = await Note.load(note21.id);
+
+		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
+		folder3 = await Folder.load(folder2.id);
+
+		const outDir = exportDir();
+
+		await service.export({ path: outDir, format: 'md', sourceNoteIds: [note11.id, note21.id] });
+
+		// verify that the md files exist
+		expect(await shim.fsDriver().exists(`${outDir}/folder1`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/title note11.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/title note12.md`)).toBe(false);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/folder2`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/folder2/title note21.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder3`)).toBe(false);
 	}));
 
 	it('should export MD with unicode filenames', asyncTest(async () => {
@@ -350,13 +379,13 @@ describe('services_InteropService', function() {
 
 		await service.export({ path: outDir, format: 'md' });
 
-		expect(await shim.fsDriver().exists(outDir + '/folder1/生活.md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/folder1/生活 (1).md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/folder1/生活 (2).md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/folder1/Untitled.md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/folder1/Untitled (1).md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/folder1/salut, ça roule _.md')).toBe(true);
-		expect(await shim.fsDriver().exists(outDir + '/ジョプリン/ジョプリン.md')).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (1).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (2).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled (1).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));
 
 });

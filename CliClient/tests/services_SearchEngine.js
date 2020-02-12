@@ -258,6 +258,16 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('말')).length).toBe(1);
 	}));
 
+	it('should support queries with Thai characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('นี่คือค')).length).toBe(1);
+		expect((await engine.search('ไทย')).length).toBe(1);
+	}));
+
 	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
@@ -297,9 +307,9 @@ describe('services_SearchEngine', function() {
 			const titleValues = actual.terms.title ? actual.terms.title.map(v => v.value) : undefined;
 			const bodyValues = actual.terms.body ? actual.terms.body.map(v => v.value) : undefined;
 
-			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), 'Test case (_) ' + i);
-			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), 'Test case (title) ' + i);
-			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), 'Test case (body) ' + i);
+			expect(JSON.stringify(_Values)).toBe(JSON.stringify(expected._), `Test case (_) ${i}`);
+			expect(JSON.stringify(titleValues)).toBe(JSON.stringify(expected.title), `Test case (title) ${i}`);
+			expect(JSON.stringify(bodyValues)).toBe(JSON.stringify(expected.body), `Test case (body) ${i}`);
 		}
 	}));
 

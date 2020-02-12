@@ -80,7 +80,7 @@ class TaskQueue {
 	}
 
 	async waitForResult(taskId) {
-		if (!this.isWaiting(taskId) && !this.isProcessing(taskId) && !this.isDone(taskId)) throw new Error('No such task: ' + taskId);
+		if (!this.isWaiting(taskId) && !this.isProcessing(taskId) && !this.isDone(taskId)) throw new Error(`No such task: ${taskId}`);
 
 		while (true) {
 			// if (this.stopping_) {
@@ -99,7 +99,7 @@ class TaskQueue {
 	async stop() {
 		this.stopping_ = true;
 
-		this.logger_.info('TaskQueue.stop: ' + this.name_ + ': waiting for tasks to complete: ' + Object.keys(this.processingTasks_).length);
+		this.logger_.info(`TaskQueue.stop: ${this.name_}: waiting for tasks to complete: ${Object.keys(this.processingTasks_).length}`);
 
 		// In general it's not a big issue if some tasks are still running because
 		// it won't call anything unexpected in caller code, since the caller has
@@ -108,12 +108,12 @@ class TaskQueue {
 		while (Object.keys(this.processingTasks_).length) {
 			await time.sleep(0.1);
 			if (Date.now() - startTime >= 30000) {
-				this.logger_.warn('TaskQueue.stop: ' + this.name_ + ': timed out waiting for task to complete');
+				this.logger_.warn(`TaskQueue.stop: ${this.name_}: timed out waiting for task to complete`);
 				break;
 			}
 		}
 
-		this.logger_.info('TaskQueue.stop: ' + this.name_ + ': Done, waited for ' + (Date.now() - startTime));
+		this.logger_.info(`TaskQueue.stop: ${this.name_}: Done, waited for ${Date.now() - startTime}`);
 	}
 
 	isStopping() {

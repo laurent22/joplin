@@ -1,5 +1,18 @@
 <!doctype html>
 <html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/spec.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/spec.md
+
+-->
+
 <head>
 	<title>Specifications | Joplin</title>
 	<meta charset="utf-8">
@@ -7,7 +20,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -21,6 +35,24 @@
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -47,18 +79,32 @@
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -115,6 +161,9 @@
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -150,7 +199,9 @@
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -185,9 +236,10 @@
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -198,6 +250,15 @@
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -211,12 +272,12 @@
 
 <body>
 
-<div class="container">
+<div class="container page-spec">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -225,6 +286,7 @@
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -241,38 +303,39 @@
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="encryption" href="#encryption" class="heading-anchor">🔗</a>Encryption</h1>
+<h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
 <p>Encrypted data is encoded to ASCII because encryption/decryption functions in React Native can only deal with strings. So for compatibility with all the apps we need to use the lowest common denominator.</p>
-<h2><a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a>Encrypted data format</h2>
-<h3><a name="header" href="#header" class="heading-anchor">🔗</a>Header</h3>
+<h2>Encrypted data format<a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a></h2>
+<h3>Header<a name="header" href="#header" class="heading-anchor">🔗</a></h3>
 <table>
 <thead>
 <tr>
@@ -315,7 +378,7 @@
 </tbody>
 </table>
 <p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
-<h3><a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a>Data chunk</h3>
+<h3>Data chunk<a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a></h3>
 <p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
 <table>
 <thead>
@@ -335,18 +398,18 @@
 </tr>
 </tbody>
 </table>
-<h2><a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a>Master Keys</h2>
-<p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263">strong encyption method</a>.</p>
+<h2>Master Keys<a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a></h2>
+<p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/fb6dee32ac035b00153106273135fb16be4b4fa5/ReactNativeClient/lib/services/EncryptionService.js#L263">strong encryption method</a>.</p>
 <p>These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.</p>
 <p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
 <p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it's available to the current app and, if so, use this for decryption.</p>
-<h2><a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a>Encryption Service</h2>
+<h2>Encryption Service<a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a></h2>
 <p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
-<h2><a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a>Encryption workflow</h2>
+<h2>Encryption workflow<a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a></h2>
 <p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
 <p>They are decrypted by DecryptionWorker in the background.</p>
 <p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
-<h2><a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a>Enabling and disabling encryption</h2>
+<h2>Enabling and disabling encryption<a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a></h2>
 <p>Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:</p>
 <ul>
 <li>
@@ -361,8 +424,16 @@
 <li>
 <p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
 </li>
+<li>
+<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
+</li>
 </ul>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -394,7 +465,7 @@
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

@@ -5,6 +5,8 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
+const ResourceFetcher = require('lib/services/ResourceFetcher');
+const Resource = require('lib/models/Resource');
 const { _ } = require('lib/locale.js');
 const { toTitleCase } = require('lib/string-utils.js');
 
@@ -13,7 +15,7 @@ class ReportService {
 		cell = this.csvValueToString(cell);
 		let output = cell.replace(/"/, '""');
 		if (this.csvCellRequiresQuotes(cell, ',')) {
-			return '"' + output + '"';
+			return `"${output}"`;
 		}
 		return output;
 	}
@@ -55,7 +57,7 @@ class ReportService {
 		for (let i = 0; i < itemTypes.length; i++) {
 			const itemType = itemTypes[i];
 			const ItemClass = BaseItem.getClassByItemType(itemType);
-			const items = await ItemClass.modelSelectAll('SELECT items.id, items.updated_time, sync_items.sync_time FROM ' + ItemClass.tableName() + ' items JOIN sync_items ON sync_items.item_id = items.id');
+			const items = await ItemClass.modelSelectAll(`SELECT items.id, items.updated_time, sync_items.sync_time FROM ${ItemClass.tableName()} items JOIN sync_items ON sync_items.item_id = items.id`);
 
 			for (let j = 0; j < items.length; j++) {
 				const item = items[j];
@@ -151,6 +153,46 @@ class ReportService {
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						DecryptionWorker.instance().scheduleStart();
+					},
+				});
+			}
+
+			sections.push(section);
+		}
+
+		{
+			section = { title: _('Attachments'), body: [], name: 'resources' };
+
+			const statuses = [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED, Resource.FETCH_STATUS_DONE, Resource.FETCH_STATUS_ERROR];
+
+			for (const status of statuses) {
+				if (status === Resource.FETCH_STATUS_DONE) {
+					const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+					const downloadedCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_DONE);
+					section.body.push(_('%s: %d', _('Downloaded and decrypted'), downloadedCount - downloadedButEncryptedBlobCount));
+					section.body.push(_('%s: %d', _('Downloaded and encrypted'), downloadedButEncryptedBlobCount));
+				} else {
+					const count = await Resource.downloadStatusCounts(status);
+					section.body.push(_('%s: %d', Resource.fetchStatusToLabel(status), count));
+				}
+			}
+
+			sections.push(section);
+		}
+
+		const resourceErrorFetchStatuses = await Resource.errorFetchStatuses();
+
+		if (resourceErrorFetchStatuses.length) {
+			section = { title: _('Attachments that could not be downloaded'), body: [], name: 'failedResourceDownload' };
+
+			for (let i = 0; i < resourceErrorFetchStatuses.length; i++) {
+				const row = resourceErrorFetchStatuses[i];
+				section.body.push({
+					text: _('%s (%s): %s', row.resource_title, row.resource_id, row.fetch_error),
+					canRetry: true,
+					retryHandler: async () => {
+						await Resource.resetErrorStatus(row.resource_id);
+						ResourceFetcher.instance().autoAddResources();
 					},
 				});
 			}

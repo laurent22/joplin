@@ -1,9 +1,13 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const Component = React.Component;
 const { TouchableOpacity, Text, StyleSheet, ScrollView, View } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+
+Icon.loadFont();
 
 class SideMenuContentNoteComponent extends Component {
 	constructor() {
@@ -35,11 +39,13 @@ class SideMenuContentNoteComponent extends Component {
 				fontSize: 22,
 				color: theme.color,
 			},
+			sideButtonText: {
+				color: theme.color,
+			},
 		};
 
 		styles.sideButton = Object.assign({}, styles.button, { flex: 0 });
 		styles.sideButtonDisabled = Object.assign({}, styles.sideButton, { opacity: 0.6 });
-		styles.sideButtonText = Object.assign({}, styles.buttonText);
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
 		return this.styles_[this.props.theme];
@@ -76,7 +82,7 @@ class SideMenuContentNoteComponent extends Component {
 
 		for (const option of options) {
 			if (option.isDivider) {
-				items.push(this.renderDivider('divider_' + dividerIndex++));
+				items.push(this.renderDivider(`divider_${dividerIndex++}`));
 			} else {
 				items.push(this.renderSideBarButton(option.title, option.title, null, option.onPress));
 			}

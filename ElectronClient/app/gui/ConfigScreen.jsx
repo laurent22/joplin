@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const Setting = require('lib/models/Setting.js');
@@ -7,6 +9,9 @@ const pathUtils = require('lib/path-utils.js');
 const { _ } = require('lib/locale.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry');
 const shared = require('lib/components/shared/config-shared.js');
+const ConfigMenuBar = require('./ConfigMenuBar.min.js');
+const { EncryptionConfigScreen } = require('./EncryptionConfigScreen.min');
+const { ClipperConfigScreen } = require('./ClipperConfigScreen.min');
 
 class ConfigScreenComponent extends React.Component {
 	constructor() {
@@ -14,17 +19,78 @@ class ConfigScreenComponent extends React.Component {
 
 		shared.init(this);
 
+		this.state.selectedSectionName = 'general';
+		this.state.screenName = '';
+
 		this.checkSyncConfig_ = async () => {
 			await shared.checkSyncConfig(this, this.state.settings);
+		};
+
+		this.checkNextcloudAppButton_click = async () => {
+			this.setState({ showNextcloudAppLog: true });
+			await shared.checkNextcloudApp(this, this.state.settings);
+		};
+
+		this.showLogButton_click = () => {
+			this.setState({ showNextcloudAppLog: true });
+		};
+
+		this.nextcloudAppHelpLink_click = () => {
+			bridge().openExternal('https://joplinapp.org/nextcloud_app');
 		};
 
 		this.rowStyle_ = {
 			marginBottom: 10,
 		};
+
+		this.configMenuBar_selectionChange = this.configMenuBar_selectionChange.bind(this);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
+	}
+
+	componentDidMount() {
+		if (this.props.defaultSection) {
+			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
+				this.switchSection(this.props.defaultSection);
+			});
+		}
+	}
+
+	sectionByName(name) {
+		const sections = shared.settingsSections({ device: 'desktop', settings: this.state.settings });
+		for (const section of sections) {
+			if (section.name === name) return section;
+		}
+
+		throw new Error(`Invalid section name: ${name}`);
+	}
+
+	screenFromName(screenName) {
+		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
+		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
+
+		throw new Error(`Invalid screen name: ${screenName}`);
+	}
+
+	switchSection(name) {
+		const section = this.sectionByName(name);
+		let screenName = '';
+		if (section.isScreen) {
+			screenName = section.name;
+
+			if (this.hasChanges()) {
+				const ok = confirm(_('This will open a new screen. Save your current changes?'));
+				if (ok) shared.saveSettings(this);
+			}
+		}
+
+		this.setState({ selectedSectionName: section.name, screenName: screenName });
+	}
+
+	configMenuBar_selectionChange(event) {
+		this.switchSection(event.section.name);
 	}
 
 	keyValueToArray(kv) {
@@ -40,27 +106,30 @@ class ConfigScreenComponent extends React.Component {
 		return output;
 	}
 
-	sectionToComponent(key, section, settings) {
+	sectionToComponent(key, section, settings, selected) {
 		const theme = themeStyle(this.props.theme);
-		const settingComps = [];
+		// const settingComps = [];
 
-		for (let i = 0; i < section.metadatas.length; i++) {
-			const md = section.metadatas[i];
+		const createSettingComponents = (advanced) => {
+			const output = [];
+			for (let i = 0; i < section.metadatas.length; i++) {
+				const md = section.metadatas[i];
+				if (!!md.advanced !== advanced) continue;
+				const settingComp = this.settingToComponent(md.key, settings[md.key]);
+				output.push(settingComp);
+			}
+			return output;
+		};
 
-			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			settingComps.push(settingComp);
-		}
+		const settingComps = createSettingComponents(false);
+		const advancedSettingComps = createSettingComponents(true);
 
 		const sectionStyle = {
+			marginTop: 20,
 			marginBottom: 20,
 		};
 
-		const headerStyle = Object.assign({}, theme.headerStyle, {
-			borderBottomWidth: 1,
-			borderBottomColor: theme.dividerColor,
-			borderBottomStyle: 'solid',
-			paddingBottom: '.4em',
-		});
+		if (!selected) sectionStyle.display = 'none';
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
@@ -70,10 +139,10 @@ class ConfigScreenComponent extends React.Component {
 
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+			const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
 
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
-				const statusStyle = Object.assign({}, theme.textStyle, { marginTop: 10 });
 				const statusComp = !messages.length ? null : (
 					<div style={statusStyle}>
 						{messages[0]}
@@ -90,13 +159,69 @@ class ConfigScreenComponent extends React.Component {
 					</div>
 				);
 			}
+
+			if (syncTargetMd.name === 'nextcloud') {
+				const syncTarget = settings['sync.5.syncTargets'][settings['sync.5.path']];
+
+				let status = _('Unknown');
+				let errorMessage = null;
+
+				if (this.state.checkNextcloudAppResult === 'checking') {
+					status = _('Checking...');
+				} else if (syncTarget) {
+					if (syncTarget.uuid) status = _('OK');
+					if (syncTarget.error) {
+						status = _('Error');
+						errorMessage = syncTarget.error;
+					}
+				}
+
+				const statusComp = !errorMessage || this.state.checkNextcloudAppResult === 'checking' || !this.state.showNextcloudAppLog ? null : (
+					<div style={statusStyle}>
+						<p style={theme.textStyle}>{_('The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:')}</p>
+						<pre>{errorMessage}</pre>
+					</div>
+				);
+
+				const showLogButton = !errorMessage || this.state.showNextcloudAppLog ? null : (
+					<a style={theme.urlStyle} href="#" onClick={this.showLogButton_click}>[{_('Show Log')}]</a>
+				);
+
+				const appStatusStyle = Object.assign({}, theme.textStyle, { fontWeight: 'bold' });
+
+				settingComps.push(
+					<div key="nextcloud_app_check" style={this.rowStyle_}>
+						<span style={theme.textStyle}>Beta: {_('Joplin Nextcloud App status:')} </span><span style={appStatusStyle}>{status}</span>
+						&nbsp;&nbsp;
+						{showLogButton}
+						&nbsp;&nbsp;
+						<button disabled={this.state.checkNextcloudAppResult === 'checking'} style={theme.buttonStyle} onClick={this.checkNextcloudAppButton_click}>
+							{_('Check Status')}
+						</button>
+						&nbsp;&nbsp;
+						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
+						{statusComp}
+					</div>
+				);
+			}
+		}
+
+		let advancedSettingsButton = null;
+		let advancedSettingsSectionStyle = { display: 'none' };
+
+		if (advancedSettingComps.length) {
+			const iconName = this.state.showAdvancedSettings ? 'fa fa-toggle-up' : 'fa fa-toggle-down';
+			const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
+			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{ fontSize: 14 }} className={iconName}></i> {_('Show Advanced Settings')}</button>;
+			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
 		return (
 			<div key={key} style={sectionStyle}>
-				<h2 style={headerStyle}>{Setting.sectionNameToLabel(section.name)}</h2>
 				{noteComp}
 				<div>{settingComps}</div>
+				{advancedSettingsButton}
+				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>
 			</div>
 		);
 	}
@@ -123,6 +248,10 @@ class ConfigScreenComponent extends React.Component {
 			opacity: 0,
 		});
 
+		const checkboxLabelStyle = Object.assign({}, labelStyle, {
+			marginLeft: 8,
+		});
+
 		const controlStyle = {
 			display: 'inline-block',
 			color: theme.color,
@@ -134,6 +263,13 @@ class ConfigScreenComponent extends React.Component {
 			marginTop: 5,
 			fontStyle: 'italic',
 			maxWidth: '70em',
+		});
+
+		const textInputBaseStyle = Object.assign({}, controlStyle, {
+			border: '1px solid',
+			padding: '4px 6px',
+			borderColor: theme.dividerColor,
+			borderRadius: 4,
 		});
 
 		const updateSettingValue = (key, value) => {
@@ -161,6 +297,8 @@ class ConfigScreenComponent extends React.Component {
 				);
 			}
 
+			const selectStyle = Object.assign({}, controlStyle, { height: 22, borderColor: theme.dividerColor });
+
 			return (
 				<div key={key} style={rowStyle}>
 					<div style={labelStyle}>
@@ -168,7 +306,7 @@ class ConfigScreenComponent extends React.Component {
 					</div>
 					<select
 						value={value}
-						style={controlStyle}
+						style={selectStyle}
 						onChange={event => {
 							updateSettingValue(key, event.target.value);
 						}}
@@ -179,7 +317,7 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BOOL) {
-			const onCheckboxClick = event => {
+			const onCheckboxClick = () => {
 				updateSettingValue(key, !value);
 			};
 
@@ -190,7 +328,7 @@ class ConfigScreenComponent extends React.Component {
 				<div key={key + value.toString()} style={rowStyle}>
 					<div style={controlStyle}>
 						<input
-							id={'setting_checkbox_' + key}
+							id={`setting_checkbox_${key}`}
 							type="checkbox"
 							checked={!!value}
 							onChange={event => {
@@ -201,8 +339,8 @@ class ConfigScreenComponent extends React.Component {
 							onClick={event => {
 								onCheckboxClick(event);
 							}}
-							style={labelStyle}
-							htmlFor={'setting_checkbox_' + key}
+							style={checkboxLabelStyle}
+							htmlFor={`setting_checkbox_${key}`}
 						>
 							{md.label()}
 						</label>
@@ -211,10 +349,9 @@ class ConfigScreenComponent extends React.Component {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_STRING) {
-			const inputStyle = Object.assign({}, controlStyle, {
+			const inputStyle = Object.assign({}, textInputBaseStyle, {
 				width: '50%',
 				minWidth: '20em',
-				border: '1px solid',
 			});
 			const inputType = md.secure === true ? 'password' : 'text';
 
@@ -231,7 +368,7 @@ class ConfigScreenComponent extends React.Component {
 					if (!cmdArray[0] && !cmdArray[1]) return '';
 					let cmdString = pathUtils.quotePath(cmdArray[0]);
 					if (!cmdString) cmdString = '""';
-					if (cmdArray[1]) cmdString += ' ' + cmdArray[1];
+					if (cmdArray[1]) cmdString += ` ${cmdArray[1]}`;
 					return cmdString;
 				};
 
@@ -279,7 +416,7 @@ class ConfigScreenComponent extends React.Component {
 										}}
 										value={cmd[0]}
 									/>
-									<button onClick={browseButtonClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 5, minHeight: 20, height: 20 })}>
+									<button onClick={browseButtonClick} style={Object.assign({}, theme.buttonStyle, { marginLeft: 5 })}>
 										{_('Browse...')}
 									</button>
 								</div>
@@ -332,7 +469,9 @@ class ConfigScreenComponent extends React.Component {
 			};
 
 			const label = [md.label()];
-			if (md.unitLabel) label.push('(' + md.unitLabel() + ')');
+			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
+
+			const inputStyle = Object.assign({}, textInputBaseStyle);
 
 			return (
 				<div key={key} style={rowStyle}>
@@ -341,7 +480,7 @@ class ConfigScreenComponent extends React.Component {
 					</div>
 					<input
 						type="number"
-						style={controlStyle}
+						style={inputStyle}
 						value={this.state.settings[key]}
 						onChange={event => {
 							onNumChange(event);
@@ -353,8 +492,26 @@ class ConfigScreenComponent extends React.Component {
 					{descriptionComp}
 				</div>
 			);
+		} else if (md.type === Setting.TYPE_BUTTON) {
+			const theme = themeStyle(this.props.theme);
+			const buttonStyle = Object.assign({}, theme.buttonStyle, {
+				display: 'inline-block',
+				marginRight: 10,
+			});
+
+			return (
+				<div key={key} style={rowStyle}>
+					<div style={labelStyle}>
+						<label>{md.label()}</label>
+					</div>
+					<button style={buttonStyle} onClick={md.onClick}>
+						{_('Edit')}
+					</button>
+					{descriptionComp}
+				</div>
+			);
 		} else {
-			console.warn('Type not implemented: ' + key);
+			console.warn(`Type not implemented: ${key}`);
 		}
 
 		return output;
@@ -371,6 +528,10 @@ class ConfigScreenComponent extends React.Component {
 
 	onCancelClick() {
 		this.props.dispatch({ type: 'NAV_BACK' });
+	}
+
+	hasChanges() {
+		return !!this.state.changedSettingKeys.length;
 	}
 
 	render() {
@@ -390,9 +551,9 @@ class ConfigScreenComponent extends React.Component {
 
 		let settings = this.state.settings;
 
-		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0 });
+		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0, display: 'flex', flex: 1 });
 
-		const hasChanges = !!this.state.changedSettingKeys.length;
+		const hasChanges = this.hasChanges();
 
 		const buttonStyle = Object.assign({}, theme.buttonStyle, {
 			display: 'inline-block',
@@ -403,19 +564,33 @@ class ConfigScreenComponent extends React.Component {
 			opacity: hasChanges ? 1 : theme.disabledOpacity,
 		});
 
-		const settingComps = shared.settingsToComponents2(this, 'desktop', settings);
+		const settingComps = shared.settingsToComponents2(this, 'desktop', settings, this.state.selectedSectionName);
 
 		const buttonBarStyle = {
 			display: 'flex',
 			alignItems: 'center',
-			padding: 15,
-			borderBottomWidth: 1,
-			borderBottomStyle: 'solid',
-			borderBottomColor: theme.dividerColor,
+			padding: 10,
+			borderTopWidth: 1,
+			borderTopStyle: 'solid',
+			borderTopColor: theme.dividerColor,
 		};
+
+		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+
+		if (screenComp) containerStyle.display = 'none';
+
+		const sections = shared.settingsSections({ device: 'desktop', settings });
 
 		return (
 			<div style={style}>
+				<ConfigMenuBar
+					selection={this.state.selectedSectionName}
+					onSelectionChange={this.configMenuBar_selectionChange}
+					sections={sections}
+					theme={this.props.theme}
+				/>
+				{screenComp}
+				<div style={containerStyle}>{settingComps}</div>
 				<div style={buttonBarStyle}>
 					<button
 						onClick={() => {
@@ -424,28 +599,15 @@ class ConfigScreenComponent extends React.Component {
 						style={buttonStyle}
 					>
 						<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
-						{_('Cancel')}
+						{hasChanges && !screenComp ? _('Cancel') : _('Back')}
 					</button>
-					<button
-						disabled={!hasChanges}
-						onClick={() => {
-							this.onSaveClick();
-						}}
-						style={buttonStyleApprove}
-					>
-						{_('OK')}
-					</button>
-					<button
-						disabled={!hasChanges}
-						onClick={() => {
-							this.onApplyClick();
-						}}
-						style={buttonStyleApprove}
-					>
-						{_('Apply')}
-					</button>
+					{ !screenComp && (
+						<div>
+							<button disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove}>{_('OK')}</button>
+							<button disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove}>{_('Apply')}</button>
+						</div>
+					)}
 				</div>
-				<div style={containerStyle}>{settingComps}</div>
 			</div>
 		);
 	}

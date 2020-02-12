@@ -2,8 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest } = require('test-utils.js');
 const htmlUtils = require('lib/htmlUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,7 +15,7 @@ describe('htmlUtils', function() {
 		done();
 	});
 
-	it('should extract image URLs', async (done) => {
+	it('should extract image URLs', asyncTest(async () => {
 		const testCases = [
 			['<img src="http://test.com/img.png"/>', ['http://test.com/img.png']],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://test.com/img.png', 'http://test.com/img2.png']],
@@ -31,11 +30,9 @@ describe('htmlUtils', function() {
 
 			expect(htmlUtils.extractImageUrls(md).join(' ')).toBe(expected.join(' '));
 		}
+	}));
 
-		done();
-	});
-
-	it('should replace image URLs', async (done) => {
+	it('should replace image URLs', asyncTest(async () => {
 		const testCases = [
 			['<img src="http://test.com/img.png"/>', ['http://other.com/img2.png'], '<img src="http://other.com/img2.png"/>'],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://other.com/img2.png', 'http://other.com/img3.png'], '<img src="http://other.com/img2.png"/> <img src="http://other.com/img3.png"/>'],
@@ -56,11 +53,9 @@ describe('htmlUtils', function() {
 			const r = htmlUtils.replaceImageUrls(md, callback(testCases[i][1]));
 			expect(r.trim()).toBe(testCases[i][2].trim());
 		}
+	}));
 
-		done();
-	});
-
-	it('should encode attributes', async (done) => {
+	it('should encode attributes', asyncTest(async () => {
 		const testCases = [
 			[{ a: 'one', b: 'two' }, 'a="one" b="two"'],
 			[{ a: 'one&two' }, 'a="one&amp;two"'],
@@ -71,11 +66,9 @@ describe('htmlUtils', function() {
 			const expected = testCases[i][1];
 			expect(htmlUtils.attributesHtml(attrs)).toBe(expected);
 		}
+	}));
 
-		done();
-	});
-
-	it('should prepend a base URL', async (done) => {
+	it('should prepend a base URL', asyncTest(async () => {
 		const testCases = [
 			[
 				'<a href="a.html">Something</a>',
@@ -100,8 +93,6 @@ describe('htmlUtils', function() {
 			const expected = testCases[i][2];
 			expect(htmlUtils.prependBaseUrl(html, baseUrl)).toBe(expected);
 		}
-
-		done();
-	});
+	}));
 
 });

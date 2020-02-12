@@ -1,5 +1,18 @@
 <!doctype html>
 <html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/prereleases.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/prereleases.md
+
+-->
+
 <head>
 	<title>Pre-releases | Joplin</title>
 	<meta charset="utf-8">
@@ -7,7 +20,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -21,6 +35,24 @@
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -47,18 +79,32 @@
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -115,6 +161,9 @@
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -150,7 +199,9 @@
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -185,9 +236,10 @@
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -198,6 +250,15 @@
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -211,12 +272,12 @@
 
 <body>
 
-<div class="container">
+<div class="container page-prereleases">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -225,6 +286,7 @@
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -241,40 +303,46 @@
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="getting-pre-releases" href="#getting-pre-releases" class="heading-anchor">🔗</a>Getting pre-releases</h1>
+<h1>Getting pre-releases<a name="getting-pre-releases" href="#getting-pre-releases" class="heading-anchor">🔗</a></h1>
 <p>Pre-releases are available for the desktop application. They are pretty much like regular releases, except that they have not yet been tested by many users, so it is possible that a bug or two went through.</p>
 <p>You can help the development of Joplin by choosing to receive these early releases when updating the application. If you find any bug or other issue, you may report it <a href="https://discourse.joplinapp.org/">on the forum</a> or <a href="https://github.com/laurent22/joplin/issues">GitHub</a>.</p>
 <p>In general it is safe to use these pre-releases (they do not include any experimental or unstable features). In fact most pre-release eventually become regular releases after a few days.</p>
 <p>To have access to these pre-releases, simply go to <strong>Configuration screen</strong> and tick the box &quot;<strong>Also get pre-releases when checking for updates</strong>&quot;.</p>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/prereleases.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -306,7 +374,7 @@
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { StyleSheet, View, TextInput, FlatList, TouchableHighlight } = require('react-native');
@@ -12,8 +14,10 @@ const { themeStyle } = require('lib/components/global-style.js');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const DialogBox = require('react-native-dialogbox').default;
 
+Icon.loadFont();
+
 class SearchScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -125,7 +129,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 				}
 
 				notes = await Note.previews(null, {
-					anywherePattern: '*' + temp.join('*') + '*',
+					anywherePattern: `*${temp.join('*')}*`,
 				});
 			}
 		}
@@ -185,7 +189,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 						</TouchableHighlight>
 					</View>
 
-					<FlatList data={this.state.notes} keyExtractor={(item, index) => item.id} renderItem={event => <NoteItem note={event.item} />} />
+					<FlatList data={this.state.notes} keyExtractor={(item) => item.id} renderItem={event => <NoteItem note={event.item} />} />
 				</View>
 				<DialogBox
 					ref={dialogbox => {

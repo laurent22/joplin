@@ -125,7 +125,7 @@ class Application extends BaseApplication {
 			if (this.store()) {
 				return this.store().dispatch(action);
 			} else {
-				return action => {};
+				return () => {};
 			}
 		});
 
@@ -136,10 +136,10 @@ class Application extends BaseApplication {
 			if (!options.answers) options.answers = options.booleanAnswerDefault === 'y' ? [_('Y'), _('n')] : [_('N'), _('y')];
 
 			if (options.type == 'boolean') {
-				message += ' (' + options.answers.join('/') + ')';
+				message += ` (${options.answers.join('/')})`;
 			}
 
-			let answer = await this.gui().prompt('', message + ' ', options);
+			let answer = await this.gui().prompt('', `${message} `, options);
 
 			if (options.type === 'boolean') {
 				if (answer === null) return false; // Pressed ESCAPE
@@ -181,7 +181,7 @@ class Application extends BaseApplication {
 				const ext = fileExtension(path);
 				if (ext != 'js') return;
 
-				let CommandClass = require('./' + path);
+				let CommandClass = require(`./${path}`);
 				let cmd = new CommandClass();
 				if (!cmd.enabled()) return;
 				cmd = this.setupCommand(cmd);
@@ -248,7 +248,7 @@ class Application extends BaseApplication {
 
 		let CommandClass = null;
 		try {
-			CommandClass = require(__dirname + '/command-' + name + '.js');
+			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
 				let e = new Error(_('No such command: %s', name));
@@ -278,16 +278,16 @@ class Application extends BaseApplication {
 			stdout: text => {
 				console.info(text);
 			},
-			fullScreen: (b = true) => {},
+			fullScreen: () => {},
 			exit: () => {},
-			showModalOverlay: text => {},
+			showModalOverlay: () => {},
 			hideModalOverlay: () => {},
 			stdoutMaxWidth: () => {
 				return 100;
 			},
 			forceRender: () => {},
 			termSaveState: () => {},
-			termRestoreState: state => {},
+			termRestoreState: () => {},
 		};
 	}
 
@@ -343,7 +343,7 @@ class Application extends BaseApplication {
 			itemsByCommand[defaultKeyMap[i].command] = defaultKeyMap[i];
 		}
 
-		const filePath = Setting.value('profileDir') + '/keymap.json';
+		const filePath = `${Setting.value('profileDir')}/keymap.json`;
 		if (await fs.pathExists(filePath)) {
 			try {
 				let configString = await fs.readFile(filePath, 'utf-8');
@@ -355,7 +355,7 @@ class Application extends BaseApplication {
 				}
 			} catch (error) {
 				let msg = error.message ? error.message : '';
-				msg = 'Could not load keymap ' + filePath + '\n' + msg;
+				msg = `Could not load keymap ${filePath}\n${msg}`;
 				error.message = msg;
 				throw error;
 			}
@@ -365,6 +365,18 @@ class Application extends BaseApplication {
 		for (let n in itemsByCommand) {
 			if (!itemsByCommand.hasOwnProperty(n)) continue;
 			output.push(itemsByCommand[n]);
+		}
+
+		// Map reserved shortcuts to their equivalent key
+		// https://github.com/cronvel/terminal-kit/issues/101
+		for (let i = 0; i < output.length; i++) {
+			const newKeys = output[i].keys.map(k => {
+				k = k.replace(/CTRL_H/g, 'BACKSPACE');
+				k = k.replace(/CTRL_I/g, 'TAB');
+				k = k.replace(/CTRL_M/g, 'ENTER');
+				return k;
+			});
+			output[i].keys = newKeys;
 		}
 
 		return output;
@@ -384,6 +396,8 @@ class Application extends BaseApplication {
 
 			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
 
+			await this.applySettingsSideEffects();
+
 			try {
 				await this.execCommand(argv);
 			} catch (error) {
@@ -397,7 +411,7 @@ class Application extends BaseApplication {
 
 			await Setting.saveAll();
 
-			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
 			process.exit(0);
 		} else {

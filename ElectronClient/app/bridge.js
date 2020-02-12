@@ -1,5 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
+const { BrowserWindow } = require('electron');
 
 class Bridge {
 
@@ -13,12 +14,20 @@ class Bridge {
 		return this.electronWrapper_;
 	}
 
+	env() {
+		return this.electronWrapper_.env();
+	}
+
 	processArgv() {
 		return process.argv;
 	}
 
 	window() {
 		return this.electronWrapper_.window();
+	}
+
+	newBrowserWindow(options) {
+		return new BrowserWindow(options);
 	}
 
 	windowContentSize() {
@@ -38,11 +47,19 @@ class Bridge {
 		return this.window().setSize(width, height);
 	}
 
+	openDevTools() {
+		return this.window().webContents.openDevTools();
+	}
+
+	closeDevTools() {
+		return this.window().webContents.closeDevTools();
+	}
+
 	showSaveDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
-		const filePath = dialog.showSaveDialog(this.window(), options);
+		const filePath = dialog.showSaveDialogSync(this.window(), options);
 		if (filePath) {
 			this.lastSelectedPath_ = filePath;
 		}
@@ -50,11 +67,11 @@ class Bridge {
 	}
 
 	showOpenDialog(options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		const filePaths = dialog.showOpenDialog(this.window(), options);
+		const filePaths = dialog.showOpenDialogSync(this.window(), options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPath_ = dirname(filePaths[0]);
 		}
@@ -63,15 +80,16 @@ class Bridge {
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
 	showMessageBox_(window, options) {
-		const {dialog} = require('electron');
+		const { dialog } = require('electron');
 		if (!window) window = this.window();
-		return dialog.showMessageBox(window, options);
+		return dialog.showMessageBoxSync(window, options);
 	}
 
 	showErrorMessageBox(message) {
 		return this.showMessageBox_(this.window(), {
 			type: 'error',
 			message: message,
+			buttons: [_('OK')],
 		});
 	}
 
@@ -120,6 +138,14 @@ class Bridge {
 	checkForUpdates(inBackground, window, logFilePath, options) {
 		const { checkForUpdates } = require('./checkForUpdates.js');
 		checkForUpdates(inBackground, window, logFilePath, options);
+	}
+
+	buildDir() {
+		return this.electronApp().buildDir();
+	}
+
+	screen() {
+		return require('electron').screen;
 	}
 
 }

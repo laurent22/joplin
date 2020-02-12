@@ -26,7 +26,7 @@ class PluginManager {
 		for (let i = 0; i < classes.length; i++) {
 			const PluginClass = classes[i];
 
-			if (this.plugins_[PluginClass.manifest.name]) throw new Error('Already registered: ' + PluginClass.manifest.name);
+			if (this.plugins_[PluginClass.manifest.name]) throw new Error(`Already registered: ${PluginClass.manifest.name}`);
 
 			this.plugins_[PluginClass.manifest.name] = {
 				Class: PluginClass,

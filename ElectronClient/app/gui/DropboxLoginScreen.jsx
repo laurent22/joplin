@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');
@@ -13,7 +15,7 @@ class DropboxLoginScreenComponent extends React.Component {
 		this.shared_ = new Shared(this, msg => bridge().showInfoMessageBox(msg), msg => bridge().showErrorMessageBox(msg));
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.shared_.refreshUrl();
 	}
 

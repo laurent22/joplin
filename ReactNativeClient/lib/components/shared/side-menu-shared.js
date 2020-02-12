@@ -16,7 +16,7 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 
 	while (true) {
 		let folder = BaseModel.byId(folders, folderId);
-		if (!folder) throw new Error('No folder with id ' + folder.id);
+		if (!folder) throw new Error(`No folder with id ${folder.id}`);
 		if (!folder.parent_id) return true;
 		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return false;
 		folderId = folder.parent_id;

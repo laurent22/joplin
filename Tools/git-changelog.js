@@ -4,23 +4,30 @@
 
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
-const { execCommand } = require('./tool-utils.js');
+const { execCommand, githubUsername } = require('./tool-utils.js');
 
 async function gitLog(sinceTag) {
-	let lines = await execCommand('git log --pretty=format:"%H:%s" ' + sinceTag + '..HEAD');
+	let lines = await execCommand(`git log --pretty=format:"%H::::DIV::::%ae::::DIV::::%an::::DIV::::%s" ${sinceTag}..HEAD`);
 	lines = lines.split('\n');
 
 	const output = [];
 	for (const line of lines) {
-		const splitted = line.split(':');
+		const splitted = line.split('::::DIV::::');
 		const commit = splitted[0];
-		const message = line.substr(commit.length + 1).trim();
+		const authorEmail = splitted[1];
+		const authorName = splitted[2];
+		const message = splitted[3].trim();
 
 		output.push({
 			commit: commit,
 			message: message,
+			author: {
+				email: authorEmail,
+				name: authorName,
+				login: await githubUsername(authorEmail, authorName),
+			},
 		});
 	}
 
@@ -33,7 +40,7 @@ function platformFromTag(tagName) {
 	if (tagName.indexOf('ios') >= 0) return 'ios';
 	if (tagName.indexOf('clipper') === 0) return 'clipper';
 	if (tagName.indexOf('cli') === 0) return 'cli';
-	throw new Error('Could not determine platform from tag: ' + tagName);
+	throw new Error(`Could not determine platform from tag: ${tagName}`);
 }
 
 function filterLogs(logs, platform) {
@@ -63,6 +70,7 @@ function filterLogs(logs, platform) {
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
@@ -72,21 +80,26 @@ function filterLogs(logs, platform) {
 	return output;
 }
 
-function formatCommitMessage(msg) {
+function formatCommitMessage(msg, author, options) {
+	options = Object.assign({}, { publishFormat: 'full' }, options);
+
 	let output = '';
 
 	const splitted = msg.split(':');
 
+	let subModule = '';
+
 	const isPlatformPrefix = prefix => {
 		prefix = prefix.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};
 
 	if (splitted.length) {
 		const platform = splitted[0].trim().toLowerCase();
+		if (platform === 'api') subModule = 'api';
 		if (isPlatformPrefix(platform)) {
 			splitted.splice(0, 1);
 		}
@@ -108,13 +121,14 @@ function formatCommitMessage(msg) {
 		return 'improved';
 	};
 
-	const parseCommitMessage = (msg) => {
+	const parseCommitMessage = (msg, subModule) => {
 		const parts = msg.split(':');
 
 		if (parts.length === 1) {
 			return {
 				type: detectType(msg),
 				message: msg.trim(),
+				subModule: subModule,
 			};
 		}
 
@@ -147,25 +161,52 @@ function formatCommitMessage(msg) {
 			type: type,
 			message: message,
 			issueNumber: issueNumber,
+			subModule: subModule,
 		};
 	};
 
-	const commitMessage = parseCommitMessage(output);
+	const commitMessage = parseCommitMessage(output, subModule);
 
-	output = capitalizeFirstLetter(commitMessage.type) + ': ' + capitalizeFirstLetter(commitMessage.message);
-	if (commitMessage.issueNumber) {
-		const formattedIssueNum = '(#' + commitMessage.issueNumber + ')';
-		if (output.indexOf(formattedIssueNum) < 0) output += ' ' + formattedIssueNum;
+	const messagePieces = [];
+	messagePieces.push(`${capitalizeFirstLetter(commitMessage.type)}`);
+	if (commitMessage.subModule) messagePieces.push(`${capitalizeFirstLetter(commitMessage.subModule)}`);
+	messagePieces.push(`${capitalizeFirstLetter(commitMessage.message)}`);
+
+	output = messagePieces.join(': ');
+
+	if (options.publishFormat === 'full') {
+		if (commitMessage.issueNumber) {
+			const formattedIssueNum = `(#${commitMessage.issueNumber})`;
+			if (output.indexOf(formattedIssueNum) < 0) output += ` ${formattedIssueNum}`;
+		}
+
+		let authorMd = null;
+		if (author && (author.login || author.name) && author.login !== 'laurent22') {
+			if (author.login) {
+				const escapedLogin = author.login.replace(/\]/g, '');
+				authorMd = `[@${escapedLogin}](https://github.com/${encodeURI(author.login)})`;
+			} else {
+				authorMd = `${author.name}`;
+			}
+		}
+
+		if (authorMd) {
+			output = output.replace(/\((#[0-9]+)\)$/, `($1 by ${authorMd})`);
+		}
+	}
+
+	if (options.publishFormat !== 'full') {
+		output = output.replace(/\((#[0-9]+)\)$/, '');
 	}
 
 	return output;
 }
 
-function createChangeLog(logs) {
+function createChangeLog(logs, options) {
 	const output = [];
 
 	for (const log of logs) {
-		output.push(formatCommitMessage(log.message));
+		output.push(formatCommitMessage(log.message, log.author, options));
 	}
 
 	return output;
@@ -175,17 +216,53 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function decreaseTagVersion(tag) {
+	const s = tag.split('.');
+	let num = Number(s.pop());
+	num--;
+	if (num < 0) throw new Error(`Cannot decrease tag version: ${tag}`);
+	s.push(`${num}`);
+	return s.join('.');
+}
+
+// This function finds the first relevant tag starting from the given tag.
+// The first "relevant tag" is the one that exists, and from which there are changes.
+async function findFirstRelevantTag(baseTag) {
+	let tag = decreaseTagVersion(baseTag);
+	while (true) {
+		try {
+			const logs = await gitLog(tag);
+			if (logs.length) return tag;
+		} catch (error) {
+			if (error.message.indexOf('unknown revision') >= 0) {
+				// We skip the error - it means this particular tag has never been created
+			} else {
+				throw error;
+			}
+		}
+
+		tag = decreaseTagVersion(tag);
+	}
+}
+
 async function main() {
 	const argv = require('yargs').argv;
-	if (!argv._.length) throw new Error('Tag name must be specified');
+	if (!argv._.length) throw new Error('Tag name must be specified. Provide the tag of the new version and git-changelog will walk backward to find the changes to the previous relevant tag.');
 
-	const sinceTagName = argv._[0];
-	const platform = platformFromTag(sinceTagName);
+	const fromTagName = argv._[0];
+	let toTagName = argv._.length >= 2 ? argv._[1] : '';
 
-	const logsSinceTags = await gitLog(sinceTagName);
+	const platform = platformFromTag(fromTagName);
+
+	if (!toTagName) toTagName = await findFirstRelevantTag(fromTagName);
+
+	const logsSinceTags = await gitLog(toTagName);
+
 	const filteredLogs = filterLogs(logsSinceTags, platform);
 
-	let changelog = createChangeLog(filteredLogs);
+	let publishFormat = 'full';
+	if (['android', 'ios'].indexOf(platform) >= 0) publishFormat = 'simple';
+	let changelog = createChangeLog(filteredLogs, { publishFormat: publishFormat });
 
 	const changelogFixes = [];
 	const changelogImproves = [];
@@ -199,13 +276,13 @@ async function main() {
 		} else if (l.indexOf('New') === 0) {
 			changelogNews.push(l);
 		} else {
-			throw new Error('Invalid changelog line: ' + l);
+			throw new Error(`Invalid changelog line: ${l}`);
 		}
 	}
 
 	changelog = [].concat(changelogNews).concat(changelogImproves).concat(changelogFixes);
 
-	const changelogString = changelog.map(l => '- ' + l);
+	const changelogString = changelog.map(l => `- ${l}`);
 	console.info(changelogString.join('\n'));
 }
 

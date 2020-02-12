@@ -10,42 +10,47 @@ async function handleAutocompletionPromise(line) {
 	// Auto-complete the command name
 	const names = await app().commandNames();
 	let words = getArguments(line);
-	//If there is only one word and it is not already a command name then you
-	//should look for commmands it could be
+	// If there is only one word and it is not already a command name then you
+	// should look for commands it could be
 	if (words.length == 1) {
 		if (names.indexOf(words[0]) === -1) {
 			let x = names.filter(n => n.indexOf(words[0]) === 0);
 			if (x.length === 1) {
-				return x[0] + ' ';
+				return `${x[0]} `;
 			}
-			return x.length > 0 ? x.map(a => a + ' ') : line;
+			return x.length > 0 ? x.map(a => `${a} `) : line;
 		} else {
 			return line;
 		}
 	}
-	//There is more than one word and it is a command
+	// There is more than one word and it is a command
 	const metadata = (await app().commandMetadata())[words[0]];
-	//If for some reason this command does not have any associated metadata
-	//just don't autocomplete. However, this should not happen.
+	// If for some reason this command does not have any associated metadata
+	// just don't autocomplete. However, this should not happen.
 	if (metadata === undefined) {
 		return line;
 	}
-	//complete an option
+
+	if (words[0] === 'tag' && words[1] === 'notetags') {
+		metadata.usage = 'tag <tag-command> <note>';
+	}
+
+	// complete an option
 	let next = words.length > 1 ? words[words.length - 1] : '';
 	let l = [];
 	if (next[0] === '-') {
 		for (let i = 0; i < metadata.options.length; i++) {
 			const options = metadata.options[i][0].split(' ');
-			//if there are multiple options then they will be separated by comma and
-			//space. The comma should be removed
+			// if there are multiple options then they will be separated by comma and
+			// space. The comma should be removed
 			if (options[0][options[0].length - 1] === ',') {
 				options[0] = options[0].slice(0, -1);
 			}
 			if (words.includes(options[0]) || words.includes(options[1])) {
 				continue;
 			}
-			//First two elements are the flag and the third is the description
-			//Only autocomplete long
+			// First two elements are the flag and the third is the description
+			// Only autocomplete long
 			if (options.length > 1 && options[1].indexOf(next) === 0) {
 				l.push(options[1]);
 			} else if (options[0].indexOf(next) === 0) {
@@ -56,12 +61,12 @@ async function handleAutocompletionPromise(line) {
 			return line;
 		}
 		let ret = l.map(a => toCommandLine(a));
-		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
-	//Complete an argument
-	//Determine the number of positional arguments by counting the number of
-	//words that don't start with a - less one for the command name
+	// Complete an argument
+	// Determine the number of positional arguments by counting the number of
+	// words that don't start with a - less one for the command name
 	const positionalArgs = words.filter(a => a.indexOf('-') !== 0).length - 1;
 
 	let cmdUsage = yargParser(metadata.usage)['_'];
@@ -74,23 +79,23 @@ async function handleAutocompletionPromise(line) {
 		const currentFolder = app().currentFolder();
 
 		if (argName == 'note' || argName == 'note-pattern') {
-			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			l.push(...notes.map(n => n.title));
 		}
 
 		if (argName == 'notebook') {
-			const folders = await Folder.search({ titlePattern: next + '*' });
+			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...folders.map(n => n.title));
 		}
 
 		if (argName == 'item') {
-			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: next + '*' }) : [];
-			const folders = await Folder.search({ titlePattern: next + '*' });
+			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
+			const folders = await Folder.search({ titlePattern: `${next}*` });
 			l.push(...notes.map(n => n.title), folders.map(n => n.title));
 		}
 
 		if (argName == 'tag') {
-			let tags = await Tag.search({ titlePattern: next + '*' });
+			let tags = await Tag.search({ titlePattern: `${next}*` });
 			l.push(...tags.map(n => n.title));
 		}
 
@@ -100,7 +105,7 @@ async function handleAutocompletionPromise(line) {
 		}
 
 		if (argName == 'tag-command') {
-			let c = filterList(['add', 'remove', 'list'], next);
+			let c = filterList(['add', 'remove', 'list', 'notetags'], next);
 			l.push(...c);
 		}
 
@@ -113,7 +118,7 @@ async function handleAutocompletionPromise(line) {
 		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
 		let ret = l.map(a => toCommandLine(a));
-		ret.prefix = toCommandLine(words.slice(0, -1)) + ' ';
+		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
 	return line;
@@ -128,9 +133,9 @@ function toCommandLine(args) {
 		return args
 			.map(function(a) {
 				if (a.indexOf('"') !== -1 || a.indexOf(' ') !== -1) {
-					return '\'' + a + '\'';
+					return `'${a}'`;
 				} else if (a.indexOf('\'') !== -1) {
-					return '"' + a + '"';
+					return `"${a}"`;
 				} else {
 					return a;
 				}
@@ -138,11 +143,11 @@ function toCommandLine(args) {
 			.join(' ');
 	} else {
 		if (args.indexOf('"') !== -1 || args.indexOf(' ') !== -1) {
-			return '\'' + args + '\' ';
+			return `'${args}' `;
 		} else if (args.indexOf('\'') !== -1) {
-			return '"' + args + '" ';
+			return `"${args}" `;
 		} else {
-			return args + ' ';
+			return `${args} `;
 		}
 	}
 }
@@ -155,20 +160,20 @@ function getArguments(line) {
 		if (line[i] === '"') {
 			if (inDoubleQuotes) {
 				inDoubleQuotes = false;
-				//maybe push word to parsed?
-				//currentWord += '"';
+				// maybe push word to parsed?
+				// currentWord += '"';
 			} else {
 				inDoubleQuotes = true;
-				//currentWord += '"';
+				// currentWord += '"';
 			}
 		} else if (line[i] === '\'') {
 			if (inSingleQuotes) {
 				inSingleQuotes = false;
-				//maybe push word to parsed?
-				//currentWord += "'";
+				// maybe push word to parsed?
+				// currentWord += "'";
 			} else {
 				inSingleQuotes = true;
-				//currentWord += "'";
+				// currentWord += "'";
 			}
 		} else if (/\s/.test(line[i]) && !(inDoubleQuotes || inSingleQuotes)) {
 			if (currentWord !== '') {

@@ -25,6 +25,11 @@ class FoldersScreenUtils {
 			folders = await Folder.orderByLastModified(folders, orderDir);
 		}
 
+		if (Setting.value('showNoteCounts')) {
+			await Folder.addNoteCounts(folders,
+				Setting.value('showCompletedTodos'));
+		}
+
 		return folders;
 	}
 

@@ -1,4 +1,4 @@
-const randomClipperPort = require('./randomClipperPort');
+const { randomClipperPort } = require('./randomClipperPort');
 
 class Bridge {
 
@@ -6,50 +6,63 @@ class Bridge {
 		this.nounce_ = Date.now();
 	}
 
-	async init(browser, browserSupportsPromises, dispatch) {
+	async init(browser, browserSupportsPromises, store) {
 		console.info('Popup: Init bridge');
 
 		this.browser_ = browser;
-		this.dispatch_ = dispatch;
+		this.dispatch_ = store.dispatch;
+		this.store_ = store;
 		this.browserSupportsPromises_ = browserSupportsPromises;
 		this.clipperServerPort_ = null;
 		this.clipperServerPortStatus_ = 'searching';
+
+		function convertCommandToContent(command) {
+			return {
+				title: command.title,
+				body_html: command.html,
+				base_url: command.base_url,
+				source_url: command.url,
+				parent_id: command.parent_id,
+				tags: command.tags || '',
+				image_sizes: command.image_sizes || {},
+				anchor_names: command.anchor_names || [],
+				source_command: command.source_command,
+				convert_to: command.convert_to,
+				stylesheets: command.stylesheets,
+			};
+		}
 
 		this.browser_notify = async (command) => {
 			console.info('Popup: Got command:', command);
 
 			if (command.warning) {
-				console.warn('Popup: Got warning: ' + command.warning);
+				console.warn(`Popup: Got warning: ${command.warning}`);
 				this.dispatch({ type: 'WARNING_SET', text: command.warning });
 			} else {
 				this.dispatch({ type: 'WARNING_SET', text: '' });
 			}
 
 			if (command.name === 'clippedContent') {
-				const content = {
-					title: command.title,
-					body_html: command.html,
-					base_url: command.base_url,
-					source_url: command.url,
-					parent_id: command.parent_id,
-					tags: command.tags || '',
-					image_sizes: command.image_sizes || {},
-					anchor_names: command.anchor_names || [],
-					source_command: command.source_command,
-					convert_to: command.convert_to,
-					stylesheets: command.stylesheets,
-				};
-
+				const content = convertCommandToContent(command);
 				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
+			}
+
+			if (command.name === 'sendContentToJoplin') {
+				const content = convertCommandToContent(command);
+				this.dispatch({ type: 'CLIPPED_CONTENT_SET', content: content });
+
+				const state = this.store_.getState();
+				content.parent_id = state.selectedFolderId;
+				if (content.parent_id) {
+					this.sendContentToJoplin(content);
+				}
 			}
 
 			if (command.name === 'isProbablyReaderable') {
 				this.dispatch({ type: 'IS_PROBABLY_READERABLE', value: command.value });
 			}
 		};
-
 		this.browser_.runtime.onMessage.addListener(this.browser_notify);
-
 		const backgroundPage = await this.backgroundPage(this.browser_);
 
 		// Not sure why the getBackgroundPage() sometimes returns null, so
@@ -71,7 +84,7 @@ class Bridge {
 		const bgp = browser.extension.getBackgroundPage();
 		if (bgp) return bgp;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			browser.runtime.getBackgroundPage((bgp) => {
 				resolve(bgp);
 			});
@@ -125,10 +138,10 @@ class Bridge {
 			state = randomClipperPort(state, this.env());
 
 			try {
-				console.info('findClipperServerPort: Trying ' + state.port);
-				const response = await fetch('http://127.0.0.1:' + state.port + '/ping');
+				console.info(`findClipperServerPort: Trying ${state.port}`);
+				const response = await fetch(`http://127.0.0.1:${state.port}/ping`);
 				const text = await response.text();
-				console.info('findClipperServerPort: Got response: ' + text);
+				console.info(`findClipperServerPort: Got response: ${text}`);
 				if (text.trim() === 'JoplinClipperServer') {
 					this.clipperServerPortStatus_ = 'found';
 					this.clipperServerPort_ = state.port;
@@ -182,7 +195,7 @@ class Bridge {
 
 	async clipperServerBaseUrl() {
 		const port = await this.clipperServerPort();
-		return 'http://127.0.0.1:' + port;
+		return `http://127.0.0.1:${port}`;
 	}
 
 	async tabsExecuteScript(options) {
@@ -192,7 +205,7 @@ class Bridge {
 			this.browser().tabs.executeScript(options, () => {
 				const e = this.browser().runtime.lastError;
 				if (e) {
-					const msg = ['tabsExecuteScript: Cannot load ' + JSON.stringify(options)];
+					const msg = [`tabsExecuteScript: Cannot load ${JSON.stringify(options)}`];
 					if (e.message) msg.push(e.message);
 					reject(new Error(msg.join(': ')));
 				}
@@ -204,7 +217,7 @@ class Bridge {
 	async tabsQuery(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.query(options);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.query(options, (tabs) => {
 				resolve(tabs);
 			});
@@ -214,7 +227,7 @@ class Bridge {
 	async tabsSendMessage(tabId, command) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.sendMessage(tabId, command);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.sendMessage(tabId, command, (result) => {
 				resolve(result);
 			});
@@ -224,7 +237,7 @@ class Bridge {
 	async tabsCreate(options) {
 		if (this.browserSupportsPromises_) return this.browser().tabs.create(options);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().tabs.create(options, () => {
 				resolve();
 			});
@@ -238,7 +251,7 @@ class Bridge {
 	async storageSet(keys) {
 		if (this.browserSupportsPromises_) return this.browser().storage.local.set(keys);
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			this.browser().storage.local.set(keys, () => {
 				resolve();
 			});
@@ -254,7 +267,7 @@ class Bridge {
 				return defaultValue;
 			}
 		} else {
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				this.browser().storage.local.get(keys, (result) => {
 					resolve(result);
 				});
@@ -277,7 +290,7 @@ class Bridge {
 	}
 
 	async clipperApiExec(method, path, query, body) {
-		console.info('Popup: ' + method + ' ' + path);
+		console.info(`Popup: ${method} ${path}`);
 
 		const baseUrl = await this.clipperServerBaseUrl();
 
@@ -295,13 +308,13 @@ class Bridge {
 			const s = [];
 			for (const k in query) {
 				if (!query.hasOwnProperty(k)) continue;
-				s.push(encodeURIComponent(k) + '=' + encodeURIComponent(query[k]));
+				s.push(`${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`);
 			}
 			queryString = s.join('&');
-			if (queryString) queryString = '?' + queryString;
+			if (queryString) queryString = `?${queryString}`;
 		}
 
-		const response = await fetch(baseUrl + '/' + path + queryString, fetchOptions);
+		const response = await fetch(`${baseUrl}/${path}${queryString}`, fetchOptions);
 		if (!response.ok) {
 			const msg = await response.text();
 			throw new Error(msg);
@@ -354,7 +367,6 @@ class Bridge {
 			}
 		}
 	}
-
 }
 
 const bridge_ = new Bridge();

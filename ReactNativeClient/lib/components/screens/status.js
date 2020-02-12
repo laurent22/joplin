@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { StyleSheet, View, Text, Button, FlatList } = require('react-native');
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
 });
 
 class StatusScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -60,7 +62,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				let style = Object.assign({}, baseStyle);
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
-				lines.push({ key: 'section_' + i, isSection: true, text: section.title });
+				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
 
 				for (let n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
@@ -82,10 +84,10 @@ class StatusScreenComponent extends BaseScreenComponent {
 						text = item;
 					}
 
-					lines.push({ key: 'item_' + i + '_' + n, text: text, retryHandler: retryHandler });
+					lines.push({ key: `item_${i}_${n}`, text: text, retryHandler: retryHandler });
 				}
 
-				lines.push({ key: 'divider2_' + i, isDivider: true });
+				lines.push({ key: `divider2_${i}`, isDivider: true });
 			}
 
 			return (

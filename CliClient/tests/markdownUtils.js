@@ -2,8 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 
-const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { asyncTest } = require('test-utils.js');
 const markdownUtils = require('lib/markdownUtils.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -16,7 +15,7 @@ describe('markdownUtils', function() {
 		done();
 	});
 
-	it('should prepend a base URL', async (done) => {
+	it('should prepend a base URL', asyncTest(async () => {
 		const baseUrl = 'https://test.com/site';
 
 		const testCases = [
@@ -24,7 +23,7 @@ describe('markdownUtils', function() {
 			['![something](/img/test.png)', '![something](https://test.com/img/test.png)'],
 			['[![something](/img/test.png)](/index.html "Home page")', '[![something](https://test.com/img/test.png)](https://test.com/index.html "Home page")'],
 			['[onelink.com](/jmp/?id=123&u=http://something.com/test)', '[onelink.com](https://test.com/jmp/?id=123&u=http://something.com/test)'],
-			['[![some text](/img/test.png)](/jmp/?s=80&l=related&u=http://example.com "some decription")', '[![some text](https://test.com/img/test.png)](https://test.com/jmp/?s=80&l=related&u=http://example.com "some decription")'],
+			['[![some text](/img/test.png)](/jmp/?s=80&l=related&u=http://example.com "some description")', '[![some text](https://test.com/img/test.png)](https://test.com/jmp/?s=80&l=related&u=http://example.com "some description")'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -32,11 +31,9 @@ describe('markdownUtils', function() {
 			const expected = testCases[i][1];
 			expect(markdownUtils.prependBaseUrl(md, baseUrl)).toBe(expected);
 		}
+	}));
 
-		done();
-	});
-
-	it('should extract image URLs', async (done) => {
+	it('should extract image URLs', asyncTest(async () => {
 		const testCases = [
 			['![something](http://test.com/img.png)', ['http://test.com/img.png']],
 			['![something](http://test.com/img.png) ![something2](http://test.com/img2.png)', ['http://test.com/img.png', 'http://test.com/img2.png']],
@@ -50,8 +47,21 @@ describe('markdownUtils', function() {
 
 			expect(markdownUtils.extractImageUrls(md).join('')).toBe(expected.join(''));
 		}
+	}));
 
-		done();
-	});
+	it('escape a markdown link (title)', asyncTest(async () => {
+
+		const testCases = [
+			['Helmut K. C. Tessarek', 'Helmut K. C. Tessarek'],
+			['Helmut (K. C.) Tessarek', 'Helmut (K. C.) Tessarek'],
+			['Helmut [K. C.] Tessarek', 'Helmut \\[K. C.\\] Tessarek'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.escapeTitleText(md)).toBe(expected);
+		}
+	}));
 
 });

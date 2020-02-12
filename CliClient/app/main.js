@@ -8,8 +8,8 @@ require('app-module-path').addPath(__dirname);
 
 const compareVersion = require('compare-version');
 const nodeVersion = process && process.versions && process.versions.node ? process.versions.node : '0.0.0';
-if (compareVersion(nodeVersion, '8.0.0') < 0) {
-	console.error('Joplin requires Node 8+. Detected version ' + nodeVersion);
+if (compareVersion(nodeVersion, '10.0.0') < 0) {
+	console.error(`Joplin requires Node 10+. Detected version ${nodeVersion}`);
 	process.exit(1);
 }
 

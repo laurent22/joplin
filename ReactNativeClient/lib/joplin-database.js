@@ -2,6 +2,7 @@ const { promiseChain } = require('lib/promise-utils.js');
 const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
+const { shim } = require('lib/shim.js');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -147,7 +148,7 @@ class JoplinDatabase extends Database {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
-		if (!this.tableFields_[tableName]) throw new Error('Unknown table: ' + tableName);
+		if (!this.tableFields_[tableName]) throw new Error(`Unknown table: ${tableName}`);
 		const output = this.tableFields_[tableName].slice();
 
 		if (options.includeDescription) {
@@ -180,8 +181,8 @@ class JoplinDatabase extends Database {
 
 		const queries = [];
 		for (const n of tableNames) {
-			queries.push('DELETE FROM ' + n);
-			queries.push('DELETE FROM sqlite_sequence WHERE name="' + n + '"'); // Reset autoincremented IDs
+			queries.push(`DELETE FROM ${n}`);
+			queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 		}
 
 		queries.push('DELETE FROM settings WHERE key="sync.1.context"');
@@ -199,7 +200,7 @@ class JoplinDatabase extends Database {
 		await this.transactionExecBatch(queries);
 	}
 
-	createDefaultRow(tableName) {
+	createDefaultRow() {
 		const row = {};
 		const fields = this.tableFields('resource_local_states');
 		for (let i = 0; i < fields.length; i++) {
@@ -260,7 +261,7 @@ class JoplinDatabase extends Database {
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
 					chain.push(() => {
-						return this.selectAll('PRAGMA table_info("' + tableName + '")').then(pragmas => {
+						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
 								let item = pragmas[i];
 								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
@@ -287,6 +288,11 @@ class JoplinDatabase extends Database {
 			});
 	}
 
+	addMigrationFile(num) {
+		const timestamp = Date.now();
+		return { sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (?, ?, ?)', params: [num, timestamp, timestamp] };
+	}
+
 	async upgradeDatabase(fromVersion) {
 		// INSTRUCTIONS TO UPGRADE THE DATABASE:
 		//
@@ -302,13 +308,19 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
 		// currentVersionIndex < 0 if for the case where an old version of Joplin used with a newer
 		// version of the database, so that migration is not run in this case.
-		if (currentVersionIndex < 0) throw new Error('Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.');
+		if (currentVersionIndex < 0) {
+			throw new Error(
+				'Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\n'
+				+ `Joplin version: ${shim.appVersion()}\n`
+				+ `Profile version: ${fromVersion}\n`
+				+ `Expected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
+		}
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
 
@@ -316,7 +328,7 @@ class JoplinDatabase extends Database {
 
 		while (currentVersionIndex < existingDatabaseVersions.length - 1) {
 			const targetVersion = existingDatabaseVersions[currentVersionIndex + 1];
-			this.logger().info('Converting database to version ' + targetVersion);
+			this.logger().info(`Converting database to version ${targetVersion}`);
 
 			let queries = [];
 
@@ -353,11 +365,11 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_created_time INT NOT NULL DEFAULT 0');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0');
-					queries.push('UPDATE ' + n + ' SET user_created_time = created_time');
-					queries.push('UPDATE ' + n + ' SET user_updated_time = updated_time');
-					queries.push('CREATE INDEX ' + n + '_user_updated_time ON ' + n + ' (user_updated_time)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_created_time INT NOT NULL DEFAULT 0`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN user_updated_time INT NOT NULL DEFAULT 0`);
+					queries.push(`UPDATE ${n} SET user_created_time = created_time`);
+					queries.push(`UPDATE ${n} SET user_updated_time = updated_time`);
+					queries.push(`CREATE INDEX ${n}_user_updated_time ON ${n} (user_updated_time)`);
 				}
 			}
 
@@ -391,9 +403,9 @@ class JoplinDatabase extends Database {
 				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
 				for (let i = 0; i < tableNames.length; i++) {
 					const n = tableNames[i];
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""');
-					queries.push('ALTER TABLE ' + n + ' ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0');
-					queries.push('CREATE INDEX ' + n + '_encryption_applied ON ' + n + ' (encryption_applied)');
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_cipher_text TEXT NOT NULL DEFAULT ""`);
+					queries.push(`ALTER TABLE ${n} ADD COLUMN encryption_applied INT NOT NULL DEFAULT 0`);
+					queries.push(`CREATE INDEX ${n}_encryption_applied ON ${n} (encryption_applied)`);
 				}
 
 				queries.push('ALTER TABLE sync_items ADD COLUMN force_sync INT NOT NULL DEFAULT 0');
@@ -596,9 +608,8 @@ class JoplinDatabase extends Database {
 				`;
 				queries.push(this.sqlStringToLines(newTableSql)[0]);
 
-				const timestamp = Date.now();
 				queries.push('ALTER TABLE resources ADD COLUMN `size` INT NOT NULL DEFAULT -1');
-				queries.push({ sql: 'INSERT INTO migrations (number, created_time, updated_time) VALUES (20, ?, ?)', params: [timestamp, timestamp] });
+				queries.push(this.addMigrationFile(20));
 			}
 
 			if (targetVersion == 21) {
@@ -637,6 +648,28 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 24) {
 				queries.push('ALTER TABLE notes ADD COLUMN `markup_language` INT NOT NULL DEFAULT 1'); // 1: Markdown, 2: HTML
+			}
+
+			if (targetVersion == 25) {
+				queries.push(`CREATE VIEW tags_with_note_count AS 
+						SELECT tags.id as id, tags.title as title, tags.created_time as created_time, tags.updated_time as updated_time, COUNT(notes.id) as note_count 
+						FROM tags 
+							LEFT JOIN note_tags nt on nt.tag_id = tags.id 
+							LEFT JOIN notes on notes.id = nt.note_id 
+						WHERE notes.id IS NOT NULL 
+						GROUP BY tags.id`);
+			}
+
+			if (targetVersion == 26) {
+				const tableNames = ['notes', 'folders', 'tags', 'note_tags', 'resources'];
+				for (let i = 0; i < tableNames.length; i++) {
+					const n = tableNames[i];
+					queries.push(`ALTER TABLE ${n} ADD COLUMN is_shared INT NOT NULL DEFAULT 0`);
+				}
+			}
+
+			if (targetVersion == 27) {
+				queries.push(this.addMigrationFile(27));
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

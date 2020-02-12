@@ -23,10 +23,6 @@ class DatabaseDriverNode {
 		return output;
 	}
 
-	setDebugMode(v) {
-		// ??
-	}
-
 	selectOne(sql, params = null) {
 		if (!params) params = {};
 		return new Promise((resolve, reject) => {

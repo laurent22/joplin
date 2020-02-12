@@ -74,7 +74,7 @@ class OneDriveApi {
 
 	async appDirectory() {
 		let r = await this.execJson('GET', '/drive/special/approot');
-		return r.parentReference.path + '/' + r.name;
+		return `${r.parentReference.path}/${r.name}`;
 	}
 
 	authCodeUrl(redirectUri) {
@@ -84,7 +84,7 @@ class OneDriveApi {
 			response_type: 'code',
 			redirect_uri: redirectUri,
 		};
-		return 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' + stringify(query);
+		return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${stringify(query)}`;
 	}
 
 	async execTokenRequest(code, redirectUri) {
@@ -102,7 +102,7 @@ class OneDriveApi {
 
 		if (!r.ok) {
 			const text = await r.text();
-			throw new Error('Could not retrieve auth code: ' + r.status + ': ' + r.statusText + ': ' + text);
+			throw new Error(`Could not retrieve auth code: ${r.status}: ${r.statusText}: ${text}`);
 		}
 
 		try {
@@ -111,7 +111,7 @@ class OneDriveApi {
 		} catch (error) {
 			this.setAuth(null);
 			const text = await r.text();
-			error.message += ': ' + text;
+			error.message += `: ${text}`;
 			throw error;
 		}
 	}
@@ -153,7 +153,7 @@ class OneDriveApi {
 		// In general, `path` contains a path relative to the base URL, but in some
 		// cases the full URL is provided (for example, when it's a URL that was
 		// retrieved from the API).
-		if (url.indexOf('https://') !== 0) url = 'https://graph.microsoft.com/v1.0' + path;
+		if (url.indexOf('https://') !== 0) url = `https://graph.microsoft.com/v1.0${path}`;
 
 		if (query) {
 			url += url.indexOf('?') < 0 ? '?' : '&';
@@ -165,7 +165,7 @@ class OneDriveApi {
 		options.timeout = 1000 * 60 * 5; // in ms
 
 		for (let i = 0; i < 5; i++) {
-			options.headers['Authorization'] = 'bearer ' + this.token();
+			options.headers['Authorization'] = `bearer ${this.token()}`;
 
 			let response = null;
 			try {
@@ -186,9 +186,9 @@ class OneDriveApi {
 				let errorResponseText = await response.text();
 				let errorResponse = null;
 				try {
-					errorResponse = JSON.parse(errorResponseText); //await response.json();
+					errorResponse = JSON.parse(errorResponseText); // await response.json();
 				} catch (error) {
-					error.message = 'OneDriveApi::exec: Cannot parse JSON error: ' + errorResponseText + ' ' + error.message;
+					error.message = `OneDriveApi::exec: Cannot parse JSON error: ${errorResponseText} ${error.message}`;
 					throw error;
 				}
 
@@ -213,7 +213,7 @@ class OneDriveApi {
 					//   type: 'system',
 					//   errno: 'EAGAIN',
 					//   code: 'EAGAIN' }
-					this.logger().info('Got error below - retrying (' + i + ')...');
+					this.logger().info(`Got error below - retrying (${i})...`);
 					this.logger().info(error);
 					await time.sleep((i + 1) * 3);
 					continue;
@@ -225,7 +225,7 @@ class OneDriveApi {
 					// Header: {"_headers":{"cache-control":["private"],"transfer-encoding":["chunked"],"content-type":["application/json"],"request-id":["d...ea47"],"client-request-id":["d99...ea47"],"x-ms-ags-diagnostic":["{\"ServerInfo\":{\"DataCenter\":\"North Europe\",\"Slice\":\"SliceA\",\"Ring\":\"2\",\"ScaleUnit\":\"000\",\"Host\":\"AGSFE_IN_13\",\"ADSiteName\":\"DUB\"}}"],"duration":["96.9464"],"date":[],"connection":["close"]}}
 					// Request: PATCH https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev/f56c5601fee94b8085524513bf3e352f.md null "{\"fileSystemInfo\":{\"lastModifiedDateTime\":\"....\"}}" {"headers":{"Content-Type":"application/json","Authorization":"bearer ...
 
-					this.logger().info('Got error below - retrying (' + i + ')...');
+					this.logger().info(`Got error below - retrying (${i})...`);
 					this.logger().info(error);
 					await time.sleep((i + 1) * 3);
 					continue;
@@ -233,7 +233,7 @@ class OneDriveApi {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {
-					error.request = method + ' ' + url + ' ' + JSON.stringify(query) + ' ' + JSON.stringify(data) + ' ' + JSON.stringify(options);
+					error.request = `${method} ${url} ${JSON.stringify(query)} ${JSON.stringify(data)} ${JSON.stringify(options)}`;
 					error.headers = await response.headers;
 					throw error;
 				}
@@ -242,19 +242,19 @@ class OneDriveApi {
 			return response;
 		}
 
-		throw new Error('Could not execute request after multiple attempts: ' + method + ' ' + url);
+		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
 	}
 
 	async execJson(method, path, query, data) {
 		let response = await this.exec(method, path, query, data);
 		let errorResponseText = await response.text();
 		try {
-			let output = JSON.parse(errorResponseText); //await response.json();
+			let output = JSON.parse(errorResponseText); // await response.json();
 			return output;
 		} catch (error) {
-			error.message = 'OneDriveApi::execJson: Cannot parse JSON: ' + errorResponseText + ' ' + error.message;
+			error.message = `OneDriveApi::execJson: Cannot parse JSON: ${errorResponseText} ${error.message}`;
 			throw error;
-			//throw new Error('Cannot parse JSON: ' + text);
+			// throw new Error('Cannot parse JSON: ' + text);
 		}
 	}
 
@@ -286,7 +286,7 @@ class OneDriveApi {
 		if (!response.ok) {
 			this.setAuth(null);
 			let msg = await response.text();
-			throw new Error(msg + ': TOKEN: ' + this.auth_);
+			throw new Error(`${msg}: TOKEN: ${this.auth_}`);
 		}
 
 		let auth = await response.json();

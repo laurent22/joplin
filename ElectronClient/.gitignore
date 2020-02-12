@@ -5,3 +5,4 @@ app/lib/
 app/gui/*.min.js
 app/plugins/*.min.js
 .DS_Store
+app/gui/note-viewer/pluginAssets/

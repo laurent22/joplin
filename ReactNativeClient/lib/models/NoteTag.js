@@ -12,7 +12,7 @@ class NoteTag extends BaseItem {
 
 	static async byNoteIds(noteIds) {
 		if (!noteIds.length) return [];
-		return this.modelSelectAll('SELECT * FROM note_tags WHERE note_id IN ("' + noteIds.join('","') + '")');
+		return this.modelSelectAll(`SELECT * FROM note_tags WHERE note_id IN ("${noteIds.join('","')}")`);
 	}
 
 	static async tagIdsByNoteId(noteId) {

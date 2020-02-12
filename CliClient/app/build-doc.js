@@ -54,7 +54,7 @@ function getCommands() {
 		const ext = fileExtension(path);
 		if (ext != 'js') return;
 
-		let CommandClass = require('./' + path);
+		let CommandClass = require(`./${path}`);
 		let cmd = new CommandClass();
 		if (!cmd.enabled()) return;
 		if (cmd.hidden()) return;
@@ -102,14 +102,14 @@ function getFooter() {
 
 	output.push('WEBSITE');
 	output.push('');
-	output.push(INDENT + 'https://joplinapp.org');
+	output.push(`${INDENT}https://joplinapp.org`);
 
 	output.push('');
 
 	output.push('LICENSE');
 	output.push('');
-	let filePath = rootDir + '/LICENSE_' + languageCode();
-	if (!fs.existsSync(filePath)) filePath = rootDir + '/LICENSE';
+	let filePath = `${rootDir}/LICENSE_${languageCode()}`;
+	if (!fs.existsSync(filePath)) filePath = `${rootDir}/LICENSE`;
 	const licenseText = fs.readFileSync(filePath, 'utf8');
 	output.push(wrap(licenseText, INDENT));
 
@@ -131,7 +131,7 @@ async function main() {
 	const commandsText = commandBlocks.join('\n\n');
 	const footerText = getFooter();
 
-	console.info(headerText + '\n\n' + 'USAGE' + '\n\n' + commandsText + '\n\n' + footerText);
+	console.info(`${headerText}\n\n` + 'USAGE' + `\n\n${commandsText}\n\n${footerText}`);
 }
 
 main().catch(error => {

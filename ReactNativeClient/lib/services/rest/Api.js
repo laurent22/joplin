@@ -22,6 +22,8 @@ const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const { uuid } = require('lib/uuid');
 
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
@@ -72,7 +74,7 @@ class Api {
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0, 1)[0];
-		let callName = 'action_' + callSuffix;
+		let callName = `action_${callSuffix}`;
 		return {
 			callName: callName,
 			params: pathParts,
@@ -229,7 +231,7 @@ class Api {
 		throw new ErrorMethodNotAllowed();
 	}
 
-	async action_ping(request, id = null, link = null) {
+	async action_ping(request) {
 		if (request.method === 'GET') {
 			return 'JoplinClipperServer';
 		}
@@ -245,7 +247,21 @@ class Api {
 		const query = request.query.query;
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
-		return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+
+		if (queryType !== BaseItem.TYPE_NOTE) {
+			const ModelClass = BaseItem.getClassByItemType(queryType);
+			const options = {};
+			const fields = this.fields_(request, []);
+			if (fields.length) options.fields = fields;
+			const sqlQueryPart = query.replace(/\*/g, '%');
+			options.where = 'title LIKE ?';
+			options.whereParams = [sqlQueryPart];
+			options.caseInsensitive = true;
+			return await ModelClass.all(options);
+		} else {
+			return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		}
 	}
 
 	async action_folders(request, id = null, link = null) {
@@ -354,12 +370,29 @@ class Api {
 		return options;
 	}
 
+	defaultLoadOptions_(request) {
+		const options = {};
+		const fields = this.fields_(request, []);
+		if (fields.length) options.fields = fields;
+		return options;
+	}
+
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
 
 		if (request.method === 'GET') {
 			if (link && link === 'tags') {
 				return Tag.tagsByNoteId(id);
+			} else if (link && link === 'resources') {
+				const note = await Note.load(id);
+				if (!note) throw new ErrorNotFound();
+				const resourceIds = await Note.linkedResourceIds(note.body);
+				const output = [];
+				const loadOptions = this.defaultLoadOptions_(request);
+				for (let resourceId of resourceIds) {
+					output.push(await Resource.load(resourceId, loadOptions));
+				}
+				return output;
 			} else if (link) {
 				throw new ErrorNotFound();
 			}
@@ -384,17 +417,17 @@ class Api {
 
 			const imageUrls = ArrayUtils.unique(markupLanguageUtils.extractImageUrls(note.markup_language, note.body));
 
-			this.logger().info('Request (' + requestId + '): Downloading images: ' + imageUrls.length);
+			this.logger().info(`Request (${requestId}): Downloading images: ${imageUrls.length}`);
 
 			let result = await this.downloadImages_(imageUrls, allowFileProtocolImages);
 
-			this.logger().info('Request (' + requestId + '): Creating resources from paths: ' + Object.getOwnPropertyNames(result).length);
+			this.logger().info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
 
 			result = await this.createResourcesFromPaths_(result);
 			await this.removeTempFiles_(result);
 			note.body = this.replaceImageUrlsByResources_(note.markup_language, note.body, result, imageSizes);
 
-			this.logger().info('Request (' + requestId + '): Saving note...');
+			this.logger().info(`Request (${requestId}): Saving note...`);
 
 			const saveOptions = this.defaultSaveOptions_(note, 'POST');
 			saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
@@ -413,7 +446,7 @@ class Api {
 				note = await this.attachImageFromDataUrl_(note, requestNote.image_data_url, requestNote.crop_rect);
 			}
 
-			this.logger().info('Request (' + requestId + '): Created note ' + note.id);
+			this.logger().info(`Request (${requestId}): Created note ${note.id}`);
 
 			return note;
 		}
@@ -464,20 +497,27 @@ class Api {
 					maxLineLen: 200,
 				});
 
-				const styleTag = style.length ? '<style>' + styleString + '</style>' + '\n' : '';
-				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
+				const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
+				let minifiedHtml = '';
+				try {
+					minifiedHtml = minify(requestNote.body_html, minifyOptions);
+				} catch (error) {
+					console.warn('Could not minify HTML - using non-minified HTML instead', error);
+					minifiedHtml = requestNote.body_html;
+				}
+				output.body = styleTag + minifiedHtml;
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
-				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			} else {
 				// Convert to Markdown
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
 				// when getting the content from elsewhere. So here wrap it - it won't change anything to the final
 				// rendering but it makes sure everything will be parsed.
-				output.body = await this.htmlToMdParser().parse('<div>' + requestNote.body_html + '</div>', {
+				output.body = await this.htmlToMdParser().parse(`<div>${requestNote.body_html}</div>`, {
 					baseUrl: baseUrl,
 					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 				});
-				output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 			}
 		}
 
@@ -496,7 +536,7 @@ class Api {
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
 		if ('markup_language' in requestNote) output.markup_language = Database.formatValue(Database.TYPE_INT, requestNote.markup_language);
 
-		if (!output.markup_language) output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+		if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 		return output;
 	}
@@ -506,8 +546,8 @@ class Api {
 		const tempDir = Setting.value('tempDir');
 		const mime = mimeUtils.fromDataUrl(imageDataUrl);
 		let ext = mimeUtils.toFileExtension(mime) || '';
-		if (ext) ext = '.' + ext;
-		const tempFilePath = tempDir + '/' + md5(Math.random() + '_' + Date.now()) + ext;
+		if (ext) ext = `.${ext}`;
+		const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
 		const imageConvOptions = {};
 		if (cropRect) imageConvOptions.cropRect = cropRect;
 		await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
@@ -521,7 +561,7 @@ class Api {
 		const newExt = mimeUtils.toFileExtension(mimeType);
 		if (!newExt) return imagePath;
 
-		const newImagePath = imagePath + '.' + newExt;
+		const newImagePath = `${imagePath}.${newExt}`;
 		await shim.fsDriver().move(imagePath, newImagePath);
 		return newImagePath;
 	}
@@ -536,33 +576,35 @@ class Api {
 				output.push(stylesheet.value);
 			} else if (stylesheet.type === 'url') {
 				try {
-					const tempPath = Setting.value('tempDir') + '/' + md5(Math.random() + '_' + Date.now()) + '.css';
+					const tempPath = `${Setting.value('tempDir')}/${md5(`${Math.random()}_${Date.now()}`)}.css`;
 					await shim.fetchBlob(stylesheet.value, { path: tempPath, maxRetry: 1 });
 					const text = await shim.fsDriver().readFile(tempPath);
 					output.push(text);
 					await shim.fsDriver().remove(tempPath);
 				} catch (error) {
-					this.logger().warn('Cannot download stylesheet at ' + stylesheet.value, error);
+					this.logger().warn(`Cannot download stylesheet at ${stylesheet.value}`, error);
 				}
 			} else {
-				throw new Error('Invalid stylesheet type: ' + stylesheet.type);
+				throw new Error(`Invalid stylesheet type: ${stylesheet.type}`);
 			}
 		}
 
 		return output;
 	}
 
-	async downloadImage_(url, allowFileProtocolImages) {
+	async downloadImage_(url /* , allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
 
-		const name = isDataUrl ? md5(Math.random() + '_' + Date.now()) : filename(url);
+		const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
-		if (fileExt) fileExt = '.' + fileExt;
-		let imagePath = tempDir + '/' + safeFilename(name) + fileExt;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = tempDir + '/' + safeFilename(name) + '_' + md5(Math.random() + '_' + Date.now()).substr(0, 10) + fileExt;
+		if (fileExt) fileExt = `.${fileExt}`;
+
+		// Append a UUID because simply checking if the file exists is not enough since
+		// multiple resources can be downloaded at the same time (race condition).
+		let imagePath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
 
 		try {
 			if (isDataUrl) {
@@ -581,7 +623,7 @@ class Api {
 			}
 			return imagePath;
 		} catch (error) {
-			this.logger().warn('Cannot download image at ' + url, error);
+			this.logger().warn(`Cannot download image at ${url}`, error);
 			return '';
 		}
 	}
@@ -619,7 +661,7 @@ class Api {
 				const resource = await shim.createResourceFromPath(urlInfo.path);
 				urlInfo.resource = resource;
 			} catch (error) {
-				this.logger().warn('Cannot create resource for ' + url, error);
+				this.logger().warn(`Cannot create resource for ${url}`, error);
 			}
 		}
 		return urls;
@@ -632,7 +674,7 @@ class Api {
 			try {
 				await shim.fsDriver().remove(urlInfo.path);
 			} catch (error) {
-				this.logger().warn('Cannot remove ' + urlInfo.path, error);
+				this.logger().warn(`Cannot remove ${urlInfo.path}`, error);
 			}
 		}
 	}
@@ -640,7 +682,7 @@ class Api {
 	replaceImageUrlsByResources_(markupLanguage, md, urls, imageSizes) {
 		const imageSizesIndexes = {};
 
-		if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
+		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 			return htmlUtils.replaceImageUrls(md, imageUrl => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return imageUrl;
@@ -652,12 +694,23 @@ class Api {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return before + imageUrl + after;
 				if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
-				const imageSize = imageSizes[urlInfo.originalUrl][imageSizesIndexes[urlInfo.originalUrl]];
-				imageSizesIndexes[urlInfo.originalUrl]++;
+
 				const resourceUrl = Resource.internalUrl(urlInfo.resource);
+				const imageSizesCollection = imageSizes[urlInfo.originalUrl];
+
+				if (!imageSizesCollection) {
+					// In some cases, we won't find the image size information for that particular URL. Normally
+					// it will only happen when using the "Clip simplified page" feature, which can modify the
+					// image URLs (for example it will select a smaller size resolution). In that case, it's
+					// fine to return the image as-is because it has already good dimensions.
+					return before + resourceUrl + after;
+				}
+
+				const imageSize = imageSizesCollection[imageSizesIndexes[urlInfo.originalUrl]];
+				imageSizesIndexes[urlInfo.originalUrl]++;
 
 				if (imageSize && (imageSize.naturalWidth !== imageSize.width || imageSize.naturalHeight !== imageSize.height)) {
-					return '<img width="' + imageSize.width + '" height="' + imageSize.height + '" src="' + resourceUrl + '"/>';
+					return `<img width="${imageSize.width}" height="${imageSize.height}" src="${resourceUrl}"/>`;
 				} else {
 					return before + resourceUrl + after;
 				}

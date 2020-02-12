@@ -1,7 +1,9 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { connect } = require('react-redux');
-const { Platform, View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
+const { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -14,6 +16,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+
+Icon.loadFont();
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -41,7 +45,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
-				paddingTop: Platform.OS === 'ios' ? 15 : 0, // Extra padding for iOS because the top icons are there
 			},
 			divider: {
 				borderBottomWidth: 1,
@@ -163,6 +166,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Search');
 	}
 
+	async duplicateButton_press() {
+		const noteIds = this.props.selectedNoteIds;
+
+		// Duplicate all selected notes. ensureUniqueTitle is set to true to use the
+		// original note's name as a root for the new unique identifier.
+		await Note.duplicateMultipleNotes(noteIds, { ensureUniqueTitle: true });
+
+		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+	}
+
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
@@ -188,8 +201,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Status');
 	}
 
-	warningBox_press() {
-		NavService.go('EncryptionConfig');
+	warningBox_press(event) {
+		NavService.go(event.screen);
+	}
+
+	renderWarningBox(screen, message) {
+		return (
+			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
+				<Text style={{ flex: 1 }}>{message}</Text>
+			</TouchableOpacity>
+		);
 	}
 
 	render() {
@@ -245,6 +266,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
+		function duplicateButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name="md-copy" style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
 		function sortButton(styles, onPress) {
 			return (
 				<TouchableOpacity onPress={onPress}>
@@ -263,10 +294,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 				let o = this.props.menuOptions[i];
 
 				if (o.isDivider) {
-					menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
+					menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
 				} else {
 					menuOptionComponents.push(
-						<MenuOption value={o.onPress} key={'menuOption_' + key++} style={this.styles().contextMenuItem}>
+						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem}>
 							<Text style={this.styles().contextMenuItemText}>{o.title}</Text>
 						</MenuOption>
 					);
@@ -274,12 +305,18 @@ class ScreenHeaderComponent extends React.PureComponent {
 			}
 
 			if (menuOptionComponents.length) {
-				menuOptionComponents.push(<View key={'menuOption_' + key++} style={this.styles().divider} />);
+				menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
 			}
 		} else {
 			menuOptionComponents.push(
 				<MenuOption value={() => this.deleteButton_press()} key={'menuOption_delete'} style={this.styles().contextMenuItem}>
 					<Text style={this.styles().contextMenuItemText}>{_('Delete')}</Text>
+				</MenuOption>
+			);
+
+			menuOptionComponents.push(
+				<MenuOption value={() => this.duplicateButton_press()} key={'menuOption_duplicate'} style={this.styles().contextMenuItem}>
+					<Text style={this.styles().contextMenuItemText}>{_('Duplicate')}</Text>
 				</MenuOption>
 			);
 		}
@@ -299,7 +336,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 					for (let i = 0; i < folders.length; i++) {
 						const f = folders[i];
-						pickerItems.push({ label: '      '.repeat(indent) + ' ' + Folder.displayTitle(f), value: f.id });
+						pickerItems.push({ label: `${'      '.repeat(indent)} ${Folder.displayTitle(f)}`, value: f.id });
 						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
 					}
 
@@ -364,11 +401,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 			}
 		};
 
-		const warningComp = this.props.showMissingMasterKeyMessage ? (
-			<TouchableOpacity style={this.styles().warningBox} onPress={() => this.warningBox_press()} activeOpacity={0.8}>
-				<Text style={{ flex: 1 }}>{_('Press to set the decryption password.')}</Text>
-			</TouchableOpacity>
-		) : null;
+		const warningComps = [];
+
+		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
+		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
@@ -383,6 +419,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
+		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press()) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
@@ -419,10 +456,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{titleComp}
 					{searchButtonComp}
 					{deleteButtonComp}
+					{duplicateButtonComp}
 					{sortButtonComp}
 					{menuComp}
 				</View>
-				{warningComp}
+				{warningComps}
 				<DialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
@@ -446,6 +484,7 @@ const ScreenHeader = connect(state => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		hasDisabledSyncItems: state.hasDisabledSyncItems,
 	};
 })(ScreenHeaderComponent);
 

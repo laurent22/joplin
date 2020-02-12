@@ -31,7 +31,7 @@ class Tag extends BaseItem {
 		return Note.previews(
 			null,
 			Object.assign({}, options, {
-				conditions: ['id IN ("' + noteIds.join('","') + '")'],
+				conditions: [`id IN ("${noteIds.join('","')}")`],
 			})
 		);
 	}
@@ -68,7 +68,7 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			item: await Tag.load(tagId),
+			item: await Tag.loadWithCount(tagId),
 		});
 
 		return output;
@@ -86,29 +86,45 @@ class Tag extends BaseItem {
 		});
 	}
 
+	static loadWithCount(tagId) {
+		let sql = 'SELECT * FROM tags_with_note_count WHERE id = ?';
+		return this.modelSelectOne(sql, [tagId]);
+	}
+
 	static async hasNote(tagId, noteId) {
 		let r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
 	}
 
-	static tagsWithNotesSql_() {
-		return 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
-	}
-
 	static async allWithNotes() {
-		return await Tag.modelSelectAll('SELECT * FROM tags WHERE id IN (' + this.tagsWithNotesSql_() + ')');
+		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
 	static async searchAllWithNotes(options) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
-		options.conditions.push('id IN (' + this.tagsWithNotesSql_() + ')');
+		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
 		return this.search(options);
 	}
 
 	static async tagsByNoteId(noteId) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
-		return this.modelSelectAll('SELECT * FROM tags WHERE id IN ("' + tagIds.join('","') + '")');
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
+	}
+
+	static async commonTagsByNoteIds(noteIds) {
+		if (!noteIds || noteIds.length === 0) {
+			return [];
+		}
+		let commonTagIds = await NoteTag.tagIdsByNoteId(noteIds[0]);
+		for (let i = 1; i < noteIds.length; i++) {
+			const tagIds = await NoteTag.tagIdsByNoteId(noteIds[i]);
+			commonTagIds = commonTagIds.filter(value => tagIds.includes(value));
+			if (commonTagIds.length === 0) {
+				break;
+			}
+		}
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
 	}
 
 	static async loadByTitle(title) {

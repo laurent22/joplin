@@ -19,7 +19,7 @@ class WelcomeUtils {
 
 		for (let i = 0; i < folderAssets.length; i++) {
 			const folderAsset = folderAssets[i];
-			const folder = await Folder.save({ title: folderAsset.title + ' (' + Setting.appTypeToLabel(Setting.value('appType')) + ')' });
+			const folder = await Folder.save({ title: `${folderAsset.title} (${Setting.appTypeToLabel(Setting.value('appType'))})` });
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
 
@@ -34,15 +34,15 @@ class WelcomeUtils {
 				if (!noteAsset.resources.hasOwnProperty(resourceUrl)) continue;
 				const resourceAsset = noteAsset.resources[resourceUrl];
 				const ext = fileExtension(resourceUrl);
-				const tempFilePath = tempDir + '/' + uuid.create() + '.tmp.' + ext;
+				const tempFilePath = `${tempDir}/${uuid.create()}.tmp.${ext}`;
 				await shim.fsDriver().writeFile(tempFilePath, resourceAsset.body, 'base64');
 				const resource = await shim.createResourceFromPath(tempFilePath, {
 					title: basename(resourceUrl),
 				});
 				await shim.fsDriver().remove(tempFilePath);
 
-				const regex = new RegExp(pregQuote('(' + resourceUrl + ')'), 'g');
-				noteBody = noteBody.replace(regex, '(:/' + resource.id + ')');
+				const regex = new RegExp(pregQuote(`(${resourceUrl})`), 'g');
+				noteBody = noteBody.replace(regex, `(:/${resource.id})`);
 			}
 
 			const note = await Note.save({

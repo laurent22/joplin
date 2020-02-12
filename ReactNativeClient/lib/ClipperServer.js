@@ -1,7 +1,7 @@
 const urlParser = require('url');
 const Setting = require('lib/models/Setting');
 const { Logger } = require('lib/logger.js');
-const randomClipperPort = require('lib/randomClipperPort');
+const { randomClipperPort, startPort } = require('lib/randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const Api = require('lib/services/rest/Api');
 const ApiResponse = require('lib/services/rest/ApiResponse');
@@ -73,13 +73,22 @@ class ClipperServer {
 		throw new Error('All potential ports are in use or not available.');
 	}
 
+	async isRunning() {
+		const tcpPortUsed = require('tcp-port-used');
+		const port = Setting.value('api.port') ? Setting.value('api.port') : startPort(Setting.value('env'));
+		const inUse = await tcpPortUsed.check(port);
+		return inUse ? port : 0;
+	}
+
 	async start() {
 		this.setPort(null);
 
 		this.setStartState('starting');
 
+		const settingPort = Setting.value('api.port');
+
 		try {
-			const p = await this.findAvailablePort();
+			const p = settingPort ? settingPort : await this.findAvailablePort();
 			this.setPort(p);
 		} catch (error) {
 			this.setStartState('idle');
@@ -120,7 +129,7 @@ class ClipperServer {
 				if (instance.type === 'attachment') {
 					const filename = instance.attachmentFilename ? instance.attachmentFilename : 'file';
 					writeCorsHeaders(code, instance.contentType ? instance.contentType : 'application/octet-stream', {
-						'Content-disposition': 'attachment; filename=' + filename,
+						'Content-disposition': `attachment; filename=${filename}`,
 						'Content-Length': instance.body.length,
 					});
 					response.end(instance.body);
@@ -139,7 +148,7 @@ class ClipperServer {
 				}
 			};
 
-			this.logger().info('Request: ' + request.method + ' ' + request.url);
+			this.logger().info(`Request: ${request.method} ${request.url}`);
 
 			const url = urlParser.parse(request.url, true);
 
@@ -153,6 +162,7 @@ class ClipperServer {
 					const msg = [];
 					if (httpCode >= 500) msg.push('Internal Server Error');
 					if (error.message) msg.push(error.message);
+					if (error.stack) msg.push(`\n\n${error.stack}`);
 
 					writeResponse(httpCode, { error: msg.join(': ') });
 				}
@@ -195,11 +205,15 @@ class ClipperServer {
 
 		enableServerDestroy(this.server_);
 
-		this.logger().info('Starting Clipper server on port ' + this.port_);
+		this.logger().info(`Starting Clipper server on port ${this.port_}`);
 
 		this.server_.listen(this.port_, '127.0.0.1');
 
 		this.setStartState('started');
+
+		// We return an empty promise that never resolves so that it's possible to `await` the server indefinitely.
+		// This is used only in command-server.js
+		return new Promise(() => {});
 	}
 
 	async stop() {

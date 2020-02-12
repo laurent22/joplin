@@ -52,11 +52,11 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 
 		try {
 			const result = await fileApi.stat('');
-			if (!result) throw new Error('WebDAV directory not found: ' + options.path());
+			if (!result) throw new Error(`WebDAV directory not found: ${options.path()}`);
 			output.ok = true;
 		} catch (error) {
 			output.errorMessage = error.message;
-			if (error.code) output.errorMessage += ' (Code ' + error.code + ')';
+			if (error.code) output.errorMessage += ` (Code ${error.code})`;
 		}
 
 		return output;

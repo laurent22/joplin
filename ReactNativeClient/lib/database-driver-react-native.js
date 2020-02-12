@@ -6,7 +6,7 @@ class DatabaseDriverReactNative {
 	}
 
 	open(options) {
-		//SQLite.DEBUG(true);
+		// SQLite.DEBUG(true);
 		return new Promise((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },
@@ -21,12 +21,8 @@ class DatabaseDriverReactNative {
 		});
 	}
 
-	sqliteErrorToJsError(error, sql = null, params = null) {
+	sqliteErrorToJsError(error) {
 		return error;
-	}
-
-	setDebugMode(v) {
-		//SQLite.DEBUG(v);
 	}
 
 	selectOne(sql, params = null) {

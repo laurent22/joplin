@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -15,7 +17,7 @@ const itemHeight = 60;
 
 class GotoAnything {
 
-	onTrigger(event) {
+	onTrigger() {
 		this.dispatch({
 			type: 'PLUGIN_DIALOG_SET',
 			open: true,
@@ -60,9 +62,9 @@ class Dialog extends React.PureComponent {
 		this.styles_[this.props.theme] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
-			row: {overflow: 'hidden', height:itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10},
+			row: { overflow: 'hidden', height: itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10 },
 			help: Object.assign({}, theme.textStyle, { marginBottom: 10 }),
-			inputHelpWrapper: {display: 'flex', flexDirection: 'row', alignItems: 'center'},
+			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
 
 		const rowTextStyle = {
@@ -106,7 +108,7 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	helpButton_onClick(event) {
+	helpButton_onClick() {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
@@ -132,7 +134,7 @@ class Dialog extends React.PureComponent {
 			const s = splitted[i].trim();
 			if (!s) continue;
 
-			output.push('title:' + s + '*');
+			output.push(`title:${s}*`);
 		}
 
 		return output.join(' ');
@@ -153,11 +155,11 @@ class Dialog extends React.PureComponent {
 
 			if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = '*' + this.state.query.split(' ')[0].substr(1).trim() + '*';
+				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = '*' + this.state.query.split(' ')[0].substr(1).trim() + '*';
+				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
 				results = await Folder.search({ titlePattern: searchQuery });
 
 				for (let i = 0; i < results.length; i++) {
@@ -246,13 +248,13 @@ class Dialog extends React.PureComponent {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
-		const titleHtml = surroundKeywords(this.state.keywords, item.title, '<span style="font-weight: bold; color: ' + theme.colorBright + ';">', '</span>');
+		const titleHtml = surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
 
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
-				<div style={style.rowTitle} dangerouslySetInnerHTML={{__html: titleHtml}}></div>
+				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{pathComp}
 			</div>
 		);

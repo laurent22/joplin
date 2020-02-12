@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { StyleSheet, View, Text, FlatList, TouchableOpacity, TextInput } = require('react-native');
@@ -8,6 +10,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ModalDialog = require('lib/components/ModalDialog');
 const naturalCompare = require('string-natural-compare');
+
+Icon.loadFont();
 
 class NoteTagsDialogComponent extends React.Component {
 	constructor() {
@@ -63,7 +67,7 @@ class NoteTagsDialogComponent extends React.Component {
 			);
 		};
 
-		this.tagKeyExtractor = (tag, index) => tag.id;
+		this.tagKeyExtractor = (tag) => tag.id;
 
 		this.okButton_press = async () => {
 			this.setState({ savingTags: true });

@@ -11,7 +11,7 @@ dialogs.confirm = (parentComponent, message) => {
 	if (!parentComponent) throw new Error('parentComponent is required');
 	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		Keyboard.dismiss();
 
 		parentComponent.dialogbox.confirm({
@@ -39,7 +39,7 @@ dialogs.pop = (parentComponent, message, buttons, options = null) => {
 	if (!options) options = {};
 	if (!('buttonFlow' in options)) options.buttonFlow = 'auto';
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		Keyboard.dismiss();
 
 		let btns = [];

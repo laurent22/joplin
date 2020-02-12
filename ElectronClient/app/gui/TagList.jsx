@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
@@ -11,12 +13,12 @@ class TagListComponent extends React.Component {
 
 		style.display = 'flex';
 		style.flexDirection = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 		style.fontSize = theme.fontSize;
 
 		const tagItems = [];
-		if (tags || tags.length > 0) {
+		if (tags && tags.length > 0) {
 			// Sort by id for now, but probably needs to be changed in the future.
 			tags.sort((a, b) => {
 				return a.title < b.title ? -1 : +1;
@@ -29,10 +31,6 @@ class TagListComponent extends React.Component {
 				};
 				tagItems.push(<TagItem {...props} />);
 			}
-		}
-
-		if (tagItems.length === 0) {
-			style.visibility = 'hidden';
 		}
 
 		return (

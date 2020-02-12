@@ -38,23 +38,23 @@ TemplateUtils.loadTemplates = async function(filePath) {
 			files = await shim.fsDriver().readDirStats(filePath);
 		} catch (error) {
 			let msg = error.message ? error.message : '';
-			msg = 'Could not read template names from ' + filePath + '\n' + msg;
+			msg = `Could not read template names from ${filePath}\n${msg}`;
 			error.message = msg;
 			throw error;
 		}
 
 		// Make sure templates are always in the same order
 		// sensitivity ensures that the sort will ignore case
-		files.sort((a, b) => { return a.path.localeCompare(b.path, undefined, {sensitivity: 'accent'}); });
+		files.sort((a, b) => { return a.path.localeCompare(b.path, undefined, { sensitivity: 'accent' }); });
 
 		files.forEach(async file => {
 			if (file.path.endsWith('.md')) {
 				try {
-					let fileString = await shim.fsDriver().readFile(filePath + '/' + file.path, 'utf-8');
+					let fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');
 					templates.push({ label: file.path, value: fileString });
 				} catch (error) {
 					let msg = error.message ? error.message : '';
-					msg = 'Could not load template ' + file.path + '\n' + msg;
+					msg = `Could not load template ${file.path}\n${msg}`;
 					error.message = msg;
 					throw error;
 				}

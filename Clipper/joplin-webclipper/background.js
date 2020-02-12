@@ -24,7 +24,7 @@ async function browserCaptureVisibleTabs(windowId) {
 	const options = { format: 'jpeg' };
 	if (browserSupportsPromises_) return browser_.tabs.captureVisibleTab(windowId, options);
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		browser_.tabs.captureVisibleTab(windowId, options, (image) => {
 			resolve(image);
 		});
@@ -34,14 +34,14 @@ async function browserCaptureVisibleTabs(windowId) {
 async function browserGetZoom(tabId) {
 	if (browserSupportsPromises_) return browser_.tabs.getZoom(tabId);
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		browser_.tabs.getZoom(tabId, (zoom) => {
 			resolve(zoom);
 		});
 	});
 }
 
-browser_.runtime.onInstalled.addListener(function(details) {
+browser_.runtime.onInstalled.addListener(function() {
 	if (window.joplinEnv() === 'dev') {
 		browser_.browserAction.setIcon({
 			path: 'icons/32-dev.png',
@@ -57,6 +57,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		const imageDataUrl = await browserCaptureVisibleTabs(null);
 		const content = Object.assign({}, command.content);
 		content.image_data_url = imageDataUrl;
+		if ('url' in content) content.source_url = content.url;
 
 		const newArea = Object.assign({}, command.content.crop_rect);
 		newArea.x *= zoom;
@@ -65,7 +66,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		newArea.height *= zoom;
 		content.crop_rect = newArea;
 
-		fetch(command.api_base_url + '/notes', {
+		fetch(`${command.api_base_url}/notes`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -73,5 +74,61 @@ browser_.runtime.onMessage.addListener(async (command) => {
 			},
 			body: JSON.stringify(content),
 		});
+	}
+});
+
+async function getActiveTabs() {
+	const options = { active: true, currentWindow: true };
+	if (browserSupportsPromises_) return browser_.tabs.query(options);
+
+	return new Promise((resolve) => {
+		browser_.tabs.query(options, (tabs) => {
+			resolve(tabs);
+		});
+	});
+}
+
+async function sendClipMessage(clipType) {
+	const tabs = await getActiveTabs();
+	if (!tabs || !tabs.length) {
+		console.error('No active tabs');
+		return;
+	}
+	const tabId = tabs[0].id;
+	// send a message to the content script on the active tab (assuming it's there)
+	const message = {
+		shouldSendToJoplin: true,
+	};
+	switch (clipType) {
+	case 'clipCompletePage':
+		message.name = 'completePageHtml';
+		message.preProcessFor = 'markdown';
+		break;
+	case 'clipCompletePageHtml':
+		message.name = 'completePageHtml';
+		message.preProcessFor = 'html';
+		break;
+	case 'clipSimplifiedPage':
+		message.name = 'simplifiedPageHtml';
+		break;
+	case 'clipUrl':
+		message.name = 'pageUrl';
+		break;
+	case 'clipSelection':
+		message.name = 'selectedHtml';
+		break;
+	default:
+		break;
+	}
+	if (message.name) {
+		browser_.tabs.sendMessage(tabId, message);
+	}
+}
+
+browser_.commands.onCommand.addListener(function(command) {
+	// We could enumerate these twice, but since we're in here first,
+	// why not save ourselves the trouble with this convention
+	if (command.startsWith('clip')) {
+		sendClipMessage(command);
 	}
 });

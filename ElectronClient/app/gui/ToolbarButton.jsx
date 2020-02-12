@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { themeStyle } = require('../theme.js');
 
@@ -17,7 +19,7 @@ class ToolbarButton extends React.Component {
 				color: theme.color,
 			};
 			if (title) iconStyle.marginRight = 5;
-			icon = <i style={iconStyle} className={'fa ' + this.props.iconName}></i>;
+			icon = <i style={iconStyle} className={`fa ${this.props.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in this.props) || this.props.enabled === true;

@@ -33,8 +33,25 @@ node_modules/
 ReactNativeClient/android
 ReactNativeClient/ios
 ReactNativeClient/lib/vendor/
+ReactNativeClient/lib/welcomeAssets.js
 ReactNativeClient/locales
 ReactNativeClient/node_modules
 readme/
 Tools/node_modules
 Tools/PortableAppsLauncher
+Server/.git/
+Server/.github/
+Server/docs/
+Server/dist/
+Server/bin/
+Server/node_modules/
+ElectronClient/app/packageInfo.js
+ReactNativeClient/pluginAssets/
+ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
+ReactNativeClient/lib/joplin-renderer/assets/
+
+# Ignore files generated from TypeScript files
+ElectronClient/app/gui/ShareNoteDialog.js
+ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/PluginAssetsLoader.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js

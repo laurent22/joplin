@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 import React, { Component } from 'react';
 import './App.css';
 import led_red from './led_red.png';
@@ -16,7 +18,7 @@ function commandUserString(command) {
 	if (command.name === 'pageUrl') s.push('URL only');
 
 	const p = command.preProcessFor ? command.preProcessFor : 'markdown';
-	s.push('(' + p + ')');
+	s.push(`(${p})`);
 
 	return s.join(' ');
 }
@@ -47,7 +49,7 @@ class PreviewComponent extends React.PureComponent {
 				<h2>Title:</h2>
 				<input className={'Title'} value={this.props.title} onChange={this.props.onTitleChange}/>
 				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
-				<a className={'Confirm Button'} onClick={this.props.onConfirmClick}>Confirm</a>
+				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
 
@@ -155,7 +157,7 @@ class AppComponent extends Component {
 		this.onClearTagButtonClick = this.onClearTagButtonClick.bind(this);
 	}
 
-	onAddTagClick(event) {
+	onAddTagClick() {
 		const newTags = this.state.selectedTags.slice();
 		newTags.push('');
 		this.setState({ selectedTags: newTags });
@@ -187,10 +189,10 @@ class AppComponent extends Component {
 	}
 
 	async loadContentScripts() {
-		await bridge().tabsExecuteScript({file: '/content_scripts/JSDOMParser.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/Readability.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/Readability-readerable.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/index.js'});
+		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
 	}
 
 	async componentDidMount() {
@@ -234,7 +236,7 @@ class AppComponent extends Component {
 			this.focusNewTagInput_ = false;
 			let lastRef = null;
 			for (let i = 0; i < 100; i++) {
-				const ref = this.refs['tagSelector' + i];
+				const ref = this.refs[`tagSelector${i}`];
 				if (!ref) break;
 				lastRef = ref;
 			}
@@ -245,8 +247,8 @@ class AppComponent extends Component {
 	render() {
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
-			if (this.state.contentScriptError) msg = 'The Joplin extension is not available on this tab due to: ' + this.state.contentScriptError;
-			return <div style={{padding: 10, fontSize: 12, maxWidth: 200}}>{msg}</div>;
+			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
+			return <div style={{ padding: 10, fontSize: 12, maxWidth: 200 }}>{msg}</div>;
 		}
 
 		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>;
@@ -268,7 +270,7 @@ class AppComponent extends Component {
 			} else if (operation.success) {
 				msg = 'Note was successfully created!';
 			} else {
-				msg = 'There was some error creating the note: ' + operation.errorMessage;
+				msg = `There was some error creating the note: ${operation.errorMessage}`;
 			}
 
 			previewComponent = (
@@ -300,7 +302,7 @@ class AppComponent extends Component {
 			const foundState = this.props.clipperServer.foundState;
 
 			if (foundState === 'found') {
-				msg = 'Ready on port ' + this.props.clipperServer.port;
+				msg = `Ready on port ${this.props.clipperServer.port}`;
 				led = led_green;
 			} else {
 				msg = stateToString(foundState);
@@ -308,7 +310,7 @@ class AppComponent extends Component {
 				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>;
 			}
 
-			msg = 'Service status: ' + msg;
+			msg = `Service status: ${msg}`;
 
 			return <div className="StatusBar"><img alt={foundState} className="Led" src={led}/><span className="ServerStatus">{ msg }{ helpLink }</span></div>;
 		};
@@ -346,7 +348,7 @@ class AppComponent extends Component {
 			for (let i = 0; i < this.state.selectedTags.length; i++) {
 				comps.push(<div key={i}>
 					<input
-						ref={'tagSelector' + i}
+						ref={`tagSelector${i}`}
 						data-index={i}
 						type="text"
 						list="tags"
@@ -382,12 +384,12 @@ class AppComponent extends Component {
 			<div className="App">
 				<div className="Controls">
 					<ul>
-						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
-						<li><a className="Button" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
-						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
-						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
-						<li><a className="Button" onClick={this.clipUrl_click}>Clip URL</a></li>
+						<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
+						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page</a></li>
+						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
+						<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
+						<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
 					</ul>
 				</div>
 				{ foldersComp() }

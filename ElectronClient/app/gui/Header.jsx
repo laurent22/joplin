@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
@@ -32,12 +34,12 @@ class HeaderComponent extends React.Component {
 			}, 500);
 		};
 
-		this.search_onClear = event => {
+		this.search_onClear = () => {
 			this.resetSearch();
 			if (this.searchElement_) this.searchElement_.focus();
 		};
 
-		this.search_onFocus = event => {
+		this.search_onFocus = () => {
 			if (this.hideSearchUsageLinkIID_) {
 				clearTimeout(this.hideSearchUsageLinkIID_);
 				this.hideSearchUsageLinkIID_ = null;
@@ -46,7 +48,7 @@ class HeaderComponent extends React.Component {
 			this.setState({ showSearchUsageLink: true });
 		};
 
-		this.search_onBlur = event => {
+		this.search_onBlur = () => {
 			if (this.hideSearchUsageLinkIID_) return;
 
 			this.hideSearchUsageLinkIID_ = setTimeout(() => {
@@ -66,12 +68,12 @@ class HeaderComponent extends React.Component {
 			triggerOnQuery('');
 		};
 
-		this.searchUsageLink_click = event => {
+		this.searchUsageLink_click = () => {
 			bridge().openExternal('https://joplinapp.org/#searching');
 		};
 	}
 
-	async componentWillReceiveProps(nextProps) {
+	async UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.windowCommand) {
 			this.doCommand(nextProps.windowCommand);
 		}
@@ -123,9 +125,9 @@ class HeaderComponent extends React.Component {
 			if (options.title) iconStyle.marginRight = 5;
 			if ('undefined' != typeof options.iconRotation) {
 				iconStyle.transition = 'transform 0.15s ease-in-out';
-				iconStyle.transform = 'rotate(' + options.iconRotation + 'deg)';
+				iconStyle.transform = `rotate(${options.iconRotation}deg)`;
 			}
-			icon = <i style={iconStyle} className={'fa ' + options.iconName}></i>;
+			icon = <i style={iconStyle} className={`fa ${options.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in options) || options.enabled;
@@ -161,11 +163,13 @@ class HeaderComponent extends React.Component {
 		const inputStyle = {
 			display: 'flex',
 			flex: 1,
+			marginLeft: 10,
 			paddingLeft: 6,
 			paddingRight: 6,
 			paddingTop: 1, // vertical alignment with buttons
 			paddingBottom: 0, // vertical alignment with buttons
 			height: style.fontSize * 2,
+			width: 300,
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
@@ -195,7 +199,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		const iconName = state.searchQuery ? 'fa-times' : 'fa-search';
-		const icon = <i style={iconStyle} className={'fa ' + iconName}></i>;
+		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
 		if (options.onQuery) this.searchOnQuery_ = options.onQuery;
 
 		const usageLink = !this.state.showSearchUsageLink ? null : (
@@ -222,7 +226,7 @@ class HeaderComponent extends React.Component {
 		style.height = theme.headerHeight;
 		style.display = 'flex';
 		style.flexDirection = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 
 		const items = [];
@@ -252,9 +256,9 @@ class HeaderComponent extends React.Component {
 				const item = this.props.items[i];
 
 				if (item.type === 'search') {
-					items.push(this.makeSearch('item_' + i + '_search', itemStyle, item, this.state));
+					items.push(this.makeSearch(`item_${i}_search`, itemStyle, item, this.state));
 				} else {
-					items.push(this.makeButton('item_' + i + '_' + item.title, itemStyle, item));
+					items.push(this.makeButton(`item_${i}_${item.title}`, itemStyle, item));
 				}
 			}
 		}

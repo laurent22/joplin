@@ -26,9 +26,9 @@
 		if (url.indexOf('//') === 0) {
 			return location.protocol + url;
 		} else if (url[0] === '/') {
-			return location.protocol + '//' + location.host + url;
+			return `${location.protocol}//${location.host}${url}`;
 		} else {
-			return baseUrl() + '/' + url;
+			return `${baseUrl()}/${url}`;
 		}
 	}
 
@@ -83,14 +83,18 @@
 	}
 
 	function getAnchorNames(element) {
-		const anchors = element.getElementsByTagName('a');
 		const output = [];
-		for (let i = 0; i < anchors.length; i++) {
-			const anchor = anchors[i];
-			if (anchor.id) {
-				output.push(anchor.id);
-			} else if (anchor.name) {
-				output.push(anchor.name);
+		// Anchor names are normally in A tags but can be in SPAN too
+		// https://github.com/laurent22/joplin-turndown/commit/45f4ee6bf15b8804bdc2aa1d7ecb2f8cb594b8e5#diff-172b8b2bc3ba160589d3a7eeb4913687R232
+		for (const tagName of ['a', 'span']) {
+			const anchors = element.getElementsByTagName(tagName);
+			for (let i = 0; i < anchors.length; i++) {
+				const anchor = anchors[i];
+				if (anchor.id) {
+					output.push(anchor.id);
+				} else if (anchor.name) {
+					output.push(anchor.name);
+				}
 			}
 		}
 		return output;
@@ -134,11 +138,17 @@
 					const src = absoluteUrl(imageSrc(node));
 					node.setAttribute('src', src);
 					if (!(src in imageIndexes)) imageIndexes[src] = 0;
-					const imageSize = imageSizes[src][imageIndexes[src]];
-					imageIndexes[src]++;
-					if (imageSize && convertToMarkup === 'markdown') {
-						node.width = imageSize.width;
-						node.height = imageSize.height;
+
+					if (!imageSizes[src]) {
+						// This seems to concern dynamic images that don't really such as Gravatar, etc.
+						console.warn('Found an image for which the size had not been fetched:', src);
+					} else {
+						const imageSize = imageSizes[src][imageIndexes[src]];
+						imageIndexes[src]++;
+						if (imageSize && convertToMarkup === 'markdown') {
+							node.width = imageSize.width;
+							node.height = imageSize.height;
+						}
 					}
 				}
 
@@ -255,13 +265,14 @@
 	}
 
 	async function prepareCommandResponse(command) {
-		console.info('Got command: ' + command.name);
+		console.info(`Got command: ${command.name}`);
+		const shouldSendToJoplin = !!command.shouldSendToJoplin;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
 		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
-				name: 'clippedContent',
+				name: shouldSendToJoplin ? 'sendContentToJoplin' : 'clippedContent',
 				title: title,
 				html: html,
 				base_url: baseUrl(),
@@ -315,9 +326,18 @@
 
 			hardcodePreStyles(document);
 			preProcessDocument(document);
-			const range = window.getSelection().getRangeAt(0);
+
 			const container = document.createElement('div');
-			container.appendChild(range.cloneContents());
+			const rangeCount = window.getSelection().rangeCount;
+
+			// Even when the user makes only one selection, Firefox might report multiple selections
+			// so we need to process them all.
+			// Fixes https://github.com/laurent22/joplin/issues/2294
+			for (let i = 0; i < rangeCount; i++) {
+				const range = window.getSelection().getRangeAt(i);
+				container.appendChild(range.cloneContents());
+			}
+
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);
@@ -343,15 +363,15 @@
 			messageComp.style.position = 'fixed';
 			messageComp.style.opacity = '0.95';
 			messageComp.style.fontSize = '14px';
-			messageComp.style.width = messageCompWidth + 'px';
-			messageComp.style.maxWidth = messageCompWidth + 'px';
+			messageComp.style.width = `${messageCompWidth}px`;
+			messageComp.style.maxWidth = `${messageCompWidth}px`;
 			messageComp.style.border = '1px solid black';
 			messageComp.style.background = 'white';
 			messageComp.style.color = 'black';
 			messageComp.style.top = '10px';
 			messageComp.style.textAlign = 'center';
 			messageComp.style.padding = '10px';
-			messageComp.style.left = Math.round(document.body.clientWidth / 2 - messageCompWidth / 2) + 'px';
+			messageComp.style.left = `${Math.round(document.body.clientWidth / 2 - messageCompWidth / 2)}px`;
 			messageComp.style.zIndex = overlay.style.zIndex + 1;
 
 			messageComp.textContent = 'Drag and release to capture a screenshot';
@@ -375,10 +395,10 @@
 			let selectionArea = {};
 
 			const updateSelection = function() {
-				selection.style.left = selectionArea.x + 'px';
-				selection.style.top = selectionArea.y + 'px';
-				selection.style.width = selectionArea.width + 'px';
-				selection.style.height = selectionArea.height + 'px';
+				selection.style.left = `${selectionArea.x}px`;
+				selection.style.top = `${selectionArea.y}px`;
+				selection.style.width = `${selectionArea.width}px`;
+				selection.style.height = `${selectionArea.height}px`;
 			};
 
 			const setSelectionSizeFromMouse = function(event) {
@@ -423,7 +443,7 @@
 					const content = {
 						title: pageTitle(),
 						crop_rect: selectionArea,
-						url: pageLocationOrigin() + location.pathname,
+						url: pageLocationOrigin() + location.pathname + location.search,
 						parent_id: command.parent_id,
 						tags: command.tags,
 					};
@@ -448,7 +468,7 @@
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {
-			throw new Error('Unknown command: ' + JSON.stringify(command));
+			throw new Error(`Unknown command: ${JSON.stringify(command)}`);
 		}
 	}
 

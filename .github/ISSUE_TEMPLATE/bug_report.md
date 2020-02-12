@@ -12,6 +12,11 @@ labels: 'bug'
   Please test using the latest Joplin release to make sure your issue has not already been fixed.
 -->
 
+<!--
+  IMPORTANT: If you are reporting a clipper bug, please include an example URL that shows the issue.
+  Without the URL the issue is likely to be closed.
+-->
+
 ## Environment
 
 Joplin version:

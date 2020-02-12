@@ -3,6 +3,7 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const ItemChange = require('lib/models/ItemChange.js');
+const Setting = require('lib/models/Setting.js');
 const ResourceLocalState = require('lib/models/ResourceLocalState.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -11,6 +12,7 @@ const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
 const { shim } = require('lib/shim.js');
+const { filename } = require('lib/path-utils');
 const JoplinError = require('lib/JoplinError');
 const BaseSyncTarget = require('lib/BaseSyncTarget');
 const TaskQueue = require('lib/TaskQueue');
@@ -21,6 +23,7 @@ class Synchronizer {
 		this.db_ = db;
 		this.api_ = api;
 		this.syncDirName_ = '.sync';
+		this.lockDirName_ = '.lock';
 		this.resourceDirName_ = BaseSyncTarget.resourceDirName();
 		this.logger_ = new Logger();
 		this.appType_ = appType;
@@ -28,6 +31,7 @@ class Synchronizer {
 		this.autoStartDecryptionWorker_ = true;
 		this.maxResourceSize_ = null;
 		this.downloadQueue_ = null;
+		this.clientId_ = Setting.value('clientId');
 
 		// Debug flags are used to test certain hard-to-test conditions
 		// such as cancelling in the middle of a loop.
@@ -51,6 +55,10 @@ class Synchronizer {
 		return this.api_;
 	}
 
+	clientId() {
+		return this.clientId_;
+	}
+
 	setLogger(l) {
 		this.logger_ = l;
 	}
@@ -70,6 +78,15 @@ class Synchronizer {
 
 	encryptionService() {
 		return this.encryptionService_;
+	}
+
+	async waitForSyncToFinish() {
+		if (this.state() === 'idle') return;
+
+		while (true) {
+			await time.sleep(1);
+			if (this.state() === 'idle') return;
+		}
 	}
 
 	static reportToLines(report) {
@@ -102,13 +119,13 @@ class Synchronizer {
 		if (local) {
 			let s = [];
 			s.push(local.id);
-			line.push('(Local ' + s.join(', ') + ')');
+			line.push(`(Local ${s.join(', ')})`);
 		}
 
 		if (remote) {
 			let s = [];
 			s.push(remote.id ? remote.id : remote.path);
-			line.push('(Remote ' + s.join(', ') + ')');
+			line.push(`(Remote ${s.join(', ')})`);
 		}
 
 		this.logger().debug(line.join(': '));
@@ -130,14 +147,14 @@ class Synchronizer {
 			if (n == 'finished') continue;
 			if (n == 'state') continue;
 			if (n == 'completedTime') continue;
-			this.logger().info(n + ': ' + (report[n] ? report[n] : '-'));
+			this.logger().info(`${n}: ${report[n] ? report[n] : '-'}`);
 		}
 		let folderCount = await Folder.count();
 		let noteCount = await Note.count();
 		let resourceCount = await Resource.count();
-		this.logger().info('Total folders: ' + folderCount);
-		this.logger().info('Total notes: ' + noteCount);
-		this.logger().info('Total resources: ' + resourceCount);
+		this.logger().info(`Total folders: ${folderCount}`);
+		this.logger().info(`Total notes: ${noteCount}`);
+		this.logger().info(`Total resources: ${resourceCount}`);
 
 		if (report.errors && report.errors.length) {
 			this.logger().warn('There was some errors:');
@@ -158,7 +175,7 @@ class Synchronizer {
 		this.logSyncOperation('cancelling', null, null, '');
 		this.cancelling_ = true;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (this.state() == 'idle') {
 					clearInterval(iid);
@@ -172,10 +189,81 @@ class Synchronizer {
 		return this.cancelling_;
 	}
 
+	logLastRequests() {
+		const lastRequests = this.api().lastRequests();
+		if (!lastRequests || !lastRequests.length) return;
+
+		for (const r of lastRequests) {
+			const timestamp = time.unixMsToLocalHms(r.timestamp);
+			this.logger().info(`Req ${timestamp}: ${r.request}`);
+			this.logger().info(`Res ${timestamp}: ${r.response}`);
+		}
+	}
+
 	static stateToLabel(state) {
 		if (state === 'idle') return _('Idle');
 		if (state === 'in_progress') return _('In progress');
 		return state;
+	}
+
+	async acquireLock_() {
+		await this.checkLock_();
+		await this.api().put(`${this.lockDirName_}/${this.clientId()}_${Date.now()}.lock`, `${Date.now()}`);
+	}
+
+	async releaseLock_() {
+		const lockFiles = await this.lockFiles_();
+		for (const lockFile of lockFiles) {
+			const p = this.parseLockFilePath(lockFile.path);
+			if (p.clientId === this.clientId()) {
+				await this.api().delete(p.fullPath);
+			}
+		}
+	}
+
+	async lockFiles_() {
+		const output = await this.api().list(this.lockDirName_);
+		return output.items;
+	}
+
+	parseLockFilePath(path) {
+		const splitted = filename(path).split('_');
+		const fullPath = `${this.lockDirName_}/${path}`;
+		if (splitted.length !== 2) throw new Error(`Sync target appears to be locked but lock filename is invalid: ${fullPath}. Please delete it on the sync target to continue.`);
+		return {
+			clientId: splitted[0],
+			timestamp: Number(splitted[1]),
+			fullPath: fullPath,
+		};
+	}
+
+	async checkLock_() {
+		const lockFiles = await this.lockFiles_();
+		if (lockFiles.length) {
+			const lock = this.parseLockFilePath(lockFiles[0].path);
+
+			if (lock.clientId === this.clientId()) {
+				await this.releaseLock_();
+			} else {
+				throw new Error(`The sync target was locked by client ${lock.clientId} on ${time.unixMsToLocalDateTime(lock.timestamp)} and cannot be accessed. If no app is currently operating on the sync target, you can delete the files in the "${this.lockDirName_}" directory on the sync target to resume.`);
+			}
+		}
+	}
+
+	async checkSyncTargetVersion_() {
+		const supportedSyncTargetVersion = Setting.value('syncVersion');
+		const syncTargetVersion = await this.api().get('.sync/version.txt');
+
+		if (!syncTargetVersion) {
+			await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+		} else {
+			if (Number(syncTargetVersion) > supportedSyncTargetVersion) {
+				throw new Error(sprintf('Sync version of the target (%d) does not match sync version supported by client (%d). Please upgrade your client.', Number(syncTargetVersion), supportedSyncTargetVersion));
+			} else {
+				await this.api().put('.sync/version.txt', `${supportedSyncTargetVersion}`);
+				// TODO: do upgrade job
+			}
+		}
 	}
 
 	// Synchronisation is done in three major steps:
@@ -187,7 +275,7 @@ class Synchronizer {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			let error = new Error(_('Synchronisation is already in progress. State: %s', this.state()));
+			let error = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
 		}
@@ -200,6 +288,9 @@ class Synchronizer {
 		const lastContext = options.context ? options.context : {};
 
 		const syncSteps = options.syncSteps ? options.syncSteps : ['update_remote', 'delete_remote', 'delta'];
+
+		// The default is to log errors, but when testing it's convenient to be able to catch and verify errors
+		const throwOnError = options.throwOnError === true;
 
 		const syncTargetId = this.api().syncTargetId();
 
@@ -214,7 +305,7 @@ class Synchronizer {
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 
-		this.logSyncOperation('starting', null, null, 'Starting synchronisation to target ' + syncTargetId + '... [' + synchronizationId + ']');
+		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... [${synchronizationId}]`);
 
 		const handleCannotSyncItem = async (ItemClass, syncTargetId, item, cannotSyncReason, itemLocation = null) => {
 			await ItemClass.saveSyncDisabled(syncTargetId, item, cannotSyncReason, itemLocation);
@@ -222,13 +313,19 @@ class Synchronizer {
 		};
 
 		const resourceRemotePath = resourceId => {
-			return this.resourceDirName_ + '/' + resourceId;
+			return `${this.resourceDirName_}/${resourceId}`;
 		};
+
+		let errorToThrow = null;
 
 		try {
 			await this.api().mkdir(this.syncDirName_);
+			await this.api().mkdir(this.lockDirName_);
 			this.api().setTempDirName(this.syncDirName_);
 			await this.api().mkdir(this.resourceDirName_);
+
+			await this.checkLock_();
+			await this.checkSyncTargetVersion_();
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -302,14 +399,14 @@ class Synchronizer {
 							} catch (error) {
 								if (error.code === 'rejectedByTarget') {
 									this.progressReport_.errors.push(error);
-									this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+									this.logger().warn(`Rejected by target: ${path}: ${error.message}`);
 									completeItemProcessing(path);
 									continue;
 								} else {
 									throw error;
 								}
 							}
-							if (!remoteContent) throw new Error('Got metadata for path but could not fetch content: ' + path);
+							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
 							remoteContent = await BaseItem.unserialize(remoteContent);
 
 							if (remoteContent.updated_time > local.sync_time) {
@@ -336,6 +433,11 @@ class Synchronizer {
 									const result = await Resource.fullPathForSyncUpload(local);
 									local = result.resource;
 									const localResourceContentPath = result.path;
+
+									if (local.size >= 10 * 1000* 1000) {
+										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
+									}
+
 									await this.api().put(remoteContentPath, null, { path: localResourceContentPath, source: 'file' });
 								} catch (error) {
 									if (error && ['rejectedByTarget', 'fileNotFound'].indexOf(error.code) >= 0) {
@@ -508,6 +610,10 @@ class Synchronizer {
 						allItemIdsHandler: async () => {
 							return BaseItem.syncedItemIds(syncTargetId);
 						},
+
+						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
+
+						logger: this.logger(),
 					});
 
 					let remotes = listResult.items;
@@ -534,7 +640,7 @@ class Synchronizer {
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let task = await this.downloadQueue_.waitForResult(path); //await this.api().get(path);
+							let task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);
@@ -572,10 +678,10 @@ class Synchronizer {
 						} catch (error) {
 							if (error.code === 'rejectedByTarget') {
 								this.progressReport_.errors.push(error);
-								this.logger().warn('Rejected by target: ' + path + ': ' + error.message);
+								this.logger().warn(`Rejected by target: ${path}: ${error.message}`);
 								action = null;
 							} else {
-								error.message = 'On file ' + path + ': ' + error.message;
+								error.message = `On file ${path}: ${error.message}`;
 								throw error;
 							}
 						}
@@ -588,7 +694,7 @@ class Synchronizer {
 
 						if (action == 'createLocal' || action == 'updateLocal') {
 							if (content === null) {
-								this.logger().warn('Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ' + path);
+								this.logger().warn(`Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ${path}`);
 								continue;
 							}
 							content = ItemClass.filter(content);
@@ -613,7 +719,7 @@ class Synchronizer {
 
 							if (creatingNewResource) {
 								if (content.size >= this.maxResourceSize()) {
-									await handleCannotSyncItem(ItemClass, syncTargetId, content, 'File "' + content.title + '" is larger than allowed ' + this.maxResourceSize() + ' bytes. Beyond this limit, the mobile app would crash.', BaseItem.SYNC_ITEM_LOCATION_REMOTE);
+									await handleCannotSyncItem(ItemClass, syncTargetId, content, `File "${content.title}" is larger than allowed ${this.maxResourceSize()} bytes. Beyond this limit, the mobile app would crash.`, BaseItem.SYNC_ITEM_LOCATION_REMOTE);
 									continue;
 								}
 
@@ -695,11 +801,19 @@ class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
-			if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice'].indexOf(error.code) >= 0) {
+			if (throwOnError) {
+				errorToThrow = error;
+			} else if (error && ['cannotEncryptEncrypted', 'noActiveMasterKey', 'processingPathTwice', 'failSafe'].indexOf(error.code) >= 0) {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
 				this.logger().info(error.message);
+
+				if (error.code === 'failSafe') {
+					// Get the message to display on UI, but not in testing to avoid poluting stdout
+					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
+					this.logLastRequests();
+				}
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				this.logger().error(error);
@@ -707,7 +821,10 @@ class Synchronizer {
 				this.logger().error(error);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) this.progressReport_.errors.push(error);
+				if (!shim.fetchRequestCanBeRetried(error)) {
+					this.progressReport_.errors.push(error);
+					this.logLastRequests();
+				}
 			}
 		}
 
@@ -718,7 +835,7 @@ class Synchronizer {
 
 		this.progressReport_.completedTime = time.unixMs();
 
-		this.logSyncOperation('finished', null, null, 'Synchronisation finished [' + synchronizationId + ']');
+		this.logSyncOperation('finished', null, null, `Synchronisation finished [${synchronizationId}]`);
 
 		await this.logSyncSummary(this.progressReport_);
 
@@ -728,6 +845,8 @@ class Synchronizer {
 		this.dispatch({ type: 'SYNC_COMPLETED' });
 
 		this.state_ = 'idle';
+
+		if (errorToThrow) throw errorToThrow;
 
 		return outputContext;
 	}

@@ -1,4 +1,4 @@
-const { PushNotificationIOS } = require('react-native');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 class AlarmServiceDriver {
 	constructor() {
@@ -22,7 +22,7 @@ class AlarmServiceDriver {
 		return true;
 	}
 
-	notificationIsSet(alarmId) {
+	notificationIsSet() {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
@@ -35,7 +35,7 @@ class AlarmServiceDriver {
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			PushNotificationIOS.checkPermissions(async perm => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
@@ -55,7 +55,7 @@ class AlarmServiceDriver {
 	}
 
 	async clearNotification(id) {
-		PushNotificationIOS.cancelLocalNotifications({ id: id + '' });
+		PushNotificationIOS.cancelLocalNotifications({ id: `${id}` });
 	}
 
 	async scheduleNotification(notification) {
@@ -66,10 +66,10 @@ class AlarmServiceDriver {
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
 		const iosNotification = {
-			id: notification.id + '',
+			id: `${notification.id}`,
 			alertTitle: notification.title,
-			fireDate: notification.date,
-			userInfo: { id: notification.id + '' },
+			fireDate: notification.date.toISOString(),
+			userInfo: { id: `${notification.id}` },
 		};
 
 		if ('body' in notification) iosNotification.alertBody = notification.body;

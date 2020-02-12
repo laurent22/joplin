@@ -22,6 +22,7 @@ class Setting extends BaseModel {
 		if (this.metadata_) return this.metadata_;
 
 		const platform = shim.platformName();
+		const mobilePlatform = shim.mobilePlatform();
 
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
@@ -30,6 +31,26 @@ class Setting extends BaseModel {
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		this.metadata_ = {
+			'clientId': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: false,
+			},
+			'editor.keyboardMode': {
+				value: 'default',
+				type: Setting.TYPE_STRING,
+				public: true,
+				appTypes: ['desktop'],
+				isEnum: true,
+				label: () => _('Keyboard Mode'),
+				options: () => {
+					let output = {};
+					output['default'] = _('Default');
+					output['emacs'] = _('Emacs');
+					output['vim'] = _('Vim');
+					return output;
+				},
+			},
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
 				type: Setting.TYPE_INT,
@@ -41,7 +62,7 @@ class Setting extends BaseModel {
 					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
-					return SyncTargetRegistry.idAndLabelPlainObject();
+					return SyncTargetRegistry.idAndLabelPlainObject(platform);
 				},
 			},
 
@@ -141,11 +162,14 @@ class Setting extends BaseModel {
 			'sync.6.context': { value: '', type: Setting.TYPE_STRING, public: false },
 			'sync.7.context': { value: '', type: Setting.TYPE_STRING, public: false },
 
+			'sync.5.syncTargets': { value: {}, type: Setting.TYPE_OBJECT, public: false },
+
 			'sync.resourceDownloadMode': {
 				value: 'always',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
 				public: true,
+				advanced: true,
 				isEnum: true,
 				appTypes: ['mobile', 'desktop'],
 				label: () => _('Attachment download behaviour'),
@@ -159,7 +183,7 @@ class Setting extends BaseModel {
 				},
 			},
 
-			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
+			'sync.maxConcurrentConnections': { value: 5, type: Setting.TYPE_INT, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
 			activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
 			firstStart: { value: true, type: Setting.TYPE_BOOL, public: false },
@@ -188,6 +212,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_4] = time.formatMsToLocal(now, Setting.DATE_FORMAT_4);
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
+					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
 					return options;
 				},
 			},
@@ -218,11 +243,29 @@ class Setting extends BaseModel {
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
 					if (platform !== 'mobile') {
+						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+						output[Setting.THEME_NORD] = _('Nord');
+					} else {
+						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
 					}
 					return output;
 				},
+			},
+			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			layoutButtonSequence: {
+				value: Setting.LAYOUT_ALL,
+				type: Setting.TYPE_INT,
+				public: false,
+				appTypes: ['desktop'],
+				isEnum: true,
+				options: () => ({
+					[Setting.LAYOUT_ALL]: _('%s / %s / %s', _('Editor'), _('Viewer'), _('Split View')),
+					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
+					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
+					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
+				}),
 			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
 			showCompletedTodos: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
@@ -243,6 +286,14 @@ class Setting extends BaseModel {
 					}
 					return options;
 				},
+			},
+			'editor.autoMatchingBraces': {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				public: true,
+				section: 'note',
+				appTypes: ['desktop'],
+				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 			},
 			'notes.sortOrder.reverse': { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			'folders.sortOrder.field': {
@@ -294,7 +345,14 @@ class Setting extends BaseModel {
 					};
 				},
 			},
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
+
+			// Deprecated - use markdown.plugin.*
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
+			// Deprecated
+
+			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
+			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
 			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
 			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
 			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
@@ -307,6 +365,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax') },
 			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension') },
 			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Fountain syntax support') },
+			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Mermaid diagrams support') },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -334,9 +393,81 @@ class Setting extends BaseModel {
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
-			'style.editor.fontFamily': { value: '', type: Setting.TYPE_STRING, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font family'), description: () => _('This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font.') },
+			'style.editor.fontFamily':
+				(mobilePlatform) ?
+					({
+						value: Setting.FONT_DEFAULT,
+						type: Setting.TYPE_STRING,
+						isEnum: true,
+						public: true,
+						label: () => _('Editor font'),
+						appTypes: ['mobile'],
+						section: 'appearance',
+						options: () => {
+							// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
+							if (mobilePlatform === 'ios') {
+								return {
+									[Setting.FONT_DEFAULT]: 'Default',
+									[Setting.FONT_MENLO]: 'Menlo',
+									[Setting.FONT_COURIER_NEW]: 'Courier New',
+									[Setting.FONT_AVENIR]: 'Avenir',
+								};
+							}
+							return {
+								[Setting.FONT_DEFAULT]: 'Default',
+								[Setting.FONT_MONOSPACE]: 'Monospace',
+							};
+						},
+					}) : {
+						value: '',
+						type: Setting.TYPE_STRING,
+						public: true,
+						appTypes: ['desktop'],
+						section: 'appearance',
+						label: () => _('Editor font family'),
+						description: () =>
+							_('This must be *monospace* font or it will not work properly. If the font ' +
+						'is incorrect or empty, it will default to a generic monospace font.'),
+					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
+
+			// TODO: Is there a better way to do this? The goal here is to simply have
+			// a way to display a link to the customizable stylesheets, not for it to
+			// serve as a customizable Setting. But because the Setting page is auto-
+			// generated from this list of settings, there wasn't a really elegant way
+			// to do that directly in the React markup.
+			'style.customCss.renderedMarkdown': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = '/* For styling the rendered Markdown */';
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for rendered Markdown'),
+				section: 'appearance',
+			},
+			'style.customCss.joplinApp': {
+				onClick: () => {
+					const dir = Setting.value('profileDir');
+					const filename = Setting.custom_css_files.JOPLIN_APP;
+					const filepath = `${dir}/${filename}`;
+					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
+
+					shim.openOrCreateFile(filepath, defaultContents);
+				},
+				type: Setting.TYPE_BUTTON,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Custom stylesheet for Joplin-wide app styles'),
+				section: 'appearance',
+			},
+
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
 			'autoUpdate.includePreReleases': { value: false, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: Setting.TYPE_BOOL, public: false },
@@ -361,14 +492,33 @@ class Setting extends BaseModel {
 			},
 			noteVisiblePanes: { value: ['editor', 'viewer'], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			sidebarVisibility: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
+			noteListVisibility: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			tagHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			folderHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			editor: { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+				return {
+					'A4': _('A4'),
+					'Letter': _('Letter'),
+					'A3': _('A3'),
+					'A5': _('A5'),
+					'Tabloid': _('Tabloid'),
+					'Legal': _('Legal'),
+				};
+			} },
+			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+				return {
+					'portrait': _('Portrait'),
+					'landscape': _('Landscape'),
+				};
+			} },
+
 
 			'net.customCertificates': {
 				value: '',
 				type: Setting.TYPE_STRING,
 				section: 'sync',
+				advanced: true,
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
 				},
@@ -380,6 +530,7 @@ class Setting extends BaseModel {
 			'net.ignoreTlsErrors': {
 				value: false,
 				type: Setting.TYPE_BOOL,
+				advanced: true,
 				section: 'sync',
 				show: settings => {
 					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].indexOf(settings['sync.target']) >= 0;
@@ -389,7 +540,10 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 			},
 
+			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, advanced: true, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
+
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
+			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: Setting.TYPE_INT, public: false },
@@ -416,6 +570,9 @@ class Setting extends BaseModel {
 
 			'welcome.wasBuilt': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'welcome.enabled': { value: true, type: Setting.TYPE_BOOL, public: false },
+
+			'camera.type': { value: 0, type: Setting.TYPE_INT, public: false, appTypes: ['mobile'] },
+			'camera.ratio': { value: '4:3', type: Setting.TYPE_STRING, public: false, appTypes: ['mobile'] },
 		};
 
 		return this.metadata_;
@@ -423,7 +580,7 @@ class Setting extends BaseModel {
 
 	static settingMetadata(key) {
 		const metadata = this.metadata();
-		if (!(key in metadata)) throw new Error('Unknown key: ' + key);
+		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
 		let output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
@@ -504,7 +661,7 @@ class Setting extends BaseModel {
 	}
 
 	static setConstant(key, value) {
-		if (!(key in this.constants_)) throw new Error('Unknown constant key: ' + key);
+		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
 		this.constants_[key] = value;
 	}
 
@@ -581,9 +738,9 @@ class Setting extends BaseModel {
 		if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
 		if (md.type == Setting.TYPE_ARRAY) return value ? JSON.stringify(value) : '[]';
 		if (md.type == Setting.TYPE_OBJECT) return value ? JSON.stringify(value) : '{}';
-		if (md.type == Setting.TYPE_STRING) return value ? value + '' : '';
+		if (md.type == Setting.TYPE_STRING) return value ? `${value}` : '';
 
-		throw new Error('Unhandled value type: ' + md.type);
+		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
 	static filterValue(key, value) {
@@ -622,10 +779,10 @@ class Setting extends BaseModel {
 
 		if (md.type === Setting.TYPE_STRING) {
 			if (!value) return '';
-			return value + '';
+			return `${value}`;
 		}
 
-		throw new Error('Unhandled value type: ' + md.type);
+		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
 	static value(key) {
@@ -643,7 +800,7 @@ class Setting extends BaseModel {
 		if (key in this.constants_) {
 			const v = this.constants_[key];
 			const output = typeof v === 'function' ? v() : v;
-			if (output == 'SET_ME') throw new Error('Setting constant has not been set: ' + key);
+			if (output == 'SET_ME') throw new Error(`Setting constant has not been set: ${key}`);
 			return output;
 		}
 
@@ -684,8 +841,8 @@ class Setting extends BaseModel {
 
 	static enumOptions(key) {
 		const metadata = this.metadata();
-		if (!metadata[key]) throw new Error('Unknown key: ' + key);
-		if (!metadata[key].options) throw new Error('No options for: ' + key);
+		if (!metadata[key]) throw new Error(`Unknown key: ${key}`);
+		if (!metadata[key].options) throw new Error(`No options for: ${key}`);
 		return metadata[key].options();
 	}
 
@@ -709,12 +866,14 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	static subValues(baseKey, settings) {
+	static subValues(baseKey, settings, options = null) {
+		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
 		let output = {};
 		for (let key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
-				const subKey = key.substr(baseKey.length + 1);
+				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
 				output[subKey] = settings[key];
 			}
 		}
@@ -810,6 +969,21 @@ class Setting extends BaseModel {
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
+		if (name === 'encryption') return _('Encryption');
+		if (name === 'server') return _('Web Clipper');
+		return name;
+	}
+
+	static sectionNameToIcon(name) {
+		if (name === 'general') return 'fa-sliders';
+		if (name === 'sync') return 'fa-refresh';
+		if (name === 'appearance') return 'fa-pencil';
+		if (name === 'note') return 'fa-file-text-o';
+		if (name === 'plugins') return 'fa-puzzle-piece';
+		if (name === 'application') return 'fa-cog';
+		if (name === 'revisionService') return 'fa-archive-org';
+		if (name === 'encryption') return 'fa-key-modern';
+		if (name === 'server') return 'fa-hand-scissors-o';
 		return name;
 	}
 
@@ -825,11 +999,26 @@ Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
 Setting.TYPE_ARRAY = 4;
 Setting.TYPE_OBJECT = 5;
+Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
+Setting.THEME_OLED_DARK = 22;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
+Setting.THEME_DRACULA = 5;
+Setting.THEME_NORD = 6;
+
+Setting.FONT_DEFAULT = 0;
+Setting.FONT_MENLO = 1;
+Setting.FONT_COURIER_NEW = 2;
+Setting.FONT_AVENIR = 3;
+Setting.FONT_MONOSPACE = 4;
+
+Setting.LAYOUT_ALL = 0;
+Setting.LAYOUT_EDITOR_VIEWER = 1;
+Setting.LAYOUT_EDITOR_SPLIT = 2;
+Setting.LAYOUT_VIEWER_SPLIT = 3;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';
@@ -837,9 +1026,16 @@ Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
 Setting.DATE_FORMAT_4 = 'MM/DD/YY';
 Setting.DATE_FORMAT_5 = 'YYYY-MM-DD';
 Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
+Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.custom_css_files = {
+	JOPLIN_APP: 'userchrome.css',
+	RENDERED_MARKDOWN: 'userstyle.css',
+};
+
 
 // Contains constants that are set by the application and
 // cannot be modified by the user:
@@ -854,7 +1050,8 @@ Setting.constants_ = {
 	profileDir: '',
 	templateDir: '',
 	tempDir: '',
-	openDevTools: false,
+	flagOpenDevTools: false,
+	syncVersion: 1,
 };
 
 Setting.autoSaveEnabled = true;

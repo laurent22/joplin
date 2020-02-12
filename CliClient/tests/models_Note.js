@@ -25,23 +25,23 @@ describe('models_Note', function() {
 	it('should find resource and note IDs', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'ma deuxième note', body: 'Lien vers première note : ' + Note.markdownTag(note1), parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'ma deuxième note', body: `Lien vers première note : ${Note.markdownTag(note1)}`, parent_id: folder1.id });
 
 		let items = await Note.linkedItems(note2.body);
 		expect(items.length).toBe(1);
 		expect(items[0].id).toBe(note1.id);
 
-		await shim.attachFileToNote(note2, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		items = await Note.linkedItems(note2.body);
 		expect(items.length).toBe(2);
 		expect(items[0].type_).toBe(BaseModel.TYPE_NOTE);
 		expect(items[1].type_).toBe(BaseModel.TYPE_RESOURCE);
 
-		const resource2 = await shim.createResourceFromPath(__dirname + '/../tests/support/photo.jpg');
-		const resource3 = await shim.createResourceFromPath(__dirname + '/../tests/support/photo.jpg');
-		note2.body += '<img alt="bla" src=":/' + resource2.id + '"/>';
-		note2.body += '<img src=\':/' + resource3.id + '\' />';
+		const resource2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const resource3 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		note2.body += `<img alt="bla" src=":/${resource2.id}"/>`;
+		note2.body += `<img src=':/${resource3.id}' />`;
 		items = await Note.linkedItems(note2.body);
 		expect(items.length).toBe(4);
 	}));
@@ -90,13 +90,13 @@ describe('models_Note', function() {
 	}));
 
 	it('should serialize and unserialize without modifying data', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1'});
+		let folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [
-			[ {title: '', body:'Body and no title\nSecond line\nThird Line', parent_id: folder1.id},
+			[{ title: '', body: 'Body and no title\nSecond line\nThird Line', parent_id: folder1.id },
 				'', 'Body and no title\nSecond line\nThird Line'],
-			[ {title: 'Note title', body:'Body and title', parent_id: folder1.id},
+			[{ title: 'Note title', body: 'Body and title', parent_id: folder1.id },
 				'Note title', 'Body and title'],
-			[ {title: 'Title and no body', body:'', parent_id: folder1.id},
+			[{ title: 'Title and no body', body: '', parent_id: folder1.id },
 				'Title and no body', ''],
 		];
 
@@ -114,6 +114,19 @@ describe('models_Note', function() {
 			expect(unserialized.title).toBe(input.title);
 			expect(unserialized.body).toBe(input.body);
 		}
+	}));
+
+	it('should reset fields for a duplicate', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+
+		let duplicatedNote = await Note.duplicate(note1.id);
+
+		expect(duplicatedNote !== note1).toBe(true);
+		expect(duplicatedNote.created_time !== note1.created_time).toBe(true);
+		expect(duplicatedNote.updated_time !== note1.updated_time).toBe(true);
+		expect(duplicatedNote.user_created_time !== note1.user_created_time).toBe(true);
+		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
 	}));
 
 });

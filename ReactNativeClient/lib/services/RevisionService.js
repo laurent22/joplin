@@ -127,7 +127,7 @@ class RevisionService extends BaseService {
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);
-				const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND id IN ("' + noteIds.join('","') + '")');
+				const notes = await Note.modelSelectAll(`SELECT * FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND id IN ("${noteIds.join('","')}")`);
 
 				for (let i = 0; i < changes.length; i++) {
 					const change = changes[i];
@@ -180,7 +180,7 @@ class RevisionService extends BaseService {
 
 		this.isCollecting_ = false;
 
-		this.logger().info('RevisionService::collectRevisions: Created revisions for ' + doneNoteIds.length + ' notes');
+		this.logger().info(`RevisionService::collectRevisions: Created revisions for ${doneNoteIds.length} notes`);
 	}
 
 	async deleteOldRevisions(ttl) {
@@ -188,7 +188,7 @@ class RevisionService extends BaseService {
 	}
 
 	async revisionNote(revisions, index) {
-		if (index < 0 || index >= revisions.length) throw new Error('Invalid revision index: ' + index);
+		if (index < 0 || index >= revisions.length) throw new Error(`Invalid revision index: ${index}`);
 
 		const rev = revisions[index];
 		const merged = await Revision.mergeDiffs(rev, revisions);
@@ -250,7 +250,7 @@ class RevisionService extends BaseService {
 			await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
 		}
 
-		this.logger().info('RevisionService::maintenance: Done in ' + (Date.now() - startTime) + 'ms');
+		this.logger().info(`RevisionService::maintenance: Done in ${Date.now() - startTime}ms`);
 	}
 
 	runInBackground(collectRevisionInterval = null) {
@@ -259,7 +259,7 @@ class RevisionService extends BaseService {
 
 		if (collectRevisionInterval === null) collectRevisionInterval = 1000 * 60 * 10;
 
-		this.logger().info('RevisionService::runInBackground: Starting background service with revision collection interval ' + collectRevisionInterval);
+		this.logger().info(`RevisionService::runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 
 		setTimeout(() => {
 			this.maintenance();

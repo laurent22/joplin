@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { StyleSheet } = require('react-native');
@@ -5,6 +7,8 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
+
+Icon.loadFont();
 
 const styles = StyleSheet.create({
 	actionButtonIcon: {
@@ -80,7 +84,7 @@ class ActionButtonComponent extends React.Component {
 		for (let i = 0; i < buttons.length; i++) {
 			let button = buttons[i];
 			let buttonTitle = button.title ? button.title : '';
-			let key = buttonTitle.replace(/\s/g, '_') + '_' + button.icon;
+			let key = `${buttonTitle.replace(/\s/g, '_')}_${button.icon}`;
 			buttonComps.push(
 				<ReactNativeActionButton.Item key={key} buttonColor={button.color} title={buttonTitle} onPress={button.onPress}>
 					<Icon name={button.icon} style={styles.actionButtonIcon} />
@@ -97,7 +101,7 @@ class ActionButtonComponent extends React.Component {
 
 		if (this.props.multiStates) {
 			if (!this.props.buttons || !this.props.buttons.length) throw new Error('Multi-state button requires at least one state');
-			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error('Button index out of bounds: ' + this.state.buttonIndex + '/' + this.props.buttons.length);
+			if (this.state.buttonIndex < 0 || this.state.buttonIndex >= this.props.buttons.length) throw new Error(`Button index out of bounds: ${this.state.buttonIndex}/${this.props.buttons.length}`);
 			let button = this.props.buttons[this.state.buttonIndex];
 			let mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />;
 			return (

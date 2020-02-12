@@ -23,7 +23,7 @@ class SearchEngineUtils {
 			{
 				order: [],
 				fields: fields,
-				conditions: ['id IN ("' + noteIds.join('","') + '")'],
+				conditions: [`id IN ("${noteIds.join('","')}")`],
 			},
 			options
 		);

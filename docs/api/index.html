@@ -1,5 +1,18 @@
 <!doctype html>
 <html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/api.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/api.md
+
+-->
+
 <head>
 	<title>REST API | Joplin</title>
 	<meta charset="utf-8">
@@ -7,7 +20,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -21,6 +35,24 @@
 		padding: .8em;
 		border: 1px solid #ccc;
 	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	h1, h2 {
 		border-bottom: 1px solid #eaecef;
 		padding-bottom: 0.3em;
@@ -47,18 +79,32 @@
 	pre {
 		font-size: .85em;
 	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
 	#toc ul {
 		margin-bottom: 10px;
 	}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -115,6 +161,9 @@
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -150,7 +199,9 @@
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -185,9 +236,10 @@
 		opacity: 0;
 		width: 1.3em;
 		font-size: 0.7em;
-		margin-left: -1.3em;
+		margin-left: 0.4em;
 		line-height: 1em;
 		text-decoration: none;
+		transition: opacity 0.3s;
 	}
 	a.heading-anchor:hover,
 	h1:hover a.heading-anchor,
@@ -198,6 +250,15 @@
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -211,12 +272,12 @@
 
 <body>
 
-<div class="container">
+<div class="container page-api">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -225,6 +286,7 @@
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -241,35 +303,36 @@
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper">Web Clipper</a></li>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/e2ee">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/debugging">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/api">API documentation</a></li>
-<li><a href="https://joplinapp.org/faq">FAQ</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/stats">Stats</a></li>
-<li><a href="https://joplinapp.org/donate">Donate</a></li>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<h1><a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a>Joplin API</h1>
+<h1>Joplin API<a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a></h1>
 <p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.</p>
 <p>In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
 <pre><code class="language-javascript">let port = null;
@@ -281,13 +344,13 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
     }
 }
 </code></pre>
-<h1><a name="authorisation" href="#authorisation" class="heading-anchor">🔗</a>Authorisation</h1>
+<h1>Authorisation<a name="authorisation" href="#authorisation" class="heading-anchor">🔗</a></h1>
 <p>To prevent unauthorised applications from accessing the API, the calls must be authentified. To do so, you must provide a token as a query parameter for each API call. You can get this token from the Joplin desktop application, on the Web Clipper Options screen.</p>
 <p>This would be an example of valid cURL call using a token:</p>
 <pre><code>curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
 </code></pre>
 <p>In the documentation below, the token will not be specified every time however you will need to include it.</p>
-<h1><a name="using-the-api" href="#using-the-api" class="heading-anchor">🔗</a>Using the API</h1>
+<h1>Using the API<a name="using-the-api" href="#using-the-api" class="heading-anchor">🔗</a></h1>
 <p>All the calls, unless noted otherwise, receives and send <strong>JSON data</strong>. For example to create a new note:</p>
 <pre><code>curl --data '{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}' http://localhost:41184/notes
 </code></pre>
@@ -302,27 +365,98 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <li><strong>PUT</strong>: To update an item. Note in a REST API, traditionally PUT is used to completely replace an item, however in this API it will only replace the properties that are provided. For example if you PUT {&quot;title&quot;: &quot;my new title&quot;}, only the &quot;title&quot; property will be changed. The other properties will be left untouched (they won't be cleared nor changed).</li>
 <li><strong>DELETE</strong>: To delete items.</li>
 </ul>
-<h1><a name="filtering-data" href="#filtering-data" class="heading-anchor">🔗</a>Filtering data</h1>
+<h1>Filtering data<a name="filtering-data" href="#filtering-data" class="heading-anchor">🔗</a></h1>
 <p>You can change the fields that will be returned by the API using the <code>fields=</code> query parameter, which takes a list of comma separated fields. For example, to get the longitude and latitude of a note, use this:</p>
 <pre><code>curl http://localhost:41184/notes/ABCD123?fields=longitude,latitude
 </code></pre>
 <p>To get the IDs only of all the tags:</p>
 <pre><code>curl http://localhost:41184/tags?fields=id
 </code></pre>
-<h1><a name="error-handling" href="#error-handling" class="heading-anchor">🔗</a>Error handling</h1>
+<h1>Error handling<a name="error-handling" href="#error-handling" class="heading-anchor">🔗</a></h1>
 <p>In case of an error, an HTTP status code &gt;= 400 will be returned along with a JSON object that provides more info about the error. The JSON object is in the format <code>{ &quot;error&quot;: &quot;description of error&quot; }</code>.</p>
-<h1><a name="about-the-property-types" href="#about-the-property-types" class="heading-anchor">🔗</a>About the property types</h1>
+<h1>About the property types<a name="about-the-property-types" href="#about-the-property-types" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>Text is UTF-8.</li>
 <li>All date/time are Unix timestamps in milliseconds.</li>
 <li>Booleans are integer values 0 or 1.</li>
 </ul>
-<h1><a name="testing-if-the-service-is-available" href="#testing-if-the-service-is-available" class="heading-anchor">🔗</a>Testing if the service is available</h1>
+<h1>Testing if the service is available<a name="testing-if-the-service-is-available" href="#testing-if-the-service-is-available" class="heading-anchor">🔗</a></h1>
 <p>Call <strong>GET /ping</strong> to check if the service is available. It should return &quot;JoplinClipperServer&quot; if it works.</p>
-<h1><a name="searching" href="#searching" class="heading-anchor">🔗</a>Searching</h1>
+<h1>Searching<a name="searching" href="#searching" class="heading-anchor">🔗</a></h1>
 <p>Call <strong>GET /search?query=YOUR_QUERY</strong> to search for notes. This end-point supports the <code>field</code> parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: <a href="https://joplinapp.org/#searching">https://joplinapp.org/#searching</a></p>
-<h1><a name="notes" href="#notes" class="heading-anchor">🔗</a>Notes</h1>
-<h2><a name="properties" href="#properties" class="heading-anchor">🔗</a>Properties</h2>
+<p>To retrieve non-notes items, such as notebooks or tags, add a <code>type</code> parameter and set it to the required <a href="#item-type-id">item type name</a>. In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use <code>*</code> as a wildcard. This is convenient for example to retrieve notebooks or tags by title.</p>
+<p>For example, to retrieve the notebook named <code>recipes</code>: <strong>GET /search?query=recipes&amp;type=folder</strong></p>
+<p>To retrieve all the tags that start with <code>project-</code>: <strong>GET /search?query=project-*&amp;type=tag</strong></p>
+<h1>Item type IDs<a name="item-type-ids" href="#item-type-ids" class="heading-anchor">🔗</a></h1>
+<p>Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>note</td>
+<td>1</td>
+</tr>
+<tr>
+<td>folder</td>
+<td>2</td>
+</tr>
+<tr>
+<td>setting</td>
+<td>3</td>
+</tr>
+<tr>
+<td>resource</td>
+<td>4</td>
+</tr>
+<tr>
+<td>tag</td>
+<td>5</td>
+</tr>
+<tr>
+<td>note_tag</td>
+<td>6</td>
+</tr>
+<tr>
+<td>search</td>
+<td>7</td>
+</tr>
+<tr>
+<td>alarm</td>
+<td>8</td>
+</tr>
+<tr>
+<td>master_key</td>
+<td>9</td>
+</tr>
+<tr>
+<td>item_change</td>
+<td>10</td>
+</tr>
+<tr>
+<td>note_resource</td>
+<td>11</td>
+</tr>
+<tr>
+<td>resource_local_state</td>
+<td>12</td>
+</tr>
+<tr>
+<td>revision</td>
+<td>13</td>
+</tr>
+<tr>
+<td>migration</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+<h1>Notes<a name="notes" href="#notes" class="heading-anchor">🔗</a></h1>
+<h2>Properties<a name="properties" href="#properties" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
 <tr>
@@ -448,6 +582,16 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td></td>
 </tr>
 <tr>
+<td>markup_language</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
+<tr>
 <td>body_html</td>
 <td>text</td>
 <td>Note body, in HTML format</td>
@@ -469,13 +613,15 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </tr>
 </tbody>
 </table>
-<h2><a name="get-notes" href="#get-notes" class="heading-anchor">🔗</a>GET /notes</h2>
+<h2>GET /notes<a name="get-notes" href="#get-notes" class="heading-anchor">🔗</a></h2>
 <p>Gets all notes</p>
-<h2><a name="get-notes-id" href="#get-notes-id" class="heading-anchor">🔗</a>GET /notes/:id</h2>
+<h2>GET /notes/:id<a name="get-notes-id" href="#get-notes-id" class="heading-anchor">🔗</a></h2>
 <p>Gets note with ID :id</p>
-<h2><a name="get-notes-id-tags" href="#get-notes-id-tags" class="heading-anchor">🔗</a>GET /notes/:id/tags</h2>
+<h2>GET /notes/:id/tags<a name="get-notes-id-tags" href="#get-notes-id-tags" class="heading-anchor">🔗</a></h2>
 <p>Gets all the tags attached to this note.</p>
-<h2><a name="post-notes" href="#post-notes" class="heading-anchor">🔗</a>POST /notes</h2>
+<h2>GET /notes/:id/resources<a name="get-notes-id-resources" href="#get-notes-id-resources" class="heading-anchor">🔗</a></h2>
+<p>Gets all the resources attached to this note.</p>
+<h2>POST /notes<a name="post-notes" href="#post-notes" class="heading-anchor">🔗</a></h2>
 <p>Creates a new note</p>
 <p>You can either specify the note body as Markdown by setting the <code>body</code> parameter, or in HTML by setting the <code>body_html</code>.</p>
 <p>Examples:</p>
@@ -496,17 +642,17 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </code></pre>
 </li>
 </ul>
-<h3><a name="creating-a-note-with-a-specific-id" href="#creating-a-note-with-a-specific-id" class="heading-anchor">🔗</a>Creating a note with a specific ID</h3>
+<h3>Creating a note with a specific ID<a name="creating-a-note-with-a-specific-id" href="#creating-a-note-with-a-specific-id" class="heading-anchor">🔗</a></h3>
 <p>When a new note is created, it is automatically assigned a new unique ID so <strong>normally you do not need to set the ID</strong>. However, if for some reason you want to set it, you can supply it as the <code>id</code> property. It needs to be a 32 characters long hexadecimal string. <strong>Make sure it is unique</strong>, for example by generating it using whatever GUID function is available in your programming language.</p>
 <pre><code>  curl --data '{ &quot;id&quot;: &quot;00a87474082744c1a8515da6aa5792d2&quot;, &quot;title&quot;: &quot;My note with custom ID&quot;}' http://127.0.0.1:41184/notes
 </code></pre>
-<h2><a name="put-notes-id" href="#put-notes-id" class="heading-anchor">🔗</a>PUT /notes/:id</h2>
+<h2>PUT /notes/:id<a name="put-notes-id" href="#put-notes-id" class="heading-anchor">🔗</a></h2>
 <p>Sets the properties of the note with ID :id</p>
-<h2><a name="delete-notes-id" href="#delete-notes-id" class="heading-anchor">🔗</a>DELETE /notes/:id</h2>
+<h2>DELETE /notes/:id<a name="delete-notes-id" href="#delete-notes-id" class="heading-anchor">🔗</a></h2>
 <p>Deletes the note with ID :id</p>
-<h1><a name="folders" href="#folders" class="heading-anchor">🔗</a>Folders</h1>
+<h1>Folders<a name="folders" href="#folders" class="heading-anchor">🔗</a></h1>
 <p>This is actually a notebook. Internally notebooks are called &quot;folders&quot;.</p>
-<h2><a name="properties-1" href="#properties-1" class="heading-anchor">🔗</a>Properties</h2>
+<h2>Properties<a name="properties-1" href="#properties-1" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
 <tr>
@@ -561,23 +707,28 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>text</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<h2><a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a>GET /folders</h2>
+<h2>GET /folders<a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a></h2>
 <p>Gets all folders</p>
 <p>The folders are returned as a tree. The sub-notebooks of a notebook, if any, are under the <code>children</code> key.</p>
-<h2><a name="get-folders-id" href="#get-folders-id" class="heading-anchor">🔗</a>GET /folders/:id</h2>
+<h2>GET /folders/:id<a name="get-folders-id" href="#get-folders-id" class="heading-anchor">🔗</a></h2>
 <p>Gets folder with ID :id</p>
-<h2><a name="get-folders-id-notes" href="#get-folders-id-notes" class="heading-anchor">🔗</a>GET /folders/:id/notes</h2>
+<h2>GET /folders/:id/notes<a name="get-folders-id-notes" href="#get-folders-id-notes" class="heading-anchor">🔗</a></h2>
 <p>Gets all the notes inside this folder.</p>
-<h2><a name="post-folders" href="#post-folders" class="heading-anchor">🔗</a>POST /folders</h2>
+<h2>POST /folders<a name="post-folders" href="#post-folders" class="heading-anchor">🔗</a></h2>
 <p>Creates a new folder</p>
-<h2><a name="put-folders-id" href="#put-folders-id" class="heading-anchor">🔗</a>PUT /folders/:id</h2>
+<h2>PUT /folders/:id<a name="put-folders-id" href="#put-folders-id" class="heading-anchor">🔗</a></h2>
 <p>Sets the properties of the folder with ID :id</p>
-<h2><a name="delete-folders-id" href="#delete-folders-id" class="heading-anchor">🔗</a>DELETE /folders/:id</h2>
+<h2>DELETE /folders/:id<a name="delete-folders-id" href="#delete-folders-id" class="heading-anchor">🔗</a></h2>
 <p>Deletes the folder with ID :id</p>
-<h1><a name="resources" href="#resources" class="heading-anchor">🔗</a>Resources</h1>
-<h2><a name="properties-2" href="#properties-2" class="heading-anchor">🔗</a>Properties</h2>
+<h1>Resources<a name="resources" href="#resources" class="heading-anchor">🔗</a></h1>
+<h2>Properties<a name="properties-2" href="#properties-2" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
 <tr>
@@ -652,26 +803,31 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<h2><a name="get-resources" href="#get-resources" class="heading-anchor">🔗</a>GET /resources</h2>
+<h2>GET /resources<a name="get-resources" href="#get-resources" class="heading-anchor">🔗</a></h2>
 <p>Gets all resources</p>
-<h2><a name="get-resources-id" href="#get-resources-id" class="heading-anchor">🔗</a>GET /resources/:id</h2>
+<h2>GET /resources/:id<a name="get-resources-id" href="#get-resources-id" class="heading-anchor">🔗</a></h2>
 <p>Gets resource with ID :id</p>
-<h2><a name="get-resources-id-file" href="#get-resources-id-file" class="heading-anchor">🔗</a>GET /resources/:id/file</h2>
+<h2>GET /resources/:id/file<a name="get-resources-id-file" href="#get-resources-id-file" class="heading-anchor">🔗</a></h2>
 <p>Gets the actual file associated with this resource.</p>
-<h2><a name="post-resources" href="#post-resources" class="heading-anchor">🔗</a>POST /resources</h2>
+<h2>POST /resources<a name="post-resources" href="#post-resources" class="heading-anchor">🔗</a></h2>
 <p>Creates a new resource</p>
 <p>Creating a new resource is special because you also need to upload the file. Unlike other API calls, this one must have the &quot;multipart/form-data&quot; Content-Type. The file data must be passed to the &quot;data&quot; form field, and the other properties to the &quot;props&quot; form field. An example of a valid call with cURL would be:</p>
 <pre><code>curl -F 'data=@/path/to/file.jpg' -F 'props={&quot;title&quot;:&quot;my resource title&quot;}' http://localhost:41184/resources
 </code></pre>
 <p>The &quot;data&quot; field is required, while the &quot;props&quot; one is not. If not specified, default values will be used.</p>
-<h2><a name="put-resources-id" href="#put-resources-id" class="heading-anchor">🔗</a>PUT /resources/:id</h2>
+<h2>PUT /resources/:id<a name="put-resources-id" href="#put-resources-id" class="heading-anchor">🔗</a></h2>
 <p>Sets the properties of the resource with ID :id</p>
-<h2><a name="delete-resources-id" href="#delete-resources-id" class="heading-anchor">🔗</a>DELETE /resources/:id</h2>
+<h2>DELETE /resources/:id<a name="delete-resources-id" href="#delete-resources-id" class="heading-anchor">🔗</a></h2>
 <p>Deletes the resource with ID :id</p>
-<h1><a name="tags" href="#tags" class="heading-anchor">🔗</a>Tags</h1>
-<h2><a name="properties-3" href="#properties-3" class="heading-anchor">🔗</a>Properties</h2>
+<h1>Tags<a name="tags" href="#tags" class="heading-anchor">🔗</a></h1>
+<h2>Properties<a name="properties-3" href="#properties-3" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
 <tr>
@@ -721,25 +877,35 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <td>int</td>
 <td></td>
 </tr>
+<tr>
+<td>is_shared</td>
+<td>int</td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<h2><a name="get-tags" href="#get-tags" class="heading-anchor">🔗</a>GET /tags</h2>
+<h2>GET /tags<a name="get-tags" href="#get-tags" class="heading-anchor">🔗</a></h2>
 <p>Gets all tags</p>
-<h2><a name="get-tags-id" href="#get-tags-id" class="heading-anchor">🔗</a>GET /tags/:id</h2>
+<h2>GET /tags/:id<a name="get-tags-id" href="#get-tags-id" class="heading-anchor">🔗</a></h2>
 <p>Gets tag with ID :id</p>
-<h2><a name="get-tags-id-notes" href="#get-tags-id-notes" class="heading-anchor">🔗</a>GET /tags/:id/notes</h2>
+<h2>GET /tags/:id/notes<a name="get-tags-id-notes" href="#get-tags-id-notes" class="heading-anchor">🔗</a></h2>
 <p>Gets all the notes with this tag.</p>
-<h2><a name="post-tags" href="#post-tags" class="heading-anchor">🔗</a>POST /tags</h2>
+<h2>POST /tags<a name="post-tags" href="#post-tags" class="heading-anchor">🔗</a></h2>
 <p>Creates a new tag</p>
-<h2><a name="post-tags-id-notes" href="#post-tags-id-notes" class="heading-anchor">🔗</a>POST /tags/:id/notes</h2>
+<h2>POST /tags/:id/notes<a name="post-tags-id-notes" href="#post-tags-id-notes" class="heading-anchor">🔗</a></h2>
 <p>Post a note to this endpoint to add the tag to the note. The note data must at least contain an ID property (all other properties will be ignored).</p>
-<h2><a name="put-tags-id" href="#put-tags-id" class="heading-anchor">🔗</a>PUT /tags/:id</h2>
+<h2>PUT /tags/:id<a name="put-tags-id" href="#put-tags-id" class="heading-anchor">🔗</a></h2>
 <p>Sets the properties of the tag with ID :id</p>
-<h2><a name="delete-tags-id" href="#delete-tags-id" class="heading-anchor">🔗</a>DELETE /tags/:id</h2>
+<h2>DELETE /tags/:id<a name="delete-tags-id" href="#delete-tags-id" class="heading-anchor">🔗</a></h2>
 <p>Deletes the tag with ID :id</p>
-<h2><a name="delete-tags-id-notes-note-id" href="#delete-tags-id-notes-note-id" class="heading-anchor">🔗</a>DELETE /tags/:id/notes/:note_id</h2>
+<h2>DELETE /tags/:id/notes/:note_id<a name="delete-tags-id-notes-note-id" href="#delete-tags-id-notes-note-id" class="heading-anchor">🔗</a></h2>
 <p>Remove the tag from the note.</p>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/api.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -771,7 +937,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

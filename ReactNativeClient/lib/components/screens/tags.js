@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { View, Text, FlatList, StyleSheet, TouchableOpacity } = require('react-native');
@@ -9,7 +11,7 @@ const { _ } = require('lib/locale.js');
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class TagsScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -76,7 +78,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 		);
 	}
 
-	tagList_keyExtractor(item, index) {
+	tagList_keyExtractor(item) {
 		return item.id;
 	}
 

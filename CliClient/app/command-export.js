@@ -18,7 +18,7 @@ class Command extends BaseCommand {
 		const formats = service
 			.modules()
 			.filter(m => m.type === 'exporter')
-			.map(m => m.format + (m.description ? ' (' + m.description + ')' : ''));
+			.map(m => m.format + (m.description ? ` (${m.description})` : ''));
 
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}

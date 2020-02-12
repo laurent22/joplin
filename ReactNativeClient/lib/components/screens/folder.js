@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { View, TextInput, StyleSheet } = require('react-native');
@@ -11,7 +13,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale.js');
 
 class FolderScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -67,7 +69,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	folderComponent_change(propName, propValue) {
-		this.setState((prevState, props) => {
+		this.setState((prevState) => {
 			let folder = Object.assign({}, prevState.folder);
 			folder[propName] = propValue;
 			return { folder: folder };

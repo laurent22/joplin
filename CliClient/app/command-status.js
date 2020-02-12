@@ -13,7 +13,7 @@ class Command extends BaseCommand {
 		return _('Displays summary about the notes and notebooks.');
 	}
 
-	async action(args) {
+	async action() {
 		let service = new ReportService();
 		let report = await service.status(Setting.value('sync.target'));
 
@@ -22,7 +22,7 @@ class Command extends BaseCommand {
 
 			if (i > 0) this.stdout('');
 
-			this.stdout('# ' + section.title);
+			this.stdout(`# ${section.title}`);
 			this.stdout('');
 
 			for (let n in section.body) {

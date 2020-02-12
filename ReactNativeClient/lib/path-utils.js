@@ -1,4 +1,4 @@
-/*eslint no-useless-escape: 0*/
+/* eslint no-useless-escape: 0*/
 
 const { _ } = require('lib/locale');
 
@@ -35,7 +35,7 @@ function fileExtension(path) {
 
 function isHidden(path) {
 	let b = basename(path);
-	if (!b.length) throw new Error('Path empty or not a valid path: ' + path);
+	if (!b.length) throw new Error(`Path empty or not a valid path: ${path}`);
 	return b[0] === '.';
 }
 
@@ -108,13 +108,13 @@ function toFileProtocolPath(filePathEncode, os = null) {
 
 	if (os === 'win32') {
 		filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
-		filePathEncode = '/' + filePathEncode; // put slash in front of path to comply with windows fileURL syntax
+		filePathEncode = `/${filePathEncode}`; // put slash in front of path to comply with windows fileURL syntax
 	}
 
 	filePathEncode = encodeURI(filePathEncode);
 	filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
 	filePathEncode = filePathEncode.replace(/%20/g, '+'); // switch space (%20) with '+'. To comply with syntax used by joplin, see urldecode_(str) in MdToHtml.js
-	return 'file://' + filePathEncode.replace(/\'/g, '%27'); // escape '(single quote) with unicode, to prevent crashing the html view
+	return `file://${filePathEncode.replace(/\'/g, '%27')}`; // escape '(single quote) with unicode, to prevent crashing the html view
 }
 
 function toSystemSlashes(path, os = null) {
@@ -135,7 +135,7 @@ function quotePath(path) {
 	if (!path) return '';
 	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
 	path = path.replace(/"/, '\\"');
-	return '"' + path + '"';
+	return `"${path}"`;
 }
 
 function unquotePath(path) {

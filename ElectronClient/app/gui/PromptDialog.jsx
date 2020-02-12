@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
@@ -14,7 +16,7 @@ class PromptDialog extends React.Component {
 		this.answerInput_ = React.createRef();
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
@@ -22,7 +24,7 @@ class PromptDialog extends React.Component {
 		this.focusInput_ = true;
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if ('visible' in newProps && newProps.visible !== this.props.visible) {
 			this.setState({ visible: newProps.visible });
 			if (newProps.visible) this.focusInput_ = true;
@@ -39,7 +41,7 @@ class PromptDialog extends React.Component {
 	}
 
 	styles(themeId, width, height, visible) {
-		const styleKey = themeId + '_' + width + '_' + height + '_' + visible;
+		const styleKey = `${themeId}_${width}_${height}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -61,7 +63,7 @@ class PromptDialog extends React.Component {
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-			paddingTop: paddingTop + 'px',
+			paddingTop: `${paddingTop}px`,
 		};
 
 		this.styles_.promptDialog = {

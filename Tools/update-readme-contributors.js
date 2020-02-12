@@ -1,23 +1,23 @@
-require('app-module-path').addPath(__dirname + '/../ReactNativeClient');
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
 
 'use strict';
 
 const request = require('request');
 
-const readmePath = __dirname + '/../README.md';
+const readmePath = `${__dirname}/../README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page) {
 	return new Promise((resolve, reject) => {
 		request.get({
-			url: 'https://api.github.com/repos/laurent22/joplin/contributors' + (page ? '?page=' + page : ''),
+			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'},
+			headers: { 'User-Agent': 'Joplin Readme Updater' },
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);
 			} else if (response.statusCode !== 200) {
-				reject(new Error('Error HTTP ' + response.statusCode));
+				reject(new Error(`Error HTTP ${response.statusCode}`));
 			} else {
 				resolve(data);
 			}
@@ -56,17 +56,17 @@ function contributorTable(contributors) {
 	}
 
 	const lines = [];
-	lines.push('| ' + header.join(' | ') + ' |');
-	lines.push('| ' + headerLine.join(' | ') + ' |');
+	lines.push(`| ${header.join(' | ')} |`);
+	lines.push(`| ${headerLine.join(' | ')} |`);
 
 	for (const row of rows) {
-		lines.push('| ' + row.join(' | ') + ' |');
+		lines.push(`| ${row.join(' | ')} |`);
 	}
 
 	return lines.join('\n');
 }
 
-async function main(argv) {
+async function main() {
 	let contributors = [];
 	let pageIndex = 0;
 	const doneNames = [];

@@ -1,4 +1,4 @@
-/*eslint no-useless-escape: 0*/
+/* eslint no-useless-escape: 0*/
 
 // parseUri 1.2.2
 // (c) Steven Levithan <stevenlevithan.com>

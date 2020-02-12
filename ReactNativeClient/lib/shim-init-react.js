@@ -6,7 +6,7 @@ const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('lib/fs-driver-rn.js').FsDriverRN;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
-const { Linking } = require('react-native');
+const { Linking, Platform } = require('react-native');
 const mimeUtils = require('lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('lib/path-utils.js');
 const { uuid } = require('lib/uuid.js');
@@ -14,11 +14,6 @@ const Resource = require('lib/models/Resource');
 
 const injectedJs = {
 	webviewLib: require('lib/rnInjectedJs/webviewLib'),
-};
-
-const cssToJs = {
-	'hljs-atom-one-dark-reasonable.css': require('lib/csstojs/hljs-atom-one-dark-reasonable.css.js'),
-	'hljs-atom-one-light.css': require('lib/csstojs/hljs-atom-one-light.css.js'),
 };
 
 function shimInit() {
@@ -48,7 +43,7 @@ function shimInit() {
 		// and throw a catchable error.
 		// Bug: https://github.com/facebook/react-native/issues/7436
 		const validatedUrl = urlValidator.isUri(url);
-		if (!validatedUrl) throw new Error('Not a valid URL: ' + url);
+		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
 
 		return shim.fetchWithRetry(() => {
 			return fetch(validatedUrl, options);
@@ -64,7 +59,7 @@ function shimInit() {
 
 		let dirs = RNFetchBlob.fs.dirs;
 		let localFilePath = options.path;
-		if (localFilePath.indexOf('/') !== 0) localFilePath = dirs.DocumentDir + '/' + localFilePath;
+		if (localFilePath.indexOf('/') !== 0) localFilePath = `${dirs.DocumentDir}/${localFilePath}`;
 
 		if (!overwrite) {
 			if (await shim.fsDriver().exists(localFilePath)) {
@@ -96,7 +91,7 @@ function shimInit() {
 
 			return output;
 		} catch (error) {
-			throw new Error('fetchBlob: ' + method + ' ' + url + ': ' + error.toString());
+			throw new Error(`fetchBlob: ${method} ${url}: ${error.toString()}`);
 		}
 	};
 
@@ -119,7 +114,7 @@ function shimInit() {
 				headers: response.respInfo.headers,
 			};
 		} catch (error) {
-			throw new Error('uploadBlob: ' + method + ' ' + url + ': ' + error.toString());
+			throw new Error(`uploadBlob: ${method} ${url}: ${error.toString()}`);
 		}
 	};
 
@@ -138,11 +133,20 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve) {
 			requestAnimationFrame(function() {
 				resolve();
 			});
 		});
+	};
+
+	shim.mobilePlatform = () => {
+		return Platform.OS;
+	};
+
+	shim.appVersion = () => {
+		const p = require('react-native-version-info').default;
+		return p.appVersion;
 	};
 
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
@@ -169,7 +173,7 @@ function shimInit() {
 		}
 
 		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
-		if (!itDoes) throw new Error('Resource file was not created: ' + targetPath);
+		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
 
 		const fileStat = await shim.fsDriver().stat(targetPath);
 		resource.size = fileStat.size;
@@ -180,13 +184,8 @@ function shimInit() {
 	};
 
 	shim.injectedJs = function(name) {
-		if (!(name in injectedJs)) throw new Error('Cannot find injectedJs file (add it to "injectedJs" object): ' + name);
+		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name];
-	};
-
-	shim.loadCssFromJs = function(name) {
-		if (!(name in cssToJs)) throw new Error('Cannot find csstojs file (add it to "cssToJs" object): ' + name);
-		return cssToJs[name];
 	};
 }
 

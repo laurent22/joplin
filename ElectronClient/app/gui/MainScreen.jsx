@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { Header } = require('./Header.min.js');
@@ -6,6 +8,7 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
+const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
 const Tag = require('lib/models/Tag.js');
@@ -24,6 +27,7 @@ class MainScreenComponent extends React.Component {
 		super();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
+		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
 	}
@@ -40,7 +44,11 @@ class MainScreenComponent extends React.Component {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
-	componentWillMount() {
+	shareNoteDialog_close() {
+		this.setState({ shareNoteDialogOptions: {} });
+	}
+
+	UNSAFE_componentWillMount() {
 		this.setState({
 			promptOptions: null,
 			modalLayer: {
@@ -48,10 +56,11 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
+			shareNoteDialogOptions: {},
 		});
 	}
 
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.windowCommand) {
 			this.doCommand(newProps.windowCommand);
 		}
@@ -66,6 +75,12 @@ class MainScreenComponent extends React.Component {
 	toggleSidebar() {
 		this.props.dispatch({
 			type: 'SIDEBAR_VISIBILITY_TOGGLE',
+		});
+	}
+
+	toggleNoteList() {
+		this.props.dispatch({
+			type: 'NOTELIST_VISIBILITY_TOGGLE',
 		});
 	}
 
@@ -102,7 +117,7 @@ class MainScreenComponent extends React.Component {
 			} else {
 				await createNewNote(null, true);
 			}
-		} else if (command.name === 'newNotebook') {
+		} else if (command.name === 'newNotebook' || (command.name === 'newSubNotebook' && command.activeFolderId)) {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
@@ -111,6 +126,7 @@ class MainScreenComponent extends React.Component {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
+								if (command.name === 'newSubNotebook') folder = await Folder.moveToFolder(folder.id, command.activeFolderId);
 							} catch (error) {
 								bridge().showErrorMessageBox(error.message);
 							}
@@ -128,33 +144,53 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'setTags') {
-			const tags = await Tag.tagsByNoteId(command.noteId);
-			const noteTags = tags
+			const tags = await Tag.commonTagsByNoteIds(command.noteIds);
+			const startTags = tags
 				.map(a => {
 					return { value: a.id, label: a.title };
 				})
 				.sort((a, b) => {
 					// sensitivity accent will treat accented characters as differemt
 					// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, {sensitivity: 'accent'});
+					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags.map(a => {
 				return { value: a.id, label: a.title };
-			});
+			})
+				.sort((a, b) => {
+				// sensitivity accent will treat accented characters as differemt
+				// but treats caps as equal
+					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
+				});
 
 			this.setState({
 				promptOptions: {
 					label: _('Add or remove tags:'),
 					inputType: 'tags',
-					value: noteTags,
+					value: startTags,
 					autocomplete: tagSuggestions,
 					onClose: async answer => {
 						if (answer !== null) {
-							const tagTitles = answer.map(a => {
+							const endTagTitles = answer.map(a => {
 								return a.label.trim();
 							});
-							await Tag.setNoteTagsByTitles(command.noteId, tagTitles);
+							if (command.noteIds.length === 1) {
+								await Tag.setNoteTagsByTitles(command.noteIds[0], endTagTitles);
+							} else {
+								const startTagTitles = startTags.map(a => { return a.label.trim(); });
+								const addTags = endTagTitles.filter(value => !startTagTitles.includes(value));
+								const delTags = startTagTitles.filter(value => !endTagTitles.includes(value));
+
+								// apply the tag additions and deletions to each selected note
+								for (let i = 0; i < command.noteIds.length; i++) {
+									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
+									let tagTitles = tags.map(a => { return a.title; });
+									tagTitles = tagTitles.concat(addTags);
+									tagTitles = tagTitles.filter(value => !delTags.includes(value));
+									await Tag.setNoteTagsByTitles(command.noteIds[i], tagTitles);
+								}
+							}
 						}
 						this.setState({ promptOptions: null });
 					},
@@ -240,12 +276,30 @@ class MainScreenComponent extends React.Component {
 					onRevisionLinkClick: command.onRevisionLinkClick,
 				},
 			});
+		} else if (command.name === 'commandShareNoteDialog') {
+			this.setState({
+				shareNoteDialogOptions: {
+					noteIds: command.noteIds,
+					visible: true,
+				},
+			});
 		} else if (command.name === 'toggleVisiblePanes') {
 			this.toggleVisiblePanes();
 		} else if (command.name === 'toggleSidebar') {
 			this.toggleSidebar();
+		} else if (command.name === 'toggleNoteList') {
+			this.toggleNoteList();
 		} else if (command.name === 'showModalMessage') {
-			this.setState({ modalLayer: { visible: true, message: command.message } });
+			this.setState({
+				modalLayer: {
+					visible: true,
+					message:
+						<div className="modal-message">
+							<div id="loading-animation" />
+							<div className="text">{command.message}</div>
+						</div>,
+				},
+			});
 		} else if (command.name === 'hideModalMessage') {
 			this.setState({ modalLayer: { visible: false, message: '' } });
 		} else if (command.name === 'editAlarm') {
@@ -321,8 +375,8 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
-	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, sidebarWidth, noteListWidth) {
-		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, sidebarWidth, noteListWidth].join('_');
+	styles(themeId, width, height, messageBoxVisible, isSidebarVisible, isNoteListVisible, sidebarWidth, noteListWidth) {
+		const styleKey = [themeId, width, height, messageBoxVisible, +isSidebarVisible, +isNoteListVisible, sidebarWidth, noteListWidth].join('_');
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -344,13 +398,15 @@ class MainScreenComponent extends React.Component {
 			backgroundColor: theme.warningBackgroundColor,
 		};
 
+		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
+
 		this.styles_.verticalResizer = {
 			width: 5,
-			height: height,
+			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
+			// making the whole window scroll vertically. So we remove 10 extra pixels here.
+			height: rowHeight - 10,
 			display: 'inline-block',
 		};
-
-		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
 		this.styles_.sideBar = {
 			width: sidebarWidth - this.styles_.verticalResizer.width,
@@ -370,6 +426,12 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 			verticalAlign: 'top',
 		};
+
+		if (isNoteListVisible === false) {
+			this.styles_.noteList.width = 0;
+			this.styles_.noteList.display = 'none';
+			this.styles_.verticalResizer.display = 'none';
+		}
 
 		this.styles_.noteText = {
 			width: Math.floor(width - this.styles_.sideBar.width - this.styles_.noteList.width - 10),
@@ -411,7 +473,8 @@ class MainScreenComponent extends React.Component {
 		const notes = this.props.notes;
 		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const noteListVisibility = this.props.noteListVisibility;
+		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
@@ -422,6 +485,15 @@ class MainScreenComponent extends React.Component {
 			iconRotation: this.props.sidebarVisibility ? 0 : 90,
 			onClick: () => {
 				this.doCommand({ name: 'toggleSidebar' });
+			},
+		});
+
+		headerItems.push({
+			title: _('Toggle note list'),
+			iconName: 'fa-align-justify',
+			iconRotation: noteListVisibility ? 0 : 90,
+			onClick: () => {
+				this.doCommand({ name: 'toggleNoteList' });
 			},
 		});
 
@@ -485,7 +557,10 @@ class MainScreenComponent extends React.Component {
 		const onViewMasterKeysClick = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'EncryptionConfig',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'encryption',
+				},
 			});
 		};
 
@@ -536,12 +611,15 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
+		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
+		const keyboardMode = Setting.value('editor.keyboardMode');
 
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
 
@@ -551,7 +629,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText style={styles.noteText} visiblePanes={this.props.noteVisiblePanes} noteDevToolsVisible={this.props.noteDevToolsVisible} />
+				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}
 			</div>
@@ -565,6 +643,7 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		noteVisiblePanes: state.noteVisiblePanes,
 		sidebarVisibility: state.sidebarVisibility,
+		noteListVisibility: state.noteListVisibility,
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
@@ -574,7 +653,6 @@ const mapStateToProps = state => {
 		noteListWidth: state.settings['style.noteList.width'],
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
-		noteDevToolsVisible: state.noteDevToolsVisible,
 		templates: state.templates,
 	};
 };

@@ -1,7 +1,7 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
 const { _ } = require('lib/locale.js');
-const { OneDriveApiNodeUtils } = require('./onedrive-api-node-utils.js');
+const { OneDriveApiNodeUtils } = require('lib/onedrive-api-node-utils.js');
 const Setting = require('lib/models/Setting.js');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const { Synchronizer } = require('lib/synchronizer.js');
@@ -72,7 +72,7 @@ class Command extends BaseCommand {
 			});
 			this.oneDriveApiUtils_ = null;
 
-			Setting.setValue('sync.' + this.syncTargetId_ + '.auth', auth ? JSON.stringify(auth) : null);
+			Setting.setValue(`sync.${this.syncTargetId_}.auth`, auth ? JSON.stringify(auth) : null);
 			if (!auth) {
 				this.stdout(_('Authentication was not completed (did not receive an authentication token).'));
 				return false;
@@ -93,7 +93,7 @@ class Command extends BaseCommand {
 			}
 
 			const response = await api.execAuthToken(authCode);
-			Setting.setValue('sync.' + this.syncTargetId_ + '.auth', response.access_token);
+			Setting.setValue(`sync.${this.syncTargetId_}.auth`, response.access_token);
 			api.setAuthToken(response.access_token);
 			return true;
 		}
@@ -117,7 +117,7 @@ class Command extends BaseCommand {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
-		const lockFilePath = require('os').tmpdir() + '/synclock_' + md5(escape(Setting.value('profileDir'))); // https://github.com/pvorb/node-md5/issues/41
+		const lockFilePath = `${require('os').tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
 		if (!(await fs.pathExists(lockFilePath))) await fs.writeFile(lockFilePath, 'synclock');
 
 		try {
@@ -178,7 +178,7 @@ class Command extends BaseCommand {
 
 			this.stdout(_('Starting synchronisation...'));
 
-			const contextKey = 'sync.' + this.syncTargetId_ + '.context';
+			const contextKey = `sync.${this.syncTargetId_}.context`;
 			let context = Setting.value(contextKey);
 
 			context = context ? JSON.parse(context) : {};
@@ -197,7 +197,7 @@ class Command extends BaseCommand {
 
 			// When using the tool in command line mode, the ResourceFetcher service is
 			// not going to be running in the background, so the resources need to be
-			// explicitely downloaded below.
+			// explicitly downloaded below.
 			if (!app().hasGui()) {
 				this.stdout(_('Downloading resources...'));
 				await ResourceFetcher.instance().fetchAll();

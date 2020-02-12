@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const Setting = require('lib/models/Setting.js');
 const { Platform } = require('react-native');
 
@@ -38,14 +40,14 @@ const globalStyle = {
 	htmlCodeBorderColor: 'rgb(220, 220, 220)',
 	htmlCodeColor: 'rgb(0,0,0)',
 
-	codeThemeCss: 'hljs-atom-one-light.css',
+	codeThemeCss: 'atom-one-light.css',
 };
 
 globalStyle.marginRight = globalStyle.margin;
 globalStyle.marginLeft = globalStyle.margin;
 globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
-globalStyle.htmlMarginLeft = ((globalStyle.marginLeft / 10) * 0.6).toFixed(2) + 'em';
+globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
 let themeCache_ = {};
 
@@ -98,9 +100,25 @@ function addExtraStyles(style) {
 	return style;
 }
 
+function editorFont(fontId) {
+	// IMPORTANT: The font mapping must match the one in Setting.js
+	const fonts = {
+		[Setting.FONT_DEFAULT]: null,
+		[Setting.FONT_MENLO]: 'Menlo',
+		[Setting.FONT_COURIER_NEW]: 'Courier New',
+		[Setting.FONT_AVENIR]: 'Avenir',
+		[Setting.FONT_MONOSPACE]: 'monospace',
+	};
+	if (!fontId) {
+		console.warn('Editor font not set! Falling back to default font."');
+		fontId = Setting.FONT_DEFAULT;
+	}
+	return fonts[fontId];
+}
+
 function themeStyle(theme) {
 	if (!theme) {
-		console.warn('Theme not set!! Defaulting to Light theme');
+		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
 	}
 
@@ -108,6 +126,37 @@ function themeStyle(theme) {
 
 	let output = Object.assign({}, globalStyle);
 	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
+	else if (theme == Setting.THEME_OLED_DARK) {
+		output.backgroundColor = '#000000';
+		output.color = '#dddddd';
+		output.colorFaded = '#777777';
+		output.dividerColor = '#555555';
+		output.strongDividerColor = '#888888';
+		output.selectedColor = '#333333';
+		output.textSelectionColor = '#00AEFF';
+		output.headerBackgroundColor = '#2D3136';
+
+		output.raisedBackgroundColor = '#0F2051';
+		output.raisedColor = '#788BC3';
+		output.raisedHighlightedColor = '#ffffff';
+
+		output.htmlColor = 'rgb(220,220,220)';
+		output.htmlBackgroundColor = 'rgb(29,32,36)';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+
+		output.htmlDividerColor = '#3D444E';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+		output.htmlCodeColor = '#ffffff';
+		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
+		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
+
+		output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+
+		output.colorUrl = '#7B81FF';
+
+		themeCache_[theme] = output;
+		return addExtraStyles(themeCache_[theme]);
+	}
 
 	output.backgroundColor = '#1D2024';
 	output.color = '#dddddd';
@@ -132,7 +181,7 @@ function themeStyle(theme) {
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
-	output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+	output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
 
@@ -140,4 +189,4 @@ function themeStyle(theme) {
 	return addExtraStyles(themeCache_[theme]);
 }
 
-module.exports = { globalStyle, themeStyle };
+module.exports = { globalStyle, themeStyle, editorFont };

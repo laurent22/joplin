@@ -66,10 +66,10 @@ class FileApiDriverOneDrive {
 		let body = {
 			fileSystemInfo: {
 				lastModifiedDateTime:
-					moment
+					`${moment
 						.unix(timestamp / 1000)
 						.utc()
-						.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z',
+						.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`,
 			},
 		};
 		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
@@ -78,7 +78,7 @@ class FileApiDriverOneDrive {
 
 	async list(path, options = null) {
 		let query = this.itemFilter_();
-		let url = this.makePath_(path) + ':/children';
+		let url = `${this.makePath_(path)}:/children`;
 
 		if (options.context) {
 			query = null;
@@ -99,10 +99,10 @@ class FileApiDriverOneDrive {
 
 		try {
 			if (options.target == 'file') {
-				let response = await this.api_.exec('GET', this.makePath_(path) + ':/content', null, null, options);
+				let response = await this.api_.exec('GET', `${this.makePath_(path)}:/content`, null, null, options);
 				return response;
 			} else {
-				let content = await this.api_.execText('GET', this.makePath_(path) + ':/content');
+				let content = await this.api_.execText('GET', `${this.makePath_(path)}:/content`);
 				return content;
 			}
 		} catch (error) {
@@ -116,7 +116,7 @@ class FileApiDriverOneDrive {
 		if (item) return item;
 
 		let parentPath = dirname(path);
-		item = await this.api_.execJson('POST', this.makePath_(parentPath) + ':/children', this.itemFilter_(), {
+		item = await this.api_.execJson('POST', `${this.makePath_(parentPath)}:/children`, this.itemFilter_(), {
 			name: basename(path),
 			folder: {},
 		});
@@ -131,10 +131,10 @@ class FileApiDriverOneDrive {
 
 		try {
 			if (options.source == 'file') {
-				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, null, options);
+				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, null, options);
 			} else {
 				options.headers = { 'Content-Type': 'text/plain' };
-				response = await this.api_.exec('PUT', this.makePath_(path) + ':/content', null, content, options);
+				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
 			}
 		} catch (error) {
 			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
@@ -151,7 +151,7 @@ class FileApiDriverOneDrive {
 		return this.api_.exec('DELETE', this.makePath_(path));
 	}
 
-	async move(oldPath, newPath) {
+	async move() {
 		// Cannot work in an atomic way because if newPath already exist, the OneDrive API throw an error
 		// "An item with the same name already exists under the parent". Some posts suggest to use
 		// @name.conflictBehavior [0]but that doesn't seem to work. So until Microsoft fixes this
@@ -202,7 +202,7 @@ class FileApiDriverOneDrive {
 		};
 
 		const freshStartDelta = () => {
-			const url = this.makePath_(path) + ':/delta';
+			const url = `${this.makePath_(path)}:/delta`;
 			const query = this.itemFilter_();
 			query.select += ',deleted';
 			return { url: url, query: query };
@@ -273,7 +273,7 @@ class FileApiDriverOneDrive {
 			nextLink = response['@odata.nextLink'];
 			output.hasMore = true;
 		} else {
-			if (!response['@odata.deltaLink']) throw new Error('Delta link missing: ' + JSON.stringify(response));
+			if (!response['@odata.deltaLink']) throw new Error(`Delta link missing: ${JSON.stringify(response)}`);
 			nextLink = response['@odata.deltaLink'];
 		}
 

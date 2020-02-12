@@ -1,10 +1,12 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
 const { bridge } = require('electron').remote.require('./bridge');
 
 class NavigatorComponent extends Component {
-	componentWillReceiveProps(newProps) {
+	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
 			let windowTitle = ['Joplin'];
@@ -17,10 +19,7 @@ class NavigatorComponent extends Component {
 
 	updateWindowTitle(title) {
 		try {
-			if (bridge().window())
-				bridge()
-					.window()
-					.setTitle(title);
+			if (bridge().window()) bridge().window().setTitle(title);
 		} catch (error) {
 			console.warn('updateWindowTitle', error);
 		}

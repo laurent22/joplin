@@ -16,6 +16,38 @@ class WebDavApi {
 	constructor(options) {
 		this.logger_ = new Logger();
 		this.options_ = options;
+		this.lastRequests_ = [];
+	}
+
+	logRequest_(request, responseText) {
+		if (this.lastRequests_.length > 10) this.lastRequests_.splice(0, 1);
+
+		const serializeRequest = (r) => {
+			const options = Object.assign({}, r.options);
+			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
+			const output = [];
+			output.push(options.method ? options.method : 'GET');
+			output.push(r.url);
+			options.headers = Object.assign({}, options.headers);
+			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
+			delete options.method;
+			output.push(JSON.stringify(options));
+			return output.join(' ');
+		};
+
+		this.lastRequests_.push({
+			timestamp: Date.now(),
+			request: serializeRequest(request),
+			response: responseText ? responseText.substr(0, 4096) : '',
+		});
+	}
+
+	lastRequests() {
+		return this.lastRequests_;
+	}
+
+	clearLastRequests() {
+		this.lastRequests_ = [];
 	}
 
 	setLogger(l) {
@@ -31,10 +63,10 @@ class WebDavApi {
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
 			// Tried various things like the below, but it didn't work on React Native:
-			//return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
-			return base64.encode(this.options_.username() + ':' + this.options_.password());
+			// return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
+			return base64.encode(`${this.options_.username()}:${this.options_.password()}`);
 		} catch (error) {
-			error.message = 'Cannot encode username/password: ' + error.message;
+			error.message = `Cannot encode username/password: ${error.message}`;
 			throw error;
 		}
 	}
@@ -52,24 +84,32 @@ class WebDavApi {
 		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = name => {
-			if (name.indexOf('xmlns:') !== 0) {
+			if (name.indexOf('xmlns') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
 				const p = name.split(':');
 				if (p.length == 2) {
 					const ns = p[0];
 					if (davNamespaces.indexOf(ns) >= 0) {
-						name = 'd:' + p[1];
+						name = `d:${p[1]}`;
 					}
+				} else if (p.length === 1 && davNamespaces.indexOf('') >= 0) {
+					// Also handle the case where the namespace alias is empty.
+					// https://github.com/laurent22/joplin/issues/2002
+					name = `d:${name}`;
 				}
 			}
+
 			return name.toLowerCase();
 		};
 
 		const attrValueProcessor = (value, name) => {
+			// The namespace is ususally specified like so: xmlns:D="DAV:" ("D" being the alias used in the tag names)
+			// In some cases, the namespace can also be empty like so: "xmlns=DAV". In this case, the tags will have
+			// no namespace so instead of <d:prop> will have just <prop>. This is handled above in nameProcessor()
 			if (value.toLowerCase() === 'dav:') {
 				const p = name.split(':');
-				davNamespaces.push(p[p.length - 1]);
+				davNamespaces.push(p.length === 2 ? p[p.length - 1] : '');
 			}
 		};
 
@@ -79,7 +119,7 @@ class WebDavApi {
 			attrValueProcessors: [attrValueProcessor],
 		};
 
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			parseXmlString(xml, options, (error, result) => {
 				if (error) {
 					resolve(null); // Error handled by caller which will display the XML text (or plain text) if null is returned from this function
@@ -155,6 +195,8 @@ class WebDavApi {
 		}
 
 		if (outputType === 'string') {
+			if (!output) throw new JoplinError(`String property not found: ${propName}: ${JSON.stringify(resource)}`, 'stringNotFound');
+
 			// If the XML has not attribute the value is directly a string
 			// If the XML node has attributes, the value is under "_".
 			// Eg for this XML, the string will be under {"_":"Thu, 01 Feb 2018 17:24:05 GMT"}:
@@ -173,7 +215,7 @@ class WebDavApi {
 			return output;
 		}
 
-		throw new Error('Invalid output type: ' + outputType);
+		throw new Error(`Invalid output type: ${outputType}`);
 	}
 
 	async execPropFind(path, depth, fields = null, options = null) {
@@ -181,7 +223,7 @@ class WebDavApi {
 
 		let fieldsXml = '';
 		for (let i = 0; i < fields.length; i++) {
-			fieldsXml += '<' + fields[i] + '/>';
+			fieldsXml += `<${fields[i]}/>`;
 		}
 
 		// To find all available properties:
@@ -195,9 +237,7 @@ class WebDavApi {
 			`<?xml version="1.0" encoding="UTF-8"?>
 			<d:propfind xmlns:d="DAV:">
 				<d:prop xmlns:oc="http://owncloud.org/ns">
-					` +
-			fieldsXml +
-			`
+					${fieldsXml}
 				</d:prop>
 			</d:propfind>`;
 
@@ -208,14 +248,14 @@ class WebDavApi {
 		let output = [];
 		output.push('curl');
 		output.push('-v');
-		if (options.method) output.push('-X ' + options.method);
+		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
 			for (let n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push('-H ' + '"' + n + ': ' + options.headers[n] + '"');
+				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
 		}
-		if (options.body) output.push('--data ' + '\'' + options.body + '\'');
+		if (options.body) output.push(`${'--data ' + '\''}${options.body}'`);
 		output.push(url);
 
 		return output.join(' ');
@@ -300,7 +340,7 @@ class WebDavApi {
 
 		const authToken = this.authToken();
 
-		if (authToken) headers['Authorization'] = 'Basic ' + authToken;
+		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
 
 		// On iOS, the network lib appends a If-None-Match header to PROPFIND calls, which is kind of correct because
 		// the call is idempotent and thus could be cached. According to RFC-7232 though only GET and HEAD should have
@@ -311,7 +351,8 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = 'JoplinIgnore-' + Math.floor(Math.random() * 100000);
+		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
@@ -319,21 +360,21 @@ class WebDavApi {
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 
-		const url = this.baseUrl() + '/' + path;
+		const url = `${this.baseUrl()}/${path}`;
 
 		let response = null;
 
-		// console.info('WebDAV Call', method + ' ' + url, headers, options);
+		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
 
 		if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
 			if (fetchOptions.path) {
 				const fileStat = await shim.fsDriver().stat(fetchOptions.path);
-				if (fileStat) fetchOptions.headers['Content-Length'] = fileStat.size + '';
+				if (fileStat) fetchOptions.headers['Content-Length'] = `${fileStat.size}`;
 			}
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target == 'string') {
-			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = shim.stringByteLength(body) + '';
+			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
 			response = await shim.fetch(url, fetchOptions);
 		} else {
 			// file
@@ -342,14 +383,16 @@ class WebDavApi {
 
 		const responseText = await response.text();
 
+		this.logRequest_({ url: url, options: fetchOptions }, responseText);
+
 		// console.info('WebDAV Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
 		const newError = (message, code = 0) => {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-			const shortResponseText = (responseText + '').substr(0, 1024);
-			return new JoplinError(method + ' ' + path + ': ' + message + ' (' + code + '): ' + shortResponseText, code);
+			const shortResponseText = (`${responseText}`).substr(0, 1024);
+			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
 		};
 
 		let responseJson_ = null;
@@ -376,7 +419,7 @@ class WebDavApi {
 			if (json && json['d:error']) {
 				const code = json['d:error']['s:exception'] ? json['d:error']['s:exception'].join(' ') : response.status;
 				const message = json['d:error']['s:message'] ? json['d:error']['s:message'].join('\n') : 'Unknown error 1';
-				throw newError(message + ' (Exception ' + code + ')', response.status);
+				throw newError(`${message} (Exception ${code})`, response.status);
 			}
 
 			throw newError('Unknown error 2', response.status);

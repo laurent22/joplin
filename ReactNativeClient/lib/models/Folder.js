@@ -105,6 +105,33 @@ class Folder extends BaseItem {
 		};
 	}
 
+	// Calculates note counts for all folders and adds the note_count attribute to each folder
+	// Note: this only calculates the overall number of nodes for this folder and all its descendants
+	static async addNoteCounts(folders, includeCompletedTodos = true) {
+		const foldersById = {};
+		folders.forEach((f) => {
+			foldersById[f.id] = f;
+			f.note_count = 0;
+		});
+
+		const where = !includeCompletedTodos ? 'WHERE (notes.is_todo = 0 OR notes.todo_completed = 0)' : '';
+
+		const sql = `SELECT folders.id as folder_id, count(notes.parent_id) as note_count 
+			FROM folders LEFT JOIN notes ON notes.parent_id = folders.id
+			${where} GROUP BY folders.id`;
+
+		const noteCounts = await this.db().selectAll(sql);
+		noteCounts.forEach((noteCount) => {
+			let parentId = noteCount.folder_id;
+			do {
+				let folder = foldersById[parentId];
+				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
+				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
+				parentId = folder.parent_id;
+			} while (parentId);
+		});
+	}
+
 	// Folders that contain notes that have been modified recently go on top.
 	// The remaining folders, that don't contain any notes are sorted by their own user_updated_time
 	static async orderByLastModified(folders, dir = 'DESC') {
@@ -125,7 +152,11 @@ class Folder extends BaseItem {
 			for (let i = 0; i < folders.length; i++) {
 				if (folders[i].id === folder.parent_id) return folders[i];
 			}
-			throw new Error('Could not find parent');
+
+			// In some rare cases, some folders may not have a parent, for example
+			// if it has not been downloaded via sync yet.
+			// https://github.com/laurent22/joplin/issues/2088
+			return null;
 		};
 
 		const applyChildTimeToParent = folderId => {

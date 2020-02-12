@@ -288,7 +288,7 @@ class AppGui {
 		if (!cmd) return;
 		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
 		if (isConfigPassword) return;
-		this.stdout(chalk.cyan.bold('> ' + cmd));
+		this.stdout(chalk.cyan.bold(`> ${cmd}`));
 	}
 
 	setupKeymap(keymap) {
@@ -297,7 +297,7 @@ class AppGui {
 		for (let i = 0; i < keymap.length; i++) {
 			const item = Object.assign({}, keymap[i]);
 
-			if (!item.command) throw new Error('Missing command for keymap item: ' + JSON.stringify(item));
+			if (!item.command) throw new Error(`Missing command for keymap item: ${JSON.stringify(item)}`);
 
 			if (!('type' in item)) item.type = 'exec';
 
@@ -440,7 +440,7 @@ class AppGui {
 				if (!item) return;
 
 				if (item.type_ === BaseModel.TYPE_FOLDER) {
-					await this.processPromptCommand('rmbook ' + item.id);
+					await this.processPromptCommand(`rmbook ${item.id}`);
 				} else if (item.type_ === BaseModel.TYPE_TAG) {
 					this.stdout(_('To delete a tag, untag the associated notes.'));
 				} else if (item.type_ === BaseModel.TYPE_SEARCH) {
@@ -473,7 +473,7 @@ class AppGui {
 			this.addCommandToConsole(cmd);
 			await this.processPromptCommand(cmd);
 		} else {
-			throw new Error('Unknown command: ' + cmd);
+			throw new Error(`Unknown command: ${cmd}`);
 		}
 	}
 
@@ -593,7 +593,7 @@ class AppGui {
 			if (!s) return false;
 			s = s.trim().toLowerCase();
 			for (let i = 0; i < protocols.length; i++) {
-				if (s.indexOf(protocols[i] + '://') === 0) return true;
+				if (s.indexOf(`${protocols[i]}://`) === 0) return true;
 			}
 			return false;
 		};
@@ -627,7 +627,7 @@ class AppGui {
 			if (link.type === 'item') {
 				const itemId = link.id;
 				let item = await BaseItem.loadItemById(itemId);
-				if (!item) throw new Error('No item with ID ' + itemId); // Should be nearly impossible
+				if (!item) throw new Error(`No item with ID ${itemId}`); // Should be nearly impossible
 
 				if (item.type_ === BaseModel.TYPE_RESOURCE) {
 					if (item.mime) response.setHeader('Content-Type', item.mime);
@@ -640,11 +640,11 @@ class AppGui {
 						<head><meta charset="UTF-8"/></head><body>
 					`,
 					];
-					html.push('<pre>' + htmlentities(item.title) + '\n\n' + htmlentities(item.body) + '</pre>');
+					html.push(`<pre>${htmlentities(item.title)}\n\n${htmlentities(item.body)}</pre>`);
 					html.push('</body></html>');
 					response.write(html.join(''));
 				} else {
-					throw new Error('Unsupported item type: ' + item.type_);
+					throw new Error(`Unsupported item type: ${item.type_}`);
 				}
 
 				return true;
@@ -676,7 +676,7 @@ class AppGui {
 					return url;
 				}
 
-				return linkStyle(this.resourceServer_.baseUrl() + '/' + index);
+				return linkStyle(`${this.resourceServer_.baseUrl()}/${index}`);
 			},
 		};
 	}
@@ -695,7 +695,7 @@ class AppGui {
 
 			term.grabInput();
 
-			term.on('key', async (name, matches, data) => {
+			term.on('key', async (name) => {
 				// -------------------------------------------------------------------------
 				// Handle special shortcuts
 				// -------------------------------------------------------------------------
@@ -777,7 +777,7 @@ class AppGui {
 					} else if (keymapItem.type === 'tkwidgets') {
 						this.widget('root').handleKey(this.tkWidgetKeys_[keymapItem.command]);
 					} else {
-						throw new Error('Unknown command type: ' + JSON.stringify(keymapItem));
+						throw new Error(`Unknown command type: ${JSON.stringify(keymapItem)}`);
 					}
 				}
 

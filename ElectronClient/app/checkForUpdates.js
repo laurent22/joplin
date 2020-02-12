@@ -42,7 +42,7 @@ async function fetchLatestRelease(options) {
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
 		}
 
 		json = await response.json();
@@ -53,7 +53,7 @@ async function fetchLatestRelease(options) {
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error('Cannot get latest release info: ' + responseText.substr(0,500));
+			throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
 		}
 
 		json = await response.json();
@@ -93,6 +93,18 @@ async function fetchLatestRelease(options) {
 	};
 }
 
+function truncateText(text, length) {
+	let truncated = text.substring(0, length);
+	const lastNewLine = truncated.lastIndexOf('\n');
+	// Cut off at a line break unless we'd be cutting off half the text
+	if (lastNewLine > length / 2) {
+		truncated = `${truncated.substring(0, lastNewLine)}\n...`;
+	} else {
+		truncated = `${truncated.trim()}...`;
+	}
+	return truncated;
+}
+
 function checkForUpdates(inBackground, window, logFilePath, options) {
 	if (isCheckingForUpdate_) {
 		autoUpdateLogger_.info('checkForUpdates: Skipping check because it is already running');
@@ -112,30 +124,36 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 	checkInBackground_ = inBackground;
 
-	autoUpdateLogger_.info('checkForUpdates: Checking with options ' + JSON.stringify(options));
+	autoUpdateLogger_.info(`checkForUpdates: Checking with options ${JSON.stringify(options)}`);
 
-	fetchLatestRelease(options).then(release => {
-		autoUpdateLogger_.info('Current version: ' + packageInfo.version);
-		autoUpdateLogger_.info('Latest version: ' + release.version);
+	fetchLatestRelease(options).then(async (release) => {
+		autoUpdateLogger_.info(`Current version: ${packageInfo.version}`);
+		autoUpdateLogger_.info(`Latest version: ${release.version}`);
 		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
-			if (!checkInBackground_) dialog.showMessageBox({
+			if (!checkInBackground_) await dialog.showMessageBox({
 				type: 'info',
 				message: _('Current version is up-to-date.'),
 				buttons: [_('OK')],
 			});
 		} else {
-			const releaseNotes = release.notes.trim() ? '\n\n' + release.notes.trim() : '';
+			const fullReleaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
+			const MAX_RELEASE_NOTES_LENGTH = 1000;
+			const truncateReleaseNotes = fullReleaseNotes.length > MAX_RELEASE_NOTES_LENGTH;
+			const releaseNotes = truncateReleaseNotes ? truncateText(fullReleaseNotes, MAX_RELEASE_NOTES_LENGTH) : fullReleaseNotes;
+
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
 
-			const buttonIndex = dialog.showMessageBox(parentWindow_, {
+			const result = await dialog.showMessageBox(parentWindow_, {
 				type: 'info',
-				message: _('An update is available, do you want to download it now?') + '\n\n' + _('Your version: %s', packageInfo.version) + '\n' + _('New version: %s', newVersionString) + releaseNotes,
-				buttons: [_('Yes'), _('No')],
+				message: `${_('An update is available, do you want to download it now?')}\n\n${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
+				buttons: [_('Yes'), _('No')].concat(truncateReleaseNotes ? [_('Full Release Notes')] : []),
 			});
 
+			const buttonIndex = result.response;
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
+			if (buttonIndex === 2) require('electron').shell.openExternal(release.pageUrl);
 		}
 	}).catch(error => {
 		autoUpdateLogger_.error(error);

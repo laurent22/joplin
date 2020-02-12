@@ -12,6 +12,7 @@ const defaultState = {
 	notLoadedMasterKeys: [],
 	searches: [],
 	selectedNoteIds: [],
+	selectedNoteHash: '',
 	selectedFolderId: null,
 	selectedTagId: null,
 	selectedSearchId: null,
@@ -59,7 +60,7 @@ const derivedStateCache_ = {};
 // Allows, for a given state, to return the same derived
 // objects, to prevent unecessary updates on calling components.
 const cacheEnabledOutput = (key, output) => {
-	key = key + '_' + JSON.stringify(output);
+	key = `${key}_${JSON.stringify(output)}`;
 	if (derivedStateCache_[key]) return derivedStateCache_[key];
 
 	derivedStateCache_[key] = output;
@@ -135,38 +136,69 @@ function folderSetCollapsed(state, action) {
 // When deleting a note, tag or folder
 function handleItemDelete(state, action) {
 	const map = {
-		FOLDER_DELETE: ['folders', 'selectedFolderId'],
-		NOTE_DELETE: ['notes', 'selectedNoteIds'],
-		TAG_DELETE: ['tags', 'selectedTagId'],
-		SEARCH_DELETE: ['searches', 'selectedSearchId'],
+		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
+		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
+		TAG_DELETE: ['tags', 'selectedTagId', true],
+		SEARCH_DELETE: ['searches', 'selectedSearchId', true],
 	};
 
 	const listKey = map[action.type][0];
 	const selectedItemKey = map[action.type][1];
+	const isSingular = map[action.type][2];
 
-	let previousIndex = 0;
-	let newItems = [];
+	const selectedItemKeys = isSingular ? [state[selectedItemKey]] : state[selectedItemKey];
+	const isSelected = selectedItemKeys.includes(action.id);
+
 	const items = state[listKey];
+	let newItems = [];
+	let newSelectedIndexes = [];
+
 	for (let i = 0; i < items.length; i++) {
 		let item = items[i];
+		if (isSelected) {
+			// the selected item is deleted so select the following item
+			// if multiple items are selected then just use the first one
+			if (selectedItemKeys[0] == item.id) {
+				newSelectedIndexes.push(newItems.length);
+			}
+		} else {
+			// the selected item/s is not deleted so keep it selected
+			if (selectedItemKeys.includes(item.id)) {
+				newSelectedIndexes.push(newItems.length);
+			}
+		}
 		if (item.id == action.id) {
-			previousIndex = i;
 			continue;
 		}
 		newItems.push(item);
 	}
 
+	if (newItems.length == 0) {
+		newSelectedIndexes = []; // no remaining items so no selection
+
+	}  else if (newSelectedIndexes.length == 0) {
+		newSelectedIndexes.push(0); // no selection exists so select the top
+
+	} else {
+		// when the items at end of list are deleted then select the end
+		for (let i = 0; i < newSelectedIndexes.length; i++) {
+			if (newSelectedIndexes[i] >= newItems.length) {
+				newSelectedIndexes = [newItems.length - 1];
+				break;
+			}
+		}
+	}
+
 	let newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
-	if (previousIndex >= newItems.length) {
-		previousIndex = newItems.length - 1;
+	const newIds = [];
+	for (let i = 0; i < newSelectedIndexes.length; i++) {
+		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
+	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	const newId = previousIndex >= 0 ? newItems[previousIndex].id : null;
-	newState[selectedItemKey] = action.type === 'NOTE_DELETE' ? [newId] : newId;
-
-	if (!newId && newState.notesParentType !== 'Folder') {
+	if ((newIds.length == 0) && newState.notesParentType !== 'Folder') {
 		newState.notesParentType = 'Folder';
 	}
 
@@ -267,6 +299,7 @@ function changeSelectedNotes(state, action, options = null) {
 		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
+		newState.selectedNoteHash = action.hash ? action.hash : '';
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -359,6 +392,11 @@ const reducer = (state = defaultState, action) => {
 					newState.selectedNoteIds = newSelectedNoteIds;
 				}
 			}
+			break;
+
+		case 'NOTE_SELECT_ALL':
+			newState = Object.assign({}, state);
+			newState.selectedNoteIds = newState.notes.map(n => n.id);
 			break;
 
 		case 'FOLDER_SELECT':
@@ -457,7 +495,7 @@ const reducer = (state = defaultState, action) => {
 					}
 				}
 
-				//newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
+				// newNotes = Note.sortNotes(newNotes, state.notesOrder, newState.settings.uncompletedTodosOnTop);
 				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
@@ -515,6 +553,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Tag';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'TAG_UPDATE_ONE':
@@ -642,6 +681,7 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Search';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':
@@ -722,7 +762,7 @@ const reducer = (state = defaultState, action) => {
 			break;
 		}
 	} catch (error) {
-		error.message = 'In reducer: ' + error.message + ' Action: ' + JSON.stringify(action);
+		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
 		throw error;
 	}
 

@@ -127,4 +127,54 @@ describe('models_Folder', function() {
 		expect(folders[3].id).toBe(f2.id);
 	}));
 
+	it('should add node counts', asyncTest(async () => {
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		let f4 = await Folder.save({ title: 'folder4' });
+
+		let n1 = await Note.save({ title: 'note1', parent_id: f3.id });
+		let n2 = await Note.save({ title: 'note1', parent_id: f3.id });
+		let n3 = await Note.save({ title: 'note1', parent_id: f1.id });
+
+		const folders = await Folder.all();
+		await Folder.addNoteCounts(folders);
+
+		const foldersById = {};
+		folders.forEach((f) => { foldersById[f.id] = f; });
+
+		expect(folders.length).toBe(4);
+		expect(foldersById[f1.id].note_count).toBe(3);
+		expect(foldersById[f2.id].note_count).toBe(2);
+		expect(foldersById[f3.id].note_count).toBe(2);
+		expect(foldersById[f4.id].note_count).toBe(0);
+	}));
+
+	it('should not count completed to-dos', asyncTest(async () => {
+
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		let f4 = await Folder.save({ title: 'folder4' });
+
+		let n1 = await Note.save({ title: 'note1', parent_id: f3.id });
+		let n2 = await Note.save({ title: 'note2', parent_id: f3.id });
+		let n3 = await Note.save({ title: 'note3', parent_id: f1.id });
+		let n4 = await Note.save({ title: 'note4', parent_id: f3.id, is_todo: true, todo_completed: 0 });
+		let n5 = await Note.save({ title: 'note5', parent_id: f3.id, is_todo: true, todo_completed: 999 });
+		let n6 = await Note.save({ title: 'note6', parent_id: f3.id, is_todo: true, todo_completed: 999 });
+
+		const folders = await Folder.all();
+		await Folder.addNoteCounts(folders, false);
+
+		const foldersById = {};
+		folders.forEach((f) => { foldersById[f.id] = f; });
+
+		expect(folders.length).toBe(4);
+		expect(foldersById[f1.id].note_count).toBe(4);
+		expect(foldersById[f2.id].note_count).toBe(3);
+		expect(foldersById[f3.id].note_count).toBe(3);
+		expect(foldersById[f4.id].note_count).toBe(0);
+	}));
+
 });

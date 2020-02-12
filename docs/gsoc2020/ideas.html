@@ -1,0 +1,480 @@
+<!doctype html>
+<html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/gsoc2020/ideas.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/gsoc2020/ideas.md
+
+-->
+
+<head>
+	<title>GSoC: Project Ideas | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
+	.title-icon {
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
+	}
+	.sub-title {
+		font-weight: normal;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: 0.4em;
+		line-height: 1em;
+		text-decoration: none;
+		transition: opacity 0.3s;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container page-ideas">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>2020 is Joplin first round at Google Summer of Code. Detailed information on how to get involved and apply are given in the <a href="https://joplinapp.org/gsoc2020/">general Summer of Code introduction</a></p>
+<p><strong>These are all proposals! We are open to new ideas you might have!!</strong> Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin.</p>
+<h1>Information for Students<a name="information-for-students" href="#information-for-students" class="heading-anchor">🔗</a></h1>
+<p>These ideas were contributed by our developers and users. They are sometimes vague or incomplete. If you wish to submit a proposal based on these ideas, you are urged to contact the developers and find out more about the particular suggestion you're looking at.</p>
+<p>Becoming accepted as a Google Summer of Code student is quite competitive. Accepted students typically have thoroughly researched the technologies of their proposed project and have been in frequent contact with potential mentors. <strong>Simply copying and pasting an idea here will not work.</strong> On the other hand, creating a completely new idea without first consulting potential mentors rarely works.</p>
+<h1>List of ideas<a name="list-of-ideas" href="#list-of-ideas" class="heading-anchor">🔗</a></h1>
+<h2>1. Support for multiple profiles<a name="1-support-for-multiple-profiles" href="#1-support-for-multiple-profiles" class="heading-anchor">🔗</a></h2>
+<p>The applications should support multiple profiles so that, for example, one can have a &quot;work&quot; profile and a &quot;personal&quot; profile. This will also make it easier to share notes: for example a &quot;work project&quot; profile could be created and shared with co-workers via sync.</p>
+<p>We want to offer this feature by allowing the user to select a profile from the app (eg. &quot;work&quot; or &quot;personal&quot;), then switch to it. Switching would be done by restarting the app and loading the selected profile.</p>
+<p>Expected Outcome: The user should be able to select a profile and switch to it.</p>
+<p>Difficulty Level: Moderate</p>
+<p>Platforms: Desktop and/or mobile (at the student's choice)</p>
+<p>Skills Required: JavaScript; React; React Native (for mobile)</p>
+<p>Potential Mentor(s): <a href="https://github.com/tessus">tessus</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://github.com/laurent22/joplin/issues/591">GitHub issue</a>, <a href="https://discourse.joplinapp.org/t/can-i-run-a-second-instance-of-joplin/110">Forum Thread</a></p>
+<h2>2. Collaboration via Nextcloud<a name="2-collaboration-via-nextcloud" href="#2-collaboration-via-nextcloud" class="heading-anchor">🔗</a></h2>
+<p>We need a way to share notes with other users, and to collaborate on notes. This is useful for companies, to collaborate on projects for example, but also for individual users when they want to share their notes with other people.</p>
+<p>The basis for this would be the <a href="https://github.com/laurent22/joplin-nextcloud/">Joplin Web API for Nextcloud</a>, which is currently used to share a note publicly, and which can be extended for other uses.</p>
+<p>The main feature we would like to see is the ability to select a Nextcloud user from the app, then share a note with him or her. Once the note is shared, it will appear in the Joplin clients of the other user (via sync). The solution should be generic enough that it can later be used to share a whole notebook.</p>
+<p>Expected Outcome: The user should be able to select a Nextcloud user then share a note with them. That note should then appear in the other user's Joplin clients.</p>
+<p>Difficulty Level: High</p>
+<p>Platforms: Desktop and/or mobile (at the student's choice)</p>
+<p>Skills Required: JavaScript; React; React Native (for mobile)</p>
+<p>Potential Mentor(s): <a href="mailto:roeland.douma@nextcloud.com">Roeland Jago Douma</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://discourse.joplinapp.org/t/joplin-api-in-nextcloud-prototype/">Forum thread about Joplin Web API for Nextcloud</a></p>
+<h2>3. Hierarchical Tags<a name="3-hierarchical-tags" href="#3-hierarchical-tags" class="heading-anchor">🔗</a></h2>
+<p>One of the most asked-for feature in Joplin is support for hierarchical tags. This would allow users that heavily rely on tags to organise them into a hierarchy, as is done for the notebooks.</p>
+<p>Expected Outcome: The tags can be organised into a hierarchy</p>
+<p>Difficulty Level: Moderate</p>
+<p>Platforms: Desktop, Mobile and Terminal</p>
+<p>Skills Required: JavaScript; React; React Native (for mobile)</p>
+<p>Potential Mentor(s): <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://github.com/laurent22/joplin/issues/375">GitHub issue</a></p>
+<h2>4. Sharing on mobile<a name="4-sharing-on-mobile" href="#4-sharing-on-mobile" class="heading-anchor">🔗</a></h2>
+<p>The mobile application allows sharing text from any application to Joplin. However it is not currently possible to share images or to share selected text with Joplin. We would like to allow sharing an image or file from any application to Joplin. And to allow selecting some text in an application (in a browser for instance) and share it with Joplin</p>
+<p>Expected Outcome: Share images and selected with Joplin</p>
+<p>Difficulty Level: Moderate</p>
+<p>Platforms: Mobile (iOS and Android)</p>
+<p>Skills Required: JavaScript; React; React Native</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://github.com/laurent22/joplin/issues/876">Mobile - Add share menu #876</a></p>
+<h2>5. Web client for Nextcloud<a name="5-web-client-for-nextcloud" href="#5-web-client-for-nextcloud" class="heading-anchor">🔗</a></h2>
+<p>There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  <a href="https://joplinapp.org/#synchronisation">Synchronisation</a>. There is already the <a href="https://github.com/foxmask/joplin-web">web application</a> what may used as a starting point, but it is also fine to start from scratch.</p>
+<p>Feature parity with the desktop client is not needed and would be out of scope. These are the features that would be needed to create a minimal web client:</p>
+<ul>
+<li>Ability to list the notebooks in a hierarchy</li>
+<li>Ability to view a note and render the Markdown to HTML</li>
+<li>Ability to edit the Markdown note and save it</li>
+<li>Handle conflicts when, for example, a note is modified in the web client and, at the same time, it is modified via sync.</li>
+</ul>
+<p>Expected Outcome: Viewing and editing notes and notebooks from a Nextcloud-based web client</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: PHP (for the Nextcloud app). For the front-end it can be plain HTML (no JS), or React.</p>
+<p>Potential Mentor(s): <a href="mailto:roeland.douma@nextcloud.com">Roeland Jago Douma</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://github.com/laurent22/joplin/issues/228">GitHub: Nextcloud notes integration (Web client)</a></p>
+<h2>5. OCR support<a name="5-ocr-support" href="#5-ocr-support" class="heading-anchor">🔗</a></h2>
+<p>It is possible to add support for OCR content in Joplin via the <a href="http://tesseract.projectnaptha.com/">Tesseract library</a>. A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.</p>
+<p>Expected Outcome: A service on the desktop app that extract text from images and attach it to the note.</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<h2>6. Password-protected notes<a name="6-password-protected-notes" href="#6-password-protected-notes" class="heading-anchor">🔗</a></h2>
+<p>We would like to add an option to allow encrypting a note or a notebook with a password. When opening the note, the password must be provided to reveal the content.</p>
+<p>Expected Outcome: The user select a note and has the option to encrypt it.</p>
+<p>Difficulty Level: Medium</p>
+<p>Skills Required: JavaScript; React</p>
+<p>Potential Mentor(s): <a href="https://github.com/PackElend">PackElend</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<h2>7. Search<a name="7-search" href="#7-search" class="heading-anchor">🔗</a></h2>
+<p>The current search engine is built on top of SQLite FTS. An index of the notes is built and this is what is used by FTS when searching.</p>
+<p>While it works relatively well, there is still room for improvement. In particular we would like to implement the following:</p>
+<ul>
+<li>
+<p>Allow boolean searches - search for &quot;A and B&quot;, or &quot;A or B&quot;, etc.</p>
+</li>
+<li>
+<p>Remove the need for wildcard queries - for example instead of typing &quot;search*&quot;, it will be possible to simply type &quot;search&quot; and results that contain &quot;search&quot; or &quot;searching&quot; will be included. Those that contain the exact match will come first.</p>
+</li>
+<li>
+<p>Search within certain tags (eg. &quot;tag:software search&quot; to search within the notes tagged with &quot;software&quot; and that contain the word &quot;search&quot;).</p>
+</li>
+<li>
+<p>Improve relevance algorithm (give a weight to certain criteria, and allow adding new criteria more easily). In particular give more weight to recently modified notes, and less weight to completed to-dos.</p>
+</li>
+<li>
+<p>Allow fuzzy search (for example return results that contain &quot;saerch&quot; for the query &quot;search&quot;)</p>
+</li>
+</ul>
+<p>Expected Outcome: To be defined with the student. Depending on what features they would like to implement.</p>
+<p>Difficulty Level: Medium</p>
+<p>Skills Required: JavaScript</p>
+<p>Potential Mentor(s): <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://github.com/laurent22/joplin/issues/1877">Search engine improvements</a></p>
+<h2>8. WYSIWYG Editor<a name="8-wysiwyg-editor" href="#8-wysiwyg-editor" class="heading-anchor">🔗</a></h2>
+<p>The current editor shows the Markdown text on the left side and the rendered HTML on the right side (a split view). We would like to add another editor option, which would be a WYSIWYG editor, where the user can directly edit formatted text. This would not replace the split view but rather be an alternative editor and the user can choose either split view or WYSIWYG.</p>
+<p>Expected Outcome: To add a WYSIWYG editor to the desktop app.</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: JavaScript; React</p>
+<p>Potential Mentor(s): <a href="https://github.com/CalebJohn/">CalebJohn</a>, <a href="https://github.com/PackElend">PackElend</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<p>More info: <a href="https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253">WYSIWYG thread on the forum</a></p>
+<h1>9. Custom keyboard shortcuts<a name="9-custom-keyboard-shortcuts" href="#9-custom-keyboard-shortcuts" class="heading-anchor">🔗</a></h1>
+<p>The CLI application allows setting custom keyboard shortcuts, however this feature is currently missing from the desktop application. We would like to let the user set shortcuts for the menu items in particular, but also potentially any other Joplin action. There should be a shortcut editor in the Config panel to do this.</p>
+<p>Expected Outcome: To add support for custom shortcuts and allow editing them in the config screen</p>
+<p>Difficulty Level: Easy</p>
+<p>Skills Required: JavaScript; React</p>
+<p>Potential Mentor(s): <a href="https://github.com/tessus">tessus</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsoc2020/ideas.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2020 Laurent Cozic
+</div>
+</body>
+</html>

@@ -6,6 +6,8 @@ Please prefix the title with the platform you are targetting:
 - "Mobile" for the mobile app (or "Android" / "iOS" if the pull request only applies to one of the mobile platforms)
 - "CLI" for the CLI app
 
+If it's not related to any platform (such as a translation, change to the documentation, etc.), simply don't add a platform.
+
 For example: "Desktop: Added new setting to change font", or "Mobile: Fixed config screen error"
 
 PLEASE READ THE GUIDE FIRST: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md

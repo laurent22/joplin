@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
+
 let shim = {};
 
 shim.isNode = () => {
@@ -31,12 +33,18 @@ shim.isMac = () => {
 };
 
 shim.platformName = function() {
-	if (shim.isReactNative()) return 'mobile';
+	if (shim.isReactNative()) return shim.mobilePlatform();
 	if (shim.isMac()) return 'darwin';
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
 	if (shim.isFreeBSD()) return 'freebsd';
+	if (process && process.platform) return process.platform;
 	throw new Error('Cannot determine platform');
+};
+
+// "ios" or "android", or "" if not on mobile
+shim.mobilePlatform = function() {
+	return ''; // Default if we're not on mobile (React Native)
 };
 
 // https://github.com/cheton/is-electron
@@ -182,14 +190,27 @@ shim.Buffer = null;
 shim.openUrl = () => {
 	throw new Error('Not implemented');
 };
+shim.openOrCreateFile = () => {
+	throw new Error('Not implemented');
+};
 shim.waitForFrame = () => {
+	throw new Error('Not implemented');
+};
+
+shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
 
 shim.injectedJs = name => '';
 
-shim.loadCssFromJs = name => {
-	throw new Error('Not implemented');
+let isTestingEnv_ = false;
+
+shim.isTestingEnv = () => {
+	return isTestingEnv_;
+};
+
+shim.setIsTestingEnv = (v) => {
+	isTestingEnv_ = v;
 };
 
 module.exports = { shim };

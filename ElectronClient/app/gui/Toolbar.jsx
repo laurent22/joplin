@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { connect } = require('react-redux');
 const { themeStyle } = require('../theme.js');
@@ -11,7 +13,7 @@ class ToolbarComponent extends React.Component {
 		style.height = theme.toolbarHeight;
 		style.display = 'flex';
 		style.flexDirection = 'row';
-		style.borderBottom = '1px solid ' + theme.dividerColor;
+		style.borderBottom = `1px solid ${theme.dividerColor}`;
 		style.boxSizing = 'border-box';
 
 		const itemComps = [];
@@ -23,7 +25,7 @@ class ToolbarComponent extends React.Component {
 				key += o.title ? o.title : '';
 				const itemType = !('type' in o) ? 'button' : o.type;
 
-				if (!key) key = o.type + '_' + i;
+				if (!key) key = `${o.type}_${i}`;
 
 				const props = Object.assign(
 					{

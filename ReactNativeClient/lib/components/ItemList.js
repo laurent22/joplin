@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 const { View, ScrollView } = require('react-native');
 
@@ -67,7 +69,7 @@ class ItemList extends React.Component {
 	render() {
 		const style = this.props.style ? this.props.style : {};
 
-		//if (!this.props.itemHeight) throw new Error('itemHeight is required');
+		// if (!this.props.itemHeight) throw new Error('itemHeight is required');
 
 		let itemComps = [];
 

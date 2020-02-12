@@ -84,8 +84,8 @@ class StatusBarWidget extends BaseWidget {
 		// On Windows, bgBlueBright is fine and looks dark enough (Windows is probably in the wrong though)
 		// For now, just don't use any colour at all.
 
-		//const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
-		//const textStyle = (s) => s;
+		// const textStyle = this.promptActive ? (s) => s : chalk.bgBlueBright.white;
+		// const textStyle = (s) => s;
 		const textStyle = this.promptActive ? s => s : chalk.gray;
 
 		this.term.drawHLine(this.absoluteInnerX, this.absoluteInnerY, this.innerWidth, textStyle(' '));

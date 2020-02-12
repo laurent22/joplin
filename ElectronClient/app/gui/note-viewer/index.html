@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head id="joplin-container-root-head">
 	<meta charset="UTF-8">
 
 	<style>
@@ -8,7 +8,7 @@
 			overflow: hidden;
 		}
 
-		#content {
+		#joplin-container-content {
 			/* Needs this in case the content contains elements with absolute positioning */
 			/* Without this they would just stay at a fixed position when scrolling */
 			position: relative;
@@ -36,10 +36,10 @@
 	</style>
 </head>
 
-<body id="body">
-	<div id="styleContainer"></div>
-	<div id="markScriptContainer"></div>
-	<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+<body id="joplin-container-body">
+	<div id="joplin-container-pluginAssetsContainer"></div>
+	<div id="joplin-container-markScriptContainer"></div>
+	<div id="joplin-container-content" ondragstart="return false;" ondrop="return false;"></div>
 	<script src="./lib.js"></script>
 
 	<script>
@@ -47,8 +47,10 @@
 		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
 	}
 
+	let pluginAssetsAdded_ = {};
+
 	try {
-		const contentElement = document.getElementById('content');
+		const contentElement = document.getElementById('joplin-container-content');
 
 		const ipc = {};
 
@@ -65,19 +67,7 @@
 				ipc[callName](callData);
 			}
 		}));
-
-		const loadedCssFiles_ = {};
-		function loadCssFiles(cssFiles) {
-			for (let i = 0; i < cssFiles.length; i++) {
-				const f = cssFiles[i];
-				if (loadedCssFiles_[f]) continue;
-				const link = document.createElement('link');
-				link.rel = 'stylesheet';
-				link.href = f;
-				document.getElementById('styleContainer').appendChild(link);
-			}
-		}
-
+		
 		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
 		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
 		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
@@ -103,6 +93,55 @@
 
 		function restorePercentScroll() {
 			setPercentScroll(percentScroll_);
+		}
+
+		// Note that this function keeps track of what's been added so as not to add the same CSS files multiple times
+		// It also means that once an asset has been added it is never removed from the view, which in many case is
+		// desirable, but still something to keep in mind.
+		function addPluginAssets(assets) {
+			if (!assets) return;
+
+			const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
+
+			for (let name in assets) {
+				if (pluginAssetsAdded_[name]) continue;
+				pluginAssetsAdded_[name] = true;
+
+				const asset = assets[name];
+
+				if (asset.mime === 'application/javascript') {
+					const script = document.createElement('script');
+					script.src = asset.path;
+					pluginAssetsContainer.appendChild(script);
+				} else if (asset.mime === 'text/css') {
+					const link = document.createElement('link');
+					link.rel = 'stylesheet';
+					link.href = asset.path;
+					pluginAssetsContainer.appendChild(link);
+				}
+			}
+		}
+
+		ipc.scrollToHash = (event) => {
+			if (window.scrollToHashIID_) clearInterval(window.scrollToHashIID_);
+			window.scrollToHashIID_ = setInterval(() => {
+				if (document.readyState !== 'complete') return;
+				clearInterval(window.scrollToHashIID_);
+				const hash = event.hash.toLowerCase();
+				const e = document.getElementById(hash);
+				if (!e) {
+					console.warn('Cannot find hash', hash);
+					return;
+				}
+				e.scrollIntoView();
+
+				// Make sure the editor pane is also scrolled
+				setTimeout(() => {
+					const percent = currentPercentScroll();
+					setPercentScroll(percent);
+					ipcProxySendToHost('percentScroll', percent);
+				}, 10);
+			}, 100);
 		}
 
 		ipc.setHtml = (event) => {
@@ -132,14 +171,16 @@
 				}, 1);
 			}
 
-			loadCssFiles(event.options.cssFiles);
-			
+			addPluginAssets(event.options.pluginAssets);
+
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
 			}
+
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}
 
-		let ignoreNextScrollEvent = false;
+		let lastScrollEventTime = 0;
 		ipc.setPercentScroll = (event) => {
 			const percent = event.percent;
 
@@ -148,7 +189,7 @@
 				checkScrollIID_ = null;
 			}
 
-			ignoreNextScrollEvent = true;
+			lastScrollEventTime = Date.now();
 			setPercentScroll(percent);
 		}
 
@@ -183,7 +224,7 @@
 			// TODO: Add support for scriptType on mobile and CLI
 
 			if (!mark_) {
-				mark_ = new Mark(document.getElementById('content'), {
+				mark_ = new Mark(document.getElementById('joplin-container-content'), {
 					exclude: ['img'],
 					acrossElements: true,
 				});
@@ -227,7 +268,11 @@
 
 			ipcProxySendToHost('setMarkerCount', elementIndex);
 
-			if (selectedElement) selectedElement.scrollIntoView();
+			// We only scroll the element into view if the search just happened. So when the user type the search
+			// or select the next/previous result, we scroll into view. However for other actions that trigger a
+			// re-render, we don't scroll as this is normally not wanted.
+			// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
+			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
 		}
 
 		let markLoaded_ = false;
@@ -244,7 +289,7 @@
 				};
 
 				script.src = '../../node_modules/mark.js/dist/mark.min.js';
-				document.getElementById('markScriptContainer').appendChild(script);
+				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
 				markLoaded_ = true;
 			} else {
 				setMarkers(keywords, options);
@@ -257,17 +302,29 @@
 
 		// The body element needs to have a fixed height for the content to be scrollable
 		function updateBodyHeight() {
-			document.getElementById('body').style.height = window.innerHeight + 'px';
-			document.getElementById('content').style.height = window.innerHeight + 'px';
+			document.getElementById('joplin-container-body').style.height = window.innerHeight + 'px';
+			document.getElementById('joplin-container-content').style.height = window.innerHeight + 'px';
+		}
+
+		function currentPercentScroll() {
+			const m = maxScrollTop();
+			return m ? contentElement.scrollTop / m : 0;
 		}
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
-			if (ignoreNextScrollEvent) {
-				ignoreNextScrollEvent = false;
+			// If the last scroll event was done by the user, lastScrollEventTime is set and
+			// we can use that to skip the event handling. We skip it because in that case
+			// the scroll position has already been updated. Also we add a 200ms interval
+			// because otherwise it's most likely a glitch where we called ipc.setPercentScroll
+			// but the scroll event listener has not been called.
+			if (lastScrollEventTime && Date.now() - lastScrollEventTime < 200) {
+				lastScrollEventTime = 0;
 				return;
 			}
-			const m = maxScrollTop();
-			const percent = m ? contentElement.scrollTop / m : 0;
+
+			lastScrollEventTime = 0;
+
+			const percent = currentPercentScroll();
 			setPercentScroll(percent);
 			
 			ipcProxySendToHost('percentScroll', percent);
@@ -329,6 +386,5 @@
 		throw error;
 	}
 	</script>
-
 </body>
 </html>

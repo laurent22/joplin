@@ -18,6 +18,7 @@ codeToLanguageE_['bi'] = 'Bislama';
 codeToLanguageE_['bn'] = 'Bangla';
 codeToLanguageE_['bo'] = 'Tibetan';
 codeToLanguageE_['br'] = 'Breton';
+codeToLanguageE_['bs'] = 'Bosnian';
 codeToLanguageE_['ca'] = 'Catalan';
 codeToLanguageE_['co'] = 'Corsican';
 codeToLanguageE_['cs'] = 'Czech';
@@ -164,7 +165,7 @@ codeToLanguage_['tr'] = 'Türkçe';
 codeToLanguage_['ja'] = '日本語';
 codeToLanguage_['ko'] = '한국말';
 codeToLanguage_['sv'] = 'Svenska';
-codeToLanguage_['el'] = 'ελληνικά';
+codeToLanguage_['el'] = 'Ελληνικά';
 codeToLanguage_['zh'] = '中文';
 codeToLanguage_['ro'] = 'Română';
 codeToLanguage_['et'] = 'Eesti Keel';
@@ -218,7 +219,7 @@ function supportedLocalesToLanguages(options = null) {
 
 		const stat = stats[locale];
 		if (options.includeStats && stat) {
-			output[locale] += ' (' + stat.percentDone + '%)';
+			output[locale] += ` (${stat.percentDone}%)`;
 		}
 	}
 	return output;
@@ -281,7 +282,7 @@ function countryDisplayName(canonicalName) {
 
 	if (languageCode == 'zh' && (countryCode == '' || countryCode == 'TW')) extraString = '繁體'; // "Traditional" in "Traditional Chinese"
 
-	if (extraString) output += ' (' + extraString + ')';
+	if (extraString) output += ` (${extraString})`;
 
 	return output;
 }
@@ -312,8 +313,13 @@ function _(s, ...args) {
 	try {
 		return sprintf(result, ...args);
 	} catch (error) {
-		return result + ' ' + args.join(', ') + ' (Translation error: ' + error.message + ')';
+		return `${result} ${args.join(', ')} (Translation error: ${error.message})`;
 	}
 }
 
-module.exports = { _, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+function _n(singular, plural, n, ...args) {
+	if (n > 1) return _(plural, ...args);
+	return _(singular, ...args);
+}
+
+module.exports = { _, _n, supportedLocales, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };

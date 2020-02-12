@@ -196,7 +196,7 @@ function splitCommandString(command, options = null) {
 	}
 
 	if (state == 'quotes') {
-		throw new Error('Unclosed quote in command line: ' + command);
+		throw new Error(`Unclosed quote in command line: ${command}`);
 	}
 
 	if (current != '') {
@@ -226,7 +226,7 @@ function toTitleCase(string) {
 }
 
 function urlDecode(string) {
-	return decodeURIComponent((string + '').replace(/\+/g, '%20'));
+	return decodeURIComponent((`${string}`).replace(/\+/g, '%20'));
 }
 
 function escapeHtml(s) {
@@ -254,19 +254,20 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 			}
 		})
 		.join('|');
-	regexString = '(' + regexString + ')';
+	regexString = `(${regexString})`;
 	const re = new RegExp(regexString, 'gi');
-	return text.replace(re, prefix + '$1' + suffix);
+	return text.replace(re, `${prefix}$1${suffix}`);
 }
 
 function substrWithEllipsis(s, start, length) {
 	if (s.length <= length) return s;
-	return s.substr(start, length - 3) + '...';
+	return `${s.substr(start, length - 3)}...`;
 }
 
 const REGEX_JAPANESE = /[\u3000-\u303f]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uff00-\uff9f]|[\u4e00-\u9faf]|[\u3400-\u4dbf]/;
 const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
 const REGEX_KOREAN = /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/;
+const REGEX_THAI = /[\u0e00-\u0e7f]/;
 
 function scriptType(s) {
 	// A string entirely with Chinese character will be detected as Japanese too
@@ -274,6 +275,7 @@ function scriptType(s) {
 	if (REGEX_CHINESE.test(s)) return 'zh';
 	if (REGEX_JAPANESE.test(s)) return 'ja';
 	if (REGEX_KOREAN.test(s)) return 'ko';
+	if (REGEX_THAI.test(s)) return 'th';
 	return 'en';
 }
 

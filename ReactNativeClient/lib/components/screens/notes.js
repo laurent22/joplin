@@ -1,3 +1,5 @@
+/* eslint-disable enforce-react-hooks/enforce-react-hooks */
+
 const React = require('react');
 
 const { AppState, View, StyleSheet } = require('react-native');
@@ -17,7 +19,7 @@ const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
-	static navigationOptions(options) {
+	static navigationOptions() {
 		return { header: null };
 	}
 
@@ -37,7 +39,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			const makeCheckboxText = function(selected, sign, label) {
 				const s = sign === 'tick' ? '✓' : '⬤';
-				return (selected ? s + ' ' : '') + label;
+				return (selected ? `${s} ` : '') + label;
 			};
 
 			for (let field in sortNoteOptions) {
@@ -49,17 +51,17 @@ class NotesScreenComponent extends BaseScreenComponent {
 			}
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', '[ ' + Setting.settingMetadata('notes.sortOrder.reverse').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', `[ ${Setting.settingMetadata('notes.sortOrder.reverse').label()} ]`),
 				id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
 			});
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', '[ ' + Setting.settingMetadata('uncompletedTodosOnTop').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', `[ ${Setting.settingMetadata('uncompletedTodosOnTop').label()} ]`),
 				id: { name: 'uncompletedTodosOnTop', value: !Setting.value('uncompletedTodosOnTop') },
 			});
 
 			buttons.push({
-				text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', '[ ' + Setting.settingMetadata('showCompletedTodos').label() + ' ]'),
+				text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', `[ ${Setting.settingMetadata('showCompletedTodos').label()} ]`),
 				id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 			});
 
@@ -207,6 +209,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
 		}
 
+		let title = parent ? parent.title : null;
 		if (!parent) {
 			return (
 				<View style={rootStyle}>
@@ -215,7 +218,6 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		let title = parent ? parent.title : null;
 		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
 		const thisComp = this;
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>;

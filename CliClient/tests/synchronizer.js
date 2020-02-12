@@ -196,13 +196,13 @@ describe('Synchronizer', function() {
 		for (let n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n == 'id' || n == 'is_conflict') continue;
-			expect(conflictedNote[n]).toBe(note2conf[n], 'Property: ' + n);
+			expect(conflictedNote[n]).toBe(note2conf[n], `Property: ${n}`);
 		}
 
 		let noteUpdatedFromRemote = await Note.load(note1.id);
 		for (let n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			expect(noteUpdatedFromRemote[n]).toBe(note2[n], 'Property: ' + n);
+			expect(noteUpdatedFromRemote[n]).toBe(note2[n], `Property: ${n}`);
 		}
 	}));
 
@@ -539,7 +539,7 @@ describe('Synchronizer', function() {
 		let context2 = await synchronizer().start();
 		if (withEncryption) {
 			const masterKey_2 = await MasterKey.load(masterKey.id);
-			await encryptionService().loadMasterKey(masterKey_2, '123456', true);
+			await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
 			let t = await Tag.load(tag.id);
 			await Tag.decrypt(t);
 		}
@@ -743,7 +743,7 @@ describe('Synchronizer', function() {
 		expect(masterKey_2.content).toBe(masterKey.content);
 		expect(masterKey_2.checksum).toBe(masterKey.checksum);
 		// Now load the master key we got from client 1 and try to decrypt
-		await encryptionService().loadMasterKey(masterKey_2, '123456', true);
+		await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
 		// Get the decrypted items back
 		await Folder.decrypt(folder1_2);
 		await Note.decrypt(note1_2);
@@ -850,7 +850,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -883,7 +883,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -892,10 +892,12 @@ describe('Synchronizer', function() {
 
 		await synchronizer().start();
 
-		const fetcher = new ResourceFetcher(() => { return {
+		const fetcher = new ResourceFetcher(() => {
+			return {
 			// Simulate a failed download
-			get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')); }); },
-		}; });
+				get: () => { return new Promise((resolve, reject) => { reject(new Error('did not work')); }); },
+			};
+		});
 		fetcher.queueDownload_(resource1.id);
 		await fetcher.waitForAllFinished();
 
@@ -910,7 +912,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -933,7 +935,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -949,7 +951,7 @@ describe('Synchronizer', function() {
 		await synchronizer().start();
 		expect((await remoteNotesFoldersResources()).length).toBe(2);
 
-		const remoteBlob = await fileApi().stat('.resource/' + resource1.id);
+		const remoteBlob = await fileApi().stat(`.resource/${resource1.id}`);
 		expect(!remoteBlob).toBe(true);
 
 		await switchClient(1);
@@ -967,7 +969,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		let resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
@@ -1025,8 +1027,8 @@ describe('Synchronizer', function() {
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as
 		// plain text to the sync target.
-		//let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
-		//expect(hasThrown).toBe(true);
+		// let hasThrown = await checkThrowAsync(async () => await encryptionService().disableEncryption());
+		// expect(hasThrown).toBe(true);
 
 		// Now supply the password, and decrypt the items
 		Setting.setObjectKey('encryption.passwordCache', masterKey.id, '123456');
@@ -1049,7 +1051,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
 		await Resource.setFileSizeOnly(resource1.id, -1);
 		let resourcePath1 = Resource.fullPath(resource1);
@@ -1075,7 +1077,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		expect(await allSyncTargetItemsEncrypted()).toBe(false);
@@ -1094,7 +1096,7 @@ describe('Synchronizer', function() {
 
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
@@ -1307,7 +1309,7 @@ describe('Synchronizer', function() {
 
 	it('should not download resources over the limit', asyncTest(async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -1337,7 +1339,7 @@ describe('Synchronizer', function() {
 		// does get uploaded.
 
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const resource = (await Resource.all())[0];
 		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_IDLE });
 		await synchronizer().start();
@@ -1352,7 +1354,7 @@ describe('Synchronizer', function() {
 
 	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', asyncTest(async () => {
 		const note1 = await Note.save({ title: 'note' });
-		await shim.attachFileToNote(note1, __dirname + '/../tests/support/photo.jpg');
+		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
@@ -1478,6 +1480,103 @@ describe('Synchronizer', function() {
 
 		expect((await kvStore().all()).length).toBe(0);
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
+	}));
+
+	it('should not wipe out user data when syncing with an empty target', asyncTest(async () => {
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
+
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizer().start();
+		await fileApi().clearRoot(); // oops
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(10); // but since the fail-safe if on, the notes have not been deleted
+
+		Setting.setValue('sync.wipeOutFailSafe', false); // Now switch it off
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(0); // Since the fail-safe was off, the data has been cleared
+
+		// Handle case where the sync target has been wiped out, then the user creates one note and sync.
+
+		for (let i = 0; i < 10; i++) await Note.save({ title: 'note' });
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await synchronizer().start();
+		await fileApi().clearRoot();
+		await Note.save({ title: 'ma note encore' });
+		await synchronizer().start();
+		expect((await Note.all()).length).toBe(11);
+	}));
+
+	it('should not sync if client sync version is lower than target', asyncTest(async () => {
+		// This should work - syncing two clients with same supported sync target version
+		await synchronizer().start();
+		await switchClient(2);
+		await synchronizer().start();
+
+		// This should not work - syncing two clients, but one of them has not been upgraded yet to the latest sync version
+		await switchClient(1);
+		Setting.setConstant('syncVersion', 2);
+		await synchronizer().start();
+
+		await switchClient(2);
+		Setting.setConstant('syncVersion', 1);
+		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not sync when target is locked', asyncTest(async () => {
+		await synchronizer().start();
+		await synchronizer().acquireLock_();
+
+		await switchClient(2);
+		const hasThrown = await checkThrowAsync(async () => synchronizer().start({ throwOnError: true }));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should clear a lock if it was created by the same app as the current one', asyncTest(async () => {
+		await synchronizer().start();
+		await synchronizer().acquireLock_();
+		expect((await synchronizer().lockFiles_()).length).toBe(1);
+		await synchronizer().start({ throwOnError: true });
+		expect((await synchronizer().lockFiles_()).length).toBe(0);
+	}));
+
+	it('should not encrypt notes that are shared', asyncTest(async () => {
+		Setting.setValue('encryption.enabled', true);
+		await loadEncryptionMasterKey();
+
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		await switchClient(1);
+
+		const origNote2 = Object.assign({}, note2);
+		await BaseItem.updateShareStatus(note2, true);
+		note2 = await Note.load(note2.id);
+
+		// Sharing a note should not modify the timestamps
+		expect(note2.user_updated_time).toBe(origNote2.user_updated_time);
+		expect(note2.user_created_time).toBe(origNote2.user_created_time);
+
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+
+		// The shared note should be decrypted
+		let note2_2 = await Note.load(note2.id);
+		expect(note2_2.title).toBe('deux');
+		expect(note2_2.is_shared).toBe(1);
+
+		// The non-shared note should be encrypted
+		let note1_2 = await Note.load(note1.id);
+		expect(note1_2.title).toBe('');
 	}));
 
 });

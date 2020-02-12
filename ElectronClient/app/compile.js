@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
 const spawnSync	= require('child_process').spawnSync;
 
-const babelPath = __dirname + '/node_modules/.bin/babel' + (process.platform === 'win32' ? '.cmd' : '');
-const basePath = __dirname + '/../..';
+const babelPath = `${__dirname}/node_modules/.bin/babel${process.platform === 'win32' ? '.cmd' : ''}`;
+const basePath = `${__dirname}/../..`;
 
 function fileIsNewerThan(path1, path2) {
 	if (!fs.existsSync(path2)) return true;
@@ -15,7 +15,7 @@ function fileIsNewerThan(path1, path2) {
 
 function convertJsx(path) {
 	fs.readdirSync(path).forEach((filename) => {
-		const jsxPath = path + '/' + filename;
+		const jsxPath = `${path}/${filename}`;
 		const p = jsxPath.split('.');
 		if (p.length <= 1) return;
 		const ext = p[p.length - 1];
@@ -24,10 +24,10 @@ function convertJsx(path) {
 
 		const basePath = p.join('.');
 
-		const jsPath = basePath + '.min.js';
+		const jsPath = `${basePath}.min.js`;
 
 		if (fileIsNewerThan(jsxPath, jsPath)) {
-			console.info('Compiling ' + jsxPath + '...');
+			console.info(`Compiling ${jsxPath}...`);
 			const result = spawnSync(babelPath, ['--presets', 'react', '--out-file', jsPath, jsxPath]);
 			if (result.status !== 0) {
 				const msg = [];
@@ -41,13 +41,13 @@ function convertJsx(path) {
 	});
 }
 
-convertJsx(__dirname + '/gui');
-convertJsx(__dirname + '/plugins');
+convertJsx(`${__dirname}/gui`);
+convertJsx(`${__dirname}/plugins`);
 
 const libContent = [
-	fs.readFileSync(basePath + '/ReactNativeClient/lib/string-utils-common.js', 'utf8'),
-	fs.readFileSync(basePath + '/ReactNativeClient/lib/markJsUtils.js', 'utf8'),
-	fs.readFileSync(basePath + '/ReactNativeClient/lib/renderers/webviewLib.js', 'utf8'),
+	fs.readFileSync(`${basePath}/ReactNativeClient/lib/string-utils-common.js`, 'utf8'),
+	fs.readFileSync(`${basePath}/ReactNativeClient/lib/markJsUtils.js`, 'utf8'),
+	fs.readFileSync(`${basePath}/ReactNativeClient/lib/renderers/webviewLib.js`, 'utf8'),
 ];
 
-fs.writeFileSync(__dirname + '/gui/note-viewer/lib.js', libContent.join('\n'), 'utf8');
+fs.writeFileSync(`${__dirname}/gui/note-viewer/lib.js`, libContent.join('\n'), 'utf8');
