@@ -434,7 +434,7 @@ class Setting extends BaseModel {
 					},
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
-			'editor.showGutter': { value: false, type: Setting.TYPE_BOOL, section: 'appearance', public: true, appTypes: ['desktop'], label: () => _('Show line numbers in editor (allows code folding)') },
+			'editor.showGutter': { value: false, type: Setting.TYPE_BOOL, section: 'appearance', public: true, appTypes: ['desktop'], label: () => _('Show line numbers and folding marks in editor') },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
