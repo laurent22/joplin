@@ -23,7 +23,7 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
-const { shell } = require('electron');
+const { shell, webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
@@ -262,6 +262,10 @@ class Application extends BaseApplication {
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'style.editor.fontFamily' || action.type == 'SETTING_UPDATE_ALL') {
 			this.updateEditorFont();
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'windowContentZoomFactor' || action.type == 'SETTING_UPDATE_ALL') {
+			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -989,6 +993,27 @@ class Application extends BaseApplication {
 					label: _('Focus'),
 					screens: ['Main'],
 					submenu: focusItems,
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Actual Size'),
+					click: () => {
+						Setting.setValue('windowContentZoomFactor', 100);
+					},
+					accelerator: 'CommandOrControl+0',
+				}, {
+					label: _('Zoom In'),
+					click: () => {
+						Setting.incValue('windowContentZoomFactor', 10);
+					},
+					accelerator: 'CommandOrControl+=',
+				}, {
+					label: _('Zoom Out'),
+					click: () => {
+						Setting.incValue('windowContentZoomFactor', -10);
+					},
+					accelerator: 'CommandOrControl+-',
 				}],
 			},
 			tools: {

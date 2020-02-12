@@ -83,6 +83,17 @@ class HeaderComponent extends React.Component {
 		if (prevProps.notesParentType !== this.props.notesParentType && this.props.notesParentType !== 'Search' && this.state.searchQuery) {
 			this.resetSearch();
 		}
+
+		if (this.props.zoomFactor !== prevProps.zoomFactor || this.props.size !== prevProps.size) {
+			const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
+			const showButtonLabels = !mediaQuery.matches;
+
+			if (this.state.showButtonLabels !== showButtonLabels) {
+				this.setState({
+					showButtonLabels: !mediaQuery.matches,
+				});
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -152,7 +163,9 @@ class HeaderComponent extends React.Component {
 				}}
 			>
 				{icon}
-				<span className="title">{title}</span>
+				<span className="title" style={{
+					display: this.state.showButtonLabels ? 'inline-block' : 'none',
+				}}>{title}</span>
 			</a>
 		);
 	}
@@ -169,7 +182,7 @@ class HeaderComponent extends React.Component {
 			paddingTop: 1, // vertical alignment with buttons
 			paddingBottom: 0, // vertical alignment with buttons
 			height: style.fontSize * 2,
-			width: 300,
+			maxWidth: 300,
 			color: style.color,
 			fontSize: style.fontSize,
 			fontFamily: style.fontFamily,
@@ -195,6 +208,7 @@ class HeaderComponent extends React.Component {
 		const containerStyle = {
 			display: 'flex',
 			flexDirection: 'row',
+			flexGrow: 1,
 			alignItems: 'center',
 		};
 
@@ -276,6 +290,8 @@ const mapStateToProps = state => {
 		theme: state.settings.theme,
 		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
+		size: state.windowContentSize,
+		zoomFactor: state.settings.windowContentZoomFactor / 100,
 	};
 };
 

@@ -391,7 +391,10 @@ class Setting extends BaseModel {
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
-			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
+
+			// Deprecated in favour of windowContentZoomFactor
+			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
+
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
@@ -573,6 +576,16 @@ class Setting extends BaseModel {
 
 			'camera.type': { value: 0, type: Setting.TYPE_INT, public: false, appTypes: ['mobile'] },
 			'camera.ratio': { value: '4:3', type: Setting.TYPE_STRING, public: false, appTypes: ['mobile'] },
+
+			windowContentZoomFactor: {
+				value: 100,
+				type: Setting.TYPE_INT,
+				public: false,
+				appTypes: ['desktop'],
+				minimum: 30,
+				maximum: 300,
+				step: 10,
+			},
 		};
 
 		return this.metadata_;
@@ -715,6 +728,10 @@ class Setting extends BaseModel {
 		});
 
 		this.scheduleSave();
+	}
+
+	static incValue(key, inc) {
+		return this.setValue(key, this.value(key) + inc);
 	}
 
 	static setObjectKey(settingKey, objectKey, value) {
