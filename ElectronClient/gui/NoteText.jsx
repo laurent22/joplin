@@ -2127,7 +2127,7 @@ class NoteTextComponent extends React.Component {
 				width={`${editorStyle.width}px`}
 				height={`${editorStyle.height}px`}
 				fontSize={editorStyle.fontSize}
-				showGutter={false}
+				showGutter={ Setting.value('editor.showGutter') }
 				name="note-editor"
 				wrapEnabled={true}
 				onScroll={() => {
