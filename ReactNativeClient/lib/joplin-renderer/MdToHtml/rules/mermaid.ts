@@ -1,4 +1,4 @@
-function addContextAssets(context) {
+function addContextAssets(context:any) {
 	if ('mermaid' in context.pluginAssets) return;
 
 	context.pluginAssets['mermaid'] = [
@@ -12,6 +12,7 @@ function addContextAssets(context) {
 	];
 }
 
+// @ts-ignore: Keep the function signature as-is despite unusued arguments
 function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any) {
 	const defaultRender:Function = markdownIt.renderer.rules.fence || function(tokens:any[], idx:number, options:any, env:any, self:any) {
 		return self.renderToken(tokens, idx, options, env, self);

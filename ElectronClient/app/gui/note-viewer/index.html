@@ -103,11 +103,10 @@
 
 			const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
 
-			for (let name in assets) {
-				if (pluginAssetsAdded_[name]) continue;
-				pluginAssetsAdded_[name] = true;
-
-				const asset = assets[name];
+			for (let i = 0; i < assets.length; i++) {
+				const asset = assets[i];
+				if (pluginAssetsAdded_[asset.name]) continue;
+				pluginAssetsAdded_[asset.name] = true;
 
 				if (asset.mime === 'application/javascript') {
 					const script = document.createElement('script');
