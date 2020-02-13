@@ -72,6 +72,8 @@
     "react-native-version-info": "^0.5.1",
     "react-native-webview": "^5.12.0",
     "react-redux": "5.0.7",
+    "memory-cache": "^0.2.0",
+    "node-html-parser": "^1.2.4",
     "redux": "4.0.0",
     "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",

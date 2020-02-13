@@ -21,7 +21,7 @@
 	function absoluteUrl(url) {
 		if (!url) return url;
 		const protocol = url.toLowerCase().split(':')[0];
-		if (['http', 'https', 'file'].indexOf(protocol) >= 0) return url;
+		if (['http', 'https', 'file', 'data'].indexOf(protocol) >= 0) return url;
 
 		if (url.indexOf('//') === 0) {
 			return location.protocol + url;

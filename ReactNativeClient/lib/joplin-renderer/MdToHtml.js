@@ -2,6 +2,7 @@ const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
 const noteStyle = require('./noteStyle');
 const { fileExtension } = require('./pathUtils');
+const memoryCache = require('memory-cache');
 const rules = {
 	image: require('./MdToHtml/rules/image'),
 	checkbox: require('./MdToHtml/rules/checkbox'),
@@ -12,6 +13,7 @@ const rules = {
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 };
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
@@ -50,6 +52,7 @@ class MdToHtml {
 		this.cachedHighlightedCode_ = {};
 		this.ResourceModel_ = options.ResourceModel;
 		this.pluginOptions_ = options.pluginOptions ? options.pluginOptions : {};
+		this.contextCache_ = new memoryCache.Cache();
 	}
 
 	pluginOptions(name) {
@@ -106,6 +109,7 @@ class MdToHtml {
 
 	async render(body, style = null, options = null) {
 		if (!options) options = {};
+		if (!('bodyOnly' in options)) options.bodyOnly = false;
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
@@ -129,6 +133,7 @@ class MdToHtml {
 		const context = {
 			css: {},
 			pluginAssets: {},
+			cache: this.contextCache_,
 		};
 
 		const ruleOptions = Object.assign({}, options, {
@@ -203,6 +208,7 @@ class MdToHtml {
 		if (this.pluginEnabled('katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		if (this.pluginEnabled('fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		if (this.pluginEnabled('mermaid')) markdownIt.use(rules.mermaid(context, ruleOptions));
+		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
