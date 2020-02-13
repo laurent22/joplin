@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -206,23 +208,21 @@ msgstr "Handeling geannuleerd"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:167
-#, fuzzy
 msgid "Confirm password:"
-msgstr "Voer het hoofdwachtwoord in:"
+msgstr "Bevestig wachtwoord:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:145
-#, fuzzy
 msgid "Passwords do not match!"
-msgstr "Wachtwoord mag niet blanco zijn"
+msgstr "Wachtwoorden komen niet overeen!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Bezig met starten van ontsleuteling... Het kan, afhankelijk van de "
-"hoeveelheid, enkele minuten duren; even geduld dus."
+"Bezig met starten van ontsleuteling... Even Geduld, afhankelijk van de "
+"hoeveelheid kan het enkele minute duren."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
@@ -648,7 +648,7 @@ msgstr "Bezig met starten van synchronisatie..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
 msgid "Downloading resources..."
-msgstr "Resources downloaden…"
+msgstr "Bronnen downloaden..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
 msgid "Cancelling... Please wait."
@@ -781,7 +781,7 @@ msgstr "Over Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:659
 msgid "Preferences..."
-msgstr "Voorkeuren…"
+msgstr "Voorkeuren..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:669
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1009
@@ -1145,11 +1145,12 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"De Joplin Nextcloud Applicatie is mogelijk niet geïnstalleerd of incorrect "
+"ingesteld. Gelieve de volledige foutmelding hieronder lezen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:208
-#, fuzzy
 msgid "Show Log"
-msgstr "Alles tonen"
+msgstr "Toon Logboek"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:221
 msgid "Joplin Nextcloud App status:"
@@ -1172,7 +1173,7 @@ msgstr "Geavanceerde opties"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:518
 msgid "Browse..."
-msgstr "Bladeren…"
+msgstr "Bladeren..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:639
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:870
@@ -1506,7 +1507,7 @@ msgstr "Linkadres kopiëren"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:835
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Er is iets misgegaan tijdens het downloaden van deze bijlage"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:837
 #, fuzzy
@@ -1622,16 +1623,14 @@ msgid "Synchronisation Status"
 msgstr "Synchronisatiestatus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:164
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Synchronisatie"
+msgstr "Synchroniseren..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:166
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Bezig met creëren van nieuw(e) %s..."
-msgstr[1] "Bezig met creëren van nieuw(e) %s..."
+msgstr[0] "Nieuwe link genereren..."
+msgstr[1] "Nieuwe links genereren..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:168
 #, fuzzy
@@ -1644,26 +1643,26 @@ msgstr[1] "Token is naar het klembord gekopieerd!"
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Let op: wanneer een notitie wordt gedeeld, zal deze niet langer versleuteld "
+"zijn."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:176
-#, fuzzy
 msgid "Share Notes"
-msgstr "Herstelde notities"
+msgstr "Deel Notities"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:178
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Delen"
-msgstr[1] "Delen"
+msgstr[0] "Kopieer Deelbare Link"
+msgstr[1] "Kopieer Deelbare Links"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:181
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:282
 msgid "Remove"
-msgstr ""
+msgstr "Verwijderen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:285
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
@@ -1697,9 +1696,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "Deze zoekopdracht verwijderen uit de zijbalk?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:303
-#, fuzzy
 msgid "New sub-notebook"
-msgstr "Nieuw notitieboek"
+msgstr "Nieuw sub-notitieboek"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:338
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:388
@@ -1770,9 +1768,8 @@ msgid "Copy Markdown link"
 msgstr "Markdownlink kopiëren"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:134
-#, fuzzy
 msgid "Share note..."
-msgstr "Herstelde notities"
+msgstr "Deel notitie..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:168
 msgid "PDF File"
@@ -1803,7 +1800,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:379
 msgid "Goto Anything..."
-msgstr "Ga naar alles…"
+msgstr "Ga naar alles..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:122
@@ -1825,6 +1822,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Kon niet verbinden met de Joplin Nextcloud app. Controleer je instellingen "
+"in het Synchronisatie configuratie-scherm. Volledige foutmelding was:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2028,16 +2029,15 @@ msgstr "Kan notitie niet verplaatsen naar notitieboek \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Niet gedownload"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Resources downloaden…"
+msgstr "Bronnen downloaden..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Gedownload"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2052,7 +2052,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Toetsenbordmodus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 #, fuzzy
@@ -2828,7 +2828,7 @@ msgstr "Alle notities"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
 msgid "Checking... Please wait."
-msgstr "Controleren… Even geduld."
+msgstr "Controleren... Even geduld."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -2920,7 +2920,7 @@ msgstr "Foutopsporingsrapportage exporteren"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:437
 msgid "Fixing search index..."
-msgstr "Zoekindex repareren…"
+msgstr "Zoekindex repareren..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:437
 msgid "Fix search index"
@@ -3020,9 +3020,8 @@ msgid "Password cannot be empty"
 msgstr "Wachtwoord mag niet blanco zijn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:144
-#, fuzzy
 msgid "Confirm password cannot be empty"
-msgstr "Wachtwoord mag niet blanco zijn"
+msgstr "Wachtwoord bevestigen mag niet blanco zijn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:180
 msgid "Enable"
