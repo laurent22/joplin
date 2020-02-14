@@ -226,20 +226,26 @@ class MdToHtml {
 		const pluginAssets = this.processPluginAssets(context.pluginAssets);
 		cssStrings = cssStrings.concat(pluginAssets.cssStrings);
 
-		if (options.userCss) cssStrings.push(options.userCss);
-
-		const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
-
-		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
-
 		const output = {
-			html: html,
 			pluginAssets: pluginAssets.files.map(f => {
 				return Object.assign({}, f, {
 					path: `pluginAssets/${f.name}`,
 				});
 			}),
 		};
+
+		if (options.bodyOnly) {
+			output.html = renderedBody;
+			return output;
+		}
+
+		if (options.userCss) cssStrings.push(options.userCss);
+
+		const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
+
+		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
+
+		output.html = html;
 
 		// Fow now, we keep only the last entry in the cache
 		this.cachedOutputs_ = {};
