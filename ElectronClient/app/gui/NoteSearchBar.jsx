@@ -161,7 +161,7 @@ class NoteSearchBarComponent extends React.Component {
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"
 						type="text"
-						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor }}
+						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor, color: theme.color }}
 					/>
 					{nextButton}
 					{previousButton}
