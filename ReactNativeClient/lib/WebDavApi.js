@@ -433,7 +433,7 @@ class WebDavApi {
 		if (['MKCOL', 'DELETE', 'PUT', 'MOVE'].indexOf(method) >= 0) return null;
 
 		const output = await loadResponseJson();
-		this.handleNginxHack_(output, newError);
+		if (output) this.handleNginxHack_(output, newError);
 
 		// Check that we didn't get for example an HTML page (as an error) instead of the JSON response
 		// null responses are possible, for example for DELETE calls
