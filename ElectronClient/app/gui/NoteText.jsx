@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');

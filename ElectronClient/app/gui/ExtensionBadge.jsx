@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const { bridge } = require('electron').remote.require('./bridge');
 const styleSelector = require('./style/ExtensionBadge');

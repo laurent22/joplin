@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const Component = React.Component;
 const { TouchableOpacity, Text, StyleSheet, ScrollView, View } = require('react-native');

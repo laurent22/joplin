@@ -51,11 +51,6 @@ module.exports = {
 		"require-atomic-updates": 0,
 
 		// -------------------------------
-		// Coding style preferences
-		// -------------------------------
-		"enforce-react-hooks/enforce-react-hooks": 2,
-
-		// -------------------------------
 		// Formatting
 		// -------------------------------
 		"space-in-parens": ["error", "never"],
@@ -92,6 +87,5 @@ module.exports = {
 	"plugins": [
 		"react",
 		"@typescript-eslint",
-		"enforce-react-hooks",
 	],
 };

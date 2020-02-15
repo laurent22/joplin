@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const { Platform, TouchableOpacity, Linking, View, Switch, StyleSheet, Text, Button, ScrollView, TextInput, Alert } = require('react-native');
 const { connect } = require('react-redux');
