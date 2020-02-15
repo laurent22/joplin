@@ -27,7 +27,8 @@
 				"*.bundle.js",
 				"yarn.lock",
 				"*.icns",
-				"*.base64"
+				"*.base64",
+				"ReactNativeClient/PluginAssetsLoader.js"
 			],
 			"folder_exclude_patterns":
 			[

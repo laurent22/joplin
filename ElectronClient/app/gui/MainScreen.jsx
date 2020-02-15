@@ -5,7 +5,8 @@ const { connect } = require('react-redux');
 const { Header } = require('./Header.min.js');
 const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
-const { NoteText } = require('./NoteText.min.js');
+// const { NoteText } = require('./NoteText.min.js');
+const NoteText2 = require('./NoteText2.js').default;
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
@@ -629,7 +630,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
+				<NoteText2 style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 
 				{pluginDialog}
 			</div>
