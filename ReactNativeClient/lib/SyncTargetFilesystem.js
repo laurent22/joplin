@@ -18,6 +18,10 @@ class SyncTargetFilesystem extends BaseSyncTarget {
 		return _('File system');
 	}
 
+	static unsupportedPlatforms() {
+		return ['ios'];
+	}
+
 	async isAuthenticated() {
 		return true;
 	}

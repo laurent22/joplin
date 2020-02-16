@@ -21,7 +21,7 @@
 	function absoluteUrl(url) {
 		if (!url) return url;
 		const protocol = url.toLowerCase().split(':')[0];
-		if (['http', 'https', 'file'].indexOf(protocol) >= 0) return url;
+		if (['http', 'https', 'file', 'data'].indexOf(protocol) >= 0) return url;
 
 		if (url.indexOf('//') === 0) {
 			return location.protocol + url;
@@ -60,9 +60,17 @@
 		return output;
 	}
 
+	function getJoplinClipperSvgClassName(svg) {
+		for (const className of svg.classList) {
+			if (className.indexOf('joplin-clipper-svg-') === 0) return className;
+		}
+		return '';
+	}
+
 	function getImageSizes(element, forceAbsoluteUrls = false) {
-		const images = element.getElementsByTagName('img');
 		const output = {};
+
+		const images = element.getElementsByTagName('img');
 		for (let i = 0; i < images.length; i++) {
 			const img = images[i];
 			if (img.classList && img.classList.contains('joplin-clipper-hidden')) continue;
@@ -79,6 +87,33 @@
 				naturalHeight: img.naturalHeight,
 			});
 		}
+
+		const svgs = element.getElementsByTagName('svg');
+		for (let i = 0; i < svgs.length; i++) {
+			const svg = svgs[i];
+			if (svg.classList && svg.classList.contains('joplin-clipper-hidden')) continue;
+
+			const className = getJoplinClipperSvgClassName(svg);// 'joplin-clipper-svg-' + i;
+
+			if (!className) {
+				console.warn('SVG without a Joplin class:', svg);
+				continue;
+			}
+
+			if (!svg.classList.contains(className)) {
+				svg.classList.add(className);
+			}
+
+			const rect = svg.getBoundingClientRect();
+
+			if (!output[className]) output[className] = [];
+
+			output[className].push({
+				width: rect.width,
+				height: rect.height,
+			});
+		}
+
 		return output;
 	}
 
@@ -152,6 +187,23 @@
 					}
 				}
 
+				if (nodeName === 'svg') {
+					const className = getJoplinClipperSvgClassName(node);
+					if (!(className in imageIndexes)) imageIndexes[className] = 0;
+
+					if (!imageSizes[className]) {
+						// This seems to concern dynamic images that don't really such as Gravatar, etc.
+						console.warn('Found an SVG for which the size had not been fetched:', className);
+					} else {
+						const imageSize = imageSizes[className][imageIndexes[className]];
+						imageIndexes[className]++;
+						if (imageSize) {
+							node.style.width = `${imageSize.width}px`;
+							node.style.height = `${imageSize.height}px`;
+						}
+					}
+				}
+
 				cleanUpElement(convertToMarkup, node, imageSizes, imageIndexes);
 			}
 		}
@@ -221,6 +273,18 @@
 		}
 	}
 
+	function addSvgClass(doc) {
+		const svgs = doc.getElementsByTagName('svg');
+		let svgId = 0;
+
+		for (const svg of svgs) {
+			if (!getJoplinClipperSvgClassName(svg)) {
+				svg.classList.add(`joplin-clipper-svg-${svgId}`);
+				svgId++;
+			}
+		}
+	}
+
 	// Given a document, return a <style> tag that contains all the styles
 	// required to render the page. Not currently used but could be as an
 	// option to clip pages as HTML.
@@ -266,12 +330,13 @@
 
 	async function prepareCommandResponse(command) {
 		console.info(`Got command: ${command.name}`);
+		const shouldSendToJoplin = !!command.shouldSendToJoplin;
 
 		const convertToMarkup = command.preProcessFor ? command.preProcessFor : 'markdown';
 
 		const clippedContentResponse = (title, html, imageSizes, anchorNames, stylesheets) => {
 			return {
-				name: 'clippedContent',
+				name: shouldSendToJoplin ? 'sendContentToJoplin' : 'clippedContent',
 				title: title,
 				html: html,
 				base_url: baseUrl(),
@@ -310,6 +375,7 @@
 		} else if (command.name === 'completePageHtml') {
 
 			hardcodePreStyles(document);
+			addSvgClass(document);
 			preProcessDocument(document);
 			// Because cleanUpElement is going to modify the DOM and remove elements we don't want to work
 			// directly on the document, so we make a copy of it first.
@@ -324,10 +390,20 @@
 		} else if (command.name === 'selectedHtml') {
 
 			hardcodePreStyles(document);
+			addSvgClass(document);
 			preProcessDocument(document);
-			const range = window.getSelection().getRangeAt(0);
+
 			const container = document.createElement('div');
-			container.appendChild(range.cloneContents());
+			const rangeCount = window.getSelection().rangeCount;
+
+			// Even when the user makes only one selection, Firefox might report multiple selections
+			// so we need to process them all.
+			// Fixes https://github.com/laurent22/joplin/issues/2294
+			for (let i = 0; i < rangeCount; i++) {
+				const range = window.getSelection().getRangeAt(i);
+				container.appendChild(range.cloneContents());
+			}
+
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);

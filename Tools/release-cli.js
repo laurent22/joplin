@@ -74,6 +74,7 @@ async function main() {
 	const defaultEditor = await execCommand('echo $EDITOR');
 
 	const finalCmds = [
+		'git pull',
 		'git add -A',
 		`git commit -m "CLI ${newVersion}"`,
 		`git tag "cli-${newVersion}"`,

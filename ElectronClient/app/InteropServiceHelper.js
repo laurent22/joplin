@@ -8,13 +8,16 @@ const { shim } = require('lib/shim');
 
 class InteropServiceHelper {
 
-	static async exportNoteToHtmlFile(noteId) {
+	static async exportNoteToHtmlFile(noteId, exportOptions) {
 		const tempFile = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.html`;
-		const exportOptions = {};
-		exportOptions.path = tempFile;
-		exportOptions.format = 'html';
-		exportOptions.target = 'file';
-		exportOptions.sourceNoteIds = [noteId];
+
+		exportOptions = Object.assign({}, {
+			path: tempFile,
+			format: 'html',
+			target: 'file',
+			sourceNoteIds: [noteId],
+			customCss: '',
+		}, exportOptions);
 
 		const service = new InteropService();
 
@@ -33,7 +36,11 @@ class InteropServiceHelper {
 		};
 
 		try {
-			htmlFile = await this.exportNoteToHtmlFile(noteId);
+			const exportOptions = {
+				customCss: options.customCss ? options.customCss : '',
+			};
+
+			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
 			const windowOptions = {
 				show: false,
@@ -54,12 +61,12 @@ class InteropServiceHelper {
 							cleanup();
 						}
 					} else {
-						win.webContents.print(options, (success) => {
+						win.webContents.print(options, (success, reason) => {
 							// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
 							// It calls the callback right away with "false" even if the document hasn't be print yet.
 
 							cleanup();
-							if (!success) reject(new Error('Could not print'));
+							if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
 							resolve();
 						});
 					}
@@ -92,7 +99,7 @@ class InteropServiceHelper {
 
 		if (module.target === 'file') {
 			path = bridge().showSaveDialog({
-				filters: [{ name: module.description, extensions: module.fileExtensions}],
+				filters: [{ name: module.description, extensions: module.fileExtensions }],
 			});
 		} else {
 			path = bridge().showOpenDialog({

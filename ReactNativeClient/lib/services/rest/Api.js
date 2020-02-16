@@ -22,7 +22,8 @@ const ApiResponse = require('lib/services/rest/ApiResponse');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const { uuid } = require('lib/uuid');
 
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
@@ -246,7 +247,21 @@ class Api {
 		const query = request.query.query;
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
-		return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+
+		if (queryType !== BaseItem.TYPE_NOTE) {
+			const ModelClass = BaseItem.getClassByItemType(queryType);
+			const options = {};
+			const fields = this.fields_(request, []);
+			if (fields.length) options.fields = fields;
+			const sqlQueryPart = query.replace(/\*/g, '%');
+			options.where = 'title LIKE ?';
+			options.whereParams = [sqlQueryPart];
+			options.caseInsensitive = true;
+			return await ModelClass.all(options);
+		} else {
+			return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		}
 	}
 
 	async action_folders(request, id = null, link = null) {
@@ -586,8 +601,10 @@ class Api {
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = `.${fileExt}`;
-		let imagePath = `${tempDir}/${safeFilename(name)}${fileExt}`;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = `${tempDir}/${safeFilename(name)}_${md5(`${Math.random()}_${Date.now()}`).substr(0, 10)}${fileExt}`;
+
+		// Append a UUID because simply checking if the file exists is not enough since
+		// multiple resources can be downloaded at the same time (race condition).
+		let imagePath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
 
 		try {
 			if (isDataUrl) {

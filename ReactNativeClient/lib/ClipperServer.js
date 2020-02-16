@@ -162,6 +162,7 @@ class ClipperServer {
 					const msg = [];
 					if (httpCode >= 500) msg.push('Internal Server Error');
 					if (error.message) msg.push(error.message);
+					if (error.stack) msg.push(`\n\n${error.stack}`);
 
 					writeResponse(httpCode, { error: msg.join(': ') });
 				}

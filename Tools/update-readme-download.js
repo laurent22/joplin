@@ -22,7 +22,7 @@ async function gitHubLatestRelease() {
 		request.get({
 			url: url,
 			json: true,
-			headers: {'User-Agent': 'Joplin Readme Updater'},
+			headers: { 'User-Agent': 'Joplin Readme Updater' },
 		}, (error, response, data) => {
 			if (error) {
 				reject(error);

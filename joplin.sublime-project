@@ -27,7 +27,7 @@
 				"*.bundle.js",
 				"yarn.lock",
 				"*.icns",
-				"*.base64",
+				"*.base64"
 			],
 			"folder_exclude_patterns":
 			[
@@ -65,6 +65,7 @@
 				"Clipper/joplin-webclipper/popup/build",
 				"Clipper/joplin-webclipper/dist",
 				"ReactNativeClient/lib/rnInjectedJs",
+				"ReactNativeClient/ios/Pods"
 			],
 			"path": "."
 		}

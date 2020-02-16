@@ -9,11 +9,13 @@ const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
 const { escapeHtml } = require('lib/string-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
-const { assetsToHeaders } = require('joplin-renderer');
+const { assetsToHeaders } = require('lib/joplin-renderer');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
-	async init(path) {
+	async init(path, options = {}) {
+		this.customCss_ = options.customCss ? options.customCss : '';
+
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
@@ -88,7 +90,11 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 			}
 
 			const bodyMd = await this.processNoteResources_(item);
-			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, { resources: this.resources_, plainResourceRendering: true });
+			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
+				resources: this.resources_,
+				plainResourceRendering: true,
+				userCss: this.customCss_,
+			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
 			if (result.html) noteContent.push(result.html);
@@ -108,7 +114,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 				<html>
 					<head>
 						<meta charset="UTF-8">
-						${assetsToHeaders(result.pluginAssets)}
+						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 						<title>${escapeHtml(item.title)}</title>
 					</head>
 					<body>

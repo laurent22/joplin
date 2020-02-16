@@ -6,6 +6,11 @@ module.exports = {
 	},
 	"parser": "@typescript-eslint/parser",
 	'extends': ['eslint:recommended'],
+	"settings": {
+		'react': {
+			'version': '16.12',
+		},
+	},
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly',
@@ -44,7 +49,6 @@ module.exports = {
 		// This error is always a false positive so far since it detects
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
-		// "no-lonely-if": "error",
 
 		// -------------------------------
 		// Formatting
@@ -59,6 +63,8 @@ module.exports = {
 		"linebreak-style": ["error", "unix"],
 		"prefer-template": ["error"],
 		"template-curly-spacing": ["error", "never"],
+		"object-curly-spacing": ["error", "always"],
+		"array-bracket-spacing": ["error", "never"],
 		"key-spacing": ["error", {
 			"beforeColon": false,
 			"afterColon": true,

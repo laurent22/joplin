@@ -126,13 +126,13 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 	autoUpdateLogger_.info(`checkForUpdates: Checking with options ${JSON.stringify(options)}`);
 
-	fetchLatestRelease(options).then(release => {
+	fetchLatestRelease(options).then(async (release) => {
 		autoUpdateLogger_.info(`Current version: ${packageInfo.version}`);
 		autoUpdateLogger_.info(`Latest version: ${release.version}`);
 		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
-			if (!checkInBackground_) dialog.showMessageBox({
+			if (!checkInBackground_) await dialog.showMessageBox({
 				type: 'info',
 				message: _('Current version is up-to-date.'),
 				buttons: [_('OK')],
@@ -145,12 +145,13 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 
 			const newVersionString = release.prerelease ? _('%s (pre-release)', release.version) : release.version;
 
-			const buttonIndex = dialog.showMessageBox(parentWindow_, {
+			const result = await dialog.showMessageBox(parentWindow_, {
 				type: 'info',
 				message: `${_('An update is available, do you want to download it now?')}\n\n${_('Your version: %s', packageInfo.version)}\n${_('New version: %s', newVersionString)}${releaseNotes}`,
 				buttons: [_('Yes'), _('No')].concat(truncateReleaseNotes ? [_('Full Release Notes')] : []),
 			});
 
+			const buttonIndex = result.response;
 			if (buttonIndex === 0) require('electron').shell.openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
 			if (buttonIndex === 2) require('electron').shell.openExternal(release.pageUrl);
 		}

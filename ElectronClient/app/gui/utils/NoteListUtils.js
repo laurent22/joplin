@@ -25,12 +25,11 @@ class NoteListUtils {
 			menu.append(
 				new MenuItem({
 					label: _('Add or remove tags'),
-					enabled: noteIds.length === 1,
 					click: async () => {
 						props.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'setTags',
-							noteId: noteIds[0],
+							noteIds: noteIds,
 						});
 					},
 				})
@@ -163,19 +162,18 @@ class NoteListUtils {
 				);
 			}
 
-			if (noteIds.length === 1) {
-				exportMenu.append(
-					new MenuItem({
-						label: `PDF - ${_('PDF File')}`,
-						click: () => {
-							props.dispatch({
-								type: 'WINDOW_COMMAND',
-								name: 'exportPdf',
-							});
-						},
-					})
-				);
-			}
+			exportMenu.append(
+				new MenuItem({
+					label: `PDF - ${_('PDF File')}`,
+					click: () => {
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'exportPdf',
+							noteIds: noteIds,
+						});
+					},
+				})
+			);
 
 			const exportMenuItem = new MenuItem({ label: _('Export'), submenu: exportMenu });
 

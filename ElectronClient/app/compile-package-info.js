@@ -20,10 +20,16 @@ packageInfo.build = { appId: appId };
 let branch;
 let hash;
 try {
-	branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-	hash   = execSync('git log --pretty="%h" -1').toString().trim();
+	// Use stdio: 'pipe' so that execSync doesn't print error directly to stdout
+	branch = execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim();
+	hash   = execSync('git log --pretty="%h" -1', { stdio: 'pipe' }).toString().trim();
+	// The builds in CI are done from a 'detached HEAD' state
+	if (branch === 'HEAD') branch = 'master';
 } catch (err) {
-	console.warn('Could not get git info', err);
+	// Don't display error object as it's a "fatal" error, but
+	// not for us, since is it not critical information
+	// https://github.com/laurent22/joplin/issues/2256
+	console.info('Warning: Could not get git info (it will not be displayed in About dialog box)');
 }
 if (typeof branch !== 'undefined' && typeof hash !== 'undefined') {
 	packageInfo.git = { branch: branch, hash: hash };

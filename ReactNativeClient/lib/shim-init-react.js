@@ -144,6 +144,11 @@ function shimInit() {
 		return Platform.OS;
 	};
 
+	shim.appVersion = () => {
+		const p = require('react-native-version-info').default;
+		return p.appVersion;
+	};
+
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
 	// only really works with images. It does not resize the image either.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null) {

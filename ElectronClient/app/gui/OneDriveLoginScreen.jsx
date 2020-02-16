@@ -68,7 +68,7 @@ class OneDriveLoginScreenComponent extends React.Component {
 		return (
 			<div>
 				<Header style={headerStyle}/>
-				<div style={{padding: 10}}>
+				<div style={{ padding: 10 }}>
 					{logComps}
 				</div>
 			</div>

@@ -33,7 +33,7 @@ shim.isMac = () => {
 };
 
 shim.platformName = function() {
-	if (shim.isReactNative()) return 'mobile';
+	if (shim.isReactNative()) return shim.mobilePlatform();
 	if (shim.isMac()) return 'darwin';
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
@@ -194,6 +194,10 @@ shim.openOrCreateFile = () => {
 	throw new Error('Not implemented');
 };
 shim.waitForFrame = () => {
+	throw new Error('Not implemented');
+};
+
+shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
 

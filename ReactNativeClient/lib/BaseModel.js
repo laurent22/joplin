@@ -77,6 +77,15 @@ class BaseModel {
 		throw new Error(`Unknown model type: ${type}`);
 	}
 
+	static modelNameToType(name) {
+		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
+			const e = BaseModel.typeEnum_[i];
+			const eName = e[0].substr(5).toLowerCase();
+			if (eName === name) return e[1];
+		}
+		throw new Error(`Unknown model name: ${name}`);
+	}
+
 	static hasField(name) {
 		let fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
@@ -192,8 +201,15 @@ class BaseModel {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
-		let q = this.applySqlOptions(options, `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``);
-		return this.modelSelectAll(q.sql);
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
+		let params = [];
+		if (options.where) {
+			sql += ` WHERE ${options.where}`;
+			if (options.whereParams) params = params.concat(options.whereParams);
+		}
+
+		let q = this.applySqlOptions(options, sql, params);
+		return this.modelSelectAll(q.sql, q.params);
 	}
 
 	static async byIds(ids, options = null) {

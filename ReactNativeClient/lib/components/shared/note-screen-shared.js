@@ -210,6 +210,7 @@ shared.initState = async function(comp) {
 	if (!comp.props.noteId) {
 		note = comp.props.itemType == 'todo' ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
 		mode = 'edit';
+		comp.scheduleFocusUpdate();
 	} else {
 		note = await Note.load(comp.props.noteId);
 	}

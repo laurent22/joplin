@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { connect } = require('react-redux');
-const { Platform, View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
+const { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -14,6 +14,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+
+Icon.loadFont();
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -41,7 +43,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
-				paddingTop: Platform.OS === 'ios' ? 15 : 0, // Extra padding for iOS because the top icons are there
 			},
 			divider: {
 				borderBottomWidth: 1,
@@ -168,7 +169,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		// Duplicate all selected notes. ensureUniqueTitle is set to true to use the
 		// original note's name as a root for the new unique identifier.
-		await Note.duplicateMultipleNotes(noteIds, {ensureUniqueTitle: true});
+		await Note.duplicateMultipleNotes(noteIds, { ensureUniqueTitle: true });
 
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 	}

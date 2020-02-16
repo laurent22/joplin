@@ -40,13 +40,6 @@ const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
-
 class BaseApplication {
 	constructor() {
 		this.logger_ = new Logger();
@@ -172,6 +165,14 @@ class BaseApplication {
 
 			if (arg.indexOf('--remote-debugging-port=') === 0) {
 				// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
 				argv.splice(0, 1);
 				continue;
 			}
@@ -442,6 +443,16 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
+		}
+
 		if (refreshNotes) {
 			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
 		}
@@ -450,11 +461,14 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showNoteCounts') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
@@ -525,27 +539,6 @@ class BaseApplication {
 		return `${os.homedir()}/.config/${Setting.value('appName')}`;
 	}
 
-	async testing() {
-		const markdownUtils = require('lib/markdownUtils');
-		const ClipperServer = require('lib/ClipperServer');
-		const server = new ClipperServer();
-		const HtmlToMd = require('lib/HtmlToMd');
-		const service = new HtmlToMd();
-		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
-		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-
-		const imageUrls = markdownUtils.extractImageUrls(markdown);
-		let result = await server.downloadImages_(imageUrls);
-		result = await server.createResourcesFromPaths_(result);
-		console.info(result);
-		markdown = server.replaceImageUrlsByResources_(markdown, result);
-		console.info('--------------------------------------------------');
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-	}
-
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
 
@@ -568,6 +561,13 @@ class BaseApplication {
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+
+		SyncTargetRegistry.addClass(SyncTargetFilesystem);
+		SyncTargetRegistry.addClass(SyncTargetOneDrive);
+		if (Setting.value('env') === 'dev') SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 		await shim.fsDriver().remove(tempDir);
 

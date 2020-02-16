@@ -371,7 +371,7 @@ let themeCache_ = {};
 function themeStyle(theme) {
 	if (!theme) throw new Error('Theme must be specified');
 
-	var zoomRatio = Setting.value('style.zoom') / 100;
+	var zoomRatio = 1; // Setting.value('style.zoom') / 100;
 	var editorFontSize = Setting.value('style.editor.fontSize');
 
 	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');

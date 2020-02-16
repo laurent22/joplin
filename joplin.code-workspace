@@ -8,9 +8,6 @@
 			"name": "Joplin Nextcloud App",
 			"path": "D:/Web/www/nextcloud/apps/joplin"
 		},
-		{
-			"path": "D:/Docs/PROGS/Node/joplin-renderer"
-		}
 	],
 	"settings": {
 		"files.exclude": {
@@ -82,6 +79,14 @@
 			"ReactNativeClient/node_modules/": true,
 			"Server/db*.sqlite/": true,
 			"Server/dist/": true,
-		}
+		},
+		"spellright.language": [
+			"en"
+		],
+		"spellright.documentTypes": [
+			"markdown",
+			"latex",
+			"plaintext"
+		]
 	},
 }

@@ -47,7 +47,7 @@ class PreviewComponent extends React.PureComponent {
 				<h2>Title:</h2>
 				<input className={'Title'} value={this.props.title} onChange={this.props.onTitleChange}/>
 				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
-				<a className={'Confirm Button'} onClick={this.props.onConfirmClick}>Confirm</a>
+				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
 
@@ -187,10 +187,10 @@ class AppComponent extends Component {
 	}
 
 	async loadContentScripts() {
-		await bridge().tabsExecuteScript({file: '/content_scripts/JSDOMParser.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/Readability.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/Readability-readerable.js'});
-		await bridge().tabsExecuteScript({file: '/content_scripts/index.js'});
+		await bridge().tabsExecuteScript({ file: '/content_scripts/JSDOMParser.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/Readability-readerable.js' });
+		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
 	}
 
 	async componentDidMount() {
@@ -246,7 +246,7 @@ class AppComponent extends Component {
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
 			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
-			return <div style={{padding: 10, fontSize: 12, maxWidth: 200}}>{msg}</div>;
+			return <div style={{ padding: 10, fontSize: 12, maxWidth: 200 }}>{msg}</div>;
 		}
 
 		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>;
@@ -382,12 +382,12 @@ class AppComponent extends Component {
 			<div className="App">
 				<div className="Controls">
 					<ul>
-						<li><a className="Button" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-						<li><a className="Button" onClick={this.clipComplete_click}>Clip complete page</a></li>
-						<li><a className="Button" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
-						<li><a className="Button" onClick={this.clipSelection_click}>Clip selection</a></li>
-						<li><a className="Button" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
-						<li><a className="Button" onClick={this.clipUrl_click}>Clip URL</a></li>
+						<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
+						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page</a></li>
+						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
+						<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
+						<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
 					</ul>
 				</div>
 				{ foldersComp() }

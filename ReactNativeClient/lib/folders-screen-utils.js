@@ -26,7 +26,8 @@ class FoldersScreenUtils {
 		}
 
 		if (Setting.value('showNoteCounts')) {
-			await Folder.addNoteCounts(folders);
+			await Folder.addNoteCounts(folders,
+				Setting.value('showCompletedTodos'));
 		}
 
 		return folders;

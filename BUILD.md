@@ -30,10 +30,12 @@ All TypeScript files are generated next to the .ts or .tsx file. So for example,
 Before building any of the applications, you need to build the tools and pre-commit hooks:
 
 ```
-npm install && cd Tools && npm install
+npm install && cd Tools && npm install && cd ..
 ```
 
 # Building the Electron application
+
+## Linux and macOS
 
 ```
 npm run copyLib
@@ -53,7 +55,9 @@ That will create the executable file in the `dist` directory.
 
 From `/ElectronClient` you can also run `run.sh` to run the app for testing.
 
-## Building Electron application on Windows
+## Windows
+
+Run the following commands on Windows Command prompt running as Administrator:
 
 ```
 xcopy /C /I /H /R /Y /S ReactNativeClient\lib ElectronClient\app\lib

@@ -26,6 +26,7 @@ class NotePropertiesDialog extends React.Component {
 			id: _('ID'),
 			user_created_time: _('Created'),
 			user_updated_time: _('Updated'),
+			todo_completed: _('Completed'),
 			location: _('Location'),
 			source_url: _('URL'),
 			revisionsLink: _('Note History'),
@@ -71,6 +72,11 @@ class NotePropertiesDialog extends React.Component {
 
 		formNote.user_updated_time = time.formatMsToLocal(note.user_updated_time);
 		formNote.user_created_time = time.formatMsToLocal(note.user_created_time);
+
+		if (note.todo_completed) {
+			formNote.todo_completed = time.formatMsToLocal(note.todo_completed);
+		}
+
 		formNote.source_url = note.source_url;
 
 		formNote.location = '';
@@ -89,6 +95,11 @@ class NotePropertiesDialog extends React.Component {
 		const note = Object.assign({ id: formNote.id }, this.latLongFromLocation(formNote.location));
 		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
 		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
+
+		if (formNote.todo_completed) {
+			note.todo_completed = time.formatMsToLocal(formNote.todo_completed);
+		}
+
 		note.source_url = formNote.source_url;
 
 		return note;
@@ -106,6 +117,9 @@ class NotePropertiesDialog extends React.Component {
 		this.styles_.controlBox = {
 			marginBottom: '1em',
 			color: 'black', // This will apply for the calendar
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
 		};
 
 		this.styles_.button = {
@@ -122,8 +136,11 @@ class NotePropertiesDialog extends React.Component {
 			color: theme.color,
 			textDecoration: 'none',
 			backgroundColor: theme.backgroundColor,
-			border: '1px solid',
-			borderColor: theme.dividerColor,
+			padding: '.14em',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginLeft: '0.5em',
 		};
 
 		this.styles_.input = {
@@ -273,7 +290,7 @@ class NotePropertiesDialog extends React.Component {
 			if (key === 'location') {
 				try {
 					const dms = formatcoords(value);
-					displayedValue = dms.format('DDMMss', { decimalPlaces: 0 });
+					displayedValue = dms.format('DD MM ss X', { latLonSeparator: ', ', decimalPlaces: 2 });
 				} catch (error) {
 					displayedValue = '';
 				}
@@ -312,7 +329,7 @@ class NotePropertiesDialog extends React.Component {
 		if (editCompHandler) {
 			editComp = (
 				<a href="#" onClick={editCompHandler} style={styles.editPropertyButton}>
-					<i className={`fa ${editCompIcon}`} aria-hidden="true" style={{ marginLeft: '.5em' }}></i>
+					<i className={`fa ${editCompIcon}`} aria-hidden="true"></i>
 				</a>
 			);
 		}
@@ -338,7 +355,7 @@ class NotePropertiesDialog extends React.Component {
 			return dms.format('DDMMss', { decimalPlaces: 0 });
 		}
 
-		if (['user_updated_time', 'user_created_time'].indexOf(key) >= 0) {
+		if (['user_updated_time', 'user_created_time', 'todo_completed'].indexOf(key) >= 0) {
 			return time.formatMsToLocal(note[key]);
 		}
 
