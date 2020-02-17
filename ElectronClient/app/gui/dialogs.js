@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const smalltalk = require('smalltalk');
 
 class Dialogs {
