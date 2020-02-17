@@ -110,6 +110,7 @@ class MdToHtml {
 	async render(body, style = null, options = null) {
 		if (!options) options = {};
 		if (!('bodyOnly' in options)) options.bodyOnly = false;
+		if (!('splitted' in options)) options.splitted = false;
 		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
 		if (!options.paddingBottom) options.paddingBottom = '0';
 		if (!options.highlightedKeywords) options.highlightedKeywords = [];
@@ -246,6 +247,11 @@ class MdToHtml {
 		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
 
 		output.html = html;
+
+		if (options.splitted) {
+			output.cssStrings = cssStrings;
+			output.html = `<div id="rendered-md">${renderedBody}</div>`;
+		}
 
 		// Fow now, we keep only the last entry in the cache
 		this.cachedOutputs_ = {};

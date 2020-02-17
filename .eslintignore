@@ -51,8 +51,10 @@ ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
 
 # Ignore files generated from TypeScript files
+ElectronClient/app/gui/DraftJs.js
 ElectronClient/app/gui/NoteText2.js
 ElectronClient/app/gui/ShareNoteDialog.js
+ElectronClient/app/gui/TinyMCE.js
 ElectronClient/app/gui/TuiEditor.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js

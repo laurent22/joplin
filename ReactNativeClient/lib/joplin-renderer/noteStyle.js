@@ -269,6 +269,10 @@ module.exports = function(style, options) {
 			padding: 1em;
 		}
 
+		.joplin-editable .joplin-source {
+			display: none;
+		}
+
 		@media print {
 			body {
 				height: auto !important;

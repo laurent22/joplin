@@ -1,26 +1,36 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import TuiEditor from './TuiEditor';
+// import TuiEditor from './TuiEditor';
+// import DraftJs, { markdownToValue, valueToMarkdown } from './DraftJs';
+import TinyMCE, { markdownToValue, valueToMarkdown } from './TinyMCE';
 import { connect } from 'react-redux';
+const { themeStyle } = require('../theme.js');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
+const Setting = require('lib/models/Setting');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+
 
 const Note = require('lib/models/Note.js');
 
 interface NoteTextProps {
 	style: any,
 	noteId: string,
+	theme: number,
 }
 
 interface FormNote {
 	id: string,
 	title: string,
-	body: string,
+	bodyEditorState: any,
+	bodyMarkdown: string,
 }
 
-const defaultNote = () => {
+const defaultNote = ():FormNote => {
 	return {
 		id: '',
 		title: '',
-		body: '',
+		bodyEditorState: null,
+		bodyMarkdown: '',
 	};
 };
 
@@ -76,29 +86,60 @@ class AsyncActionsHandler {
 
 const asyncActionHandler = new AsyncActionsHandler();
 
+// TODO: HtmlToMd should support joplin-source element
+
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
 
 	const scheduleSaveNote = (formNote:FormNote) => {
-		// const action = (formNote:FormNote) => {
-		// 	return async () => {
-		// 		await Note.save(formNoteToNote(formNote));
-		// 	}
-		// }
+		console.info('Schedule', formNote);
+		// const makeAction = (formNote:FormNote) => {
+		// 	return async function() {
+		// 		const note = await formNoteToNote(formNote);
+		// 		console.info('Saving note:', note);
+		// 		// await Note.save(note);
+		// 	};
+		// };
 
-		const makeAction = (formNote:FormNote) => {
-			return async function() {
-				console.info('Saving note:', formNote);
-				await Note.save(formNoteToNote(formNote));
-			};
-		};
-
-		asyncActionHandler.push('saveNote', makeAction(formNote));
+		// asyncActionHandler.push('saveNote', makeAction(formNote));
 	};
 
-	const formNoteToNote = (formNote:FormNote):any => {
-		return Object.assign({}, formNote);
-	};
+	// const formNoteToNote = async (formNote:FormNote):any => {
+	// 	// const md = await valueToMarkdown(formNote.body);
+	// 	// return Object.assign({}, formNote, { body: md });
+	// 	return Object.assign({}, formNote);
+	// };
+
+	const markdownToHtml = useCallback(async (md:string):Promise<any> => {
+		if (!md) return '';
+
+		const theme = themeStyle(props.theme);
+
+		console.info('===================================');
+
+		console.info('Markdown', md);
+
+		md = await Note.replaceResourceInternalToExternalLinks(md, { useAbsolutePaths: true });
+
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+		});
+
+		const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, {
+			codeTheme: theme.codeThemeCss,
+			// userCss: this.props.customCss ? this.props.customCss : '',
+			// resources: await shared.attachedResources(noteBody),
+			resources: [],
+			postMessageSyntax: 'ipcProxySendToHost',
+			splitted: true,
+		});
+
+		console.info('RESULT', result);
+
+		console.info('===================================');
+
+		return result;
+	}, [props.theme]);
 
 	useEffect(() => {
 		async function fetchNote() {
@@ -106,10 +147,11 @@ function NoteText2(props:NoteTextProps) {
 
 			if (props.noteId) {
 				const dbNote = await Note.load(props.noteId);
-				const f = {
+				const f:FormNote = {
 					id: dbNote.id,
 					title: dbNote.title,
-					body: dbNote.body,
+					bodyMarkdown: dbNote.body,
+					bodyEditorState: null,
 				};
 				console.info('Loaded note', f);
 				setFormNote(f);
@@ -124,10 +166,10 @@ function NoteText2(props:NoteTextProps) {
 
 
 	const onBodyChange = useCallback((event) => {
-		if (formNote.body === event.value) return;
+		if (formNote.bodyEditorState === event.editorState) return;
 
 		const newNote = Object.assign({}, formNote, {
-			body: event.value,
+			bodyEditorState: event.editorState,
 		});
 
 		setFormNote(newNote);
@@ -136,9 +178,28 @@ function NoteText2(props:NoteTextProps) {
 
 	return (
 		<div style={props.style}>
-			<TuiEditor style={{ width: props.style.width, height: props.style.height }} value={formNote.body} onChange={onBodyChange}/>
+			<TinyMCE
+				style={{ width: props.style.width, height: props.style.height }}
+				editorState={formNote.bodyEditorState}
+				onChange={onBodyChange}
+				defaultMarkdown={formNote.bodyMarkdown}
+				theme={props.theme}
+				markdownToHtml={markdownToHtml}
+			/>
 		</div>
 	);
+
+	// return (
+	// 	<div style={props.style}>
+	// 		<DraftJs style={{ width: props.style.width, height: props.style.height }} value={formNote.body} onChange={onBodyChange}/>
+	// 	</div>
+	// );
+
+	// return (
+	// 	<div style={props.style}>
+	// 		<TuiEditor style={{ width: props.style.width, height: props.style.height }} value={formNote.body} onChange={onBodyChange}/>
+	// 	</div>
+	// );
 }
 
 const mapStateToProps = (state:any) => {
@@ -151,7 +212,7 @@ const mapStateToProps = (state:any) => {
 		// folderId: state.selectedFolderId,
 		// itemType: state.selectedItemType,
 		// folders: state.folders,
-		// theme: state.settings.theme,
+		theme: state.settings.theme,
 		// syncStarted: state.syncStarted,
 		// newNote: state.newNote,
 		// windowCommand: state.windowCommand,

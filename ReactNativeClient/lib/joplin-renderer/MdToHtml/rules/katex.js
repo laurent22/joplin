@@ -241,7 +241,7 @@ module.exports = function(context) {
 		var katexInline = function(latex) {
 			options.displayMode = false;
 			try {
-				return renderToStringWithCache(latex, options);
+				return `<span class="joplin-katex-inline joplin-editable"><pre class="joplin-source">${latex}</pre>${renderToStringWithCache(latex, options)}</span>`;
 			} catch (error) {
 				console.error('Katex error for:', latex, error);
 				return latex;
@@ -256,7 +256,7 @@ module.exports = function(context) {
 		var katexBlock = function(latex) {
 			options.displayMode = true;
 			try {
-				return `<p>${renderToStringWithCache(latex, options)}</p>`;
+				return `<div class="joplin-katex-block joplin-editable"><pre class="joplin-source">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
 			} catch (error) {
 				console.error('Katex error for:', latex, error);
 				return latex;

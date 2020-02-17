@@ -16,6 +16,22 @@ export interface TuiEditorChangeEvent {
 	value: string
 }
 
+export async function markdownToValue(md:string):any {
+	// Process markdown
+
+	// if (!md) return EditorState.createEmpty();
+
+	// const rawData = markdownToDraft(md);
+	// const contentState = convertFromRaw(rawData);
+	// return EditorState.createWithContent(contentState);
+}
+
+export async function valueToMarkdown(value:any):string {
+//	const content = value.getCurrentContent();
+	// const rawObject = convertToRaw(content);
+	// return draftToMarkdown(rawObject);
+}
+
 export default function TuiEditor(props:TuiEditorProps) {
 	const editorRef = useRef(null);
 	const [editor, setEditor] = useState(null);
