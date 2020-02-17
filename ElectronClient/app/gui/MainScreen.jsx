@@ -20,6 +20,8 @@ const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 
+require('global-agent').bootstrap();
+
 class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
