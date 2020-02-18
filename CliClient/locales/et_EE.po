@@ -262,7 +262,7 @@ msgstr "Aktiivset märkmikku pole."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Märget pole olemas: %s. Kas luua?"
+msgstr "Märget pole olemas: \"%s\". Kas luua?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
 msgid "Exits the application."
@@ -325,8 +325,8 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või "
-"kasutades otseteed \"$n\" või \"$b\" vastavalt praegu valitud Märkus või "
-"märkmiku. \"$c\" saab kasutada praegu valitud üksusele viitamiseks."
+"kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või "
+"märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -445,9 +445,9 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"Kuvab ainult konkreetset tüüpi tüübid. Võib olla \"n\" märkmete jaoks, \"t\" "
-"ülesannete jaoks või \"nt\" märkmete ja ülesannete jaoks (nt \"-tt\" kuvaks "
-"ainult ülesandeid, \"-ttd\" aga märkmeid ja ülesanded."
+"Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` "
+"ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks "
+"ainult ülesandeid, `-ttd` aga märkmeid ja ülesanded."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Either \"text\" or \"json\""
@@ -550,7 +550,7 @@ msgstr "Server töötab juba pordis %d"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr "Serveris töötab Port %d"
+msgstr "Serveris töötab port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
@@ -565,10 +565,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Seab antud atribuudi väärtuseks antud <name> <note>[väärtuse]. Võimalikud "
+"Seab antud atribuudi väärtuseks antud <name> <note> [value]. Võimalikud "
 "omadused on järgmised:\n"
 "\n"
-" %s</note> </name>"
+" %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
 #, fuzzy
@@ -606,7 +606,7 @@ msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:56
 #, fuzzy
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Samm 1: avage see URL brauseris, et lubada rakendust:"
+msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:59
@@ -621,9 +621,8 @@ msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Pole %s-ga seostatud. Palun esitage puuduv mandaat."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
-#, fuzzy
 msgid "Synchronisation is already in progress."
-msgstr "Sünkroniseerimine on juba pooleli."
+msgstr "Sünkroniseerimine on juba teoksil."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, fuzzy, javascript-format
@@ -646,17 +645,14 @@ msgid "Cannot initialize synchroniser."
 msgstr "Sünkroonijat ei saa lähtestada."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
-#, fuzzy
 msgid "Starting synchronisation..."
 msgstr "Sünkroonimise käivitamine..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
-#, fuzzy
 msgid "Downloading resources..."
 msgstr "Ressursside allalaadimine..."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
-#, fuzzy
 msgid "Cancelling... Please wait."
 msgstr "Tühistamine... Oota."
 
@@ -668,13 +664,13 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command>võib olla \"lisa\", \"Eemalda\", \"loend\" või \"notetags\", et "
-"määrata või eemaldada [silt], [märge], loetleda märkmed, mis on seotud "
-"[tag], või loetleda silte seostatud [Note]. Käsu \"tag list\" saab kasutada "
-"loetleda kõik sildid (kasutamine-l pikka võimalust)."
+"<tag-command>võib olla \"add\", \"remove\", \"list\" või \"notetags\", et "
+"määrata või eemaldada [tag], [note], loetleda märkmed, mis on seotud "
+"[tag], või loetleda silte seostatud [note]. Käsu `tag list` saab kasutada "
+"loetleda kõik sildid (kasuta -l laiendatud valiku jaoks)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Sobimatu käsk: %s"
 
@@ -686,10 +682,10 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command>võib kas olla \"Lülita\" või \"selge\". Kasutage \"Lülita\" "
+"<todo-command>võib kas olla \"toggle\" või \"clear\". Kasutage \"toggle\" "
 "antud to-do ümberlülitamiseks lõpetatud ja lõpetamata oleku vahel (kui "
 "sihtmärk on regulaarne märge, teisendatakse see tellimuseks). Kasutage "
-"\"Clear\" teisendada to-do tagasi tavalise Märkus."
+"\"clear\" teisendada to-do tagasi tavalise Märkus."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
 #, fuzzy
@@ -702,10 +698,9 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Aktiveerib [märkmiku]-kõik edasised toimingud toimuvad selle märkmiku sees."
+"Aktiveerib [notebook]-kõik edasised toimingud toimuvad selle märkmiku sees."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
-#, fuzzy
 msgid "Displays version information"
 msgstr "Kuvab versiooniteabe"
 
@@ -762,10 +757,10 @@ msgid ""
 msgstr ""
 "Tere tulemast Joplini!\n"
 "\n"
-"Tüüp ': spikri otseteed ' klaviatuuri otseteede loendi või lihtsalt \": Help"
-"\" kasutusteabe jaoks.\n"
+"Kirjuta `:help shortcuts` klaviatuuri otseteede loendi või lihtsalt `:help` "
+"kasutusteabe jaoks.\n"
 "\n"
-"Näiteks märkmiku loomiseks vajutage \"MB\"; , et luua märkme Press \"MN\"."
+"Näiteks märkmiku loomiseks vajutage `mb`; , et luua märkme Press `mn`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 #, fuzzy
@@ -1281,7 +1276,7 @@ msgid ""
 "how the notes or notebooks were originally encrypted."
 msgstr ""
 "Märkus: krüptimiseks kasutatakse ainult ühte Põhivõtit (see on märgitud kui "
-"\"aktiivne\"). Mis tahes võtit võib kasutada dekrüptimiseks, olenevalt "
+"\"active\"). Mis tahes võtit võib kasutada dekrüptimiseks, olenevalt "
 "sellest, kuidas märkmed või märkmikud algselt krüptiti."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:267
@@ -1341,7 +1336,7 @@ msgstr "Kasutus"
 #, fuzzy, javascript-format
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "Luuakse uus märkmik %s ja fail %s imporditakse sellesse"
+msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:110
 msgid "Please create a notebook first."
@@ -1384,7 +1379,7 @@ msgstr "Uus Märkus"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:62
 #, fuzzy
 msgid "New to-do"
-msgstr "Uus-do"
+msgstr "Uus to-do"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:522
 msgid "New notebook"
@@ -1417,12 +1412,12 @@ msgstr "Parooli seadmine"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:453
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Siin pole märkmeid. Looge üks, klõpsates nupul \"uus märkus\"."
+msgstr "Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:453
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Praegu pole märkmikku. Loo üks klõpsates \"uus märkmik\"."
+msgstr "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
@@ -1458,7 +1453,7 @@ msgstr "Märkme atribuudid"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:77
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Märkus %s on märkmikku %s edukalt taastatud."
+msgstr "Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:102
 msgid "This note has no history"
@@ -1480,7 +1475,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Märkme taastamiseks klõpsake nuppu %s. See kopeeritakse märkmikku nimega %s. "
+"Märkme taastamiseks klõpsake nuppu \"%s\". See kopeeritakse märkmikku nimega \"%s\". "
 "Märkme praegust versiooni ei asendata ega muudeta."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:780
@@ -1672,7 +1667,7 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"Kas soovite märkmiku %s kustutada?\n"
+"Kas soovite märkmiku \"%s\"?\n"
 "\n"
 "Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
 
@@ -1688,7 +1683,7 @@ msgstr "Kustuta"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:289
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "Kas eemaldada silt \" %s\" kõigist märkmetest?"
+msgstr "Kas eemaldada silt \"%s\" kõigist märkmetest?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:291
 msgid "Remove this search from the sidebar?"
@@ -1778,7 +1773,7 @@ msgstr "PDF-fail"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:204
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Kas kustutada märge \" %s\"?"
+msgstr "Kas kustutada märge \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:206
 #, javascript-format
@@ -1824,7 +1819,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloud ' i rakendusega ei saanud ühendust. Kontrollige "
+"Joplin Nextcloud'i rakendusega ei saanud ühendust. Kontrollige "
 "konfiguratsiooni ekraanil Sünkrooniseerimise config. Täielik viga oli:\n"
 "\n"
 "%s"
@@ -1884,7 +1879,7 @@ msgid ""
 "will be shared with any third party."
 msgstr ""
 "Rakenduse autentimiseks avage brauseris järgmine URL. Rakendus loob "
-"kataloogi \"apps/Joplin\" ja ainult lugeda ja kirjutada faile selles "
+"kataloogi \"Apps/Joplin\" ja ainult lugeda ja kirjutada faile selles "
 "kataloogis. See ei ole juurdepääsu tahes faile väljaspool seda kataloogi ega "
 "muid isikuandmeid. Andmeid ei jagata ühelegi kolmandale osapoolele."
 
@@ -1919,7 +1914,7 @@ msgstr ""
 "See tõrge ilmneb sageli siis, kui kasutate OneDrive for Business, mida "
 "kahjuks ei toetata.\n"
 "\n"
-"Palun kaaluge tavalise OneDrive ' i konto kasutamist."
+"Palun kaaluge tavalise OneDrive'i konto kasutamist."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:126
 #, fuzzy, javascript-format
@@ -2012,7 +2007,7 @@ msgstr "Märkmiku ei saa sellesse asukohta teisaldada"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "Märkmikke ei saa nimega %s, mis on reserveeritud tiitel."
+msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "created date"
@@ -2026,12 +2021,12 @@ msgstr "Sellel märkil pole geoasukohateavet."
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:431
 #, fuzzy, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Märget \" %s\" märkmikku ei saa kopeerida"
+msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:442
 #, fuzzy, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "Märget \" %s\" märkmikku ei saa teisaldada"
+msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
@@ -2084,7 +2079,7 @@ msgid ""
 "which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Sihtmärk, kuhu sünteesitakse. Iga sünkroonimise Target võib olla täiendavaid "
-"parameetreid, mis on nimega \"Sync. NUM.NAME \"(kõik dokumenteeritud "
+"parameetreid, mis on nimega `sync.NUM.NAME` (kõik dokumenteeritud "
 "allpool)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
@@ -2127,8 +2122,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"\"Käsitsi\" režiimis laaditakse manused alla ainult siis, kui klõpsate neid. "
-"\"Auto\", nad laaditakse, kui avate märkme. \"Alati\", laaditakse kõik "
+"\"Manual\" režiimis laaditakse manused alla ainult siis, kui klõpsate neid. "
+"\"Auto\", nad laaditakse, kui avate märkme. \"Always\", laaditakse kõik "
 "manused, kas avate märkme või mitte."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
@@ -2504,8 +2499,8 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Komaeraldusega teede kataloogid laadida serdid või tee üksikute CERT faile. "
-"Näiteks:/My/cert_dir,/other/custom.PEM. Pange tähele, et kui muudate TLS-i "
-"sätteid, peate enne nupu \"kontrolli sünkroonimist konfiguratsiooni\" "
+"Näiteks:/my/cert_dir, /other/custom.pem. Pange tähele, et kui muudate TLS-i "
+"sätteid, peate enne nupu \"Check synchronisation configuration\" "
 "klõpsamist oma muudatused salvestama."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:537
@@ -2641,7 +2636,7 @@ msgstr "Kataloogid"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr "%s moodulit ei saa laadida vormingus %s"
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, fuzzy, javascript-format
@@ -2654,7 +2649,7 @@ msgid ""
 "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
 "decrypted and try again."
 msgstr ""
-"See üksus on praegu krüptitud: %s %s. Palun oodake, kuni kõik üksused "
+"See üksus on praegu krüptitud: %s \"%s\". Palun oodake, kuni kõik üksused "
 "dekrüpteeritud ja proovige uuesti."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
@@ -2688,7 +2683,7 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s ( %s) ei saanud üles laadida: %s"
+msgstr "%s (%s) ei saanud üles laadida: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
 #, javascript-format
@@ -2723,7 +2718,7 @@ msgstr "Alla laaditud ja dekrüpteeritud"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
 #, javascript-format
 msgid "%s: %d"
-msgstr "%s:%d"
+msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
@@ -2769,7 +2764,7 @@ msgstr "Kaustad"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
 #, javascript-format
 msgid "%s: %d notes"
-msgstr "%s:%d märkused"
+msgstr "%s: %d märkused"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
 #, fuzzy
@@ -2812,7 +2807,7 @@ msgstr "Teisalda märkmikku..."
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:387
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Kas teisaldada %d märkmed märkmikku %s?"
+msgstr "Kas teisaldada %d märkmed märkmikku \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
 msgid "Press to set the decryption password."
@@ -3123,7 +3118,7 @@ msgstr "Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:159
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "Linke protokolliga %s ei toetata"
+msgstr "Linke protokolliga \"%s\" ei toetata"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:485
 #, javascript-format
