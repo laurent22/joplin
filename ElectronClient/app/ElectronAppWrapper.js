@@ -59,6 +59,8 @@ class ElectronAppWrapper {
 			y: windowState.y,
 			width: windowState.width,
 			height: windowState.height,
+			minWidth: 480,
+			minHeight: 320,
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
