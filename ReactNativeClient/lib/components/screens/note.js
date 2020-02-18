@@ -131,8 +131,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
 						// Easier to just go back, then go to the note since
-						// the Note screen doesn't handle reloading a different note.
-						// Similar to creating a new note via QuickActions.
+						// the Note screen doesn't handle reloading a different note
 
 						this.props.dispatch({
 							type: 'NAV_BACK',
@@ -759,8 +758,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
-		if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
+		if (fieldToFocus === 'title' && this.refs.titleTextField) this.refs.titleTextField.focus();
+		if (fieldToFocus === 'body' && this.refs.noteBodyTextField) this.refs.noteBodyTextField.focus();
 	}
 
 	async folderPickerOptions_valueChanged(itemValue) {

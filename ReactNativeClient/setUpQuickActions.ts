@@ -1,5 +1,4 @@
-
-import {DeviceEventEmitter} from 'react-native';
+import { DeviceEventEmitter } from 'react-native';
 import * as QuickActions from 'react-native-quick-actions';
 const { _ } = require('lib/locale.js');
 
@@ -10,8 +9,8 @@ type TData = {
 export default (dispatch: Function, folderId: string) => {
 	const userInfo = { url: '' };
 	QuickActions.setShortcutItems([
-		{type: 'New note', title: _('New note'), icon: 'Compose', userInfo},
-		{type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo},
+		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
+		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
 	]);
 
 	DeviceEventEmitter.addListener('quickActionShortcut', (data: TData) => {
@@ -25,7 +24,7 @@ export default (dispatch: Function, folderId: string) => {
 		// page to that first note you made rather than creating an entirely new
 		// note. If you navigate around enough (which I think changes the redux
 		// state sufficiently or something), then it'll work again.
-		dispatch({type: 'NAV_BACK'});
+		dispatch({ type: 'NAV_BACK' });
 
 		if (data.type === 'New note') {
 			dispatch({
