@@ -52,21 +52,32 @@ When submitting a pull request for a new feature or bug fix, please add unit tes
 
 The tests are under CliClient/tests. To get them running, you first need to build the CLI app:
 
-    cd CliClient
-    npm i
-    ./build.sh
+```sh
+npm run tsc # Build the .ts and .tsx files
+cd CliClient
+npm i
+./build.sh
+```
 
 To run all the test units:
 
-    ./run_test.sh
+```sh
+./run_test.sh
+```
 
 To run just one particular file:
 
-    ./run_test.sh markdownUtils # Don't add the .js extension
+```sh
+./run_test.sh markdownUtils # Don't add the .js extension
+```
 
 To filter tests:
 
-    ./run_test.sh "should handle conflict" # Will run all the test units that contain "should handle conflict" in their description
+```sh
+./run_test.sh "should handle conflict" # Will run all the test units that contain "should handle conflict" in their description
+```
+
+If you get the error `Cannot find module '/joplin/CliClient/node_modules/sqlite3/lib/binding/node-v79-darwin-x64/node_sqlite3.node'`, you may need to run `npm rebuild`.
 
 ## About abandoned pull requests
 

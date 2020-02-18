@@ -180,6 +180,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-quick-actions')
+    implementation project(':@react-native-community_slider')
 	implementation "org.webkit:android-jsc:r241213"
     compile project(':react-native-push-notification')
     // implementation (project(':react-native-camera')) {
@@ -219,6 +221,7 @@ dependencies {
 	implementation project(':react-native-version-info')
 	implementation project(':react-native-camera')
 	implementation "com.facebook.react:react-native:+"
+	implementation project(':react-native-quick-actions')
 
 	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
 	// implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
