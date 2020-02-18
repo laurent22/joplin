@@ -22,6 +22,8 @@ const PluginManager = require('lib/services/PluginManager');
 
 require('global-agent').bootstrap();
 
+global.GLOBAL_AGENT.HTTP_PROXY='http://TEST:test@localhost:8085';
+
 class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
