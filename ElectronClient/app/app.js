@@ -489,6 +489,16 @@ class Application extends BaseApplication {
 			},
 		};
 
+		const resourceViewItem = {
+			label: _('Resources'),
+			click: () => {
+				this.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Resources',
+				});
+			},
+		};
+
 		const newNoteItem = {
 			label: _('New note'),
 			accelerator: 'CommandOrControl+N',
@@ -614,7 +624,7 @@ class Application extends BaseApplication {
 					routeName: 'Config',
 				});
 			},
-		}]);
+		}, resourceViewItem]);
 
 		function _checkForUpdates(ctx) {
 			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });

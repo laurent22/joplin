@@ -55,6 +55,7 @@ ElectronClient/app/gui/ShareNoteDialog.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
+ElectronClient/app/gui/ResourceScreen.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
