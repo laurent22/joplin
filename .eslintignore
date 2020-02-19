@@ -50,9 +50,12 @@ ReactNativeClient/pluginAssets/
 ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
 
-# Ignore files generated from TypeScript files
+# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/app/gui/ShareNoteDialog.js
-ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js
+ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ElectronClient/app/gui/ResourceScreen.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ReactNativeClient/setUpQuickActions.js
+# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

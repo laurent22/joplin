@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');

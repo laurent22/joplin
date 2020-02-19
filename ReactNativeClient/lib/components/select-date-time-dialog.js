@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 import React from 'react';
 import { View } from 'react-native';
 import PopupDialog, { DialogTitle, DialogButton } from 'react-native-popup-dialog';

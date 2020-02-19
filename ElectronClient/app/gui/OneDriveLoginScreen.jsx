@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');

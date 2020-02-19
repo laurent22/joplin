@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -2146,7 +2144,9 @@ class NoteTextComponent extends React.Component {
 				onFocus={this.aceEditor_focus}
 				readOnly={visiblePanes.indexOf('editor') < 0}
 				// Enable/Disable the autoclosing braces
-				setOptions={{ behavioursEnabled: Setting.value('editor.autoMatchingBraces') }}
+				setOptions={{
+					behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
+					useSoftTabs: false }}
 				// Disable warning: "Automatically scrolling cursor into view after
 				// selection change this will be disabled in the next version set
 				// editor.$blockScrolling = Infinity to disable this message"

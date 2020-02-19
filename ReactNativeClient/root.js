@@ -1,7 +1,5 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -83,6 +81,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
+import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
@@ -536,6 +535,8 @@ async function initialize(dispatch) {
 				folderId: folder.id,
 			});
 		}
+
+		setUpQuickActions(dispatch, folderId);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -750,6 +751,7 @@ class AppComponent extends React.Component {
 					});
 				}}
 			>
+				<StatusBar barStyle="dark-content" />
 				<MenuContext style={{ flex: 1 }}>
 					<SafeAreaView style={{ flex: 1 }}>
 						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>

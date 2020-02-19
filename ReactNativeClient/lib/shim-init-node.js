@@ -214,7 +214,7 @@ function shimInit() {
 		if (shim.isElectron()) {
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromDataURL(imageDataUrl);
-			if (image.isEmpty()) throw new Error('Could not convert data URL to image'); // Would throw for example if the image format is no supported (eg. image/gif)
+			if (image.isEmpty()) throw new Error('Could not convert data URL to image - perhaps the format is not supported (eg. image/gif)'); // Would throw for example if the image format is no supported (eg. image/gif)
 			if (options.cropRect) {
 				// Crop rectangle values need to be rounded or the crop() call will fail
 				const c = options.cropRect;

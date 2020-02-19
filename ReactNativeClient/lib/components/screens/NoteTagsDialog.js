@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 
 const { StyleSheet, View, Text, FlatList, TouchableOpacity, TextInput } = require('react-native');

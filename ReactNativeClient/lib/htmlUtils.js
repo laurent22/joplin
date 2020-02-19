@@ -24,7 +24,7 @@ class HtmlUtils {
 			output.push(matches[2]);
 		}
 
-		return output;
+		return output.filter(url => !!url);
 	}
 
 	replaceImageUrls(html, callback) {

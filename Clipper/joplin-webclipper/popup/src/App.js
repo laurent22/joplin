@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 import React, { Component } from 'react';
 import './App.css';
 import led_red from './led_red.png';

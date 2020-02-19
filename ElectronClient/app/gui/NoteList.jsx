@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');

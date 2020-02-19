@@ -1,5 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
-
 const React = require('react');
 const { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View } = require('react-native');
 const { ItemList } = require('lib/components/ItemList.js');

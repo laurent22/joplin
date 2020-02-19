@@ -72,6 +72,7 @@
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
     "md5-file": "^4.0.0",
+    "memory-cache": "^0.2.0",
     "mime": "^2.0.3",
     "moment": "^2.24.0",
     "multiparty": "^4.2.1",
@@ -104,7 +105,8 @@
     "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
     "xml2js": "^0.4.19",
-    "yargs-parser": "^7.0.0"
+    "yargs-parser": "^7.0.0",
+    "node-html-parser": "^1.2.4"
   },
   "devDependencies": {
     "jasmine": "^3.5.0"
