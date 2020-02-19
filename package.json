@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
+    "@types/react-native": "^0.61.15",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "eslint": "^6.1.0",
@@ -35,9 +36,5 @@
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"
-  },
-  "dependencies": {
-    "@types/react-native": "^0.61.4",
-    "joplin-renderer": "^1.0.6"
   }
 }

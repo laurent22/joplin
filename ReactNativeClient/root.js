@@ -81,8 +81,8 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
+import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
-import setUpQuickActions from './QuickActions';
 
 let storeDispatch = function() {};
 
@@ -216,9 +216,9 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-					// If the route *name* is the same (even if the other parameters are different), we
-					// overwrite the last route in the history with the current one. If the route name
-					// is different, we push a new history entry.
+				// If the route *name* is the same (even if the other parameters are different), we
+				// overwrite the last route in the history with the current one. If the route name
+				// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
 					// nothing
 					} else {

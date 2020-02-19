@@ -53,7 +53,7 @@ ReactNativeClient/lib/joplin-renderer/assets/
 # Ignore files generated from TypeScript files
 ElectronClient/app/gui/ShareNoteDialog.js
 ReactNativeClient/lib/JoplinServerApi.js
-ReactNativeClient/QuickActions.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ReactNativeClient/setUpQuickActions.js
