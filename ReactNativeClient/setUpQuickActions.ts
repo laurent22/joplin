@@ -1,4 +1,7 @@
-import { DeviceEventEmitter } from 'react-native';
+// Need to require this class instead of importing it
+// to disable buggy type-checking, maybe because this
+// class is undocumented.
+const { DeviceEventEmitter } = require('react-native');
 import * as QuickActions from 'react-native-quick-actions';
 const { _ } = require('lib/locale.js');
 
