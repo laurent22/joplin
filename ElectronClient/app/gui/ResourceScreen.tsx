@@ -19,7 +19,6 @@ interface Resource {
 	id: string
 	size: number
 	file_extension: string
-	daoResource: any
 }
 
 interface State {
@@ -124,8 +123,8 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		this.reloadResources(this.state.sorting);
 	}
 
-	async onResourceDelete(resource: Resource) {
-		await Resource.delete(resource.id)
+	onResourceDelete(resource: Resource) {
+		Resource.delete(resource.id)
 			.catch((error: Error) => {
 				bridge().showErrorMessageBox(error.message);
 			})
