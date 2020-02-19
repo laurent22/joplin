@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import android.database.CursorWindow;
+import com.reactNativeQuickActions.AppShortcutsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

@@ -81,6 +81,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
+import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
@@ -534,6 +535,8 @@ async function initialize(dispatch) {
 				folderId: folder.id,
 			});
 		}
+
+		setUpQuickActions(dispatch, folderId);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);

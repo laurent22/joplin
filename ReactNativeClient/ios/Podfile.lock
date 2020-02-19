@@ -249,6 +249,8 @@ PODS:
     - React
   - RNFS (2.11.17):
     - React
+  - RNQuickAction (0.3.13):
+    - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
   - RNVectorIcons (6.6.0):
@@ -296,6 +298,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFileViewer (from `../node_modules/react-native-file-viewer/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
+  - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -379,6 +382,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-file-viewer/ios"
   RNFS:
     :path: "../node_modules/react-native-fs"
+  RNQuickAction:
+    :path: "../node_modules/react-native-quick-actions"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
   RNVectorIcons:
@@ -425,6 +430,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
   RNFileViewer: 5047ecf40477339723cc08abd55b5ebcefcef4b5
   RNFS: 416676c3a9ae404454bade10e3d78147c7c33a40
+  RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
