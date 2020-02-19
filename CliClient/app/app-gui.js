@@ -681,6 +681,107 @@ class AppGui {
 		};
 	}
 
+	async handleSpecialShortcuts(name) {
+		if (name === 'CTRL_D') {
+			const cmd = this.app().currentCommand();
+
+			if (cmd && cmd.cancellable() && !this.commandCancelCalled_) {
+				this.commandCancelCalled_ = true;
+				await cmd.cancel();
+				this.commandCancelCalled_ = false;
+			}
+
+			await this.app().exit();
+			return true;
+		}
+
+		if (name === 'CTRL_C') {
+			const cmd = this.app().currentCommand();
+			if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
+				this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
+			} else {
+				this.commandCancelCalled_ = true;
+				await cmd.cancel();
+				this.commandCancelCalled_ = false;
+			}
+			return true;
+		}
+
+		return false; // was no special shortcut
+	}
+
+	buildCurrentShortcut(name) {
+		const now = new Date().getTime();
+
+		if (now - this.lastShortcutKeyTime_ > 800 || this.isSpecialKey(name)) {
+			this.currentShortcutKeys_ = [name];
+		} else {
+			// If the previous key was a special key (eg. up, down arrow), this new key
+			// starts a new shortcut.
+			if (this.currentShortcutKeys_.length && this.isSpecialKey(this.currentShortcutKeys_[0])) {
+				this.currentShortcutKeys_ = [name];
+			} else {
+				this.currentShortcutKeys_.push(name);
+			}
+		}
+
+		this.lastShortcutKeyTime_ = now;
+	}
+
+	async processShortcut(statusBar) {
+		const shortcutKey = this.currentShortcutKeys_.join('');
+		let keymapItem = this.keymapItemByKey(shortcutKey);
+
+		// If this command is an alias to another command, resolve to the actual command
+
+		let processShortcutKeys = !this.app().currentCommand() && keymapItem;
+		if (keymapItem && keymapItem.canRunAlongOtherCommands) processShortcutKeys = true;
+		if (statusBar.promptActive) processShortcutKeys = false;
+
+		if (processShortcutKeys) {
+			this.logger().debug('Shortcut:', shortcutKey, keymapItem);
+
+			this.currentShortcutKeys_ = [];
+
+			if (keymapItem.type === 'function') {
+				this.processFunctionCommand(keymapItem.command);
+			} else if (keymapItem.type === 'prompt') {
+				let promptOptions = {};
+				if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
+				const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
+				this.addCommandToConsole(commandString);
+				await this.processPromptCommand(commandString);
+			} else if (keymapItem.type === 'exec') {
+				this.stdout(keymapItem.command);
+				await this.processPromptCommand(keymapItem.command);
+			} else if (keymapItem.type === 'tkwidgets') {
+				this.widget('root').handleKey(this.tkWidgetKeys_[keymapItem.command]);
+			} else {
+				throw new Error(`Unknown command type: ${JSON.stringify(keymapItem)}`);
+			}
+		}
+
+	}
+
+	async handleShortcut(name) {
+
+		let wasSpecial = await this.handleSpecialShortcuts(name);
+
+		if (wasSpecial) {
+			return;
+		}
+
+		const statusBar = this.widget('statusBar');
+
+		this.buildCurrentShortcut(name);
+
+		await this.processShortcut(statusBar);
+
+		// Optimisation: Update the status bar only
+		// if the user is not already typing a command:
+		if (!statusBar.promptActive) this.updateStatusBarMessage();
+	}
+
 	async start() {
 		const term = this.term();
 
@@ -691,100 +792,9 @@ class AppGui {
 
 			this.renderer_.start();
 
-			const statusBar = this.widget('statusBar');
-
 			term.grabInput();
 
-			term.on('key', async (name) => {
-				// -------------------------------------------------------------------------
-				// Handle special shortcuts
-				// -------------------------------------------------------------------------
-
-				if (name === 'CTRL_D') {
-					const cmd = this.app().currentCommand();
-
-					if (cmd && cmd.cancellable() && !this.commandCancelCalled_) {
-						this.commandCancelCalled_ = true;
-						await cmd.cancel();
-						this.commandCancelCalled_ = false;
-					}
-
-					await this.app().exit();
-					return;
-				}
-
-				if (name === 'CTRL_C') {
-					const cmd = this.app().currentCommand();
-					if (!cmd || !cmd.cancellable() || this.commandCancelCalled_) {
-						this.stdout(_('Press Ctrl+D or type "exit" to exit the application'));
-					} else {
-						this.commandCancelCalled_ = true;
-						await cmd.cancel();
-						this.commandCancelCalled_ = false;
-					}
-					return;
-				}
-
-				// -------------------------------------------------------------------------
-				// Build up current shortcut
-				// -------------------------------------------------------------------------
-
-				const now = new Date().getTime();
-
-				if (now - this.lastShortcutKeyTime_ > 800 || this.isSpecialKey(name)) {
-					this.currentShortcutKeys_ = [name];
-				} else {
-					// If the previous key was a special key (eg. up, down arrow), this new key
-					// starts a new shortcut.
-					if (this.currentShortcutKeys_.length && this.isSpecialKey(this.currentShortcutKeys_[0])) {
-						this.currentShortcutKeys_ = [name];
-					} else {
-						this.currentShortcutKeys_.push(name);
-					}
-				}
-
-				this.lastShortcutKeyTime_ = now;
-
-				// -------------------------------------------------------------------------
-				// Process shortcut and execute associated command
-				// -------------------------------------------------------------------------
-
-				const shortcutKey = this.currentShortcutKeys_.join('');
-				let keymapItem = this.keymapItemByKey(shortcutKey);
-
-				// If this command is an alias to another command, resolve to the actual command
-
-				let processShortcutKeys = !this.app().currentCommand() && keymapItem;
-				if (keymapItem && keymapItem.canRunAlongOtherCommands) processShortcutKeys = true;
-				if (statusBar.promptActive) processShortcutKeys = false;
-
-				if (processShortcutKeys) {
-					this.logger().debug('Shortcut:', shortcutKey, keymapItem);
-
-					this.currentShortcutKeys_ = [];
-
-					if (keymapItem.type === 'function') {
-						this.processFunctionCommand(keymapItem.command);
-					} else if (keymapItem.type === 'prompt') {
-						let promptOptions = {};
-						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
-						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
-						this.addCommandToConsole(commandString);
-						await this.processPromptCommand(commandString);
-					} else if (keymapItem.type === 'exec') {
-						this.stdout(keymapItem.command);
-						await this.processPromptCommand(keymapItem.command);
-					} else if (keymapItem.type === 'tkwidgets') {
-						this.widget('root').handleKey(this.tkWidgetKeys_[keymapItem.command]);
-					} else {
-						throw new Error(`Unknown command type: ${JSON.stringify(keymapItem)}`);
-					}
-				}
-
-				// Optimisation: Update the status bar only
-				// if the user is not already typing a command:
-				if (!statusBar.promptActive) this.updateStatusBarMessage();
-			});
+			term.on('key', this.handleShortcut.bind(this));
 		} catch (error) {
 			this.fullScreen(false);
 			this.logger().error(error);
