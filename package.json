@@ -5,9 +5,8 @@
   "scripts": {
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "tsc": "tsc --project tsconfig.json",
-    "tsc-watch": "tsc --watch --project tsconfig.json",
-    "copyLib": "rsync --delete -a ReactNativeClient/lib/ ElectronClient/lib/"
+    "watch": "gulp watch",
+    "postinstall": "gulp build"
   },
   "husky": {
     "hooks": {
