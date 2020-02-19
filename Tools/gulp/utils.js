@@ -142,4 +142,10 @@ utils.rootDir = function() {
 	return utils.dirname(utils.dirname(__dirname));
 };
 
+utils.registerGulpTasks = function(gulp, tasks) {
+	for (const taskName in tasks) {
+		gulp.task(taskName, tasks[taskName].fn);
+	}
+};
+
 module.exports = utils;

@@ -36,7 +36,4 @@ async function main() {
 	}
 }
 
-main().catch((error) => {
-	console.error(error);
-	process.exit(1);
-});
+module.exports = main;

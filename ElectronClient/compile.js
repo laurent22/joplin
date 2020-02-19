@@ -41,13 +41,17 @@ function convertJsx(path) {
 	});
 }
 
-convertJsx(`${__dirname}/gui`);
-convertJsx(`${__dirname}/plugins`);
+module.exports = function() {
+	convertJsx(`${__dirname}/gui`);
+	convertJsx(`${__dirname}/plugins`);
 
-const libContent = [
-	fs.readFileSync(`${basePath}/ReactNativeClient/lib/string-utils-common.js`, 'utf8'),
-	fs.readFileSync(`${basePath}/ReactNativeClient/lib/markJsUtils.js`, 'utf8'),
-	fs.readFileSync(`${basePath}/ReactNativeClient/lib/renderers/webviewLib.js`, 'utf8'),
-];
+	const libContent = [
+		fs.readFileSync(`${basePath}/ReactNativeClient/lib/string-utils-common.js`, 'utf8'),
+		fs.readFileSync(`${basePath}/ReactNativeClient/lib/markJsUtils.js`, 'utf8'),
+		fs.readFileSync(`${basePath}/ReactNativeClient/lib/renderers/webviewLib.js`, 'utf8'),
+	];
 
-fs.writeFileSync(`${__dirname}/gui/note-viewer/lib.js`, libContent.join('\n'), 'utf8');
+	fs.writeFileSync(`${__dirname}/gui/note-viewer/lib.js`, libContent.join('\n'), 'utf8');
+
+	return Promise.resolve();
+};
