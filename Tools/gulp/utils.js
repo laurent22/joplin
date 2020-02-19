@@ -111,6 +111,8 @@ utils.copyDir = async function(src, dest, options) {
 	src = utils.toSystemSlashes(src);
 	dest = utils.toSystemSlashes(dest);
 
+	await fs.mkdirp(dest);
+
 	if (utils.isWindows()) {
 		let excludedFlag = '';
 		let tempFile = null;
@@ -130,7 +132,8 @@ utils.copyDir = async function(src, dest, options) {
 				return `--exclude "${f}"`;
 			}).join(' ');
 		}
-		await utils.execCommand(`rsync -a --delete ${excludedFlag} "${src}/" "${dest}/"`);
+
+		await utils.execCommand(`rsync -a --relative --delete ${excludedFlag} "${src}/" "${dest}/"`);
 	}
 };
 
