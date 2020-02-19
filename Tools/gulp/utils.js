@@ -133,7 +133,7 @@ utils.copyDir = async function(src, dest, options) {
 			}).join(' ');
 		}
 
-		await utils.execCommand(`rsync -a --relative --delete ${excludedFlag} "${src}/" "${dest}/"`);
+		await utils.execCommand(`rsync -a --delete ${excludedFlag} "${src}/" "${dest}/"`);
 	}
 };
 
