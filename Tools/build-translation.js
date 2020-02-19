@@ -310,7 +310,7 @@ async function main() {
 	const destDirs = [
 		`${rnDir}/locales`,
 		`${electronDir}/locales`,
-		`${cliDir}/build/locales`,
+		`${cliDir}/locales-build`,
 	];
 
 	for (const destDir of destDirs) {
