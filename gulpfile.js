@@ -43,10 +43,9 @@ gulp.task('tsc', tscTask);
 gulp.task('copyLib', tasks.copyLib.fn);
 
 gulp.task('watch', function() {
-	gulp.watch(tscTaskSrc, tscTask);
 	gulp.watch(tasks.copyLib.src, tasks.copyLib.fn);
+	gulp.watch(tscTaskSrc, gulp.series('tsc', 'updateIgnoredTypeScriptBuild'));
 });
 
-gulp.task('build', gulp.series(tasks.copyLib.fn, tscTask));
-
+gulp.task('build', gulp.series('copyLib', 'tsc'));
 gulp.task('updateIgnoredTypeScriptBuild', updateIgnoredTypeScriptBuildTask);
