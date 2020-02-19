@@ -4,7 +4,7 @@ const execSync = require('child_process').execSync;
 // Electron Builder strip off certain important keys from package.json, which we need, in particular build.appId
 // so this script is used to preserve the keys that we need.
 
-const packageInfo = require(`${__dirname}/package.json`);
+const packageInfo = require(`${__dirname}/../package.json`);
 
 module.exports = async function() {
 	let removeKeys = ['scripts', 'devDependencies', 'optionalDependencies', 'dependencies'];
@@ -40,7 +40,7 @@ module.exports = async function() {
 	fileContent += '\n';
 	fileContent += 'module.exports = packageInfo;';
 
-	fs.writeFileSync(`${__dirname}/packageInfo.js`, fileContent);
+	fs.writeFileSync(`${__dirname}/../packageInfo.js`, fileContent);
 
 	return Promise.resolve();
 };

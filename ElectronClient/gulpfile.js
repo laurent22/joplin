@@ -3,16 +3,16 @@ const utils = require('../Tools/gulp/utils');
 
 const tasks = {
 	compileScripts: {
-		fn: require('./compile'),
+		fn: require('./tools/compileScripts'),
 	},
 	compilePackageInfo: {
-		fn: require('./compile-package-info.js'),
+		fn: require('./tools/compile-package-info.js'),
 	},
 	copyPluginAssets: {
-		fn: require('./copyPluginAssets.js'),
+		fn: require('./tools/copyPluginAssets.js'),
 	},
 	electronRebuild: {
-		fn: require('./electronRebuild.js'),
+		fn: require('./tools/electronRebuild.js'),
 	},
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
 };
