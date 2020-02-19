@@ -94,7 +94,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
 
     # Create icon for Gnome
     echo 'Create Desktop icon.'
-    if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.* ]]
+    if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*ubuntu.*|.*x-cinnamon.*|.*deepin.* ]]
     then
        : "${TMPDIR:=/tmp}"
        # This command extracts to squashfs-root by default and can't be changed...
@@ -109,6 +109,11 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
        mkdir -p ~/.local/share/applications
        echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
        # Update application icons
+        if [[ $DESKTOP =~ .*unity.*|.*ubuntu.* ]]
+        then
+          echo "${COLOR_GREEN}Please give permission to create desktop file for Ubuntu:${COLOR_GREEN}"
+          [[ `command -v desktop-file-install` ]] && sudo desktop-file-install ~/.local/share/applications/appimagekit-joplin.desktop
+        fi
        [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications
        print "${COLOR_GREEN}OK${COLOR_RESET}"
     else
