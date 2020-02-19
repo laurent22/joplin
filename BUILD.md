@@ -40,7 +40,7 @@ npm install && cd Tools && npm install && cd ..
 ```
 npm run copyLib
 npm run tsc
-cd ElectronClient/app
+cd ElectronClient
 npm install
 yarn dist
 ```

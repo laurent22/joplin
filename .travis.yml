@@ -56,7 +56,7 @@ before_install:
 script:
   - |
     # Copy lib
-    rsync -aP --delete ReactNativeClient/lib/ ElectronClient/app/lib/
+    rsync -aP --delete ReactNativeClient/lib/ ElectronClient/lib/
 
     # Install tools
     npm install
@@ -113,5 +113,5 @@ script:
     fi
 
     # Prepare the Electron app and build it
-    cd ElectronClient/app
+    cd ElectronClient
     npm install && USE_HARD_LINKS=false yarn dist

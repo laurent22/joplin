@@ -40,14 +40,14 @@ Tools/github_oauth_token.txt
 _releases
 ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
-ElectronClient/app/gui/note-viewer/fonts/
-ElectronClient/app/gui/note-viewer/lib.js
+ElectronClient/gui/note-viewer/fonts/
+ElectronClient/gui/note-viewer/lib.js
 Tools/commit_hook.txt
 .vscode/*
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-ElectronClient/app/gui/ShareNoteDialog.js
+ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js

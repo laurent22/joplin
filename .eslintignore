@@ -22,12 +22,12 @@ Clipper/joplin-webclipper/icons
 Clipper/joplin-webclipper/popup/build
 Clipper/joplin-webclipper/popup/node_modules
 docs/
-ElectronClient/app/dist
-ElectronClient/app/lib
-ElectronClient/app/lib/vendor/sjcl-rn.js
-ElectronClient/app/lib/vendor/sjcl.js
-ElectronClient/app/locales
-ElectronClient/app/node_modules
+ElectronClient/dist
+ElectronClient/lib
+ElectronClient/lib/vendor/sjcl-rn.js
+ElectronClient/lib/vendor/sjcl.js
+ElectronClient/locales
+ElectronClient/node_modules
 highlight.pack.js
 node_modules/
 ReactNativeClient/android
@@ -45,13 +45,13 @@ Server/docs/
 Server/dist/
 Server/bin/
 Server/node_modules/
-ElectronClient/app/packageInfo.js
+ElectronClient/packageInfo.js
 ReactNativeClient/pluginAssets/
 ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-ElectronClient/app/gui/ShareNoteDialog.js
+ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js

@@ -78,7 +78,7 @@ utils.getAllFiles = function(dir, options = null) {
 
 		var stat = fs.statSync(file);
 		if (stat && stat.isDirectory()) {
-			if (file.indexOf('ElectronClient/app/lib') >= 0) return;
+			if (file.indexOf('ElectronClient/lib') >= 0) return;
 			if (file.indexOf('CliClient/lib') >= 0) return;
 			if (filename === 'node_modules' || filename === '.git' || filename === 'build' || filename === 'tests-build' || filename === 'dist') return;
 			results = results.concat(utils.getAllFiles(file, options));

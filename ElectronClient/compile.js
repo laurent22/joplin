@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const spawnSync	= require('child_process').spawnSync;
 
 const babelPath = `${__dirname}/node_modules/.bin/babel${process.platform === 'win32' ? '.cmd' : ''}`;
-const basePath = `${__dirname}/../..`;
+const basePath = `${__dirname}/..`;
 
 function fileIsNewerThan(path1, path2) {
 	if (!fs.existsSync(path2)) return true;

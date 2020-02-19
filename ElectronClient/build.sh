@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BUILD_DIR="$ROOT_DIR/app"
+BUILD_DIR="$ROOT_DIR"
 
 rsync -a --delete "$ROOT_DIR/../ReactNativeClient/lib/" "$BUILD_DIR/lib/"
 

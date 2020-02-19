@@ -16,7 +16,7 @@ const gettextParser = require('gettext-parser');
 const cliDir = `${rootDir}/CliClient`;
 const cliLocalesDir = `${cliDir}/locales`;
 const rnDir = `${rootDir}/ReactNativeClient`;
-const electronDir = `${rootDir}/ElectronClient/app`;
+const electronDir = `${rootDir}/ElectronClient`;
 
 const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');

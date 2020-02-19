@@ -23,7 +23,7 @@
 	"exclude": [
 		"**/node_modules",
 		"CliClient/build/**/*",
-		"ElectronClient/app/lib/**/*",
-		"ElectronClient/app/dist/**/*",
+		"ElectronClient/lib/**/*",
+		"ElectronClient/dist/**/*",
 	],
 }
