@@ -22,8 +22,6 @@
 	],
 	"exclude": [
 		"**/node_modules",
-		"CliClient/build/**/*",
-		"ElectronClient/lib/**/*",
 		"ElectronClient/dist/**/*",
 	],
 }
