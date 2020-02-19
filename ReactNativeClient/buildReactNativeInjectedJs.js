@@ -6,8 +6,8 @@
 const fs = require('fs-extra');
 
 const cwd = process.cwd();
-const outputDir = `${cwd}/lib/rnInjectedJs`;
 const rnDir = `${__dirname}/../ReactNativeClient`;
+const outputDir = `${rnDir}/lib/rnInjectedJs`;
 
 async function copyJs(name, filePath) {
 	const js = await fs.readFile(filePath, 'utf-8');

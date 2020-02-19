@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "node ../Tools/buildReactNativeInjectedJs.js && npx jetify && npm run encodeAssets",
+    "postinstall": "node buildReactNativeInjectedJs.js && npx jetify && npm run encodeAssets",
     "encodeAssets": "node encodeAssets.js",
     "log-ios": "react-native-log-ios \"Joplin\"",
     "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
