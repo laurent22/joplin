@@ -7,7 +7,7 @@
   "scripts": {
     "start-ios": "react-native run-ios",
     "start-android": "react-native run-android",
-    "postinstall": "npm run build",
+    "postinstall": "jetify && npm run build",
     "build": "gulp build",
     "log-ios": "react-native-log-ios \"Joplin\"",
     "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
@@ -98,7 +98,7 @@
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "gulp": "^4.0.2",
-    "jetifier": "^1.6.4",
+    "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "^16.8.3"
   }

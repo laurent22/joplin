@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const execa = require('execa');
+// const execa = require('execa');
 const utils = require('../Tools/gulp/utils');
 
 const tasks = {
@@ -14,19 +14,24 @@ const tasks = {
 	},
 };
 
-tasks.jetify = {
-	fn: async () => {
-		const promise = execa('npx', ['jetify']);
-		promise.stdout.pipe(process.stdout);
-		return promise;
-	},
-};
+// tasks.jetify = {
+// 	fn: async () => {
+// 		try {
+// 			const promise = execa('npx', ['jetify']);
+// 			promise.stdout.pipe(process.stdout);
+// 			await promise;
+// 		} catch (error) {
+// 			console.warn('Jetify failed:', error);
+// 		}
+// 		return Promise.resolve();
+// 	},
+// };
 
 utils.registerGulpTasks(gulp, tasks);
 
 gulp.task('build', gulp.series(
 	'buildReactNativeInjectedJs',
-	'jetify',
+	// 'jetify',
 	'encodeAssets',
 	'podInstall',
 ));
