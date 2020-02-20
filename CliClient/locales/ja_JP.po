@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -757,9 +759,8 @@ msgid "Sidebar"
 msgstr "サイドバー"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:367
-#, fuzzy
 msgid "Note list"
-msgstr "ノートの履歴"
+msgstr "ノート一覧"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:373
 msgid "Note title"
@@ -847,19 +848,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:636
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "完了: %s"
+msgstr "クライアントID: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:637
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "新バージョン: %s"
+msgstr "同期バージョン: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:638
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "新バージョン: %s"
+msgstr "プロファイルバージョン: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:652
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:735
@@ -1014,15 +1015,15 @@ msgstr "フォーカス"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1000
 msgid "Actual Size"
-msgstr ""
+msgstr "100%表示"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1006
 msgid "Zoom In"
-msgstr ""
+msgstr "ズームイン"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1012
 msgid "Zoom Out"
-msgstr ""
+msgstr "ズームアウト"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1020
 msgid "&Tools"
@@ -1500,9 +1501,8 @@ msgid ""
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "完了: %s"
+msgstr "完了"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1597,9 +1597,8 @@ msgstr ""
 "ノートを編集してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1294
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "一度に印刷またはPDF出力できるノートは1つだけです。"
+msgstr "一度に印刷できるノートは1つだけです。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1479
 msgid "strong text"
@@ -2232,9 +2231,8 @@ msgid "Nord"
 msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "暗い"
+msgstr "ダークモード"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
@@ -2374,9 +2372,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Fountain構文を有効にする"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Typographer（記号文字）を有効にする"
+msgstr "Mermaid（作図機能）を有効にする"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Show tray icon"

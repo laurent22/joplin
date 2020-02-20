@@ -51,6 +51,9 @@ ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/dist/mac/Joplin.app/Contents/Resources/app/gui/ShareNoteDialog.js
+ElectronClient/dist/mac/Joplin.app/Contents/Resources/app/lib/JoplinServerApi.js
+ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js

@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -31,8 +33,7 @@ msgstr "Ctrl+D 키를 누르거나 혹은 “exit\"를 입력해서 종료해주
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
+msgstr "\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
@@ -142,14 +143,8 @@ msgid "Displays the complete information about note."
 msgstr "노트와 관련된 모든 정보를 표시합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
-msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
-msgstr ""
-"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 "
-"값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
-"표시할 것입니다."
+msgid "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration."
+msgstr "설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 표시할 것입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -166,12 +161,8 @@ msgid "%s = %s"
 msgstr "%s = %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
-msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
-msgstr ""
-"<note>와 일치하는 노트를 [notebook]에 복제합니다. 노트북이 특정되지 않았다면 "
-"노트는 현재의 노트북에 복제됩니다."
+msgid "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook."
+msgstr "<note>와 일치하는 노트를 [notebook]에 복제합니다. 노트북이 특정되지 않았다면 노트는 현재의 노트북에 복제됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -183,12 +174,8 @@ msgid "Note is not a to-do: \"%s\""
 msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
-msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"E2EE(종단간 암호화) 설정을 관리합니다. 다음과 같은 명령어 `enable`, "
-"`disable`, `decrypt`, `status`, `target-status` 들이 있습니다."
+msgid "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file` and `target-status`."
+msgstr "E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, `status`, `target-status`와 같은 명령들이 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
@@ -212,12 +199,8 @@ msgid "Passwords do not match!"
 msgstr "비밀번호가 맞지 않습니다!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
-msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
-"복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다"
-"러주세요."
+msgid "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt."
+msgstr "복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다러주세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
@@ -247,11 +230,8 @@ msgid "Edit note."
 msgstr "노트를 편집합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 "
-"지정해주세요"
+msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr "텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 지정해주세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
@@ -267,12 +247,8 @@ msgid "Exits the application."
 msgstr "애플리케이션을 종료합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
-msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
-msgstr ""
-"Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기"
-"타 자원을 포함한 완전한 데이터베이스를 내보내게 됩니다."
+msgid "Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources."
+msgstr "Joplin의 데이터를 주어진 경로로 내보냅니다. 기본적으로 노트북, 노트, 태그, 기타 자원을 포함한 완전한 데이터베이스를 내보내게 됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 #, javascript-format
@@ -305,38 +281,24 @@ msgid "Shortcuts are not available in CLI mode."
 msgstr "바로가기는 명령줄 인터페이스 모드에서는 사용할 수 없습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
-msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
-"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help "
-"all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
+msgid "Type `help [command]` for more information about a command; or type `help all` for the complete usage information."
+msgstr "명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
 msgid "The possible commands are:"
 msgstr "가능한 명령어는 다음과 같습니다:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
-msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
-"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니"
-"다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 "
-"선택된 항목의 경우 `$c`로 참조할 수 있습니다."
+msgid "In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr "어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "한 패널에서 다른 패널로 옮기려면 Tab키 또는 Shift+Tab 키를 누르세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr ""
-"화살표 키와 Page Up/Down 키를 눌러 목록이나 텍스트 영역을 스크롤 하세요 (현"
-"재 콘솔 포함)."
+msgid "Use the arrows and page up/down to scroll the lists and text areas (including this console)."
+msgstr "화살표 키와 Page Up/Down 키를 눌러 목록이나 텍스트 영역을 스크롤 하세요 (현재 콘솔 포함)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -351,8 +313,7 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr "명령줄 모드를 종료하시려면 ESC를 눌러주세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "키보드 단축키 및 설정 옵션을 변경하려면 `help keymap`을 입력해주세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
@@ -415,12 +376,8 @@ msgid "The notes have been imported: %s"
 msgstr "노트를 가져왔습니다: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
-msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
-"현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인하실 수 있"
-"습니다."
+msgid "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
+msgstr "현재 노트북에 있는 노트를 표시합니다. `ls /`로 노트북의 목록을 확인하실 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Displays only the first top <num> notes."
@@ -428,21 +385,15 @@ msgstr "맨 처음 <num> 노트만 표시합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
-"항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
+msgstr "항목을 <field>별로 정렬합니다 (예시: title, updated_time, created_time)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Reverses the sorting order."
 msgstr "정렬 순서를 바꿉니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
-msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
-msgstr ""
-"특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 "
-"일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-ttd`)."
+msgid "Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-ttd` would display notes and to-dos."
+msgstr "특정 형식의 항목만 표시합니다. 노트의 경우 `n`, 할 일의 경우 `t`, 노트와 할 일 모두는 `nt` 입니다. (예시: 할 일은 `-tt`, 노트와 할 일은 `-ttd`)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Either \"text\" or \"json\""
@@ -450,12 +401,8 @@ msgstr "\"text\" 또는 \"json\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
-msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, "
-"TODO_CHECKED (할 일에 해당), TITLE 입니다"
+msgid "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE"
+msgstr "긴 목록 포맷을 사용합니다. 포맷은 ID, NOTE_COUNT (노트북에 해당), DATE, TODO_CHECKED (할 일에 해당), TITLE 입니다"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
 msgid "Please select a notebook first."
@@ -496,12 +443,8 @@ msgstr "확인을 거치지 않고 노트북을 삭제합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
-msgstr ""
-"이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들"
-"도 함께 삭제됩니다."
+msgid "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 삭제됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -527,12 +470,8 @@ msgstr "주어진 <pattern>을 모든 노트에서 검색합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
 #, javascript-format
-msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
-msgstr ""
-"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, "
-"api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
+msgid "Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s)."
+msgstr "API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
@@ -552,13 +491,11 @@ msgstr "서버가 동작하지 않습니다."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
 msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
+"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
 "\n"
 "%s"
 msgstr ""
-"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음"
-"과 같습니다:\n"
+"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음과 같습니다:\n"
 "\n"
 "%s"
 
@@ -577,15 +514,13 @@ msgstr "지정된 대상으로 동기화 합니다 (기본값은 sync.target con
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/OneDriveLoginScreen.min.js:40
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
+msgid "Authentication was not completed (did not receive an authentication token)."
 msgstr "인증이 완료되지 않았습니다 (인증 토큰을 받을 수 없음)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:42
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "Joplin을 Dropbox와 동기화하려면 다음 절차를 따라주세요:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
@@ -611,13 +546,8 @@ msgstr "이미 동기화가 진행중입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
-msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
-msgstr ""
-"잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠"
-"금 파일을 삭제하고 작업을 재개하실 수 있습니다."
+msgid "Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation."
+msgstr "잠금 파일이 이미 대기중입니다. 만약 동기화가 시작되지 않는다면 \"%s\"에서 잠금 파일을 삭제하고 작업을 재개하실 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
@@ -641,16 +571,8 @@ msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
-msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
-msgstr ""
-"[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 "
-"확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 "
-"사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 "
-"있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
+msgid "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option)."
+msgstr "[note]로부터 [tag]를 지우거나 지정할 때, 아니면 [tag]와 관련된 노트의 목록을 확인할 때 <tag-command>로 \"add\", \"remove\", \"list\" 또는 \"notetags\" 를 사용하실 수 있습니다. 또한 `tag list` 명령어로 모든 태그의 목록을 확인할 수 있습니다 (긴 태그인 옵션 -l 을 사용하실수 있습니다)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
@@ -658,27 +580,16 @@ msgid "Invalid command: \"%s\""
 msgstr "올바르지 않은 명령어: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
-msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
-msgstr ""
-"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle"
-"\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용"
-"됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear"
-"\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
+msgid "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note."
+msgstr "<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 '할 일'의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
 msgstr "할 일을 '완료되지 않음'으로 표시합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
-msgstr ""
-"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
+msgid "Switches to [notebook] - all further operations will happen within this notebook."
+msgstr "[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
 msgid "Displays version information"
@@ -728,38 +639,27 @@ msgstr "검색:"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 "Joplin에 오신 것을 환영합니다!\n"
 "\n"
-"`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`"
-"를 입력하시면 사용 방법을 확인하실 수 있습니다.\n"
+"`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`를 입력하시면 사용 방법을 확인하실 수 있습니다.\n"
 "\n"
-"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세"
-"요."
+"예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
-msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
-msgstr ""
-"현재 하나 또는 여러개의 항목이 암호화되어 있으며, 해당 마스터 키의 비밀번호"
-"를 입력하셔야 합니다. `e2ee decrypt`를 입력하셔서 암호화를 해제해주세요. 비밀"
-"번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
+msgid "One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon."
+msgstr "현재 하나 또는 여러개의 항목이 암호화되어 있으며, 해당 마스터 키의 비밀번호를 입력하셔야 합니다. `e2ee decrypt`를 입력하셔서 암호화를 해제해주세요. 비밀번호를 입력하셨다면 백그라운드에서 복호화가 될 것입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:361
 msgid "Sidebar"
 msgstr "사이드바"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:367
-#, fuzzy
 msgid "Note list"
-msgstr "노트 역사"
+msgstr "노트 목록"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:373
 msgid "Note title"
@@ -846,19 +746,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:636
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "완료됨: %s"
+msgstr "클라이언트 식별자: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:637
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "새 버전: %s"
+msgstr "동기화 버전: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:638
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "새 버전: %s"
+msgstr "프로파일 버전: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:652
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:735
@@ -872,7 +772,7 @@ msgstr "Joplin에 대해서"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:665
 msgid "Preferences..."
-msgstr "설정…"
+msgstr "설정..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:675
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1036
@@ -1001,7 +901,7 @@ msgstr "레이아웃 버튼 순서"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:936
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:493
 msgid "Toggle note list"
-msgstr "Toggle 노트 목록"
+msgstr "노트 목록 전환"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:945
 msgid "Toggle editor layout"
@@ -1013,15 +913,15 @@ msgstr "강조"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1000
 msgid "Actual Size"
-msgstr ""
+msgstr "실제 크기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1006
 msgid "Zoom In"
-msgstr ""
+msgstr "확대"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1012
 msgid "Zoom Out"
-msgstr ""
+msgstr "축소"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1020
 msgid "&Tools"
@@ -1157,12 +1057,8 @@ msgid "Enable Web Clipper Service"
 msgstr "웹 수집기 서비스 사용"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:122
-msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
-msgstr ""
-"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있"
-"게 해줍니다."
+msgid "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
+msgstr "Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있게 해줍니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:127
 msgid "In order to use the web clipper, you need to do the following:"
@@ -1173,13 +1069,8 @@ msgid "Step 1: Enable the clipper service"
 msgstr "1단계: 웹 수집기 서비스 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:140
-msgid ""
-"This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
-msgstr ""
-"이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성"
-"화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
+msgid "This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port."
+msgstr "이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:154
 msgid "Step 2: Install the extension"
@@ -1202,12 +1093,8 @@ msgid "Copy token"
 msgstr "토큰 복사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:195
-msgid ""
-"This authorisation token is only needed to allow third-party applications to "
-"access Joplin."
-msgstr ""
-"이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니"
-"다."
+msgid "This authorisation token is only needed to allow third-party applications to access Joplin."
+msgstr "이 인증 토큰은 오직 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
@@ -1224,54 +1111,45 @@ msgid "Check synchronisation configuration"
 msgstr "동기화 설정 확인"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "알 수 없는 플래그: %s"
+msgstr "알 수 없음"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "취소하는 중..."
+msgstr "검사 중..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "오류들만 보기"
+msgstr "오류"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
-msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
-msgstr ""
+msgid "The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:"
+msgstr "Joplin Nextcloud 애플리케이션이 설치되지 않았거나 잘못 설정되었습니다. 아래의 상세 오류 메시지를 확인해주세요:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "모두 표시"
+msgstr "로그 보기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Joplin Nextcloud 애플리케이션 상태:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "동기화 상태"
+msgstr "상태 검사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
 msgstr "도움말"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
 msgstr "고급 옵션"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
 msgid "Browse..."
-msgstr "훑어보기…"
+msgstr "훑어보기..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:637
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
@@ -1300,26 +1178,13 @@ msgid "Save"
 msgstr "저장"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
-msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
-msgstr ""
-"암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
-"않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
+msgid "Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?"
+msgstr "암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
-msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
-msgstr ""
-"암호화를 사용하게 되면 모든 노트와 첨부파일이 다시 동기화되며, 암호화 된 상태"
-"로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할수 있는 유일한 수단"
-"으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하실려면 아래에 비"
-"밀번호를 넣어주세요."
+msgid "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below."
+msgstr "암호화를 사용하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 된 상태로 동기화 대상에게 전달됩니다. 비밀번호는 데이터를 복구할수 있는 유일한 수단으로, *절대로* 비밀번호를 잃어버리지 마세요. 암호화를 사용하실려면 아래에 비밀번호를 넣어주세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
@@ -1368,14 +1233,8 @@ msgid "Password OK"
 msgstr "비밀번호 확인"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
-"참고: \"활성\"로 표시된 단 하나의 마스터 키만 암호화에 사용됩니다. 모든 키는 "
-"노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용될 수 있습"
-"니다."
+msgid "Note: Only one master key is going to be used for encryption (the one marked as \"active\"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted."
+msgstr "참고: \"활성\"로 표시된 단 하나의 마스터 키만 암호화에 사용됩니다. 모든 키는 노트나 노트북이 기존에 어떻게 암호화되었는지에 따라서 복호화에 사용될 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
@@ -1384,22 +1243,13 @@ msgstr "마스터 키를 찾을 수 없음"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플"
-"리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드"
-"될 가능성이 있습니다."
+msgid "The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation."
+msgstr "이 ID와 연관된 마스터 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드될 가능성이 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-"종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
+msgid "For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:"
+msgstr "종단간 암호화(E2EE)에 관한 정보, 사용법 및 조언은 다음 문서에서 확인해주세요:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
@@ -1429,8 +1279,7 @@ msgstr "사용 방법"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:62
 #, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "새 \"%s\" 노트북이 생성되었으며 \"%s\" 파일을 가져왔습니다"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:108
@@ -1495,14 +1344,12 @@ msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "노트가 없습니다. '새 노트'를 선택해서 노트를 새로 만드세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:451
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "노트북이 없습니다. '새 노트북'을 선택해서 노트북을 새로 만드세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "완료됨: %s"
+msgstr "완료됨"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1551,12 +1398,8 @@ msgstr "복구"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-"“%s”를 클릭하여 노트를 복구하세요. 노트는 “%s” 이름을 가진 노트북에 복사될 것"
-"입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
+msgid "Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified."
+msgstr "“%s”를 클릭하여 노트를 복구하세요. 노트는 “%s” 이름을 가진 노트북에 복사될 것입니다. 현재 버전의 노트는 이동하거나 수정되지 않습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:778
 msgid "Open..."
@@ -1581,26 +1424,20 @@ msgstr "링크 주소 복사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "첨부 파일을 다운로드하던 중에 오류가 발생했습니다:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:835
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "이 첨부는 아직 다운로드 또는 복호화 되지 않았습니다."
+msgstr "이 첨부 파일은 아직 다운로드 또는 복호화 되지 않았습니다"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1058
 #, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세"
-"요."
+msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
+msgstr "비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1294
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "한 번에 오직 하나의 노트만 출력하거나 내보내기 할 수 있습니다."
+msgstr "한 번에 오직 하나의 노트만 출력할 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1479
 msgid "strong text"
@@ -1666,7 +1503,7 @@ msgstr "외부 편집을 그만 두시려면 클릭하세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1720
 msgid "Watching..."
-msgstr "외부 보기…"
+msgstr "외부 보기..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2036
 msgid "to-do"
@@ -1694,41 +1531,35 @@ msgid "Dropbox Login"
 msgstr "Dropbox 로그인"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:164
-#, fuzzy
 msgid "Synchronising..."
-msgstr "동기화"
+msgstr "동기화 중..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:166
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "%s 새로 만들기..."
+msgstr[0] "링크를 만드는 중..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:168
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "토큰이 클립보드로 복사되었습니다!"
+msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:171
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr "참고: 공유된 노트는 서버에서 암호화될 수 없습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:176
-#, fuzzy
 msgid "Share Notes"
-msgstr "복구된 노트들"
+msgstr "공유된 노트들"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:178
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "공유"
+msgstr[0] "공유 링크 복사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:181
 msgid "Close"
-msgstr ""
+msgstr "닫기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
@@ -1811,7 +1642,6 @@ msgid "%s - Copy"
 msgstr "%s - 복사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:65
-#, fuzzy
 msgid "Stop external editing"
 msgstr "외부 편집을 그만 두시려면 클릭하세요"
 
@@ -1833,9 +1663,8 @@ msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:134
-#, fuzzy
 msgid "Share note..."
-msgstr "복구된 노트들"
+msgstr "노트 공유..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:202
 #, javascript-format
@@ -1853,16 +1682,12 @@ msgid "Error opening note in editor: %s"
 msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:339
-msgid ""
-"Type a note title to jump to it. Or type # followed by a tag name, or @ "
-"followed by a notebook name."
-msgstr ""
-"노트 제목을 적으시거나 혹은 건너 뛰세요. 혹은 # 를 적고 태그 이름을 붙이거"
-"나, @뒤에 노트북 이름을 적으세요."
+msgid "Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name."
+msgstr "노트 제목을 적으시거나 혹은 건너 뛰세요. 혹은 # 를 적고 태그 이름을 붙이거나, @뒤에 노트북 이름을 적으세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
 msgid "Goto Anything..."
-msgstr "가고자 하는 곳으로 이동…"
+msgstr "가고자 하는 곳으로 이동..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:102
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:115
@@ -1879,11 +1704,13 @@ msgstr "알 수 없는 플래그: %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to the Joplin Nextcloud app. Please check the configuration in the Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
+"Joplin Nextcloud 애플리케이션에 연결할 수 없습니다. 동기화 설정 화면에서 설정을 확인해주세요. 전체 오류 메시지:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -1920,8 +1747,7 @@ msgid "Unknown level ID: %s"
 msgstr "알 수 없는 레벨 ID: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr "애플리케이션이 허가되었습니다 - 브라우저 탭을 닫으셔도 됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
@@ -1929,25 +1755,12 @@ msgid "The application has been successfully authorised."
 msgstr "애플리케이션이 성공적으로 허가되었습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
-msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
-msgstr ""
-"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 "
-"\"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것"
-"입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 "
-"데이터는 제3자와 공유되지 않습니다."
+msgid "Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party."
+msgstr "다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 \"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 데이터는 제3자와 공유되지 않습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
-msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
-msgstr ""
-"인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
-"도하면 문제가 해결될 수 있습니다."
+msgid "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem."
+msgstr "인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시도하면 문제가 해결될 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
@@ -1960,15 +1773,13 @@ msgstr "제목 없음"
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
+"This error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n"
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
 "OneDrive와 동기화 할 수 없습니다.\n"
 "\n"
-"이 오류는 OneDrive for Business를 사용할 경우 주로 발생하며, 현재 지원하지 않"
-"습니다.\n"
+"이 오류는 OneDrive for Business를 사용할 경우 주로 발생하며, 현재 지원하지 않습니다.\n"
 "\n"
 "일반 OneDrive 계정을 사용해보시기 바랍니다."
 
@@ -2085,26 +1896,20 @@ msgstr "노트를 \"%s\" 노트북으로 옮길 수 없습니다"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "다운로드 안됨"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "리소스 다운로드 중..."
+msgstr "다운로드 중"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "다운로드됨"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
-msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
-msgstr ""
-"주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
-"세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
+msgid "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s"
+msgstr "주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주세요. 변경중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
@@ -2127,12 +1932,8 @@ msgid "Synchronisation target"
 msgstr "동기화 대상"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
-msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
-msgstr ""
-"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
-"된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
+msgid "The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below)."
+msgstr "동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
 msgid "Directory to synchronise with (absolute path)"
@@ -2164,17 +1965,11 @@ msgstr "WebDAV 암호"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
 msgid "Attachment download behaviour"
-msgstr "첨부파일 다운로드시 행동"
+msgstr "첨부 파일 다운로드 시 행동"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
-msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
-msgstr ""
-"“수동” 모드에서, 첨부파일은 클릭시에만 다운로드 되며, “자동”모드에서는 노트"
-"를 열때만 다운로드 됩니다. “항상” 모드에서는 노트를 열지 않아도 첨부파일이 다"
-"운로드 됩니다."
+msgid "In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not."
+msgstr "“수동” 모드에서, 첨부 파일은 클릭 시에만 다운로드되며, “자동” 모드에서는 노트를 열 때만 다운로드됩니다. “항상” 모드에서는 노트를 열지 않아도 첨부 파일이 다운로드됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
 msgid "Always"
@@ -2210,11 +2005,11 @@ msgstr "테마"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
 msgid "Light"
-msgstr "밝게"
+msgstr "Light"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:244
 msgid "Dark"
-msgstr "어둡게"
+msgstr "Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Dracula"
@@ -2230,21 +2025,19 @@ msgstr "Solarized Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
 msgid "Nord"
-msgstr "노드"
+msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "어둡게"
+msgstr "OLED Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
-msgstr "노트 수 보이기\""
+msgstr "노트 수 보이기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
-#, fuzzy
 msgid "Editor"
 msgstr "편집"
 
@@ -2286,7 +2079,7 @@ msgstr "노트를 다음 기준으로 정렬"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "괄호, 중괄호, 인용 부호 등의 자동 완성"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
@@ -2321,64 +2114,63 @@ msgstr "새 노트를 만들 때:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
 msgid "Enable soft breaks"
-msgstr "소프트 브레이크 허용"
+msgstr "소프트 브레이크 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
 msgid "Enable typographer support"
-msgstr "typographer 지원 허용"
+msgstr "typographer 지원 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
 msgid "Enable math expressions"
-msgstr "수학 정규식 허용"
+msgstr "수식 표현 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
 msgid "Enable ==mark== syntax"
-msgstr "==Mark== 구문 허용"
+msgstr "==Mark== 구문 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Enable footnotes"
-msgstr "각주 허용"
+msgstr "각주 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Enable table of contents extension"
-msgstr "표 내용 확장 허용"
+msgstr "표 내용 확장 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
 msgid "Enable ~sub~ syntax"
-msgstr "~sub~ 구문 허용"
+msgstr "~sub~ 구문 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
 msgid "Enable ^sup^ syntax"
-msgstr "^sup^ 구문 허용"
+msgstr "^sup^ 구문 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Enable deflist syntax"
-msgstr "목록 구문 허용"
+msgstr "정의 목록 구문 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
 msgid "Enable abbreviation syntax"
-msgstr "약어 구문 허용"
+msgstr "약어 구문 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid "Enable markdown emoji"
-msgstr "마크다운 이모지 허용"
+msgstr "마크다운 이모지 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
 msgid "Enable ++insert++ syntax"
-msgstr "++insert++ 확장 허용"
+msgstr "++insert++ 확장 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
 msgid "Enable multimarkdown table extension"
-msgstr "멀티 마크다운 테이블 확장 허용"
+msgstr "MultiMarkdown 테이블 확장 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
 msgid "Enable Fountain syntax support"
-msgstr "Fountain 구문 지원 허용"
+msgstr "Fountain 구문 지원 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "typographer 지원 허용"
+msgstr "Mermaid 다이어그램 지원 활성화"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Show tray icon"
@@ -2389,13 +2181,8 @@ msgid "Note: Does not work in all desktop environments."
 msgstr "참고: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
-msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable "
-"this setting so that your notes are constantly being synchronised, thus "
-"reducing the number of conflicts."
-msgstr ""
-"Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟"
-"수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
+msgid "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts."
+msgstr "Joplin을 백그라운드에서 구동합니다. 노트가 정기적으로 동기화 되므로, 충돌 횟수가 줄어들게 되므로 이 옵션을 활성화 하시는 것을 추천드립니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
 msgid "Start application minimised in the tray icon"
@@ -2414,17 +2201,12 @@ msgid "Editor font family"
 msgstr "편집기 글꼴 모음"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
-msgid ""
-"This must be *monospace* font or it will not work properly. If the font is "
-"incorrect or empty, it will default to a generic monospace font."
-msgstr ""
-"반드시 monospace 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 "
-"올바르지 않을 경우, 기본적으로 제공되는 monospace 글꼴을 기본값으로 사용합니"
-"다."
+msgid "This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a generic monospace font."
+msgstr "반드시 monospace 글꼴을 사용하여야 정상적으로 작동합니다. 만약 글꼴이 없거나 올바르지 않을 경우, 기본적으로 제공되는 monospace 글꼴을 기본값으로 사용합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Joplin 앱에 전역적으로 적용되는 사용자 정의 스타일시트"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
 msgid "Automatically update the application"
@@ -2466,12 +2248,8 @@ msgid "Text editor command"
 msgstr "텍스트 편집기 명령어"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
-msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
-msgstr ""
-"노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합"
-"니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
+msgid "The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor."
+msgstr "노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
 msgid "Page size for PDF export"
@@ -2507,47 +2285,31 @@ msgstr "PDF를 내보낼때의 페이지 방향"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
 msgid "Portrait"
-msgstr "포트레이트"
+msgstr "세로 방향"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
 msgid "Landscape"
-msgstr "Landscape"
+msgstr "가로 방향"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
-msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
-msgstr ""
-"인증서를 불러올 (쉼표로 구분되어 있는) 경로들의 목록, 또는 개별적인 인증서 파"
-"일들의 경로입니다. 예를 들면 다음과 같은 형식입니다: /my/cert_dir, /other/"
-"custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행"
-"하기 전에 반드시 변경 사항을 저장해야 합니다."
+msgid "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\"."
+msgstr "인증서를 불러올 (쉼표로 구분되어 있는) 경로들의 목록, 또는 개별적인 인증서 파일들의 경로입니다. 예를 들면 다음과 같은 형식입니다: /my/cert_dir, /other/custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행하기 전에 반드시 변경 사항을 저장해야 합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
-msgid ""
-"Fail-safe: Do not wipe out local data when sync target is empty (often the "
-"result of a misconfiguration or bug)"
-msgstr ""
-"안전 장치: 동기화 목표가 비어 있을시 로컬 데이터를 지우시지 마세요 (종종 잘못"
-"된 설정이나 버그로 인해 발생됩니다)"
+msgid "Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)"
+msgstr "안전 장치: 동기화 목표가 비어 있을시 로컬 데이터를 지우시지 마세요 (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
-msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
-msgstr ""
-"API 서버에 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니"
-"다."
+msgid "Specify the port that should be used by the API server. If not set, a default will be used."
+msgstr "API 서버에 사용할 포트를 선택해주세요. 선택되지 않으면, 기본 포트를 선택합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
 msgid "Enable note history"
@@ -2636,14 +2398,12 @@ msgid "Json Export Directory"
 msgstr "Json 내보내기 폴더"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "파일"
+msgstr "HTML 파일"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "폴더"
+msgstr "HTML 디렉터리"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2665,12 +2425,8 @@ msgstr "%s 항목에 사용할 가져오기 형식을 지정하세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
-msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
-msgstr ""
-"이 항목은 암호화되어 있습니다: %s \"%s\". 모든 항목이 복호화 될 때까지 기다"
-"린 후 다시 시도하세요."
+msgid "This item is currently encrypted: %s \"%s\". Please wait for all items to be decrypted and try again."
+msgstr "이 항목은 암호화되어 있습니다: %s \"%s\". 모든 항목이 복호화 될 때까지 기다린 후 다시 시도하세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
@@ -2689,14 +2445,8 @@ msgid "Items that cannot be synchronised"
 msgstr "동기화 할 수 없는 항목"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
-msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
-msgstr ""
-"해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이"
-"런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되"
-"어 있습니다)"
+msgid "These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above)."
+msgstr "해당 항목들은 기기에 남아 있지만 동기화 대상에 업로드되지는 않을 것입니다. 이런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되어 있습니다)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, javascript-format
@@ -2713,39 +2463,31 @@ msgid "Items that cannot be decrypted"
 msgstr "항목을 복호화 할 수 없습니다"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
-msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
-msgstr ""
-"Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손"
-"상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목"
-"들을 복호화 할 수 없습니다."
+msgid "Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them."
+msgstr "Joplin이 여러 항목에 대해서 복호화를 실패했습니다. 아마도 너무 크거나 혹은 손상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목들을 복호화 할 수 없습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "파일 첨부"
+msgstr "첨부"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "다운로드 및 복호화됨"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "다운로드 및 암호화됨"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "“%s”를 다운로드 할 수 없습니다: %s"
+msgstr "첨부 파일을 다운로드할 수 없습니다: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2832,9 +2574,8 @@ msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "일부 항목들은 동기화할 수 없습니다."
+msgstr "일부 항목들은 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -2884,13 +2625,8 @@ msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "성공! 동기화 설정이 올바릅니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
-msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-"오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목"
-"표하는 동기화 장소가 접근가능한지 확인해주세요. 보고된 오류는 다음과 같습니"
-"다:"
+msgid "Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:"
+msgstr "오류. URL을 확인하시거나, 혹은 사용자명이나 비밀번호를 확인해주세요, 또한 목표하는 동기화 장소가 접근가능한지 확인해주세요. 보고된 오류는 다음과 같습니다:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -2930,11 +2666,8 @@ msgstr "경고"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-"파일 시스템 동기화를 사용하실려면 외부 저장소 쓰기 권한을 필요로 합니다."
+msgid "In order to use file system synchronisation your permission to write to external storage is required."
+msgstr "파일 시스템 동기화를 사용하실려면 외부 저장소 쓰기 권한을 필요로 합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
 msgid "Information"
@@ -2960,7 +2693,7 @@ msgstr "로그"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 msgid "Creating report..."
-msgstr "보고서 생성하기…"
+msgstr "보고서 생성하기..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
 msgid "Export Debug Report"
@@ -2968,53 +2701,39 @@ msgstr "디버그 보고서 내보내기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fixing search index..."
-msgstr "검색 인덱스 수정…"
+msgstr "검색 인덱스 수정..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fix search index"
 msgstr "검색 인덱스 수정"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-"검색에 오류가 있는 경우, 이를 이용하여 검색 인덱스를 다시 만들수 있습니다. 이"
-"는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
+msgid "Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes."
+msgstr "검색에 오류가 있는 경우, 이를 이용하여 검색 인덱스를 다시 만들수 있습니다. 이는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "노트를 가져오는 중..."
+msgstr "프로파일을 내보내는 중..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
-#, fuzzy
 msgid "Export profile"
-msgstr "Joplin 내보내기 파일"
+msgstr "프로파일 내보내기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 내보냅니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"
 msgstr "더 많은 정보"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케"
-"이션 > Joplin > 권한'에서 허가해주세요"
+msgid "To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions"
+msgstr "앱이 정상적으로 작동하기 위해서는 다음 권한이 있어야 합니다. '설정 > 애플리케이션 > Joplin > 권한'에서 허가해주세요"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-"- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합"
-"니다."
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
+msgstr "- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -3152,7 +2871,7 @@ msgstr "소스 URL로 이동"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
 msgid "Attach..."
-msgstr "첨부…"
+msgstr "첨부..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Choose an option"
@@ -3212,8 +2931,7 @@ msgstr "검색"
 #~ msgstr "내보낼 노트를 찾을수 없습니다: %s"
 
 #~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr ""
-#~ "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
+#~ msgstr "모든 가능한 포트들이 사용중에 있습니다 - %s 에 대한 문제를 알려주세요"
 
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "동기화가 이미 진행되고 있습니다. 상태: %s"
@@ -3249,11 +2967,8 @@ msgstr "검색"
 #~ msgid "Clipper Options"
 #~ msgstr "수집기 옵션"
 
-#~ msgid ""
-#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
-#~ msgstr ""
-#~ "알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 "
-#~ "해주세요"
+#~ msgid "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr "알려지지 않은 타입을 다운로드 했습니다 - Joplin을 최신 버전으로 업데이트 해주세요"
 
 #, fuzzy
 #~ msgid "Permission to write to external storage"
@@ -3271,15 +2986,10 @@ msgstr "검색"
 #~ msgid "Delete notebook"
 #~ msgstr "노트북 삭제"
 
-#~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
-#~ msgstr ""
-#~ "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트"
-#~ "북을 관리하세요."
+#~ msgid "Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks."
+#~ msgstr "(+) 버튼을 눌러 새 노트 및 노트북을 만드세요. 측면 메뉴를 눌러 기존의 노트북을 관리하세요."
 
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgid "You currently have no notebook. Create one by clicking on (+) button."
 #~ msgstr "노트북이 없습니다. (+) 버튼을 눌러 새로 만드세요."
 
 #~ msgid "Welcome"
@@ -3291,12 +3001,8 @@ msgstr "검색"
 #~ msgid "Some items cannot be decrypted."
 #~ msgstr "일부 항목들은 암호화할 수 없습니다."
 
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr ""
-#~ "파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`"
-#~ "를 참조하세요."
+#~ msgid "The path to synchronise with when file system synchronisation is enabled. See `sync.target`."
+#~ msgstr "파일 시스템 동기화가 활성화된 경우에 동기화를 할 경로입니다. `sync.target`를 참조하세요."
 
 #~ msgid "State: %s."
 #~ msgstr "상태: %s."
