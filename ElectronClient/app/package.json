@@ -60,7 +60,7 @@
       "asar": false
     },
     "linux": {
-      "asar": false,
+      "asar": true,
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
