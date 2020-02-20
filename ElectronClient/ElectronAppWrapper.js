@@ -43,9 +43,12 @@ class ElectronAppWrapper {
 
 		const windowStateKeeper = require('electron-window-state');
 
+		const currentWorkArea = screen.getPrimaryDisplay().workArea;
+		const [defaultWidth, defaultHeight] = [0.8*currentWorkArea.width, 0.8*currentWorkArea.width];
+
 		const stateOptions = {
-			defaultWidth: 800,
-			defaultHeight: 600,
+			defaultWidth: defaultWidth,
+			defaultHeight: defaultHeight,
 			file: `window-state-${this.env_}.json`,
 		};
 
