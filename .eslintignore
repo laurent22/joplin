@@ -6,6 +6,7 @@ _releases/
 Assets/
 CliClient/build
 CliClient/locales
+CliClient/locales-build
 CliClient/node_modules
 CliClient/tests-build
 CliClient/tests/enex_to_md
