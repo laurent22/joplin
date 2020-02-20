@@ -5,7 +5,6 @@
 
 const fs = require('fs-extra');
 
-const cwd = process.cwd();
 const rnDir = `${__dirname}/..`;
 const outputDir = `${rnDir}/lib/rnInjectedJs`;
 

@@ -2,7 +2,7 @@ const utils = require('../../Tools/gulp/utils');
 const fs = require('fs-extra');
 const md5 = require('md5');
 
-const rootDir = __dirname + '/..';
+const rootDir = `${__dirname}/..`;
 const outputDir = `${rootDir}/pluginAssets`;
 
 var walk = function(dir) {

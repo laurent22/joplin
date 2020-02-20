@@ -50,6 +50,7 @@ ElectronClient/packageInfo.js
 ReactNativeClient/pluginAssets/
 ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
+ReactNativeClient/lib/rnInjectedJs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/dist/mac/Joplin.app/Contents/Resources/app/gui/ShareNoteDialog.js
