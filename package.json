@@ -6,7 +6,7 @@
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "gulp watch",
-    "postinstall": "cd ReactNativeClient && npm i --ignore-scripts && cd - && cd ElectronClient && npm i --ignore-scripts && cd - && cd CliClient && npm i --ignore-scripts && gulp build"
+    "postinstall": "cd ReactNativeClient && npm i && cd - && cd ElectronClient && npm i && cd - && cd CliClient && npm i && cd - && gulp build"
   },
   "husky": {
     "hooks": {

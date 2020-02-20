@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const glob = require('glob');
 const ts = require('gulp-typescript');
 const utils = require('./Tools/gulp/utils');
 
@@ -24,7 +25,14 @@ const tscTask = function() {
 };
 
 const updateIgnoredTypeScriptBuildTask = async function() {
-	const tsFiles = utils.getAllFiles(__dirname, { extensions: ['tsx', 'ts'] });
+	const tsFiles = glob.sync(`${__dirname}{/**/*.ts,/**/*.tsx}`, {
+		ignore: [
+			'**/node_modules/**',
+			'**/.git/**',
+			'**/ElectronClient/lib/**',
+			'**/CliClient/build/lib/**',
+		],
+	}).map(f => f.substr(__dirname.length + 1));
 
 	const ignoredFiles = tsFiles.map(f => {
 		const s = f.split('.');
@@ -41,11 +49,11 @@ const updateIgnoredTypeScriptBuildTask = async function() {
 
 gulp.task('tsc', tscTask);
 gulp.task('copyLib', tasks.copyLib.fn);
+gulp.task('updateIgnoredTypeScriptBuild', updateIgnoredTypeScriptBuildTask);
 
 gulp.task('watch', function() {
 	gulp.watch(tasks.copyLib.src, tasks.copyLib.fn);
 	gulp.watch(tscTaskSrc, gulp.series('tsc', 'updateIgnoredTypeScriptBuild'));
 });
 
-gulp.task('build', gulp.series('copyLib', 'tsc'));
-gulp.task('updateIgnoredTypeScriptBuild', updateIgnoredTypeScriptBuildTask);
+gulp.task('build', gulp.series('copyLib', 'tsc', 'updateIgnoredTypeScriptBuild'));

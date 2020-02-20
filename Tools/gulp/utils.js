@@ -68,36 +68,10 @@ utils.fileExtension = function(path) {
 	return output[output.length - 1];
 };
 
-utils.getAllFiles = function(dir, options = null) {
-	var results = [];
-	var list = fs.readdirSync(dir);
-	list.forEach(function(file) {
-		file = `${dir}/${file}`;
-		const filename = utils.basename(file);
-		const ext = utils.fileExtension(file).toLowerCase();
-
-		var stat = fs.statSync(file);
-		if (stat && stat.isDirectory()) {
-			if (file.indexOf('ElectronClient/lib') >= 0) return;
-			if (file.indexOf('CliClient/lib') >= 0) return;
-			if (filename === 'node_modules' || filename === '.git' || filename === 'build' || filename === 'tests-build' || filename === 'dist') return;
-			results = results.concat(utils.getAllFiles(file, options));
-		} else {
-			let addIt = true;
-
-			if (options.extensions && options.extensions.length && !options.extensions.includes(ext)) {
-				addIt = false;
-			}
-
-			if (addIt) results.push(file.substr(__dirname.length + 1));
-		}
-	});
-	return results;
-};
-
 utils.replaceFileText = async function(filePath, regex, toInsert) {
 	const content = await fs.readFile(filePath, 'utf8');
 	const newContent = content.replace(regex, toInsert);
+	if (newContent === content) return Promise.resolve();
 	await fs.writeFile(filePath, newContent);
 };
 

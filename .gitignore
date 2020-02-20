@@ -48,9 +48,9 @@ Tools/commit_hook.txt
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/ShareNoteDialog.js
-ReactNativeClient/PluginAssetsLoader.js
-ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
