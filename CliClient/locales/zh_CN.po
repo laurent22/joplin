@@ -63,7 +63,7 @@ msgstr "是"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "正在取消后台同步……请稍候。"
+msgstr "正在取消后台同步... 请稍候。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
 #, javascript-format
@@ -187,7 +187,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status、`decrypt-"
+"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status`、`decrypt-"
 "file` 和 `target-status`。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
@@ -432,9 +432,9 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
-"仅显示指定类型的项目。可以把  `n`  用于笔记，`t` 用于待办事项，或者 `nt` 用于"
-"笔记和待办事项 (示例：`-tt` 只会显示待办事项，当使用 `-ttd` 时将会显示笔记和"
-"待办事项。"
+"仅显示指定类型的项目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
+"记和待办事项 (示例：`-tt` 只会显示待办事项，当使用 `-ttd` 时将会显示笔记和待"
+"办事项。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Either \"text\" or \"json\""
@@ -636,9 +636,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是“add”、“remove”、“list” 或者 “notetags”， 用于从 [note] "
-"中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出"
-"所有的标签（对于过长选项请使用 -l 参数）。"
+"<tag-command> 可以是“add”、“remove”、“list” 或者 “notetags”，用于从 [note] 中"
+"赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所"
+"有的标签（对于过长选项请使用 -l 参数）。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
 #, javascript-format
@@ -2237,7 +2237,7 @@ msgstr "排序笔记"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "自动配对花括号，圆括号，引号等。"
+msgstr "自动配对花括号、圆括号、引号等。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
@@ -2912,7 +2912,7 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"如果‘搜索’功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
+"如果搜索功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "Exporting profile..."
