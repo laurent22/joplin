@@ -6,8 +6,8 @@
   "scripts": {
     "dist": "node_modules/.bin/electron-builder",
     "build": "patch-package && gulp build",
-    "postinstall": "npm run build",
-    "start": "gulp build -L && ./node_modules/.bin/electron . --env dev --log-level debug --no-welcome --open-dev-tools"
+    "postinstall": "npm run build && gulp electronRebuild",
+    "start": "gulp build -L && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
   },
   "repository": {
     "type": "git",

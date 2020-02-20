@@ -24,5 +24,5 @@ gulp.task('build', gulp.series(
 	'compileScripts',
 	'compilePackageInfo',
 	'copyPluginAssets',
-	'electronRebuild'
+	// 'electronRebuild'
 ));
