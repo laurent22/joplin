@@ -95,6 +95,7 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "app-module-path": "^2.2.0",
+    "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "gulp": "^4.0.2",
     "jetifier": "^1.6.4",

@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const execa = require('execa');
 const utils = require('../Tools/gulp/utils');
 
 const tasks = {
@@ -8,11 +9,16 @@ const tasks = {
 	buildReactNativeInjectedJs: {
 		fn: require('./tools/buildReactNativeInjectedJs'),
 	},
+	podInstall: {
+		fn: require('./tools/podInstall'),
+	},
 };
 
 tasks.jetify = {
 	fn: async () => {
-		return utils.execCommand('npx jetify');
+		const promise = execa('npx', ['jetify']);
+		promise.stdout.pipe(process.stdout);
+		return promise;
 	},
 };
 
@@ -22,4 +28,5 @@ gulp.task('build', gulp.series(
 	'buildReactNativeInjectedJs',
 	'jetify',
 	'encodeAssets',
+	'podInstall',
 ));

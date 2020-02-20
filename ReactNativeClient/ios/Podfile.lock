@@ -200,7 +200,7 @@ PODS:
     - React
   - react-native-sqlite-storage (4.1.0):
     - React
-  - react-native-version-info (0.5.1):
+  - react-native-version-info (1.0.1):
     - React
   - react-native-webview (5.12.0):
     - React
@@ -413,7 +413,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: aa1600566fd336a044daf9273dcec5033c1d41ca
   react-native-slider: b2f361499888302147205f17f6fffa921a7bda70
   react-native-sqlite-storage: bb10beb2407e5fc21f3f1bcd86bacbfd6edcc818
-  react-native-version-info: 8905d01e64f8444ab6842b3fff89886b3191e732
+  react-native-version-info: daadd78b8fc93cf2764cb5aa52ec995961b62201
   react-native-webview: 26d8993b090ca5d59eb9a9466dcb8291baa3223e
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
