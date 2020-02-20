@@ -40,18 +40,22 @@ Tools/github_oauth_token.txt
 _releases
 ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
-ElectronClient/app/gui/note-viewer/fonts/
-ElectronClient/app/gui/note-viewer/lib.js
+ElectronClient/gui/note-viewer/fonts/
+ElectronClient/gui/note-viewer/lib.js
 Tools/commit_hook.txt
 .vscode/*
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-ElectronClient/app/gui/ShareNoteDialog.js
-ReactNativeClient/PluginAssetsLoader.js
-ReactNativeClient/lib/JoplinServerApi.js
+CliClient/tests-build/lib/JoplinServerApi.js
+ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/mermaid.js
+ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ElectronClient/app/lib/JoplinServerApi.js
+ElectronClient/gui/ResourceScreen.js
+ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
-ElectronClient/app/gui/ResourceScreen.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

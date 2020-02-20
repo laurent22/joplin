@@ -25,7 +25,7 @@ const isWindows = () => {
 async function main() {
 	// electron-rebuild --arch ia32 && electron-rebuild --arch x64
 
-	let exePath = `${__dirname}/node_modules/.bin/electron-rebuild`;
+	let exePath = `${__dirname}/../node_modules/.bin/electron-rebuild`;
 	if (isWindows()) exePath += '.cmd';
 
 	if (isWindows()) {
@@ -36,7 +36,4 @@ async function main() {
 	}
 }
 
-main().catch((error) => {
-	console.error(error);
-	process.exit(1);
-});
+module.exports = main;

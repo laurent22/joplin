@@ -6,6 +6,7 @@ _releases/
 Assets/
 CliClient/build
 CliClient/locales
+CliClient/locales-build
 CliClient/node_modules
 CliClient/tests-build
 CliClient/tests/enex_to_md
@@ -22,12 +23,12 @@ Clipper/joplin-webclipper/icons
 Clipper/joplin-webclipper/popup/build
 Clipper/joplin-webclipper/popup/node_modules
 docs/
-ElectronClient/app/dist
-ElectronClient/app/lib
-ElectronClient/app/lib/vendor/sjcl-rn.js
-ElectronClient/app/lib/vendor/sjcl.js
-ElectronClient/app/locales
-ElectronClient/app/node_modules
+ElectronClient/dist
+ElectronClient/lib
+ElectronClient/lib/vendor/sjcl-rn.js
+ElectronClient/lib/vendor/sjcl.js
+ElectronClient/locales
+ElectronClient/node_modules
 highlight.pack.js
 node_modules/
 ReactNativeClient/android
@@ -45,17 +46,22 @@ Server/docs/
 Server/dist/
 Server/bin/
 Server/node_modules/
-ElectronClient/app/packageInfo.js
+ElectronClient/packageInfo.js
 ReactNativeClient/pluginAssets/
 ReactNativeClient/lib/joplin-renderer/vendor/fountain.min.js
 ReactNativeClient/lib/joplin-renderer/assets/
+ReactNativeClient/lib/rnInjectedJs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-ElectronClient/app/gui/ShareNoteDialog.js
-ReactNativeClient/PluginAssetsLoader.js
-ReactNativeClient/lib/JoplinServerApi.js
+CliClient/tests-build/lib/JoplinServerApi.js
+ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/mermaid.js
+ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ElectronClient/app/lib/JoplinServerApi.js
+ElectronClient/gui/ResourceScreen.js
+ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
-ElectronClient/app/gui/ResourceScreen.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+ReactNativeClient/lib/JoplinServerApi.js
+ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

@@ -55,12 +55,8 @@ before_install:
 
 script:
   - |
-    # Copy lib
-    rsync -aP --delete ReactNativeClient/lib/ ElectronClient/app/lib/
-
     # Install tools
     npm install
-    npm run tsc
     cd Tools
     npm install
     cd ..
@@ -70,7 +66,6 @@ script:
     # and that would break the desktop release.
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       cd CliClient
-      npm install
       ./run_test.sh
       testResult=$?
       if [ $testResult -ne 0 ]; then
@@ -113,5 +108,5 @@ script:
     fi
 
     # Prepare the Electron app and build it
-    cd ElectronClient/app
-    npm install && USE_HARD_LINKS=false yarn dist
+    cd ElectronClient
+    USE_HARD_LINKS=false yarn dist

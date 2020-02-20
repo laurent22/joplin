@@ -5,9 +5,10 @@
   "version": "0.8.0",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "node ../Tools/buildReactNativeInjectedJs.js && npx jetify && npm run encodeAssets",
-    "encodeAssets": "node encodeAssets.js",
+    "start-ios": "react-native run-ios",
+    "start-android": "react-native run-android",
+    "postinstall": "jetify && npm run build",
+    "build": "gulp build",
     "log-ios": "react-native-log-ios \"Joplin\"",
     "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
   },
@@ -94,8 +95,10 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "app-module-path": "^2.2.0",
+    "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
-    "jetifier": "^1.6.4",
+    "gulp": "^4.0.2",
+    "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "^16.8.3"
   }

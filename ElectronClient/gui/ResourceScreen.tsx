@@ -1,4 +1,3 @@
-/* eslint-disable enforce-react-hooks/enforce-react-hooks */
 import * as React from 'react';
 
 const { connect } = require('react-redux');

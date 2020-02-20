@@ -4,13 +4,10 @@
   "description": "Joplin for Desktop",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "node_modules/.bin/electron-builder --dir",
     "dist": "node_modules/.bin/electron-builder",
-    "publish": "build -p always",
-    "postinstall": "patch-package && node compile.js && node compile-package-info.js && node copyPluginAssets.js && node electronRebuild.js",
-    "compile": "node compile.js && node compile-package-info.js",
-    "install-141": "npm install --toolset=v141"
+    "build": "patch-package && gulp build",
+    "postinstall": "npm run build && gulp electronRebuild",
+    "start": "gulp build -L && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
   },
   "repository": {
     "type": "git",
@@ -77,6 +74,7 @@
     "electron": "^7.1.12",
     "electron-builder": "22.3.2",
     "electron-rebuild": "^1.8.8",
+    "gulp": "^4.0.2",
     "patch-package": "^6.2.0"
   },
   "optionalDependencies": {
