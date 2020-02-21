@@ -381,6 +381,7 @@ class Application extends BaseApplication {
 			accelerator: 'CommandOrControl+Shift+B',
 		});
 
+		let toolsItems = [];
 		const importItems = [];
 		const exportItems = [];
 		const toolsItemsFirst = [];
@@ -485,16 +486,6 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'NAV_GO',
 					routeName: 'Status',
-				});
-			},
-		};
-
-		const resourceViewItem = {
-			label: _('Resources'),
-			click: () => {
-				this.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Resources',
 				});
 			},
 		};
@@ -614,7 +605,8 @@ class Application extends BaseApplication {
 			},
 		});
 
-		const toolsItems = toolsItemsFirst.concat([{
+		// we need this workaround, because on macOS the menu is different
+		const toolsItemsWindowsLinux = toolsItemsFirst.concat([{
 			label: _('Options'),
 			visible: !shim.isMac(),
 			accelerator: 'CommandOrControl+,',
@@ -624,7 +616,23 @@ class Application extends BaseApplication {
 					routeName: 'Config',
 				});
 			},
-		}, resourceViewItem]);
+		}]);
+
+		// the following menu items will be available for all OS under Tools
+		const toolsItemsAll = [{
+			label: _('Resources'),
+			click: () => {
+				this.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Resources',
+				});
+			},
+		}];
+
+		if (!shim.isMac()) {
+			toolsItems = toolsItems.concat(toolsItemsWindowsLinux);
+		}
+		toolsItems = toolsItems.concat(toolsItemsAll);
 
 		function _checkForUpdates(ctx) {
 			bridge().checkForUpdates(false, bridge().window(), ctx.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -1028,7 +1036,7 @@ class Application extends BaseApplication {
 			},
 			tools: {
 				label: _('&Tools'),
-				submenu: shim.isMac() ? [] : toolsItems,
+				submenu: toolsItems,
 			},
 			help: {
 				label: _('&Help'),
