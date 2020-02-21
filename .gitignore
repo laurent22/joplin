@@ -40,19 +40,22 @@ Tools/github_oauth_token.txt
 _releases
 ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
-ElectronClient/app/gui/note-viewer/fonts/
-ElectronClient/app/gui/note-viewer/lib.js
+ElectronClient/gui/note-viewer/fonts/
+ElectronClient/gui/note-viewer/lib.js
 Tools/commit_hook.txt
 .vscode/*
 *.map
 
-# Ignore files generated from TypeScript files
-ElectronClient/app/gui/DraftJs.js
-ElectronClient/app/gui/NoteText2.js
-ElectronClient/app/gui/ShareNoteDialog.js
-ElectronClient/app/gui/TinyMCE.js
-ElectronClient/app/gui/TuiEditor.js
+# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/gui/DraftJs.js
+ElectronClient/gui/NoteText2.js
+ElectronClient/gui/ResourceScreen.js
+ElectronClient/gui/ShareNoteDialog.js
+ElectronClient/gui/TinyMCE.js
+ElectronClient/gui/TuiEditor.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js
+ReactNativeClient/setUpQuickActions.js
+# AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

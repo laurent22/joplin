@@ -200,7 +200,7 @@ PODS:
     - React
   - react-native-sqlite-storage (4.1.0):
     - React
-  - react-native-version-info (0.5.1):
+  - react-native-version-info (1.0.1):
     - React
   - react-native-webview (5.12.0):
     - React
@@ -249,6 +249,8 @@ PODS:
     - React
   - RNFS (2.11.17):
     - React
+  - RNQuickAction (0.3.13):
+    - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
   - RNVectorIcons (6.6.0):
@@ -296,6 +298,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFileViewer (from `../node_modules/react-native-file-viewer/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
+  - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -379,6 +382,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-file-viewer/ios"
   RNFS:
     :path: "../node_modules/react-native-fs"
+  RNQuickAction:
+    :path: "../node_modules/react-native-quick-actions"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
   RNVectorIcons:
@@ -408,7 +413,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: aa1600566fd336a044daf9273dcec5033c1d41ca
   react-native-slider: b2f361499888302147205f17f6fffa921a7bda70
   react-native-sqlite-storage: bb10beb2407e5fc21f3f1bcd86bacbfd6edcc818
-  react-native-version-info: 8905d01e64f8444ab6842b3fff89886b3191e732
+  react-native-version-info: daadd78b8fc93cf2764cb5aa52ec995961b62201
   react-native-webview: 26d8993b090ca5d59eb9a9466dcb8291baa3223e
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -425,6 +430,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
   RNFileViewer: 5047ecf40477339723cc08abd55b5ebcefcef4b5
   RNFS: 416676c3a9ae404454bade10e3d78147c7c33a40
+  RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b

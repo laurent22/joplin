@@ -758,8 +758,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
-		if (fieldToFocus === 'body') this.refs.noteBodyTextField.focus();
+		if (fieldToFocus === 'title' && this.refs.titleTextField) this.refs.titleTextField.focus();
+		if (fieldToFocus === 'body' && this.refs.noteBodyTextField) this.refs.noteBodyTextField.focus();
 	}
 
 	async folderPickerOptions_valueChanged(itemValue) {

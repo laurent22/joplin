@@ -40,7 +40,7 @@ class FolderListWidget extends ListWidget {
 		let output = 0;
 		while (true) {
 			const folder = BaseModel.byId(folders, folderId);
-			if (!folder.parent_id) return output;
+			if (!folder || !folder.parent_id) return output;
 			output++;
 			folderId = folder.parent_id;
 		}

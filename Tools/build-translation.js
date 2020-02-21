@@ -16,7 +16,7 @@ const gettextParser = require('gettext-parser');
 const cliDir = `${rootDir}/CliClient`;
 const cliLocalesDir = `${cliDir}/locales`;
 const rnDir = `${rootDir}/ReactNativeClient`;
-const electronDir = `${rootDir}/ElectronClient/app`;
+const electronDir = `${rootDir}/ElectronClient`;
 
 const { execCommand, isMac, insertContentIntoFile } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('lib/locale.js');
@@ -307,11 +307,15 @@ async function main() {
 
 	saveToFile(`${jsonLocalesDir}/index.js`, buildIndex(locales, stats));
 
-	const rnJsonLocaleDir = `${rnDir}/locales`;
-	await execCommand(`rsync -a "${jsonLocalesDir}/" "${rnJsonLocaleDir}"`);
+	const destDirs = [
+		`${rnDir}/locales`,
+		`${electronDir}/locales`,
+		`${cliDir}/locales-build`,
+	];
 
-	const electronJsonLocaleDir = `${electronDir}/locales`;
-	await execCommand(`rsync -a "${jsonLocalesDir}/" "${electronJsonLocaleDir}"`);
+	for (const destDir of destDirs) {
+		await execCommand(`rsync -a "${jsonLocalesDir}/" "${destDir}/"`);
+	}
 
 	await updateReadmeWithStats(stats);
 }

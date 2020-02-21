@@ -1,0 +1,3297 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: et_EE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+msgid "To delete a tag, untag the associated notes."
+msgstr "Sildi kustutamiseks eemaldage märkmed seotud silt."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Valige esmalt kustutatav märkus või märkmik."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
+msgid "No notebook selected."
+msgstr "Ühtegi märkmikku pole valitud."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr "Ühtegi märkmikku pole määratud."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "Y"
+msgstr "Y"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "n"
+msgstr "n"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "N"
+msgstr "N"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "y"
+msgstr "y"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Tausta sünkroniseerimise tühistamine... Oota."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Sellist käsku pole: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Krüpteeritud üksust ei saa muuta"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Puuduv nõutav argument: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
+msgid "Your choice: "
+msgstr "Sinu valik: "
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Sobimatu vastus: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Manustab antud faili märkmele."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Ei leia \" %s\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+msgid "Displays the given note."
+msgstr "Kuvab antud märkme."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+msgid "Displays the complete information about note."
+msgstr "Kuvatakse märkme kohta täielik teave."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, "
+"näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], "
+"loetatakse praegune konfiguratsioon."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Kuvab ka seatud ja peidetud konfiguratsioonimuutujad."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s ( %s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Kopeerib märkmed, mis vastavad märkusele <note> ja [notebook]. Kui ühtegi "
+"märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Märgib, et ülesannete loetelu on tehtud ."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Märkus ei ole ülesannete loetelu: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Haldab E2EE konfigureerimist. Käsud on `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
+msgid "Enter master password:"
+msgstr "Sisestage põhiparool:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
+msgid "Operation cancelled"
+msgstr "Toiming tühistati"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
+msgid "Confirm password:"
+msgstr "Kinnitage parool:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
+msgid "Passwords do not match!"
+msgstr "Paroolid ei kattu!"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit "
+"sõltuvalt sellest, kui palju on dekrüpteerida."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
+msgid "Completed decryption."
+msgstr "Dekrüpteerimine on lõpetatud."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Enabled"
+msgstr "Lubatud"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Disabled"
+msgstr "Keelatud"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Krüpteerimine on: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Redigeeri märkust."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Tekstiredaktorit pole määratletud. Seadistage see kasutades "
+"konfiguratsiooniredaktorit <editor-path>"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Aktiivset märkmikku pole."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Märget pole olemas: \"%s\". Kas luua?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Väljub rakendusest."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Ekspordib Joplini andmed antud teele. Vaikimisi ekspordime täieliku "
+"andmebaasi, sealhulgas märkmikud, märkmed, sildid ja ressursid."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Sihtkoha Formaat: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Ekspordib ainult antud märkuse."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Ekspordib ainult antud märkmiku."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Kuvatakse märkme geograafilise asukoha URL."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Kuvab kasutusteabe."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "Teavet selle kohta, kuidas kohandada otseteed Palun külastage %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Otseteed pole CLI režiimis saadaval."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Käsu kohta lisateabe saamiseks tippige käsk `help [command]`; või tippige "
+"täieliku kasutamise teabe saamiseks `help all`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Võimalikud käsud on:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või "
+"kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või "
+"märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Ühest paanist teise liikumiseks vajutage Tab või Shift + Tab."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja "
+"lehe üles/alla klahve."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Konsooli maksimeerimiseks/minimeerimiseks vajutage \"tc\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Käsurea režiimi sisestamiseks vajutage \":\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Käsurea režiimist väljumiseks vajutage ESCAPE"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"73/5000\n"
+"Klaviatuuri otseteede ja konfiguratsioonivõimaluste loendi jaoks tippige "
+"\"help keymap\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Impordib andmed Joplini."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Allika Formaat: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+msgid "Do not ask for confirmation."
+msgstr "Ära küsi kinnitust."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "Leitud: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "Loodud: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Värskendatud: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Vahele jäetud: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Ressursid: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Sildistatud: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
+msgid "Importing notes..."
+msgstr "Märkmete importimine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Märkmed on imporditud: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' "
+"ls /'."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Displays only the first top <num> notes."
+msgstr "Kuvab ainult esimesed <num> märkmed."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Reverses the sorting order."
+msgstr "Pöörab sorteerimis järjestuse ümber."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` "
+"ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks "
+"ainult ülesandeid, `-ttd` aga märkmeid ja ülesanded."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Either \"text\" or \"json\""
+msgstr "Kas \"tekst\" või \"JSON\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Kasutage pikka nimekirja vormingut. ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
+msgid "Please select a notebook first."
+msgstr "Palun valige esmalt märkmik."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Loob uue märkmiku."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Loob uue märkme."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Märkmeid saab luua ainult märkmiku sees."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Loob uue tee."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
+#, fuzzy
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Teisaldab märkmete vastendamise <note> [notebook]."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Nimetab antud <item> (Märkus või märkmik) <name>."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Kustutab antud märkmiku."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
+#, fuzzy
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Kustutab märkmiku ilma kinnitust küsimata."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+#, fuzzy
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Kas soovite märkmiku kustutada? Kustutatakse ka kõik selle märkmiku märkmed "
+"ja alammärkmikud."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Kustutab märkmete vastendamise <note-pattern>."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Kustutab märkmed ilma kinnitust küsimata."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
+msgid "Delete note?"
+msgstr "Kas soovite märkme kustutada?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Otsib <pattern> kõiki märkmeid."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
+#, fuzzy, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Käivitage, peatage või kontrollige API server. Määrata, millist porti peaks "
+"käivitama, seadke API. Port config muutuja. Käsud on ( %s)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Server töötab juba pordis %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Serveris töötab port %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
+msgid "Server is not running."
+msgstr "Server ei tööta."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
+#, fuzzy, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Seab antud atribuudi väärtuseks antud <name> <note> [value]. Võimalikud "
+"omadused on järgmised:\n"
+"\n"
+" %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
+#, fuzzy
+msgid "Displays summary about the notes and notebooks."
+msgstr "Kuvab kokkuvõtte märkmete ja märkmike kohta."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
+#, fuzzy
+msgid "Synchronises with remote storage."
+msgstr "Sünkrooniseerib kaugsalvestusruumi."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
+#, fuzzy
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "Sync esitatud Target (vaikimisi sünkroonimine. Target config väärtus)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/OneDriveLoginScreen.min.js:40
+#, fuzzy
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Autentimine on lõpule viidud (ei saanud autentimise luba)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:42
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
+#, fuzzy
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#, fuzzy
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:57
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
+#, fuzzy
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "2. samm: sisestage kood, mis on esitatud Dropbox:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
+#, fuzzy, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "Pole %s-ga seostatud. Palun esitage puuduv mandaat."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
+msgid "Synchronisation is already in progress."
+msgstr "Sünkroniseerimine on juba teoksil."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
+#, fuzzy, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Lukusta fail on juba kinni. Kui teate, et sünkroonimis ei toimu, võite luku "
+"faili kustutada kohas %s ja jätkata toimingut."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
+#, fuzzy, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Sünkroonimise sihtkoht: %s ( %s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
+#, fuzzy
+msgid "Cannot initialize synchroniser."
+msgstr "Sünkroonijat ei saa lähtestada."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "Sünkroonimise käivitamine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "Ressursside allalaadimine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "Tühistamine... Oota."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
+#, fuzzy
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command>võib olla \"add\", \"remove\", \"list\" või \"notetags\", et "
+"määrata või eemaldada [tag], [note], loetleda märkmed, mis on seotud [tag], "
+"või loetleda silte seostatud [note]. Käsu `tag list` saab kasutada loetleda "
+"kõik sildid (kasuta -l laiendatud valiku jaoks)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Sobimatu käsk: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
+#, fuzzy
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command>võib kas olla \"toggle\" või \"clear\". Kasutage \"toggle\" "
+"antud to-do ümberlülitamiseks lõpetatud ja lõpetamata oleku vahel (kui "
+"sihtmärk on regulaarne märge, teisendatakse see tellimuseks). Kasutage "
+"\"clear\" teisendada to-do tagasi tavalise Märkus."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
+#, fuzzy
+msgid "Marks a to-do as non-completed."
+msgstr "Märgib, et see ei ole lõpetatud."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
+#, fuzzy
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Aktiveerib [notebook]-kõik edasised toimingud toimuvad selle märkmiku sees."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Kuvab versiooniteabe"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#, fuzzy
+msgid "Enum"
+msgstr "Enum"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Tüüp: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Võimalikud väärtused: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Default: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Võimalikud klahvid/väärtused:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
+msgid "Type `joplin help` for usage information."
+msgstr "Sisestage `joplin help` kasutusteabe jaoks ."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
+msgid "Fatal error:"
+msgstr "Parandamatu tõrge:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Otsi:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
+#, fuzzy
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Tere tulemast Joplini!\n"
+"\n"
+"Kirjuta `:help shortcuts` klaviatuuri otseteede loendi või lihtsalt `:help` "
+"kasutusteabe jaoks.\n"
+"\n"
+"Näiteks märkmiku loomiseks vajutage `mb`; , et luua märkme Press `mn`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
+#, fuzzy
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Üks või mitu üksust on praegu krüptitud ja peate võib-olla esitama "
+"Põhiparooli. Selleks sisestage \"e2ee Decrypt\". Kui olete juba parooli "
+"sisestanud, krüptitakse krüptitud üksused taustal ja need on peagi saadaval."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:361
+msgid "Sidebar"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:367
+#, fuzzy
+msgid "Note list"
+msgstr "Märkmete ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:373
+#, fuzzy
+msgid "Note title"
+msgstr "Märkmiku tiitel:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:379
+#, fuzzy
+msgid "Note body"
+msgstr "Märkmete ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:430
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:463
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:167
+msgid "PDF File"
+msgstr "PDF-fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:92
+msgid "Synchronisation Status"
+msgstr "Sünkroonimise olek"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:493
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:502
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:71
+msgid "New note"
+msgstr "Uus Märkus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:505
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:511
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:62
+#, fuzzy
+msgid "New to-do"
+msgstr "Uus to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:517
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:520
+msgid "New notebook"
+msgstr "Uus märkmik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:528
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:301
+msgid "New sub-notebook"
+msgstr "Uus alammärkmik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:540
+msgid "Print"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:559
+msgid "Create note from template"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:569
+msgid "Create to-do from template"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:579
+#, fuzzy
+msgid "Insert template"
+msgstr "Lisa kuupäev kellaaeg"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:589
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin Export kataloog"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:596
+#, fuzzy
+msgid "Refresh templates"
+msgstr "Mallid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:608
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:91
+msgid "Options"
+msgstr "Valikud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:627
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "%s %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:634
+#, fuzzy, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:636
+#, fuzzy, javascript-format
+msgid "Client ID: %s"
+msgstr "Lõpule viidud: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:637
+#, fuzzy, javascript-format
+msgid "Sync Version: %s"
+msgstr "Uus versioon: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:638
+#, fuzzy, javascript-format
+msgid "Profile Version: %s"
+msgstr "Uus versioon: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:652
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:735
+msgid "&File"
+msgstr "&Fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:658
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1057
+msgid "About Joplin"
+msgstr "Teave kasutaja Joplin kohta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:665
+msgid "Preferences..."
+msgstr "Eelistused..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:675
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1036
+msgid "Check for updates..."
+msgstr "Otsi värskendusi..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:689
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:749
+msgid "Templates"
+msgstr "Mallid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:754
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:90
+msgid "Import"
+msgstr "Impordi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:700
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:757
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:379
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:178
+msgid "Export"
+msgstr "Eksport"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:706
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:710
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+msgid "Synchronise"
+msgstr "Sünkroniseeri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:721
+#, javascript-format
+msgid "Hide %s"
+msgstr "Peida %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:728
+msgid "Quit"
+msgstr "Lõpeta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:742
+msgid "Close Window"
+msgstr "Sule aken"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:780
+msgid "&Edit"
+msgstr "&Redigeeri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:783
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:804
+msgid "Copy"
+msgstr "Kopeeri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:788
+msgid "Cut"
+msgstr "Lõika"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:793
+msgid "Paste"
+msgstr "Kleebi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:798
+msgid "Select all"
+msgstr "Vali kõik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:806
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1617
+msgid "Bold"
+msgstr "Paks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:817
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1625
+msgid "Italic"
+msgstr "Kald"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:828
+msgid "Link"
+msgstr "Link"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:839
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1645
+msgid "Code"
+msgstr "Kood"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:853
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1705
+msgid "Insert Date Time"
+msgstr "Lisa kuupäev kellaaeg"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:867
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1728
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:55
+msgid "Edit in external editor"
+msgstr "Redigeeri välisredaktoris"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:878
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1562
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1737
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:760
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
+msgid "Tags"
+msgstr "Sildid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:894
+msgid "Search in all the notes"
+msgstr "Otsi kõigist märkmetest"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:905
+msgid "Search in current note"
+msgstr "Otsi praeguses märkuses"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:917
+msgid "&View"
+msgstr "&Vaade"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:919
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:484
+msgid "Toggle sidebar"
+msgstr "Lülita külgriba sisse/välja"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:932
+#, fuzzy
+msgid "Layout button sequence"
+msgstr "Paigutuse nupujada"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:936
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:493
+msgid "Toggle note list"
+msgstr "Lülita märkuseloend sisse/välja"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:945
+msgid "Toggle editor layout"
+msgstr "Lülita redaktori paigutus sisse/välja"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:993
+msgid "Focus"
+msgstr "Fookus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1000
+msgid "Actual Size"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1006
+msgid "Zoom In"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1012
+msgid "Zoom Out"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1020
+msgid "&Tools"
+msgstr "&Tööriistad"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1024
+msgid "&Help"
+msgstr "&Spikker"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1026
+msgid "Website and documentation"
+msgstr "Veebileht ja dokumentatsioon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1030
+msgid "Joplin Forum"
+msgstr "Joplini Foorum"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1033
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
+msgid "Make a donation"
+msgstr "Annetuse tegemine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1045
+msgid "Toggle development tools"
+msgstr "Lülita arendus tööriistad"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1179
+#, javascript-format
+msgid "Open %s"
+msgstr "Ava %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1181
+msgid "Exit"
+msgstr "Välju"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:92
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:113
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:138
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:749
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:30
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
+msgid "OK"
+msgstr "OK"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DialogButtonRow.min.js:38
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:238
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:316
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:710
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:156
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Cancel"
+msgstr "Tühista"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:137
+msgid "Current version is up-to-date."
+msgstr "Praegune versioon on ajakohane."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:146
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (väljalaske-eelne)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+msgid "An update is available, do you want to download it now?"
+msgstr "Saadaval on värskendus, kas soovite selle kohe alla laadida?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Teie versioon: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:150
+#, javascript-format
+msgid "New version: %s"
+msgstr "Uus versioon: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+msgid "Yes"
+msgstr "Jah"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+msgid "No"
+msgstr "Ei"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/checkForUpdates.js:151
+msgid "Full Release Notes"
+msgstr "Täielikud väljalaskemärkmed"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Token on kopeeritud lõikelauale!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr "Web Clipper service on lubatud ja seadke automaatselt käivituma."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Olek: alustatud porti %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "Staatus: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "Keela Web Clipper Service"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr "Web clipper service pole lubatud."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "Luba Web Clipper Service"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:122
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Joplin Web Clipper võimaldab salvestada veebilehti ja ekraanipilte "
+"brauserist Joplini."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Selleks, et kasutada Web Clipper, peate tegema järgmist:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "1. samm: Lubage Clipper service"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:140
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"See teenus võimaldab brauseri laiendil suhelda Joplini-ga. Kui lubate selle, "
+"võib tulemüür paluda teil anda luba Joplini kuulata teatud porti."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "2. toiming: installige laiend"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr "Laadige alla ja installige brauseri vastav laiend:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "Täpsemad suvandid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Autoriseerimis token:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "Kopeeri token"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ClipperConfigScreen.min.js:195
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"See luba on vajalik ainult selleks, et lubada kolmanda osapoole rakendustele "
+"juurdepääsu Joplini."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:139
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Märkmed ja sätted talletatakse: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
+msgid "Check synchronisation configuration"
+msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:174
+msgid "Unknown"
+msgstr "Tundmatu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:178
+msgid "Checking..."
+msgstr "Kontrollimine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
+msgid "Error"
+msgstr "Viga"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:193
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Joplin Nextcloud app ei ole installitud või valesti konfigureeritud. Palun "
+"vaadake täielikku tõrketeadet allpool:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
+msgid "Show Log"
+msgstr "Näita Logi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
+msgid "Joplin Nextcloud App status:"
+msgstr "Joplin Nextcloud rakenduse staatus:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
+msgid "Check Status"
+msgstr "Kontrolli olekut"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:240
+msgid "Help"
+msgstr "Abi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:259
+msgid "Show Advanced Settings"
+msgstr "Kuva täpsemad sätted"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:516
+msgid "Browse..."
+msgstr "Sirvi..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:637
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+msgid "Edit"
+msgstr "Muuda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:269
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:187
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1598
+msgid "Back"
+msgstr "Tagasi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:756
+msgid "Apply"
+msgstr "Rakenda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/DropboxLoginScreen.min.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
+msgid "Submit"
+msgstr "Saada"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:104
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
+msgid "Save"
+msgstr "Salvesta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:141
+#, fuzzy
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"Krüpteerimis keelamine tähendab, et * kõik * teie märkmed ja manused "
+"sünkrooniseeritakse uuesti ja saadetakse krüptimata sünkroonimisobjektile. "
+"Kas soovite jätkata?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:143
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
+#, fuzzy
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Krüptimise lubamine tähendab * kõik * teie märkmed ja manused lähevad uuesti "
+"sünkroonitult ja saadetakse krüptitud sünkroonimise sihtmärgini. Ärge "
+"kaotage parooli, kuna turvalisuse huvides on see * ainult * võimalus andmeid "
+"dekrüptida! Krüptimise lubamiseks sisestage palun oma parool."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+msgid "Disable encryption"
+msgstr "Keela krüptimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+msgid "Enable encryption"
+msgstr "Luba krüptimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:184
+msgid "Master Keys"
+msgstr "Põhiklahvid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:198
+msgid "Active"
+msgstr "Aktiivne"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:203
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:284
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:26
+msgid "ID"
+msgstr "ID"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:208
+msgid "Source"
+msgstr "Allikas"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:213
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "Loodud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "Uuendatud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:223
+msgid "Password"
+msgstr "Parool"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:228
+msgid "Password OK"
+msgstr "Salasõna OK"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:237
+#, fuzzy
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Märkus: krüptimiseks kasutatakse ainult ühte Põhivõtit (see on märgitud kui "
+"\"active\"). Mis tahes võtit võib kasutada dekrüptimiseks, olenevalt "
+"sellest, kuidas märkmed või märkmikud algselt krüptiti."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid "Missing Master Keys"
+msgstr "Puuduvad juhtklahvid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:270
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
+#, fuzzy
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Nende ID-dega põhivõtmeid kasutatakse mõnede üksuste krüptimiseks, kuid "
+"rakendus ei ole praegu neile juurdepääsemiseks. Tõenäoliselt laaditakse need "
+"lõpuks sünkroniseerimise kaudu alla."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
+#, fuzzy
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"End-to-end krüptimine (E2EE) kohta lisateabe saamiseks ja nõuanded selle "
+"kohta, kuidas seda lubada, Palun kontrollige dokumentatsiooni:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:327
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
+msgid "Status"
+msgstr "Staatus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/EncryptionConfigScreen.min.js:332
+msgid "Encryption is:"
+msgstr "Krüpteerimine on:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefoxi laiendus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome ' i veebipood"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Võta nüüd:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:224
+msgid "Usage"
+msgstr "Kasutus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ImportScreen.min.js:62
+#, fuzzy, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:108
+msgid "Please create a notebook first."
+msgstr "Palun looge esmalt märkmik."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:114
+msgid "Please create a notebook first"
+msgstr "Palun looge esmalt märkmik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:121
+msgid "Notebook title:"
+msgstr "Märkmiku tiitel:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:164
+msgid "Add or remove tags:"
+msgstr "Siltide lisamine või eemaldamine:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:204
+msgid "Rename notebook:"
+msgstr "Märkmiku ümbernimetamine:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:225
+msgid "Rename tag:"
+msgstr "Nimeta silt ümber:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:318
+msgid "Set alarm:"
+msgstr "Alarmi seadmine:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:349
+msgid "Template file:"
+msgstr "Mallifail:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:528
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1058
+msgid "Layout"
+msgstr "Paigutus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:537
+msgid "Search..."
+msgstr "Otsi..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:576
+msgid "Some items cannot be synchronised."
+msgstr "Mõnda üksust ei saa sünkroonida."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:586
+msgid "View them now"
+msgstr "Vaata neid nüüd"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:593
+msgid "One or more master keys need a password."
+msgstr "Üks või mitu Põhivõtit vajavad parooli."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:603
+msgid "Set the password"
+msgstr "Parooli seadmine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:451
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteList.min.js:451
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr "Praegu pole märkmikku. Loo üks klõpsates \"New notebook\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr "Lõpetatud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:30
+msgid "Location"
+msgstr "Asukoht"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:32
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
+msgid "Note History"
+msgstr "Märkmete ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:33
+#, fuzzy
+msgid "Markup"
+msgstr "Märgistus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:312
+msgid "Previous versions of this note"
+msgstr "Selle märkme eelmised versioonid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:389
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1761
+msgid "Note properties"
+msgstr "Märkme atribuudid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Sellel märkel pole ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:142
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Toetuseta link või sõnum: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Taasta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteRevisionViewer.min.js:178
+#, fuzzy, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Märkme taastamiseks klõpsake nuppu \"%s\". See kopeeritakse märkmikku nimega "
+"\"%s\". Märkme praegust versiooni ei asendata ega muudeta."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "Avatud..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:781
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Seda faili ei saanud avada: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "Salvesta kui..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
+msgstr "Kopeeri tee lõikelauale"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr "Kopeeri lingi aadress"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
+msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:835
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1058
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Sellel märkel pole sisu. Klõpsake \" %s\" redaktori vahetamiseks ja märkme "
+"redigeerimiseks."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1294
+msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1479
+#, fuzzy
+msgid "strong text"
+msgstr "tugev tekst"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1483
+msgid "emphasized text"
+msgstr "toonitud tekst"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1519
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1523
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1532
+#, fuzzy
+msgid "List item"
+msgstr "Loendiüksus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1544
+msgid "Insert Hyperlink"
+msgstr "Lisa hüperlink"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1555
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1653
+msgid "Attach file"
+msgstr "Manusta fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1570
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1755
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
+msgid "Set alarm"
+msgstr "Alarmi seadmine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1584
+#, javascript-format
+msgid "In: %s"
+msgstr "Asukoht: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1637
+msgid "Hyperlink"
+msgstr "Hüperlink"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1665
+msgid "Numbered List"
+msgstr "Nummerdatud loend"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1673
+msgid "Bulleted List"
+msgstr "Täpp-loend"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1681
+msgid "Checkbox"
+msgstr "Märkekast"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1689
+msgid "Heading"
+msgstr "Pealkiri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1697
+#, fuzzy
+msgid "Horizontal Rule"
+msgstr "Horisontaalne reegel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1719
+msgid "Click to stop external editing"
+msgstr "Klõpsake välise redigeerimise peatamiseks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1720
+msgid "Watching..."
+msgstr "Vaadates..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2036
+msgid "to-do"
+msgstr "ülesande nimekiri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2036
+msgid "note"
+msgstr "paberraha"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:2036
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Uue %s loomine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/PromptDialog.min.js:243
+msgid "Clear"
+msgstr "Tühjenda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:88
+msgid "OneDrive Login"
+msgstr "OneDrive-i sisselogimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Root.min.js:89
+msgid "Dropbox Login"
+msgstr "Dropbox-i sisselogimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:164
+msgid "Synchronising..."
+msgstr "Sünkroonimine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:166
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Lingi loomine..."
+msgstr[1] "Linkide loomine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:168
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Link on kopeeritud lõikelauale!"
+msgstr[1] "Lingid on kopeeritud lõikelauale!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:171
+#, fuzzy
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Märkused: kui Märkus on ühiskasutuses, ei ole see enam serveris krüptitud."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:176
+msgid "Share Notes"
+msgstr "Märkmete ühiskasutus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:178
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Kopeeri jagatav link"
+msgstr[1] "Kopeeri jagatavad lingid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:181
+msgid "Close"
+msgstr "Sulge"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
+msgid "Remove"
+msgstr "Eemalda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:283
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Kas soovite märkmiku \"%s\"?\n"
+"\n"
+"Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:284
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:185
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:311
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
+msgid "Delete"
+msgstr "Kustuta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:287
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Kas eemaldada silt \"%s\" kõigist märkmetest?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:289
+msgid "Remove this search from the sidebar?"
+msgstr "Kas soovite selle otsingu külgribalt eemaldada?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:336
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:386
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Nimeta ümber"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:743
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:362
+msgid "Notebooks"
+msgstr "Sülearvutid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:778
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Üksuste dekrüpteerimine: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:783
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Ressursside toomine: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/StatusScreen.min.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
+msgid "Retry"
+msgstr "Uuesti"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:27
+msgid "Add or remove tags"
+msgstr "Lisa või eemalda sildid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:40
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:317
+msgid "Duplicate"
+msgstr "Paljunda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:45
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopeeri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:65
+msgid "Stop external editing"
+msgstr "Peata väline redigeerimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:77
+#, fuzzy
+msgid "Switch between note and to-do type"
+msgstr "Märkme ja to-do tüübi vaheldumisi aktiveerimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:100
+msgid "Switch to note type"
+msgstr "Märkme tüübi aktiveerimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:109
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Lülita to-do-tüüpi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:119
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
+msgid "Copy Markdown link"
+msgstr "Kopeeri Markdown link"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:134
+msgid "Share note..."
+msgstr "Jaga märkust..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:202
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Kas kustutada märge \"%s\"?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:204
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Kas kustutada %d märkmed?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/utils/NoteListUtils.js:221
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Tõrge märkme avamisel redaktoris: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:339
+#, fuzzy
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"Tippige sellele hüppamiseks märkme tiitel. Või tippige #, millele järgneb "
+"sildi nimi või @, millele järgneb märkmiku nimi."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/plugins/GotoAnything.min.js:377
+#, fuzzy
+msgid "Goto Anything..."
+msgstr "Ükskõik mida..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:102
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:115
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:146
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Kasutus: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:181
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Tundmatu lipp: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#, fuzzy, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Joplin Nextcloud'i rakendusega ei saanud ühendust. Kontrollige "
+"konfiguratsiooni ekraanil Sünkrooniseerimise config. Täielik viga oli:\n"
+"\n"
+"%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Failisüsteem"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive dev (ainult testimiseks)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:176
+#, fuzzy, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Tundmatu Logitase: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:185
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Tundmatu taseme ID: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
+#, fuzzy
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "Taotlus on lubatud-võite nüüd sulgeda selle brauseri vahekaart."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
+#, fuzzy
+msgid "The application has been successfully authorised."
+msgstr "Taotlus on edukalt lubatud."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
+#, fuzzy
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Rakenduse autentimiseks avage brauseris järgmine URL. Rakendus loob "
+"kataloogi \"Apps/Joplin\" ja ainult lugeda ja kirjutada faile selles "
+"kataloogis. See ei ole juurdepääsu tahes faile väljaspool seda kataloogi ega "
+"muid isikuandmeid. Andmeid ei jagata ühelegi kolmandale osapoolele."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
+#, fuzzy
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Luba ei saa värskendada: autentimisandmed on puudu. Sünkroonimise "
+"käivitamine võib probleemi lahendada."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:99
+msgid "Untitled"
+msgstr "Pealkirjata"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:137
+#, fuzzy
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"OneDrive ' iga ei saanud sünkroonida.\n"
+"\n"
+"See tõrge ilmneb sageli siis, kui kasutate OneDrive for Business, mida "
+"kahjuks ei toetata.\n"
+"\n"
+"Palun kaaluge tavalise OneDrive'i konto kasutamist."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:126
+#, fuzzy, javascript-format
+msgid "Cannot access %s"
+msgstr "%s ei pääse juurde"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Loodud kohalikud üksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
+#, fuzzy, javascript-format
+msgid "Updated local items: %d."
+msgstr "Värskendatud kohalikud üksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Loodud kaugüksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Värskendatud kaugüksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Kustutatud kohalikud üksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Kustutatud kaugüksused: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Tõmmatud üksused: %d/%d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "Tühistamine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Lõpule viidud: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Viimane tõrge: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
+msgid "Idle"
+msgstr "Jõude"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "Töötlemisel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
+msgid "Encrypted"
+msgstr "Krüpteeritud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
+msgid "Encrypted items cannot be modified"
+msgstr "Krüpteeritud üksusi ei saa muuta"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:23
+msgid "title"
+msgstr "pealkiri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+msgid "updated date"
+msgstr "värskendatud kuupäev"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
+msgid "Conflicts"
+msgstr "Konfliktid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
+msgid "Cannot move notebook to this location"
+msgstr "Märkmiku ei saa sellesse asukohta teisaldada"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+msgid "created date"
+msgstr "loodud kuupäev"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:104
+#, fuzzy
+msgid "This note does not have geolocation information."
+msgstr "Sellel märkil pole geoasukohateavet."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:431
+#, fuzzy, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:442
+#, fuzzy, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
+msgid "Not downloaded"
+msgstr "Ei laaditud alla"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
+msgid "Downloading"
+msgstr "Allalaadimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
+msgid "Downloaded"
+msgstr "Allalaetud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
+#, fuzzy, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Tähelepanu: kui muudate seda asukohta, veenduge, et kopeerite enne "
+"sünkroonimist kõik oma sisu, vastasel juhul eemaldatakse kõik failid! "
+"Lisateavet leiate KKK-st: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+msgid "Keyboard Mode"
+msgstr "Klaviatuuri režiim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+msgid "Default"
+msgstr "Vaikimisi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
+msgid "Emacs"
+msgstr "Emacs"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+msgid "Vim"
+msgstr "Vim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
+#, fuzzy
+msgid "Synchronisation target"
+msgstr "Sünkroniseerimine eesmärk"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
+#, fuzzy
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Sihtmärk, kuhu sünteesitakse. Iga sünkroonimise Target võib olla täiendavaid "
+"parameetreid, mis on nimega `sync.NUM.NAME` (kõik dokumenteeritud allpool)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
+#, fuzzy
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Kataloog, millega sünkroonitakse (absoluutne tee)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV-i URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
+msgid "Nextcloud username"
+msgstr "Nextcloud-i kasutajanimi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
+msgid "Nextcloud password"
+msgstr "Nextcloud-i parool"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
+msgid "WebDAV URL"
+msgstr "WebDAV-i URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
+msgid "WebDAV username"
+msgstr "WebDAV-i kasutajanimi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
+msgid "WebDAV password"
+msgstr "WebDAV-i parool"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
+msgid "Attachment download behaviour"
+msgstr "Manuse allalaadimise käitumine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
+#, fuzzy
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"\"Manual\" režiimis laaditakse manused alla ainult siis, kui klõpsate neid. "
+"\"Auto\", nad laaditakse, kui avate märkme. \"Always\", laaditakse kõik "
+"manused, kas avate märkme või mitte."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
+msgid "Always"
+msgstr "Alati"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
+msgid "Manual"
+msgstr "Manuaal"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
+msgid "Auto"
+msgstr "Automaatne"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+msgid "Max concurrent connections"
+msgstr "Maksimaalsed samaaegsed ühendused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
+msgid "Language"
+msgstr "Keel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
+msgid "Date format"
+msgstr "Kuupäeva formaat"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:224
+msgid "Time format"
+msgstr "Kellaaja Formaat"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:239
+msgid "Theme"
+msgstr "Teema"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
+msgid "Light"
+msgstr "Hele"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:244
+msgid "Dark"
+msgstr "Tume"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+msgid "Dracula"
+msgstr "Dracula"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
+msgid "Nord"
+msgstr "Nord"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
+#, fuzzy
+msgid "OLED Dark"
+msgstr "Tume"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
+msgid "Show note counts"
+msgstr "Kuva märkmete arv"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+msgid "Editor"
+msgstr "Redigeerija"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, fuzzy
+msgid "Viewer"
+msgstr "Viewer"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Split View"
+msgstr "Tükelda vaade"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
+msgid "Uncompleted to-dos on top"
+msgstr "Lõpetamata ülesanded üleval"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
+msgid "Show completed to-dos"
+msgstr "Näita lõpuleviidud ülesandeid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+msgid "Sort notes by"
+msgstr "Märkmete sortimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Automaatne sidumine traksid, sulg, noteeringud jne."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
+msgid "Reverse sort order"
+msgstr "Pööra sortimisjärjestus ümber"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
+msgid "Sort notebooks by"
+msgstr "Sorteeri märkmikud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
+msgid "Save geo-location with notes"
+msgstr "Salvesta geograafilise asukoha märkmed"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+#, fuzzy
+msgid "When creating a new to-do:"
+msgstr "Uue tee loomisel:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:328
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
+#, fuzzy
+msgid "Focus title"
+msgstr "Fookuse tiitel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
+#, fuzzy
+msgid "Focus body"
+msgstr "Fookuse keha"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+msgid "When creating a new note:"
+msgstr "Uue märkme loomisel:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
+#, fuzzy
+msgid "Enable soft breaks"
+msgstr "Luba pehmed katkestused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "Luba typographer tugi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
+#, fuzzy
+msgid "Enable math expressions"
+msgstr "Luba matemaatika avaldised"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
+#, fuzzy
+msgid "Enable ==mark== syntax"
+msgstr "Luba = = Mark = = süntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+#, fuzzy
+msgid "Enable footnotes"
+msgstr "Luba allmärkused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+#, fuzzy
+msgid "Enable table of contents extension"
+msgstr "Luba sisukorra laiend"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+#, fuzzy
+msgid "Enable ~sub~ syntax"
+msgstr "Luba ~ sub ~ süntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
+#, fuzzy
+msgid "Enable ^sup^ syntax"
+msgstr "Luba ^ SUP ^ Süntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
+#, fuzzy
+msgid "Enable deflist syntax"
+msgstr "Luba deflailosüntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+#, fuzzy
+msgid "Enable abbreviation syntax"
+msgstr "Luba lühendi süntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+#, fuzzy
+msgid "Enable markdown emoji"
+msgstr "Luba allahindlusest emotikonide"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
+#, fuzzy
+msgid "Enable ++insert++ syntax"
+msgstr "Luba + + lisa + + süntaks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
+#, fuzzy
+msgid "Enable multimarkdown table extension"
+msgstr "Luba mitmemarkdown tabeli laiend"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
+#, fuzzy
+msgid "Enable Fountain syntax support"
+msgstr "Luba purskkaevu süntaks toetust"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
+#, fuzzy
+msgid "Enable Mermaid diagrams support"
+msgstr "Luba typographer tugi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
+msgid "Show tray icon"
+msgstr "Kuva salve ikoon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+msgid "Note: Does not work in all desktop environments."
+msgstr "Märkus: ei tööta kõigil töölaua keskkondades."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#, fuzzy
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"See võimaldab Joplini taustal töötada. Soovitatav on seda sätet lubada, et "
+"teie märkmed pidevalt sünkroonitakse, vähendades seega konfliktide arvu."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
+#, fuzzy
+msgid "Start application minimised in the tray icon"
+msgstr "Alusta rakenduse minimeerimise salve ikoonil"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:398
+msgid "Editor font size"
+msgstr "Redaktori fondi suurus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:406
+msgid "Editor font"
+msgstr "Redaktori font"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:430
+msgid "Editor font family"
+msgstr "Redaktori font pere"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+#, fuzzy
+msgid ""
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
+msgstr ""
+"See peab olema * monospace * font või see ei tööta korralikult. Kui font on "
+"vale või tühi, vaikimisi on üldine monospace font."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
+#, fuzzy
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Kohandatud Stylesheet Joplin Wide app stiilid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
+#, fuzzy
+msgid "Automatically update the application"
+msgstr "Värskenda rakendus automaatselt"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#, fuzzy
+msgid "Get pre-releases when checking for updates"
+msgstr "Hankige eelväljaanded värskenduste kontrollimisel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#, fuzzy, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Lisateavet väljalaske-eelse lehe kohta leiate teemast: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+#, fuzzy
+msgid "Synchronisation interval"
+msgstr "Sünkroniseerimisintervall"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d minutit"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#, javascript-format
+msgid "%d hour"
+msgstr "%d tund"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#, javascript-format
+msgid "%d hours"
+msgstr "%d tundi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#, fuzzy
+msgid "Text editor command"
+msgstr "Tekstiredaktori käsk"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#, fuzzy
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Toimetaja käsk (võib sisaldada argumente), mida kasutatakse märkme "
+"avamiseks. Kui ühtegi pole ette nähtud, proovib see automaatselt tuvastada "
+"vaikeredaktorit."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
+#, fuzzy
+msgid "Page size for PDF export"
+msgstr "Lehekülje suurus PDF-i eksportimiseks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+msgid "A4"
+msgstr "A4"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+msgid "Letter"
+msgstr "Kaaskiri"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
+msgid "A3"
+msgstr "A3"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+msgid "A5"
+msgstr "A5"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+#, fuzzy
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
+msgid "Legal"
+msgstr "Õiguslik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+msgid "Page orientation for PDF export"
+msgstr "Lehekülje suund PDF-i eksportimiseks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
+msgid "Portrait"
+msgstr "Portree"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+msgid "Landscape"
+msgstr "Maastik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+msgid "Custom TLS certificates"
+msgstr "Kohandatud TLS-i serdid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+#, fuzzy
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Komaeraldusega teede kataloogid laadida serdid või tee üksikute CERT faile. "
+"Näiteks:/my/cert_dir, /other/custom.pem. Pange tähele, et kui muudate TLS-i "
+"sätteid, peate enne nupu \"Check synchronisation configuration\" klõpsamist "
+"oma muudatused salvestama."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+msgid "Ignore TLS certificate errors"
+msgstr "Ignoreeri TLS-i serdi tõrked"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
+#, fuzzy
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Fail-Safe: Ärge pühkige kohalikke andmeid, kui sünkroonimise eesmärk on tühi "
+"(sageli tulemus vale konfiguratsioon või viga)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+#, fuzzy
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Määrake Port, mida peaks kasutama API-server. Kui seda ei määrata, "
+"kasutatakse vaikeväärtust."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
+#, fuzzy
+msgid "Enable note history"
+msgstr "Luba märkmete ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+msgid "days"
+msgstr "päeva"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#, javascript-format
+msgid "%d days"
+msgstr "%d päeva"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
+msgid "Keep note history for"
+msgstr "Säilita märkmete ajalugu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:694
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:982
+msgid "General"
+msgstr "Üldine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:983
+msgid "Synchronisation"
+msgstr "Sünkroonimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:984
+msgid "Appearance"
+msgstr "Välimus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
+msgid "Note"
+msgstr "Märge"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
+msgid "Plugins"
+msgstr "Pluginad"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
+msgid "Application"
+msgstr "Rakendus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
+msgid "Encryption"
+msgstr "Krüpteerimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
+#, fuzzy, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Silt %s on juba olemas. Palun valige mõni muu nimi."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Joplin Export faili"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
+msgid "Markdown"
+msgstr "Markdown"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
+#, fuzzy
+msgid "Joplin Export Directory"
+msgstr "Joplin Export kataloog"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Export faili (nagu Markdown)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Export faili (HTML)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "JSON Export kataloog"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+msgid "HTML File"
+msgstr "HTML-fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+msgid "HTML Directory"
+msgstr "HTML-kataloog"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "File"
+msgstr "Fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "Directory"
+msgstr "Kataloogid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
+#, fuzzy, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Määrake %s importimise vorming"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
+#, fuzzy, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"See üksus on praegu krüptitud: %s \"%s\". Palun oodake, kuni kõik üksused "
+"dekrüpteeritud ja proovige uuesti."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+msgid "There is no data to export."
+msgstr "Eksportivaid andmeid pole."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Palun täpsustage märkmik, kuhu märkmed tuleks importida."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
+msgid "Restored Notes"
+msgstr "Taastatud märkmed"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Üksused, mida ei saa sünkrooniseerida"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
+#, fuzzy
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Need üksused jäävad seadmesse, kuid ei laadita sünkroonimise sihtmärki. "
+"Nende üksuste leidmiseks otsige pealkirja või ID-d (mis kuvatakse ülaltoodud "
+"sulgudes)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) ei saanud üles laadida: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Üksust %s ei saanud alla laadida: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "Üksused, mida ei saa dekrüptida"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
+#, fuzzy
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin ei saanud neid üksusi mitu korda dekrüptida, võimalik, et need on "
+"rikutud või liiga suured. Need üksused jäävad seadmesse, kuid Joplin ei püüa "
+"enam neid dekrüptida."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+msgid "Attachments"
+msgstr "Manused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+msgid "Downloaded and decrypted"
+msgstr "Alla laaditud ja dekrüpteeritud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+msgid "Downloaded and encrypted"
+msgstr "Alla laaditud ja krüpteeritud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+msgid "Attachments that could not be downloaded"
+msgstr "Manused, mida ei saanud alla laadida"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
+msgid "Sync status (synced items / total items)"
+msgstr "Sünkroonimise olek (sünkroonitud üksused/kokku üksused)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Kokku: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Konflikteeritud: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Kustutamiseks: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
+msgid "Folders"
+msgstr "Kaustad"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d märkused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
+#, fuzzy
+msgid "Coming alarms"
+msgstr "Tulehäired"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
+#, javascript-format
+msgid "On %s: %s"
+msgstr "%s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "Kaamera kasutamise õigus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr "Teie luba kaamera kasutamiseks on vajalik."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Teil pole praegu märkmikke."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Märkmiku loomine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Praegu pole märkmeid. Looge üks, klõpsates nupul (+)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:180
+msgid "Delete these notes?"
+msgstr "Kas soovite need märkmed kustutada?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:347
+msgid "Move to notebook..."
+msgstr "Teisalda märkmikku..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:386
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Kas teisaldada %d märkmed märkmikku \"%s\"?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
+msgid "Press to set the decryption password."
+msgstr "Vajutage, et määrata dekrüptimisparool."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Mõnda üksust ei saa sünkroonida. Lisateabe saamiseks vajutage."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "Tühjenda alarm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
+#, fuzzy
+msgid "Save alarm"
+msgstr "Häire salvestamine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "Vali kuupäev"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "Kinnita"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Märkmik: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Krüptitud märkmikke ei saa ümber nimetada"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
+msgid "New Notebook"
+msgstr "Uus märkmik"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+msgid "Configuration"
+msgstr "Seadistamine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:358
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+msgid "All notes"
+msgstr "Kõik märkmed"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Kontroll... Oota."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Edu! Sünkroonimise konfiguratsioon näib olevat õige."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
+#, fuzzy
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Viga. Palun kontrollige, kas URL, kasutajanimi, parool jne on õiged ja et "
+"Sünkroonimise sihtkoht on juurdepääsetav. Teatatud viga oli:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Taotlus on heaks kiidetud!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Taotlust ei saanud lubada:\n"
+"\n"
+"%s\n"
+"\n"
+"Palun proovige uuesti."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Dekrüpteeritud üksused: %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Uued sildid:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:177
+msgid "Type new tags or select from list"
+msgstr "Tippige uued sildid või valige loendist"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+msgid "Warning"
+msgstr "Hoiatus"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Selleks, et kasutada failisüsteemi sünkroniseerimist, on vajalik teie õigus "
+"kirjutada välisele salvestussüsteemile."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
+msgid "Information"
+msgstr "Informatsioon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
+msgid "Encryption Config"
+msgstr "Krüptimise konfiguratsioon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
+msgid "Tools"
+msgstr "Tööriistad"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
+msgid "Sync Status"
+msgstr "Sünkroonimise olek"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
+msgid "Log"
+msgstr "Logi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+msgid "Creating report..."
+msgstr "Aruande loomine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+#, fuzzy
+msgid "Export Debug Report"
+msgstr "Ekspordi Silumisaruanne"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fixing search index..."
+msgstr "Otsinguindeksi parandamine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fix search index"
+msgstr "Paranda otsinguindeks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+#, fuzzy
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Kasutage seda Otsinguindeksi taastamiseks, kui otsinguga on probleeme. "
+"Sõltuvalt märkmete arvust võib kuluda palju aega."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "Exporting profile..."
+msgstr "Profiili eksportimine..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "Export profile"
+msgstr "Ekspordi profiil"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "Ainult silumiseks eesmärk: eksportida oma profiili välise SD kaardi."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
+msgid "More information"
+msgstr "Lisainformatsioon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
+#, fuzzy
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Õigesti töötamiseks vajab rakendus järgmisi õigusi. Palun lubage need oma "
+"telefoni seaded, rakendustes > Joplin > permissions"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
+#, fuzzy
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"-Storage: lubada lisades faile märkmeid ja lubada failisüsteemi "
+"sünkroniseerimine."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "-Kaamera: lubada pildistamine ja lisada see märkmele."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "-Asukoht: lubada lisamine geograafilise asukoha teavet märkkele."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+msgid "Joplin website"
+msgstr "Joplini veebisait"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
+#, javascript-format
+msgid "Database v%s"
+msgstr "Andmebaas v%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS lubatud: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
+msgid "Login with Dropbox"
+msgstr "Logi sisse Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+msgid "Enter code here"
+msgstr "Sisestage kood siia"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Põhivõti %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
+#, javascript-format
+msgid "Created: %s"
+msgstr "Loodud: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
+msgid "Password:"
+msgstr "Parool:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
+msgid "Password cannot be empty"
+msgstr "Parool ei tohi olla tühi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
+msgid "Confirm password cannot be empty"
+msgstr "Parooli kinnitamine ei tohi olla tühi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
+msgid "Enable"
+msgstr "Luba"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Märkmikku ei saanud salvestada: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Märkmiku redigeerimine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Sisestage märkmiku tiitel"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+msgid "Refresh"
+msgstr "Värskenda"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Näita kõiki"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Ainult tõrked"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "This note has been modified:"
+msgstr "Seda märkust on muudetud:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Save changes"
+msgstr "Salvesta muudatused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Discard changes"
+msgstr "Hülga muutused"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Üksust ID-ga %s ei ole"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Seda manust ei ole laetud ega dekrüpteeritud veel."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Linke protokolliga \"%s\" ei toetata"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Toetuseta pilditüüp: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Värskendatud: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+msgid "View on map"
+msgstr "Vaata kaardilt"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
+msgid "Go to source URL"
+msgstr "Mine Allika URL-ile"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
+msgid "Attach..."
+msgstr "Lisada..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Choose an option"
+msgstr "Valida suvand"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Take photo"
+msgstr "Pildista"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Attach photo"
+msgstr "Manusta foto"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Attach any file"
+msgstr "Manusta mis tahes fail"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+msgid "Share"
+msgstr "Jaga"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+msgid "Convert to note"
+msgstr "Teisenda märkeks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#, fuzzy
+msgid "Convert to todo"
+msgstr "Teisenda Todo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+msgid "Properties"
+msgstr "Objektid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
+msgid "Add body"
+msgstr "Lisa keha"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
+msgid "Add title"
+msgstr "Pealkirja lisamine"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
+msgid "Login with OneDrive"
+msgstr "Logi sisse OneDrive ' iga"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Otsi"
+
+#, fuzzy
+#~ msgid "Global zoom percentage"
+#~ msgstr "Globaalne suurenduse protsent"
