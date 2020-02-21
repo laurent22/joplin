@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Laurent Cozic",
   "scripts": {
+    "test": "gulp buildTests -L && jasmine --config=tests/support/jasmine.json",
     "postinstall": "patch-package && npm run build",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --env dev"

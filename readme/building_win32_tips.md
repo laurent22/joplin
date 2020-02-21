@@ -1,3 +1,8 @@
+* * *
+
+**IMPORTANT: The build system has been changed since this document was written, thus it contains outdated information. It is kept for now as it may still contain some tips on how to get things working.**
+
+* * *
 
 ## Building Joplin on Windows
 

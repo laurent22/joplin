@@ -5,10 +5,9 @@ const tasks = {
 	copyLib: require('../Tools/gulp/tasks/copyLib'),
 };
 
-const buildDir = `${__dirname}/build`;
-
 tasks.build = {
 	fn: async () => {
+		const buildDir = `${__dirname}/build`;
 		await utils.copyDir(`${__dirname}/app`, buildDir, {
 			excluded: ['node_modules'],
 		});
@@ -19,4 +18,23 @@ tasks.build = {
 	},
 };
 
+tasks.buildTests = {
+	fn: async () => {
+		const testBuildDir = `${__dirname}/tests-build`;
+
+		await utils.copyDir(`${__dirname}/tests`, testBuildDir, {
+			excluded: [
+				'lib/',
+				'locales/',
+				'node_modules/',
+			],
+		});
+
+		await utils.copyDir(`${__dirname}/../ReactNativeClient/lib`, `${testBuildDir}/lib`);
+		await utils.copyDir(`${__dirname}/../ReactNativeClient/locales`, `${testBuildDir}/locales`);
+		await fs.mkdirp(`${testBuildDir}/data`);
+	},
+};
+
 gulp.task('build', tasks.build.fn);
+gulp.task('buildTests', tasks.buildTests.fn);

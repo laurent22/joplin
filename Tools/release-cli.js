@@ -56,8 +56,9 @@ async function main() {
 	console.info(`Building ${newVersion}...`);
 	const newTag = `cli-${newVersion}`;
 
+	await execCommand('git pull');
 	await execCommand('touch app/main.js');
-	await execCommand('bash build.sh');
+	await execCommand('npm run build');
 	await execCommand('cp package.json build/');
 	await execCommand('cp ../README.md build/');
 
@@ -74,7 +75,6 @@ async function main() {
 	const defaultEditor = await execCommand('echo $EDITOR');
 
 	const finalCmds = [
-		'git pull',
 		'git add -A',
 		`git commit -m "CLI ${newVersion}"`,
 		`git tag "cli-${newVersion}"`,
