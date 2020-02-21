@@ -53,12 +53,13 @@ ReactNativeClient/lib/joplin-renderer/assets/
 ReactNativeClient/lib/rnInjectedJs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-ElectronClient/gui/DraftJs.js
+CliClient/tests-build/lib/joplin-renderer/MdToHtml/rules/mermaid.js
+CliClient/tests-build/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
+CliClient/tests-build/lib/JoplinServerApi.js
 ElectronClient/gui/NoteText2.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/TinyMCE.js
-ElectronClient/gui/TuiEditor.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 ReactNativeClient/lib/JoplinServerApi.js

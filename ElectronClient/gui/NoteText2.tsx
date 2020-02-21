@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 // import TuiEditor from './TuiEditor';
 // import DraftJs, { markdownToValue, valueToMarkdown } from './DraftJs';
-import TinyMCE, { markdownToValue, valueToMarkdown } from './TinyMCE';
+import TinyMCE from './TinyMCE';
 import { connect } from 'react-redux';
 const { themeStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
@@ -34,57 +34,57 @@ const defaultNote = ():FormNote => {
 	};
 };
 
-class AsyncActionsHandler {
+// class AsyncActionsHandler {
 
-	items_:any = {};
-	processing_ = false;
-	needProcessing_ = false;
-	scheduleProcessingIID_:Timeout = null;
+// 	items_:any = {};
+// 	processing_ = false;
+// 	needProcessing_ = false;
+// 	scheduleProcessingIID_:any = null;
 
-	push(queueId:string, action:Function) {
-		if (!this.items_[queueId]) this.items_[queueId] = [];
-		this.items_[queueId].push({ action: action });
-		this.scheduleProcessing();
-	}
+// 	push(queueId:string, action:Function) {
+// 		if (!this.items_[queueId]) this.items_[queueId] = [];
+// 		this.items_[queueId].push({ action: action });
+// 		this.scheduleProcessing();
+// 	}
 
-	private scheduleProcessing() {
-		if (this.scheduleProcessingIID_) {
-			clearTimeout(this.scheduleProcessingIID_);
-		}
+// 	private scheduleProcessing() {
+// 		if (this.scheduleProcessingIID_) {
+// 			clearTimeout(this.scheduleProcessingIID_);
+// 		}
 
-		this.scheduleProcessingIID_ = setTimeout(() => {
-			this.scheduleProcessingIID_ = null;
-			this.processQueue();
-		}, 1000);
-	}
+// 		this.scheduleProcessingIID_ = setTimeout(() => {
+// 			this.scheduleProcessingIID_ = null;
+// 			this.processQueue();
+// 		}, 1000);
+// 	}
 
-	private async processQueue() {
-		if (this.processing_) {
-			this.scheduleProcessing();
-			return;
-		}
+// 	private async processQueue() {
+// 		if (this.processing_) {
+// 			this.scheduleProcessing();
+// 			return;
+// 		}
 
-		this.processing_ = true;
+// 		this.processing_ = true;
 
-		for (const queueId in this.items_) {
-			const queueItems = this.items_[queueId];
+// 		for (const queueId in this.items_) {
+// 			const queueItems = this.items_[queueId];
 
-			const itemCount = queueItems.length;
-			if (!itemCount) continue;
+// 			const itemCount = queueItems.length;
+// 			if (!itemCount) continue;
 
-			const item = queueItems[itemCount - 1];
-			await item.action();
-			this.items_[queueId].splice(0, itemCount);
-		}
+// 			const item = queueItems[itemCount - 1];
+// 			await item.action();
+// 			this.items_[queueId].splice(0, itemCount);
+// 		}
 
-		console.info('QUEUE', this.items_);
+// 		console.info('QUEUE', this.items_);
 
-		this.processing_ = false;
-	}
+// 		this.processing_ = false;
+// 	}
 
-}
+// }
 
-const asyncActionHandler = new AsyncActionsHandler();
+// const asyncActionHandler = new AsyncActionsHandler();
 
 // TODO: HtmlToMd should support joplin-source element
 

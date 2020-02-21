@@ -29,6 +29,8 @@ module.exports = {
 		'browserSupportsPromises_': true,
 		'chrome': 'readonly',
 		'browser': 'readonly',
+
+		'tinymce': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,

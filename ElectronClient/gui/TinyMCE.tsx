@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
-const markupLanguageUtils = require('lib/markupLanguageUtils');
-const Setting = require('lib/models/Setting');
+declare var tinymce: any;
+
+// const markupLanguageUtils = require('lib/markupLanguageUtils');
+// const Setting = require('lib/models/Setting');
 const Note = require('lib/models/Note');
-const { MarkupToHtml } = require('lib/joplin-renderer');
+// const { MarkupToHtml } = require('lib/joplin-renderer');
 const HtmlToMd = require('lib/HtmlToMd');
-const dialogs = require('./dialogs');
-const { themeStyle } = require('../theme.js');
+// const dialogs = require('./dialogs');
+// const { themeStyle } = require('../theme.js');
 
 // const Setting = require('lib/models/Setting');
 // const markupLanguageUtils = require('lib/markupLanguageUtils');
@@ -79,7 +81,9 @@ export interface TinyMCEChangeEvent {
 // 	return result.html;
 // }
 
-export async function valueToMarkdown(value:any):string {
+let lastClickedEditableNode_:any = null;
+
+export async function valueToMarkdown(value:any):Promise<string> {
 	const htmlToMd = new HtmlToMd();
 	let md = htmlToMd.parse(value);
 	md = await Note.replaceResourceExternalToInternalLinks(md, { useAbsolutePaths: true });
@@ -87,13 +91,12 @@ export async function valueToMarkdown(value:any):string {
 }
 
 
-function findBlockSource(node) {
-	const sources = lastClickedEditableNode_.getElementsByClassName('joplin-source');
+function findBlockSource(node:any) {
+	const sources = node.getElementsByClassName('joplin-source');
 	if (!sources.length) throw new Error('No source for node');
 	return sources[0].textContent;
 }
 
-let lastClickedEditableNode_ = null;
 
 export default function TinyMCE(props:TinyMCEProps) {
 	const [editor, setEditor] = useState(null);
@@ -122,7 +125,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 		if (!editor) return;
 
 		editor.ui.registry.addContextToolbar('joplinEditable', {
-			predicate: function(node) {
+			predicate: function(node:any) {
 				if (node.classList && node.classList.contains('joplin-editable')) {
 					// const tinyNode = editor.selection.getNode();
 					// console.info('TTTTTTTT', tinyNode);
@@ -138,7 +141,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 
 		editor.ui.registry.addButton('customInsertButton', {
 			text: 'My Button',
-			onAction: function(event) {
+			onAction: function() {
 				const source = findBlockSource(lastClickedEditableNode_);
 
 
@@ -147,7 +150,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 					initialData: {
 						codeTextArea: source,
 					},
-					onSubmit: async (dialogApi) => {
+					onSubmit: async (dialogApi:any) => {
 						const result = await props.markdownToHtml(`$$\n${dialogApi.getData().codeTextArea}\n$$`);
 						lastClickedEditableNode_.innerHTML = result.html;
 						dialogApi.close();
@@ -177,15 +180,15 @@ export default function TinyMCE(props:TinyMCEProps) {
 	useEffect(() => {
 		if (!editor) return;
 
-		props.markdownToHtml(props.defaultMarkdown).then((result:string) => {
+		props.markdownToHtml(props.defaultMarkdown).then((result:any) => {
 			editor.setContent(result.html);
 		});
 	}, [editor, props.defaultMarkdown, props.theme]);
 
 	useEffect(() => {
-		if (!editor) return;
+		if (!editor) return () => {};
 
-		let onChangeHandlerIID = null;
+		let onChangeHandlerIID:any = null;
 
 		const onChangeHandler = () => {
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
