@@ -55,8 +55,7 @@ The tests are under CliClient/tests. To get them running, you first need to buil
 ```sh
 npm run tsc # Build the .ts and .tsx files
 cd CliClient
-npm i
-./build.sh
+npm install
 ```
 
 To run all the test units:
