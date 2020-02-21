@@ -1,60 +1,64 @@
  [![Travis Build Status](https://travis-ci.org/laurent22/joplin.svg?branch=master)](https://travis-ci.org/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
 
-# General information
-
-- All the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
-- In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
-
-## TypeScript
-
-Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). Even if you don't write TypeScript code, you will need to build the existing .ts and .tsx files. This is done from the root of the project, by running `npm run build`.
-
-If you are modifying TypeScript code, the best is to have the compiler watch for changes from a terminal. To do so, run `npm run watch`.
-
-All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. If you create a new TypeScript file, make sure you add the generated .js file to .gitignore. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
+# Building the applications
 
 ## Required dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
 - Install node v10.x (check with `node --version`) - https://nodejs.org/en/
 
-# Building the desktop application
+## Building
 
-```
-npm install
-cd ElectronClient
-npm run start
-```
+Before doing anything else, from the root of the project, run:
 
-# Building the Terminal application
+	npm install
 
-```
-npm install
-cd CliClient
-npm run start
-```
+Then you can test the various applications:
 
-# Building the Mobile application
+## Testing the desktop application
+
+	cd ElectronClient
+	npm run start
+	
+## Testing the Terminal application
+
+	cd CliClient
+	npm run start
+
+## Testing the Mobile application
 
 First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
 
 Then:
 
-```
-npm install
-cd ReactNativeClient
-react-native run-ios
-# Or: react-native run-android
-```
+	cd ReactNativeClient
+	react-native run-ios
+	# Or: react-native run-android
 
-To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and the app from there.
+To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
-On iOS you might also need to install the Podfiles:
+# General information
 
-```
-cd ReactNativeClient/ios
-pod install
-```
+- All the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
+- In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
+
+## Watching files
+
+To make change to the application, you'll need to rebuild any TypeScript file you've changed, and rebuild the lib. The simplest way to do all this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
+
+	npm run watch
+
+Running `npm run build` would have the same effect, but without watching.
+
+## Running an application with additional parameters
+
+You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm run start` command, followed by your flags. For example:
+
+	npm run start -- --profile ~/MyTestProfile
+
+## TypeScript
+
+Most of the application is written in JavaScript, however new classes and files should generally be written in [TypeScript](https://www.typescriptlang.org/). All TypeScript files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
 # Troubleshooting desktop application
 

@@ -47,10 +47,6 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-CliClient/tests-build/lib/JoplinServerApi.js
-ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/mermaid.js
-ElectronClient/app/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
-ElectronClient/app/lib/JoplinServerApi.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
