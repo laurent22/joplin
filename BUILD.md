@@ -2,6 +2,9 @@
 
 # Building the applications
 
+- All the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
+- In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
+
 ## Required dependencies
 
 - Install yarn - https://yarnpkg.com/lang/en/docs/install/
@@ -37,14 +40,9 @@ Then:
 
 To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
-# General information
-
-- All the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
-- In general, most of the backend (anything to do with the database, synchronisation, data import or export, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
-
 ## Watching files
 
-To make change to the application, you'll need to rebuild any TypeScript file you've changed, and rebuild the lib. The simplest way to do all this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
+To make changes to the application, you'll need to rebuild any TypeScript file you've changed, and rebuild the lib. The simplest way to do all this is to watch for changes from the root of the project. Simply run this command, and it should take care of the rest:
 
 	npm run watch
 
@@ -95,4 +93,4 @@ This is an indication that there's an early initialisation error. Try this:
 
 You should not use WSL at all because this is a GUI app that lives outside of WSL, and the WSL layer can cause all kind of very hard to debug issues. It can also lock files in node_modules that cannot be unlocked when the app crashes. (You need to restart your computer.) Likewise, don't run the TypeScript watch command from WSL.
 
-So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator. You can use `run.bat` to run the app in dev mode.
+So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator.
