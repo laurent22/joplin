@@ -62,13 +62,13 @@ pod install
 
 If there's an error `while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`, run `sudo apt-get install libgconf-2-4`
 
-If you get a node-gyp related error you might need to manually install it: `npm install -g node-gyp`.
+If you get a node-gyp related error, you might need to manually install it: `npm install -g node-gyp`.
 
 If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
-## On Windows
+## On Windows
 
-If node-gyp does not works (MSBUILD: error MSB3428: Could not load the Visual C++ component "VCBuild.exe"), you might need to install the `windows-build-tools` using `npm install --global windows-build-tools`.
+If node-gyp does not work (MSBUILD: error MSB3428: Could not load the Visual C++ component "VCBuild.exe"), you might need to install `windows-build-tools` using `npm install --global windows-build-tools`.
 
 If `yarn dist` fails, it may need administrative rights.
 
@@ -85,10 +85,10 @@ This is an indication that there's an early initialisation error. Try this:
 - In ElectronAppWrapper, set `debugEarlyBugs` to `true`. This will force the window to show up and should open the console next to it, which should display any error.
 - In more rare cases, an already open instance of Joplin can create strange low-level bugs that will display no error but will result in this white window. A non-dev instance of Joplin, or a dev instance that wasn't properly closed might cause this. So make sure you close everything and try again. Perhaps even other Electron apps running (Skype, Slack, etc.) could cause this?
 - Also try to delete node_modules and rebuild.
-- If all else fail, switch your computer off and on again, to make sure you start clean.
+- If all else fails, switch your computer off and on again, to make sure you start clean.
 
 > How to work on the app from Windows?
 
-You should not use WSL at all because this is a GUI app that lives outside of WSL, and the WSL layer can cause all kind of very hard to debug issues. It can also lock files in node_modules that cannot be unlocked when the app crashes (you need to restart your computer). Likewise, don't run the TypeScript watch command from WSL.
+You should not use WSL at all because this is a GUI app that lives outside of WSL, and the WSL layer can cause all kind of very hard to debug issues. It can also lock files in node_modules that cannot be unlocked when the app crashes. (You need to restart your computer.) Likewise, don't run the TypeScript watch command from WSL.
 
-So everything should be done from a Windows Command prompt running as Administrator. You can use `run.bat` to run the app in dev mode.
+So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator. You can use `run.bat` to run the app in dev mode.
