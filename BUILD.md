@@ -2,8 +2,7 @@
 
 # Building the applications
 
-- All the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
-- Most of the backend (anything to do with the database, synchronisation, etc.) is shared across all the apps, so when making a change please consider how it will affect all the apps.
+Note that all the applications share the same library, which, for historical reasons, is in `ReactNativeClient/lib`. This library is copied to the relevant directories when building each app.
 
 ## Required dependencies
 
