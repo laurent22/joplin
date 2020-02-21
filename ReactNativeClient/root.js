@@ -1,5 +1,13 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
+const {
+	AppState,
+	Keyboard,
+	NativeModules,
+	BackHandler,
+	Animated,
+	View,
+	StatusBar,
+} = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -38,23 +46,36 @@ const { FolderScreen } = require('lib/components/screens/folder.js');
 const { LogScreen } = require('lib/components/screens/log.js');
 const { StatusScreen } = require('lib/components/screens/status.js');
 const { SearchScreen } = require('lib/components/screens/search.js');
-const { OneDriveLoginScreen } = require('lib/components/screens/onedrive-login.js');
-const { EncryptionConfigScreen } = require('lib/components/screens/encryption-config.js');
-const { DropboxLoginScreen } = require('lib/components/screens/dropbox-login.js');
+const {
+	OneDriveLoginScreen,
+} = require('lib/components/screens/onedrive-login.js');
+const {
+	EncryptionConfigScreen,
+} = require('lib/components/screens/encryption-config.js');
+const {
+	DropboxLoginScreen,
+} = require('lib/components/screens/dropbox-login.js');
 const Setting = require('lib/models/Setting.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('lib/components/side-menu.js');
 const { SideMenuContent } = require('lib/components/side-menu-content.js');
-const { SideMenuContentNote } = require('lib/components/side-menu-content-note.js');
-const { DatabaseDriverReactNative } = require('lib/database-driver-react-native');
+const {
+	SideMenuContentNote,
+} = require('lib/components/side-menu-content-note.js');
+const {
+	DatabaseDriverReactNative,
+} = require('lib/database-driver-react-native');
 const { reg } = require('lib/registry.js');
-const { setLocale, closestSupportedLocale, defaultLocale } = require('lib/locale.js');
+const {
+	setLocale,
+	closestSupportedLocale,
+	defaultLocale,
+} = require('lib/locale.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
-// const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
@@ -87,15 +108,16 @@ import PluginAssetsLoader from './PluginAssetsLoader';
 let storeDispatch = function() {};
 
 const logReducerAction = function(action) {
-	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
+	if (
+		['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0
+	)
+		return;
 
 	let msg = [action.type];
 	if (action.routeName) msg.push(action.routeName);
-
-	// reg.logger().debug('Reducer action', msg.join(', '));
 };
 
-const generalMiddleware = store => next => async (action) => {
+const generalMiddleware = store => next => async action => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
@@ -106,29 +128,58 @@ const generalMiddleware = store => next => async (action) => {
 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
-	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+	if (
+		[
+			'NOTE_UPDATE_ONE',
+			'NOTE_DELETE',
+			'FOLDER_UPDATE_ONE',
+			'FOLDER_DELETE',
+		].indexOf(action.type) >= 0
+	) {
+		if (!(await reg.syncTarget().syncStarted()))
+			reg.scheduleSync(5 * 1000, {
+				syncSteps: ['update_remote', 'delete_remote'],
+			});
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
-	if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
-		await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
+	if (
+		['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0
+	) {
+		await AlarmService.updateNoteNotification(
+			action.id,
+			action.type === 'NOTE_DELETE'
+		);
 	}
 
-	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval' || action.type == 'SETTING_UPDATE_ALL') {
+	if (
+		(action.type == 'SETTING_UPDATE_ONE' && action.key == 'sync.interval') ||
+    action.type == 'SETTING_UPDATE_ALL'
+	) {
 		reg.setupRecurrentSync();
 	}
 
-	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key == 'dateFormat' || action.key == 'timeFormat')) || (action.type == 'SETTING_UPDATE_ALL')) {
+	if (
+		(action.type == 'SETTING_UPDATE_ONE' &&
+      (action.key == 'dateFormat' || action.key == 'timeFormat')) ||
+    action.type == 'SETTING_UPDATE_ALL'
+	) {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
 	}
 
-	if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
+	if (
+		(action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale') ||
+    action.type == 'SETTING_UPDATE_ALL'
+	) {
 		setLocale(Setting.value('locale'));
 	}
 
-	if ((action.type == 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type == 'SETTING_UPDATE_ALL')) {
+	if (
+		(action.type == 'SETTING_UPDATE_ONE' &&
+      action.key.indexOf('encryption.') === 0) ||
+    action.type == 'SETTING_UPDATE_ALL'
+	) {
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 		DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -166,6 +217,7 @@ function historyCanGoBackTo(route) {
 
 	// There's no point going back to these screens in general and, at least in OneDrive case,
 	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...)
+
 	if (route.routeName === 'OneDriveLogin') return false;
 	if (route.routeName === 'DropboxLogin') return false;
 
@@ -191,10 +243,7 @@ const appReducer = (state = appDefaultState, action) => {
 
 	try {
 		switch (action.type) {
-
-		case 'NAV_BACK':
-
-		{
+		case 'NAV_BACK': {
 			if (!navHistory.length) break;
 
 			let newAction = null;
@@ -211,16 +260,15 @@ const appReducer = (state = appDefaultState, action) => {
 		// Fall throught
 
 		case 'NAV_GO':
-
 			{
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
+					// If the route *name* is the same (even if the other parameters are different), we
+					// overwrite the last route in the history with the current one. If the route name
+					// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
-					// nothing
+						// nothing
 					} else {
 						navHistory.push(currentRoute);
 					}
@@ -232,6 +280,7 @@ const appReducer = (state = appDefaultState, action) => {
 				// this is a simple fix without doing a big refactoring to change the way notes
 				// are loaded. Might be good enough since going back to different folders
 				// is probably not a common workflow.
+
 				for (let i = 0; i < navHistory.length; i++) {
 					let n = navHistory[i];
 					if (n.routeName == action.routeName) {
@@ -282,31 +331,26 @@ const appReducer = (state = appDefaultState, action) => {
 			break;
 
 		case 'SIDE_MENU_TOGGLE':
-
 			newState = Object.assign({}, state);
 			newState.showSideMenu = !newState.showSideMenu;
 			break;
 
 		case 'SIDE_MENU_OPEN':
-
 			newState = Object.assign({}, state);
 			newState.showSideMenu = true;
 			break;
 
 		case 'SIDE_MENU_CLOSE':
-
 			newState = Object.assign({}, state);
 			newState.showSideMenu = false;
 			break;
 
 		case 'SIDE_MENU_OPEN_PERCENT':
-
 			newState = Object.assign({}, state);
 			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'NOTE_SELECTION_TOGGLE':
-
 			{
 				newState = Object.assign({}, state);
 
@@ -326,7 +370,6 @@ const appReducer = (state = appDefaultState, action) => {
 			break;
 
 		case 'NOTE_SELECTION_START':
-
 			if (!state.noteSelectionEnabled) {
 				newState = Object.assign({}, state);
 				newState.noteSelectionEnabled = true;
@@ -335,21 +378,20 @@ const appReducer = (state = appDefaultState, action) => {
 			break;
 
 		case 'NOTE_SELECTION_END':
-
 			newState = Object.assign({}, state);
 			newState.noteSelectionEnabled = false;
 			newState.selectedNoteIds = [];
 			break;
 
 		case 'NOTE_SIDE_MENU_OPTIONS_SET':
-
 			newState = Object.assign({}, state);
 			newState.noteSideMenuOptions = action.options;
 			break;
-
 		}
 	} catch (error) {
-		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
+		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(
+			action
+		)}`;
 		throw error;
 	}
 
@@ -387,12 +429,18 @@ async function initialize(dispatch) {
 	}
 
 	reg.setLogger(mainLogger);
-	reg.setShowErrorMessageBoxHandler((message) => { alert(message); });
+	reg.setShowErrorMessageBoxHandler(message => {
+		alert(message);
+	});
 
 	BaseService.logger_ = mainLogger;
 
 	reg.logger().info('====================================');
-	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
+	reg
+		.logger()
+		.info(
+			`Starting application ${Setting.value('appId')} (${Setting.value('env')})`
+		);
 
 	const dbLogger = new Logger();
 	dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
@@ -437,8 +485,6 @@ async function initialize(dispatch) {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
 			await db.open({ name: 'joplin-70.sqlite' });
-
-			// await db.clearForTesting();
 		}
 
 		reg.logger().info('Database is ready.');
@@ -451,7 +497,11 @@ async function initialize(dispatch) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
-			if (Setting.value('env') === 'dev') Setting.setValue('sync.target', SyncTargetRegistry.nameToId('onedrive_dev'));
+			if (Setting.value('env') === 'dev')
+				Setting.setValue(
+					'sync.target',
+					SyncTargetRegistry.nameToId('onedrive_dev')
+				);
 			Setting.setValue('firstStart', 0);
 		}
 
@@ -491,7 +541,9 @@ async function initialize(dispatch) {
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
+		DecryptionWorker.instance().setEncryptionService(
+			EncryptionService.instance()
+		);
 		await EncryptionService.instance().loadMasterKeysFromSettings();
 
 		// ----------------------------------------------------------------
@@ -550,10 +602,15 @@ async function initialize(dispatch) {
 
 	ResourceService.runInBackground();
 
-	ResourceFetcher.instance().setFileApi(() => { return reg.syncTarget().fileApi(); });
+	ResourceFetcher.instance().setFileApi(() => {
+		return reg.syncTarget().fileApi();
+	});
 	ResourceFetcher.instance().setLogger(reg.logger());
 	ResourceFetcher.instance().dispatch = dispatch;
-	ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
+	ResourceFetcher.instance().on(
+		'downloadComplete',
+		resourceFetcher_downloadComplete
+	);
 	ResourceFetcher.instance().start();
 
 	SearchEngine.instance().setDb(reg.db());
@@ -580,7 +637,6 @@ async function initialize(dispatch) {
 }
 
 class AppComponent extends React.Component {
-
 	constructor() {
 		super();
 
@@ -614,49 +670,16 @@ class AppComponent extends React.Component {
 			});
 		}
 
-		if (Platform.OS !== 'ios') {
-			// try {
-			// 	const { type, value } = await ShareExtension.data();
-
-			// 	// reg.logger().info('Got share data:', type, value);
-
-			// 	if (type != '' && this.props.selectedFolderId) {
-			// 		const newNote = await Note.save({
-			// 			title: Note.defaultTitleFromBody(value),
-			// 			body: value,
-			// 			parent_id: this.props.selectedFolderId,
-			// 		});
-
-			// 		// This is a bit hacky, but the surest way to go to
-			// 		// the needed note. We go back one screen in case there's
-			// 		// already a note open - if we don't do this, the dispatch
-			// 		// below will do nothing (because routeName wouldn't change)
-			// 		// Then we wait a bit for the state to be set correctly, and
-			// 		// finally we go to the new note.
-			// 		this.props.dispatch({
-			// 			type: 'NAV_BACK',
-			// 		});
-
-			// 		setTimeout(() => {
-			// 			this.props.dispatch({
-			// 				type: 'NAV_GO',
-			// 				routeName: 'Note',
-			// 				noteId: newNote.id,
-			// 			});
-			// 		}, 5);
-			// 	}
-
-			// } catch (e) {
-			// 	reg.logger().error('Error in ShareExtension.data', e);
-			// }
-		}
-
 		BackButtonService.initialize(this.backButtonHandler_);
 
-		AlarmService.setInAppNotificationHandler(async (alarmId) => {
+		AlarmService.setInAppNotificationHandler(async alarmId => {
 			const alarm = await Alarm.load(alarmId);
 			const notification = await Alarm.makeNotification(alarm);
-			this.dropdownAlert_.alertWithType('info', notification.title, notification.body ? notification.body : '');
+			this.dropdownAlert_.alertWithType(
+				'info',
+				notification.title,
+				notification.body ? notification.body : ''
+			);
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
@@ -719,10 +742,22 @@ class AppComponent extends React.Component {
 		let menuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = (
+				<SafeAreaView
+					style={{ flex: 1, backgroundColor: theme.backgroundColor }}
+				>
+					<SideMenuContentNote options={this.props.noteSideMenuOptions} />
+				</SafeAreaView>
+			);
 			menuPosition = 'right';
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = (
+				<SafeAreaView
+					style={{ flex: 1, backgroundColor: theme.backgroundColor }}
+				>
+					<SideMenuContent />
+				</SafeAreaView>
+			);
 		}
 
 		const appNavInit = {
@@ -743,22 +778,34 @@ class AppComponent extends React.Component {
 			<SideMenu
 				menu={sideMenuContent}
 				menuPosition={menuPosition}
-				onChange={(isOpen) => this.sideMenu_change(isOpen)}
-				onSliding={(percent) => {
+				onChange={isOpen => this.sideMenu_change(isOpen)}
+				onSliding={percent => {
 					this.props.dispatch({
 						type: 'SIDE_MENU_OPEN_PERCENT',
 						value: percent,
 					});
 				}}
 			>
-				<StatusBar barStyle="dark-content" />
+				<StatusBar barStyle='dark-content' />
 				<MenuContext style={{ flex: 1 }}>
 					<SafeAreaView style={{ flex: 1 }}>
 						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 							<AppNav screens={appNavInit} />
 						</View>
-						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
+						<DropdownAlert
+							ref={ref => (this.dropdownAlert_ = ref)}
+							tapToCloseEnabled={true}
+						/>
+						<Animated.View
+							pointerEvents='none'
+							style={{
+								position: 'absolute',
+								backgroundColor: 'black',
+								opacity: this.state.sideMenuContentOpacity,
+								width: '100%',
+								height: '120%',
+							}}
+						/>
 					</SafeAreaView>
 				</MenuContext>
 			</SideMenu>
@@ -766,7 +813,7 @@ class AppComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,
@@ -786,7 +833,7 @@ class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<App/>
+				<App />
 			</Provider>
 		);
 	}

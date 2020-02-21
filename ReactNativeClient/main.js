@@ -6,8 +6,6 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-// console.disableYellowBox = true
-
 import { YellowBox, AppRegistry } from 'react-native';
 YellowBox.ignoreWarnings([
 	'Require cycle: node_modules/react-native-',
