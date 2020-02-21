@@ -381,10 +381,10 @@ class Application extends BaseApplication {
 			accelerator: 'CommandOrControl+Shift+B',
 		});
 
+		let toolsItems = [];
 		const importItems = [];
 		const exportItems = [];
 		const toolsItemsFirst = [];
-		var   toolsItems = [];
 		const templateItems = [];
 		const ioService = new InteropService();
 		const ioModules = ioService.modules();
