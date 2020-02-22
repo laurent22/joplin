@@ -60,8 +60,10 @@ class MdToHtml {
 			exists: (/* path*/) => { throw new Error('writeFile not set'); },
 		};
 
-		if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
-		if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
+		if (options.fsDriver) {
+			if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
+			if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
+		}
 	}
 
 	fsDriver() {

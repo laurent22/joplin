@@ -1,4 +1,6 @@
 module.exports = function(style, options) {
+	style = style ? style : {};
+
 	// https://necolas.github.io/normalize.css/
 	const normalizeCss = `
 		html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
