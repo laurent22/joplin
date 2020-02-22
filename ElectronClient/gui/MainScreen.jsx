@@ -19,8 +19,15 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
+const urlUtils = require('lib/urlUtils.js');
 
-require('global-agent').bootstrap();
+if (Setting.value('proxy')) {
+	const proxyURL = urlUtils.genProxyUrl(Setting.value('proxy.protocol'), Setting.value('proxy.hostname'), Setting.value('proxy.port'), Setting.value('proxy.username'), Setting.value('proxy.password'));
+	if (proxyURL !== null) {
+		require('global-agent').bootstrap();
+		global.GLOBAL_AGENT.HTTP_PROXY = proxyURL;
+	}
+}
 
 class MainScreenComponent extends React.Component {
 	constructor() {

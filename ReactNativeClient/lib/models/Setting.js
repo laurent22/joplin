@@ -545,6 +545,29 @@ class Setting extends BaseModel {
 
 			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, advanced: true, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
 
+			'proxy': { value: false, type: Setting.TYPE_BOOL, advanced: true, public: true, appTypes: ['desktop'], section: 'sync', label: () => _('Use proxy server') },
+			'proxy.protocol': {
+				value: Setting.PROXY_PROTOCOL_1,
+				type: Setting.TYPE_STRING,
+				isEnum: true,
+				advanced: true,
+				public: true,
+				appTypes: ['desktop'],
+				section: 'sync',
+				show: (settings) => { return settings['proxy']; },
+				label: () => _('Proxy prrotocol'),
+				options: () => {
+					let options = {};
+					options[Setting.PROXY_PROTOCOL_1] = Setting.PROXY_PROTOCOL_1;
+					options[Setting.PROXY_PROTOCOL_2] = Setting.PROXY_PROTOCOL_2;
+					return options;
+				},
+			},
+			'proxy.hostname': { value: '', type: Setting.TYPE_STRING, advanced: true, public: true, appTypes: ['desktop'], section: 'sync', show: (settings) => { return settings['proxy']; }, label: () => _('Proxy hostname') },
+			'proxy.port': { value: 8080, type: Setting.TYPE_INT, minimum: 1, maximum: 65535, advanced: true, public: true, appTypes: ['desktop'], section: 'sync', show: (settings) => { return settings['proxy']; }, label: () => _('Proxy port') },
+			'proxy.username': { value: '', type: Setting.TYPE_STRING, advanced: true, public: true, appTypes: ['desktop'], section: 'sync', show: (settings) => { return settings['proxy']; }, label: () => _('Proxy username') },
+			'proxy.password': { value: '', type: Setting.TYPE_STRING, advanced: true, public: true, appTypes: ['desktop'], section: 'sync', show: (settings) => { return settings['proxy']; }, label: () => _('Proxy password') },
+
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
 
@@ -1047,6 +1070,9 @@ Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.PROXY_PROTOCOL_1 = 'http';
+Setting.PROXY_PROTOCOL_2 = 'https';
 
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',

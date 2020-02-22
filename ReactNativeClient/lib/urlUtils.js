@@ -91,4 +91,15 @@ urlUtils.extractResourceUrls = function(text) {
 	return output;
 };
 
+urlUtils.genProxyUrl = function(protocol, hostname, port, username, password) {
+	if (hostname === '') return null;
+	if (port <= 0 || port > 65535) return null;
+	var userCredentials = '';
+	const encPassword = encodeURIComponent(password);
+	if (username !== '' && password !== '') {
+		userCredentials = `${username}:${encPassword}@`;
+	}
+	return `${protocol}://${userCredentials}${hostname}:${port}`;
+};
+
 module.exports = urlUtils;

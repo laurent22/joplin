@@ -81,4 +81,16 @@ describe('urlUtils', function() {
 		}
 	}));
 
+	it('should generate a proxy URL', asyncTest(async (done) => {
+		expect(urlUtils.genProxyUrl('https', 'example.com', 8080, '', '')).toBe('https://example.com:8080');
+		expect(urlUtils.genProxyUrl('https', 'example.com', -1, '', '')).toBe(null);
+		expect(urlUtils.genProxyUrl('https', 'example.com', 0, '', '')).toBe(null);
+		expect(urlUtils.genProxyUrl('https', 'example.com', 77777, '', '')).toBe(null);
+		expect(urlUtils.genProxyUrl('http', 'example.com', 8080, 'test', 'testpwd')).toBe('http://test:testpwd@example.com:8080');
+		expect(urlUtils.genProxyUrl('http', 'example.com', 8888, 'test', '')).toBe('http://example.com:8888');
+		expect(urlUtils.genProxyUrl('https', 'example.com', 8888, '', 'testpwd')).toBe('https://example.com:8888');
+		expect(urlUtils.genProxyUrl('http', 'example.com', 8888, 'test', 'test:pwd@my%')).toBe('http://test:test%3Apwd%40my%25@example.com:8888');
+		expect(urlUtils.genProxyUrl('http', '', 8080, '', '')).toBe(null);
+	}));
+
 });
