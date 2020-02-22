@@ -39,7 +39,7 @@ describe('HtmlToMd', function() {
 			const htmlPath = `${basePath}/${htmlFilename}`;
 			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'table_with_header.html') continue;
+			// if (htmlFilename !== 'joplin_source_2.html') continue;
 
 			const htmlToMdOptions = {};
 

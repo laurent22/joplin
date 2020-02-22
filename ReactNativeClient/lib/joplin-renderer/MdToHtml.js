@@ -125,15 +125,16 @@ class MdToHtml {
 	}
 
 	async render(body, style = null, options = null) {
-		if (!options) options = {};
-		if (!('bodyOnly' in options)) options.bodyOnly = false;
-		if (!('splitted' in options)) options.splitted = false;
-		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
-		if (!options.paddingBottom) options.paddingBottom = '0';
-		if (!options.highlightedKeywords) options.highlightedKeywords = [];
-		if (!options.codeTheme) options.codeTheme = 'atom-one-light.css';
-
-		if (!style) style = Object.assign({}, defaultNoteStyle);
+		options = Object.assign({}, {
+			bodyOnly: false,
+			splitted: false,
+			externalAssetsOnly: false,
+			postMessageSyntax: 'postMessage',
+			paddingBottom: '0',
+			highlightedKeywords: [],
+			codeTheme: 'atom-one-light.css',
+			style: Object.assign({}, defaultNoteStyle),
+		}, options);
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
 		// associated with this particular Markdown body. It is only used to allow us to
@@ -269,7 +270,7 @@ class MdToHtml {
 			output.cssStrings = cssStrings;
 			output.html = `<div id="rendered-md">${renderedBody}</div>`;
 
-			if (output.externalAssetsOnly) {
+			if (options.externalAssetsOnly) {
 				const cssString = cssStrings.join('\n');
 				const cssFilePath = `${this.tempDir()}/${md5(escape(cssString))}.css`;
 				if (!(await this.fsDriver().exists(cssFilePath))) {
