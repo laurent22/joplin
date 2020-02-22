@@ -446,15 +446,14 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
-			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			newState.notesSource = action.notesSource;
 			break;
 
-			// Insert the note into the note list if it's new, or
-			// update it within the note array if it already exists.
+		// Insert the note into the note list if it's new, or
+		// update it within the note array if it already exists.
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote = action.note;
