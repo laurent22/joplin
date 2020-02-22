@@ -52,7 +52,7 @@ reg.syncTarget = (syncTargetId = null) => {
 	return target;
 };
 
-reg.scheduleSync = async (delay = null, syncOptions = null) => {
+reg.scheduleSync_ = async (delay = null, syncOptions = null) => {
 	if (delay === null) delay = 1000 * 10;
 	if (syncOptions === null) syncOptions = {};
 
@@ -152,6 +152,15 @@ reg.scheduleSync = async (delay = null, syncOptions = null) => {
 	return promise;
 };
 
+reg.scheduleSync = async (delay = null, syncOptions = null) => {
+	reg.syncCalls_.push(true);
+	try {
+		await reg.scheduleSync_(delay, syncOptions);
+	} finally {
+		reg.syncCalls_.pop();
+	}
+};
+
 reg.setupRecurrentSync = () => {
 	if (reg.recurrentSyncId_) {
 		shim.clearInterval(reg.recurrentSyncId_);
@@ -182,5 +191,19 @@ reg.setDb = v => {
 reg.db = () => {
 	return reg.db_;
 };
+
+reg.cancelTimers = async () => {
+	if (this.recurrentSyncId_) clearTimeout(this.recurrentSyncId_);
+	return new Promise((resolve) => {
+		const iid = setInterval(() => {
+			if (!reg.syncCalls_.length) {
+				clearInterval(iid);
+				resolve();
+			}
+		}, 100);
+	});
+};
+
+reg.syncCalls_ = [];
 
 module.exports = { reg };

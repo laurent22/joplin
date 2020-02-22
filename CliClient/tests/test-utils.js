@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const { BaseApplication }= require('lib/BaseApplication.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -412,4 +413,49 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+class TestApp extends BaseApplication {
+	constructor() {
+		super();
+		this.middlewareCalls_ = [];
+	}
+
+	async start(argv) {
+		argv = await super.start(argv);
+		this.initRedux();
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		Setting.dispatchUpdateAll();
+		await time.msleep(100);
+	}
+
+	async generalMiddleware(store, next, action) {
+		this.middlewareCalls_.push(true);
+		try {
+			await super.generalMiddleware(store, next, action);
+		} finally {
+			this.middlewareCalls_.pop();
+		}
+	}
+
+	async waitForMiddleware_() {
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.middlewareCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
+
+	async destroy() {
+		this.deinitRedux();
+		await this.waitForMiddleware_();
+		await super.destroy();
+
+	}
+}
+
+
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, TestApp };
+

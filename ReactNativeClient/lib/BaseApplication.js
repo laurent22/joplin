@@ -54,8 +54,12 @@ class BaseApplication {
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
-	destroy() {
-		FoldersScreenUtils.cancelTimers();
+	async destroy() {
+		await FoldersScreenUtils.cancelTimers();
+		await SearchEngine.instance().cancelTimers();
+		await DecryptionWorker.instance().cancelTimers();
+		await reg.cancelTimers();
+
 		this.logger_ = null;
 		this.dbLogger_ = null;
 		this.eventEmitter_ = null;
@@ -511,7 +515,6 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
-
 		return result;
 	}
 
@@ -698,7 +701,6 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
 		return argv;
 	}
 }

@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, TestApp } = require('test-utils.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { BaseApplication } = require('lib/BaseApplication.js');
 const { time } = require('lib/time-utils.js');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
 
@@ -53,24 +52,19 @@ function flatten(arr) {
 	return (arr.reduce((acc, val) => acc.concat(val), []));
 }
 
-let baseApplication = null;
+let testApp = null;
 
 describe('integration_SmartFilters', function() {
 
 	beforeEach(async (done) => {
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
-
-		baseApplication = new BaseApplication();
-		baseApplication.initRedux();
-		Setting.dispatchUpdateAll();
+		testApp = new TestApp();
+		await testApp.start(['--no-welcome']);
 		done();
 	});
 
 	afterEach(async (done) => {
-		baseApplication.deinitRedux();
-		baseApplication.destroy();
-		baseApplication = null;
+		if (testApp !== null) await testApp.destroy();
+		testApp = null;
 		done();
 	});
 
@@ -81,13 +75,13 @@ describe('integration_SmartFilters', function() {
 			notes.push(await createNTestNotes(3, folders[i]));
 		}
 
-		baseApplication.dispatch({
+		testApp.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folders[1].id,
 		});
 		await time.msleep(100);
 
-		let state = baseApplication.store().getState();
+		let state = testApp.store().getState();
 
 		expect(state.notesParentType).toEqual('Folder');
 		expect(state.selectedFolderId).toEqual(folders[1].id);
@@ -104,13 +98,13 @@ describe('integration_SmartFilters', function() {
 			notes.push(await createNTestNotes(3, folders[i]));
 		}
 
-		baseApplication.dispatch({
+		testApp.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
 		});
 		await time.msleep(100);
 
-		let state = baseApplication.store().getState();
+		let state = testApp.store().getState();
 
 		expect(state.notesParentType).toEqual('SmartFilter');
 		expect(state.selectedSmartFilterId).toEqual(ALL_NOTES_FILTER_ID);
