@@ -12,6 +12,7 @@ const rules = {
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
+	copy: require('./MdToHtml/rules/copy_to_clipboard'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 };
@@ -166,7 +167,6 @@ class MdToHtml {
 					context.pluginAssets['highlight.js'] = [
 						{ name: options.codeTheme },
 					];
-
 					return `<pre class="hljs"><code>${hlCode}</code></pre>`;
 				} catch (error) {
 					return `<pre class="hljs"><code>${markdownIt.utils.escapeHtml(str)}</code></pre>`;
@@ -200,7 +200,7 @@ class MdToHtml {
 		//
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.
 		// The calling application will need to handle loading these assets.
-
+		markdownIt.use(rules.copy(context));
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
@@ -208,7 +208,6 @@ class MdToHtml {
 		if (this.pluginEnabled('katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		if (this.pluginEnabled('fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		if (this.pluginEnabled('mermaid')) markdownIt.use(rules.mermaid(context, ruleOptions));
-		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
