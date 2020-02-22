@@ -69,7 +69,12 @@ If you get the error `libtool: unrecognized option '-static'`, follow the instru
 
 ## On Windows
 
-If node-gyp does not work (MSBUILD: error MSB3428: Could not load the Visual C++ component "VCBuild.exe"), you might need to install `windows-build-tools` using `npm install --global windows-build-tools`.
+There are various errors that can occur from an improper build environment (such as MSBUILD: error MSB3428). It is recommended to install `windows-build-tools` with the command `npm install --global windows-build-tools` (elevation required) and then using these two commands to set the environmental variables to the proper values:
+
+```batch
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsamd64_x86.bat" 
+set "PATH=C:\Program Files\nodejs;%PATH%"
+```
 
 If `yarn dist` fails, it may need administrative rights.
 
