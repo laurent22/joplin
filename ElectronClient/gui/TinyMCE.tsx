@@ -100,10 +100,10 @@ export default function TinyMCE(props:TinyMCEProps) {
 			}
 
 			props.onReady({
-				editorState: result.html,
+				editorState: editor.getContent(),
 			});
 
-			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
+			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
 		};
 
 		loadContent();
@@ -176,7 +176,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
 				props.onChange({ editorState: editor.getContent() });
-				setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
+				setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
 			}, 5);
 		};
 
@@ -201,6 +201,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 		if (!editor) return;
 		if (editorState === editor.getContent()) return;
 		editor.setContent(editorState);
+		setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
 	}, [editor, editorState]);
 
 	return <div style={props.style} id={rootId}/>;
