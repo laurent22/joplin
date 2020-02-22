@@ -19,7 +19,10 @@ module.exports = {
 		'expect': 'readonly',
 		'describe': 'readonly',
 		'it': 'readonly',
+		'beforeAll': 'readonly',
+		'afterAll': 'readonly',
 		'beforeEach': 'readonly',
+		'afterEach': 'readonly',
 		'jasmine': 'readonly',
 
 		// React Native variables

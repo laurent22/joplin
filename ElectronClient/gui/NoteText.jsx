@@ -1621,7 +1621,7 @@ class NoteTextComponent extends React.Component {
 
 	createToolbarItems(note, editorIsVisible) {
 		const toolbarItems = [];
-		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
+		if (note && this.state.folder && ['Search', 'Tag', 'SmartFilter'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
 				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
 				iconName: 'fa-book',
