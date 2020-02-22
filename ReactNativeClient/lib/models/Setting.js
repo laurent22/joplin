@@ -577,7 +577,7 @@ class Setting extends BaseModel {
 			'camera.type': { value: 0, type: Setting.TYPE_INT, public: false, appTypes: ['mobile'] },
 			'camera.ratio': { value: '4:3', type: Setting.TYPE_STRING, public: false, appTypes: ['mobile'] },
 
-			'windowContentZoomFactor': {
+			windowContentZoomFactor: {
 				value: 100,
 				type: Setting.TYPE_INT,
 				public: false,
@@ -652,8 +652,8 @@ class Setting extends BaseModel {
 
 				this.cache_.push(c);
 			}
-			this.dispatchUpdateAll();
 
+			this.dispatchUpdateAll();
 		});
 	}
 
