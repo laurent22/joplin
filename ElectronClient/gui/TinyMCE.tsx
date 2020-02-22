@@ -95,7 +95,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 						src: jsFile,
 					});
 
-					editor.getDoc().getElementsByTagName('head')[ 0 ].appendChild(script);
+					editor.getDoc().getElementsByTagName('head')[0].appendChild(script);
 				}
 			}
 
