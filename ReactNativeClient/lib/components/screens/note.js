@@ -903,7 +903,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
 				{titleComp}
-                    <ScrollView persistentScrollbar={true}>{bodyComponent}</ScrollView>
+                <ScrollView persistentScrollbar={true}>{bodyComponent}</ScrollView>
 				{actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
