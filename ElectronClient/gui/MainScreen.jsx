@@ -3,7 +3,7 @@ const { connect } = require('react-redux');
 const { Header } = require('./Header.min.js');
 const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
-// const { NoteText } = require('./NoteText.min.js');
+const { NoteText } = require('./NoteText.min.js');
 const NoteText2 = require('./NoteText2.js').default;
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
@@ -613,6 +613,12 @@ class MainScreenComponent extends React.Component {
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
 
+		const isWYSIWYG = this.props.noteVisiblePanes.length && this.props.noteVisiblePanes[0] === 'wysiwyg';
+		const noteTextComp = isWYSIWYG ?
+			<NoteText2 style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
+			:
+			<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />;
+
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
@@ -628,8 +634,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				<NoteText2 style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
-
+				{noteTextComp}
 				{pluginDialog}
 			</div>
 		);

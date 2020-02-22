@@ -28,6 +28,7 @@
 				"yarn.lock",
 				"*.icns",
 				"*.base64",
+				"Podfile.lock",
 				"ReactNativeClient/PluginAssetsLoader.js"
 			],
 			"folder_exclude_patterns":
@@ -57,6 +58,7 @@
 				"ReactNativeClient/android/build",
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/node_modules",
+				"ReactNativeClient/pluginAssets",
 				"ElectronClient/gui/note-viewer/highlight/styles",
 				"tests/logs",
 				"ReactNativeClient/ios/build",
@@ -66,7 +68,8 @@
 				"Clipper/joplin-webclipper/popup/build",
 				"Clipper/joplin-webclipper/dist",
 				"ReactNativeClient/lib/rnInjectedJs",
-				"ReactNativeClient/ios/Pods"
+				"ReactNativeClient/ios/Pods",
+				"CliClient/locales-build",
 			],
 			"path": "."
 		}

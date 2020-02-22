@@ -1,24 +1,13 @@
+declare const tinymce: any;
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-
-declare var tinymce: any;
-
-// const markupLanguageUtils = require('lib/markupLanguageUtils');
-// const Setting = require('lib/models/Setting');
-const Note = require('lib/models/Note');
-// const { MarkupToHtml } = require('lib/joplin-renderer');
-const HtmlToMd = require('lib/HtmlToMd');
-// const dialogs = require('./dialogs');
-// const { themeStyle } = require('../theme.js');
-
-// const Setting = require('lib/models/Setting');
-// const markupLanguageUtils = require('lib/markupLanguageUtils');
-
 
 interface TinyMCEProps {
 	style: any,
 	editorState: any,
 	onChange: Function,
+	onReady: Function,
 	defaultMarkdown: string,
 	theme: any,
 	markdownToHtml: Function,
@@ -28,75 +17,27 @@ export interface TinyMCEChangeEvent {
 	editorState: any,
 }
 
-// function mdToHtmlRender() {
-// 	const markupToHtml = markupLanguageUtils.newMarkupToHtml({
-// 		resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
-// 	});
-
-// 	const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, {
-// 		codeTheme: theme.codeThemeCss,
-// 		// userCss: this.props.customCss ? this.props.customCss : '',
-// 		// resources: await shared.attachedResources(noteBody),
-// 		resources: [],
-// 		postMessageSyntax: 'ipcProxySendToHost',
-// 		splitted: true,
-// 	});
-// }
-
-// Update turndown
-
-// defaultMarkdown
-// editorState
-// onChange
-
-// export async function markdownToValue(md:string, themeId:any):any {
-// 	if (!md) return '';
-
-// 	const theme = themeStyle(themeId);
-
-// 	console.info('===================================');
-
-// 	console.info('Markdown', md);
-
-// 	md = await Note.replaceResourceInternalToExternalLinks(md, { useAbsolutePaths: true });
-
-// 	const markupToHtml = markupLanguageUtils.newMarkupToHtml({
-// 		resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
-// 	});
-
-// 	const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, {
-// 		codeTheme: theme.codeThemeCss,
-// 		// userCss: this.props.customCss ? this.props.customCss : '',
-// 		// resources: await shared.attachedResources(noteBody),
-// 		resources: [],
-// 		postMessageSyntax: 'ipcProxySendToHost',
-// 		splitted: true,
-// 	});
-
-// 	console.info('RESULT', result);
-
-// 	console.info('===================================');
-
-
-// 	return result.html;
-// }
-
 let lastClickedEditableNode_:any = null;
 
-export async function valueToMarkdown(value:any):Promise<string> {
-	const htmlToMd = new HtmlToMd();
-	let md = htmlToMd.parse(value);
-	md = await Note.replaceResourceExternalToInternalLinks(md, { useAbsolutePaths: true });
-	return md;
+export async function editorStateToHtml(editorState:any):Promise<string> {
+	return editorState;
 }
 
 
 function findBlockSource(node:any) {
 	const sources = node.getElementsByClassName('joplin-source');
 	if (!sources.length) throw new Error('No source for node');
-	return sources[0].textContent;
+	const source = sources[0];
+
+	return {
+		openCharacters: source.getAttribute('data-joplin-source-open'),
+		closeCharacters: source.getAttribute('data-joplin-source-close'),
+		content: source.textContent,
+		node: source,
+	};
 }
 
+let loadedAssetFiles_:string[] = [];
 
 export default function TinyMCE(props:TinyMCEProps) {
 	const [editor, setEditor] = useState(null);
@@ -105,13 +46,15 @@ export default function TinyMCE(props:TinyMCEProps) {
 	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
 
 	useEffect(() => {
+		loadedAssetFiles_ = [];
+
 		const loadEditor = async () => {
 			const editors = await tinymce.init({
 				selector: `#${rootId}`,
 				plugins: 'noneditable',
-				noneditable_noneditable_class: 'joplin-katex-block', // TODO: regex
+				noneditable_noneditable_class: 'joplin-editable', // TODO: regex
 				valid_elements: '*[*]', // TODO: filter more,
-				// toolbar: 'customInsertButton',
+				menubar: false,
 			});
 
 			setEditor(editors[0]);
@@ -129,9 +72,38 @@ export default function TinyMCE(props:TinyMCEProps) {
 
 			editor.setContent(result.html);
 
-			const cssFiles = result.pluginAssets.filter((a:any) => a.mime === 'text/css').map((a:any) => a.path);
-			console.info('cssFiles', cssFiles);
-			editor.dom.loadCSS(cssFiles.join(','));
+			const cssFiles = result.pluginAssets
+				.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
+				.map((a:any) => a.path);
+
+			const jsFiles = result.pluginAssets
+				.filter((a:any) => a.mime === 'application/javascript' && !loadedAssetFiles_.includes(a.path))
+				.map((a:any) => a.path);
+
+			for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
+			for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
+
+			if (cssFiles.length) editor.dom.loadCSS(cssFiles.join(','));
+
+			if (jsFiles.length) {
+				const editorElementId = editor.dom.uniqueId();
+
+				for (const jsFile of jsFiles) {
+					const script = editor.dom.create('script', {
+						id: editorElementId,
+						type: 'text/javascript',
+						src: jsFile,
+					});
+
+					editor.getDoc().getElementsByTagName('head')[ 0 ].appendChild(script);
+				}
+			}
+
+			props.onReady({
+				editorState: result.html,
+			});
+
+			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
 		};
 
 		loadContent();
@@ -154,20 +126,24 @@ export default function TinyMCE(props:TinyMCEProps) {
 		});
 
 		editor.ui.registry.addButton('customInsertButton', {
-			text: 'My Button',
+			text: 'Edit',
 			onAction: function() {
 				const source = findBlockSource(lastClickedEditableNode_);
 
-
 				editor.windowManager.open({
-					title: 'Dialog Title', // The dialog's title - displayed in the dialog header
+					title: 'Edit', // The dialog's title - displayed in the dialog header
 					initialData: {
-						codeTextArea: source,
+						codeTextArea: source.content,
 					},
 					onSubmit: async (dialogApi:any) => {
-						const result = await props.markdownToHtml(`$$\n${dialogApi.getData().codeTextArea}\n$$`);
+						const newSource = dialogApi.getData().codeTextArea;
+						const result = await props.markdownToHtml(`${source.openCharacters}${newSource}${source.closeCharacters}`);
 						lastClickedEditableNode_.innerHTML = result.html;
+						source.node.textContent = newSource;
 						dialogApi.close();
+						editor.fire('Change');
+						editor.getDoc().activeElement.blur();
+						setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
 					},
 					body: {
 						type: 'panel', // The root body type - a Panel or TabPanel
@@ -175,7 +151,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 							{
 								type: 'textarea', // A HTML panel component
 								name: 'codeTextArea',
-								value: source,
+								value: source.content,
 							},
 						],
 					},
@@ -186,31 +162,9 @@ export default function TinyMCE(props:TinyMCEProps) {
 						},
 					],
 				});
-				// editor.insertContent('&nbsp;<strong>It\'s my button!</strong>&nbsp;');
 			},
 		});
 	}, [editor, props.markdownToHtml]);
-
-	// const addPluginAssets = function(container:any, assets:any[]) {
-	// 	if (!assets) return;
-
-	// 	for (let i = 0; i < assets.length; i++) {
-	// 		const asset = assets[i];
-	// 		// if (pluginAssetsAdded_[asset.name]) continue;
-	// 		// pluginAssetsAdded_[asset.name] = true;
-
-	// 		if (asset.mime === 'application/javascript') {
-	// 			const script = document.createElement('script');
-	// 			script.src = asset.path;
-	// 			container.appendChild(script);
-	// 		} else if (asset.mime === 'text/css') {
-	// 			const link = document.createElement('link');
-	// 			link.rel = 'stylesheet';
-	// 			link.href = asset.path;
-	// 			container.appendChild(link);
-	// 		}
-	// 	}
-	// }
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -222,6 +176,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
 				props.onChange({ editorState: editor.getContent() });
+				setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
 			}, 5);
 		};
 
@@ -251,36 +206,3 @@ export default function TinyMCE(props:TinyMCEProps) {
 	return <div style={props.style} id={rootId}/>;
 }
 
-// rules.katexScriptBlock = {
-//   filter: function (node) {
-//     const className = node.getAttribute('class');
-//     return className && className.indexOf('joplin-katex-block') >= 0;
-//   },
-
-//   escapeContent: function() {
-//     return false;
-//   },
-
-//   replacement: function (content, node, options) {
-//     const source = findKatexBlockSource(node);
-//     if (!source) return '**Katex Block: Could not find source**';
-//     return '$$\n' + source + '\n$$';
-//   }
-// };
-
-// rules.katexScriptInline = {
-//   filter: function (node) {
-//     const className = node.getAttribute('class');
-//     return className && className.indexOf('joplin-katex-inline') >= 0;
-//   },
-
-//   escapeContent: function() {
-//     return false;
-//   },
-
-//   replacement: function (content, node, options) {
-//     const source = findKatexBlockSource(node);
-//     if (!source) return '**Katex Inline: Could not find source**';
-//     return '$' + source + '$';
-//   }
-// };

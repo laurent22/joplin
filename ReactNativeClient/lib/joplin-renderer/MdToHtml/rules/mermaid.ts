@@ -22,7 +22,12 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 		const token = tokens[idx];
 		if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
 		addContextAssets(context);
-		return `<div class="mermaid">${token.content}</div>`;
+		return `
+			<div class="joplin-editable">
+				<pre class="joplin-source" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`">${token.content}</pre>
+				<div class="mermaid">${token.content}</div>
+			</div>
+		`;
 	};
 }
 
