@@ -350,6 +350,17 @@ function addExtraStyles(style) {
 		alignItems: 'center',
 	};
 
+	style.controlBoxLabel = {
+		marginRight: '1em',
+		width: '10em',
+		display: 'inline-block',
+		fontWeight: 'bold',
+	};
+
+	style.controlBoxValue = {
+		display: 'inline-block',
+	};
+
 	style.dialogBox = {
 		backgroundColor: style.backgroundColor,
 		padding: 16,

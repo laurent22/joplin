@@ -7,8 +7,7 @@ const Countable = require('countable');
 
 interface NoteContentPropertiesDialogProps {
 	theme: number,
-	text: number,
-	lines: number,
+	text: string,
 	onClose: Function,
 }
 
@@ -34,7 +33,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 			setCharacters(counter.all);
 			setCharactersNoSpace(counter.characters);
 		});
-		setLines(props.lines);
+		setLines(props.text.split('\n').length);
 	}, []);
 
 	const textProperties: TextPropertiesMap = {
@@ -56,8 +55,8 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	};
 
 	const createItemField = (key: string, value: number) => {
-		const labelComp = <label style={Object.assign({}, theme.textStyle, { marginRight: '1em', width: '10em', display: 'inline-block', fontWeight: 'bold' })}>{keyToLabel[key]}</label>;
-		const controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{value}</div>;
+		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{keyToLabel[key]}</label>;
+		const controlComp = <div style={Object.assign({}, theme.textStyle, theme.controlBoxValue)}>{value}</div>;
 
 		return (
 			<div key={key} style={theme.controlBox} className="note-text-property-box">{labelComp}{controlComp}</div>
