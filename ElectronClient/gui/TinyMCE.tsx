@@ -110,7 +110,6 @@ export default function TinyMCE(props:TinyMCEProps) {
 				selector: `#${rootId}`,
 				plugins: 'noneditable',
 				noneditable_noneditable_class: 'joplin-katex-block', // TODO: regex
-				content_css: 'node_modules/katex/dist/katex.css',
 				valid_elements: '*[*]', // TODO: filter more,
 				// toolbar: 'customInsertButton',
 			});
@@ -124,11 +123,26 @@ export default function TinyMCE(props:TinyMCEProps) {
 	useEffect(() => {
 		if (!editor) return;
 
+		const loadContent = async () => {
+			const result = await props.markdownToHtml(props.defaultMarkdown);
+			if (!result) return;
+
+			editor.setContent(result.html);
+
+			const cssFiles = result.pluginAssets.filter((a:any) => a.mime === 'text/css').map((a:any) => a.path);
+			console.info('cssFiles', cssFiles);
+			editor.dom.loadCSS(cssFiles.join(','));
+		};
+
+		loadContent();
+	}, [editor, props.markdownToHtml, props.defaultMarkdown, props.theme]);
+
+	useEffect(() => {
+		if (!editor) return;
+
 		editor.ui.registry.addContextToolbar('joplinEditable', {
 			predicate: function(node:any) {
 				if (node.classList && node.classList.contains('joplin-editable')) {
-					// const tinyNode = editor.selection.getNode();
-					// console.info('TTTTTTTT', tinyNode);
 					lastClickedEditableNode_ = node;
 					return true;
 				}
@@ -177,13 +191,26 @@ export default function TinyMCE(props:TinyMCEProps) {
 		});
 	}, [editor, props.markdownToHtml]);
 
-	useEffect(() => {
-		if (!editor) return;
+	// const addPluginAssets = function(container:any, assets:any[]) {
+	// 	if (!assets) return;
 
-		props.markdownToHtml(props.defaultMarkdown).then((result:any) => {
-			editor.setContent(result.html);
-		});
-	}, [editor, props.defaultMarkdown, props.theme]);
+	// 	for (let i = 0; i < assets.length; i++) {
+	// 		const asset = assets[i];
+	// 		// if (pluginAssetsAdded_[asset.name]) continue;
+	// 		// pluginAssetsAdded_[asset.name] = true;
+
+	// 		if (asset.mime === 'application/javascript') {
+	// 			const script = document.createElement('script');
+	// 			script.src = asset.path;
+	// 			container.appendChild(script);
+	// 		} else if (asset.mime === 'text/css') {
+	// 			const link = document.createElement('link');
+	// 			link.rel = 'stylesheet';
+	// 			link.href = asset.path;
+	// 			container.appendChild(link);
+	// 		}
+	// 	}
+	// }
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -204,10 +231,14 @@ export default function TinyMCE(props:TinyMCEProps) {
 		editor.on('Change', onChangeHandler);
 
 		return () => {
-			editor.off('keyup', onChangeHandler);
-			editor.off('paste', onChangeHandler);
-			editor.off('cut', onChangeHandler);
-			editor.off('Change', onChangeHandler);
+			try {
+				editor.off('keyup', onChangeHandler);
+				editor.off('paste', onChangeHandler);
+				editor.off('cut', onChangeHandler);
+				editor.off('Change', onChangeHandler);
+			} catch (error) {
+				console.warn('Error removing events', error);
+			}
 		};
 	}, [props.onChange, editor]);
 

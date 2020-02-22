@@ -132,6 +132,7 @@ function NoteText2(props:NoteTextProps) {
 			resources: [],
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
+			externalAssetsOnly: true,
 		});
 
 		console.info('RESULT', result);
