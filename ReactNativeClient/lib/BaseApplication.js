@@ -54,6 +54,18 @@ class BaseApplication {
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
 	}
 
+	async destroy() {
+		await FoldersScreenUtils.cancelTimers();
+		await SearchEngine.instance().cancelTimers();
+		await DecryptionWorker.instance().cancelTimers();
+		await reg.cancelTimers();
+
+		this.logger_ = null;
+		this.dbLogger_ = null;
+		this.eventEmitter_ = null;
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
+	}
+
 	logger() {
 		return this.logger_;
 	}
@@ -217,6 +229,9 @@ class BaseApplication {
 		} else if (parentType === 'Search') {
 			parentId = state.selectedSearchId;
 			parentType = BaseModel.TYPE_SEARCH;
+		} else if (parentType === 'SmartFilter') {
+			parentId = state.selectedSmartFilterId;
+			parentType = BaseModel.TYPE_SMART_FILTER;
 		}
 
 		this.logger().debug('Refreshing notes:', parentType, parentId);
@@ -243,6 +258,8 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
+				notes = await Note.previews(parentId, options);
 			}
 		}
 
@@ -435,6 +452,11 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'SMART_FILTER_SELECT') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
 			refreshNotes = true;
 		}
@@ -493,7 +515,6 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
-
 		return result;
 	}
 
@@ -513,6 +534,16 @@ class BaseApplication {
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
+	}
+
+	deinitRedux() {
+		this.store_ = null;
+		BaseModel.dispatch = function() {};
+		FoldersScreenUtils.dispatch = function() {};
+		reg.dispatch = function() {};
+		BaseSyncTarget.dispatch = function() {};
+		DecryptionWorker.instance().dispatch = function() {};
+		ResourceFetcher.instance().dispatch = function() {};
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -670,7 +701,6 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
 		return argv;
 	}
 }
