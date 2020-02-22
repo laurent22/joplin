@@ -14,6 +14,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 class SideBarComponent extends React.Component {
 	constructor() {
@@ -89,6 +90,7 @@ class SideBarComponent extends React.Component {
 		this.tagItemsOrder_ = [];
 
 		this.onKeyDown = this.onKeyDown.bind(this);
+		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
 
 		this.rootRef = React.createRef();
 
@@ -570,6 +572,9 @@ class SideBarComponent extends React.Component {
 			let isExpanded = this.state[toggleKey];
 			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
+		if (extraProps.selected) {
+			style.backgroundColor =this.style().listItemSelected.backgroundColor;
+		}
 
 		const ref = this.anchorItemRef('headers', key);
 
@@ -696,6 +701,13 @@ class SideBarComponent extends React.Component {
 		}
 	}
 
+	onAllNotesClick_() {
+		this.props.dispatch({
+			type: 'SMART_FILTER_SELECT',
+			id: ALL_NOTES_FILTER_ID,
+		});
+	}
+
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
 		const iconName = 'fa-refresh';
@@ -732,6 +744,13 @@ class SideBarComponent extends React.Component {
 		});
 
 		let items = [];
+		items.push(
+			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
+				onClick: this.onAllNotesClick_,
+				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID,
+			})
+		);
+
 		items.push(
 			this.makeHeader('folderHeader', _('Notebooks'), 'fa-book', {
 				onDrop: this.onFolderDrop_,
@@ -821,6 +840,7 @@ const mapStateToProps = state => {
 		selectedFolderId: state.selectedFolderId,
 		selectedTagId: state.selectedTagId,
 		selectedSearchId: state.selectedSearchId,
+		selectedSmartFilterId: state.selectedSmartFilterId,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		theme: state.settings.theme,

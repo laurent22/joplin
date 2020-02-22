@@ -34,22 +34,40 @@ class FoldersScreenUtils {
 	}
 
 	static async refreshFolders() {
-		const folders = await this.allForDisplay({ includeConflictFolder: true });
+		FoldersScreenUtils.refreshCalls_.push(true);
+		try {
+			const folders = await this.allForDisplay({ includeConflictFolder: true });
 
-		this.dispatch({
-			type: 'FOLDER_UPDATE_ALL',
-			items: folders,
-		});
+			this.dispatch({
+				type: 'FOLDER_UPDATE_ALL',
+				items: folders,
+			});
+		} finally {
+			FoldersScreenUtils.refreshCalls_.pop();
+		}
 	}
 
 	static scheduleRefreshFolders() {
 		if (this.scheduleRefreshFoldersIID_) clearTimeout(this.scheduleRefreshFoldersIID_);
-
 		this.scheduleRefreshFoldersIID_ = setTimeout(() => {
 			this.scheduleRefreshFoldersIID_ = null;
 			this.refreshFolders();
 		}, 1000);
 	}
+
+	static async cancelTimers() {
+		if (this.scheduleRefreshFoldersIID_) clearTimeout(this.scheduleRefreshFoldersIID_);
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!FoldersScreenUtils.refreshCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
 }
+
+FoldersScreenUtils.refreshCalls_ = [];
 
 module.exports = { FoldersScreenUtils };
