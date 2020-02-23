@@ -1,7 +1,7 @@
 declare const tinymce: any;
 
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface TinyMCEProps {
 	style: any,
@@ -11,6 +11,7 @@ interface TinyMCEProps {
 	defaultMarkdown: string,
 	theme: any,
 	markdownToHtml: Function,
+	attachResources: Function,
 }
 
 export interface TinyMCEChangeEvent {
@@ -43,9 +44,15 @@ export default function TinyMCE(props:TinyMCEProps) {
 	const [editor, setEditor] = useState(null);
 	const editorState = props.editorState ? props.editorState : '';
 
+	const attachResources = useRef(null);
+	attachResources.current = props.attachResources;
+
+	const markdownToHtml = useRef(null);
+	markdownToHtml.current = props.markdownToHtml;
+
 	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
 
-	const dispatchDidUpdate = (editor) => {
+	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
 		dispatchDidUpdateIID_ = setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
@@ -70,6 +77,26 @@ export default function TinyMCE(props:TinyMCEProps) {
 				noneditable_noneditable_class: 'joplin-editable', // TODO: regex
 				valid_elements: '*[*]', // TODO: filter more,
 				menubar: false,
+				toolbar: 'bold italic customAttach',
+				setup: (editor:any) => {
+
+					editor.ui.registry.addButton('customAttach', {
+						tooltip: 'Attach...',
+						icon: 'upload',
+						onAction: async function() {
+							const resources = await attachResources.current();
+
+							const html = [];
+							for (const resource of resources) {
+								const result = await markdownToHtml.current(resource.markdownTag, { bodyOnly: true });
+								html.push(result.html);
+							}
+
+							editor.insertContent(html.join('\n'));
+						},
+					});
+
+				},
 			});
 
 			setEditor(editors[0]);
@@ -79,7 +106,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 	}, []);
 
 	useEffect(() => {
-		if (!editor) return;
+		if (!editor) return () => {};
 
 		const loadContent = async () => {
 			const result = await props.markdownToHtml(props.defaultMarkdown);
@@ -185,7 +212,8 @@ export default function TinyMCE(props:TinyMCEProps) {
 				});
 			},
 		});
-	}, [editor, props.markdownToHtml]);
+
+	}, [editor, props.markdownToHtml, props.attachResources]);
 
 	useEffect(() => {
 		if (!editor) return () => {};

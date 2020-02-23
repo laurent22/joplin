@@ -9,6 +9,9 @@ const { MarkupToHtml } = require('lib/joplin-renderer');
 const HtmlToMd = require('lib/HtmlToMd');
 const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
+const Resource = require('lib/models/Resource.js');
+const { shim } = require('lib/shim');
+const { bridge } = require('electron').remote.require('./bridge');
 
 interface NoteTextProps {
 	style: any,
@@ -85,7 +88,7 @@ class AsyncActionsHandler {
 		this.scheduleProcessingIID_ = setTimeout(() => {
 			this.scheduleProcessingIID_ = null;
 			this.processQueue();
-		}, 1000);
+		}, 500);
 	}
 
 	private async processQueue() {
@@ -108,6 +111,19 @@ class AsyncActionsHandler {
 		}
 
 		this.processing_ = false;
+	}
+
+	waitForAllDone(queueId:string) {
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (this.processing_) return;
+
+				if (!this.items_[queueId] || !this.items_[queueId].length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 
 }
@@ -135,6 +151,11 @@ function NoteText2(props:NoteTextProps) {
 		return newNote;
 	};
 
+	const saveNoteNow = useCallback(async () => {
+		scheduleSaveNote(formNote);
+		return asyncActionHandler.waitForAllDone('saveNote');
+	}, [formNote]);
+
 	const scheduleSaveNote = (formNote:FormNote) => {
 		const makeAction = (formNote:FormNote) => {
 			return async function() {
@@ -150,7 +171,7 @@ function NoteText2(props:NoteTextProps) {
 		asyncActionHandler.push('saveNote', makeAction(formNote));
 	};
 
-	const markdownToHtml = useCallback(async (md:string):Promise<any> => {
+	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
 		if (!md) return '';
 
 		const theme = themeStyle(props.theme);
@@ -164,7 +185,7 @@ function NoteText2(props:NoteTextProps) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 
-		const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, {
+		const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
 			// userCss: this.props.customCss ? this.props.customCss : '',
 			// resources: await shared.attachedResources(noteBody),
@@ -172,7 +193,7 @@ function NoteText2(props:NoteTextProps) {
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,
 			externalAssetsOnly: true,
-		});
+		}, options));
 
 		// console.info('RESULT', result);
 		// console.info('===================================');
@@ -210,6 +231,30 @@ function NoteText2(props:NoteTextProps) {
 		fetchNote();
 	}, [props.noteId, props.newNote]);
 
+	const attachResources = useCallback(async () => {
+		const filePaths = bridge().showOpenDialog({
+			properties: ['openFile', 'createDirectory', 'multiSelections'],
+		});
+		if (!filePaths || !filePaths.length) return [];
+
+		await saveNoteNow();
+
+		const output = [];
+
+		for (const filePath of filePaths) {
+			try {
+				const resource = await shim.createResourceFromPath(filePath);
+				output.push({
+					item: resource,
+					markdownTag: Resource.markdownTag(resource),
+				});
+			} catch (error) {
+				bridge().showErrorMessageBox(error.message);
+			}
+		}
+
+		return output;
+	}, [formNote]);
 
 	const onBodyChange = useCallback((event) => {
 		if (formNote.bodyEditorState === event.editorState) return;
@@ -261,6 +306,7 @@ function NoteText2(props:NoteTextProps) {
 						defaultMarkdown={formNote.bodyMarkdown}
 						theme={props.theme}
 						markdownToHtml={markdownToHtml}
+						attachResources={attachResources}
 					/>
 				</div>
 			</div>
