@@ -44,7 +44,7 @@ class ElectronAppWrapper {
 		const windowStateKeeper = require('electron-window-state');
 
 		const currentWorkArea = screen.getPrimaryDisplay().workArea;
-		const [defaultWidth, defaultHeight] = [0.8*currentWorkArea.width, 0.8*currentWorkArea.width];
+		const [defaultWidth, defaultHeight] = [0.8*currentWorkArea.width, 0.8*currentWorkArea.height];
 
 		const stateOptions = {
 			defaultWidth: defaultWidth,
