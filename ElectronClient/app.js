@@ -281,8 +281,8 @@ class Application extends BaseApplication {
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
-			console.log('from toggle')
-			newState.noteVisiblePanes[0] === 'viewer' ? this.updateMenuItemStates(false) : this.updateMenuItemStates(true);
+			const viewer = newState.noteVisiblePanes[0];
+			this.updateMenuItemStates(viewer, newState);
 		}
 
 		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
@@ -294,9 +294,9 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
-			//this.updateMenuItemStates(newState);
-			console.log('note select', newState.noteVisiblePanes)
-			newState.noteVisiblePanes[0] === 'viewer' ? this.updateMenuItemStates(false) : this.updateMenuItemStates(newState);
+			const viewer = newState.noteVisiblePanes[0];
+			this.updateMenuItemStates(viewer, newState);
+
 		}
 
 		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
@@ -1170,7 +1170,7 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
-	async updateMenuItemStates(enable = null, state = null) {
+	async updateMenuItemStates(viewer, state = null) {
 		if (!this.lastMenuScreen_) return;
 		if (!this.store() && !state) return;
 
@@ -1178,14 +1178,18 @@ class Application extends BaseApplication {
 
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
-
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
-			if (enable === null) {
-				menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			if (viewer) {
+				if (viewer === 'viewer') {
+					menuItem.enabled = false;
+				} else {
+					menuItem.enabled = true;
+				}
 			} else {
-				menuItem.enabled = enable;
+
+				menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 			}
 		}
 
