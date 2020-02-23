@@ -55,3 +55,10 @@ ReactNativeClient/lib/JoplinServerApi.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+
+#custom gitignore ---- start here----
+.gitignore
+CliClient/package-lock.json
+ElectronClient/package-lock.json
+ReactNativeClient/package-lock.json
+package-lock.json
