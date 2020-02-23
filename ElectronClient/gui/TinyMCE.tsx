@@ -1,7 +1,7 @@
 declare const tinymce: any;
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface TinyMCEProps {
 	style: any,
@@ -20,9 +20,8 @@ export interface TinyMCEChangeEvent {
 let lastClickedEditableNode_:any = null;
 
 export async function editorStateToHtml(editorState:any):Promise<string> {
-	return editorState;
+	return editorState ? editorState : '';
 }
-
 
 function findBlockSource(node:any) {
 	const sources = node.getElementsByClassName('joplin-source');
@@ -44,6 +43,13 @@ export default function TinyMCE(props:TinyMCEProps) {
 	const editorState = props.editorState ? props.editorState : '';
 
 	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
+
+	const onEditorContentClick = useCallback((event:any) => {
+		if (event.target && event.target.nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
+			editor.fire('Change');
+			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
+		}
+	}, [editor]);
 
 	useEffect(() => {
 		loadedAssetFiles_ = [];
@@ -99,6 +105,8 @@ export default function TinyMCE(props:TinyMCEProps) {
 				}
 			}
 
+			editor.getDoc().addEventListener('click', onEditorContentClick);
+
 			props.onReady({
 				editorState: editor.getContent(),
 			});
@@ -107,6 +115,10 @@ export default function TinyMCE(props:TinyMCEProps) {
 		};
 
 		loadContent();
+
+		return () => {
+			editor.getDoc().removeEventListener('click', onEditorContentClick);
+		};
 	}, [editor, props.markdownToHtml, props.defaultMarkdown, props.theme]);
 
 	useEffect(() => {

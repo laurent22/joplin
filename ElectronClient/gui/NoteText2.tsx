@@ -127,7 +127,8 @@ function NoteText2(props:NoteTextProps) {
 	}, []);
 
 	const formNoteToNote = async (formNote:FormNote):Promise<any> => {
-		const bodyMd = await htmlToMarkdown(await editorStateToHtml(formNote.bodyEditorState));
+		const html = await editorStateToHtml(formNote.bodyEditorState);
+		const bodyMd = await htmlToMarkdown(html);
 		const newNote = Object.assign({}, formNote, { body: bodyMd });
 		delete newNote.bodyMarkdown;
 		delete newNote.bodyEditorState;

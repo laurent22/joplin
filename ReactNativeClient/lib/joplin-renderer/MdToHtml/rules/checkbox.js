@@ -33,10 +33,20 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 	const labelId = `cb-label-${id}`;
 
 	const js = `
-		${postMessageSyntax}('checkboxclick:${checkedString}:${lineIndex}');
-		const label = document.getElementById("${labelId}");
-		label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
-		label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
+		try {
+			if (this.checked) {
+				this.setAttribute('checked', 'checked');
+			} else {
+				this.removeAttribute('checked');
+			}
+
+			${postMessageSyntax}('checkboxclick:${checkedString}:${lineIndex}');
+			const label = document.getElementById("${labelId}");
+			label.classList.remove(this.checked ? 'checkbox-label-unchecked' : 'checkbox-label-checked');
+			label.classList.add(this.checked ? 'checkbox-label-checked' : 'checkbox-label-unchecked');
+		} catch (error) {
+			console.warn('Checkbox ${checkedString}:${lineIndex} error', error);
+		}
 		return true;
 	`;
 
@@ -46,7 +56,7 @@ function createPrefixTokens(Token, id, checked, label, postMessageSyntax, source
 
 	token = new Token('checkbox_input', 'input', 0);
 	token.attrs = [['type', 'checkbox'], ['id', id], ['onclick', js]];
-	if (checked) token.attrs.push(['checked', 'true']);
+	if (checked) token.attrs.push(['checked', 'checked']);
 	tokens.push(token);
 
 	token = new Token('label_open', 'label', 1);
@@ -119,7 +129,7 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 
 				let itemClass = currentListItem.attrGet('class');
 				if (!itemClass) itemClass = '';
-				itemClass += ' md-checkbox';
+				itemClass += ' md-checkbox joplin-checkbox';
 				currentListItem.attrSet('class', itemClass.trim());
 
 				if (!('checkbox' in context.pluginAssets)) {
