@@ -1,10 +1,8 @@
-require('app-module-path').addPath(`${__dirname}`);
-
+const utils = require('../../Tools/gulp/utils');
 const fs = require('fs-extra');
-const { dirname, fileExtension } = require('lib/path-utils');
 const md5 = require('md5');
 
-const rootDir = __dirname;
+const rootDir = `${__dirname}/..`;
 const outputDir = `${rootDir}/pluginAssets`;
 
 var walk = function(dir) {
@@ -27,10 +25,10 @@ async function encodeFile(sourcePath, destPath) {
 	const hash = md5(buffer.toString('base64'));
 	const js = `module.exports = \`${buffer.toString('base64')}\`;`;
 	const outputPath = `${outputDir}/${destPath}.base64.js`;
-	await fs.mkdirp(dirname(outputPath));
+	await fs.mkdirp(utils.dirname(outputPath));
 	await fs.writeFile(outputPath, js);
 
-	const ext = fileExtension(sourcePath).toLowerCase();
+	const ext = utils.fileExtension(sourcePath).toLowerCase();
 	let mime = 'application/octet-stream';
 	if (ext === 'js') mime = 'application/javascript';
 	if (ext === 'css') mime = 'text/css';
@@ -69,7 +67,4 @@ async function main() {
 	await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\nhash:"${hash}", files: {\n${indexJs.join('\n')}\n}\n};`);
 }
 
-main().catch((error) => {
-	console.error(error);
-	process.exit(1);
-});
+module.exports = main;

@@ -1,3 +1,8 @@
+* * *
+
+**IMPORTANT: The build system has been changed since this document was written, thus it contains outdated information. It is kept for now as it may still contain some tips on how to get things working.**
+
+* * *
 
 ## Building Joplin on Windows
 
@@ -25,7 +30,7 @@ Run the following from an admin prompt,
 
 * Run `cd c:\path\to\joplin`
 
-* Run `cd ElectronClient/app`
+* Run `cd ElectronClient`
 
 * Run `xcopy /C /I /H /R /Y /S ..\..\ReactNativeClient\lib lib`
 
@@ -46,7 +51,7 @@ Run the following from any cmd.exe prompt, doesn't need to be admin,
 
 * Run `cd c:\path\to\joplin`
 
-* Run `cd ElectronClient/app`
+* Run `cd ElectronClient`
 
 * Create a profile directory for testing, for example `mkdir c:\path\to\test_profile_dir`
 

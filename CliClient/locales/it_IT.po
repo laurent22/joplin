@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
+"Last-Translator: StarFang108\n"
 "Language-Team: \n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -775,9 +777,8 @@ msgid "Sidebar"
 msgstr "Barra laterale"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:367
-#, fuzzy
 msgid "Note list"
-msgstr "Cronologia nota"
+msgstr "Lista della nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:373
 msgid "Note title"
@@ -864,19 +865,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:636
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Completata: %s"
+msgstr "ID del Client: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:637
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Nuova versione: %s"
+msgstr "Sinc. versione: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:638
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Nuova versione: %s"
+msgstr "Profilo versione: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:652
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:735
@@ -1014,7 +1015,7 @@ msgstr "Attiva / disattiva barra laterale"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:932
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Layout della sequenza tasti"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:936
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/MainScreen.min.js:493
@@ -1031,15 +1032,15 @@ msgstr "Focus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1000
 msgid "Actual Size"
-msgstr ""
+msgstr "Dimensione attuale"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1006
 msgid "Zoom In"
-msgstr ""
+msgstr "Aumenta zoom"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1012
 msgid "Zoom Out"
-msgstr ""
+msgstr "Diminuisci zoom"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/app.js:1020
 msgid "&Tools"
@@ -1261,6 +1262,8 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Joplin Nextcloud App o non è installata o mal configurata. Si prega di "
+"leggere il messaggio d'errore completo sottostante: "
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:206
 msgid "Show Log"
@@ -1268,7 +1271,7 @@ msgstr "Mostra log"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Stato di Joplin Nextcloud App"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ConfigScreen.min.js:233
 msgid "Check Status"
@@ -1430,15 +1433,15 @@ msgstr "La crittografia è:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Estensione Firefox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Web Store"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "Scaricalo subito:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/Header.min.js:224
 msgid "Usage"
@@ -1537,7 +1540,7 @@ msgstr "Cronologia nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
-msgstr ""
+msgstr "Marcatura"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NotePropertiesDialog.min.js:312
 msgid "Previous versions of this note"
@@ -1616,9 +1619,8 @@ msgstr ""
 "modificare la nota."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1294
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "Solo una nota alla volta può essere stampata o esportata come PDF."
+msgstr "Solo una nota alla volta può essere stampata."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/NoteText.min.js:1479
 msgid "strong text"
@@ -1730,7 +1732,7 @@ msgstr[1] "I link sono stati copiati negli appunti!"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:171
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
+msgstr "Nota: Quando una nota è condivisa, non sarà più criptata nel server."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:176
 msgid "Share Notes"
@@ -1744,7 +1746,7 @@ msgstr[1] "Copia link condivisibili"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/ShareNoteDialog.js:181
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app/gui/SideBar.min.js:280
 msgid "Remove"
@@ -1899,6 +1901,11 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Non è stato possibile connettersi alla Joplin Nextcloud app. Si prega di "
+"controllare la configurazione nella schermata di Config. della "
+"Sincronizzazione. Errore completo era:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2126,7 +2133,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Modalità Tastiera"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 msgid "Default"
@@ -2134,11 +2141,11 @@ msgstr "Predefinito"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Emacs"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
@@ -2236,24 +2243,23 @@ msgstr "Scuro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Dracula"
-msgstr ""
+msgstr "Dracula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
 msgid "Solarised Light"
-msgstr ""
+msgstr "Chiaro solarizzato"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Scuro Solarizzato"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Scuro"
+msgstr "Scuro OLED"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
@@ -2275,7 +2281,7 @@ msgstr "Visualizzatore"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Split View"
-msgstr ""
+msgstr "Split View"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
@@ -2287,7 +2293,7 @@ msgstr "%s / %s / %s"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
 msgid "Uncompleted to-dos on top"
@@ -2303,7 +2309,7 @@ msgstr "Ordina le note per"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Auto- accoppia parentesi graffe, parentesi, citazione, ecc."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
@@ -2338,7 +2344,7 @@ msgstr "Quando si crea una nuova nota:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Abilita interruzioni soft"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
 msgid "Enable typographer support"
@@ -2370,7 +2376,7 @@ msgstr "Attiva sintassi ^sup^"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Enable deflist syntax"
-msgstr ""
+msgstr "Abilita sintassi deflist"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
 msgid "Enable abbreviation syntax"
@@ -2393,9 +2399,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Attiva supporto sintassi Fountain"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Attiva supporto tipografico"
+msgstr "Attiva supporto diagrammi Mermaid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Show tray icon"
@@ -2442,7 +2447,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "CSS per gli stili Joplin-wide app"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
 msgid "Automatically update the application"
@@ -2498,27 +2503,27 @@ msgstr "Dimensione pagina per l’esportazione in PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Letter"
-msgstr ""
+msgstr "Lettera"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "Legal"
-msgstr ""
+msgstr "Legale"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Page orientation for PDF export"
@@ -2558,6 +2563,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Fail-safe: Non rimuovere i dati locale quando la destinazione di sinc è "
+"vuota (spesso il risultato di una mal configurazione o di un bug)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
 msgid ""
@@ -3010,6 +3017,7 @@ msgstr "Esporta profilo"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
+"Solo per scopo di debugging: esporta il tuo profilo su una scheda SD esterna"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
 msgid "More information"

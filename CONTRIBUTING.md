@@ -55,26 +55,25 @@ The tests are under CliClient/tests. To get them running, you first need to buil
 ```sh
 npm run tsc # Build the .ts and .tsx files
 cd CliClient
-npm i
-./build.sh
+npm install
 ```
 
 To run all the test units:
 
 ```sh
-./run_test.sh
+npm run test
 ```
 
 To run just one particular file:
 
 ```sh
-./run_test.sh markdownUtils # Don't add the .js extension
+npm run test -- --filter=markdownUtils # Don't add the .js extension
 ```
 
-To filter tests:
+To filter tests. For example, to run all the test units that contain "should handle conflict" in their description:
 
 ```sh
-./run_test.sh "should handle conflict" # Will run all the test units that contain "should handle conflict" in their description
+npm run test -- --filter="should handle conflict"
 ```
 
 If you get the error `Cannot find module '/joplin/CliClient/node_modules/sqlite3/lib/binding/node-v79-darwin-x64/node_sqlite3.node'`, you may need to run `npm rebuild`.

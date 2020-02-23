@@ -552,7 +552,7 @@ class BaseModel {
 	}
 }
 
-BaseModel.typeEnum_ = [['TYPE_NOTE', 1], ['TYPE_FOLDER', 2], ['TYPE_SETTING', 3], ['TYPE_RESOURCE', 4], ['TYPE_TAG', 5], ['TYPE_NOTE_TAG', 6], ['TYPE_SEARCH', 7], ['TYPE_ALARM', 8], ['TYPE_MASTER_KEY', 9], ['TYPE_ITEM_CHANGE', 10], ['TYPE_NOTE_RESOURCE', 11], ['TYPE_RESOURCE_LOCAL_STATE', 12], ['TYPE_REVISION', 13], ['TYPE_MIGRATION', 14]];
+BaseModel.typeEnum_ = [['TYPE_NOTE', 1], ['TYPE_FOLDER', 2], ['TYPE_SETTING', 3], ['TYPE_RESOURCE', 4], ['TYPE_TAG', 5], ['TYPE_NOTE_TAG', 6], ['TYPE_SEARCH', 7], ['TYPE_ALARM', 8], ['TYPE_MASTER_KEY', 9], ['TYPE_ITEM_CHANGE', 10], ['TYPE_NOTE_RESOURCE', 11], ['TYPE_RESOURCE_LOCAL_STATE', 12], ['TYPE_REVISION', 13], ['TYPE_MIGRATION', 14], ['TYPE_SMART_FILTER', 15]];
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];

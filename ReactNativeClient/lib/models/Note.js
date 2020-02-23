@@ -12,6 +12,7 @@ const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -275,7 +276,7 @@ class Note extends BaseItem {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
-			if (parentId) {
+			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
 			}
