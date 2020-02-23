@@ -4,9 +4,12 @@ Joplin has a young but well proven history. It all started by single idea but is
 
 Joplin is about to make another big step to answers these demands by applying at Google Summer of Code. All students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Code program with Joplin. Here's how.
 
-Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
+Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).   
+**Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.   
+Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6098) as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.**
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
+
 
 ## Programming Language
 
@@ -55,7 +58,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 ## Recommended steps
 
-1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself, share your GitHub username, and meet your fellow developers in the [Development category](https://discourse.joplinapp.org/c/development). The subject of the topic shall contain your username, e.g. _Introducing \<username>_.
+1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. _Introducing \<username>_.
 2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
 3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2020/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Development category](https://discourse.joplinapp.org/c/development)
