@@ -1,33 +1,36 @@
+// For Encoding and decoding
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
+
 const copyStyle = `
-.code-n-btn-wrapper {
-  positon: relative;
+.code-n-btn-wrapper	{
+	position:	relative;
 }
-.copy-code-wrapper {
-  display: none;
-  position: absolute;
-  right: 0;
-  margin: 10px 15px 0 0;
+.copy-code-wrapper	{
+	display:	none;
+	position:	absolute;
+	top:4px;
+	right:	4px;
 }
-.copy-code-wrapper button {
-   background: #fff;
-   border: none;
-   padding: 10px;
-   cursor: pointer;
+.copy-code-wrapper	button	{
+		background:	#fff;
+		border:	1px	solid	#777;
+		padding:	3.5px	8px;
+		border-radius:	5px;
+		font-weight:	500;
+		cursor:	pointer;
 }
-.copy-code-wrapper button i {
-font-size: 1rem;
+.code-n-btn-wrapper:hover	.copy-code-wrapper{
+	display:	block;
 }
-.code-n-btn-wrapper:hover .copy-code-wrapper{
-  display: block;
-}
-.u-mdic-copy-notify {
-  display: none;
-  padding: 4px 12px;
-  background: #fff;
-  color: #ccc;
-  font-size:0.9rem;
-  margin: 0 10px;
-  border-radius: 10px;
+.u-mdic-copy-notify	{
+	display:	none;
+	padding:	4px	10px;
+	background:	#fff;
+	color:	#777;
+	font-size:0.9rem;
+	margin:	0	10px;
+	border-radius:	10px;
 }
 `;
 
@@ -35,58 +38,47 @@ function generateUuid() {
 	return `${+Date.now()}-${parseInt(Math.random() * 100000)}`;
 }
 
-function strEncode(str = '') {
-	if (!str || str.length === 0) {
-		return '';
-	}
-	return str
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/'/g, '&apos;')
-		.replace(/"/g, '&quot;');
-}
-
 let copyCode = `
-(function (button) {
-            const markdownItCopy = {
-                async copy(text = '') {
-                    if (!navigator.clipboard) {
-                        console.error('no clipboard support');
-                    } else {
-                        try {
-                            await navigator.clipboard.writeText(text);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
-                },
-                async buttonClick(_btn) {
-                    const copyButtonDataSet = _btn && _btn.dataset ? _btn.dataset : {};
-                    const notifyId = copyButtonDataSet.mdicNotifyId;
-                    const copyNotify = document.getElementById(notifyId);
-                    const notifyDelayTime = copyButtonDataSet.mdicNotifyDelay;
-                    const copyFailText = copyButtonDataSet.mdicCopyFailText;
-                    try {
-                        await markdownItCopy.copy(copyButtonDataSet.mdicContent);
-                        copyNotify.style.display = 'inline';
-                        setTimeout(() => {
-                            copyNotify.style.display = 'none';
-                        }, notifyDelayTime);
-                    } catch (e) {
-                        alert(copyFailText);
-                    }
-                },
-            };
-            markdownItCopy.buttonClick(button);
-  }(this));  
+(function	(button)	{
+	const	markdownItCopy	=	{
+		async	copy(text	=	'')	{
+			if	(!navigator.clipboard)	{
+				console.error('no	clipboard	support');
+			}	else	{
+				try	{
+					await	navigator.clipboard.writeText(text);
+				}	catch	(e)	{
+					console.error(e);
+				}
+			}
+		},
+		async	buttonClick(_btn)	{
+			const	copyButtonDataSet	=	_btn	&&	_btn.dataset	?	_btn.dataset	:	{};
+			const	notifyId	=	copyButtonDataSet.mdicNotifyId;
+			const	copyNotify	=	document.getElementById(notifyId);
+			const	notifyDelayTime	=	copyButtonDataSet.mdicNotifyDelay;
+			const	copyFailText	=	copyButtonDataSet.mdicCopyFailText;
+			try	{
+				await	markdownItCopy.copy(copyButtonDataSet.mdicContent);
+				copyNotify.style.display	=	'inline';
+				setTimeout(()	=>	{
+					copyNotify.style.display	=	'none';
+				},	notifyDelayTime);
+			}	catch	(e)	{
+				alert(copyFailText);
+			}
+		},
+	};
+	markdownItCopy.buttonClick(button);
+}(this));
 `;
 const enhance = (render) => (...args) => {
 	/* args = [tokens, idx, options, env, slf] */
 	let failText = 'copy fail';
-	let successText = 'copied';
+	let successText = 'copied!';
 	let successTextDelay = 2000;
 	const [tokens, idx] = args;
-	const content = strEncode(tokens[idx].content || '');
+	const content = entities.encode(tokens[idx].content);
 	const uuid = `j-notify-${generateUuid()}`;
 	const buttonBuilder = [
 		'<div class="copy-code-wrapper">',
@@ -97,7 +89,7 @@ const enhance = (render) => (...args) => {
 		`data-mdic-notify-id="${uuid}" `,
 		`data-mdic-notify-delay="${successTextDelay}" `,
 		`data-mdic-copy-fail-text="${failText}" `,
-		`onclick="${copyCode}"><i class="fa fa-copy"></i></button>`,
+		`onclick="${copyCode}">copy</button>`,
 		'</div>',
 	];
 	const copyTag = buttonBuilder.join('');
