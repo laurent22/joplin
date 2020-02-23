@@ -16,7 +16,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "watch": "cra-build-watch",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js && npm run build"
   },
   "devDependencies": {
     "cra-build-watch": "^3.2.0",
