@@ -27,7 +27,14 @@
 				"*.bundle.js",
 				"yarn.lock",
 				"*.icns",
-				"*.base64"
+				"*.base64",
+				"Podfile.lock",
+				"ReactNativeClient/PluginAssetsLoader.js",
+				"ElectronClient/gui/NoteText2.js",
+				"ElectronClient/gui/ResourceScreen.js",
+				"ElectronClient/gui/ShareNoteDialog.js",
+				"ElectronClient/gui/TinyMCE.js",
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js"
 			],
 			"folder_exclude_patterns":
 			[
@@ -56,16 +63,18 @@
 				"ReactNativeClient/android/build",
 				"ReactNativeClient/android/local.properties",
 				"ReactNativeClient/node_modules",
+				"ReactNativeClient/pluginAssets",
 				"ElectronClient/gui/note-viewer/highlight/styles",
 				"tests/logs",
 				"ReactNativeClient/ios/build",
 				"ElectronClient/dist",
 				"_releases",
 				"ReactNativeClient/lib/csstojs",
-				"Clipper/joplin-webclipper/popup/build",
-				"Clipper/joplin-webclipper/dist",
+				"Clipper/popup/build",
+				"Clipper/dist",
 				"ReactNativeClient/lib/rnInjectedJs",
-				"ReactNativeClient/ios/Pods"
+				"ReactNativeClient/ios/Pods",
+				"CliClient/locales-build"
 			],
 			"path": "."
 		}

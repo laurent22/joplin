@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
 
-const clipperDir   = `${__dirname}/../Clipper/joplin-webclipper`;
-const tmpSourceDir = `${__dirname}/../Clipper/joplin-webclipper-source`;
+const clipperDir   = `${__dirname}/../Clipper`;
+const tmpSourceDir = `${__dirname}/../Clipper-source`;
 
 async function copyDir(baseSourceDir, sourcePath, baseDestDir) {
 	await fs.mkdirp(`${baseDestDir}/${sourcePath}`);

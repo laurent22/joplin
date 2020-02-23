@@ -1,14 +1,8 @@
 {
   "name": "joplin-webclipper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Joplin Web Clipper",
   "main": "main.js",
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "readability-node": "^0.1.0"
-  },
-  "devDependencies": {
-    "fs-extra": "^6.0.1"
-  }
+  "author": "Laurent Cozic",
+  "license": "MIT"
 }
