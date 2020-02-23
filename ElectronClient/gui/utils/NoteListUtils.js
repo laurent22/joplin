@@ -37,6 +37,19 @@ class NoteListUtils {
 
 			menu.append(
 				new MenuItem({
+					label: _('Assign Notebook'),
+					click: async () => {
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'setNotebook',
+							noteIds: noteIds,
+						});
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
 					label: _('Duplicate'),
 					click: async () => {
 						for (let i = 0; i < noteIds.length; i++) {
