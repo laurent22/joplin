@@ -37,6 +37,7 @@ function findBlockSource(node:any) {
 }
 
 let loadedAssetFiles_:string[] = [];
+let dispatchDidUpdateIID_:any = null;
 
 export default function TinyMCE(props:TinyMCEProps) {
 	const [editor, setEditor] = useState(null);
@@ -44,10 +45,18 @@ export default function TinyMCE(props:TinyMCEProps) {
 
 	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
 
+	const dispatchDidUpdate = (editor) => {
+		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
+		dispatchDidUpdateIID_ = setTimeout(() => {
+			dispatchDidUpdateIID_ = null;
+			editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+		}, 10);
+	};
+
 	const onEditorContentClick = useCallback((event:any) => {
 		if (event.target && event.target.nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
 			editor.fire('Change');
-			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
+			dispatchDidUpdate(editor);
 		}
 	}, [editor]);
 
@@ -111,7 +120,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 				editorState: editor.getContent(),
 			});
 
-			setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
+			dispatchDidUpdate(editor);
 		};
 
 		loadContent();
@@ -155,7 +164,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 						dialogApi.close();
 						editor.fire('Change');
 						editor.getDoc().activeElement.blur();
-						setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 100);
+						dispatchDidUpdate(editor);
 					},
 					body: {
 						type: 'panel', // The root body type - a Panel or TabPanel
@@ -188,7 +197,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
 				props.onChange({ editorState: editor.getContent() });
-				setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
+				dispatchDidUpdate(editor);
 			}, 5);
 		};
 
@@ -213,7 +222,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 		if (!editor) return;
 		if (editorState === editor.getContent()) return;
 		editor.setContent(editorState);
-		setTimeout(() => editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate')), 10);
+		dispatchDidUpdate(editor);
 	}, [editor, editorState]);
 
 	return <div style={props.style} id={rootId}/>;
