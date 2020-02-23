@@ -281,6 +281,7 @@ class Application extends BaseApplication {
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
+			console.log('from toggle')
 			newState.noteVisiblePanes[0] === 'viewer' ? this.updateMenuItemStates(false) : this.updateMenuItemStates(true);
 		}
 
@@ -293,6 +294,8 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
+			//this.updateMenuItemStates(newState);
+			console.log('note select', newState.noteVisiblePanes)
 			newState.noteVisiblePanes[0] === 'viewer' ? this.updateMenuItemStates(false) : this.updateMenuItemStates(newState);
 		}
 
