@@ -1512,11 +1512,23 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextBold() {
-		this.wrapSelectionWithStrings('**', '**', _('strong text'));
+		const selection = this.textOffsetSelection();
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		if (string.startsWith('**') && string.endsWith('**')) {
+			this.wrapSelectionWithStrings('', '', '', string.substr(2, selection.end - selection.start - 4));
+		} else {
+			this.wrapSelectionWithStrings('**', '**', _('strong text'));
+		}
 	}
 
 	commandTextItalic() {
-		this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
+		const selection = this.textOffsetSelection();
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		if ((string.startsWith('*') && string.endsWith('*')) || (string.startsWith('_') && string.endsWith('_'))) {
+			this.wrapSelectionWithStrings('', '', '', string.substr(1, selection.end - selection.start - 2));
+		} else {
+			this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
+		}
 	}
 
 	commandDateTime() {
@@ -1532,9 +1544,17 @@ class NoteTextComponent extends React.Component {
 
 		if (match && match.length > 0) {
 			// Follow the same newline style
-			this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+			if (string.startsWith('```') && string.endsWith('```')) {
+				this.wrapSelectionWithStrings('', '', '', string.substr(4, selection.end - selection.start - 8));
+			} else {
+				this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+			}
 		} else {
-			this.wrapSelectionWithStrings('`', '`');
+			if (string.startsWith('`') && string.endsWith('`')) {
+				this.wrapSelectionWithStrings('', '', '', string.substr(1, selection.end - selection.start - 2));
+			} else {
+				this.wrapSelectionWithStrings('`', '`');
+			}
 		}
 	}
 
