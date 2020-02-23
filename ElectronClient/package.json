@@ -54,7 +54,7 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "asar": false
+      "asar": true
     },
     "linux": {
       "asar": true,
