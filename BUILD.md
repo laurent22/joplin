@@ -21,7 +21,20 @@ Then you can test the various applications:
 
 	cd ElectronClient
 	npm run start
-	
+
+If you'd like to auto-reload the app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
+
+```sh
+cd ElectronClient
+watchman-make -p '**/*.js' '**/*.jsx' --run "npm run start"
+```
+
+It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"npm run start"` each time. Here's what the workflow loop looks like in practice:
+
+1. Edit and save files in your text editor.
+2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
+3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm run start"`, and hit enter).
+
 ## Testing the Terminal application
 
 	cd CliClient
