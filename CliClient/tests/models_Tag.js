@@ -150,4 +150,76 @@ describe('models_Tag', function() {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	}));
 
+	it('should create parent tags', asyncTest(async () => {
+		let tag = await Tag.save({ title: 'tag1/subtag1/subtag2' });
+		expect(tag).not.toEqual(null);
+
+		let parent_tag = await Tag.loadByTitle('tag1/subtag1');
+		expect(parent_tag).not.toEqual(null);
+
+		parent_tag = await Tag.loadByTitle('tag1');
+		expect(parent_tag).not.toEqual(null);
+	}));
+
+	it('should should find notes tagged with descendant tag', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let tag0 = await Tag.save({ title: 'tag1/subtag1/subsubtag' });
+		let tag1 = await Tag.loadByTitle('tag1/subtag1');
+
+		let note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
+		let note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
+
+		await Tag.addNote(tag0.id, note0.id);
+		await Tag.addNote(tag1.id, note1.id);
+
+		let parent_tag = await Tag.loadByTitle('tag1');
+		let noteIds = await Tag.noteIds(parent_tag.id);
+		expect(noteIds.includes(note0.id)).toBe(true);
+		expect(noteIds.includes(note1.id)).toBe(true);
+	}));
+
+	it('should untag descendant tags', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let tag0 = await Tag.save({ title: 'tag1/subtag1/subsubtag' });
+		let parent_tag = await Tag.loadByTitle('tag1');
+		let note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
+
+		await Tag.addNote(tag0.id, note0.id);
+		let tagIds = await NoteTag.tagIdsByNoteId(note0.id);
+		expect(tagIds.includes(tag0.id)).toBe(true);
+
+		await Tag.untagAll(parent_tag.id);
+		tagIds = await NoteTag.tagIdsByNoteId(note0.id);
+		expect(tagIds.length).toBe(0);
+	}));
+
+	it('should count note_tags of descendant tags', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let tag0 = await Tag.save({ title: 'tag1/subtag1/subsubtag' });
+		let parent_tag = await Tag.loadByTitle('tag1');
+
+		let note0 = await Note.save({ title: 'my note 0', parent_id: folder1.id });
+		await Tag.addNote(tag0.id, note0.id);
+
+		let parent_tag_with_count = await Tag.loadWithCount(parent_tag.id);
+		expect(parent_tag_with_count.note_count).toBe(1);
+	}));
+
+	it('should delete descendant tags', asyncTest(async () => {
+		let tag1 = await Tag.save({ title: 'tag1/subtag1/subsubtag' });
+		let tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
+		expect(tag1).toBeDefined();
+		expect(tag1_subtag1).toBeDefined();
+
+		let parent_tag = await Tag.loadByTitle('tag1');
+		await Tag.delete(parent_tag.id);
+
+		parent_tag = await Tag.loadByTitle('tag1');
+		expect(parent_tag).not.toBeDefined();
+		tag1_subtag1 = await Tag.loadByTitle('tag1/subtag1');
+		expect(tag1_subtag1).not.toBeDefined();
+		tag1 = await Tag.loadByTitle('tag1/subtag1/subsubtag');
+		expect(tag1).not.toBeDefined();
+	}));
+
 });

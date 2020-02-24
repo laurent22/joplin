@@ -93,6 +93,15 @@ class SideBarComponent extends React.Component {
 			});
 		};
 
+		this.onTagToggleClick_ = async event => {
+			const tagId = event.currentTarget.getAttribute('tagid');
+
+			this.props.dispatch({
+				type: 'TAG_TOGGLE',
+				id: tagId,
+			});
+		};
+
 		this.folderItemsOrder_ = [];
 		this.tagItemsOrder_ = [];
 
@@ -206,10 +215,6 @@ class SideBarComponent extends React.Component {
 			},
 		};
 
-		style.tagItem = Object.assign({}, style.listItem);
-		style.tagItem.paddingLeft = 23;
-		style.tagItem.height = itemHeight;
-
 		return style;
 	}
 
@@ -241,7 +246,7 @@ class SideBarComponent extends React.Component {
 			buttonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			deleteMessage = _('Remove tag "%s" and its descendant tags from all notes?', substrWithEllipsis(tag.title, 0, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}
@@ -417,31 +422,52 @@ class SideBarComponent extends React.Component {
 		);
 	}
 
-	tagItem(tag, selected) {
-		let style = Object.assign({}, this.style().tagItem);
+	tagItem(tag, selected, hasChildren, depth) {
+		let style = Object.assign({}, this.style().listItem);
+
+		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
+
+		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
+		let expandIconStyle = {
+			visibility: hasChildren ? 'visible' : 'hidden',
+			paddingLeft: 8 + depth * 10,
+		};
+
+		const iconName = this.props.collapsedTagIds.indexOf(tag.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
+		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
+		const expandLink = hasChildren ? (
+			<a style={expandLinkStyle} href="#" tagid={tag.id} onClick={this.onTagToggleClick_}>
+				{expandIcon}
+			</a>
+		) : (
+			<span style={expandLinkStyle}>{expandIcon}</span>
+		);
+
 
 		const anchorRef = this.anchorItemRef('tag', tag.id);
 		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(tag.note_count) : '';
 
 		return (
-			<a
-				className="list-item"
-				href="#"
-				ref={anchorRef}
-				data-id={tag.id}
-				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={event => this.itemContextMenu(event)}
-				tagid={tag.id}
-				key={tag.id}
-				style={style}
-				onDrop={this.onTagDrop_}
-				onClick={() => {
-					this.tagItem_click(tag);
-				}}
-			>
-				{Tag.displayTitle(tag)} {noteCount}
-			</a>
+			<div className="list-item-container" style={containerStyle} key={tag.id} onDrop={this.onTagDrop_} draggable={true} tagid={tag.id}>
+				{expandLink}
+				<a
+					ref={anchorRef}
+					className="list-item"
+					href="#"
+					data-id={tag.id}
+					data-type={BaseModel.TYPE_TAG}
+					onContextMenu={event => this.itemContextMenu(event)}
+					style={style}
+					tagid={tag.id}
+					onClick={() => {
+						this.tagItem_click(tag);
+					}}
+					onDoubleClick={this.onTagToggleClick_}
+				>
+					{Tag.displayTitle(tag)} {noteCount}
+				</a>
+			</div>
 		);
 	}
 
@@ -754,6 +780,7 @@ const mapStateToProps = state => {
 		locale: state.settings.locale,
 		theme: state.settings.theme,
 		collapsedFolderIds: state.collapsedFolderIds,
+		collapsedTagIds: state.collapsedTagIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
 		sidebarVisibility: state.sidebarVisibility,

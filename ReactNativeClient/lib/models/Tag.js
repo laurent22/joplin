@@ -14,7 +14,13 @@ class Tag extends BaseItem {
 	}
 
 	static async noteIds(tagId) {
-		const rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
+		// Get NoteIds of that are tagged with current tag or its descendants
+		const rows = await this.db().selectAll(`WITH RECURSIVE
+												parent_of(id, child_id) AS 
+												(SELECT id, id FROM tags where id=?
+												UNION ALL
+												SELECT parent_of.id, tags2.id FROM parent_of JOIN tags AS tags2 ON parent_of.child_id=tags2.parent_id)
+												SELECT note_id FROM note_tags WHERE tag_id IN (SELECT child_id from parent_of)`, [tagId]);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].note_id);
@@ -36,18 +42,48 @@ class Tag extends BaseItem {
 		);
 	}
 
+	static async childrenTagIds(parentId) {
+		const rows = await this.db().selectAll('SELECT id FROM tags WHERE parent_id = ?', [parentId]);
+		return rows.map(r => r.id);
+	}
+
 	// Untag all the notes and delete tag
-	static async untagAll(tagId) {
+	static async untagAll(tagId, options = null) {
+		if (!options) options = {};
+		if (!('deleteChildren' in options)) options.deleteChildren = true;
+
+		let tag = await Tag.load(tagId);
+		if (!tag) return; // noop
+
+		if (options.deleteChildren) {
+			let childrenTagIds = await Tag.childrenTagIds(tagId);
+			for (let i = 0; i < childrenTagIds.length; i++) {
+				await Tag.untagAll(childrenTagIds[i]);
+			}
+		}
+
 		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ?', [tagId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
 
-		await Tag.delete(tagId);
+		// We're recursing over all children already, so this call doesn't have to be recursive.
+		await Tag.delete(tagId, { deleteChildren: false });
 	}
 
 	static async delete(id, options = null) {
 		if (!options) options = {};
+		if (!('deleteChildren' in options)) options.deleteChildren = true;
+
+		let tag = await Tag.load(id);
+		if (!tag) return; // noop
+
+		if (options.deleteChildren) {
+			let childrenTagIds = await Tag.childrenTagIds(id);
+			for (let i = 0; i < childrenTagIds.length; i++) {
+				await Tag.delete(childrenTagIds[i]);
+			}
+		}
 
 		await super.delete(id, options);
 
@@ -174,7 +210,38 @@ class Tag extends BaseItem {
 		}
 	}
 
+	static tagPath(tags, tagId) {
+		const idToTags = {};
+		for (let i = 0; i < tags.length; i++) {
+			idToTags[tags[i].id] = tags[i];
+		}
+
+		const path = [];
+		while (tagId) {
+			const tag = idToTags[tagId];
+			if (!tag) break; // Shouldn't happen
+			path.push(tag);
+			tagId = tag.parent_id;
+		}
+
+		path.reverse();
+
+		return path;
+	}
+
+	static displayTitle(item) {
+		let title = super.displayTitle(item);
+		const separator = '/';
+		const i = title.lastIndexOf(separator);
+		if (i !== -1) return title.slice(i+separator.length);
+		return title;
+	}
+
 	static async save(o, options = null) {
+		if (!options) options = {};
+		if (!('createParents' in options)) options.createParents = true;
+		if (!('selectNoteTag' in options)) options.selectNoteTag = true;
+
 		if (options && options.userSideValidation) {
 			if ('title' in o) {
 				o.title = o.title.trim().toLowerCase();
@@ -183,6 +250,35 @@ class Tag extends BaseItem {
 				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
 			}
 		}
+		let parentId = '';
+		let parentTitle = '';
+		if ('title' in o) {
+			// Check if the tag is nested using `/` as separator
+			const separator = '/';
+			const i = o.title.lastIndexOf(separator);
+			if (i !== -1) {
+				parentTitle = o.title.slice(0,i);
+
+				// Try to get the parent tag
+				let parentTag = await Tag.loadByTitle(parentTitle);
+				if (parentTag) parentId = parentTag.id;
+			}
+		}
+		if (options && options.createParents && parentTitle && !parentId) {
+			// Create the parent tag if it doesn't exist
+			let parent = {};
+			Object.assign(parent, o);
+			parent.title = parentTitle;
+			// Do not select the parent note_tags
+			let parent_opts = {};
+			Object.assign(parent_opts, options);
+			parent_opts.selectNoteTag = false;
+			const parentTag = await Tag.save(parent, parent_opts);
+			parentId = parentTag.id;
+		}
+
+		// Set parent_id
+		o.parent_id = parentId;
 
 		return super.save(o, options).then(tag => {
 			this.dispatch({

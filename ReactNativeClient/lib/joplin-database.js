@@ -326,7 +326,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -733,6 +733,24 @@ class JoplinDatabase extends Database {
 						is_shared: 'INT NOT NULL DEFAULT 0',
 					})
 				);
+			}
+
+			if (targetVersion == 31) {
+				queries.push('ALTER TABLE tags ADD COLUMN parent_id TEXT NOT NULL DEFAULT ""');
+				// Modify the tags_with_note_count view table for hierarchical tags
+				queries.push('DROP VIEW tags_with_note_count');
+				queries.push(`CREATE VIEW tags_with_note_count AS
+									WITH RECURSIVE
+									parent_of(id, parent_id, title, created_time, updated_time, child_id) AS 
+									(SELECT id, parent_id, title, created_time, updated_time, id FROM tags
+										UNION ALL
+										SELECT parent_of.id, parent_of.parent_id, parent_of.title, parent_of.created_time, parent_of.updated_time, tags2.id FROM parent_of JOIN tags AS tags2 ON parent_of.child_id=tags2.parent_id)
+									SELECT parent_of.id, parent_of.parent_id, parent_of.title, parent_of.created_time, parent_of.updated_time, COUNT(DISTINCT notes.id) as note_count FROM
+											parent_of
+											LEFT JOIN note_tags nt on nt.tag_id = parent_of.child_id 
+											LEFT JOIN notes on notes.id = nt.note_id 
+											WHERE notes.id IS NOT NULL
+										GROUP BY parent_of.id`);
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

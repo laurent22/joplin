@@ -295,6 +295,18 @@ class Dialog extends React.PureComponent {
 			}
 		}
 
+		if (this.state.listType === BaseModel.TYPE_TAG) {
+			const tagPath = await Tag.tagPath(this.props.tags, item.parent_id);
+
+			for (const tag of tagPath) {
+				this.props.dispatch({
+					type: 'TAG_SET_COLLAPSED',
+					id: tag.id,
+					collapsed: false,
+				});
+			}
+		}
+
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
 			this.props.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
