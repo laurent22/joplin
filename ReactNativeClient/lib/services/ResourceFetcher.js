@@ -248,6 +248,13 @@ class ResourceFetcher extends BaseService {
 		await Resource.resetStartedFetchStatus();
 		this.autoAddResources(null);
 	}
+
+	async cancelTimers() {
+		this.eventEmitter_.removeAllListeners();
+		if (this.scheduleQueueProcessIID_) clearTimeout(this.scheduleQueueProcessIID_);
+
+		return await this.waitForAllFinished();
+	}
 }
 
 module.exports = ResourceFetcher;

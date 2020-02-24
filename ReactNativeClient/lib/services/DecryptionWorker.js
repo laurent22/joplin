@@ -251,7 +251,9 @@ class DecryptionWorker {
 	}
 
 	async cancelTimers() {
+		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleId_) clearTimeout(this.scheduleId_);
+
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!this.startCalls_.length) {

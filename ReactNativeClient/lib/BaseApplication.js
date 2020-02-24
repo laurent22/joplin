@@ -55,10 +55,15 @@ class BaseApplication {
 	}
 
 	async destroy() {
+		await ResourceFetcher.instance().cancelTimers();
 		await FoldersScreenUtils.cancelTimers();
 		await SearchEngine.instance().cancelTimers();
 		await DecryptionWorker.instance().cancelTimers();
 		await reg.cancelTimers();
+
+		this.eventEmitter_.removeAllListeners();
+		BaseModel.db_ = null;
+		reg.setDb(null);
 
 		this.logger_ = null;
 		this.dbLogger_ = null;
