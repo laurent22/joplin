@@ -11,6 +11,7 @@ const rules = {
 	html_image: require('./MdToHtml/rules/html_image'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
+	fence: require('./MdToHtml/rules/fence').default,
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
@@ -168,6 +169,9 @@ class MdToHtml {
 			linkify: true,
 			html: true,
 			highlight: (str, lang) => {
+				let outputCodeHtml = '';
+				let sourceBlockHtml = `<pre class="joplin-source" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(str)}</pre>`;
+
 				try {
 					let hlCode = '';
 
@@ -188,10 +192,15 @@ class MdToHtml {
 						{ name: options.codeTheme },
 					];
 
-					return `<pre class="hljs"><code>${hlCode}</code></pre>`;
+					outputCodeHtml = hlCode;
 				} catch (error) {
-					return `<pre class="hljs"><code>${markdownIt.utils.escapeHtml(str)}</code></pre>`;
+					outputCodeHtml = markdownIt.utils.escapeHtml(str);
 				}
+
+				return {
+					wrapCode: false,
+					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
+				};
 			},
 		});
 
@@ -232,6 +241,7 @@ class MdToHtml {
 		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
+		markdownIt.use(rules.fence(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
 
 		for (let key in plugins) {

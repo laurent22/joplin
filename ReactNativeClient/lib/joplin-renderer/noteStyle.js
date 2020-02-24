@@ -275,6 +275,11 @@ module.exports = function(style, options) {
 			display: none;
 		}
 
+		/* For TinyMCE */
+		.mce-content-body code {
+			background-color: transparent;
+		}
+
 		@media print {
 			body {
 				height: auto !important;
