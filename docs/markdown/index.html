@@ -335,6 +335,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 <h1>Markdown Guide<a name="markdown-guide" href="#markdown-guide" class="heading-anchor">🔗</a></h1>
 <p>Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.</p>
 <p>Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.</p>
+<p>Joplin follows the <a href="https://spec.commonmark.org/">CommonMark</a> specification, with additional features added via plugins.</p>
 <h2>Cheat Sheet<a name="cheat-sheet" href="#cheat-sheet" class="heading-anchor">🔗</a></h2>
 <p>This is a quick summary of the Markdown syntax.</p>
 <table>
@@ -479,7 +480,7 @@ https://github.com/laurent22/joplin/blob/master/readme/markdown.md
 </tbody>
 </table>
 <h2>Joplin Extras<a name="joplin-extras" href="#joplin-extras" class="heading-anchor">🔗</a></h2>
-<p>Besides the standard Mardkown syntax, Joplin supports several additional features.</p>
+<p>Besides the standard Markdown syntax, Joplin supports several additional features.</p>
 <h3>Links to other notes<a name="links-to-other-notes" href="#links-to-other-notes" class="heading-anchor">🔗</a></h3>
 <p>You can create a link to a note by specifying its ID in the URL. For example:</p>
 <pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
@@ -503,6 +504,19 @@ $$
 <h3>Chemical equations<a name="chemical-equations" href="#chemical-equations" class="heading-anchor">🔗</a></h3>
 <p>Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the <a href="https://mhchem.github.io/MathJax-mhchem/">mhchem documentation</a> for the syntax.</p>
 <img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
+<h3>Diagrams<a name="diagrams" href="#diagrams" class="heading-anchor">🔗</a></h3>
+<p>You can create diagrams in Joplin using the <a href="https://mermaidjs.github.io/">Mermaid syntax</a>. To add such a graph, wrap the Mermaid script inside a &quot;```mermaid&quot; code block like this:</p>
+<pre><code>```mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+```
+</code></pre>
+<p>This is how it would look with the Markdown on the left, and rendered graph on the right:</p>
+<p><img src="https://joplin.cozic.net/images/Mermaid.png" alt="Mermaid support in Joplin"></p>
+<p>Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.</p>
 <h3>Checkboxes<a name="checkboxes" href="#checkboxes" class="heading-anchor">🔗</a></h3>
 <p>Checkboxes can be added like so:</p>
 <pre><code>- [ ] Milk
@@ -515,7 +529,8 @@ $$
 <pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
 </code></pre>
 <h3>Plugins<a name="plugins" href="#plugins" class="heading-anchor">🔗</a></h3>
-<p>Joplin supports a number of plugins that can be toggled on top the standard Markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.</p>
+<p>Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.</p>
+<p>Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.</p>
 <table>
 <thead>
 <tr>
