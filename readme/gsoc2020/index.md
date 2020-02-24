@@ -6,7 +6,7 @@ Joplin is about to make another big step to answers these demands by applying at
 
 Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).   
 **Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.   
-Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6098) as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.**
+Moreover, watch/subscribe the topic [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219) as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.**
 
 All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  [Joplin Forum](https://discourse.joplinapp.org).
 
