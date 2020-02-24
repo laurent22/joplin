@@ -33,7 +33,10 @@
 				"ElectronClient/gui/NoteText2.js",
 				"ElectronClient/gui/ResourceScreen.js",
 				"ElectronClient/gui/ShareNoteDialog.js",
-				"ElectronClient/gui/TinyMCE.js"
+				"ElectronClient/gui/TinyMCE.js",
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js",
+				"ReactNativeClient/setUpQuickActions.js",
+				"ReactNativeClient/android/app/joplin.keystore"
 			],
 			"folder_exclude_patterns":
 			[
@@ -69,11 +72,13 @@
 				"ElectronClient/dist",
 				"_releases",
 				"ReactNativeClient/lib/csstojs",
-				"Clipper/joplin-webclipper/popup/build",
-				"Clipper/joplin-webclipper/dist",
+				"Clipper/popup/build",
+				"Clipper/dist",
 				"ReactNativeClient/lib/rnInjectedJs",
 				"ReactNativeClient/ios/Pods",
 				"CliClient/locales-build",
+				"ReactNativeClient/lib/vendor",
+				"ReactNativeClient/ios/Joplin-tvOS"
 			],
 			"path": "."
 		}
