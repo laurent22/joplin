@@ -507,7 +507,6 @@ class TestApp extends BaseApplication {
 		try {
 			await this.waitForMiddleware_();
 			this.deinitRedux();
-			// await clearDatabase_(this._database);
 			await super.destroy();
 		} catch (e) {
 			console.log(e);
