@@ -1444,8 +1444,8 @@ class NoteTextComponent extends React.Component {
 					if (this.state.note.body.substr(selection.end) === '') newBody = newBody.trim();
 				} else { newBody += string1 + selectedStrings[i] + string2; }
 
-			}			
-			
+			}
+
 			newBody += this.state.note.body.substr(selection.end);
 
 			const r = this.selectionRange_;
