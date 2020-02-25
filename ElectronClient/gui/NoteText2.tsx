@@ -26,8 +26,8 @@ interface FormNote {
 	title: string,
 	parent_id: string,
 	is_todo: number,
-	bodyEditorState: any,
 	bodyMarkdown: string,
+	bodyEditorState?: any,
 }
 
 const defaultNote = ():FormNote => {
@@ -35,7 +35,6 @@ const defaultNote = ():FormNote => {
 		id: '',
 		parent_id: '',
 		title: '',
-		bodyEditorState: null,
 		bodyMarkdown: '',
 		is_todo: 0,
 	};
@@ -83,9 +82,13 @@ function NoteText2(props:NoteTextProps) {
 	}, []);
 
 	const formNoteToNote = async (formNote:FormNote):Promise<any> => {
-		const html = await editorStateToHtml(formNote.bodyEditorState);
-		const bodyMd = await htmlToMarkdown(html);
-		const newNote = Object.assign({}, formNote, { body: bodyMd });
+		const newNote:any = Object.assign({}, formNote);
+
+		if ('bodyEditorState' in formNote) {
+			const html = await editorStateToHtml(formNote.bodyEditorState);
+			newNote.body = await htmlToMarkdown(html);
+		}
+
 		delete newNote.bodyMarkdown;
 		delete newNote.bodyEditorState;
 		return newNote;
@@ -150,7 +153,6 @@ function NoteText2(props:NoteTextProps) {
 					is_todo: props.newNote.is_todo,
 					title: '',
 					bodyMarkdown: '',
-					bodyEditorState: null,
 				});
 			} else if (props.noteId) {
 				const dbNote = await Note.load(props.noteId);
@@ -159,7 +161,6 @@ function NoteText2(props:NoteTextProps) {
 					title: dbNote.title,
 					is_todo: dbNote.is_todo,
 					bodyMarkdown: dbNote.body,
-					bodyEditorState: null,
 					parent_id: dbNote.parent_id,
 				};
 				setFormNote(f);
@@ -196,9 +197,7 @@ function NoteText2(props:NoteTextProps) {
 		return output;
 	}, [formNote]);
 
-	const onBodyChange = useCallback((event) => {
-		if (formNote.bodyEditorState === event.editorState) return;
-
+	const onBodyChange = useCallback((event:any) => {
 		const newNote = Object.assign({}, formNote, {
 			bodyEditorState: event.editorState,
 		});
@@ -207,19 +206,13 @@ function NoteText2(props:NoteTextProps) {
 		scheduleSaveNote(newNote);
 	}, [formNote]);
 
-	const onTitleChange = useCallback((event) => {
+	const onTitleChange = useCallback((event:any) => {
 		const newNote = Object.assign({}, formNote, {
 			title: event.target.value,
 		});
 
 		setFormNote(newNote);
 		scheduleSaveNote(newNote);
-	}, [formNote]);
-
-	const onReady = useCallback((event) => {
-		setFormNote(Object.assign({}, formNote, {
-			bodyEditorState: event.editorState,
-		}));
 	}, [formNote]);
 
 	return (
@@ -240,9 +233,7 @@ function NoteText2(props:NoteTextProps) {
 				<div style={{ display: 'flex', flex: 1 }}>
 					<TinyMCE
 						style={{ width: '100%', height: '100%' }}
-						editorState={formNote.bodyEditorState}
 						onChange={onBodyChange}
-						onReady={onReady}
 						defaultMarkdown={formNote.bodyMarkdown}
 						theme={props.theme}
 						markdownToHtml={markdownToHtml}

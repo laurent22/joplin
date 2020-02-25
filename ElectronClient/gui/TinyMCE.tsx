@@ -5,9 +5,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface TinyMCEProps {
 	style: any,
-	editorState: any,
 	onChange: Function,
-	onReady: Function,
 	defaultMarkdown: string,
 	theme: any,
 	markdownToHtml: Function,
@@ -40,15 +38,16 @@ function findBlockSource(node:any) {
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 
-export default function TinyMCE(props:TinyMCEProps) {
+const TinyMCE = (props:TinyMCEProps) => {
 	const [editor, setEditor] = useState(null);
-	const editorState = props.editorState ? props.editorState : '';
 
 	const attachResources = useRef(null);
 	attachResources.current = props.attachResources;
 
 	const markdownToHtml = useRef(null);
 	markdownToHtml.current = props.markdownToHtml;
+
+	const lastChangeContent = useRef(null);
 
 	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
 
@@ -109,6 +108,8 @@ export default function TinyMCE(props:TinyMCEProps) {
 		if (!editor) return () => {};
 
 		const loadContent = async () => {
+			console.info('TinyMCE.loadContent');
+
 			const result = await props.markdownToHtml(props.defaultMarkdown);
 			if (!result) return;
 
@@ -143,10 +144,6 @@ export default function TinyMCE(props:TinyMCEProps) {
 
 			editor.getDoc().addEventListener('click', onEditorContentClick);
 
-			props.onReady({
-				editorState: editor.getContent(),
-			});
-
 			dispatchDidUpdate(editor);
 		};
 
@@ -180,6 +177,7 @@ export default function TinyMCE(props:TinyMCEProps) {
 
 				editor.windowManager.open({
 					title: 'Edit', // The dialog's title - displayed in the dialog header
+					size: 'large',
 					initialData: {
 						codeTextArea: source.content,
 					},
@@ -195,16 +193,16 @@ export default function TinyMCE(props:TinyMCEProps) {
 						dispatchDidUpdate(editor);
 					},
 					body: {
-						type: 'panel', // The root body type - a Panel or TabPanel
-						items: [ // A list of panel components
+						type: 'panel',
+						items: [
 							{
-								type: 'textarea', // A HTML panel component
+								type: 'textarea',
 								name: 'codeTextArea',
 								value: source.content,
 							},
 						],
 					},
-					buttons: [ // A list of footer buttons
+					buttons: [
 						{
 							type: 'submit',
 							text: 'OK',
@@ -225,9 +223,19 @@ export default function TinyMCE(props:TinyMCEProps) {
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
-				props.onChange({ editorState: editor.getContent() });
+
+				const content = editor.getContent();
+				// The Change event for example will be fired when the text area loses
+				// focus, even if nothing has changed, so we need to double-check here
+				// to avoid dispatching unecessary events.
+				if (lastChangeContent.current === content) return;
+
+				lastChangeContent.current = content;
+				props.onChange({
+					editorState: content,
+				});
 				dispatchDidUpdate(editor);
-			}, 5);
+			}, 500);
 		};
 
 		editor.on('keyup', onChangeHandler);
@@ -247,13 +255,8 @@ export default function TinyMCE(props:TinyMCEProps) {
 		};
 	}, [props.onChange, editor]);
 
-	useEffect(() => {
-		if (!editor) return;
-		if (editorState === editor.getContent()) return;
-		editor.setContent(editorState);
-		dispatchDidUpdate(editor);
-	}, [editor, editorState]);
-
 	return <div style={props.style} id={rootId}/>;
-}
+};
+
+export default TinyMCE;
 

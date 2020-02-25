@@ -36,7 +36,8 @@
 				"ElectronClient/gui/TinyMCE.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js",
 				"ReactNativeClient/setUpQuickActions.js",
-				"ReactNativeClient/android/app/joplin.keystore"
+				"ReactNativeClient/android/app/joplin.keystore",
+				"ReactNativeClient/lib/AsyncActionHandler.js"
 			],
 			"folder_exclude_patterns":
 			[
