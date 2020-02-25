@@ -21,10 +21,10 @@ class WebDavApi {
 		this.options_ = options;
 		this.lastRequests_ = [];
 		this.AgentSettings = 	{
-						keepAlive: true,
-						maxSockets: 1,
-						keepAliveMsecs: 5000,
-					};
+			keepAlive: true,
+			maxSockets: 1,
+			keepAliveMsecs: 5000,
+		};
 	}
 
 	logRequest_(request, responseText) {
@@ -366,16 +366,15 @@ class WebDavApi {
 		const fetchOptions = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
+		if (options.path) fetchOptions.path = options.path;
+		if (body) fetchOptions.body = body;
 		if (shim.isLinux()) {
-			if (this.baseUrl().startsWith('https')){
+			if (this.baseUrl().startsWith('https')) {
 				fetchOptions.agent = new https.Agent(this.AgentSettings);
-			}else{
+			} else {
 				fetchOptions.agent = new http.Agent(this.AgentSettings);
 			}
 		}
-		
-		if (options.path) fetchOptions.path = options.path;
-		if (body) fetchOptions.body = body;
 
 		const url = `${this.baseUrl()}/${path}`;
 
