@@ -16,8 +16,6 @@ export interface TinyMCEChangeEvent {
 	editorState: any,
 }
 
-let lastClickedEditableNode_:any = null;
-
 export async function editorStateToHtml(editorState:any):Promise<string> {
 	return editorState ? editorState : '';
 }
@@ -35,6 +33,7 @@ function findBlockSource(node:any) {
 	};
 }
 
+let lastClickedEditableNode_:any = null;
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 
@@ -107,11 +106,11 @@ const TinyMCE = (props:TinyMCEProps) => {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const loadContent = async () => {
-			console.info('TinyMCE.loadContent');
+		let cancelled = false;
 
+		const loadContent = async () => {
 			const result = await props.markdownToHtml(props.defaultMarkdown);
-			if (!result) return;
+			if (cancelled) return;
 
 			editor.setContent(result.html);
 
@@ -150,6 +149,7 @@ const TinyMCE = (props:TinyMCEProps) => {
 		loadContent();
 
 		return () => {
+			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
 	}, [editor, props.markdownToHtml, props.defaultMarkdown, props.theme]);

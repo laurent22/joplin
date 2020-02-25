@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import TinyMCE, { editorStateToHtml } from './TinyMCE';
 import { connect } from 'react-redux';
-import AsyncActionHandler from '../lib/AsyncActionHandler';
+import AsyncActionQueue from '../lib/AsyncActionQueue';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const Setting = require('lib/models/Setting');
@@ -67,7 +67,7 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
-const asyncActionHandler = new AsyncActionHandler();
+const saveNoteActionQueue = new AsyncActionQueue();
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
@@ -96,7 +96,7 @@ function NoteText2(props:NoteTextProps) {
 
 	const saveNoteNow = useCallback(async () => {
 		scheduleSaveNote(formNote);
-		return asyncActionHandler.waitForAllDone('saveNote');
+		return saveNoteActionQueue.waitForAllDone();
 	}, [formNote]);
 
 	const scheduleSaveNote = (formNote:FormNote) => {
@@ -111,12 +111,10 @@ function NoteText2(props:NoteTextProps) {
 			};
 		};
 
-		asyncActionHandler.push('saveNote', makeAction(formNote));
+		saveNoteActionQueue.push(makeAction(formNote));
 	};
 
 	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
-		if (!md) return '';
-
 		const theme = themeStyle(props.theme);
 
 		// console.info('===================================');
@@ -145,6 +143,8 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.theme]);
 
 	useEffect(() => {
+		let cancelled = false;
+
 		async function fetchNote() {
 			if (props.newNote) {
 				setFormNote({
@@ -155,21 +155,25 @@ function NoteText2(props:NoteTextProps) {
 					bodyMarkdown: '',
 				});
 			} else if (props.noteId) {
-				const dbNote = await Note.load(props.noteId);
-				const f:FormNote = {
-					id: dbNote.id,
-					title: dbNote.title,
-					is_todo: dbNote.is_todo,
-					bodyMarkdown: dbNote.body,
-					parent_id: dbNote.parent_id,
-				};
-				setFormNote(f);
+				const n = await Note.load(props.noteId);
+				if (cancelled) return;
+				setFormNote({
+					id: n.id,
+					title: n.title,
+					is_todo: n.is_todo,
+					bodyMarkdown: n.body,
+					parent_id: n.parent_id,
+				});
 			} else {
 				setFormNote(defaultNote());
 			}
 		}
 
 		fetchNote();
+
+		return () => {
+			cancelled = true;
+		};
 	}, [props.noteId, props.newNote]);
 
 	const attachResources = useCallback(async () => {
