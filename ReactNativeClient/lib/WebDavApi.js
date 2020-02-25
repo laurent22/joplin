@@ -5,9 +5,10 @@ const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
-const http = require('http');
-const https = require('https');
-
+if (shim.isLinux()) {
+	const http = require('http');
+	const https = require('https');
+}
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
