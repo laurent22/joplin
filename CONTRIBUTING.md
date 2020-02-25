@@ -47,6 +47,8 @@ Coding style is enforced by a pre-commit hook that runs eslint. This hook is ins
 
 For new React components, please use [React Hooks](https://reactjs.org/docs/hooks-intro.html). For new code in general, please use TypeScript (unless you are modifying a file that was originally in JavaScript).
 
+For changes made to the Desktop client that affect the user interface, refer to `ElectronClient/app/theme.js` for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
+
 ### Unit tests
 
 When submitting a pull request for a new feature or bug fix, please add unit tests for your code. Unit testing GUI changes is not always possible so it is not required, but any change in a file under /lib for example should be unit tested.
