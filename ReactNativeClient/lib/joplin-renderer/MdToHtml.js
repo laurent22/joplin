@@ -170,7 +170,11 @@ class MdToHtml {
 			html: true,
 			highlight: (str, lang) => {
 				let outputCodeHtml = '';
-				let sourceBlockHtml = `<pre class="joplin-source" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(str)}</pre>`;
+
+				// The strings includes the last \n that is part of the fence,
+				// so we remove it because we need the exact code in the source block
+				const trimmedStr = str.replace(/(.*)\n$/, '$1');
+				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
 
 				try {
 					let hlCode = '';
@@ -181,9 +185,9 @@ class MdToHtml {
 						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
 						if (lang && hljs.getLanguage(lang)) {
-							hlCode = hljs.highlight(lang, str, true).value;
+							hlCode = hljs.highlight(lang, trimmedStr, true).value;
 						} else {
-							hlCode = hljs.highlightAuto(str).value;
+							hlCode = hljs.highlightAuto(trimmedStr).value;
 						}
 						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
@@ -194,7 +198,7 @@ class MdToHtml {
 
 					outputCodeHtml = hlCode;
 				} catch (error) {
-					outputCodeHtml = markdownIt.utils.escapeHtml(str);
+					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
 
 				return {

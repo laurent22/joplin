@@ -185,7 +185,8 @@ export default function TinyMCE(props:TinyMCEProps) {
 					},
 					onSubmit: async (dialogApi:any) => {
 						const newSource = dialogApi.getData().codeTextArea;
-						const result = await props.markdownToHtml(`${source.openCharacters}${newSource}${source.closeCharacters}`);
+						const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
+						const result = await props.markdownToHtml(md);
 						lastClickedEditableNode_.innerHTML = result.html;
 						source.node.textContent = newSource;
 						dialogApi.close();

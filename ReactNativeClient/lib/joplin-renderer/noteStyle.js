@@ -280,6 +280,10 @@ module.exports = function(style, options) {
 			background-color: transparent;
 		}
 
+		.mce-content-body [data-mce-selected=inline-boundary] {
+			background-color: transparent;
+		}
+
 		@media print {
 			body {
 				height: auto !important;
