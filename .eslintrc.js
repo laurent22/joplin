@@ -56,7 +56,7 @@ module.exports = {
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",
 		// Checks effect dependencies
-    	"react-hooks/exhaustive-deps": "error",
+		"react-hooks/exhaustive-deps": "error",
 
 		// -------------------------------
 		// Formatting
