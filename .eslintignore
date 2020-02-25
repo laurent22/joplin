@@ -53,6 +53,7 @@ ReactNativeClient/lib/joplin-renderer/assets/
 ReactNativeClient/lib/rnInjectedJs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
