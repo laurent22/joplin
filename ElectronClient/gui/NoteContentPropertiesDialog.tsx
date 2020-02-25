@@ -34,7 +34,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 			setCharactersNoSpace(counter.characters);
 		});
 		setLines(props.text.split('\n').length);
-	}, []);
+	}, [props.text]);
 
 	const textProperties: TextPropertiesMap = {
 		lines: lines,
