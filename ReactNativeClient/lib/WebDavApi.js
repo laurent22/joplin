@@ -5,10 +5,7 @@ const JoplinError = require('lib/JoplinError');
 const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
-if (shim.isLinux()) {
-	const http = require('http');
-	const https = require('https');
-}
+
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -21,11 +18,6 @@ class WebDavApi {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.lastRequests_ = [];
-		this.AgentSettings = 	{
-			keepAlive: true,
-			maxSockets: 1,
-			keepAliveMsecs: 5000,
-		};
 	}
 
 	logRequest_(request, responseText) {
@@ -369,15 +361,10 @@ class WebDavApi {
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
-		if (shim.isLinux()) {
-			if (this.baseUrl().startsWith('https')) {
-				fetchOptions.agent = new https.Agent(this.AgentSettings);
-			} else {
-				fetchOptions.agent = new http.Agent(this.AgentSettings);
-			}
-		}
-
 		const url = `${this.baseUrl()}/${path}`;
+
+		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
+
 
 		let response = null;
 
