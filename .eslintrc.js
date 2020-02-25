@@ -41,6 +41,9 @@ module.exports = {
 	    "sourceType": "module",
 	},
 	'rules': {
+		
+		"react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    		"react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
 		// -------------------------------
 		// Code correctness
 		// -------------------------------
@@ -87,9 +90,6 @@ module.exports = {
 		"spaced-comment": ["error", "always"],
 		"keyword-spacing": ["error", { "before": true, "after": true }],
 		
-		
-		"react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    		"react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
 	},
 	"plugins": [
 		"react",
