@@ -32,6 +32,7 @@
     "@typescript-eslint/parser": "^2.10.0",
     "eslint": "^6.1.0",
     "eslint-plugin-react": "^7.18.0",
+    "eslint-plugin-react-hooks": "^2.4.0",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
