@@ -51,6 +51,7 @@ CliClient/tests-build/lib/joplin-renderer/MdToHtml/rules/fence.js
 CliClient/tests-build/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 CliClient/tests-build/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js
 CliClient/tests-build/lib/JoplinServerApi.js
+ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteText2.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import TinyMCE, { editorStateToHtml } from './TinyMCE';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
+import MultiNoteActions from './MultiNoteActions';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const Setting = require('lib/models/Setting');
@@ -19,6 +20,10 @@ interface NoteTextProps {
 	noteId: string,
 	theme: number,
 	newNote: any,
+	dispatch: Function,
+	selectedNoteIds: string[],
+	notes:any[],
+	watchedNoteFiles:string[],
 }
 
 interface FormNote {
@@ -67,7 +72,7 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
-const saveNoteActionQueue = new AsyncActionQueue();
+const saveNoteActionQueue = new AsyncActionQueue(1000);
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
@@ -107,6 +112,11 @@ function NoteText2(props:NoteTextProps) {
 				const result = await Note.save(note);
 				if (!formNote.id) {
 					setFormNote(Object.assign({}, formNote, { id: result.id }));
+
+					props.dispatch({
+						type: 'NOTE_SELECT',
+						id: result.id,
+					});
 				}
 			};
 		};
@@ -219,6 +229,17 @@ function NoteText2(props:NoteTextProps) {
 		scheduleSaveNote(newNote);
 	}, [formNote]);
 
+	if (props.selectedNoteIds.length > 1) {
+		return <MultiNoteActions
+			theme={props.theme}
+			selectedNoteIds={props.selectedNoteIds}
+			notes={props.notes}
+			dispatch={props.dispatch}
+			watchedNoteFiles={props.watchedNoteFiles}
+			style={props.style}
+		/>;
+	}
+
 	return (
 		<div style={props.style}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -253,8 +274,8 @@ function NoteText2(props:NoteTextProps) {
 const mapStateToProps = (state:any) => {
 	return {
 		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
-		// notes: state.notes,
-		// selectedNoteIds: state.selectedNoteIds,
+		notes: state.notes,
+		selectedNoteIds: state.selectedNoteIds,
 		// selectedNoteHash: state.selectedNoteHash,
 		// noteTags: state.selectedNoteTags,
 		// folderId: state.selectedFolderId,
@@ -267,7 +288,7 @@ const mapStateToProps = (state:any) => {
 		// notesParentType: state.notesParentType,
 		// searches: state.searches,
 		// selectedSearchId: state.selectedSearchId,
-		// watchedNoteFiles: state.watchedNoteFiles,
+		watchedNoteFiles: state.watchedNoteFiles,
 		// customCss: state.customCss,
 		// lastEditorScrollPercents: state.lastEditorScrollPercents,
 		// historyNotes: state.historyNotes,
