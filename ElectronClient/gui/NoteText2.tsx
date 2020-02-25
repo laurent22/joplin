@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import TinyMCE, { editorStateToHtml } from './TinyMCE';
 import { connect } from 'react-redux';
+import AsyncActionHandler from '../lib/AsyncActionHandler';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const Setting = require('lib/models/Setting');
@@ -67,68 +68,7 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
-class AsyncActionsHandler {
-
-	items_:any = {};
-	processing_ = false;
-	needProcessing_ = false;
-	scheduleProcessingIID_:any = null;
-
-	push(queueId:string, action:Function) {
-		if (!this.items_[queueId]) this.items_[queueId] = [];
-		this.items_[queueId].push({ action: action });
-		this.scheduleProcessing();
-	}
-
-	private scheduleProcessing() {
-		if (this.scheduleProcessingIID_) {
-			clearTimeout(this.scheduleProcessingIID_);
-		}
-
-		this.scheduleProcessingIID_ = setTimeout(() => {
-			this.scheduleProcessingIID_ = null;
-			this.processQueue();
-		}, 500);
-	}
-
-	private async processQueue() {
-		if (this.processing_) {
-			this.scheduleProcessing();
-			return;
-		}
-
-		this.processing_ = true;
-
-		for (const queueId in this.items_) {
-			const queueItems = this.items_[queueId];
-
-			const itemCount = queueItems.length;
-			if (!itemCount) continue;
-
-			const item = queueItems[itemCount - 1];
-			await item.action();
-			this.items_[queueId].splice(0, itemCount);
-		}
-
-		this.processing_ = false;
-	}
-
-	waitForAllDone(queueId:string) {
-		return new Promise((resolve) => {
-			const iid = setInterval(() => {
-				if (this.processing_) return;
-
-				if (!this.items_[queueId] || !this.items_[queueId].length) {
-					clearInterval(iid);
-					resolve();
-				}
-			}, 100);
-		});
-	}
-
-}
-
-const asyncActionHandler = new AsyncActionsHandler();
+const asyncActionHandler = new AsyncActionHandler();
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
