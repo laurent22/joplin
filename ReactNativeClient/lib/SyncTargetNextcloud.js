@@ -6,7 +6,7 @@ const { _ } = require('lib/locale.js');
 const Setting = require('lib/models/Setting.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV');
-const JoplinServerApi = require('lib/JoplinServerApi.js').default;
+const JoplinServerApi = require('lib/JoplinServerApi.ts').default;
 
 class SyncTargetNextcloud extends BaseSyncTarget {
 
