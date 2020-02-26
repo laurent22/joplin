@@ -114,14 +114,6 @@ class NotePropertiesDialog extends React.Component {
 		this.styles_ = {};
 		this.styleKey_ = styleKey;
 
-		this.styles_.controlBox = {
-			marginBottom: '1em',
-			color: 'black', // This will apply for the calendar
-			display: 'flex',
-			flexDirection: 'row',
-			alignItems: 'center',
-		};
-
 		this.styles_.button = {
 			minWidth: theme.buttonMinWidth,
 			minHeight: theme.buttonMinHeight,
@@ -234,7 +226,7 @@ class NotePropertiesDialog extends React.Component {
 	createNoteField(key, value) {
 		const styles = this.styles(this.props.theme);
 		const theme = themeStyle(this.props.theme);
-		const labelComp = <label style={Object.assign({}, theme.textStyle, { marginRight: '1em', width: '6em', display: 'inline-block', fontWeight: 'bold' })}>{this.formatLabel(key)}</label>;
+		const labelComp = <label style={Object.assign({}, theme.textStyle, theme.controlBoxLabel)}>{this.formatLabel(key)}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
@@ -315,7 +307,7 @@ class NotePropertiesDialog extends React.Component {
 					</a>
 				);
 			} else {
-				controlComp = <div style={Object.assign({}, theme.textStyle, { display: 'inline-block' })}>{displayedValue}</div>;
+				controlComp = <div style={Object.assign({}, theme.textStyle, theme.controlBoxValue)}>{displayedValue}</div>;
 			}
 
 			if (['id', 'revisionsLink', 'markup_language'].indexOf(key) < 0) {
@@ -335,7 +327,7 @@ class NotePropertiesDialog extends React.Component {
 		}
 
 		return (
-			<div key={key} style={this.styles_.controlBox} className="note-property-box">
+			<div key={key} style={theme.controlBox} className="note-property-box">
 				{labelComp}
 				{controlComp}
 				{editComp}

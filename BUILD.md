@@ -21,7 +21,20 @@ Then you can test the various applications:
 
 	cd ElectronClient
 	npm run start
-	
+
+If you'd like to auto-reload the app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
+
+```sh
+cd ElectronClient
+watchman-make -p '**/*.js' '**/*.jsx' --run "npm run start"
+```
+
+It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"npm run start"` each time. Here's what the workflow loop looks like in practice:
+
+1. Edit and save files in your text editor.
+2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
+3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm run start"`, and hit enter).
+
 ## Testing the Terminal application
 
 	cd CliClient
@@ -34,10 +47,20 @@ First you need to setup React Native to build projects with native code. For thi
 Then:
 
 	cd ReactNativeClient
-	react-native run-ios
-	# Or: react-native run-android
+	npm run start-android
+	# Or: npm run start-ios
 
 To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
+
+Normally the bundler should start automatically with the application. If it doesn't run `npm run start`.
+
+## Building the clipper
+
+	cd Clipper/popup
+	npm install
+	npm run watch # To watch for changes
+
+To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/extensions/faq#faq-dev-01). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
 
 ## Watching files
 

@@ -1817,6 +1817,18 @@ class NoteTextComponent extends React.Component {
 			},
 		});
 
+		toolbarItems.push({
+			tooltip: _('Content Properties'),
+			iconName: 'fa-sticky-note',
+			onClick: () => {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandContentProperties',
+					text: this.state.note.body,
+				});
+			},
+		});
+
 		return toolbarItems;
 	}
 
