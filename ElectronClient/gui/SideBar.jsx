@@ -196,6 +196,9 @@ class SideBarComponent extends React.Component {
 				paddingLeft: 5,
 				opacity: 0.5,
 			},
+			hideIcon: {
+				opacity: 0,
+			},
 		};
 
 		style.tagItem = Object.assign({}, style.listItem);
@@ -336,14 +339,16 @@ class SideBarComponent extends React.Component {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			const folder = await Folder.load(itemId);
 			menu.append(
 				new MenuItem({
-					label: _('Rename'),
+					label: _('Properties'),
+
 					click: async () => {
 						this.props.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'renameFolder',
-							id: itemId,
+							name: 'commandFolderProperties',
+							folderId: folder.id,
 						});
 					},
 				})
@@ -478,6 +483,15 @@ class SideBarComponent extends React.Component {
 		const anchorRef = this.anchorItemRef('folder', folder.id);
 		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
 
+		let folderIconStyle = {
+			visibility: (folder.icon == '') ? 'hidden' : 'visible',
+			paddingLeft: 5,
+			paddingRight: 5,
+		};
+
+		const folderIconName = (folder.icon == '') ? 'fa-book' : folder.icon ;
+		const folderIcon = <i style={folderIconStyle} className={`fa ${folderIconName}`}></i>;
+
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
 				{expandLink}
@@ -495,7 +509,7 @@ class SideBarComponent extends React.Component {
 					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
-					{itemTitle} {noteCount}
+					{folderIcon} {itemTitle} {noteCount}
 				</a>
 			</div>
 		);

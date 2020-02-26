@@ -308,7 +308,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -532,7 +532,7 @@ class JoplinDatabase extends Database {
 					CREATE TABLE notes_normalized (
 						id TEXT NOT NULL,
 						title TEXT NOT NULL DEFAULT "",
-						body TEXT NOT NULL DEFAULT "" 
+						body TEXT NOT NULL DEFAULT ""
 					);
 				`;
 
@@ -674,6 +674,10 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 28) {
 				queries.push('CREATE INDEX resources_size ON resources(size)');
+			}
+
+			if (targetVersion == 29) {
+				queries.push('ALTER TABLE folders ADD COLUMN `icon` TEXT NOT NULL DEFAULT ""');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

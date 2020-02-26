@@ -6,6 +6,7 @@ const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
+const FolderPropertiesDialog = require('./FolderPropertiesDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -25,6 +26,7 @@ class MainScreenComponent extends React.Component {
 		super();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
+		this.folderPropertiesDialog_close = this.folderPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
@@ -42,6 +44,10 @@ class MainScreenComponent extends React.Component {
 		this.setState({ notePropertiesDialogOptions: {} });
 	}
 
+	folderPropertiesDialog_close() {
+		this.setState({ folderPropertiesDialogOptions: {} });
+	}
+
 	shareNoteDialog_close() {
 		this.setState({ shareNoteDialogOptions: {} });
 	}
@@ -54,6 +60,8 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
+			dialogPropertiesDialogOptions: {},
+			folderPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
 		});
 	}
@@ -194,28 +202,6 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
-		} else if (command.name === 'renameFolder') {
-			const folder = await Folder.load(command.id);
-
-			if (folder) {
-				this.setState({
-					promptOptions: {
-						label: _('Rename notebook:'),
-						value: folder.title,
-						onClose: async answer => {
-							if (answer !== null) {
-								try {
-									folder.title = answer;
-									await Folder.save(folder, { fields: ['title'], userSideValidation: true });
-								} catch (error) {
-									bridge().showErrorMessageBox(error.message);
-								}
-							}
-							this.setState({ promptOptions: null });
-						},
-					},
-				});
-			}
 		} else if (command.name === 'renameTag') {
 			const tag = await Tag.load(command.id);
 			if (tag) {
@@ -272,6 +258,13 @@ class MainScreenComponent extends React.Component {
 					noteId: command.noteId,
 					visible: true,
 					onRevisionLinkClick: command.onRevisionLinkClick,
+				},
+			});
+		} else if (command.name === 'commandFolderProperties') {
+			this.setState({
+				folderPropertiesDialogOptions: {
+					folderId: command.folderId,
+					visible: true,
 				},
 			});
 		} else if (command.name === 'commandShareNoteDialog') {
@@ -609,6 +602,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
+		const folderPropertiesDialogOptions = this.state.folderPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
 
@@ -617,6 +611,7 @@ class MainScreenComponent extends React.Component {
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{folderPropertiesDialogOptions.visible && <FolderPropertiesDialog theme={this.props.theme} folderId={folderPropertiesDialogOptions.folderId} onClose={this.folderPropertiesDialog_close}/>}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
