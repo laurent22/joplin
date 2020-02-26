@@ -1181,16 +1181,11 @@ class Application extends BaseApplication {
 
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
-			if (!menuItem) continue;
-			if (viewer) {
-				if (viewer === 'viewer') {
-					menuItem.enabled = false;
-				} else {
-					menuItem.enabled = true;
-				}
-			} else {
-
-				menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			const noteCheck = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			if (noteCheck === false || viewer === 'viewer') {
+				menuItem.enabled = false;
+			} else if (noteCheck === true || viewer !== 'viewer') {
+				menuItem.enabled = true;
 			}
 		}
 
