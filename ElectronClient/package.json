@@ -26,6 +26,7 @@
       "build/images/*"
     ],
     "win": {
+      "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
       "icon": "../../Assets/Joplin.ico",
       "target": [
@@ -54,10 +55,10 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "asar": false
+      "asar": true
     },
     "linux": {
-      "asar": false,
+      "asar": true,
       "category": "Office",
       "desktop": {
         "Icon": "joplin"
