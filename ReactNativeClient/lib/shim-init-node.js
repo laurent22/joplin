@@ -365,7 +365,7 @@ function shimInit() {
 		return bridge().openExternal(url);
 	};
 
-	shim.agent = null;
+	shim.agent_ = null;
 
 	shim.httpAgent = url => {
 		if (shim.isLinux() && !shim.httpAgent) {
@@ -375,12 +375,12 @@ function shimInit() {
 				keepAliveMsecs: 5000,
 			};
 			if (url.startsWith('https')) {
-				shim.agent = new https.Agent(AgentSettings);
+				shim.agent_ = new https.Agent(AgentSettings);
 			} else {
-				shim.agent = new http.Agent(AgentSettings);
+				shim.agent_ = new http.Agent(AgentSettings);
 			}
 		}
-		return shim.agent;
+		return shim.agent_;
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {
