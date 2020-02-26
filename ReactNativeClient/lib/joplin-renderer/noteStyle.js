@@ -276,6 +276,10 @@ module.exports = function(style, options) {
 		}
 
 		/* For TinyMCE */
+		.mce-content-body {
+			padding: 5px 10px 10px 10px;
+		}
+
 		.mce-content-body code {
 			background-color: transparent;
 		}

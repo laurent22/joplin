@@ -37,7 +37,7 @@ function styles_(props:MultiNoteActionsProps) {
 export default function MultiNoteActions(props:MultiNoteActionsProps) {
 	const styles = styles_(props);
 
-	const multiNotesButton_click = item => {
+	const multiNotesButton_click = (item:any) => {
 		if (item.submenu) {
 			item.submenu.popup(bridge().window());
 		} else {

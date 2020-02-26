@@ -71,11 +71,11 @@ const TinyMCE = (props:TinyMCEProps) => {
 		const loadEditor = async () => {
 			const editors = await tinymce.init({
 				selector: `#${rootId}`,
-				plugins: 'noneditable',
+				plugins: 'noneditable link lists hr',
 				noneditable_noneditable_class: 'joplin-editable', // TODO: regex
 				valid_elements: '*[*]', // TODO: filter more,
 				menubar: false,
-				toolbar: 'bold italic customAttach',
+				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr',
 				setup: (editor:any) => {
 
 					editor.ui.registry.addButton('customAttach', {
@@ -113,6 +113,7 @@ const TinyMCE = (props:TinyMCEProps) => {
 			if (cancelled) return;
 
 			editor.setContent(result.html);
+			lastChangeContent.current = editor.getContent();
 
 			const cssFiles = result.pluginAssets
 				.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))

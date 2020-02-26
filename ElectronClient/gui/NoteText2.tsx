@@ -15,6 +15,11 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
+// TODO: change note, switch to another note before save => broken
+// TODO: preserve image size
+// TODO: handle HTML notes
+// TODO: handle switching layout when note hasn't saved yet
+
 interface NoteTextProps {
 	style: any,
 	noteId: string,
@@ -33,6 +38,7 @@ interface FormNote {
 	is_todo: number,
 	bodyMarkdown: string,
 	bodyEditorState?: any,
+	fromNewNote: any,
 }
 
 const defaultNote = ():FormNote => {
@@ -42,6 +48,7 @@ const defaultNote = ():FormNote => {
 		title: '',
 		bodyMarkdown: '',
 		is_todo: 0,
+		fromNewNote: null,
 	};
 };
 
@@ -96,15 +103,18 @@ function NoteText2(props:NoteTextProps) {
 
 		delete newNote.bodyMarkdown;
 		delete newNote.bodyEditorState;
+		delete newNote.fromNewNote;
+
 		return newNote;
 	};
 
-	const saveNoteNow = useCallback(async () => {
-		scheduleSaveNote(formNote);
+	const saveNoteNow = useCallback(async (fn:FormNote = null) => {
+		scheduleSaveNote(fn ? fn : formNote);
 		return saveNoteActionQueue.waitForAllDone();
 	}, [formNote]);
 
 	const scheduleSaveNote = (formNote:FormNote) => {
+		console.info('Scheduling...', formNote);
 		const makeAction = (formNote:FormNote) => {
 			return async function() {
 				const note = await formNoteToNote(formNote);
@@ -155,36 +165,53 @@ function NoteText2(props:NoteTextProps) {
 	useEffect(() => {
 		let cancelled = false;
 
-		async function fetchNote() {
-			if (props.newNote) {
-				setFormNote({
-					id: null,
-					parent_id: props.newNote.parent_id,
-					is_todo: props.newNote.is_todo,
-					title: '',
-					bodyMarkdown: '',
-				});
-			} else if (props.noteId) {
+		if (props.noteId && formNote.id !== props.noteId && !props.newNote) {
+			async function fetchNote() {
+				console.info('Load existing', props.noteId);
 				const n = await Note.load(props.noteId);
 				if (cancelled) return;
+
+				if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
+
 				setFormNote({
 					id: n.id,
 					title: n.title,
 					is_todo: n.is_todo,
 					bodyMarkdown: n.body,
 					parent_id: n.parent_id,
+					fromNewNote: null,
 				});
-			} else {
-				setFormNote(defaultNote());
 			}
-		}
 
-		fetchNote();
+			fetchNote();
+		}
 
 		return () => {
 			cancelled = true;
+			if (formNote.id) saveNoteNow();
 		};
-	}, [props.noteId, props.newNote]);
+	}, [props.noteId, formNote]);
+
+	useEffect(() => {
+		if (props.newNote && props.newNote === formNote.fromNewNote) {
+			console.info('Create new');
+
+			setFormNote({
+				id: null,
+				parent_id: props.newNote.parent_id,
+				is_todo: props.newNote.is_todo,
+				title: '',
+				bodyMarkdown: '',
+				fromNewNote: props.newNote,
+			});
+		}
+
+		// TODO: if (note.template) note.body = TemplateUtils.render(note.template);
+
+		return () => {
+			if (formNote.id) saveNoteNow();
+		};
+	}, [props.newNote, formNote]);
 
 	const attachResources = useCallback(async () => {
 		const filePaths = bridge().showOpenDialog({
@@ -211,23 +238,27 @@ function NoteText2(props:NoteTextProps) {
 		return output;
 	}, [formNote]);
 
-	const onBodyChange = useCallback((event:any) => {
-		const newNote = Object.assign({}, formNote, {
-			bodyEditorState: event.editorState,
-		});
+	const onFieldChange = useCallback((field:string, value:any) => {
+		const change = field === 'body' ? {
+			bodyEditorState: value,
+		} : {
+			title: value,
+		};
+
+		const newNote = Object.assign({}, formNote, change);
 
 		setFormNote(newNote);
-		scheduleSaveNote(newNote);
+
+		if (!newNote.id) {
+			saveNoteNow(newNote);
+		} else {
+			scheduleSaveNote(newNote);
+		}
 	}, [formNote]);
 
-	const onTitleChange = useCallback((event:any) => {
-		const newNote = Object.assign({}, formNote, {
-			title: event.target.value,
-		});
+	const onBodyChange = (event:any) => onFieldChange('body', event.editorState);
 
-		setFormNote(newNote);
-		scheduleSaveNote(newNote);
-	}, [formNote]);
+	const onTitleChange = (event:any) => onFieldChange('title', event.target.value);
 
 	if (props.selectedNoteIds.length > 1) {
 		return <MultiNoteActions
