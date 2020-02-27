@@ -132,6 +132,10 @@ function shimInit() {
 		Linking.openURL(url);
 	};
 
+	shim.httpAgent = () => {
+		return null;
+	};
+
 	shim.waitForFrame = () => {
 		return new Promise(function(resolve) {
 			requestAnimationFrame(function() {
