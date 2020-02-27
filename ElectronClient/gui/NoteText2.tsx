@@ -15,10 +15,33 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
+// Note: Data from the editor is currently processed and saved this way:
+//
+// 1. TinyMCE triggers the onChange event if the user stops typing for 500ms
+// 2. NoteText2 receives this event, update formNote and schedule a save operation
+// 3. The note is saved after several ms depending on how AsyncActionQueue is configured
+//
+// This means that if the user types something, then switch to another note within
+// less than 500ms, the changes will be lost. It's relatively rare case but it could happen.
+//
+// The delay between scheduling save and actual saving on the other hand is not an issue
+// because when scheduling the complete state is saved to a variable, which is then
+// used to save to the database. So even if the component is unmounted, saving will
+// still happen in the background.
+//
+// New notes don't have an ID and can be more of a problem, this is why they are saved
+// immediately (no scheduling) once the user starts modifying it so that we have an ID
+// to work with.
+
 // TODO: change note, switch to another note before save => broken
 // TODO: preserve image size
 // TODO: handle HTML notes
 // TODO: handle switching layout when note hasn't saved yet
+// TODO: add indicator showing that note has been saved or not
+//       from TinyMCE, emit willChange event, which means we know we're expecting changes
+//
+// TODO: create new note, type something in body => cursor jumps back at beginning
+// TODO: create new note, set title, set body, create new note => body is that of previously created note
 
 interface NoteTextProps {
 	style: any,
@@ -115,6 +138,7 @@ function NoteText2(props:NoteTextProps) {
 
 	const scheduleSaveNote = (formNote:FormNote) => {
 		console.info('Scheduling...', formNote);
+
 		const makeAction = (formNote:FormNote) => {
 			return async function() {
 				const note = await formNoteToNote(formNote);
@@ -163,55 +187,50 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.theme]);
 
 	useEffect(() => {
+		if (!props.noteId) return () => {};
+
 		let cancelled = false;
 
-		if (props.noteId && formNote.id !== props.noteId && !props.newNote) {
-			async function fetchNote() {
-				console.info('Load existing', props.noteId);
-				const n = await Note.load(props.noteId);
-				if (cancelled) return;
+		async function fetchNote() {
+			console.info('Load existing', props.noteId);
+			const n = await Note.load(props.noteId);
+			if (cancelled) return;
 
-				if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
-
-				setFormNote({
-					id: n.id,
-					title: n.title,
-					is_todo: n.is_todo,
-					bodyMarkdown: n.body,
-					parent_id: n.parent_id,
-					fromNewNote: null,
-				});
-			}
-
-			fetchNote();
-		}
-
-		return () => {
-			cancelled = true;
-			if (formNote.id) saveNoteNow();
-		};
-	}, [props.noteId, formNote]);
-
-	useEffect(() => {
-		if (props.newNote && props.newNote === formNote.fromNewNote) {
-			console.info('Create new');
+			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
 
 			setFormNote({
-				id: null,
-				parent_id: props.newNote.parent_id,
-				is_todo: props.newNote.is_todo,
-				title: '',
-				bodyMarkdown: '',
-				fromNewNote: props.newNote,
+				id: n.id,
+				title: n.title,
+				is_todo: n.is_todo,
+				bodyMarkdown: n.body,
+				parent_id: n.parent_id,
+				fromNewNote: null,
 			});
 		}
 
-		// TODO: if (note.template) note.body = TemplateUtils.render(note.template);
+		fetchNote();
 
 		return () => {
-			if (formNote.id) saveNoteNow();
+			cancelled = true;
 		};
-	}, [props.newNote, formNote]);
+	}, [props.noteId]);
+
+	useEffect(() => {
+		if (!props.newNote) return;
+
+		console.info('Create new');
+
+		setFormNote({
+			id: null,
+			parent_id: props.newNote.parent_id,
+			is_todo: props.newNote.is_todo,
+			title: '',
+			bodyMarkdown: '',
+			fromNewNote: props.newNote,
+		});
+
+		// TODO: if (note.template) note.body = TemplateUtils.render(note.template);
+	}, [props.newNote]);
 
 	const attachResources = useCallback(async () => {
 		const filePaths = bridge().showOpenDialog({
