@@ -1181,13 +1181,8 @@ class Application extends BaseApplication {
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
-			// noteCheck stores the boolean value for if there is a note and if the note is a HTML note
-			const noteCheck = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
-			if (noteCheck === false || viewer === 'viewer') {
-				menuItem.enabled = false;
-			} else {
-				menuItem.enabled = true;
-			}
+			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			!isHtmlNote || viewer === 'viewer' ?  menuItem.enabled = false : menuItem.enabled = true;
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
