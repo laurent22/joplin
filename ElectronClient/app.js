@@ -1177,15 +1177,19 @@ class Application extends BaseApplication {
 
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
+
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
+			if (!menuItem) continue;
+			// noteCheck stores the boolean value for if there is a note and if the note is a HTML note
 			const noteCheck = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 			if (noteCheck === false || viewer === 'viewer') {
 				menuItem.enabled = false;
-			} else if (noteCheck === true || viewer !== 'viewer') {
+			} else {
 				menuItem.enabled = true;
 			}
 		}
+
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
 	}
