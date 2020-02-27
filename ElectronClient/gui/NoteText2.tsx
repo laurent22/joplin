@@ -109,7 +109,7 @@ const saveNoteActionQueue = new AsyncActionQueue(1000);
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
-	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({});
+	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ markdown: '' });
 
 	const editorRef = useRef<any>();
 	const bodyWillChange = useRef<boolean>(false);
