@@ -43,8 +43,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 // TODO: handle switching layout when note hasn't saved yet
 // TODO: add indicator showing that note has been saved or not
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
-//
-// TODO: create new note, type something in body => cursor jumps back at beginning
 
 interface NoteTextProps {
 	style: any,
@@ -113,9 +111,6 @@ function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
 	const [defaultEditorState, setDefaultEditorState] = useState<EditorState>({});
 
-	console.info('props.noteId', props.noteId);
-	console.info('props.newNote', props.newNote);
-
 	const styles = styles_(props);
 
 	const htmlToMarkdown = useCallback(async (html:string):Promise<string> => {
@@ -167,6 +162,8 @@ function NoteText2(props:NoteTextProps) {
 	};
 
 	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
+		md = md || '';
+
 		const theme = themeStyle(props.theme);
 
 		// console.info('===================================');
@@ -195,52 +192,56 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.theme]);
 
 	useEffect(() => {
-		if (!props.noteId) return () => {};
+		const isLoadingNewNote = !!props.newNote;
+		const isLoadingExistingNote = !!props.noteId && !isLoadingNewNote;
 
-		let cancelled = false;
+		if (!isLoadingNewNote && !isLoadingExistingNote) return () => {};
 
-		async function fetchNote() {
-			console.info('Load existing', props.noteId);
-			const n = await Note.load(props.noteId);
-			if (cancelled) return;
+		if (isLoadingExistingNote) {
+			if (formNote.id === props.noteId) return () => {};
 
-			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
+			let cancelled = false;
 
-			setFormNote({
-				id: n.id,
-				title: n.title,
-				is_todo: n.is_todo,
-				parent_id: n.parent_id,
-				fromNewNote: null,
-			});
+			const fetchNote = async () => {
+				const n = await Note.load(props.noteId);
+				if (cancelled) return;
 
-			setDefaultEditorState({ markdown: n.body });
+				if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
+
+				setFormNote({
+					id: n.id,
+					title: n.title,
+					is_todo: n.is_todo,
+					parent_id: n.parent_id,
+					fromNewNote: null,
+				});
+
+				setDefaultEditorState({ markdown: n.body });
+			};
+
+			fetchNote();
+
+			return () => {
+				cancelled = true;
+			};
 		}
 
-		fetchNote();
+		if (isLoadingNewNote) {
+			if (formNote.fromNewNote === props.newNote) return () => {};
 
-		return () => {
-			cancelled = true;
-		};
-	}, [props.noteId]);
+			setFormNote({
+				id: null,
+				parent_id: props.newNote.parent_id,
+				is_todo: props.newNote.is_todo,
+				title: '',
+				fromNewNote: props.newNote,
+			});
 
-	useEffect(() => {
-		if (!props.newNote) return;
+			setDefaultEditorState({ markdown: '' });
+		}
 
-		console.info('Create new');
-
-		setFormNote({
-			id: null,
-			parent_id: props.newNote.parent_id,
-			is_todo: props.newNote.is_todo,
-			title: '',
-			fromNewNote: props.newNote,
-		});
-
-		setDefaultEditorState({ markdown: '' });
-
-		// TODO: if (note.template) note.body = TemplateUtils.render(note.template);
-	}, [props.newNote]);
+		return () => {};
+	}, [props.noteId, props.newNote, formNote]);
 
 	const attachResources = useCallback(async () => {
 		const filePaths = bridge().showOpenDialog({
