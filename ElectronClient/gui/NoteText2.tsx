@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import TinyMCE, { editorStateToHtml } from './TinyMCE';
+
+// eslint-disable-next-line no-unused-vars
+import TinyMCE, { editorStateToHtml, OnChangeEvent } from './TinyMCE';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
 import MultiNoteActions from './MultiNoteActions';
+
+// eslint-disable-next-line no-unused-vars
+import { EditorState } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const Setting = require('lib/models/Setting');
@@ -33,7 +38,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 // immediately (no scheduling) once the user starts modifying it so that we have an ID
 // to work with.
 
-// TODO: change note, switch to another note before save => broken
 // TODO: preserve image size
 // TODO: handle HTML notes
 // TODO: handle switching layout when note hasn't saved yet
@@ -41,7 +45,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
 //
 // TODO: create new note, type something in body => cursor jumps back at beginning
-// TODO: create new note, set title, set body, create new note => body is that of previously created note
 
 interface NoteTextProps {
 	style: any,
@@ -59,8 +62,7 @@ interface FormNote {
 	title: string,
 	parent_id: string,
 	is_todo: number,
-	bodyMarkdown: string,
-	bodyEditorState?: any,
+	bodyEditorState?: EditorState,
 	fromNewNote: any,
 }
 
@@ -69,7 +71,6 @@ const defaultNote = ():FormNote => {
 		id: '',
 		parent_id: '',
 		title: '',
-		bodyMarkdown: '',
 		is_todo: 0,
 		fromNewNote: null,
 	};
@@ -98,6 +99,10 @@ function styles_(props:NoteTextProps) {
 				padding: 10,
 				fontSize: theme.fontSize,
 			},
+			tinyMCE: {
+				width: '100%',
+				height: '100%',
+			},
 		};
 	});
 }
@@ -106,8 +111,12 @@ const saveNoteActionQueue = new AsyncActionQueue(1000);
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
+	const [defaultEditorState, setDefaultEditorState] = useState<EditorState>({});
 
-	const style = styles_(props);
+	console.info('props.noteId', props.noteId);
+	console.info('props.newNote', props.newNote);
+
+	const styles = styles_(props);
 
 	const htmlToMarkdown = useCallback(async (html:string):Promise<string> => {
 		const htmlToMd = new HtmlToMd();
@@ -124,7 +133,6 @@ function NoteText2(props:NoteTextProps) {
 			newNote.body = await htmlToMarkdown(html);
 		}
 
-		delete newNote.bodyMarkdown;
 		delete newNote.bodyEditorState;
 		delete newNote.fromNewNote;
 
@@ -202,10 +210,11 @@ function NoteText2(props:NoteTextProps) {
 				id: n.id,
 				title: n.title,
 				is_todo: n.is_todo,
-				bodyMarkdown: n.body,
 				parent_id: n.parent_id,
 				fromNewNote: null,
 			});
+
+			setDefaultEditorState({ markdown: n.body });
 		}
 
 		fetchNote();
@@ -225,9 +234,10 @@ function NoteText2(props:NoteTextProps) {
 			parent_id: props.newNote.parent_id,
 			is_todo: props.newNote.is_todo,
 			title: '',
-			bodyMarkdown: '',
 			fromNewNote: props.newNote,
 		});
+
+		setDefaultEditorState({ markdown: '' });
 
 		// TODO: if (note.template) note.body = TemplateUtils.render(note.template);
 	}, [props.newNote]);
@@ -275,7 +285,7 @@ function NoteText2(props:NoteTextProps) {
 		}
 	}, [formNote]);
 
-	const onBodyChange = (event:any) => onFieldChange('body', event.editorState);
+	const onBodyChange = (event:OnChangeEvent) => onFieldChange('body', event.editorState.content);
 
 	const onTitleChange = (event:any) => onFieldChange('title', event.target.value);
 
@@ -293,23 +303,23 @@ function NoteText2(props:NoteTextProps) {
 	return (
 		<div style={props.style}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				<div style={style.warningBanner}>
+				<div style={styles.warningBanner}>
 					This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a href="https://www.patreon.com/posts/34246624">introduction post</a> for more information.
 				</div>
 				<div style={{ display: 'flex' }}>
 					<input
 						type="text"
 						placeholder={props.newNote ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
-						style={style.titleInput}
+						style={styles.titleInput}
 						onChange={onTitleChange}
 						value={formNote.title}
 					/>
 				</div>
 				<div style={{ display: 'flex', flex: 1 }}>
 					<TinyMCE
-						style={{ width: '100%', height: '100%' }}
+						style={styles.tinyMCE}
 						onChange={onBodyChange}
-						defaultMarkdown={formNote.bodyMarkdown}
+						defaultEditorState={defaultEditorState}
 						theme={props.theme}
 						markdownToHtml={markdownToHtml}
 						attachResources={attachResources}

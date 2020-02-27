@@ -3,17 +3,20 @@ declare const tinymce: any;
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
+// eslint-disable-next-line no-unused-vars
+import { EditorState } from './utils/NoteText';
+
+export interface OnChangeEvent {
+	editorState: EditorState,
+}
+
 interface TinyMCEProps {
 	style: any,
-	onChange: Function,
-	defaultMarkdown: string,
+	onChange(event: OnChangeEvent): void,
+	defaultEditorState: any,
 	theme: any,
 	markdownToHtml: Function,
 	attachResources: Function,
-}
-
-export interface TinyMCEChangeEvent {
-	editorState: any,
 }
 
 export async function editorStateToHtml(editorState:any):Promise<string> {
@@ -109,7 +112,7 @@ const TinyMCE = (props:TinyMCEProps) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markdownToHtml(props.defaultMarkdown);
+			const result = await props.markdownToHtml(props.defaultEditorState.markdown);
 			if (cancelled) return;
 
 			editor.setContent(result.html);
@@ -153,7 +156,7 @@ const TinyMCE = (props:TinyMCEProps) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markdownToHtml, props.defaultMarkdown, props.theme]);
+	}, [editor, props.markdownToHtml, props.defaultEditorState, props.theme]);
 
 	useEffect(() => {
 		if (!editor) return;
@@ -233,7 +236,9 @@ const TinyMCE = (props:TinyMCEProps) => {
 
 				lastChangeContent.current = content;
 				props.onChange({
-					editorState: content,
+					editorState: {
+						content,
+					},
 				});
 				dispatchDidUpdate(editor);
 			}, 500);
