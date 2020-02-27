@@ -859,7 +859,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 			bodyComponent = (
-				<ScrollView>
+				<ScrollView persistentScrollbar>
 					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
 				</ScrollView>
 			);
