@@ -14,7 +14,6 @@ interface TinyMCEProps {
 	style: any,
 	onChange(event: OnChangeEvent): void,
 	defaultEditorState: any,
-	theme: any,
 	markdownToHtml: Function,
 	attachResources: Function,
 }
@@ -156,7 +155,7 @@ const TinyMCE = (props:TinyMCEProps) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markdownToHtml, props.defaultEditorState, props.theme]);
+	}, [editor, props.markdownToHtml, props.defaultEditorState]);
 
 	useEffect(() => {
 		if (!editor) return;

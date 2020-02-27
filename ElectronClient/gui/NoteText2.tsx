@@ -320,7 +320,6 @@ function NoteText2(props:NoteTextProps) {
 						style={styles.tinyMCE}
 						onChange={onBodyChange}
 						defaultEditorState={defaultEditorState}
-						theme={props.theme}
 						markdownToHtml={markdownToHtml}
 						attachResources={attachResources}
 					/>
