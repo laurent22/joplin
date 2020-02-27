@@ -283,7 +283,6 @@ class Application extends BaseApplication {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 			const viewer = newState.noteVisiblePanes[0];
 			this.updateMenuItemStates(viewer);
-
 		}
 
 		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
@@ -1178,7 +1177,6 @@ class Application extends BaseApplication {
 
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
-
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			const noteCheck = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
@@ -1188,7 +1186,6 @@ class Application extends BaseApplication {
 				menuItem.enabled = true;
 			}
 		}
-
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
 	}
