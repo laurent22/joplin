@@ -1182,7 +1182,7 @@ class Application extends BaseApplication {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
 			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
-			!isHtmlNote || viewer === 'viewer' ?  menuItem.enabled = false : menuItem.enabled = true;
+			menuItem.enabled = isHtmlNote && viewer !== 'viewer';
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
