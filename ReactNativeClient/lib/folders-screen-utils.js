@@ -56,7 +56,10 @@ class FoldersScreenUtils {
 	}
 
 	static async cancelTimers() {
-		if (this.scheduleRefreshFoldersIID_) clearTimeout(this.scheduleRefreshFoldersIID_);
+		if (this.scheduleRefreshFoldersIID_) {
+			clearTimeout(this.scheduleRefreshFoldersIID_);
+			this.scheduleRefreshFoldersIID_ = null;
+		}
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!FoldersScreenUtils.refreshCalls_.length) {

@@ -1,4 +1,4 @@
-const { BrowserWindow, Tray } = require('electron');
+const { BrowserWindow, Tray, screen } = require('electron');
 const { shim } = require('lib/shim');
 const url = require('url');
 const path = require('path');
@@ -43,9 +43,10 @@ class ElectronAppWrapper {
 
 		const windowStateKeeper = require('electron-window-state');
 
+
 		const stateOptions = {
-			defaultWidth: 800,
-			defaultHeight: 600,
+			defaultWidth: Math.round(0.8*screen.getPrimaryDisplay().workArea.width),
+			defaultHeight: Math.round(0.8*screen.getPrimaryDisplay().workArea.height),
 			file: `window-state-${this.env_}.json`,
 		};
 
@@ -59,6 +60,8 @@ class ElectronAppWrapper {
 			y: windowState.y,
 			width: windowState.width,
 			height: windowState.height,
+			minWidth: 100,
+			minHeight: 100,
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
@@ -82,6 +85,12 @@ class ElectronAppWrapper {
 		});
 
 		this.win_ = new BrowserWindow(windowOptions);
+
+		if (!screen.getDisplayMatching(this.win_.getBounds())) {
+			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
+			const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;
+			this.win_.setPosition(primaryDisplayWidth/2 - windowWidth, primaryDisplayHeight/2 - windowHeight);
+		}
 
 		this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),

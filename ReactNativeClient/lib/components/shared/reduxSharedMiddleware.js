@@ -28,7 +28,8 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		refreshTags = true;
 	}
 
-	if (action.type === 'NOTE_SELECT' ||
+	if (action.type === 'NOTE_DELETE' ||
+		action.type === 'NOTE_SELECT' ||
 		action.type === 'NOTE_SELECT_TOGGLE' ||
 		action.type === 'NOTE_SET_NEW_ONE') {
 		let noteTags = [];
