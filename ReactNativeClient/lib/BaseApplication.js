@@ -59,10 +59,10 @@ class BaseApplication {
 			clearTimeout(this.scheduleAutoAddResourcesIID_);
 			this.scheduleAutoAddResourcesIID_ = null;
 		}
-		await ResourceFetcher.instance().cancelTimers();
+		await ResourceFetcher.instance().destroy();
+		await SearchEngine.instance().destroy();
+		await DecryptionWorker.instance().destroy();
 		await FoldersScreenUtils.cancelTimers();
-		await SearchEngine.instance().cancelTimers();
-		await DecryptionWorker.instance().cancelTimers();
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();

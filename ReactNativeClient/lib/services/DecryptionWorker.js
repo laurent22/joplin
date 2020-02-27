@@ -250,7 +250,7 @@ class DecryptionWorker {
 		}
 	}
 
-	async cancelTimers() {
+	async destroy() {
 		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleId_) {
 			clearTimeout(this.scheduleId_);

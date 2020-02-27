@@ -413,7 +413,7 @@ class SearchEngine {
 		}
 	}
 
-	async cancelTimers() {
+	async destroy() {
 		if (this.scheduleSyncTablesIID_) {
 			clearTimeout(this.scheduleSyncTablesIID_);
 			this.scheduleSyncTablesIID_ = null;

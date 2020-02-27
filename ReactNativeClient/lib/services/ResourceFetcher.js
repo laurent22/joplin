@@ -249,7 +249,7 @@ class ResourceFetcher extends BaseService {
 		this.autoAddResources(null);
 	}
 
-	async cancelTimers() {
+	async destroy() {
 		this.eventEmitter_.removeAllListeners();
 		if (this.scheduleQueueProcessIID_) {
 			clearTimeout(this.scheduleQueueProcessIID_);
