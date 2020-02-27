@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import TinyMCE, { editorStateToHtml, OnChangeEvent } from './TinyMCE';
+import TinyMCE, { editorContentToHtml, OnChangeEvent } from './TinyMCE';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
 import MultiNoteActions from './MultiNoteActions';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorState } from './utils/NoteText';
+import { DefaultEditorState } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const Setting = require('lib/models/Setting');
@@ -40,9 +40,9 @@ const { bridge } = require('electron').remote.require('./bridge');
 
 // TODO: preserve image size
 // TODO: handle HTML notes
-// TODO: handle switching layout when note hasn't saved yet
 // TODO: add indicator showing that note has been saved or not
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
+// TODO: create new note, set body, switch to another note before save => it selects the new note, but doesn't actually display it
 
 interface NoteTextProps {
 	style: any,
@@ -60,7 +60,7 @@ interface FormNote {
 	title: string,
 	parent_id: string,
 	is_todo: number,
-	bodyEditorState?: EditorState,
+	bodyEditorContent?: any,
 	fromNewNote: any,
 }
 
@@ -109,7 +109,10 @@ const saveNoteActionQueue = new AsyncActionQueue(1000);
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
-	const [defaultEditorState, setDefaultEditorState] = useState<EditorState>({});
+	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({});
+
+	const editorRef = useRef<any>();
+	const bodyWillChange = useRef<boolean>(false);
 
 	const styles = styles_(props);
 
@@ -123,12 +126,12 @@ function NoteText2(props:NoteTextProps) {
 	const formNoteToNote = async (formNote:FormNote):Promise<any> => {
 		const newNote:any = Object.assign({}, formNote);
 
-		if ('bodyEditorState' in formNote) {
-			const html = await editorStateToHtml(formNote.bodyEditorState);
+		if ('bodyEditorContent' in formNote) {
+			const html = await editorContentToHtml(formNote.bodyEditorContent);
 			newNote.body = await htmlToMarkdown(html);
 		}
 
-		delete newNote.bodyEditorState;
+		delete newNote.bodyEditorContent;
 		delete newNote.fromNewNote;
 
 		return newNote;
@@ -191,6 +194,21 @@ function NoteText2(props:NoteTextProps) {
 		return result;
 	}, [props.theme]);
 
+	const saveNoteIfChanged = () => {
+		if (bodyWillChange.current && editorRef.current) {
+			console.info('Saving "willChange" note...', typeof editorRef.current.content());
+			scheduleSaveNote({ ...formNote, bodyEditorContent: editorRef.current.content() });
+		}
+		bodyWillChange.current = false;
+	};
+
+	const saveNoteIfChangedRef = useRef<Function>();
+	saveNoteIfChangedRef.current = saveNoteIfChanged;
+
+	useEffect(() => {
+		return () => saveNoteIfChangedRef.current();
+	}, []);
+
 	useEffect(() => {
 		const isLoadingNewNote = !!props.newNote;
 		const isLoadingExistingNote = !!props.noteId && !isLoadingNewNote;
@@ -201,6 +219,10 @@ function NoteText2(props:NoteTextProps) {
 			if (formNote.id === props.noteId) return () => {};
 
 			let cancelled = false;
+
+			console.info('Loading existing note', props.noteId);
+
+			saveNoteIfChanged();
 
 			const fetchNote = async () => {
 				const n = await Note.load(props.noteId);
@@ -228,6 +250,10 @@ function NoteText2(props:NoteTextProps) {
 
 		if (isLoadingNewNote) {
 			if (formNote.fromNewNote === props.newNote) return () => {};
+
+			console.info('Loading new note');
+
+			saveNoteIfChanged();
 
 			setFormNote({
 				id: null,
@@ -270,10 +296,12 @@ function NoteText2(props:NoteTextProps) {
 
 	const onFieldChange = useCallback((field:string, value:any) => {
 		const change = field === 'body' ? {
-			bodyEditorState: value,
+			bodyEditorContent: value,
 		} : {
 			title: value,
 		};
+
+		if (field === 'body') bodyWillChange.current = false;
 
 		const newNote = Object.assign({}, formNote, change);
 
@@ -286,9 +314,13 @@ function NoteText2(props:NoteTextProps) {
 		}
 	}, [formNote]);
 
-	const onBodyChange = (event:OnChangeEvent) => onFieldChange('body', event.editorState.content);
+	const onBodyChange = (event:OnChangeEvent) => onFieldChange('body', event.content);
 
 	const onTitleChange = (event:any) => onFieldChange('title', event.target.value);
+
+	const onBodyWillChange = () => {
+		bodyWillChange.current = true;
+	};
 
 	if (props.selectedNoteIds.length > 1) {
 		return <MultiNoteActions
@@ -318,8 +350,10 @@ function NoteText2(props:NoteTextProps) {
 				</div>
 				<div style={{ display: 'flex', flex: 1 }}>
 					<TinyMCE
+						ref={editorRef}
 						style={styles.tinyMCE}
 						onChange={onBodyChange}
+						onWillChange={onBodyWillChange}
 						defaultEditorState={defaultEditorState}
 						markdownToHtml={markdownToHtml}
 						attachResources={attachResources}

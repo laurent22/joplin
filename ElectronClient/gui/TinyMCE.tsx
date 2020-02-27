@@ -1,25 +1,26 @@
 declare const tinymce: any;
 
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorState } from './utils/NoteText';
+import { DefaultEditorState } from './utils/NoteText';
 
 export interface OnChangeEvent {
-	editorState: EditorState,
+	content: any,
 }
 
 interface TinyMCEProps {
 	style: any,
 	onChange(event: OnChangeEvent): void,
-	defaultEditorState: any,
+	onWillChange(): void,
+	defaultEditorState: DefaultEditorState,
 	markdownToHtml: Function,
 	attachResources: Function,
 }
 
-export async function editorStateToHtml(editorState:any):Promise<string> {
-	return editorState ? editorState : '';
+export async function editorContentToHtml(content:any):Promise<string> {
+	return content ? content : '';
 }
 
 function findBlockSource(node:any) {
@@ -39,7 +40,7 @@ let lastClickedEditableNode_:any = null;
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 
-const TinyMCE = (props:TinyMCEProps) => {
+const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
 
 	const attachResources = useRef(null);
@@ -65,6 +66,12 @@ const TinyMCE = (props:TinyMCEProps) => {
 			editor.fire('Change');
 			dispatchDidUpdate(editor);
 		}
+	}, [editor]);
+
+	useImperativeHandle(ref, () => {
+		return {
+			content: () => editor ? editor.getContent() : '',
+		};
 	}, [editor]);
 
 	useEffect(() => {
@@ -220,40 +227,44 @@ const TinyMCE = (props:TinyMCEProps) => {
 	useEffect(() => {
 		if (!editor) return () => {};
 
+		let cancelled = false;
 		let onChangeHandlerIID:any = null;
 
 		const onChangeHandler = () => {
+			props.onWillChange();
+
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
+
+				if (cancelled) return;
 
 				const content = editor.getContent();
 				// The Change event for example will be fired when the text area loses
 				// focus, even if nothing has changed, so we need to double-check here
 				// to avoid dispatching unecessary events.
-				if (lastChangeContent.current === content) return;
+				// TODO: not needed anymore??
+				// if (lastChangeContent.current === content) return;
 
 				lastChangeContent.current = content;
-				props.onChange({
-					editorState: {
-						content,
-					},
-				});
+				props.onChange({ content: content });
 				dispatchDidUpdate(editor);
-			}, 500);
+			}, 1000);
 		};
 
-		editor.on('keyup', onChangeHandler);
+		editor.on('keyup', onChangeHandler); // TODO: don't trigger for shift, ctrl, etc.
 		editor.on('paste', onChangeHandler);
 		editor.on('cut', onChangeHandler);
-		editor.on('Change', onChangeHandler);
+		// editor.on('Change', onChangeHandler);
 
 		return () => {
+			cancelled = true;
+
 			try {
 				editor.off('keyup', onChangeHandler);
 				editor.off('paste', onChangeHandler);
 				editor.off('cut', onChangeHandler);
-				editor.off('Change', onChangeHandler);
+				// editor.off('Change', onChangeHandler);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
@@ -263,5 +274,5 @@ const TinyMCE = (props:TinyMCEProps) => {
 	return <div style={props.style} id={rootId}/>;
 };
 
-export default TinyMCE;
+export default forwardRef(TinyMCE);
 
