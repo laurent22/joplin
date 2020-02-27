@@ -37,9 +37,9 @@ class DecryptionWorker {
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new DecryptionWorker();
-		return this.instance_;
+		if (DecryptionWorker.instance_) return DecryptionWorker.instance_;
+		DecryptionWorker.instance_ = new DecryptionWorker();
+		return DecryptionWorker.instance_;
 	}
 
 	setEncryptionService(v) {
@@ -252,7 +252,12 @@ class DecryptionWorker {
 
 	async cancelTimers() {
 		this.eventEmitter_.removeAllListeners();
-		if (this.scheduleId_) clearTimeout(this.scheduleId_);
+		if (this.scheduleId_) {
+			clearTimeout(this.scheduleId_);
+			this.scheduleId_ = null;
+		}
+		this.eventEmitter_ = null;
+		DecryptionWorker.instance_ = null;
 
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
@@ -264,5 +269,7 @@ class DecryptionWorker {
 		});
 	}
 }
+
+DecryptionWorker.instance_ = null;
 
 module.exports = DecryptionWorker;

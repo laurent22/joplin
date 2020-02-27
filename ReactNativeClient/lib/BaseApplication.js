@@ -55,6 +55,10 @@ class BaseApplication {
 	}
 
 	async destroy() {
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
 		await ResourceFetcher.instance().cancelTimers();
 		await FoldersScreenUtils.cancelTimers();
 		await SearchEngine.instance().cancelTimers();

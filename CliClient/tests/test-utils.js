@@ -504,13 +504,9 @@ class TestApp extends BaseApplication {
 	}
 
 	async destroy() {
-		try {
-			await this.waitForMiddleware_();
-			this.deinitRedux();
-			await super.destroy();
-		} catch (e) {
-			console.log(e);
-		}
+		await this.waitForMiddleware_();
+		this.deinitRedux();
+		await super.destroy();
 	}
 }
 

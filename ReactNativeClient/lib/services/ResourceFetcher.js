@@ -24,9 +24,9 @@ class ResourceFetcher extends BaseService {
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new ResourceFetcher();
-		return this.instance_;
+		if (ResourceFetcher.instance_) return ResourceFetcher.instance_;
+		ResourceFetcher.instance_ = new ResourceFetcher();
+		return ResourceFetcher.instance_;
 	}
 
 	on(eventName, callback) {
@@ -251,10 +251,17 @@ class ResourceFetcher extends BaseService {
 
 	async cancelTimers() {
 		this.eventEmitter_.removeAllListeners();
-		if (this.scheduleQueueProcessIID_) clearTimeout(this.scheduleQueueProcessIID_);
+		if (this.scheduleQueueProcessIID_) {
+			clearTimeout(this.scheduleQueueProcessIID_);
+			this.scheduleQueueProcessIID_ = null;
+		}
+		this.eventEmitter_ = null;
+		ResourceFetcher.instance_ = null;
 
 		return await this.waitForAllFinished();
 	}
 }
+
+ResourceFetcher.instance_ = null;
 
 module.exports = ResourceFetcher;
