@@ -153,6 +153,7 @@ async function switchClient(id) {
 
 async function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
+	if (!databases_[id]) return;
 
 	await ItemChange.waitForAllSaved();
 
@@ -178,7 +179,6 @@ async function clearDatabase(id = null) {
 		queries.push(`DELETE FROM ${n}`);
 		queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 	}
-
 	await databases_[id].transactionExecBatch(queries);
 }
 
@@ -413,6 +413,60 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
+function id(a) {
+	return a.id;
+}
+
+function ids(a) {
+	return a.map(n => n.id);
+}
+
+function sortedIds(a) {
+	return ids(a).sort();
+}
+
+function at(a, indexes) {
+	let out = [];
+	for (let i = 0; i < indexes.length; i++) {
+		out.push(a[indexes[i]]);
+	}
+	return out;
+}
+
+async function createNTestFolders(n) {
+	let folders = [];
+	for (let i = 0; i < n; i++) {
+		let folder = await Folder.save({ title: 'folder' });
+		folders.push(folder);
+	}
+	return folders;
+}
+
+async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
+	let notes = [];
+	for (let i = 0; i < n; i++) {
+		let title_ = n > 1 ? `${title}${i}` : title;
+		let note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		notes.push(note);
+	}
+	if (tagIds) {
+		for (let i = 0; i < notes.length; i++) {
+			await Tag.setNoteTagsByIds(notes[i].id, tagIds);
+		}
+	}
+	return notes;
+}
+
+async function createNTestTags(n) {
+	let tags = [];
+	for (let i = 0; i < n; i++) {
+		let tag = await Tag.save({ title: 'tag' });
+		tags.push(tag);
+	}
+	return tags;
+}
+
+// Integration test application
 class TestApp extends BaseApplication {
 	constructor() {
 		super();
@@ -420,10 +474,11 @@ class TestApp extends BaseApplication {
 	}
 
 	async start(argv) {
-		argv = await super.start(argv);
+		await clearDatabase(); // not sure why we need this as we use our own database
+
+		argv = argv.concat(['--profile', `tests-build/profile-${uuid.create()}`]);
+		argv = await super.start(['',''].concat(argv));
 		this.initRedux();
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
 		Setting.dispatchUpdateAll();
 		await time.msleep(100);
 	}
@@ -449,13 +504,12 @@ class TestApp extends BaseApplication {
 	}
 
 	async destroy() {
-		this.deinitRedux();
 		await this.waitForMiddleware_();
+		this.deinitRedux();
 		await super.destroy();
-
 	}
 }
 
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, TestApp };
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
 

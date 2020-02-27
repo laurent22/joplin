@@ -1,40 +1,13 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes, createNTestFolders, createNTestTags } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
 
-async function createNTestFolders(n) {
-	let folders = [];
-	for (let i = 0; i < n; i++) {
-		let folder = await Folder.save({ title: 'folder' });
-		folders.push(folder);
-	}
-	return folders;
-}
-
-async function createNTestNotes(n, folder) {
-	let notes = [];
-	for (let i = 0; i < n; i++) {
-		let note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
-		notes.push(note);
-	}
-	return notes;
-}
-
-async function createNTestTags(n) {
-	let tags = [];
-	for (let i = 0; i < n; i++) {
-		let tag = await Tag.save({ title: 'tag' });
-		tags.push(tag);
-	}
-	return tags;
-}
-
-function initTestState(folders, selectedFolderIndex, notes, selectedIndexes, tags=null, selectedTagIndex=null) {
+function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags=null, selectedTagIndex=null) {
 	let state = defaultState;
 
 	if (selectedFolderIndex != null) {
@@ -46,10 +19,10 @@ function initTestState(folders, selectedFolderIndex, notes, selectedIndexes, tag
 	if (notes != null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
 	}
-	if (selectedIndexes != null) {
+	if (selectedNoteIndexes != null) {
 		let selectedIds = [];
-		for (let i = 0; i < selectedIndexes.length; i++) {
-			selectedIds.push(notes[selectedIndexes[i]].id);
+		for (let i = 0; i < selectedNoteIndexes.length; i++) {
+			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
 		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
 	}

@@ -18,9 +18,9 @@ class SearchEngine {
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new SearchEngine();
-		return this.instance_;
+		if (SearchEngine.instance_) return SearchEngine.instance_;
+		SearchEngine.instance_ = new SearchEngine();
+		return SearchEngine.instance_;
 	}
 
 	setLogger(logger) {
@@ -413,8 +413,13 @@ class SearchEngine {
 		}
 	}
 
-	async cancelTimers() {
-		if (this.scheduleSyncTablesIID_) clearTimeout(this.scheduleSyncTablesIID_);
+	async destroy() {
+		if (this.scheduleSyncTablesIID_) {
+			clearTimeout(this.scheduleSyncTablesIID_);
+			this.scheduleSyncTablesIID_ = null;
+		}
+		SearchEngine.instance_ = null;
+
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!this.syncCalls_.length) {
@@ -425,5 +430,7 @@ class SearchEngine {
 		});
 	}
 }
+
+SearchEngine.instance_ = null;
 
 module.exports = SearchEngine;
