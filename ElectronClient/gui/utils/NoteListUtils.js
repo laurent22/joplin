@@ -41,7 +41,7 @@ class NoteListUtils {
 					click: async () => {
 						props.dispatch({
 							type: 'WINDOW_COMMAND',
-							name: 'setNotebook',
+							name: 'moveToFolder',
 							noteIds: noteIds,
 						});
 					},

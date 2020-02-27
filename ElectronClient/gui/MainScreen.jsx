@@ -157,8 +157,8 @@ class MainScreenComponent extends React.Component {
 				return { value: a.id, label: a.title };
 			})
 				.sort((a, b) => {
-					// sensitivity accent will treat accented characters as differemt
-					// but treats caps as equal
+				// sensitivity accent will treat accented characters as differemt
+				// but treats caps as equal
 					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
 
@@ -194,7 +194,7 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
-		} else if (command.name === 'setNotebook') {
+		} else if (command.name === 'moveToFolder') {
 			const folderItems = this.props.folders;
 			const startFolders = folderItems
 				.map(a => {
@@ -203,18 +203,14 @@ class MainScreenComponent extends React.Component {
 
 			this.setState({
 				promptOptions: {
-					label: _('Assign Notebook:'),
+					label: _('Move to Notebook:'),
 					inputType: 'dropdown',
-					value: startFolders[0],
+					value: '',
 					autocomplete: startFolders,
 					onClose: async answer => {
 						if (answer != null) {
-							if (command.noteIds.length === 1) {
-								await Note.moveToFolder(command.noteIds[0], answer.value);
-							} else {
-								for (let i = 0; i < command.noteIds.length; i++) {
-									await Note.moveToFolder(command.noteIds[i], answer.value);
-								}
+							for (let i = 0; i < command.noteIds.length; i++) {
+								await Note.moveToFolder(command.noteIds[i], answer.value);
 							}
 						}
 						this.setState({ promptOptions: null });
