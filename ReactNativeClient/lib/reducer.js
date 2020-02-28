@@ -1,6 +1,7 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
+const HistoryHelper = require('lib/services/HistoryHelper');
 
 const defaultState = {
 	notes: [],
@@ -49,7 +50,8 @@ const defaultState = {
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
-	historyNotes: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
 	plugins: {},
 };
 
@@ -192,6 +194,15 @@ function handleItemDelete(state, action) {
 	let newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
+	if (listKey === 'notes') {
+		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.id != action.id);
+		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.id != action.id);
+	}
+	if (listKey === 'folders') {
+		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.parent_id != action.id);
+		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.parent_id != action.id);
+	}
+
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
@@ -252,9 +263,24 @@ function defaultNotesParentType(state, exclusion) {
 
 function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let newState = Object.assign({}, state);
+
+	// Save the last note in the previous notebook so back will return to it.
+	if (action.type === 'FOLDER_SELECT') {
+		if (action.historyNoteAction) {
+			const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+			let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+			if (typeof action.historyNoteAction === 'object' && action.id != action.historyNoteAction.id) {
+				forwardHistoryNotes = [];
+				backwardHistoryNotes.push(Object.assign({}, action.historyNoteAction));
+			}
+
+			newState.backwardHistoryNotes = backwardHistoryNotes;
+			newState.forwardHistoryNotes = forwardHistoryNotes;
+		}
+	}
+
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
 		newState.notesParentType = defaultNotesParentType(state, 'Folder');
@@ -264,7 +290,6 @@ function changeSelectedFolder(state, action, options = null) {
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
-	if (options.clearNoteHistory) newState.historyNotes = [];
 	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
@@ -284,22 +309,39 @@ function recordLastSelectedNoteIds(state, noteIds) {
 
 function changeSelectedNotes(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
 
-	// const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
-
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
-		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
+
+
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
+
+		if (action.historyNoteAction) {
+			const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+			let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+			if (typeof action.historyNoteAction === 'object' && action.id != action.historyNoteAction.id) {
+				forwardHistoryNotes = [];
+				backwardHistoryNotes.push(Object.assign({}, action.historyNoteAction));
+			} else if (action.historyNoteAction === 'pop') {
+				forwardHistoryNotes.push({ id: action.prevNoteId, parent_id: action.prevFolderId });
+				backwardHistoryNotes.pop();
+			} else if (action.historyNoteAction === 'push') {
+				backwardHistoryNotes.push({ id: action.prevNoteId, parent_id: action.prevFolderId });
+				forwardHistoryNotes.pop();
+			}
+			newState.backwardHistoryNotes = backwardHistoryNotes;
+			newState.forwardHistoryNotes = forwardHistoryNotes;
+		}
+
+		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return newState;
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -331,8 +373,6 @@ function changeSelectedNotes(state, action, options = null) {
 	}
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
-
-	if (options.clearNoteHistory) newState.historyNotes = [];
 
 	return newState;
 }
@@ -411,24 +451,9 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
+				newState = changeSelectedFolder(state, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
-
-				if (action.historyNoteAction) {
-					const historyNotes = newState.historyNotes.slice();
-					if (typeof action.historyNoteAction === 'object') {
-						historyNotes.push(Object.assign({}, action.historyNoteAction));
-					} else if (action.historyNoteAction === 'pop') {
-						historyNotes.pop();
-					}
-					newState.historyNotes = historyNotes;
-				} else if (newState !== state) {
-					// Clear the note history if folder and selected note have actually been changed. For example
-					// they won't change if they are already selected. That way, the "Back" button to go to the
-					// previous note wll stay.
-					newState.historyNotes = [];
-				}
+				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
 
@@ -687,7 +712,19 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Search';
 			}
+
+			var currentNote = HistoryHelper.getNoteAction(state.selectedNoteIds, state.notes);
+			if (currentNote) {
+				if (state.backwardHistoryNotes.length === 0) {
+					newState.backwardHistoryNotes.push(currentNote);
+				} else if (state.backwardHistoryNotes[state.backwardHistoryNotes.length-1].id != currentNote.id) {
+					newState.backwardHistoryNotes.push(currentNote);
+				}
+			}
+
 			newState.selectedNoteIds = [];
+
+
 			break;
 
 		case 'APP_STATE_SET':

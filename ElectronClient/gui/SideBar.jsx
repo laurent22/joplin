@@ -15,6 +15,7 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const HistoryHelper = require('lib/services/HistoryHelper');
 
 class SideBarComponent extends React.Component {
 	constructor() {
@@ -413,6 +414,7 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
+			historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
 		});
 	}
 
@@ -490,9 +492,7 @@ class SideBarComponent extends React.Component {
 					onContextMenu={event => this.itemContextMenu(event)}
 					style={style}
 					folderid={folder.id}
-					onClick={() => {
-						this.folderItem_click(folder);
-					}}
+					onClick={() => this.folderItem_click(folder)}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
 					{itemTitle} {noteCount}
@@ -850,6 +850,8 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,
+		selectedNoteIds: state.selectedNoteIds,
+		notes: state.notes,
 	};
 };
 

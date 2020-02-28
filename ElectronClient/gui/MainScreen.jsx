@@ -20,6 +20,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
+const HistoryHelper = require('lib/services/HistoryHelper');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -140,6 +141,7 @@ class MainScreenComponent extends React.Component {
 								this.props.dispatch({
 									type: 'FOLDER_SELECT',
 									id: folder.id,
+									historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
 								});
 							}
 						}
@@ -669,6 +671,7 @@ const mapStateToProps = state => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
 		templates: state.templates,
+		selectedNoteIds: state.selectedNoteIds,
 	};
 };
 

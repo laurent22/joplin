@@ -9,6 +9,7 @@ const Folder = require('lib/models/Folder');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords } = require('lib/string-utils.js');
+const HistoryHelper = require('lib/services/HistoryHelper');
 
 const PLUGIN_NAME = 'gotoAnything';
 const itemHeight = 60;
@@ -218,6 +219,7 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
+				historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -228,6 +230,7 @@ class Dialog extends React.PureComponent {
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
+				historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
 			});
 		}
 	}
@@ -347,6 +350,8 @@ const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
 		theme: state.settings.theme,
+		selectedNoteIds: state.selectedNoteIds,
+		notes: state.notes,
 	};
 };
 
