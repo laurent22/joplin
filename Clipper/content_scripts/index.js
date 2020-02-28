@@ -351,11 +351,15 @@
 			};
 		};
 
+		// adding a footer to included the url clipped
+		let url = pageLocationOrigin() + location.pathname + location.search;
+		let footer = "<br>----------------------------------<br> clipped from : " + url;
+
 		if (command.name === 'simplifiedPageHtml') {
 
 			let article = null;
 			try {
-				article = readabilityProcess();
+				article = readabilityProcess()
 			} catch (error) {
 				console.warn(error);
 				console.warn('Sending full page HTML instead');
@@ -364,7 +368,7 @@
 				response.warning = 'Could not retrieve simplified version of page - full page has been saved instead.';
 				return response;
 			}
-			return clippedContentResponse(article.title, article.body, getImageSizes(document), getAnchorNames(document));
+			return clippedContentResponse(article.title, article.body + footer, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'isProbablyReaderable') {
 
@@ -385,7 +389,7 @@
 			cleanUpElement(convertToMarkup, cleanDocument, imageSizes, imageIndexes);
 
 			const stylesheets = convertToMarkup === 'html' ? getStyleSheets(document) : null;
-			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML, imageSizes, getAnchorNames(document), stylesheets);
+			return clippedContentResponse(pageTitle(), cleanDocument.innerHTML + footer, imageSizes, getAnchorNames(document), stylesheets);
 
 		} else if (command.name === 'selectedHtml') {
 
@@ -407,7 +411,7 @@
 			const imageSizes = getImageSizes(document, true);
 			const imageIndexes = {};
 			cleanUpElement(convertToMarkup, container, imageSizes, imageIndexes);
-			return clippedContentResponse(pageTitle(), container.innerHTML, getImageSizes(document), getAnchorNames(document));
+			return clippedContentResponse(pageTitle(), container.innerHTML + footer, getImageSizes(document), getAnchorNames(document));
 
 		} else if (command.name === 'screenshot') {
 
