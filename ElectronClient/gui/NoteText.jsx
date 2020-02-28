@@ -993,7 +993,7 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').addEventListener('keydown', this.onEditorKeyDown_);
 			document.querySelector('#note-editor').addEventListener('contextmenu', this.onEditorContextMenu_);
 
-			const lineLeftSpaces = function (line) {
+			const lineLeftSpaces = function(line) {
 				let output = '';
 				for (let i = 0; i < line.length; i++) {
 					if ([' ', '\t'].indexOf(line[i]) >= 0) {
@@ -1008,7 +1008,7 @@ class NoteTextComponent extends React.Component {
 			// Disable Markdown auto-completion (eg. auto-adding a dash after a line with a dash.
 			// https://github.com/ajaxorg/ace/issues/2754
 			const that = this; // The "this" within the function below refers to something else
-			this.editor_.editor.getSession().getMode().getNextLineIndent = function (state, line) {
+			this.editor_.editor.getSession().getMode().getNextLineIndent = function(state, line) {
 				const ls = that.state.lastKeys;
 				if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
 
@@ -1181,8 +1181,7 @@ class NoteTextComponent extends React.Component {
 		} else {
 			this.setState({
 				showLocalSearch: true,
-				localSearch: Object.assign({}, this.localSearchDefaultState)
-			});
+				localSearch: Object.assign({}, this.localSearchDefaultState) });
 		}
 
 		this.props.dispatch({
@@ -1457,14 +1456,10 @@ class NoteTextComponent extends React.Component {
 			// Add the number of newlines to the row
 			// and add the length of the final line to the column (for strings with no newlines this is the string length)
 			const newRange = {
-				start: {
-					row: r.start.row + str1Split.length - 1,
-					column: r.start.column + str1Split[str1Split.length - 1].length
-				},
-				end: {
-					row: r.end.row + str1Split.length - 1,
-					column: r.end.column + str1Split[str1Split.length - 1].length
-				},
+				start: { row: r.start.row + str1Split.length - 1,
+					column: r.start.column + str1Split[str1Split.length - 1].length },
+				end: { row: r.end.row + str1Split.length - 1,
+					column: r.end.column + str1Split[str1Split.length - 1].length },
 			};
 
 			if (replacementText !== null) {
@@ -1555,7 +1550,7 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
-	addListItem(string1, string2 = '', defaultText = '', byLine = false) {
+	addListItem(string1, string2 = '', defaultText = '', byLine=false) {
 		let newLine = '\n';
 		const range = this.selectionRange_;
 		if (!range || (range.start.row === range.end.row && !this.selectionRangeCurrentLine())) {
@@ -1588,11 +1583,9 @@ class NoteTextComponent extends React.Component {
 	commandTextHorizontalRule() {
 		this.addListItem('* * *');
 	}
-	// const url = await dialogs.prompt(_('Insert Hyperlink'));
 
 	async commandTextLink() {
-		const formValues = (await dialogs.promptUrl(_('Insert Hyperlink')));
-		console.log(formValues);
+		const formValues= (await dialogs.promptUrl(_('Insert Hyperlink')));
 		try {
 			this.wrapSelectionWithStrings(`[${formValues.value.title}`, `](${formValues.value.url})`);
 		} catch (error) {
@@ -1978,7 +1971,7 @@ class NoteTextComponent extends React.Component {
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
 			color: theme.textStyle.color,
-			fontSize: theme.textStyle.fontSize * 1.25 * 1.5,
+			fontSize: theme.textStyle.fontSize * 1.25 *1.5,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
@@ -2001,7 +1994,7 @@ class NoteTextComponent extends React.Component {
 			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom - tagStyle.height - tagStyle.marginBottom;
 		} else {
 			toolbarStyle.marginBottom = tagStyle.marginBottom,
-				bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom;
+			bottomRowHeight = rootStyle.height - titleBarStyle.height - titleBarStyle.marginBottom - titleBarStyle.marginTop - theme.toolbarHeight - toolbarStyle.marginTop - toolbarStyle.marginBottom;
 		}
 
 		bottomRowHeight -= searchBarHeight;
@@ -2150,7 +2143,7 @@ class NoteTextComponent extends React.Component {
 				VimApi.CodeMirror.Vim.defineEx('write', 'w', save);
 			}
 		};
-		const onLoad = () => { };
+		const onLoad = () => {};
 		const editor = (
 			<AceEditor
 				value={body}
@@ -2179,8 +2172,7 @@ class NoteTextComponent extends React.Component {
 				// Enable/Disable the autoclosing braces
 				setOptions={{
 					behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
-					useSoftTabs: false
-				}}
+					useSoftTabs: false }}
 				// Disable warning: "Automatically scrolling cursor into view after
 				// selection change this will be disabled in the next version set
 				// editor.$blockScrolling = Infinity to disable this message"
