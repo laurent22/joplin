@@ -83,14 +83,13 @@ class HeaderComponent extends React.Component {
 		}
 
 		if (this.props.zoomFactor !== prevProps.zoomFactor || this.props.size !== prevProps.size) {
-			const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
-			const showButtonLabels = !mediaQuery.matches;
+			this.determineButtonLabelState();
+		}
+	}
 
-			if (this.state.showButtonLabels !== showButtonLabels) {
-				this.setState({
-					showButtonLabels: !mediaQuery.matches,
-				});
-			}
+	componentDidMount() {
+		if (this.state.showButtonLabels == undefined) {
+			this.determineButtonLabelState();
 		}
 	}
 
@@ -98,6 +97,17 @@ class HeaderComponent extends React.Component {
 		if (this.hideSearchUsageLinkIID_) {
 			clearTimeout(this.hideSearchUsageLinkIID_);
 			this.hideSearchUsageLinkIID_ = null;
+		}
+	}
+
+	determineButtonLabelState() {
+		const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
+		const showButtonLabels = !mediaQuery.matches;
+
+		if (this.state.showButtonLabels !== showButtonLabels) {
+			this.setState({
+				showButtonLabels: !mediaQuery.matches,
+			});
 		}
 	}
 
