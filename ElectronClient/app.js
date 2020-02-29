@@ -281,8 +281,8 @@ class Application extends BaseApplication {
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
-			const viewer = newState.noteVisiblePanes[0];
-			this.updateMenuItemStates(viewer);
+			const layout = newState.noteVisiblePanes[0];
+			this.updateMenuItemStates(layout);
 		}
 
 		if (['SIDEBAR_VISIBILITY_TOGGLE', 'SIDEBAR_VISIBILITY_SET'].indexOf(action.type) >= 0) {
@@ -294,8 +294,8 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
-			const viewer = newState.noteVisiblePanes[0];
-			this.updateMenuItemStates(viewer, newState);
+			const layout = newState.noteVisiblePanes[0];
+			this.updateMenuItemStates(layout, newState);
 		}
 
 		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
@@ -1169,7 +1169,7 @@ class Application extends BaseApplication {
 		this.lastMenuScreen_ = screen;
 	}
 
-	async updateMenuItemStates(viewer, state = null) {
+	async updateMenuItemStates(layout, state = null) {
 		if (!this.lastMenuScreen_) return;
 		if (!this.store() && !state) return;
 
@@ -1181,8 +1181,8 @@ class Application extends BaseApplication {
 		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
-			const isHtmlNote = !!note && note.markup_language !== MarkupToHtml.MARKUP_LANGUAGE_HTML;
-			menuItem.enabled = isHtmlNote && viewer !== 'viewer';
+			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML;
+			menuItem.enabled = !isHtmlNote && layout !== 'viewer' && !!note;
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
