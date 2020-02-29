@@ -561,6 +561,7 @@ class Note extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
 			note: note,
+			provisional: !!options.provisional,
 		});
 
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {

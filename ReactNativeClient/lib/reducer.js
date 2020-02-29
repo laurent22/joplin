@@ -32,7 +32,6 @@ const defaultState = {
 	sharedData: null,
 	appState: 'starting',
 	hasDisabledSyncItems: false,
-	newNote: null,
 	customCss: '',
 	templates: [],
 	collapsedFolderIds: [],
@@ -51,6 +50,7 @@ const defaultState = {
 	},
 	historyNotes: [],
 	plugins: {},
+	provisionalNoteIds: [],
 };
 
 const stateUtils = {};
@@ -291,19 +291,15 @@ function changeSelectedNotes(state, action, options = null) {
 	if (action.ids) noteIds = action.ids;
 	if (action.noteId) noteIds = [action.noteId];
 
-	// const noteIds = 'id' in action ? (action.id ? [action.id] : []) : action.ids;
-
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
 		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
-		newState.newNote = null;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
-		newState.newNote = null;
 	} else if (action.type === 'NOTE_SELECT_REMOVE') {
 		if (!noteIds.length) return state; // Nothing to unselect
 		if (state.selectedNoteIds.length <= 1) return state; // Cannot unselect the last note
@@ -315,7 +311,6 @@ function changeSelectedNotes(state, action, options = null) {
 			newSelectedNoteIds.push(id);
 		}
 		newState.selectedNoteIds = newSelectedNoteIds;
-		newState.newNote = null;
 	} else if (action.type === 'NOTE_SELECT_TOGGLE') {
 		if (!noteIds.length) return state;
 
@@ -324,8 +319,6 @@ function changeSelectedNotes(state, action, options = null) {
 		} else {
 			newState = changeSelectedNotes(state, { type: 'NOTE_SELECT_ADD', id: noteIds[0] });
 		}
-
-		newState.newNote = null;
 	} else {
 		throw new Error('Unreachable');
 	}
@@ -512,11 +505,32 @@ const reducer = (state = defaultState, action) => {
 					if (!newNotes.length) newIndex = -1;
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
+
+				if (action.provisional) {
+					newState.provisionalNoteIds.push(modNote.id);
+				} else {
+					const idx = newState.provisionalNoteIds.indexOf(modNote.id);
+					if (idx >= 0) {
+						const t = newState.provisionalNoteIds.slice();
+						t.splice(idx, 1);
+						newState.provisionalNoteIds = t;
+					}
+				}
 			}
 			break;
 
 		case 'NOTE_DELETE':
-			newState = handleItemDelete(state, action);
+
+			{
+				newState = handleItemDelete(state, action);
+
+				const idx = newState.provisionalNoteIds.indexOf(action.id);
+				if (idx >= 0) {
+					const t = newState.provisionalNoteIds.slice();
+					t.splice(idx, 1);
+					newState.provisionalNoteIds = t;
+				}
+			}
 			break;
 
 		case 'TAG_DELETE':
@@ -698,15 +712,6 @@ const reducer = (state = defaultState, action) => {
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
 			newState = Object.assign({}, state);
 			newState.hasDisabledSyncItems = true;
-			break;
-
-		case 'NOTE_SET_NEW_ONE':
-			newState = Object.assign({}, state);
-			newState.newNote = action.item;
-			if (newState.selectedNoteIds.length > 1) {
-				newState.selectedNoteIds = newState.selectedNoteIds.slice();
-				newState.selectedNoteIds = [newState.selectedNoteIds[0]];
-			}
 			break;
 
 		case 'CLIPPER_SERVER_SET':

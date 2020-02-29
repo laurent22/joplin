@@ -96,15 +96,15 @@ class MainScreenComponent extends React.Component {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
-			const newNote = {
+			const newNote = await Note.save({
 				parent_id: folderId,
-				template: template,
 				is_todo: isTodo ? 1 : 0,
-			};
+				template: template,
+			}, { provisional: true });
 
 			this.props.dispatch({
-				type: 'NOTE_SET_NEW_ONE',
-				item: newNote,
+				type: 'NOTE_SELECT',
+				id: newNote.id,
 			});
 		};
 
