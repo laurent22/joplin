@@ -177,4 +177,19 @@ describe('models_Folder', function() {
 		expect(foldersById[f4.id].note_count).toBe(0);
 	}));
 
+	it('should recursively find folder path', asyncTest(async () => {
+
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+
+		const folders = await Folder.all();
+		const folderPath = await Folder.folderPath(folders, f3.id);
+
+		expect(folderPath.length).toBe(3);
+		expect(folderPath[0].id).toBe(f1.id);
+		expect(folderPath[1].id).toBe(f2.id);
+		expect(folderPath[2].id).toBe(f3.id);
+	}));
+
 });
