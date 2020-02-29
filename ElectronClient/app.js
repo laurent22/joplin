@@ -960,6 +960,7 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					id: 'toggleLayout',
 					label: _('Toggle editor layout'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+L',
@@ -1180,8 +1181,8 @@ class Application extends BaseApplication {
 			if (!menuItem) continue;
 			menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
-		
-		const toggleLayout = Menu.getApplicationMenu().getMenuItemById('view:toggle');
+
+		const toggleLayout = Menu.getApplicationMenu().getMenuItemById('view:toggleLayout');
 		toggleLayout.enabled = note !== null ? true : false;
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
