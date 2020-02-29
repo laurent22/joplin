@@ -435,6 +435,32 @@ class Setting extends BaseModel {
 			'style.sidebar.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 			'style.noteList.width': { value: 150, minimum: 80, maximum: 400, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'] },
 
+			'layout.folderList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Factor of screen Folder List covers'),
+			},
+			'layout.noteList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Factor of screen Note List covers'),
+			},
+			'layout.note.factor': {
+				value: 2,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Factor of screen Note covers'),
+				description: () => _('The factor properties sets how the respective items will grow or shrink to fit the available space in their container with respect to the other items. Thus an item with a factor of "2" will take twice as much space as an item with a factor of "1".'),
+			},
+
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
 			// serve as a customizable Setting. But because the Setting page is auto-
