@@ -193,7 +193,10 @@ reg.db = () => {
 };
 
 reg.cancelTimers = async () => {
-	if (this.recurrentSyncId_) clearTimeout(this.recurrentSyncId_);
+	if (this.recurrentSyncId_) {
+		clearTimeout(this.recurrentSyncId_);
+		this.recurrentSyncId_ = null;
+	}
 	return new Promise((resolve) => {
 		const iid = setInterval(() => {
 			if (!reg.syncCalls_.length) {

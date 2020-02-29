@@ -5,6 +5,7 @@
   "version": "0.8.0",
   "private": true,
   "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "start-ios": "react-native run-ios",
     "start-android": "react-native run-android",
     "postinstall": "jetify && npm run build",

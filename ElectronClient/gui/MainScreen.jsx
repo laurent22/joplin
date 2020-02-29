@@ -5,6 +5,7 @@ const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
+const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
 const FolderPropertiesDialog = require('./FolderPropertiesDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
@@ -48,6 +49,10 @@ class MainScreenComponent extends React.Component {
 		this.setState({ folderPropertiesDialogOptions: {} });
 	}
 
+	noteContentPropertiesDialog_close() {
+		this.setState({ noteContentPropertiesDialogOptions: {} });
+	}
+
 	shareNoteDialog_close() {
 		this.setState({ shareNoteDialogOptions: {} });
 	}
@@ -62,6 +67,7 @@ class MainScreenComponent extends React.Component {
 			notePropertiesDialogOptions: {},
 			dialogPropertiesDialogOptions: {},
 			folderPropertiesDialogOptions: {},
+			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
 		});
 	}
@@ -265,6 +271,14 @@ class MainScreenComponent extends React.Component {
 				folderPropertiesDialogOptions: {
 					folderId: command.folderId,
 					visible: true,
+				},
+			});
+		} else if (command.name === 'commandContentProperties') {
+			this.setState({
+				noteContentPropertiesDialogOptions: {
+					visible: true,
+					text: command.text,
+					lines: command.lines,
 				},
 			});
 		} else if (command.name === 'commandShareNoteDialog') {
@@ -603,6 +617,7 @@ class MainScreenComponent extends React.Component {
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const folderPropertiesDialogOptions = this.state.folderPropertiesDialogOptions;
+		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
 
@@ -610,6 +625,7 @@ class MainScreenComponent extends React.Component {
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
 
+				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} lines={noteContentPropertiesDialogOptions.lines}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
 				{folderPropertiesDialogOptions.visible && <FolderPropertiesDialog theme={this.props.theme} folderId={folderPropertiesDialogOptions.folderId} onClose={this.folderPropertiesDialog_close}/>}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}

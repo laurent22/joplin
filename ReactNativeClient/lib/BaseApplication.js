@@ -55,10 +55,19 @@ class BaseApplication {
 	}
 
 	async destroy() {
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
+		await ResourceFetcher.instance().destroy();
+		await SearchEngine.instance().destroy();
+		await DecryptionWorker.instance().destroy();
 		await FoldersScreenUtils.cancelTimers();
-		await SearchEngine.instance().cancelTimers();
-		await DecryptionWorker.instance().cancelTimers();
 		await reg.cancelTimers();
+
+		this.eventEmitter_.removeAllListeners();
+		BaseModel.db_ = null;
+		reg.setDb(null);
 
 		this.logger_ = null;
 		this.dbLogger_ = null;

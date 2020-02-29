@@ -53,6 +53,11 @@ module.exports = {
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
 
+		// Checks rules of Hooks
+		"react-hooks/rules-of-hooks": "error",
+		// Checks effect dependencies
+		"react-hooks/exhaustive-deps": "error",
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------
@@ -90,5 +95,6 @@ module.exports = {
 	"plugins": [
 		"react",
 		"@typescript-eslint",
+		"react-hooks"
 	],
 };

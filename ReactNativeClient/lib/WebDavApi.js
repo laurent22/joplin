@@ -6,6 +6,7 @@ const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
+
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
 // implementations use the same namespaces. If not, extra processing can be done in `nameProcessor`, for
@@ -31,6 +32,7 @@ class WebDavApi {
 			options.headers = Object.assign({}, options.headers);
 			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
 			delete options.method;
+			delete options.agent;
 			output.push(JSON.stringify(options));
 			return output.join(' ');
 		};
@@ -359,8 +361,10 @@ class WebDavApi {
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
-
 		const url = `${this.baseUrl()}/${path}`;
+
+		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
+
 
 		let response = null;
 
