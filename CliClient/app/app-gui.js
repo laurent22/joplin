@@ -4,6 +4,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const Resource = require('lib/models/Resource.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { splitCommandString } = require('lib/string-utils.js');
@@ -243,9 +244,9 @@ class AppGui {
 
 		const hLayout = new HLayoutWidget();
 		hLayout.name = 'hLayout';
-		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteLayout, { type: 'stretch', factor: 2 });
+		hLayout.addChild(folderList, { type: 'stretch', factor: Setting.value('layout.folderList.factor') });
+		hLayout.addChild(noteList, { type: 'stretch', factor: Setting.value('layout.noteList.factor') });
+		hLayout.addChild(noteLayout, { type: 'stretch', factor: Setting.value('layout.note.factor') });
 
 		const vLayout = new VLayoutWidget();
 		vLayout.name = 'vLayout';
