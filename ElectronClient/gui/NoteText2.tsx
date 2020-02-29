@@ -38,6 +38,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 // immediately (no scheduling) once the user starts modifying it so that we have an ID
 // to work with.
 
+// TODO: Change new note logic - create note right away. And delete it if user closes it without making changes
 // TODO: preserve image size
 // TODO: handle HTML notes
 // TODO: add indicator showing that note has been saved or not
@@ -105,7 +106,51 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
-const saveNoteActionQueue = new AsyncActionQueue(1000);
+const htmlToMarkdown = async (html:string):Promise<string> => {
+	const htmlToMd = new HtmlToMd();
+	let md = htmlToMd.parse(html);
+	md = await Note.replaceResourceExternalToInternalLinks(md, { useAbsolutePaths: true });
+	return md;
+};
+
+const formNoteToNote = async (formNote:FormNote):Promise<any> => {
+	const newNote:any = Object.assign({}, formNote);
+
+	if ('bodyEditorContent' in formNote) {
+		const html = await editorContentToHtml(formNote.bodyEditorContent);
+		newNote.body = await htmlToMarkdown(html);
+	}
+
+	delete newNote.bodyEditorContent;
+	delete newNote.fromNewNote;
+
+	return newNote;
+};
+
+const attachResources = async () => {
+	const filePaths = bridge().showOpenDialog({
+		properties: ['openFile', 'createDirectory', 'multiSelections'],
+	});
+	if (!filePaths || !filePaths.length) return [];
+
+	const output = [];
+
+	for (const filePath of filePaths) {
+		try {
+			const resource = await shim.createResourceFromPath(filePath);
+			output.push({
+				item: resource,
+				markdownTag: Resource.markdownTag(resource),
+			});
+		} catch (error) {
+			bridge().showErrorMessageBox(error.message);
+		}
+	}
+
+	return output;
+};
+
+const saveNoteActionQueue = new AsyncActionQueue(2000);
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
@@ -115,32 +160,6 @@ function NoteText2(props:NoteTextProps) {
 	const bodyWillChange = useRef<boolean>(false);
 
 	const styles = styles_(props);
-
-	const htmlToMarkdown = useCallback(async (html:string):Promise<string> => {
-		const htmlToMd = new HtmlToMd();
-		let md = htmlToMd.parse(html);
-		md = await Note.replaceResourceExternalToInternalLinks(md, { useAbsolutePaths: true });
-		return md;
-	}, []);
-
-	const formNoteToNote = async (formNote:FormNote):Promise<any> => {
-		const newNote:any = Object.assign({}, formNote);
-
-		if ('bodyEditorContent' in formNote) {
-			const html = await editorContentToHtml(formNote.bodyEditorContent);
-			newNote.body = await htmlToMarkdown(html);
-		}
-
-		delete newNote.bodyEditorContent;
-		delete newNote.fromNewNote;
-
-		return newNote;
-	};
-
-	const saveNoteNow = useCallback(async (fn:FormNote = null) => {
-		scheduleSaveNote(fn ? fn : formNote);
-		return saveNoteActionQueue.waitForAllDone();
-	}, [formNote]);
 
 	const scheduleSaveNote = (formNote:FormNote) => {
 		console.info('Scheduling...', formNote);
@@ -162,6 +181,11 @@ function NoteText2(props:NoteTextProps) {
 		};
 
 		saveNoteActionQueue.push(makeAction(formNote));
+	};
+
+	const saveNoteNow = async (fn:FormNote = null) => {
+		scheduleSaveNote(fn ? fn : formNote);
+		return saveNoteActionQueue.waitForAllDone();
 	};
 
 	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
@@ -222,7 +246,7 @@ function NoteText2(props:NoteTextProps) {
 
 			console.info('Loading existing note', props.noteId);
 
-			saveNoteIfChanged();
+			saveNoteIfChangedRef.current();
 
 			const fetchNote = async () => {
 				const n = await Note.load(props.noteId);
@@ -253,7 +277,7 @@ function NoteText2(props:NoteTextProps) {
 
 			console.info('Loading new note');
 
-			saveNoteIfChanged();
+			saveNoteIfChangedRef.current();
 
 			setFormNote({
 				id: null,
@@ -269,32 +293,7 @@ function NoteText2(props:NoteTextProps) {
 		return () => {};
 	}, [props.noteId, props.newNote, formNote]);
 
-	const attachResources = useCallback(async () => {
-		const filePaths = bridge().showOpenDialog({
-			properties: ['openFile', 'createDirectory', 'multiSelections'],
-		});
-		if (!filePaths || !filePaths.length) return [];
-
-		await saveNoteNow();
-
-		const output = [];
-
-		for (const filePath of filePaths) {
-			try {
-				const resource = await shim.createResourceFromPath(filePath);
-				output.push({
-					item: resource,
-					markdownTag: Resource.markdownTag(resource),
-				});
-			} catch (error) {
-				bridge().showErrorMessageBox(error.message);
-			}
-		}
-
-		return output;
-	}, [formNote]);
-
-	const onFieldChange = useCallback((field:string, value:any) => {
+	const onFieldChange = (field:string, value:any) => {
 		const change = field === 'body' ? {
 			bodyEditorContent: value,
 		} : {
@@ -312,7 +311,7 @@ function NoteText2(props:NoteTextProps) {
 		} else {
 			scheduleSaveNote(newNote);
 		}
-	}, [formNote]);
+	};// , [formNote, saveNoteNow, scheduleSaveNote]);
 
 	const onBodyChange = (event:OnChangeEvent) => onFieldChange('body', event.content);
 

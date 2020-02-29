@@ -1,6 +1,15 @@
+export interface QueueItemAction {
+	(): void,
+}
+
+export interface QueueItem {
+	action: QueueItemAction,
+	context: any,
+}
+
 export default class AsyncActionQueue {
 
-	queue_:any[] = [];
+	queue_:QueueItem[] = [];
 	interval_:number;
 	scheduleProcessingIID_:any = null;
 	processing_ = false;
@@ -10,9 +19,16 @@ export default class AsyncActionQueue {
 		this.interval_ = interval;
 	}
 
-	push(action:Function) {
-		this.queue_.push({ action: action });
+	push(action:QueueItemAction, context:any = null) {
+		this.queue_.push({
+			action: action,
+			context: context,
+		});
 		this.scheduleProcessing();
+	}
+
+	get queue():QueueItem[] {
+		return this.queue_;
 	}
 
 	private scheduleProcessing(interval:number = null) {
