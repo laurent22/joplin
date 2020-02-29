@@ -222,4 +222,52 @@ describe('models_Tag', function() {
 		expect(tag1).not.toBeDefined();
 	}));
 
+	it('renaming should change prefix in descendant tags', asyncTest(async () => {
+		let tag1 = await Tag.save({ title: 'tag1/subtag1/subsubtag' });
+		let subtag2 = await Tag.save({ title: 'tag1/subtag2' });
+		let subtag1 = await Tag.loadByTitle('tag1/subtag1');
+		let tag1_parent = await Tag.loadByTitle('tag1');
+
+		await Tag.rename(tag1_parent, 'tag2');
+
+		expect((await Tag.load(tag1_parent.id)).title).toBe('tag2');
+		expect((await Tag.load(tag1.id)).title).toBe('tag2/subtag1/subsubtag');
+		expect((await Tag.load(subtag1.id)).title).toBe('tag2/subtag1');
+		expect((await Tag.load(subtag2.id)).title).toBe('tag2/subtag2');
+	}));
+
+	it('renaming parent prefix should branch-out to two hierarchies', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note1 = await Note.save({ title: 'my note 1', parent_id: folder1.id });
+		let note2 = await Note.save({ title: 'my note 2', parent_id: folder1.id });
+		let subsubtag1 = await Tag.save({ title: 'tag1/subtag1/subsubtag1' });
+		let subsubtag2 = await Tag.save({ title: 'tag1/subtag1/subsubtag2' });
+		await Tag.addNote(subsubtag1.id, note1.id);
+		await Tag.addNote(subsubtag2.id, note2.id);
+
+		await Tag.rename(subsubtag1, 'tag1/subtag2/subsubtag1');
+
+		let subtag1 = await Tag.loadByTitle('tag1/subtag1');
+		let subtag2 = await Tag.loadByTitle('tag1/subtag2');
+		expect(subtag1).toBeDefined();
+		expect(subtag2).toBeDefined();
+	}));
+
+	it('renaming parent prefix to existing tag should remove unused old tag', asyncTest(async () => {
+		let subsubtag1 = await Tag.save({ title: 'tag1/subtag1/subsubtag1' });
+		let subsubtag2 = await Tag.save({ title: 'tag1/subtag2/subsubtag2' });
+
+		await Tag.rename(subsubtag1, 'tag1/subtag2/subsubtag1');
+
+		expect((await Tag.loadByTitle('tag1/subtag1'))).not.toBeDefined();
+	}));
+
+	it('moving tag should change prefix name', asyncTest(async () => {
+		let subsubtag1 = await Tag.save({ title: 'tag1/subtag1/subsubtag1' });
+		let tag2 = await Tag.save({ title: 'tag2' });
+
+		await Tag.moveTag(subsubtag1.id, tag2.id);
+
+		expect((await Tag.load(subsubtag1.id)).title).toBe('tag2/subsubtag1');
+	}));
 });

@@ -69,6 +69,20 @@ class SideBarComponent extends React.Component {
 			}
 		};
 
+		this.onTagDragStart_ = event => {
+			const tagId = event.currentTarget.getAttribute('tagid');
+			if (!tagId) return;
+
+			event.dataTransfer.setDragImage(new Image(), 1, 1);
+			event.dataTransfer.clearData();
+			event.dataTransfer.setData('text/x-jop-tag-ids', JSON.stringify([tagId]));
+		};
+
+		this.onTagDragOver_ = event => {
+			if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
+			if (event.dataTransfer.types.indexOf('text/x-jop-tag-ids') >= 0) event.preventDefault();
+		};
+
 		this.onTagDrop_ = async event => {
 			const tagId = event.currentTarget.getAttribute('tagid');
 			const dt = event.dataTransfer;
@@ -80,6 +94,13 @@ class SideBarComponent extends React.Component {
 				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 				for (let i = 0; i < noteIds.length; i++) {
 					await Tag.addNote(tagId, noteIds[i]);
+				}
+			} else if (dt.types.indexOf('text/x-jop-tag-ids') >= 0) {
+				event.preventDefault();
+
+				const tagIds = JSON.parse(dt.getData('text/x-jop-tag-ids'));
+				for (let i = 0; i < tagIds.length; i++) {
+					await Tag.moveTag(tagIds[i], tagId);
 				}
 			}
 		};
@@ -449,7 +470,7 @@ class SideBarComponent extends React.Component {
 		const noteCount = Setting.value('showNoteCounts') ? this.noteCountElement(tag.note_count) : '';
 
 		return (
-			<div className="list-item-container" style={containerStyle} key={tag.id} onDrop={this.onTagDrop_} draggable={true} tagid={tag.id}>
+			<div className="list-item-container" style={containerStyle} key={tag.id} onDragStart={this.onTagDragStart_} onDragOver={this.onTagDragOver_} onDrop={this.onTagDrop_} draggable={true} tagid={tag.id}>
 				{expandLink}
 				<a
 					ref={anchorRef}
@@ -708,6 +729,7 @@ class SideBarComponent extends React.Component {
 		items.push(
 			this.makeHeader('tagHeader', _('Tags'), 'fa-tags', {
 				toggleblock: 1,
+				onDrop: this.onTagDrop_,
 			})
 		);
 
