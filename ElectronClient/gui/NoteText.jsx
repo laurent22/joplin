@@ -995,6 +995,23 @@ class NoteTextComponent extends React.Component {
 			const that = this; // The "this" within the function below refers to something else
 			this.editor_.editor.getSession().getMode().getNextLineIndent = function(state, line) {
 				const ls = that.state.lastKeys;
+
+				// Detects empty List Element
+				// Solves: https://github.com/laurent22/joplin/issues/2614
+
+				let regexer = /^[\d]+[.] $/;
+				if (line == '- ' || line == '* ' || line == '- [ ] ' || line== '- [x] '|| regexer.test(line)) {
+					let s = that.currentTextOffset();
+
+					const s1 = that.state.note.body.substr(0, s-(line.length+1));
+					const s2 = that.state.note.body.substr(s);
+					console.log(s1);
+					console.log(s2);
+					shared.noteComponent_change(that, 'body', s1 + s2);
+
+					return this.$getIndent(line);
+				}
+
 				if (ls.length >= 2 && ls[ls.length - 1] === 'Enter' && ls[ls.length - 2] === 'Enter') return this.$getIndent(line);
 
 				const leftSpaces = lineLeftSpaces(line);
