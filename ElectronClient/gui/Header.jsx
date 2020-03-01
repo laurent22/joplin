@@ -10,6 +10,7 @@ class HeaderComponent extends React.Component {
 		this.state = {
 			searchQuery: '',
 			showSearchUsageLink: false,
+			showButtonLabels: true,
 		};
 
 		this.scheduleSearchChangeEventIid_ = null;
@@ -88,9 +89,7 @@ class HeaderComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.state.showButtonLabels == undefined) {
-			this.determineButtonLabelState();
-		}
+		this.determineButtonLabelState();
 	}
 
 	componentWillUnmount() {
