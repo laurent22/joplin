@@ -1,7 +1,7 @@
 const React = require('react');
 
 const { connect } = require('react-redux');
-const { Platform, View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
+const { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -14,6 +14,8 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+
+Icon.loadFont();
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -41,7 +43,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
-				paddingTop: Platform.OS === 'ios' ? 15 : 0, // Extra padding for iOS because the top icons are there
 			},
 			divider: {
 				borderBottomWidth: 1,
@@ -168,7 +169,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		// Duplicate all selected notes. ensureUniqueTitle is set to true to use the
 		// original note's name as a root for the new unique identifier.
-		await Note.duplicateMultipleNotes(noteIds, {ensureUniqueTitle: true});
+		await Note.duplicateMultipleNotes(noteIds, { ensureUniqueTitle: true });
 
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 	}
@@ -198,8 +199,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Status');
 	}
 
-	warningBox_press() {
-		NavService.go('EncryptionConfig');
+	warningBox_press(event) {
+		NavService.go(event.screen);
+	}
+
+	renderWarningBox(screen, message) {
+		return (
+			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
+				<Text style={{ flex: 1 }}>{message}</Text>
+			</TouchableOpacity>
+		);
 	}
 
 	render() {
@@ -390,11 +399,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 			}
 		};
 
-		const warningComp = this.props.showMissingMasterKeyMessage ? (
-			<TouchableOpacity style={this.styles().warningBox} onPress={() => this.warningBox_press()} activeOpacity={0.8}>
-				<Text style={{ flex: 1 }}>{_('Press to set the decryption password.')}</Text>
-			</TouchableOpacity>
-		) : null;
+		const warningComps = [];
+
+		if (this.props.showMissingMasterKeyMessage) warningComps.push(this.renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
+		if (this.props.hasDisabledSyncItems) warningComps.push(this.renderWarningBox('Status', _('Some items cannot be synchronised. Press for more info.')));
 
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
@@ -450,7 +458,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{sortButtonComp}
 					{menuComp}
 				</View>
-				{warningComp}
+				{warningComps}
 				<DialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
@@ -474,6 +482,7 @@ const ScreenHeader = connect(state => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		hasDisabledSyncItems: state.hasDisabledSyncItems,
 	};
 })(ScreenHeaderComponent);
 

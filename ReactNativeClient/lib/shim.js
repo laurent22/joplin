@@ -33,7 +33,7 @@ shim.isMac = () => {
 };
 
 shim.platformName = function() {
-	if (shim.isReactNative()) return 'mobile';
+	if (shim.isReactNative()) return shim.mobilePlatform();
 	if (shim.isMac()) return 'darwin';
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
@@ -190,6 +190,9 @@ shim.Buffer = null;
 shim.openUrl = () => {
 	throw new Error('Not implemented');
 };
+shim.httpAgent = () => {
+	throw new Error('Not implemented');
+};
 shim.openOrCreateFile = () => {
 	throw new Error('Not implemented');
 };
@@ -197,11 +200,11 @@ shim.waitForFrame = () => {
 	throw new Error('Not implemented');
 };
 
-shim.injectedJs = name => '';
-
-shim.loadCssFromJs = name => {
+shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
+
+shim.injectedJs = name => '';
 
 let isTestingEnv_ = false;
 

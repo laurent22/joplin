@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head id="joplin-container-root-head">
+	<meta charset="UTF-8">
+
+	<style>
+		body {
+			overflow: hidden;
+		}
+
+		#joplin-container-content {
+			/* Needs this in case the content contains elements with absolute positioning */
+			/* Without this they would just stay at a fixed position when scrolling */
+			position: relative;
+			overflow-y: auto;
+			padding-left: 10px;
+			padding-right: 10px;
+
+			/* Note: the height is set via updateBodyHeight(). Setting it here to 100% */
+			/* won't work with some pages due to the position: relative */
+		}
+
+		mark {
+			background: #F3B717;
+			color: black;
+		}
+
+		.mark-selected {
+			background: #CF3F00;
+			color: white;
+		}
+
+		ul ul, ul ol, ol ul, ol ol   {
+			margin-bottom: 0px;			
+		}
+	</style>
+</head>
+
+<body id="joplin-container-body">
+	<div id="joplin-container-pluginAssetsContainer"></div>
+	<div id="joplin-container-markScriptContainer"></div>
+	<div id="joplin-container-content" ondragstart="return false;" ondrop="return false;"></div>
+	<script src="./lib.js"></script>
+
+	<script>
+	const ipcProxySendToHost = (methodName, arg) => {
+		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+	}
+
+	let pluginAssetsAdded_ = {};
+
+	try {
+		const contentElement = document.getElementById('joplin-container-content');
+
+		const ipc = {};
+
+		window.addEventListener('message', webviewLib.logEnabledEventHandler(event => {
+			// Here we only deal with messages that are sent from the main Electro process to the webview.
+			if (!event.data || event.data.target !== 'webview') return;
+
+			const callName = event.data.name;
+			const callData = event.data.data;
+
+			if (!ipc[callName]) {
+				console.warn('Missing IPC function:', event.data);
+			} else {
+				ipc[callName](callData);
+			}
+		}));
+		
+		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
+		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
+		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
+		// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
+		// it at any time knowing that it's not going to be changed because the content height has changed.
+		// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
+		// one second after the content has been updated.
+		//
+		// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
+		// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
+
+		let percentScroll_ = 0;
+		let checkScrollIID_ = null;
+
+		function setPercentScroll(percent) {
+			percentScroll_ = percent;
+			contentElement.scrollTop = percentScroll_ * maxScrollTop();
+		}
+
+		function percentScroll() {
+			return percentScroll_;
+		}
+
+		function restorePercentScroll() {
+			setPercentScroll(percentScroll_);
+		}
+
+		// Note that this function keeps track of what's been added so as not to add the same CSS files multiple times
+		// It also means that once an asset has been added it is never removed from the view, which in many case is
+		// desirable, but still something to keep in mind.
+		function addPluginAssets(assets) {
+			if (!assets) return;
+
+			const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
+
+			for (let i = 0; i < assets.length; i++) {
+				const asset = assets[i];
+				if (pluginAssetsAdded_[asset.name]) continue;
+				pluginAssetsAdded_[asset.name] = true;
+
+				if (asset.mime === 'application/javascript') {
+					const script = document.createElement('script');
+					script.src = asset.path;
+					pluginAssetsContainer.appendChild(script);
+				} else if (asset.mime === 'text/css') {
+					const link = document.createElement('link');
+					link.rel = 'stylesheet';
+					link.href = asset.path;
+					pluginAssetsContainer.appendChild(link);
+				}
+			}
+		}
+
+		ipc.scrollToHash = (event) => {
+			if (window.scrollToHashIID_) clearInterval(window.scrollToHashIID_);
+			window.scrollToHashIID_ = setInterval(() => {
+				if (document.readyState !== 'complete') return;
+				clearInterval(window.scrollToHashIID_);
+				const hash = event.hash.toLowerCase();
+				const e = document.getElementById(hash);
+				if (!e) {
+					console.warn('Cannot find hash', hash);
+					return;
+				}
+				e.scrollIntoView();
+
+				// Make sure the editor pane is also scrolled
+				setTimeout(() => {
+					const percent = currentPercentScroll();
+					setPercentScroll(percent);
+					ipcProxySendToHost('percentScroll', percent);
+				}, 10);
+			}, 100);
+		}
+
+		ipc.setHtml = (event) => {
+			const html = event.html;
+
+			markJsHackMarkerInserted_ = false;
+
+			updateBodyHeight();
+
+			contentElement.innerHTML = html;
+
+			let previousContentHeight = contentElement.scrollHeight;
+			let startTime = Date.now();
+			restorePercentScroll();
+
+			if (!checkScrollIID_) {
+				checkScrollIID_ = setInterval(() => {
+					const h = contentElement.scrollHeight;
+					if (h !== previousContentHeight) {
+						previousContentHeight = h;
+						restorePercentScroll();
+					}
+					if (Date.now() - startTime >= 1000) {
+						clearInterval(checkScrollIID_);
+						checkScrollIID_ = null;
+					}
+				}, 1);
+			}
+
+			addPluginAssets(event.options.pluginAssets);
+
+			if (event.options.downloadResources === 'manual') {
+				webviewLib.setupResourceManualDownload();
+			}
+
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+		}
+
+		let lastScrollEventTime = 0;
+		ipc.setPercentScroll = (event) => {
+			const percent = event.percent;
+
+			if (checkScrollIID_) {
+				clearInterval(checkScrollIID_);
+				checkScrollIID_ = null;
+			}
+
+			lastScrollEventTime = Date.now();
+			setPercentScroll(percent);
+		}
+
+		// HACK for Mark.js bug - https://github.com/julmot/mark.js/issues/127
+		let markJsHackMarkerInserted_ = false;
+		function addMarkJsSpaceHack(document) {
+			if (markJsHackMarkerInserted_) return;
+			
+			const prepareElementsForMarkJs = (elements, type) => {
+				// const markJsHackMarker_ = '&#8203; &#8203;'
+				const markJsHackMarker_ = ' ';
+				for (let i = 0; i < elements.length; i++) {
+					if (!type) {
+						elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
+					} else if (type === 'insertBefore') {
+						elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
+					}
+				}
+			}
+
+			prepareElementsForMarkJs(document.getElementsByTagName('p'));
+			prepareElementsForMarkJs(document.getElementsByTagName('div'));
+			prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
+			markJsHackMarkerInserted_ = true;
+		}
+
+		let mark_ = null;
+		let markSelectedElement_ = null;
+		function setMarkers(keywords, options = null) {
+			if (!options) options = {};
+
+			// TODO: Add support for scriptType on mobile and CLI
+
+			if (!mark_) {
+				mark_ = new Mark(document.getElementById('joplin-container-content'), {
+					exclude: ['img'],
+					acrossElements: true,
+				});
+			}
+
+			addMarkJsSpaceHack(document);
+
+			mark_.unmark()
+
+			if (markSelectedElement_) markSelectedElement_.classList.remove('mark-selected');
+
+			let selectedElement = null;
+			let elementIndex = 0;
+
+			const onEachElement = (element) => {
+				if (!('selectedIndex' in options)) return;
+
+				if (('selectedIndex' in options) && elementIndex === options.selectedIndex) {
+					markSelectedElement_ = element;
+					element.classList.add('mark-selected');
+					selectedElement = element;
+				}
+				
+				elementIndex++;
+			}
+
+			const markKeywordOptions = {
+				each: onEachElement,
+			};
+
+			if ('separateWordSearch' in options) markKeywordOptions.separateWordSearch = options.separateWordSearch;
+
+			for (let i = 0; i < keywords.length; i++) {
+				let keyword = keywords[i];
+
+				markJsUtils.markKeyword(mark_, keyword, {
+					pregQuote: pregQuote,
+					replaceRegexDiacritics: replaceRegexDiacritics,
+				}, markKeywordOptions);
+			}
+
+			ipcProxySendToHost('setMarkerCount', elementIndex);
+
+			// We only scroll the element into view if the search just happened. So when the user type the search
+			// or select the next/previous result, we scroll into view. However for other actions that trigger a
+			// re-render, we don't scroll as this is normally not wanted.
+			// This is to go around this issue: https://github.com/laurent22/joplin/issues/1833
+			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
+		}
+
+		let markLoaded_ = false;
+		ipc.setMarkers = (event) => {
+			const keywords = event.keywords;
+			const options = event.options;
+
+			if (!keywords.length && !markLoaded_) return;
+
+			if (!markLoaded_) {
+				const script = document.createElement('script');
+				script.onload = function() {
+					setMarkers(keywords, options);
+				};
+
+				script.src = '../../node_modules/mark.js/dist/mark.min.js';
+				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
+				markLoaded_ = true;
+			} else {
+				setMarkers(keywords, options);
+			}
+		}
+
+		function maxScrollTop() {
+			return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
+		}
+
+		// The body element needs to have a fixed height for the content to be scrollable
+		function updateBodyHeight() {
+			document.getElementById('joplin-container-body').style.height = window.innerHeight + 'px';
+			document.getElementById('joplin-container-content').style.height = window.innerHeight + 'px';
+		}
+
+		function currentPercentScroll() {
+			const m = maxScrollTop();
+			return m ? contentElement.scrollTop / m : 0;
+		}
+
+		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
+			// If the last scroll event was done by the user, lastScrollEventTime is set and
+			// we can use that to skip the event handling. We skip it because in that case
+			// the scroll position has already been updated. Also we add a 200ms interval
+			// because otherwise it's most likely a glitch where we called ipc.setPercentScroll
+			// but the scroll event listener has not been called.
+			if (lastScrollEventTime && Date.now() - lastScrollEventTime < 200) {
+				lastScrollEventTime = 0;
+				return;
+			}
+
+			lastScrollEventTime = 0;
+
+			const percent = currentPercentScroll();
+			setPercentScroll(percent);
+			
+			ipcProxySendToHost('percentScroll', percent);
+		}));
+
+		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
+			let element = event.target;
+
+			// To handle right clicks on resource icons
+			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
+
+			if (element && element.getAttribute('data-resource-id')) {
+				ipcProxySendToHost('contextMenu', {
+					type: element.getAttribute('src') ? 'image' : 'resource',
+					resourceId: element.getAttribute('data-resource-id'),
+				});
+			} else {
+				const selectedText = window.getSelection().toString();
+
+				if (selectedText) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'text',
+						textToCopy: selectedText,
+					});
+				} else if (event.target.getAttribute('href')) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'link',
+						textToCopy: event.target.getAttribute('href'),
+					});
+				}
+			}
+		}));
+
+		webviewLib.initialize({
+			postMessage: ipcProxySendToHost,
+		});
+
+		// Disable drag and drop otherwise it's possible to drop a URL
+		// on it and it will open in the view as a website.
+		document.addEventListener('drop', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+			e.stopPropagation();
+		}));
+		document.addEventListener('dragover', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+			e.stopPropagation();
+		}));
+		document.addEventListener('dragover', webviewLib.logEnabledEventHandler(e => {
+			e.preventDefault();
+		}));
+
+		window.addEventListener('resize', webviewLib.logEnabledEventHandler(() => {
+			updateBodyHeight();
+		}));
+
+		updateBodyHeight();
+	} catch (error) {
+		ipcProxySendToHost('error:' + JSON.stringify(webviewLib.cloneError(error)));
+		throw error;
+	}
+	</script>
+</body>
+</html>

@@ -77,6 +77,15 @@ class BaseModel {
 		throw new Error(`Unknown model type: ${type}`);
 	}
 
+	static modelNameToType(name) {
+		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
+			const e = BaseModel.typeEnum_[i];
+			const eName = e[0].substr(5).toLowerCase();
+			if (eName === name) return e[1];
+		}
+		throw new Error(`Unknown model name: ${name}`);
+	}
+
 	static hasField(name) {
 		let fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
@@ -192,8 +201,15 @@ class BaseModel {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
-		let q = this.applySqlOptions(options, `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``);
-		return this.modelSelectAll(q.sql);
+		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
+		let params = [];
+		if (options.where) {
+			sql += ` WHERE ${options.where}`;
+			if (options.whereParams) params = params.concat(options.whereParams);
+		}
+
+		let q = this.applySqlOptions(options, sql, params);
+		return this.modelSelectAll(q.sql, q.params);
 	}
 
 	static async byIds(ids, options = null) {
@@ -536,7 +552,7 @@ class BaseModel {
 	}
 }
 
-BaseModel.typeEnum_ = [['TYPE_NOTE', 1], ['TYPE_FOLDER', 2], ['TYPE_SETTING', 3], ['TYPE_RESOURCE', 4], ['TYPE_TAG', 5], ['TYPE_NOTE_TAG', 6], ['TYPE_SEARCH', 7], ['TYPE_ALARM', 8], ['TYPE_MASTER_KEY', 9], ['TYPE_ITEM_CHANGE', 10], ['TYPE_NOTE_RESOURCE', 11], ['TYPE_RESOURCE_LOCAL_STATE', 12], ['TYPE_REVISION', 13], ['TYPE_MIGRATION', 14]];
+BaseModel.typeEnum_ = [['TYPE_NOTE', 1], ['TYPE_FOLDER', 2], ['TYPE_SETTING', 3], ['TYPE_RESOURCE', 4], ['TYPE_TAG', 5], ['TYPE_NOTE_TAG', 6], ['TYPE_SEARCH', 7], ['TYPE_ALARM', 8], ['TYPE_MASTER_KEY', 9], ['TYPE_ITEM_CHANGE', 10], ['TYPE_NOTE_RESOURCE', 11], ['TYPE_RESOURCE_LOCAL_STATE', 12], ['TYPE_REVISION', 13], ['TYPE_MIGRATION', 14], ['TYPE_SMART_FILTER', 15]];
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];

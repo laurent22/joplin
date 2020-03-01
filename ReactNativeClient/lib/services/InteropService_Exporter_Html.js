@@ -4,17 +4,18 @@ const BaseModel = require('lib/BaseModel');
 const Folder = require('lib/models/Folder');
 const Note = require('lib/models/Note');
 const Setting = require('lib/models/Setting');
-const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim');
-const MarkupToHtml = require('lib/renderers/MarkupToHtml.js');
-const dataurl	 = require('dataurl');
 const { themeStyle } = require('../../theme.js');
 const { dirname } = require('lib/path-utils.js');
 const { escapeHtml } = require('lib/string-utils.js');
+const markupLanguageUtils = require('lib/markupLanguageUtils');
+const { assetsToHeaders } = require('lib/joplin-renderer');
 
 class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
-	async init(path) {
+	async init(path, options = {}) {
+		this.customCss_ = options.customCss ? options.customCss : '';
+
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
@@ -27,7 +28,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 		this.resourceDir_ = this.destDir_ ? `${this.destDir_}/_resources` : null;
 
 		await shim.fsDriver().mkdir(this.destDir_);
-		this.markupToHtml_ = new MarkupToHtml();
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 		this.resources_ = [];
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
@@ -58,21 +59,7 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
 		for (let i = 0; i < linkedResourceIds.length; i++) {
 			const id = linkedResourceIds[i];
-			const resource = await Resource.load(id);
-			let resourceContent = '';
-			const isImage = Resource.isSupportedImageMimeType(resource.mime);
-
-			if (!isImage) {
-				resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
-			} else {
-				const buffer = await shim.fsDriver().readFile(resourcePaths[id], 'Buffer');
-
-				resourceContent = dataurl.convert({
-					data: buffer,
-					mimetype: resource.mime,
-				});
-			}
-
+			const resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
 			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), resourceContent);
 		}
 
@@ -103,16 +90,31 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 			}
 
 			const bodyMd = await this.processNoteResources_(item);
-			const result = this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, { resources: this.resources_, plainResourceRendering: true });
+			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
+				resources: this.resources_,
+				plainResourceRendering: true,
+				userCss: this.customCss_,
+			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
 			if (result.html) noteContent.push(result.html);
+
+			// We need to export all the plugin assets too and refer them from the header
+			// The source path is a bit hard-coded but shouldn't change.
+			for (let i = 0; i < result.pluginAssets.length; i++) {
+				const asset = result.pluginAssets[i];
+				const filePath = `${dirname(dirname(__dirname))}/gui/note-viewer/pluginAssets/${asset.name}`;
+				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
+				await shim.fsDriver().mkdir(dirname(destPath));
+				await shim.fsDriver().copy(filePath, destPath);
+			}
 
 			const fullHtml = `
 				<!DOCTYPE html>
 				<html>
 					<head>
 						<meta charset="UTF-8">
+						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 						<title>${escapeHtml(item.title)}</title>
 					</head>
 					<body>
@@ -126,11 +128,9 @@ class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 	}
 
 	async processResource(resource, filePath) {
-		if (!Resource.isSupportedImageMimeType(resource.mime)) {
-			const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
-			await shim.fsDriver().copy(filePath, destResourcePath);
-			this.resources_.push(resource);
-		}
+		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
+		await shim.fsDriver().copy(filePath, destResourcePath);
+		this.resources_.push(resource);
 	}
 
 	async close() {}

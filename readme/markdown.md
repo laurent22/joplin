@@ -4,6 +4,8 @@ Markdown is a simple way to format text that looks great on any device. It doesn
 
 Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.
 
+Joplin follows the [CommonMark](https://spec.commonmark.org/) specification, with additional features added via plugins.
+
 ## Cheat Sheet
 
 This is a quick summary of the Markdown syntax.
@@ -60,7 +62,7 @@ Which is rendered as:
 
 ## Joplin Extras
 
-Besides the standard Mardkown syntax, Joplin supports several additional features.
+Besides the standard Markdown syntax, Joplin supports several additional features.
 
 ### Links to other notes
 
@@ -96,6 +98,24 @@ Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin 
 
 <img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
 
+### Diagrams
+
+You can create diagrams in Joplin using the [Mermaid syntax](https://mermaidjs.github.io/). To add such a graph, wrap the Mermaid script inside a "\`\`\`mermaid" code block like this:
+
+	```mermaid
+	graph TD;
+	    A-->B;
+	    A-->C;
+	    B-->D;
+	    C-->D;
+	```
+
+This is how it would look with the Markdown on the left, and rendered graph on the right:
+
+![Mermaid support in Joplin](https://joplin.cozic.net/images/Mermaid.png)
+
+Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
+
 ### Checkboxes
 
 Checkboxes can be added like so:
@@ -114,7 +134,9 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 ### Plugins
 
-Joplin supports a number of plugins that can be toggled on top the standard Markdown features you would expect. These toggle-able plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
+Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
+
+Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
 
 | Plugin | Syntax | Description | Enabled |
 |--------|--------|-------------|---------|
@@ -127,7 +149,7 @@ Joplin supports a number of plugins that can be toggled on top the standard Mark
 | [Sub](https://github.com/markdown-it/markdown-it-sub) | `X~1~` | Transforms into X<sub>1</sub> | no |
 | [Sup](https://github.com/markdown-it/markdown-it-sup) | `X^2^` | Transforms into X<sup>2</sup> | no |
 | [Deflist](https://github.com/markdown-it/markdown-it-deflist) | See [pandoc](http://johnmacfarlane.net/pandoc/README.html#definition-lists) page for syntax | Adds the html `<dl>` tag accessible through markdown | no |
-| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
+| [Abbr](https://github.com/markdown-it/markdown-it-abbr) | *[HTML]: Hyper Text Markup Language<br/>The HTML specification | Allows definition of abbreviations that can be hovered over later for a full expansion | no |
 | [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |

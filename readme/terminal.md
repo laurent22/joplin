@@ -279,7 +279,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                             Possible values: DD/MM/YYYY (30/01/2017), 
 	                             DD/MM/YY (30/01/17), MM/DD/YYYY (01/30/2017), 
 	                             MM/DD/YY (01/30/17), YYYY-MM-DD (2017-01-30), 
-	                             DD.MM.YYYY (30.01.2017).
+	                             DD.MM.YYYY (30.01.2017), YYYY.MM.DD (2017.01.30).
 	                             Default: "DD/MM/YYYY"
 	                             
 	    timeFormat               Time format.
@@ -514,7 +514,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 # License
 
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

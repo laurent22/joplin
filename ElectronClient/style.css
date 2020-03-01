@@ -1,0 +1,172 @@
+body, textarea {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#react-root {
+	height: 100%;
+	overflow: hidden;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table th {
+	text-align: left;
+}
+
+table td, table th {
+	padding: .5em;
+	border: 1px solid #ccc;
+}
+
+a {
+	text-decoration: none;
+}
+
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+}
+
+::-webkit-scrollbar-corner {
+	background: none;
+}
+
+::-webkit-scrollbar-track {
+	border: none;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: rgba(100, 100, 100, 0.3); 
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-track:hover {
+	background: rgba(0, 0, 0, 0.1); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 100, 100, 0.7); 
+}
+
+.fade_out {
+	-webkit-transition: 0.15s;
+	transition: 0.15s;
+	opacity: 0;
+}
+
+.fade_in {
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+	opacity: 1;
+}
+/* By default, the Ice Editor displays invalid characters, such as non-breaking spaces
+   as red boxes, but since those are actually valid characters and common in imported
+   Evernote data, we hide them here. */
+.ace-chrome .ace_invisible_space {
+	background-color: transparent !important;
+	opacity: 0;
+}
+
+.note-list .list-item:hover {
+	background-color: rgba(0,160,255,0.1) !important;
+}
+
+/*.side-bar .list-item:hover,
+.side-bar .synchronize-button:hover {
+	background-color: #01427B;
+}
+
+.side-bar .list-item:active,
+.side-bar .synchronize-button:active {
+	background-color: #0465BB;
+}*/
+
+.editor-toolbar .button:not(.disabled):hover,
+.header .button:not(.disabled):hover {
+	background-color: rgba(0,160,255,0.1);
+	border: 1px solid rgba(0,160,255,0.5);
+	box-sizing: 'border-box';
+}
+
+.editor-toolbar .button:not(.disabled):active,
+.header .button:not(.disabled):active {
+	background-color: rgba(0,160,255,0.2);
+	border: 1px solid rgba(0,160,255,0.7);
+	box-sizing: 'border-box';
+}
+
+.editor-toolbar .button,
+.header .button {
+	border: 1px solid rgba(0,160,255,0);
+}
+
+.icon-button:hover {
+	background-color: rgba(0,0,0,0.05) !important;
+	border: 1px solid rgba(0,0,0,0.10);
+	border-radius: 5px;
+}
+
+.icon-button:active {
+	background-color: rgba(0,0,0,0.10) !important;
+	border: 1px solid rgba(0,0,0,0.15);
+	border-radius: 5px;
+}
+
+@keyframes icon-infinite-rotation{
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.smalltalk {
+	font-family: sans-serif;
+}
+
+.note-property-box .rdt {
+	display: inline-block;
+}
+
+.help-tooltip {
+	font-family: sans-serif;
+	max-width: 200px;
+}
+
+:disabled {
+	opacity: 0.6;
+}
+
+.config-menu-bar button:focus {
+	outline: 0 none;
+}
+
+.modal-message {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: grey;
+	font-size: 1.2em;
+	margin: 40px 20px;
+}
+
+.modal-message #loading-animation {
+	margin-right: 20px;
+	width: 20px;
+	height: 20px;
+	border: 5px solid lightgrey;
+	border-top: 4px solid white;
+	border-radius: 50%;
+	transition-property: transform;
+	animation-name: rotate;
+	animation-duration: 1.2s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes rotate {
+	from {transform: rotate(0deg);}
+	to {transform: rotate(360deg);}
+}

@@ -1,12 +1,17 @@
 const stringPadding = require('string-padding');
 const urlUtils = require('lib/urlUtils');
 const MarkdownIt = require('markdown-it');
-const setupLinkify = require('lib/renderers/MdToHtml/setupLinkify');
+const { setupLinkify } = require('lib/joplin-renderer');
 
 const markdownUtils = {
 	// Not really escaping because that's not supported by marked.js
 	escapeLinkText(text) {
 		return text.replace(/(\[|\]|\(|\))/g, '_');
+	},
+
+	// Titles for markdown links only need escaping for [ and ]
+	escapeTitleText(text) {
+		return text.replace(/(\[|\])/g, '\\$1');
 	},
 
 	escapeLinkUrl(url) {

@@ -34,7 +34,7 @@ const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
-const ShareExtension = require('react-native-share-extension').default;
+// const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
@@ -283,8 +283,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
 		}
-
-		this.focusUpdate();
 	}
 
 	onMarkForDownload(event) {
@@ -311,9 +309,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		if (Platform.OS !== 'ios' && this.state.fromShare) {
-			ShareExtension.close();
-		}
+		// if (Platform.OS !== 'ios' && this.state.fromShare) {
+		// 	ShareExtension.close();
+		// }
 	}
 
 	title_changeText(text) {
@@ -749,13 +747,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ titleTextInputHeight: height });
 	}
 
+	scheduleFocusUpdate() {
+		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+
+		this.focusUpdateIID_ = setTimeout(() => {
+			this.focusUpdateIID_ = null;
+			this.focusUpdate();
+		}, 100);
+	}
+
 	focusUpdate() {
-		this.scheduleFocusUpdateIID_ = null;
+		if (this.focusUpdateIID_) clearTimeout(this.focusUpdateIID_);
+		this.focusUpdateIID_ = null;
+
 		if (!this.state.note) return;
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title') this.refs.titleTextField.focus();
+		if (fieldToFocus === 'title' && this.refs.titleTextField) this.refs.titleTextField.focus();
+		if (fieldToFocus === 'body' && this.refs.noteBodyTextField) this.refs.noteBodyTextField.focus(); // TODO: Maybe turn off?
 	}
 
 	async folderPickerOptions_valueChanged(itemValue) {

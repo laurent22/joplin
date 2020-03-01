@@ -9,6 +9,7 @@ const { filename, safeFilename } = require('lib/path-utils.js');
 const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 const markdownUtils = require('lib/markdownUtils');
 const JoplinError = require('lib/JoplinError');
+const { _ } = require('lib/locale.js');
 
 class Resource extends BaseItem {
 	static tableName() {
@@ -34,6 +35,15 @@ class Resource extends BaseItem {
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
 	}
 
+	static errorFetchStatuses() {
+		return this.db().selectAll(`
+			SELECT title AS resource_title, resource_id, fetch_error
+			FROM resource_local_states
+			LEFT JOIN resources ON resources.id = resource_local_states.resource_id
+			WHERE fetch_status = ?
+		`, [Resource.FETCH_STATUS_ERROR]);
+	}
+
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
 		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
@@ -46,6 +56,10 @@ class Resource extends BaseItem {
 
 	static async resetStartedFetchStatus() {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
+	}
+
+	static resetErrorStatus(resourceId) {
+		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
 	}
 
 	static fsDriver() {
@@ -249,10 +263,33 @@ class Resource extends BaseItem {
 	}
 
 	static async downloadedButEncryptedBlobCount() {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM resource_local_states WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)', [Resource.FETCH_STATUS_DONE]);
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)
+		`, [Resource.FETCH_STATUS_DONE]);
 
 		return r ? r.total : 0;
 	}
+
+	static async downloadStatusCounts(status) {
+		const r = await this.db().selectOne(`
+			SELECT count(*) as total
+			FROM resource_local_states
+			WHERE fetch_status = ?
+		`, [status]);
+
+		return r ? r.total : 0;
+	}
+
+	static fetchStatusToLabel(status) {
+		if (status === Resource.FETCH_STATUS_IDLE) return _('Not downloaded');
+		if (status === Resource.FETCH_STATUS_STARTED) return _('Downloading');
+		if (status === Resource.FETCH_STATUS_DONE) return _('Downloaded');
+		if (status === Resource.FETCH_STATUS_ERROR) return _('Error');
+		throw new Error(`Invalid status: ${status}`);
+	}
+
 }
 
 Resource.IMAGE_MAX_DIMENSION = 1920;

@@ -40,13 +40,6 @@ const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
-
 class BaseApplication {
 	constructor() {
 		this.logger_ = new Logger();
@@ -59,6 +52,27 @@ class BaseApplication {
 		this.currentFolder_ = null;
 
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
+	}
+
+	async destroy() {
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
+		await ResourceFetcher.instance().destroy();
+		await SearchEngine.instance().destroy();
+		await DecryptionWorker.instance().destroy();
+		await FoldersScreenUtils.cancelTimers();
+		await reg.cancelTimers();
+
+		this.eventEmitter_.removeAllListeners();
+		BaseModel.db_ = null;
+		reg.setDb(null);
+
+		this.logger_ = null;
+		this.dbLogger_ = null;
+		this.eventEmitter_ = null;
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
 	logger() {
@@ -176,6 +190,14 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
@@ -216,6 +238,9 @@ class BaseApplication {
 		} else if (parentType === 'Search') {
 			parentId = state.selectedSearchId;
 			parentType = BaseModel.TYPE_SEARCH;
+		} else if (parentType === 'SmartFilter') {
+			parentId = state.selectedSmartFilterId;
+			parentType = BaseModel.TYPE_SMART_FILTER;
 		}
 
 		this.logger().debug('Refreshing notes:', parentType, parentId);
@@ -242,6 +267,8 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
+				notes = await Note.previews(parentId, options);
 			}
 		}
 
@@ -434,12 +461,27 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'SMART_FILTER_SELECT') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
 			refreshNotes = true;
 		}
 
 		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
 			refreshNotes = true;
+		}
+
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
 		}
 
 		if (refreshNotes) {
@@ -450,11 +492,14 @@ class BaseApplication {
 			refreshFolders = true;
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ALL') {
 			refreshFolders = 'now';
 		}
 
-		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'showNoteCounts') || action.type == 'SETTING_UPDATE_ALL')) {
+		if (this.hasGui() && action.type == 'SETTING_UPDATE_ONE' && (
+			action.key.indexOf('folders.sortOrder') === 0 ||
+			action.key == 'showNoteCounts' ||
+			action.key == 'showCompletedTodos')) {
 			refreshFolders = 'now';
 		}
 
@@ -479,7 +524,6 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
-
 		return result;
 	}
 
@@ -499,6 +543,16 @@ class BaseApplication {
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
+	}
+
+	deinitRedux() {
+		this.store_ = null;
+		BaseModel.dispatch = function() {};
+		FoldersScreenUtils.dispatch = function() {};
+		reg.dispatch = function() {};
+		BaseSyncTarget.dispatch = function() {};
+		DecryptionWorker.instance().dispatch = function() {};
+		ResourceFetcher.instance().dispatch = function() {};
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -525,27 +579,6 @@ class BaseApplication {
 		return `${os.homedir()}/.config/${Setting.value('appName')}`;
 	}
 
-	async testing() {
-		const markdownUtils = require('lib/markdownUtils');
-		const ClipperServer = require('lib/ClipperServer');
-		const server = new ClipperServer();
-		const HtmlToMd = require('lib/HtmlToMd');
-		const service = new HtmlToMd();
-		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
-		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-
-		const imageUrls = markdownUtils.extractImageUrls(markdown);
-		let result = await server.downloadImages_(imageUrls);
-		result = await server.createResourcesFromPaths_(result);
-		console.info(result);
-		markdown = server.replaceImageUrlsByResources_(markdown, result);
-		console.info('--------------------------------------------------');
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-	}
-
 	async start(argv) {
 		let startFlags = await this.handleStartFlags_(argv);
 
@@ -568,6 +601,13 @@ class BaseApplication {
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
+
+		SyncTargetRegistry.addClass(SyncTargetFilesystem);
+		SyncTargetRegistry.addClass(SyncTargetOneDrive);
+		if (Setting.value('env') === 'dev') SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetDropbox);
 
 		await shim.fsDriver().remove(tempDir);
 
@@ -670,7 +710,6 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
 		return argv;
 	}
 }

@@ -1,7 +1,8 @@
-app/node_modules/
-app/packageInfo.js
+node_modules/
+packageInfo.js
 dist/
-app/lib/
-app/gui/*.min.js
-app/plugins/*.min.js
+lib/
+gui/*.min.js
+plugins/*.min.js
 .DS_Store
+gui/note-viewer/pluginAssets/

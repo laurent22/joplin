@@ -16,6 +16,8 @@ class DecryptionWorker {
 		this.eventEmitter_ = new EventEmitter();
 		this.kvStore_ = null;
 		this.maxDecryptionAttempts_ = 2;
+
+		this.startCalls_ = [];
 	}
 
 	setLogger(l) {
@@ -35,9 +37,9 @@ class DecryptionWorker {
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new DecryptionWorker();
-		return this.instance_;
+		if (DecryptionWorker.instance_) return DecryptionWorker.instance_;
+		DecryptionWorker.instance_ = new DecryptionWorker();
+		return DecryptionWorker.instance_;
 	}
 
 	setEncryptionService(v) {
@@ -92,7 +94,7 @@ class DecryptionWorker {
 		this.dispatch(action);
 	}
 
-	async start(options = null) {
+	async start_(options = null) {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -238,6 +240,36 @@ class DecryptionWorker {
 			this.scheduleStart();
 		}
 	}
+
+	async start(options) {
+		this.startCalls_.push(true);
+		try {
+			await this.start_(options);
+		} finally {
+			this.startCalls_.pop();
+		}
+	}
+
+	async destroy() {
+		this.eventEmitter_.removeAllListeners();
+		if (this.scheduleId_) {
+			clearTimeout(this.scheduleId_);
+			this.scheduleId_ = null;
+		}
+		this.eventEmitter_ = null;
+		DecryptionWorker.instance_ = null;
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.startCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
 }
+
+DecryptionWorker.instance_ = null;
 
 module.exports = DecryptionWorker;

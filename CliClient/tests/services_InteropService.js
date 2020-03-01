@@ -334,6 +334,35 @@ describe('services_InteropService', function() {
 		}
 	}));
 
+	it('should export selected notes in md format', asyncTest(async () => {
+		const service = new InteropService();
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let note11 = await Note.save({ title: 'title note11', parent_id: folder1.id });
+		note11 = await Note.load(note11.id);
+		let note12 = await Note.save({ title: 'title note12', parent_id: folder1.id });
+		note12 = await Note.load(note12.id);
+
+		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		folder2 = await Folder.load(folder2.id);
+		let note21 = await Note.save({ title: 'title note21', parent_id: folder2.id });
+		note21 = await Note.load(note21.id);
+
+		let folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
+		folder3 = await Folder.load(folder2.id);
+
+		const outDir = exportDir();
+
+		await service.export({ path: outDir, format: 'md', sourceNoteIds: [note11.id, note21.id] });
+
+		// verify that the md files exist
+		expect(await shim.fsDriver().exists(`${outDir}/folder1`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/title note11.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/title note12.md`)).toBe(false);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/folder2`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/folder2/title note21.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder3`)).toBe(false);
+	}));
+
 	it('should export MD with unicode filenames', asyncTest(async () => {
 		const service = new InteropService();
 		let folder1 = await Folder.save({ title: 'folder1' });

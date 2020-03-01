@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const { BaseApplication }= require('lib/BaseApplication.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -152,6 +153,7 @@ async function switchClient(id) {
 
 async function clearDatabase(id = null) {
 	if (id === null) id = currentClient_;
+	if (!databases_[id]) return;
 
 	await ItemChange.waitForAllSaved();
 
@@ -177,7 +179,6 @@ async function clearDatabase(id = null) {
 		queries.push(`DELETE FROM ${n}`);
 		queries.push(`DELETE FROM sqlite_sequence WHERE name="${n}"`); // Reset autoincremented IDs
 	}
-
 	await databases_[id].transactionExecBatch(queries);
 }
 
@@ -299,7 +300,7 @@ async function loadEncryptionMasterKey(id = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey(masterKey, '123456', true);
+	await service.loadMasterKey_(masterKey, '123456', true);
 
 	return masterKey;
 }
@@ -370,8 +371,12 @@ function asyncTest(callback) {
 		try {
 			await callback();
 		} catch (error) {
-			console.error(error);
-			expect('good').toBe('not good', 'Test has thrown an exception - see above error');
+			if (error.constructor && error.constructor.name === 'ExpectationFailed') {
+				// OK - will be reported by Jasmine
+			} else {
+				console.error(error);
+				expect(0).toBe(1, 'Test has thrown an exception - see above error');
+			}
 		} finally {
 			done();
 		}
@@ -408,4 +413,103 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest };
+function id(a) {
+	return a.id;
+}
+
+function ids(a) {
+	return a.map(n => n.id);
+}
+
+function sortedIds(a) {
+	return ids(a).sort();
+}
+
+function at(a, indexes) {
+	let out = [];
+	for (let i = 0; i < indexes.length; i++) {
+		out.push(a[indexes[i]]);
+	}
+	return out;
+}
+
+async function createNTestFolders(n) {
+	let folders = [];
+	for (let i = 0; i < n; i++) {
+		let folder = await Folder.save({ title: 'folder' });
+		folders.push(folder);
+	}
+	return folders;
+}
+
+async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
+	let notes = [];
+	for (let i = 0; i < n; i++) {
+		let title_ = n > 1 ? `${title}${i}` : title;
+		let note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		notes.push(note);
+	}
+	if (tagIds) {
+		for (let i = 0; i < notes.length; i++) {
+			await Tag.setNoteTagsByIds(notes[i].id, tagIds);
+		}
+	}
+	return notes;
+}
+
+async function createNTestTags(n) {
+	let tags = [];
+	for (let i = 0; i < n; i++) {
+		let tag = await Tag.save({ title: 'tag' });
+		tags.push(tag);
+	}
+	return tags;
+}
+
+// Integration test application
+class TestApp extends BaseApplication {
+	constructor() {
+		super();
+		this.middlewareCalls_ = [];
+	}
+
+	async start(argv) {
+		await clearDatabase(); // not sure why we need this as we use our own database
+
+		argv = argv.concat(['--profile', `tests-build/profile-${uuid.create()}`]);
+		argv = await super.start(['',''].concat(argv));
+		this.initRedux();
+		Setting.dispatchUpdateAll();
+		await time.msleep(100);
+	}
+
+	async generalMiddleware(store, next, action) {
+		this.middlewareCalls_.push(true);
+		try {
+			await super.generalMiddleware(store, next, action);
+		} finally {
+			this.middlewareCalls_.pop();
+		}
+	}
+
+	async waitForMiddleware_() {
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.middlewareCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
+
+	async destroy() {
+		await this.waitForMiddleware_();
+		this.deinitRedux();
+		await super.destroy();
+	}
+}
+
+
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+

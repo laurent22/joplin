@@ -30,7 +30,7 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 
 	if (href.indexOf('#') === 0) {
 		event.preventDefault();
-		let old_hash = location.hash;
+		// let old_hash = location.hash;
 
 		location.hash = href;
 
@@ -41,9 +41,13 @@ webviewLib.handleInternalLink = function(event, anchorNode) {
 		// position, the scroll positions stays correct though
 		// Additionally an anchor could not be clicked twice because the location
 		// would not change, this fixes that also
-		setTimeout(function() {
-			location.hash = old_hash;
-		}, 10);
+		//
+		// Commented out to fix https://github.com/laurent22/joplin/issues/2141
+		// We might need to fix a better fix to the previous bug.
+		//
+		// setTimeout(function() {
+		// 	location.hash = old_hash;
+		// }, 10);
 		return true;
 	}
 

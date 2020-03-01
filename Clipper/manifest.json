@@ -1,0 +1,72 @@
+{
+    "manifest_version": 2,
+    "name": "Joplin Web Clipper [DEV]",
+    "version": "1.0.20",
+    "description": "Capture and save web pages and screenshots from your browser to Joplin.",
+    "homepage_url": "https://joplinapp.org",
+    "content_security_policy": "script-src 'self'; object-src 'self'",
+    "icons": {
+        "32": "icons/32.png",
+        "48": "icons/48.png",
+        "96": "icons/96.png"
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "http://*/",
+        "https://*/",
+        "<all_urls>",
+        "storage"
+    ],
+    "browser_action": {
+        "default_icon": "icons/32.png",
+        "default_title": "Joplin Web Clipper",
+        "default_popup": "popup/build/index.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/"
+            ],
+            "js": [
+                "main.js"
+            ]
+        }
+    ],
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "default": "Alt+Shift+J"
+            }
+        },
+        "clipCompletePage": {
+            "suggested_key": {
+                "default": "Alt+Shift+C"
+            },
+            "description": "Clip complete page (uses last selected notebook)"
+        },
+        "clipCompletePageHtml": {
+            "description": "Clip complete page (HTML) (uses last selected notebook)"
+        },
+        "clipSimplifiedPage": {
+            "description": "Clip simplified page (uses last selected notebook)"
+        },
+        "clipUrl": {
+            "description": "Clip url (uses last selected notebook)"
+        },
+        "clipSelection": {
+            "description": "Clip selection (uses last selected notebook)"
+        }
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
+    "applications": {
+        "gecko": {
+            "id": "{8419486a-54e9-11e8-9401-ac9e17909436}"
+        }
+    }
+}

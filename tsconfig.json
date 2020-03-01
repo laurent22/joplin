@@ -22,5 +22,6 @@
 	],
 	"exclude": [
 		"**/node_modules",
+		"ElectronClient/dist/**/*",
 	],
 }

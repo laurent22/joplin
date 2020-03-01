@@ -21,7 +21,10 @@ class FsDriverBase {
 		return output;
 	}
 
-	async findUniqueFilename(name) {
+	async findUniqueFilename(name, reservedNames = null) {
+		if (reservedNames === null) {
+			reservedNames = [];
+		}
 		let counter = 1;
 
 		let nameNoExt = filename(name, true);
@@ -29,12 +32,16 @@ class FsDriverBase {
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
-			const exists = await this.exists(nameToTry);
+			// Check if the filename does not exist in the filesystem and is not reserved
+			const exists = await this.exists(nameToTry) || reservedNames.includes(nameToTry);
 			if (!exists) return nameToTry;
 			nameToTry = `${nameNoExt} (${counter})${extension}`;
 			counter++;
-			if (counter >= 1000) nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
-			if (counter >= 10000) throw new Error('Cannot find unique title');
+			if (counter >= 1000) {
+				nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
+				await time.msleep(10);
+			}
+			if (counter >= 1100) throw new Error('Cannot find unique filename');
 		}
 	}
 

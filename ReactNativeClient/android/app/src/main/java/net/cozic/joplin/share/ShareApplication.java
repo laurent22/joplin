@@ -2,7 +2,7 @@ package net.cozic.joplin.share;
 // import build config
 import net.cozic.joplin.BuildConfig;
 
-import com.alinz.parkerdan.shareextension.SharePackage;
+// import com.alinz.parkerdan.shareextension.SharePackage;
 
 import android.app.Application;
 
@@ -25,8 +25,8 @@ public class ShareApplication extends Application implements ReactApplication {
 		@Override
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
-				new MainReactPackage(),
-				new SharePackage()
+				new MainReactPackage()
+				// new SharePackage()
 			);
 		}
 	};

@@ -83,6 +83,7 @@ class InteropService {
 			},
 			{
 				format: 'html',
+				fileExtensions: ['html', 'htm'],
 				target: 'file',
 				canDoMultiExport: false,
 				description: _('HTML File'),
@@ -195,7 +196,7 @@ class InteropService {
 		const ModuleClass = require(modulePath);
 		const output = new ModuleClass();
 		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
-		output.setMetadata({options, ...moduleMetadata}); // TODO: Check that this metadata is equivalent to module above
+		output.setMetadata({ options, ...moduleMetadata }); // TODO: Check that this metadata is equivalent to module above
 		return output;
 	}
 
@@ -330,7 +331,7 @@ class InteropService {
 		}
 
 		const exporter = this.newModuleFromPath_('exporter', options);// this.newModuleByFormat_('exporter', exportFormat);
-		await exporter.init(exportPath);
+		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
 		const context = {
@@ -339,6 +340,8 @@ class InteropService {
 
 		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
 			const type = typeOrder[typeOrderIndex];
+
+			await exporter.prepareForProcessingItemType(type, itemsToExport);
 
 			for (let i = 0; i < itemsToExport.length; i++) {
 				const itemType = itemsToExport[i].type;

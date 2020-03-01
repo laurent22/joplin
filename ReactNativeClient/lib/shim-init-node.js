@@ -9,6 +9,8 @@ const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const urlValidator = require('valid-url');
 const { _ } = require('lib/locale.js');
+const http = require('http');
+const https = require('https');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -214,7 +216,7 @@ function shimInit() {
 		if (shim.isElectron()) {
 			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromDataURL(imageDataUrl);
-			if (image.isEmpty()) throw new Error('Could not convert data URL to image'); // Would throw for example if the image format is no supported (eg. image/gif)
+			if (image.isEmpty()) throw new Error('Could not convert data URL to image - perhaps the format is not supported (eg. image/gif)'); // Would throw for example if the image format is no supported (eg. image/gif)
 			if (options.cropRect) {
 				// Crop rectangle values need to be rounded or the crop() call will fail
 				const c = options.cropRect;
@@ -363,6 +365,24 @@ function shimInit() {
 		return bridge().openExternal(url);
 	};
 
+	shim.httpAgent_ = null;
+
+	shim.httpAgent = url => {
+		if (shim.isLinux() && !shim.httpAgent) {
+			var AgentSettings = {
+				keepAlive: true,
+				maxSockets: 1,
+				keepAliveMsecs: 5000,
+			};
+			if (url.startsWith('https')) {
+				shim.httpAgent_ = new https.Agent(AgentSettings);
+			} else {
+				shim.httpAgent_ = new http.Agent(AgentSettings);
+			}
+		}
+		return shim.httpAgent_;
+	};
+
 	shim.openOrCreateFile = (filepath, defaultContents) => {
 		// If the file doesn't exist, create it
 		if (!fs.existsSync(filepath)) {
@@ -378,6 +398,15 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {};
+
+	shim.appVersion = () => {
+		if (shim.isElectron()) {
+			const p = require('../packageInfo.js');
+			return p.version;
+		}
+		const p = require('../package.json');
+		return p.version;
+	};
 }
 
 module.exports = { shimInit };

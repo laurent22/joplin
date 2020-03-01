@@ -11,6 +11,8 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -142,6 +144,10 @@ class Note extends BaseItem {
 		return this.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, body);
 	}
 
+	static async linkedNoteIds(body) {
+		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
+	}
+
 	static async replaceResourceInternalToExternalLinks(body) {
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
@@ -270,7 +276,7 @@ class Note extends BaseItem {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
-			if (parentId) {
+			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
 			}
@@ -506,7 +512,11 @@ class Note extends BaseItem {
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		let newNote = Object.assign({}, originalNote);
-		delete newNote.id;
+		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
+
+		for (let field of fieldsToReset) {
+			delete newNote[field];
+		}
 
 		for (let n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
@@ -529,6 +539,7 @@ class Note extends BaseItem {
 
 	static async save(o, options = null) {
 		let isNew = this.isNew(o, options);
+		const isProvisional = options && !!options.provisional;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
@@ -551,6 +562,7 @@ class Note extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
 			note: note,
+			provisional: isProvisional,
 		});
 
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
@@ -624,16 +636,13 @@ class Note extends BaseItem {
 	}
 
 	static markupLanguageToLabel(markupLanguageId) {
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
-		if (markupLanguageId === Note.MARKUP_LANGUAGE_HTML) return 'HTML';
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) return 'Markdown';
+		if (markupLanguageId === MarkupToHtml.MARKUP_LANGUAGE_HTML) return 'HTML';
 		throw new Error(`Invalid markup language ID: ${markupLanguageId}`);
 	}
 }
 
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
-
-Note.MARKUP_LANGUAGE_MARKDOWN = 1;
-Note.MARKUP_LANGUAGE_HTML = 2;
 
 module.exports = Note;

@@ -107,15 +107,19 @@ class Folder extends BaseItem {
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
-	static async addNoteCounts(folders) {
+	static async addNoteCounts(folders, includeCompletedTodos = true) {
 		const foldersById = {};
 		folders.forEach((f) => {
 			foldersById[f.id] = f;
+			f.note_count = 0;
 		});
 
+		const where = !includeCompletedTodos ? 'WHERE (notes.is_todo = 0 OR notes.todo_completed = 0)' : '';
+
 		const sql = `SELECT folders.id as folder_id, count(notes.parent_id) as note_count 
-			FROM folders LEFT JOIN notes ON notes.parent_id = folders.id 
-			GROUP BY folders.id`;
+			FROM folders LEFT JOIN notes ON notes.parent_id = folders.id
+			${where} GROUP BY folders.id`;
+
 		const noteCounts = await this.db().selectAll(sql);
 		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
