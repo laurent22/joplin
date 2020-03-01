@@ -333,6 +333,68 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog.md
 </ul>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.187">v1.0.187</a> - 2020-03-01T12:31:06Z<a name="v1-0-187-https-github-com-laurent22-joplin-releases-tag-v1-0-187-2020-03-01t12-31-06z" href="#v1-0-187-https-github-com-laurent22-joplin-releases-tag-v1-0-187-2020-03-01t12-31-06z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added concept of provisional note to simplify creation and handling of newly created notes</li>
+<li>New: Add word counter feature to notes (<a href="https://github.com/laurent22/joplin/issues/2444">#2444</a>) (<a href="https://github.com/laurent22/joplin/issues/160">#160</a> by <a href="https://github.com/jdrobertso">@jdrobertso</a>)</li>
+<li>New: Added zoom controls to the application menu (<a href="https://github.com/laurent22/joplin/issues/2162">#2162</a>)</li>
+<li>New: Added Mermaid diagrams support (<a href="https://github.com/laurent22/joplin/issues/2001">#2001</a>)</li>
+<li>New: Add &quot;add or remove tags&quot; for multiple notes. (<a href="https://github.com/laurent22/joplin/issues/2386">#2386</a>) (<a href="https://github.com/laurent22/joplin/issues/539">#539</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>New: Added new date format YYYY.MM.DD (<a href="https://github.com/laurent22/joplin/issues/2318">#2318</a> by XSAkos)</li>
+<li>New: Added new, more secure encryption methods, so that they can be switched to at a later time</li>
+<li>Security: Fixed potential Arbitrary File Read via XSS (Reported by <a href="https://github.com/JavierOlmedo">Javier Olmedo</a>, fixed by Laurent Cozic)</li>
+<li>Improved: Change geolocation service to freegeoip.app to improve privacy (<a href="https://github.com/laurent22/joplin/issues/2503">#2503</a> by Helmut K. C. Tessarek)</li>
+<li>Improved: Use asar packing to improve performances (<a href="https://github.com/laurent22/joplin/issues/2531">#2531</a> by <a href="https://github.com/R-L-T-Y">@R-L-T-Y</a>)</li>
+<li>Improved: Implement &quot;show all notes&quot; (<a href="https://github.com/laurent22/joplin/issues/2472">#2472</a>) (<a href="https://github.com/laurent22/joplin/issues/262">#262</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Create a screen that list all the resouces (<a href="https://github.com/laurent22/joplin/issues/2189">#2189</a>) (<a href="https://github.com/laurent22/joplin/issues/592">#592</a> by Georg Grab)</li>
+<li>Improved: Ensure tabs act like tabs and spaces act like spaces in editor. (<a href="https://github.com/laurent22/joplin/issues/2508">#2508</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Update Electron to 7.1.12 (<a href="https://github.com/laurent22/joplin/issues/2500">#2500</a> by Helmut K. C. Tessarek)</li>
+<li>Improved: Support export of multiple notes to PDF files. (<a href="https://github.com/laurent22/joplin/issues/2468">#2468</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Use current year in About box (in the copyright text) (<a href="https://github.com/laurent22/joplin/issues/2466">#2466</a> by Helmut K. C. Tessarek)</li>
+<li>Improved: Show master instead of HEAD as branch in about box (<a href="https://github.com/laurent22/joplin/issues/2465">#2465</a> by Helmut K. C. Tessarek)</li>
+<li>Improved: Sort tags in drop-down list (when adding tags) (<a href="https://github.com/laurent22/joplin/issues/2453">#2453</a> by Helmut K. C. Tessarek)</li>
+<li>Improved: Support scrolling in the note list using keys (eg page up, page down) (<a href="https://github.com/laurent22/joplin/issues/2404">#2404</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Do not select pasted text no matter the paste method (<a href="https://github.com/laurent22/joplin/issues/2431">#2431</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Support list creation on multi-line selections (<a href="https://github.com/laurent22/joplin/issues/2408">#2408</a>) (<a href="https://github.com/laurent22/joplin/issues/1014">#1014</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Allow --no-sandbox flag to go around AppImage limitation (<a href="https://github.com/laurent22/joplin/issues/2436">#2436</a> by Vaidotas Simkus)</li>
+<li>Improved: Reset time fields when duplicating a note (<a href="https://github.com/laurent22/joplin/issues/2428">#2428</a> by Andrey Dolgov)</li>
+<li>Improved: Improved Note search bar UI (<a href="https://github.com/laurent22/joplin/issues/2329">#2329</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Emphasise note title (<a href="https://github.com/laurent22/joplin/issues/2311">#2311</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Support &quot;select all&quot; in the note list (<a href="https://github.com/laurent22/joplin/issues/2403">#2403</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: More info for &quot;unknown profile version&quot; error message (<a href="https://github.com/laurent22/joplin/issues/2361">#2361</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Handle Thai language in search (<a href="https://github.com/laurent22/joplin/issues/2387">#2387</a>) (<a href="https://github.com/laurent22/joplin/issues/2279">#2279</a> by Kirtan Purohit)</li>
+<li>Improved: Improve appearance of note Info dialog</li>
+<li>Fixed: Fix issue with disappearing button labels in toolbar (<a href="https://github.com/laurent22/joplin/issues/2619">#2619</a>) (<a href="https://github.com/laurent22/joplin/issues/2615">#2615</a> by <a href="https://github.com/anjulalk">@anjulalk</a>)</li>
+<li>Fixed: Fix window dimensions and position when the application starts (<a href="https://github.com/laurent22/joplin/issues/2514">#2514</a>) (<a href="https://github.com/laurent22/joplin/issues/2476">#2476</a> by Daulet Amirkhanov)</li>
+<li>Fixed: Improved detection of selected text when applying formatting (<a href="https://github.com/laurent22/joplin/issues/2582">#2582</a>) (<a href="https://github.com/laurent22/joplin/issues/2573">#2573</a> by <a href="https://github.com/Rishgod">@Rishgod</a>)</li>
+<li>Fixed: Speed up WebDAV and Nextcloud Sync on Linux (<a href="https://github.com/laurent22/joplin/issues/2577">#2577</a>) (<a href="https://github.com/laurent22/joplin/issues/1023">#1023</a> by <a href="https://github.com/WisdomCode">@WisdomCode</a>)</li>
+<li>Fixed: Fix to update tag list when note is deleted. (<a href="https://github.com/laurent22/joplin/issues/2554">#2554</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Fix Resources menu item on macOS (<a href="https://github.com/laurent22/joplin/issues/2530">#2530</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fixed search bar text not visible in dark mode</li>
+<li>Fixed: Better handling of rare error in WebDAV server (<a href="https://github.com/laurent22/joplin/issues/2485">#2485</a>)</li>
+<li>Fixed: Fixed note renderer asset caching issue</li>
+<li>Fixed: Add new Katex fonts to improve rendering (<a href="https://github.com/laurent22/joplin/issues/2478">#2478</a>) (<a href="https://github.com/laurent22/joplin/issues/2477">#2477</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fix <code>.desktop</code> file &amp; force refresh (<a href="https://github.com/laurent22/joplin/issues/2479">#2479</a> by Brandon Wulf)</li>
+<li>Fixed: Fixed incorect location format (<a href="https://github.com/laurent22/joplin/issues/2480">#2480</a> by <a href="https://github.com/anjulalk">@anjulalk</a>)</li>
+<li>Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files</li>
+<li>Fixed: Fix to update the note list if the selected tag is deleted. (<a href="https://github.com/laurent22/joplin/issues/2398">#2398</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Fix alignment of checkboxes and other list items in rendered note (<a href="https://github.com/laurent22/joplin/issues/2277">#2277</a>)</li>
+<li>Fixed: Fix slow rendering and memory leak issues with Katex notes (<a href="https://github.com/laurent22/joplin/issues/2357">#2357</a>)</li>
+<li>Fixed: Fix rendering of certain letters in Katex. Fixed printing when note contains Katex code (<a href="https://github.com/laurent22/joplin/issues/2374">#2374</a>)</li>
+<li>Fixed: Fix markdown export (<a href="https://github.com/laurent22/joplin/issues/2463">#2463</a>) (<a href="https://github.com/laurent22/joplin/issues/2455">#2455</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Fix escaping of title when generating a markdown link (<a href="https://github.com/laurent22/joplin/issues/2456">#2456</a>) (<a href="https://github.com/laurent22/joplin/issues/2085">#2085</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fix rendering of tabs in code blocks (<a href="https://github.com/laurent22/joplin/issues/2446">#2446</a>) (<a href="https://github.com/laurent22/joplin/issues/2330">#2330</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Do not show &quot;could not print&quot; warning dialog after cancelling print. (<a href="https://github.com/laurent22/joplin/issues/2410">#2410</a>) (<a href="https://github.com/laurent22/joplin/issues/2407">#2407</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Fixes long lines warpped (<a href="https://github.com/laurent22/joplin/issues/2447">#2447</a> by Amit singh)</li>
+<li>Fixed: Ensure the main window is hidden when Joplin starts (<a href="https://github.com/laurent22/joplin/issues/2432">#2432</a>) (<a href="https://github.com/laurent22/joplin/issues/2365">#2365</a> by 0xCLOVER)</li>
+<li>Fixed: Fix hang when selecting tag when multiple notes are selected (also for search) (<a href="https://github.com/laurent22/joplin/issues/2372">#2372</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Apply userstyle again when exporting to PDF or printing (<a href="https://github.com/laurent22/joplin/issues/2324">#2324</a>)</li>
+<li>Fixed: Fixed update message box</li>
+<li>Fixed: Fix identification of note in pdf export from main menu. (<a href="https://github.com/laurent22/joplin/issues/2323">#2323</a> by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Fixed: Undefined text was being displayed on top of notes in revision viewer (<a href="https://github.com/laurent22/joplin/issues/2352">#2352</a>)</li>
+<li>Fixed: Fixed issues with Katex and MultiMd table plugin (<a href="https://github.com/laurent22/joplin/issues/2339">#2339</a>)</li>
+<li>Fixed: Fix Linux installation script (<a href="https://github.com/laurent22/joplin/issues/2333">#2333</a> by Carl Bordum Hansen)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.179">v1.0.179</a> - 2020-01-24T22:42:41Z<a name="v1-0-179-https-github-com-laurent22-joplin-releases-tag-v1-0-179-2020-01-24t22-42-41z" href="#v1-0-179-https-github-com-laurent22-joplin-releases-tag-v1-0-179-2020-01-24t22-42-41z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added new, more secure encryption methods, so that they can be switched to at a later time</li>

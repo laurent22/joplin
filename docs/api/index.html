@@ -332,6 +332,10 @@ https://github.com/laurent22/joplin/blob/master/readme/api.md
 </li>
 </ul>
 </div>
+<blockquote>
+<p>joplin@1.0.155 start /Users/laurent/src/joplin-master/CliClient<br>
+gulp build -L &amp;&amp; node 'build/main.js' --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --env dev &quot;apidoc&quot;</p>
+</blockquote>
 <h1>Joplin API<a name="joplin-api" href="#joplin-api" class="heading-anchor">🔗</a></h1>
 <p>When the Web Clipper service is enabled, Joplin exposes a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST API</a> which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.</p>
 <p>In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port <strong>41184</strong>. If you want to find it programmatically, you may follow this kind of algorithm:</p>
@@ -452,6 +456,10 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <tr>
 <td>migration</td>
 <td>14</td>
+</tr>
+<tr>
+<td>smart_filter</td>
+<td>15</td>
 </tr>
 </tbody>
 </table>
