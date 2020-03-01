@@ -1025,6 +1025,13 @@ class Application extends BaseApplication {
 					click: () => {
 						Setting.incValue('windowContentZoomFactor', 10);
 					},
+					accelerator: 'CommandOrControl+Plus',
+				}, {
+					label: _('Zoom In'),
+					visible: false,
+					click: () => {
+						Setting.incValue('windowContentZoomFactor', 10);
+					},
 					accelerator: 'CommandOrControl+=',
 				}, {
 					label: _('Zoom Out'),
