@@ -115,7 +115,8 @@ class NoteListComponent extends React.Component {
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
-					historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
+					historyAction: 'goto',
+					lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
 				});
 			}
 		};

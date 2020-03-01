@@ -414,7 +414,8 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
-			historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
+			historyAction: 'goto',
+			lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
 		});
 	}
 
@@ -492,7 +493,9 @@ class SideBarComponent extends React.Component {
 					onContextMenu={event => this.itemContextMenu(event)}
 					style={style}
 					folderid={folder.id}
-					onClick={() => this.folderItem_click(folder)}
+					onClick={() => {
+						this.folderItem_click(folder);
+					}}
 					onDoubleClick={this.onFolderToggleClick_}
 				>
 					{itemTitle} {noteCount}

@@ -1,4 +1,4 @@
-function getNoteAction(selectedNoteIds, notes) {
+function getLastSeenNote(selectedNoteIds, notes) {
 	if ((typeof selectedNoteIds != 'undefined') && selectedNoteIds.length>0) {
 		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
 		if (typeof currNote != 'undefined') {
@@ -10,4 +10,4 @@ function getNoteAction(selectedNoteIds, notes) {
 	} else return undefined;
 }
 
-module.exports = { getNoteAction };
+module.exports = { getLastSeenNote };

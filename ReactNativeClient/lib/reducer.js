@@ -266,14 +266,16 @@ function changeSelectedFolder(state, action, options = null) {
 
 	let newState = Object.assign({}, state);
 
-	// Save the last note in the previous notebook so back will return to it.
+	// Save the last seen note so that back will return to it.
 	if (action.type === 'FOLDER_SELECT') {
-		if (action.historyNoteAction) {
+		if (action.historyAction == 'goto') {
 			const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 			let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-			if (typeof action.historyNoteAction === 'object' && action.id != action.historyNoteAction.id) {
+
+			// Don't update history if going to the same note again.
+			if (action.id != action.lastSeenNote.id) {
 				forwardHistoryNotes = [];
-				backwardHistoryNotes.push(Object.assign({}, action.historyNoteAction));
+				backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 			}
 
 			newState.backwardHistoryNotes = backwardHistoryNotes;
@@ -318,30 +320,29 @@ function changeSelectedNotes(state, action, options = null) {
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
-
-
 		newState.selectedNoteIds = noteIds;
 		newState.newNote = null;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
 
-		if (action.historyNoteAction) {
-			const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-			let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-			if (typeof action.historyNoteAction === 'object' && action.id != action.historyNoteAction.id) {
-				forwardHistoryNotes = [];
-				backwardHistoryNotes.push(Object.assign({}, action.historyNoteAction));
-			} else if (action.historyNoteAction === 'pop') {
-				forwardHistoryNotes.push({ id: action.prevNoteId, parent_id: action.prevFolderId });
-				backwardHistoryNotes.pop();
-			} else if (action.historyNoteAction === 'push') {
-				backwardHistoryNotes.push({ id: action.prevNoteId, parent_id: action.prevFolderId });
-				forwardHistoryNotes.pop();
-			}
-			newState.backwardHistoryNotes = backwardHistoryNotes;
-			newState.forwardHistoryNotes = forwardHistoryNotes;
+		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+
+		if (action.historyAction == 'goto' && action.id != action.lastSeenNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+		} else if (action.historyAction === 'pop') {
+			forwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			backwardHistoryNotes.pop();
+		} else if (action.historyAction === 'push') {
+			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			forwardHistoryNotes.pop();
 		}
 
+		newState.backwardHistoryNotes = backwardHistoryNotes;
+		newState.forwardHistoryNotes = forwardHistoryNotes;
+
 		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return newState;
+
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -713,18 +714,15 @@ const reducer = (state = defaultState, action) => {
 				newState.notesParentType = 'Search';
 			}
 
-			var currentNote = HistoryHelper.getNoteAction(state.selectedNoteIds, state.notes);
-			if (currentNote) {
-				if (state.backwardHistoryNotes.length === 0) {
-					newState.backwardHistoryNotes.push(currentNote);
-				} else if (state.backwardHistoryNotes[state.backwardHistoryNotes.length-1].id != currentNote.id) {
-					newState.backwardHistoryNotes.push(currentNote);
-				}
+			// Update history when searching
+			var lastSeenNote = HistoryHelper.getLastSeenNote(state.selectedNoteIds, state.notes);
+			if (lastSeenNote && (state.backwardHistoryNotes.length === 0 ||
+				state.backwardHistoryNotes[state.backwardHistoryNotes.length-1].id != lastSeenNote.id)) {
+				newState.forwardHistoryNotes = [];
+				newState.backwardHistoryNotes.push(Object.assign({},lastSeenNote));
 			}
 
 			newState.selectedNoteIds = [];
-
-
 			break;
 
 		case 'APP_STATE_SET':

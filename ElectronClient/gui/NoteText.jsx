@@ -866,7 +866,8 @@ class NoteTextComponent extends React.Component {
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyNoteAction: {
+					historyAction: 'goto',
+					lastSeenNote: {
 						id: this.state.note.id,
 						parent_id: this.state.note.parent_id,
 					},
@@ -1654,9 +1655,12 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: lastItem.parent_id,
 					noteId: lastItem.id,
-					prevFolderId: this.state.note.parent_id,
-					prevNoteId: this.state.note.id,
-					historyNoteAction: 'pop',
+
+					historyAction: 'pop',
+					lastSeenNote: {
+						id: this.state.note.id,
+						parent_id: this.state.note.parent_id,
+					},
 				});
 			},
 		});
@@ -1672,9 +1676,12 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: nextItem.parent_id,
 					noteId: nextItem.id,
-					prevFolderId: this.state.note.parent_id,
-					prevNoteId: this.state.note.id,
-					historyNoteAction: 'push',
+
+					historyAction: 'push',
+					lastSeenNote: {
+						id: this.state.note.id,
+						parent_id: this.state.note.parent_id,
+					},
 				});
 			},
 		});

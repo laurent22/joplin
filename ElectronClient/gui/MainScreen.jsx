@@ -141,7 +141,8 @@ class MainScreenComponent extends React.Component {
 								this.props.dispatch({
 									type: 'FOLDER_SELECT',
 									id: folder.id,
-									historyNoteAction: HistoryHelper.getNoteAction(this.props.selectedNoteIds, this.props.notes),
+									historyAction: 'goto',
+									lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
 								});
 							}
 						}
