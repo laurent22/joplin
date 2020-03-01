@@ -322,7 +322,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.scheduleSave();
 	}
 
-	saveText(text) {
+	body_changeText(text) {
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
@@ -873,7 +873,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				style={this.styles().bodyTextInput}
 				previewStyles={this.styles().noteBodyViewer}
 				value={note.body}
-				saveText={text => this.saveText(text)}
+				saveText={text => this.body_changeText(text)}
 				blurOnSubmit={false}
 				selectionColor={theme.textSelectionColor}
 				placeholder={_('Add body')}
