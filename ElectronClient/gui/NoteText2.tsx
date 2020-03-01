@@ -38,22 +38,23 @@ const { bridge } = require('electron').remote.require('./bridge');
 // immediately (no scheduling) once the user starts modifying it so that we have an ID
 // to work with.
 
-// TODO: Change new note logic - create note right away. And delete it if user closes it without making changes
+// TODO: as soon as note change, clear provisional flag
 // TODO: preserve image size
 // TODO: handle HTML notes
 // TODO: add indicator showing that note has been saved or not
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
-// TODO: create new note, set body, switch to another note before save => it selects the new note, but doesn't actually display it
+// TODO: Handle template
+// TODO: document willChange/change event and changeId
 
 interface NoteTextProps {
 	style: any,
 	noteId: string,
 	theme: number,
-	newNote: any,
 	dispatch: Function,
 	selectedNoteIds: string[],
 	notes:any[],
 	watchedNoteFiles:string[],
+	isProvisional: boolean,
 }
 
 interface FormNote {
@@ -62,7 +63,9 @@ interface FormNote {
 	parent_id: string,
 	is_todo: number,
 	bodyEditorContent?: any,
-	fromNewNote: any,
+	bodyWillChangeId: number
+	bodyChangeId: number,
+	saveActionQueue: AsyncActionQueue,
 }
 
 const defaultNote = ():FormNote => {
@@ -71,7 +74,9 @@ const defaultNote = ():FormNote => {
 		parent_id: '',
 		title: '',
 		is_todo: 0,
-		fromNewNote: null,
+		bodyWillChangeId: 0,
+		bodyChangeId: 0,
+		saveActionQueue: null,
 	};
 };
 
@@ -106,14 +111,14 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
-const htmlToMarkdown = async (html:string):Promise<string> => {
+async function htmlToMarkdown(html:string):Promise<string> {
 	const htmlToMd = new HtmlToMd();
 	let md = htmlToMd.parse(html);
 	md = await Note.replaceResourceExternalToInternalLinks(md, { useAbsolutePaths: true });
 	return md;
-};
+}
 
-const formNoteToNote = async (formNote:FormNote):Promise<any> => {
+async function formNoteToNote(formNote:FormNote):Promise<any> {
 	const newNote:any = Object.assign({}, formNote);
 
 	if ('bodyEditorContent' in formNote) {
@@ -122,12 +127,11 @@ const formNoteToNote = async (formNote:FormNote):Promise<any> => {
 	}
 
 	delete newNote.bodyEditorContent;
-	delete newNote.fromNewNote;
 
 	return newNote;
-};
+}
 
-const attachResources = async () => {
+async function attachResources() {
 	const filePaths = bridge().showOpenDialog({
 		properties: ['openFile', 'createDirectory', 'multiSelections'],
 	});
@@ -148,53 +152,49 @@ const attachResources = async () => {
 	}
 
 	return output;
-};
+}
 
-const saveNoteActionQueue = new AsyncActionQueue(2000);
+function scheduleSaveNote(formNote:FormNote) {
+	if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
+
+	console.info('Scheduling...', formNote);
+
+	const makeAction = (formNote:FormNote) => {
+		return async function() {
+			const note = await formNoteToNote(formNote);
+			console.info('Saving note...', note);
+			await Note.save(note);
+		};
+	};
+
+	formNote.saveActionQueue.push(makeAction(formNote));
+}
+
+function saveNoteIfWillChange(formNote:FormNote, editorRef:any) {
+	if (!formNote.id || !formNote.bodyWillChangeId) return;
+
+	scheduleSaveNote({
+		...formNote,
+		bodyEditorContent: editorRef.current.content(),
+		bodyWillChangeId: 0,
+		bodyChangeId: 0,
+	});
+}
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
 	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ markdown: '' });
 
 	const editorRef = useRef<any>();
-	const bodyWillChange = useRef<boolean>(false);
+	const formNoteRef = useRef<FormNote>();
+	formNoteRef.current = { ...formNote };
 
 	const styles = styles_(props);
-
-	const scheduleSaveNote = (formNote:FormNote) => {
-		console.info('Scheduling...', formNote);
-
-		const makeAction = (formNote:FormNote) => {
-			return async function() {
-				const note = await formNoteToNote(formNote);
-				console.info('Saving note...', note);
-				const result = await Note.save(note);
-				if (!formNote.id) {
-					setFormNote(Object.assign({}, formNote, { id: result.id }));
-
-					props.dispatch({
-						type: 'NOTE_SELECT',
-						id: result.id,
-					});
-				}
-			};
-		};
-
-		saveNoteActionQueue.push(makeAction(formNote));
-	};
-
-	const saveNoteNow = async (fn:FormNote = null) => {
-		scheduleSaveNote(fn ? fn : formNote);
-		return saveNoteActionQueue.waitForAllDone();
-	};
 
 	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
 		md = md || '';
 
 		const theme = themeStyle(props.theme);
-
-		// console.info('===================================');
-		// console.info('Markdown', md);
 
 		md = await Note.replaceResourceInternalToExternalLinks(md, { useAbsolutePaths: true });
 
@@ -212,113 +212,93 @@ function NoteText2(props:NoteTextProps) {
 			externalAssetsOnly: true,
 		}, options));
 
-		// console.info('RESULT', result);
-		// console.info('===================================');
-
 		return result;
 	}, [props.theme]);
 
-	const saveNoteIfChanged = () => {
-		if (bodyWillChange.current && editorRef.current) {
-			console.info('Saving "willChange" note...', typeof editorRef.current.content());
-			scheduleSaveNote({ ...formNote, bodyEditorContent: editorRef.current.content() });
-		}
-		bodyWillChange.current = false;
-	};
-
-	const saveNoteIfChangedRef = useRef<Function>();
-	saveNoteIfChangedRef.current = saveNoteIfChanged;
-
 	useEffect(() => {
-		return () => saveNoteIfChangedRef.current();
+		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
+		// yet saved, we need to save it now before the component is unmounted. However, we can't put
+		// formNote in the dependency array or that effect will run every time the note changes. We only
+		// want to run it once on unmount. So because of that we need to use that formNoteRef.
+		return () => {
+			saveNoteIfWillChange(formNoteRef.current, editorRef);
+		};
 	}, []);
 
 	useEffect(() => {
-		const isLoadingNewNote = !!props.newNote;
-		const isLoadingExistingNote = !!props.noteId && !isLoadingNewNote;
+		if (!props.noteId) return () => {};
 
-		if (!isLoadingNewNote && !isLoadingExistingNote) return () => {};
+		if (formNote.id === props.noteId) return () => {};
 
-		if (isLoadingExistingNote) {
-			if (formNote.id === props.noteId) return () => {};
+		let cancelled = false;
 
-			let cancelled = false;
+		console.info('Loading existing note', props.noteId);
 
-			console.info('Loading existing note', props.noteId);
+		saveNoteIfWillChange(formNote, editorRef);
 
-			saveNoteIfChangedRef.current();
+		const loadNote = async () => {
+			const n = await Note.load(props.noteId);
+			if (cancelled) return;
 
-			const fetchNote = async () => {
-				const n = await Note.load(props.noteId);
-				if (cancelled) return;
-
-				if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
-
-				setFormNote({
-					id: n.id,
-					title: n.title,
-					is_todo: n.is_todo,
-					parent_id: n.parent_id,
-					fromNewNote: null,
-				});
-
-				setDefaultEditorState({ markdown: n.body });
-			};
-
-			fetchNote();
-
-			return () => {
-				cancelled = true;
-			};
-		}
-
-		if (isLoadingNewNote) {
-			if (formNote.fromNewNote === props.newNote) return () => {};
-
-			console.info('Loading new note');
-
-			saveNoteIfChangedRef.current();
+			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
 
 			setFormNote({
-				id: null,
-				parent_id: props.newNote.parent_id,
-				is_todo: props.newNote.is_todo,
-				title: '',
-				fromNewNote: props.newNote,
+				id: n.id,
+				title: n.title,
+				is_todo: n.is_todo,
+				parent_id: n.parent_id,
+				bodyWillChangeId: 0,
+				bodyChangeId: 0,
+				saveActionQueue: new AsyncActionQueue(2000),
 			});
 
-			setDefaultEditorState({ markdown: '' });
-		}
+			setDefaultEditorState({ markdown: n.body });
+		};
 
-		return () => {};
-	}, [props.noteId, props.newNote, formNote]);
+		loadNote();
 
-	const onFieldChange = (field:string, value:any) => {
+		return () => {
+			cancelled = true;
+		};
+	}, [props.noteId, formNote]);
+
+	const onFieldChange = useCallback((field:string, value:any, changeId: number = 0) => {
 		const change = field === 'body' ? {
 			bodyEditorContent: value,
 		} : {
 			title: value,
 		};
 
-		if (field === 'body') bodyWillChange.current = false;
+		setFormNote(prev => {
+			return {
+				...prev,
+				...change,
+				bodyChangeId: changeId,
+			};
+		});
+	}, []);
 
-		const newNote = Object.assign({}, formNote, change);
+	useEffect(() => {
+		if (!formNote.bodyChangeId) return;
 
-		setFormNote(newNote);
-
-		if (!newNote.id) {
-			saveNoteNow(newNote);
+		if (formNote.bodyWillChangeId !== formNote.bodyChangeId) {
+			console.info('Note was changed, but another note was loaded before save - skipping', formNote);
 		} else {
+			console.info('Saving: bodyChangeId');
+			const newNote = { ...formNote, bodyWillChangeId: 0, bodyChangeId: 0 };
+			setFormNote(newNote);
 			scheduleSaveNote(newNote);
 		}
-	};// , [formNote, saveNoteNow, scheduleSaveNote]);
+	}, [formNote]);
 
-	const onBodyChange = (event:OnChangeEvent) => onFieldChange('body', event.content);
+	const onBodyChange = useCallback((event:OnChangeEvent) => onFieldChange('body', event.content, event.changeId), [onFieldChange]);
 
-	const onTitleChange = (event:any) => onFieldChange('title', event.target.value);
+	const onTitleChange = useCallback((event:any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
-	const onBodyWillChange = () => {
-		bodyWillChange.current = true;
+	const onBodyWillChange = (event:any) => {
+		setFormNote(prev => {
+			return { ...prev, bodyWillChangeId: event.changeId };
+		});
 	};
 
 	if (props.selectedNoteIds.length > 1) {
@@ -341,7 +321,7 @@ function NoteText2(props:NoteTextProps) {
 				<div style={{ display: 'flex' }}>
 					<input
 						type="text"
-						placeholder={props.newNote ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
+						placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
 						style={styles.titleInput}
 						onChange={onTitleChange}
 						value={formNote.title}
@@ -365,10 +345,13 @@ function NoteText2(props:NoteTextProps) {
 }
 
 const mapStateToProps = (state:any) => {
+	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+
 	return {
-		noteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
+		noteId: noteId,
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
+		isProvisional: state.provisionalNoteIds.includes(noteId),
 		// selectedNoteHash: state.selectedNoteHash,
 		// noteTags: state.selectedNoteTags,
 		// folderId: state.selectedFolderId,
@@ -376,7 +359,6 @@ const mapStateToProps = (state:any) => {
 		// folders: state.folders,
 		theme: state.settings.theme,
 		// syncStarted: state.syncStarted,
-		newNote: state.newNote,
 		// windowCommand: state.windowCommand,
 		// notesParentType: state.notesParentType,
 		// searches: state.searches,

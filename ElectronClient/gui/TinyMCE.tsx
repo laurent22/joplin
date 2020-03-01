@@ -7,13 +7,14 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { DefaultEditorState } from './utils/NoteText';
 
 export interface OnChangeEvent {
+	changeId: number,
 	content: any,
 }
 
 interface TinyMCEProps {
 	style: any,
 	onChange(event: OnChangeEvent): void,
-	onWillChange(): void,
+	onWillChange(event:any): void,
 	defaultEditorState: DefaultEditorState,
 	markdownToHtml: Function,
 	attachResources: Function,
@@ -39,6 +40,7 @@ function findBlockSource(node:any) {
 let lastClickedEditableNode_:any = null;
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
+let changeId_:number = 1;
 
 const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
@@ -51,7 +53,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	const lastChangeContent = useRef(null);
 
-	const rootId = `tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`;
+	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
@@ -79,7 +81,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		const loadEditor = async () => {
 			const editors = await tinymce.init({
-				selector: `#${rootId}`,
+				selector: `#${rootIdRef.current}`,
 				plugins: 'noneditable link lists hr',
 				noneditable_noneditable_class: 'joplin-editable', // TODO: regex
 				valid_elements: '*[*]', // TODO: filter more,
@@ -162,7 +164,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markdownToHtml, props.defaultEditorState]);
+	}, [editor, props.markdownToHtml, props.defaultEditorState, onEditorContentClick]);
 
 	useEffect(() => {
 		if (!editor) return;
@@ -222,22 +224,24 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			},
 		});
 
-	}, [editor, props.markdownToHtml, props.attachResources]);
+	}, [editor, props.markdownToHtml]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		let cancelled = false;
 		let onChangeHandlerIID:any = null;
 
 		const onChangeHandler = () => {
-			props.onWillChange();
+			const changeId = changeId_++;
+			props.onWillChange({ changeId: changeId });
+
+			console.info('TinyMCE: onChangeHandler');
 
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
 
-				if (cancelled) return;
+				// if (cancelled) return;
 
 				const content = editor.getContent();
 				// The Change event for example will be fired when the text area loses
@@ -247,7 +251,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				// if (lastChangeContent.current === content) return;
 
 				lastChangeContent.current = content;
-				props.onChange({ content: content });
+				props.onChange({ changeId: changeId, content: content });
 				dispatchDidUpdate(editor);
 			}, 1000);
 		};
@@ -255,23 +259,19 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		editor.on('keyup', onChangeHandler); // TODO: don't trigger for shift, ctrl, etc.
 		editor.on('paste', onChangeHandler);
 		editor.on('cut', onChangeHandler);
-		// editor.on('Change', onChangeHandler);
 
 		return () => {
-			cancelled = true;
-
 			try {
 				editor.off('keyup', onChangeHandler);
 				editor.off('paste', onChangeHandler);
 				editor.off('cut', onChangeHandler);
-				// editor.off('Change', onChangeHandler);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
 		};
-	}, [props.onChange, editor]);
+	}, [props.onWillChange, props.onChange, editor]);
 
-	return <div style={props.style} id={rootId}/>;
+	return <div style={props.style} id={rootIdRef.current}/>;
 };
 
 export default forwardRef(TinyMCE);
