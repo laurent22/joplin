@@ -33,7 +33,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 			setCharacters(counter.all);
 			setCharactersNoSpace(counter.characters);
 		});
-		setLines(props.text.split('\n').length);
+		props.text === '' ? setLines(0) : setLines(props.text.split('\n').length);
 	}, [props.text]);
 
 	const textProperties: TextPropertiesMap = {
