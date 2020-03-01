@@ -1649,7 +1649,7 @@ class NoteTextComponent extends React.Component {
 
 		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
-				tooltip: _('Bold'),
+				tooltip: _('Bold - Ctrl + B'),
 				iconName: 'fa-bold',
 				onClick: () => {
 					return this.commandTextBold();
@@ -1657,7 +1657,7 @@ class NoteTextComponent extends React.Component {
 			});
 
 			toolbarItems.push({
-				tooltip: _('Italic'),
+				tooltip: _('Italic - Ctrl + I'),
 				iconName: 'fa-italic',
 				onClick: () => {
 					return this.commandTextItalic();
@@ -1669,7 +1669,7 @@ class NoteTextComponent extends React.Component {
 			});
 
 			toolbarItems.push({
-				tooltip: _('Hyperlink'),
+				tooltip: _('Hyperlink - Ctrl + K'),
 				iconName: 'fa-link',
 				onClick: () => {
 					return this.commandTextLink();
@@ -1677,7 +1677,7 @@ class NoteTextComponent extends React.Component {
 			});
 
 			toolbarItems.push({
-				tooltip: _('Code'),
+				tooltip: _('Code - Ctrl + `'),
 				iconName: 'fa-code',
 				onClick: () => {
 					return this.commandTextCode();
@@ -1737,7 +1737,7 @@ class NoteTextComponent extends React.Component {
 			});
 
 			toolbarItems.push({
-				tooltip: _('Insert Date Time'),
+				tooltip: _('Insert Date Time - Ctrl + Shift + T'),
 				iconName: 'fa-calendar-plus-o',
 				onClick: () => {
 					return this.commandDateTime();
@@ -1760,7 +1760,7 @@ class NoteTextComponent extends React.Component {
 			});
 		} else {
 			toolbarItems.push({
-				tooltip: _('Edit in external editor'),
+				tooltip: _('Edit in external editor - Ctrl + E'),
 				iconName: 'fa-external-link',
 				onClick: () => {
 					return this.commandStartExternalEditing();
