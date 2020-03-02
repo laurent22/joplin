@@ -14,9 +14,7 @@ async function copyToDist(distDir) {
 	await copyDir(clipperDir, 'content_scripts', distDir);
 	await copyDir(clipperDir, 'icons', distDir);
 	await fs.copy(`${clipperDir}/background.js`, `${distDir}/background.js`);
-	await fs.copy(`${clipperDir}/main.js`, `${distDir}/main.js`);
 	await fs.copy(`${clipperDir}/manifest.json`, `${distDir}/manifest.json`);
-
 	await fs.remove(`${distDir}/popup/build/manifest.json`);
 }
 
