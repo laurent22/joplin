@@ -42,6 +42,9 @@ ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
 ElectronClient/gui/note-viewer/fonts/
 ElectronClient/gui/note-viewer/lib.js
+Clipper-source/
+Clipper/joplin-webclipper-source.zip
+joplin-webclipper-source.zip
 Tools/commit_hook.txt
 .vscode/*
 *.map
