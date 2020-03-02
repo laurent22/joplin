@@ -215,6 +215,15 @@ function NoteText2(props:NoteTextProps) {
 		return result;
 	}, [props.theme]);
 
+	const handleProvisionalFlag = useCallback(() => {
+		if (props.isProvisional) {
+			props.dispatch({
+				type: 'NOTE_PROVISIONAL_FLAG_CLEAR',
+				id: formNote.id,
+			});
+		}
+	}, [props.isProvisional, formNote.id]);
+
 	useEffect(() => {
 		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
 		// yet saved, we need to save it now before the component is unmounted. However, we can't put
@@ -263,43 +272,41 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.noteId, formNote]);
 
 	const onFieldChange = useCallback((field:string, value:any, changeId: number = 0) => {
+		handleProvisionalFlag();
+
 		const change = field === 'body' ? {
 			bodyEditorContent: value,
 		} : {
 			title: value,
 		};
 
-		setFormNote(prev => {
-			return {
-				...prev,
-				...change,
-				bodyChangeId: changeId,
-			};
-		});
-	}, []);
+		const newNote = {
+			...formNote,
+			...change,
+			bodyWillChangeId: 0,
+			bodyChangeId: 0,
+		};
 
-	useEffect(() => {
-		if (!formNote.bodyChangeId) return;
-
-		if (formNote.bodyWillChangeId !== formNote.bodyChangeId) {
-			console.info('Note was changed, but another note was loaded before save - skipping', formNote);
+		if (field === 'body' && formNote.bodyWillChangeId !== changeId) {
+			// Note was changed, but another note was loaded before save - skipping
+			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
-			console.info('Saving: bodyChangeId');
-			const newNote = { ...formNote, bodyWillChangeId: 0, bodyChangeId: 0 };
 			setFormNote(newNote);
 			scheduleSaveNote(newNote);
 		}
-	}, [formNote]);
+	}, [handleProvisionalFlag, formNote]);
 
 	const onBodyChange = useCallback((event:OnChangeEvent) => onFieldChange('body', event.content, event.changeId), [onFieldChange]);
 
 	const onTitleChange = useCallback((event:any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
-	const onBodyWillChange = (event:any) => {
+	const onBodyWillChange = useCallback((event:any) => {
+		handleProvisionalFlag();
+
 		setFormNote(prev => {
 			return { ...prev, bodyWillChangeId: event.changeId };
 		});
-	};
+	}, [formNote, handleProvisionalFlag]);
 
 	if (props.selectedNoteIds.length > 1) {
 		return <MultiNoteActions

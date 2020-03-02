@@ -439,6 +439,16 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
+		case 'NOTE_PROVISIONAL_FLAG_CLEAR':
+			{
+				const newIds = ArrayUtils.removeElement(state.provisionalNoteIds, action.id);
+				if (newIds !== state.provisionalNoteIds) {
+					newState = Object.assign({}, state, { provisionalNoteIds: newIds });
+				}
+			}
+			break;
+
+
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);

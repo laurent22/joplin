@@ -51,8 +51,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const markdownToHtml = useRef(null);
 	markdownToHtml.current = props.markdownToHtml;
 
-	const lastChangeContent = useRef(null);
-
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 
 	const dispatchDidUpdate = (editor:any) => {
@@ -124,7 +122,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			if (cancelled) return;
 
 			editor.setContent(result.html);
-			lastChangeContent.current = editor.getContent();
 
 			const cssFiles = result.pluginAssets
 				.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
@@ -226,6 +223,12 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	}, [editor, props.markdownToHtml]);
 
+	// Need to save the onChange handler to a ref to make sure
+	// we call the current one from setTimeout.
+	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
+	const props_onChangeRef = useRef<Function>();
+	props_onChangeRef.current = props.onChange;
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -235,23 +238,18 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
-			console.info('TinyMCE: onChangeHandler');
-
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
+
 			onChangeHandlerIID = setTimeout(() => {
 				onChangeHandlerIID = null;
 
-				// if (cancelled) return;
+				if (!editor) return;
 
-				const content = editor.getContent();
-				// The Change event for example will be fired when the text area loses
-				// focus, even if nothing has changed, so we need to double-check here
-				// to avoid dispatching unecessary events.
-				// TODO: not needed anymore??
-				// if (lastChangeContent.current === content) return;
+				props_onChangeRef.current({
+					changeId: changeId,
+					content: editor.getContent(),
+				});
 
-				lastChangeContent.current = content;
-				props.onChange({ changeId: changeId, content: content });
 				dispatchDidUpdate(editor);
 			}, 1000);
 		};
