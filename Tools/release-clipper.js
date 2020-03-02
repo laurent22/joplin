@@ -2,7 +2,8 @@ const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
 
 const clipperDir   = `${__dirname}/../Clipper`;
-const tmpSourceDir = `${__dirname}/../Clipper-source`;
+const tmpSourceDirName = 'Clipper-source';
+const tmpSourceDir = `${__dirname}/../${tmpSourceDirName}`;
 
 async function copyDir(baseSourceDir, sourcePath, baseDestDir) {
 	await fs.mkdirp(`${baseDestDir}/${sourcePath}`);
@@ -82,9 +83,9 @@ async function main() {
 
 	console.info('Creating source tarball for code validation...');
 	process.chdir(`${clipperDir}/`);
-	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' ${clipperDir}/ ${tmpSourceDir}/`));
-	console.info(await execCommand('7z a -tzip joplin-webclipper-source.zip joplin-webclipper-source'));
-	console.info(await execCommand(`mv joplin-webclipper-source.zip ${clipperDir}/dist/ && rm -rf joplin-webclipper-source`));
+	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' "${clipperDir}/ ${tmpSourceDir}/"`));
+	console.info(await execCommand(`7z a -tzip joplin-webclipper-source.zip "${tmpSourceDirName}"`));
+	console.info(await execCommand(`mv joplin-webclipper-source.zip "${clipperDir}/dist/" && rm -rf "${tmpSourceDirName}"`));
 
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand(`git commit -m "Clipper release v${newVersion}"`));
