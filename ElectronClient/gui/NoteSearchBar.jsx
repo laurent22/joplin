@@ -146,7 +146,7 @@ class NoteSearchBarComponent extends React.Component {
 			<div style={textStyle}>
 				{`${this.props.selectedIndex + 1} / ${this.props.resultCount}`}
 			</div>
-		) : null;
+		) : (query.length === 0 ? null : 'No matches found');
 
 		return (
 			<div style={this.props.style}>
