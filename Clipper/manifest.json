@@ -23,16 +23,6 @@
         "default_title": "Joplin Web Clipper",
         "default_popup": "popup/build/index.html"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "*://*/"
-            ],
-            "js": [
-                "main.js"
-            ]
-        }
-    ],
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
