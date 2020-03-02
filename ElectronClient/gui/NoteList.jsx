@@ -287,6 +287,7 @@ class NoteListComponent extends React.Component {
 			for (let i = 0; i < this.props.notes.length; i++) {
 				if (this.props.notes[i].id === id) {
 					this.itemListRef.current.makeItemIndexVisible(i);
+					this.focusNoteId_(this.props.notes[i].id);
 					break;
 				}
 			}
@@ -343,10 +344,6 @@ class NoteListComponent extends React.Component {
 				type: 'NOTE_SELECT',
 				id: newSelectedNote.id,
 			});
-
-			this.itemListRef.current.makeItemIndexVisible(noteIndex);
-
-			this.focusNoteId_(newSelectedNote.id);
 
 			event.preventDefault();
 		}
