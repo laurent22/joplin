@@ -82,8 +82,8 @@ async function main() {
 	}
 
 	console.info('Creating source tarball for code validation...');
-	console.info(`Chdir: ${clipperDir}`);
-	process.chdir(`${clipperDir}/`);
+	console.info(`Chdir: ${clipperDir}/..`);
+	process.chdir(`${clipperDir}/..`);
 	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' "${clipperDir}/" "${tmpSourceDir}/"`));
 	console.info(await execCommand(`7z a -tzip joplin-webclipper-source.zip "${tmpSourceDirName}"`));
 	console.info(await execCommand(`mv joplin-webclipper-source.zip "${clipperDir}/dist/" && rm -rf "${tmpSourceDirName}"`));
