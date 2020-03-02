@@ -1005,8 +1005,6 @@ class NoteTextComponent extends React.Component {
 
 					const s1 = that.state.note.body.substr(0, s-(line.length+1));
 					const s2 = that.state.note.body.substr(s);
-					console.log(s1);
-					console.log(s2);
 					shared.noteComponent_change(that, 'body', s1 + s2);
 
 					return this.$getIndent(line);
