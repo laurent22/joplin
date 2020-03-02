@@ -225,6 +225,40 @@ class NoteTextComponent extends React.Component {
 				})
 			);
 
+			// Text formatting options in context menu
+			menu.append(
+				new MenuItem({
+					label: _('Format'),
+					enabled: !!selectedText,
+					submenu: [
+						{
+							label: 'Bold',
+							click: async () => {
+								this.commandTextBold();
+							},
+						},
+						{
+							label: 'Italic',
+							click: async () => {
+								this.commandTextItalic();
+							},
+						},
+						{
+							label: 'Hyperlink',
+							click: async () => {
+								this.commandTextLink();
+							},
+						},
+						{
+							label: 'Code',
+							click: async () => {
+								this.commandTextCode();
+							},
+						},
+					],
+				})
+			);
+
 			menu.popup(bridge().window());
 		};
 
