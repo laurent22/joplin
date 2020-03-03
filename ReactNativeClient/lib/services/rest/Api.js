@@ -451,6 +451,23 @@ class Api {
 			return note;
 		}
 
+		if (request.method === 'PUT') {
+			const note = await Note.load(id);
+			const requestBody = JSON.parse(request.body);
+
+			if (!note) throw new ErrorNotFound();
+
+			let newNote = Object.assign({}, note, request.bodyJson(this.readonlyProperties('PUT')));
+			newNote = await Note.save(newNote, { userSideValidation: true });
+
+			if (requestBody.tags) {
+				const tagTitles = requestBody.tags.split(',');
+				await Tag.setNoteTagsByTitles(newNote.id, tagTitles);
+			}
+
+			return newNote;
+		}
+
 		return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 	}
 
