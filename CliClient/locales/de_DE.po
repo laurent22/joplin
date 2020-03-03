@@ -865,9 +865,8 @@ msgstr "Optionen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:623
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "Anhänge: %d."
+msgstr "Anhänge"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:645
 #, javascript-format
@@ -1468,16 +1467,15 @@ msgstr "Hole es jetzt:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Piktogramm"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "Notiz-Eigenschaften"
+msgstr "Notizbuch-Eigenschaften"
 
 # 'Nutzung', 'Gebrauch', or 'Verwendung' - depends on the context
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:224
@@ -1551,24 +1549,23 @@ msgstr "Gib das Passwort ein"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Worte"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Zeichen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Zeichen ohne Leerzeichen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Zeilen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "Notiz-Eigenschaften"
+msgstr "Inhaltseigenschaften"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:180
@@ -1758,9 +1755,8 @@ msgid "Watching..."
 msgstr "Zuschauend..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
-#, fuzzy
 msgid "Content Properties"
-msgstr "Notiz-Eigenschaften"
+msgstr "Inhaltseigenschaften"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
 msgid "to-do"
@@ -1780,19 +1776,16 @@ msgid "Clear"
 msgstr "Leeren"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
 msgstr "Titel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
-# Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
-#, fuzzy
 msgid "Action"
-msgstr "Standort"
+msgstr "Aktion"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
@@ -1805,18 +1798,19 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "Überprüfe… Bitte warten."
+msgstr "Bitte warten..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "Keine Anhänge!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Warnung: Nicht alle Anhänge werden aus Leistungsgründen angezeigt (Limit: "
+"%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1911,7 +1905,7 @@ msgstr "Entschlüsselte Objekte: %d/%d"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
 #, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Ressourcen abrufen: %d/%d"
+msgstr "Anhänge abrufen: %d/%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:33
 msgid "Please select where the sync status should be exported to"
