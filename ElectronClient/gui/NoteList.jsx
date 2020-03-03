@@ -285,12 +285,12 @@ class NoteListComponent extends React.Component {
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
 			const doRefocus = this.props.notes.length < prevProps.notes.length;
+
 			for (let i = 0; i < this.props.notes.length; i++) {
 				if (this.props.notes[i].id === id) {
 					this.itemListRef.current.makeItemIndexVisible(i);
-
 					if (doRefocus) {
-						const ref = this.itemAnchorRef(this.props.selectedNoteIds[0]);
+						const ref = this.itemAnchorRef(id);
 						if (ref) ref.focus();
 					}
 					break;
