@@ -284,10 +284,15 @@ class NoteListComponent extends React.Component {
 
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
+			const doRefocus = this.props.notes.length < prevProps.notes.length;
 			for (let i = 0; i < this.props.notes.length; i++) {
 				if (this.props.notes[i].id === id) {
 					this.itemListRef.current.makeItemIndexVisible(i);
-					this.focusNoteId_(this.props.notes[i].id);
+
+					if (doRefocus) {
+						const ref = this.itemAnchorRef(this.props.selectedNoteIds[0]);
+						if (ref) ref.focus();
+					}
 					break;
 				}
 			}
@@ -320,10 +325,8 @@ class NoteListComponent extends React.Component {
 			// Down
 			noteIndex += 1;
 		}
-
 		if (noteIndex < 0) noteIndex = 0;
 		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
-
 		return noteIndex;
 	}
 
@@ -345,13 +348,16 @@ class NoteListComponent extends React.Component {
 				id: newSelectedNote.id,
 			});
 
+			this.itemListRef.current.makeItemIndexVisible(noteIndex);
+			this.focusNoteId_(newSelectedNote.id);
+
 			event.preventDefault();
 		}
 
 		if (noteIds.length && (keyCode === 46 || (keyCode === 8 && event.metaKey))) {
 			// DELETE / CMD+Backspace
 			event.preventDefault();
-			await NoteListUtils.confirmDeleteNotes(noteIds);
+			await NoteListUtils.confirmDeleteNotes(noteIds, this.props);
 		}
 
 		if (noteIds.length && keyCode === 32) {
