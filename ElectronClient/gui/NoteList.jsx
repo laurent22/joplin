@@ -357,6 +357,7 @@ class NoteListComponent extends React.Component {
 		if (noteIds.length && (keyCode === 46 || (keyCode === 8 && event.metaKey))) {
 			// DELETE / CMD+Backspace
 			event.preventDefault();
+
 			await NoteListUtils.confirmDeleteNotes(noteIds);
 		}
 
