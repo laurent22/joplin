@@ -326,4 +326,28 @@ describe('services_rest_Api', function() {
 		expect(response3.length).toBe(2);
 	}));
 
+	it('should update tags when updating notes', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+		const tag3 = await Tag.save({ title: 'mon étiquette 3' });
+		const note = await Note.save({
+			title: 'ma note un',
+			tags: `${tag1.title},${tag2.title}`,
+		});
+
+		const response1 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title},${tag3.title}`,
+		}));
+		expect(response1.tags === `${tag1.title},${tag3.title}`).toBe(true);
+
+		const response2 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title}`,
+		}));
+		expect(response2.tags === `${tag1.title}`).toBe(true);
+
+		const response3 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title},${tag2.title},${tag3.title}`,
+		}));
+		expect(response3.tags === `${tag1.title},${tag2.title},${tag3.title}`).toBe(true);
+	}));
 });
