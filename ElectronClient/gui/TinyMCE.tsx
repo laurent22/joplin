@@ -6,6 +6,8 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 // eslint-disable-next-line no-unused-vars
 import { DefaultEditorState } from './utils/NoteText';
 
+const { MarkupToHtml } = require('lib/joplin-renderer');
+
 export interface OnChangeEvent {
 	changeId: number,
 	content: any,
@@ -16,7 +18,7 @@ interface TinyMCEProps {
 	onChange(event: OnChangeEvent): void,
 	onWillChange(event:any): void,
 	defaultEditorState: DefaultEditorState,
-	markdownToHtml: Function,
+	markupToHtml: Function,
 	attachResources: Function,
 }
 
@@ -48,8 +50,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const attachResources = useRef(null);
 	attachResources.current = props.attachResources;
 
-	const markdownToHtml = useRef(null);
-	markdownToHtml.current = props.markdownToHtml;
+	const markupToHtml = useRef(null);
+	markupToHtml.current = props.markupToHtml;
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 
@@ -95,7 +97,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 							const html = [];
 							for (const resource of resources) {
-								const result = await markdownToHtml.current(resource.markdownTag, { bodyOnly: true });
+								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resource.markdownTag, { bodyOnly: true });
 								html.push(result.html);
 							}
 
@@ -118,7 +120,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markdownToHtml(props.defaultEditorState.markdown);
+			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value);
 			if (cancelled) return;
 
 			editor.setContent(result.html);
@@ -161,7 +163,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markdownToHtml, props.defaultEditorState, onEditorContentClick]);
+	}, [editor, props.markupToHtml, props.defaultEditorState, onEditorContentClick]);
 
 	useEffect(() => {
 		if (!editor) return;
@@ -193,7 +195,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 					onSubmit: async (dialogApi:any) => {
 						const newSource = dialogApi.getData().codeTextArea;
 						const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
-						const result = await props.markdownToHtml(md);
+						const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md);
 						lastClickedEditableNode_.innerHTML = result.html;
 						source.node.textContent = newSource;
 						dialogApi.close();
@@ -221,7 +223,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			},
 		});
 
-	}, [editor, props.markdownToHtml]);
+	}, [editor, props.markupToHtml]);
 
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.

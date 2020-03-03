@@ -58,12 +58,14 @@ class MdToHtml {
 		this.tempDir_ = options.tempDir;
 		this.fsDriver_ = {
 			writeFile: (/* path, content, encoding = 'base64'*/) => { throw new Error('writeFile not set'); },
-			exists: (/* path*/) => { throw new Error('writeFile not set'); },
+			exists: (/* path*/) => { throw new Error('exists not set'); },
+			cacheCssToFile: (/* cssStrings*/) => { throw new Error('cacheCssToFile not set'); },
 		};
 
 		if (options.fsDriver) {
 			if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
 			if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
+			if (options.fsDriver.cacheCssToFile) this.fsDriver_.cacheCssToFile = options.fsDriver.cacheCssToFile;
 		}
 	}
 
@@ -289,16 +291,7 @@ class MdToHtml {
 			output.html = `<div id="rendered-md">${renderedBody}</div>`;
 
 			if (options.externalAssetsOnly) {
-				const cssString = cssStrings.join('\n');
-				const cssFilePath = `${this.tempDir()}/${md5(escape(cssString))}.css`;
-				if (!(await this.fsDriver().exists(cssFilePath))) {
-					await this.fsDriver().writeFile(cssFilePath, cssString, 'utf8');
-				}
-
-				output.pluginAssets.push({
-					path: cssFilePath,
-					mime: 'text/css',
-				});
+				output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssStrings));
 			}
 		}
 

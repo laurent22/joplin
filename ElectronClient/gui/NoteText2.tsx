@@ -20,31 +20,11 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
-// Note: Data from the editor is currently processed and saved this way:
-//
-// 1. TinyMCE triggers the onChange event if the user stops typing for 500ms
-// 2. NoteText2 receives this event, update formNote and schedule a save operation
-// 3. The note is saved after several ms depending on how AsyncActionQueue is configured
-//
-// This means that if the user types something, then switch to another note within
-// less than 500ms, the changes will be lost. It's relatively rare case but it could happen.
-//
-// The delay between scheduling save and actual saving on the other hand is not an issue
-// because when scheduling the complete state is saved to a variable, which is then
-// used to save to the database. So even if the component is unmounted, saving will
-// still happen in the background.
-//
-// New notes don't have an ID and can be more of a problem, this is why they are saved
-// immediately (no scheduling) once the user starts modifying it so that we have an ID
-// to work with.
-
-// TODO: as soon as note change, clear provisional flag
 // TODO: preserve image size
 // TODO: handle HTML notes
 // TODO: add indicator showing that note has been saved or not
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
 // TODO: Handle template
-// TODO: document willChange/change event and changeId
 
 interface NoteTextProps {
 	style: any,
@@ -63,8 +43,27 @@ interface FormNote {
 	parent_id: string,
 	is_todo: number,
 	bodyEditorContent?: any,
+	markup_language: number,
+
+	// Getting the content from the editor can be a slow process because that content
+	// might need to be serialized first. For that reason, the wrapped editor (eg TinyMCE)
+	// first emits onWillChange when there is a change. That event does not include the
+	// editor content. After a few milliseconds (eg if the user stops typing for long
+	// enough), the editor emits onChange, and that event will include the editor content.
+	//
+	// Both onWillChange and onChange events include a changeId property which is used
+	// to link the two events together. It is used for example to detect if a new note
+	// was loaded before the current note was saved - in that case the changeId will be
+	// different. The two properties bodyWillChangeId and bodyChangeId are used to save
+	// this info with the currently loaded note.
+	//
+	// The willChange/onChange events also allow us to handle the case where the user
+	// types something then quickly switch a different note. In that case, bodyWillChangeId
+	// is set, thus we know we should save the note, even though we won't receive the
+	// onChange event.
 	bodyWillChangeId: number
 	bodyChangeId: number,
+
 	saveActionQueue: AsyncActionQueue,
 }
 
@@ -74,6 +73,7 @@ const defaultNote = ():FormNote => {
 		parent_id: '',
 		title: '',
 		is_todo: 0,
+		markup_language: 1,
 		bodyWillChangeId: 0,
 		bodyChangeId: 0,
 		saveActionQueue: null,
@@ -123,7 +123,13 @@ async function formNoteToNote(formNote:FormNote):Promise<any> {
 
 	if ('bodyEditorContent' in formNote) {
 		const html = await editorContentToHtml(formNote.bodyEditorContent);
-		newNote.body = await htmlToMarkdown(html);
+		if (formNote.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN) {
+			newNote.body = await htmlToMarkdown(html);
+		} else {
+			// TODO: send back style that was originally part of the HTML note
+			newNote.body = html;
+			newNote.body = await Note.replaceResourceExternalToInternalLinks(newNote.body, { useAbsolutePaths: true });
+		}
 	}
 
 	delete newNote.bodyEditorContent;
@@ -183,7 +189,7 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any) {
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
-	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ markdown: '' });
+	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ value: '', markupLanguage: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN });
 
 	const editorRef = useRef<any>();
 	const formNoteRef = useRef<FormNote>();
@@ -191,7 +197,7 @@ function NoteText2(props:NoteTextProps) {
 
 	const styles = styles_(props);
 
-	const markdownToHtml = useCallback(async (md:string, options:any = null):Promise<any> => {
+	const markupToHtml = useCallback(async (markupLanguage:number, md:string, options:any = null):Promise<any> => {
 		md = md || '';
 
 		const theme = themeStyle(props.theme);
@@ -202,7 +208,7 @@ function NoteText2(props:NoteTextProps) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 		});
 
-		const result = await markupToHtml.render(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, theme, Object.assign({}, {
+		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
 			// userCss: this.props.customCss ? this.props.customCss : '',
 			// resources: await shared.attachedResources(noteBody),
@@ -249,6 +255,8 @@ function NoteText2(props:NoteTextProps) {
 			const n = await Note.load(props.noteId);
 			if (cancelled) return;
 
+			console.info('Loaded note:', n);
+
 			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
 
 			setFormNote({
@@ -258,10 +266,14 @@ function NoteText2(props:NoteTextProps) {
 				parent_id: n.parent_id,
 				bodyWillChangeId: 0,
 				bodyChangeId: 0,
+				markup_language: n.markup_language,
 				saveActionQueue: new AsyncActionQueue(2000),
 			});
 
-			setDefaultEditorState({ markdown: n.body });
+			setDefaultEditorState({
+				value: n.body,
+				markupLanguage: n.markup_language,
+			});
 		};
 
 		loadNote();
@@ -341,7 +353,7 @@ function NoteText2(props:NoteTextProps) {
 						onChange={onBodyChange}
 						onWillChange={onBodyWillChange}
 						defaultEditorState={defaultEditorState}
-						markdownToHtml={markdownToHtml}
+						markupToHtml={markupToHtml}
 						attachResources={attachResources}
 					/>
 				</div>
