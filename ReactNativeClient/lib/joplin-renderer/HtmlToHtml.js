@@ -27,16 +27,16 @@ class HtmlToHtml {
 		return this.fsDriver_;
 	}
 
-	splitHtml_(html) {
+	splitHtml(html) {
 		const trimmedHtml = html.trimStart();
-		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, cssStrings: [] };
+		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, cssStrings: [], originalCssHtml: '' };
 
 		const closingIndex = trimmedHtml.indexOf('</style>');
-		if (closingIndex < 0) return { html: html, cssStrings: [] };
+		if (closingIndex < 0) return { html: html, cssStrings: [], originalCssHtml: '' };
 
 		return {
 			html: trimmedHtml.substr(closingIndex + 8),
-			cssStrings: [trimmedHtml.substr(7, closingIndex)],
+			css: trimmedHtml.substr(7, closingIndex),
 		};
 	}
 
@@ -81,8 +81,8 @@ class HtmlToHtml {
 		let cssStrings = noteStyle(theme, options);
 
 		if (options.splitted) {
-			const splitted = this.splitHtml_(html);
-			cssStrings = splitted.cssStrings.concat(cssStrings);
+			const splitted = this.splitHtml(html);
+			cssStrings = [splitted.css].concat(cssStrings);
 
 			const output = {
 				html: splitted.html,

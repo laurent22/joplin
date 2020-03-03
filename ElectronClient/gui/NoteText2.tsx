@@ -11,6 +11,7 @@ import MultiNoteActions from './MultiNoteActions';
 import { DefaultEditorState } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const Setting = require('lib/models/Setting');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const HtmlToMd = require('lib/HtmlToMd');
@@ -21,10 +22,10 @@ const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
 // TODO: preserve image size
-// TODO: handle HTML notes
 // TODO: add indicator showing that note has been saved or not
 //       from TinyMCE, emit willChange event, which means we know we're expecting changes
 // TODO: Handle template
+// TODO: Check that inserted code or resources is not wrapped in DIV
 
 interface NoteTextProps {
 	style: any,
@@ -65,6 +66,16 @@ interface FormNote {
 	bodyChangeId: number,
 
 	saveActionQueue: AsyncActionQueue,
+
+	// Note with markup_language = HTML have a block of CSS at the start, which is used
+	// to preserve the style from the original (web-clipped) page. When sending the note
+	// content to TinyMCE, we only send the actual HTML, without this CSS. The CSS is passed
+	// via a file in pluginAssets. This is because TinyMCE would not render the style otherwise.
+	// However, when we get back the HTML from TinyMCE, we need to reconstruct the original note.
+	// Since the CSS used by TinyMCE has been lost (since it's in a temp CSS file), we keep that
+	// original CSS here. It's used in formNoteToNote to rebuild the note body.
+	// We can keep it here because we know TinyMCE will not modify it anyway.
+	originalCss: string,
 }
 
 const defaultNote = ():FormNote => {
@@ -77,6 +88,7 @@ const defaultNote = ():FormNote => {
 		bodyWillChangeId: 0,
 		bodyChangeId: 0,
 		saveActionQueue: null,
+		originalCss: '',
 	};
 };
 
@@ -123,12 +135,12 @@ async function formNoteToNote(formNote:FormNote):Promise<any> {
 
 	if ('bodyEditorContent' in formNote) {
 		const html = await editorContentToHtml(formNote.bodyEditorContent);
-		if (formNote.markup_language === Note.MARKUP_LANGUAGE_MARKDOWN) {
+		if (formNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 			newNote.body = await htmlToMarkdown(html);
 		} else {
-			// TODO: send back style that was originally part of the HTML note
 			newNote.body = html;
 			newNote.body = await Note.replaceResourceExternalToInternalLinks(newNote.body, { useAbsolutePaths: true });
+			if (formNote.originalCss) newNote.body = `<style>${formNote.originalCss}</style>\n${newNote.body}`;
 		}
 	}
 
@@ -259,6 +271,13 @@ function NoteText2(props:NoteTextProps) {
 
 			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
 
+			let originalCss = '';
+			if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
+				const htmlToHtml = new HtmlToHtml();
+				const splitted = htmlToHtml.splitHtml(n.body);
+				originalCss = splitted.css;
+			}
+
 			setFormNote({
 				id: n.id,
 				title: n.title,
@@ -268,6 +287,7 @@ function NoteText2(props:NoteTextProps) {
 				bodyChangeId: 0,
 				markup_language: n.markup_language,
 				saveActionQueue: new AsyncActionQueue(2000),
+				originalCss: originalCss,
 			});
 
 			setDefaultEditorState({
