@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -762,7 +764,7 @@ msgstr "ノート一覧"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:373
 msgid "Note title"
-msgstr "ノートの題名："
+msgstr "ノートの題名"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:379
 msgid "Note body"
@@ -837,9 +839,8 @@ msgstr "オプション"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:623
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "リソース: %d."
+msgstr "リソース一覧"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:645
 #, javascript-format
@@ -1430,16 +1431,15 @@ msgstr "今すぐ取得:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "アイコン"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "ノートのプロパティ"
+msgstr "ノートブックのプロパティ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:224
 msgid "Usage"
@@ -1512,24 +1512,23 @@ msgstr "パスワードの設定"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "単語数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "文字数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "文字数(空白を除く)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "行数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "ノートのプロパティ"
+msgstr "ノート内容のプロパティ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:180
@@ -1712,9 +1711,8 @@ msgid "Watching..."
 msgstr "確認中..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
-#, fuzzy
 msgid "Content Properties"
-msgstr "ノートのプロパティ"
+msgstr "ノート内容のプロパティ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
 msgid "to-do"
@@ -1734,18 +1732,16 @@ msgid "Clear"
 msgstr "クリア"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
-msgstr "タイトル"
+msgstr "題名"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "サイズ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
-#, fuzzy
 msgid "Action"
-msgstr "場所"
+msgstr "操作"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
@@ -1758,18 +1754,17 @@ msgid "Delete"
 msgstr "削除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "確認中...お待ちください。"
+msgstr "お待ちください..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "リソースがありません!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1930,8 +1925,8 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name."
 msgstr ""
-"ノートタイトルを入力すると、そのノートに移動します。または#につづいてタグ名も"
-"しくは@につづいてノートブック名を使うこともできます。"
+"ノートの題名を入力すると、そのノートに移動します。または#につづいてタグ名もし"
+"くは@につづいてノートブック名を使うこともできます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:377
 msgid "Goto Anything..."
@@ -2122,7 +2117,7 @@ msgstr "暗号化したアイテムは修正できません"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
 msgid "title"
-msgstr "タイトル"
+msgstr "題名"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
@@ -2385,7 +2380,7 @@ msgstr "新しいToDoを作成した場合:"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:328
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
 msgid "Focus title"
-msgstr "タイトルにフォーカス"
+msgstr "題名にフォーカス"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
@@ -2768,8 +2763,8 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 "これらのアイテムはデバイスに残りましたが、同期先にアップロードされません。そ"
-"のようなアイテムを探すには、タイトルまたはID(上記の括弧内に表示されている)で"
-"検索してください。"
+"のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
+"してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, javascript-format
@@ -3147,7 +3142,7 @@ msgstr "ノートブックの編集"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
 msgid "Enter notebook title"
-msgstr "ノートブックのタイトルを入力"
+msgstr "ノートブックの題名を入力"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
@@ -3254,7 +3249,7 @@ msgstr "本文を追加"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
 msgid "Add title"
-msgstr "タイトルを追加"
+msgstr "題名を追加"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
 msgid "Login with OneDrive"
