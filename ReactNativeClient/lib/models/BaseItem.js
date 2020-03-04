@@ -341,7 +341,15 @@ class BaseItem extends BaseModel {
 			throw e;
 		}
 
-		const cipherText = await this.encryptionService().encryptString(serialized);
+		let cipherText = null;
+
+		try {
+			cipherText = await this.encryptionService().encryptString(serialized);
+		} catch (error) {
+			const msg = [`Could not encrypt item ${item.id}`];
+			if (error && error.message) msg.push(error.message);
+			throw new Error(msg.join(': '));
+		}
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
