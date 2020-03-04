@@ -21,6 +21,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
+const TemplateUtils = require('lib/TemplateUtils');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -98,10 +99,12 @@ class MainScreenComponent extends React.Component {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
 
+			const body = template ? TemplateUtils.render(template) : '';
+
 			const newNote = await Note.save({
 				parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
-				body: template || '',
+				body: body,
 			}, { provisional: true });
 
 			this.props.dispatch({
