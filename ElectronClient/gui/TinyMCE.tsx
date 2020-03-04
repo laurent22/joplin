@@ -39,7 +39,14 @@ function findBlockSource(node:any) {
 	};
 }
 
-let lastClickedEditableNode_:any = null;
+function findEditableContainer(node:any):any {
+	while (node) {
+		if (node.classList && node.classList.contains('joplin-editable')) return node;
+		node = node.parentNode;
+	}
+	return null;
+}
+
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
@@ -65,7 +72,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	const onEditorContentClick = useCallback((event:any) => {
 		if (event.target && event.target.nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
-			editor.fire('Change');
+			editor.fire('joplinChange');
 			dispatchDidUpdate(editor);
 		}
 	}, [editor]);
@@ -89,6 +96,47 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr',
 				setup: (editor:any) => {
 
+					function openEditDialog(editable:any) {
+						const source = findBlockSource(editable);
+
+						editor.windowManager.open({
+							title: 'Edit',
+							size: 'large',
+							initialData: {
+								codeTextArea: source.content,
+							},
+							onSubmit: async (dialogApi:any) => {
+								const newSource = dialogApi.getData().codeTextArea;
+								const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
+								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
+								console.info('Result', result);
+
+								editable.outerHTML = result.html;
+								source.node.textContent = newSource;
+								dialogApi.close();
+								editor.fire('joplinChange');
+								// editor.getDoc().activeElement.blur();
+								dispatchDidUpdate(editor);
+							},
+							body: {
+								type: 'panel',
+								items: [
+									{
+										type: 'textarea',
+										name: 'codeTextArea',
+										value: source.content,
+									},
+								],
+							},
+							buttons: [
+								{
+									type: 'submit',
+									text: 'OK',
+								},
+							],
+						});
+					}
+
 					editor.ui.registry.addButton('customAttach', {
 						tooltip: 'Attach...',
 						icon: 'upload',
@@ -105,6 +153,12 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 						},
 					});
 
+					editor.on('DblClick', (event:any) => {
+						const editable = findEditableContainer(event.target);
+						if (editable) {
+							openEditDialog(editable);
+						}
+					});
 				},
 			});
 
@@ -165,66 +219,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 	}, [editor, props.markupToHtml, props.defaultEditorState, onEditorContentClick]);
 
-	useEffect(() => {
-		if (!editor) return;
-
-		editor.ui.registry.addContextToolbar('joplinEditable', {
-			predicate: function(node:any) {
-				if (node.classList && node.classList.contains('joplin-editable')) {
-					lastClickedEditableNode_ = node;
-					return true;
-				}
-				return false;
-			},
-			items: 'customInsertButton',
-			position: 'node',
-			scope: 'node',
-		});
-
-		editor.ui.registry.addButton('customInsertButton', {
-			text: 'Edit',
-			onAction: function() {
-				const source = findBlockSource(lastClickedEditableNode_);
-
-				editor.windowManager.open({
-					title: 'Edit', // The dialog's title - displayed in the dialog header
-					size: 'large',
-					initialData: {
-						codeTextArea: source.content,
-					},
-					onSubmit: async (dialogApi:any) => {
-						const newSource = dialogApi.getData().codeTextArea;
-						const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
-						const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md);
-						lastClickedEditableNode_.innerHTML = result.html;
-						source.node.textContent = newSource;
-						dialogApi.close();
-						editor.fire('Change');
-						editor.getDoc().activeElement.blur();
-						dispatchDidUpdate(editor);
-					},
-					body: {
-						type: 'panel',
-						items: [
-							{
-								type: 'textarea',
-								name: 'codeTextArea',
-								value: source.content,
-							},
-						],
-					},
-					buttons: [
-						{
-							type: 'submit',
-							text: 'OK',
-						},
-					],
-				});
-			},
-		});
-
-	}, [editor, props.markupToHtml]);
-
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
@@ -259,12 +253,14 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		editor.on('keyup', onChangeHandler); // TODO: don't trigger for shift, ctrl, etc.
 		editor.on('paste', onChangeHandler);
 		editor.on('cut', onChangeHandler);
+		editor.on('joplinChange', onChangeHandler);
 
 		return () => {
 			try {
 				editor.off('keyup', onChangeHandler);
 				editor.off('paste', onChangeHandler);
 				editor.off('cut', onChangeHandler);
+				editor.off('joplinChange', onChangeHandler);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}

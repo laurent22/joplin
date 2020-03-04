@@ -288,6 +288,10 @@ module.exports = function(style, options) {
 			background-color: transparent;
 		}
 
+		.mce-content-body .joplin-editable {
+			cursor: pointer !important;
+		}
+
 		@media print {
 			body {
 				height: auto !important;

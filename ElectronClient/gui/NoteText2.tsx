@@ -22,10 +22,7 @@ const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
 // TODO: preserve image size
-// TODO: add indicator showing that note has been saved or not
-//       from TinyMCE, emit willChange event, which means we know we're expecting changes
 // TODO: Handle template
-// TODO: Check that inserted code or resources is not wrapped in DIV
 
 interface NoteTextProps {
 	style: any,
