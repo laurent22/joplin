@@ -932,6 +932,7 @@ const NoteScreen = connect(state => {
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
+		provisionalNoteIds: state.provisionalNoteIds,
 	};
 })(NoteScreenComponent);
 
