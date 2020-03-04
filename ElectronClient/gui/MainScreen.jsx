@@ -66,7 +66,8 @@ class MainScreenComponent extends React.Component {
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps) {
-		if (newProps.windowCommand) {
+		// Execute a command if any, and if we haven't already executed it
+		if (newProps.windowCommand && newProps.windowCommand !== this.props.windowCommand) {
 			this.doCommand(newProps.windowCommand);
 		}
 	}
