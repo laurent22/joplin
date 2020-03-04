@@ -8,6 +8,7 @@ const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
+const NoteTag = require('lib/models/NoteTag');
 const { shim } = require('lib/shim');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
@@ -330,24 +331,29 @@ describe('services_rest_Api', function() {
 		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
 		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
 		const tag3 = await Tag.save({ title: 'mon étiquette 3' });
+		const newTagTitle = 'mon étiquette 4';
+
 		const note = await Note.save({
 			title: 'ma note un',
-			tags: `${tag1.title},${tag2.title}`,
 		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
 
 		const response1 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${tag3.title}`,
 		}));
+		const tagIds1 = await NoteTag.tagIdsByNoteId(note.id);
 		expect(response1.tags === `${tag1.title},${tag3.title}`).toBe(true);
+		expect(tagIds1[0]).toBe(tag1.id);
+		expect(tagIds1[1]).toBe(tag3.id);
 
 		const response2 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
-			tags: `${tag1.title}`,
+			tags: `${tag2.title},${newTagTitle}`,
 		}));
-		expect(response2.tags === `${tag1.title}`).toBe(true);
-
-		const response3 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
-			tags: `${tag1.title},${tag2.title},${tag3.title}`,
-		}));
-		expect(response3.tags === `${tag1.title},${tag2.title},${tag3.title}`).toBe(true);
+		const newTag = await Tag.loadByTitle(newTagTitle);
+		const tagIds2 = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response2.tags === `${tag2.title},${newTag.title}`).toBe(true);
+		expect(tagIds2[0]).toBe(tag2.id);
+		expect(tagIds2[1]).toBe(newTag.id);
 	}));
 });
