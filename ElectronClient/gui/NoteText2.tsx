@@ -34,6 +34,7 @@ interface NoteTextProps {
 	notes:any[],
 	watchedNoteFiles:string[],
 	isProvisional: boolean,
+	editorNoteStatuses: any,
 }
 
 interface FormNote {
@@ -170,7 +171,7 @@ async function attachResources() {
 	return output;
 }
 
-function scheduleSaveNote(formNote:FormNote) {
+function scheduleSaveNote(formNote:FormNote, dispatch:Function) {
 	if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
 	console.info('Scheduling...', formNote);
@@ -180,13 +181,18 @@ function scheduleSaveNote(formNote:FormNote) {
 			const note = await formNoteToNote(formNote);
 			console.info('Saving note...', note);
 			await Note.save(note);
+
+			dispatch({
+				type: 'EDITOR_NOTE_STATUS_REMOVE',
+				id: formNote.id,
+			});
 		};
 	};
 
 	formNote.saveActionQueue.push(makeAction(formNote));
 }
 
-function saveNoteIfWillChange(formNote:FormNote, editorRef:any) {
+function saveNoteIfWillChange(formNote:FormNote, editorRef:any, dispatch:Function) {
 	if (!formNote.id || !formNote.bodyWillChangeId) return;
 
 	scheduleSaveNote({
@@ -194,7 +200,7 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any) {
 		bodyEditorContent: editorRef.current.content(),
 		bodyWillChangeId: 0,
 		bodyChangeId: 0,
-	});
+	}, dispatch);
 }
 
 function NoteText2(props:NoteTextProps) {
@@ -259,7 +265,7 @@ function NoteText2(props:NoteTextProps) {
 
 		console.info('Loading existing note', props.noteId);
 
-		saveNoteIfWillChange(formNote, editorRef);
+		saveNoteIfWillChange(formNote, editorRef, props.dispatch);
 
 		const loadNote = async () => {
 			const n = await Note.load(props.noteId);
@@ -322,7 +328,7 @@ function NoteText2(props:NoteTextProps) {
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
 			setFormNote(newNote);
-			scheduleSaveNote(newNote);
+			scheduleSaveNote(newNote, props.dispatch);
 		}
 	}, [handleProvisionalFlag, formNote]);
 
@@ -335,6 +341,12 @@ function NoteText2(props:NoteTextProps) {
 
 		setFormNote(prev => {
 			return { ...prev, bodyWillChangeId: event.changeId };
+		});
+
+		props.dispatch({
+			type: 'EDITOR_NOTE_STATUS_SET',
+			id: formNote.id,
+			status: 'saving',
 		});
 	}, [formNote, handleProvisionalFlag]);
 
@@ -389,6 +401,7 @@ const mapStateToProps = (state:any) => {
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
+		editorNoteStatuses: state.editorNoteStatuses,
 		// selectedNoteHash: state.selectedNoteHash,
 		// noteTags: state.selectedNoteTags,
 		// folderId: state.selectedFolderId,
