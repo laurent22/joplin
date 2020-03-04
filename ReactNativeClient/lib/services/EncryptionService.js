@@ -295,7 +295,7 @@ class EncryptionService {
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw new Error(`SJCL error: ${error.message}`);
 			}
 		}
 
@@ -313,7 +313,7 @@ class EncryptionService {
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw new Error(`SJCL error: ${error.message}`);
 			}
 		}
 
@@ -331,7 +331,7 @@ class EncryptionService {
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw new Error(`SJCL error: ${error.message}`);
 			}
 		}
 
@@ -348,7 +348,7 @@ class EncryptionService {
 				});
 			} catch (error) {
 				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw new Error(`SJCL error: ${error.message}`);
 			}
 		}
 
