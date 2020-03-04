@@ -21,8 +21,6 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
-// TODO: Handle switching layout when note hasn't finished saving
-// TODO: Handle template
 // TODO: Handle note modified after sync
 
 interface NoteTextProps {

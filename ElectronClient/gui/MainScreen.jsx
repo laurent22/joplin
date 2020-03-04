@@ -101,7 +101,7 @@ class MainScreenComponent extends React.Component {
 			const newNote = await Note.save({
 				parent_id: folderId,
 				is_todo: isTodo ? 1 : 0,
-				template: template,
+				body: template || '',
 			}, { provisional: true });
 
 			this.props.dispatch({
