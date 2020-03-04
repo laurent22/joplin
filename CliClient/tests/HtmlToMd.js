@@ -41,6 +41,8 @@ describe('HtmlToMd', function() {
 
 			// if (htmlFilename !== 'joplin_source_2.html') continue;
 
+			// if (htmlFilename.indexOf('image_preserve_size') !== 0) continue;
+
 			const htmlToMdOptions = {};
 
 			if (htmlFilename === 'anchor_local.html') {
@@ -49,6 +51,10 @@ describe('HtmlToMd', function() {
 				// but otherwise it would need to be somehow parsed out from the HTML. Here we just
 				// hard code the anchors that we know are in the file.
 				htmlToMdOptions.anchorNames = ['first', 'second', 'fourth'];
+			}
+
+			if (htmlFilename.indexOf('image_preserve_size') === 0) {
+				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
 			const html = await shim.fsDriver().readFile(htmlPath);

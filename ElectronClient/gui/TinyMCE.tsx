@@ -90,7 +90,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			const editors = await tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				plugins: 'noneditable link lists hr',
-				noneditable_noneditable_class: 'joplin-editable', // TODO: regex
+				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // TODO: filter more,
 				menubar: false,
 				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr',
@@ -115,7 +115,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 								source.node.textContent = newSource;
 								dialogApi.close();
 								editor.fire('joplinChange');
-								// editor.getDoc().activeElement.blur();
 								dispatchDidUpdate(editor);
 							},
 							body: {
@@ -150,13 +149,21 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							}
 
 							editor.insertContent(html.join('\n'));
+							editor.fire('joplinChange');
+							dispatchDidUpdate(editor);
 						},
 					});
 
+					// TODO: remove event on unmount?
 					editor.on('DblClick', (event:any) => {
 						const editable = findEditableContainer(event.target);
-						if (editable) {
-							openEditDialog(editable);
+						if (editable) openEditDialog(editable);
+					});
+
+					editor.on('ObjectResized', function(event:any) {
+						if (event.target.nodeName === 'IMG') {
+							editor.fire('joplinChange');
+							dispatchDidUpdate(editor);
 						}
 					});
 				},
