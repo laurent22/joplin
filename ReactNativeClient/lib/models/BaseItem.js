@@ -254,13 +254,13 @@ class BaseItem extends BaseModel {
 
 		const ItemClass = this.itemClass(type);
 
-		if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
-			if (!propValue) return 0;
-			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
-		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+		if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.parse(propValue);
 		} else {
+			if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
+				propValue = (!propValue) ? '0' : moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+			}
 			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
 		}
 
