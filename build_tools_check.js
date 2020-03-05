@@ -18,7 +18,6 @@ const installBuildTool = async (tool, command) => {
 		console.log(stdout);
 		console.log(`${tool} Installed Successfully`);
 	} catch (error) {
-		console.error(error);
 		console.log(`Something went wrong, Please ensure that ${tool} is installed in your system before proceeding`);
 	}
 };
