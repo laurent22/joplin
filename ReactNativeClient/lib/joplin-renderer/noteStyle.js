@@ -292,6 +292,10 @@ module.exports = function(style, options) {
 			cursor: pointer !important;
 		}
 
+		.mce-content-body.mce-content-readonly {
+			opacity: 0.5;
+		}
+
 		@media print {
 			body {
 				height: auto !important;

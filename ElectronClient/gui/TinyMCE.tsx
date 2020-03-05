@@ -20,6 +20,7 @@ interface TinyMCEProps {
 	defaultEditorState: DefaultEditorState,
 	markupToHtml: Function,
 	attachResources: Function,
+	disabled: boolean,
 }
 
 export async function editorContentToHtml(content:any):Promise<string> {
@@ -82,6 +83,11 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			content: () => editor ? editor.getContent() : '',
 		};
 	}, [editor]);
+
+	useEffect(() => {
+		if (!editor) return;
+		editor.setMode(props.disabled ? 'readonly' : 'design');
+	}, [editor, props.disabled]);
 
 	useEffect(() => {
 		loadedAssetFiles_ = [];

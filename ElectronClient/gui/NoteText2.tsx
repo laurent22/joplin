@@ -209,6 +209,10 @@ function NoteText2(props:NoteTextProps) {
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
 
+	// If the note has been modified in another editor, wait for it to be saved
+	// before loading it in this editor.
+	const waitingToSaveNote = props.noteId && formNote.id !== props.noteId && props.editorNoteStatuses[props.noteId] === 'saving';
+
 	const styles = styles_(props);
 
 	const markupToHtml = useCallback(async (markupLanguage:number, md:string, options:any = null):Promise<any> => {
@@ -250,7 +254,7 @@ function NoteText2(props:NoteTextProps) {
 		// formNote in the dependency array or that effect will run every time the note changes. We only
 		// want to run it once on unmount. So because of that we need to use that formNoteRef.
 		return () => {
-			saveNoteIfWillChange(formNoteRef.current, editorRef);
+			saveNoteIfWillChange(formNoteRef.current, editorRef, props.dispatch);
 		};
 	}, []);
 
@@ -258,6 +262,8 @@ function NoteText2(props:NoteTextProps) {
 		if (!props.noteId) return () => {};
 
 		if (formNote.id === props.noteId) return () => {};
+
+		if (waitingToSaveNote) return () => {};
 
 		let cancelled = false;
 
@@ -303,7 +309,7 @@ function NoteText2(props:NoteTextProps) {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.noteId, formNote]);
+	}, [props.noteId, formNote, waitingToSaveNote]);
 
 	const onFieldChange = useCallback((field:string, value:any, changeId: number = 0) => {
 		handleProvisionalFlag();
@@ -368,6 +374,7 @@ function NoteText2(props:NoteTextProps) {
 				<div style={{ display: 'flex' }}>
 					<input
 						type="text"
+						disabled={waitingToSaveNote}
 						placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
 						style={styles.titleInput}
 						onChange={onTitleChange}
@@ -383,6 +390,7 @@ function NoteText2(props:NoteTextProps) {
 						defaultEditorState={defaultEditorState}
 						markupToHtml={markupToHtml}
 						attachResources={attachResources}
+						disabled={waitingToSaveNote}
 					/>
 				</div>
 			</div>
