@@ -1,11 +1,6 @@
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-let OSName = '';
-if (process.platform === 'win32')   OSName = 'Windows';
-if (process.platform === 'darwin')  OSName = 'MacOS';
-if (process.platform === 'linux')   OSName = 'Linux';
-
 const verifyBuildToolInstallation = async (tool, checkCommand, installCommand = null) => {
 	try {
 		const { stdout } = await exec(checkCommand);
@@ -15,7 +10,7 @@ const verifyBuildToolInstallation = async (tool, checkCommand, installCommand = 
 	}
 };
 
-const installBuildTool = async (tool, command) =>  {
+const installBuildTool = async (tool, command) => {
 	const message = `Installing ${tool}....`;
 	console.log(message);
 	try {
@@ -23,20 +18,20 @@ const installBuildTool = async (tool, command) =>  {
 		console.log(stdout);
 		console.log(`${tool} Installed Successfully`);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		console.log(`Something went wrong, Please ensure that ${tool} is installed in your system before proceeding`);
 	}
 };
 
-switch (OSName) {
-case 'Windows':
+switch (process.platform) {
+case 'win32':
 	verifyBuildToolInstallation('Windows Build Tools', 'npm ls -g windows-build-tools', 'npm install --global windows-build-tools');
 	break;
-case 'MacOS':
+case 'darwin':
 	verifyBuildToolInstallation('CocoaPods', 'pod --version', 'sudo gem install cocoapods');
 	verifyBuildToolInstallation('Rsync', 'rsync -version');
 	break;
-case 'Linux':
+case 'linux':
 	verifyBuildToolInstallation('Rsync', 'rsync -version', 'apt-get install rsync');
 	break;
 default:
