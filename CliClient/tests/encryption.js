@@ -190,6 +190,24 @@ describe('Encryption', function() {
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
 
+	it('should encrypt invalid UTF-8 data', asyncTest(async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+
+		await service.loadMasterKey_(masterKey, '123456', true);
+
+		// First check that we can replicate the error with the old encryption method
+		service.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+		const hasThrown = await checkThrowAsync(async () => await service.encryptString('🐶🐶🐶'.substr(0,5)));
+		expect(hasThrown).toBe(true);
+
+		// Now check that the new one fixes the problem
+		service.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
+		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0,5));
+		const plainText = await service.decryptString(cipherText);
+		expect(plainText).toBe('🐶🐶🐶'.substr(0,5));
+	}));
+
 	// it('should upgrade master key encryption mode', asyncTest(async () => {
 	// 	let masterKey = await service.generateMasterKey('123456', {
 	// 		encryptionMethod: EncryptionService.METHOD_SJCL_2,
