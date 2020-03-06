@@ -448,7 +448,7 @@ class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -459,7 +459,7 @@ class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
