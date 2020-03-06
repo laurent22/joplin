@@ -12,7 +12,7 @@ const verifyBuildToolInstallation = async (tool, checkCommand, installCommand) =
 
 switch (process.platform) {
 case 'win32':
-	verifyBuildToolInstallation('Windows Build Tools', 'npm ls -g windows-build-tools', 'npm install --global windows-build-tools');
+	verifyBuildToolInstallation('Windows Build Tools', 'npm list -g windows-build-tools', 'npm install --global windows-build-tools');
 	break;
 case 'darwin':
 	verifyBuildToolInstallation('CocoaPods', 'pod --version', 'sudo gem install cocoapods');
