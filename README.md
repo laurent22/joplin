@@ -141,7 +141,7 @@ Joplin can export to the JEX format (Joplin Export file), which is a tar file th
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with Nextcloud, Dropbox (by default), OneDrive or the local filesystem. To setup synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
+Currently, synchronisation is possible with Nextcloud, Dropbox, OneDrive or the local filesystem. To enable synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
 
 ## Nextcloud synchronisation
 
@@ -300,6 +300,24 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 # Goto Anything
 
 In the desktop application, press Ctrl+G or Cmd+G and type the title of a note to jump directly to it. You can also type `#` followed by a tag or `@` followed by a notebook title.
+
+# Privacy
+
+Joplin values your privacy and security by giving you complete control over your information and digital footprint.
+
+Joplin applications do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.
+
+Joplin has many modern features, some of which use third-party services. You can disable any or all of these features in the application settings. These features are:
+
+|Feature | Description | Default|
+|--------|-------------|--------|
+|Auto-update|Joplin periodically connects to GitHub to check for new releases.|Enabled|
+|Geo-location|Joplin saves geo-location information in note properties when you create a note.|Enabled|
+|Synchronisation|Joplin supports synchronisation of your notes across multiple devices. If you choose to synchronise with a third-party, such as OneDrive, the notes will be sent to your OneDrive account, in which case the third-party privacy policy applies.|Disabled|
+
+Joplin is developed as an open-source application and the source code is freely available online to inspect.
+
+For any question about Joplin privacy, please leave a message on the [Joplin Forum](https://discourse.joplinapp.org/).
 
 # Donations
 
