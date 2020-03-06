@@ -331,17 +331,21 @@ function changeSelectedNotes(state, action, options = null) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 		} else if (action.historyAction === 'pop') {
-			forwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			if (forwardHistoryNotes.length === 0 || action.lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length-1].id) {
+				forwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			}
 			backwardHistoryNotes.pop();
 		} else if (action.historyAction === 'push') {
-			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			if (backwardHistoryNotes.length === 0 || action.lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length-1].id) {
+				backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			}
 			forwardHistoryNotes.pop();
 		}
 
 		newState.backwardHistoryNotes = backwardHistoryNotes;
 		newState.forwardHistoryNotes = forwardHistoryNotes;
 
-		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return newState;
+		return newState;
 
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
