@@ -16,10 +16,10 @@ case 'win32':
 	break;
 case 'darwin':
 	verifyBuildToolInstallation('CocoaPods', 'pod --version', 'sudo gem install cocoapods');
-	verifyBuildToolInstallation('rsync', 'rsync -version','apt-get install rsync');
+	verifyBuildToolInstallation('rsync', 'rsync --version', 'sudo port install rsync');
 	break;
 case 'linux':
-	verifyBuildToolInstallation('rsync', 'rsync -version', 'apt-get install rsync');
+	verifyBuildToolInstallation('rsync', 'rsync --version', 'sudo apt-get install rsync');
 	break;
 default:
 	console.log('WARNING: Please ensure that you read the documentation to know the necessary build tools that must be installed in your system to successfullly build this project');
