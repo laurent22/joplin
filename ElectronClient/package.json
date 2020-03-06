@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dist": "node_modules/.bin/electron-builder",
-    "build": "patch-package && gulp build",
+    "build": "patch-package --patch-dir ../patches && gulp build",
     "postinstall": "npm run build && gulp electronRebuild",
     "start": "gulp build -L && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
   },
@@ -107,6 +107,7 @@
     "highlight.js": "^9.17.1",
     "html-entities": "^1.2.1",
     "html-minifier": "^4.0.0",
+    "htmlparser2": "^4.1.0",
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.19",
     "joplin-turndown-plugin-gfm": "^1.0.12",
@@ -137,7 +138,6 @@
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
     "node-fetch": "^1.7.3",
-    "node-html-parser": "^1.2.4",
     "node-notifier": "^6.0.0",
     "pretty-bytes": "^5.3.0",
     "promise": "^8.0.1",

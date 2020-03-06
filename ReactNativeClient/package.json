@@ -8,7 +8,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "start-ios": "react-native run-ios",
     "start-android": "react-native run-android",
-    "postinstall": "jetify && npm run build",
+    "postinstall": "patch-package --patch-dir ../patches && jetify && npm run build",
     "build": "gulp build",
     "log-ios": "react-native-log-ios \"Joplin\"",
     "log-android": "adb logcat *:S ReactNative:V ReactNativeJS:V"
@@ -26,6 +26,7 @@
     "form-data": "^2.1.4",
     "highlight.js": "^9.17.1",
     "html-entities": "^1.2.1",
+    "htmlparser2": "^4.1.0",
     "jsc-android": "241213.1.0",
     "json-stringify-safe": "^5.0.1",
     "katex": "^0.11.1",
@@ -46,7 +47,6 @@
     "memory-cache": "^0.2.0",
     "mermaid": "^8.4.6",
     "moment": "^2.24.0",
-    "node-html-parser": "^1.2.4",
     "prop-types": "^15.6.0",
     "punycode": "^2.1.1",
     "query-string": "4.3.4",
@@ -101,6 +101,7 @@
     "gulp": "^4.0.2",
     "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.54.1",
+    "patch-package": "^6.2.1",
     "react-test-renderer": "^16.8.3"
   }
 }
