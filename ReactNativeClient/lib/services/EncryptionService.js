@@ -316,7 +316,7 @@ class EncryptionService {
 					iter: 101, // Since the master key already uses key derivations and is secure, additional iteration here aren't necessary, which will make decryption faster. SJCL enforces an iter strictly greater than 100
 					ks: 128, // Key size - "128 bits should be secure enough"
 					ts: 64, // ???
-					mode: 'ocb2', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+					mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
 					// "adata":"", // Associated Data - not needed?
 					cipher: 'aes',
 				});
