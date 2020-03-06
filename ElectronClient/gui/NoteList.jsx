@@ -162,7 +162,7 @@ class NoteListComponent extends React.Component {
 			}
 		}
 
-		let style = Object.assign({ width: width }, this.style().listItem);
+		let style = Object.assign({ width: width, opacity: this.props.provisionalNoteIds.includes(item.id) ? 0.5 : 1 }, this.style().listItem);
 
 		if (this.props.selectedNoteIds.indexOf(item.id) >= 0) {
 			style = Object.assign(style, this.style().listItemSelected);
@@ -468,6 +468,7 @@ const mapStateToProps = state => {
 		selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
 		windowCommand: state.windowCommand,
+		provisionalNoteIds: state.provisionalNoteIds,
 	};
 };
 

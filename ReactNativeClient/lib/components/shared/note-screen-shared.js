@@ -20,13 +20,9 @@ shared.noteExists = async function(noteId) {
 };
 
 shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
-	options = Object.assign(
-		{},
-		{
-			autoTitle: true,
-		},
-		options
-	);
+	options = Object.assign({}, {
+		autoTitle: true,
+	}, options);
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
@@ -46,14 +42,14 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note.parent_id = folder.id;
 	}
 
-	let isNew = !note.id;
+	const isProvisionalNote = comp.props.provisionalNoteIds.includes(note.id);
 
-	let saveOptions = { userSideValidation: true };
-	if (!isNew) {
-		saveOptions.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
-	}
+	const saveOptions = {
+		userSideValidation: true,
+		fields: BaseModel.diffObjectsFields(comp.state.lastSavedNote, note),
+	};
 
-	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
+	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
@@ -64,7 +60,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
-	if (!isNew && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
+	if (!stateNote || stateNote.id !== savedNote.id) return releaseMutex();
 
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
@@ -86,15 +82,13 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note: note,
 	};
 
-	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
+	if (isProvisionalNote && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
 
 	if (!options.autoTitle) newState.newAndNoTitleChangeNoteId = null;
 
 	comp.setState(newState);
 
-	// await shared.refreshAttachedResources(comp, newState.note.body);
-
-	if (isNew) {
+	if (isProvisionalNote) {
 		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
@@ -113,15 +107,6 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 			const modLastSavedNote = Object.assign({}, comp.state.lastSavedNote, geoInfo);
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
-		});
-	}
-
-	if (isNew) {
-		// Clear the newNote item now that the note has been saved, and
-		// make sure that the note we're editing is selected.
-		comp.props.dispatch({
-			type: 'NOTE_SELECT',
-			id: savedNote.id,
 		});
 	}
 

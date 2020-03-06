@@ -217,7 +217,7 @@ const solarizedDarkStyle = {
 	htmlLinkColor: '#268bd2',
 	htmlTableBackgroundColor: '#002b36',
 	htmlCodeBackgroundColor: '#002b36',
-	htmlCodeBorderColor: '#073642',
+	htmlCodeBorderColor: '#696969',
 	htmlCodeColor: '#fdf6e3',
 
 	editorTheme: 'solarized_dark',

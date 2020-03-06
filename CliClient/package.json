@@ -5,7 +5,7 @@
   "author": "Laurent Cozic",
   "scripts": {
     "test": "gulp buildTests -L && jasmine --config=tests/support/jasmine.json",
-    "postinstall": "patch-package && npm run build",
+    "postinstall": "patch-package --patch-dir ../patches && npm run build",
     "build": "gulp build",
     "start": "gulp build -L && node 'build/main.js' --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --env dev"
   },
@@ -52,6 +52,7 @@
     "highlight.js": "^9.17.1",
     "html-entities": "^1.2.1",
     "html-minifier": "^3.5.15",
+    "htmlparser2": "^4.1.0",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
     "joplin-turndown": "^4.0.19",
@@ -108,8 +109,7 @@
     "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
     "xml2js": "^0.4.19",
-    "yargs-parser": "^7.0.0",
-    "node-html-parser": "^1.2.4"
+    "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
     "gulp": "^4.0.2",

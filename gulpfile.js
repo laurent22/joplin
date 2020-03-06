@@ -32,6 +32,7 @@ const updateIgnoredTypeScriptBuildTask = async function() {
 			'**/.git/**',
 			'**/ElectronClient/lib/**',
 			'**/CliClient/build/lib/**',
+			'**/CliClient/tests-build/lib/**',
 			'**/ElectronClient/dist/**',
 		],
 	}).map(f => f.substr(__dirname.length + 1));

@@ -539,6 +539,7 @@ class Note extends BaseItem {
 
 	static async save(o, options = null) {
 		let isNew = this.isNew(o, options);
+		const isProvisional = options && !!options.provisional;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
@@ -561,6 +562,7 @@ class Note extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
 			note: note,
+			provisional: isProvisional,
 		});
 
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
