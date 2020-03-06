@@ -344,8 +344,8 @@ describe('services_rest_Api', function() {
 		}));
 		const tagIds1 = await NoteTag.tagIdsByNoteId(note.id);
 		expect(response1.tags === `${tag1.title},${tag3.title}`).toBe(true);
-		expect(tagIds1[0]).toBe(tag1.id);
-		expect(tagIds1[1]).toBe(tag3.id);
+		expect(tagIds1.includes(tag1.id)).toBe(true);
+		expect(tagIds1.includes(tag3.id)).toBe(true);
 
 		const response2 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag2.title},${newTagTitle}`,
@@ -353,7 +353,7 @@ describe('services_rest_Api', function() {
 		const newTag = await Tag.loadByTitle(newTagTitle);
 		const tagIds2 = await NoteTag.tagIdsByNoteId(note.id);
 		expect(response2.tags === `${tag2.title},${newTag.title}`).toBe(true);
-		expect(tagIds2[0]).toBe(tag2.id);
-		expect(tagIds2[1]).toBe(newTag.id);
+		expect(tagIds2.includes(tag2.id)).toBe(true);
+		expect(tagIds2.includes(newTag.id)).toBe(true);
 	}));
 });
