@@ -1,5 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
+const { stateUtils } = require('lib/reducer.js');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const SearchEngine = require('lib/services/SearchEngine');
@@ -9,7 +10,6 @@ const Folder = require('lib/models/Folder');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords } = require('lib/string-utils.js');
-const HistoryHelper = require('lib/services/HistoryHelper');
 
 const PLUGIN_NAME = 'gotoAnything';
 const itemHeight = 60;
@@ -220,7 +220,7 @@ class Dialog extends React.PureComponent {
 				folderId: item.parent_id,
 				noteId: item.id,
 				historyAction: 'goto',
-				lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
+				lastSeenNote: stateUtils.getLastSeenNote(this.props),
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -232,7 +232,7 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_SELECT',
 				id: item.id,
 				historyAction: 'goto',
-				lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
+				lastSeenNote: stateUtils.getLastSeenNote(this.props),
 			});
 		}
 	}

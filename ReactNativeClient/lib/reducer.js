@@ -1,7 +1,6 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const HistoryHelper = require('lib/services/HistoryHelper');
 
 const defaultState = {
 	notes: [],
@@ -102,6 +101,20 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	if (!parent) return [];
 	const output = state.lastSelectedNotesIds[parent.type][parent.id];
 	return output ? output : [];
+};
+
+stateUtils.getLastSeenNote = function(state) {
+	const selectedNoteIds = state.selectedNoteIds;
+	const notes = state.notes;
+	if ((typeof selectedNoteIds != 'undefined') && selectedNoteIds.length>0) {
+		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
+		if (typeof currNote != 'undefined') {
+			return {
+				id: currNote.id,
+				parent_id: currNote.parent_id,
+			};
+		} else return undefined;
+	} else return undefined;
 };
 
 function arrayHasEncryptedItems(array) {
@@ -267,20 +280,18 @@ function changeSelectedFolder(state, action, options = null) {
 	let newState = Object.assign({}, state);
 
 	// Save the last seen note so that back will return to it.
-	if (action.type === 'FOLDER_SELECT') {
-		if (action.historyAction == 'goto') {
-			const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-			let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+	if (action.type === 'FOLDER_SELECT' && action.historyAction == 'goto') {
+		const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
-			// Don't update history if going to the same note again.
-			if (action.id != action.lastSeenNote.id) {
-				forwardHistoryNotes = [];
-				backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
-			}
-
-			newState.backwardHistoryNotes = backwardHistoryNotes;
-			newState.forwardHistoryNotes = forwardHistoryNotes;
+		// Don't update history if going to the same note again.
+		if (action.id != action.lastSeenNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 		}
+
+		newState.backwardHistoryNotes = backwardHistoryNotes;
+		newState.forwardHistoryNotes = forwardHistoryNotes;
 	}
 
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
@@ -719,7 +730,7 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			// Update history when searching
-			var lastSeenNote = HistoryHelper.getLastSeenNote(state.selectedNoteIds, state.notes);
+			var lastSeenNote = stateUtils.getLastSeenNote(state.selectedNoteIds, state.notes);
 			if (lastSeenNote && (state.backwardHistoryNotes.length === 0 ||
 				state.backwardHistoryNotes[state.backwardHistoryNotes.length-1].id != lastSeenNote.id)) {
 				newState.forwardHistoryNotes = [];

@@ -1,5 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
+const { stateUtils } = require('lib/reducer.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -15,7 +16,6 @@ const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
-const HistoryHelper = require('lib/services/HistoryHelper');
 
 class SideBarComponent extends React.Component {
 	constructor() {
@@ -415,7 +415,7 @@ class SideBarComponent extends React.Component {
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
 			historyAction: 'goto',
-			lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
+			lastSeenNote: stateUtils.getLastSeenNote(this.props),
 		});
 	}
 

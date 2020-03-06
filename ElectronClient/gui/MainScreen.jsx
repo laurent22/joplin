@@ -1,5 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
+const { stateUtils } = require('lib/reducer.js');
 const { Header } = require('./Header.min.js');
 const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
@@ -20,7 +21,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
-const HistoryHelper = require('lib/services/HistoryHelper');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -142,7 +142,7 @@ class MainScreenComponent extends React.Component {
 									type: 'FOLDER_SELECT',
 									id: folder.id,
 									historyAction: 'goto',
-									lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
+									lastSeenNote: stateUtils.getLastSeenNote(this.props),
 								});
 							}
 						}

@@ -1,6 +1,7 @@
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
+const { stateUtils } = require('lib/reducer.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
 const BaseModel = require('lib/BaseModel');
@@ -13,7 +14,6 @@ const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
 const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
-const HistoryHelper = require('lib/services/HistoryHelper');
 
 class NoteListComponent extends React.Component {
 	constructor() {
@@ -116,7 +116,7 @@ class NoteListComponent extends React.Component {
 					type: 'NOTE_SELECT',
 					id: item.id,
 					historyAction: 'goto',
-					lastSeenNote: HistoryHelper.getLastSeenNote(this.props.selectedNoteIds, this.props.notes),
+					lastSeenNote: stateUtils.getLastSeenNote(this.props),
 				});
 			}
 		};
