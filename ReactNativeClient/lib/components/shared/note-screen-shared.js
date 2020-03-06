@@ -19,6 +19,20 @@ shared.noteExists = async function(noteId) {
 	return !!existingNote;
 };
 
+// Note has been deleted while user was modifying it. In that case, we
+// just save a new note so that user can keep editing.
+shared.handleNoteDeletedWhileEditing_ = async (note) => {
+	if (await shared.noteExists(note.id)) return null;
+
+	reg.logger().info('Note has been deleted while it was being edited - recreating it.');
+
+	let newNote = Object.assign({}, note);
+	delete newNote.id;
+	newNote = await Note.save(newNote);
+
+	return Note.load(newNote.id);
+};
+
 shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
 	options = Object.assign({}, {
 		autoTitle: true,
@@ -28,9 +42,8 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 
 	let note = Object.assign({}, comp.state.note);
 
-	// Note has been deleted while user was modifying it. In that case, we
-	// just save a new note by clearing the note ID.
-	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	if (recreatedNote) note = recreatedNote;
 
 	if (folderId) {
 		note.parent_id = folderId;
@@ -60,7 +73,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
-	if (!stateNote || stateNote.id !== savedNote.id) return releaseMutex();
+	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
 
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
@@ -116,26 +129,18 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 shared.saveOneProperty = async function(comp, name, value) {
 	let note = Object.assign({}, comp.state.note);
 
-	// Note has been deleted while user was modifying it. In that, we
-	// just save a new note by clearing the note ID.
-	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	if (recreatedNote) note = recreatedNote;
 
-	// reg.logger().info('Saving note property: ', note.id, name, value);
+	let toSave = { id: note.id };
+	toSave[name] = value;
+	toSave = await Note.save(toSave);
+	note[name] = toSave[name];
 
-	if (note.id) {
-		let toSave = { id: note.id };
-		toSave[name] = value;
-		toSave = await Note.save(toSave);
-		note[name] = toSave[name];
-
-		comp.setState({
-			lastSavedNote: Object.assign({}, note),
-			note: note,
-		});
-	} else {
-		note[name] = value;
-		comp.setState({ note: note });
-	}
+	comp.setState({
+		lastSavedNote: Object.assign({}, note),
+		note: note,
+	});
 };
 
 shared.noteComponent_change = function(comp, propName, propValue) {
@@ -190,14 +195,15 @@ shared.isModified = function(comp) {
 };
 
 shared.initState = async function(comp) {
-	let note = null;
+	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
+
+	const note = await Note.load(comp.props.noteId);
 	let mode = 'view';
-	if (!comp.props.noteId) {
-		note = comp.props.itemType == 'todo' ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
+
+	if (isProvisionalNote) {
+		// note = comp.props.itemType == 'todo' ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
 		mode = 'edit';
 		comp.scheduleFocusUpdate();
-	} else {
-		note = await Note.load(comp.props.noteId);
 	}
 
 	const folder = Folder.byId(comp.props.folders, note.parent_id);
@@ -217,7 +223,7 @@ shared.initState = async function(comp) {
 	}
 
 	// eslint-disable-next-line require-atomic-updates
-	comp.lastLoadedNoteId_ = note ? note.id : null;
+	comp.lastLoadedNoteId_ = note.id;
 };
 
 shared.toggleIsTodo_onPress = function(comp) {

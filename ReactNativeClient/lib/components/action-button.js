@@ -1,6 +1,7 @@
 const React = require('react');
 
 const { StyleSheet } = require('react-native');
+const Note = require('lib/models/Note');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ReactNativeActionButton = require('react-native-action-button').default;
 const { connect } = require('react-redux');
@@ -33,24 +34,25 @@ class ActionButtonComponent extends React.Component {
 		}
 	}
 
-	newTodo_press() {
+	async newNoteNavigate(folderId, isTodo) {
+		const newNote = await Note.save({
+			parent_id: folderId,
+			is_todo: isTodo ? 1 : 0,
+		}, { provisional: true });
+
 		this.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Note',
-			noteId: null,
-			folderId: this.props.parentFolderId,
-			itemType: 'todo',
+			noteId: newNote.id,
 		});
 	}
 
+	newTodo_press() {
+		this.newNoteNavigate(this.props.parentFolderId, true);
+	}
+
 	newNote_press() {
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Note',
-			noteId: null,
-			folderId: this.props.parentFolderId,
-			itemType: 'note',
-		});
+		this.newNoteNavigate(this.props.parentFolderId, false);
 	}
 
 	render() {

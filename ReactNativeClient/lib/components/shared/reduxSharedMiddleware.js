@@ -29,10 +29,11 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		refreshTags = true;
 	}
 
-	if (action.type === 'NOTE_SELECT') {
+	if (action.type === 'NOTE_SELECT' || action.type === 'NAV_BACK') {
 		const noteIds = newState.provisionalNoteIds.slice();
 		for (const noteId of noteIds) {
 			if (action.id === noteId) continue;
+			reg.logger().info('Provisional was not modified - deleting it');
 			await Note.delete(noteId);
 		}
 	}
