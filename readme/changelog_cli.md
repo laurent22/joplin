@@ -1,6 +1,6 @@
 # Joplin terminal app changelog
 
-## [cli-v1.0.157](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.157) - 2020-03-07T00:56:50Z
+## [cli-v1.0.158](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.158) - 2020-03-07T01:00:31Z
 
 - New: Add more context to encryption errors
 - Improved: Changed default encryption method to CCM
