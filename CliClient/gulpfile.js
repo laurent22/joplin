@@ -15,6 +15,7 @@ tasks.build = {
 		await utils.copyDir(`${__dirname}/../patches`, `${buildDir}/patches`);
 		await tasks.copyLib.fn();
 		await utils.copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
+		await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
 
 		// const packageRaw = await fs.readFile(`${buildDir}/package.json`);
 		// const package = JSON.parse(packageRaw.toString());

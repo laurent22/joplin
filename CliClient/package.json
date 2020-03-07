@@ -109,10 +109,10 @@
     "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3",
     "xml2js": "^0.4.19",
-    "yargs-parser": "^7.0.0"
+    "yargs-parser": "^7.0.0",
+    "gulp": "^4.0.2"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
     "jasmine": "^3.5.0",
     "temp": "^0.9.1"
   }
