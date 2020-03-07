@@ -1,5 +1,15 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.156](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.156) - 2020-03-07T00:32:09Z
+
+- New: Add more context to encryption errors
+- Improved: Changed default encryption method to CCM
+- Improved: Change geolocation service to freegeoip.app to improve privacy (#2503 by Helmut K. C. Tessarek)
+- Fixed: Handle invalid UTF-8 data when encrypting (#2591)
+- Fixed: Fixed issue when a notebook does not have a parent (#2536)
+- Fixed: Better handling of rare error in WebDAV server (#2485)
+- Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files
+
 ## [cli-v1.0.154](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154) - 2020-02-07T23:22:24Z
 
 - New: Added new date format YYYY.MM.DD (#2318 by XSAkos)
