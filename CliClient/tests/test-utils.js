@@ -70,6 +70,7 @@ const logDir = `${__dirname}/../tests/logs`;
 const tempDir = `${__dirname}/../tests/tmp`;
 fs.mkdirpSync(logDir, 0o755);
 fs.mkdirpSync(tempDir, 0o755);
+fs.mkdirpSync(`${__dirname}/data`);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);

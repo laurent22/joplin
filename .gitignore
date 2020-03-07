@@ -50,6 +50,7 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/gui/editors/PlainEditor.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteText2.js

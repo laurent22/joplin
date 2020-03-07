@@ -37,7 +37,8 @@
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js",
 				"ReactNativeClient/setUpQuickActions.js",
 				"ReactNativeClient/android/app/joplin.keystore",
-				"ReactNativeClient/lib/AsyncActionHandler.js"
+				"ReactNativeClient/lib/AsyncActionHandler.js",
+				"*.eps"
 			],
 			"folder_exclude_patterns":
 			[
@@ -79,7 +80,10 @@
 				"ReactNativeClient/ios/Pods",
 				"CliClient/locales-build",
 				"ReactNativeClient/lib/vendor",
-				"ReactNativeClient/ios/Joplin-tvOS"
+				"ReactNativeClient/ios/Joplin-tvOS",
+				"ReactNativeClient/ios/Joplin.xcodeproj/project.xcworkspace",
+				"ReactNativeClient/ios/Joplin.xcworkspace/xcuserdata",
+				"ReactNativeClient/ios/Joplin.xcodeproj/xcuserdata"
 			],
 			"path": "."
 		}

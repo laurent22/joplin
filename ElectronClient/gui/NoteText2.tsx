@@ -2,13 +2,14 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import TinyMCE, { editorContentToHtml, OnChangeEvent } from './TinyMCE';
+import TinyMCE from './TinyMCE';
+import PlainEditor from './editors/PlainEditor';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
 import MultiNoteActions from './MultiNoteActions';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState } from './utils/NoteText';
+import { DefaultEditorState, OnChangeEvent } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
@@ -32,6 +33,7 @@ interface NoteTextProps {
 	isProvisional: boolean,
 	editorNoteStatuses: any,
 	syncStarted: boolean,
+	editor: string,
 }
 
 interface FormNote {
@@ -164,11 +166,11 @@ async function htmlToMarkdown(html:string):Promise<string> {
 	return md;
 }
 
-async function formNoteToNote(formNote:FormNote):Promise<any> {
+async function formNoteToNote(formNote:FormNote, editorRef:any):Promise<any> {
 	const newNote:any = Object.assign({}, formNote);
 
 	if ('bodyEditorContent' in formNote) {
-		const html = await editorContentToHtml(formNote.bodyEditorContent);
+		const html = await editorRef.current.editorContentToHtml(formNote.bodyEditorContent);
 		if (formNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 			newNote.body = await htmlToMarkdown(html);
 		} else {
@@ -206,14 +208,14 @@ async function attachResources() {
 	return output;
 }
 
-function scheduleSaveNote(formNote:FormNote, dispatch:Function) {
+function scheduleSaveNote(formNote:FormNote, editorRef:any, dispatch:Function) {
 	if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
 	console.info('Scheduling...', formNote);
 
 	const makeAction = (formNote:FormNote) => {
 		return async function() {
-			const note = await formNoteToNote(formNote);
+			const note = await formNoteToNote(formNote, editorRef);
 			console.info('Saving note...', note);
 			await Note.save(note);
 
@@ -235,7 +237,7 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any, dispatch:Functio
 		bodyEditorContent: editorRef.current.content(),
 		bodyWillChangeId: 0,
 		bodyChangeId: 0,
-	}, dispatch);
+	}, editorRef, dispatch);
 }
 
 function NoteText2(props:NoteTextProps) {
@@ -377,12 +379,12 @@ function NoteText2(props:NoteTextProps) {
 			hasChanged: true,
 		};
 
-		if (field === 'body' && formNote.bodyWillChangeId !== changeId) {
+		if (changeId !== null && field === 'body' && formNote.bodyWillChangeId !== changeId) {
 			// Note was changed, but another note was loaded before save - skipping
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
 			setFormNote(newNote);
-			scheduleSaveNote(newNote, props.dispatch);
+			scheduleSaveNote(newNote, editorRef, props.dispatch);
 		}
 	}, [handleProvisionalFlag, formNote]);
 
@@ -419,6 +421,27 @@ function NoteText2(props:NoteTextProps) {
 		/>;
 	}
 
+	const editorProps = {
+		ref: editorRef,
+		style: styles.tinyMCE,
+		onChange: onBodyChange,
+		onWillChange: onBodyWillChange,
+		defaultEditorState: defaultEditorState,
+		markupToHtml: markupToHtml,
+		attachResources: attachResources,
+		disabled: waitingToSaveNote,
+	};
+
+	let editor = null;
+
+	if (props.editor === 'TinyMCE') {
+		editor = <TinyMCE {...editorProps}/>;
+	} else if (props.editor === 'PlainEditor') {
+		editor = <PlainEditor {...editorProps}/>;
+	} else {
+		throw new Error(`Invalid editor: ${props.editor}`);
+	}
+
 	return (
 		<div style={props.style}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -436,22 +459,17 @@ function NoteText2(props:NoteTextProps) {
 					/>
 				</div>
 				<div style={{ display: 'flex', flex: 1 }}>
-					<TinyMCE
-						ref={editorRef}
-						style={styles.tinyMCE}
-						onChange={onBodyChange}
-						onWillChange={onBodyWillChange}
-						defaultEditorState={defaultEditorState}
-						markupToHtml={markupToHtml}
-						attachResources={attachResources}
-						disabled={waitingToSaveNote}
-					/>
+					{editor}
 				</div>
 			</div>
 		</div>
 
 	);
 }
+
+export {
+	NoteText2 as NoteText2Component,
+};
 
 const mapStateToProps = (state:any) => {
 	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;

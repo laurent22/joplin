@@ -635,7 +635,7 @@ class MainScreenComponent extends React.Component {
 
 		const isWYSIWYG = this.props.noteVisiblePanes.length && this.props.noteVisiblePanes[0] === 'wysiwyg';
 		const noteTextComp = isWYSIWYG ?
-			<NoteText2 style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
+			<NoteText2 editor="TinyMCE" style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
 			:
 			<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />;
 

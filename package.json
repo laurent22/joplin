@@ -26,7 +26,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/draft-js": "^0.10.38",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",

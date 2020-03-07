@@ -53,6 +53,7 @@ ReactNativeClient/lib/joplin-renderer/assets/
 ReactNativeClient/lib/rnInjectedJs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/gui/editors/PlainEditor.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteText2.js

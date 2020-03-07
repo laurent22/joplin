@@ -1,17 +1,10 @@
-declare const tinymce: any;
-
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState } from './utils/NoteText';
+import { DefaultEditorState, OnChangeEvent } from './utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
-
-export interface OnChangeEvent {
-	changeId: number,
-	content: any,
-}
 
 interface TinyMCEProps {
 	style: any,
@@ -21,10 +14,6 @@ interface TinyMCEProps {
 	markupToHtml: Function,
 	attachResources: Function,
 	disabled: boolean,
-}
-
-export async function editorContentToHtml(content:any):Promise<string> {
-	return content ? content : '';
 }
 
 function findBlockSource(node:any) {
@@ -54,6 +43,7 @@ let changeId_:number = 1;
 
 const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
+	const [scriptLoaded, setScriptLoaded] = useState(false);
 
 	const attachResources = useRef(null);
 	attachResources.current = props.attachResources;
@@ -81,19 +71,58 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	useImperativeHandle(ref, () => {
 		return {
 			content: () => editor ? editor.getContent() : '',
+			editorContentToHtml(content:any):Promise<string> {
+				return content ? content : '';
+			},
 		};
 	}, [editor]);
+
+	// -----------------------------------------------------------------------------------------
+	// Load the TinyMCE library. The lib loads additional JS and CSS files on startup
+	// (for themes), and so it needs to be loaded via <script> tag. Requiring it from the
+	// module would not load these extra files.
+	// -----------------------------------------------------------------------------------------
+
+	useEffect(() => {
+		if (document.getElementById('tinyMceScript')) {
+			setScriptLoaded(true);
+			return () => {};
+		}
+
+		let cancelled = false;
+		const script = document.createElement('script');
+		script.src = 'node_modules/tinymce/tinymce.min.js';
+		script.id = 'tinyMceScript';
+		script.onload = () => {
+			if (cancelled) return;
+			setScriptLoaded(true);
+		};
+		document.getElementsByTagName('head')[0].appendChild(script);
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	// -----------------------------------------------------------------------------------------
+	// Enable or disable the editor
+	// -----------------------------------------------------------------------------------------
 
 	useEffect(() => {
 		if (!editor) return;
 		editor.setMode(props.disabled ? 'readonly' : 'design');
 	}, [editor, props.disabled]);
 
+	// -----------------------------------------------------------------------------------------
+	// Create and setup the editor
+	// -----------------------------------------------------------------------------------------
+
 	useEffect(() => {
+		if (!scriptLoaded) return;
+
 		loadedAssetFiles_ = [];
 
 		const loadEditor = async () => {
-			const editors = await tinymce.init({
+			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				plugins: 'noneditable link lists hr',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
@@ -115,7 +144,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 								const newSource = dialogApi.getData().codeTextArea;
 								const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
-								console.info('Result', result);
 
 								editable.outerHTML = result.html;
 								source.node.textContent = newSource;
@@ -179,7 +207,11 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 
 		loadEditor();
-	}, []);
+	}, [scriptLoaded]);
+
+	// -----------------------------------------------------------------------------------------
+	// Set the initial content and load the plugin CSS and JS files
+	// -----------------------------------------------------------------------------------------
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -231,6 +263,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
 	}, [editor, props.markupToHtml, props.defaultEditorState, onEditorContentClick]);
+
+	// -----------------------------------------------------------------------------------------
+	// Handle onChange event
+	// -----------------------------------------------------------------------------------------
 
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.

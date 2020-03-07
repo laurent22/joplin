@@ -35,7 +35,12 @@ class Database {
 	}
 
 	async open(options) {
-		await this.driver().open(options);
+		try {
+			await this.driver().open(options);
+		} catch (error) {
+			throw new Error(`Cannot open database: ${error.message}: ${JSON.stringify(options)}`);
+		}
+
 		this.logger().info('Database was open successfully');
 	}
 
