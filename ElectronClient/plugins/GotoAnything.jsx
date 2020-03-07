@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { stateUtils } = require('lib/reducer.js');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const SearchEngine = require('lib/services/SearchEngine');
@@ -220,7 +219,6 @@ class Dialog extends React.PureComponent {
 				folderId: item.parent_id,
 				noteId: item.id,
 				historyAction: 'goto',
-				lastSeenNote: stateUtils.getLastSeenNote(this.props),
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -232,7 +230,6 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_SELECT',
 				id: item.id,
 				historyAction: 'goto',
-				lastSeenNote: stateUtils.getLastSeenNote(this.props),
 			});
 		}
 	}
@@ -352,8 +349,6 @@ const mapStateToProps = (state) => {
 	return {
 		folders: state.folders,
 		theme: state.settings.theme,
-		selectedNoteIds: state.selectedNoteIds,
-		notes: state.notes,
 	};
 };
 

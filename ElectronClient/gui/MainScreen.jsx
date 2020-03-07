@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { stateUtils } = require('lib/reducer.js');
 const { Header } = require('./Header.min.js');
 const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
@@ -146,7 +145,6 @@ class MainScreenComponent extends React.Component {
 									type: 'FOLDER_SELECT',
 									id: folder.id,
 									historyAction: 'goto',
-									lastSeenNote: stateUtils.getLastSeenNote(this.props),
 								});
 							}
 						}
@@ -676,7 +674,6 @@ const mapStateToProps = state => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
 		templates: state.templates,
-		selectedNoteIds: state.selectedNoteIds,
 	};
 };
 

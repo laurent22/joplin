@@ -1,7 +1,6 @@
 const { ItemList } = require('./ItemList.min.js');
 const React = require('react');
 const { connect } = require('react-redux');
-const { stateUtils } = require('lib/reducer.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('../theme.js');
 const BaseModel = require('lib/BaseModel');
@@ -116,7 +115,6 @@ class NoteListComponent extends React.Component {
 					type: 'NOTE_SELECT',
 					id: item.id,
 					historyAction: 'goto',
-					lastSeenNote: stateUtils.getLastSeenNote(this.props),
 				});
 			}
 		};

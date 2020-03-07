@@ -285,9 +285,10 @@ function changeSelectedFolder(state, action, options = null) {
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
 		// Don't update history if going to the same note again.
-		if (action.lastSeenNote != null && action.id != action.lastSeenNote.id) {
+		const lastSeenNote = stateUtils.getLastSeenNote(state);
+		if (lastSeenNote != null && action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
 		}
 
 		newState.backwardHistoryNotes = backwardHistoryNotes;
@@ -337,17 +338,18 @@ function changeSelectedNotes(state, action, options = null) {
 		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
-		if (action.historyAction == 'goto' && action.lastSeenNote != null &&  action.id != action.lastSeenNote.id) {
+		const lastSeenNote = stateUtils.getLastSeenNote(state);
+		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
-		} else if (action.historyAction === 'pop' && action.lastSeenNote != null) {
-			if (forwardHistoryNotes.length === 0 || action.lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length-1].id) {
-				forwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
+		} else if (action.historyAction === 'pop' && lastSeenNote != null) {
+			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length-1].id) {
+				forwardHistoryNotes.push(Object.assign({}, lastSeenNote));
 			}
 			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'push' && action.lastSeenNote != null) {
-			if (backwardHistoryNotes.length === 0 || action.lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length-1].id) {
-				backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
+		} else if (action.historyAction === 'push' && lastSeenNote != null) {
+			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length-1].id) {
+				backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
 			}
 			forwardHistoryNotes.pop();
 		}

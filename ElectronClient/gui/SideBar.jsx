@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { stateUtils } = require('lib/reducer.js');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -415,7 +414,6 @@ class SideBarComponent extends React.Component {
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
 			historyAction: 'goto',
-			lastSeenNote: stateUtils.getLastSeenNote(this.props),
 		});
 	}
 
@@ -853,8 +851,6 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,
-		selectedNoteIds: state.selectedNoteIds,
-		notes: state.notes,
 	};
 };
 
