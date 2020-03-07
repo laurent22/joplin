@@ -188,6 +188,7 @@ class Tag extends BaseItem {
 			this.dispatch({
 				type: 'TAG_UPDATE_ONE',
 				item: tag,
+				rename: (options && options.rename) || false,
 			});
 			return tag;
 		});

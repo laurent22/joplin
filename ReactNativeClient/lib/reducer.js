@@ -227,7 +227,7 @@ function updateOneItem(state, action, keyName = '') {
 		}
 	}
 
-	if (!found) newItems.push(item);
+	if (!action.rename && !found) newItems.push(item);
 
 	let newState = Object.assign({}, state);
 
@@ -577,8 +577,10 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_UPDATE_ONE':
-			newState = updateOneItem(state, action);
-			newState = updateOneItem(newState, action, 'selectedNoteTags');
+			{
+				newState = updateOneItem(state, action);
+				newState = updateOneItem(newState, action, 'selectedNoteTags');
+			}
 			break;
 
 		case 'NOTE_TAG_REMOVE':

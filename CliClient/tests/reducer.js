@@ -345,4 +345,16 @@ describe('Reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
+	it('should rename tag', asyncTest(async () => {
+		let tags = await createNTestTags(3);
+		let state = initTestState(null, null, null, null, tags, [2]);
+
+		tags[2].title = 'algorithms';
+
+		let expected = createExpectedState(tags, [0,1,2], [2]);
+
+		// test action
+		state = reducer(state, { type: 'TAG_UPDATE_ONE', item: tags[2] });
+		expect(state.tags[2]).toEqual(expected.items[2]);
+	}));
 });

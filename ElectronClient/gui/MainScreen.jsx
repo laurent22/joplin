@@ -238,7 +238,7 @@ class MainScreenComponent extends React.Component {
 							if (answer !== null) {
 								try {
 									tag.title = answer;
-									await Tag.save(tag, { fields: ['title'], userSideValidation: true });
+									await Tag.save(tag, { fields: ['title'], userSideValidation: true, rename: true });
 								} catch (error) {
 									bridge().showErrorMessageBox(error.message);
 								}
