@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent } from './utils/NoteText';
+import { DefaultEditorState, OnChangeEvent } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 
