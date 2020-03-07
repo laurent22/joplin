@@ -21,8 +21,6 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const { bridge } = require('electron').remote.require('./bridge');
 
-// TODO: Handle note modified after sync
-
 interface NoteTextProps {
 	style: any,
 	noteId: string,
@@ -33,6 +31,7 @@ interface NoteTextProps {
 	watchedNoteFiles:string[],
 	isProvisional: boolean,
 	editorNoteStatuses: any,
+	syncStarted: boolean,
 }
 
 interface FormNote {
@@ -42,6 +41,8 @@ interface FormNote {
 	is_todo: number,
 	bodyEditorContent?: any,
 	markup_language: number,
+
+	hasChanged: boolean,
 
 	// Getting the content from the editor can be a slow process because that content
 	// might need to be serialized first. For that reason, the wrapped editor (eg TinyMCE)
@@ -86,6 +87,7 @@ const defaultNote = ():FormNote => {
 		bodyChangeId: 0,
 		saveActionQueue: null,
 		originalCss: '',
+		hasChanged: false,
 	};
 };
 
@@ -117,6 +119,41 @@ function styles_(props:NoteTextProps) {
 				height: '100%',
 			},
 		};
+	});
+}
+
+function usePrevious(value:any):any {
+	const ref = useRef();
+	useEffect(() => {
+		ref.current = value;
+	});
+	return ref.current;
+}
+
+function initNoteState(n:any, setFormNote:Function, setDefaultEditorState:Function) {
+	let originalCss = '';
+	if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
+		const htmlToHtml = new HtmlToHtml();
+		const splitted = htmlToHtml.splitHtml(n.body);
+		originalCss = splitted.css;
+	}
+
+	setFormNote({
+		id: n.id,
+		title: n.title,
+		is_todo: n.is_todo,
+		parent_id: n.parent_id,
+		bodyWillChangeId: 0,
+		bodyChangeId: 0,
+		markup_language: n.markup_language,
+		saveActionQueue: new AsyncActionQueue(1000),
+		originalCss: originalCss,
+		hasChanged: false,
+	});
+
+	setDefaultEditorState({
+		value: n.body,
+		markupLanguage: n.markup_language,
 	});
 }
 
@@ -204,6 +241,7 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any, dispatch:Functio
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
 	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ value: '', markupLanguage: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN });
+	const prevSyncStarted = usePrevious(props.syncStarted);
 
 	const editorRef = useRef<any>();
 	const formNoteRef = useRef<FormNote>();
@@ -259,6 +297,42 @@ function NoteText2(props:NoteTextProps) {
 	}, []);
 
 	useEffect(() => {
+		// Check that synchronisation has just finished - and
+		// if the note has never been changed, we reload it.
+		// If the note has already been changed, it's a conflict
+		// that's already been handled by the synchronizer.
+
+		if (!prevSyncStarted) return () => {};
+		if (props.syncStarted) return () => {};
+		if (formNote.hasChanged) return () => {};
+
+		console.info('Sync has finished and note has never been changed - reloading it');
+
+		let cancelled = false;
+
+		const loadNote = async () => {
+			const n = await Note.load(props.noteId);
+			if (cancelled) return;
+
+			// Normally should not happened because if the note has been deleted via sync
+			// it would not have been loaded in the editor (due to note selection changing
+			// on delete)
+			if (!n) {
+				console.warn('Trying to reload note that has been deleted:', props.noteId);
+				return;
+			}
+
+			initNoteState(n, setFormNote, setDefaultEditorState);
+		};
+
+		loadNote();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [prevSyncStarted, props.syncStarted, formNote]);
+
+	useEffect(() => {
 		if (!props.noteId) return () => {};
 
 		if (formNote.id === props.noteId) return () => {};
@@ -274,34 +348,9 @@ function NoteText2(props:NoteTextProps) {
 		const loadNote = async () => {
 			const n = await Note.load(props.noteId);
 			if (cancelled) return;
-
-			console.info('Loaded note:', n);
-
 			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
-
-			let originalCss = '';
-			if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
-				const htmlToHtml = new HtmlToHtml();
-				const splitted = htmlToHtml.splitHtml(n.body);
-				originalCss = splitted.css;
-			}
-
-			setFormNote({
-				id: n.id,
-				title: n.title,
-				is_todo: n.is_todo,
-				parent_id: n.parent_id,
-				bodyWillChangeId: 0,
-				bodyChangeId: 0,
-				markup_language: n.markup_language,
-				saveActionQueue: new AsyncActionQueue(2000),
-				originalCss: originalCss,
-			});
-
-			setDefaultEditorState({
-				value: n.body,
-				markupLanguage: n.markup_language,
-			});
+			console.info('Loaded note:', n);
+			initNoteState(n, setFormNote, setDefaultEditorState);
 		};
 
 		loadNote();
@@ -325,6 +374,7 @@ function NoteText2(props:NoteTextProps) {
 			...change,
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
+			hasChanged: true,
 		};
 
 		if (field === 'body' && formNote.bodyWillChangeId !== changeId) {
@@ -344,7 +394,11 @@ function NoteText2(props:NoteTextProps) {
 		handleProvisionalFlag();
 
 		setFormNote(prev => {
-			return { ...prev, bodyWillChangeId: event.changeId };
+			return {
+				...prev,
+				bodyWillChangeId: event.changeId,
+				hasChanged: true,
+			};
 		});
 
 		props.dispatch({
@@ -408,22 +462,9 @@ const mapStateToProps = (state:any) => {
 		selectedNoteIds: state.selectedNoteIds,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
-		// selectedNoteHash: state.selectedNoteHash,
-		// noteTags: state.selectedNoteTags,
-		// folderId: state.selectedFolderId,
-		// itemType: state.selectedItemType,
-		// folders: state.folders,
+		syncStarted: state.syncStarted,
 		theme: state.settings.theme,
-		// syncStarted: state.syncStarted,
-		// windowCommand: state.windowCommand,
-		// notesParentType: state.notesParentType,
-		// searches: state.searches,
-		// selectedSearchId: state.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
-		// customCss: state.customCss,
-		// lastEditorScrollPercents: state.lastEditorScrollPercents,
-		// historyNotes: state.historyNotes,
-		// templates: state.templates,
 	};
 };
 
