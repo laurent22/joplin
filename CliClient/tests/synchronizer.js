@@ -87,7 +87,7 @@ async function localNotesFoldersSameAsRemote(locals, expect) {
 
 let insideBeforeEach = false;
 
-describe('Synchronizer', function() {
+describe('synchronizer', function() {
 
 	beforeEach(async (done) => {
 		insideBeforeEach = true;

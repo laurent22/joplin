@@ -59,7 +59,7 @@ async function main() {
 	await execCommand('git pull');
 	await execCommand('touch app/main.js');
 	await execCommand('npm run build');
-	await execCommand('cp package.json build/');
+	// await execCommand('cp package.json build/');
 	await execCommand('cp ../README.md build/');
 
 	process.chdir(`${appDir}/build`);
