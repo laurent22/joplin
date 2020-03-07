@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import TinyMCE from './TinyMCE';
+import TinyMCE from './editors/TinyMCE';
 import PlainEditor from './editors/PlainEditor';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
@@ -11,6 +11,7 @@ import MultiNoteActions from './MultiNoteActions';
 // eslint-disable-next-line no-unused-vars
 import { DefaultEditorState, OnChangeEvent } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
+const { reg } = require('lib/registry.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const Setting = require('lib/models/Setting');
@@ -211,12 +212,12 @@ async function attachResources() {
 function scheduleSaveNote(formNote:FormNote, editorRef:any, dispatch:Function) {
 	if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
-	console.info('Scheduling...', formNote);
+	reg.logger().debug('Scheduling...', formNote);
 
 	const makeAction = (formNote:FormNote) => {
 		return async function() {
 			const note = await formNoteToNote(formNote, editorRef);
-			console.info('Saving note...', note);
+			reg.logger().debug('Saving note...', note);
 			await Note.save(note);
 
 			dispatch({
@@ -308,7 +309,7 @@ function NoteText2(props:NoteTextProps) {
 		if (props.syncStarted) return () => {};
 		if (formNote.hasChanged) return () => {};
 
-		console.info('Sync has finished and note has never been changed - reloading it');
+		reg.logger().debug('Sync has finished and note has never been changed - reloading it');
 
 		let cancelled = false;
 
@@ -343,7 +344,7 @@ function NoteText2(props:NoteTextProps) {
 
 		let cancelled = false;
 
-		console.info('Loading existing note', props.noteId);
+		reg.logger().debug('Loading existing note', props.noteId);
 
 		saveNoteIfWillChange(formNote, editorRef, props.dispatch);
 
@@ -351,7 +352,7 @@ function NoteText2(props:NoteTextProps) {
 			const n = await Note.load(props.noteId);
 			if (cancelled) return;
 			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
-			console.info('Loaded note:', n);
+			reg.logger().debug('Loaded note:', n);
 			initNoteState(n, setFormNote, setDefaultEditorState);
 		};
 
