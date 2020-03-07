@@ -106,15 +106,15 @@ stateUtils.lastSelectedNoteIds = function(state) {
 stateUtils.getLastSeenNote = function(state) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
-	if ((typeof selectedNoteIds != 'undefined') && selectedNoteIds.length>0) {
+	if (selectedNoteIds != null && selectedNoteIds.length>0) {
 		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
-		if (typeof currNote != 'undefined') {
+		if (currNote != null) {
 			return {
 				id: currNote.id,
 				parent_id: currNote.parent_id,
 			};
-		} else return undefined;
-	} else return undefined;
+		}
+	}
 };
 
 function arrayHasEncryptedItems(array) {
@@ -285,7 +285,7 @@ function changeSelectedFolder(state, action, options = null) {
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
 		// Don't update history if going to the same note again.
-		if (action.id != action.lastSeenNote.id) {
+		if (action.lastSeenNote != null && action.id != action.lastSeenNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 		}
@@ -337,15 +337,15 @@ function changeSelectedNotes(state, action, options = null) {
 		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
-		if (action.historyAction == 'goto' && action.id != action.lastSeenNote.id) {
+		if (action.historyAction == 'goto' && action.lastSeenNote != null &&  action.id != action.lastSeenNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
-		} else if (action.historyAction === 'pop') {
+		} else if (action.historyAction === 'pop' && action.lastSeenNote != null) {
 			if (forwardHistoryNotes.length === 0 || action.lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length-1].id) {
 				forwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 			}
 			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'push') {
+		} else if (action.historyAction === 'push' && action.lastSeenNote != null) {
 			if (backwardHistoryNotes.length === 0 || action.lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length-1].id) {
 				backwardHistoryNotes.push(Object.assign({}, action.lastSeenNote));
 			}
@@ -746,8 +746,8 @@ const reducer = (state = defaultState, action) => {
 			}
 
 			// Update history when searching
-			var lastSeenNote = stateUtils.getLastSeenNote(state.selectedNoteIds, state.notes);
-			if (lastSeenNote && (state.backwardHistoryNotes.length === 0 ||
+			var lastSeenNote = stateUtils.getLastSeenNote(state);
+			if (lastSeenNote != null && (state.backwardHistoryNotes.length === 0 ||
 				state.backwardHistoryNotes[state.backwardHistoryNotes.length-1].id != lastSeenNote.id)) {
 				newState.forwardHistoryNotes = [];
 				newState.backwardHistoryNotes.push(Object.assign({},lastSeenNote));

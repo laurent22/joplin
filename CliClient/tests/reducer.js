@@ -345,4 +345,36 @@ describe('Reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
+	// xit('should remove deleted note from history', asyncTest(async () => {
+
+	// }));
+
+	// xit('should remove all notes of a deleted notebook from history', asyncTest(async () => {
+
+	// }));
+
+	// xit('should add current note to history on notebook change', asyncTest(async () => {
+
+	// }));
+
+	// xit('should not change history when selecting the currently selected note again', asyncTest(async () => {
+
+	// }));
+
+	// xit('should add selected note to history on note change', asyncTest(async () => {
+
+	// }));
+
+	// --
+
+	// xit('should go back to previous note when back arrow is used', asyncTest(async () => {
+
+	// }));
+
+	// xit('should return back to current note when front arrow is used', asyncTest(async () => {
+
+	// }));
+
+
+
 });
