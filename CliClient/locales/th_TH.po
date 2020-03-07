@@ -76,7 +76,7 @@ msgstr "ไม่มีคำสั่ง: %s"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr ""
+msgstr "คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -143,13 +143,12 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
 msgid "Displays the complete information about note."
-msgstr ""
+msgstr "แสดงข้อมูลทั้งหมดของบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
 msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
+"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. "
+"If neither [name] nor [value] is provided, it will list the current configuration."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
@@ -168,8 +167,8 @@ msgstr "%s = %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is "
+"duplicated in the current notebook."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
@@ -183,9 +182,11 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
 msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-"
+"file` and `target-status`."
 msgstr ""
+"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-file` และ "
+"`target-status`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
@@ -209,10 +210,11 @@ msgid "Passwords do not match!"
 msgstr "รหัสผ่านไม่เหมือนกัน!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
+#, fuzzy
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
+"Starting decryption... Please wait as it may take several minutes depending on how much "
+"there is to decrypt."
+msgstr "เริ่มต้นการถอดรหัส... โปรดรอสักครู่ อาจจะใช้เวลาสองถึงสามนาที ขึ้นอยู่กับว่าปริมาณของไฟล์ต้องถอดรหัส"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
@@ -233,22 +235,21 @@ msgstr "ปิด"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Encryption is: %s"
-msgstr ""
+msgstr "การเข้ารหัส: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
 msgid "Edit note."
 msgstr "แก้ไขบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
-msgstr ""
+msgstr "ไม่มีสมุดบันทึกที่ถูกใช้งาน"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
 #, javascript-format
@@ -261,8 +262,8 @@ msgstr "ออกจากแอปพลิเคชั่น"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete database "
+"including notebooks, notes, tags and resources."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
@@ -287,19 +288,20 @@ msgid "Displays usage information."
 msgstr "แสดงข้อมูลการใช้งาน"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr ""
+msgstr "สำหรับข้อมูลเพิ่มเติมสำหรับการปรับแต่งคีย์ลัด ไปที่ %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+#, fuzzy
 msgid "Shortcuts are not available in CLI mode."
-msgstr ""
+msgstr "คีย์ลัดใช้ไม่ได้ในโหมด CLI"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
+"Type `help [command]` for more information about a command; or type `help all` for the "
+"complete usage information."
+msgstr "พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
 msgid "The possible commands are:"
@@ -307,9 +309,9 @@ msgstr "คำสั่งที่เป็นไปได้คือ:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
 msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
+"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts "
+"`$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to "
+"refer to the currently selected item."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
@@ -318,13 +320,13 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including this console)."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+#, fuzzy
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr ""
+msgstr "ขยาย/ย่อ คอนโซล พิมพ์ “tc”"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
@@ -335,9 +337,8 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
@@ -346,7 +347,7 @@ msgstr "นำเข้าข้อมูลเข้ามาที่ Joplin"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
 #, javascript-format
 msgid "Source format: %s"
-msgstr ""
+msgstr "ฟอร์แมตต้นฉบับ: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
 #, fuzzy
@@ -400,18 +401,19 @@ msgid "The notes have been imported: %s"
 msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+#, fuzzy
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
+"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
+msgstr "แสดงบันทึกในสมุดบันทึกปัจจุบัน ใช้ `ls /` เพื่อแสดงรายการสมุดบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Displays only the first top <num> notes."
-msgstr ""
+msgstr "แสดงเฉพาะบันทึก <num> อันดับแรก"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#, fuzzy
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr ""
+msgstr "จัดเรียงรายการโดย <field> (เช่น. title, updated_time, created_time)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid "Reverses the sorting order."
@@ -419,20 +421,21 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or "
+"`nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-ttd` would "
+"display notes and to-dos."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#, fuzzy
 msgid "Either \"text\" or \"json\""
-msgstr ""
+msgstr "ไม่ “text” ก็ “json”"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-"
+"dos), TITLE"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
@@ -474,9 +477,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
+msgid "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
@@ -504,8 +505,8 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
 #, javascript-format
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
+"Start, stop or check the API server. To specify on which port it should run, set the api."
+"port config variable. Commands are (%s)."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
@@ -527,8 +528,7 @@ msgstr "เซิร์ฟเวอร์ไม่ทำงาน"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
 msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
+"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
 "\n"
 "%s"
 msgstr ""
@@ -548,15 +548,13 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr ""
+msgid "Authentication was not completed (did not receive an authentication token)."
+msgstr "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
@@ -583,9 +581,8 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"Lock file is already being hold. If you know that no synchronisation is taking place, you "
+"may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
@@ -611,10 +608,9 @@ msgstr "กำลังยกเลิก... โปรดรอสักคร�
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove "
+"[tag] from [note], to list notes associated with [tag], or to list tags associated with "
+"[note]. The command `tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
@@ -624,10 +620,9 @@ msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-"
+"do between completed and uncompleted state (If the target is a regular note it will be "
+"converted to a to-do). Use \"clear\" to convert the to-do back to a regular note."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
@@ -635,9 +630,7 @@ msgid "Marks a to-do as non-completed."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
+msgid "Switches to [notebook] - all further operations will happen within this notebook."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
@@ -688,18 +681,22 @@ msgstr "ค้นหา:"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage "
+"information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
+"ยินดีต้อนรับสู่ Joplin!\n"
+"\n"
+"พิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n"
+"\n"
+"ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master password. To "
+"do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted "
+"items are being decrypted in the background and will be available soon."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:361
@@ -713,7 +710,7 @@ msgstr "รายการบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:373
 msgid "Note title"
-msgstr "หัวข้อบันทึก"
+msgstr "ชื่อบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:379
 #, fuzzy
@@ -723,7 +720,7 @@ msgstr "เนื้อความบันทึก"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:431
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr ""
+msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:464
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
@@ -1127,9 +1124,7 @@ msgid "Enable Web Clipper Service"
 msgstr "เปิดใช้บริการ Web Clipper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:122
-msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
+msgid "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:127
@@ -1143,9 +1138,8 @@ msgstr "ขั้นตอนที่ 1: เปิดใช้บริกา�
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:140
 #, fuzzy
 msgid ""
-"This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
+"This service allows the browser extension to communicate with Joplin. When enabling it your "
+"firewall may ask you to give permission to Joplin to listen to a particular port."
 msgstr ""
 "บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
 "ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
@@ -1172,8 +1166,7 @@ msgstr "คัดลอก Token"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:195
 msgid ""
-"This authorisation token is only needed to allow third-party applications to "
-"access Joplin."
+"This authorisation token is only needed to allow third-party applications to access Joplin."
 msgstr "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
@@ -1207,8 +1200,8 @@ msgstr "ผิดพลาด"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:193
 msgid ""
-"The Joplin Nextcloud App is either not installed or misconfigured. Please "
-"see the full error message below:"
+"The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error "
+"message below:"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:206
@@ -1266,18 +1259,17 @@ msgstr "บันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:141
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:143
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent encrypted to the sync target. Do not lose the password as, for security purposes, "
+"this will be the *only* way to decrypt the data! To enable encryption, please enter your "
+"password below."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:172
@@ -1333,9 +1325,9 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:237
 msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+"Note: Only one master key is going to be used for encryption (the one marked as \"active\"). "
+"Any of the keys might be used for decryption, depending on how the notes or notebooks were "
+"originally encrypted."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:265
@@ -1346,17 +1338,19 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:270
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
 msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
+"The master keys with these IDs are used to encrypt some of your items, however the "
+"application does not currently have access to them. It is likely they will eventually be "
+"downloaded via synchronisation."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:308
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to enable it "
+"please check the documentation:"
 msgstr ""
+"สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) และคำแนะนำในการเปิดใช้งาน "
+"โปรดอ่านคู่มือการใช้งาน:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:327
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
@@ -1399,8 +1393,7 @@ msgstr "การใช้งาน"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:62
 #, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:115
@@ -1413,7 +1406,7 @@ msgstr "โปรดสร้างสมุดบันทึกก่อน"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:128
 msgid "Notebook title:"
-msgstr "หัวข้อสมุดบันทึก:"
+msgstr "ชื่อสมุดบันทึก:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:171
 msgid "Add or remove tags:"
@@ -1490,8 +1483,7 @@ msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
@@ -1547,8 +1539,8 @@ msgstr "กู้คืน"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The "
+"current version of the note will not be replaced or modified."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:763
@@ -1582,9 +1574,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
 #, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
+msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
@@ -1682,8 +1672,9 @@ msgid "Clear"
 msgstr "ล้าง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
+#, fuzzy
 msgid "Title"
-msgstr "หัวข้อ"
+msgstr "ชื่อเรื่อง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
@@ -1740,8 +1731,7 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
@@ -1877,8 +1867,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:339
 msgid ""
-"Type a note title to jump to it. Or type # followed by a tag name, or @ "
-"followed by a notebook name."
+"Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a "
+"notebook name."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:377
@@ -1900,8 +1890,8 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
 #, javascript-format
 msgid ""
-"Could not connect to the Joplin Nextcloud app. Please check the "
-"configuration in the Synchronisation config screen. Full error was:\n"
+"Could not connect to the Joplin Nextcloud app. Please check the configuration in the "
+"Synchronisation config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -1942,8 +1932,7 @@ msgid "Unknown level ID: %s"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
@@ -1952,33 +1941,31 @@ msgstr "แอปพลิเคชั่นนี้ได้รับการ
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
 msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"Please open the following URL in your browser to authenticate the application. The "
+"application will create a directory in \"Apps/Joplin\" and will only read and write files in "
+"this directory. It will have no access to any files outside this directory nor to any other "
+"personal data. No data will be shared with any third party."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
 msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
+"Cannot refresh token: authentication data is missing. Starting the synchronisation again may "
+"fix the problem."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
-#, fuzzy
 msgid "Untitled"
-msgstr "Untitled"
+msgstr "ไม่มีชื่อ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:137
 msgid ""
 "Could not synchronize with OneDrive.\n"
 "\n"
-"This error often happens when using OneDrive for Business, which "
-"unfortunately cannot be supported.\n"
+"This error often happens when using OneDrive for Business, which unfortunately cannot be "
+"supported.\n"
 "\n"
 "Please consider using a regular OneDrive account."
 msgstr ""
@@ -2043,7 +2030,6 @@ msgid "Idle"
 msgstr "ว่าง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
-#, fuzzy
 msgid "In progress"
 msgstr "กำลังกำเนินการ"
 
@@ -2060,7 +2046,7 @@ msgstr "รายการที่เข้ารหัสแล้วไม่
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
 #, fuzzy
 msgid "title"
-msgstr "หัวข้อ"
+msgstr "ชื่อเรื่อง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
@@ -2078,9 +2064,9 @@ msgid "Cannot move notebook to this location"
 msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr ""
+msgstr "สมุดบันทึกไม่สามารถใช้ชื่อ “%s” เพราะมีคำสงวน"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
 #, fuzzy
@@ -2116,18 +2102,17 @@ msgstr "ดาวน์โหลดแล้ว"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
 msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
+"Attention: If you change this location, make sure you copy all your content to it before "
+"syncing, otherwise all files will be removed! See the FAQ for more details: %s"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "โหมดของคีย์บอร์ด"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 msgid "Default"
-msgstr ""
+msgstr "ค่าเริ่มต้น"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
@@ -2143,8 +2128,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
 msgid ""
-"The target to synchonise to. Each sync target may have additional parameters "
-"which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchonise to. Each sync target may have additional parameters which are named "
+"as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
@@ -2181,9 +2166,9 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", "
+"they are downloaded when you open the note. In \"Always\", all the attachments are "
+"downloaded whether you open the note or not."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
@@ -2285,12 +2270,14 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
+#, fuzzy
 msgid "Uncompleted to-dos on top"
-msgstr ""
+msgstr "to-do ที่ยังไม่เสร็จไว้บนสุด"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
+#, fuzzy
 msgid "Show completed to-dos"
-msgstr ""
+msgstr "แสดง to-do ที่เสร็จแล้ว"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Sort notes by"
@@ -2322,83 +2309,85 @@ msgstr "เมื่อสร้าง to-do ใหม่:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:328
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
+#, fuzzy
 msgid "Focus title"
-msgstr ""
+msgstr "โฟกัสที่ชื่อเรื่อง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
+#, fuzzy
 msgid "Focus body"
-msgstr ""
+msgstr "โฟกัสที่เนื้อเรื่อง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#, fuzzy
 msgid "When creating a new note:"
-msgstr ""
+msgstr "เมื่อสร้างบันทึกใหม่:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "เปิดใช้งาน Soft Break"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+#, fuzzy
 msgid "Enable typographer support"
-msgstr ""
+msgstr "เปิดใช้งานการรองรับ Typographer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
 msgid "Enable math expressions"
-msgstr ""
+msgstr "เปิดใช้งาน Math Expressions"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
 msgid "Enable ==mark== syntax"
-msgstr "เปิดใช้ ==mark== syntax"
+msgstr "เปิดใช้งาน ==mark== syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
 msgid "Enable footnotes"
-msgstr ""
+msgstr "เปิดใช้งาน Footnotes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "เปิดใช้งานส่วนเสริมสารบัญ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
 msgid "Enable ~sub~ syntax"
-msgstr "เปิดใช้ ~sub~ syntax"
+msgstr "เปิดใช้งาน ~sub~ syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
 msgid "Enable ^sup^ syntax"
-msgstr "เปิดใช้ ^sup^ syntax"
+msgstr "เปิดใช้งาน ^sup^ syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
 msgid "Enable deflist syntax"
-msgstr "เปิดใช้ deflist syntax"
+msgstr "เปิดใช้งาน deflist syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
-#, fuzzy
 msgid "Enable abbreviation syntax"
-msgstr "เปิดใช้ abbreviation syntax"
+msgstr "เปิดใช้งาน abbreviation syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
 msgid "Enable markdown emoji"
-msgstr "เปิดใช้ markdown emoji"
+msgstr "เปิดใช้งาน Markdown Emoji"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
-#, fuzzy
 msgid "Enable ++insert++ syntax"
-msgstr "เปิดใช้ ++insert++syntax"
+msgstr "เปิดใช้งาน ++insert++syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
 msgid "Enable multimarkdown table extension"
-msgstr "เปิดใช้ส่วนเสริมตาราง multimarkdown"
+msgstr "เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
 msgid "Enable Fountain syntax support"
-msgstr "เปิดใช้การรองรับ Fountain syntax"
+msgstr "เปิดใช้งานการรองรับ Fountain syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
 msgid "Enable Mermaid diagrams support"
-msgstr "เปิดใช้การรองรับ Mermaid diagram"
+msgstr "เปิดใช้งานการรองรับ Mermaid diagram"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Show tray icon"
-msgstr ""
+msgstr "แสดงไอคอนใน System tray"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
 msgid "Note: Does not work in all desktop environments."
@@ -2406,14 +2395,13 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
 msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable "
-"this setting so that your notes are constantly being synchronised, thus "
-"reducing the number of conflicts."
+"This will allow Joplin to run in the background. It is recommended to enable this setting so "
+"that your notes are constantly being synchronised, thus reducing the number of conflicts."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
 msgid "Start application minimised in the tray icon"
-msgstr ""
+msgstr "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:398
 msgid "Editor font size"
@@ -2428,14 +2416,18 @@ msgid "Editor font family"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+#, fuzzy
 msgid ""
-"This must be *monospace* font or it will not work properly. If the font is "
-"incorrect or empty, it will default to a generic monospace font."
+"This must be *monospace* font or it will not work properly. If the font is incorrect or "
+"empty, it will default to a generic monospace font."
 msgstr ""
+"เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ จะใช้ตัวอักษรแบบ "
+"monospace ค่าเริ่มต้น"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
+#, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
 msgid "Automatically update the application"
@@ -2478,8 +2470,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
 msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. If none is "
+"provided it will try to auto-detect the default editor."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
@@ -2525,31 +2517,30 @@ msgstr "แนวนอน"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
 msgid "Custom TLS certificates"
-msgstr ""
+msgstr "TLS certificate แบบกำหนดเอง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
 msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"Comma-separated list of paths to directories to load the certificates from, or path to "
+"individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make "
+"changes to the TLS settings, you must save your changes before clicking on \"Check "
+"synchronisation configuration\"."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
 msgid "Ignore TLS certificate errors"
-msgstr ""
+msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
 msgid ""
-"Fail-safe: Do not wipe out local data when sync target is empty (often the "
-"result of a misconfiguration or bug)"
+"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a "
+"misconfiguration or bug)"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
-msgstr ""
+"Specify the port that should be used by the API server. If not set, a default will be used."
+msgstr "ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
 msgid "Enable note history"
@@ -2610,7 +2601,7 @@ msgstr "Web Clipper"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
@@ -2659,7 +2650,7 @@ msgstr "ไดเรกทอรี่"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
 #, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\""
-msgstr ""
+msgstr "ไม่สามารถโหลดโมดูล “%s” สำหรับฟอร์แมต “%s”"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
@@ -2669,8 +2660,8 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
 msgid ""
-"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
-"decrypted and try again."
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be decrypted and "
+"try again."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
@@ -2679,8 +2670,9 @@ msgid "There is no data to export."
 msgstr "ไม่มีข้อมูลที่จะส่งออก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#, fuzzy
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr ""
+msgstr "โปรดระบุสมุดบันทึกสำหรับทำการนำเข้าบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
 #, fuzzy
@@ -2693,30 +2685,30 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"These items will remain on the device but will not be uploaded to the sync target. In order "
+"to find these items, either search for the title or the ID (which is displayed in brackets "
+"above)."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr ""
+msgstr "%s (%s) ไม่สามารถอัพโหลด: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr ""
+msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
 msgid "Items that cannot be decrypted"
-msgstr ""
+msgstr "รายการที่ไม่สามารถทำการถอดรหัส"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or "
+"too large. These items will remain on the device but Joplin will no longer attempt to "
+"decrypt them."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
@@ -2799,8 +2791,9 @@ msgid "Your permission to use your camera is required."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
+#, fuzzy
 msgid "You currently have no notebooks."
-msgstr ""
+msgstr "คุณยังไม่มีสมุดบันทึกใดเลย"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:101
 msgid "Create a notebook"
@@ -2808,7 +2801,7 @@ msgstr "สร้างสมุดบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
 msgid "There are currently no notes. Create one by clicking on the (+) button."
-msgstr ""
+msgstr "ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:180
 msgid "Delete these notes?"
@@ -2821,11 +2814,11 @@ msgstr "ย้ายไปสมุดบันทึก..."
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:386
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr ""
+msgstr "ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
 msgid "Press to set the decryption password."
-msgstr ""
+msgstr "โปรดตั้งรหัสผ่านสำหรับการถอดรหัส"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
 msgid "Some items cannot be synchronised. Press for more info."
@@ -2877,8 +2870,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
+"Error. Please check that URL, username, password, etc. are correct and that the sync target "
+"is accessible. The reported error was:"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
@@ -2922,8 +2915,8 @@ msgstr "คำเตือน"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
+"In order to use file system synchronisation your permission to write to external storage is "
+"required."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
@@ -2933,7 +2926,7 @@ msgstr "ข้อมูล"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
 msgid "Encryption Config"
-msgstr ""
+msgstr "ตั้งค่าการเข้ารหัส"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
 msgid "Tools"
@@ -2958,16 +2951,16 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fixing search index..."
-msgstr ""
+msgstr "กำลังซ่อมดัชนีค้นหา..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid "Fix search index"
-msgstr ""
+msgstr "ซ่อมดัชนีย์ค้นหา"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may take a long "
+"time depending on the number of notes."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
@@ -2990,23 +2983,21 @@ msgstr "ข้อมูลเพิ่มเติม"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
 msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
+"To work correctly, the app needs the following permissions. Please enable them in your phone "
+"settings, in Apps > Joplin > Permissions"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
+msgstr "- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
+msgstr "- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
 msgid "Joplin website"
@@ -3070,7 +3061,7 @@ msgstr "แก้ไขสมุดบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
 msgid "Enter notebook title"
-msgstr "กรอกหัวข้อสมุดบันทึก"
+msgstr "กรอกชื่อของสมุดบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
@@ -3107,17 +3098,17 @@ msgstr "ไม่มีรายการที่มี ID %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr ""
+msgstr "ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr ""
+msgstr "แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
 #, javascript-format
@@ -3164,11 +3155,11 @@ msgstr "แบ่งปัน"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 msgid "Convert to note"
-msgstr ""
+msgstr "แปลงเป็นบันทึก"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
 msgid "Convert to todo"
-msgstr ""
+msgstr "แปลงเป็น to-do"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Properties"
@@ -3180,7 +3171,7 @@ msgstr "เพิ่มเนื้อความ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
 msgid "Add title"
-msgstr "เพิ่มหัวข้อ"
+msgstr "เพิ่มชื่อเรื่อง"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
 msgid "Login with OneDrive"
