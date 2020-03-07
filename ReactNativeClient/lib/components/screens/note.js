@@ -99,7 +99,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const r = await saveDialog();
 			if (r) return r;
 
-			if (!this.state.note.id) {
+			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
+
+			if (isProvisionalNote) {
 				return false;
 			}
 

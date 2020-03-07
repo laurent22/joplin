@@ -348,7 +348,9 @@ class BaseItem extends BaseModel {
 		} catch (error) {
 			const msg = [`Could not encrypt item ${item.id}`];
 			if (error && error.message) msg.push(error.message);
-			throw new Error(msg.join(': '));
+			const newError = new Error(msg.join(': '));
+			newError.stack = error.stack;
+			throw newError;
 		}
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items

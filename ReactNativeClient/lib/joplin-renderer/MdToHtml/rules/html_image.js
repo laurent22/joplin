@@ -34,7 +34,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 			if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
 
 			return content.replace(imageRegex, (v, before, src, after) => {
-				if (!Resource.isResourceUrl(src)) return defaultRender(tokens, idx, options, env, self);
+				if (!Resource.isResourceUrl(src)) return `<img${before}src="${src}"${after}>`;
 				return renderImageHtml(before, src, after, ruleOptions);
 			});
 		};

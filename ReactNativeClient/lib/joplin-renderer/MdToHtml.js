@@ -240,6 +240,7 @@ class MdToHtml {
 		// /!\/!\ Note: the order of rules is important!! /!\/!\
 
 		markdownIt.use(rules.fence(context, ruleOptions));
+		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
 		markdownIt.use(rules.link_open(context, ruleOptions));
@@ -247,7 +248,6 @@ class MdToHtml {
 		if (this.pluginEnabled('katex')) markdownIt.use(rules.katex(context, ruleOptions));
 		if (this.pluginEnabled('fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
 		if (this.pluginEnabled('mermaid')) markdownIt.use(rules.mermaid(context, ruleOptions));
-		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });

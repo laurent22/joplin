@@ -20,25 +20,25 @@ Then you can test the various applications:
 ## Testing the desktop application
 
 	cd ElectronClient
-	npm run start
+	npm start
 
 If you'd like to auto-reload the app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
 
 ```sh
 cd ElectronClient
-watchman-make -p '**/*.js' '**/*.jsx' --run "npm run start"
+watchman-make -p '**/*.js' '**/*.jsx' --run "npm start"
 ```
 
-It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"npm run start"` each time. Here's what the workflow loop looks like in practice:
+It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"npm start"` each time. Here's what the workflow loop looks like in practice:
 
 1. Edit and save files in your text editor.
 2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
-3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm run start"`, and hit enter).
+3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"npm start"`, and hit enter).
 
 ## Testing the Terminal application
 
 	cd CliClient
-	npm run start
+	npm start
 
 ## Testing the Mobile application
 
@@ -47,12 +47,12 @@ First you need to setup React Native to build projects with native code. For thi
 Then:
 
 	cd ReactNativeClient
-	npm run start-android
-	# Or: npm run start-ios
+	npm start-android
+	# Or: npm start-ios
 
 To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
-Normally the bundler should start automatically with the application. If it doesn't run `npm run start`.
+Normally the bundler should start automatically with the application. If it doesn't run `npm start`.
 
 ## Building the clipper
 
@@ -72,9 +72,9 @@ Running `npm run build` would have the same effect, but without watching.
 
 ## Running an application with additional parameters
 
-You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm run start` command, followed by your flags. For example:
+You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `npm start` command, followed by your flags. For example:
 
-	npm run start -- --profile ~/MyTestProfile
+	npm start -- --profile ~/MyTestProfile
 
 ## TypeScript
 
