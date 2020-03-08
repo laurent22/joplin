@@ -1,7 +1,3 @@
-
-> joplin@1.0.155 start /Users/laurent/src/joplin-master/CliClient
-> gulp build -L && node 'build/main.js' --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --env dev "apidoc"
-
 # Joplin API
 
 When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.
@@ -333,4 +329,3 @@ Deletes the tag with ID :id
 ## DELETE /tags/:id/notes/:note_id
 
 Remove the tag from the note.
-
