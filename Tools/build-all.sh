@@ -6,9 +6,9 @@ ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "---------------------------------------------------"
 echo "Rebuild API doc..."
 echo "---------------------------------------------------"
-# TODO: When the apidoc command fails, it copy the failure in api.md, but shouldn't be doing that
 cd "$ROOT_DIR/../CliClient"
-npm run start -- apidoc > "$ROOT_DIR/../readme/api.md"
+API_DOC="$(npm run --silent start -- apidoc)"
+echo "$API_DOC" > "$ROOT_DIR/../readme/api.md"
 cd "$ROOT_DIR"
 
 echo "---------------------------------------------------"
