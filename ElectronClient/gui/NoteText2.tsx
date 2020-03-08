@@ -323,7 +323,7 @@ function NoteText2(props:NoteTextProps) {
 			// it would not have been loaded in the editor (due to note selection changing
 			// on delete)
 			if (!n) {
-				console.warn('Trying to reload note that has been deleted:', props.noteId);
+				reg.logger().warn('Trying to reload note that has been deleted:', props.noteId);
 				return;
 			}
 
