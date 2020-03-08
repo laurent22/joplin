@@ -852,10 +852,6 @@ class NoteTextComponent extends React.Component {
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
 					historyAction: 'goto',
-					lastSeenNote: {
-						id: this.state.note.id,
-						parent_id: this.state.note.parent_id,
-					},
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
@@ -1663,10 +1659,6 @@ class NoteTextComponent extends React.Component {
 					noteId: lastItem.id,
 
 					historyAction: 'pop',
-					lastSeenNote: {
-						id: this.state.note.id,
-						parent_id: this.state.note.parent_id,
-					},
 				});
 			},
 		});
@@ -1684,10 +1676,6 @@ class NoteTextComponent extends React.Component {
 					noteId: nextItem.id,
 
 					historyAction: 'push',
-					lastSeenNote: {
-						id: this.state.note.id,
-						parent_id: this.state.note.parent_id,
-					},
 				});
 			},
 		});
