@@ -38,7 +38,12 @@
 				"ReactNativeClient/setUpQuickActions.js",
 				"ReactNativeClient/android/app/joplin.keystore",
 				"ReactNativeClient/lib/AsyncActionHandler.js",
-				"*.eps"
+				"*.eps",
+				"ElectronClient/gui/editors/TinyMCE.js",
+				"ElectronClient/gui/editors/PlainEditor.js",
+				"ElectronClient/gui/MultiNoteActions.js",
+				"ElectronClient/gui/NoteContentPropertiesDialog.js",
+				"ElectronClient/gui/utils/NoteText.js"
 			],
 			"folder_exclude_patterns":
 			[
@@ -83,7 +88,8 @@
 				"ReactNativeClient/ios/Joplin-tvOS",
 				"ReactNativeClient/ios/Joplin.xcodeproj/project.xcworkspace",
 				"ReactNativeClient/ios/Joplin.xcworkspace/xcuserdata",
-				"ReactNativeClient/ios/Joplin.xcodeproj/xcuserdata"
+				"ReactNativeClient/ios/Joplin.xcodeproj/xcuserdata",
+				"ElectronClient/pluginAssets"
 			],
 			"path": "."
 		}

@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { DefaultEditorState, OnChangeEvent, TextEditorUtils } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
+const taboverride = require('taboverride');
 
 interface TinyMCEProps {
 	style: any,
@@ -43,6 +44,28 @@ function editableInnerHtml(html:string):string {
 	const editable = temp.getElementsByClassName('joplin-editable');
 	if (!editable.length) throw new Error(`Invalid joplin-editable: ${html}`);
 	return editable[0].innerHTML;
+}
+
+function dialogTextArea_keyDown(event:any) {
+	if (event.key === 'Tab') {
+		window.requestAnimationFrame(() => event.target.focus());
+	}
+}
+
+// Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
+// taboverride will take care of actually inserting the tab character, while the keydown
+// event listener will override the default behaviour, which is to focus the next field.
+function enableTextAreaTab(enable:boolean) {
+	const textAreas = document.getElementsByClassName('tox-textarea');
+	for (const textArea of textAreas) {
+		taboverride.set(textArea, enable);
+
+		if (enable) {
+			textArea.addEventListener('keydown', dialogTextArea_keyDown);
+		} else {
+			textArea.removeEventListener('keydown', dialogTextArea_keyDown);
+		}
+	}
 }
 
 export const utils:TextEditorUtils = {
@@ -135,9 +158,12 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		const loadEditor = async () => {
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
+				width: '100%',
+				height: '100%',
+				resize: false,
 				plugins: 'noneditable link lists hr',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
-				valid_elements: '*[*]', // TODO: filter more,
+				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr',
 				setup: (editor:any) => {
@@ -153,17 +179,19 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							},
 							onSubmit: async (dialogApi:any) => {
 								const newSource = dialogApi.getData().codeTextArea;
-								const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
+								const md = `${source.openCharacters}${newSource.trim()}${source.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
 
 								// markupToHtml will return the complete editable HTML, but we only
 								// want to update the inner HTML, so as not to break additional props that
 								// are added by TinyMCE on the main node.
 								editable.innerHTML = editableInnerHtml(result.html);
-								source.node.textContent = newSource;
 								dialogApi.close();
 								editor.fire('joplinChange');
 								dispatchDidUpdate(editor);
+							},
+							onClose: () => {
+								enableTextAreaTab(false);
 							},
 							body: {
 								type: 'panel',
@@ -182,6 +210,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 								},
 							],
 						});
+
+						window.requestAnimationFrame(() => {
+							enableTextAreaTab(true);
+						});
 					}
 
 					editor.ui.registry.addButton('customAttach', {
@@ -189,6 +221,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 						icon: 'upload',
 						onAction: async function() {
 							const resources = await attachResources.current();
+							if (!resources.length) return;
 
 							const html = [];
 							for (const resource of resources) {
@@ -313,17 +346,63 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			}, 1000);
 		};
 
-		editor.on('keyup', onChangeHandler); // TODO: don't trigger for shift, ctrl, etc.
+		const onExecCommand = (event:any) => {
+			const c:string = event.command;
+			if (!c) return;
+
+			// We need to dispatch onChange for these commands:
+			//
+			// InsertHorizontalRule
+			// InsertOrderedList
+			// InsertUnorderedList
+			// mceInsertContent
+			// mceToggleFormat
+			//
+			// Any maybe others, so to catch them all we only check the prefix
+
+			if (c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
+				onChangeHandler();
+			}
+		};
+
+		// Keypress means that a printable key (letter, digit, etc.) has been
+		// pressed so we want to always trigger onChange in this case
+		const onKeypress = () => {
+			console.info('keypress');
+			onChangeHandler();
+		};
+
+		// KeyUp is triggered for any keypress, including Control, Shift, etc.
+		// so most of the time we don't want to trigger onChange. We trigger
+		// it however for the keys that might change text, such as Delete or
+		// Backspace. It's not completely accurate though because if user presses
+		// Backspace at the beginning of a note or Delete at the end, we trigger
+		// onChange even though nothing is changed. The alternative would be to
+		// check the content before and after, but this is too slow, so let's
+		// keep it this way for now.
+		const onKeyUp = (event:any) => {
+			console.info('keyup');
+
+			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
+				onChangeHandler();
+			}
+		};
+
+		editor.on('keyup', onKeyUp);
+		editor.on('keypress', onKeypress);
 		editor.on('paste', onChangeHandler);
 		editor.on('cut', onChangeHandler);
 		editor.on('joplinChange', onChangeHandler);
+		editor.on('ExecCommand', onExecCommand);
 
 		return () => {
 			try {
-				editor.off('keyup', onChangeHandler);
+				editor.off('keyup', onKeyUp);
+				editor.off('keypress', onKeypress);
 				editor.off('paste', onChangeHandler);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);
+				editor.off('ExecCommand', onExecCommand);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
