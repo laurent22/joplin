@@ -203,7 +203,7 @@ class MainScreenComponent extends React.Component {
 
 			this.setState({
 				promptOptions: {
-					label: _('Move to Notebook:'),
+					label: _('move to notebook:'),
 					inputType: 'dropdown',
 					value: '',
 					autocomplete: startFolders,

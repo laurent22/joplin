@@ -37,8 +37,8 @@ class NoteListUtils {
 
 			menu.append(
 				new MenuItem({
-					label: _('Assign Notebook'),
-					click: async () => {
+					label: _('Move to notebook'),
+					click: () => {
 						props.dispatch({
 							type: 'WINDOW_COMMAND',
 							name: 'moveToFolder',
