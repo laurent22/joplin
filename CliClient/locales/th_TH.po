@@ -1,0 +1,3148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Language: th_TH\n"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+#, fuzzy
+msgid "Please select the note or notebook to be deleted first."
+msgstr "โปรดเลือกบันทึกหรือสมุดบันทึกที่ต้องการลบก่อน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "กด Ctrl+D หรือพิมพ์ \"exit\" เพื่อออกจากแอปพลิเคชั่น"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
+#, fuzzy
+msgid "No notebook selected."
+msgstr "สมุดบันทึกไม่ได้ถูกเลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
+#, fuzzy
+msgid "No notebook has been specified."
+msgstr "สมุดบันทึกไม่ได้ระบุ"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "Y"
+msgstr "Y"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "n"
+msgstr "n"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "N"
+msgstr "N"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "y"
+msgstr "y"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
+#, fuzzy
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "กำลังยกเลิกการซิงโครไนซ์เบื้องหลัง... โปรดรอสักครู่"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "ไม่มีคำสั่ง: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
+#, fuzzy
+msgid "Cannot change encrypted item"
+msgstr "ไม่สามารถเปลี่ยนรายการการเข้ารหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
+#, fuzzy
+msgid "Your choice: "
+msgstr "ตัวเลือกของคุณ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
+#, fuzzy
+msgid "Attaches the given file to the note."
+msgstr "แนบไฟล์ที่ถูกเลือกกับบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "ไม่พบ \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+msgid "Displays the given note."
+msgstr "แสดงบันทึกที่เลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+msgid "Displays the complete information about note."
+msgstr "แสดงข้อมูลทั้งหมดของบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor "
+"[value] is provided, it will list the current configuration."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the "
+"current notebook."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file` and `target-"
+"status`."
+msgstr "จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-file` และ `target-status`"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
+msgid "Enter master password:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
+msgid "Operation cancelled"
+msgstr "ระบวนการถูกยกเลิก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
+msgid "Confirm password:"
+msgstr "ยืนยันรหัสผ่าน:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
+msgid "Passwords do not match!"
+msgstr "รหัสผ่านไม่เหมือนกัน!"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
+#, fuzzy
+msgid "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt."
+msgstr "เริ่มต้นการถอดรหัส... โปรดรอสักครู่ อาจจะใช้เวลาสองถึงสามนาที ขึ้นอยู่กับว่าปริมาณของไฟล์ต้องถอดรหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
+msgid "Completed decryption."
+msgstr "ถอดรหัสเรียบร้อยแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Enabled"
+msgstr "เปิด"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Disabled"
+msgstr "ปิด"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#, fuzzy, javascript-format
+msgid "Encryption is: %s"
+msgstr "การเข้ารหัส: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "แก้ไขบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
+msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "ไม่มีสมุดบันทึกที่ถูกใช้งาน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "ออกจากแอปพลิเคชั่น"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, "
+"tags and resources."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "ฟอร์แมตปลายทาง: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#, fuzzy
+msgid "Exports only the given note."
+msgstr "ส่งออกเฉพาะบันทึกที่เลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "ส่งออกเฉพาะสมุดบันทึกที่เลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "แสดง URL ตำแหน่งภูมิศาสตร์สำหรับบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "แสดงข้อมูลการใช้งาน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
+#, fuzzy, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "สำหรับข้อมูลเพิ่มเติมสำหรับการปรับแต่งคีย์ลัด ไปที่ %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+#, fuzzy
+msgid "Shortcuts are not available in CLI mode."
+msgstr "คีย์ลัดใช้ไม่ได้ในโหมด CLI"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help all` for the complete usage information."
+msgstr "พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "คำสั่งที่เป็นไปได้คือ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, "
+"respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
+msgid "Use the arrows and page up/down to scroll the lists and text areas (including this console)."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "ขยาย/ย่อ คอนโซล พิมพ์ “tc”"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "นำเข้าข้อมูลเข้ามาที่ Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#, javascript-format
+msgid "Source format: %s"
+msgstr "ฟอร์แมตต้นฉบับ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#, fuzzy
+msgid "Do not ask for confirmation."
+msgstr "อย่าถามให้ยืนยัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "พบ: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "สร้างเมื่อ: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "แก้ไขเมื่อ: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "ข้าม: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "ทรัพยากร: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "แท็ก: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
+msgid "Importing notes..."
+msgstr "กำลังนำเข้าบันทึก..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+#, fuzzy
+msgid "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
+msgstr "แสดงบันทึกในสมุดบันทึกปัจจุบัน ใช้ `ls /` เพื่อแสดงรายการสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Displays only the first top <num> notes."
+msgstr "แสดงเฉพาะบันทึก <num> อันดับแรก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#, fuzzy
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "จัดเรียงรายการโดย <field> (เช่น. title, updated_time, created_time)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid "Reverses the sorting order."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos "
+"(eg. `-tt` would display only the to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#, fuzzy
+msgid "Either \"text\" or \"json\""
+msgstr "ไม่ “text” ก็ “json”"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
+msgid "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
+msgid "Please select a notebook first."
+msgstr "โปรดเลือกสมุดบันทึกก่อน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "สร้างสมุดบันทึกใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "สร้างบันทึกใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
+msgid "Notes can only be created within a notebook."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "สร้าง to-do ใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "ลบสมุดบันทึกที่เลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "ลบสมุดบันทึกโดยไม่ต้องถามการยืนยัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+msgid "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
+msgid "Delete note?"
+msgstr "ลบบันทึก?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. "
+"Commands are (%s)."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
+#, fuzzy
+msgid "Server is not running."
+msgstr "เซิร์ฟเวอร์ไม่ทำงาน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
+msgid "Synchronises with remote storage."
+msgstr "ซิงโครไนซ์กับแหล่งเก็บข้อมูลระยะไกล"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
+msgid "Authentication was not completed (did not receive an authentication token)."
+msgstr "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
+#, fuzzy
+msgid "Synchronisation is already in progress."
+msgstr "การซิงโครไนซ์กำลังดำเนินการอยู่"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file "
+"at \"%s\" and resume the operation."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "จุดหมายการซิงโครไนซ์: %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
+msgid "Cannot initialize synchroniser."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "เริ่มต้นการซิงโครไนซ์..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "กำลังดาวน์โหลดทรัพยากร..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "กำลังยกเลิก... โปรดรอสักครู่..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list "
+"notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all "
+"the tags (use -l for long option)."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed "
+"and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert "
+"the to-do back to a regular note."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
+msgid "Switches to [notebook] - all further operations will happen within this notebook."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "แสดงข้อมูลเวอร์ชั่น"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#, fuzzy, javascript-format
+msgid "Type: %s."
+msgstr "ชนิด: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "ค่าที่เป็นไปได้: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
+msgid "Type `joplin help` for usage information."
+msgstr "พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
+msgid "Fatal error:"
+msgstr "ผิดพลาดร้ายแรง:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "ค้นหา:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"ยินดีต้อนรับสู่ Joplin!\n"
+"\n"
+"พิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n"
+"\n"
+"ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee "
+"decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and "
+"will be available soon."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:361
+msgid "Sidebar"
+msgstr "แถบด้านข้าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:367
+msgid "Note list"
+msgstr "รายการบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:373
+msgid "Note title"
+msgstr "ชื่อบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:379
+#, fuzzy
+msgid "Note body"
+msgstr "เนื้อความบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:431
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:464
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
+msgid "PDF File"
+msgstr "ไฟล์ PDF"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:484
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
+msgid "Synchronisation Status"
+msgstr "สถานะการซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:517
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:71
+msgid "New note"
+msgstr "สร้างบันทึกใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:506
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:526
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:62
+msgid "New to-do"
+msgstr "สร้าง to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:518
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:535
+msgid "New notebook"
+msgstr "สร้างสมุดบันทึกใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:529
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
+msgid "New sub-notebook"
+msgstr "สร้างสมุดบันทึกย่อยใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:541
+msgid "Print"
+msgstr "พิมพ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:560
+msgid "Create note from template"
+msgstr "สร้างบันทึกจากเทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:570
+msgid "Create to-do from template"
+msgstr "สร้าง to-do จากเทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:580
+msgid "Insert template"
+msgstr "แทรกเทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:590
+msgid "Open template directory"
+msgstr "เปิดไดเรกทอรี่เทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:597
+msgid "Refresh templates"
+msgstr "รีเฟรชเทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:610
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
+msgid "Options"
+msgstr "ตัวเลือก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:623
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
+msgid "Resources"
+msgstr "ทรัพยากร"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:645
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Revision: %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:652
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Client ID: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "ซิงค์เวอร์ชั่น: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "เวอร์ชั่นโปรไฟล์: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
+msgid "&File"
+msgstr "&ไฟล์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1075
+msgid "About Joplin"
+msgstr "เกี่ยวกับ Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
+msgid "Preferences..."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+msgid "Check for updates..."
+msgstr "ตรวจสอบการอัพเดท..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:707
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:767
+msgid "Templates"
+msgstr "เทมเพลต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:714
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:772
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
+msgid "Import"
+msgstr "นำเข้า"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:718
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
+msgid "Export"
+msgstr "ส่งออก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+msgid "Synchronise"
+msgstr "ซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:739
+#, javascript-format
+msgid "Hide %s"
+msgstr "ซ่อน %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
+msgid "Quit"
+msgstr "ออก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:760
+msgid "Close Window"
+msgstr "ปิดหน้าต่าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:798
+msgid "&Edit"
+msgstr "&แก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:789
+msgid "Copy"
+msgstr "คัดลอก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
+msgid "Cut"
+msgstr "ตัด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+msgid "Paste"
+msgstr "วาง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
+msgid "Select all"
+msgstr "เลือกทั้งหมด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:824
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1612
+msgid "Bold"
+msgstr "ตัวหนา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:835
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1620
+msgid "Italic"
+msgstr "ตัวเอียง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:846
+msgid "Link"
+msgstr "ลิงก์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:857
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1640
+msgid "Code"
+msgstr "Code"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:871
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1700
+msgid "Insert Date Time"
+msgstr "แทรก วันที่และเวลา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1723
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
+#, fuzzy
+msgid "Edit in external editor"
+msgstr "แก้ไขด้วยโปรแกรมภายนอก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1556
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1732
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:777
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
+msgid "Tags"
+msgstr "แท็ก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:912
+msgid "Search in all the notes"
+msgstr "ค้นหาในบันทึกทั้งหมด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:923
+msgid "Search in current note"
+msgstr "ค้นหาในบันทึกปัจจุบัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+msgid "&View"
+msgstr "&มุมมอง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:937
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:499
+msgid "Toggle sidebar"
+msgstr "สลับแถบด้านข้าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950
+msgid "Layout button sequence"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:954
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:508
+#, fuzzy
+msgid "Toggle note list"
+msgstr "สลับรายการบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:963
+msgid "Toggle editor layout"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1011
+msgid "Focus"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1018
+#, fuzzy
+msgid "Actual Size"
+msgstr "ขนาดจริง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1024
+#, fuzzy
+msgid "Zoom In"
+msgstr "ซูมเข้า"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+#, fuzzy
+msgid "Zoom Out"
+msgstr "ซูมออก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1038
+msgid "&Tools"
+msgstr "&เครื่องมือ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
+msgid "&Help"
+msgstr "&ช่วยเหลือ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1044
+msgid "Website and documentation"
+msgstr "เว็บไซต์และเอกสารต่างๆ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin Forum"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1051
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
+#, fuzzy
+msgid "Make a donation"
+msgstr "บริจาคช่วยเหลือ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1063
+#, fuzzy
+msgid "Toggle development tools"
+msgstr "สลับเครื่องมือนักพัฒนา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1197
+#, javascript-format
+msgid "Open %s"
+msgstr "เปิด %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1199
+msgid "Exit"
+msgstr "ออก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:113
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:138
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:749
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:30
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
+msgid "OK"
+msgstr "ตกลง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:238
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:318
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:156
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:137
+#, fuzzy
+msgid "Current version is up-to-date."
+msgstr "เป็นเวอร์ชั่นปัจจุบันแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:146
+#, fuzzy, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (pre-release)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+#, fuzzy
+msgid "An update is available, do you want to download it now?"
+msgstr "มีอัพเดทใหม่ คุณต้องการดาวน์โหลดเลยหรือไม่?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+#, javascript-format
+msgid "Your version: %s"
+msgstr "เวอร์ชั่นของคุณ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+#, javascript-format
+msgid "New version: %s"
+msgstr "เวอร์ชั่นใหม่: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "Yes"
+msgstr "ใช่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "No"
+msgstr "ไม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "Full Release Notes"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Token ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "สถานะ: เริ่มทำงาน ที่พอร์ต %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "สถานะ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "ปิดบริการ Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "เปิดใช้บริการ Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:122
+msgid "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "ในการที่จะใช้ web clipper คุณจำเป็นต้องทำสิ่งต่อไปนี้:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "ขั้นตอนที่ 1: เปิดใช้บริการ clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:140
+#, fuzzy
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to "
+"give permission to Joplin to listen to a particular port."
+msgstr ""
+"บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin "
+"ในการเข้าถึงพอร์ตบางพอร์ต"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "ขั้นตอนที่ 2: ติดตั้งส่วนเสริม"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr "ดาวน์โหลดและติดตั้งส่วนเสริมที่เกี่ยวข้องสำหรับเว็บเบราว์เซอร์ของคุณ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "ตัวเลือกขั้นสูง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Token สำหรับการขออนุมัติ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "คัดลอก Token"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:195
+msgid "This authorisation token is only needed to allow third-party applications to access Joplin."
+msgstr "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:139
+#, fuzzy, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "บันทึก และ การตั้งค่า จะถูกเก็บไว้ใน: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
+msgid "Check synchronisation configuration"
+msgstr "ตรวจสอบการตั้งค่าซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:174
+#, fuzzy
+msgid "Unknown"
+msgstr "ไม่รู้จัก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:178
+#, fuzzy
+msgid "Checking..."
+msgstr "กำลังตรวจสอบ..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
+msgid "Error"
+msgstr "ผิดพลาด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:193
+msgid "The Joplin Nextcloud App is either not installed or misconfigured. Please see the full error message below:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:206
+msgid "Show Log"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:219
+msgid "Joplin Nextcloud App status:"
+msgstr "สถานะ Joplin Nextcloud App:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:233
+msgid "Check Status"
+msgstr "ตรวจสอบสถานะ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:240
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:259
+#, fuzzy
+msgid "Show Advanced Settings"
+msgstr "แสดงการตั้งค่าขั้นสูง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:516
+#, fuzzy
+msgid "Browse..."
+msgstr "เปิด..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+msgid "Edit"
+msgstr "แก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:269
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1593
+#, fuzzy
+msgid "Back"
+msgstr "กลับ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:756
+msgid "Apply"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
+msgid "Submit"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:104
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
+msgid "Save"
+msgstr "บันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:141
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to "
+"the sync target. Do you wish to continue?"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:143
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to "
+"the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the "
+"data! To enable encryption, please enter your password below."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+#, fuzzy
+msgid "Disable encryption"
+msgstr "ปิดการเข้ารหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+#, fuzzy
+msgid "Enable encryption"
+msgstr "เปิดการเข้ารหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:184
+msgid "Master Keys"
+msgstr "มาสเตอร์คีย์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:198
+msgid "Active"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:203
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:284
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
+#, fuzzy
+msgid "ID"
+msgstr "ไอดี"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:208
+msgid "Source"
+msgstr "ต้นฉบับ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:213
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "สร้างเมื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "แก้ไขเมื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:223
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:228
+msgid "Password OK"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:237
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked as \"active\"). Any of the keys might "
+"be used for decryption, depending on how the notes or notebooks were originally encrypted."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid "Missing Master Keys"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:270
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, however the application does not currently "
+"have access to them. It is likely they will eventually be downloaded via synchronisation."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the "
+"documentation:"
+msgstr "สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) และคำแนะนำในการเปิดใช้งาน โปรดอ่านคู่มือการใช้งาน:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:327
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
+msgid "Status"
+msgstr "สถานะ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:332
+msgid "Encryption is:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "ส่วนเสริมของ Firefox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "ชื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "ไอคอน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "คุณสมบัติสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:224
+#, fuzzy
+msgid "Usage"
+msgstr "การใช้งาน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
+msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:115
+msgid "Please create a notebook first."
+msgstr "โปรดสร้างสมุดบันทึกก่อน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:121
+msgid "Please create a notebook first"
+msgstr "โปรดสร้างสมุดบันทึกก่อน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:128
+msgid "Notebook title:"
+msgstr "ชื่อสมุดบันทึก:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:171
+msgid "Add or remove tags:"
+msgstr "เพิ่มหรือลบแท็ก:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:211
+msgid "Rename notebook:"
+msgstr "แก้ไขชื่อสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:232
+msgid "Rename tag:"
+msgstr "แก้ไขชื่อแท็ก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:333
+msgid "Set alarm:"
+msgstr "ตั้งการแจ้งเตือน:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:364
+msgid "Template file:"
+msgstr "ไฟล์เทมเพลต:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
+msgid "Layout"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:552
+msgid "Search..."
+msgstr "ค้นหา..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:591
+msgid "Some items cannot be synchronised."
+msgstr "มีบางรายการที่ไม่สามารถซิงโครไนซ์ได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:601
+msgid "View them now"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:608
+msgid "One or more master keys need a password."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:618
+msgid "Set the password"
+msgstr "ตั้งรหัสผ่าน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
+msgid "Words"
+msgstr "คำ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
+msgid "Characters"
+msgstr "ตัวอักษร"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
+msgid "Characters excluding spaces"
+msgstr "ตัวอักษรไม่รวมวรรค"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
+msgid "Lines"
+msgstr "บรรทัด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
+msgid "Content properties"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:180
+msgid "Close"
+msgstr "ปิด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
+#, fuzzy
+msgid "Location"
+msgstr "ตำแหน่ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
+msgid "Note History"
+msgstr "ประวัติบันทึกย้อนหลัง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Markup"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
+msgid "Previous versions of this note"
+msgstr "เวอร์ชั่นก่อนหน้าของบันทึกนี้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1756
+msgid "Note properties"
+msgstr "คุณสมบัติของบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "บันทึกนี้ไม่มีประวัติย้อนหลัง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:850
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "กู้คืน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note "
+"will not be replaced or modified."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:763
+msgid "Open..."
+msgstr "เปิด..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:766
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "ไม่สามารถเปิดไฟล์นี้ได้: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:771
+msgid "Save as..."
+msgstr "บันทึกเป็น..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:782
+msgid "Copy path to clipboard"
+msgstr "คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:796
+msgid "Copy Link Address"
+msgstr "คัดลอกที่อยู่ลิงก์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:818
+msgid "There was an error downloading this attachment:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:820
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
+#, javascript-format
+msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
+msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1473
+msgid "strong text"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1477
+msgid "emphasized text"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1513
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1517
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1526
+msgid "List item"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1538
+msgid "Insert Hyperlink"
+msgstr "แทรกไฮเปอร์ลิงก์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1549
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1648
+msgid "Attach file"
+msgstr "แนบไฟล์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1564
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1750
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
+msgid "Set alarm"
+msgstr "ตั้งการแจ้งเตือน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1578
+#, javascript-format
+msgid "In: %s"
+msgstr "ใน: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1632
+msgid "Hyperlink"
+msgstr "ไฮเปอร์ลิงก์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1660
+msgid "Numbered List"
+msgstr "รายการแบบตัวเลข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1668
+#, fuzzy
+msgid "Bulleted List"
+msgstr "รายการ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1676
+msgid "Checkbox"
+msgstr "ช่องทำเครื่องหมาย"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1684
+msgid "Heading"
+msgstr "หัวข้อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1692
+#, fuzzy
+msgid "Horizontal Rule"
+msgstr "เส้นขั้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1714
+msgid "Click to stop external editing"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1715
+msgid "Watching..."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
+msgid "Content Properties"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+msgid "to-do"
+msgstr "to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+msgid "note"
+msgstr "บันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "สร้าง %s..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:243
+#, fuzzy
+msgid "Clear"
+msgstr "ล้าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
+#, fuzzy
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
+msgid "Size"
+msgstr "ขนาด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
+#, fuzzy
+msgid "Action"
+msgstr "การกระทำ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:185
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:311
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
+msgid "Delete"
+msgstr "ลบ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
+msgid "Please wait..."
+msgstr "โปรดรอสักครู่..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
+msgid "No resources!"
+msgstr "ไม่มีทรัพยากร"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
+#, fuzzy, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr "คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "เข้าสู่ระบบ OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "เข้าสู่ระบบ Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:163
+msgid "Synchronising..."
+msgstr "กำลังซิงโครไนซ์..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "กำลังสร้างลิงก์..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:167
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
+msgid "Share Notes"
+msgstr "แบ่งปันบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:177
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "คัดลอกลิงก์ที่สามารถแบ่งปันได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:282
+#, fuzzy
+msgid "Remove"
+msgstr "ลบ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:285
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"ลบสมุดบันทึก \"%s\"?\n"
+"\n"
+"บันทึกทั้งหมดและสมุดบันทึกย่อยภายในสมุดบันทึกนี้จะถูกลบไปด้วย"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:289
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:291
+msgid "Remove this search from the sidebar?"
+msgstr "ลบการค้นหานี้ออกจากแถบด้านข้าง?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:338
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:388
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "แก้ไขชื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:755
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:358
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+msgid "All notes"
+msgstr "บันทึกทั้งหมด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:760
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:362
+msgid "Notebooks"
+msgstr "สมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:795
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "กำลังถอดรหัสรายการ: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:800
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
+msgid "Retry"
+msgstr "ลองอีกครั้ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:27
+msgid "Add or remove tags"
+msgstr "เพิ่มหรือลบแท็ก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:317
+msgid "Duplicate"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:45
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "%s - คัดลอก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:65
+#, fuzzy
+msgid "Stop external editing"
+msgstr "หยุดการแก้ไขภายนอก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:77
+#, fuzzy
+msgid "Switch between note and to-do type"
+msgstr "สลับไปมาระหว่างชนิดของ บันทึก และ to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:100
+#, fuzzy
+msgid "Switch to note type"
+msgstr "เปลี่ยนชนิดเป็นบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:109
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "เปลี่ยนชนิดเป็น to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
+msgid "Copy Markdown link"
+msgstr "คัดลอกลิงก์ Markdown"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:134
+msgid "Share note..."
+msgstr "แบ่งปันบันทึก..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:202
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "ลบบันทึก \"%s\"?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "ลบบันทึก %d เหล่านี้?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:339
+msgid "Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:377
+msgid "Goto Anything..."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:123
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:136
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:167
+#, javascript-format
+msgid "Usage: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:202
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the configuration in the Synchronisation config screen. "
+"Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+#, fuzzy
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (เพื่อทดสอบเท่านั้น)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:176
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:185
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid "The application has been authorised - you may now close this browser tab."
+msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติเป็นที่เรียบร้อยแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the application. The application will create a "
+"directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any "
+"files outside this directory nor to any other personal data. No data will be shared with any third party."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
+msgid "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
+msgid "Untitled"
+msgstr "ไม่มีชื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:137
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:128
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "ไม่สามารถเข้าถึง %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "กำลังยกเลิก..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "เสร็จสิ้นเมื่อ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "ข้อผิดพลาดล่าสุด: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
+#, fuzzy
+msgid "Idle"
+msgstr "ว่าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "กำลังกำเนินการ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
+msgid "Encrypted"
+msgstr "เข้ารหัสแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "รายการที่เข้ารหัสแล้วไม่สามารถแก้ไขได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+#, fuzzy
+msgid "title"
+msgstr "ชื่อเรื่อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+#, fuzzy
+msgid "updated date"
+msgstr "แก้ไขเมื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
+msgid "Conflicts"
+msgstr "ขัดแย้ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
+#, fuzzy, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "สมุดบันทึกไม่สามารถใช้ชื่อ “%s” เพราะมีคำสงวน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
+#, fuzzy
+msgid "created date"
+msgstr "สร้างเมื่อ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:105
+msgid "This note does not have geolocation information."
+msgstr "บันทึกนี้ไม่มีตำแหน่งภูมิศาสตร์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:432
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "มันสามารถคัดลอกบันทึกไปที่สมุดบันทึก \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:443
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "ไม่สามารถย้ายบันทึกไปที่สมุดบันทึก \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
+msgid "Not downloaded"
+msgstr "ยังไม่ได้ดาวน์โหลด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
+msgid "Downloading"
+msgstr "กำลังดาวน์โหลด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
+msgid "Downloaded"
+msgstr "ดาวน์โหลดแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all "
+"files will be removed! See the FAQ for more details: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+msgid "Keyboard Mode"
+msgstr "โหมดของคีย์บอร์ด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+msgid "Default"
+msgstr "ค่าเริ่มต้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
+msgid "Emacs"
+msgstr "Emacs"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+msgid "Vim"
+msgstr "Vim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
+msgid "Synchronisation target"
+msgstr "จุดหมายการซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` "
+"(all documented below)."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
+msgid "Nextcloud username"
+msgstr "ชื่อผู้ใช้ Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
+msgid "Nextcloud password"
+msgstr "รหัสผ่าน Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
+msgid "WebDAV username"
+msgstr "ชื่อผู้ใช้ WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
+msgid "WebDAV password"
+msgstr "รหัสผ่าน WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
+msgid "Attachment download behaviour"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when "
+"you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
+#, fuzzy
+msgid "Always"
+msgstr "ตลอดเวลา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
+msgid "Manual"
+msgstr "ทำด้วยตนเอง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
+msgid "Auto"
+msgstr "อัตโนมัติ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+msgid "Max concurrent connections"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
+msgid "Language"
+msgstr "ภาษา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
+msgid "Date format"
+msgstr "รูปแบบวันที่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:224
+msgid "Time format"
+msgstr "รูปแบบเวลา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:239
+msgid "Theme"
+msgstr "ธีม"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
+#, fuzzy
+msgid "Light"
+msgstr "สว่าง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:244
+#, fuzzy
+msgid "Dark"
+msgstr "มืด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+msgid "Dracula"
+msgstr "Dracula"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
+msgid "Nord"
+msgstr "Nord"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
+#, fuzzy
+msgid "Show note counts"
+msgstr "แสดงจำนวนบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+msgid "Editor"
+msgstr "ตัวแก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, fuzzy
+msgid "Viewer"
+msgstr "Viewer"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Split View"
+msgstr "มุมมองแบบแบ่งครึ่ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
+#, fuzzy
+msgid "Uncompleted to-dos on top"
+msgstr "to-do ที่ยังไม่เสร็จไว้บนสุด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "แสดง to-do ที่เสร็จแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+msgid "Sort notes by"
+msgstr "จัดเรียงบันทึกโดย"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
+#, fuzzy
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "จัดเรียงย้อนกลับ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
+msgid "Sort notebooks by"
+msgstr "จัดเรียงสมุดบันทึกโดย"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
+#, fuzzy
+msgid "Save geo-location with notes"
+msgstr "บันทึกตำหน่งภูมิศาสตร์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+msgid "When creating a new to-do:"
+msgstr "เมื่อสร้าง to-do ใหม่:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:328
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
+#, fuzzy
+msgid "Focus title"
+msgstr "โฟกัสที่ชื่อเรื่อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
+#, fuzzy
+msgid "Focus body"
+msgstr "โฟกัสที่เนื้อเรื่อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "เมื่อสร้างบันทึกใหม่:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
+msgid "Enable soft breaks"
+msgstr "เปิดใช้งาน Soft Break"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "เปิดใช้งานการรองรับ Typographer"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
+msgid "Enable math expressions"
+msgstr "เปิดใช้งาน Math Expressions"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
+msgid "Enable ==mark== syntax"
+msgstr "เปิดใช้งาน ==mark== syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+msgid "Enable footnotes"
+msgstr "เปิดใช้งาน Footnotes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+msgid "Enable table of contents extension"
+msgstr "เปิดใช้งานส่วนเสริมสารบัญ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+msgid "Enable ~sub~ syntax"
+msgstr "เปิดใช้งาน ~sub~ syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
+msgid "Enable ^sup^ syntax"
+msgstr "เปิดใช้งาน ^sup^ syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
+msgid "Enable deflist syntax"
+msgstr "เปิดใช้งาน deflist syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+msgid "Enable abbreviation syntax"
+msgstr "เปิดใช้งาน abbreviation syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+msgid "Enable markdown emoji"
+msgstr "เปิดใช้งาน Markdown Emoji"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
+msgid "Enable ++insert++ syntax"
+msgstr "เปิดใช้งาน ++insert++syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
+msgid "Enable multimarkdown table extension"
+msgstr "เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
+msgid "Enable Fountain syntax support"
+msgstr "เปิดใช้งานการรองรับ Fountain syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
+msgid "Enable Mermaid diagrams support"
+msgstr "เปิดใช้งานการรองรับ Mermaid diagram"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
+msgid "Show tray icon"
+msgstr "แสดงไอคอนใน System tray"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+#, fuzzy
+msgid "Note: Does not work in all desktop environments."
+msgstr "หมายเหตุ: ทำงานได้กับบาง Desktop Environment เท่านั้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are "
+"constantly being synchronised, thus reducing the number of conflicts."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
+msgid "Start application minimised in the tray icon"
+msgstr "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:398
+msgid "Editor font size"
+msgstr "ขนาดตัวอักษรของตัวแก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:406
+msgid "Editor font"
+msgstr "แบบตัวอักษรของตัวแก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:430
+msgid "Editor font family"
+msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+#, fuzzy
+msgid ""
+"This must be *monospace* font or it will not work properly. If the font is incorrect or empty, it will default to a "
+"generic monospace font."
+msgstr "เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
+#, fuzzy
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
+msgid "Automatically update the application"
+msgstr "อัพเดทแอปพลิเคชั่นอัตโนมัติ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+msgid "Synchronisation interval"
+msgstr "ความถี่ในการซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d นาที"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#, javascript-format
+msgid "%d hour"
+msgstr "%d ชั่วโมง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#, javascript-format
+msgid "%d hours"
+msgstr "%d ชั่วโมง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+msgid "Text editor command"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to "
+"auto-detect the default editor."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
+msgid "Page size for PDF export"
+msgstr "ขนาดของหน้า สำหรับการส่งออก PDF"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+msgid "A4"
+msgstr "A4"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+msgid "Letter"
+msgstr "Letter"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
+msgid "A3"
+msgstr "A3"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+msgid "A5"
+msgstr "A5"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
+msgid "Legal"
+msgstr "Legal"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+#, fuzzy
+msgid "Page orientation for PDF export"
+msgstr "การจัดวางหน้า สำหรับการส่งออก PDF"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
+msgid "Portrait"
+msgstr "แนวตั้ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+msgid "Landscape"
+msgstr "แนวนอน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+msgid "Custom TLS certificates"
+msgstr "TLS certificate แบบกำหนดเอง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For "
+"example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+msgid "Ignore TLS certificate errors"
+msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+msgid "Specify the port that should be used by the API server. If not set, a default will be used."
+msgstr "ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
+msgid "Enable note history"
+msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+msgid "days"
+msgstr "วัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#, javascript-format
+msgid "%d days"
+msgstr "%d วัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
+#, fuzzy
+msgid "Keep note history for"
+msgstr "เก็บประวัติบันทึกย้อนหลังเป็นเวลา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:694
+#, fuzzy, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "ค่าของตัวเลือกไม่ถูกต้อง: \"%s\" ค่าที่เป็นไปได้คือ: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:982
+msgid "General"
+msgstr "ทั่วไป"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:983
+msgid "Synchronisation"
+msgstr "การซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:984
+#, fuzzy
+msgid "Appearance"
+msgstr "รูปร่างหน้าตา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
+msgid "Note"
+msgstr "บันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
+msgid "Plugins"
+msgstr "ปลั๊กอิน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
+msgid "Application"
+msgstr "แอปพลิเคชัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
+msgid "Encryption"
+msgstr "การเข้ารหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
+msgid "Joplin Export File"
+msgstr "ไฟล์ส่งออก Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
+msgid "Markdown"
+msgstr "Markdown"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
+msgid "Joplin Export Directory"
+msgstr "ไดเรกทอรี่ส่งออก Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "ไฟล์ส่งออก Evernote (เป็น Markdown)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "ไฟล์ส่งออก Evernote (เป็น HTML)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "ไดเรกทอรี่ส่งออก Json"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+msgid "HTML File"
+msgstr "ไฟล์ HTML"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+msgid "HTML Directory"
+msgstr "ไดเรกทอรี่ HTML"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "File"
+msgstr "ไฟล์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "Directory"
+msgstr "ไดเรกทอรี่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "ไม่สามารถโหลดโมดูล “%s” สำหรับฟอร์แมต “%s”"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
+#, javascript-format
+msgid "This item is currently encrypted: %s \"%s\". Please wait for all items to be decrypted and try again."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+#, fuzzy
+msgid "There is no data to export."
+msgstr "ไม่มีข้อมูลที่จะส่งออก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "โปรดระบุสมุดบันทึกสำหรับทำการนำเข้าบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
+#, fuzzy
+msgid "Restored Notes"
+msgstr "กู้คืนบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "รายการที่ไม่สามารถทำการซิงโครไนซ์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, "
+"either search for the title or the ID (which is displayed in brackets above)."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) ไม่สามารถอัพโหลด: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "รายการที่ไม่สามารถทำการถอดรหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items "
+"will remain on the device but Joplin will no longer attempt to decrypt them."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+#, fuzzy
+msgid "Attachments"
+msgstr "ไฟล์แนบ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+msgid "Downloaded and decrypted"
+msgstr "ดาวน์โหลดและถอดรหัสแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+msgid "Downloaded and encrypted"
+msgstr "ดาวน์โหลดและเข้ารหัสแล้ว"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+msgid "Attachments that could not be downloaded"
+msgstr "ไฟล์แนบไม่สามารถดาวน์โหลดได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
+msgid "Sync status (synced items / total items)"
+msgstr "สถานะซิงค์ (รายการที่ซิงค์ไปแล้ว / รายการทั้งหมด)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "ทั้งหมด: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
+#, javascript-format
+msgid "To delete: %d"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
+msgid "Folders"
+msgstr "โฟลเดอร์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d บันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
+msgid "Coming alarms"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
+#, fuzzy, javascript-format
+msgid "On %s: %s"
+msgstr "เมื่อ %s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "สิทธิ์การเข้าใช้งานกล้อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "คุณยังไม่มีสมุดบันทึกใดเลย"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "สร้างสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:180
+msgid "Delete these notes?"
+msgstr "ลบบันทึกเหล่านี้?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:347
+msgid "Move to notebook..."
+msgstr "ย้ายไปสมุดบันทึก..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:386
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
+msgid "Press to set the decryption password."
+msgstr "โปรดตั้งรหัสผ่านสำหรับการถอดรหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "ยกเลิกแจ้งเตือน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
+#, fuzzy
+msgid "Save alarm"
+msgstr "บันทึกแจ้งเตือน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "เลือกวันที่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "ยืนยัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "สมุดบันทึก: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "สมุดบันทึกที่ถูกเข้ารหัสจะไม่สามารถแก้ไขชื่อได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
+#, fuzzy
+msgid "New Notebook"
+msgstr "สมุดบันทึกใหม่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+msgid "Configuration"
+msgstr "การตั้งค่า"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "กำลังตรวจสอบ... โปรดรอสักครู่..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "สำเร็จ! การตั้งค่าการซิงโครไนซ์ดูเหมือนจะถูกต้อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The "
+"reported error was:"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "แอปพลิเคชั่นได้รับการอนุมัติแล้ว!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"ไม่สามารถอนุมัติแอปพลิเคชั่น:\n"
+"\n"
+"%s\n"
+"\n"
+"โปรดลองอีกครั้ง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "รายการที่ถูกถอดรหัส: %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "แท็กใหม่:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:177
+#, fuzzy
+msgid "Type new tags or select from list"
+msgstr "กรอกแท็กใหม่หรือเลือกจากรายการ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#, fuzzy
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
+msgid "In order to use file system synchronisation your permission to write to external storage is required."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
+msgid "Information"
+msgstr "ข้อมูล"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
+msgid "Encryption Config"
+msgstr "ตั้งค่าการเข้ารหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
+msgid "Tools"
+msgstr "เครื่องมือ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
+msgid "Sync Status"
+msgstr "สถานะการซิงค์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
+msgid "Log"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+msgid "Creating report..."
+msgstr "กำลังสร้างรายงาน..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+msgid "Export Debug Report"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fixing search index..."
+msgstr "กำลังซ่อมดัชนีค้นหา..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fix search index"
+msgstr "ซ่อมดัชนีย์ค้นหา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the "
+"number of notes."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "Exporting profile..."
+msgstr "กำลังส่งออกโปรไฟล์..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+#, fuzzy
+msgid "Export profile"
+msgstr "ส่งออกโปรไฟล์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
+msgid "More information"
+msgstr "ข้อมูลเพิ่มเติม"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > "
+"Joplin > Permissions"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
+msgstr "- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+msgid "Joplin website"
+msgstr "เว็บไซต์ของ Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
+#, fuzzy, javascript-format
+msgid "Database v%s"
+msgstr "ฐานข้อมูล v%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "เปิดใช้ FTS: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
+msgid "Login with Dropbox"
+msgstr "เข้าสู่ระบบด้วย Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+msgid "Enter code here"
+msgstr "กรอกรหัสที่นี่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
+#, javascript-format
+msgid "Master Key %s"
+msgstr "มาสเตอร์คีย์ %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
+#, javascript-format
+msgid "Created: %s"
+msgstr "สร้างเมื่อ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
+msgid "Password:"
+msgstr "รหัสผ่าน:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
+#, fuzzy
+msgid "Password cannot be empty"
+msgstr "รหัสผ่านไม่สามารถเว้นว่างได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
+msgid "Confirm password cannot be empty"
+msgstr "รหัสผ่านยืนยันไม่สามารถเว้นว่างได้"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
+msgid "Enable"
+msgstr "เปิด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "ไม่สามารถบันทึกสมุดบันทึก: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "แก้ไขสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "กรอกชื่อของสมุดบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+msgid "Refresh"
+msgstr "รีเฟรช"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "แสดงทั้งหมด"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+#, fuzzy
+msgid "Errors only"
+msgstr "ข้อผิดพลาดเท่านั้น"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#, fuzzy
+msgid "This note has been modified:"
+msgstr "บันทึกนี้ได้ถูกแก้ไขเมื่อ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Save changes"
+msgstr "บันทึกการเปลี่ยนแปลง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Discard changes"
+msgstr "ยกเลิกการเปลี่ยนแปลง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "ไม่มีรายการที่มี ID %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
+#, fuzzy, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "ไม่รองรับภาพนี้ประเภทนี้: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "แก้ไขเมื่อ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+msgid "View on map"
+msgstr "แสดงในแผนที่"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
+msgid "Go to source URL"
+msgstr "ไปที่ URL แหล่งที่มา"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
+msgid "Attach..."
+msgstr "แนบ..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Choose an option"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#, fuzzy
+msgid "Take photo"
+msgstr "ถ่ายรูป"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Attach photo"
+msgstr "แนบรูปภาพ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Attach any file"
+msgstr "แนบไฟล์"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+msgid "Share"
+msgstr "แบ่งปัน"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+msgid "Convert to note"
+msgstr "แปลงเป็นบันทึก"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+msgid "Convert to todo"
+msgstr "แปลงเป็น to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+msgid "Properties"
+msgstr "คุณสมบัติ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
+msgid "Add body"
+msgstr "เพิ่มเนื้อความ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
+msgid "Add title"
+msgstr "เพิ่มชื่อเรื่อง"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
+msgid "Login with OneDrive"
+msgstr "เข้าสู่ระบบด้วย OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "ค้นหา"
