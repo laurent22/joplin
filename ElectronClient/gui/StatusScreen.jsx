@@ -47,6 +47,7 @@ class StatusScreenComponent extends React.Component {
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 		const retryStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
+		const retryAllStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
 
 		const containerPadding = 10;
 
@@ -114,7 +115,30 @@ class StatusScreenComponent extends React.Component {
 				sectionsHtml.push(renderSectionHtml(i, section));
 			}
 
-			return <div>{sectionsHtml}</div>;
+			const onClick = async () => {
+				for (let i = 0; i < report.length; i++) {
+					let section = report[i];
+					if (!section.body.length) continue;
+					for (let n in section.body) {
+						let item = section[n];
+						if (typeof item === 'object') {
+							if (item.canRetry()) {
+								await item.retryHandler();
+							}
+						}
+					}
+				}
+				this.resfreshScreen();
+			};
+
+			const retryAllLink = <a href='#' style={retryAllStyle} onClick={onClick}>{_('Retry All')}</a>;
+
+			return (
+				<div>
+					{retryAllLink}
+					<br />
+					{sectionsHtml}
+				</div>);
 		}
 
 		let body = renderBodyHtml(this.state.report);
