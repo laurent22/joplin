@@ -232,7 +232,7 @@ msgstr "Zapnuto"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Disabled"
 msgstr "Vypnuto"
@@ -423,19 +423,19 @@ msgid ""
 msgstr ""
 "Zobrazí poznámky v používaném zápisníku. Pro seznam zápisníků zadejte `ls /`."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
 msgstr "Zobrazí jen prvních <num> poznámek."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr "Řadit položky podle <pole> (např. title, updated_time, created_time)."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
 msgstr "Řadit opačně."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
@@ -445,11 +445,11 @@ msgstr ""
 "(notes), `t` pro to-do, a `nt` pro poznámky a to-do  (tedy `-tt` zobrazí "
 "pouze to-do, zatímco `-ttd` zobrazí poznámky a to-do)."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
 msgstr "Buď \"text\" nebo \"json\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
@@ -458,7 +458,7 @@ msgstr ""
 "Použít formát dlouhého seznamu. Formát je ID, NOTE_COUNT (u zápisníků), "
 "DATE, TODO_CHECKED (pro to-do), TITLE"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
 msgstr "Nejprve prosím vyberte zápisník."
 
@@ -518,7 +518,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d poznámek vyhovuje zadání. Smazat všechny?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:349
 msgid "Delete note?"
 msgstr "Smazat poznámku?"
 
@@ -759,319 +759,319 @@ msgstr ""
 "tak zadáním  `e2ee decrypt`. Pokud jste heslo již zadali, zašifrované "
 "položky se nyní dešifrují na pozadí a budou brzy k dispozici."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:361
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:364
 msgid "Sidebar"
 msgstr "Postranní lišta"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:367
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:370
 #, fuzzy
 msgid "Note list"
 msgstr "Historie poznámky"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:373
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:376
 msgid "Note title"
 msgstr "Název zápisníku"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:379
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:382
 #, fuzzy
 msgid "Note body"
 msgstr "Zápisník"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:431
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:434
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importuji z \"%s\" jako formát \"%s\". Chvíli strpení..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:464
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:467
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
 msgid "PDF File"
 msgstr "PDF soubor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:484
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:487
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "Stav synchronizace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:517
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:71
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:497
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "Nová poznámka"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:506
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:526
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:62
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:509
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "Nové to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:518
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:535
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:539
 msgid "New notebook"
 msgstr "Nový zápisník"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:529
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:532
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
 msgid "New sub-notebook"
 msgstr "Nový pod-zápisník"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:541
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:544
 msgid "Print"
 msgstr "Tisk"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:560
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:563
 #, fuzzy
 msgid "Create note from template"
 msgstr "Vložit datum a čas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:570
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:573
 msgid "Create to-do from template"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:580
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:583
 #, fuzzy
 msgid "Insert template"
 msgstr "Vložit datum a čas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:590
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:593
 #, fuzzy
 msgid "Open template directory"
 msgstr "Složka pro export"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:597
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:600
 #, fuzzy
 msgid "Refresh templates"
 msgstr "Vložit datum a čas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:610
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:613
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "Nastavení"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:623
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:626
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
 #, fuzzy
 msgid "Resources"
 msgstr "Zdroje: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:645
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:648
 #, fuzzy, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:652
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
 #, fuzzy, javascript-format
 msgid "Client ID: %s"
 msgstr "Dokončeno: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
 #, fuzzy, javascript-format
 msgid "Sync Version: %s"
 msgstr "Nová verze: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
 #, fuzzy, javascript-format
 msgid "Profile Version: %s"
 msgstr "Nová verze: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:670
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:673
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
 msgid "&File"
 msgstr "&Soubor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1075
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:679
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1079
 msgid "About Joplin"
 msgstr "O aplikaci Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
 msgid "Preferences..."
 msgstr "Nastavení..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
 msgid "Check for updates..."
 msgstr "Zkontrolovat updaty..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:707
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:767
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:710
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
 msgid "Templates"
 msgstr "Šablony"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:714
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:772
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "Import"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:718
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:721
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
 msgid "Export"
 msgstr "Export"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "Synchronizovat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:742
 #, javascript-format
 msgid "Hide %s"
 msgstr "Schovat %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
 msgid "Quit"
 msgstr "Ukončit"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:760
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
 msgid "Close Window"
 msgstr "Zavřít akno"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:798
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
 msgid "&Edit"
 msgstr "Ú&pravy"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:804
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:789
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:809
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
 msgid "Paste"
 msgstr "Vložit"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:819
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:824
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1612
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:827
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1637
 msgid "Bold"
 msgstr "Tučně"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:835
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1620
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:838
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1645
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:846
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:849
 msgid "Link"
 msgstr "Odkaz"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:857
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1640
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:860
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1665
 msgid "Code"
 msgstr "Kód"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:871
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1700
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1725
 msgid "Insert Date Time"
 msgstr "Vložit datum a čas"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1723
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:888
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1748
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
 msgid "Edit in external editor"
 msgstr "Upravit externím editorem"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1556
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1732
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:899
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1582
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1757
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:777
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:698
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Tagy"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:912
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:915
 msgid "Search in all the notes"
 msgstr "Hledat ve všech poznámkách"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:923
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:926
 msgid "Search in current note"
 msgstr "Hledat v aktuální poznámce"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:938
 msgid "&View"
 msgstr "&Zobrazit"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:937
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:499
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:940
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:503
 msgid "Toggle sidebar"
 msgstr "Přepnout postranní lištu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:953
 msgid "Layout button sequence"
 msgstr "Posloupnost pro tlačítko Rozvržení"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:954
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:957
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:512
 msgid "Toggle note list"
 msgstr "Přepnout seznam poznámek"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:963
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967
 msgid "Toggle editor layout"
 msgstr "Změňit layout editoru"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1011
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1015
 msgid "Focus"
 msgstr "Přejít na"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1018
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1022
 msgid "Actual Size"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1024
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Zoom In"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom Out"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1038
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
 msgid "&Tools"
 msgstr "&Nástroje"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1046
 msgid "&Help"
 msgstr "Nápo&věda"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1044
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 msgid "Website and documentation"
 msgstr "Web a dokumentace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
 msgid "Joplin Forum"
 msgstr "Joplin Forum"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1051
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1055
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
 msgid "Make a donation"
 msgstr "Přispět"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1063
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
 msgid "Toggle development tools"
 msgstr "Otevřít developerské nástroje"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1197
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1204
 #, javascript-format
 msgid "Open %s"
 msgstr "Otevřít %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1199
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1206
 msgid "Exit"
 msgstr "Ukončit"
 
@@ -1289,14 +1289,14 @@ msgid "Browse..."
 msgstr "Procházet..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:870
 msgid "Edit"
 msgstr "Upravit"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:269
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:278
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1593
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1618
 msgid "Back"
 msgstr "Zpět"
 
@@ -1453,7 +1453,7 @@ msgstr ""
 msgid "Notebook properties"
 msgstr "Nastavení poznámek"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:224
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
 msgstr "Použití: %s"
 
@@ -1463,60 +1463,60 @@ msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Bude vytvořen zápisník \"%s\" a soubor \"%s\" do něj bude importován"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:115
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:119
 msgid "Please create a notebook first."
 msgstr "Nejprve prosím vytvořte zápisník."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:121
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:125
 msgid "Please create a notebook first"
 msgstr "Nejprve prosím vytvořte zápisník"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:128
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:132
 msgid "Notebook title:"
 msgstr "Název zápisníku:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:171
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:175
 msgid "Add or remove tags:"
 msgstr "Přidat či odebrat tagy:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:211
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:215
 msgid "Rename notebook:"
 msgstr "Přejmenovat zápisník:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:232
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:236
 msgid "Rename tag:"
 msgstr "Přejmenovat tag:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:333
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:337
 msgid "Set alarm:"
 msgstr "Nastavit alarm:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:364
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:368
 msgid "Template file:"
 msgstr "Soubor šablony:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:547
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
 msgid "Layout"
 msgstr "Rozvržení"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:552
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:556
 msgid "Search..."
 msgstr "Hledat..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:591
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:595
 msgid "Some items cannot be synchronised."
 msgstr "Některé položky nelze synchronizovat."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:601
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:605
 msgid "View them now"
 msgstr "Zobrazit"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:608
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:612
 msgid "One or more master keys need a password."
 msgstr "Jeden nebo více master klíčů potřebují heslo."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:618
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
 msgid "Set the password"
 msgstr "Nastavit heslo"
 
@@ -1546,11 +1546,11 @@ msgstr "Nastavení poznámek"
 msgid "Close"
 msgstr "Zavřít"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "Žádné poznámky. Vytvořte jednu kliknutím na \"Nová poznámka\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "Nemáte žádný zápisník. Vytvořte jeden kliknutím na \"Nový zápisník\"."
@@ -1568,7 +1568,7 @@ msgid "URL"
 msgstr "URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:991
 msgid "Note History"
 msgstr "Historie poznámky"
 
@@ -1581,7 +1581,7 @@ msgid "Previous versions of this note"
 msgstr "Předchozí verze poznámky"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1756
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1781
 msgid "Note properties"
 msgstr "Nastavení poznámek"
 
@@ -1650,92 +1650,97 @@ msgid ""
 "note."
 msgstr "Tato poznámka je prázdný. Klikněte na  \"%s\" pro otevření editoru."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1281
 #, fuzzy
 msgid "Only one note can be printed at a time."
 msgstr ""
 "Pouze jedna poznámka může být zároveň vytištěna nebo exportována do PDF."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1473
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1491
 msgid "strong text"
 msgstr "tučný text"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1477
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1495
 msgid "emphasized text"
 msgstr "zvýrazněný text"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1513
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1517
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1526
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1522
+#, fuzzy
+msgid "marked text"
+msgstr "zvýrazněný text"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1539
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1552
 msgid "List item"
 msgstr "Seznam položek"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1538
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1564
 msgid "Insert Hyperlink"
 msgstr "Vložit odkaz"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1549
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1648
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1575
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1673
 msgid "Attach file"
 msgstr "Přiložit soubor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1564
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1750
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1590
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1775
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:683
 msgid "Set alarm"
 msgstr "Nastavit alarm"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1578
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1604
 #, javascript-format
 msgid "In: %s"
 msgstr "V: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1632
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1657
 msgid "Hyperlink"
 msgstr "Odkaz"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1660
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1685
 msgid "Numbered List"
 msgstr "Číslovanáý seznam"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1668
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1693
 msgid "Bulleted List"
 msgstr "Seznam s odrážkami"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1676
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1701
 msgid "Checkbox"
 msgstr "Zaškrtávací pole"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1684
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1709
 msgid "Heading"
 msgstr "Nadpis"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1692
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1717
 msgid "Horizontal Rule"
 msgstr "Horizontální čára"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1714
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1739
 msgid "Click to stop external editing"
 msgstr "Kliknutím ukončíte externí úpravy"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1740
 msgid "Watching..."
 msgstr "Sleduji..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1799
 #, fuzzy
 msgid "Content Properties"
 msgstr "Nastavení poznámek"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 msgid "to-do"
 msgstr "to-do"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 msgid "note"
 msgstr "poznámka"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Vytvářím %s..."
@@ -1764,7 +1769,7 @@ msgstr "Lokace"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:311
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:723
 msgid "Delete"
 msgstr "Smazat"
 
@@ -1918,7 +1923,7 @@ msgid "Switch to to-do type"
 msgstr "Přepnout na to-do"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:711
 msgid "Copy Markdown link"
 msgstr "Vytvořit Markdown odkaz"
 
@@ -2044,7 +2049,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:701
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
 msgid "Untitled"
 msgstr "Bez názvu"
@@ -2127,11 +2132,11 @@ msgstr "Nečinný"
 msgid "In progress"
 msgstr "Probíhá"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:700
 msgid "Encrypted"
 msgstr "Zašifrováno"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:760
 msgid "Encrypted items cannot be modified"
 msgstr "Nelze editovat zašifrovanou položku"
 
@@ -2513,50 +2518,50 @@ msgstr ""
 "Jméno fontu není kontrolováno. Pokud je neplatné či chybí, bude použit "
 "výchozí monospace font."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:471
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Vlastní styly pro aplikaci Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:477
 msgid "Automatically update the application"
 msgstr "Automaticky updatovat aplikaci"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
 msgid "Get pre-releases when checking for updates"
 msgstr "Při hledání aktualizací zahrnout beta verze"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Pro náhled beta verzí navštivte stránku: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
 msgid "Synchronisation interval"
 msgstr "Interval synchronizace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minut"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:493
 #, javascript-format
 msgid "%d hour"
 msgstr "%d hodina"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 #, javascript-format
 msgid "%d hours"
 msgstr "%d hodin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 msgid "Text editor command"
 msgstr "Textový editor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2565,51 +2570,51 @@ msgstr ""
 "Pokud není specifikováno, aplikace se pokusí o autodetekci defaultního "
 "editoru."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page size for PDF export"
 msgstr "Velikost stránky pro PDF export"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "A4"
 msgstr "A4"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Letter"
 msgstr "Dopis"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "A3"
 msgstr "A3"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
 msgid "A5"
 msgstr "A5"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Legal"
 msgstr "Legal"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
 msgid "Page orientation for PDF export"
 msgstr "Orientace stránky pro PDF export"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
 msgid "Portrait"
 msgstr "Na výšku"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
 msgid "Landscape"
 msgstr "Na šířku"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
 msgid "Custom TLS certificates"
 msgstr "Vlastní TLS certifikát"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2621,11 +2626,11 @@ msgstr ""
 "si, že pokud provedete změny nastavení TLS, musíte změny uložit dříve, než "
 "kliknete na \"Zkontrolovat konfiguraci synchronizace\"."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorovat chyby TLS certifikátu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2633,7 +2638,7 @@ msgstr ""
 "Zabezpečení proti selhání: Nevypírejte místní data, když je synchronizační "
 "cíl prázdný (často v důsledku nesprávné konfigurace nebo chyby)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2641,57 +2646,57 @@ msgstr ""
 "Určete port, který by měl server API používat. Pokud není nastavena, použije "
 "se výchozí."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 msgid "Enable note history"
 msgstr "Povolit historii poznámky"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 msgid "days"
 msgstr "dní"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 #, javascript-format
 msgid "%d days"
 msgstr "%d dní"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
 msgid "Keep note history for"
 msgstr "Uchovat historii poznámky"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:694
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:982
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
 msgid "General"
 msgstr "Obecná nastavení"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:983
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
 msgid "Synchronisation"
 msgstr "Synchronizace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:984
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
 msgid "Appearance"
 msgstr "Vzhled"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
 msgid "Note"
 msgstr "Zápisníky"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
 msgid "Plugins"
 msgstr "Rozšíření"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
 msgid "Application"
 msgstr "Aplikace"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:992
 msgid "Encryption"
 msgstr "Šifrování"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:993
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -3134,7 +3139,7 @@ msgid "Master Key %s"
 msgstr "Master heslo %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:631
 #, javascript-format
 msgid "Created: %s"
 msgstr "Vytvořeno: %s"
@@ -3195,84 +3200,84 @@ msgstr "Uložit změny"
 msgid "Discard changes"
 msgstr "Zahodit změny"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:132
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Nenalezena položka s ID %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:151
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Tato příloha není ještě stažena nebo rozšifrována."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:155
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:159
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Odkazy s protokolem \"%s\" nejsou podporovány"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:485
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný formát obrázku: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:632
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Upraveno: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:636
 msgid "View on map"
 msgstr "Zobrazit na map+"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:643
 msgid "Go to source URL"
 msgstr "Jít na zdrojovou URL"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 msgid "Attach..."
 msgstr "Přiložit..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Choose an option"
 msgstr "Zvolit možnost"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Take photo"
 msgstr "Přiložit foto"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Attach photo"
 msgstr "Přiložit obrázek"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Attach any file"
 msgstr "Přiložit soubor"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:691
 msgid "Share"
 msgstr "Sdílet"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
 msgid "Convert to note"
 msgstr "Konvertovat na poznámku"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
 msgid "Convert to todo"
 msgstr "Konvertovat na todo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
 msgid "Properties"
 msgstr "Nastavení"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:863
 msgid "Add body"
 msgstr "Přidat tělo"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:898
 msgid "Add title"
 msgstr "Přidejte nadpis"
 

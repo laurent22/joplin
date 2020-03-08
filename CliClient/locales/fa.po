@@ -224,7 +224,7 @@ msgstr "فعال"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
 msgid "Disabled"
 msgstr "غیر‌فعال"
@@ -403,37 +403,37 @@ msgid ""
 "of notebooks."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
 msgstr "معکوس کردن ترتیب مرتب‌سازی."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:30
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
 msgstr "یا «text» و یا «json»"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:26
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:56
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
 msgstr "لطفا ابتدا یه دفترچه مشخص کنید."
 
@@ -491,7 +491,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:347
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:349
 msgid "Delete note?"
 msgstr "پاک کردن یادداشت؟"
 
@@ -703,325 +703,325 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:361
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:364
 msgid "Sidebar"
 msgstr "نوار کناری"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:367
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:370
 #, fuzzy
 msgid "Note list"
 msgstr "تاریخچه ی یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:373
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:376
 msgid "Note title"
 msgstr "موضوع یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:379
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:382
 msgid "Note body"
 msgstr "بدنه ی یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:431
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:434
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:464
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:467
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
 msgid "PDF File"
 msgstr "فایل PDF"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:484
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:487
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:494
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:517
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:71
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:497
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "یادداشت جدید"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:506
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:526
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:62
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:509
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "فهرست کارهای جدید"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:518
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:535
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:539
 msgid "New notebook"
 msgstr "دفترچه جدید"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:529
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:532
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
 #, fuzzy
 msgid "New sub-notebook"
 msgstr "دفترچه جدید"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:541
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:544
 msgid "Print"
 msgstr "پرینت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:560
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:563
 #, fuzzy
 msgid "Create note from template"
 msgstr "وارد کردن تاریخ و ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:570
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:573
 msgid "Create to-do from template"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:580
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:583
 #, fuzzy
 msgid "Insert template"
 msgstr "وارد کردن تاریخ و ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:590
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:593
 #, fuzzy
 msgid "Open template directory"
 msgstr "فولدر خروجی Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:597
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:600
 #, fuzzy
 msgid "Refresh templates"
 msgstr "وارد کردن تاریخ و ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:610
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:613
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "گزینه ها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:623
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:626
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
 #, fuzzy
 msgid "Resources"
 msgstr "منابع: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:645
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:648
 #, fuzzy, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:652
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s، %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
 #, fuzzy, javascript-format
 msgid "Client ID: %s"
 msgstr "کامل شد: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
 #, fuzzy, javascript-format
 msgid "Sync Version: %s"
 msgstr "ورژن جدید: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
 #, fuzzy, javascript-format
 msgid "Profile Version: %s"
 msgstr "ورژن جدید: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:670
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:753
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:673
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
 #, fuzzy
 msgid "&File"
 msgstr "فایل"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:676
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1075
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:679
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1079
 msgid "About Joplin"
 msgstr "درباره جاپلین"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
 msgid "Preferences..."
 msgstr "تنظیمات..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
 msgid "Check for updates..."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:707
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:767
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:710
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
 msgid "Templates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:714
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:772
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "بارگذاری"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:718
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:721
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
 msgid "Export"
 msgstr "خروجی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 #, fuzzy
 msgid "Synchronise"
 msgstr "سینک کردن"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:742
 #, javascript-format
 msgid "Hide %s"
 msgstr "پنهان کردن %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:746
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
 msgid "Quit"
 msgstr "بستن"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:760
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
 msgid "Close Window"
 msgstr "بستن پنجره"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:798
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
 msgid "&Edit"
 msgstr "و ویرایش"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:804
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:789
 msgid "Copy"
 msgstr "کپی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:806
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:809
 msgid "Cut"
 msgstr "بریدن"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
 msgid "Paste"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:819
 msgid "Select all"
 msgstr "انتخاب همه"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:824
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1612
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:827
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1637
 msgid "Bold"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:835
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1620
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:838
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1645
 msgid "Italic"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:846
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:849
 msgid "Link"
 msgstr "لینک"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:857
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1640
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:860
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1665
 msgid "Code"
 msgstr "کد"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:871
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1700
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1725
 msgid "Insert Date Time"
 msgstr "وارد کردن تاریخ و ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:885
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1723
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:888
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1748
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
 msgid "Edit in external editor"
 msgstr "تنظیم ویرایشگر خارجی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:896
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1556
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1732
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:899
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1582
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1757
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:777
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:698
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "برچسب‌ها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:912
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:915
 msgid "Search in all the notes"
 msgstr "جستجو در تمام یادداشت ها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:923
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:926
 msgid "Search in current note"
 msgstr "جستجو در همین یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:935
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:938
 msgid "&View"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:937
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:499
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:940
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:503
 msgid "Toggle sidebar"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:953
 msgid "Layout button sequence"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:954
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:957
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:512
 #, fuzzy
 msgid "Toggle note list"
 msgstr "لیست یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:963
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967
 #, fuzzy
 msgid "Toggle editor layout"
 msgstr "لیست یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1011
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1015
 msgid "Focus"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1018
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1022
 msgid "Actual Size"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1024
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Zoom In"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1030
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom Out"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1038
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
 msgid "&Tools"
 msgstr "&ابزارها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1046
 msgid "&Help"
 msgstr "&کمک"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1044
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 msgid "Website and documentation"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
 #, fuzzy
 msgid "Joplin Forum"
 msgstr "فایل خروجی Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1051
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1055
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
 msgid "Make a donation"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1063
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
 #, fuzzy
 msgid "Toggle development tools"
 msgstr "لیست یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1197
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1204
 #, javascript-format
 msgid "Open %s"
 msgstr "باز کردن %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1199
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1206
 msgid "Exit"
 msgstr "خروج"
 
@@ -1236,14 +1236,14 @@ msgid "Browse..."
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:868
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:870
 msgid "Edit"
 msgstr "ویرایش"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:269
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:278
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1593
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1618
 msgid "Back"
 msgstr "بازگشت"
 
@@ -1388,7 +1388,7 @@ msgstr ""
 msgid "Notebook properties"
 msgstr "جزییات یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:224
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 #, fuzzy
 msgid "Usage"
 msgstr "کارکرد: %s"
@@ -1399,61 +1399,61 @@ msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:115
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:119
 msgid "Please create a notebook first."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:121
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:125
 msgid "Please create a notebook first"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:128
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:132
 msgid "Notebook title:"
 msgstr "موضوع دفترچه:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:171
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:175
 msgid "Add or remove tags:"
 msgstr "اضافه یا حذف برچسب:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:211
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:215
 msgid "Rename notebook:"
 msgstr "تغییر نام دفترچه:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:232
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:236
 msgid "Rename tag:"
 msgstr "تغییر نام برچسب:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:333
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:337
 msgid "Set alarm:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:364
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:368
 msgid "Template file:"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:547
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
 msgid "Layout"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:552
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:556
 msgid "Search..."
 msgstr "جستجو..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:591
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:595
 msgid "Some items cannot be synchronised."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:601
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:605
 msgid "View them now"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:608
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:612
 #, fuzzy
 msgid "One or more master keys need a password."
 msgstr "رمز اصلی را وارد کنید:"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:618
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
 msgid "Set the password"
 msgstr ""
 
@@ -1483,14 +1483,14 @@ msgstr "جزییات یادداشت"
 msgid "Close"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 #, fuzzy
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک "
 "یادداشت جدید ایجاد کنید."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:450
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -1511,7 +1511,7 @@ msgid "URL"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:991
 msgid "Note History"
 msgstr "تاریخچه ی یادداشت"
 
@@ -1524,7 +1524,7 @@ msgid "Previous versions of this note"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1756
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1781
 msgid "Note properties"
 msgstr "جزییات یادداشت"
 
@@ -1591,97 +1591,101 @@ msgid ""
 "note."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1281
 msgid "Only one note can be printed at a time."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1473
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1491
 msgid "strong text"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1477
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1495
 msgid "emphasized text"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1513
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1517
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1526
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1522
+msgid "marked text"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1539
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1543
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1552
 #, fuzzy
 msgid "List item"
 msgstr "لیست"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1538
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1564
 msgid "Insert Hyperlink"
 msgstr "وارد کردن لینک"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1549
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1648
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1575
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1673
 msgid "Attach file"
 msgstr "پیوست فایل"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1564
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1750
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:681
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1590
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1775
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:683
 #, fuzzy
 msgid "Set alarm"
 msgstr "انتخاب همه"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1578
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1604
 #, javascript-format
 msgid "In: %s"
 msgstr "در: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1632
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1657
 msgid "Hyperlink"
 msgstr "لینک"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1660
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1685
 #, fuzzy
 msgid "Numbered List"
 msgstr "لیست ترتیبی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1668
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1693
 #, fuzzy
 msgid "Bulleted List"
 msgstr "لیست بدون ترتیب"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1676
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1701
 #, fuzzy
 msgid "Checkbox"
 msgstr "گزینه (چک‌باکس)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1684
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1709
 msgid "Heading"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1692
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1717
 msgid "Horizontal Rule"
 msgstr "خط افقی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1714
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1739
 #, fuzzy
 msgid "Click to stop external editing"
 msgstr "کلیک کنید تا ویرایشگر خارجی را متوقف کنید"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1740
 #, fuzzy
 msgid "Watching..."
 msgstr "در حال لغو..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1799
 #, fuzzy
 msgid "Content Properties"
 msgstr "جزییات یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 msgid "to-do"
 msgstr "فهرست کارها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 msgid "note"
 msgstr "یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2042
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2067
 #, fuzzy, javascript-format
 msgid "Creating new %s..."
 msgstr "بارگذاری یادداشت‌ها..."
@@ -1711,7 +1715,7 @@ msgstr "مکان"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:311
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:723
 msgid "Delete"
 msgstr "پاک کردن"
 
@@ -1866,7 +1870,7 @@ msgid "Switch to to-do type"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:709
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:711
 msgid "Copy Markdown link"
 msgstr "کپی کردن لینک Markdown"
 
@@ -1981,7 +1985,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:691
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:701
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
 msgid "Untitled"
 msgstr "بدون موضوع"
@@ -2058,11 +2062,11 @@ msgstr "بیکار"
 msgid "In progress"
 msgstr "درحال انجام"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:690
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:700
 msgid "Encrypted"
 msgstr "رمزنگاری شده"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:750
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:760
 msgid "Encrypted items cannot be modified"
 msgstr ""
 
@@ -2436,101 +2440,101 @@ msgid ""
 "incorrect or empty, it will default to a generic monospace font."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:470
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:471
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:474
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:477
 msgid "Automatically update the application"
 msgstr "به طور خودکار نرم‌افزار را به‌روز کن"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:475
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
 msgid "Synchronisation interval"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:487
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d دقیقه"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:493
 #, javascript-format
 msgid "%d hour"
 msgstr "%d ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ساعت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 #, fuzzy
 msgid "Text editor command"
 msgstr "دستور ویراستار متنی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:502
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page size for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "A4"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Letter"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "A3"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
 msgid "A5"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
 msgid "Tabloid"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Legal"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
 msgid "Page orientation for PDF export"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
 msgid "Portrait"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
 msgid "Landscape"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
 msgid "Custom TLS certificates"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2538,75 +2542,75 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:557
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
 msgid "Enable note history"
 msgstr "فعال سایز ثبت تاریخچه ی یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 msgid "days"
 msgstr "روز"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:567
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
 #, javascript-format
 msgid "%d days"
 msgstr "%d روز"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:569
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
 msgid "Keep note history for"
 msgstr "تاریخچه ی یادداشت را نگه دار به مدت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:694
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:982
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
 msgid "General"
 msgstr "کلی"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:983
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
 #, fuzzy
 msgid "Synchronisation"
 msgstr "هدف سینک"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:984
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
 msgid "Appearance"
 msgstr "ظاهر"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
 msgid "Note"
 msgstr "یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
 msgid "Plugins"
 msgstr "پلاگین ها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
 msgid "Application"
 msgstr "نرم‌افزار"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:992
 #, fuzzy
 msgid "Encryption"
 msgstr "رمزنگاری: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:993
 msgid "Web Clipper"
 msgstr ""
 
@@ -3040,7 +3044,7 @@ msgid "Master Key %s"
 msgstr "رمز اصلی %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:629
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:631
 #, javascript-format
 msgid "Created: %s"
 msgstr "ایجاد شده: %s"
@@ -3103,87 +3107,87 @@ msgstr "ذخیره ی تغییرات"
 msgid "Discard changes"
 msgstr "لغو تغییرات"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:130
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:132
 #, javascript-format
 msgid "No item with ID %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:149
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:151
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:153
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:155
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:157
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:159
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:485
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:630
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:632
 #, fuzzy, javascript-format
 msgid "Updated: %s"
 msgstr "به‌روز شده: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:636
 msgid "View on map"
 msgstr "نمایش بر روی نقشه"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:641
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:643
 msgid "Go to source URL"
 msgstr "رفتن به آدرس منبع"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
 #, fuzzy
 msgid "Attach..."
 msgstr "جستجو..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 #, fuzzy
 msgid "Choose an option"
 msgstr "نمایش گزینه های پیشرفته"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Take photo"
 msgstr "گرفتن عکس"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Attach photo"
 msgstr "ضمیمه‌ی تصویر"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
 msgid "Attach any file"
 msgstr "ضمیمه‌ی فایل"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:689
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:691
 msgid "Share"
 msgstr "اشتراک گذاری"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
 msgid "Convert to note"
 msgstr "تبدیل به یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:702
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
 msgid "Convert to todo"
 msgstr "تبدیل به فهرست کارها"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
 #, fuzzy
 msgid "Properties"
 msgstr "جزییات یادداشت"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:861
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:863
 msgid "Add body"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:896
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:898
 #, fuzzy
 msgid "Add title"
 msgstr "موضوع"
