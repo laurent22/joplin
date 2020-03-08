@@ -413,6 +413,10 @@ function NoteText2(props:NoteTextProps) {
 		});
 	}, [formNote, handleProvisionalFlag]);
 
+	const introductionPostLinkClick = useCallback(() => {
+		bridge().openExternal('https://www.patreon.com/posts/34246624');
+	}, []);
+
 	if (props.selectedNoteIds.length > 1) {
 		return <MultiNoteActions
 			theme={props.theme}
@@ -451,7 +455,7 @@ function NoteText2(props:NoteTextProps) {
 		<div style={props.style}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				<div style={styles.warningBanner}>
-					This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} href="https://www.patreon.com/posts/34246624">introduction post</a> for more information.
+					This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} onClick={introductionPostLinkClick} href="#">introduction post</a> for more information.
 				</div>
 				<div style={{ display: 'flex' }}>
 					<input

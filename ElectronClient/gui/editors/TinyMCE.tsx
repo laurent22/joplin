@@ -165,7 +165,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
-				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr',
+				branding: false,
+				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr blockquote',
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
@@ -360,7 +361,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			if (c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
+			const changeCommands = ['mceBlockQuote'];
+
+			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
 				onChangeHandler();
 			}
 		};
@@ -368,7 +371,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
 		const onKeypress = () => {
-			console.info('keypress');
 			onChangeHandler();
 		};
 
@@ -381,8 +383,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
 		const onKeyUp = (event:any) => {
-			console.info('keyup');
-
 			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
 				onChangeHandler();
 			}
