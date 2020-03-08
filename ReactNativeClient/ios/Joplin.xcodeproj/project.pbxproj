@@ -337,7 +337,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
@@ -357,7 +357,7 @@
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 10.0.44;
+				MARKETING_VERSION = 10.0.45;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -380,7 +380,7 @@
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -393,7 +393,7 @@
 				INFOPLIST_FILE = Joplin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 10.0.44;
+				MARKETING_VERSION = 10.0.45;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
