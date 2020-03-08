@@ -217,7 +217,7 @@ const solarizedDarkStyle = {
 	htmlLinkColor: '#268bd2',
 	htmlTableBackgroundColor: '#002b36',
 	htmlCodeBackgroundColor: '#002b36',
-	htmlCodeBorderColor: '#073642',
+	htmlCodeBorderColor: '#696969',
 	htmlCodeColor: '#fdf6e3',
 
 	editorTheme: 'solarized_dark',
@@ -340,6 +340,25 @@ function addExtraStyles(style) {
 		backgroundColor: 'rgba(0,0,0,0.6)',
 		alignItems: 'flex-start',
 		justifyContent: 'center',
+	};
+
+	style.controlBox = {
+		marginBottom: '1em',
+		color: 'black', // This will apply for the calendar
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+	};
+
+	style.controlBoxLabel = {
+		marginRight: '1em',
+		width: '10em',
+		display: 'inline-block',
+		fontWeight: 'bold',
+	};
+
+	style.controlBoxValue = {
+		display: 'inline-block',
 	};
 
 	style.dialogBox = {

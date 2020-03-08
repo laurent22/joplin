@@ -10,6 +10,7 @@ class HeaderComponent extends React.Component {
 		this.state = {
 			searchQuery: '',
 			showSearchUsageLink: false,
+			showButtonLabels: true,
 		};
 
 		this.scheduleSearchChangeEventIid_ = null;
@@ -83,21 +84,29 @@ class HeaderComponent extends React.Component {
 		}
 
 		if (this.props.zoomFactor !== prevProps.zoomFactor || this.props.size !== prevProps.size) {
-			const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
-			const showButtonLabels = !mediaQuery.matches;
-
-			if (this.state.showButtonLabels !== showButtonLabels) {
-				this.setState({
-					showButtonLabels: !mediaQuery.matches,
-				});
-			}
+			this.determineButtonLabelState();
 		}
+	}
+
+	componentDidMount() {
+		this.determineButtonLabelState();
 	}
 
 	componentWillUnmount() {
 		if (this.hideSearchUsageLinkIID_) {
 			clearTimeout(this.hideSearchUsageLinkIID_);
 			this.hideSearchUsageLinkIID_ = null;
+		}
+	}
+
+	determineButtonLabelState() {
+		const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
+		const showButtonLabels = !mediaQuery.matches;
+
+		if (this.state.showButtonLabels !== showButtonLabels) {
+			this.setState({
+				showButtonLabels: !mediaQuery.matches,
+			});
 		}
 	}
 

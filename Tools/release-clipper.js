@@ -1,8 +1,9 @@
 const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
 
-const clipperDir   = `${__dirname}/../Clipper/joplin-webclipper`;
-const tmpSourceDir = `${__dirname}/../Clipper/joplin-webclipper-source`;
+const clipperDir   = `${__dirname}/../Clipper`;
+const tmpSourceDirName = 'Clipper-source';
+const tmpSourceDir = `${__dirname}/../${tmpSourceDirName}`;
 
 async function copyDir(baseSourceDir, sourcePath, baseDestDir) {
 	await fs.mkdirp(`${baseDestDir}/${sourcePath}`);
@@ -14,9 +15,7 @@ async function copyToDist(distDir) {
 	await copyDir(clipperDir, 'content_scripts', distDir);
 	await copyDir(clipperDir, 'icons', distDir);
 	await fs.copy(`${clipperDir}/background.js`, `${distDir}/background.js`);
-	await fs.copy(`${clipperDir}/main.js`, `${distDir}/main.js`);
 	await fs.copy(`${clipperDir}/manifest.json`, `${distDir}/manifest.json`);
-
 	await fs.remove(`${distDir}/popup/build/manifest.json`);
 }
 
@@ -33,6 +32,8 @@ async function updateManifestVersionNumber(manifestPath) {
 }
 
 async function main() {
+	console.info(await execCommand('git pull'));
+
 	const newVersion = await updateManifestVersionNumber(`${clipperDir}/manifest.json`);
 
 	console.info('Building extension...');
@@ -40,7 +41,7 @@ async function main() {
 	// SKIP_PREFLIGHT_CHECK avoids the error "There might be a problem with the project dependency tree." due to eslint 5.12.0 being
 	// installed by CRA and 6.1.0 by us. It doesn't affect anything though, and the behaviour of the preflight
 	// check is buggy so we can ignore it.
-	console.info(await execCommand('SKIP_PREFLIGHT_CHECK=true npm run build'));
+	console.info(await execCommand('npm run build'));
 
 	const dists = [
 		{
@@ -81,12 +82,12 @@ async function main() {
 	}
 
 	console.info('Creating source tarball for code validation...');
-	process.chdir(`${clipperDir}/../`);
-	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' ${clipperDir}/ ${tmpSourceDir}/`));
-	console.info(await execCommand('7z a -tzip joplin-webclipper-source.zip joplin-webclipper-source'));
-	console.info(await execCommand(`mv joplin-webclipper-source.zip ${clipperDir}/dist/ && rm -rf joplin-webclipper-source`));
+	console.info(`Chdir: ${clipperDir}/..`);
+	process.chdir(`${clipperDir}/..`);
+	console.info(await execCommand(`rsync -a --delete --exclude 'node_modules/' --exclude 'build/' --exclude 'dist/' "${clipperDir}/" "${tmpSourceDir}/"`));
+	console.info(await execCommand(`7z a -tzip joplin-webclipper-source.zip "${tmpSourceDirName}"`));
+	console.info(await execCommand(`mv joplin-webclipper-source.zip "${clipperDir}/dist/" && rm -rf "${tmpSourceDirName}"`));
 
-	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
 	console.info(await execCommand(`git commit -m "Clipper release v${newVersion}"`));
 	console.info(await execCommand(`git tag clipper-${newVersion}`));

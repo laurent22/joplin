@@ -19,7 +19,10 @@ module.exports = {
 		'expect': 'readonly',
 		'describe': 'readonly',
 		'it': 'readonly',
+		'beforeAll': 'readonly',
+		'afterAll': 'readonly',
 		'beforeEach': 'readonly',
+		'afterEach': 'readonly',
 		'jasmine': 'readonly',
 
 		// React Native variables
@@ -49,6 +52,11 @@ module.exports = {
 		// This error is always a false positive so far since it detects
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
+
+		// Checks rules of Hooks
+		"react-hooks/rules-of-hooks": "error",
+		// Checks effect dependencies
+		"react-hooks/exhaustive-deps": "error",
 
 		// -------------------------------
 		// Formatting
@@ -87,5 +95,6 @@ module.exports = {
 	"plugins": [
 		"react",
 		"@typescript-eslint",
+		"react-hooks"
 	],
 };

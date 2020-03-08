@@ -242,7 +242,7 @@ class Setting extends BaseModel {
 					let output = {};
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
-					if (platform !== 'mobile') {
+					if (platform !== mobilePlatform) {
 						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
@@ -454,6 +454,7 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for rendered Markdown'),
 				section: 'appearance',
+				advanced: true,
 			},
 			'style.customCss.joplinApp': {
 				onClick: () => {
@@ -469,6 +470,8 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for Joplin-wide app styles'),
 				section: 'appearance',
+				advanced: true,
+				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },

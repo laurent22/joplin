@@ -99,7 +99,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const r = await saveDialog();
 			if (r) return r;
 
-			if (!this.state.note.id) {
+			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
+
+			if (isProvisionalNote) {
 				return false;
 			}
 
@@ -932,6 +934,7 @@ const NoteScreen = connect(state => {
 		ftsEnabled: state.settings['db.ftsEnabled'],
 		sharedData: state.sharedData,
 		showSideMenu: state.showSideMenu,
+		provisionalNoteIds: state.provisionalNoteIds,
 	};
 })(NoteScreenComponent);
 

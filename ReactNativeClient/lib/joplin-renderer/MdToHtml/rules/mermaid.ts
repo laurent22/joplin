@@ -6,7 +6,10 @@ function addContextAssets(context:any) {
 		{ name: 'mermaid_render.js' },
 		{
 			inline: true,
-			text: '.mermaid { background-color: white }',
+			// Note: Mermaid is buggy when rendering below a certain width (500px?)
+			// so set an arbitrarily high width here for the container. Once the
+			// diagram is rendered it will be reset to 100% in mermaid_render.js
+			text: '.mermaid { background-color: white; width: 640px; }',
 			mime: 'text/css',
 		},
 	];

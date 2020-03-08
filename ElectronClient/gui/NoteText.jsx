@@ -101,7 +101,6 @@ class NoteTextComponent extends React.Component {
 			webviewReady: false,
 			scrollHeight: null,
 			editorScrollTop: 0,
-			newNote: null,
 			noteTags: [],
 			showRevisions: false,
 			loading: false,
@@ -416,9 +415,8 @@ class NoteTextComponent extends React.Component {
 	async UNSAFE_componentWillMount() {
 		let note = null;
 		let noteTags = [];
-		if (this.props.newNote) {
-			note = Object.assign({}, this.props.newNote);
-		} else if (this.props.noteId) {
+
+		if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
 			noteTags = this.props.noteTags || [];
 		}
@@ -537,35 +535,24 @@ class NoteTextComponent extends React.Component {
 		this.setState({ loading: true });
 
 		const stateNoteId = this.state.note ? this.state.note.id : null;
-		let noteId = null;
-		let note = null;
-		let loadingNewNote = true;
+		let noteId = props.noteId;
 		let parentFolder = null;
-		let scrollPercent = 0;
+		const isProvisionalNote = this.props.provisionalNoteIds.includes(noteId);
 
-		if (props.newNote) {
-			// assign new note and prevent body from being null
-			note = Object.assign({}, props.newNote, { body: '' });
-			this.lastLoadedNoteId_ = null;
-			if (note.template) note.body = TemplateUtils.render(note.template);
-		} else {
-			noteId = props.noteId;
+		let scrollPercent = this.props.lastEditorScrollPercents[noteId];
+		if (!scrollPercent) scrollPercent = 0;
 
-			scrollPercent = this.props.lastEditorScrollPercents[noteId];
-			if (!scrollPercent) scrollPercent = 0;
+		let loadingNewNote = stateNoteId !== noteId;
+		this.lastLoadedNoteId_ = noteId;
+		let note = noteId ? await Note.load(noteId) : null;
+		if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
+		if (options.noReloadIfLocalChanges && this.isModified()) return defer();
 
-			loadingNewNote = stateNoteId !== noteId;
-			this.lastLoadedNoteId_ = noteId;
-			note = noteId ? await Note.load(noteId) : null;
-			if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
-			if (options.noReloadIfLocalChanges && this.isModified()) return defer();
-
-			// If the note hasn't been changed, exit now
-			if (this.state.note && note) {
-				let diff = Note.diffObjects(this.state.note, note);
-				delete diff.type_;
-				if (!Object.getOwnPropertyNames(diff).length) return defer();
-			}
+		// If the note hasn't been changed, exit now
+		if (this.state.note && note) {
+			let diff = Note.diffObjects(this.state.note, note);
+			delete diff.type_;
+			if (!Object.getOwnPropertyNames(diff).length) return defer();
 		}
 
 		this.markupToHtml_ = null;
@@ -573,7 +560,7 @@ class NoteTextComponent extends React.Component {
 		// If we are loading nothing (noteId == null), make sure to
 		// set webviewReady to false too because the webview component
 		// is going to be removed in render().
-		const webviewReady = !!this.webviewRef_.current && this.state.webviewReady && (!!noteId || !!props.newNote);
+		const webviewReady = !!this.webviewRef_.current && this.state.webviewReady && !!noteId;
 
 		// Scroll back to top when loading new note
 		if (loadingNewNote) {
@@ -589,7 +576,7 @@ class NoteTextComponent extends React.Component {
 			this.restoreScrollTop_ = 0;
 
 			// Only force focus on notes when creating a new note/todo
-			if (this.props.newNote) {
+			if (isProvisionalNote) {
 				const focusSettingName = note.is_todo ? 'newTodoFocus' : 'newNoteFocus';
 
 				requestAnimationFrame(() => {
@@ -661,9 +648,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async UNSAFE_componentWillReceiveProps(nextProps) {
-		if (this.props.newNote !== nextProps.newNote && nextProps.newNote) {
-			await this.scheduleReloadNote(nextProps);
-		} else if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
+		if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
 			await this.scheduleReloadNote(nextProps);
 		} else if ('noteTags' in nextProps && this.areNoteTagsModified(nextProps.noteTags, this.state.noteTags)) {
 			this.setState({
@@ -1435,9 +1420,17 @@ class NoteTextComponent extends React.Component {
 			let selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
 
 			newBody = this.state.note.body.substr(0, selection.start);
+
 			for (let i = 0; i < selectedStrings.length; i++) {
-				newBody += string1 + selectedStrings[i] + string2;
+				if (byLine == false) {
+					let start = selectedStrings[i].search(/[^\s]/);
+					let end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
+					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
+					if (this.state.note.body.substr(selection.end) === '') newBody = newBody.trim();
+				} else { newBody += string1 + selectedStrings[i] + string2; }
+
 			}
+
 			newBody += this.state.note.body.substr(selection.end);
 
 			const r = this.selectionRange_;
@@ -1511,12 +1504,29 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSave();
 	}
 
+	toggleWrapSelection(strings1, strings2, defaultText) {
+		const selection = this.textOffsetSelection();
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		let replaced = false;
+		for (var i = 0; i < strings1.length; i++) {
+			if (string.startsWith(strings1[i]) && string.endsWith(strings1[i])) {
+				this.wrapSelectionWithStrings('', '', '', string.substr(strings1[i].length, selection.end - selection.start - (2 * strings1[i].length)));
+				replaced = true;
+				break;
+			}
+		}
+		if (!replaced) {
+			this.wrapSelectionWithStrings(strings1[0], strings2[0], defaultText);
+		}
+
+	}
+
 	commandTextBold() {
-		this.wrapSelectionWithStrings('**', '**', _('strong text'));
+		this.toggleWrapSelection(['**'], ['**'], _('strong text'));
 	}
 
 	commandTextItalic() {
-		this.wrapSelectionWithStrings('*', '*', _('emphasized text'));
+		this.toggleWrapSelection(['*', '_'], ['*', '_'], _('emphasized text'));
 	}
 
 	commandDateTime() {
@@ -1532,9 +1542,13 @@ class NoteTextComponent extends React.Component {
 
 		if (match && match.length > 0) {
 			// Follow the same newline style
-			this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+			if (string.startsWith('```') && string.endsWith('```')) {
+				this.wrapSelectionWithStrings('', '', '', string.substr(4, selection.end - selection.start - 8));
+			} else {
+				this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
+			}
 		} else {
-			this.wrapSelectionWithStrings('`', '`');
+			this.toggleWrapSelection(['`'], ['`'], '');
 		}
 	}
 
@@ -1621,7 +1635,7 @@ class NoteTextComponent extends React.Component {
 
 	createToolbarItems(note, editorIsVisible) {
 		const toolbarItems = [];
-		if (note && this.state.folder && ['Search', 'Tag'].includes(this.props.notesParentType)) {
+		if (note && this.state.folder && ['Search', 'Tag', 'SmartFilter'].includes(this.props.notesParentType)) {
 			toolbarItems.push({
 				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
 				iconName: 'fa-book',
@@ -1817,6 +1831,18 @@ class NoteTextComponent extends React.Component {
 			},
 		});
 
+		toolbarItems.push({
+			tooltip: _('Content Properties'),
+			iconName: 'fa-sticky-note',
+			onClick: () => {
+				this.props.dispatch({
+					type: 'WINDOW_COMMAND',
+					name: 'commandContentProperties',
+					text: this.state.note.body,
+				});
+			},
+		});
+
 		return toolbarItems;
 	}
 
@@ -1921,7 +1947,6 @@ class NoteTextComponent extends React.Component {
 		if (this.props.selectedNoteIds.length > 1) {
 			return this.renderMultiNotes(rootStyle);
 		} else if (!note || !!note.encryption_applied) {
-			// || (note && !this.props.newNote && this.props.noteId && note.id !== this.props.noteId)) { // note.id !== props.noteId is when the note has not been loaded yet, and the previous one is still in the state
 			return this.renderNoNotes(rootStyle);
 		}
 
@@ -2081,7 +2106,7 @@ class NoteTextComponent extends React.Component {
 					this.title_changeText(event);
 				}}
 				onKeyDown={this.titleField_keyDown}
-				placeholder={this.props.newNote ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : ''}
+				placeholder={this.props.provisionalNoteIds.includes(note.id) ? _('Creating new %s...', isTodo ? _('to-do') : _('note')) : ''}
 			/>
 		);
 
@@ -2209,7 +2234,6 @@ const mapStateToProps = state => {
 		folders: state.folders,
 		theme: state.settings.theme,
 		syncStarted: state.syncStarted,
-		newNote: state.newNote,
 		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
 		searches: state.searches,
@@ -2219,6 +2243,7 @@ const mapStateToProps = state => {
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		historyNotes: state.historyNotes,
 		templates: state.templates,
+		provisionalNoteIds: state.provisionalNoteIds,
 	};
 };
 

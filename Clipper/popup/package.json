@@ -1,0 +1,31 @@
+{
+  "name": "joplin-webclipper-popup",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^5.0.7",
+    "react-scripts": "3.3.1",
+    "redux": "^4.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "watch": "cra-build-watch",
+    "postinstall": "node scripts/postinstall.js && npm run build"
+  },
+  "devDependencies": {
+    "cra-build-watch": "^3.2.0",
+    "fs-extra": "^6.0.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

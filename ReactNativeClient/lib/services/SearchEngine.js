@@ -14,12 +14,13 @@ class SearchEngine {
 		this.logger_ = new Logger();
 		this.db_ = null;
 		this.isIndexing_ = false;
+		this.syncCalls_ = [];
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new SearchEngine();
-		return this.instance_;
+		if (SearchEngine.instance_) return SearchEngine.instance_;
+		SearchEngine.instance_ = new SearchEngine();
+		return SearchEngine.instance_;
 	}
 
 	setLogger(logger) {
@@ -95,7 +96,7 @@ class SearchEngine {
 		return this.syncTables();
 	}
 
-	async syncTables() {
+	async syncTables_() {
 		if (this.isIndexing_) return;
 
 		this.isIndexing_ = true;
@@ -174,6 +175,15 @@ class SearchEngine {
 		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 
 		this.isIndexing_ = false;
+	}
+
+	async syncTables() {
+		this.syncCalls_.push(true);
+		try {
+			await this.syncTables_();
+		} finally {
+			this.syncCalls_.pop();
+		}
 	}
 
 	async countRows() {
@@ -402,6 +412,25 @@ class SearchEngine {
 			}
 		}
 	}
+
+	async destroy() {
+		if (this.scheduleSyncTablesIID_) {
+			clearTimeout(this.scheduleSyncTablesIID_);
+			this.scheduleSyncTablesIID_ = null;
+		}
+		SearchEngine.instance_ = null;
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.syncCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
 }
+
+SearchEngine.instance_ = null;
 
 module.exports = SearchEngine;

@@ -1,10 +1,14 @@
 {
   "name": "tools",
   "version": "1.0.0",
-  "description": "",
+  "description": "Various tools for Joplin",
   "main": "index.js",
-  "author": "",
-  "license": "ISC",
+  "author": "Laurent Cozic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "app-module-path": "^2.2.0",
     "fs-extra": "^4.0.3",
