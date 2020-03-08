@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState } from '../utils/NoteText';
+import { DefaultEditorState, TextEditorUtils } from '../utils/NoteText';
 
 export interface OnChangeEvent {
 	changeId: number,
@@ -19,15 +19,18 @@ interface PlainEditorProps {
 	disabled: boolean,
 }
 
+export const utils:TextEditorUtils = {
+	editorContentToHtml(content:any):Promise<string> {
+		return content ? content : '';
+	},
+};
+
 const PlainEditor = (props:PlainEditorProps, ref:any) => {
 	const editorRef = useRef<any>();
 
 	useImperativeHandle(ref, () => {
 		return {
 			content: () => '',
-			editorContentToHtml(content:any):Promise<string> {
-				return content ? content : '';
-			},
 		};
 	}, []);
 

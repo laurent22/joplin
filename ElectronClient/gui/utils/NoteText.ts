@@ -7,3 +7,7 @@ export interface OnChangeEvent {
 	changeId: number,
 	content: any,
 }
+
+export interface TextEditorUtils {
+	editorContentToHtml(content:any):Promise<string>,
+}

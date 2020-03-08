@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent } from '../utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 
@@ -36,6 +36,20 @@ function findEditableContainer(node:any):any {
 	}
 	return null;
 }
+
+function editableInnerHtml(html:string):string {
+	const temp = document.createElement('div');
+	temp.innerHTML = html;
+	const editable = temp.getElementsByClassName('joplin-editable');
+	if (!editable.length) throw new Error(`Invalid joplin-editable: ${html}`);
+	return editable[0].innerHTML;
+}
+
+export const utils:TextEditorUtils = {
+	editorContentToHtml(content:any):Promise<string> {
+		return content ? content : '';
+	},
+};
 
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
@@ -71,9 +85,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	useImperativeHandle(ref, () => {
 		return {
 			content: () => editor ? editor.getContent() : '',
-			editorContentToHtml(content:any):Promise<string> {
-				return content ? content : '';
-			},
 		};
 	}, [editor]);
 
@@ -145,7 +156,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 								const md = `${source.openCharacters}${newSource}${source.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
 
-								editable.outerHTML = result.html;
+								// markupToHtml will return the complete editable HTML, but we only
+								// want to update the inner HTML, so as not to break additional props that
+								// are added by TinyMCE on the main node.
+								editable.innerHTML = editableInnerHtml(result.html);
 								source.node.textContent = newSource;
 								dialogApi.close();
 								editor.fire('joplinChange');

@@ -2,14 +2,14 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import TinyMCE from './editors/TinyMCE';
-import PlainEditor from './editors/PlainEditor';
+import TinyMCE, { utils as tinyMceUtils } from './editors/TinyMCE';
+import PlainEditor, { utils as plainEditorUtils }  from './editors/PlainEditor';
 import { connect } from 'react-redux';
 import AsyncActionQueue from '../lib/AsyncActionQueue';
 import MultiNoteActions from './MultiNoteActions';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent } from './utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const { reg } = require('lib/registry.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
@@ -125,6 +125,8 @@ function styles_(props:NoteTextProps) {
 	});
 }
 
+let textEditorUtils_:TextEditorUtils = null;
+
 function usePrevious(value:any):any {
 	const ref = useRef();
 	useEffect(() => {
@@ -167,11 +169,11 @@ async function htmlToMarkdown(html:string):Promise<string> {
 	return md;
 }
 
-async function formNoteToNote(formNote:FormNote, editorRef:any):Promise<any> {
+async function formNoteToNote(formNote:FormNote):Promise<any> {
 	const newNote:any = Object.assign({}, formNote);
 
 	if ('bodyEditorContent' in formNote) {
-		const html = await editorRef.current.editorContentToHtml(formNote.bodyEditorContent);
+		const html = await textEditorUtils_.editorContentToHtml(formNote.bodyEditorContent);
 		if (formNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
 			newNote.body = await htmlToMarkdown(html);
 		} else {
@@ -209,14 +211,14 @@ async function attachResources() {
 	return output;
 }
 
-function scheduleSaveNote(formNote:FormNote, editorRef:any, dispatch:Function) {
+function scheduleSaveNote(formNote:FormNote, dispatch:Function) {
 	if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
 	reg.logger().debug('Scheduling...', formNote);
 
 	const makeAction = (formNote:FormNote) => {
 		return async function() {
-			const note = await formNoteToNote(formNote, editorRef);
+			const note = await formNoteToNote(formNote);
 			reg.logger().debug('Saving note...', note);
 			await Note.save(note);
 
@@ -238,7 +240,7 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any, dispatch:Functio
 		bodyEditorContent: editorRef.current.content(),
 		bodyWillChangeId: 0,
 		bodyChangeId: 0,
-	}, editorRef, dispatch);
+	}, dispatch);
 }
 
 function NoteText2(props:NoteTextProps) {
@@ -385,7 +387,7 @@ function NoteText2(props:NoteTextProps) {
 			// The previously loaded note, that was modified, will be saved via saveNoteIfWillChange()
 		} else {
 			setFormNote(newNote);
-			scheduleSaveNote(newNote, editorRef, props.dispatch);
+			scheduleSaveNote(newNote, props.dispatch);
 		}
 	}, [handleProvisionalFlag, formNote]);
 
@@ -437,8 +439,10 @@ function NoteText2(props:NoteTextProps) {
 
 	if (props.editor === 'TinyMCE') {
 		editor = <TinyMCE {...editorProps}/>;
+		textEditorUtils_ = tinyMceUtils;
 	} else if (props.editor === 'PlainEditor') {
 		editor = <PlainEditor {...editorProps}/>;
+		textEditorUtils_ = plainEditorUtils;
 	} else {
 		throw new Error(`Invalid editor: ${props.editor}`);
 	}
@@ -447,7 +451,7 @@ function NoteText2(props:NoteTextProps) {
 		<div style={props.style}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				<div style={styles.warningBanner}>
-					This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a href="https://www.patreon.com/posts/34246624">introduction post</a> for more information.
+					This is an experimental WYSIWYG editor for evaluation only. Please do not use with important notes as you may lose some data! See the <a style={styles.urlColor} href="https://www.patreon.com/posts/34246624">introduction post</a> for more information.
 				</div>
 				<div style={{ display: 'flex' }}>
 					<input

@@ -256,7 +256,7 @@ module.exports = function(context) {
 		var katexBlock = function(latex) {
 			options.displayMode = true;
 			try {
-				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
+				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
 			} catch (error) {
 				console.error('Katex error for:', latex, error);
 				return latex;
