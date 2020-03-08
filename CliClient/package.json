@@ -82,7 +82,6 @@
     "multiparty": "^4.2.1",
     "node-emoji": "^1.8.1",
     "node-fetch": "^1.7.1",
-    "node-html-parser": "^1.2.4",
     "node-persist": "^2.1.0",
     "patch-package": "^6.2.0",
     "promise": "^7.1.1",

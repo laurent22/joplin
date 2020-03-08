@@ -13,7 +13,6 @@ const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
-const toRelative = require('relative');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -176,7 +175,7 @@ class Note extends BaseItem {
 		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
 			pathsToTry.push(Setting.value('resourceDir'));
-			pathsToTry.push(toRelative(process.cwd(), Setting.value('resourceDir')));
+			pathsToTry.push(shim.pathRelativeToCwd(Setting.value('resourceDir')));
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
