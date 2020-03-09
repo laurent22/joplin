@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent, TextEditorUtils } from '../utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
+const { reg } = require('lib/registry.js');
 
 interface TinyMCEProps {
 	style: any,
@@ -74,6 +75,23 @@ export const utils:TextEditorUtils = {
 	},
 };
 
+interface TinyMceCommand {
+	name: string,
+	value?: any,
+	ui?: boolean
+}
+
+interface JoplinCommandToTinyMceCommands {
+	[key:string]: TinyMceCommand,
+}
+
+const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
+	'textBold': { name: 'mceToggleFormat', value: 'bold' },
+	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
+	'textLink': { name: 'mceLink' },
+	'search': { name: 'SearchReplace' },
+};
+
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
@@ -108,6 +126,37 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	useImperativeHandle(ref, () => {
 		return {
 			content: () => editor ? editor.getContent() : '',
+			execCommand: async (cmd:EditorCommand) => {
+				if (!editor) return false;
+
+				reg.logger().debug('TinyMce: execCommand', cmd);
+
+				let commandProcessed = true;
+
+				if (cmd.name === 'insertText') {
+					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, cmd.value, { bodyOnly: true });
+					editor.insertContent(result.html);
+				} else if (cmd.name === 'focus') {
+					editor.focus();
+				} else {
+					commandProcessed = false;
+				}
+
+				if (commandProcessed) return true;
+
+				if (!joplinCommandToTinyMceCommands[cmd.name]) {
+					reg.logger().warn('TinyMCE: unsupported Joplin command: ', cmd);
+					return false;
+				}
+
+				const tinyMceCmd:TinyMceCommand = { ...joplinCommandToTinyMceCommands[cmd.name] };
+				if (!('ui' in tinyMceCmd)) tinyMceCmd.ui = false;
+				if (!('value' in tinyMceCmd)) tinyMceCmd.value = null;
+
+				editor.execCommand(tinyMceCmd.name, tinyMceCmd.ui, tinyMceCmd.value);
+
+				return true;
+			},
 		};
 	}, [editor]);
 
@@ -161,7 +210,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				width: '100%',
 				height: '100%',
 				resize: false,
-				plugins: 'noneditable link lists hr',
+				plugins: 'noneditable link lists hr searchreplace',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,

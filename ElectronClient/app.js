@@ -117,7 +117,7 @@ class Application extends BaseApplication {
 					newState = Object.assign({}, state);
 					let command = Object.assign({}, action);
 					delete command.type;
-					newState.windowCommand = command;
+					newState.windowCommand = command.name ? command : null;
 				}
 				break;
 

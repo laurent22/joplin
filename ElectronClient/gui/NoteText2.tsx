@@ -9,9 +9,10 @@ import AsyncActionQueue from '../lib/AsyncActionQueue';
 import MultiNoteActions from './MultiNoteActions';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent, TextEditorUtils } from './utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand } from './utils/NoteText';
 const { themeStyle, buildStyle } = require('../theme.js');
 const { reg } = require('lib/registry.js');
+const { time } = require('lib/time-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const Setting = require('lib/models/Setting');
@@ -21,6 +22,7 @@ const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
+const TemplateUtils = require('lib/TemplateUtils');
 const { bridge } = require('electron').remote.require('./bridge');
 
 interface NoteTextProps {
@@ -35,6 +37,7 @@ interface NoteTextProps {
 	editorNoteStatuses: any,
 	syncStarted: boolean,
 	editor: string,
+	windowCommand: any,
 }
 
 interface FormNote {
@@ -243,14 +246,77 @@ function saveNoteIfWillChange(formNote:FormNote, editorRef:any, dispatch:Functio
 	}, dispatch);
 }
 
+function useWindowCommand(windowCommand:any, dispatch:Function, formNote:FormNote, titleInputRef:React.MutableRefObject<any>, editorRef:React.MutableRefObject<any>) {
+	useEffect(() => {
+		const command = windowCommand;
+		if (!command || !formNote) return;
+
+		const editorCmd:EditorCommand = { name: command.name, value: { ...command.value } };
+		let fn:Function = null;
+
+		if (command.name === 'exportPdf') {
+			// TODO
+		} else if (command.name === 'print') {
+			// TODO
+		} else if (command.name === 'insertDateTime') {
+			editorCmd.name = 'insertText',
+			editorCmd.value = time.formatMsToLocal(new Date().getTime());
+		} else if (command.name === 'commandStartExternalEditing') {
+			// TODO
+		} else if (command.name === 'commandStopExternalEditing') {
+			// TODO
+		} else if (command.name === 'showLocalSearch') {
+			editorCmd.name = 'search';
+		} else if (command.name === 'textCode') {
+			// TODO
+		} else if (command.name === 'insertTemplate') {
+			editorCmd.name = 'insertText',
+			editorCmd.value = TemplateUtils.render(command.value);
+		}
+
+		if (command.name === 'focusElement' && command.target === 'noteTitle') {
+			fn = () => {
+				if (!titleInputRef.current) return;
+				titleInputRef.current.focus();
+			};
+		}
+
+		if (command.name === 'focusElement' && command.target === 'noteBody') {
+			editorCmd.name = 'focus';
+		}
+
+		if (!editorCmd.name && !fn) return;
+
+		dispatch({
+			type: 'WINDOW_COMMAND',
+			name: null,
+		});
+
+		requestAnimationFrame(() => {
+			if (fn) {
+				fn();
+			} else {
+				if (!editorRef.current.execCommand) {
+					reg.logger().warn('Received command, but editor cannot execute commands', editorCmd);
+				} else {
+					editorRef.current.execCommand(editorCmd);
+				}
+			}
+		});
+	}, [windowCommand, dispatch, formNote]);
+}
+
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
 	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ value: '', markupLanguage: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN });
 	const prevSyncStarted = usePrevious(props.syncStarted);
 
 	const editorRef = useRef<any>();
+	const titleInputRef = useRef<any>();
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
+
+	useWindowCommand(props.windowCommand, props.dispatch, formNote, titleInputRef, editorRef);
 
 	// If the note has been modified in another editor, wait for it to be saved
 	// before loading it in this editor.
@@ -460,6 +526,7 @@ function NoteText2(props:NoteTextProps) {
 				<div style={{ display: 'flex' }}>
 					<input
 						type="text"
+						ref={titleInputRef}
 						disabled={waitingToSaveNote}
 						placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
 						style={styles.titleInput}
@@ -492,6 +559,7 @@ const mapStateToProps = (state:any) => {
 		syncStarted: state.syncStarted,
 		theme: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
+		windowCommand: state.windowCommand,
 	};
 };
 

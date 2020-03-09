@@ -11,3 +11,8 @@ export interface OnChangeEvent {
 export interface TextEditorUtils {
 	editorContentToHtml(content:any):Promise<string>,
 }
+
+export interface EditorCommand {
+	name: string,
+	value: any,
+}
