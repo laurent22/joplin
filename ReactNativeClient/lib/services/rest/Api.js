@@ -459,7 +459,9 @@ class Api {
 			let updatedNote = await this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 
 			const requestNote = JSON.parse(request.body);
-			if (requestNote.tags) {
+			if (requestNote.tags === '') {
+				await Tag.setNoteTagsByTitles(id, '');
+			} else if (requestNote.tags) {
 				const tagTitles = requestNote.tags.split(',');
 				await Tag.setNoteTagsByTitles(id, tagTitles);
 			}
