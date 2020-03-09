@@ -413,6 +413,14 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async UNSAFE_componentWillMount() {
+		// If the note has been modified in another editor, wait for it to be saved
+		// before loading it in this editor. This is particularly relevant when
+		// switching layout from WYSIWYG to this editor before the note has finished saving.
+		while (this.props.noteId && this.props.editorNoteStatuses[this.props.noteId] === 'saving') {
+			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
+			await time.msleep(100);
+		}
+
 		let note = null;
 		let noteTags = [];
 
@@ -2228,6 +2236,7 @@ const mapStateToProps = state => {
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedNoteHash: state.selectedNoteHash,
+		editorNoteStatuses: state.editorNoteStatuses,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,

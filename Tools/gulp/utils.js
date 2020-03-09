@@ -80,6 +80,7 @@ utils.copyDir = async function(src, dest, options) {
 
 	options = Object.assign({}, {
 		excluded: [],
+		delete: true,
 	}, options);
 
 	src = utils.toSystemSlashes(src);
@@ -96,6 +97,8 @@ utils.copyDir = async function(src, dest, options) {
 			excludedFlag = `/EXCLUDE:${tempFile}`;
 		}
 
+		// TODO: add support for delete flag
+
 		await utils.execCommand(`xcopy /C /I /H /R /Y /S ${excludedFlag} "${src}" ${dest}`);
 
 		if (tempFile) await fs.remove(tempFile);
@@ -107,7 +110,10 @@ utils.copyDir = async function(src, dest, options) {
 			}).join(' ');
 		}
 
-		await utils.execCommand(`rsync -a --delete ${excludedFlag} "${src}/" "${dest}/"`);
+		let deleteFlag = '';
+		if (options.delete) deleteFlag = '--delete';
+
+		await utils.execCommand(`rsync -a ${deleteFlag} ${excludedFlag} "${src}/" "${dest}/"`);
 	}
 };
 

@@ -80,4 +80,12 @@ describe('MdToHtml', function() {
 		}
 	}));
 
+	// it('should write CSS to an external file', asyncTest(async () => {
+	// 	const mdToHtml = new MdToHtml({
+	// 		fsDriver: shim.fsDriver(),
+	// 		tempDir: Setting.value('tempDir'),
+	// 	});
+
+	// }));
+
 });

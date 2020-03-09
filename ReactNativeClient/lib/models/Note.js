@@ -148,7 +148,11 @@ class Note extends BaseItem {
 		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
 	}
 
-	static async replaceResourceInternalToExternalLinks(body) {
+	static async replaceResourceInternalToExternalLinks(body, options = null) {
+		options = Object.assign({}, {
+			useAbsolutePaths: false,
+		}, options);
+
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
 
@@ -156,20 +160,35 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? Resource.fullPath(resource) : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
 
 		return body;
 	}
 
-	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = `${pregQuote(`${Resource.baseRelativeDirectoryPath()}/`)}[a-zA-Z0-9.]+`;
-		const re = new RegExp(reString, 'gi');
-		body = body.replace(re, match => {
-			const id = Resource.pathToId(match);
-			return `:/${id}`;
-		});
+	static async replaceResourceExternalToInternalLinks(body, options = null) {
+		options = Object.assign({}, {
+			useAbsolutePaths: false,
+		}, options);
+
+		const pathsToTry = [];
+		if (options.useAbsolutePaths) {
+			pathsToTry.push(Setting.value('resourceDir'));
+			pathsToTry.push(shim.pathRelativeToCwd(Setting.value('resourceDir')));
+		} else {
+			pathsToTry.push(Resource.baseRelativeDirectoryPath());
+		}
+
+		for (const basePath of pathsToTry) {
+			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
+			const re = new RegExp(reString, 'gi');
+			body = body.replace(re, match => {
+				const id = Resource.pathToId(match);
+				return `:/${id}`;
+			});
+		}
+
 		return body;
 	}
 

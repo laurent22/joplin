@@ -265,6 +265,7 @@ class Setting extends BaseModel {
 					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
 					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
 					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
+					[Setting.LAYOUT_SPLIT_WYSIWYG]: _('%s / %s', _('Split'), 'WYSIWYG (Experimental)'),
 				}),
 			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
@@ -1039,6 +1040,7 @@ Setting.LAYOUT_ALL = 0;
 Setting.LAYOUT_EDITOR_VIEWER = 1;
 Setting.LAYOUT_EDITOR_SPLIT = 2;
 Setting.LAYOUT_VIEWER_SPLIT = 3;
+Setting.LAYOUT_SPLIT_WYSIWYG = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';

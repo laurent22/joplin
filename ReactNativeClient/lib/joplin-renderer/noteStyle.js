@@ -1,4 +1,6 @@
 module.exports = function(style, options) {
+	style = style ? style : {};
+
 	// https://necolas.github.io/normalize.css/
 	const normalizeCss = `
 		html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -264,6 +266,31 @@ module.exports = function(style, options) {
 
 		.exported-note {
 			padding: 1em;
+		}
+
+		.joplin-editable .joplin-source {
+			display: none;
+		}
+
+		/* For TinyMCE */
+		.mce-content-body {
+			padding: 5px 10px 10px 10px;
+		}
+
+		.mce-content-body code {
+			background-color: transparent;
+		}
+
+		.mce-content-body [data-mce-selected=inline-boundary] {
+			background-color: transparent;
+		}
+
+		.mce-content-body .joplin-editable {
+			cursor: pointer !important;
+		}
+
+		.mce-content-body.mce-content-readonly {
+			opacity: 0.5;
 		}
 
 		@media print {
