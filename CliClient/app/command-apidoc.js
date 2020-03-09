@@ -15,6 +15,10 @@ class Command extends BaseCommand {
 		return 'Build the API doc';
 	}
 
+	enabled() {
+		return false;
+	}
+
 	createPropertiesTable(tableFields) {
 		const headers = [
 			{ name: 'name', label: 'Name' },
