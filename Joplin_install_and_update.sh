@@ -6,12 +6,13 @@ set -e
 #-----------------------------------------------------
 COLOR_RED=`tput setaf 1`
 COLOR_GREEN=`tput setaf 2`
+COLOR_BLUE=`tput setaf 4`
 COLOR_RESET=`tput sgr0`
 SILENT=false
 
 print() {
     if [[ "$SILENT" == false ]] ; then
-        echo "$1"
+        echo -e "$@"
     fi
 }
 
@@ -34,11 +35,18 @@ if [[ $* == *--silent* ]] ; then
     SILENT=true
 fi
 
+# --force
+## Always download
+if [[ $* == *--force* ]] && [[ -e ~/.joplin/VERSION ]] ; then
+    rm -f ~/.joplin/VERSION
+fi
+
 #-----------------------------------------------------
 # START
 #-----------------------------------------------------
 
 # Title
+print "${COLOR_BLUE}"
 print "     _             _ _       "
 print "    | | ___  _ __ | (_)_ __  "
 print " _  | |/ _ \| '_ \| | | '_ \ "
@@ -47,6 +55,7 @@ print " \___/ \___/| .__/|_|_|_| |_|"
 print "            |_|"
 print ""
 print "Linux Installer and Updater"
+print "${COLOR_RESET}"
 
 #-----------------------------------------------------
 # Download Joplin
@@ -66,7 +75,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     mkdir -p ~/.joplin/
 
     # Download the latest version
-    wget -nv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION.AppImage
+    wget -qnv --show-progress -O ~/.joplin/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION.AppImage
 
     # Gives execution privileges
     chmod +x ~/.joplin/Joplin.AppImage
@@ -80,7 +89,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     # Download icon
     print 'Downloading icon...'
     mkdir -p ~/.local/share/icons/hicolor/512x512/apps
-    wget -nv -O ~/.local/share/icons/hicolor/512x512/apps/joplin.png https://joplinapp.org/images/Icon512.png
+    wget -qnv --show-progress -O ~/.local/share/icons/hicolor/512x512/apps/joplin.png https://joplinapp.org/images/Icon512.png
     print "${COLOR_GREEN}OK${COLOR_RESET}"
 
     # Detect desktop environment
@@ -93,7 +102,7 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
     DESKTOP=${DESKTOP,,}  # convert to lower case
 
     # Create icon for Gnome
-    echo 'Create Desktop icon.'
+    echo 'Create Desktop icon...'
     if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.* ]]
     then
        : "${TMPDIR:=/tmp}"
@@ -123,8 +132,13 @@ if [[ ! -e ~/.joplin/VERSION ]] || [[ $(< ~/.joplin/VERSION) != "$RELEASE_VERSIO
 
     # Add version
     echo $RELEASE_VERSION > ~/.joplin/VERSION
+
+    if [[ $* == *--notes* ]]; then
+        NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
+        print "${COLOR_BLUE}Release Notes:${COLOR_RESET}\n${NOTES}"
+    fi
 else
-    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET}" $version "${COLOR_GREEN}installed.${COLOR_RESET}"
+    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${version} ${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
 
 # Goodbye
