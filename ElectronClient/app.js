@@ -664,14 +664,9 @@ class Application extends BaseApplication {
 			}
 			const text = message.join('\n');
 
-			const copyLabel = _('Copy');
-			// The following hack helps to position the OK button approximately in the middle
-			// of the dialog box (if the copyLabel is not longer than 14 characters)
-			const spacer = ' '.repeat(Math.max(0, Math.trunc((14 - copyLabel.length) / 2)));
-
 			const copyToClipboard = bridge().showConfirmMessageBox(text, {
 				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
-				buttons: [spacer + copyLabel + spacer, _('OK')],
+				buttons: [_('Copy'), _('OK')],
 				defaultId: 1,
 			});
 			if (copyToClipboard) {
