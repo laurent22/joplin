@@ -622,7 +622,7 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
+		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
