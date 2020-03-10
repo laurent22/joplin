@@ -956,6 +956,7 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').removeEventListener('keydown', this.onEditorKeyDown_);
 			document.querySelector('#note-editor').removeEventListener('contextmenu', this.onEditorContextMenu_);
+			this.editor_.editor.indent = this.indentOrig;
 		}
 
 		this.editor_ = element;
@@ -1021,7 +1022,8 @@ class NoteTextComponent extends React.Component {
 			// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
 			// If the current line starts with `markup.list` token,
 			// hitting `Tab` key indents the line instead of inserting tab at cursor.
-			const indentOrig = this.editor_.editor.indent;
+			this.indentOrig = this.editor_.editor.indent;
+			const indentOrig = this.indentOrig;
 			this.editor_.editor.indent = function() {
 				const range = this.getSelectionRange();
 				if (range.isEmpty()) {
@@ -1029,8 +1031,7 @@ class NoteTextComponent extends React.Component {
 					const tokens = this.session.getTokens(row);
 
 					if (tokens.length > 0 && tokens[0].type == 'markup.list') {
-						let num_list = tokens[0].value.search(/\d+\./);
-						if (num_list != -1) {
+						if (tokens[0].value.search(/\d+\./) != -1) {
 							// Resets numbered list to 1.
 							this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
 								tokens[0].value.replace(/\d+\./, '1.'));
