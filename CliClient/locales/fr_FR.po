@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -773,7 +775,6 @@ msgid "Sidebar"
 msgstr "Barre latérale"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:370
-#, fuzzy
 msgid "Note list"
 msgstr "Historique des notes"
 
@@ -853,9 +854,8 @@ msgstr "Options"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:626
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "Ressources : %d."
+msgstr "Ressources : %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:648
 #, javascript-format
@@ -868,19 +868,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Terminé : %s"
+msgstr "Identifiant client : %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Nouvelle version : %s"
+msgstr "Version syncrhonisée : %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Nouvelle version : %s"
+msgstr "Version du profil : %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:673
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
@@ -1035,15 +1035,15 @@ msgstr "Naviguer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1022
 msgid "Actual Size"
-msgstr ""
+msgstr "Taille réelle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Zoom In"
-msgstr ""
+msgstr "Zoom avant"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zoom arrière"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
 msgid "&Tools"
@@ -1068,7 +1068,7 @@ msgstr "Faire un don"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
 msgid "Toggle development tools"
-msgstr "Monter/Cacher les outils de développement"
+msgstr "Montrer/Cacher les outils de développement"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1204
 #, javascript-format
@@ -1452,14 +1452,13 @@ msgstr "L'obtenir maintenant :"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Icône"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
 msgstr "Propriétés de la note"
 
@@ -1534,22 +1533,21 @@ msgstr "Définir le mot de passe"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Mots"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Caractères"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Caractères (espaces non compris)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Lignes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
 msgstr "Propriétés de la note"
 
@@ -1668,7 +1666,6 @@ msgstr ""
 "l'éditeur et éditer cette note."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
-#, fuzzy
 msgid "Only one note can be printed at a time."
 msgstr ""
 "Les notes ne peuvent être imprimées ou exportées en PDF qu'une seule à la "
@@ -1741,7 +1738,6 @@ msgid "Watching..."
 msgstr "En cours..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1793
-#, fuzzy
 msgid "Content Properties"
 msgstr "Propriétés de la note"
 
@@ -1763,18 +1759,16 @@ msgid "Clear"
 msgstr "Supprimer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
-msgstr "titre"
+msgstr "Titre"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Taille"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
-#, fuzzy
 msgid "Action"
-msgstr "Lieu"
+msgstr "Action"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
@@ -1787,18 +1781,19 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
 msgstr "Vérification... Veuillez attendre."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "Pas de notes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Attention : Pour des raisons de performances, certaines notes ne sont pas "
+"affichées (limite : %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1947,7 +1942,7 @@ msgstr "Partager note.."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:202
 #, javascript-format
 msgid "Delete note \"%s\"?"
-msgstr "Supprimer note \"%s\" ?"
+msgstr "Supprimer note \"%s\" ?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
 #, javascript-format
@@ -2347,9 +2342,8 @@ msgid "Nord"
 msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Sombre"
+msgstr "Sombre OLED"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
@@ -2489,9 +2483,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Activer la syntaxe \"Fountain\""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Activer le typographe"
+msgstr "Activer le support des diagrammes Mermaid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Show tray icon"
@@ -2842,7 +2835,7 @@ msgstr "Fichiers joints"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr "Téléchargé et chiffré"
+msgstr "Téléchargé et déchiffré"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
@@ -2853,7 +2846,7 @@ msgstr "%s : %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr "Téléchargé et déchiffré"
+msgstr "Téléchargé et chiffré"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
 msgid "Attachments that could not be downloaded"
