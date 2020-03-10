@@ -106,6 +106,19 @@ class Bridge {
 		return result === 0;
 	}
 
+	/* returns the index of the clicked button */
+	showMessageBox(message, options = null) {
+		if (options === null) options = {};
+
+		const result = this.showMessageBox_(this.window(), Object.assign({}, {
+			type: 'question',
+			message: message,
+			buttons: [_('OK'), _('Cancel')],
+		}, options));
+
+		return result;
+	}
+
 	showInfoMessageBox(message, options = {}) {
 		const result = this.showMessageBox_(this.window(), Object.assign({}, {
 			type: 'info',
