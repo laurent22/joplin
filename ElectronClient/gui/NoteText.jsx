@@ -1017,6 +1017,29 @@ class NoteTextComponent extends React.Component {
 
 				return this.$getIndent(line);
 			};
+
+			// Markdown list indentation.
+			const indentOrig = this.editor_.editor.indent;
+			this.editor_.editor.indent = function() {
+				const range = this.getSelectionRange();
+				if (range.isEmpty()) {
+					const row = range.start.row;
+					const tokens = this.session.getTokens(row);
+
+					if (tokens.length > 0 && tokens[0].type == 'markup.list') {
+						let num_list = tokens[0].value.search(/\d+\./);
+						if (num_list != -1) {
+							this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
+								tokens[0].value.replace(/\d+\./, '1.'));
+						}
+
+						this.session.indentRows(row, row, '\t');
+						return;
+					}
+				}
+
+				indentOrig.call(this);
+			};
 		}
 	}
 
