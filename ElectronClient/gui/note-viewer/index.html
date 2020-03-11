@@ -310,6 +310,7 @@
 			return m ? contentElement.scrollTop / m : 0;
 		}
 
+		let lastTextLength=0;
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
 			// If the last scroll event was done by the user, lastScrollEventTime is set and
 			// we can use that to skip the event handling. We skip it because in that case
