@@ -7,3 +7,4 @@ plugins/*.min.js
 .DS_Store
 gui/note-viewer/pluginAssets/
 app/
+pluginAssets/

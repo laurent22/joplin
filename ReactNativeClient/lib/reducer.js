@@ -52,6 +52,7 @@ const defaultState = {
 	forwardHistoryNotes: [],
 	plugins: {},
 	provisionalNoteIds: [],
+	editorNoteStatuses: {},
 };
 
 const stateUtils = {};
@@ -484,6 +485,16 @@ const reducer = (state = defaultState, action) => {
 			}
 			break;
 
+		case 'NOTE_PROVISIONAL_FLAG_CLEAR':
+			{
+				const newIds = ArrayUtils.removeElement(state.provisionalNoteIds, action.id);
+				if (newIds !== state.provisionalNoteIds) {
+					newState = Object.assign({}, state, { provisionalNoteIds: newIds });
+				}
+			}
+			break;
+
+
 			// Replace all the notes with the provided array
 		case 'NOTE_UPDATE_ALL':
 			newState = Object.assign({}, state);
@@ -631,6 +642,24 @@ const reducer = (state = defaultState, action) => {
 				newState = updateOneItem(state, action, 'tags');
 				let tagRemoved = action.item;
 				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
+			}
+			break;
+
+		case 'EDITOR_NOTE_STATUS_SET':
+
+			{
+				const newStatuses = Object.assign({}, state.editorNoteStatuses);
+				newStatuses[action.id] = action.status;
+				newState = Object.assign({}, state, { editorNoteStatuses: newStatuses });
+			}
+			break;
+
+		case 'EDITOR_NOTE_STATUS_REMOVE':
+
+			{
+				const newStatuses = Object.assign({}, state.editorNoteStatuses);
+				delete newStatuses[action.id];
+				newState = Object.assign({}, state, { editorNoteStatuses: newStatuses });
 			}
 			break;
 
