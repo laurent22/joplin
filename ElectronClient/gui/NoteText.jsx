@@ -1110,7 +1110,9 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (this.state.note) {
-			if (command.name === 'textBold') {
+			if (command.name === 'textFont') {
+				fn = this.commandTextFont;
+			} else if (command.name === 'textBold') {
 				fn = this.commandTextBold;
 			} else if (command.name === 'textItalic') {
 				fn = this.commandTextItalic;
@@ -1589,6 +1591,11 @@ class NoteTextComponent extends React.Component {
 	commandTextHorizontalRule() {
 		this.addListItem('* * *');
 	}
+	async commandTextFont() {
+		const fontSelect = await dialogs.prompt('Select Font','','monospace');
+		this.toggleWrapSelection([`<span style="font-family:${fontSelect};">`], ['</span>'], _(`${fontSelect}`));
+		// this.wrapSelectionWithStrings(`<span style="font-family:${fontSelect}; font-size:4em;">`, '</span>');
+	}
 
 	async commandTextLink() {
 		const url = await dialogs.prompt(_('Insert Hyperlink'));
@@ -1669,6 +1676,13 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
+			toolbarItems.push({
+				tooltip: _('font'),
+				iconName: 'fa-font',
+				onClick: () => {
+					return this.commandTextFont();
+				},
+			});
 			toolbarItems.push({
 				tooltip: _('Bold'),
 				iconName: 'fa-bold',
