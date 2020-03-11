@@ -68,9 +68,10 @@ class Folder extends BaseItem {
 
 		if (options.deleteChildren) {
 			let noteIds = await Folder.noteIds(folderId);
-			for (let i = 0; i < noteIds.length; i++) {
-				await Note.delete(noteIds[i]);
-			}
+			// for (let i = 0; i < noteIds.length; i++) {
+			// 	await Note.delete(noteIds[i]);
+			// }
+			await Note.batchDelete(noteIds);
 
 			let subFolderIds = await Folder.subFolderIds(folderId);
 			for (let i = 0; i < subFolderIds.length; i++) {
