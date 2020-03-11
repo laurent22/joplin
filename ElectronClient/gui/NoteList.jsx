@@ -284,9 +284,15 @@ class NoteListComponent extends React.Component {
 
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
+			const doRefocus = this.props.notes.length < prevProps.notes.length;
+
 			for (let i = 0; i < this.props.notes.length; i++) {
 				if (this.props.notes[i].id === id) {
 					this.itemListRef.current.makeItemIndexVisible(i);
+					if (doRefocus) {
+						const ref = this.itemAnchorRef(id);
+						if (ref) ref.focus();
+					}
 					break;
 				}
 			}
@@ -319,10 +325,8 @@ class NoteListComponent extends React.Component {
 			// Down
 			noteIndex += 1;
 		}
-
 		if (noteIndex < 0) noteIndex = 0;
 		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
-
 		return noteIndex;
 	}
 
@@ -330,7 +334,7 @@ class NoteListComponent extends React.Component {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
 
-		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
