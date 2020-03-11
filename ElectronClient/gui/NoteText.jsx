@@ -1653,6 +1653,7 @@ class NoteTextComponent extends React.Component {
 						folderId: this.state.folder.id,
 						noteId: note.id,
 					});
+					Folder.expandTree(this.props.folders, this.state.folder.parent_id);
 				},
 			});
 		}
