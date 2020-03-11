@@ -671,7 +671,7 @@ class Application extends BaseApplication {
 				defaultId: 1,
 			});
 			if (copyToClipboard === 0) {
-				clipboard.writeText(text);
+				clipboard.writeText(message.splice(3).join('\n'));
 			}
 		}
 
