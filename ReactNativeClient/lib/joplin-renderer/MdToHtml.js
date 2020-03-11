@@ -11,6 +11,7 @@ const rules = {
 	html_image: require('./MdToHtml/rules/html_image'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
+	fence: require('./MdToHtml/rules/fence').default,
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
@@ -53,6 +54,27 @@ class MdToHtml {
 		this.ResourceModel_ = options.ResourceModel;
 		this.pluginOptions_ = options.pluginOptions ? options.pluginOptions : {};
 		this.contextCache_ = new memoryCache.Cache();
+
+		this.tempDir_ = options.tempDir;
+		this.fsDriver_ = {
+			writeFile: (/* path, content, encoding = 'base64'*/) => { throw new Error('writeFile not set'); },
+			exists: (/* path*/) => { throw new Error('exists not set'); },
+			cacheCssToFile: (/* cssStrings*/) => { throw new Error('cacheCssToFile not set'); },
+		};
+
+		if (options.fsDriver) {
+			if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
+			if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
+			if (options.fsDriver.cacheCssToFile) this.fsDriver_.cacheCssToFile = options.fsDriver.cacheCssToFile;
+		}
+	}
+
+	fsDriver() {
+		return this.fsDriver_;
+	}
+
+	tempDir() {
+		return this.tempDir_;
 	}
 
 	pluginOptions(name) {
@@ -108,14 +130,16 @@ class MdToHtml {
 	}
 
 	async render(body, style = null, options = null) {
-		if (!options) options = {};
-		if (!('bodyOnly' in options)) options.bodyOnly = false;
-		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
-		if (!options.paddingBottom) options.paddingBottom = '0';
-		if (!options.highlightedKeywords) options.highlightedKeywords = [];
-		if (!options.codeTheme) options.codeTheme = 'atom-one-light.css';
-
-		if (!style) style = Object.assign({}, defaultNoteStyle);
+		options = Object.assign({}, {
+			bodyOnly: false,
+			splitted: false,
+			externalAssetsOnly: false,
+			postMessageSyntax: 'postMessage',
+			paddingBottom: '0',
+			highlightedKeywords: [],
+			codeTheme: 'atom-one-light.css',
+			style: Object.assign({}, defaultNoteStyle),
+		}, options);
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
 		// associated with this particular Markdown body. It is only used to allow us to
@@ -147,6 +171,13 @@ class MdToHtml {
 			linkify: true,
 			html: true,
 			highlight: (str, lang) => {
+				let outputCodeHtml = '';
+
+				// The strings includes the last \n that is part of the fence,
+				// so we remove it because we need the exact code in the source block
+				const trimmedStr = str.replace(/(.*)\n$/, '$1');
+				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
+
 				try {
 					let hlCode = '';
 
@@ -156,9 +187,9 @@ class MdToHtml {
 						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
 						if (lang && hljs.getLanguage(lang)) {
-							hlCode = hljs.highlight(lang, str, true).value;
+							hlCode = hljs.highlight(lang, trimmedStr, true).value;
 						} else {
-							hlCode = hljs.highlightAuto(str).value;
+							hlCode = hljs.highlightAuto(trimmedStr).value;
 						}
 						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
@@ -167,10 +198,15 @@ class MdToHtml {
 						{ name: options.codeTheme },
 					];
 
-					return `<pre class="hljs"><code>${hlCode}</code></pre>`;
+					outputCodeHtml = hlCode;
 				} catch (error) {
-					return `<pre class="hljs"><code>${markdownIt.utils.escapeHtml(str)}</code></pre>`;
+					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
+
+				return {
+					wrapCode: false,
+					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
+				};
 			},
 		});
 
@@ -201,6 +237,9 @@ class MdToHtml {
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.
 		// The calling application will need to handle loading these assets.
 
+		// /!\/!\ Note: the order of rules is important!! /!\/!\
+
+		markdownIt.use(rules.fence(context, ruleOptions));
 		markdownIt.use(rules.sanitize_html(context, ruleOptions));
 		markdownIt.use(rules.image(context, ruleOptions));
 		markdownIt.use(rules.checkbox(context, ruleOptions));
@@ -246,6 +285,15 @@ class MdToHtml {
 		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
 
 		output.html = html;
+
+		if (options.splitted) {
+			output.cssStrings = cssStrings;
+			output.html = `<div id="rendered-md">${renderedBody}</div>`;
+
+			if (options.externalAssetsOnly) {
+				output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssStrings));
+			}
+		}
 
 		// Fow now, we keep only the last entry in the cache
 		this.cachedOutputs_ = {};

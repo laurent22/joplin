@@ -108,7 +108,8 @@ class Logger {
 	log(level, ...object) {
 		if (!this.targets_.length) return;
 
-		let line = `${moment().format('YYYY-MM-DD HH:mm:ss')}: `;
+		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+		let line = `${timestamp}: `;
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			let target = this.targets_[i];
@@ -121,7 +122,8 @@ class Logger {
 				if (level == Logger.LEVEL_WARN) fn = 'warn';
 				if (level == Logger.LEVEL_INFO) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				consoleObj[fn](line + this.objectsToString(...object));
+				const items = [moment().format('HH:mm:ss')].concat(object);
+				consoleObj[fn](...items);
 			} else if (target.type == 'file') {
 				let serializedObject = this.objectsToString(...object);
 				try {

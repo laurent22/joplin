@@ -166,7 +166,7 @@ async function main() {
 		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version, rcSuffix);
 	}
 
-	if (rcSuffix) {
+	if (!rcSuffix) {
 		console.info('Updating Readme URL...');
 
 		let readmeContent = await fs.readFile('README.md', 'utf8');

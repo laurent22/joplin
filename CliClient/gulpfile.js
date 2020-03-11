@@ -15,11 +15,13 @@ tasks.build = {
 		await utils.copyDir(`${__dirname}/../patches`, `${buildDir}/patches`);
 		await tasks.copyLib.fn();
 		await utils.copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
+		await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
+		await utils.copyFile(`${__dirname}/gulpfile.js`, `${buildDir}/gulpfile.js`);
 
-		// const packageRaw = await fs.readFile(`${buildDir}/package.json`);
-		// const package = JSON.parse(packageRaw.toString());
-		// package.scripts.postinstall = package.scripts.postinstall.replace(/\.\.\/patches/, './patches');
-		// await fs.writeFile(`${buildDir}/package.json`, JSON.stringify(package, null, 2), 'utf8');
+		const packageRaw = await fs.readFile(`${buildDir}/package.json`);
+		const package = JSON.parse(packageRaw.toString());
+		package.scripts.postinstall = 'patch-package';
+		await fs.writeFile(`${buildDir}/package.json`, JSON.stringify(package, null, 2), 'utf8');
 
 		fs.chmodSync(`${buildDir}/main.js`, 0o755);
 	},

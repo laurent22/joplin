@@ -117,7 +117,7 @@ class Application extends BaseApplication {
 					newState = Object.assign({}, state);
 					let command = Object.assign({}, action);
 					delete command.type;
-					newState.windowCommand = command;
+					newState.windowCommand = command.name ? command : null;
 				}
 				break;
 
@@ -134,6 +134,8 @@ class Application extends BaseApplication {
 							paneOptions = ['editor', 'both'];
 						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_VIEWER_SPLIT) {
 							paneOptions = ['viewer', 'both'];
+						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_SPLIT_WYSIWYG) {
+							paneOptions = ['both', 'wysiwyg'];
 						} else {
 							paneOptions = ['editor', 'viewer', 'both'];
 						}

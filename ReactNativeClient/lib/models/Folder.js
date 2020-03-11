@@ -218,6 +218,17 @@ class Folder extends BaseItem {
 		return output;
 	}
 
+	static async expandTree(folders, parentId) {
+		const folderPath = await this.folderPath(folders, parentId);
+		for (const folder of folderPath) {
+			this.dispatch({
+				type: 'FOLDER_SET_COLLAPSED',
+				id: folder.id,
+				collapsed: false,
+			});
+		}
+	}
+
 	static async allAsTree(folders = null, options = null) {
 		const all = folders ? folders : await this.all(options);
 

@@ -413,6 +413,14 @@ class NoteTextComponent extends React.Component {
 	}
 
 	async UNSAFE_componentWillMount() {
+		// If the note has been modified in another editor, wait for it to be saved
+		// before loading it in this editor. This is particularly relevant when
+		// switching layout from WYSIWYG to this editor before the note has finished saving.
+		while (this.props.noteId && this.props.editorNoteStatuses[this.props.noteId] === 'saving') {
+			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
+			await time.msleep(100);
+		}
+
 		let note = null;
 		let noteTags = [];
 
@@ -948,6 +956,7 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').removeEventListener('keydown', this.onEditorKeyDown_);
 			document.querySelector('#note-editor').removeEventListener('contextmenu', this.onEditorContextMenu_);
+			this.editor_.editor.indent = this.indentOrig;
 		}
 
 		this.editor_ = element;
@@ -1008,6 +1017,32 @@ class NoteTextComponent extends React.Component {
 				if (bulletNumber) return `${leftSpaces + (bulletNumber + 1)}. `;
 
 				return this.$getIndent(line);
+			};
+
+			// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
+			// If the current line starts with `markup.list` token,
+			// hitting `Tab` key indents the line instead of inserting tab at cursor.
+			this.indentOrig = this.editor_.editor.indent;
+			const indentOrig = this.indentOrig;
+			this.editor_.editor.indent = function() {
+				const range = this.getSelectionRange();
+				if (range.isEmpty()) {
+					const row = range.start.row;
+					const tokens = this.session.getTokens(row);
+
+					if (tokens.length > 0 && tokens[0].type == 'markup.list') {
+						if (tokens[0].value.search(/\d+\./) != -1) {
+							// Resets numbered list to 1.
+							this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
+								tokens[0].value.replace(/\d+\./, '1.'));
+						}
+
+						this.session.indentRows(row, row, '\t');
+						return;
+					}
+				}
+
+				indentOrig.call(this);
 			};
 		}
 	}
@@ -1652,6 +1687,7 @@ class NoteTextComponent extends React.Component {
 						folderId: this.state.folder.id,
 						noteId: note.id,
 					});
+					Folder.expandTree(this.props.folders, this.state.folder.parent_id);
 				},
 			});
 		}
@@ -2242,6 +2278,7 @@ const mapStateToProps = state => {
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedNoteHash: state.selectedNoteHash,
+		editorNoteStatuses: state.editorNoteStatuses,
 		noteTags: state.selectedNoteTags,
 		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,

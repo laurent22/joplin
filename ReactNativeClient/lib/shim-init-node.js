@@ -11,6 +11,7 @@ const urlValidator = require('valid-url');
 const { _ } = require('lib/locale.js');
 const http = require('http');
 const https = require('https');
+const toRelative = require('relative');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -406,6 +407,10 @@ function shimInit() {
 		}
 		const p = require('../package.json');
 		return p.version;
+	};
+
+	shim.pathRelativeToCwd = (path) => {
+		return toRelative(process.cwd(), path);
 	};
 }
 

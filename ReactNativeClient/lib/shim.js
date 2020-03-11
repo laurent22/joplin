@@ -216,4 +216,8 @@ shim.setIsTestingEnv = (v) => {
 	isTestingEnv_ = v;
 };
 
+shim.pathRelativeToCwd = (path) => {
+	throw new Error('Not implemented');
+};
+
 module.exports = { shim };
