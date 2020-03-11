@@ -316,17 +316,22 @@
 			// the scroll position has already been updated. Also we add a 200ms interval
 			// because otherwise it's most likely a glitch where we called ipc.setPercentScroll
 			// but the scroll event listener has not been called.
-			if (lastScrollEventTime && Date.now() - lastScrollEventTime < 200) {
-				lastScrollEventTime = 0;
-				return;
-			}
-
-			lastScrollEventTime = 0;
-
-			const percent = currentPercentScroll();
-			setPercentScroll(percent);
 			
-			ipcProxySendToHost('percentScroll', percent);
+			// The editor position should change parallelly when the user scrolls on the viewer. 
+			// The position change in the viewer might be caused by two events. First, the user 
+			// scrolls in the viewer side. Second, when the user scrolls in the editor side, the 
+			// viewer position changes simultaneously. Third, content changes in the viewer. We 
+			// use lastScrollEventTime to detect second event, and lastTextLength to detect third
+			// event
+
+			if ((lastScrollEventTime && Date.now() - lastScrollEventTime > 200) && 
+			    (contentElement.innerText.length == lastTextLength)){
+				const percent = currentPercentScroll();
+				ipcProxySendToHost('percentScroll', percent);
+			}
+			else{
+				lastTextLength = contentElement.innerText.length;
+			}
 		}));
 
 		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
