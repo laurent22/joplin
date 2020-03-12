@@ -23,7 +23,7 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
-const { shell, webFrame } = require('electron');
+const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
@@ -664,9 +664,17 @@ class Application extends BaseApplication {
 				message.push(`\n${gitInfo}`);
 				console.info(gitInfo);
 			}
-			bridge().showInfoMessageBox(message.join('\n'), {
+			const text = message.join('\n');
+
+			const copyToClipboard = bridge().showMessageBox(text, {
 				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
+				buttons: [_('Copy'), _('OK')],
+				cancelId: 1,
+				defaultId: 1,
 			});
+			if (copyToClipboard === 0) {
+				clipboard.writeText(message.splice(3).join('\n'));
+			}
 		}
 
 		const rootMenuFile = {
