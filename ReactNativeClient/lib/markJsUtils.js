@@ -31,8 +31,8 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 			{
 				accuracy: accuracy,
 			},
-			extraOptions
-		)
+			extraOptions,
+		),
 	);
 };
 

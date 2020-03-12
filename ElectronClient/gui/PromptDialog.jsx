@@ -234,19 +234,19 @@ class PromptDialog extends React.Component {
 			buttonComps.push(
 				<button key="ok" style={styles.button} onClick={() => onClose(true, 'ok')}>
 					{_('OK')}
-				</button>
+				</button>,
 			);
 		if (buttonTypes.indexOf('cancel') >= 0)
 			buttonComps.push(
 				<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>
 					{_('Cancel')}
-				</button>
+				</button>,
 			);
 		if (buttonTypes.indexOf('clear') >= 0)
 			buttonComps.push(
 				<button key="clear" style={styles.button} onClick={() => onClose(false, 'clear')}>
 					{_('Clear')}
-				</button>
+				</button>,
 			);
 
 		return (

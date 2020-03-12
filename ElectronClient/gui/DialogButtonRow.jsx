@@ -27,7 +27,7 @@ function DialogButtonRow(props) {
 		buttonComps.push(
 			<button key="ok" style={theme.buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
 				{_('OK')}
-			</button>
+			</button>,
 		);
 	}
 
@@ -35,7 +35,7 @@ function DialogButtonRow(props) {
 		buttonComps.push(
 			<button key="cancel" style={Object.assign({}, theme.buttonStyle, { marginLeft: 10 })} onClick={cancelButton_click}>
 				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}
-			</button>
+			</button>,
 		);
 	}
 

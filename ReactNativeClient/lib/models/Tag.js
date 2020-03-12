@@ -32,7 +32,7 @@ class Tag extends BaseItem {
 			null,
 			Object.assign({}, options, {
 				conditions: [`id IN ("${noteIds.join('","')}")`],
-			})
+			}),
 		);
 	}
 

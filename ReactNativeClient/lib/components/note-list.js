@@ -1,11 +1,13 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { FlatList, Text, StyleSheet, Button, View } = require('react-native');
+const { Text, StyleSheet, Button, View, TouchableOpacity, Dimensions } = require('react-native');
 const { _ } = require('lib/locale.js');
 const { NoteItem } = require('lib/components/note-item.js');
 const { time } = require('lib/time-utils.js');
 const { themeStyle } = require('lib/components/global-style.js');
+const { SwipeListView } = require('react-native-swipe-list-view');
+const Note = require('lib/models/Note.js');
 
 class NoteListComponent extends Component {
 	constructor() {
@@ -40,6 +42,37 @@ class NoteListComponent extends Component {
 			},
 			noNotebookView: {
 
+			},
+			rowFront: {
+				alignItems: 'center',
+				backgroundColor: '#CCC',
+				borderBottomColor: 'black',
+				borderBottomWidth: 1,
+				justifyContent: 'center',
+				height: 50,
+			},
+			rowBack: {
+				alignItems: 'center',
+				backgroundColor: 'red',
+				flex: 1,
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				paddingLeft: 15,
+			},
+			backRightBtn: {
+				alignItems: 'center',
+				bottom: 0,
+				justifyContent: 'center',
+				position: 'absolute',
+				top: 0,
+				width: 75,
+			},
+			backRightBtnRight: {
+				backgroundColor: 'red',
+				right: 0,
+			},
+			backTextWhite: {
+				color: '#FFF',
 			},
 		};
 
@@ -82,15 +115,49 @@ class NoteListComponent extends Component {
 		}
 	}
 
+	async deleteNote_onPress(data) {
+		let note = data.item;
+		if (!note.id) return;
+
+		let folderId = note.parent_id;
+
+		await Note.delete(note.id);
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			folderId: folderId,
+		});
+	}
+
+	renderHiddenItem(data, rowMap) {
+		return (
+			<TouchableOpacity
+				onPress={() => this.deleteNote_onPress(data, rowMap)}
+				style={this.styles().rowBack}
+			>
+				<View
+					style={[this.styles().backRightBtn, this.styles().backRightBtnRight]}
+				>
+					<Text style={this.styles().backTextWhite}>Delete</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
 	render() {
 		// `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
 		if (this.props.items.length) {
-			return <FlatList
+			return <SwipeListView
 				ref={ref => (this.rootRef_ = ref)}
 				data={this.props.items}
 				renderItem={({ item }) => <NoteItem note={item} />}
 				keyExtractor={item => item.id}
+				disableRightSwipe
+				rightOpenValue={-Dimensions.get('window').width}
+				renderHiddenItem={this.renderHiddenItem.bind(this)}
+				rightOpenValue={-75}
 			/>;
 		} else {
 			if (!this.props.folders.length) {

@@ -103,7 +103,7 @@ class InteropService {
 					type: 'importer',
 					path: `lib/services/${className}`,
 				},
-				a
+				a,
 			);
 			if (!('isNoteArchive' in output)) output.isNoteArchive = true;
 			return output;
@@ -117,7 +117,7 @@ class InteropService {
 					type: 'exporter',
 					path: `lib/services/${className}`,
 				},
-				a
+				a,
 			);
 		});
 
@@ -224,7 +224,7 @@ class InteropService {
 				destinationFolderId: null,
 				destinationFolder: null,
 			},
-			options
+			options,
 		);
 
 		if (options.format === 'auto') {

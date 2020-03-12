@@ -1,7 +1,12 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
+const {
+	Text,
+	TouchableWithoutFeedback,
+	View,
+	StyleSheet,
+} = require('react-native');
 const { Checkbox } = require('lib/components/checkbox.js');
 const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
@@ -57,9 +62,13 @@ class NoteItemComponent extends Component {
 
 		styles.listItemTextWithCheckbox = Object.assign({}, styles.listItemText);
 		styles.listItemTextWithCheckbox.marginTop = styles.listItem.paddingTop - 1;
-		styles.listItemTextWithCheckbox.marginBottom = styles.listItem.paddingBottom;
+		styles.listItemTextWithCheckbox.marginBottom =
+      styles.listItem.paddingBottom;
 
-		styles.selectionWrapperSelected = Object.assign({}, styles.selectionWrapper);
+		styles.selectionWrapperSelected = Object.assign(
+			{},
+			styles.selectionWrapper,
+		);
 		styles.selectionWrapperSelected.backgroundColor = theme.selectedColor;
 
 		this.styles_[this.props.theme] = StyleSheet.create(styles);
@@ -98,7 +107,9 @@ class NoteItemComponent extends Component {
 		if (!this.props.note) return;
 
 		this.props.dispatch({
-			type: this.props.noteSelectionEnabled ? 'NOTE_SELECTION_TOGGLE' : 'NOTE_SELECTION_START',
+			type: this.props.noteSelectionEnabled
+				? 'NOTE_SELECTION_TOGGLE'
+				: 'NOTE_SELECTION_START',
 			id: this.props.note.id,
 		});
 	}
@@ -121,24 +132,39 @@ class NoteItemComponent extends Component {
 
 		const checkboxChecked = !!Number(note.todo_completed);
 
-		const listItemStyle = isTodo ? this.styles().listItemWithCheckbox : this.styles().listItem;
-		const listItemTextStyle = isTodo ? this.styles().listItemTextWithCheckbox : this.styles().listItemText;
+		const listItemStyle = isTodo
+			? this.styles().listItemWithCheckbox
+			: this.styles().listItem;
+		const listItemTextStyle = isTodo
+			? this.styles().listItemTextWithCheckbox
+			: this.styles().listItemText;
 		const opacityStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
-		const isSelected = this.props.noteSelectionEnabled && this.props.selectedNoteIds.indexOf(note.id) >= 0;
+		const isSelected =
+      this.props.noteSelectionEnabled &&
+      this.props.selectedNoteIds.indexOf(note.id) >= 0;
 
-		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
+		const selectionWrapperStyle = isSelected
+			? this.styles().selectionWrapperSelected
+			: this.styles().selectionWrapper;
 
 		return (
-			<TouchableOpacity onPress={() => this.onPress()} onLongPress={() => this.onLongPress()} activeOpacity={0.5}>
+			<TouchableWithoutFeedback
+				onPress={() => this.onPress()}
+				onLongPress={() => this.onLongPress()}
+			>
 				<View style={selectionWrapperStyle}>
 					<View style={opacityStyle}>
 						<View style={listItemStyle}>
-							<Checkbox style={checkboxStyle} checked={checkboxChecked} onChange={checked => this.todoCheckbox_change(checked)} />
+							<Checkbox
+								style={checkboxStyle}
+								checked={checkboxChecked}
+								onChange={checked => this.todoCheckbox_change(checked)}
+							/>
 							<Text style={listItemTextStyle}>{Note.displayTitle(note)}</Text>
 						</View>
 					</View>
 				</View>
-			</TouchableOpacity>
+			</TouchableWithoutFeedback>
 		);
 	}
 }

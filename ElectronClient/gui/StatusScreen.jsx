@@ -98,7 +98,7 @@ class StatusScreenComponent extends React.Component {
 					<div style={theme.textStyle} key={`item_${n}`}>
 						<span>{text}</span>
 						{retryLink}
-					</div>
+					</div>,
 				);
 			}
 

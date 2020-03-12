@@ -175,7 +175,7 @@ const NoteTextViewer = connect(
 	mapStateToProps,
 	null,
 	null,
-	{ withRef: true }
+	{ withRef: true },
 )(NoteTextViewerComponent);
 
 module.exports = NoteTextViewer;

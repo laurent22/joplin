@@ -173,7 +173,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 				rows.push(
 					<tr key={id}>
 						<td style={theme.textStyle}>{id}</td>
-					</tr>
+					</tr>,
 				);
 			}
 

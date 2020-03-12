@@ -88,7 +88,7 @@ class ActionButtonComponent extends React.Component {
 			buttonComps.push(
 				<ReactNativeActionButton.Item key={key} buttonColor={button.color} title={buttonTitle} onPress={button.onPress}>
 					<Icon name={button.icon} style={styles.actionButtonIcon} />
-				</ReactNativeActionButton.Item>
+				</ReactNativeActionButton.Item>,
 			);
 		}
 

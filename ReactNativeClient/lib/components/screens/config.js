@@ -472,7 +472,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 							{_('- Location: to allow attaching geo-location information to a note.')}
 						</Text>
 					</View>
-				</View>
+				</View>,
 			);
 		}
 
@@ -487,7 +487,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						{_('Make a donation')}
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
@@ -501,7 +501,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						{_('Joplin website')}
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
@@ -515,25 +515,25 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						Privacy Policy
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_app" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_db" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('Database v%s', reg.db().version())}</Text>
-			</View>
+			</View>,
 		);
 
 		settingComps.push(
 			<View key="version_info_fts" style={this.styles().settingContainer}>
 				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-			</View>
+			</View>,
 		);
 
 		return (

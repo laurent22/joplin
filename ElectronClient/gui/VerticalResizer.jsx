@@ -63,7 +63,7 @@ class VerticalResizer extends React.PureComponent {
 			},
 			() => {
 				this.props.onDrag({ deltaX: delta });
-			}
+			},
 		);
 	}
 
@@ -90,7 +90,7 @@ class VerticalResizer extends React.PureComponent {
 				boxSizing: 'border-box',
 				opacity: 0,
 			},
-			this.props.style
+			this.props.style,
 		);
 
 		return <div style={rootStyle} draggable={true} onDragStart={this.onDragStart} onDrag={this.onDrag} onDragEnd={this.onDragEnd} />;

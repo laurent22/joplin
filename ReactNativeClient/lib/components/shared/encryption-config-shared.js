@@ -28,7 +28,7 @@ shared.initState = function(comp, props) {
 		},
 		() => {
 			comp.checkPasswords();
-		}
+		},
 	);
 
 	comp.refreshStats();

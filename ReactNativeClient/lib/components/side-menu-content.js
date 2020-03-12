@@ -97,7 +97,7 @@ class SideMenuContentComponent extends Component {
 						toValue: 1,
 						duration: 3000,
 						easing: Easing.linear,
-					})
+					}),
 				);
 
 				this.syncIconAnimation.start();
@@ -169,7 +169,7 @@ class SideMenuContentComponent extends Component {
 			],
 			{
 				cancelable: false,
-			}
+			},
 		);
 	}
 
@@ -340,7 +340,7 @@ class SideMenuContentComponent extends Component {
 			items.push(
 				<Text key="sync_report" style={this.styles().syncStatus}>
 					{fullReport.join('\n')}
-				</Text>
+				</Text>,
 			);
 
 		return <View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>{items}</View>;

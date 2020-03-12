@@ -180,7 +180,7 @@ const NoteSearchBar = connect(
 	mapStateToProps,
 	null,
 	null,
-	{ withRef: true }
+	{ withRef: true },
 )(NoteSearchBarComponent);
 
 module.exports = NoteSearchBar;

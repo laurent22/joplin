@@ -132,7 +132,7 @@ class SearchEngine {
 					ORDER BY id ASC
 					LIMIT 10
 				`,
-					[BaseModel.TYPE_NOTE, lastChangeId]
+					[BaseModel.TYPE_NOTE, lastChangeId],
 				);
 
 				if (!changes.length) break;

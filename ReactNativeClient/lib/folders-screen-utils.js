@@ -16,7 +16,7 @@ class FoldersScreenUtils {
 					},
 				],
 			},
-			options
+			options,
 		);
 
 		let folders = await Folder.all(folderOptions);

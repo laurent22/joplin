@@ -116,5 +116,5 @@ render(
 	<Provider store={store}>
 		<Root />
 	</Provider>,
-	document.getElementById('react-root')
+	document.getElementById('react-root'),
 );

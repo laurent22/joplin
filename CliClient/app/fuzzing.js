@@ -42,7 +42,7 @@ async function createClients() {
 		promises.push(
 			execCommand(client, 'config sync.target 2').then(() => {
 				return execCommand(client, `config sync.2.path ${syncDir}`);
-			})
+			}),
 		);
 		output.push(client);
 	}

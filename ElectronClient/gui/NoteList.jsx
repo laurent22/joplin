@@ -447,7 +447,7 @@ class NoteListComponent extends React.Component {
 					backgroundColor: theme.backgroundColor,
 					fontFamily: theme.fontFamily,
 				},
-				style
+				style,
 			);
 			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
 			emptyDivStyle.height = emptyDivStyle.height - padding * 2;

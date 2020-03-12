@@ -501,7 +501,7 @@ class BaseItem extends BaseModel {
 				`,
 				this.db().escapeField(ItemClass.tableName()),
 				whereSql.join(' AND '),
-				limit
+				limit,
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);
@@ -553,7 +553,7 @@ class BaseItem extends BaseModel {
 				this.db().escapeField(ItemClass.tableName()),
 				Number(syncTarget),
 				extraWhere,
-				limit
+				limit,
 			);
 
 			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
@@ -581,7 +581,7 @@ class BaseItem extends BaseModel {
 					this.db().escapeField(ItemClass.tableName()),
 					Number(syncTarget),
 					extraWhere,
-					newLimit
+					newLimit,
 				);
 
 				changedItems = await ItemClass.modelSelectAll(sql);
@@ -713,7 +713,7 @@ class BaseItem extends BaseModel {
 				SELECT id
 				FROM %s
 				WHERE encryption_applied = 0`,
-				this.db().escapeField(ItemClass.tableName())
+				this.db().escapeField(ItemClass.tableName()),
 			);
 
 			const items = await ItemClass.modelSelectAll(sql);

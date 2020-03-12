@@ -25,7 +25,7 @@ class SearchEngineUtils {
 				fields: fields,
 				conditions: [`id IN ("${noteIds.join('","')}")`],
 			},
-			options
+			options,
 		);
 
 		const notes = await Note.previews(null, previewOptions);

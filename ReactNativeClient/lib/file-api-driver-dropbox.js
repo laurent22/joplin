@@ -131,7 +131,7 @@ class FileApiDriverDropbox {
 				{
 					'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }),
 				},
-				options
+				options,
 			);
 			return response;
 		} catch (error) {
@@ -175,7 +175,7 @@ class FileApiDriverDropbox {
 						mute: true, // Don't send a notification to user since there can be many of these updates
 					}),
 				},
-				options
+				options,
 			);
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'restricted_content')) {

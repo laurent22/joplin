@@ -484,7 +484,7 @@ class MainScreenComponent extends React.Component {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 			},
-			this.props.style
+			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;

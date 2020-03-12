@@ -35,7 +35,7 @@ class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 				file: this.destPath_,
 				cwd: this.tempDir_,
 			},
-			filePaths
+			filePaths,
 		);
 
 		await fs.remove(this.tempDir_);

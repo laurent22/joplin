@@ -26,7 +26,7 @@ class ImportScreenComponent extends React.Component {
 				},
 				() => {
 					this.doImport();
-				}
+				},
 			);
 		}
 	}

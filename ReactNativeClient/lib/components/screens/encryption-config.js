@@ -240,7 +240,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				rows.push(
 					<Text style={this.styles().normalText} key={id}>
 						{id}
-					</Text>
+					</Text>,
 				);
 			}
 

@@ -30,7 +30,7 @@ class ToolbarComponent extends React.Component {
 						key: key,
 						theme: this.props.theme,
 					},
-					o
+					o,
 				);
 
 				if (itemType === 'button') {

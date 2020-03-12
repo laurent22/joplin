@@ -154,7 +154,7 @@ class ConfigScreenComponent extends React.Component {
 							{_('Check synchronisation configuration')}
 						</button>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 
@@ -199,7 +199,7 @@ class ConfigScreenComponent extends React.Component {
 						&nbsp;&nbsp;
 						<a style={theme.urlStyle} href="#" onClick={this.nextcloudAppHelpLink_click}>[{_('Help')}]</a>
 						{statusComp}
-					</div>
+					</div>,
 				);
 			}
 		}
@@ -291,7 +291,7 @@ class ConfigScreenComponent extends React.Component {
 				items.push(
 					<option value={e.key.toString()} key={e.key}>
 						{settingOptions[e.key]}
-					</option>
+					</option>,
 				);
 			}
 
@@ -544,7 +544,7 @@ class ConfigScreenComponent extends React.Component {
 				overflow: 'hidden',
 				display: 'flex',
 				flexDirection: 'column',
-			}
+			},
 		);
 
 		let settings = this.state.settings;

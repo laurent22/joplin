@@ -307,7 +307,7 @@ class SideBarComponent extends React.Component {
 							activeFolderId: itemId,
 						});
 					},
-				})
+				}),
 			);
 		}
 
@@ -332,7 +332,7 @@ class SideBarComponent extends React.Component {
 						});
 					}
 				},
-			})
+			}),
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
@@ -346,7 +346,7 @@ class SideBarComponent extends React.Component {
 							id: itemId,
 						});
 					},
-				})
+				}),
 			);
 
 			// menu.append(
@@ -379,7 +379,7 @@ class SideBarComponent extends React.Component {
 						click: async () => {
 							await InteropServiceHelper.export(this.props.dispatch.bind(this), module, { sourceFolderIds: [itemId] });
 						},
-					})
+					}),
 				);
 			}
 
@@ -387,7 +387,7 @@ class SideBarComponent extends React.Component {
 				new MenuItem({
 					label: _('Export'),
 					submenu: exportMenu,
-				})
+				}),
 			);
 		}
 
@@ -402,7 +402,7 @@ class SideBarComponent extends React.Component {
 							id: itemId,
 						});
 					},
-				})
+				}),
 			);
 		}
 
@@ -748,7 +748,7 @@ class SideBarComponent extends React.Component {
 			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
 				onClick: this.onAllNotesClick_,
 				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID,
-			})
+			}),
 		);
 
 		items.push(
@@ -756,7 +756,7 @@ class SideBarComponent extends React.Component {
 				onDrop: this.onFolderDrop_,
 				folderid: '',
 				toggleblock: 1,
-			})
+			}),
 		);
 
 		if (this.props.folders.length) {
@@ -766,14 +766,14 @@ class SideBarComponent extends React.Component {
 			items.push(
 				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none' }}>
 					{folderItems}
-				</div>
+				</div>,
 			);
 		}
 
 		items.push(
 			this.makeHeader('tagHeader', _('Tags'), 'fa-tags', {
 				toggleblock: 1,
-			})
+			}),
 		);
 
 		if (this.props.tags.length) {
@@ -784,7 +784,7 @@ class SideBarComponent extends React.Component {
 			items.push(
 				<div className="tags" key="tag_items" style={{ display: this.state.tagHeaderIsExpanded ? 'block' : 'none' }}>
 					{tagItems}
-				</div>
+				</div>,
 			);
 		}
 
@@ -806,7 +806,7 @@ class SideBarComponent extends React.Component {
 			syncReportText.push(
 				<div key={i} style={{ wordWrap: 'break-word', width: '100%' }}>
 					{lines[i]}
-				</div>
+				</div>,
 			);
 		}
 

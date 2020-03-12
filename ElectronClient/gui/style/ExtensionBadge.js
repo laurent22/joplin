@@ -43,7 +43,7 @@ const style = createSelector(
 		};
 
 		return output;
-	}
+	},
 );
 
 module.exports = style;

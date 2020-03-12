@@ -66,7 +66,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			},
 			() => {
 				this.reloadNote();
-			}
+			},
 		);
 	}
 
@@ -94,7 +94,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 				},
 				() => {
 					this.reloadNote();
-				}
+				},
 			);
 		}
 	}
@@ -176,7 +176,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 			revisionListItems.push(
 				<option key={rev.id} value={rev.id}>
 					{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
-				</option>
+				</option>,
 			);
 		}
 

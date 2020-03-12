@@ -24,7 +24,7 @@ class IconButton extends React.Component {
 				backgroundColor: theme.backgroundColor,
 				cursor: 'default',
 			},
-			style
+			style,
 		);
 
 		return (

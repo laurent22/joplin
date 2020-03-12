@@ -56,7 +56,7 @@ require('brace/keybinding/emacs');
 
 /* eslint-disable-next-line no-undef */
 class CustomHighlightRules extends ace.acequire(
-	'ace/mode/markdown_highlight_rules'
+	'ace/mode/markdown_highlight_rules',
 ).MarkdownHighlightRules {
 	constructor() {
 		super();
@@ -197,7 +197,7 @@ class NoteTextComponent extends React.Component {
 					click: async () => {
 						this.editorCutText();
 					},
-				})
+				}),
 			);
 
 			menu.append(
@@ -207,7 +207,7 @@ class NoteTextComponent extends React.Component {
 					click: async () => {
 						this.editorCopyText();
 					},
-				})
+				}),
 			);
 
 			menu.append(
@@ -222,7 +222,7 @@ class NoteTextComponent extends React.Component {
 							this.onEditorPaste_();
 						}
 					},
-				})
+				}),
 			);
 
 			menu.popup(bridge().window());
@@ -786,7 +786,7 @@ class NoteTextComponent extends React.Component {
 							const ok = bridge().openExternal(`file://${resourcePath}`);
 							if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -799,7 +799,7 @@ class NoteTextComponent extends React.Component {
 							if (!filePath) return;
 							await fs.copy(resourcePath, filePath);
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -808,7 +808,7 @@ class NoteTextComponent extends React.Component {
 						click: async () => {
 							clipboard.writeText(toSystemSlashes(resourcePath));
 						},
-					})
+					}),
 				);
 			} else if (itemType === 'text') {
 				menu.append(
@@ -817,7 +817,7 @@ class NoteTextComponent extends React.Component {
 						click: async () => {
 							clipboard.writeText(arg0.textToCopy);
 						},
-					})
+					}),
 				);
 			} else if (itemType === 'link') {
 				menu.append(
@@ -826,7 +826,7 @@ class NoteTextComponent extends React.Component {
 						click: async () => {
 							clipboard.writeText(arg0.textToCopy);
 						},
-					})
+					}),
 				);
 			} else {
 				reg.logger().error(`Unhandled item type: ${itemType}`);
@@ -1642,7 +1642,7 @@ class NoteTextComponent extends React.Component {
 				click: async () => {
 					return this.commandAttachFile();
 				},
-			})
+			}),
 		);
 
 		menu.append(
@@ -1651,7 +1651,7 @@ class NoteTextComponent extends React.Component {
 				click: async () => {
 					return this.commandSetTags();
 				},
-			})
+			}),
 		);
 
 		if (note.is_todo) {
@@ -1661,7 +1661,7 @@ class NoteTextComponent extends React.Component {
 					click: async () => {
 						return this.commandSetAlarm();
 					},
-				})
+				}),
 			);
 		}
 
@@ -1888,7 +1888,7 @@ class NoteTextComponent extends React.Component {
 				backgroundColor: 'black',
 				opacity: 0.1,
 			},
-			rootStyle
+			rootStyle,
 		);
 		return <div style={emptyDivStyle}></div>;
 	}
@@ -1924,7 +1924,7 @@ class NoteTextComponent extends React.Component {
 			itemComps.push(
 				<button key={item.label} style={buttonStyle} onClick={() => multiNotesButton_click(item)}>
 					{item.label}
-				</button>
+				</button>,
 			);
 		}
 
@@ -1963,7 +1963,7 @@ class NoteTextComponent extends React.Component {
 				paddingLeft: 10,
 				paddingRight: 0,
 			},
-			style
+			style,
 		);
 
 		const innerWidth = rootStyle.width - rootStyle.paddingLeft - rootStyle.paddingRight - borderWidth;

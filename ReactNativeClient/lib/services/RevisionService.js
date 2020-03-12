@@ -121,7 +121,7 @@ class RevisionService extends BaseService {
 					ORDER BY id ASC
 					LIMIT 10
 				`,
-					[BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')]
+					[BaseModel.TYPE_NOTE, ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION, Setting.value('revisionService.lastProcessedChangeId')],
 				);
 
 				if (!changes.length) break;
@@ -198,7 +198,7 @@ class RevisionService extends BaseService {
 				title: merged.title,
 				body: merged.body,
 			},
-			merged.metadata
+			merged.metadata,
 		);
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;

@@ -64,7 +64,7 @@ class NoteResource extends BaseModel {
 			AND last_seen_time < ?
 			AND last_seen_time != 0
 		`,
-			[cutOffTime]
+			[cutOffTime],
 		);
 		return output.map(r => r.resource_id);
 	}
