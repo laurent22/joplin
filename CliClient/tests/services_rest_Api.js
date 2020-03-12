@@ -331,7 +331,6 @@ describe('services_rest_Api', function() {
 		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
 		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
 		const tag3 = await Tag.save({ title: 'mon étiquette 3' });
-		const newTagTitle = 'mon étiquette 4';
 
 		const note = await Note.save({
 			title: 'ma note un',
@@ -339,38 +338,73 @@ describe('services_rest_Api', function() {
 		Tag.addNote(tag1.id, note.id);
 		Tag.addNote(tag2.id, note.id);
 
-		const response1 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
 			tags: `${tag1.title},${tag3.title}`,
 		}));
-		const tagIds1 = await NoteTag.tagIdsByNoteId(note.id);
-		expect(response1.tags === `${tag1.title},${tag3.title}`).toBe(true);
-		expect(tagIds1.length === 2).toBe(true);
-		expect(tagIds1.includes(tag1.id)).toBe(true);
-		expect(tagIds1.includes(tag3.id)).toBe(true);
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === `${tag1.title},${tag3.title}`).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(tag3.id)).toBe(true);
+	}));
 
-		const response2 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
-			tags: `${tag2.title},${newTagTitle}`,
+	it('should create and update tags when updating notes', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+		const newTagTitle = 'mon étiquette 3';
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title},${newTagTitle}`,
 		}));
 		const newTag = await Tag.loadByTitle(newTagTitle);
-		const tagIds2 = await NoteTag.tagIdsByNoteId(note.id);
-		expect(response2.tags === `${tag2.title},${newTag.title}`).toBe(true);
-		expect(tagIds2.length === 2).toBe(true);
-		expect(tagIds2.includes(tag2.id)).toBe(true);
-		expect(tagIds2.includes(newTag.id)).toBe(true);
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === `${tag1.title},${newTag.title}`).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(newTag.id)).toBe(true);
+	}));
 
-		const response3 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+	it('should not update tags if tags is not mentioned when updating', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
 			title: 'Some other title',
 		}));
-		const tagIds3 = await NoteTag.tagIdsByNoteId(note.id);
-		expect(tagIds3.length === 2).toBe(true);
-		expect(tagIds3.includes(tag2.id)).toBe(true);
-		expect(tagIds3.includes(newTag.id)).toBe(true);
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === undefined).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(tag2.id)).toBe(true);
+	}));
 
-		const response4 = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+	it('should remove tags from note if tags is set to empty string when updating', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
 			tags: '',
 		}));
-		const tagIds4 = await NoteTag.tagIdsByNoteId(note.id);
-		expect(response4.tags === '').toBe(true);
-		expect(tagIds4.length === 0).toBe(true);
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === '').toBe(true);
+		expect(tagIds.length === 0).toBe(true);
 	}));
 });
