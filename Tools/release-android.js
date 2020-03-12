@@ -151,7 +151,7 @@ async function createRelease(name, tagName, version, rcSuffix) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const rcSuffix = argv.rc ? `-rc${argv.rc}` : '';
+	const rcSuffix = argv.rc ? `-${argv.rc}` : '';
 
 	if (rcSuffix) console.info(`Creating release candidate ${argv.rc}`);
 	console.info('Updating version numbers in build.gradle...');

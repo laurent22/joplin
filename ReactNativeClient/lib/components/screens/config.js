@@ -402,10 +402,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
+			// minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color}
 		} else if (md.type == Setting.TYPE_STRING) {
 			return (
 				<View key={key} style={this.styles().settingContainer}>
