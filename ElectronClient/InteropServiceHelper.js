@@ -2,6 +2,9 @@ const { _ } = require('lib/locale');
 const { bridge } = require('electron').remote.require('./bridge');
 const InteropService = require('lib/services/InteropService');
 const Setting = require('lib/models/Setting');
+const Note = require('lib/models/Note.js');
+const Folder = require('lib/models/Folder.js');
+const { friendlySafeFilename } = require('lib/path-utils');
 const md5 = require('md5');
 const url = require('url');
 const { shim } = require('lib/shim');
@@ -92,6 +95,16 @@ class InteropServiceHelper {
 		return this.exportNoteTo_('printer', noteId, options);
 	}
 
+	static async defaultFilename(noteIds, fileExtension, folders = null) {
+		const note = await Note.load(noteIds[0]);
+		if (folders) {
+			const folder = Folder.byId(folders, note.parent_id);
+			return friendlySafeFilename(`${note.title} - ${folder.title}.${fileExtension}`, 255);
+		} else {
+			return friendlySafeFilename(`${note.title}.${fileExtension}`, 255);
+		}
+	}
+
 	static async export(dispatch, module, options = null) {
 		if (!options) options = {};
 
@@ -100,6 +113,7 @@ class InteropServiceHelper {
 		if (module.target === 'file') {
 			path = bridge().showSaveDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
+				defaultPath: await this.defaultFilename(options.sourceNoteIds, module.fileExtensions[0]),
 			});
 		} else {
 			path = bridge().showOpenDialog({
