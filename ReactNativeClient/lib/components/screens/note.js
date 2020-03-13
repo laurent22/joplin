@@ -184,6 +184,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
 		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
@@ -599,6 +600,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			const url = Note.geolocationUrl(note);
 			Linking.openURL(url);
 		} catch (error) {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
 		}
 	}
