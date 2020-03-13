@@ -14,6 +14,12 @@ process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
+async function allItems() {
+	let folders = await Folder.all();
+	let notes = await Note.all();
+	return folders.concat(notes);
+}
+
 describe('models_Note', function() {
 
 	beforeEach(async (done) => {
@@ -127,6 +133,20 @@ describe('models_Note', function() {
 		expect(duplicatedNote.updated_time !== note1.updated_time).toBe(true);
 		expect(duplicatedNote.user_created_time !== note1.user_created_time).toBe(true);
 		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
+	}));
+
+	it('should delete a set of notebooks', asyncTest(async () => {
+		let folder1 = await Folder.save({ title: 'folder1' });
+		let noOfNotes = 20;
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note1${i}`, parent_id: folder1.id });
+		}
+
+		let noteIds = await Folder.noteIds(folder1.id);
+		await Note.batchDelete(noteIds);
+
+		const all = await allItems();
+		expect(all.length).toBe(1);
 	}));
 
 });
