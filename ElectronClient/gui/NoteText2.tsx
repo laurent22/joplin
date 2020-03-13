@@ -109,7 +109,7 @@ function styles_(props:NoteTextProps) {
 				paddingRight: 8,
 				marginRight: theme.paddingLeft,
 				color: theme.textStyle.color,
-				fontSize: theme.textStyle.fontSize * 1.25 *1.5,
+				fontSize: theme.textStyle.fontSize * 1.25 * 1.5,
 				backgroundColor: theme.backgroundColor,
 				border: '1px solid',
 				borderColor: theme.dividerColor,

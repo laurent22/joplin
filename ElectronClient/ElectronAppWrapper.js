@@ -45,8 +45,8 @@ class ElectronAppWrapper {
 
 
 		const stateOptions = {
-			defaultWidth: Math.round(0.8*screen.getPrimaryDisplay().workArea.width),
-			defaultHeight: Math.round(0.8*screen.getPrimaryDisplay().workArea.height),
+			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
+			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
 			file: `window-state-${this.env_}.json`,
 		};
 
@@ -89,7 +89,7 @@ class ElectronAppWrapper {
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
 			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
 			const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;
-			this.win_.setPosition(primaryDisplayWidth/2 - windowWidth, primaryDisplayHeight/2 - windowHeight);
+			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
 		this.win_.loadURL(url.format({
