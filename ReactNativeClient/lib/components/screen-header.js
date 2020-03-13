@@ -161,7 +161,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 	}
 
 	selectAllButton_press() {
-		this.props.dispatch({ type: 'NOTE_SELECT_ALL' });
+		this.props.dispatch({ type: 'NOTE_SELECT_ALL_TOGGLE' });
 	}
 
 	searchButton_press() {
