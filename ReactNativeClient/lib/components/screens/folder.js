@@ -74,13 +74,24 @@ class FolderScreenComponent extends BaseScreenComponent {
 		});
 	}
 
-	title_changeText(text) {
-		this.folderComponent_change('title', text);
+	scheduleSave() {
+		if (this.scheduleSaveIID_) {
+			clearTimeout(this.scheduleSaveIID_);
+			this.scheduleSaveIID_ = null;
+		}
+
+		this.scheduleSaveIID_ = setTimeout(async () => {
+			await this.saveFolderButton_press_without_closing();
+		}, 1000);
 	}
 
-	async saveFolderButton_press() {
-		let folder = Object.assign({}, this.state.folder);
+	title_changeText(text) {
+		this.folderComponent_change('title', text);
+		this.scheduleSave();
+	}
 
+	async saveFolderButton_press_without_closing() {
+		let folder = Object.assign({}, this.state.folder);
 		try {
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
@@ -92,11 +103,15 @@ class FolderScreenComponent extends BaseScreenComponent {
 			lastSavedFolder: Object.assign({}, folder),
 			folder: folder,
 		});
+	}
+
+	async saveFolderButton_press() {
+		this.saveFolderButton_press_without_closing();
 
 		this.props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Notes',
-			folderId: folder.id,
+			folderId: this.state.folder.id,
 		});
 	}
 
