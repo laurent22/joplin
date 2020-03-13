@@ -36,10 +36,12 @@ class NoteTextViewerComponent extends React.Component {
 		const callName = event.data.name;
 		const args = event.data.args;
 
-		if (this.props.onIpcMessage) this.props.onIpcMessage({
-			channel: callName,
-			args: args,
-		});
+		if (this.props.onIpcMessage) {
+			this.props.onIpcMessage({
+				channel: callName,
+				args: args,
+			});
+		}
 	}
 
 	domReady() {

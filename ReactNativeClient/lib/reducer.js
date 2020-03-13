@@ -209,8 +209,7 @@ function handleItemDelete(state, action) {
 
 function updateOneItem(state, action, keyName = '') {
 	let itemsKey = null;
-	if (keyName) itemsKey = keyName;
-	else {
+	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
 		if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
 		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
@@ -397,10 +396,11 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_SELECT_ALL_TOGGLE': {
 			newState = Object.assign({}, state);
 			const allSelected = state.notes.every(n => state.selectedNoteIds.includes(n.id));
-			if (allSelected)
+			if (allSelected) {
 				newState.selectedNoteIds = [];
-			else
+			} else {
 				newState.selectedNoteIds = newState.notes.map(n => n.id);
+			}
 			break;
 		}
 

@@ -640,13 +640,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.showOnMap_onPress();
 			},
 		});
-		if (note.source_url)
+		if (note.source_url) {
 			output.push({
 				title: _('Go to source URL'),
 				onPress: () => {
 					this.showSource_onPress();
 				},
 			});
+		}
 
 		return output;
 	}
@@ -695,26 +696,28 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.share_onPress();
 			},
 		});
-		if (isSaved)
+		if (isSaved) {
 			output.push({
 				title: _('Tags'),
 				onPress: () => {
 					this.tags_onPress();
 				},
 			});
+		}
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
 		});
-		if (isSaved)
+		if (isSaved) {
 			output.push({
 				title: _('Copy Markdown link'),
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
 				},
 			});
+		}
 		output.push({
 			title: _('Properties'),
 			onPress: () => {

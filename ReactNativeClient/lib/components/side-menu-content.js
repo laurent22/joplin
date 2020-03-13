@@ -336,12 +336,13 @@ class SideMenuContentComponent extends Component {
 
 		items.push(this.renderSideBarButton('synchronize_button', !this.props.syncStarted ? _('Synchronise') : _('Cancel'), 'md-sync', this.synchronize_press));
 
-		if (fullReport.length)
+		if (fullReport.length) {
 			items.push(
 				<Text key="sync_report" style={this.styles().syncStatus}>
 					{fullReport.join('\n')}
 				</Text>
 			);
+		}
 
 		return <View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>{items}</View>;
 	}

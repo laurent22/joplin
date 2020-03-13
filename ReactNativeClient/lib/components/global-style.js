@@ -123,8 +123,9 @@ function themeStyle(theme) {
 	if (themeCache_[theme]) return themeCache_[theme];
 
 	const output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
-	else if (theme == Setting.THEME_OLED_DARK) {
+	if (theme == Setting.THEME_LIGHT) {
+		return addExtraStyles(output);
+	} else if (theme == Setting.THEME_OLED_DARK) {
 		output.backgroundColor = '#000000';
 		output.color = '#dddddd';
 		output.colorFaded = '#777777';

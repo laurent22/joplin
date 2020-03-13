@@ -68,6 +68,7 @@ module.exports = {
 		// -------------------------------
 		"space-in-parens": ["error", "never"],
 		"space-infix-ops": ["error"],
+		"curly": ["error", "multi-line", "consistent"],
 		"semi": ["error", "always"],
 		"eol-last": ["error", "always"],
 		"quotes": ["error", "single"],
