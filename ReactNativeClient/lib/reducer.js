@@ -394,6 +394,16 @@ const reducer = (state = defaultState, action) => {
 			newState.selectedNoteIds = newState.notes.map(n => n.id);
 			break;
 
+		case 'NOTE_SELECT_ALL_TOGGLE': {
+			newState = Object.assign({}, state);
+			const allSelected = state.notes.every(n => state.selectedNoteIds.includes(n.id));
+			if (allSelected)
+				newState.selectedNoteIds = [];
+			else
+				newState.selectedNoteIds = newState.notes.map(n => n.id);
+			break;
+		}
+
 		case 'SMART_FILTER_SELECT':
 			newState = Object.assign({}, state);
 			newState.notesParentType = 'SmartFilter';
