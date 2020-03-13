@@ -451,6 +451,22 @@ class Api {
 			return note;
 		}
 
+		if (request.method === 'PUT') {
+			const note = await Note.load(id);
+
+			if (!note) throw new ErrorNotFound();
+
+			let updatedNote = await this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
+
+			const requestNote = JSON.parse(request.body);
+			if (requestNote.tags || requestNote.tags === '') {
+				const tagTitles = requestNote.tags.split(',');
+				await Tag.setNoteTagsByTitles(id, tagTitles);
+			}
+
+			return updatedNote;
+		}
+
 		return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 	}
 

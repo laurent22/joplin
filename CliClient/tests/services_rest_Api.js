@@ -8,6 +8,7 @@ const Folder = require('lib/models/Folder');
 const Resource = require('lib/models/Resource');
 const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
+const NoteTag = require('lib/models/NoteTag');
 const { shim } = require('lib/shim');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
@@ -326,4 +327,84 @@ describe('services_rest_Api', function() {
 		expect(response3.length).toBe(2);
 	}));
 
+	it('should update tags when updating notes', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+		const tag3 = await Tag.save({ title: 'mon étiquette 3' });
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title},${tag3.title}`,
+		}));
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === `${tag1.title},${tag3.title}`).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(tag3.id)).toBe(true);
+	}));
+
+	it('should create and update tags when updating notes', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+		const newTagTitle = 'mon étiquette 3';
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: `${tag1.title},${newTagTitle}`,
+		}));
+		const newTag = await Tag.loadByTitle(newTagTitle);
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === `${tag1.title},${newTag.title}`).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(newTag.id)).toBe(true);
+	}));
+
+	it('should not update tags if tags is not mentioned when updating', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			title: 'Some other title',
+		}));
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === undefined).toBe(true);
+		expect(tagIds.length === 2).toBe(true);
+		expect(tagIds.includes(tag1.id)).toBe(true);
+		expect(tagIds.includes(tag2.id)).toBe(true);
+	}));
+
+	it('should remove tags from note if tags is set to empty string when updating', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'mon étiquette 1' });
+		const tag2 = await Tag.save({ title: 'mon étiquette 2' });
+
+		const note = await Note.save({
+			title: 'ma note un',
+		});
+		Tag.addNote(tag1.id, note.id);
+		Tag.addNote(tag2.id, note.id);
+
+		const response = await api.route('PUT', `notes/${note.id}`, null, JSON.stringify({
+			tags: '',
+		}));
+		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
+		expect(response.tags === '').toBe(true);
+		expect(tagIds.length === 0).toBe(true);
+	}));
 });
