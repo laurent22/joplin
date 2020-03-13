@@ -55,6 +55,8 @@ class StatusScreenComponent extends React.Component {
 			height: style.height - theme.headerHeight - containerPadding * 2,
 		});
 
+		let retryHandlers = [];
+
 		function renderSectionTitleHtml(key, title) {
 			return (
 				<h2 key={`section_${key}`} style={theme.h2Style}>
@@ -81,6 +83,8 @@ class StatusScreenComponent extends React.Component {
 							this.resfreshScreen();
 						};
 
+						retryHandlers.push(item.retryHandler);
+
 						retryLink = (
 							<a href="#" onClick={onClick} style={retryStyle}>
 								{_('Retry')}
@@ -105,24 +109,13 @@ class StatusScreenComponent extends React.Component {
 			return <div key={key}>{itemsHtml}</div>;
 		};
 
-		function renderRetryAllHtml(report) {
-			let retryHandlers = [];
+		function renderRetryAllHtml() {
 			let retryAllLink = null;
-
-			report.forEach(section => {
-				section.body.forEach(item => {
-					if (item.canRetry) {
-						retryHandlers.push(item.retryHandler);
-					}
-				});
-			});
-
 			if (retryHandlers.length > 1) {
 				const onClick = async () => {
 					await Promise.all(retryHandlers.map(handler => handler()));
 					this.resfreshScreen();
 				};
-
 				retryAllLink = (
 					<div>
 						<a href="#" onClick={onClick} style={retryStyle}>
@@ -143,7 +136,7 @@ class StatusScreenComponent extends React.Component {
 				sectionsHtml.push(renderSectionHtml(i, section));
 			}
 
-			let retryAllHtml = renderRetryAllHtml(report);
+			let retryAllHtml = renderRetryAllHtml(); // must be called after renderSectionHtml
 
 			return (
 				<div>
