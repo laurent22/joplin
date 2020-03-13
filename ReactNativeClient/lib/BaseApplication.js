@@ -666,6 +666,15 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		if (Setting.value('encryption.shouldReencrypt') < 0) {
+			// We suggest reencryption if the user has at least one notebook
+			// and if encryptino is enabled. This code runs only when shouldReencrypt = -1
+			// which can be set by a maintenance script for example.
+			const folderCount = await Folder.count();
+			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			Setting.setValue('encryption.shouldReencrypt', itShould);
+		}
+
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
 
 		if (!Setting.value('api.token')) {

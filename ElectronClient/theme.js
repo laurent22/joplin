@@ -63,7 +63,7 @@ globalStyle.buttonStyle = {
 	border: '1px solid',
 	minHeight: 26,
 	minWidth: 80,
-	maxWidth: 220,
+	// maxWidth: 220,
 	paddingLeft: 12,
 	paddingRight: 12,
 	paddingTop: 6,

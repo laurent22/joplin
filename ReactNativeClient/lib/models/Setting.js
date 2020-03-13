@@ -392,6 +392,11 @@ class Setting extends BaseModel {
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
+			'encryption.shouldReencrypt': {
+				value: -1, // will be set on app startup
+				type: Setting.TYPE_INT,
+				public: false,
+			},
 
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
@@ -1052,6 +1057,10 @@ Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be reencrypted
+Setting.SHOULD_REENCRYPT_YES = 1; // Data should be reencrypted
+Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be reencrypted, and user has been notified
 
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',

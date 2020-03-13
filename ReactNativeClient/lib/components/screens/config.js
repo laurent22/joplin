@@ -395,6 +395,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			);
 		} else if (md.type == Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
+			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
+			// on the Slider as they are buggy and can crash the app on certain devices.
+			// https://github.com/laurent22/joplin/issues/2733
+			// https://github.com/react-native-community/react-native-slider/issues/161
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>
@@ -406,7 +410,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</View>
 				</View>
 			);
-			// minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color}
 		} else if (md.type == Setting.TYPE_STRING) {
 			return (
 				<View key={key} style={this.styles().settingContainer}>

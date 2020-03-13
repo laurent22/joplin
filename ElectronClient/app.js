@@ -973,7 +973,6 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
-					id: 'view:toggleLayout',
 					label: _('Toggle editor layout'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+L',
@@ -1196,8 +1195,6 @@ class Application extends BaseApplication {
 			menuItem.enabled = !isHtmlNote && layout !== 'viewer' && !!note;
 		}
 
-		const toggleLayout = Menu.getApplicationMenu().getMenuItemById('view:toggleLayout');
-		toggleLayout.enabled = !!note;
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
 	}

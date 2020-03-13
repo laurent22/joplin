@@ -538,22 +538,27 @@ class BaseItem extends BaseModel {
 			extraWhere = extraWhere.length ? `AND ${extraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target
+			//
+			// We order them by date descending so that latest modified notes go first.
+			// In most case it doesn't make a big difference, but when re-syncing the whole
+			// data set it does. In that case it means the recent notes, those that are likely
+			// to be modified again, will be synced first, thus avoiding potential conflicts.
 
-			let sql = sprintf(
-				`
+			let sql = sprintf(`
 				SELECT %s
 				FROM %s items
 				WHERE id NOT IN (
 					SELECT item_id FROM sync_items WHERE sync_target = %d
 				)
 				%s
+				ORDER BY items.updated_time DESC
 				LIMIT %d
 			`,
-				this.db().escapeFields(fieldNames),
-				this.db().escapeField(ItemClass.tableName()),
-				Number(syncTarget),
-				extraWhere,
-				limit
+			this.db().escapeFields(fieldNames),
+			this.db().escapeField(ItemClass.tableName()),
+			Number(syncTarget),
+			extraWhere,
+			limit
 			);
 
 			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
@@ -575,6 +580,7 @@ class BaseItem extends BaseModel {
 					AND (s.sync_time < items.updated_time OR force_sync = 1)
 					AND s.sync_disabled = 0
 					%s
+					ORDER BY items.updated_time DESC
 					LIMIT %d
 				`,
 					this.db().escapeFields(fieldNames),

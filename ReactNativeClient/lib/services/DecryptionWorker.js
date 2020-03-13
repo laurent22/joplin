@@ -133,6 +133,7 @@ class DecryptionWorker {
 
 		let excludedIds = [];
 
+		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
 		try {
@@ -163,7 +164,8 @@ class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().warn(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
+							this.logger().debug(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
+							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
 							excludedIds.push(item.id);
 							continue;
 						}

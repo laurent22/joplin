@@ -96,12 +96,6 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		clipboard.writeText(links.join('\n'));
 	};
 
-	const synchronize = async () => {
-		const synchronizer = await reg.syncTarget().synchronizer();
-		await synchronizer.waitForSyncToFinish();
-		await reg.scheduleSync(0);
-	};
-
 	const shareLinkButton_click = async () => {
 		let hasSynced = false;
 		let tryToSync = false;
@@ -109,7 +103,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 			try {
 				if (tryToSync) {
 					setSharesState('synchronizing');
-					await synchronize();
+					await reg.waitForSyncFinishedThenSync();
 					tryToSync = false;
 					hasSynced = true;
 				}
@@ -136,7 +130,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 				if (sharedStatusChanged) {
 					setSharesState('synchronizing');
-					await synchronize();
+					await reg.waitForSyncFinishedThenSync();
 					setSharesState('creating');
 				}
 

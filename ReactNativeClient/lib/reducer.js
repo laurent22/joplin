@@ -32,6 +32,7 @@ const defaultState = {
 	sharedData: null,
 	appState: 'starting',
 	hasDisabledSyncItems: false,
+	hasDisabledEncryptionItems: false,
 	customCss: '',
 	templates: [],
 	collapsedFolderIds: [],
@@ -741,6 +742,11 @@ const reducer = (state = defaultState, action) => {
 		case 'SYNC_HAS_DISABLED_SYNC_ITEMS':
 			newState = Object.assign({}, state);
 			newState.hasDisabledSyncItems = true;
+			break;
+
+		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
+			newState = Object.assign({}, state);
+			newState.hasDisabledEncryptionItems = action.value;
 			break;
 
 		case 'CLIPPER_SERVER_SET':

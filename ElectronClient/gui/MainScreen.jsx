@@ -22,6 +22,7 @@ const eventManager = require('../eventManager');
 const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 const TemplateUtils = require('lib/TemplateUtils');
+const EncryptionService = require('lib/services/EncryptionService');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -477,6 +478,85 @@ class MainScreenComponent extends React.Component {
 		return this.styles_;
 	}
 
+	renderNotification(theme, styles) {
+		if (!this.messageBoxVisible()) return null;
+
+		const onViewStatusScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Status',
+			});
+		};
+
+		const onViewEncryptionConfigScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'encryption',
+				},
+			});
+		};
+
+		let msg = null;
+		if (this.props.hasDisabledSyncItems) {
+			msg = (
+				<span>
+					{_('Some items cannot be synchronised.')}{' '}
+					<a href="#" onClick={() => onViewStatusScreen()}>
+						{_('View them now')}
+					</a>
+				</span>
+			);
+		} else if (this.props.hasDisabledEncryptionItems) {
+			msg = (
+				<span>
+					{_('Some items cannot be decrypted.')}{' '}
+					<a href="#" onClick={() => onViewStatusScreen()}>
+						{_('View them now')}
+					</a>
+				</span>
+			);
+		} else if (this.props.showMissingMasterKeyMessage) {
+			msg = (
+				<span>
+					{_('One or more master keys need a password.')}{' '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('Set the password')}
+					</a>
+				</span>
+			);
+		} else if (this.props.showNeedUpgradingMasterKeyMessage) {
+			msg = (
+				<span>
+					{_('One of your master keys use an obsolete encryption method.')}{' '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('View them now')}
+					</a>
+				</span>
+			);
+		} else if (this.props.showShouldReencryptMessage) {
+			msg = (
+				<span>
+					{_('The default encryption method has been changed, you should reencrypt your data.')}{' '}
+					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
+						{_('More info')}
+					</a>
+				</span>
+			);
+		}
+
+		return (
+			<div style={styles.messageBox}>
+				<span style={theme.textStyle}>{msg}</span>
+			</div>
+		);
+	}
+
+	messageBoxVisible() {
+		return this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage || this.props.showNeedUpgradingMasterKeyMessage || this.props.showShouldReencryptMessage || this.props.hasDisabledEncryptionItems;
+	}
+
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = Object.assign(
@@ -489,10 +569,9 @@ class MainScreenComponent extends React.Component {
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
 		const notes = this.props.notes;
-		const messageBoxVisible = this.props.hasDisabledSyncItems || this.props.showMissingMasterKeyMessage;
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
-		const styles = this.styles(this.props.theme, style.width, style.height, messageBoxVisible, sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
+		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
 		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
 
 		const headerItems = [];
@@ -565,63 +644,7 @@ class MainScreenComponent extends React.Component {
 			};
 		}
 
-		const onViewDisabledItemsClick = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Status',
-			});
-		};
-
-		const onViewMasterKeysClick = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Config',
-				props: {
-					defaultSection: 'encryption',
-				},
-			});
-		};
-
-		let messageComp = null;
-
-		if (messageBoxVisible) {
-			let msg = null;
-			if (this.props.hasDisabledSyncItems) {
-				msg = (
-					<span>
-						{_('Some items cannot be synchronised.')}{' '}
-						<a
-							href="#"
-							onClick={() => {
-								onViewDisabledItemsClick();
-							}}
-						>
-							{_('View them now')}
-						</a>
-					</span>
-				);
-			} else if (this.props.showMissingMasterKeyMessage) {
-				msg = (
-					<span>
-						{_('One or more master keys need a password.')}{' '}
-						<a
-							href="#"
-							onClick={() => {
-								onViewMasterKeysClick();
-							}}
-						>
-							{_('Set the password')}
-						</a>
-					</span>
-				);
-			}
-
-			messageComp = (
-				<div style={styles.messageBox}>
-					<span style={theme.textStyle}>{msg}</span>
-				</div>
-			);
-		}
+		const messageComp = this.renderNotification(theme, styles);
 
 		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.plugins);
 		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
@@ -672,7 +695,10 @@ const mapStateToProps = state => {
 		folders: state.folders,
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
+		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(state.masterKeys).length,
+		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		selectedFolderId: state.selectedFolderId,
 		sidebarWidth: state.settings['style.sidebar.width'],
 		noteListWidth: state.settings['style.noteList.width'],

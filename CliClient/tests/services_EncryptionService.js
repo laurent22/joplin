@@ -23,7 +23,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000; // The first test is slow because the 
 
 let service = null;
 
-describe('Encryption', function() {
+describe('services_EncryptionService', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -49,7 +49,6 @@ describe('Encryption', function() {
 
 	it('should generate and decrypt a master key', asyncTest(async () => {
 		const masterKey = await service.generateMasterKey('123456');
-		expect(!!masterKey.checksum).toBe(true);
 		expect(!!masterKey.content).toBe(true);
 
 		let hasThrown = false;
@@ -63,6 +62,91 @@ describe('Encryption', function() {
 
 		const decryptedMasterKey = await service.decryptMasterKey_(masterKey, '123456');
 		expect(decryptedMasterKey.length).toBe(512);
+	}));
+
+	it('should upgrade a master key', asyncTest(async () => {
+		// Create an old style master key
+		let masterKey = await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+		});
+		masterKey = await MasterKey.save(masterKey);
+
+		let upgradedMasterKey = await service.upgradeMasterKey(masterKey, '123456');
+		upgradedMasterKey = await MasterKey.save(upgradedMasterKey);
+
+		// Check that master key has been upgraded (different ciphertext)
+		expect(masterKey.content).not.toBe(upgradedMasterKey.content);
+
+		// Check that master key plain text is still the same
+		const plainTextOld = await service.decryptMasterKey_(masterKey, '123456');
+		const plainTextNew = await service.decryptMasterKey_(upgradedMasterKey, '123456');
+		expect(plainTextOld.content).toBe(plainTextNew.content);
+
+		// Check that old content can be decrypted with new master key
+		await service.loadMasterKey_(masterKey, '123456', true);
+		const cipherText = await service.encryptString('some secret');
+		const plainTextFromOld = await service.decryptString(cipherText);
+
+		await service.loadMasterKey_(upgradedMasterKey, '123456', true);
+		const plainTextFromNew = await service.decryptString(cipherText);
+
+		expect(plainTextFromOld).toBe(plainTextFromNew);
+	}));
+
+	it('should not upgrade master key if invalid password', asyncTest(async () => {
+		let masterKey = await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+		});
+
+		const hasThrown = await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
+	}));
+
+	it('should require a checksum only for old master keys', asyncTest(async () => {
+		const masterKey = await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+		});
+
+		expect(!!masterKey.checksum).toBe(true);
+		expect(!!masterKey.content).toBe(true);
+	}));
+
+	it('should not require a checksum for new master keys', asyncTest(async () => {
+		const masterKey = await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_4,
+		});
+
+		expect(!masterKey.checksum).toBe(true);
+		expect(!!masterKey.content).toBe(true);
+
+		const decryptedMasterKey = await service.decryptMasterKey_(masterKey, '123456');
+		expect(decryptedMasterKey.length).toBe(512);
+	}));
+
+	it('should throw an error if master key decryption fails', asyncTest(async () => {
+		const masterKey = await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_4,
+		});
+
+		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKey_(masterKey, 'wrong'));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should return the master keys that need an upgrade', asyncTest(async () => {
+		const masterKey1 = await MasterKey.save(await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+		}));
+
+		const masterKey2 = await MasterKey.save(await service.generateMasterKey('123456', {
+			encryptionMethod: EncryptionService.METHOD_SJCL,
+		}));
+
+		const masterKey3 = await MasterKey.save(await service.generateMasterKey('123456'));
+
+		const needUpgrade = service.masterKeysThatNeedUpgrading(await MasterKey.all());
+
+		expect(needUpgrade.length).toBe(2);
+		expect(needUpgrade.map(k => k.id).sort()).toEqual([masterKey1.id, masterKey2.id].sort());
 	}));
 
 	it('should encrypt and decrypt with a master key', asyncTest(async () => {
