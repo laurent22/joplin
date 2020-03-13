@@ -40,7 +40,7 @@ class SideMenuContentComponent extends Component {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			menu: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
@@ -316,7 +316,7 @@ class SideMenuContentComponent extends Component {
 
 		items.push(this.makeDivider('divider_2'));
 
-		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		const lines = Synchronizer.reportToLines(this.props.syncReport);
 		const syncReportText = lines.join('\n');
 
 		let decryptionReportText = '';
@@ -329,7 +329,7 @@ class SideMenuContentComponent extends Component {
 			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
 		}
 
-		let fullReport = [];
+		const fullReport = [];
 		if (syncReportText) fullReport.push(syncReportText);
 		if (resourceFetcherText) fullReport.push(resourceFetcherText);
 		if (decryptionReportText) fullReport.push(decryptionReportText);
@@ -367,7 +367,7 @@ class SideMenuContentComponent extends Component {
 			items = items.concat(folderItems);
 		}
 
-		let style = {
+		const style = {
 			flex: 1,
 			borderRightWidth: 1,
 			borderRightColor: globalStyle.dividerColor,

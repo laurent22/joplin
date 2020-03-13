@@ -74,7 +74,7 @@ class Api {
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0, 1)[0];
-		let callName = `action_${callSuffix}`;
+		const callName = `action_${callSuffix}`;
 		return {
 			callName: callName,
 			params: pathParts,
@@ -121,7 +121,7 @@ class Api {
 
 		let id = null;
 		let link = null;
-		let params = parsedPath.params;
+		const params = parsedPath.params;
 
 		if (params.length >= 1) {
 			id = params[0];
@@ -389,7 +389,7 @@ class Api {
 				const resourceIds = await Note.linkedResourceIds(note.body);
 				const output = [];
 				const loadOptions = this.defaultLoadOptions_(request);
-				for (let resourceId of resourceIds) {
+				for (const resourceId of resourceIds) {
 					output.push(await Resource.load(resourceId, loadOptions));
 				}
 				return output;
@@ -456,7 +456,7 @@ class Api {
 
 			if (!note) throw new ErrorNotFound();
 
-			let updatedNote = await this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
+			const updatedNote = await this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 
 			const requestNote = JSON.parse(request.body);
 			if (requestNote.tags || requestNote.tags === '') {
@@ -670,7 +670,7 @@ class Api {
 	}
 
 	async createResourcesFromPaths_(urls) {
-		for (let url in urls) {
+		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo = urls[url];
 			try {
@@ -684,7 +684,7 @@ class Api {
 	}
 
 	async removeTempFiles_(urls) {
-		for (let url in urls) {
+		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo = urls[url];
 			try {

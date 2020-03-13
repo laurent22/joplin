@@ -73,7 +73,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	useEffect(() => {
 		async function fetchNotes() {
 			const result = [];
-			for (let noteId of props.noteIds) {
+			for (const noteId of props.noteIds) {
 				result.push(await Note.load(noteId));
 			}
 			setNotes(result);
@@ -180,7 +180,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 	const renderNoteList = (notes:any) => {
 		const noteComps = [];
-		for (let noteId of Object.keys(notes)) {
+		for (const noteId of Object.keys(notes)) {
 			noteComps.push(renderNote(notes[noteId]));
 		}
 		return <div style={styles.noteList}>{noteComps}</div>;

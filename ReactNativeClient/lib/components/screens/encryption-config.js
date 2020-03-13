@@ -63,7 +63,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			titleText: {
 				flex: 1,
 				fontWeight: 'bold',
@@ -198,7 +198,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		const mkComps = [];
 
-		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
+		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];

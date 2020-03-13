@@ -42,7 +42,7 @@ class RevisionService extends BaseService {
 	noteMetadata_(note) {
 		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict'];
 		const md = {};
-		for (let k in note) {
+		for (const k in note) {
 			if (excludedFields.indexOf(k) >= 0) continue;
 			md[k] = note[k];
 		}

@@ -166,7 +166,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			body: {
 				flex: 1,
 				justifyContent: 'flex-start',
@@ -332,7 +332,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	settingToComponent(key, value) {
 		const themeId = this.props.theme;
 		const theme = themeStyle(themeId);
-		let output = null;
+		const output = null;
 
 		const updateSettingValue = (key, value) => {
 			return shared.updateSettingValue(this, key, value);
@@ -344,9 +344,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (md.isEnum) {
 			value = value.toString();
 
-			let items = [];
+			const items = [];
 			const settingOptions = md.options();
-			for (let k in settingOptions) {
+			for (const k in settingOptions) {
 				if (!settingOptions.hasOwnProperty(k)) continue;
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}

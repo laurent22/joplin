@@ -83,7 +83,7 @@ class WebDavApi {
 	}
 
 	async xmlToJson(xml) {
-		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
+		const davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = name => {
 			if (name.indexOf('xmlns') !== 0) {
@@ -247,12 +247,12 @@ class WebDavApi {
 	}
 
 	requestToCurl_(url, options) {
-		let output = [];
+		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}

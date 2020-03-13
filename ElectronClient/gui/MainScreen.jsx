@@ -324,7 +324,7 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'editAlarm') {
 			const note = await Note.load(command.noteId);
 
-			let defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
+			const defaultDate = new Date(Date.now() + 2 * 3600 * 1000);
 			defaultDate.setMinutes(0);
 			defaultDate.setSeconds(0);
 

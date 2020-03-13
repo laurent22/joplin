@@ -36,7 +36,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		const theme = themeStyle(themeId);
 
-		let styleObject = {
+		const styleObject = {
 			container: {
 				flexDirection: 'column',
 				backgroundColor: theme.raisedBackgroundColor,
@@ -299,11 +299,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 		}
 
 		let key = 0;
-		let menuOptionComponents = [];
+		const menuOptionComponents = [];
 
 		if (!this.props.noteSelectionEnabled) {
 			for (let i = 0; i < this.props.menuOptions.length; i++) {
-				let o = this.props.menuOptions[i];
+				const o = this.props.menuOptions[i];
 
 				if (o.isDivider) {
 					menuOptionComponents.push(<View key={`menuOption_${key++}`} style={this.styles().divider} />);
@@ -408,7 +408,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					/>
 				);
 			} else {
-				let title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
+				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
 				return <Text style={this.styles().titleText}>{title}</Text>;
 			}
 		};

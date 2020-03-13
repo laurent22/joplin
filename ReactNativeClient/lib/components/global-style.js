@@ -47,7 +47,7 @@ globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
-let themeCache_ = {};
+const themeCache_ = {};
 
 function addExtraStyles(style) {
 	style.icon = {
@@ -122,7 +122,7 @@ function themeStyle(theme) {
 
 	if (themeCache_[theme]) return themeCache_[theme];
 
-	let output = Object.assign({}, globalStyle);
+	const output = Object.assign({}, globalStyle);
 	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
 	else if (theme == Setting.THEME_OLED_DARK) {
 		output.backgroundColor = '#000000';

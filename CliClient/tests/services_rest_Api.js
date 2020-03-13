@@ -37,26 +37,26 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should get folders', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'mon carnet' });
+		const f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('GET', 'folders');
 		expect(response.length).toBe(1);
 	}));
 
 	it('should update folders', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'mon carnet' });
+		const f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('PUT', `folders/${f1.id}`, null, JSON.stringify({
 			title: 'modifié',
 		}));
 
-		let f1b = await Folder.load(f1.id);
+		const f1b = await Folder.load(f1.id);
 		expect(f1b.title).toBe('modifié');
 	}));
 
 	it('should delete folders', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'mon carnet' });
+		const f1 = await Folder.save({ title: 'mon carnet' });
 		await api.route('DELETE', `folders/${f1.id}`);
 
-		let f1b = await Folder.load(f1.id);
+		const f1b = await Folder.load(f1.id);
 		expect(!f1b).toBe(true);
 	}));
 
@@ -67,13 +67,13 @@ describe('services_rest_Api', function() {
 
 		expect(!!response.id).toBe(true);
 
-		let f = await Folder.all();
+		const f = await Folder.all();
 		expect(f.length).toBe(1);
 		expect(f[0].title).toBe('from api');
 	}));
 
 	it('should get one folder', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'mon carnet' });
+		const f1 = await Folder.save({ title: 'mon carnet' });
 		const response = await api.route('GET', `folders/${f1.id}`);
 		expect(response.id).toBe(f1.id);
 
@@ -82,7 +82,7 @@ describe('services_rest_Api', function() {
 	}));
 
 	it('should get the folder notes', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'mon carnet' });
+		const f1 = await Folder.save({ title: 'mon carnet' });
 		const response2 = await api.route('GET', `folders/${f1.id}/notes`);
 		expect(response2.length).toBe(0);
 

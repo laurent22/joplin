@@ -5,7 +5,7 @@ const { Keyboard } = require('react-native');
 //
 // <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
 
-let dialogs = {};
+const dialogs = {};
 
 dialogs.confirm = (parentComponent, message) => {
 	if (!parentComponent) throw new Error('parentComponent is required');
@@ -42,7 +42,7 @@ dialogs.pop = (parentComponent, message, buttons, options = null) => {
 	return new Promise((resolve) => {
 		Keyboard.dismiss();
 
-		let btns = [];
+		const btns = [];
 		for (let i = 0; i < buttons.length; i++) {
 			btns.push({
 				text: buttons[i].text,

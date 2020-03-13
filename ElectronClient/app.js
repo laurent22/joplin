@@ -85,7 +85,7 @@ class Application extends BaseApplication {
 					const currentRoute = state.route;
 
 					newState = Object.assign({}, state);
-					let newNavHistory = state.navHistory.slice();
+					const newNavHistory = state.navHistory.slice();
 
 					if (goingBack) {
 						let newAction = null;
@@ -115,7 +115,7 @@ class Application extends BaseApplication {
 
 				{
 					newState = Object.assign({}, state);
-					let command = Object.assign({}, action);
+					const command = Object.assign({}, action);
 					delete command.type;
 					newState.windowCommand = command.name ? command : null;
 				}
@@ -143,13 +143,13 @@ class Application extends BaseApplication {
 						const currentLayoutIndex = paneOptions.indexOf(currentLayout);
 						const nextLayoutIndex = currentLayoutIndex === paneOptions.length - 1 ? 0 : currentLayoutIndex + 1;
 
-						let nextLayout = paneOptions[nextLayoutIndex];
+						const nextLayout = paneOptions[nextLayoutIndex];
 						return nextLayout === 'both' ? ['editor', 'viewer'] : [nextLayout];
 					};
 
 					newState = Object.assign({}, state);
 
-					let panes = state.noteVisiblePanes.slice();
+					const panes = state.noteVisiblePanes.slice();
 					newState.noteVisiblePanes = getNextLayout(panes);
 				}
 				break;
@@ -328,7 +328,7 @@ class Application extends BaseApplication {
 		const sortNoteFolderItems = (type) => {
 			const sortItems = [];
 			const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
-			for (let field in sortOptions) {
+			for (const field in sortOptions) {
 				if (!sortOptions.hasOwnProperty(field)) continue;
 				sortItems.push({
 					label: sortOptions[field],
@@ -650,7 +650,7 @@ class Application extends BaseApplication {
 				gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
 			}
 			const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
-			let message = [
+			const message = [
 				p.description,
 				'',
 				copyrightText.replace('YYYY', new Date().getFullYear()),
@@ -1119,7 +1119,7 @@ class Application extends BaseApplication {
 
 		const pluginMenuItems = PluginManager.instance().menuItems();
 		for (const item of pluginMenuItems) {
-			let itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
+			const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
 			itemParent.submenu.push(item);
 		}
 
@@ -1155,7 +1155,7 @@ class Application extends BaseApplication {
 			}
 
 			// Remove empty separator for now empty sections
-			let temp = [];
+			const temp = [];
 			let previous = null;
 			for (let i = 0; i < output.length; i++) {
 				const t = Object.assign({}, output[i]);
@@ -1171,7 +1171,7 @@ class Application extends BaseApplication {
 			return output;
 		}
 
-		let screenTemplate = removeUnwantedItems(template, screen);
+		const screenTemplate = removeUnwantedItems(template, screen);
 
 		const menu = Menu.buildFromTemplate(screenTemplate);
 		Menu.setApplicationMenu(menu);

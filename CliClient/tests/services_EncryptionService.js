@@ -94,7 +94,7 @@ describe('services_EncryptionService', function() {
 	}));
 
 	it('should not upgrade master key if invalid password', asyncTest(async () => {
-		let masterKey = await service.generateMasterKey('123456', {
+		const masterKey = await service.generateMasterKey('123456', {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
 		});
 
@@ -207,7 +207,7 @@ describe('services_EncryptionService', function() {
 
 		await service.unloadMasterKey(masterKey);
 
-		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
+		const hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
 		expect(hasThrown).toBe(true);
 	}));
@@ -222,7 +222,7 @@ describe('services_EncryptionService', function() {
 		let cipherText = await service.encryptString('some secret');
 		cipherText += 'ABCDEFGHIJ';
 
-		let hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
+		const hasThrown = await checkThrowAsync(async () => await service.decryptString(cipherText));
 
 		expect(hasThrown).toBe(true);
 	}));
@@ -232,10 +232,10 @@ describe('services_EncryptionService', function() {
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey_(masterKey, '123456', true);
 
-		let folder = await Folder.save({ title: 'folder' });
-		let note = await Note.save({ title: 'encrypted note', body: 'something', parent_id: folder.id });
-		let serialized = await Note.serializeForSync(note);
-		let deserialized = Note.filter(await Note.unserialize(serialized));
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'encrypted note', body: 'something', parent_id: folder.id });
+		const serialized = await Note.serializeForSync(note);
+		const deserialized = Note.filter(await Note.unserialize(serialized));
 
 		// Check that required properties are not encrypted
 		expect(deserialized.id).toBe(note.id);

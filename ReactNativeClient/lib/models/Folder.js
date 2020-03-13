@@ -35,9 +35,9 @@ class Folder extends BaseItem {
 		return this.db()
 			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
 			.then(rows => {
-				let output = [];
+				const output = [];
 				for (let i = 0; i < rows.length; i++) {
-					let row = rows[i];
+					const row = rows[i];
 					output.push(row.id);
 				}
 				return output;
@@ -50,12 +50,12 @@ class Folder extends BaseItem {
 	}
 
 	static async noteCount(parentId) {
-		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
 	}
 
 	static markNotesAsConflict(parentId) {
-		let query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
+		const query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
 		return this.db().exec(query);
 	}
 
@@ -63,16 +63,16 @@ class Folder extends BaseItem {
 		if (!options) options = {};
 		if (!('deleteChildren' in options)) options.deleteChildren = true;
 
-		let folder = await Folder.load(folderId);
+		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
 		if (options.deleteChildren) {
-			let noteIds = await Folder.noteIds(folderId);
+			const noteIds = await Folder.noteIds(folderId);
 			for (let i = 0; i < noteIds.length; i++) {
 				await Note.delete(noteIds[i]);
 			}
 
-			let subFolderIds = await Folder.subFolderIds(folderId);
+			const subFolderIds = await Folder.subFolderIds(folderId);
 			for (let i = 0; i < subFolderIds.length; i++) {
 				await Folder.delete(subFolderIds[i]);
 			}
@@ -124,7 +124,7 @@ class Folder extends BaseItem {
 		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
 			do {
-				let folder = foldersById[parentId];
+				const folder = foldersById[parentId];
 				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
 				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
 				parentId = folder.parent_id;
@@ -172,7 +172,7 @@ class Folder extends BaseItem {
 			applyChildTimeToParent(parent.id);
 		};
 
-		for (let folderId in folderIdToTime) {
+		for (const folderId in folderIdToTime) {
 			if (!folderIdToTime.hasOwnProperty(folderId)) continue;
 			applyChildTimeToParent(folderId);
 		}
@@ -193,9 +193,9 @@ class Folder extends BaseItem {
 	}
 
 	static async all(options = null) {
-		let output = await super.all(options);
+		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
-			let conflictCount = await Note.conflictedCount();
+			const conflictCount = await Note.conflictedCount();
 			if (conflictCount) output.push(this.conflictFolder());
 		}
 		return output;
@@ -305,7 +305,7 @@ class Folder extends BaseItem {
 		}
 
 		const rootFolders = [];
-		for (let folderId in idToFolders) {
+		for (const folderId in idToFolders) {
 			if (!idToFolders.hasOwnProperty(folderId)) continue;
 
 			const folder = idToFolders[folderId];
@@ -343,7 +343,7 @@ class Folder extends BaseItem {
 		if (!targetFolderId) return true;
 
 		while (true) {
-			let folder = await Folder.load(targetFolderId);
+			const folder = await Folder.load(targetFolderId);
 			if (!folder.parent_id) break;
 			if (folder.parent_id === folderId) return false;
 			targetFolderId = folder.parent_id;

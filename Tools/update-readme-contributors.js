@@ -26,11 +26,11 @@ async function gitHubContributors(page) {
 }
 
 function contributorTable(contributors) {
-	let rows = [];
+	const rows = [];
 
 	let row = [];
 	rows.push(row);
-	let rowLength = 5;
+	const rowLength = 5;
 	let contributorIndex = 0;
 	while (contributorIndex < contributors.length) {
 		const c = contributors[contributorIndex];

@@ -68,7 +68,7 @@ class EncryptionService {
 		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
 
 		if (password) {
-			let passwordCache = Setting.value('encryption.passwordCache');
+			const passwordCache = Setting.value('encryption.passwordCache');
 			passwordCache[masterKey.id] = password;
 			Setting.setValue('encryption.passwordCache', passwordCache);
 		}
@@ -101,7 +101,7 @@ class EncryptionService {
 		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
 
 		for (let i = 0; i < masterKeys.length; i++) {
-			let mk = masterKeys[i];
+			const mk = masterKeys[i];
 			const password = passwords[mk.id];
 			if (this.isMasterKeyLoaded(mk.id)) continue;
 			if (!password) continue;
@@ -118,7 +118,7 @@ class EncryptionService {
 
 	loadedMasterKeysCount() {
 		let output = 0;
-		for (let n in this.loadedMasterKeys_) {
+		for (const n in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_[n]) continue;
 			output++;
 		}
@@ -161,7 +161,7 @@ class EncryptionService {
 	}
 
 	unloadAllMasterKeys() {
-		for (let id in this.loadedMasterKeys_) {
+		for (const id in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
 			this.unloadMasterKey(this.loadedMasterKeys_[id]);
 		}
@@ -178,8 +178,8 @@ class EncryptionService {
 	}
 
 	loadedMasterKeyIds() {
-		let output = [];
-		for (let id in this.loadedMasterKeys_) {
+		const output = [];
+		for (const id in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
 			output.push(id);
 		}
@@ -629,7 +629,7 @@ class EncryptionService {
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
-		let output = {};
+		const output = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
 			const m = template.fields[i];

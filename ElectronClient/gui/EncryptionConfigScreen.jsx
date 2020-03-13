@@ -149,7 +149,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		});
 
 		const mkComps = [];
-		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
+		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];

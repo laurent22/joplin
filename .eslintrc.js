@@ -54,16 +54,20 @@ module.exports = {
 		// This error is always a false positive so far since it detects
 		// possible race conditions in contexts where we know it cannot happen.
 		"require-atomic-updates": 0,
+		"prefer-const": ["error"],
+		"no-var": ["error"],
 
 		// Checks rules of Hooks
 		"react-hooks/rules-of-hooks": "error",
 		// Checks effect dependencies
-		"react-hooks/exhaustive-deps": "warn",
+		// Disable because of this: https://github.com/facebook/react/issues/16265
+		// "react-hooks/exhaustive-deps": "warn",
 
 		// -------------------------------
 		// Formatting
 		// -------------------------------
 		"space-in-parens": ["error", "never"],
+		"space-infix-ops": ["error"],
 		"semi": ["error", "always"],
 		"eol-last": ["error", "always"],
 		"quotes": ["error", "single"],
@@ -92,7 +96,7 @@ module.exports = {
 		"multiline-comment-style": ["error", "separate-lines"],
 		"space-before-blocks": "error",
 		"spaced-comment": ["error", "always"],
-		"keyword-spacing": ["error", { "before": true, "after": true }]
+		"keyword-spacing": ["error", { "before": true, "after": true }],
 	},
 	"plugins": [
 		"react",

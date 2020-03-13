@@ -82,7 +82,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
-				let buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
+				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
@@ -205,7 +205,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
@@ -344,13 +344,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async deleteNote_onPress() {
-		let note = this.state.note;
+		const note = this.state.note;
 		if (!note.id) return;
 
-		let ok = await dialogs.confirm(this, _('Delete note?'));
+		const ok = await dialogs.confirm(this, _('Delete note?'));
 		if (!ok) return;
 
-		let folderId = note.parent_id;
+		const folderId = note.parent_id;
 
 		await Note.delete(note.id);
 
@@ -402,7 +402,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async resizeImage(localFilePath, targetPath, mimeType) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
-		let dimensions = await this.imageDimensions(localFilePath);
+		const dimensions = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
 		if (dimensions.width > maxSize || dimensions.height > maxSize) {
@@ -476,7 +476,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 
-		let targetPath = Resource.fullPath(resource);
+		const targetPath = Resource.fullPath(resource);
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
@@ -580,7 +580,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async onAlarmDialogAccept(date) {
-		let newNote = Object.assign({}, this.state.note);
+		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -595,7 +595,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async showOnMap_onPress() {
 		if (!this.state.note.id) return;
 
-		let note = await Note.load(this.state.note.id);
+		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
 			Linking.openURL(url);
@@ -608,7 +608,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async showSource_onPress() {
 		if (!this.state.note.id) return;
 
-		let note = await Note.load(this.state.note.id);
+		const note = await Note.load(this.state.note.id);
 		try {
 			Linking.openURL(note.source_url);
 		} catch (error) {
@@ -661,7 +661,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		let output = [];
+		const output = [];
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
@@ -741,7 +741,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	titleTextInput_contentSizeChange(event) {
 		if (!this.enableMultilineTitle_) return;
 
-		let height = event.nativeEvent.contentSize.height;
+		const height = event.nativeEvent.contentSize.height;
 		this.setState({ titleTextInputHeight: height });
 	}
 
@@ -866,7 +866,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const renderActionButton = () => {
-			let buttons = [];
+			const buttons = [];
 
 			buttons.push({
 				title: _('Edit'),
@@ -885,8 +885,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		let showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		let saveButtonDisabled = !this.isModified();
+		const showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		const saveButtonDisabled = !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 

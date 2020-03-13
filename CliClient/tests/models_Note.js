@@ -23,8 +23,8 @@ describe('models_Note', function() {
 	});
 
 	it('should find resource and note IDs', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'ma deuxième note', body: `Lien vers première note : ${Note.markdownTag(note1)}`, parent_id: folder1.id });
 
 		let items = await Note.linkedItems(note2.body);
@@ -69,7 +69,7 @@ describe('models_Note', function() {
 	}));
 
 	it('should change the type of notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		note1 = await Note.load(note1.id);
 
@@ -90,7 +90,7 @@ describe('models_Note', function() {
 	}));
 
 	it('should serialize and unserialize without modifying data', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [
 			[{ title: '', body: 'Body and no title\nSecond line\nThird Line', parent_id: folder1.id },
 				'', 'Body and no title\nSecond line\nThird Line'],
@@ -107,9 +107,9 @@ describe('models_Note', function() {
 			const expectedTitle = t[1];
 			const expectedBody = t[1];
 
-			let note1 = await Note.save(input);
-			let serialized = await Note.serialize(note1);
-			let unserialized = await Note.unserialize(serialized);
+			const note1 = await Note.save(input);
+			const serialized = await Note.serialize(note1);
+			const unserialized = await Note.unserialize(serialized);
 
 			expect(unserialized.title).toBe(input.title);
 			expect(unserialized.body).toBe(input.body);
@@ -117,10 +117,10 @@ describe('models_Note', function() {
 	}));
 
 	it('should reset fields for a duplicate', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
-		let duplicatedNote = await Note.duplicate(note1.id);
+		const duplicatedNote = await Note.duplicate(note1.id);
 
 		expect(duplicatedNote !== note1).toBe(true);
 		expect(duplicatedNote.created_time !== note1.created_time).toBe(true);

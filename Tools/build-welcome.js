@@ -130,7 +130,7 @@ async function main() {
 	}
 
 	const tags = [];
-	for (let n in tagIdsToTag) {
+	for (const n in tagIdsToTag) {
 		if (!tagIdsToTag.hasOwnProperty(n)) continue;
 		tags.push(tagIdsToTag[n]);
 	}

@@ -44,19 +44,19 @@ describe('integration_ShowAllNotes', function() {
 
 	it('should show all notes', asyncTest(async () => {
 		// setup
-		let folders = await createNTestFolders(3);
+		const folders = await createNTestFolders(3);
 		Folder.moveToFolder(id(folders[2]), id(folders[1])); // subfolder
 		await time.msleep(100);
-		let notes0 = await createNTestNotes(3, folders[0]);
-		let notes1 = await createNTestNotes(3, folders[1]);
-		let notes2 = await createNTestNotes(3, folders[2]);
+		const notes0 = await createNTestNotes(3, folders[0]);
+		const notes1 = await createNTestNotes(3, folders[1]);
+		const notes2 = await createNTestNotes(3, folders[2]);
 
 		// TEST ACTION: View all-notes
 		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
 		await time.msleep(100);
 
 		// check: all the notes are shown
-		let state = testApp.store().getState();
+		const state = testApp.store().getState();
 		expect(state.notesParentType).toEqual('SmartFilter');
 		expect(state.selectedSmartFilterId).toEqual(ALL_NOTES_FILTER_ID);
 		expect(sortedIds(state.notes)).toEqual(sortedIds(notes0.concat(notes1).concat(notes2)));
@@ -64,9 +64,9 @@ describe('integration_ShowAllNotes', function() {
 
 	it('should show retain note selection when going from a folder to all-notes', asyncTest(async () => {
 		// setup
-		let folders = await createNTestFolders(2);
-		let notes0 = await createNTestNotes(3, folders[0]);
-		let notes1 = await createNTestNotes(3, folders[1]);
+		const folders = await createNTestFolders(2);
+		const notes0 = await createNTestNotes(3, folders[0]);
+		const notes1 = await createNTestNotes(3, folders[1]);
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]) });
 		await time.msleep(100);
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: id(notes1[1]) });

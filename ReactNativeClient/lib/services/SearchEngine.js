@@ -316,7 +316,7 @@ class SearchEngine {
 
 		let termCount = 0;
 		const keys = [];
-		for (let col in terms) {
+		for (const col in terms) {
 			if (!terms.hasOwnProperty(col)) continue;
 
 			if (!terms[col].length) {
@@ -356,7 +356,7 @@ class SearchEngine {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
 		let output = [];
-		for (let col in parsedQuery.terms) {
+		for (const col in parsedQuery.terms) {
 			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
 			output = output.concat(parsedQuery.terms[col]);
 		}

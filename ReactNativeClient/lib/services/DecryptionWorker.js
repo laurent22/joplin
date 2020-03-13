@@ -131,7 +131,7 @@ class DecryptionWorker {
 
 		this.state_ = 'started';
 
-		let excludedIds = [];
+		const excludedIds = [];
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
