@@ -201,6 +201,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		const rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
+
 		};
 
 		if (!this.props.visible) {
@@ -223,7 +224,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
-				<NoteList style={this.styles().noteList} />
+				<NoteList style={{ ...this.styles().noteList, backgroundColor: 'red' }} />
 				{actionButtonComp}
 				<DialogBox
 					ref={dialogbox => {
