@@ -24,8 +24,8 @@ describe('models_Tag', function() {
 	});
 
 	it('should add tags by title', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
 
@@ -34,8 +34,8 @@ describe('models_Tag', function() {
 	}));
 
 	it('should not allow renaming tag to existing tag names', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
 
@@ -46,8 +46,8 @@ describe('models_Tag', function() {
 	}));
 
 	it('should not return tags without notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 
 		let tags = await Tag.allWithNotes();
@@ -60,9 +60,9 @@ describe('models_Tag', function() {
 	}));
 
 	it('should return tags with note counts', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 		await Tag.setNoteTagsByTitles(note2.id, ['un']);
 
@@ -83,10 +83,10 @@ describe('models_Tag', function() {
 	}));
 
 	it('should load individual tags with note count', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
-		let tag = await Tag.save({ title: 'mytag' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		const tag = await Tag.save({ title: 'mytag' });
 		await Tag.addNote(tag.id, note1.id);
 
 		let tagWithCount = await Tag.loadWithCount(tag.id);
@@ -98,16 +98,16 @@ describe('models_Tag', function() {
 	}));
 
 	it('should get common tags for set of notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let taga = await Tag.save({ title: 'mytaga' });
-		let tagb = await Tag.save({ title: 'mytagb' });
-		let tagc = await Tag.save({ title: 'mytagc' });
-		let tagd = await Tag.save({ title: 'mytagd' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const taga = await Tag.save({ title: 'mytaga' });
+		const tagb = await Tag.save({ title: 'mytagb' });
+		const tagc = await Tag.save({ title: 'mytagc' });
+		const tagd = await Tag.save({ title: 'mytagd' });
 
-		let note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
-		let note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'ma note 2', parent_id: folder1.id });
-		let note3 = await Note.save({ title: 'ma note 3', parent_id: folder1.id });
+		const note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
+		const note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'ma note 2', parent_id: folder1.id });
+		const note3 = await Note.save({ title: 'ma note 3', parent_id: folder1.id });
 
 		await Tag.addNote(taga.id, note1.id);
 

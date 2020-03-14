@@ -73,7 +73,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	useEffect(() => {
 		async function fetchNotes() {
 			const result = [];
-			for (let noteId of props.noteIds) {
+			for (const noteId of props.noteIds) {
 				result.push(await Note.load(noteId));
 			}
 			setNotes(result);
@@ -96,12 +96,6 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 		clipboard.writeText(links.join('\n'));
 	};
 
-	const synchronize = async () => {
-		const synchronizer = await reg.syncTarget().synchronizer();
-		await synchronizer.waitForSyncToFinish();
-		await reg.scheduleSync(0);
-	};
-
 	const shareLinkButton_click = async () => {
 		let hasSynced = false;
 		let tryToSync = false;
@@ -109,7 +103,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 			try {
 				if (tryToSync) {
 					setSharesState('synchronizing');
-					await synchronize();
+					await reg.waitForSyncFinishedThenSync();
 					tryToSync = false;
 					hasSynced = true;
 				}
@@ -136,7 +130,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 				if (sharedStatusChanged) {
 					setSharesState('synchronizing');
-					await synchronize();
+					await reg.waitForSyncFinishedThenSync();
 					setSharesState('creating');
 				}
 
@@ -186,7 +180,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 
 	const renderNoteList = (notes:any) => {
 		const noteComps = [];
-		for (let noteId of Object.keys(notes)) {
+		for (const noteId of Object.keys(notes)) {
 			noteComps.push(renderNote(notes[noteId]));
 		}
 		return <div style={styles.noteList}>{noteComps}</div>;

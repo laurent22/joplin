@@ -34,11 +34,11 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let pattern = args['note-pattern'];
+		const pattern = args['note-pattern'];
 		let items = [];
-		let options = args.options;
+		const options = args.options;
 
-		let queryOptions = {};
+		const queryOptions = {};
 		if (options.limit) queryOptions.limit = options.limit;
 		if (options.sort) {
 			queryOptions.orderBy = options.sort;
@@ -70,19 +70,19 @@ class Command extends BaseCommand {
 		} else {
 			let hasTodos = false;
 			for (let i = 0; i < items.length; i++) {
-				let item = items[i];
+				const item = items[i];
 				if (item.is_todo) {
 					hasTodos = true;
 					break;
 				}
 			}
 
-			let seenTitles = [];
-			let rows = [];
+			const seenTitles = [];
+			const rows = [];
 			let shortIdShown = false;
 			for (let i = 0; i < items.length; i++) {
-				let item = items[i];
-				let row = [];
+				const item = items[i];
+				const row = [];
 
 				if (options.long) {
 					row.push(BaseModel.shortId(item.id));

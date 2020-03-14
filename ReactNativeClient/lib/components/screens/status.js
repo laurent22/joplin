@@ -33,8 +33,8 @@ class StatusScreenComponent extends BaseScreenComponent {
 	}
 
 	async resfreshScreen() {
-		let service = new ReportService();
-		let report = await service.status(Setting.value('sync.target'));
+		const service = new ReportService();
+		const report = await service.status(Setting.value('sync.target'));
 		this.setState({ report: report });
 	}
 
@@ -42,7 +42,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 		const theme = themeStyle(this.props.theme);
 
 		const renderBody = report => {
-			let baseStyle = {
+			const baseStyle = {
 				paddingLeft: 6,
 				paddingRight: 6,
 				paddingTop: 2,
@@ -52,17 +52,17 @@ class StatusScreenComponent extends BaseScreenComponent {
 				fontSize: theme.fontSize,
 			};
 
-			let lines = [];
+			const lines = [];
 
 			for (let i = 0; i < report.length; i++) {
-				let section = report[i];
+				const section = report[i];
 
 				let style = Object.assign({}, baseStyle);
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
 
-				for (let n in section.body) {
+				for (const n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
 					style = Object.assign({}, baseStyle);
 					const item = section.body[n];
@@ -92,7 +92,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 				<FlatList
 					data={lines}
 					renderItem={({ item }) => {
-						let style = Object.assign({}, baseStyle);
+						const style = Object.assign({}, baseStyle);
 
 						if (item.isSection === true) {
 							style.fontWeight = 'bold';
@@ -122,7 +122,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 			);
 		};
 
-		let body = renderBody(this.state.report);
+		const body = renderBody(this.state.report);
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>

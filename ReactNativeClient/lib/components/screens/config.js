@@ -166,7 +166,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			body: {
 				flex: 1,
 				justifyContent: 'flex-start',
@@ -332,7 +332,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	settingToComponent(key, value) {
 		const themeId = this.props.theme;
 		const theme = themeStyle(themeId);
-		let output = null;
+		const output = null;
 
 		const updateSettingValue = (key, value) => {
 			return shared.updateSettingValue(this, key, value);
@@ -344,9 +344,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (md.isEnum) {
 			value = value.toString();
 
-			let items = [];
+			const items = [];
 			const settingOptions = md.options();
-			for (let k in settingOptions) {
+			for (const k in settingOptions) {
 				if (!settingOptions.hasOwnProperty(k)) continue;
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
@@ -395,6 +395,10 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			);
 		} else if (md.type == Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
+			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
+			// on the Slider as they are buggy and can crash the app on certain devices.
+			// https://github.com/laurent22/joplin/issues/2733
+			// https://github.com/react-native-community/react-native-slider/issues/161
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>
@@ -402,7 +406,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);

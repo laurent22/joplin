@@ -132,11 +132,13 @@ function checkForUpdates(inBackground, window, logFilePath, options) {
 		autoUpdateLogger_.info('Is Pre-release:', release.prerelease);
 
 		if (compareVersions(release.version, packageInfo.version) <= 0) {
-			if (!checkInBackground_) await dialog.showMessageBox({
-				type: 'info',
-				message: _('Current version is up-to-date.'),
-				buttons: [_('OK')],
-			});
+			if (!checkInBackground_) {
+				await dialog.showMessageBox({
+					type: 'info',
+					message: _('Current version is up-to-date.'),
+					buttons: [_('OK')],
+				});
+			}
 		} else {
 			const fullReleaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
 			const MAX_RELEASE_NOTES_LENGTH = 1000;

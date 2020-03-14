@@ -95,10 +95,12 @@ const fountainCss = `
 }
 `;
 
-function renderFountainScript(content) {
+function renderFountainScript(markdownIt, content) {
 	const result = fountain.parse(content);
+
 	return `
-		<div class="fountain">
+		<div class="fountain joplin-editable">
+			<pre class="joplin-source" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
 			<div class="title-page">
 				${result.html.title_page}
 			</div>
@@ -130,7 +132,7 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 		const token = tokens[idx];
 		if (token.info !== 'fountain') return defaultRender(tokens, idx, options, env, self);
 		addContextAssets(context);
-		return renderFountainScript(token.content);
+		return renderFountainScript(markdownIt, token.content);
 	};
 }
 

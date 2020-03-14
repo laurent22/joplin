@@ -8,27 +8,27 @@ const Tag = require('lib/models/Tag.js');
 const { time } = require('lib/time-utils.js');
 
 async function createNTestFolders(n) {
-	let folders = [];
+	const folders = [];
 	for (let i = 0; i < n; i++) {
-		let folder = await Folder.save({ title: 'folder' });
+		const folder = await Folder.save({ title: 'folder' });
 		folders.push(folder);
 	}
 	return folders;
 }
 
 async function createNTestNotes(n, folder) {
-	let notes = [];
+	const notes = [];
 	for (let i = 0; i < n; i++) {
-		let note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
+		const note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
 		notes.push(note);
 	}
 	return notes;
 }
 
 async function createNTestTags(n) {
-	let tags = [];
+	const tags = [];
 	for (let i = 0; i < n; i++) {
-		let tag = await Tag.save({ title: 'tag' });
+		const tag = await Tag.save({ title: 'tag' });
 		tags.push(tag);
 	}
 	return tags;
@@ -58,9 +58,9 @@ describe('integration_TagList', function() {
 	// the tag list should be cleared if the next note has no tags
 	it('should clear tag list when a note is deleted', asyncTest(async () => {
 		// setup and select the note
-		let folders = await createNTestFolders(1);
-		let notes = await createNTestNotes(5, folders[0]);
-		let tags = await createNTestTags(3);
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		const tags = await createNTestTags(3);
 
 		await Tag.addNote(tags[2].id, notes[2].id);
 
@@ -96,9 +96,9 @@ describe('integration_TagList', function() {
 	// the tag list should be updated if the next note has tags
 	it('should update tag list when a note is deleted', asyncTest(async () => {
 		// set up and select the note
-		let folders = await createNTestFolders(1);
-		let notes = await createNTestNotes(5, folders[0]);
-		let tags = await createNTestTags(3);
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		const tags = await createNTestTags(3);
 
 		await Tag.addNote(tags[1].id, notes[1].id);
 		await Tag.addNote(tags[0].id, notes[0].id);
@@ -130,8 +130,8 @@ describe('integration_TagList', function() {
 
 		// check the tag list is updated
 		state = testApp.store().getState();
-		let tagIds = state.selectedNoteTags.map(n => n.id).sort();
-		let expectedTagIds = [tags[0].id, tags[2].id].sort();
+		const tagIds = state.selectedNoteTags.map(n => n.id).sort();
+		const expectedTagIds = [tags[0].id, tags[2].id].sort();
 		expect(state.selectedNoteTags.length).toEqual(2);
 		expect(tagIds).toEqual(expectedTagIds);
 	}));

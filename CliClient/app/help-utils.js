@@ -6,11 +6,11 @@ const MAX_WIDTH = 78;
 const INDENT = '    ';
 
 function renderTwoColumnData(options, baseIndent, width) {
-	let output = [];
+	const output = [];
 	const optionColWidth = getOptionColWidth(options);
 
 	for (let i = 0; i < options.length; i++) {
-		let option = options[i];
+		const option = options[i];
 		const flag = option[0];
 		const indent = baseIndent + INDENT + ' '.repeat(optionColWidth + 2);
 
@@ -28,7 +28,7 @@ function renderCommandHelp(cmd, width = null) {
 
 	const baseIndent = '';
 
-	let output = [];
+	const output = [];
 	output.push(baseIndent + cmd.usage());
 	output.push('');
 	output.push(wrap(cmd.description(), baseIndent + INDENT, width));
@@ -42,7 +42,7 @@ function renderCommandHelp(cmd, width = null) {
 
 	if (cmd.name() === 'config') {
 		const renderMetadata = md => {
-			let desc = [];
+			const desc = [];
 
 			if (md.label) {
 				let label = md.label();
@@ -77,7 +77,7 @@ function renderCommandHelp(cmd, width = null) {
 		output.push(_('Possible keys/values:'));
 		output.push('');
 
-		let keysValues = [];
+		const keysValues = [];
 		const keys = Setting.keys(true, 'cli');
 		for (let i = 0; i < keys.length; i++) {
 			if (keysValues.length) keysValues.push(['', '']);

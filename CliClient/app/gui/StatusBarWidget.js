@@ -106,7 +106,7 @@ class StatusBarWidget extends BaseWidget {
 
 			const isSecurePrompt = !!this.promptState_.secure;
 
-			let options = {
+			const options = {
 				cancelable: true,
 				history: this.history,
 				default: this.promptState_.initialText,

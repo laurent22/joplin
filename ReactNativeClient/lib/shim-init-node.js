@@ -11,6 +11,7 @@ const urlValidator = require('valid-url');
 const { _ } = require('lib/locale.js');
 const http = require('http');
 const https = require('https');
+const toRelative = require('relative');
 
 function shimInit() {
 	shim.fsDriver = () => {
@@ -152,7 +153,7 @@ function shimInit() {
 
 		resource.file_extension = fileExt;
 
-		let targetPath = Resource.fullPath(resource);
+		const targetPath = Resource.fullPath(resource);
 
 		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
 			await resizeImage_(filePath, targetPath, resource.mime);
@@ -197,8 +198,8 @@ function shimInit() {
 		if (!createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
-			let filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
-			let fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
+			const filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop
+			const fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
 			newBody.push(fileURL);
 		}
 
@@ -369,7 +370,7 @@ function shimInit() {
 
 	shim.httpAgent = url => {
 		if (shim.isLinux() && !shim.httpAgent) {
-			var AgentSettings = {
+			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
@@ -406,6 +407,10 @@ function shimInit() {
 		}
 		const p = require('../package.json');
 		return p.version;
+	};
+
+	shim.pathRelativeToCwd = (path) => {
+		return toRelative(process.cwd(), path);
 	};
 }
 
