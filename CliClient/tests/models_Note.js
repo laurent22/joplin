@@ -21,7 +21,6 @@ async function allItems() {
 }
 
 describe('models_Note', function() {
-
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -135,7 +134,7 @@ describe('models_Note', function() {
 		expect(duplicatedNote.user_updated_time !== note1.user_updated_time).toBe(true);
 	}));
 
-	it('should delete a set of notebooks', asyncTest(async () => {
+	it('should delete a set of notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let noOfNotes = 20;
 		for (let i = 0; i < noOfNotes; i++) {
@@ -147,6 +146,54 @@ describe('models_Note', function() {
 
 		const all = await allItems();
 		expect(all.length).toBe(1);
+		expect(all[0].id).toBe(folder1.id);
 	}));
 
+	it('should delete only the selected notes', asyncTest(async () => {
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+
+		let noOfNotes = 20;
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note1${i}`, parent_id: f1.id });
+		}
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note2${i}`, parent_id: f2.id });
+		}
+
+		const allBeforeDelete = await allItems();
+
+		let notesInFolder1IDs = await Folder.noteIds(f1.id);
+		let notesInFolder2IDs = await Folder.noteIds(f2.id);
+
+		const selectRandomly = (source, count) => {
+			let selected = [];
+			let source_copy = source.slice();
+
+			while (selected.length != count) {
+				let idx = Math.floor(Math.random() * source_copy.length);
+				selected.push(source_copy[idx]);
+				source_copy.splice(idx, 1);
+			}
+
+			return selected;
+		};
+
+		let noOfNotesToRemove = 6;
+		let notesToRemoveFromFolder1 = selectRandomly(notesInFolder1IDs, noOfNotesToRemove);
+		let notesToRemoveFromFolder2 = selectRandomly(notesInFolder2IDs, noOfNotesToRemove);
+
+		await Note.batchDelete(notesToRemoveFromFolder1);
+		await Note.batchDelete(notesToRemoveFromFolder2);
+
+		const allAfterDelete = await allItems();
+
+		let expectedLength = allBeforeDelete.length - notesToRemoveFromFolder1.length - notesToRemoveFromFolder2.length;
+		expect(allAfterDelete.length).toBe(expectedLength);
+
+		// Common elements between the to-be-deleted notes and the notes and folders remaining after the delete
+		let intersection = [...notesToRemoveFromFolder1, ...notesToRemoveFromFolder2].filter(x => allAfterDelete.includes(x));
+		// Should be empty
+		expect(intersection.length).toBe(0);
+	}));
 });
