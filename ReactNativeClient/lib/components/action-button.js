@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		height: 22,
 		color: 'white',
-
 	},
 	itemText: {
 		// fontSize: 14, // Cannot currently set fontsize since the bow surrounding the label has a fixed size
@@ -87,7 +86,7 @@ class ActionButtonComponent extends React.Component {
 			const buttonTitle = button.title ? button.title : '';
 			const key = `${buttonTitle.replace(/\s/g, '_')}_${button.icon}`;
 			buttonComps.push(
-				<ReactNativeActionButton.Item key={key} buttonColor={button.color} title={buttonTitle} onPress={button.onPress} >
+				<ReactNativeActionButton.Item key={key} buttonColor={button.color} title={buttonTitle} onPress={button.onPress}>
 					<Icon name={button.icon} style={styles.actionButtonIcon} />
 				</ReactNativeActionButton.Item>
 			);
@@ -106,24 +105,19 @@ class ActionButtonComponent extends React.Component {
 			const button = this.props.buttons[this.state.buttonIndex];
 			const mainIcon = <Icon name={button.icon} style={styles.actionButtonIcon} />;
 			return (
-
 				<ReactNativeActionButton
 					icon={mainIcon}
 					buttonColor="rgba(231,76,60,1)"
 					onPress={() => {
 						button.onPress();
 					}}
-
 				/>
-
 			);
 		} else {
 			return (
-
-				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() { }} >
+				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() { }}>
 					{buttonComps}
 				</ReactNativeActionButton>
-
 			);
 		}
 	}
