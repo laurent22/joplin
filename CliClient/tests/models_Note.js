@@ -196,4 +196,36 @@ describe('models_Note', function() {
 		// Should be empty
 		expect(intersection.length).toBe(0);
 	}));
+
+	it('should delete nothing', asyncTest(async () => {
+		let f1 = await Folder.save({ title: 'folder1' });
+		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
+
+		let noOfNotes = 20;
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note1${i}`, parent_id: f1.id });
+		}
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note2${i}`, parent_id: f2.id });
+		}
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note3${i}`, parent_id: f3.id });
+		}
+		for (let i = 0; i < noOfNotes; i++) {
+			await Note.save({ title: `note4${i}`, parent_id: f4.id });
+		}
+
+		const beforeDelete = await allItems();
+		await Note.batchDelete([]);
+		const afterDelete = await allItems();
+
+		expect(beforeDelete.length).toBe(afterDelete.length);
+		let count = 0;
+		for (let i = 0; i < beforeDelete.length; i++) {
+			if (beforeDelete[i].id == afterDelete[i].id) ++count;
+		}
+		expect(beforeDelete.length).toBe(count);
+	}));
 });
