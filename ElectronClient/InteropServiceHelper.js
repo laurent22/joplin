@@ -99,9 +99,9 @@ class InteropServiceHelper {
 		const note = await Note.load(noteIds[0]);
 		if (folders) {
 			const folder = Folder.byId(folders, note.parent_id);
-			return friendlySafeFilename(`${note.title} - ${folder.title}.${fileExtension}`, 255);
+			return `${friendlySafeFilename(`${folder.title}-${note.title}`)}.${fileExtension}`;
 		} else {
-			return friendlySafeFilename(`${note.title}.${fileExtension}`, 255);
+			return `${friendlySafeFilename(note.title)}.${fileExtension}`;
 		}
 	}
 
