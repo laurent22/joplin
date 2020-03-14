@@ -60,6 +60,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			noteArr: [],
+			noteArrHistory: [],
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -188,6 +190,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
 		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
 		this.saveNoteButton_press = this.saveNoteButton_press.bind(this);
+		this.undoButton_onPress = this.undoButton_onPress.bind(this);
+		this.redoButton_onPress = this.redoButton_onPress.bind(this);
 		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
 		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
@@ -340,6 +344,29 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async saveOneProperty(name, value) {
 		await shared.saveOneProperty(this, name, value);
+	}
+
+	undoButton_onPress() {
+		this.setState({
+			noteArr: this.state.note.body.split(' '),
+		}, () => {
+			const noteUndo = this.state.noteArr.pop();
+			this.setState({
+				noteArrHistory: this.state.noteArrHistory.concat(noteUndo),
+				note: { body: this.state.noteArr.join(' ') },
+			});
+		});
+	}
+
+	redoButton_onPress() {
+		const noteRedo = this.state.noteArrHistory.pop();
+		this.setState({
+			noteArr: this.state.noteArr.concat(noteRedo),
+		}, () => {
+			this.setState({
+				note: { body: this.state.noteArr.join(' ') },
+			});
+		});
 	}
 
 	async deleteNote_onPress() {
@@ -903,7 +930,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
+				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} showUndoButton={true} undoButton_onPress={this.undoButton_onPress} redoButton_onPress={this.redoButton_onPress} showRedoButton={true} />
 				{titleComp}
 				{bodyComponent}
 				{actionButtonComp}
