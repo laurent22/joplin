@@ -15,8 +15,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 async function allItems() {
-	let folders = await Folder.all();
-	let notes = await Note.all();
+	const folders = await Folder.all();
+	const notes = await Note.all();
 	return folders.concat(notes);
 }
 
@@ -135,11 +135,11 @@ describe('models_Note', function() {
 	}));
 
 	it('should delete a set of notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let noOfNotes = 20;
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const noOfNotes = 20;
 		await createNTestNotes(noOfNotes, folder1);
 
-		let noteIds = await Folder.noteIds(folder1.id);
+		const noteIds = await Folder.noteIds(folder1.id);
 		await Note.batchDelete(noteIds);
 
 		const all = await allItems();
@@ -148,42 +148,42 @@ describe('models_Note', function() {
 	}));
 
 	it('should delete only the selected notes', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'folder1' });
-		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 
-		let noOfNotes = 20;
+		const noOfNotes = 20;
 		await createNTestNotes(noOfNotes, f1, null, 'note1');
 		await createNTestNotes(noOfNotes, f2, null, 'note1');
 
 		const allBeforeDelete = await allItems();
 
-		let notesInFolder1IDs = await Folder.noteIds(f1.id);
-		let notesInFolder2IDs = await Folder.noteIds(f2.id);
+		const notesInFolder1IDs = await Folder.noteIds(f1.id);
+		const notesInFolder2IDs = await Folder.noteIds(f2.id);
 
-		let notesToRemoveFromFolder1 = notesInFolder1IDs.slice(0, 6);
-		let notesToRemoveFromFolder2 = notesInFolder2IDs.slice(11, 14);
+		const notesToRemoveFromFolder1 = notesInFolder1IDs.slice(0, 6);
+		const notesToRemoveFromFolder2 = notesInFolder2IDs.slice(11, 14);
 
 		await Note.batchDelete(notesToRemoveFromFolder1);
 		await Note.batchDelete(notesToRemoveFromFolder2);
 
 		const allAfterDelete = await allItems();
 
-		let expectedLength = allBeforeDelete.length - notesToRemoveFromFolder1.length - notesToRemoveFromFolder2.length;
+		const expectedLength = allBeforeDelete.length - notesToRemoveFromFolder1.length - notesToRemoveFromFolder2.length;
 		expect(allAfterDelete.length).toBe(expectedLength);
 
 		// Common elements between the to-be-deleted notes and the notes and folders remaining after the delete
-		let intersection = [...notesToRemoveFromFolder1, ...notesToRemoveFromFolder2].filter(x => allAfterDelete.includes(x));
+		const intersection = [...notesToRemoveFromFolder1, ...notesToRemoveFromFolder2].filter(x => allAfterDelete.includes(x));
 		// Should be empty
 		expect(intersection.length).toBe(0);
 	}));
 
 	it('should delete nothing', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'folder1' });
-		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
-		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
-		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		const f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
 
-		let noOfNotes = 20;
+		const noOfNotes = 20;
 		await createNTestNotes(noOfNotes, f1, null, 'note1');
 		await createNTestNotes(noOfNotes, f2, null, 'note2');
 		await createNTestNotes(noOfNotes, f3, null, 'note3');

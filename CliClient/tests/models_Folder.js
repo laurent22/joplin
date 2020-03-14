@@ -44,12 +44,12 @@ describe('models_Folder', function() {
 	}));
 
 	it('should recursively delete notes and sub-notebooks', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'folder1' });
-		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
-		let f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
-		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		const f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
 
-		let noOfNotes = 20;
+		const noOfNotes = 20;
 		await createNTestNotes(noOfNotes, f1, null, 'note1');
 		await createNTestNotes(noOfNotes, f2, null, 'note2');
 		await createNTestNotes(noOfNotes, f3, null, 'note3');
