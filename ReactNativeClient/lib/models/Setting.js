@@ -1058,9 +1058,9 @@ Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
 
-Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be reencrypted
-Setting.SHOULD_REENCRYPT_YES = 1; // Data should be reencrypted
-Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be reencrypted, and user has been notified
+Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
+Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
+Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',

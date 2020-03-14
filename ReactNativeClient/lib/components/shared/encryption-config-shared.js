@@ -28,13 +28,13 @@ shared.refreshStats = async function(comp) {
 };
 
 shared.reencryptData = async function() {
-	const ok = confirm(_('Please confirm that you would like to reencrypt your complete database.'));
+	const ok = confirm(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
 
 	await BaseItem.forceSyncAll();
 	reg.waitForSyncFinishedThenSync();
 	Setting.setValue('encryption.shouldReencrypt', Setting.SHOULD_REENCRYPT_NO);
-	alert(_('Your data is going to be reencrypted and synced again.'));
+	alert(_('Your data is going to be re-encrypted and synced again.'));
 };
 
 shared.dontReencryptData = function() {

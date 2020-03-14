@@ -538,7 +538,7 @@ class MainScreenComponent extends React.Component {
 		} else if (this.props.showShouldReencryptMessage) {
 			msg = (
 				<span>
-					{_('The default encryption method has been changed, you should reencrypt your data.')}{' '}
+					{_('The default encryption method has been changed, you should re-encrypt your data.')}{' '}
 					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
 						{_('More info')}
 					</a>
