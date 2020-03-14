@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -50,18 +50,10 @@ describe('models_Folder', function() {
 		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
 
 		let noOfNotes = 20;
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note1${i}`, parent_id: f1.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note2${i}`, parent_id: f2.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note3${i}`, parent_id: f3.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note4${i}`, parent_id: f4.id });
-		}
+		await createNTestNotes(noOfNotes, f1, null, 'note1');
+		await createNTestNotes(noOfNotes, f2, null, 'note2');
+		await createNTestNotes(noOfNotes, f3, null, 'note3');
+		await createNTestNotes(noOfNotes, f4, null, 'note4');
 
 		await Folder.delete(f1.id);
 

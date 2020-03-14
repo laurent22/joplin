@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { sortedIds, createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -137,9 +137,7 @@ describe('models_Note', function() {
 	it('should delete a set of notes', asyncTest(async () => {
 		let folder1 = await Folder.save({ title: 'folder1' });
 		let noOfNotes = 20;
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note1${i}`, parent_id: folder1.id });
-		}
+		await createNTestNotes(noOfNotes, folder1);
 
 		let noteIds = await Folder.noteIds(folder1.id);
 		await Note.batchDelete(noteIds);
@@ -154,34 +152,16 @@ describe('models_Note', function() {
 		let f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 
 		let noOfNotes = 20;
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note1${i}`, parent_id: f1.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note2${i}`, parent_id: f2.id });
-		}
+		await createNTestNotes(noOfNotes, f1, null, 'note1');
+		await createNTestNotes(noOfNotes, f2, null, 'note1');
 
 		const allBeforeDelete = await allItems();
 
 		let notesInFolder1IDs = await Folder.noteIds(f1.id);
 		let notesInFolder2IDs = await Folder.noteIds(f2.id);
 
-		const selectRandomly = (source, count) => {
-			let selected = [];
-			let source_copy = source.slice();
-
-			while (selected.length != count) {
-				let idx = Math.floor(Math.random() * source_copy.length);
-				selected.push(source_copy[idx]);
-				source_copy.splice(idx, 1);
-			}
-
-			return selected;
-		};
-
-		let noOfNotesToRemove = 6;
-		let notesToRemoveFromFolder1 = selectRandomly(notesInFolder1IDs, noOfNotesToRemove);
-		let notesToRemoveFromFolder2 = selectRandomly(notesInFolder2IDs, noOfNotesToRemove);
+		let notesToRemoveFromFolder1 = notesInFolder1IDs.slice(0, 6);
+		let notesToRemoveFromFolder2 = notesInFolder2IDs.slice(11, 14);
 
 		await Note.batchDelete(notesToRemoveFromFolder1);
 		await Note.batchDelete(notesToRemoveFromFolder2);
@@ -204,28 +184,15 @@ describe('models_Note', function() {
 		let f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
 
 		let noOfNotes = 20;
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note1${i}`, parent_id: f1.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note2${i}`, parent_id: f2.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note3${i}`, parent_id: f3.id });
-		}
-		for (let i = 0; i < noOfNotes; i++) {
-			await Note.save({ title: `note4${i}`, parent_id: f4.id });
-		}
+		await createNTestNotes(noOfNotes, f1, null, 'note1');
+		await createNTestNotes(noOfNotes, f2, null, 'note2');
+		await createNTestNotes(noOfNotes, f3, null, 'note3');
+		await createNTestNotes(noOfNotes, f4, null, 'note4');
 
 		const beforeDelete = await allItems();
 		await Note.batchDelete([]);
 		const afterDelete = await allItems();
 
-		expect(beforeDelete.length).toBe(afterDelete.length);
-		let count = 0;
-		for (let i = 0; i < beforeDelete.length; i++) {
-			if (beforeDelete[i].id == afterDelete[i].id) ++count;
-		}
-		expect(beforeDelete.length).toBe(count);
+		expect(sortedIds(afterDelete)).toEqual(sortedIds(beforeDelete));
 	}));
 });
