@@ -115,9 +115,9 @@ class ActionButtonComponent extends React.Component {
 			);
 		} else {
 			return (
-				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() { }}>
+				<ReactNativeActionButton textStyle={styles.itemText} icon={mainIcon} buttonColor="rgba(231,76,60,1)" onPress={function() {}}>
 					{buttonComps}
-				</ReactNativeActionButton>
+				</ReactNativeActionButton >
 			);
 		}
 	}
