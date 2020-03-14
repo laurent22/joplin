@@ -1301,7 +1301,7 @@ class NoteTextComponent extends React.Component {
 			if (noteIds.length === 1) {
 				path = bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: await InteropServiceHelper.defaultFilename(noteIds, 'pdf', this.props.folders),
+					defaultPath: await InteropServiceHelper.defaultFilename(noteIds, 'pdf'),
 				});
 
 			} else {

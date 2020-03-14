@@ -95,14 +95,14 @@ class InteropServiceHelper {
 		return this.exportNoteTo_('printer', noteId, options);
 	}
 
-	static async defaultFilename(noteIds, fileExtension, folders = null) {
+	static async defaultFilename(noteIds, fileExtension) {
 		const note = await Note.load(noteIds[0]);
-		if (folders) {
-			const folder = Folder.byId(folders, note.parent_id);
-			return `${friendlySafeFilename(`${folder.title}-${note.title}`)}.${fileExtension}`;
-		} else {
-			return `${friendlySafeFilename(note.title)}.${fileExtension}`;
-		}
+		const folder = await Folder.load(note.parent_id);
+
+		// friendlySafeFilename assumes that the file extension is added after
+		const filename = friendlySafeFilename(`${folder.title}-${note.title}`);
+
+		return `${filename}.${fileExtension}`;
 	}
 
 	static async export(dispatch, module, options = null) {
