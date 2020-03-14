@@ -83,7 +83,7 @@ class ItemList extends React.Component {
 			return <div key={key} style={{ height: height }}></div>;
 		};
 
-		let itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
+		const itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
 
 		for (let i = this.state.topItemIndex; i <= this.state.bottomItemIndex; i++) {
 			const itemComp = this.props.itemRenderer(items[i]);
@@ -92,7 +92,7 @@ class ItemList extends React.Component {
 
 		itemComps.push(blankItem('bottom', (items.length - this.state.bottomItemIndex - 1) * this.props.itemHeight));
 
-		let classes = ['item-list'];
+		const classes = ['item-list'];
 		if (this.props.className) classes.push(this.props.className);
 
 		return (

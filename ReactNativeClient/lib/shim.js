@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
 
-let shim = {};
+const shim = {};
 
 shim.isNode = () => {
 	if (typeof process === 'undefined') return false;

@@ -34,7 +34,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 	async relaceLinkedItemIdsByRelativePaths_(item) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
-		let newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
+		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
 		return await this.replaceNoteIdsByRelativePaths_(newBody, relativePathToRoot);
 	}
 
@@ -42,7 +42,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		const linkedResourceIds = await Note.linkedResourceIds(noteBody);
 		const resourcePaths = this.context() && this.context().resourcePaths ? this.context().resourcePaths : {};
 
-		let createRelativePath = function(resourcePath) {
+		const createRelativePath = function(resourcePath) {
 			return `${relativePathToRoot}_resources/${basename(resourcePath)}`;
 		};
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedResourceIds, resourcePaths, createRelativePath);
@@ -52,7 +52,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 		const linkedNoteIds = await Note.linkedNoteIds(noteBody);
 		const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
 
-		let createRelativePath = function(notePath) {
+		const createRelativePath = function(notePath) {
 			return encodeURI(`${relativePathToRoot}${notePath}`.trim());
 		};
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
@@ -63,7 +63,7 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 		for (let i = 0; i < linkedItemIds.length; i++) {
 			const id = linkedItemIds[i];
-			let itemPath = fn_createRelativePath(paths[id]);
+			const itemPath = fn_createRelativePath(paths[id]);
 			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), itemPath);
 		}
 
@@ -114,9 +114,9 @@ class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 		} else if (item.type_ === BaseModel.TYPE_NOTE) {
 			const notePaths = this.context() && this.context().notePaths ? this.context().notePaths : {};
-			let noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
+			const noteFilePath = `${this.destDir_}/${notePaths[item.id]}`;
 
-			let noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
+			const noteBody = await this.relaceLinkedItemIdsByRelativePaths_(item);
 			const modNote = Object.assign({}, item, { body: noteBody });
 			const noteContent = await Note.serializeForEdit(modNote);
 			await shim.fsDriver().mkdir(dirname(noteFilePath));

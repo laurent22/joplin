@@ -15,8 +15,8 @@ function assetsToHeaders(pluginAssets, options = null) {
 	}
 
 	if (options.asHtml) {
-		let output = [];
-		for (let name in headers) {
+		const output = [];
+		for (const name in headers) {
 			output.push(headers[name]);
 		}
 		return output.join('');

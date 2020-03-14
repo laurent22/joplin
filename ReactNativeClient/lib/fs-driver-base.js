@@ -29,7 +29,7 @@ class FsDriverBase {
 		}
 		let counter = 1;
 
-		let nameNoExt = filename(name, true);
+		const nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;

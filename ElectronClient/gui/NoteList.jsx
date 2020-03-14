@@ -34,7 +34,7 @@ class NoteListComponent extends React.Component {
 		// Pull request: https://github.com/laurent22/joplin/pull/2062
 		const itemWidth = '100%';
 
-		let style = {
+		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
@@ -184,7 +184,7 @@ class NoteListComponent extends React.Component {
 		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
-		let displayTitle = Note.displayTitle(item);
+		const displayTitle = Note.displayTitle(item);
 		let titleComp = null;
 
 		if (highlightedWords.length) {
@@ -435,7 +435,7 @@ class NoteListComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
-		let notes = this.props.notes.slice();
+		const notes = this.props.notes.slice();
 
 		if (!notes.length) {
 			const padding = 10;

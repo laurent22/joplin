@@ -277,7 +277,7 @@ class InteropService {
 			});
 		};
 
-		let exportedNoteIds = [];
+		const exportedNoteIds = [];
 		let resourceIds = [];
 		const folderIds = await Folder.allIds();
 
@@ -317,7 +317,7 @@ class InteropService {
 
 		const noteTags = await NoteTag.all();
 
-		let exportedTagIds = [];
+		const exportedTagIds = [];
 
 		for (let i = 0; i < noteTags.length; i++) {
 			const noteTag = noteTags[i];

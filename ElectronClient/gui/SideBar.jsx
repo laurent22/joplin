@@ -107,7 +107,7 @@ class SideBarComponent extends React.Component {
 
 		const itemHeight = 25;
 
-		let style = {
+		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor2,
 			},
@@ -459,8 +459,8 @@ class SideBarComponent extends React.Component {
 		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
 
-		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-		let expandIconStyle = {
+		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
+		const expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 			paddingLeft: 8 + depth * 10,
 		};
@@ -562,18 +562,18 @@ class SideBarComponent extends React.Component {
 			style.cursor = 'pointer';
 		}
 
-		let headerClick = extraProps.onClick || null;
+		const headerClick = extraProps.onClick || null;
 		delete extraProps.onClick;
 
 		// check if toggling option is set.
 		let toggleIcon = null;
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
-			let isExpanded = this.state[toggleKey];
+			const isExpanded = this.state[toggleKey];
 			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 		if (extraProps.selected) {
-			style.backgroundColor =this.style().listItemSelected.backgroundColor;
+			style.backgroundColor = this.style().listItemSelected.backgroundColor;
 		}
 
 		const ref = this.anchorItemRef('headers', key);
@@ -645,7 +645,7 @@ class SideBarComponent extends React.Component {
 
 			const focusItem = focusItems[newIndex];
 
-			let actionName = `${focusItem.type.toUpperCase()}_SELECT`;
+			const actionName = `${focusItem.type.toUpperCase()}_SELECT`;
 
 			this.props.dispatch({
 				type: actionName,
@@ -712,7 +712,7 @@ class SideBarComponent extends React.Component {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
 		const iconName = 'fa-refresh';
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
-		let iconStyle = { fontSize: style.fontSize, marginRight: 5 };
+		const iconStyle = { fontSize: style.fontSize, marginRight: 5 };
 
 		if (type !== 'sync') {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
@@ -743,7 +743,7 @@ class SideBarComponent extends React.Component {
 			flexDirection: 'column',
 		});
 
-		let items = [];
+		const items = [];
 		items.push(
 			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
 				onClick: this.onAllNotesClick_,
@@ -798,7 +798,7 @@ class SideBarComponent extends React.Component {
 			resourceFetcherText = _('Fetching resources: %d/%d', this.props.resourceFetcher.fetchingCount, this.props.resourceFetcher.toFetchCount);
 		}
 
-		let lines = Synchronizer.reportToLines(this.props.syncReport);
+		const lines = Synchronizer.reportToLines(this.props.syncReport);
 		if (resourceFetcherText) lines.push(resourceFetcherText);
 		if (decryptionReportText) lines.push(decryptionReportText);
 		const syncReportText = [];

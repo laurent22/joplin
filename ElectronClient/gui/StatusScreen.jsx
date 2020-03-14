@@ -64,13 +64,13 @@ class StatusScreenComponent extends React.Component {
 		}
 
 		const renderSectionHtml = (key, section) => {
-			let itemsHtml = [];
+			const itemsHtml = [];
 
 			itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
 
-			for (let n in section.body) {
+			for (const n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				let item = section.body[n];
+				const item = section.body[n];
 				let text = '';
 
 				let retryLink = null;
@@ -106,10 +106,10 @@ class StatusScreenComponent extends React.Component {
 		};
 
 		function renderBodyHtml(report) {
-			let sectionsHtml = [];
+			const sectionsHtml = [];
 
 			for (let i = 0; i < report.length; i++) {
-				let section = report[i];
+				const section = report[i];
 				if (!section.body.length) continue;
 				sectionsHtml.push(renderSectionHtml(i, section));
 			}
@@ -117,7 +117,7 @@ class StatusScreenComponent extends React.Component {
 			return <div>{sectionsHtml}</div>;
 		}
 
-		let body = renderBodyHtml(this.state.report);
+		const body = renderBodyHtml(this.state.report);
 
 		return (
 			<div style={style}>

@@ -162,7 +162,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 			<Header style={headerStyle} />
 			<div style={{ ...style, margin: '20px', overflow: 'scroll' }}>
 				{this.state.isLoading && <div>{_('Please wait...')}</div>}
-				{!this.state.isLoading &&<div>
+				{!this.state.isLoading && <div>
 					{!this.state.resources && <div>
 						{_('No resources!')}
 					</div>

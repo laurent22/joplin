@@ -18,9 +18,9 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let title = args['note'];
+		const title = args['note'];
 
-		let item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		const item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 
 		const content = args.options.verbose ? await Note.serialize(item) : await Note.serializeForEdit(item);

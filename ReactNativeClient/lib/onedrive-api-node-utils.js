@@ -44,11 +44,11 @@ class OneDriveApiNodeUtils {
 		const port = await netUtils.findAvailablePort(this.possibleOAuthDancePorts(), 0);
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
-		let authCodeUrl = this.api().authCodeUrl(`http://localhost:${port}`);
+		const authCodeUrl = this.api().authCodeUrl(`http://localhost:${port}`);
 
 		return new Promise((resolve, reject) => {
 			this.oauthServer_ = http.createServer();
-			let errorMessage = null;
+			const errorMessage = null;
 
 			this.oauthServer_.on('request', (request, response) => {
 				const url = urlParser.parse(request.url, true);
