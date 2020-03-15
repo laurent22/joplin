@@ -57,4 +57,16 @@ describe('models_BaseItem', function() {
 		expect(unserialized2.title).toBe(folder2.title);
 	}));
 
+	it('should correctly unserialize note timestamps', asyncTest(async () => {
+		let folder = await Folder.save({ title: 'folder' });
+		let note = await Note.save({ title: 'note', parent_id: folder.id });
+
+		let serialized = await Note.serialize(note);
+		let unserialized = await Note.unserialize(serialized);
+
+		expect(unserialized.created_time).toEqual(note.created_time);
+		expect(unserialized.updated_time).toEqual(note.updated_time);
+		expect(unserialized.user_created_time).toEqual(note.user_created_time);
+		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
+	}));
 });
