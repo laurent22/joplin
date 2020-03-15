@@ -52,11 +52,11 @@ class Tag extends BaseItem {
 		if (!options) options = {};
 		if (!('deleteChildren' in options)) options.deleteChildren = true;
 
-		let tag = await Tag.load(tagId);
+		const tag = await Tag.load(tagId);
 		if (!tag) return; // noop
 
 		if (options.deleteChildren) {
-			let childrenTagIds = await Tag.childrenTagIds(tagId);
+			const childrenTagIds = await Tag.childrenTagIds(tagId);
 			for (let i = 0; i < childrenTagIds.length; i++) {
 				await Tag.untagAll(childrenTagIds[i]);
 			}
@@ -75,11 +75,11 @@ class Tag extends BaseItem {
 		if (!options) options = {};
 		if (!('deleteChildren' in options)) options.deleteChildren = true;
 
-		let tag = await Tag.load(id);
+		const tag = await Tag.load(id);
 		if (!tag) return; // noop
 
 		if (options.deleteChildren) {
-			let childrenTagIds = await Tag.childrenTagIds(id);
+			const childrenTagIds = await Tag.childrenTagIds(id);
 			for (let i = 0; i < childrenTagIds.length; i++) {
 				await Tag.delete(childrenTagIds[i]);
 			}
@@ -230,19 +230,19 @@ class Tag extends BaseItem {
 	}
 
 	static displayTitle(item) {
-		let title = super.displayTitle(item);
+		const title = super.displayTitle(item);
 		const separator = '/';
 		const i = title.lastIndexOf(separator);
-		if (i !== -1) return title.slice(i+separator.length);
+		if (i !== -1) return title.slice(i + separator.length);
 		return title;
 	}
 
 	static async changeDescendantPrefix(parentItem, parentPrefix) {
 		const childrenTagIds = await Tag.childrenTagIds(parentItem.id);
 		for (let i = 0; i < childrenTagIds.length; i++) {
-			let childItem = await Tag.load(childrenTagIds[i]);
+			const childItem = await Tag.load(childrenTagIds[i]);
 			// The new title of the child is new prefix + display name
-			let childName = `${parentPrefix}/${await Tag.displayTitle(childItem)}`;
+			const childName = `${parentPrefix}/${await Tag.displayTitle(childItem)}`;
 			childItem.title = childName;
 			// Change the child title
 			await Tag.save(childItem, { selectNoteTag: false, createParents: false });
@@ -274,11 +274,11 @@ class Tag extends BaseItem {
 	}
 
 	static async moveTag(tagId, parentTagId) {
-		let tag = await Tag.load(tagId);
+		const tag = await Tag.load(tagId);
 		if (!tag) return;
 		let tagTitle = await Tag.displayTitle(tag);
 
-		let parentTag = await Tag.load(parentTagId);
+		const parentTag = await Tag.load(parentTagId);
 		if (parentTag) {
 			tagTitle = `${parentTag.title}/${tagTitle}`;
 		}
@@ -308,17 +308,17 @@ class Tag extends BaseItem {
 				parentTitle = o.title.slice(0,i);
 
 				// Try to get the parent tag
-				let parentTag = await Tag.loadByTitle(parentTitle);
+				const parentTag = await Tag.loadByTitle(parentTitle);
 				if (parentTag) parentId = parentTag.id;
 			}
 
 			if (options && options.createParents && parentTitle && !parentId) {
 				// Create the parent tag if it doesn't exist
-				let parent = {
+				const parent = {
 					title: parentTitle,
 				};
 				// Do not select the parent note_tags
-				let parentOpts = {};
+				const parentOpts = {};
 				parentOpts.selectNoteTag = false;
 				const parentTag = await Tag.save(parent, parentOpts);
 				parentId = parentTag.id;

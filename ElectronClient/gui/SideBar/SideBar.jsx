@@ -99,8 +99,12 @@ class SideBarComponent extends React.Component {
 				event.preventDefault();
 
 				const tagIds = JSON.parse(dt.getData('text/x-jop-tag-ids'));
-				for (let i = 0; i < tagIds.length; i++) {
-					await Tag.moveTag(tagIds[i], tagId);
+				try {
+					for (let i = 0; i < tagIds.length; i++) {
+						await Tag.moveTag(tagIds[i], tagId);
+					}
+				} catch (error) {
+					bridge().showErrorMessageBox(error.message);
 				}
 			}
 		};
@@ -446,11 +450,11 @@ class SideBarComponent extends React.Component {
 	tagItem(tag, selected, hasChildren, depth) {
 		let style = Object.assign({}, this.style().listItem);
 
-		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
+		const containerStyle = Object.assign({}, this.style(depth).listItemContainer);
 		if (selected) style = Object.assign(style, this.style().listItemSelected);
 
-		let expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
-		let expandIconStyle = {
+		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
+		const expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
 			paddingLeft: 8 + depth * 10,
 		};
