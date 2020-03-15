@@ -37,7 +37,7 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
-const UndoRedoService = require('lib/services/UndoRedoService.js');
+const UndoRedoService = require('lib/services/UndoRedoService.ts');
 
 import FileViewer from 'react-native-file-viewer';
 
