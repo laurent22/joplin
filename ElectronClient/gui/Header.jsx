@@ -100,7 +100,7 @@ class HeaderComponent extends React.Component {
 	}
 
 	determineButtonLabelState() {
-		const mediaQuery = window.matchMedia(`(max-width: ${550 * this.props.zoomFactor}px)`);
+		const mediaQuery = window.matchMedia(`(max-width: ${780 * this.props.zoomFactor}px)`);
 		const showButtonLabels = !mediaQuery.matches;
 
 		if (this.state.showButtonLabels !== showButtonLabels) {
@@ -266,6 +266,7 @@ class HeaderComponent extends React.Component {
 			fontSize: theme.fontSize,
 			boxSizing: 'border-box',
 			cursor: 'default',
+			whiteSpace: 'nowrap',
 		};
 
 		if (showBackButton) {
