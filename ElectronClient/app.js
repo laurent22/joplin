@@ -774,7 +774,7 @@ class Application extends BaseApplication {
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
 					selector: 'performClose:',
-				}, {
+				},  {
 					type: 'separator',
 				}, {
 					label: _('Templates'),
