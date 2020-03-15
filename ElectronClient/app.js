@@ -1,4 +1,4 @@
-require('app-module-path').addPath(__dirname);
+﻿require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
@@ -442,9 +442,9 @@ class Application extends BaseApplication {
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
-									!module.isNoteArchive && moduleSource === 'file'
-										? selectedFolderId
-										: null,
+								!module.isNoteArchive && moduleSource === 'file'
+									? selectedFolderId
+									: null,
 							};
 
 							const service = new InteropService();
