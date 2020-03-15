@@ -859,10 +859,7 @@ class NoteTextComponent extends React.Component {
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyNoteAction: {
-						id: this.state.note.id,
-						parent_id: this.state.note.parent_id,
-					},
+					historyAction: 'goto',
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
@@ -1685,24 +1682,39 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (this.props.historyNotes.length) {
-			toolbarItems.push({
-				tooltip: _('Back'),
-				iconName: 'fa-arrow-left',
-				onClick: () => {
-					if (!this.props.historyNotes.length) return;
+		toolbarItems.push({
+			tooltip: _('Back'),
+			iconName: 'fa-arrow-left',
+			enabled: (this.props.backwardHistoryNotes.length > 0),
+			onClick: () => {
+				if (!this.props.backwardHistoryNotes.length) return;
+				const lastItem = this.props.backwardHistoryNotes[this.props.backwardHistoryNotes.length - 1];
+				this.props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: lastItem.parent_id,
+					noteId: lastItem.id,
 
-					const lastItem = this.props.historyNotes[this.props.historyNotes.length - 1];
+					historyAction: 'pop',
+				});
+			},
+		});
 
-					this.props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: lastItem.parent_id,
-						noteId: lastItem.id,
-						historyNoteAction: 'pop',
-					});
-				},
-			});
-		}
+		toolbarItems.push({
+			tooltip: _('Front'),
+			iconName: 'fa-arrow-right',
+			enabled: (this.props.forwardHistoryNotes.length > 0),
+			onClick: () => {
+				if (!this.props.forwardHistoryNotes.length) return;
+				const nextItem = this.props.forwardHistoryNotes[this.props.forwardHistoryNotes.length - 1];
+				this.props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: nextItem.parent_id,
+					noteId: nextItem.id,
+
+					historyAction: 'push',
+				});
+			},
+		});
 
 		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
@@ -2278,7 +2290,8 @@ const mapStateToProps = state => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
-		historyNotes: state.historyNotes,
+		backwardHistoryNotes: state.backwardHistoryNotes,
+		forwardHistoryNotes: state.forwardHistoryNotes,
 		templates: state.templates,
 		provisionalNoteIds: state.provisionalNoteIds,
 	};

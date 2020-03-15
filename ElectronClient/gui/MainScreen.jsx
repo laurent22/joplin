@@ -146,6 +146,7 @@ class MainScreenComponent extends React.Component {
 								this.props.dispatch({
 									type: 'FOLDER_SELECT',
 									id: folder.id,
+									historyAction: 'goto',
 								});
 							}
 						}

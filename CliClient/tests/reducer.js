@@ -36,6 +36,41 @@ function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes,
 	return state;
 }
 
+function goToNote(notes, selectedNoteIndexes, state) {
+	if (selectedNoteIndexes != null) {
+		const selectedIds = [];
+		for (let i = 0; i < selectedNoteIndexes.length; i++) {
+			selectedIds.push(notes[selectedNoteIndexes[i]].id);
+		}
+		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds, historyAction: 'goto' });
+	}
+	return state;
+}
+
+function goBackWard(state) {
+	if (!state.backwardHistoryNotes.length)	return state;
+	const lastItem = state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1];
+	state = reducer(state, {
+		type: 'FOLDER_AND_NOTE_SELECT',
+		noteId: lastItem.id ,
+		folderId: lastItem.parent_id ,
+		historyAction: 'pop',
+	});
+	return state;
+}
+
+function goForward(state) {
+	if (!state.forwardHistoryNotes.length)	return state;
+	const nextItem = state.forwardHistoryNotes[state.forwardHistoryNotes.length - 1];
+	state = reducer(state, {
+		type: 'FOLDER_AND_NOTE_SELECT',
+		noteId: nextItem.id ,
+		folderId: nextItem.parent_id ,
+		historyAction: 'push',
+	});
+	return state;
+}
+
 function createExpectedState(items, keepIndexes, selectedIndexes) {
 	const expected = { items: [], selectedIds: [] };
 
@@ -344,5 +379,89 @@ describe('Reducer', function() {
 		expect(getIds(state.notes)).toEqual(getIds(expected.items));
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
+
+	it('should remove deleted note from history', asyncTest(async () => {
+
+		// create 1 folder
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// select second note
+		state = goToNote(notes, [1], state);
+		// select third note
+		state = goToNote(notes, [2], state);
+		// select fourth note
+		state = goToNote(notes, [3], state);
+
+		// expect history to contain first, second and third note
+		expect(state.backwardHistoryNotes.length).toEqual(3);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 3)));
+
+		// delete third note
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+
+		// expect history to not contain third note
+		expect(getIds(state.backwardHistoryNotes)).not.toContain(notes[2].id);
+	}));
+
+	it('should remove all notes of a deleted notebook from history', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(3, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+
+
+		// go to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 3)));
+
+		// delete the first folder
+		state = reducer(state, { type: 'FOLDER_DELETE', id: folders[0].id });
+
+		expect(getIds(state.backwardHistoryNotes)).toEqual([]);
+	}));
+
+	it('should maintain history correctly when going backward and forward', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(5, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [4], state);
+
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 4)));
+
+		state = goBackWard(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,3)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds(notes.slice(4, 5)));
+
+		state = goBackWard(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,2)));
+		// because we push the last seen note to stack.
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds([notes[4], notes[3]]));
+
+		state = goForward(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,3)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds([notes[4]]));
+
+		state = goForward(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,4)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual([]);
+	}));
+
+
 
 });
