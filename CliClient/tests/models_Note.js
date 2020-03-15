@@ -195,4 +195,25 @@ describe('models_Note', function() {
 
 		expect(sortedIds(afterDelete)).toEqual(sortedIds(beforeDelete));
 	}));
+
+	it('should not move to conflict folder', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+
+		const hasThrown = await checkThrowAsync(async () => await Folder.moveToFolder(note1.id, folder2.id));
+		expect(hasThrown).toBe(true);
+
+		const note = await Note.load(note1.id);
+		expect(note.parent_id).toEqual(folder1.id);
+	}));
+
+	it('should not copy to conflict folder', asyncTest(async () => {
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+
+		const hasThrown = await checkThrowAsync(async () => await Folder.copyToFolder(note1.id, folder2.id));
+		expect(hasThrown).toBe(true);
+	}));
 });

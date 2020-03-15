@@ -58,11 +58,11 @@ describe('models_BaseItem', function() {
 	}));
 
 	it('should correctly unserialize note timestamps', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder' });
-		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
 
-		let serialized = await Note.serialize(note);
-		let unserialized = await Note.unserialize(serialized);
+		const serialized = await Note.serialize(note);
+		const unserialized = await Note.unserialize(serialized);
 
 		expect(unserialized.created_time).toEqual(note.created_time);
 		expect(unserialized.updated_time).toEqual(note.updated_time);
