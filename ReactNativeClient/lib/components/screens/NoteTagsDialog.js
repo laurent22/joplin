@@ -122,7 +122,7 @@ class NoteTagsDialogComponent extends React.Component {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			tag: {
 				padding: 10,
 				borderBottomWidth: 1,

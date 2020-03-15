@@ -90,7 +90,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note.body = stateNote.body;
 	}
 
-	let newState = {
+	const newState = {
 		lastSavedNote: Object.assign({}, note),
 		note: note,
 	};
@@ -144,9 +144,9 @@ shared.saveOneProperty = async function(comp, name, value) {
 };
 
 shared.noteComponent_change = function(comp, propName, propValue) {
-	let newState = {};
+	const newState = {};
 
-	let note = Object.assign({}, comp.state.note);
+	const note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
 	newState.note = note;
 
@@ -189,7 +189,7 @@ shared.attachedResources = async function(noteBody) {
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
-	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
+	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
@@ -227,13 +227,13 @@ shared.initState = async function(comp) {
 };
 
 shared.toggleIsTodo_onPress = function(comp) {
-	let newNote = Note.toggleIsTodo(comp.state.note);
-	let newState = { note: newNote };
+	const newNote = Note.toggleIsTodo(comp.state.note);
+	const newState = { note: newNote };
 	comp.setState(newState);
 };
 
 shared.toggleCheckbox = function(ipcMessage, noteBody) {
-	let newBody = noteBody.split('\n');
+	const newBody = noteBody.split('\n');
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
 	if (lineIndex >= newBody.length) {

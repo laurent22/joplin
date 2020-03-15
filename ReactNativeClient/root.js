@@ -89,7 +89,7 @@ let storeDispatch = function() {};
 const logReducerAction = function(action) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
-	let msg = [action.type];
+	const msg = [action.type];
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
@@ -158,7 +158,7 @@ const generalMiddleware = store => next => async (action) => {
 	return result;
 };
 
-let navHistory = [];
+const navHistory = [];
 
 function historyCanGoBackTo(route) {
 	if (route.routeName === 'Note') return false;
@@ -233,7 +233,7 @@ const appReducer = (state = appDefaultState, action) => {
 				// are loaded. Might be good enough since going back to different folders
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
-					let n = navHistory[i];
+					const n = navHistory[i];
 					if (n.routeName == action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
@@ -356,7 +356,7 @@ const appReducer = (state = appDefaultState, action) => {
 	return reducer(newState, action);
 };
 
-let store = createStore(appReducer, applyMiddleware(generalMiddleware));
+const store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
 function resourceFetcher_downloadComplete(event) {
@@ -403,7 +403,7 @@ async function initialize(dispatch) {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
-	let db = new JoplinDatabase(new DatabaseDriverReactNative());
+	const db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
 	reg.setDb(db);
 
@@ -516,7 +516,7 @@ async function initialize(dispatch) {
 			items: masterKeys,
 		});
 
-		let folderId = Setting.value('activeFolderId');
+		const folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
 
 		if (!folder) folder = await Folder.defaultFolder();

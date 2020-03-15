@@ -6,7 +6,7 @@ class EventDispatcher {
 	dispatch(eventName, event = null) {
 		if (!this.listeners_[eventName]) return;
 
-		let ls = this.listeners_[eventName];
+		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			ls[i](event);
 		}
@@ -20,7 +20,7 @@ class EventDispatcher {
 	off(eventName, callback) {
 		if (!this.listeners_[eventName]) return;
 
-		let ls = this.listeners_[eventName];
+		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			if (ls[i] === callback) {
 				ls.splice(i, 1);

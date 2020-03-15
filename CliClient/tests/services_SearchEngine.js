@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint prefer-const: 0*/
 
 require('app-module-path').addPath(__dirname);
 

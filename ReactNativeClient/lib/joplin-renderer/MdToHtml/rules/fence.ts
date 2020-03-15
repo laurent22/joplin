@@ -1,3 +1,5 @@
+/* eslint prefer-const: 0*/
+
 // Note: this is copied from https://github.com/markdown-it/markdown-it/blob/master/lib/renderer.js
 // Markdown-it assigns a special meaning to code returned from highlight() when it starts with PRE or not.
 // If it starts with PRE, the highlited code is returned as-is. If it does not, it is wrapped in <PRE><CODE>
@@ -9,7 +11,7 @@
 function installRule(markdownIt:any) {
 	// @ts-ignore: Keep the function signature as-is despite unusued arguments
 	markdownIt.renderer.rules.fence = function(tokens:any[], idx:number, options:any, env:any, slf:any) {
-		var token = tokens[idx],
+		let token = tokens[idx],
 			info = token.info ? markdownIt.utils.unescapeAll(token.info).trim() : '',
 			langName = '',
 			highlighted, i, tmpAttrs, tmpToken;

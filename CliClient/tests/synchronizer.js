@@ -27,8 +27,8 @@ process.on('unhandledRejection', (reason, p) => {
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000 + 30000; // The first test is slow because the database needs to be built
 
 async function allNotesFolders() {
-	let folders = await Folder.all();
-	let notes = await Note.all();
+	const folders = await Folder.all();
+	const notes = await Note.all();
 	return folders.concat(notes);
 }
 
@@ -66,9 +66,9 @@ async function localNotesFoldersSameAsRemote(locals, expect) {
 		expect(locals.length).toBe(nf.length);
 
 		for (let i = 0; i < locals.length; i++) {
-			let dbItem = locals[i];
-			let path = BaseItem.systemPath(dbItem);
-			let remote = await fileApi().stat(path);
+			const dbItem = locals[i];
+			const path = BaseItem.systemPath(dbItem);
+			const remote = await fileApi().stat(path);
 
 			expect(!!remote).toBe(true);
 			if (!remote) continue;
@@ -101,10 +101,10 @@ describe('synchronizer', function() {
 	});
 
 	it('should create remote items', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder1' });
+		const folder = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder.id });
 
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 
 		await synchronizer().start();
 
@@ -112,20 +112,20 @@ describe('synchronizer', function() {
 	}));
 
 	it('should update remote items', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder1' });
-		let note = await Note.save({ title: 'un', parent_id: folder.id });
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizer().start();
 
 		await Note.save({ title: 'un UPDATE', id: note.id });
 
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 		await synchronizer().start();
 
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should create local items', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder1' });
+		const folder = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizer().start();
 
@@ -133,14 +133,14 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should update local items', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -160,14 +160,14 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should resolve note conflicts', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -186,29 +186,29 @@ describe('synchronizer', function() {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizer().start();
-		let conflictedNotes = await Note.conflictedNotes();
+		const conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
 		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
 		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
-		let conflictedNote = conflictedNotes[0];
+		const conflictedNote = conflictedNotes[0];
 		expect(conflictedNote.id == note2conf.id).toBe(false);
-		for (let n in conflictedNote) {
+		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n == 'id' || n == 'is_conflict') continue;
 			expect(conflictedNote[n]).toBe(note2conf[n], `Property: ${n}`);
 		}
 
-		let noteUpdatedFromRemote = await Note.load(note1.id);
-		for (let n in noteUpdatedFromRemote) {
+		const noteUpdatedFromRemote = await Note.load(note1.id);
+		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
 			expect(noteUpdatedFromRemote[n]).toBe(note2[n], `Property: ${n}`);
 		}
 	}));
 
 	it('should resolve folders conflicts', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2); // ----------------------------------
@@ -235,13 +235,13 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let folder1_final = await Folder.load(folder1.id);
+		const folder1_final = await Folder.load(folder1.id);
 		expect(folder1_final.title).toBe(folder1_modRemote.title);
 	}));
 
 	it('should delete remote notes', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -258,13 +258,13 @@ describe('synchronizer', function() {
 		expect(remotes.length).toBe(1);
 		expect(remotes[0].id).toBe(folder1.id);
 
-		let deletedItems = await BaseItem.deletedItems(syncTargetId());
+		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
 	}));
 
 	it('should not created deleted_items entries for items deleted via sync', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -276,7 +276,7 @@ describe('synchronizer', function() {
 		await switchClient(1);
 
 		await synchronizer().start();
-		let deletedItems = await BaseItem.deletedItems(syncTargetId());
+		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
 	}));
 
@@ -285,9 +285,9 @@ describe('synchronizer', function() {
 		// property of the basicDelta() function is cleared properly at the end of a sync operation. If it is not cleared
 		// it means items will no longer be deleted locally via sync.
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
 		let context1 = await synchronizer().start();
 
 		await switchClient(2);
@@ -299,17 +299,17 @@ describe('synchronizer', function() {
 		await switchClient(1);
 
 		context1 = await synchronizer().start({ context: context1 });
-		let items = await allNotesFolders();
+		const items = await allNotesFolders();
 		expect(items.length).toBe(2);
-		let deletedItems = await BaseItem.deletedItems(syncTargetId());
+		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
 		await Note.delete(note2.id);
 		context1 = await synchronizer().start({ context: context1 });
 	}));
 
 	it('should delete remote folder', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -322,30 +322,30 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 		await localNotesFoldersSameAsRemote(all, expect);
 	}));
 
 	it('should delete local folder', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
-		let context1 = await synchronizer().start();
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const context1 = await synchronizer().start();
 
 		await switchClient(2);
 
-		let context2 = await synchronizer().start();
+		const context2 = await synchronizer().start();
 		await Folder.delete(folder2.id);
 		await synchronizer().start({ context: context2 });
 
 		await switchClient(1);
 
 		await synchronizer().start({ context: context1 });
-		let items = await allNotesFolders();
+		const items = await allNotesFolders();
 		await localNotesFoldersSameAsRemote(items, expect);
 	}));
 
 	it('should resolve conflict if remote folder has been deleted, but note has been added to folder locally', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -356,17 +356,17 @@ describe('synchronizer', function() {
 
 		await switchClient(1);
 
-		let note = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await synchronizer().start();
-		let items = await allNotesFolders();
+		const items = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('note1');
 		expect(items[0].is_conflict).toBe(1);
 	}));
 
 	it('should resolve conflict if note has been deleted remotely and locally', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder' });
-		let note = await Note.save({ title: 'note', parent_id: folder.title });
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.title });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -380,7 +380,7 @@ describe('synchronizer', function() {
 		await Note.delete(note.id);
 		await synchronizer().start();
 
-		let items = await allNotesFolders();
+		const items = await allNotesFolders();
 		expect(items.length).toBe(1);
 		expect(items[0].title).toBe('folder');
 
@@ -391,8 +391,8 @@ describe('synchronizer', function() {
 		// If client1 and 2 have two folders, client 1 deletes item 1 and client
 		// 2 deletes item 2, they should both end up with no items after sync.
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -413,21 +413,21 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let items2 = await allNotesFolders();
+		const items2 = await allNotesFolders();
 
 		await switchClient(1);
 
 		await synchronizer().start();
 
-		let items1 = await allNotesFolders();
+		const items1 = await allNotesFolders();
 
 		expect(items1.length).toBe(0);
 		expect(items1.length).toBe(items2.length);
 	}));
 
 	it('should handle conflict when remote note is deleted then local note is modified', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -442,25 +442,25 @@ describe('synchronizer', function() {
 
 		await switchClient(1);
 
-		let newTitle = 'Modified after having been deleted';
+		const newTitle = 'Modified after having been deleted';
 		await Note.save({ id: note1.id, title: newTitle });
 
 		await synchronizer().start();
 
-		let conflictedNotes = await Note.conflictedNotes();
+		const conflictedNotes = await Note.conflictedNotes();
 
 		expect(conflictedNotes.length).toBe(1);
 		expect(conflictedNotes[0].title).toBe(newTitle);
 
-		let unconflictedNotes = await Note.unconflictedNotes();
+		const unconflictedNotes = await Note.unconflictedNotes();
 
 		expect(unconflictedNotes.length).toBe(0);
 	}));
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -477,18 +477,18 @@ describe('synchronizer', function() {
 
 		await sleep(0.1);
 
-		let newTitle = 'Modified after having been deleted';
+		const newTitle = 'Modified after having been deleted';
 		await Folder.save({ id: folder1.id, title: newTitle });
 
 		await synchronizer().start();
 
-		let items = await allNotesFolders();
+		const items = await allNotesFolders();
 
 		expect(items.length).toBe(1);
 	}));
 
 	it('should allow duplicate folder titles', asyncTest(async () => {
-		let localF1 = await Folder.save({ title: 'folder' });
+		const localF1 = await Folder.save({ title: 'folder' });
 
 		await switchClient(2);
 
@@ -501,7 +501,7 @@ describe('synchronizer', function() {
 
 		await synchronizer().start();
 
-		let localF2 = await Folder.load(remoteF2.id);
+		const localF2 = await Folder.load(remoteF2.id);
 
 		expect(localF2.title == remoteF2.title).toBe(true);
 
@@ -528,10 +528,10 @@ describe('synchronizer', function() {
 			masterKey = await loadEncryptionMasterKey();
 		}
 
-		let f1 = await Folder.save({ title: 'folder' });
-		let n1 = await Note.save({ title: 'mynote' });
-		let n2 = await Note.save({ title: 'mynote2' });
-		let tag = await Tag.save({ title: 'mytag' });
+		const f1 = await Folder.save({ title: 'folder' });
+		const n1 = await Note.save({ title: 'mynote' });
+		const n2 = await Note.save({ title: 'mynote2' });
+		const tag = await Tag.save({ title: 'mytag' });
 		let context1 = await synchronizer().start();
 
 		await switchClient(2);
@@ -540,10 +540,10 @@ describe('synchronizer', function() {
 		if (withEncryption) {
 			const masterKey_2 = await MasterKey.load(masterKey.id);
 			await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
-			let t = await Tag.load(tag.id);
+			const t = await Tag.load(tag.id);
 			await Tag.decrypt(t);
 		}
-		let remoteTag = await Tag.loadByTitle(tag.title);
+		const remoteTag = await Tag.loadByTitle(tag.title);
 		expect(!!remoteTag).toBe(true);
 		expect(remoteTag.id).toBe(tag.id);
 		await Tag.addNote(remoteTag.id, n1.id);
@@ -579,22 +579,22 @@ describe('synchronizer', function() {
 	}));
 
 	it('should not sync notes with conflicts', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'folder' });
-		let n1 = await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
+		const f1 = await Folder.save({ title: 'folder' });
+		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id, is_conflict: 1 });
 		await synchronizer().start();
 
 		await switchClient(2);
 
 		await synchronizer().start();
-		let notes = await Note.all();
-		let folders = await Folder.all();
+		const notes = await Note.all();
+		const folders = await Folder.all();
 		expect(notes.length).toBe(0);
 		expect(folders.length).toBe(1);
 	}));
 
 	it('should not try to delete on remote conflicted notes that have been deleted', asyncTest(async () => {
-		let f1 = await Folder.save({ title: 'folder' });
-		let n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
+		const f1 = await Folder.save({ title: 'folder' });
+		const n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -613,8 +613,8 @@ describe('synchronizer', function() {
 			await loadEncryptionMasterKey();
 		}
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -625,7 +625,7 @@ describe('synchronizer', function() {
 			await decryptionWorker().start();
 		}
 		let note2 = await Note.load(note1.id);
-		note2.todo_completed = time.unixMs()-1;
+		note2.todo_completed = time.unixMs() - 1;
 		await Note.save(note2);
 		note2 = await Note.load(note2.id);
 		await synchronizer().start();
@@ -646,10 +646,10 @@ describe('synchronizer', function() {
 			// but in practice it doesn't matter, we can just take the date when the
 			// todo was marked as "done" the first time.
 
-			let conflictedNotes = await Note.conflictedNotes();
+			const conflictedNotes = await Note.conflictedNotes();
 			expect(conflictedNotes.length).toBe(0);
 
-			let notes = await Note.all();
+			const notes = await Note.all();
 			expect(notes.length).toBe(1);
 			expect(notes[0].id).toBe(note1.id);
 			expect(notes[0].todo_completed).toBe(note2.todo_completed);
@@ -658,10 +658,10 @@ describe('synchronizer', function() {
 			// smart conflict resolving since we don't know the content, so in that
 			// case it's handled as a regular conflict.
 
-			let conflictedNotes = await Note.conflictedNotes();
+			const conflictedNotes = await Note.conflictedNotes();
 			expect(conflictedNotes.length).toBe(1);
 
-			let notes = await Note.all();
+			const notes = await Note.all();
 			expect(notes.length).toBe(2);
 		}
 	}
@@ -675,14 +675,14 @@ describe('synchronizer', function() {
 	}));
 
 	it('items should be downloaded again when user cancels in the middle of delta operation', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
 		await synchronizer().start();
 
 		await switchClient(2);
 
 		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];
-		let context = await synchronizer().start();
+		const context = await synchronizer().start();
 		let notes = await Note.all();
 		expect(notes.length).toBe(0);
 
@@ -693,8 +693,8 @@ describe('synchronizer', function() {
 	}));
 
 	it('should skip items that cannot be synced', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', is_todo: 1, parent_id: folder1.id });
 		const noteId = note1.id;
 		await synchronizer().start();
 		let disabledItems = await BaseItem.syncDisabledItems(syncTargetId());
@@ -708,7 +708,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		let notes = await Note.all();
+		const notes = await Note.all();
 		expect(notes.length).toBe(1);
 		expect(notes[0].title).toBe('un');
 
@@ -721,7 +721,7 @@ describe('synchronizer', function() {
 	it('notes and folders should get encrypted when encryption is enabled', asyncTest(async () => {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'un', body: 'to be encrypted', parent_id: folder1.id });
 		await synchronizer().start();
 		// After synchronisation, remote items should be encrypted but local ones remain plain text
@@ -733,7 +733,7 @@ describe('synchronizer', function() {
 		await synchronizer().start();
 		let folder1_2 = await Folder.load(folder1.id);
 		let note1_2 = await Note.load(note1.id);
-		let masterKey_2 = await MasterKey.load(masterKey.id);
+		const masterKey_2 = await MasterKey.load(masterKey.id);
 		// On this side however it should be received encrypted
 		expect(!note1_2.title).toBe(true);
 		expect(!folder1_2.title).toBe(true);
@@ -820,7 +820,7 @@ describe('synchronizer', function() {
 
 	it('should encrypt existing notes too when enabling E2EE', asyncTest(async () => {
 		// First create a folder, without encryption enabled, and sync it
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
 		let files = await fileApi().list();
 		let content = await fileApi().get(files.items[0].path);
@@ -848,18 +848,18 @@ describe('synchronizer', function() {
 	it('should sync resources', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
-		let resource1 = (await Resource.all())[0];
-		let resourcePath1 = Resource.fullPath(resource1);
+		const resource1 = (await Resource.all())[0];
+		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
 		expect((await remoteNotesFoldersResources()).length).toBe(3);
 
 		await switchClient(2);
 
 		await synchronizer().start();
-		let allResources = await Resource.all();
+		const allResources = await Resource.all();
 		expect(allResources.length).toBe(1);
 		let resource1_2 = allResources[0];
 		let ls = await Resource.localState(resource1_2);
@@ -874,18 +874,18 @@ describe('synchronizer', function() {
 		ls = await Resource.localState(resource1_2);
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_DONE);
 
-		let resourcePath1_2 = Resource.fullPath(resource1_2);
+		const resourcePath1_2 = Resource.fullPath(resource1_2);
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
 
 	it('should handle resource download errors', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		let resource1 = (await Resource.all())[0];
-		let resourcePath1 = Resource.fullPath(resource1);
+		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -902,7 +902,7 @@ describe('synchronizer', function() {
 		await fetcher.waitForAllFinished();
 
 		resource1 = await Resource.load(resource1.id);
-		let ls = await Resource.localState(resource1);
+		const ls = await Resource.localState(resource1);
 		expect(ls.fetch_status).toBe(Resource.FETCH_STATUS_ERROR);
 		expect(ls.fetch_error).toBe('did not work');
 	}));
@@ -910,8 +910,8 @@ describe('synchronizer', function() {
 	it('should set the resource file size if it is missing', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
@@ -933,11 +933,11 @@ describe('synchronizer', function() {
 	it('should delete resources', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(500);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
-		let resource1 = (await Resource.all())[0];
-		let resourcePath1 = Resource.fullPath(resource1);
+		const resource1 = (await Resource.all())[0];
+		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -945,7 +945,7 @@ describe('synchronizer', function() {
 		await synchronizer().start();
 		let allResources = await Resource.all();
 		expect(allResources.length).toBe(1);
-		let all = await fileApi().list();
+		const all = await fileApi().list();
 		expect((await remoteNotesFoldersResources()).length).toBe(3);
 		await Resource.delete(resource1.id);
 		await synchronizer().start();
@@ -967,11 +967,11 @@ describe('synchronizer', function() {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
-		let resource1 = (await Resource.all())[0];
-		let resourcePath1 = Resource.fullPath(resource1);
+		const resource1 = (await Resource.all())[0];
+		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -986,7 +986,7 @@ describe('synchronizer', function() {
 
 		let resource1_2 = (await Resource.all())[0];
 		resource1_2 = await Resource.decrypt(resource1_2);
-		let resourcePath1_2 = Resource.fullPath(resource1_2);
+		const resourcePath1_2 = Resource.fullPath(resource1_2);
 
 		expect(fileContentEqual(resourcePath1, resourcePath1_2)).toBe(true);
 	}));
@@ -995,7 +995,7 @@ describe('synchronizer', function() {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
 
 		let allEncrypted = await allSyncTargetItemsEncrypted();
@@ -1016,7 +1016,7 @@ describe('synchronizer', function() {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -1049,12 +1049,12 @@ describe('synchronizer', function() {
 		Setting.setValue('encryption.enabled', true);
 		const masterKey = await loadEncryptionMasterKey();
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
-		let resource1 = (await Resource.all())[0];
+		const resource1 = (await Resource.all())[0];
 		await Resource.setFileSizeOnly(resource1.id, -1);
-		let resourcePath1 = Resource.fullPath(resource1);
+		const resourcePath1 = Resource.fullPath(resource1);
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -1075,8 +1075,8 @@ describe('synchronizer', function() {
 	it('should encrypt remote resources after encryption has been enabled', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		await synchronizer().start();
 
@@ -1094,22 +1094,22 @@ describe('synchronizer', function() {
 	it('should upload encrypted resource, but it should not mark the blob as encrypted locally', asyncTest(async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await encryptionService().enableEncryption(masterKey, '123456');
 		await encryptionService().loadMasterKeysFromSettings();
 		await synchronizer().start();
 
-		let resource1 = (await Resource.all())[0];
+		const resource1 = (await Resource.all())[0];
 		expect(resource1.encryption_blob_encrypted).toBe(0);
 	}));
 
 	it('should create remote items with UTF-8 content', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'Fahrräder' });
+		const folder = await Folder.save({ title: 'Fahrräder' });
 		await Note.save({ title: 'Fahrräder', body: 'Fahrräder', parent_id: folder.id });
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 
 		await synchronizer().start();
 
@@ -1117,8 +1117,8 @@ describe('synchronizer', function() {
 	}));
 
 	it('should update remote items but not pull remote changes', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder1' });
-		let note = await Note.save({ title: 'un', parent_id: folder.id });
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'un', parent_id: folder.id });
 		await synchronizer().start();
 
 		await switchClient(2);
@@ -1131,13 +1131,13 @@ describe('synchronizer', function() {
 
 		await Note.save({ title: 'un UPDATE', id: note.id });
 		await synchronizer().start({ syncSteps: ['update_remote'] });
-		let all = await allNotesFolders();
+		const all = await allNotesFolders();
 		expect(all.length).toBe(2);
 
 		await switchClient(2);
 
 		await synchronizer().start();
-		let note2 = await Note.load(note.id);
+		const note2 = await Note.load(note.id);
 		expect(note2.title).toBe('un UPDATE');
 	}));
 
@@ -1544,8 +1544,8 @@ describe('synchronizer', function() {
 		Setting.setValue('encryption.enabled', true);
 		await loadEncryptionMasterKey();
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'deux', parent_id: folder1.id });
 		await synchronizer().start();
 
@@ -1570,12 +1570,12 @@ describe('synchronizer', function() {
 		await synchronizer().start();
 
 		// The shared note should be decrypted
-		let note2_2 = await Note.load(note2.id);
+		const note2_2 = await Note.load(note2.id);
 		expect(note2_2.title).toBe('deux');
 		expect(note2_2.is_shared).toBe(1);
 
 		// The non-shared note should be encrypted
-		let note1_2 = await Note.load(note1.id);
+		const note1_2 = await Note.load(note1.id);
 		expect(note1_2.title).toBe('');
 	}));
 

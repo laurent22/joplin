@@ -92,8 +92,8 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	keyValueToArray(kv) {
-		let output = [];
-		for (let k in kv) {
+		const output = [];
+		for (const k in kv) {
 			if (!kv.hasOwnProperty(k)) continue;
 			output.push({
 				key: k,
@@ -205,7 +205,7 @@ class ConfigScreenComponent extends React.Component {
 		}
 
 		let advancedSettingsButton = null;
-		let advancedSettingsSectionStyle = { display: 'none' };
+		const advancedSettingsSectionStyle = { display: 'none' };
 
 		if (advancedSettingComps.length) {
 			const iconName = this.state.showAdvancedSettings ? 'fa fa-toggle-up' : 'fa fa-toggle-down';
@@ -227,7 +227,7 @@ class ConfigScreenComponent extends React.Component {
 	settingToComponent(key, value) {
 		const theme = themeStyle(this.props.theme);
 
-		let output = null;
+		const output = null;
 
 		const rowStyle = this.rowStyle_;
 
@@ -283,9 +283,9 @@ class ConfigScreenComponent extends React.Component {
 		const descriptionComp = descriptionText ? <div style={descriptionStyle}>{descriptionText}</div> : null;
 
 		if (md.isEnum) {
-			let items = [];
+			const items = [];
 			const settingOptions = md.options();
-			let array = this.keyValueToArray(settingOptions);
+			const array = this.keyValueToArray(settingOptions);
 			for (let i = 0; i < array.length; i++) {
 				const e = array[i];
 				items.push(
@@ -547,7 +547,7 @@ class ConfigScreenComponent extends React.Component {
 			}
 		);
 
-		let settings = this.state.settings;
+		const settings = this.state.settings;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, { padding: 10, paddingTop: 0, display: 'flex', flex: 1 });
 

@@ -44,7 +44,7 @@ class Setting extends BaseModel {
 				isEnum: true,
 				label: () => _('Keyboard Mode'),
 				options: () => {
-					let output = {};
+					const output = {};
 					output['default'] = _('Default');
 					output['emacs'] = _('Emacs');
 					output['vim'] = _('Vim');
@@ -204,7 +204,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Date format'),
 				options: () => {
-					let options = {};
+					const options = {};
 					const now = new Date('2017-01-30T12:00:00').getTime();
 					options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
 					options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
@@ -223,7 +223,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Time format'),
 				options: () => {
-					let options = {};
+					const options = {};
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 					options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
@@ -239,7 +239,7 @@ class Setting extends BaseModel {
 				label: () => _('Theme'),
 				section: 'appearance',
 				options: () => {
-					let output = {};
+					const output = {};
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
 					if (platform !== mobilePlatform) {
@@ -392,6 +392,11 @@ class Setting extends BaseModel {
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
+			'encryption.shouldReencrypt': {
+				value: -1, // will be set on app startup
+				type: Setting.TYPE_INT,
+				public: false,
+			},
 
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
@@ -598,7 +603,7 @@ class Setting extends BaseModel {
 	static settingMetadata(key) {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
-		let output = Object.assign({}, metadata[key]);
+		const output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
 	}
@@ -617,14 +622,14 @@ class Setting extends BaseModel {
 		if (!this.keys_) {
 			const metadata = this.metadata();
 			this.keys_ = [];
-			for (let n in metadata) {
+			for (const n in metadata) {
 				if (!metadata.hasOwnProperty(n)) continue;
 				this.keys_.push(n);
 			}
 		}
 
 		if (appType || publicOnly) {
-			let output = [];
+			const output = [];
 			for (let i = 0; i < this.keys_.length; i++) {
 				const md = this.settingMetadata(this.keys_[i]);
 				if (publicOnly && !md.public) continue;
@@ -648,7 +653,7 @@ class Setting extends BaseModel {
 			this.cache_ = [];
 
 			for (let i = 0; i < rows.length; i++) {
-				let c = rows[i];
+				const c = rows[i];
 
 				if (!this.keyExists(c.key)) continue;
 				c.value = this.formatValue(c.key, c.value);
@@ -663,7 +668,7 @@ class Setting extends BaseModel {
 
 	static toPlainObject() {
 		const keys = this.keys();
-		let keyToValues = {};
+		const keyToValues = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
@@ -689,7 +694,7 @@ class Setting extends BaseModel {
 		value = this.filterValue(key, value);
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			let c = this.cache_[i];
+			const c = this.cache_[i];
 			if (c.key == key) {
 				const md = this.settingMetadata(key);
 
@@ -844,8 +849,8 @@ class Setting extends BaseModel {
 
 	static enumOptionValues(key) {
 		const options = this.enumOptions(key);
-		let output = [];
-		for (let n in options) {
+		const output = [];
+		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
 			output.push(n);
 		}
@@ -854,7 +859,7 @@ class Setting extends BaseModel {
 
 	static enumOptionLabel(key, value) {
 		const options = this.enumOptions(key);
-		for (let n in options) {
+		for (const n in options) {
 			if (n == value) return options[n];
 		}
 		return '';
@@ -870,8 +875,8 @@ class Setting extends BaseModel {
 	static enumOptionsDoc(key, templateString = null) {
 		if (templateString === null) templateString = '%s: %s';
 		const options = this.enumOptions(key);
-		let output = [];
-		for (let n in options) {
+		const output = [];
+		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
 			output.push(sprintf(templateString, n, options[n]));
 		}
@@ -890,8 +895,8 @@ class Setting extends BaseModel {
 	static subValues(baseKey, settings, options = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
-		let output = {};
-		for (let key in settings) {
+		const output = {};
+		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
 				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
@@ -908,10 +913,10 @@ class Setting extends BaseModel {
 		clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
-		let queries = [];
+		const queries = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
-			let s = Object.assign({}, this.cache_[i]);
+			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
@@ -941,10 +946,10 @@ class Setting extends BaseModel {
 
 		const metadata = this.metadata();
 
-		let output = {};
-		for (let key in metadata) {
+		const output = {};
+		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
-			let s = Object.assign({}, metadata[key]);
+			const s = Object.assign({}, metadata[key]);
 			if (!s.public) continue;
 			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
 			s.value = this.value(key);
@@ -962,7 +967,7 @@ class Setting extends BaseModel {
 	}
 
 	static groupMetadatasBySections(metadatas) {
-		let sections = [];
+		const sections = [];
 		const generalSection = { name: 'general', metadatas: [] };
 		const nameToSections = {};
 		nameToSections['general'] = generalSection;
@@ -1052,6 +1057,10 @@ Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
+Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
+Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',

@@ -46,9 +46,9 @@ class ImportScreenComponent extends React.Component {
 	}
 
 	uniqueMessages() {
-		let output = [];
+		const output = [];
 		const messages = this.state.messages.slice();
-		let foundKeys = [];
+		const foundKeys = [];
 		for (let i = messages.length - 1; i >= 0; i--) {
 			const msg = messages[i];
 			if (foundKeys.indexOf(msg.key) >= 0) continue;
@@ -68,7 +68,7 @@ class ImportScreenComponent extends React.Component {
 
 		const options = {
 			onProgress: progressState => {
-				let line = [];
+				const line = [];
 				line.push(_('Found: %d.', progressState.loaded));
 				line.push(_('Created: %d.', progressState.created));
 				if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));

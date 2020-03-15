@@ -20,7 +20,7 @@ function processMdArrayNewLines(md) {
 	let temp = [];
 	let last = '';
 	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
+		const v = md[i];
 		if (isNewLineBlock(last) && isNewLineBlock(v) && last == v) {
 			// Skip it
 		} else {
@@ -33,7 +33,7 @@ function processMdArrayNewLines(md) {
 	temp = [];
 	last = '';
 	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
+		const v = md[i];
 		if (last == BLOCK_CLOSE && v == BLOCK_OPEN) {
 			temp.pop();
 			temp.push(NEWLINE_MERGED);
@@ -47,7 +47,7 @@ function processMdArrayNewLines(md) {
 	temp = [];
 	last = '';
 	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
+		const v = md[i];
 		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_CLOSE)) {
 			// Skip it
 		} else {
@@ -61,7 +61,7 @@ function processMdArrayNewLines(md) {
 	temp = [];
 	last = '';
 	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
+		const v = md[i];
 		if (last == NEWLINE && (v == NEWLINE_MERGED || v == BLOCK_OPEN)) {
 			// Skip it
 		} else {
@@ -81,7 +81,7 @@ function processMdArrayNewLines(md) {
 	let previous = '';
 	let start = true;
 	for (let i = 0; i < md.length; i++) {
-		let v = md[i];
+		const v = md[i];
 		let add = '';
 		if (v == BLOCK_CLOSE || v == BLOCK_OPEN || v == NEWLINE || v == NEWLINE_MERGED) {
 			add = '\n';
@@ -103,7 +103,7 @@ function processMdArrayNewLines(md) {
 
 	// To simplify the result, we only allow up to one empty line between blocks of text
 	const mergeMultipleNewLines = function(lines) {
-		let output = [];
+		const output = [];
 		let newlineCount = 0;
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
@@ -191,7 +191,7 @@ const isPlainParagraph = function(line) {
 
 function formatMdLayout(lines) {
 	let previous = '';
-	let newLines = [];
+	const newLines = [];
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i];
 
@@ -245,8 +245,8 @@ function simplifyString(s) {
 	let output = '';
 	let previousWhite = false;
 	for (let i = 0; i < s.length; i++) {
-		let c = s[i];
-		let isWhite = isWhiteSpace(c);
+		const c = s[i];
+		const isWhite = isWhiteSpace(c);
 		if (previousWhite && isWhite) {
 			// skip
 		} else {
@@ -271,8 +271,8 @@ function collapseWhiteSpaceAndAppend(lines, state, text) {
 
 		// Collapse all white spaces to just one. If there are spaces to the left and right of the string
 		// also collapse them to just one space.
-		let spaceLeft = text.length && text[0] == ' ';
-		let spaceRight = text.length && text[text.length - 1] == ' ';
+		const spaceLeft = text.length && text[0] == ' ';
+		const spaceRight = text.length && text[text.length - 1] == ' ';
 		text = simplifyString(text);
 
 		if (!spaceLeft && !spaceRight && text == '') return lines;
@@ -369,8 +369,8 @@ function isNewLineBlock(s) {
 
 function attributeToLowerCase(node) {
 	if (!node.attributes) return {};
-	let output = {};
-	for (let n in node.attributes) {
+	const output = {};
+	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
 		output[n.toLowerCase()] = node.attributes[n];
 	}
@@ -388,7 +388,7 @@ function isSpanWithStyle(attributes) {
 }
 
 function isSpanStyleBold(attributes) {
-	let style = attributes.style;
+	const style = attributes.style;
 	if (style.includes('font-weight: bold;')) {
 		return true;
 	} else if (style.search(/font-family:.*,Bold.*;/) != -1) {
@@ -407,7 +407,7 @@ function isSpanStyleItalic(attributes) {
 }
 
 function enexXmlToMdArray(stream, resources) {
-	let remainingResources = resources.slice();
+	const remainingResources = resources.slice();
 
 	const removeRemainingResource = id => {
 		for (let i = 0; i < remainingResources.length; i++) {
@@ -419,7 +419,7 @@ function enexXmlToMdArray(stream, resources) {
 	};
 
 	return new Promise((resolve) => {
-		let state = {
+		const state = {
 			inCode: [],
 			inPre: false,
 			inQuote: false,
@@ -428,9 +428,9 @@ function enexXmlToMdArray(stream, resources) {
 			spanAttributes: [],
 		};
 
-		let options = {};
-		let strict = false;
-		var saxStream = require('sax').createStream(strict, options);
+		const options = {};
+		const strict = false;
+		const saxStream = require('sax').createStream(strict, options);
 
 		let section = {
 			type: 'text',
@@ -475,7 +475,7 @@ function enexXmlToMdArray(stream, resources) {
 
 		saxStream.on('opentag', function(node) {
 			const nodeAttributes = attributeToLowerCase(node);
-			let n = node.name.toLowerCase();
+			const n = node.name.toLowerCase();
 
 			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
 
@@ -493,7 +493,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isBlockTag(n)) {
 				section.lines.push(BLOCK_OPEN);
 			} else if (n == 'table') {
-				let newSection = {
+				const newSection = {
 					type: 'table',
 					lines: [],
 					parent: section,
@@ -508,7 +508,7 @@ function enexXmlToMdArray(stream, resources) {
 					return;
 				}
 
-				let newSection = {
+				const newSection = {
 					type: 'tr',
 					lines: [],
 					parent: section,
@@ -525,7 +525,7 @@ function enexXmlToMdArray(stream, resources) {
 
 				if (n == 'th') section.isHeader = true;
 
-				let newSection = {
+				const newSection = {
 					type: 'td',
 					lines: [],
 					parent: section,
@@ -543,7 +543,7 @@ function enexXmlToMdArray(stream, resources) {
 					return;
 				}
 
-				let container = state.lists[state.lists.length - 1];
+				const container = state.lists[state.lists.length - 1];
 				container.startedText = false;
 
 				const indent = '    '.repeat(state.lists.length - 1);
@@ -577,7 +577,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (isEmTag(n)) {
 				section.lines.push('*');
 			} else if (n == 'en-todo') {
-				let x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
+				const x = nodeAttributes && nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? 'X' : ' ';
 				section.lines.push(`- [${x}] `);
 			} else if (n == 'hr') {
 				// Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
@@ -610,7 +610,7 @@ function enexXmlToMdArray(stream, resources) {
 				state.inCode.push(true);
 				state.currentCode = '';
 
-				let newSection = {
+				const newSection = {
 					type: 'code',
 					lines: [],
 					parent: section,
@@ -628,7 +628,7 @@ function enexXmlToMdArray(stream, resources) {
 
 				let resource = null;
 				for (let i = 0; i < resources.length; i++) {
-					let r = resources[i];
+					const r = resources[i];
 					if (r.id == hash) {
 						resource = r;
 						removeRemainingResource(r.id);
@@ -677,7 +677,7 @@ function enexXmlToMdArray(stream, resources) {
 
 					let found = false;
 					for (let i = 0; i < remainingResources.length; i++) {
-						let r = remainingResources[i];
+						const r = remainingResources[i];
 						if (!r.id) {
 							resource = Object.assign({}, r);
 							resource.id = hash;
@@ -770,8 +770,8 @@ function enexXmlToMdArray(stream, resources) {
 				state.inPre = false;
 				section.lines.push(BLOCK_CLOSE);
 			} else if (isAnchor(n)) {
-				let attributes = state.anchorAttributes.pop();
-				let url = attributes && attributes.href ? attributes.href : '';
+				const attributes = state.anchorAttributes.pop();
+				const url = attributes && attributes.href ? attributes.href : '';
 
 				if (section.lines.length < 1) throw new Error('Invalid anchor tag closing'); // Sanity check, but normally not possible
 
@@ -892,7 +892,7 @@ function enexXmlToMdArray(stream, resources) {
 			} else if (n == 'en-media') {
 				// Skip
 			} else if (n == 'span') {
-				let attributes = state.spanAttributes.pop();
+				const attributes = state.spanAttributes.pop();
 				if (isSpanWithStyle(attributes)) {
 					if (isSpanStyleBold(attributes)) {
 						// console.debug('Applying style found in span tag (closing): bold')
@@ -958,8 +958,8 @@ function drawTable(table) {
 	for (let trIndex = 0; trIndex < table.lines.length; trIndex++) {
 		const tr = table.lines[trIndex];
 		const isHeader = tr.isHeader;
-		let line = [];
-		let headerLine = [];
+		const line = [];
+		const headerLine = [];
 		let emptyHeader = null;
 		for (let tdIndex = 0; tdIndex < tr.lines.length; tdIndex++) {
 			const td = tr.lines[tdIndex];
@@ -1015,7 +1015,7 @@ function drawTable(table) {
 				if (!headerDone) {
 					if (!isHeader) {
 						if (!emptyHeader) emptyHeader = [];
-						let h = stringPadding(' ', width, ' ', stringPadding.RIGHT);
+						const h = stringPadding(' ', width, ' ', stringPadding.RIGHT);
 						emptyHeader.push(h);
 					}
 					headerLine.push('-'.repeat(width));
@@ -1103,12 +1103,12 @@ function postProcessMarkdown(lines) {
 
 async function enexXmlToMd(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
-	let result = await enexXmlToMdArray(stream, resources, options);
+	const result = await enexXmlToMdArray(stream, resources, options);
 
 	let mdLines = [];
 
 	for (let i = 0; i < result.content.lines.length; i++) {
-		let line = result.content.lines[i];
+		const line = result.content.lines[i];
 		if (typeof line === 'object' && line.type === 'table') {
 			// A table
 			const table = line;
@@ -1127,7 +1127,7 @@ async function enexXmlToMd(xmlString, resources, options = {}) {
 
 	let firstAttachment = true;
 	for (let i = 0; i < result.resources.length; i++) {
-		let r = result.resources[i];
+		const r = result.resources[i];
 		if (firstAttachment) mdLines.push(NEWLINE);
 		mdLines.push(NEWLINE);
 		mdLines = addResourceTag(mdLines, r, r.filename);

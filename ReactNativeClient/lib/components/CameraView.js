@@ -107,10 +107,10 @@ class CameraView extends Component {
 	}
 
 	fitRectIntoBounds(rect, bounds) {
-		var rectRatio = rect.width / rect.height;
-		var boundsRatio = bounds.width / bounds.height;
+		const rectRatio = rect.width / rect.height;
+		const boundsRatio = bounds.width / bounds.height;
 
-		var newDimensions = {};
+		const newDimensions = {};
 
 		// Rect is more landscape than bounds - fit to width
 		if (rectRatio > boundsRatio) {

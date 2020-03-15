@@ -1048,11 +1048,11 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Zoom In"
-msgstr ""
+msgstr "Зумирај"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom Out"
-msgstr ""
+msgstr "Одзумирај"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
 msgid "&Tools"
@@ -1245,7 +1245,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
-msgstr ""
+msgstr "Ово ће отворити нови екран. Сачувај своје промене?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:139
 #, javascript-format
@@ -1286,7 +1286,7 @@ msgstr "Прикажи све"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Статус Joplin Nextcloud апликације"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:233
 #, fuzzy
@@ -1452,23 +1452,23 @@ msgstr "Шифровање је:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox екстензија"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr ""
+msgstr "Chrome Web продавница"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "Набави их сада"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Икона"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
 #, fuzzy
@@ -1516,7 +1516,7 @@ msgstr "Подеси аларм:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:368
 msgid "Template file:"
-msgstr ""
+msgstr "Шаблонска датотека:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:547
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
@@ -1545,19 +1545,19 @@ msgstr "Постави лозинку"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Речи"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Карактери"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Карактери искључујући празне"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Линије"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
 #, fuzzy
@@ -1567,7 +1567,7 @@ msgstr "Својства белешке"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:180
 msgid "Close"
-msgstr ""
+msgstr "Затвори"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1599,7 +1599,7 @@ msgstr "Историја о белешци"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:33
 msgid "Markup"
-msgstr ""
+msgstr "Означавање"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
 msgid "Previous versions of this note"
@@ -1661,7 +1661,7 @@ msgstr "Копирај адресу везе"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:818
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Дошло је до грешке приликом преузимања овог прилога"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:820
 #, fuzzy
@@ -1778,7 +1778,7 @@ msgstr "назив"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Величина"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
 #, fuzzy
@@ -1802,12 +1802,12 @@ msgstr "Проверавам... Молимо вас да сачекате."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "Без ресурса"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "Упозорење: нису сви ресурси приказани због перформанси (лимит: %s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1842,6 +1842,7 @@ msgstr[2] "Токен је копиран у клипборд!"
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Белешка: Када је белешка дељена, не може се више шифровати на серверу."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 #, fuzzy
@@ -1858,7 +1859,7 @@ msgstr[2] "Подели"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:282
 msgid "Remove"
-msgstr ""
+msgstr "Уклони"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:285
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
@@ -2211,7 +2212,7 @@ msgstr "Не могу да преместим бележницу у \"%s\" бе�
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Није преузето"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
 #, fuzzy
@@ -2220,7 +2221,7 @@ msgstr "Преузимам ресурсе..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Преузето"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2236,7 +2237,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Режим тастатуре"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 #, fuzzy
@@ -2245,11 +2246,11 @@ msgstr "Подразумевано: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
 msgid "Emacs"
-msgstr ""
+msgstr "Емакс"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
 msgid "Vim"
-msgstr ""
+msgstr "Вим"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
 msgid "Synchronisation target"
@@ -2348,19 +2349,19 @@ msgstr "Тамна"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Dracula"
-msgstr ""
+msgstr "Дракула"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
 msgid "Solarised Light"
-msgstr ""
+msgstr "Соларизовано светло"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
 msgid "Solarised Dark"
-msgstr ""
+msgstr "Соларизовано тамно"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
 msgid "Nord"
-msgstr ""
+msgstr "Норд"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
 #, fuzzy
@@ -2390,19 +2391,19 @@ msgstr "&Приказ"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Split View"
-msgstr ""
+msgstr "Раздвојени преглед"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, javascript-format
 msgid "%s / %s / %s"
-msgstr ""
+msgstr "%s / %s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 #, javascript-format
 msgid "%s / %s"
-msgstr ""
+msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
 msgid "Uncompleted to-dos on top"
@@ -2418,7 +2419,7 @@ msgstr "Сортирај белешке по"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Ауто-упари заграде, цитате, итд."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
@@ -2559,7 +2560,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:471
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Прилагођена таблица стилова за стилове Џоплин програма"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:477
 msgid "Automatically update the application"
@@ -2611,43 +2612,43 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Величина странице за извоз у ПДФ формат"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
 msgid "A4"
-msgstr ""
+msgstr "А4"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
 msgid "Letter"
-msgstr ""
+msgstr "Писмо"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 msgid "A3"
-msgstr ""
+msgstr "А3"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
 msgid "A5"
-msgstr ""
+msgstr "А5"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
 msgid "Tabloid"
-msgstr ""
+msgstr "Таблоид"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Legal"
-msgstr ""
+msgstr "Правно"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Орјентација странице за извоз у ПДФ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
 msgid "Portrait"
-msgstr ""
+msgstr "Усправно"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
 msgid "Landscape"
-msgstr ""
+msgstr "Положено"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
 msgid "Custom TLS certificates"
@@ -2866,7 +2867,7 @@ msgstr "Приложи фајл"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Преузето и дешифровано"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
@@ -2877,7 +2878,7 @@ msgstr "Укупно: %d/%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Преузето и шифровано"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
 #, fuzzy
@@ -3063,7 +3064,7 @@ msgstr "Унесите нове ознаке или одаберите са ли
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 msgid "Warning"
-msgstr ""
+msgstr "Упозорење"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
