@@ -140,7 +140,7 @@ function themeStyle(theme) {
 		output.raisedHighlightedColor = '#ffffff';
 
 		output.htmlColor = 'rgb(220,220,220)';
-		output.htmlBackgroundColor = 'rgb(29,32,36)';
+		output.htmlBackgroundColor = 'rgb(0,0,0)';
 		output.htmlLinkColor = 'rgb(166,166,255)';
 
 		output.htmlDividerColor = '#3D444E';
