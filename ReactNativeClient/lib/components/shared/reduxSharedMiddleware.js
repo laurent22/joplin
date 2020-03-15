@@ -40,7 +40,9 @@ const reduxSharedMiddleware = async function(store, next, action) {
 
 	if (action.type === 'NOTE_DELETE' ||
 		action.type === 'NOTE_SELECT' ||
-		action.type === 'NOTE_SELECT_TOGGLE') {
+		action.type === 'NOTE_SELECT_TOGGLE' ||
+		action.type === 'TAG_UPDATE_ONE' ||
+		action.type === 'TAG_UPDATE_ALL') {
 		let noteTags = [];
 
 		// We don't need to show tags unless only one note is selected.
