@@ -413,7 +413,6 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
-			historyAction: 'goto',
 		});
 	}
 
