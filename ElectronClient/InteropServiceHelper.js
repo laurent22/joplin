@@ -99,10 +99,11 @@ class InteropServiceHelper {
 		const note = await Note.load(noteIds[0]);
 		const folder = await Folder.load(note.parent_id);
 
-		// friendlySafeFilename assumes that the file extension is added after
-		const filename = friendlySafeFilename(`${folder.title}-${note.title}`);
+		const foldername = friendlySafeFilename(folder.title, 100);
+		const filename = friendlySafeFilename(note.title, 100);
 
-		return `${filename}.${fileExtension}`;
+		// friendlySafeFilename assumes that the file extension is added after
+		return `${foldername}-${filename}.${fileExtension}`;
 	}
 
 	static async export(dispatch, module, options = null) {
