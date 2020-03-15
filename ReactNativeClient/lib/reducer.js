@@ -1,6 +1,7 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 const defaultState = {
 	notes: [],
@@ -524,6 +525,7 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote = action.note;
+				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 
 				const noteIsInFolder = function(note, folderId) {
 					if (note.is_conflict) return folderId === Folder.conflictFolderId();
@@ -539,7 +541,7 @@ const reducer = (state = defaultState, action) => {
 					const n = newNotes[i];
 					if (n.id == modNote.id) {
 						// Note is still in the same folder
-						if (noteIsInFolder(modNote, n.parent_id)) {
+						if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
@@ -562,7 +564,7 @@ const reducer = (state = defaultState, action) => {
 				// Note was not found - if the current folder is the same as the note folder,
 				// add it to it.
 				if (!found) {
-					if (noteIsInFolder(modNote, state.selectedFolderId)) {
+					if (isViewingAllNotes || noteIsInFolder(modNote, state.selectedFolderId)) {
 						newNotes.push(modNote);
 					}
 				}
