@@ -442,9 +442,9 @@ class Application extends BaseApplication {
 								modulePath: module.path,
 								onError: console.warn,
 								destinationFolderId:
-								!module.isNoteArchive && moduleSource === 'file'
-									? selectedFolderId
-									: null,
+									!module.isNoteArchive && moduleSource === 'file'
+										? selectedFolderId
+										: null,
 							};
 
 							const service = new InteropService();
@@ -774,7 +774,7 @@ class Application extends BaseApplication {
 					platforms: ['darwin'],
 					accelerator: 'Command+W',
 					selector: 'performClose:',
-				},  {
+				}, {
 					type: 'separator',
 				}, {
 					label: _('Templates'),
@@ -1193,6 +1193,9 @@ class Application extends BaseApplication {
 			if (!menuItem) continue;
 			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			menuItem.enabled = !isHtmlNote && layout !== 'viewer' && !!note;
+			if (itemId === 'commandStartExternalEditing') {
+				menuItem.enabled = true;
+			}
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
