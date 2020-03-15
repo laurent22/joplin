@@ -16,7 +16,7 @@ class SyncTargetRegistry {
 	}
 
 	static nameToId(name) {
-		for (let n in this.reg_) {
+		for (const n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].name === name) return this.reg_[n].id;
 		}
@@ -24,7 +24,7 @@ class SyncTargetRegistry {
 	}
 
 	static idToMetadata(id) {
-		for (let n in this.reg_) {
+		for (const n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].id === id) return this.reg_[n];
 		}
@@ -36,8 +36,8 @@ class SyncTargetRegistry {
 	}
 
 	static idAndLabelPlainObject(os) {
-		let output = {};
-		for (let n in this.reg_) {
+		const output = {};
+		for (const n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			const info = this.reg_[n];
 			if (info.classRef.unsupportedPlatforms().indexOf(os) >= 0) {

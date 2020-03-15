@@ -30,7 +30,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			textInput: {
 				color: theme.color,
 				paddingLeft: theme.marginLeft,
@@ -61,14 +61,14 @@ class FolderScreenComponent extends BaseScreenComponent {
 
 	isModified() {
 		if (!this.state.folder || !this.state.lastSavedFolder) return false;
-		let diff = BaseModel.diffObjects(this.state.folder, this.state.lastSavedFolder);
+		const diff = BaseModel.diffObjects(this.state.folder, this.state.lastSavedFolder);
 		delete diff.type_;
 		return !!Object.getOwnPropertyNames(diff).length;
 	}
 
 	folderComponent_change(propName, propValue) {
 		this.setState((prevState) => {
-			let folder = Object.assign({}, prevState.folder);
+			const folder = Object.assign({}, prevState.folder);
 			folder[propName] = propValue;
 			return { folder: folder };
 		});
@@ -101,7 +101,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		let saveButtonDisabled = !this.isModified();
+		const saveButtonDisabled = !this.isModified();
 		const theme = themeStyle(this.props.theme);
 
 		return (

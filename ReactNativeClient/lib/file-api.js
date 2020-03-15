@@ -116,7 +116,7 @@ class FileApi {
 	}
 
 	fullPath_(path) {
-		let output = [];
+		const output = [];
 		if (this.baseDir()) output.push(this.baseDir());
 		if (path) output.push(path);
 		return output.join('/');
@@ -134,7 +134,7 @@ class FileApi {
 		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
-			let temp = [];
+			const temp = [];
 			for (let i = 0; i < result.items.length; i++) {
 				if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
 			}
@@ -216,7 +216,7 @@ class FileApi {
 }
 
 function basicDeltaContextFromOptions_(options) {
-	let output = {
+	const output = {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
@@ -254,7 +254,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		logger.warn('BasicDelta: Sync will continue but it is likely that nothing will be synced');
 	}
 
-	let newContext = {
+	const newContext = {
 		timestamp: context.timestamp,
 		filesAtTimestamp: context.filesAtTimestamp.slice(),
 		statsCache: context.statsCache,
@@ -327,7 +327,7 @@ async function basicDelta(path, getDirStatFn, options) {
 		// we have to the items on the target.
 		// Note that when deleted items are processed it might result in the output having
 		// more items than outputLimit. This is acceptable since delete operations are cheap.
-		let deletedItems = [];
+		const deletedItems = [];
 		for (let i = 0; i < itemIds.length; i++) {
 			const itemId = itemIds[i];
 

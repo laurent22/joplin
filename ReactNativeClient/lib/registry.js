@@ -52,6 +52,15 @@ reg.syncTarget = (syncTargetId = null) => {
 	return target;
 };
 
+// This can be used when some data has been modified and we want to make
+// sure it gets synced. So we wait for the current sync operation to
+// finish (if one is running), then we trigger a sync just after.
+reg.waitForSyncFinishedThenSync = async () => {
+	const synchronizer = await reg.syncTarget().synchronizer();
+	await synchronizer.waitForSyncToFinish();
+	await reg.scheduleSync(0);
+};
+
 reg.scheduleSync_ = async (delay = null, syncOptions = null) => {
 	if (delay === null) delay = 1000 * 10;
 	if (syncOptions === null) syncOptions = {};

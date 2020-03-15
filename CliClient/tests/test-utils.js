@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseApplication }= require('lib/BaseApplication.js');
+const { BaseApplication } = require('lib/BaseApplication.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -41,13 +41,13 @@ const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 
-let databases_ = [];
-let synchronizers_ = [];
-let encryptionServices_ = [];
-let revisionServices_ = [];
-let decryptionWorkers_ = [];
-let resourceServices_ = [];
-let kvStores_ = [];
+const databases_ = [];
+const synchronizers_ = [];
+const encryptionServices_ = [];
+const revisionServices_ = [];
+const decryptionWorkers_ = [];
+const resourceServices_ = [];
+const kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -341,7 +341,7 @@ function fileApi() {
 
 function objectsEqual(o1, o2) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
-	for (let n in o1) {
+	for (const n in o1) {
 		if (!o1.hasOwnProperty(n)) continue;
 		if (o1[n] !== o2[n]) return false;
 	}
@@ -427,7 +427,7 @@ function sortedIds(a) {
 }
 
 function at(a, indexes) {
-	let out = [];
+	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
 		out.push(a[indexes[i]]);
 	}
@@ -435,19 +435,19 @@ function at(a, indexes) {
 }
 
 async function createNTestFolders(n) {
-	let folders = [];
+	const folders = [];
 	for (let i = 0; i < n; i++) {
-		let folder = await Folder.save({ title: 'folder' });
+		const folder = await Folder.save({ title: 'folder' });
 		folders.push(folder);
 	}
 	return folders;
 }
 
 async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
-	let notes = [];
+	const notes = [];
 	for (let i = 0; i < n; i++) {
-		let title_ = n > 1 ? `${title}${i}` : title;
-		let note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const title_ = n > 1 ? `${title}${i}` : title;
+		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
 		notes.push(note);
 	}
 	if (tagIds) {
@@ -459,9 +459,9 @@ async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
 }
 
 async function createNTestTags(n) {
-	let tags = [];
+	const tags = [];
 	for (let i = 0; i < n; i++) {
-		let tag = await Tag.save({ title: 'tag' });
+		const tag = await Tag.save({ title: 'tag' });
 		tags.push(tag);
 	}
 	return tags;

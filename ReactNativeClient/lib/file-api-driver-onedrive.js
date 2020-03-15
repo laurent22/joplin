@@ -22,7 +22,7 @@ class FileApiDriverOneDrive {
 	}
 
 	makeItems_(odItems) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < odItems.length; i++) {
 			output.push(this.makeItem_(odItems[i]));
 		}
@@ -30,7 +30,7 @@ class FileApiDriverOneDrive {
 	}
 
 	makeItem_(odItem) {
-		let output = {
+		const output = {
 			path: odItem.name,
 			isDir: 'folder' in odItem,
 		};
@@ -57,13 +57,13 @@ class FileApiDriverOneDrive {
 	}
 
 	async stat(path) {
-		let item = await this.statRaw_(path);
+		const item = await this.statRaw_(path);
 		if (!item) return null;
 		return this.makeItem_(item);
 	}
 
 	async setTimestamp(path, timestamp) {
-		let body = {
+		const body = {
 			fileSystemInfo: {
 				lastModifiedDateTime:
 					`${moment
@@ -72,7 +72,7 @@ class FileApiDriverOneDrive {
 						.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`,
 			},
 		};
-		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
+		const item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
 		return this.makeItem_(item);
 	}
 
@@ -85,7 +85,7 @@ class FileApiDriverOneDrive {
 			url = options.context;
 		}
 
-		let r = await this.api_.execJson('GET', url, query);
+		const r = await this.api_.execJson('GET', url, query);
 
 		return {
 			hasMore: !!r['@odata.nextLink'],
@@ -99,10 +99,10 @@ class FileApiDriverOneDrive {
 
 		try {
 			if (options.target == 'file') {
-				let response = await this.api_.exec('GET', `${this.makePath_(path)}:/content`, null, null, options);
+				const response = await this.api_.exec('GET', `${this.makePath_(path)}:/content`, null, null, options);
 				return response;
 			} else {
-				let content = await this.api_.execText('GET', `${this.makePath_(path)}:/content`);
+				const content = await this.api_.execText('GET', `${this.makePath_(path)}:/content`);
 				return content;
 			}
 		} catch (error) {
@@ -115,7 +115,7 @@ class FileApiDriverOneDrive {
 		let item = await this.stat(path);
 		if (item) return item;
 
-		let parentPath = dirname(path);
+		const parentPath = dirname(path);
 		item = await this.api_.execJson('POST', `${this.makePath_(parentPath)}:/children`, this.itemFilter_(), {
 			name: basename(path),
 			folder: {},
@@ -185,7 +185,7 @@ class FileApiDriverOneDrive {
 
 	async pathDetails_(path) {
 		if (this.pathCache_[path]) return this.pathCache_[path];
-		let output = await this.api_.execJson('GET', path);
+		const output = await this.api_.execJson('GET', path);
 		this.pathCache_[path] = output;
 		return this.pathCache_[path];
 	}
@@ -195,7 +195,7 @@ class FileApiDriverOneDrive {
 	}
 
 	async delta(path, options = null) {
-		let output = {
+		const output = {
 			hasMore: false,
 			context: {},
 			items: [],
@@ -211,7 +211,7 @@ class FileApiDriverOneDrive {
 		const pathDetails = await this.pathDetails_(path);
 		const pathId = pathDetails.id;
 
-		let context = options ? options.context : null;
+		const context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
 		let query = null;
 
@@ -248,7 +248,7 @@ class FileApiDriverOneDrive {
 			}
 		}
 
-		let items = [];
+		const items = [];
 
 		// The delta API might return things that happen in subdirectories of the root and we don't want to
 		// deal with these since all the files we're interested in are at the root (The .resource dir
@@ -282,10 +282,10 @@ class FileApiDriverOneDrive {
 		// https://dev.onedrive.com/items/view_delta.htm
 		// The same item may appear more than once in a delta feed, for various reasons. You should use the last occurrence you see.
 		// So remove any duplicate item from the array.
-		let temp = [];
-		let seenPaths = [];
+		const temp = [];
+		const seenPaths = [];
 		for (let i = output.items.length - 1; i >= 0; i--) {
-			let item = output.items[i];
+			const item = output.items[i];
 			if (seenPaths.indexOf(item.path) >= 0) continue;
 			temp.splice(0, 0, item);
 			seenPaths.push(item.path);

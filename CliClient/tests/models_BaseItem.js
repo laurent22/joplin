@@ -16,8 +16,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 async function allItems() {
-	let folders = await Folder.all();
-	let notes = await Note.all();
+	const folders = await Folder.all();
+	const notes = await Note.all();
 	return folders.concat(notes);
 }
 
@@ -32,27 +32,27 @@ describe('models_BaseItem', function() {
 	// This is to handle the case where a property is removed from a BaseItem table - in that case files in
 	// the sync target will still have the old property but we don't need it locally.
 	it('should ignore properties that are present in sync file but not in database when serialising', asyncTest(async () => {
-		let folder = await Folder.save({ title: 'folder1' });
+		const folder = await Folder.save({ title: 'folder1' });
 
 		let serialized = await Folder.serialize(folder);
 		serialized += '\nignore_me: true';
 
-		let unserialized = await Folder.unserialize(serialized);
+		const unserialized = await Folder.unserialize(serialized);
 
 		expect('ignore_me' in unserialized).toBe(false);
 	}));
 
 	it('should not modify title when unserializing', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: '' });
-		let folder2 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: '' });
+		const folder2 = await Folder.save({ title: 'folder1' });
 
-		let serialized1 = await Folder.serialize(folder1);
-		let unserialized1 = await Folder.unserialize(serialized1);
+		const serialized1 = await Folder.serialize(folder1);
+		const unserialized1 = await Folder.unserialize(serialized1);
 
 		expect(unserialized1.title).toBe(folder1.title);
 
-		let serialized2 = await Folder.serialize(folder2);
-		let unserialized2 = await Folder.unserialize(serialized2);
+		const serialized2 = await Folder.serialize(folder2);
+		const unserialized2 = await Folder.unserialize(serialized2);
 
 		expect(unserialized2.title).toBe(folder2.title);
 	}));

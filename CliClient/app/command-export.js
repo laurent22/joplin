@@ -24,7 +24,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let exportOptions = {};
+		const exportOptions = {};
 		exportOptions.path = args.path;
 
 		exportOptions.format = args.options.format ? args.options.format : 'jex';

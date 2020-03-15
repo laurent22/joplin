@@ -65,7 +65,7 @@ async function createRelease(name, tagName, version, rcSuffix) {
 	console.info(`Creating release: ${suffix}`);
 
 	if (name === '32bit') {
-		let filename = `${rnDir}/android/app/build.gradle`;
+		const filename = `${rnDir}/android/app/build.gradle`;
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
@@ -136,7 +136,7 @@ async function createRelease(name, tagName, version, rcSuffix) {
 		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
-	for (let filename in originalContents) {
+	for (const filename in originalContents) {
 		const content = originalContents[filename];
 		await fs.writeFile(filename, content);
 	}
@@ -151,7 +151,7 @@ async function createRelease(name, tagName, version, rcSuffix) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const rcSuffix = argv.rc ? `-rc${argv.rc}` : '';
+	const rcSuffix = argv.rc ? `-${argv.rc}` : '';
 
 	if (rcSuffix) console.info(`Creating release candidate ${argv.rc}`);
 	console.info('Updating version numbers in build.gradle...');

@@ -23,7 +23,7 @@ const ResourceService = require('lib/services/ResourceService');
 const ClipperServer = require('lib/ClipperServer');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const { bridge } = require('electron').remote.require('./bridge');
-const { shell, webFrame } = require('electron');
+const { shell, webFrame, clipboard } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('lib/services/PluginManager');
 const RevisionService = require('lib/services/RevisionService');
@@ -85,7 +85,7 @@ class Application extends BaseApplication {
 					const currentRoute = state.route;
 
 					newState = Object.assign({}, state);
-					let newNavHistory = state.navHistory.slice();
+					const newNavHistory = state.navHistory.slice();
 
 					if (goingBack) {
 						let newAction = null;
@@ -115,7 +115,7 @@ class Application extends BaseApplication {
 
 				{
 					newState = Object.assign({}, state);
-					let command = Object.assign({}, action);
+					const command = Object.assign({}, action);
 					delete command.type;
 					newState.windowCommand = command.name ? command : null;
 				}
@@ -143,13 +143,13 @@ class Application extends BaseApplication {
 						const currentLayoutIndex = paneOptions.indexOf(currentLayout);
 						const nextLayoutIndex = currentLayoutIndex === paneOptions.length - 1 ? 0 : currentLayoutIndex + 1;
 
-						let nextLayout = paneOptions[nextLayoutIndex];
+						const nextLayout = paneOptions[nextLayoutIndex];
 						return nextLayout === 'both' ? ['editor', 'viewer'] : [nextLayout];
 					};
 
 					newState = Object.assign({}, state);
 
-					let panes = state.noteVisiblePanes.slice();
+					const panes = state.noteVisiblePanes.slice();
 					newState.noteVisiblePanes = getNextLayout(panes);
 				}
 				break;
@@ -328,7 +328,7 @@ class Application extends BaseApplication {
 		const sortNoteFolderItems = (type) => {
 			const sortItems = [];
 			const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
-			for (let field in sortOptions) {
+			for (const field in sortOptions) {
 				if (!sortOptions.hasOwnProperty(field)) continue;
 				sortItems.push({
 					label: sortOptions[field],
@@ -650,7 +650,7 @@ class Application extends BaseApplication {
 				gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
 			}
 			const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
-			let message = [
+			const message = [
 				p.description,
 				'',
 				copyrightText.replace('YYYY', new Date().getFullYear()),
@@ -664,9 +664,17 @@ class Application extends BaseApplication {
 				message.push(`\n${gitInfo}`);
 				console.info(gitInfo);
 			}
-			bridge().showInfoMessageBox(message.join('\n'), {
+			const text = message.join('\n');
+
+			const copyToClipboard = bridge().showMessageBox(text, {
 				icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
+				buttons: [_('Copy'), _('OK')],
+				cancelId: 1,
+				defaultId: 1,
 			});
+			if (copyToClipboard === 0) {
+				clipboard.writeText(message.splice(3).join('\n'));
+			}
 		}
 
 		const rootMenuFile = {
@@ -965,7 +973,6 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
-					id: 'view:toggleLayout',
 					label: _('Toggle editor layout'),
 					screens: ['Main'],
 					accelerator: 'CommandOrControl+L',
@@ -1112,7 +1119,7 @@ class Application extends BaseApplication {
 
 		const pluginMenuItems = PluginManager.instance().menuItems();
 		for (const item of pluginMenuItems) {
-			let itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
+			const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
 			itemParent.submenu.push(item);
 		}
 
@@ -1148,7 +1155,7 @@ class Application extends BaseApplication {
 			}
 
 			// Remove empty separator for now empty sections
-			let temp = [];
+			const temp = [];
 			let previous = null;
 			for (let i = 0; i < output.length; i++) {
 				const t = Object.assign({}, output[i]);
@@ -1164,7 +1171,7 @@ class Application extends BaseApplication {
 			return output;
 		}
 
-		let screenTemplate = removeUnwantedItems(template, screen);
+		const screenTemplate = removeUnwantedItems(template, screen);
 
 		const menu = Menu.buildFromTemplate(screenTemplate);
 		Menu.setApplicationMenu(menu);
@@ -1188,8 +1195,6 @@ class Application extends BaseApplication {
 			menuItem.enabled = !isHtmlNote && layout !== 'viewer' && !!note;
 		}
 
-		const toggleLayout = Menu.getApplicationMenu().getMenuItemById('view:toggleLayout');
-		toggleLayout.enabled = !!note;
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');
 		menuItem.checked = state.devToolsVisible;
 	}

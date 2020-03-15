@@ -40,7 +40,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		let style = {
+		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 				display: 'flex',

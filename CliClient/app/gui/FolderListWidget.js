@@ -20,7 +20,7 @@ class FolderListWidget extends ListWidget {
 		this.trimItemTitle = false;
 
 		this.itemRenderer = item => {
-			let output = [];
+			const output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
@@ -121,7 +121,7 @@ class FolderListWidget extends ListWidget {
 
 	folderHasChildren_(folders, folderId) {
 		for (let i = 0; i < folders.length; i++) {
-			let folder = folders[i];
+			const folder = folders[i];
 			if (folder.parent_id === folderId) return true;
 		}
 		return false;

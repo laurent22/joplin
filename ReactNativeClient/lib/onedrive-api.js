@@ -33,7 +33,7 @@ class OneDriveApi {
 	}
 
 	dispatch(eventName, param) {
-		let ls = this.listeners_[eventName];
+		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			ls[i](param);
 		}
@@ -73,12 +73,12 @@ class OneDriveApi {
 	}
 
 	async appDirectory() {
-		let r = await this.execJson('GET', '/drive/special/approot');
+		const r = await this.execJson('GET', '/drive/special/approot');
 		return `${r.parentReference.path}/${r.name}`;
 	}
 
 	authCodeUrl(redirectUri) {
-		let query = {
+		const query = {
 			client_id: this.clientId_,
 			scope: 'files.readwrite offline_access',
 			response_type: 'code',
@@ -88,7 +88,7 @@ class OneDriveApi {
 	}
 
 	async execTokenRequest(code, redirectUri) {
-		let body = new shim.FormData();
+		const body = new shim.FormData();
 		body.append('client_id', this.clientId());
 		if (!this.isPublic()) body.append('client_secret', this.clientSecret());
 		body.append('code', code);
@@ -120,8 +120,8 @@ class OneDriveApi {
 		if (!errorResponse) return new Error('Undefined error');
 
 		if (errorResponse.error) {
-			let e = errorResponse.error;
-			let output = new Error(e.message);
+			const e = errorResponse.error;
+			const output = new Error(e.message);
 			if (e.code) output.code = e.code;
 			if (e.innerError) output.innerError = e.innerError;
 			return output;
@@ -183,7 +183,7 @@ class OneDriveApi {
 			}
 
 			if (!response.ok) {
-				let errorResponseText = await response.text();
+				const errorResponseText = await response.text();
 				let errorResponse = null;
 				try {
 					errorResponse = JSON.parse(errorResponseText); // await response.json();
@@ -192,7 +192,7 @@ class OneDriveApi {
 					throw error;
 				}
 
-				let error = this.oneDriveErrorResponseToError(errorResponse);
+				const error = this.oneDriveErrorResponseToError(errorResponse);
 
 				if (error.code == 'InvalidAuthenticationToken' || error.code == 'unauthenticated') {
 					this.logger().info('Token expired: refreshing...');
@@ -246,10 +246,10 @@ class OneDriveApi {
 	}
 
 	async execJson(method, path, query, data) {
-		let response = await this.exec(method, path, query, data);
-		let errorResponseText = await response.text();
+		const response = await this.exec(method, path, query, data);
+		const errorResponseText = await response.text();
 		try {
-			let output = JSON.parse(errorResponseText); // await response.json();
+			const output = JSON.parse(errorResponseText); // await response.json();
 			return output;
 		} catch (error) {
 			error.message = `OneDriveApi::execJson: Cannot parse JSON: ${errorResponseText} ${error.message}`;
@@ -259,8 +259,8 @@ class OneDriveApi {
 	}
 
 	async execText(method, path, query, data) {
-		let response = await this.exec(method, path, query, data);
-		let output = await response.text();
+		const response = await this.exec(method, path, query, data);
+		const output = await response.text();
 		return output;
 	}
 
@@ -270,26 +270,26 @@ class OneDriveApi {
 			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));
 		}
 
-		let body = new shim.FormData();
+		const body = new shim.FormData();
 		body.append('client_id', this.clientId());
 		if (!this.isPublic()) body.append('client_secret', this.clientSecret());
 		body.append('refresh_token', this.auth_.refresh_token);
 		body.append('redirect_uri', 'http://localhost:1917');
 		body.append('grant_type', 'refresh_token');
 
-		let options = {
+		const options = {
 			method: 'POST',
 			body: body,
 		};
 
-		let response = await shim.fetch(this.tokenBaseUrl(), options);
+		const response = await shim.fetch(this.tokenBaseUrl(), options);
 		if (!response.ok) {
 			this.setAuth(null);
-			let msg = await response.text();
+			const msg = await response.text();
 			throw new Error(`${msg}: TOKEN: ${this.auth_}`);
 		}
 
-		let auth = await response.json();
+		const auth = await response.json();
 		this.setAuth(auth);
 	}
 }

@@ -32,6 +32,7 @@ const defaultState = {
 	sharedData: null,
 	appState: 'starting',
 	hasDisabledSyncItems: false,
+	hasDisabledEncryptionItems: false,
 	customCss: '',
 	templates: [],
 	collapsedFolderIds: [],
@@ -144,7 +145,7 @@ function folderSetCollapsed(state, action) {
 		collapsedFolderIds.splice(idx, 1);
 	}
 
-	let newState = Object.assign({}, state);
+	const newState = Object.assign({}, state);
 	newState.collapsedFolderIds = collapsedFolderIds;
 	return newState;
 }
@@ -166,11 +167,11 @@ function handleItemDelete(state, action) {
 	const isSelected = selectedItemKeys.includes(action.id);
 
 	const items = state[listKey];
-	let newItems = [];
+	const newItems = [];
 	let newSelectedIndexes = [];
 
 	for (let i = 0; i < items.length; i++) {
-		let item = items[i];
+		const item = items[i];
 		if (isSelected) {
 			// the selected item is deleted so select the following item
 			// if multiple items are selected then just use the first one
@@ -205,7 +206,7 @@ function handleItemDelete(state, action) {
 		}
 	}
 
-	let newState = Object.assign({}, state);
+	const newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
 	if (listKey === 'notes') {
@@ -232,19 +233,18 @@ function handleItemDelete(state, action) {
 
 function updateOneItem(state, action, keyName = '') {
 	let itemsKey = null;
-	if (keyName) itemsKey = keyName;
-	else {
+	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
 		if (action.type === 'FOLDER_UPDATE_ONE') itemsKey = 'folders';
 		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
 	}
 
-	let newItems = state[itemsKey].splice(0);
-	let item = action.item;
+	const newItems = state[itemsKey].splice(0);
+	const item = action.item;
 
-	var found = false;
+	let found = false;
 	for (let i = 0; i < newItems.length; i++) {
-		let n = newItems[i];
+		const n = newItems[i];
 		if (n.id == item.id) {
 			newItems[i] = Object.assign(newItems[i], item);
 			found = true;
@@ -254,7 +254,7 @@ function updateOneItem(state, action, keyName = '') {
 
 	if (!found) newItems.push(item);
 
-	let newState = Object.assign({}, state);
+	const newState = Object.assign({}, state);
 
 	newState[itemsKey] = newItems;
 
@@ -295,7 +295,7 @@ function changeSelectedFolder(state, action, options = null) {
 		newState.backwardHistoryNotes = backwardHistoryNotes;
 		newState.forwardHistoryNotes = forwardHistoryNotes;
 	}
-
+  
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
 		newState.notesParentType = defaultNotesParentType(state, 'Folder');
@@ -373,7 +373,7 @@ function changeSelectedNotes(state, action, options = null) {
 		if (!noteIds.length) return state; // Nothing to unselect
 		if (state.selectedNoteIds.length <= 1) return state; // Cannot unselect the last note
 
-		let newSelectedNoteIds = [];
+		const newSelectedNoteIds = [];
 		for (let i = 0; i < newState.selectedNoteIds.length; i++) {
 			const id = newState.selectedNoteIds[i];
 			if (noteIds.indexOf(id) >= 0) continue;
@@ -399,7 +399,7 @@ function changeSelectedNotes(state, action, options = null) {
 
 function removeItemFromArray(array, property, value) {
 	for (let i = 0; i !== array.length; ++i) {
-		let currentItem = array[i];
+		const currentItem = array[i];
 		if (currentItem[property] === value) {
 			array.splice(i, 1);
 			break;
@@ -431,7 +431,7 @@ const reducer = (state = defaultState, action) => {
 					const selectRangeId2 = action.id;
 					if (selectRangeId1 === selectRangeId2) return state;
 
-					let newSelectedNoteIds = state.selectedNoteIds.slice();
+					const newSelectedNoteIds = state.selectedNoteIds.slice();
 					let selectionStarted = false;
 					for (let i = 0; i < state.notes.length; i++) {
 						const id = state.notes[i].id;
@@ -459,6 +459,17 @@ const reducer = (state = defaultState, action) => {
 			newState.selectedNoteIds = newState.notes.map(n => n.id);
 			break;
 
+		case 'NOTE_SELECT_ALL_TOGGLE': {
+			newState = Object.assign({}, state);
+			const allSelected = state.notes.every(n => state.selectedNoteIds.includes(n.id));
+			if (allSelected) {
+				newState.selectedNoteIds = [];
+			} else {
+				newState.selectedNoteIds = newState.notes.map(n => n.id);
+			}
+			break;
+		}
+
 		case 'SMART_FILTER_SELECT':
 			newState = Object.assign({}, state);
 			newState.notesParentType = 'SmartFilter';
@@ -485,7 +496,7 @@ const reducer = (state = defaultState, action) => {
 		case 'SETTING_UPDATE_ONE':
 			{
 				newState = Object.assign({}, state);
-				let newSettings = Object.assign({}, state.settings);
+				const newSettings = Object.assign({}, state.settings);
 				newSettings[action.key] = action.value;
 				newState.settings = newSettings;
 			}
@@ -523,9 +534,9 @@ const reducer = (state = defaultState, action) => {
 				let movedNotePreviousIndex = 0;
 				let noteFolderHasChanged = false;
 				let newNotes = state.notes.slice();
-				var found = false;
+				let found = false;
 				for (let i = 0; i < newNotes.length; i++) {
-					let n = newNotes[i];
+					const n = newNotes[i];
 					if (n.id == modNote.id) {
 						// Note is still in the same folder
 						if (noteIsInFolder(modNote, n.parent_id)) {
@@ -533,7 +544,7 @@ const reducer = (state = defaultState, action) => {
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
 
-							for (let n in modNote) {
+							for (const n in modNote) {
 								if (!modNote.hasOwnProperty(n)) continue;
 								newNotes[i][n] = modNote[n];
 							}
@@ -646,7 +657,7 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_TAG_REMOVE':
 			{
 				newState = updateOneItem(state, action, 'tags');
-				let tagRemoved = action.item;
+				const tagRemoved = action.item;
 				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
 			}
 			break;
@@ -738,7 +749,7 @@ const reducer = (state = defaultState, action) => {
 		case 'SEARCH_ADD':
 			{
 				newState = Object.assign({}, state);
-				let searches = newState.searches.slice();
+				const searches = newState.searches.slice();
 				searches.push(action.search);
 				newState.searches = searches;
 			}
@@ -747,7 +758,7 @@ const reducer = (state = defaultState, action) => {
 		case 'SEARCH_UPDATE':
 			{
 				newState = Object.assign({}, state);
-				let searches = newState.searches.slice();
+				const searches = newState.searches.slice();
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
 					if (searches[i].id === action.search.id) {
@@ -803,6 +814,11 @@ const reducer = (state = defaultState, action) => {
 			newState.hasDisabledSyncItems = true;
 			break;
 
+		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
+			newState = Object.assign({}, state);
+			newState.hasDisabledEncryptionItems = action.value;
+			break;
+
 		case 'CLIPPER_SERVER_SET':
 			{
 				newState = Object.assign({}, state);
@@ -817,7 +833,7 @@ const reducer = (state = defaultState, action) => {
 			{
 				newState = Object.assign({}, state);
 				const decryptionWorker = Object.assign({}, newState.decryptionWorker);
-				for (var n in action) {
+				for (const n in action) {
 					if (!action.hasOwnProperty(n) || n === 'type') continue;
 					decryptionWorker[n] = action[n];
 				}
