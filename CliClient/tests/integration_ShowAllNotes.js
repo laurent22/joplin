@@ -93,10 +93,10 @@ describe('integration_ShowAllNotes', function() {
 
 	it('should support note duplication', asyncTest(async () => {
 		// setup
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
-		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
 		await time.msleep(100);
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });
@@ -130,10 +130,10 @@ describe('integration_ShowAllNotes', function() {
 
 	it('should support changing the note parent', asyncTest(async () => {
 		// setup
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let folder2 = await Folder.save({ title: 'folder2' });
-		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'note1', parent_id: folder2.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note1', parent_id: folder2.id });
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
 		await time.msleep(100);
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });

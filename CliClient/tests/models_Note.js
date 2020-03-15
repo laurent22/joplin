@@ -197,9 +197,9 @@ describe('models_Note', function() {
 	}));
 
 	it('should not move to conflict folder', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'Folder' });
-		let folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
-		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
 		const hasThrown = await checkThrowAsync(async () => await Folder.moveToFolder(note1.id, folder2.id));
 		expect(hasThrown).toBe(true);
@@ -209,9 +209,9 @@ describe('models_Note', function() {
 	}));
 
 	it('should not copy to conflict folder', asyncTest(async () => {
-		let folder1 = await Folder.save({ title: 'Folder' });
-		let folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
-		let note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'Folder' });
+		const folder2 = await Folder.save({ title: Folder.conflictFolderTitle(), id: Folder.conflictFolderId() });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
 		const hasThrown = await checkThrowAsync(async () => await Folder.copyToFolder(note1.id, folder2.id));
 		expect(hasThrown).toBe(true);
