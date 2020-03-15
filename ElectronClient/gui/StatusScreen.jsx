@@ -63,10 +63,22 @@ class StatusScreenComponent extends React.Component {
 			);
 		}
 
+		function renderSectionRetryAllHtml(key, retryAllHandler) {
+			return (
+				<a key={`retry_all_${key}`} href="#" onClick={retryAllHandler} style={retryStyle}>
+					{_('Retry All')}
+				</a>
+			);
+		}
+
 		const renderSectionHtml = (key, section) => {
 			let itemsHtml = [];
 
 			itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
+
+			if (section.canRetryAll) {
+				itemsHtml.push(renderSectionRetryAllHtml(section.title, section.retryAllHandler));
+			}
 
 			for (let n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
