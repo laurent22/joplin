@@ -650,8 +650,12 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_UPDATE_ONE':
-			newState = updateOneItem(state, action);
-			newState = updateOneItem(newState, action, 'selectedNoteTags');
+			{
+				// We only want to update the selected note tags if the tag belongs to the currently open note
+				const selectedNoteHasTag = !!state.selectedNoteTags.find(tag => tag.id === action.item.id);
+				newState = updateOneItem(state, action);
+				if (selectedNoteHasTag) newState = updateOneItem(newState, action, 'selectedNoteTags');
+			}
 			break;
 
 		case 'NOTE_TAG_REMOVE':
