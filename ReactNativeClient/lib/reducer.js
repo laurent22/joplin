@@ -339,6 +339,12 @@ function changeSelectedNotes(state, action, options = null) {
 		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
+		// The historyAction property is only used for user-initiated actions and tells how
+		// the history stack should be handled. That property should not be present for
+		// programmatic navigation. Possible values are:
+		// - "goto": When going to a note, but not via the back/forward arrows.
+		// - "pop": When clicking on the Back arrow
+		// - "push": When clicking on the Forward arrow
 		const lastSeenNote = stateUtils.getLastSeenNote(state);
 		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
