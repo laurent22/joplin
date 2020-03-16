@@ -424,6 +424,7 @@ class SearchEngine {
 			const iid = setInterval(() => {
 				if (!this.syncCalls_.length) {
 					clearInterval(iid);
+					this.instance_ = null;
 					resolve();
 				}
 			}, 100);

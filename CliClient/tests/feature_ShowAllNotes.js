@@ -17,14 +17,9 @@ const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
 //  - inject the event to be tested
 //  - check the resulting application state
 //
-// Important: sleep must be used after TestApp dispatch to allow the async processing
-//  to complete
+// Important: TestApp.wait() must be used after TestApp dispatch to allow the async
+// processing to complete
 //
-
-// use this until Javascript arr.flat() function works in Travis
-function flatten(arr) {
-	return (arr.reduce((acc, val) => acc.concat(val), []));
-}
 
 let testApp = null;
 
@@ -46,14 +41,15 @@ describe('integration_ShowAllNotes', function() {
 		// setup
 		const folders = await createNTestFolders(3);
 		Folder.moveToFolder(id(folders[2]), id(folders[1])); // subfolder
-		await time.msleep(100);
+		await testApp.wait();
 		const notes0 = await createNTestNotes(3, folders[0]);
 		const notes1 = await createNTestNotes(3, folders[1]);
 		const notes2 = await createNTestNotes(3, folders[2]);
+		await testApp.wait();
 
 		// TEST ACTION: View all-notes
 		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await time.msleep(100);
+		await testApp.wait();
 
 		// check: all the notes are shown
 		const state = testApp.store().getState();
@@ -67,10 +63,12 @@ describe('integration_ShowAllNotes', function() {
 		const folders = await createNTestFolders(2);
 		const notes0 = await createNTestNotes(3, folders[0]);
 		const notes1 = await createNTestNotes(3, folders[1]);
+		await testApp.wait();
+
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]) });
-		await time.msleep(100);
+		await testApp.wait();
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: id(notes1[1]) });
-		await time.msleep(100);
+		await testApp.wait();
 
 		// check the state is set up as expected
 		let state = testApp.store().getState();
@@ -81,7 +79,7 @@ describe('integration_ShowAllNotes', function() {
 
 		// TEST ACTION: View all-notes
 		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await time.msleep(100);
+		await testApp.wait();
 
 		// check: all the notes are shown
 		state = testApp.store().getState();
