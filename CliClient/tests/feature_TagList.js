@@ -1,43 +1,11 @@
 /* eslint-disable no-unused-vars */
 require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, TestApp } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('test-utils.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { time } = require('lib/time-utils.js');
-
-async function createNTestFolders(n) {
-	const folders = [];
-	for (let i = 0; i < n; i++) {
-		const folder = await Folder.save({ title: 'folder' });
-		folders.push(folder);
-	}
-	return folders;
-}
-
-async function createNTestNotes(n, folder) {
-	const notes = [];
-	for (let i = 0; i < n; i++) {
-		const note = await Note.save({ title: 'note', parent_id: folder.id, is_conflict: 0 });
-		notes.push(note);
-	}
-	return notes;
-}
-
-async function createNTestTags(n) {
-	const tags = [];
-	for (let i = 0; i < n; i++) {
-		const tag = await Tag.save({ title: 'tag' });
-		tags.push(tag);
-	}
-	return tags;
-}
-
-// use this until Javascript arr.flat() function works in Travis
-function flatten(arr) {
-	return (arr.reduce((acc, val) => acc.concat(val), []));
-}
 
 let testApp = null;
 
@@ -61,20 +29,16 @@ describe('integration_TagList', function() {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		const tags = await createNTestTags(3);
+		await testApp.wait();
 
 		await Tag.addNote(tags[2].id, notes[2].id);
+		await testApp.wait();
 
-		testApp.dispatch({
-			type: 'FOLDER_SELECT',
-			id: folders[0].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: folders[0].id });
+		await testApp.wait();
 
-		testApp.dispatch({
-			type: 'NOTE_SELECT',
-			id: notes[2].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'NOTE_SELECT',	id: notes[2].id });
+		await testApp.wait();
 
 		// check the tag list is correct
 		let state = testApp.store().getState();
@@ -82,11 +46,8 @@ describe('integration_TagList', function() {
 		expect(state.selectedNoteTags[0].id).toEqual(tags[2].id);
 
 		// delete the note
-		testApp.dispatch({
-			type: 'NOTE_DELETE',
-			id: notes[2].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'NOTE_DELETE',	id: notes[2].id });
+		await testApp.wait();
 
 		// check the tag list is updated
 		state = testApp.store().getState();
@@ -99,22 +60,18 @@ describe('integration_TagList', function() {
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(5, folders[0]);
 		const tags = await createNTestTags(3);
+		await testApp.wait();
 
 		await Tag.addNote(tags[1].id, notes[1].id);
 		await Tag.addNote(tags[0].id, notes[0].id);
 		await Tag.addNote(tags[2].id, notes[0].id);
+		await testApp.wait();
 
-		testApp.dispatch({
-			type: 'FOLDER_SELECT',
-			id: folders[0].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: folders[0].id });
+		await testApp.wait();
 
-		testApp.dispatch({
-			type: 'NOTE_SELECT',
-			id: notes[1].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes[1].id	});
+		await testApp.wait();
 
 		// check the tag list is correct
 		let state = testApp.store().getState();
@@ -122,11 +79,8 @@ describe('integration_TagList', function() {
 		expect(state.selectedNoteTags[0].id).toEqual(tags[1].id);
 
 		// delete the note
-		testApp.dispatch({
-			type: 'NOTE_DELETE',
-			id: notes[1].id,
-		});
-		await time.msleep(100);
+		testApp.dispatch({ type: 'NOTE_DELETE',	id: notes[1].id });
+		await testApp.wait();
 
 		// check the tag list is updated
 		state = testApp.store().getState();

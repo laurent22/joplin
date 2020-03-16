@@ -34,6 +34,7 @@ const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const RevisionService = require('lib/services/RevisionService');
+const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
@@ -63,12 +64,24 @@ class BaseApplication {
 		await SearchEngine.instance().destroy();
 		await DecryptionWorker.instance().destroy();
 		await FoldersScreenUtils.cancelTimers();
+		await BaseItem.revisionService_.cancelTimers();
+		await ResourceService.instance().cancelTimers();
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();
-		BaseModel.db_ = null;
+		KvStore.instance_ = null;
+		BaseModel.setDb(null);
 		reg.setDb(null);
 
+		BaseItem.revisionService_ = null;
+		RevisionService.instance_ = null;
+		ResourceService.instance_ = null;
+		ResourceService.isRunningInBackground = false;
+		ResourceFetcher.instance_ = null;
+		EncryptionService.instance_ = null;
+		DecryptionWorker.instance_ = null;
+
+		this.logger_.info('Base application terminated...');
 		this.logger_ = null;
 		this.dbLogger_ = null;
 		this.eventEmitter_ = null;
@@ -320,16 +333,7 @@ class BaseApplication {
 	}
 
 	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
-		this.scheduleAutoAddResources();
-	}
-
-	scheduleAutoAddResources() {
-		if (this.scheduleAutoAddResourcesIID_) return;
-
-		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
-			this.scheduleAutoAddResourcesIID_ = null;
-			ResourceFetcher.instance().autoAddResources();
-		}, 1000);
+		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
 	reducerActionToString(action) {
@@ -645,7 +649,7 @@ class BaseApplication {
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
-		BaseModel.db_ = this.database_;
+		BaseModel.setDb(this.database_);
 
 		await Setting.load();
 

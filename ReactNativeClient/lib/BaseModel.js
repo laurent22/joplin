@@ -12,6 +12,10 @@ class BaseModel {
 		throw new Error('Must be overriden');
 	}
 
+	static setDb(db) {
+		this.db_ = db;
+	}
+
 	static addModelMd(model) {
 		if (!model) return model;
 

@@ -218,7 +218,7 @@ async function main() {
 	logger.info(await execCommand(client, 'version'));
 
 	await db.open({ name: `${client.profileDir}/database.sqlite` });
-	BaseModel.db_ = db;
+	BaseModel.setDb(db);
 	await Setting.load();
 
 	let onlyThisTest = 'testMv';

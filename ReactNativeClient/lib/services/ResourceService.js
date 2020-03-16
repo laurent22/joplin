@@ -11,6 +11,20 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { sprintf } = require('sprintf-js');
 
 class ResourceService extends BaseService {
+	constructor() {
+		super();
+
+		this.maintenanceCalls_ = [];
+		this.maintenanceTimer1_ = null;
+		this.maintenanceTimer2_ = null;
+	}
+
+	static instance() {
+		if (this.instance_) return this.instance_;
+		this.instance_ = new ResourceService();
+		return this.instance_;
+	}
+
 	async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');
 
@@ -131,23 +145,48 @@ class ResourceService extends BaseService {
 	}
 
 	async maintenance() {
-		await this.indexNoteResources();
-		await this.deleteOrphanResources();
+		this.maintenanceCalls_.push(true);
+		try {
+			await this.indexNoteResources();
+			await this.deleteOrphanResources();
+		} finally {
+			this.maintenanceCalls_.pop();
+		}
 	}
 
 	static runInBackground() {
 		if (this.isRunningInBackground_) return;
 
 		this.isRunningInBackground_ = true;
-		const service = new ResourceService();
+		const service = this.instance();
 
-		setTimeout(() => {
+		service.maintenanceTimer1_ = setTimeout(() => {
 			service.maintenance();
 		}, 1000 * 30);
 
-		shim.setInterval(() => {
+		service.maintenanceTimer2_ = shim.setInterval(() => {
 			service.maintenance();
 		}, 1000 * 60 * 60 * 4);
+	}
+
+	async cancelTimers() {
+		if (this.maintenanceTimer1_) {
+			clearTimeout(this.maintenanceTimer1);
+			this.maintenanceTimer1_ = null;
+		}
+		if (this.maintenanceTimer2_) {
+			shim.clearInterval(this.maintenanceTimer2);
+			this.maintenanceTimer2_ = null;
+		}
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.maintenanceCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 }
 
