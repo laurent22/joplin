@@ -51,6 +51,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
 	devToolsVisible: false,
+	noteListStyle: '',
 });
 
 class Application extends BaseApplication {
@@ -230,6 +231,11 @@ class Application extends BaseApplication {
 			case 'NOTE_DEVTOOLS_SET':
 				newState = Object.assign({}, state);
 				newState.devToolsVisible = action.value;
+				break;
+
+			case 'NOTE_LIST_STYLE_SET':
+				newState = Object.assign({}, state);
+				newState.noteListStyle = action.value;
 				break;
 
 			}
@@ -980,6 +986,41 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					label: _('Note list display style'),
+					screens: ['Main'],
+					submenu: [{
+						id: 'view:title',
+						label: _('Title'),
+						screens: ['Main'],
+						type: 'checkbox',
+						checked: Setting.value('noteListStyle') == 'title',
+						click: () => {
+							this.dispatch({
+								type: 'NOTE_LIST_STYLE_SET',
+								value: 'title',
+							});
+							Menu.getApplicationMenu().getMenuItemById('view:snippet').checked = false;
+							Setting.setValue('noteListStyle', 'title');
+							console.log(Setting.value('noteListStyle'));
+						},
+					}, {
+						id: 'view:snippet',
+						label: _('Snippet'),
+						screens: ['Main'],
+						type: 'checkbox',
+						checked: Setting.value('noteListStyle') == 'snippet',
+						click: () => {
+							this.dispatch({
+								type: 'NOTE_LIST_STYLE_SET',
+								value: 'snippet',
+							});
+							Menu.getApplicationMenu().getMenuItemById('view:title').checked = false;
+							Setting.setValue('noteListStyle', 'snippet');
+							console.log(Setting.value('noteListStyle'));
+						},
+					},
+					],
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
@@ -1327,6 +1368,11 @@ class Application extends BaseApplication {
 		this.dispatch({
 			type: 'MASTERKEY_UPDATE_ALL',
 			items: masterKeys,
+		});
+
+		this.dispatch({
+			type: 'NOTE_LIST_STYLE_SET',
+			value: Setting.value('noteListStyle'),
 		});
 
 		this.store().dispatch({

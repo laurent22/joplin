@@ -28,7 +28,12 @@ class NoteListComponent extends React.Component {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		const itemHeight = 34;
+		let itemHeight = 0;
+		if (this.props.listStyle === 'title') {
+			itemHeight = 32;
+		} else if (this.props.listStyle === 'snippet') {
+			itemHeight = 84;
+		}
 
 		// Note: max-width is used to specifically prevent horizontal scrolling on Linux when the scrollbar is present in the note list.
 		// Pull request: https://github.com/laurent22/joplin/pull/2062
@@ -186,6 +191,7 @@ class NoteListComponent extends React.Component {
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		const displayTitle = Note.displayTitle(item);
+		const displayBody = item.body;
 		let titleComp = null;
 
 		if (highlightedWords.length) {
@@ -212,9 +218,34 @@ class NoteListComponent extends React.Component {
 			// with `textContent` so it cannot contain any XSS attacks. We use this feature because
 			// mark.js can only deal with DOM elements.
 			// https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+
 			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>;
 		} else {
-			titleComp = <span>{displayTitle}</span>;
+			if (this.props.listStyle === 'title') {
+				titleComp = <span>{displayTitle}</span>;
+			} else if (this.props.listStyle === 'snippet') {
+				const myHeadingStyle = {
+					overflow: 'hidden',
+					textOverflow: 'ellipsis',
+					margin: 0,
+					flex: 1,
+				};
+				const myParagraphStyle = {
+					flex: 2,
+					textAlign: 'justify',
+					whiteSpace: 'normal',
+					overflow: 'hidden',
+					margin: 0,
+					padding: '1em 0',
+					paddingRight: '1em',
+				};
+				titleComp = (
+					<div style={{ width: '100%', height: '80%', display: 'flex', flexDirection: 'column' }}>
+						<h4 style={myHeadingStyle}>{displayTitle}</h4>
+						<p style={myParagraphStyle}>{displayBody}</p>
+					</div>
+				);
+			}
 		}
 
 		const watchedIconStyle = {
@@ -470,6 +501,7 @@ const mapStateToProps = state => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		windowCommand: state.windowCommand,
 		provisionalNoteIds: state.provisionalNoteIds,
+		listStyle: state.noteListStyle,
 	};
 };
 
