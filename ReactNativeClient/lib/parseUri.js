@@ -1,11 +1,12 @@
 /* eslint no-useless-escape: 0*/
+/* eslint prefer-const: 0*/
 
 // parseUri 1.2.2
 // (c) Steven Levithan <stevenlevithan.com>
 // MIT License
 
 function parseUri(str) {
-	var o = parseUri.options,
+	let o = parseUri.options,
 		m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str),
 		uri = {},
 		i = 14;

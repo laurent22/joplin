@@ -29,17 +29,20 @@ const reduxSharedMiddleware = async function(store, next, action) {
 		refreshTags = true;
 	}
 
-	if (action.type === 'NOTE_SELECT') {
+	if (action.type === 'NOTE_SELECT' || action.type === 'NAV_BACK') {
 		const noteIds = newState.provisionalNoteIds.slice();
 		for (const noteId of noteIds) {
 			if (action.id === noteId) continue;
+			reg.logger().info('Provisional was not modified - deleting it');
 			await Note.delete(noteId);
 		}
 	}
 
 	if (action.type === 'NOTE_DELETE' ||
 		action.type === 'NOTE_SELECT' ||
-		action.type === 'NOTE_SELECT_TOGGLE') {
+		action.type === 'NOTE_SELECT_TOGGLE' ||
+		action.type === 'TAG_UPDATE_ONE' ||
+		action.type === 'TAG_UPDATE_ALL') {
 		let noteTags = [];
 
 		// We don't need to show tags unless only one note is selected.

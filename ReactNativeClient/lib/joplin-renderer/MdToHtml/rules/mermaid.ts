@@ -6,7 +6,10 @@ function addContextAssets(context:any) {
 		{ name: 'mermaid_render.js' },
 		{
 			inline: true,
-			text: '.mermaid { background-color: white }',
+			// Note: Mermaid is buggy when rendering below a certain width (500px?)
+			// so set an arbitrarily high width here for the container. Once the
+			// diagram is rendered it will be reset to 100% in mermaid_render.js
+			text: '.mermaid { background-color: white; width: 640px; }',
 			mime: 'text/css',
 		},
 	];
@@ -22,7 +25,13 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 		const token = tokens[idx];
 		if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
 		addContextAssets(context);
-		return `<div class="mermaid">${token.content}</div>`;
+		const contentHtml = markdownIt.utils.escapeHtml(token.content);
+		return `
+			<div class="joplin-editable">
+				<pre class="joplin-source" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+				<div class="mermaid">${contentHtml}</div>
+			</div>
+		`;
 	};
 }
 

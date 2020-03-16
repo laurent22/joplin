@@ -28,8 +28,8 @@ class EncryptionService {
 		this.chunkSize_ = 5000;
 		this.loadedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
-		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
-		this.defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_2;
+		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
+		this.defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
 		this.logger_ = new Logger();
 
 		this.headerTemplates_ = {
@@ -68,7 +68,7 @@ class EncryptionService {
 		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
 
 		if (password) {
-			let passwordCache = Setting.value('encryption.passwordCache');
+			const passwordCache = Setting.value('encryption.passwordCache');
 			passwordCache[masterKey.id] = password;
 			Setting.setValue('encryption.passwordCache', passwordCache);
 		}
@@ -101,19 +101,12 @@ class EncryptionService {
 		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
 
 		for (let i = 0; i < masterKeys.length; i++) {
-			let mk = masterKeys[i];
+			const mk = masterKeys[i];
 			const password = passwords[mk.id];
 			if (this.isMasterKeyLoaded(mk.id)) continue;
 			if (!password) continue;
 
 			try {
-				// if (mk.encryption_method != this.defaultMasterKeyEncryptionMethod_) {
-				// 	const newMkContent = await this.generateMasterKeyContent_(password);
-				// 	mk = Object.assign({}, mk, newMkContent);
-				// 	await MasterKey.save(mk);
-				// 	this.logger().info(`Master key ${mk.id} is using a deprectated encryption method. It has been upgraded to the new method.`);
-				// }
-
 				await this.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
 			} catch (error) {
 				this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
@@ -125,7 +118,7 @@ class EncryptionService {
 
 	loadedMasterKeysCount() {
 		let output = 0;
-		for (let n in this.loadedMasterKeys_) {
+		for (const n in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_[n]) continue;
 			output++;
 		}
@@ -168,7 +161,7 @@ class EncryptionService {
 	}
 
 	unloadAllMasterKeys() {
-		for (let id in this.loadedMasterKeys_) {
+		for (const id in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
 			this.unloadMasterKey(this.loadedMasterKeys_[id]);
 		}
@@ -185,8 +178,8 @@ class EncryptionService {
 	}
 
 	loadedMasterKeyIds() {
-		let output = [];
-		for (let id in this.loadedMasterKeys_) {
+		const output = [];
+		for (const id in this.loadedMasterKeys_) {
 			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
 			output.push(id);
 		}
@@ -229,6 +222,29 @@ class EncryptionService {
 			.join('');
 	}
 
+	masterKeysThatNeedUpgrading(masterKeys) {
+		return MasterKey.allWithoutEncryptionMethod(masterKeys, this.defaultMasterKeyEncryptionMethod_);
+	}
+
+	async upgradeMasterKey(model, decryptionPassword) {
+		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
+		const plainText = await this.decryptMasterKey_(model, decryptionPassword);
+		const newContent = await this.encryptMasterKeyContent_(newEncryptionMethod, plainText, decryptionPassword);
+		return { ...model, ...newContent };
+	}
+
+	async encryptMasterKeyContent_(encryptionMethod, hexaBytes, password) {
+		// Checksum is not necessary since decryption will already fail if data is invalid
+		const checksum = encryptionMethod === EncryptionService.METHOD_SJCL_2 ? this.sha256(hexaBytes) : '';
+		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
+
+		return {
+			checksum: checksum,
+			encryption_method: encryptionMethod,
+			content: cipherText,
+		};
+	}
+
 	async generateMasterKeyContent_(password, options = null) {
 		options = Object.assign({}, {
 			encryptionMethod: this.defaultMasterKeyEncryptionMethod_,
@@ -236,14 +252,8 @@ class EncryptionService {
 
 		const bytes = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
-		const checksum = this.sha256(hexaBytes);
-		const cipherText = await this.encrypt(options.encryptionMethod, password, hexaBytes);
 
-		return {
-			checksum: checksum,
-			encryption_method: options.encryptionMethod,
-			content: cipherText,
-		};
+		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password);
 	}
 
 	async generateMasterKey(password, options = null) {
@@ -259,8 +269,10 @@ class EncryptionService {
 
 	async decryptMasterKey_(model, password) {
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
-		const checksum = this.sha256(plainText);
-		if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
+		if (model.encryption_method === EncryptionService.METHOD_SJCL_2) {
+			const checksum = this.sha256(plainText);
+			if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
+		}
 		return plainText;
 	}
 
@@ -272,6 +284,12 @@ class EncryptionService {
 		}
 
 		return true;
+	}
+
+	wrapSjclError(sjclError) {
+		const error = new Error(sjclError.message);
+		error.stack = sjclError.stack;
+		return error;
 	}
 
 	async encrypt(method, key, plainText) {
@@ -294,8 +312,28 @@ class EncryptionService {
 					cipher: 'aes',
 				});
 			} catch (error) {
-				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw this.wrapSjclError(error);
+			}
+		}
+
+		// 2020-03-06: Added method to fix https://github.com/laurent22/joplin/issues/2591
+		//             Also took the opportunity to change number of key derivations, per Isaac Potoczny's suggestion
+		if (method === EncryptionService.METHOD_SJCL_1A) {
+			try {
+				// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
+				// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
+				// invalid UTF-8 data. Fixes https://github.com/laurent22/joplin/issues/2591
+				return sjcl.json.encrypt(key, escape(plainText), {
+					v: 1, // version
+					iter: 101, // Since the master key already uses key derivations and is secure, additional iteration here aren't necessary, which will make decryption faster. SJCL enforces an iter strictly greater than 100
+					ks: 128, // Key size - "128 bits should be secure enough"
+					ts: 64, // ???
+					mode: 'ccm', //  The cipher mode is a standard for how to use AES and other algorithms to encrypt and authenticate your message. OCB2 mode is slightly faster and has more features, but CCM mode has wider support because it is not patented.
+					// "adata":"", // Associated Data - not needed?
+					cipher: 'aes',
+				});
+			} catch (error) {
+				throw this.wrapSjclError(error);
 			}
 		}
 
@@ -312,8 +350,7 @@ class EncryptionService {
 					cipher: 'aes',
 				});
 			} catch (error) {
-				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw this.wrapSjclError(error);
 			}
 		}
 
@@ -330,8 +367,7 @@ class EncryptionService {
 					cipher: 'aes',
 				});
 			} catch (error) {
-				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw this.wrapSjclError(error);
 			}
 		}
 
@@ -347,8 +383,7 @@ class EncryptionService {
 					cipher: 'aes',
 				});
 			} catch (error) {
-				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-				throw new Error(error.message);
+				throw this.wrapSjclError(error);
 			}
 		}
 
@@ -363,7 +398,13 @@ class EncryptionService {
 		if (!this.isValidEncryptionMethod(method)) throw new Error(`Unknown decryption method: ${method}`);
 
 		try {
-			return sjcl.json.decrypt(key, cipherText);
+			const output = sjcl.json.decrypt(key, cipherText);
+
+			if (method === EncryptionService.METHOD_SJCL_1A) {
+				return unescape(output);
+			} else {
+				return output;
+			}
 		} catch (error) {
 			// SJCL returns a string as error which means stack trace is missing so convert to an error object here
 			throw new Error(error.message);
@@ -588,7 +629,7 @@ class EncryptionService {
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
-		let output = {};
+		const output = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
 			const m = template.fields[i];
@@ -618,7 +659,7 @@ class EncryptionService {
 	}
 
 	isValidEncryptionMethod(method) {
-		return [EncryptionService.METHOD_SJCL, EncryptionService.METHOD_SJCL_2, EncryptionService.METHOD_SJCL_3, EncryptionService.METHOD_SJCL_4].indexOf(method) >= 0;
+		return [EncryptionService.METHOD_SJCL, EncryptionService.METHOD_SJCL_1A, EncryptionService.METHOD_SJCL_2, EncryptionService.METHOD_SJCL_3, EncryptionService.METHOD_SJCL_4].indexOf(method) >= 0;
 	}
 
 	async itemIsEncrypted(item) {
@@ -640,6 +681,7 @@ EncryptionService.METHOD_SJCL = 1;
 EncryptionService.METHOD_SJCL_2 = 2;
 EncryptionService.METHOD_SJCL_3 = 3;
 EncryptionService.METHOD_SJCL_4 = 4;
+EncryptionService.METHOD_SJCL_1A = 5;
 
 EncryptionService.fsDriver_ = null;
 

@@ -63,7 +63,7 @@ globalStyle.buttonStyle = {
 	border: '1px solid',
 	minHeight: 26,
 	minWidth: 80,
-	maxWidth: 220,
+	// maxWidth: 220,
 	paddingLeft: 12,
 	paddingRight: 12,
 	paddingTop: 6,
@@ -217,7 +217,7 @@ const solarizedDarkStyle = {
 	htmlLinkColor: '#268bd2',
 	htmlTableBackgroundColor: '#002b36',
 	htmlCodeBackgroundColor: '#002b36',
-	htmlCodeBorderColor: '#073642',
+	htmlCodeBorderColor: '#696969',
 	htmlCodeColor: '#fdf6e3',
 
 	editorTheme: 'solarized_dark',
@@ -385,13 +385,13 @@ function addExtraStyles(style) {
 	return style;
 }
 
-let themeCache_ = {};
+const themeCache_ = {};
 
 function themeStyle(theme) {
 	if (!theme) throw new Error('Theme must be specified');
 
-	var zoomRatio = 1; // Setting.value('style.zoom') / 100;
-	var editorFontSize = Setting.value('style.editor.fontSize');
+	const zoomRatio = 1; // Setting.value('style.zoom') / 100;
+	const editorFontSize = Setting.value('style.editor.fontSize');
 
 	const cacheKey = [theme, zoomRatio, editorFontSize].join('-');
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
@@ -399,7 +399,7 @@ function themeStyle(theme) {
 	// Font size are not theme specific, but they must be referenced
 	// and computed here to allow them to respond to settings changes
 	// without the need to restart
-	let fontSizes = {
+	const fontSizes = {
 		fontSize: Math.round(globalStyle.fontSize * zoomRatio),
 		editorFontSize: editorFontSize,
 		textAreaLineHeight: Math.round(globalStyle.textAreaLineHeight * editorFontSize / 12),

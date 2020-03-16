@@ -98,6 +98,7 @@ note_resource | 11
 resource_local_state | 12   
 revision | 13   
 migration | 14   
+smart_filter | 15   
 
 # Notes
 
@@ -328,4 +329,3 @@ Deletes the tag with ID :id
 ## DELETE /tags/:id/notes/:note_id
 
 Remove the tag from the note.
-

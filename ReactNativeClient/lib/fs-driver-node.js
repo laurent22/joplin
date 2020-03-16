@@ -6,7 +6,7 @@ class FsDriverNode extends FsDriverBase {
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		let output = new Error(msg);
+		const output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
@@ -26,7 +26,7 @@ class FsDriverNode extends FsDriverBase {
 	async writeBinaryFile(path, content) {
 		try {
 			// let buffer = new Buffer(content);
-			let buffer = Buffer.from(content);
+			const buffer = Buffer.from(content);
 			return await fs.writeFile(path, buffer);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -125,7 +125,7 @@ class FsDriverNode extends FsDriverBase {
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			let stat = await this.stat(`${path}/${item}`);
+			const stat = await this.stat(`${path}/${item}`);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
 			stat.path = stat.path.substr(path.length + 1);
 			output.push(stat);

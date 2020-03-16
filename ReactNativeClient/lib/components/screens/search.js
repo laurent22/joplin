@@ -35,7 +35,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			body: {
 				flex: 1,
 			},
@@ -118,10 +118,10 @@ class SearchScreenComponent extends BaseScreenComponent {
 			if (this.props.settings['db.ftsEnabled']) {
 				notes = await SearchEngineUtils.notesForQuery(query);
 			} else {
-				let p = query.split(' ');
-				let temp = [];
+				const p = query.split(' ');
+				const temp = [];
 				for (let i = 0; i < p.length; i++) {
-					let t = p[i].trim();
+					const t = p[i].trim();
 					if (!t) continue;
 					temp.push(t);
 				}
@@ -146,7 +146,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		const theme = themeStyle(this.props.theme);
 
-		let rootStyle = {
+		const rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
 		};

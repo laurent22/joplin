@@ -290,8 +290,8 @@
 	// option to clip pages as HTML.
 	function getStyleSheets(doc) {
 		const output = [];
-		for (var i=0; i<doc.styleSheets.length; i++) {
-			var sheet = doc.styleSheets[i];
+		for (let i = 0; i < doc.styleSheets.length; i++) {
+			const sheet = doc.styleSheets[i];
 			try {
 				for (const cssRule of sheet.cssRules) {
 					output.push({ type: 'text', value: cssRule.cssText });
@@ -530,7 +530,7 @@
 
 		} else if (command.name === 'pageUrl') {
 
-			let url = pageLocationOrigin() + location.pathname + location.search;
+			const url = pageLocationOrigin() + location.pathname + location.search;
 			return clippedContentResponse(pageTitle(), url, getImageSizes(document), getAnchorNames(document));
 
 		} else {

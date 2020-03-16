@@ -29,7 +29,7 @@ class NoteListComponent extends Component {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			noItemMessage: {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -64,7 +64,7 @@ class NoteListComponent extends Component {
 		const maxInterval = 1000 * 60 * 60 * 24;
 		const notRecentTime = now - maxInterval;
 
-		let output = [];
+		const output = [];
 		for (let i = 0; i < notes.length; i++) {
 			const note = notes[i];
 			if (note.is_todo) {
