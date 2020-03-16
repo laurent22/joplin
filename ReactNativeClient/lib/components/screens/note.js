@@ -38,6 +38,7 @@ const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
 
+import Toast from 'react-native-simple-toast';
 import FileViewer from 'react-native-file-viewer';
 
 class NoteScreenComponent extends BaseScreenComponent {
@@ -53,6 +54,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			folder: null,
 			lastSavedNote: null,
 			isLoading: true,
+			notetitleLength: 60,
 			titleTextInputHeight: 20,
 			alarmDialogShown: false,
 			heightBumpView: 0,
@@ -311,6 +313,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	title_changeText(text) {
+		// check if text length is greater than the allowed limit
+		if (text.length > this.state.notetitleLength) {
+			Toast.show('Maximum title length reached', Toast.LONG);
+			return;
+		}
 		shared.noteComponent_change(this, 'title', text);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 		this.scheduleSave();
