@@ -92,7 +92,7 @@ class PromptDialog extends React.Component {
 
 		this.styles_.input = {
 			width: 0.5 * width,
-			maxWidth: 400,
+			maxWidth: 430,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
