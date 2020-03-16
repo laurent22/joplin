@@ -1,8 +1,6 @@
 require('app-module-path').addPath(__dirname);
 const { asyncTest, id, ids, createNTestFolders, createNTestNotes, TestApp } = require('test-utils.js');
 
-const { time } = require('lib/time-utils.js');
-
 let testApp = null;
 
 const goBackWard = (state) => {
@@ -32,7 +30,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should save history when navigating through notes', asyncTest(async () => {
 		// setup
 		const folders = await createNTestFolders(2);
-        await testApp.wait();
+		await testApp.wait();
 		const notes0 = await createNTestNotes(5, folders[0]);
 		await testApp.wait();
 
