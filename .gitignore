@@ -48,11 +48,6 @@ joplin-webclipper-source.zip
 Tools/commit_hook.txt
 .vscode/*
 *.map
-GTAGS
-GRTAGS
-GPATH
-cscope.out
-.starscope.db
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/editors/PlainEditor.js

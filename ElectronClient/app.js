@@ -1188,7 +1188,7 @@ class Application extends BaseApplication {
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
 
-		for (const itemId of ['paste', 'cut', 'bold', 'italic', 'link', 'code', 'insertDateTime']) {
+		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'showLocalSearch']) {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
 			if (!menuItem) continue;
 			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML;
