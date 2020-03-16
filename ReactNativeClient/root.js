@@ -284,8 +284,9 @@ const appReducer = (state = appDefaultState, action) => {
 		case 'HANDLE_LAST_FOLDER':
 
 			{
-				if (state.folders.length!=0)
+				if (state.folders.length != 0) {
 					break;
+				}
 
 				const currentRoute = state.route;
 				const action = {
@@ -312,7 +313,7 @@ const appReducer = (state = appDefaultState, action) => {
 				// are loaded. Might be good enough since going back to different folders
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
-					let n = navHistory[i];
+					const n = navHistory[i];
 					if (n.routeName == action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
