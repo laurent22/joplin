@@ -22,5 +22,8 @@
     "string-padding": "^1.0.2",
     "uri-template": "^1.0.1",
     "yargs": "^12.0.5"
+  },
+  "devDependencies": {
+    "md5-file": "^4.0.0"
   }
 }

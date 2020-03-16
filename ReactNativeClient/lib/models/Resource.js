@@ -45,7 +45,7 @@ class Resource extends BaseItem {
 	}
 
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
-		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		const sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
@@ -180,7 +180,7 @@ class Resource extends BaseItem {
 	static markdownTag(resource) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
-		let lines = [];
+		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));

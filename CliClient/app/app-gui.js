@@ -134,7 +134,7 @@ class AppGui {
 			const item = folderList.currentItem;
 
 			if (item === '-') {
-				let newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
+				const newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
 				let nextItem = folderList.itemAt(newIndex);
 				if (!nextItem) nextItem = folderList.itemAt(event.previousIndex);
 
@@ -186,7 +186,7 @@ class AppGui {
 			borderRightWidth: 1,
 		};
 		noteList.on('currentItemChange', async () => {
-			let note = noteList.currentItem;
+			const note = noteList.currentItem;
 			this.store_.dispatch({
 				type: 'NOTE_SELECT',
 				id: note ? note.id : null,
@@ -338,7 +338,7 @@ class AppGui {
 
 		if (consoleWidget.isMaximized__ === doMaximize) return;
 
-		let constraints = {
+		const constraints = {
 			type: 'stretch',
 			factor: !doMaximize ? 1 : 4,
 		};
@@ -415,10 +415,10 @@ class AppGui {
 	async handleModelAction(action) {
 		this.logger().info('Action:', action);
 
-		let state = Object.assign({}, defaultState);
+		const state = Object.assign({}, defaultState);
 		state.notes = this.widget('noteList').items;
 
-		let newState = reducer(state, action);
+		const newState = reducer(state, action);
 
 		if (newState !== state) {
 			this.widget('noteList').items = newState.notes;
@@ -485,9 +485,9 @@ class AppGui {
 		// this.logger().debug('Got command: ' + cmd);
 
 		try {
-			let note = this.widget('noteList').currentItem;
-			let folder = this.widget('folderList').currentItem;
-			let args = splitCommandString(cmd);
+			const note = this.widget('noteList').currentItem;
+			const folder = this.widget('folderList').currentItem;
+			const args = splitCommandString(cmd);
 
 			for (let i = 0; i < args.length; i++) {
 				if (args[i] == '$n') {
@@ -548,7 +548,7 @@ class AppGui {
 	stdout(text) {
 		if (text === null || text === undefined) return;
 
-		let lines = text.split('\n');
+		const lines = text.split('\n');
 		for (let i = 0; i < lines.length; i++) {
 			const v = typeof lines[i] === 'object' ? JSON.stringify(lines[i]) : lines[i];
 			this.widget('console').addLine(v);
@@ -626,7 +626,7 @@ class AppGui {
 
 			if (link.type === 'item') {
 				const itemId = link.id;
-				let item = await BaseItem.loadItemById(itemId);
+				const item = await BaseItem.loadItemById(itemId);
 				if (!item) throw new Error(`No item with ID ${itemId}`); // Should be nearly impossible
 
 				if (item.type_ === BaseModel.TYPE_RESOURCE) {
@@ -750,7 +750,7 @@ class AppGui {
 				// -------------------------------------------------------------------------
 
 				const shortcutKey = this.currentShortcutKeys_.join('');
-				let keymapItem = this.keymapItemByKey(shortcutKey);
+				const keymapItem = this.keymapItemByKey(shortcutKey);
 
 				// If this command is an alias to another command, resolve to the actual command
 
@@ -766,7 +766,7 @@ class AppGui {
 					if (keymapItem.type === 'function') {
 						this.processFunctionCommand(keymapItem.command);
 					} else if (keymapItem.type === 'prompt') {
-						let promptOptions = {};
+						const promptOptions = {};
 						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
 						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
 						this.addCommandToConsole(commandString);

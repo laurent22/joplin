@@ -7,7 +7,7 @@ class NoteStatusBarComponent extends React.Component {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		let style = {
+		const style = {
 			root: Object.assign({}, theme.textStyle, {
 				backgroundColor: theme.backgroundColor,
 				color: theme.colorFaded,

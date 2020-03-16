@@ -21,7 +21,7 @@ class ToolbarButton extends React.Component {
 		}
 
 		const isEnabled = !('enabled' in this.props) || this.props.enabled === true;
-		let classes = ['button'];
+		const classes = ['button'];
 		if (!isEnabled) classes.push('disabled');
 
 		const finalStyle = Object.assign({}, style, {

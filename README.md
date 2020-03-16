@@ -32,7 +32,7 @@ Linux          | <a href='https://github.com/laurent22/joplin/releases/download/
 
 Operating System | Download | Alt. Download
 -----------------|----------|----------------
-Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.320/joplin-v1.0.320.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.320/joplin-v1.0.320-32bit.apk)
+Android          | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.322/joplin-v1.0.322.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v1.0.322/joplin-v1.0.322-32bit.apk)
 iOS              | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -302,6 +302,10 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 # Goto Anything
 
 In the desktop application, press Ctrl+G or Cmd+G and type the title of a note to jump directly to it. You can also type `#` followed by a tag or `@` followed by a notebook title.
+
+# Global shortcut
+
+In the desktop application, press `Cmd+Opt+J` (macOS) or `Ctrl+Alt+J` (Linux, Windows) to show or hide Joplin in the current workspace.
 
 # Privacy
 

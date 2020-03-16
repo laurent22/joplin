@@ -73,10 +73,12 @@ class HtmlToHtml {
 
 		this.cache_.put(cacheKey, html, 1000 * 60 * 10);
 
-		if (options.bodyOnly) return {
-			html: html,
-			pluginAssets: [],
-		};
+		if (options.bodyOnly) {
+			return {
+				html: html,
+				pluginAssets: [],
+			};
+		}
 
 		let cssStrings = noteStyle(theme, options);
 

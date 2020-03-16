@@ -136,8 +136,8 @@ class JoplinDatabase extends Database {
 	}
 
 	tableFieldNames(tableName) {
-		let tf = this.tableFields(tableName);
-		let output = [];
+		const tf = this.tableFields(tableName);
+		const output = [];
 		for (let i = 0; i < tf.length; i++) {
 			output.push(tf[i].name);
 		}
@@ -248,14 +248,14 @@ class JoplinDatabase extends Database {
 
 	refreshTableFields() {
 		this.logger().info('Initializing tables...');
-		let queries = [];
+		const queries = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
 
 		return this.selectAll('SELECT name FROM sqlite_master WHERE type="table"')
 			.then(tableRows => {
-				let chain = [];
+				const chain = [];
 				for (let i = 0; i < tableRows.length; i++) {
-					let tableName = tableRows[i].name;
+					const tableName = tableRows[i].name;
 					if (tableName == 'android_metadata') continue;
 					if (tableName == 'table_fields') continue;
 					if (tableName == 'sqlite_sequence') continue;
@@ -263,13 +263,13 @@ class JoplinDatabase extends Database {
 					chain.push(() => {
 						return this.selectAll(`PRAGMA table_info("${tableName}")`).then(pragmas => {
 							for (let i = 0; i < pragmas.length; i++) {
-								let item = pragmas[i];
+								const item = pragmas[i];
 								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
 								let defaultValue = item.dflt_value;
 								if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
 									defaultValue = defaultValue.substr(1, defaultValue.length - 2);
 								}
-								let q = Database.insertQuery('table_fields', {
+								const q = Database.insertQuery('table_fields', {
 									table_name: tableName,
 									field_name: item.name,
 									field_type: Database.enumId('fieldType', item.type),
@@ -319,7 +319,7 @@ class JoplinDatabase extends Database {
 				'Unknown profile version. Most likely this is an old version of Joplin, while the profile was created by a newer version. Please upgrade Joplin at https://joplinapp.org and try again.\n'
 				+ `Joplin version: ${shim.appVersion()}\n`
 				+ `Profile version: ${fromVersion}\n`
-				+ `Expected version: ${existingDatabaseVersions[existingDatabaseVersions.length-1]}`);
+				+ `Expected version: ${existingDatabaseVersions[existingDatabaseVersions.length - 1]}`);
 		}
 
 		if (currentVersionIndex == existingDatabaseVersions.length - 1) return fromVersion;
@@ -738,10 +738,10 @@ class JoplinDatabase extends Database {
 
 		this.tableFields_ = {};
 
-		let rows = await this.selectAll('SELECT * FROM table_fields');
+		const rows = await this.selectAll('SELECT * FROM table_fields');
 
 		for (let i = 0; i < rows.length; i++) {
-			let row = rows[i];
+			const row = rows[i];
 			if (!this.tableFields_[row.table_name]) this.tableFields_[row.table_name] = [];
 			this.tableFields_[row.table_name].push({
 				name: row.field_name,

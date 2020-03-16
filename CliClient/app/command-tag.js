@@ -20,7 +20,7 @@ class Command extends BaseCommand {
 
 	async action(args) {
 		let tag = null;
-		let options = args.options;
+		const options = args.options;
 
 		if (args.tag) tag = await app().loadItem(BaseModel.TYPE_TAG, args.tag);
 		let notes = [];
@@ -46,7 +46,7 @@ class Command extends BaseCommand {
 			}
 		} else if (command == 'list') {
 			if (tag) {
-				let notes = await Tag.notes(tag.id);
+				const notes = await Tag.notes(tag.id);
 				notes.map(note => {
 					let line = '';
 					if (options.long) {
@@ -70,7 +70,7 @@ class Command extends BaseCommand {
 					this.stdout(line);
 				});
 			} else {
-				let tags = await Tag.all();
+				const tags = await Tag.all();
 				tags.map(tag => {
 					this.stdout(tag.title);
 				});

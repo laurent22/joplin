@@ -4,14 +4,14 @@ const { _ } = require('lib/locale');
 
 function dirname(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	s.pop();
 	return s.join('/');
 }
 
 function basename(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	return s[s.length - 1];
 }
 
@@ -28,13 +28,13 @@ function filename(path, includeDir = false) {
 function fileExtension(path) {
 	if (!path) throw new Error('Path is empty');
 
-	let output = path.split('.');
+	const output = path.split('.');
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
 }
 
 function isHidden(path) {
-	let b = basename(path);
+	const b = basename(path);
 	if (!b.length) throw new Error(`Path empty or not a valid path: ${path}`);
 	return b[0] === '.';
 }
@@ -49,7 +49,7 @@ function safeFilename(e, maxLength = null, allowSpaces = false) {
 	if (maxLength === null) maxLength = 32;
 	if (!e || !e.replace) return '';
 	const regex = allowSpaces ? /[^a-zA-Z0-9\-_\(\)\. ]/g : /[^a-zA-Z0-9\-_\(\)\.]/g;
-	let output = e.replace(regex, '_');
+	const output = e.replace(regex, '_');
 	return output.substr(0, maxLength);
 }
 

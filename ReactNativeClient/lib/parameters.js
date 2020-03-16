@@ -34,7 +34,7 @@ parameters_.prod = {
 
 function parameters(env = null) {
 	if (env === null) env = Setting.value('env');
-	let output = parameters_[env];
+	const output = parameters_[env];
 	if (Setting.value('isDemo')) {
 		output.oneDrive = output.oneDriveDemo;
 	}

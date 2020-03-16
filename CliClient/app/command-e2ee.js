@@ -138,7 +138,7 @@ class Command extends BaseCommand {
 			if (!targetPath) throw new Error('Please specify the sync target path.');
 
 			const dirPaths = function(targetPath) {
-				let paths = [];
+				const paths = [];
 				fs.readdirSync(targetPath).forEach(path => {
 					paths.push(path);
 				});
@@ -151,10 +151,10 @@ class Command extends BaseCommand {
 			let encryptedResourceCount = 0;
 			let otherItemCount = 0;
 
-			let encryptedPaths = [];
-			let decryptedPaths = [];
+			const encryptedPaths = [];
+			const decryptedPaths = [];
 
-			let paths = dirPaths(targetPath);
+			const paths = dirPaths(targetPath);
 
 			for (let i = 0; i < paths.length; i++) {
 				const path = paths[i];
@@ -164,7 +164,7 @@ class Command extends BaseCommand {
 				// this.stdout(fullPath);
 
 				if (path === '.resource') {
-					let resourcePaths = dirPaths(fullPath);
+					const resourcePaths = dirPaths(fullPath);
 					for (let j = 0; j < resourcePaths.length; j++) {
 						const resourcePath = resourcePaths[j];
 						resourceCount++;

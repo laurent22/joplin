@@ -36,8 +36,8 @@ function addResourceTag(lines, resource, attributes) {
 
 function attributeToLowerCase(node) {
 	if (!node.attributes) return {};
-	let output = {};
-	for (let n in node.attributes) {
+	const output = {};
+	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
 		output[n.toLowerCase()] = node.attributes[n];
 	}
@@ -45,7 +45,7 @@ function attributeToLowerCase(node) {
 }
 
 function enexXmlToHtml_(stream, resources) {
-	let remainingResources = resources.slice();
+	const remainingResources = resources.slice();
 
 	const removeRemainingResource = id => {
 		for (let i = 0; i < remainingResources.length; i++) {
@@ -59,9 +59,9 @@ function enexXmlToHtml_(stream, resources) {
 	return new Promise((resolve, reject) => {
 		const options = {};
 		const strict = false;
-		var saxStream = require('sax').createStream(strict, options);
+		const saxStream = require('sax').createStream(strict, options);
 
-		let section = {
+		const section = {
 			type: 'text',
 			lines: [],
 			parent: null,
@@ -87,7 +87,7 @@ function enexXmlToHtml_(stream, resources) {
 
 				let resource = null;
 				for (let i = 0; i < resources.length; i++) {
-					let r = resources[i];
+					const r = resources[i];
 					if (r.id == hash) {
 						resource = r;
 						removeRemainingResource(r.id);
@@ -99,7 +99,7 @@ function enexXmlToHtml_(stream, resources) {
 					// TODO: Extract this duplicate of code in ./import-enex-md-gen.js
 					let found = false;
 					for (let i = 0; i < remainingResources.length; i++) {
-						let r = remainingResources[i];
+						const r = remainingResources[i];
 						if (!r.id) {
 							resource = Object.assign({}, r);
 							resource.id = hash;
@@ -149,7 +149,7 @@ function enexXmlToHtml_(stream, resources) {
 
 async function enexXmlToHtml(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
-	let result = await enexXmlToHtml_(stream, resources, options);
+	const result = await enexXmlToHtml_(stream, resources, options);
 
 	try {
 		const preCleaning = result.content.lines.join(''); // xmlString
