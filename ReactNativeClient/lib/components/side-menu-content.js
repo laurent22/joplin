@@ -148,10 +148,8 @@ class SideMenuContentComponent extends Component {
 						Alert.alert('', _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', folder.title), [
 							{
 								text: _('OK'),
-								onPress: async () => {
-									await Folder.delete(folder.id);
-									if (this.props.folders.length==0)
-										this.allNotesButton_press();
+								onPress: () => {
+									Folder.delete(folder.id);
 								},
 							},
 							{

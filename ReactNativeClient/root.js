@@ -281,6 +281,56 @@ const appReducer = (state = appDefaultState, action) => {
 			}
 			break;
 
+		case 'HANDLE_LAST_FOLDER':
+
+			{
+				if (state.folders.length!=0)
+					break;
+
+				const currentRoute = state.route;
+				const action = {
+					type: 'NAV_GO',
+					routeName: 'Notes',
+					smartFilterId: 'c3176726992c11e9ac940492261af972',
+				};
+
+				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
+				// If the route *name* is the same (even if the other parameters are different), we
+				// overwrite the last route in the history with the current one. If the route name
+				// is different, we push a new history entry.
+					if (currentRoute.routeName == action.routeName) {
+					// nothing
+					} else {
+						navHistory.push(currentRoute);
+					}
+				}
+
+				// HACK: whenever a new screen is loaded, all the previous screens of that type
+				// are overwritten with the new screen parameters. This is because the way notes
+				// are currently loaded is not optimal (doesn't retain history properly) so
+				// this is a simple fix without doing a big refactoring to change the way notes
+				// are loaded. Might be good enough since going back to different folders
+				// is probably not a common workflow.
+				for (let i = 0; i < navHistory.length; i++) {
+					let n = navHistory[i];
+					if (n.routeName == action.routeName) {
+						navHistory[i] = Object.assign({}, action);
+					}
+				}
+
+				newState = Object.assign({}, state);
+
+				newState.selectedNoteHash = '';
+
+				newState.smartFilterId = action.smartFilterId;
+				newState.notesParentType = 'SmartFilter';
+
+				newState.route = action;
+				newState.historyCanGoBack = !!navHistory.length;
+				newState.showSideMenu = false;
+			}
+			break;
+
 		case 'SIDE_MENU_TOGGLE':
 
 			newState = Object.assign({}, state);
