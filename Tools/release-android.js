@@ -58,14 +58,14 @@ function gradleVersionName(content) {
 	return matches[1];
 }
 
-async function createRelease(name, tagName, version) {
+async function createRelease(name, tagName, version, rcSuffix) {
 	const originalContents = {};
-	const suffix = version + (name === 'main' ? '' : `-${name}`);
+	const suffix = version + rcSuffix + (name === 'main' ? '' : `-${name}`);
 
 	console.info(`Creating release: ${suffix}`);
 
 	if (name === '32bit') {
-		let filename = `${rnDir}/android/app/build.gradle`;
+		const filename = `${rnDir}/android/app/build.gradle`;
 		let content = await fs.readFile(filename, 'utf8');
 		originalContents[filename] = content;
 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
@@ -136,7 +136,7 @@ async function createRelease(name, tagName, version) {
 		await fs.copy('ReactNativeClient/android/app/build/outputs/apk/release/app-release.apk', `${releaseDir}/joplin-latest.apk`);
 	}
 
-	for (let filename in originalContents) {
+	for (const filename in originalContents) {
 		const content = originalContents[filename];
 		await fs.writeFile(filename, content);
 	}
@@ -149,28 +149,35 @@ async function createRelease(name, tagName, version) {
 }
 
 async function main() {
+	const argv = require('yargs').argv;
+
+	const rcSuffix = argv.rc ? `-${argv.rc}` : '';
+
+	if (rcSuffix) console.info(`Creating release candidate ${argv.rc}`);
 	console.info('Updating version numbers in build.gradle...');
 
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
-	const tagName = `android-v${version}`;
+	const tagName = `android-v${version}${rcSuffix}`;
 	const releaseNames = ['main', '32bit'];
 	const releaseFiles = {};
 
 	for (const releaseName of releaseNames) {
-		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version);
+		releaseFiles[releaseName] = await createRelease(releaseName, tagName, version, rcSuffix);
 	}
 
-	console.info('Updating Readme URL...');
+	if (!rcSuffix) {
+		console.info('Updating Readme URL...');
 
-	let readmeContent = await fs.readFile('README.md', 'utf8');
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
-	readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
-	await fs.writeFile('README.md', readmeContent);
+		let readmeContent = await fs.readFile('README.md', 'utf8');
+		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, releaseFiles['main'].downloadUrl);
+		readmeContent = readmeContent.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, releaseFiles['32bit'].downloadUrl);
+		await fs.writeFile('README.md', readmeContent);
+	}
 
 	console.info(await execCommand('git pull'));
 	console.info(await execCommand('git add -A'));
-	console.info(await execCommand(`git commit -m "Android release v${version}"`));
+	console.info(await execCommand(`git commit -m "Android release v${version}${rcSuffix}"`));
 	console.info(await execCommand(`git tag ${tagName}`));
 	console.info(await execCommand('git push'));
 	console.info(await execCommand('git push --tags'));

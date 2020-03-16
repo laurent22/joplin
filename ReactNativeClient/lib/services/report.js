@@ -13,7 +13,7 @@ const { toTitleCase } = require('lib/string-utils.js');
 class ReportService {
 	csvEscapeCell(cell) {
 		cell = this.csvValueToString(cell);
-		let output = cell.replace(/"/, '""');
+		const output = cell.replace(/"/, '""');
 		if (this.csvCellRequiresQuotes(cell, ',')) {
 			return `"${output}"`;
 		}
@@ -40,7 +40,7 @@ class ReportService {
 	}
 
 	csvCreate(rows) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
 		}
@@ -52,7 +52,7 @@ class ReportService {
 		if (!option.format) option.format = 'array';
 
 		const itemTypes = BaseItem.syncItemTypes();
-		let output = [];
+		const output = [];
 		output.push(['type', 'id', 'updated_time', 'sync_time', 'is_conflict']);
 		for (let i = 0; i < itemTypes.length; i++) {
 			const itemType = itemTypes[i];
@@ -61,7 +61,7 @@ class ReportService {
 
 			for (let j = 0; j < items.length; j++) {
 				const item = items[j];
-				let row = [itemType, item.id, item.updated_time, item.sync_time];
+				const row = [itemType, item.id, item.updated_time, item.sync_time];
 				row.push('is_conflict' in item ? item.is_conflict : '');
 				output.push(row);
 			}
@@ -71,7 +71,7 @@ class ReportService {
 	}
 
 	async syncStatus(syncTarget) {
-		let output = {
+		const output = {
 			items: {},
 			total: {},
 		};
@@ -79,9 +79,9 @@ class ReportService {
 		let itemCount = 0;
 		let syncedCount = 0;
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-			let d = BaseItem.syncItemDefinitions_[i];
-			let ItemClass = BaseItem.getClass(d.className);
-			let o = {
+			const d = BaseItem.syncItemDefinitions_[i];
+			const ItemClass = BaseItem.getClass(d.className);
+			const o = {
 				total: await ItemClass.count(),
 				synced: await ItemClass.syncedCount(syncTarget),
 			};
@@ -90,7 +90,7 @@ class ReportService {
 			syncedCount += o.synced;
 		}
 
-		let conflictedCount = await Note.conflictedCount();
+		const conflictedCount = await Note.conflictedCount();
 
 		output.total = {
 			total: itemCount - conflictedCount,
@@ -111,8 +111,8 @@ class ReportService {
 	}
 
 	async status(syncTarget) {
-		let r = await this.syncStatus(syncTarget);
-		let sections = [];
+		const r = await this.syncStatus(syncTarget);
+		const sections = [];
 		let section = null;
 
 		const disabledItems = await BaseItem.syncDisabledItems(syncTarget);
@@ -202,7 +202,7 @@ class ReportService {
 
 		section = { title: _('Sync status (synced items / total items)'), body: [] };
 
-		for (let n in r.items) {
+		for (const n in r.items) {
 			if (!r.items.hasOwnProperty(n)) continue;
 			section.body.push(_('%s: %d/%d', n, r.items[n].synced, r.items[n].total));
 		}

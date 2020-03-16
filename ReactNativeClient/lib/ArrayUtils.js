@@ -9,13 +9,14 @@ ArrayUtils.unique = function(array) {
 ArrayUtils.removeElement = function(array, element) {
 	const index = array.indexOf(element);
 	if (index < 0) return array;
-	array.splice(index, 1);
-	return array;
+	const newArray = array.slice();
+	newArray.splice(index, 1);
+	return newArray;
 };
 
 // https://stackoverflow.com/a/10264318/561309
 ArrayUtils.binarySearch = function(items, value) {
-	var startIndex = 0,
+	let startIndex = 0,
 		stopIndex = items.length - 1,
 		middle = Math.floor((stopIndex + startIndex) / 2);
 

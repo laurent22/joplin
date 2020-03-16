@@ -19,6 +19,10 @@ class RevisionService extends BaseService {
 		// the original note is saved. The goal is to have at least one revision in case the note
 		// is deleted or modified as a result of a bug or user mistake.
 		this.isOldNotesCache_ = {};
+
+		this.maintenanceCalls_ = [];
+		this.maintenanceTimer1_ = null;
+		this.maintenanceTimer2_ = null;
 	}
 
 	static instance() {
@@ -42,7 +46,7 @@ class RevisionService extends BaseService {
 	noteMetadata_(note) {
 		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict'];
 		const md = {};
-		for (let k in note) {
+		for (const k in note) {
 			if (excludedFields.indexOf(k) >= 0) continue;
 			md[k] = note[k];
 		}
@@ -235,22 +239,27 @@ class RevisionService extends BaseService {
 	}
 
 	async maintenance() {
-		const startTime = Date.now();
-		this.logger().info('RevisionService::maintenance: Starting...');
+		this.maintenanceCalls_.push(true);
+		try {
+			const startTime = Date.now();
+			this.logger().info('RevisionService::maintenance: Starting...');
 
-		if (!Setting.value('revisionService.enabled')) {
-			this.logger().info('RevisionService::maintenance: Service is disabled');
-			// We do as if we had processed all the latest changes so that they can be cleaned up
-			// later on by ItemChangeUtils.deleteProcessedChanges().
-			Setting.setValue('revisionService.lastProcessedChangeId', await ItemChange.lastChangeId());
-			await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
-		} else {
-			this.logger().info('RevisionService::maintenance: Service is enabled');
-			await this.collectRevisions();
-			await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
+			if (!Setting.value('revisionService.enabled')) {
+				this.logger().info('RevisionService::maintenance: Service is disabled');
+				// We do as if we had processed all the latest changes so that they can be cleaned up
+				// later on by ItemChangeUtils.deleteProcessedChanges().
+				Setting.setValue('revisionService.lastProcessedChangeId', await ItemChange.lastChangeId());
+				await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
+			} else {
+				this.logger().info('RevisionService::maintenance: Service is enabled');
+				await this.collectRevisions();
+				await this.deleteOldRevisions(Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000);
+
+				this.logger().info(`RevisionService::maintenance: Done in ${Date.now() - startTime}ms`);
+			}
+		} finally {
+			this.maintenanceCalls_.pop();
 		}
-
-		this.logger().info(`RevisionService::maintenance: Done in ${Date.now() - startTime}ms`);
 	}
 
 	runInBackground(collectRevisionInterval = null) {
@@ -261,13 +270,33 @@ class RevisionService extends BaseService {
 
 		this.logger().info(`RevisionService::runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 
-		setTimeout(() => {
+		this.maintenanceTimer1_ = setTimeout(() => {
 			this.maintenance();
 		}, 1000 * 4);
 
-		shim.setInterval(() => {
+		this.maintenanceTImer2_ = shim.setInterval(() => {
 			this.maintenance();
 		}, collectRevisionInterval);
+	}
+
+	async cancelTimers() {
+		if (this.maintenanceTimer1_) {
+			clearTimeout(this.maintenanceTimer1);
+			this.maintenanceTimer1_ = null;
+		}
+		if (this.maintenanceTimer2_) {
+			shim.clearInterval(this.maintenanceTimer2);
+			this.maintenanceTimer2_ = null;
+		}
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.maintenanceCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
 	}
 }
 

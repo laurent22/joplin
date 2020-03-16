@@ -65,7 +65,7 @@ const markdownUtils = {
 	},
 
 	createMarkdownTable(headers, rows) {
-		let output = [];
+		const output = [];
 
 		const headersMd = [];
 		const lineMd = [];

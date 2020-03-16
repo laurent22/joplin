@@ -30,7 +30,11 @@ describe('MdToHtml', function() {
 	it('should convert from Markdown to Html', asyncTest(async () => {
 		const basePath = `${__dirname}/md_to_html`;
 		const files = await shim.fsDriver().readDirStats(basePath);
-		const mdToHtml = new MdToHtml();
+		const mdToHtml = new MdToHtml({
+			ResourceModel: {
+				isResourceUrl: () => false,
+			},
+		});
 
 		for (let i = 0; i < files.length; i++) {
 			const mdFilename = files[i].path;
@@ -39,7 +43,7 @@ describe('MdToHtml', function() {
 			const mdFilePath = `${basePath}/${mdFilename}`;
 			const htmlPath = `${basePath}/${filename(mdFilePath)}.html`;
 
-			// if (mdFilename !== 'table_with_header.html') continue;
+			// if (mdFilename !== 'sanitize_9.md') continue;
 
 			const mdToHtmlOptions = {
 				bodyOnly: true,
@@ -75,5 +79,13 @@ describe('MdToHtml', function() {
 			}
 		}
 	}));
+
+	// it('should write CSS to an external file', asyncTest(async () => {
+	// 	const mdToHtml = new MdToHtml({
+	// 		fsDriver: shim.fsDriver(),
+	// 		tempDir: Setting.value('tempDir'),
+	// 	});
+
+	// }));
 
 });

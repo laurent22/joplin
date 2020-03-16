@@ -19,24 +19,26 @@ labels: 'bug'
 
 ## Environment
 
-Joplin version:
-Platform:
-OS specifcs:
+Joplin version: 
+Platform: 
+OS specifics: 
+
 <!--
   Platform can be one of: macOS, Linux, Windows, Android, iOS, terminal (or a combination)
-  OS specifcs: e.g. OS version, Linux distribution, Android/iOS version, ...
+  OS specifics: e.g. OS version, Linux distribution, Android/iOS version...
 -->
 
-## Steps To Reproduce
+## Steps to reproduce
 
-1.
-2.
+1. 
+2. 
+3. 
 
 <!--
   Issues without reproduction steps are likely to stall.
 -->
 
-Describe what you expected to happen:
+## Describe what you expected to happen
 
 
 

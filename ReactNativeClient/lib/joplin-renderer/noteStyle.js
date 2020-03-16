@@ -1,4 +1,6 @@
 module.exports = function(style, options) {
+	style = style ? style : {};
+
 	// https://necolas.github.io/normalize.css/
 	const normalizeCss = `
 		html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -52,23 +54,20 @@ module.exports = function(style, options) {
 		}
 
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
-		/* Disabled, because it also applies to non-direct descendants of #rendered-md and also not a very elegant solution */
-		
-		/*
-		#rendered-md h1:first-child,
-		#rendered-md h2:first-child,
-		#rendered-md h3:first-child,
-		#rendered-md h4:first-child,
-		#rendered-md ul:first-child,
-		#rendered-md ol:first-child,
-		#rendered-md table:first-child,
-		#rendered-md blockquote:first-child,
-		#rendered-md img:first-child,
-		#rendered-md p:first-child {
+
+		#rendered-md > h1:first-child,
+		#rendered-md > h2:first-child,
+		#rendered-md > h3:first-child,
+		#rendered-md > h4:first-child,
+		#rendered-md > ul:first-child,
+		#rendered-md > ol:first-child,
+		#rendered-md > table:first-child,
+		#rendered-md > blockquote:first-child,
+		#rendered-md > img:first-child,
+		#rendered-md > p:first-child {
 			margin-top: 0;
 			padding-top: 0;
 		}
-		*/
 		
 		p, h1, h2, h3, h4, h5, h6, ul, table {
 			margin-top: .6em;
@@ -267,6 +266,31 @@ module.exports = function(style, options) {
 
 		.exported-note {
 			padding: 1em;
+		}
+
+		.joplin-editable .joplin-source {
+			display: none;
+		}
+
+		/* For TinyMCE */
+		.mce-content-body {
+			padding: 5px 10px 10px 10px;
+		}
+
+		.mce-content-body code {
+			background-color: transparent;
+		}
+
+		.mce-content-body [data-mce-selected=inline-boundary] {
+			background-color: transparent;
+		}
+
+		.mce-content-body .joplin-editable {
+			cursor: pointer !important;
+		}
+
+		.mce-content-body.mce-content-readonly {
+			opacity: 0.5;
 		}
 
 		@media print {

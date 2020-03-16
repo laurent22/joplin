@@ -27,6 +27,10 @@ const itemMetadata_ = {
 		id: '2ee48f80889447429a3cccb04a466072',
 		// tags: 'attachment,search',
 	},
+	'5_privacy.md': {
+		id: '5ec2e7505ec2e7505ec2e7505ec2e750',
+		// tags: 'privacy',
+	},
 	'AllClients.png': { id: '5c05172554194f95b60971f6d577cc1a' },
 	'SubNotebooks.png': { id: '3a851ab0c0e849b7bc9e8cd5c4feb34a' },
 	'folder_Welcome': { id: '9bb5d498aba74cc6a047cfdc841e82a1' },
@@ -115,10 +119,12 @@ async function main() {
 			for (let j = 0; j < note.tags.length; j++) {
 				const tagTitle = note.tags[j];
 				const tagId = itemIdFromPath(tagTitle);
-				if (!tagIdsToTag[tagId]) tagIdsToTag[tagId] = {
-					id: tagId,
-					title: tagTitle,
-				};
+				if (!tagIdsToTag[tagId]) {
+					tagIdsToTag[tagId] = {
+						id: tagId,
+						title: tagTitle,
+					};
+				}
 			}
 
 			notes.push(note);
@@ -126,7 +132,7 @@ async function main() {
 	}
 
 	const tags = [];
-	for (let n in tagIdsToTag) {
+	for (const n in tagIdsToTag) {
 		if (!tagIdsToTag.hasOwnProperty(n)) continue;
 		tags.push(tagIdsToTag[n]);
 	}

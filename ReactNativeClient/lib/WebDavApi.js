@@ -6,6 +6,7 @@ const URL = require('url-parse');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
 
+
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
 // implementations use the same namespaces. If not, extra processing can be done in `nameProcessor`, for
@@ -31,6 +32,7 @@ class WebDavApi {
 			options.headers = Object.assign({}, options.headers);
 			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
 			delete options.method;
+			delete options.agent;
 			output.push(JSON.stringify(options));
 			return output.join(' ');
 		};
@@ -81,7 +83,7 @@ class WebDavApi {
 	}
 
 	async xmlToJson(xml) {
-		let davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
+		const davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
 		const nameProcessor = name => {
 			if (name.indexOf('xmlns') !== 0) {
@@ -245,12 +247,12 @@ class WebDavApi {
 	}
 
 	requestToCurl_(url, options) {
-		let output = [];
+		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
@@ -359,8 +361,10 @@ class WebDavApi {
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
-
 		const url = `${this.baseUrl()}/${path}`;
+
+		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
+
 
 		let response = null;
 
