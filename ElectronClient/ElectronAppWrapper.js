@@ -1,4 +1,4 @@
-const { BrowserWindow, Tray, screen } = require('electron');
+const { BrowserWindow, Tray, screen, globalShortcut } = require('electron');
 const { shim } = require('lib/shim');
 const url = require('url');
 const path = require('path');
@@ -243,6 +243,15 @@ class ElectronAppWrapper {
 		return false;
 	}
 
+	toggleWindowVisilibity() {
+		if (this.win_.isVisible()) {
+			this.win_.hide();
+		} else {
+			this.win_.setVisibleOnAllWorkspaces(true);
+			this.win_.show();
+		}
+	}
+
 	async start() {
 		// Since we are doing other async things before creating the window, we might miss
 		// the "ready" event. So we use the function below to make sure that the app is ready.
@@ -253,8 +262,17 @@ class ElectronAppWrapper {
 
 		this.createWindow();
 
+		const registerGlobalShortcut = globalShortcut.register('CommandOrControl+Alt+J', () => {
+			this.toggleWindowVisilibity();
+		});
+
+		if (!registerGlobalShortcut) {
+			console.warn('Could not register global shortcut');
+		}
+
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
+			globalShortcut.unregisterAll();
 		});
 
 		this.electronApp_.on('window-all-closed', () => {
