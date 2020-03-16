@@ -46,7 +46,7 @@ class Database {
 
 	escapeField(field) {
 		if (field == '*') return '*';
-		let p = field.split('.');
+		const p = field.split('.');
 		if (p.length == 1) return `\`${field}\``;
 		if (p.length == 2) return `${p[0]}.\`${p[1]}\``;
 
@@ -56,7 +56,7 @@ class Database {
 	escapeFields(fields) {
 		if (fields == '*') return '*';
 
-		let output = [];
+		const output = [];
 		for (let i = 0; i < fields.length; i++) {
 			output.push(this.escapeField(fields[i]));
 		}
@@ -74,7 +74,7 @@ class Database {
 		while (true) {
 			try {
 				this.logQuery(sql, params);
-				let result = await this.driver()[callName](sql, params);
+				const result = await this.driver()[callName](sql, params);
 				return result; // No exception was thrown
 			} catch (error) {
 				if (error && (error.code == 'SQLITE_IOERR' || error.code == 'SQLITE_BUSY')) {
@@ -120,7 +120,7 @@ class Database {
 		if (queries.length <= 0) return;
 
 		if (queries.length == 1) {
-			let q = this.wrapQuery(queries[0]);
+			const q = this.wrapQuery(queries[0]);
 			await this.exec(q.sql, q.params);
 			return;
 		}
@@ -132,7 +132,7 @@ class Database {
 			await this.exec('BEGIN TRANSACTION');
 
 			for (let i = 0; i < queries.length; i++) {
-				let query = this.wrapQuery(queries[i]);
+				const query = this.wrapQuery(queries[i]);
 				await this.exec(query.sql, query.params);
 			}
 
@@ -183,11 +183,11 @@ class Database {
 	}
 
 	sqlStringToLines(sql) {
-		let output = [];
-		let lines = sql.split('\n');
+		const output = [];
+		const lines = sql.split('\n');
 		let statement = '';
-		for (var i = 0; i < lines.length; i++) {
-			var line = lines[i];
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
 			if (line == '') continue;
 			if (line.substr(0, 2) == '--') continue;
 			statement += line.trim();
@@ -217,8 +217,8 @@ class Database {
 
 		let keySql = '';
 		let valueSql = '';
-		let params = [];
-		for (let key in data) {
+		const params = [];
+		for (const key in data) {
 			if (!data.hasOwnProperty(key)) continue;
 			if (key[key.length - 1] == '_') continue;
 			if (keySql != '') keySql += ', ';
@@ -237,8 +237,8 @@ class Database {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
 		let sql = '';
-		let params = [];
-		for (let key in data) {
+		const params = [];
+		for (const key in data) {
 			if (!data.hasOwnProperty(key)) continue;
 			if (key[key.length - 1] == '_') continue;
 			if (sql != '') sql += ', ';
@@ -247,8 +247,8 @@ class Database {
 		}
 
 		if (typeof where != 'string') {
-			let s = [];
-			for (let n in where) {
+			const s = [];
+			for (const n in where) {
 				if (!where.hasOwnProperty(n)) continue;
 				params.push(where[n]);
 				s.push(`\`${n}\`=?`);
@@ -263,14 +263,14 @@ class Database {
 	}
 
 	alterColumnQueries(tableName, fields) {
-		let fieldsNoType = [];
-		for (let n in fields) {
+		const fieldsNoType = [];
+		for (const n in fields) {
 			if (!fields.hasOwnProperty(n)) continue;
 			fieldsNoType.push(n);
 		}
 
-		let fieldsWithType = [];
-		for (let n in fields) {
+		const fieldsWithType = [];
+		for (const n in fields) {
 			if (!fields.hasOwnProperty(n)) continue;
 			fieldsWithType.push(`${this.escapeField(n)} ${fields[n]}`);
 		}
@@ -293,7 +293,7 @@ class Database {
 	}
 
 	wrapQueries(queries) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < queries.length; i++) {
 			output.push(this.wrapQuery(queries[i]));
 		}
@@ -304,7 +304,7 @@ class Database {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 
 		if (sql.constructor === Array) {
-			let output = {};
+			const output = {};
 			output.sql = sql[0];
 			output.params = sql.length >= 2 ? sql[1] : null;
 			return output;

@@ -34,14 +34,14 @@ utils.execCommand = function(command) {
 
 utils.dirname = function(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	s.pop();
 	return s.join('/');
 };
 
 utils.basename = function(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	return s[s.length - 1];
 };
 
@@ -63,7 +63,7 @@ utils.toSystemSlashes = function(path) {
 utils.fileExtension = function(path) {
 	if (!path) throw new Error('Path is empty');
 
-	let output = path.split('.');
+	const output = path.split('.');
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
 };

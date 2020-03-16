@@ -252,7 +252,7 @@ class MdToHtml {
 		markdownIt.use(rules.code_inline(context, ruleOptions));
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
 
-		for (let key in plugins) {
+		for (const key in plugins) {
 			if (this.pluginEnabled(key)) markdownIt.use(plugins[key].module, plugins[key].options);
 		}
 

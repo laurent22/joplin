@@ -1,3 +1,5 @@
+/* eslint prefer-const: 0*/
+
 // Based on https://github.com/waylonflinn/markdown-it-katex
 
 'use strict';
@@ -15,7 +17,7 @@ katex = mhchemModule(katex);
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
 function isValidDelim(state, pos) {
-	var prevChar,
+	let prevChar,
 		nextChar,
 		max = state.posMax,
 		can_open = true,
@@ -40,7 +42,7 @@ function isValidDelim(state, pos) {
 }
 
 function math_inline(state, silent) {
-	var start, match, token, res, pos;
+	let start, match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
 		return false;
@@ -115,7 +117,7 @@ function math_inline(state, silent) {
 }
 
 function math_block(state, start, end, silent) {
-	var firstLine,
+	let firstLine,
 		lastLine,
 		next,
 		lastPos,
@@ -180,7 +182,7 @@ function math_block(state, start, end, silent) {
 	return true;
 }
 
-let cache_ = {};
+const cache_ = {};
 
 module.exports = function(context) {
 	// Keep macros that persist across Katex blocks to allow defining a macro
@@ -238,7 +240,7 @@ module.exports = function(context) {
 		options.trust = true;
 
 		// set KaTeX as the renderer for markdown-it-simplemath
-		var katexInline = function(latex) {
+		const katexInline = function(latex) {
 			options.displayMode = false;
 			try {
 				return `<span class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$" data-joplin-source-close="$">${latex}</pre>${renderToStringWithCache(latex, options)}</span>`;
@@ -248,12 +250,12 @@ module.exports = function(context) {
 			}
 		};
 
-		var inlineRenderer = function(tokens, idx) {
+		const inlineRenderer = function(tokens, idx) {
 			addContextAssets();
 			return katexInline(tokens[idx].content);
 		};
 
-		var katexBlock = function(latex) {
+		const katexBlock = function(latex) {
 			options.displayMode = true;
 			try {
 				return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
@@ -263,7 +265,7 @@ module.exports = function(context) {
 			}
 		};
 
-		var blockRenderer = function(tokens, idx) {
+		const blockRenderer = function(tokens, idx) {
 			addContextAssets();
 			return `${katexBlock(tokens[idx].content)}\n`;
 		};

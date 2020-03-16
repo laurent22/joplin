@@ -3,7 +3,7 @@ function promiseChain(chain, defaultValue = null) {
 		resolve(defaultValue);
 	});
 	for (let i = 0; i < chain.length; i++) {
-		let f = chain[i];
+		const f = chain[i];
 		output = output.then(f);
 	}
 	return output;

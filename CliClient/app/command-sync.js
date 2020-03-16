@@ -161,9 +161,9 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
-			let options = {
+			const options = {
 				onProgress: report => {
-					let lines = Synchronizer.reportToLines(report);
+					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
 				},
 				onMessage: msg => {
@@ -185,7 +185,7 @@ class Command extends BaseCommand {
 			options.context = context;
 
 			try {
-				let newContext = await sync.start(options);
+				const newContext = await sync.start(options);
 				Setting.setValue(contextKey, JSON.stringify(newContext));
 			} catch (error) {
 				if (error.code == 'alreadyStarted') {

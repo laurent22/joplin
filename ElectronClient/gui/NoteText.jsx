@@ -543,22 +543,22 @@ class NoteTextComponent extends React.Component {
 		this.setState({ loading: true });
 
 		const stateNoteId = this.state.note ? this.state.note.id : null;
-		let noteId = props.noteId;
+		const noteId = props.noteId;
 		let parentFolder = null;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(noteId);
 
 		let scrollPercent = this.props.lastEditorScrollPercents[noteId];
 		if (!scrollPercent) scrollPercent = 0;
 
-		let loadingNewNote = stateNoteId !== noteId;
+		const loadingNewNote = stateNoteId !== noteId;
 		this.lastLoadedNoteId_ = noteId;
-		let note = noteId ? await Note.load(noteId) : null;
+		const note = noteId ? await Note.load(noteId) : null;
 		if (noteId !== this.lastLoadedNoteId_) return defer(); // Race condition - current note was changed while this one was loading
 		if (options.noReloadIfLocalChanges && this.isModified()) return defer();
 
 		// If the note hasn't been changed, exit now
 		if (this.state.note && note) {
-			let diff = Note.diffObjects(this.state.note, note);
+			const diff = Note.diffObjects(this.state.note, note);
 			delete diff.type_;
 			if (!Object.getOwnPropertyNames(diff).length) return defer();
 		}
@@ -622,7 +622,7 @@ class NoteTextComponent extends React.Component {
 			parentFolder = Folder.byId(props.folders, note.parent_id);
 		}
 
-		let newState = {
+		const newState = {
 			note: note,
 			lastSavedNote: Object.assign({}, note),
 			webviewReady: webviewReady,
@@ -686,9 +686,9 @@ class NoteTextComponent extends React.Component {
 
 		for (let i = 0; i < newTags.length; ++i) {
 			let found = false;
-			let currNewTag = newTags[i];
+			const currNewTag = newTags[i];
 			for (let j = 0; j < oldTags.length; ++j) {
-				let currOldTag = oldTags[j];
+				const currOldTag = oldTags[j];
 				if (currOldTag.id === currNewTag.id) {
 					found = true;
 					if (currOldTag.updated_time !== currNewTag.updated_time) {
@@ -859,10 +859,7 @@ class NoteTextComponent extends React.Component {
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyNoteAction: {
-						id: this.state.note.id,
-						parent_id: this.state.note.parent_id,
-					},
+					historyAction: 'goto',
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
@@ -956,6 +953,7 @@ class NoteTextComponent extends React.Component {
 			document.querySelector('#note-editor').removeEventListener('paste', this.onEditorPaste_, true);
 			document.querySelector('#note-editor').removeEventListener('keydown', this.onEditorKeyDown_);
 			document.querySelector('#note-editor').removeEventListener('contextmenu', this.onEditorContextMenu_);
+			this.editor_.editor.indent = this.indentOrig;
 		}
 
 		this.editor_ = element;
@@ -1016,6 +1014,32 @@ class NoteTextComponent extends React.Component {
 				if (bulletNumber) return `${leftSpaces + (bulletNumber + 1)}. `;
 
 				return this.$getIndent(line);
+			};
+
+			// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
+			// If the current line starts with `markup.list` token,
+			// hitting `Tab` key indents the line instead of inserting tab at cursor.
+			this.indentOrig = this.editor_.editor.indent;
+			const indentOrig = this.indentOrig;
+			this.editor_.editor.indent = function() {
+				const range = this.getSelectionRange();
+				if (range.isEmpty()) {
+					const row = range.start.row;
+					const tokens = this.session.getTokens(row);
+
+					if (tokens.length > 0 && tokens[0].type == 'markup.list') {
+						if (tokens[0].value.search(/\d+\./) != -1) {
+							// Resets numbered list to 1.
+							this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
+								tokens[0].value.replace(/\d+\./, '1.'));
+						}
+
+						this.session.indentRows(row, row, '\t');
+						return;
+					}
+				}
+
+				indentOrig.call(this);
 			};
 		}
 	}
@@ -1272,7 +1296,7 @@ class NoteTextComponent extends React.Component {
 		try {
 			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
 
-			let noteIds = args.noteIds ? args.noteIds : [this.state.note.id];
+			const noteIds = args.noteIds ? args.noteIds : [this.state.note.id];
 
 			let path = null;
 			if (noteIds.length === 1) {
@@ -1425,14 +1449,14 @@ class NoteTextComponent extends React.Component {
 
 		if (selection && selection.start !== selection.end) {
 			const selectedLines = replacementText !== null ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
-			let selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
+			const selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
 
 			newBody = this.state.note.body.substr(0, selection.start);
 
 			for (let i = 0; i < selectedStrings.length; i++) {
 				if (byLine == false) {
-					let start = selectedStrings[i].search(/[^\s]/);
-					let end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
+					const start = selectedStrings[i].search(/[^\s]/);
+					const end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
 					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
 					if (this.state.note.body.substr(selection.end) === '') newBody = newBody.trim();
 				} else { newBody += string1 + selectedStrings[i] + string2; }
@@ -1471,7 +1495,7 @@ class NoteTextComponent extends React.Component {
 				editor.focus();
 			});
 		} else {
-			let middleText = replacementText !== null ? replacementText : defaultText;
+			const middleText = replacementText !== null ? replacementText : defaultText;
 			const textOffset = this.currentTextOffset();
 			const s1 = this.state.note.body.substr(0, textOffset);
 			const s2 = this.state.note.body.substr(textOffset);
@@ -1514,9 +1538,9 @@ class NoteTextComponent extends React.Component {
 
 	toggleWrapSelection(strings1, strings2, defaultText) {
 		const selection = this.textOffsetSelection();
-		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		const string = this.state.note.body.substr(selection.start, selection.end - selection.start);
 		let replaced = false;
-		for (var i = 0; i < strings1.length; i++) {
+		for (let i = 0; i < strings1.length; i++) {
 			if (string.startsWith(strings1[i]) && string.endsWith(strings1[i])) {
 				this.wrapSelectionWithStrings('', '', '', string.substr(strings1[i].length, selection.end - selection.start - (2 * strings1[i].length)));
 				replaced = true;
@@ -1543,10 +1567,10 @@ class NoteTextComponent extends React.Component {
 
 	commandTextCode() {
 		const selection = this.textOffsetSelection();
-		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		const string = this.state.note.body.substr(selection.start, selection.end - selection.start);
 
 		// Look for newlines
-		let match = string.match(/\r?\n/);
+		const match = string.match(/\r?\n/);
 
 		if (match && match.length > 0) {
 			// Follow the same newline style
@@ -1564,7 +1588,7 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings(TemplateUtils.render(value));
 	}
 
-	addListItem(string1, string2 = '', defaultText = '', byLine=false) {
+	addListItem(string1, string2 = '', defaultText = '', byLine = false) {
 		let newLine = '\n';
 		const range = this.selectionRange_;
 		if (!range || (range.start.row === range.end.row && !this.selectionRangeCurrentLine())) {
@@ -1653,28 +1677,44 @@ class NoteTextComponent extends React.Component {
 						folderId: this.state.folder.id,
 						noteId: note.id,
 					});
+					Folder.expandTree(this.props.folders, this.state.folder.parent_id);
 				},
 			});
 		}
 
-		if (this.props.historyNotes.length) {
-			toolbarItems.push({
-				tooltip: _('Back'),
-				iconName: 'fa-arrow-left',
-				onClick: () => {
-					if (!this.props.historyNotes.length) return;
+		toolbarItems.push({
+			tooltip: _('Back'),
+			iconName: 'fa-arrow-left',
+			enabled: (this.props.backwardHistoryNotes.length > 0),
+			onClick: () => {
+				if (!this.props.backwardHistoryNotes.length) return;
+				const lastItem = this.props.backwardHistoryNotes[this.props.backwardHistoryNotes.length - 1];
+				this.props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: lastItem.parent_id,
+					noteId: lastItem.id,
 
-					const lastItem = this.props.historyNotes[this.props.historyNotes.length - 1];
+					historyAction: 'pop',
+				});
+			},
+		});
 
-					this.props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: lastItem.parent_id,
-						noteId: lastItem.id,
-						historyNoteAction: 'pop',
-					});
-				},
-			});
-		}
+		toolbarItems.push({
+			tooltip: _('Front'),
+			iconName: 'fa-arrow-right',
+			enabled: (this.props.forwardHistoryNotes.length > 0),
+			onClick: () => {
+				if (!this.props.forwardHistoryNotes.length) return;
+				const nextItem = this.props.forwardHistoryNotes[this.props.forwardHistoryNotes.length - 1];
+				this.props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: nextItem.parent_id,
+					noteId: nextItem.id,
+
+					historyAction: 'push',
+				});
+			},
+		});
 
 		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({
@@ -1921,7 +1961,7 @@ class NoteTextComponent extends React.Component {
 		const theme = themeStyle(this.props.theme);
 		const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 		const isTodo = note && !!note.is_todo;
-		var keyboardMode = this.props.keyboardMode;
+		let keyboardMode = this.props.keyboardMode;
 		if (keyboardMode === 'default' || !keyboardMode) {
 			keyboardMode = null;
 		}
@@ -1978,7 +2018,7 @@ class NoteTextComponent extends React.Component {
 			paddingRight: 8,
 			marginRight: rootStyle.paddingLeft,
 			color: theme.textStyle.color,
-			fontSize: theme.textStyle.fontSize * 1.25 *1.5,
+			fontSize: theme.textStyle.fontSize * 1.25 * 1.5,
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
@@ -2055,11 +2095,11 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (this.state.webviewReady && this.webviewRef_.current) {
-			let html = this.state.bodyHtml;
+			const html = this.state.bodyHtml;
 
 			const htmlHasChanged = this.lastSetHtml_ !== html;
 			if (htmlHasChanged) {
-				let options = {
+				const options = {
 					pluginAssets: this.state.lastRenderPluginAssets,
 					downloadResources: Setting.value('sync.resourceDownloadMode'),
 				};
@@ -2250,7 +2290,8 @@ const mapStateToProps = state => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
-		historyNotes: state.historyNotes,
+		backwardHistoryNotes: state.backwardHistoryNotes,
+		forwardHistoryNotes: state.forwardHistoryNotes,
 		templates: state.templates,
 		provisionalNoteIds: state.provisionalNoteIds,
 	};

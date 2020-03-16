@@ -84,7 +84,7 @@ class KvStore extends BaseService {
 	}
 
 	async searchByPrefix(prefix) {
-		let results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
+		const results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
 		return this.formatValues_(results);
 	}
 

@@ -88,7 +88,7 @@ const defaultDiacriticsRemovalMap = [
 ];
 
 function removeDiacritics(str) {
-	for (var i = 0; i < defaultDiacriticsRemovalMap.length; i++) {
+	for (let i = 0; i < defaultDiacriticsRemovalMap.length; i++) {
 		str = str.replace(defaultDiacriticsRemovalMap[i].letters, defaultDiacriticsRemovalMap[i].base);
 	}
 
@@ -124,7 +124,7 @@ function wrap(text, indent, width) {
 }
 
 function commandArgumentsToString(args) {
-	let output = [];
+	const output = [];
 	for (let i = 0; i < args.length; i++) {
 		let arg = args[i];
 		const quote = arg.indexOf('"') >= 0 ? '\'' : '"';
@@ -142,13 +142,13 @@ function splitCommandString(command, options = null) {
 		options.handleEscape = true;
 	}
 
-	let args = [];
+	const args = [];
 	let state = 'start';
 	let current = '';
 	let quote = '"';
 	let escapeNext = false;
 	for (let i = 0; i < command.length; i++) {
-		let c = command[i];
+		const c = command[i];
 
 		if (state == 'quotes') {
 			if (c != quote) {

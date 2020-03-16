@@ -119,10 +119,12 @@ async function main() {
 			for (let j = 0; j < note.tags.length; j++) {
 				const tagTitle = note.tags[j];
 				const tagId = itemIdFromPath(tagTitle);
-				if (!tagIdsToTag[tagId]) tagIdsToTag[tagId] = {
-					id: tagId,
-					title: tagTitle,
-				};
+				if (!tagIdsToTag[tagId]) {
+					tagIdsToTag[tagId] = {
+						id: tagId,
+						title: tagTitle,
+					};
+				}
 			}
 
 			notes.push(note);
@@ -130,7 +132,7 @@ async function main() {
 	}
 
 	const tags = [];
-	for (let n in tagIdsToTag) {
+	for (const n in tagIdsToTag) {
 		if (!tagIdsToTag.hasOwnProperty(n)) continue;
 		tags.push(tagIdsToTag[n]);
 	}

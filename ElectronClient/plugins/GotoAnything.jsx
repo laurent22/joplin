@@ -218,6 +218,7 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
+				historyAction: 'goto',
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -228,6 +229,7 @@ class Dialog extends React.PureComponent {
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
+				historyAction: 'goto',
 			});
 		}
 	}

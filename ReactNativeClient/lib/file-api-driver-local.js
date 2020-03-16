@@ -17,7 +17,7 @@ class FileApiDriverLocal {
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		let output = new Error(msg);
+		const output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
@@ -47,7 +47,7 @@ class FileApiDriverLocal {
 	}
 
 	metadataFromStats_(stats) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < stats.length; i++) {
 			const mdStat = this.metadataFromStat_(stats[i]);
 			output.push(mdStat);

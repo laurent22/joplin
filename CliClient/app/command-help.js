@@ -15,8 +15,8 @@ class Command extends BaseCommand {
 
 	allCommands() {
 		const commands = app().commands(app().uiType());
-		let output = [];
-		for (let n in commands) {
+		const output = [];
+		for (const n in commands) {
 			if (!commands.hasOwnProperty(n)) continue;
 			const command = commands[n];
 			if (command.hidden()) continue;
@@ -48,7 +48,7 @@ class Command extends BaseCommand {
 				.gui()
 				.keymap();
 
-			let rows = [];
+			const rows = [];
 
 			for (let i = 0; i < keymap.length; i++) {
 				const item = keymap[i];

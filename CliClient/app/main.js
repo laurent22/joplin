@@ -54,7 +54,7 @@ shimInit();
 const application = app();
 
 if (process.platform === 'win32') {
-	var rl = require('readline').createInterface({
+	const rl = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout,
 	});

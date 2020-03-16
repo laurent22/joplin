@@ -22,7 +22,7 @@ toolUtils.execCommand = function(command) {
 };
 
 toolUtils.execCommandWithPipes = function(executable, args) {
-	var spawn = require('child_process').spawn;
+	const spawn = require('child_process').spawn;
 
 	return new Promise((resolve, reject) => {
 		const child = spawn(executable, args, { stdio: 'inherit' });
