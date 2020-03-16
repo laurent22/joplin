@@ -623,6 +623,13 @@ class Setting extends BaseModel {
 				maximum: 300,
 				step: 10,
 			},
+
+			noteListStyle: {
+				value: 'title',
+				type: Setting.TYPE_STRING,
+				public: false,
+				appTypes: ['desktop'],
+			},
 		};
 
 		return this.metadata_;
