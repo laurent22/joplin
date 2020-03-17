@@ -116,6 +116,16 @@ class EncryptionConfigScreenComponent extends React.Component {
 
 			if (!answer) return;
 
+			if (!isEnabled) {
+				let confirmAnswer = '';
+				let confirmPasswordMessage = 'Re-enter your password to verify it.';
+				do {
+					confirmAnswer = await dialogs.prompt(_(confirmPasswordMessage), '', '', { type: 'password' });
+					confirmPasswordMessage = 'Passwords don\'t match!\nRe-enter your password to verify it.';
+				} while (confirmAnswer != answer);
+			}
+
+
 			try {
 				if (isEnabled) {
 					await EncryptionService.instance().disableEncryption();
