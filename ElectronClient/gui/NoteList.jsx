@@ -34,7 +34,7 @@ class NoteListComponent extends React.Component {
 		// Pull request: https://github.com/laurent22/joplin/pull/2062
 		const itemWidth = '100%';
 
-		let style = {
+		const style = {
 			root: {
 				backgroundColor: theme.backgroundColor,
 			},
@@ -114,6 +114,7 @@ class NoteListComponent extends React.Component {
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
+					historyAction: 'goto',
 				});
 			}
 		};
@@ -184,7 +185,7 @@ class NoteListComponent extends React.Component {
 		listItemTitleStyle.paddingLeft = !checkbox ? hPadding : 4;
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
-		let displayTitle = Note.displayTitle(item);
+		const displayTitle = Note.displayTitle(item);
 		let titleComp = null;
 
 		if (highlightedWords.length) {
@@ -284,9 +285,15 @@ class NoteListComponent extends React.Component {
 
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
+			const doRefocus = this.props.notes.length < prevProps.notes.length;
+
 			for (let i = 0; i < this.props.notes.length; i++) {
 				if (this.props.notes[i].id === id) {
 					this.itemListRef.current.makeItemIndexVisible(i);
+					if (doRefocus) {
+						const ref = this.itemAnchorRef(id);
+						if (ref) ref.focus();
+					}
 					break;
 				}
 			}
@@ -319,10 +326,8 @@ class NoteListComponent extends React.Component {
 			// Down
 			noteIndex += 1;
 		}
-
 		if (noteIndex < 0) noteIndex = 0;
 		if (noteIndex > this.props.notes.length - 1) noteIndex = this.props.notes.length - 1;
-
 		return noteIndex;
 	}
 
@@ -330,7 +335,7 @@ class NoteListComponent extends React.Component {
 		const keyCode = event.keyCode;
 		const noteIds = this.props.selectedNoteIds;
 
-		if (noteIds.length === 1 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(this.props.notes, noteId);
@@ -431,7 +436,7 @@ class NoteListComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.props.style;
-		let notes = this.props.notes.slice();
+		const notes = this.props.notes.slice();
 
 		if (!notes.length) {
 			const padding = 10;

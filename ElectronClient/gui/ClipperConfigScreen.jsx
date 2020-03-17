@@ -57,7 +57,7 @@ class ClipperConfigScreenComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 		};
 
-		let webClipperStatusComps = [];
+		const webClipperStatusComps = [];
 
 		if (this.props.clipperServerAutoStart) {
 			webClipperStatusComps.push(

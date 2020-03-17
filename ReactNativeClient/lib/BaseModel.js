@@ -12,11 +12,15 @@ class BaseModel {
 		throw new Error('Must be overriden');
 	}
 
+	static setDb(db) {
+		this.db_ = db;
+	}
+
 	static addModelMd(model) {
 		if (!model) return model;
 
 		if (Array.isArray(model)) {
-			let output = [];
+			const output = [];
 			for (let i = 0; i < model.length; i++) {
 				output.push(this.addModelMd(model[i]));
 			}
@@ -87,16 +91,16 @@ class BaseModel {
 	}
 
 	static hasField(name) {
-		let fields = this.fieldNames();
+		const fields = this.fieldNames();
 		return fields.indexOf(name) >= 0;
 	}
 
 	static fieldNames(withPrefix = false) {
-		let output = this.db().tableFieldNames(this.tableName());
+		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 
-		let p = withPrefix === true ? this.tableName() : withPrefix;
-		let temp = [];
+		const p = withPrefix === true ? this.tableName() : withPrefix;
+		const temp = [];
 		for (let i = 0; i < output.length; i++) {
 			temp.push(`${p}.${output[i]}`);
 		}
@@ -105,7 +109,7 @@ class BaseModel {
 	}
 
 	static fieldType(name, defaultValue = null) {
-		let fields = this.fields();
+		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
 			if (fields[i].name == name) return fields[i].type;
 		}
@@ -119,7 +123,7 @@ class BaseModel {
 
 	static removeUnknownFields(model) {
 		const newModel = {};
-		for (let n in model) {
+		for (const n in model) {
 			if (!model.hasOwnProperty(n)) continue;
 			if (!this.hasField(n) && n !== 'type_') continue;
 			newModel[n] = model[n];
@@ -128,10 +132,10 @@ class BaseModel {
 	}
 
 	static new() {
-		let fields = this.fields();
-		let output = {};
+		const fields = this.fields();
+		const output = {};
 		for (let i = 0; i < fields.length; i++) {
-			let f = fields[i];
+			const f = fields[i];
 			output[f.name] = f.default;
 		}
 		return output;
@@ -175,7 +179,7 @@ class BaseModel {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
-			let items = [];
+			const items = [];
 			for (let i = 0; i < options.order.length; i++) {
 				const o = options.order[i];
 				let item = o.by;
@@ -192,7 +196,7 @@ class BaseModel {
 	}
 
 	static async allIds(options = null) {
-		let q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
+		const q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
 		const rows = await this.db().selectAll(q.sql, q.params);
 		return rows.map(r => r.id);
 	}
@@ -208,7 +212,7 @@ class BaseModel {
 			if (options.whereParams) params = params.concat(options.whereParams);
 		}
 
-		let q = this.applySqlOptions(options, sql, params);
+		const q = this.applySqlOptions(options, sql, params);
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
@@ -219,7 +223,7 @@ class BaseModel {
 
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
 		sql += ` WHERE id IN ("${ids.join('","')}")`;
-		let q = this.applySqlOptions(options, sql);
+		const q = this.applySqlOptions(options, sql);
 		return this.modelSelectAll(q.sql);
 	}
 
@@ -227,11 +231,11 @@ class BaseModel {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
-		let conditions = options.conditions ? options.conditions.slice(0) : [];
-		let params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
+		const conditions = options.conditions ? options.conditions.slice(0) : [];
+		const params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
 
 		if (options.titlePattern) {
-			let pattern = options.titlePattern.replace(/\*/g, '%');
+			const pattern = options.titlePattern.replace(/\*/g, '%');
 			conditions.push('title LIKE ?');
 			params.push(pattern);
 		}
@@ -241,7 +245,7 @@ class BaseModel {
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
 		if (conditions.length) sql += ` WHERE ${conditions.join(' AND ')}`;
 
-		let query = this.applySqlOptions(options, sql, params);
+		const query = this.applySqlOptions(options, sql, params);
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
@@ -277,7 +281,7 @@ class BaseModel {
 	}
 
 	static diffObjects(oldModel, newModel) {
-		let output = {};
+		const output = {};
 		const fields = this.diffObjectsFields(oldModel, newModel);
 		for (let i = 0; i < fields.length; i++) {
 			output[fields[i]] = newModel[fields[i]];
@@ -287,8 +291,8 @@ class BaseModel {
 	}
 
 	static diffObjectsFields(oldModel, newModel) {
-		let output = [];
-		for (let n in newModel) {
+		const output = [];
+		for (const n in newModel) {
 			if (!newModel.hasOwnProperty(n)) continue;
 			if (n == 'type_') continue;
 			if (!(n in oldModel) || newModel[n] !== oldModel[n]) {
@@ -313,7 +317,7 @@ class BaseModel {
 
 		if (!modelOrId) return noLockMutex;
 
-		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
+		const modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
 
 		if (!modelId) return noLockMutex;
 
@@ -329,11 +333,11 @@ class BaseModel {
 		if (!release) return;
 		if (!modelOrId) return release();
 
-		let modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
+		const modelId = typeof modelOrId === 'string' ? modelOrId : modelOrId.id;
 
 		if (!modelId) return release();
 
-		let mutex = BaseModel.saveMutexes_[modelId];
+		const mutex = BaseModel.saveMutexes_[modelId];
 		if (!mutex) return release();
 
 		delete BaseModel.saveMutexes_[modelId];
@@ -342,9 +346,9 @@ class BaseModel {
 
 	static saveQuery(o, options) {
 		let temp = {};
-		let fieldNames = this.fieldNames();
+		const fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
-			let n = fieldNames[i];
+			const n = fieldNames[i];
 			if (n in o) temp[n] = o[n];
 		}
 
@@ -354,7 +358,7 @@ class BaseModel {
 		// id also will stay.
 		if (!options.isNew && options.fields) {
 			const filtered = {};
-			for (let k in temp) {
+			for (const k in temp) {
 				if (!temp.hasOwnProperty(k)) continue;
 				if (k !== 'id' && options.fields.indexOf(k) < 0) continue;
 				filtered[k] = temp[k];
@@ -404,8 +408,8 @@ class BaseModel {
 
 			query = Database.insertQuery(this.tableName(), o);
 		} else {
-			let where = { id: o.id };
-			let temp = Object.assign({}, o);
+			const where = { id: o.id };
+			const temp = Object.assign({}, o);
 			delete temp.id;
 
 			query = Database.updateQuery(this.tableName(), temp, where);
@@ -445,8 +449,8 @@ class BaseModel {
 		o = this.filter(o);
 
 		let queries = [];
-		let saveQuery = this.saveQuery(o, options);
-		let modelId = saveQuery.id;
+		const saveQuery = this.saveQuery(o, options);
+		const modelId = saveQuery.id;
 
 		queries.push(saveQuery);
 
@@ -473,7 +477,7 @@ class BaseModel {
 			o = this.addModelMd(o);
 
 			if (isDiffSaving) {
-				for (let n in options.oldItem) {
+				for (const n in options.oldItem) {
 					if (!options.oldItem.hasOwnProperty(n)) continue;
 					if (n in o) continue;
 					o[n] = options.oldItem[n];
@@ -499,7 +503,7 @@ class BaseModel {
 	}
 
 	static filterArray(models) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < models.length; i++) {
 			output.push(this.filter(models[i]));
 		}
@@ -509,8 +513,8 @@ class BaseModel {
 	static filter(model) {
 		if (!model) return model;
 
-		let output = Object.assign({}, model);
-		for (let n in output) {
+		const output = Object.assign({}, model);
+		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 
 			// The SQLite database doesn't have booleans so cast everything to int

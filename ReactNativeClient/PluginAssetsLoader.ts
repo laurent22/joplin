@@ -36,7 +36,7 @@ export default class PluginAssetsLoader {
 		this.logger().info(`PluginAssetsLoader: Importing assets to ${destDir}`);
 
 		try {
-			for (let name in pluginAssets.files) {
+			for (const name in pluginAssets.files) {
 				const dataBase64 = pluginAssets.files[name].data;
 				const destPath = `${destDir}/${name}`;
 				await shim.fsDriver().mkdir(dirname(destPath));

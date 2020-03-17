@@ -27,9 +27,9 @@ function parsePoFile(filePath) {
 }
 
 function serializeTranslation(translation) {
-	let output = {};
+	const output = {};
 	const translations = translation.translations[''];
-	for (let n in translations) {
+	for (const n in translations) {
 		if (!translations.hasOwnProperty(n)) continue;
 		if (n == '') continue;
 		const t = translations[n];
@@ -64,7 +64,7 @@ function executablePath(file) {
 	];
 
 	for (const path of potentialPaths) {
-		let pathFile = path + file;
+		const pathFile = path + file;
 		if (fs.existsSync(pathFile)) {
 			return pathFile;
 		}
@@ -80,7 +80,7 @@ async function removePoHeaderDate(filePath) {
 }
 
 async function createPotFile(potFilePath, sources) {
-	let baseArgs = [];
+	const baseArgs = [];
 	baseArgs.push('--from-code=utf-8');
 	baseArgs.push(`--output="${potFilePath}"`);
 	baseArgs.push('--language=JavaScript');
@@ -91,7 +91,7 @@ async function createPotFile(potFilePath, sources) {
 	baseArgs.push('--keyword=_n:1,2');
 
 	for (let i = 0; i < sources.length; i++) {
-		let args = baseArgs.slice();
+		const args = baseArgs.slice();
 		if (i > 0) args.push('--join-existing');
 		args.push(sources[i]);
 		let xgettextPath = 'xgettext';
@@ -114,7 +114,7 @@ async function mergePotToPo(potFilePath, poFilePath) {
 }
 
 function buildIndex(locales, stats) {
-	let output = [];
+	const output = [];
 	output.push('var locales = {};');
 	output.push('var stats = {};');
 
@@ -223,7 +223,7 @@ function poFileUrl(locale) {
 }
 
 function translationStatusToMdTable(status) {
-	let output = [];
+	const output = [];
 	output.push(['&nbsp;', 'Language', 'Po File', 'Last translator', 'Percent done'].join('  |  '));
 	output.push(['---', '---', '---', '---', '---'].join('|'));
 	for (let i = 0; i < status.length; i++) {
@@ -246,8 +246,8 @@ async function updateReadmeWithStats(stats) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	let potFilePath = `${cliLocalesDir}/joplin.pot`;
-	let jsonLocalesDir = `${cliDir}/build/locales`;
+	const potFilePath = `${cliLocalesDir}/joplin.pot`;
+	const jsonLocalesDir = `${cliDir}/build/locales`;
 	const defaultLocale = 'en_GB';
 
 	const oldPotStatus = await translationStatus(false, potFilePath);
@@ -284,9 +284,9 @@ async function main() {
 
 	fs.mkdirpSync(jsonLocalesDir, 0o755);
 
-	let stats = [];
+	const stats = [];
 
-	let locales = availableLocales(defaultLocale);
+	const locales = availableLocales(defaultLocale);
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
 
