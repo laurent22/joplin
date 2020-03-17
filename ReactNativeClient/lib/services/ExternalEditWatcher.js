@@ -150,7 +150,7 @@ class ExternalEditWatcher {
 		const output = [];
 		const watchedPaths = this.watcher_.getWatched();
 
-		for (let dirName in watchedPaths) {
+		for (const dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
@@ -169,7 +169,7 @@ class ExternalEditWatcher {
 
 		const watchedPaths = this.watcher_.getWatched();
 
-		for (let dirName in watchedPaths) {
+		for (const dirName in watchedPaths) {
 			if (!watchedPaths.hasOwnProperty(dirName)) continue;
 
 			for (let i = 0; i < watchedPaths[dirName].length; i++) {
@@ -216,7 +216,7 @@ class ExternalEditWatcher {
 
 			const wrapError = error => {
 				if (!error) return error;
-				let msg = error.message ? [error.message] : [];
+				const msg = error.message ? [error.message] : [];
 				msg.push(`Command was: "${path}" ${args.join(' ')}`);
 				error.message = msg.join('\n\n');
 				return error;

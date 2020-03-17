@@ -12,7 +12,7 @@ const styleObject_ = {
 
 const styles_ = StyleSheet.create(styleObject_);
 
-let rootStyles_ = {};
+const rootStyles_ = {};
 
 class BaseScreenComponent extends React.Component {
 	styles() {

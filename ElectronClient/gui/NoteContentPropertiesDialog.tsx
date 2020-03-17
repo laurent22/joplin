@@ -64,7 +64,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	};
 
 	if (textProperties) {
-		for (let key in textProperties) {
+		for (const key in textProperties) {
 			if (!textProperties.hasOwnProperty(key)) continue;
 			const comp = createItemField(key, textProperties[key]);
 			textComps.push(comp);

@@ -35,7 +35,7 @@ class Command extends BaseCommand {
 			});
 
 			inputStream.on('end', () => {
-				let json = chunks.join('');
+				const json = chunks.join('');
 				let settingsObj;
 				try {
 					settingsObj = JSON.parse(json);
@@ -83,7 +83,7 @@ class Command extends BaseCommand {
 		};
 
 		if (isExport || (!isImport && !args.value)) {
-			let keys = Setting.keys(!verbose, 'cli');
+			const keys = Setting.keys(!verbose, 'cli');
 			keys.sort();
 
 			if (isExport) {

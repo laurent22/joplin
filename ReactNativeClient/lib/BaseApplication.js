@@ -34,6 +34,7 @@ const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const RevisionService = require('lib/services/RevisionService');
+const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
@@ -63,12 +64,24 @@ class BaseApplication {
 		await SearchEngine.instance().destroy();
 		await DecryptionWorker.instance().destroy();
 		await FoldersScreenUtils.cancelTimers();
+		await BaseItem.revisionService_.cancelTimers();
+		await ResourceService.instance().cancelTimers();
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();
-		BaseModel.db_ = null;
+		KvStore.instance_ = null;
+		BaseModel.setDb(null);
 		reg.setDb(null);
 
+		BaseItem.revisionService_ = null;
+		RevisionService.instance_ = null;
+		ResourceService.instance_ = null;
+		ResourceService.isRunningInBackground = false;
+		ResourceFetcher.instance_ = null;
+		EncryptionService.instance_ = null;
+		DecryptionWorker.instance_ = null;
+
+		this.logger_.info('Base application terminated...');
 		this.logger_ = null;
 		this.dbLogger_ = null;
 		this.eventEmitter_ = null;
@@ -111,13 +124,13 @@ class BaseApplication {
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
 	async handleStartFlags_(argv, setDefaults = true) {
-		let matched = {};
+		const matched = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
 
 		while (argv.length) {
-			let arg = argv[0];
-			let nextArg = argv.length >= 2 ? argv[1] : null;
+			const arg = argv[0];
+			const nextArg = argv.length >= 2 ? argv[1] : null;
 
 			if (arg == '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
@@ -245,7 +258,7 @@ class BaseApplication {
 
 		this.logger().debug('Refreshing notes:', parentType, parentId);
 
-		let options = {
+		const options = {
 			order: stateUtils.notesOrder(state.settings),
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
 			showCompletedTodos: Setting.value('showCompletedTodos'),
@@ -320,20 +333,11 @@ class BaseApplication {
 	}
 
 	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
-		this.scheduleAutoAddResources();
-	}
-
-	scheduleAutoAddResources() {
-		if (this.scheduleAutoAddResourcesIID_) return;
-
-		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
-			this.scheduleAutoAddResourcesIID_ = null;
-			ResourceFetcher.instance().autoAddResources();
-		}, 1000);
+		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
 	reducerActionToString(action) {
-		let o = [action.type];
+		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);
 		if ('folderId' in action) o.push(action.folderId);
@@ -580,7 +584,7 @@ class BaseApplication {
 	}
 
 	async start(argv) {
-		let startFlags = await this.handleStartFlags_(argv);
+		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
@@ -645,7 +649,7 @@ class BaseApplication {
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
-		BaseModel.db_ = this.database_;
+		BaseModel.setDb(this.database_);
 
 		await Setting.load();
 
@@ -664,6 +668,15 @@ class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
+		}
+
+		if (Setting.value('encryption.shouldReencrypt') < 0) {
+			// We suggest re-encryption if the user has at least one notebook
+			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
+			// which can be set by a maintenance script for example.
+			const folderCount = await Folder.count();
+			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
@@ -703,7 +716,7 @@ class BaseApplication {
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
 
-		let currentFolderId = Setting.value('activeFolderId');
+		const currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();

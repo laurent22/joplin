@@ -22,8 +22,8 @@ async function copyToDist(distDir) {
 
 async function updateManifestVersionNumber(manifestPath) {
 	const manifestText = await fs.readFile(manifestPath, 'utf-8');
-	let manifest = JSON.parse(manifestText);
-	let v = manifest.version.split('.');
+	const manifest = JSON.parse(manifestText);
+	const v = manifest.version.split('.');
 	const buildNumber = Number(v.pop()) + 1;
 	v.push(buildNumber);
 	manifest.version = v.join('.');
@@ -162,7 +162,7 @@ async function main() {
 		},
 	};
 
-	for (let distName in dists) {
+	for (const distName in dists) {
 		const dist = dists[distName];
 		const distDir = `${clipperDir}/dist/${distName}`;
 		await fs.remove(distDir);

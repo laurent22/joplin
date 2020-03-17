@@ -51,11 +51,11 @@ class DropboxApi {
 	}
 
 	requestToCurl_(url, options) {
-		let output = [];
+		const output = [];
 		output.push('curl');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '\''}${n}: ${options.headers[n]}'`);
 			}
@@ -74,10 +74,10 @@ class DropboxApi {
 			client_secret: this.clientSecret(),
 		};
 
-		var formBody = [];
-		for (var property in postData) {
-			var encodedKey = encodeURIComponent(property);
-			var encodedValue = encodeURIComponent(postData[property]);
+		let formBody = [];
+		for (const property in postData) {
+			const encodedKey = encodeURIComponent(property);
+			const encodedValue = encodeURIComponent(postData[property]);
 			formBody.push(`${encodedKey}=${encodedValue}`);
 		}
 		formBody = formBody.join('&');

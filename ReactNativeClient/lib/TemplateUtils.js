@@ -30,7 +30,7 @@ TemplateUtils.render = function(input) {
 };
 
 TemplateUtils.loadTemplates = async function(filePath) {
-	let templates = [];
+	const templates = [];
 	let files = [];
 
 	if (await shim.fsDriver().exists(filePath)) {
@@ -50,7 +50,7 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		files.forEach(async file => {
 			if (file.path.endsWith('.md')) {
 				try {
-					let fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');
+					const fileString = await shim.fsDriver().readFile(`${filePath}/${file.path}`, 'utf-8');
 					templates.push({ label: file.path, value: fileString });
 				} catch (error) {
 					let msg = error.message ? error.message : '';

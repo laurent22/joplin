@@ -21,6 +21,7 @@ class ResourceFetcher extends BaseService {
 		this.maxDownloads_ = 3;
 		this.addingResources_ = false;
 		this.eventEmitter_ = new EventEmitter();
+		this.autoAddResourcesCalls_ = [];
 	}
 
 	static instance() {
@@ -197,7 +198,12 @@ class ResourceFetcher extends BaseService {
 	async waitForAllFinished() {
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
-				if (!this.updateReportIID_ && !this.scheduleQueueProcessIID_ && !this.addingResources_ && !this.queue_.length && !Object.getOwnPropertyNames(this.fetchingItems_).length) {
+				if (!this.updateReportIID_ &&
+                    !this.scheduleQueueProcessIID_ &&
+                    !this.queue_.length &&
+                    !this.autoAddResourcesCalls_.length &&
+                    !Object.getOwnPropertyNames(this.fetchingItems_).length) {
+
 					clearInterval(iid);
 					resolve();
 				}
@@ -206,25 +212,31 @@ class ResourceFetcher extends BaseService {
 	}
 
 	async autoAddResources(limit = null) {
-		if (limit === null) limit = 10;
+		this.autoAddResourcesCalls_.push(true);
+		try {
+			if (limit === null) limit = 10;
 
-		if (this.addingResources_) return;
-		this.addingResources_ = true;
+			if (this.addingResources_) return;
+			this.addingResources_ = true;
 
-		this.logger().info(`ResourceFetcher: Auto-add resources: Mode: ${Setting.value('sync.resourceDownloadMode')}`);
+			this.logger().info(`ResourceFetcher: Auto-add resources: Mode: ${Setting.value('sync.resourceDownloadMode')}`);
 
-		let count = 0;
-		const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
-		for (let i = 0; i < resources.length; i++) {
-			const added = this.queueDownload_(resources[i].id);
-			if (added) count++;
+			let count = 0;
+			const resources = await Resource.needToBeFetched(Setting.value('sync.resourceDownloadMode'), limit);
+			for (let i = 0; i < resources.length; i++) {
+				const added = this.queueDownload_(resources[i].id);
+				if (added) count++;
+			}
+
+			this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
+
+			const errorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
+			if (errorCount) this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
+
+		} finally {
+			this.addingResources_ = false;
+			this.autoAddResourcesCalls_.pop();
 		}
-
-		this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
-		this.addingResources_ = false;
-
-		const errorCount = await Resource.downloadStatusCounts(Resource.FETCH_STATUS_ERROR);
-		if (errorCount) this.dispatch({ type: 'SYNC_HAS_DISABLED_SYNC_ITEMS' });
 	}
 
 	async start() {
@@ -244,6 +256,15 @@ class ResourceFetcher extends BaseService {
 		}, 100);
 	}
 
+	scheduleAutoAddResources() {
+		if (this.scheduleAutoAddResourcesIID_) return;
+
+		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
+			this.scheduleAutoAddResourcesIID_ = null;
+			ResourceFetcher.instance().autoAddResources();
+		}, 1000);
+	}
+
 	async fetchAll() {
 		await Resource.resetStartedFetchStatus();
 		this.autoAddResources(null);
@@ -255,10 +276,13 @@ class ResourceFetcher extends BaseService {
 			clearTimeout(this.scheduleQueueProcessIID_);
 			this.scheduleQueueProcessIID_ = null;
 		}
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
+		await this.waitForAllFinished();
 		this.eventEmitter_ = null;
 		ResourceFetcher.instance_ = null;
-
-		return await this.waitForAllFinished();
 	}
 }
 

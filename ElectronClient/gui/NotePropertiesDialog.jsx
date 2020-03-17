@@ -361,7 +361,7 @@ class NotePropertiesDialog extends React.Component {
 		const noteComps = [];
 
 		if (formNote) {
-			for (let key in formNote) {
+			for (const key in formNote) {
 				if (!formNote.hasOwnProperty(key)) continue;
 				const comp = this.createNoteField(key, formNote[key]);
 				noteComps.push(comp);

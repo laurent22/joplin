@@ -7,7 +7,7 @@ const execSync = require('child_process').execSync;
 const packageInfo = require(`${__dirname}/../package.json`);
 
 module.exports = async function() {
-	let removeKeys = ['scripts', 'devDependencies', 'optionalDependencies', 'dependencies'];
+	const removeKeys = ['scripts', 'devDependencies', 'optionalDependencies', 'dependencies'];
 
 	for (let i = 0; i < removeKeys.length; i++) {
 		delete packageInfo[removeKeys[i]];

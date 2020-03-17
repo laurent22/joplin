@@ -29,8 +29,8 @@ function shimInit() {
 
 	shim.randomBytes = async count => {
 		const randomBytes = await generateSecureRandom(count);
-		let temp = [];
-		for (let n in randomBytes) {
+		const temp = [];
+		for (const n in randomBytes) {
 			if (!randomBytes.hasOwnProperty(n)) continue;
 			temp.push(randomBytes[n]);
 		}
@@ -53,11 +53,11 @@ function shimInit() {
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 
-		let headers = options.headers ? options.headers : {};
-		let method = options.method ? options.method : 'GET';
+		const headers = options.headers ? options.headers : {};
+		const method = options.method ? options.method : 'GET';
 		const overwrite = 'overwrite' in options ? options.overwrite : true;
 
-		let dirs = RNFetchBlob.fs.dirs;
+		const dirs = RNFetchBlob.fs.dirs;
 		let localFilePath = options.path;
 		if (localFilePath.indexOf('/') !== 0) localFilePath = `${dirs.DocumentDir}/${localFilePath}`;
 
@@ -80,7 +80,7 @@ function shimInit() {
 			const response = await shim.fetchWithRetry(doFetchBlob, options);
 
 			// Returns an object that's roughtly compatible with a standard Response object
-			let output = {
+			const output = {
 				ok: response.respInfo.status < 400,
 				path: response.data,
 				text: response.text,
@@ -102,7 +102,7 @@ function shimInit() {
 		const method = options.method ? options.method : 'POST';
 
 		try {
-			let response = await RNFetchBlob.fetch(method, url, headers, RNFetchBlob.wrap(options.path));
+			const response = await RNFetchBlob.fetch(method, url, headers, RNFetchBlob.wrap(options.path));
 
 			// Returns an object that's roughtly compatible with a standard Response object
 			return {
@@ -169,7 +169,7 @@ function shimInit() {
 		resource.title = basename(filePath);
 		resource.file_extension = ext;
 
-		let targetPath = Resource.fullPath(resource);
+		const targetPath = Resource.fullPath(resource);
 		await shim.fsDriver().copy(filePath, targetPath);
 
 		if (defaultProps) {

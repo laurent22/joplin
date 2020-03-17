@@ -63,10 +63,10 @@ async function md5FileAsync(filePath) {
 }
 
 function removeUndefinedProperties(note) {
-	let output = {};
-	for (let n in note) {
+	const output = {};
+	for (const n in note) {
 		if (!note.hasOwnProperty(n)) continue;
-		let v = note[n];
+		const v = note[n];
 		if (v === undefined || v === null) continue;
 		output[n] = v;
 	}
@@ -74,26 +74,26 @@ function removeUndefinedProperties(note) {
 }
 
 function levenshteinPercent(s1, s2) {
-	let l = new Levenshtein(s1, s2);
+	const l = new Levenshtein(s1, s2);
 	if (!s1.length || !s2.length) return 1;
 	return Math.abs(l.distance / s1.length);
 }
 
 async function fuzzyMatch(note) {
 	if (note.created_time < time.unixMs() - 1000 * 60 * 60 * 24 * 360) {
-		let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?', [note.created_time, note.title]);
+		const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?', [note.created_time, note.title]);
 		return notes.length !== 1 ? null : notes[0];
 	}
 
-	let notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
+	const notes = await Note.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?', [note.created_time]);
 	if (notes.length === 0) return null;
 	if (notes.length === 1) return notes[0];
 
 	let lowestL = 1;
 	let lowestN = null;
 	for (let i = 0; i < notes.length; i++) {
-		let n = notes[i];
-		let l = levenshteinPercent(note.title, n.title);
+		const n = notes[i];
+		const l = levenshteinPercent(note.title, n.title);
 		if (l < lowestL) {
 			lowestL = l;
 			lowestN = n;
@@ -147,14 +147,14 @@ async function saveNoteResources(note, importOptions) {
 			continue;
 		}
 
-		let toSave = Object.assign({}, resource);
+		const toSave = Object.assign({}, resource);
 		delete toSave.dataFilePath;
 		delete toSave.dataEncoding;
 
 		// The same resource sometimes appear twice in the same enex (exact same ID and file).
 		// In that case, just skip it - it means two different notes might be linked to the
 		// same resource.
-		let existingResource = await Resource.load(toSave.id);
+		const existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
 		await fs.move(resource.dataFilePath, Resource.fullPath(toSave), { overwrite: true });
@@ -167,7 +167,7 @@ async function saveNoteResources(note, importOptions) {
 async function saveNoteTags(note) {
 	let notesTagged = 0;
 	for (let i = 0; i < note.tags.length; i++) {
-		let tagTitle = note.tags[i];
+		const tagTitle = note.tags[i];
 
 		let tag = await Tag.loadByTitle(tagTitle);
 		if (!tag) tag = await Tag.save({ title: tagTitle });
@@ -186,9 +186,9 @@ async function saveNoteToStorage(note, importOptions) {
 
 	note = Note.filter(note);
 
-	let existingNote = importOptions.fuzzyMatching ? await fuzzyMatch(note) : null;
+	const existingNote = importOptions.fuzzyMatching ? await fuzzyMatch(note) : null;
 
-	let result = {
+	const result = {
 		noteCreated: false,
 		noteUpdated: false,
 		noteSkipped: false,
@@ -196,14 +196,14 @@ async function saveNoteToStorage(note, importOptions) {
 		notesTagged: 0,
 	};
 
-	let resourcesCreated = await saveNoteResources(note, importOptions);
+	const resourcesCreated = await saveNoteResources(note, importOptions);
 	result.resourcesCreated += resourcesCreated;
 
-	let notesTagged = await saveNoteTags(note);
+	const notesTagged = await saveNoteTags(note);
 	result.notesTagged += notesTagged;
 
 	if (existingNote) {
-		let diff = BaseModel.diffObjects(existingNote, note);
+		const diff = BaseModel.diffObjects(existingNote, note);
 		delete diff.tags;
 		delete diff.resources;
 		delete diff.id;
@@ -236,7 +236,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 	if (!('onError' in importOptions)) importOptions.onError = function() {};
 
 	return new Promise((resolve, reject) => {
-		let progressState = {
+		const progressState = {
 			loaded: 0,
 			created: 0,
 			updated: 0,
@@ -245,19 +245,19 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			notesTagged: 0,
 		};
 
-		let stream = fs.createReadStream(filePath);
+		const stream = fs.createReadStream(filePath);
 
-		let options = {};
-		let strict = true;
-		let saxStream = require('sax').createStream(strict, options);
+		const options = {};
+		const strict = true;
+		const saxStream = require('sax').createStream(strict, options);
 
-		let nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
+		const nodes = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note = null;
 		let noteAttributes = null;
 		let noteResource = null;
 		let noteResourceAttributes = null;
 		let noteResourceRecognition = null;
-		let notes = [];
+		const notes = [];
 		let processingNotes = false;
 
 		stream.on('error', error => {
@@ -282,7 +282,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 				stream.pause();
 
 				while (notes.length) {
-					let note = notes.shift();
+					const note = notes.shift();
 					const body = importOptions.outputFormat === 'html' ?
 						await enexXmlToHtml(note.bodyXml, note.resources) :
 						await enexXmlToMd(note.bodyXml, note.resources);
@@ -332,7 +332,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		});
 
 		saxStream.on('text', function(text) {
-			let n = currentNodeName();
+			const n = currentNodeName();
 
 			if (noteAttributes) {
 				noteAttributes[n] = text;
@@ -341,7 +341,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 			} else if (noteResource) {
 				if (n == 'data') {
 					if (!noteResource.dataEncoding) {
-						let attr = currentNodeAttributes();
+						const attr = currentNodeAttributes();
 						noteResource.dataEncoding = attr.encoding;
 					}
 
@@ -374,7 +374,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		});
 
 		saxStream.on('opentag', function(node) {
-			let n = node.name.toLowerCase();
+			const n = node.name.toLowerCase();
 			nodes.push(node);
 
 			if (n == 'note') {
@@ -394,7 +394,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 		});
 
 		saxStream.on('cdata', function(data) {
-			let n = currentNodeName();
+			const n = currentNodeName();
 
 			if (noteResourceRecognition) {
 				noteResourceRecognition.objID = extractRecognitionObjId(data);
@@ -462,7 +462,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
 		saxStream.on('end', function() {
 			// Wait till there is no more notes to process.
-			let iid = setInterval(() => {
+			const iid = setInterval(() => {
 				processNotes().then(allDone => {
 					if (allDone) {
 						clearTimeout(iid);

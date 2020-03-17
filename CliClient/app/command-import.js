@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
+		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
 
 		if (args.notebook && !folder) throw new Error(_('Cannot find "%s".', args.notebook));
 
@@ -39,7 +39,7 @@ class Command extends BaseCommand {
 		// onProgress/onError supported by Enex import only
 
 		importOptions.onProgress = progressState => {
-			let line = [];
+			const line = [];
 			line.push(_('Found: %d.', progressState.loaded));
 			line.push(_('Created: %d.', progressState.created));
 			if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
@@ -51,7 +51,7 @@ class Command extends BaseCommand {
 		};
 
 		importOptions.onError = error => {
-			let s = error.trace ? error.trace : error.toString();
+			const s = error.trace ? error.trace : error.toString();
 			this.stdout(s);
 		};
 

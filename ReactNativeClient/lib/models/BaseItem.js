@@ -100,7 +100,7 @@ class BaseItem extends BaseModel {
 			return this.itemClass(item.type_);
 		} else {
 			for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
-				let d = BaseItem.syncItemDefinitions_[i];
+				const d = BaseItem.syncItemDefinitions_[i];
 				if (Number(item) == d.type) return this.getClass(d.className);
 			}
 			throw new JoplinError(`Unknown type: ${item}`, 'unknownItemType');
@@ -110,8 +110,8 @@ class BaseItem extends BaseModel {
 	// Returns the IDs of the items that have been synced at least once
 	static async syncedItemIds(syncTarget) {
 		if (!syncTarget) throw new Error('No syncTarget specified');
-		let temp = await this.db().selectAll('SELECT item_id FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
-		let output = [];
+		const temp = await this.db().selectAll('SELECT item_id FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const output = [];
 		for (let i = 0; i < temp.length; i++) {
 			output.push(temp[i].item_id);
 		}
@@ -124,8 +124,8 @@ class BaseItem extends BaseModel {
 	}
 
 	static pathToId(path) {
-		let p = path.split('/');
-		let s = p[p.length - 1].split('.');
+		const p = path.split('/');
+		const s = p[p.length - 1].split('.');
 		let name = s[0];
 		if (!name) return name;
 		name = name.split('-');
@@ -137,9 +137,9 @@ class BaseItem extends BaseModel {
 	}
 
 	static async loadItemById(id) {
-		let classes = this.syncItemClassNames();
+		const classes = this.syncItemClassNames();
 		for (let i = 0; i < classes.length; i++) {
-			let item = await this.getClass(classes[i]).load(id);
+			const item = await this.getClass(classes[i]).load(id);
 			if (item) return item;
 		}
 		return null;
@@ -158,17 +158,17 @@ class BaseItem extends BaseModel {
 	}
 
 	static loadItemByField(itemType, field, value) {
-		let ItemClass = this.itemClass(itemType);
+		const ItemClass = this.itemClass(itemType);
 		return ItemClass.loadByField(field, value);
 	}
 
 	static loadItem(itemType, id) {
-		let ItemClass = this.itemClass(itemType);
+		const ItemClass = this.itemClass(itemType);
 		return ItemClass.load(id);
 	}
 
 	static deleteItem(itemType, id) {
-		let ItemClass = this.itemClass(itemType);
+		const ItemClass = this.itemClass(itemType);
 		return ItemClass.delete(id);
 	}
 
@@ -195,8 +195,8 @@ class BaseItem extends BaseModel {
 
 		if (trackDeleted) {
 			const syncTargetIds = Setting.enumOptionValues('sync.target');
-			let queries = [];
-			let now = time.unixMs();
+			const queries = [];
+			const now = time.unixMs();
 			for (let i = 0; i < ids.length; i++) {
 				if (conflictNoteIds.indexOf(ids[i]) >= 0) continue;
 
@@ -227,7 +227,7 @@ class BaseItem extends BaseModel {
 	}
 
 	static async deletedItemCount(syncTarget) {
-		let r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items WHERE sync_target = ?', [syncTarget]);
+		const r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items WHERE sync_target = ?', [syncTarget]);
 		return r['total'];
 	}
 
@@ -254,13 +254,13 @@ class BaseItem extends BaseModel {
 
 		const ItemClass = this.itemClass(type);
 
-		if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
-			if (!propValue) return 0;
-			propValue = moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
-		} else if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
+		if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.parse(propValue);
 		} else {
+			if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
+				propValue = (!propValue) ? '0' : moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');
+			}
 			propValue = Database.formatValue(ItemClass.fieldType(propName), propValue);
 		}
 
@@ -275,7 +275,7 @@ class BaseItem extends BaseModel {
 
 		item = this.filter(item);
 
-		let output = {};
+		const output = {};
 
 		if ('title' in item && shownKeys.indexOf('title') >= 0) {
 			output.title = item.title;
@@ -293,7 +293,7 @@ class BaseItem extends BaseModel {
 
 			let value = null;
 			if (typeof key === 'function') {
-				let r = await key();
+				const r = await key();
 				key = r.key;
 				value = r.value;
 			} else {
@@ -303,7 +303,7 @@ class BaseItem extends BaseModel {
 			output.props.push(`${key}: ${value}`);
 		}
 
-		let temp = [];
+		const temp = [];
 
 		if (typeof output.title === 'string') temp.push(output.title);
 		if (output.body) temp.push(output.body);
@@ -324,7 +324,7 @@ class BaseItem extends BaseModel {
 
 	static async serializeForSync(item) {
 		const ItemClass = this.itemClass(item);
-		let shownKeys = ItemClass.fieldNames();
+		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
@@ -384,10 +384,10 @@ class BaseItem extends BaseModel {
 	}
 
 	static async unserialize(content) {
-		let lines = content.split('\n');
+		const lines = content.split('\n');
 		let output = {};
 		let state = 'readingProps';
-		let body = [];
+		const body = [];
 
 		for (let i = lines.length - 1; i >= 0; i--) {
 			let line = lines[i];
@@ -400,10 +400,10 @@ class BaseItem extends BaseModel {
 					continue;
 				}
 
-				let p = line.indexOf(':');
+				const p = line.indexOf(':');
 				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				let key = line.substr(0, p).trim();
-				let value = line.substr(p + 1).trim();
+				const key = line.substr(0, p).trim();
+				const value = line.substr(p + 1).trim();
 				output[key] = value;
 			} else if (state == 'readingBody') {
 				body.splice(0, 0, line);
@@ -414,7 +414,7 @@ class BaseItem extends BaseModel {
 		output.type_ = Number(output.type_);
 
 		if (body.length) {
-			let title = body.splice(0, 2);
+			const title = body.splice(0, 2);
 			output.title = title[0];
 		}
 
@@ -423,7 +423,7 @@ class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
 
-		for (let n in output) {
+		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 			output[n] = await this.unserialize_format(output.type_, n, output[n]);
 		}
@@ -522,7 +522,7 @@ class BaseItem extends BaseModel {
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
-			let fieldNames = ItemClass.fieldNames('items');
+			const fieldNames = ItemClass.fieldNames('items');
 
 			// // NEVER SYNCED:
 			// 'SELECT * FROM [ITEMS] WHERE id NOT INT (SELECT item_id FROM sync_items WHERE sync_target = ?)'
@@ -538,25 +538,30 @@ class BaseItem extends BaseModel {
 			extraWhere = extraWhere.length ? `AND ${extraWhere.join(' AND ')}` : '';
 
 			// First get all the items that have never been synced under this sync target
+			//
+			// We order them by date descending so that latest modified notes go first.
+			// In most case it doesn't make a big difference, but when re-syncing the whole
+			// data set it does. In that case it means the recent notes, those that are likely
+			// to be modified again, will be synced first, thus avoiding potential conflicts.
 
-			let sql = sprintf(
-				`
+			const sql = sprintf(`
 				SELECT %s
 				FROM %s items
 				WHERE id NOT IN (
 					SELECT item_id FROM sync_items WHERE sync_target = %d
 				)
 				%s
+				ORDER BY items.updated_time DESC
 				LIMIT %d
 			`,
-				this.db().escapeFields(fieldNames),
-				this.db().escapeField(ItemClass.tableName()),
-				Number(syncTarget),
-				extraWhere,
-				limit
+			this.db().escapeFields(fieldNames),
+			this.db().escapeField(ItemClass.tableName()),
+			Number(syncTarget),
+			extraWhere,
+			limit
 			);
 
-			let neverSyncedItem = await ItemClass.modelSelectAll(sql);
+			const neverSyncedItem = await ItemClass.modelSelectAll(sql);
 
 			// Secondly get the items that have been synced under this sync target but that have been changed since then
 
@@ -567,7 +572,7 @@ class BaseItem extends BaseModel {
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
 
-				let sql = sprintf(
+				const sql = sprintf(
 					`
 					SELECT %s FROM %s items
 					JOIN sync_items s ON s.item_id = items.id
@@ -575,6 +580,7 @@ class BaseItem extends BaseModel {
 					AND (s.sync_time < items.updated_time OR force_sync = 1)
 					AND s.sync_disabled = 0
 					%s
+					ORDER BY items.updated_time DESC
 					LIMIT %d
 				`,
 					this.db().escapeFields(fieldNames),
@@ -607,7 +613,7 @@ class BaseItem extends BaseModel {
 
 	static encryptableItemClassNames() {
 		const temp = this.syncItemClassNames();
-		let output = [];
+		const output = [];
 		for (let i = 0; i < temp.length; i++) {
 			if (temp[i] === 'MasterKey') continue;
 			output.push(temp[i]);
@@ -630,7 +636,7 @@ class BaseItem extends BaseModel {
 
 	static async syncDisabledItems(syncTargetId) {
 		const rows = await this.db().selectAll('SELECT * FROM sync_items WHERE sync_disabled = 1 AND sync_target = ?', [syncTargetId]);
-		let output = [];
+		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const item = await this.loadItem(row.item_type, row.item_id);
@@ -681,7 +687,7 @@ class BaseItem extends BaseModel {
 	static async deleteOrphanSyncItems() {
 		const classNames = this.syncItemClassNames();
 
-		let queries = [];
+		const queries = [];
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
 			const ItemClass = this.getClass(className);
