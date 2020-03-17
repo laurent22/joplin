@@ -63,27 +63,18 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async importLocalImages(filePath, md) {
 		let updated = md;
 		const imageLinks = unique(extractImageUrls(md));
-		console.log('DEBUG markdown body: ', md);
 		await Promise.all(imageLinks.map(async (encodedLink) => {
-			console.log('DEBUG Image Link encoded: ', encodedLink);
 			const link = decodeURI(encodedLink);
-			console.log('DEBUG Image Link decoded: ', link);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
-			console.log('DEBUG pathWithExtension: ', pathWithExtension);
 			const stat = await shim.fsDriver().stat(pathWithExtension);
 			const isDir = stat ? stat.isDirectory() : false;
-			console.log('DEBUG isDir: ', isDir);
-			console.log('DEBUG stat: ', stat);
 			if (stat && !isDir) {
 				const resource = await shim.createResourceFromPath(pathWithExtension);
-				console.log('DEBUG resource: ', resource);
 				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
 				const linkPatternEscaped = pregQuote(`](${link})`);
-				console.log('DEBUG linkPatternEscaped: ', linkPatternEscaped);
 				const reg = new RegExp(linkPatternEscaped, 'g');
 				updated = updated.replace(reg, `](:/${resource.id})`);
-				console.log('DEBUG updated', updated);
 			}
 		}));
 		return updated;
@@ -98,7 +89,7 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 		try {
 			updatedBody = await this.importLocalImages(filePath, body);
 		} catch (error) {
-			console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
+			// console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
 		}
 		const note = {
 			parent_id: parentFolderId,
