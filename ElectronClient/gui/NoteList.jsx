@@ -32,7 +32,7 @@ class NoteListComponent extends React.Component {
 		if (this.props.listStyle === 'title') {
 			itemHeight = 32;
 		} else if (this.props.listStyle === 'snippet') {
-			itemHeight = 84;
+			itemHeight = 70;
 		}
 
 		// Note: max-width is used to specifically prevent horizontal scrolling on Linux when the scrollbar is present in the note list.
@@ -191,7 +191,8 @@ class NoteListComponent extends React.Component {
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		const displayTitle = Note.displayTitle(item);
-		const displayBody = item.body;
+		const displayBody = Note.displayPreview(item);
+		// const displayBody = item.body;
 		let titleComp = null;
 
 		if (highlightedWords.length) {
@@ -221,7 +222,7 @@ class NoteListComponent extends React.Component {
 
 			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>;
 		} else {
-			if (this.props.listStyle === 'title') {
+			if (this.props.listStyle === 'title' || !displayBody) {
 				titleComp = <span>{displayTitle}</span>;
 			} else if (this.props.listStyle === 'snippet') {
 				const myHeadingStyle = {
@@ -235,8 +236,7 @@ class NoteListComponent extends React.Component {
 					textAlign: 'justify',
 					whiteSpace: 'normal',
 					overflow: 'hidden',
-					margin: 0,
-					padding: '1em 0',
+					margin: '0.5em 0',
 					paddingRight: '1em',
 				};
 				titleComp = (
