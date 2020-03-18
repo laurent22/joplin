@@ -263,8 +263,8 @@ class Note extends BaseItem {
 	}
 
 	static previewFields() {
-		return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
-		// return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
 	static previewFieldsSql(fields = null) {
@@ -295,7 +295,10 @@ class Note extends BaseItem {
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
-		if (!options.fields) options.fields = this.previewFields();
+		if (!options.fields) {
+			options.fields = this.previewFields();
+			options.unescapedFields = ',substr(body,1,80) as preview';
+		}
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
@@ -367,7 +370,8 @@ class Note extends BaseItem {
 
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null };
-		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
+		const fields = this.previewFieldsSql(options.fields) + (options.unescapedFields ? options.unescapedFields : ',substr(body,1,80) as preview');
+		return this.modelSelectOne(`SELECT ${fields} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
 	static async search(options = null) {
@@ -588,7 +592,7 @@ class Note extends BaseItem {
 
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
-			note: note,
+			note: await this.preview(note.id),
 			provisional: isProvisional,
 		});
 

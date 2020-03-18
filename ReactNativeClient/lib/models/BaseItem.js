@@ -707,6 +707,12 @@ class BaseItem extends BaseModel {
 		return item.title ? item.title : _('Untitled');
 	}
 
+	static displayPreview(item) {
+		if (!item || !item.preview) return '';
+		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
+		return item.preview.length == 80 ? (`${item.preview} ...`) : item.preview;
+	}
+
 	static async markAllNonEncryptedForSync() {
 		const classNames = this.encryptableItemClassNames();
 

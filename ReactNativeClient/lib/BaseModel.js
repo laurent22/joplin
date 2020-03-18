@@ -230,6 +230,7 @@ class BaseModel {
 	static async search(options = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
+		if (!options.unescapedFields) options.unescapedFields = '';
 
 		const conditions = options.conditions ? options.conditions.slice(0) : [];
 		const params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
@@ -242,7 +243,7 @@ class BaseModel {
 
 		if ('limit' in options && options.limit <= 0) return [];
 
-		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
+		let sql = `SELECT ${this.db().escapeFields(options.fields) + options.unescapedFields} FROM \`${this.tableName()}\``;
 		if (conditions.length) sql += ` WHERE ${conditions.join(' AND ')}`;
 
 		const query = this.applySqlOptions(options, sql, params);
