@@ -149,8 +149,9 @@ class MainScreenComponent extends React.Component {
 									historyAction: 'goto',
 								});
 							}
+						} else {
+							bridge().showErrorMessageBox(_('Title must be there'));
 						}
-
 						this.setState({ promptOptions: null });
 					},
 				},
