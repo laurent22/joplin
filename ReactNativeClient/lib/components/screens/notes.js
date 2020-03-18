@@ -68,6 +68,26 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			Setting.setValue(r.name, r.value);
 		};
+
+		this.filterButton_press = async () => {
+			const buttons = [];
+			const sortNoteOptions = ['All','Completed Todo','Incomplete Todos','Notes'];
+			let value = this.props.filterType;
+			for (const field of sortNoteOptions) {
+				buttons.push({
+					text: field == value ? `⬤ ${field}` : field,
+					id: { name: 'notes.filter.field', value: field },
+				});
+			}
+
+			const r = await dialogs.pop(this, 'Choose Filter', buttons);
+			if (!r) return;
+			value = r.value;
+			this.props.dispatch({
+				type: 'CHANGE_FILTER_TYPE',
+				filterType: value,
+			});
+		};
 	}
 
 	styles() {
@@ -222,7 +242,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} filterButton_press={this.filterButton_press} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox
@@ -251,6 +271,7 @@ const NotesScreen = connect(state => {
 		theme: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		filterType: state.filterType,
 	};
 })(NotesScreenComponent);
 

@@ -55,6 +55,7 @@ const defaultState = {
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
+	filterType: 'All',
 };
 
 const stateUtils = {};
@@ -500,6 +501,13 @@ const reducer = (state = defaultState, action) => {
 				const newSettings = Object.assign({}, state.settings);
 				newSettings[action.key] = action.value;
 				newState.settings = newSettings;
+			}
+			break;
+
+		case 'CHANGE_FILTER_TYPE':
+			{
+				newState = Object.assign({}, state);
+				newState.filterType = action.filterType;
 			}
 			break;
 

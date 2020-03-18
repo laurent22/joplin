@@ -75,6 +75,28 @@ class NoteListComponent extends Component {
 		return output;
 	}
 
+	filteredNotes() {
+		const type = this.props.filterType;
+		const items = this.props.items;
+		const notes = items.filter(note => note.is_todo == 0);
+		const todo = items.filter(item => item.is_todo);
+		const pendingTodo = todo.filter(todo => todo.todo_completed == 0);
+		const completedTodo = todo.filter(todo => todo.todo_completed != 0);
+		console.debug(items);
+		switch (type) {
+		case 'All':
+			return items;
+		case 'Completed Todo':
+			return completedTodo;
+		case 'Incomplete Todos':
+			return pendingTodo;
+		case 'Notes':
+			return notes;
+		default:
+			return items;
+		}
+	}
+
 	UNSAFE_componentWillReceiveProps(newProps) {
 		// Make sure scroll position is reset when switching from one folder to another or to a tag list.
 		if (this.rootRef_ && newProps.notesSource != this.props.notesSource) {
@@ -88,7 +110,7 @@ class NoteListComponent extends Component {
 		if (this.props.items.length) {
 			return <FlatList
 				ref={ref => (this.rootRef_ = ref)}
-				data={this.props.items}
+				data={this.filteredNotes()}
 				renderItem={({ item }) => <NoteItem note={item} />}
 				keyExtractor={item => item.id}
 			/>;
@@ -116,6 +138,7 @@ const NoteList = connect(state => {
 		notesSource: state.notesSource,
 		theme: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
+		filterType: state.filterType,
 	};
 })(NoteListComponent);
 

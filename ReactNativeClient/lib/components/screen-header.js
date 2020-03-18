@@ -258,6 +258,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
+		function filterButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name="md-square-outline" style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
 		function searchButton(styles, onPress) {
 			return (
 				<TouchableOpacity onPress={onPress}>
@@ -420,6 +430,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSelectAllButton = this.props.noteSelectionEnabled;
+		const showFilterButton = !this.props.noteSelectionEnabled && this.props.showBackButton == false;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
 		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
@@ -431,6 +442,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
+		const filterButtonComp = !showFilterButton ? null : filterButton(this.styles(), () => this.props.filterButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
 		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press()) : null;
@@ -469,6 +481,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					)}
 					{titleComp}
 					{selectAllButtonComp}
+					{filterButtonComp}
 					{searchButtonComp}
 					{deleteButtonComp}
 					{duplicateButtonComp}
