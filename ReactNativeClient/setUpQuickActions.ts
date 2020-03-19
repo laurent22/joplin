@@ -5,6 +5,7 @@ const { DeviceEventEmitter } = require('react-native');
 import * as QuickActions from 'react-native-quick-actions';
 const { _ } = require('lib/locale.js');
 const Note = require('lib/models/Note.js');
+const { reg } = require('lib/registry.js');
 
 type TData = {
 	type: string
@@ -17,7 +18,7 @@ export default (dispatch: Function, folderId: string) => {
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
 	]);
 
-	DeviceEventEmitter.addListener('quickActionShortcut', (data: TData) => {
+	const handleQuickAction = (data: TData) => {
 		const isTodo = data.type === 'New to-do' ? 1 : 0;
 
 		Note.save({
@@ -43,5 +44,10 @@ export default (dispatch: Function, folderId: string) => {
 				routeName: 'Note',
 			});
 		});
-	});
+	};
+
+	DeviceEventEmitter.addListener('quickActionShortcut', handleQuickAction);
+
+	QuickActions.popInitialAction().then(handleQuickAction).catch((reason: any) => reg.logger().error(reason));
 };
+
