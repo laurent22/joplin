@@ -135,7 +135,7 @@ class MdToHtml {
 			splitted: false,
 			externalAssetsOnly: false,
 			postMessageSyntax: 'postMessage',
-      paddingTop: '0',
+			paddingTop: '0',
 			paddingBottom: '0',
 			highlightedKeywords: [],
 			codeTheme: 'atom-one-light.css',
