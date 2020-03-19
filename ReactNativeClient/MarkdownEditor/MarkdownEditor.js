@@ -134,7 +134,7 @@ export default class MarkdownEditor extends React.Component {
 					onChangeText={this.changeText(selection)}
 					onSelectionChange={this.onSelectionChange}
 					value={text}
-					ref={this[this.props.textInputRefName]} // TODO: Consider passing the name down
+					ref={this[this.props.textInputRefName]}
 					selection={selection}
 				/>
 				{showPreview ? this.renderPreview() : null}
