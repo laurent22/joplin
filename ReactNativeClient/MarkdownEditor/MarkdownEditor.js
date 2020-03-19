@@ -41,7 +41,7 @@ export default class MarkdownEditor extends React.Component {
 	textInput: TextInput;
 
 	changeText = (selection: {start: number, end: number}) => (input: string) => {
-		var result = input;
+		let result = input;
 		const cursor = selection.start;
 		const isOnNewline = '\n' === input.slice(cursor - 1, cursor);
 		const isDeletion = input.length < this.state.text.length;
@@ -93,7 +93,6 @@ export default class MarkdownEditor extends React.Component {
 				}
 			}
 		}
-		console.log(input.split('\n'));
 		this.setState({ text: result });
 		this.props.saveText(result);
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
@@ -111,7 +110,7 @@ export default class MarkdownEditor extends React.Component {
 	}
 
 	getState = () => {
-		this.setState({selection: {start: 1, end: 1}});
+		this.setState({ selection: { start: 1, end: 1 } });
 		return this.state;
 	};
 
