@@ -1,4 +1,4 @@
-﻿require('app-module-path').addPath(__dirname);
+require('app-module-path').addPath(__dirname);
 
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
@@ -1193,9 +1193,6 @@ class Application extends BaseApplication {
 			if (!menuItem) continue;
 			const isHtmlNote = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			menuItem.enabled = !isHtmlNote && layout !== 'viewer' && !!note;
-			if (itemId === 'commandStartExternalEditing') {
-				menuItem.enabled = true;
-			}
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');

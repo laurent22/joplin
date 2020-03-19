@@ -84,7 +84,7 @@ const MigrationService = require('lib/services/MigrationService');
 import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
-let storeDispatch = function() { };
+let storeDispatch = function() {};
 
 const logReducerAction = function(action) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
@@ -216,11 +216,11 @@ const appReducer = (state = appDefaultState, action) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute, action)) {
-					// If the route *name* is the same (even if the other parameters are different), we
-					// overwrite the last route in the history with the current one. If the route name
-					// is different, we push a new history entry.
+				// If the route *name* is the same (even if the other parameters are different), we
+				// overwrite the last route in the history with the current one. If the route name
+				// is different, we push a new history entry.
 					if (currentRoute.routeName == action.routeName) {
-						// nothing
+					// nothing
 					} else {
 						navHistory.push(currentRoute);
 					}
@@ -726,10 +726,10 @@ class AppComponent extends React.Component {
 		let menuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions} /></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
 			menuPosition = 'right';
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent /></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
 		}
 
 		const appNavInit = {
@@ -765,7 +765,7 @@ class AppComponent extends React.Component {
 							<AppNav screens={appNavInit} />
 						</View>
 						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }} />
+						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 					</SafeAreaView>
 				</MenuContext>
 			</SideMenu>
@@ -793,7 +793,7 @@ class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<App />
+				<App/>
 			</Provider>
 		);
 	}
