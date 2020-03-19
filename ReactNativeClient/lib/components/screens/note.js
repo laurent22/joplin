@@ -73,6 +73,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.markdownEditorRef = React.createRef();
+		this.textInputRefName = 'textInputRef';
 
 		this.doFocusUpdate_ = false;
 
@@ -777,8 +778,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.refs.titleTextField.focus();
 		}
 		if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
-			if (this.markdownEditorRef.current.textInputRef.current) {
-				this.markdownEditorRef.current.textInputRef.current.focus();
+			if (this.markdownEditorRef.current[this.textInputRefName].current) {
+				this.markdownEditorRef.current[this.textInputRefName].current.focus();
 			}
 		}
 	}
@@ -895,6 +896,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 			bodyComponent = <MarkdownEditor
 				ref={this.markdownEditorRef}
+				textInputRefName={this.textInputRefName}
 				editorFont={editorFont(this.props.editorFont)}
 				style={this.styles().bodyTextInput}
 				previewStyles={this.styles().noteBodyViewer}
