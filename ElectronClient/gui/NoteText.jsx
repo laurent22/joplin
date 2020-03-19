@@ -1180,6 +1180,13 @@ class NoteTextComponent extends React.Component {
 			};
 		}
 
+		if (command.name === 'focusElement' && command.target === 'noteTextViewer') {
+			fn = () => {
+				if (!this.webviewRef_) return;
+				this.webviewRef_.current.wrappedInstance.webviewRef_.current.focus();
+			};
+		}
+
 		if (!fn) return;
 
 		this.props.dispatch({

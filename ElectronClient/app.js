@@ -322,6 +322,14 @@ class Application extends BaseApplication {
 		});
 	}
 
+	checkLayout(layout) {
+		if (layout === 'viewer') {
+			this.focusElement_('noteTextViewer');
+		} else {
+			this.focusElement_('noteBody');
+		}
+	}
+
 	async updateMenu(screen) {
 		if (this.lastMenuScreen_ === screen) return;
 
@@ -382,9 +390,11 @@ class Application extends BaseApplication {
 
 		focusItems.push({
 			label: _('Note body'),
-			click: () => { this.focusElement_('noteBody'); },
+			click: () => { this.checkLayout(this.store().getState().noteVisiblePanes[0]); },
 			accelerator: 'CommandOrControl+Shift+B',
 		});
+
+
 
 		let toolsItems = [];
 		const importItems = [];
