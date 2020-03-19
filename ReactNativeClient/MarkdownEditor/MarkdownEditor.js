@@ -107,7 +107,6 @@ export default class MarkdownEditor extends React.Component {
 	};
 
 	getState = () => {
-		this.setState({ selection: { start: 1, end: 1 } });
 		return this.state;
 	};
 
