@@ -132,8 +132,8 @@ class MainScreenComponent extends React.Component {
 			this.setState({
 				promptOptions: {
 					label: _('Notebook title:'),
-					onClose: async answer => {
-						if (answer) {
+					onClose: async (answer, buttonType) => {
+						if (answer && buttonType === 'ok') {
 							let folder = null;
 							try {
 								folder = await Folder.save({ title: answer }, { userSideValidation: true });
@@ -149,8 +149,8 @@ class MainScreenComponent extends React.Component {
 									historyAction: 'goto',
 								});
 							}
-						} else {
-							bridge().showErrorMessageBox(_('Title must be there'));
+						} else if (!answer && buttonType === 'ok') {
+							bridge().showErrorMessageBox('please select a title first');
 						}
 						this.setState({ promptOptions: null });
 					},
