@@ -152,7 +152,6 @@ export default class MarkdownEditor extends React.Component {
 						{
 							getState: this.getState,
 							setState: (state, callback) => {
-								this.textInput.focus();
 								this.setState(state, callback);
 							},
 						},
