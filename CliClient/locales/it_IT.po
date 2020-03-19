@@ -2970,3 +2970,211 @@ msgstr "Accedi a OneDrive"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
 msgstr "Cerca"
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "testo Sottolineato"
+
+#~ msgid "Global zoom percentage"
+#~ msgstr "Percentuale di zoom globale"
+
+#~ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr ""
+#~ "Esportazione da \"%s\" come formato \"%s\". Si prega di attendere..."
+
+#~ msgid "Could not export notes: %s"
+#~ msgstr "Non è possibile esportare le note: %s"
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr ""
+#~ "Tutte le potenziali porte sono in uso - prego riportare il problema a %s"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La sincronizzazione è già in corso. Stato: %s"
+
+#~ msgid "Confirm master password:"
+#~ msgstr "Conferma password principale:"
+
+#~ msgid "Confirm password"
+#~ msgstr "Conferma password"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Argomento richiesto mancante: %s"
+
+#~ msgid "Starting to edit note. Close the editor to get back to the prompt."
+#~ msgstr ""
+#~ "Comincia a modificare la nota. Chiudi l'editor per tornare al prompt."
+
+#~ msgid "Note has been saved."
+#~ msgstr "La nota è stata salvata."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Stato di sincronizzazione"
+
+#~ msgid "General Options"
+#~ msgstr "Opzioni Generali"
+
+#~ msgid "Encryption options"
+#~ msgstr "Opzioni Crittografia"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Opzioni di crittografia"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Opzioni Clipper"
+
+#~ msgid ""
+#~ "Unknown item type downloaded - please upgrade Joplin to the latest version"
+#~ msgstr ""
+#~ "Tipo elemento scaricato sconosciuto - prego aggiornare Joplin all’ultima "
+#~ "versione"
+
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Permesso di usare la fotocamera"
+
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Annulla la sincronizzazione"
+
+#~ msgid "Hide metadata"
+#~ msgstr "Nascondi i Metadati"
+
+#~ msgid "Show metadata"
+#~ msgstr "Mostra i metadati"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Elimina Taccuino"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Fare clic sul pulsante (+) per creare una nuova Nota o un nuovo Taccuino. "
+#~ "Fare clic sul menu laterale per accedere ai tuoi Taccuini esistenti."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Attualmente non hai nessun Taccuino. Crearne uno cliccando sul pulsante "
+#~ "(+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Benvenuto"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separa ogni etichetta da una virgola."
+
+#~ msgid "Some items cannot be decrypted."
+#~ msgstr "Alcuni elementi non possono essere decodificati."
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Il percorso di sincronizzazione quando la sincronizzazione è abilitata. "
+#~ "Vedi `sync.target`."
+
+#~ msgid "State: %s."
+#~ msgstr "Stato: %s."
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Esiste già un Taccuino col titolo \"%s\""
+
+#~ msgid ""
+#~ "Benvenuto su Joplin!\n"
+#~ "\n"
+#~ "Digita `:help shortcuts` per l'elenco delle scorciatoie da tastiera, o "
+#~ "semplicemente `:help` per informazioni sull'utilizzo.\n"
+#~ "\n"
+#~ "Ad esempio, per creare un taccuino, premere `mb`; per creare una nota "
+#~ "premere `mn`."
+#~ msgstr ""
+#~ "Benvenuto su Joplin!\n"
+#~ "\n"
+#~ "Digita `:help shortcuts` per l'elenco delle scorciatoie da tastiera, o "
+#~ "semplicemente `:help` per informazioni sull'utilizzo.\n"
+#~ "\n"
+#~ "Ad esempio, per creare un taccuino, premere `mb`; per creare una nota "
+#~ "premere `mn`."
+
+#~ msgid "Searches"
+#~ msgstr "Ricerche"
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Importa un file taccuino di Evernote (.enex file)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Il file \"%s\" sarà importato nel taccuino esistente \"%s\". Continuare?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Un nuovo taccuino \"%s\" sarà creato e al suo interno verrà importato il "
+#~ "file \"%s\" . Continuare?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Importa le note da Evernote"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Pannello successivo"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Pannello precedente"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Esci dalla modalità linea di comando"
+
+#~ msgid "Edit the selected note"
+#~ msgstr "Modifica la nota selezionata"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Annulla il comando corrente."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Imposta un \"Cose-da-fare\" come completato / non completato"
+
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr ""
+#~ "Scegli lo  s[t]ato della [c]onsole: massimizzato/minimizzato/nascosto/"
+#~ "visibile."
+
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "mos[t]ra/nascondi i [m]etadata nelle note."
+
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "Crea ([M]ake) una nuova [n]ota"
+
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "Crea ([M]ake) una nuova at[t]ività"
+
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "Crea ([M]ake) un nuovo [b]locco note"
+
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copia ([Y]) la [n]ota in un taccuino."
+
+#~ msgid "Move the note to a notebook."
+#~ msgstr "Sposta la nota in un taccuino."
+
+#~ msgid ""
+#~ "The target to synchonise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "La destinazione della sincronizzazione. Se si sincronizza con il file "
+#~ "system, impostare ' Sync. 2. Path ' per specificare la directory di "
+#~ "destinazione."
+
+#~ msgid "To-do title:"
+#~ msgstr "Titolo del \"Cose-da-fare\":"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
+
+#~ msgid "Delete notebook?"
+#~ msgstr "Eliminare il taccuino?"
+
+#~ msgid "File system synchronisation target directory"
+#~ msgstr "Cartella di destinazione per la sincronizzazione nel file system"
