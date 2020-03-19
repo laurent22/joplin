@@ -37,6 +37,8 @@ export default (dispatch: Function, folderId: string) => {
 			// state sufficiently or something), then it'll work again.
 			dispatch({ type: 'NAV_BACK' });
 
+			dispatch({ type: 'SIDE_MENU_CLOSE' });
+
 			dispatch({
 				type: 'NAV_GO',
 				noteId: newNote.id,
