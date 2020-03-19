@@ -1053,6 +1053,7 @@ class Application extends BaseApplication {
 			},
 			help: {
 				label: _('&Help'),
+				role: 'help',
 				submenu: [{
 					label: _('Website and documentation'),
 					accelerator: 'F1',
