@@ -365,8 +365,6 @@ function changeSelectedNotes(state, action, options = null) {
 		newState.backwardHistoryNotes = backwardHistoryNotes;
 		newState.forwardHistoryNotes = forwardHistoryNotes;
 
-		return newState;
-
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
