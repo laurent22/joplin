@@ -1,6 +1,5 @@
-/* eslint-disable */
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, ScrollView } = require('react-native');
+const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -938,7 +937,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// Requires "const { ScrollView } = require('react-native');"
 			//
 			// bodyComponent = (
-		  //		<ScrollView persistentScrollbar>
+			//		<ScrollView persistentScrollbar>
 			//		<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
 			//	</ScrollView>
 			// );
