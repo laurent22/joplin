@@ -46,6 +46,16 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	componentDidMount() {
 		this.isMounted_ = true;
 		shared.componentDidMount(this);
+
+		const masterKeys = this.props.masterKeys;
+
+		for (let i = 0; i < masterKeys.length; i++) {
+			const mk = masterKeys[i];
+
+			this.setState(prevState =>({
+				passwordShow: [{ id: mk.id, [mk.id]: true }, ...prevState.passwordShow],
+			}));
+		}
 	}
 
 	componentDidUpdate(prevProps) {
@@ -54,6 +64,22 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 	async checkPasswords() {
 		return shared.checkPasswords(this);
+	}
+
+	handlePasswordShow(id) {
+		const prevState = this.state.passwordShow;
+		const prevValue = prevState.find(obj => obj.id === id)[id];
+		const newState = prevState.map(obj => {
+			if (obj.id == id) {
+				return {
+					id: obj.id,
+					[id]: !prevValue,
+				};
+			} else {
+				return obj;
+			}
+		});
+		this.setState({ passwordShow: newState });
 	}
 
 	styles() {
@@ -96,7 +122,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		return this.styles_[themeId];
 	}
 
-	renderMasterKey(num, mk) {
+	renderMasterKey(num, mk,secureTextEntry) {
 		const theme = themeStyle(this.props.theme);
 
 		const onSaveClick = () => {
@@ -120,8 +146,10 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
+					<TextInput selectionColor={theme.textSelectionColor} secureTextEntry={secureTextEntry} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
+					<Button title={'👁️'} onPress={()=>this.handlePasswordShow(mk.id)}  ></Button>
+					<Text>  </Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
 			</View>
@@ -197,12 +225,17 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		const decryptedItemsInfo = this.props.encryptionEnabled ? <Text style={this.styles().normalText}>{shared.decryptedStatText(this)}</Text> : null;
 
 		const mkComps = [];
+		const passwordShow = this.state.passwordShow;
 
 		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
-			mkComps.push(this.renderMasterKey(i + 1, mk));
+
+			const showPasswordObj = passwordShow.find(obj => obj.id == mk.id);
+			const secureTextEntry = showPasswordObj ? showPasswordObj[mk.id] : true;
+
+			mkComps.push(this.renderMasterKey(i + 1, mk,secureTextEntry));
 
 			const idx = nonExistingMasterKeyIds.indexOf(mk.id);
 			if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
