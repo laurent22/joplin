@@ -13,7 +13,7 @@ ALLOW_ROOT=false
 SHOW_CHANGELOG=false
 
 print() {
-    if [[ "$SILENT" == false ]] ; then
+    if [[ "${SILENT}" == false ]] ; then
         echo -e "$@"
     fi
 }
@@ -52,26 +52,27 @@ showHelp() {
 #-----------------------------------------------------
 
 optspec=":h-:"
-while getopts "$optspec" OPT; do
-  if [ "$OPT" = "-" ]; then   # long option: reformulate OPT and OPTARG
+while getopts "${optspec}" OPT; do
+  [ "${OPT}" = " " ] && continue
+  if [ "${OPT}" = "-" ]; then   # long option: reformulate OPT and OPTARG
     OPT="${OPTARG%%=*}"       # extract long option name
     OPTARG="${OPTARG#$OPT}"   # extract long option argument (may be empty)
     OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
   fi
-  case "$OPT" in
+  case "${OPT}" in
     h | help )     showHelp ;;
     allow-root )   ALLOW_ROOT=true ;;
     silent )       SILENT=true ;;
     force )        FORCE=true ;;
     changelog )    SHOW_CHANGELOG=true ;;
-    [^\?]* )       showHelp "Illegal option --$OPT"; exit 2 ;;
-    \? )           showHelp "Illegal option -$OPTARG"; exit 2 ;;
+    [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
+    \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
   esac
 done
 shift $((OPTIND-1)) # remove parsed options and args from $@ list
 
 ## Check and warn if running as root.
-if [[ $EUID = 0 ]] && [[ "$ALLOW_ROOT" != true ]]; then
+if [[ $EUID = 0 ]] && [[ "${ALLOW_ROOT}" != true ]]; then
     showHelp "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
     exit 1
 fi
@@ -86,7 +87,7 @@ print "Checking latest version..."
 RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
 
 # Check if it's in the latest version
-if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "$RELEASE_VERSION" ]]; then
+if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
     print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
     ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
@@ -97,7 +98,7 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v$RELEASE_VERSION/Joplin-$RELEASE_VERSION.AppImage
+wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
 wget -qnv --show-progress -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
@@ -125,7 +126,7 @@ print "${COLOR_GREEN}OK${COLOR_RESET}"
 # Detect desktop environment
 if [ "$XDG_CURRENT_DESKTOP" = "" ]
 then
-  DESKTOP=$(echo "$XDG_DATA_DIRS" | sed 's/.*\(xfce\|kde\|gnome\).*/\1/')
+  DESKTOP=$(echo "${XDG_DATA_DIRS}" | sed 's/.*\(xfce\|kde\|gnome\).*/\1/')
 else
   DESKTOP=$XDG_CURRENT_DESKTOP
 fi
@@ -146,7 +147,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/$USER/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#$APPIMAGE_VERSION" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/${USER}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications
     print "${COLOR_GREEN}OK${COLOR_RESET}"
@@ -159,7 +160,7 @@ fi
 #-----------------------------------------------------
 
 # Informs the user that it has been installed
-print "${COLOR_GREEN}Joplin version${COLOR_RESET}" $RELEASE_VERSION "${COLOR_GREEN}installed.${COLOR_RESET}"
+print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
 echo $RELEASE_VERSION > ~/.joplin/VERSION
