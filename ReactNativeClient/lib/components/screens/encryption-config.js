@@ -10,7 +10,10 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { time } = require('lib/time-utils.js');
 const shared = require('lib/components/shared/encryption-config-shared.js');
 const { dialogs } = require('lib/dialogs.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
 const DialogBox = require('react-native-dialogbox').default;
+
+Icon.loadFont();
 
 class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -131,8 +134,13 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
 					<TextInput selectionColor={theme.textSelectionColor} secureTextEntry={secureTextEntry} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
-					<Button title={'👁️'} onPress={()=>this.handlePasswordShow(mk.id)}  ></Button>
-					<Text>  </Text>
+					<Icon
+						name="md-eye"
+						color='black'
+						raised
+						style={{ fontSize: 30, marginRight: 10 }}
+						onPress={()=>this.handlePasswordShow(mk.id)}
+					></Icon>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
 			</View>
