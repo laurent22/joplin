@@ -46,16 +46,6 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	componentDidMount() {
 		this.isMounted_ = true;
 		shared.componentDidMount(this);
-
-		const masterKeys = this.props.masterKeys;
-
-		for (let i = 0; i < masterKeys.length; i++) {
-			const mk = masterKeys[i];
-
-			this.setState(prevState =>({
-				passwordHide: [{ id: mk.id, [mk.id]: true }, ...prevState.passwordHide],
-			}));
-		}
 	}
 
 	componentDidUpdate(prevProps) {
@@ -67,19 +57,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 	}
 
 	handlePasswordShow(id) {
-		const prevState = this.state.passwordHide;
-		const prevValue = prevState.find(obj => obj.id === id)[id];
-		const newState = prevState.map(obj => {
-			if (obj.id == id) {
-				return {
-					id: obj.id,
-					[id]: !prevValue,
-				};
-			} else {
-				return obj;
-			}
-		});
-		this.setState({ passwordHide: newState });
+		const showedID = this.state.passwordShowID;
+		if (id == showedID) {
+			this.setState({ passwordShowID: null });
+		} else {
+			this.setState({ passwordShowID: id });
+		}
 	}
 
 	styles() {
@@ -225,15 +208,13 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		const decryptedItemsInfo = this.props.encryptionEnabled ? <Text style={this.styles().normalText}>{shared.decryptedStatText(this)}</Text> : null;
 
 		const mkComps = [];
-		const passwordHide = this.state.passwordHide;
 
 		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 
-			const hidePasswordObj = passwordHide.find(obj => obj.id == mk.id);
-			const secureTextEntry = hidePasswordObj ? hidePasswordObj[mk.id] : true;
+			const secureTextEntry = mk.id == this.state.passwordShowID ? false : true;
 
 			mkComps.push(this.renderMasterKey(i + 1, mk,secureTextEntry));
 

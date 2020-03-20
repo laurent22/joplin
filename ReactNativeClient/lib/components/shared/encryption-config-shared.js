@@ -14,7 +14,7 @@ shared.constructor = function(comp) {
 			encrypted: null,
 			total: null,
 		},
-		passwordHide: [],
+		passwordShowID: null,
 	};
 	comp.isMounted_ = false;
 
