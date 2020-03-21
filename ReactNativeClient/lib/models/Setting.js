@@ -316,6 +316,17 @@ class Setting extends BaseModel {
 			},
 			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			trackLocation: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
+
+			editorBeta: {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				section: 'note',
+				public: true,
+				appTypes: ['mobile'],
+				label: () => _('Editor beta'),
+				description: () => _('Opt-in to to the beta for the new editor. If you find bugs, please report them in the Discourse forum.'),
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: Setting.TYPE_STRING,
