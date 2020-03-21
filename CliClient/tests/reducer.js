@@ -462,6 +462,36 @@ describe('Reducer', function() {
 		expect(getIds(state.forwardHistoryNotes)).toEqual([]);
 	}));
 
+	it('should remember the last seen note of a notebook', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(5, folders[i]));
+		}
 
+		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
+
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [4], state); // last seen note is notes[4]
+
+
+		// go to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		state = goToNote(notes, [5], state);
+		state = goToNote(notes, [6], state);
+
+
+		// return to first folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[0].id, historyAction: 'goto' });
+
+		expect(state.lastSelectedNotesIds.Folder[folders[0].id]).toEqual([notes[4].id]);
+
+		// return to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		expect(state.lastSelectedNotesIds.Folder[folders[1].id]).toEqual([notes[6].id]);
+
+	}));
 
 });
