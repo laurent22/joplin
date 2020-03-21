@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Yukio Usuzumi <anohigisavay@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: paventyang@gmail.com\n"
+"Language-Team: paventyang@gmail.com\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -817,9 +818,8 @@ msgstr "选项"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "资源：%d。"
+msgstr "资源"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:650
 #, javascript-format
@@ -1281,7 +1281,7 @@ msgstr "保存"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "需要升级的主密钥"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1289,6 +1289,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"以下主密钥使用了过时的加密算法，建议对其进行升级。 升级后的主密钥仍将能够照常"
+"解密和加密您的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1299,24 +1301,25 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "升级"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "选择日期"
+msgstr "重新加密数据"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
-msgstr ""
+msgstr "默认的加密方法已更改为一种更安全的方法，建议您将其应用于您的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"您可以使用下面的工具重新加密您的数据，例如，您已知的使用过时的加密方法进行加"
+"密的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1335,6 +1338,16 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"为此，必须对整个数据集进行加密和同步，因此最好将其整夜运行。\n"
+"\n"
+"首先，请按照以下说明进行操作：\n"
+"\n"
+"1.同步您的所有设备。\n"
+"2.单击\"%s\"。\n"
+"3.让它运行完成。 在运行时，请避免在其他设备上更改任何笔记，以免发生冲突。\n"
+"4.在此设备上完成同步后，同步其他所有设备，并使其同步完成。\n"
+"\n"
+"重要提示：您只需要在一台设备上运行此ONCE一次。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1360,16 +1373,15 @@ msgstr "立即获取："
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "图标"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "笔记属性"
+msgstr "笔记本属性"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1436,18 +1448,16 @@ msgid "Set the password"
 msgstr "设置密码"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "一个或多个主密钥需要密码。"
+msgstr "您的主密钥之一使用了过时的加密方法。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
+msgstr "默认的加密方法已更改，您应该重新加密数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
 msgid "More info"
 msgstr "更多信息"
 
@@ -1462,24 +1472,23 @@ msgstr "搜索..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "字数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "字符数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "字符数（不计空格）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "行"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "笔记属性"
+msgstr "内容属性"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
@@ -1672,9 +1681,8 @@ msgid "Watching..."
 msgstr "正在监控变化..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1841
-#, fuzzy
 msgid "Content Properties"
-msgstr "笔记属性"
+msgstr "内容属性"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2109
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:416
@@ -1697,13 +1705,12 @@ msgid "Clear"
 msgstr "清除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
 msgstr "标题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "大小"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
 #, fuzzy
@@ -1721,18 +1728,17 @@ msgid "Delete"
 msgstr "删除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "正在检查... 请稍候。"
+msgstr "请稍后..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "没有资源！"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "由于性能原因并未显示出所有资源 (范围: %s)。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -2928,26 +2934,26 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "请确认您要重新加密整个数据库。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "您的数据将被重新加密并再次同步。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
+msgstr "在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "主密钥已成功升级！"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "无法升级主密钥：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
