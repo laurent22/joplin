@@ -190,8 +190,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				paddingRight: 5,
 			},
 			descriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 			},
 			sliderUnits: {
