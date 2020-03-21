@@ -54,7 +54,7 @@ function goBackWard(state) {
 		type: 'FOLDER_AND_NOTE_SELECT',
 		noteId: lastItem.id ,
 		folderId: lastItem.parent_id ,
-		historyAction: 'pop',
+		historyAction: 'goBackward',
 	});
 	return state;
 }
@@ -66,7 +66,7 @@ function goForward(state) {
 		type: 'FOLDER_AND_NOTE_SELECT',
 		noteId: nextItem.id ,
 		folderId: nextItem.parent_id ,
-		historyAction: 'push',
+		historyAction: 'goForward',
 	});
 	return state;
 }

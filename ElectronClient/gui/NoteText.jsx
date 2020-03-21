@@ -1668,20 +1668,6 @@ class NoteTextComponent extends React.Component {
 
 	createToolbarItems(note, editorIsVisible) {
 		const toolbarItems = [];
-		if (note && this.state.folder && ['Search', 'Tag', 'SmartFilter'].includes(this.props.notesParentType)) {
-			toolbarItems.push({
-				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
-				iconName: 'fa-book',
-				onClick: () => {
-					this.props.dispatch({
-						type: 'FOLDER_AND_NOTE_SELECT',
-						folderId: this.state.folder.id,
-						noteId: note.id,
-					});
-					Folder.expandTree(this.props.folders, this.state.folder.parent_id);
-				},
-			});
-		}
 
 		toolbarItems.push({
 			tooltip: _('Back'),
@@ -1694,8 +1680,7 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: lastItem.parent_id,
 					noteId: lastItem.id,
-
-					historyAction: 'pop',
+					historyAction: 'goBackward',
 				});
 			},
 		});
@@ -1711,11 +1696,25 @@ class NoteTextComponent extends React.Component {
 					type: 'FOLDER_AND_NOTE_SELECT',
 					folderId: nextItem.parent_id,
 					noteId: nextItem.id,
-
-					historyAction: 'push',
+					historyAction: 'goForward',
 				});
 			},
 		});
+
+		if (note && this.state.folder && ['Search', 'Tag', 'SmartFilter'].includes(this.props.notesParentType)) {
+			toolbarItems.push({
+				title: _('In: %s', substrWithEllipsis(this.state.folder.title, 0, 16)),
+				iconName: 'fa-book',
+				onClick: () => {
+					this.props.dispatch({
+						type: 'FOLDER_AND_NOTE_SELECT',
+						folderId: this.state.folder.id,
+						noteId: note.id,
+					});
+					Folder.expandTree(this.props.folders, this.state.folder.parent_id);
+				},
+			});
+		}
 
 		if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN && editorIsVisible) {
 			toolbarItems.push({

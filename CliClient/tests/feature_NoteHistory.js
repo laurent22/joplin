@@ -23,12 +23,12 @@ let testApp = null;
 
 const goBackWard = (state) => {
 	const lastItem = state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1];
-	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'pop' });
+	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'goBackward' });
 };
 
 const goForward = (state) => {
 	const lastItem = state.forwardHistoryNotes[state.forwardHistoryNotes.length - 1];
-	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'push' });
+	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'goForward' });
 };
 
 describe('integration_ForwardBackwardNoteHistory', function() {

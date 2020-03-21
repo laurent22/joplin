@@ -118,6 +118,7 @@ stateUtils.getLastSeenNote = function(state) {
 			};
 		}
 	}
+	return null;
 };
 
 function arrayHasEncryptedItems(array) {
@@ -344,18 +345,18 @@ function changeSelectedNotes(state, action, options = null) {
 		// the history stack should be handled. That property should not be present for
 		// programmatic navigation. Possible values are:
 		// - "goto": When going to a note, but not via the back/forward arrows.
-		// - "pop": When clicking on the Back arrow
-		// - "push": When clicking on the Forward arrow
+		// - "goBackward": When clicking on the Back arrow
+		// - "goForward": When clicking on the Forward arrow
 		const lastSeenNote = stateUtils.getLastSeenNote(state);
 		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
-		} else if (action.historyAction === 'pop' && lastSeenNote != null) {
+		} else if (action.historyAction === 'goBackward' && lastSeenNote != null) {
 			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
 				forwardHistoryNotes.push(Object.assign({}, lastSeenNote));
 			}
 			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'push' && lastSeenNote != null) {
+		} else if (action.historyAction === 'goForward' && lastSeenNote != null) {
 			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
 				backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
 			}
