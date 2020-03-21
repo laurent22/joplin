@@ -200,8 +200,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				marginRight: 10,
 			},
 			settingDescriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
