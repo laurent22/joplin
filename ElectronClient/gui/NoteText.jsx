@@ -2026,7 +2026,7 @@ class NoteTextComponent extends React.Component {
 		};
 
 		const toolbarStyle = {
-			marginTop: 3,
+			marginTop: 4,
 			marginBottom: 0,
 		};
 
