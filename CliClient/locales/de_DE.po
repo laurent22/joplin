@@ -1339,7 +1339,7 @@ msgstr "Speichern"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Hauptschlüssel, die aktualisiert werden müssen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1347,6 +1347,10 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Die folgenden Hauptschlüssel verwenden einen veralteten "
+"Verschlüsselungsalgorithmus und es wird empfohlen, sie zu aktualisieren. Der "
+"aktualisierte Hauptschlüssel wird Ihre Daten weiterhin wie gewohnt "
+"entschlüsseln und verschlüsseln können."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1357,27 +1361,32 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Upgrade"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "Datum auswählen"
+msgstr "Daten neu verschlüsseln"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
+#, fuzzy
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Die Standardverschlüsselungsmethode wurde in eine sicherere geändert, und es "
+"wird empfohlen, sie auf Ihre Daten anzuwenden."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Sie können das folgende Werkzeug  verwenden, um Ihre Daten erneut zu "
+"verschlüsseln, falls einige Ihrer Notizen mit einer veralteten "
+"Verschlüsselungsmethode verschlüsselt sein sollten."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
-#, javascript-format
+#, fuzzy, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1393,6 +1402,19 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"Dazu muss dein gesamter Datensatz verschlüsselt und erneut synchronisiert "
+"werden. Starte diese Prozedur daher am besten Nachts.\n"
+"\n"
+"Beachte dazu folgende Hinweise:\n"
+"\n"
+"1. Synchronisiere alle deine Geräte.\n"
+"2. klicke auf \"%s\".\n"
+"3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern "
+"von Notizen auf anderen Geräten, um Konflikte zu vermeiden\n"
+"4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, "
+"synchronisiere alle anderen Geräte und lass es komplett durch laufen.\n"
+"\n"
+"Wichtig: Du darfst dies nur EINMAL auf einem Gerät starten."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1496,15 +1518,17 @@ msgid "Set the password"
 msgstr "Gib das Passwort ein"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Mindestens ein Hauptschlüssel benötigt ein Passwort."
+msgstr ""
+"Einer Ihrer Hauptschlüssel verwendet eine veraltete Verschlüsselungsmethode."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"Die Standardverschlüsselungsmethode wurde geändert. Du solltest deine Daten "
+"erneut verschlüsseln."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
 #, fuzzy
@@ -1704,8 +1728,9 @@ msgid "In: %s"
 msgstr "In: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
+#, fuzzy
 msgid "Front"
-msgstr ""
+msgstr "Vorderseite"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
 msgid "Hyperlink"
@@ -2389,7 +2414,6 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
-#, fuzzy
 msgid "Split"
 msgstr "Geteilte Ansicht"
 
@@ -3038,25 +3062,28 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Bitte bestätige, dass du deine gesamte Datenbank neu verschlüsseln möchtest."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Deine Daten werden neu verschlüsselt und erneut synchronisiert."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Bitte gib zuerst dein Passwort in der untenstehenden Liste der "
+"Hauptschlüssel ein, bevor du den Schlüssel aktualisierst."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Der Hauptschlüssel wurde erfolgreich aktualisiert!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "Konnte Notizen nicht exportieren: %s"
+msgstr "Konnte Hauptschlüssel nicht exportieren: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
