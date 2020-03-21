@@ -1,6 +1,7 @@
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 const defaultState = {
 	notes: [],
@@ -49,7 +50,8 @@ const defaultState = {
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
-	historyNotes: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
@@ -102,6 +104,20 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	if (!parent) return [];
 	const output = state.lastSelectedNotesIds[parent.type][parent.id];
 	return output ? output : [];
+};
+
+stateUtils.getLastSeenNote = function(state) {
+	const selectedNoteIds = state.selectedNoteIds;
+	const notes = state.notes;
+	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
+		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
+		if (currNote != null) {
+			return {
+				id: currNote.id,
+				parent_id: currNote.parent_id,
+			};
+		}
+	}
 };
 
 function arrayHasEncryptedItems(array) {
@@ -194,6 +210,15 @@ function handleItemDelete(state, action) {
 	const newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
+	if (listKey === 'notes') {
+		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.id != action.id);
+		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.id != action.id);
+	}
+	if (listKey === 'folders') {
+		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.parent_id != action.id);
+		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.parent_id != action.id);
+	}
+
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
@@ -253,9 +278,25 @@ function defaultNotesParentType(state, exclusion) {
 
 function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	const newState = Object.assign({}, state);
+
+	// Save the last seen note so that back will return to it.
+	if (action.type === 'FOLDER_SELECT' && action.historyAction == 'goto') {
+		const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+
+		// Don't update history if going to the same note again.
+		const lastSeenNote = stateUtils.getLastSeenNote(state);
+		if (lastSeenNote != null && action.id != lastSeenNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
+		}
+
+		newState.backwardHistoryNotes = backwardHistoryNotes;
+		newState.forwardHistoryNotes = forwardHistoryNotes;
+	}
+
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
 		newState.notesParentType = defaultNotesParentType(state, 'Folder');
@@ -265,7 +306,6 @@ function changeSelectedFolder(state, action, options = null) {
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
-	if (options.clearNoteHistory) newState.historyNotes = [];
 	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
@@ -285,7 +325,6 @@ function recordLastSelectedNoteIds(state, noteIds) {
 
 function changeSelectedNotes(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
@@ -295,9 +334,37 @@ function changeSelectedNotes(state, action, options = null) {
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
-		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
+
+		const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+
+		// The historyAction property is only used for user-initiated actions and tells how
+		// the history stack should be handled. That property should not be present for
+		// programmatic navigation. Possible values are:
+		// - "goto": When going to a note, but not via the back/forward arrows.
+		// - "pop": When clicking on the Back arrow
+		// - "push": When clicking on the Forward arrow
+		const lastSeenNote = stateUtils.getLastSeenNote(state);
+		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
+		} else if (action.historyAction === 'pop' && lastSeenNote != null) {
+			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
+				forwardHistoryNotes.push(Object.assign({}, lastSeenNote));
+			}
+			backwardHistoryNotes.pop();
+		} else if (action.historyAction === 'push' && lastSeenNote != null) {
+			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+				backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
+			}
+			forwardHistoryNotes.pop();
+		}
+
+		newState.backwardHistoryNotes = backwardHistoryNotes;
+		newState.forwardHistoryNotes = forwardHistoryNotes;
+
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -325,8 +392,6 @@ function changeSelectedNotes(state, action, options = null) {
 	}
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
-
-	if (options.clearNoteHistory) newState.historyNotes = [];
 
 	return newState;
 }
@@ -416,24 +481,9 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
+				newState = changeSelectedFolder(state, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
-
-				if (action.historyNoteAction) {
-					const historyNotes = newState.historyNotes.slice();
-					if (typeof action.historyNoteAction === 'object') {
-						historyNotes.push(Object.assign({}, action.historyNoteAction));
-					} else if (action.historyNoteAction === 'pop') {
-						historyNotes.pop();
-					}
-					newState.historyNotes = historyNotes;
-				} else if (newState !== state) {
-					// Clear the note history if folder and selected note have actually been changed. For example
-					// they won't change if they are already selected. That way, the "Back" button to go to the
-					// previous note wll stay.
-					newState.historyNotes = [];
-				}
+				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
 
@@ -473,6 +523,7 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote = action.note;
+				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 
 				const noteIsInFolder = function(note, folderId) {
 					if (note.is_conflict) return folderId === Folder.conflictFolderId();
@@ -488,7 +539,7 @@ const reducer = (state = defaultState, action) => {
 					const n = newNotes[i];
 					if (n.id == modNote.id) {
 						// Note is still in the same folder
-						if (noteIsInFolder(modNote, n.parent_id)) {
+						if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
@@ -511,7 +562,7 @@ const reducer = (state = defaultState, action) => {
 				// Note was not found - if the current folder is the same as the note folder,
 				// add it to it.
 				if (!found) {
-					if (noteIsInFolder(modNote, state.selectedFolderId)) {
+					if (isViewingAllNotes || noteIsInFolder(modNote, state.selectedFolderId)) {
 						newNotes.push(modNote);
 					}
 				}
@@ -599,8 +650,12 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_UPDATE_ONE':
-			newState = updateOneItem(state, action);
-			newState = updateOneItem(newState, action, 'selectedNoteTags');
+			{
+				// We only want to update the selected note tags if the tag belongs to the currently open note
+				const selectedNoteHasTag = !!state.selectedNoteTags.find(tag => tag.id === action.item.id);
+				newState = updateOneItem(state, action);
+				if (selectedNoteHasTag) newState = updateOneItem(newState, action, 'selectedNoteTags');
+			}
 			break;
 
 		case 'NOTE_TAG_REMOVE':
@@ -734,14 +789,25 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'SEARCH_SELECT':
-			newState = Object.assign({}, state);
-			newState.selectedSearchId = action.id;
-			if (!action.id) {
-				newState.notesParentType = defaultNotesParentType(state, 'Search');
-			} else {
-				newState.notesParentType = 'Search';
+			{
+				newState = Object.assign({}, state);
+				newState.selectedSearchId = action.id;
+				if (!action.id) {
+					newState.notesParentType = defaultNotesParentType(state, 'Search');
+				} else {
+					newState.notesParentType = 'Search';
+				}
+
+				// Update history when searching
+				const lastSeenNote = stateUtils.getLastSeenNote(state);
+				if (lastSeenNote != null && (state.backwardHistoryNotes.length === 0 ||
+					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != lastSeenNote.id)) {
+					newState.forwardHistoryNotes = [];
+					newState.backwardHistoryNotes.push(Object.assign({},lastSeenNote));
+				}
+
+				newState.selectedNoteIds = [];
 			}
-			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':

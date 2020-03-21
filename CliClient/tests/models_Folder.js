@@ -3,7 +3,7 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -46,7 +46,14 @@ describe('models_Folder', function() {
 	it('should recursively delete notes and sub-notebooks', asyncTest(async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
-		const n1 = await Note.save({ title: 'note1', parent_id: f2.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		const f4 = await Folder.save({ title: 'folder4', parent_id: f1.id });
+
+		const noOfNotes = 20;
+		await createNTestNotes(noOfNotes, f1, null, 'note1');
+		await createNTestNotes(noOfNotes, f2, null, 'note2');
+		await createNTestNotes(noOfNotes, f3, null, 'note3');
+		await createNTestNotes(noOfNotes, f4, null, 'note4');
 
 		await Folder.delete(f1.id);
 

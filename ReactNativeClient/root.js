@@ -412,7 +412,7 @@ async function initialize(dispatch) {
 	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
-	BaseModel.db_ = db;
+	BaseModel.setDb(db);
 
 	KvStore.instance().setDb(reg.db());
 
