@@ -214,7 +214,8 @@ class NoteListComponent extends React.Component {
 			// https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
 			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>;
 		} else {
-			titleComp = <span>{displayTitle}</span>;
+			const pinStyle = item.pinned ? { fontWeight: 'bold' } : {};
+			titleComp = <span style={pinStyle}>{displayTitle}</span>;
 		}
 
 		const watchedIconStyle = {
@@ -448,7 +449,7 @@ class NoteListComponent extends React.Component {
 					backgroundColor: theme.backgroundColor,
 					fontFamily: theme.fontFamily,
 				},
-				style
+				style,
 			);
 			emptyDivStyle.width = emptyDivStyle.width - padding * 2;
 			emptyDivStyle.height = emptyDivStyle.height - padding * 2;

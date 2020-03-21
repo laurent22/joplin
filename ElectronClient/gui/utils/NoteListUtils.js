@@ -32,7 +32,7 @@ class NoteListUtils {
 							noteIds: noteIds,
 						});
 					},
-				})
+				}),
 			);
 
 			menu.append(
@@ -46,7 +46,7 @@ class NoteListUtils {
 							});
 						}
 					},
-				})
+				}),
 			);
 
 			if (props.watchedNoteFiles.indexOf(noteIds[0]) < 0) {
@@ -57,7 +57,7 @@ class NoteListUtils {
 						click: async () => {
 							this.startExternalEditing(noteIds[0]);
 						},
-					})
+					}),
 				);
 			} else {
 				menu.append(
@@ -67,7 +67,7 @@ class NoteListUtils {
 						click: async () => {
 							this.stopExternalEditing(noteIds[0]);
 						},
-					})
+					}),
 				);
 			}
 
@@ -82,7 +82,7 @@ class NoteListUtils {
 								eventManager.emit('noteTypeToggle', { noteId: note.id });
 							}
 						},
-					})
+					}),
 				);
 			} else {
 				const switchNoteType = async (noteIds, type) => {
@@ -101,7 +101,7 @@ class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'note');
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -110,7 +110,7 @@ class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'todo');
 						},
-					})
+					}),
 				);
 			}
 
@@ -126,8 +126,21 @@ class NoteListUtils {
 						}
 						clipboard.writeText(links.join(' '));
 					},
-				})
+				}),
 			);
+
+			if (noteIds.length <= 1) {
+				menu.append(
+					new MenuItem({
+						label: _('Pin Item'),
+						click: async () => {
+							const newNote = await Note.load(noteIds[0]);
+							newNote.pinned = !newNote.pinned;
+							await Note.save(newNote);
+						},
+					}),
+				);
+			}
 
 			menu.append(
 				new MenuItem({
@@ -140,7 +153,7 @@ class NoteListUtils {
 							noteIds: noteIds.slice(),
 						});
 					},
-				})
+				}),
 			);
 
 			const exportMenu = new Menu();
@@ -158,7 +171,7 @@ class NoteListUtils {
 						click: async () => {
 							await InteropServiceHelper.export(props.dispatch.bind(this), module, { sourceNoteIds: noteIds });
 						},
-					})
+					}),
 				);
 			}
 
@@ -172,7 +185,7 @@ class NoteListUtils {
 							noteIds: noteIds,
 						});
 					},
-				})
+				}),
 			);
 
 			const exportMenuItem = new MenuItem({ label: _('Export'), submenu: exportMenu });
@@ -186,7 +199,7 @@ class NoteListUtils {
 				click: async () => {
 					await this.confirmDeleteNotes(noteIds);
 				},
-			})
+			}),
 		);
 
 		return menu;
