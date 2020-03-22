@@ -21,6 +21,8 @@ class FoldersScreenUtils {
 
 		let folders = await Folder.all(folderOptions);
 
+		folders = await Folder.sortLocale(folders, orderDir);
+
 		if (Setting.value('folders.sortOrder.field') === 'last_note_user_updated_time') {
 			folders = await Folder.orderByLastModified(folders, orderDir);
 		}
