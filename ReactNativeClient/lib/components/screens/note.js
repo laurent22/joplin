@@ -37,6 +37,8 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
+const UndoRedoService = require('lib/services/UndoRedoService.ts');
+const undoRedoService = new UndoRedoService();
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -90,6 +92,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			return false;
 		};
+
+		// clear previous stored history
+		undoRedoService.clearHistory();
 
 		this.navHandler = async () => {
 			return await saveDialog();
@@ -194,6 +199,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
+		this.undoButton_onPress = this.undoButton_onPress.bind(this);
+		this.redoButton_onPress = this.redoButton_onPress.bind(this);
 	}
 
 	styles() {
@@ -319,6 +326,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	body_changeText(text) {
 		shared.noteComponent_change(this, 'body', text);
+		undoRedoService.handleText(text);
 		this.scheduleSave();
 	}
 
@@ -341,6 +349,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async saveOneProperty(name, value) {
 		await shared.saveOneProperty(this, name, value);
+	}
+
+	undoButton_onPress() {
+		undoRedoService.undo();
+		const undoNote = undoRedoService.getValue();
+		if (undoNote !== undefined) { this.setState({ note: { body: undoNote } }); }
+	}
+
+	redoButton_onPress() {
+		undoRedoService.redo();
+		const redoNote = undoRedoService.getValue();
+		if (redoNote !== undefined) { this.setState({ note: { body: redoNote } }); }
 	}
 
 	async deleteNote_onPress() {
@@ -912,7 +932,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
-				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
+				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} undoButton_onPress={this.undoButton_onPress} showUndoButton={true} redoButton_onPress={this.redoButton_onPress} showRedoButton={true} />
 				{titleComp}
 				{bodyComponent}
 				{actionButtonComp}

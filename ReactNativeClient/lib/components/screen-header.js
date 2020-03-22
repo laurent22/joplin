@@ -168,6 +168,14 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Search');
 	}
 
+	undoButton_press() {
+		this.props.undoButton_onPress();
+	}
+
+	redoButton_press() {
+		this.props.redoButton_onPress();
+	}
+
 	async duplicateButton_press() {
 		const noteIds = this.props.selectedNoteIds;
 
@@ -253,6 +261,26 @@ class ScreenHeaderComponent extends React.PureComponent {
 				<TouchableOpacity onPress={onPress}>
 					<View style={styles.iconButton}>
 						<Icon name="md-checkmark-circle-outline" style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
+		function undoButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name="md-undo" style={styles.topIcon} />
+					</View>
+				</TouchableOpacity>
+			);
+		}
+
+		function redoButton(styles, onPress) {
+			return (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.iconButton}>
+						<Icon name="md-redo" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -421,6 +449,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const showSideMenuButton = !!this.props.showSideMenuButton && !this.props.noteSelectionEnabled;
 		const showSelectAllButton = this.props.noteSelectionEnabled;
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
+		const showUndoButton = !!this.props.showUndoButton && !this.props.noteSelectionEnabled;
+		const showRedoButton = !!this.props.showRedoButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
 		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
 
@@ -432,6 +462,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
+		const undoButtonComp = !showUndoButton ? null : undoButton(this.styles(), () => this.undoButton_press());
+		const redoButtonComp = !showRedoButton ? null : redoButton(this.styles(), () => this.redoButton_press());
 		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
 		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press()) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
@@ -470,6 +502,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 					{titleComp}
 					{selectAllButtonComp}
 					{searchButtonComp}
+					{undoButtonComp}
+					{redoButtonComp}
 					{deleteButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}
