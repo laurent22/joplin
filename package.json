@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Joplin root package for linting",
   "scripts": {
-    "preinstall": "node build_tools_check.js",
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "gulp watch",
