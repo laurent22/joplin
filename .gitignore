@@ -1,3 +1,17 @@
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
 /app/config/parameters.yml
 /app/config/parameters_dev.yml
 /app/config/parameters_prod.yml
@@ -16,10 +30,8 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-*.sublime-workspace
 Makefile.Debug
 Makefile.Release
-Makefile
 QtClient/build-*
 TODO.md
 *.pro.user
@@ -30,7 +42,6 @@ sparse_test.php
 INFO.md
 /web/env.php
 sync_staging.sh
-*.swp
 _vieux/
 _mydocs
 .DS_Store
@@ -46,8 +57,6 @@ Clipper-source/
 Clipper/joplin-webclipper-source.zip
 joplin-webclipper-source.zip
 Tools/commit_hook.txt
-.vscode/*
-*.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/editors/PlainEditor.js
