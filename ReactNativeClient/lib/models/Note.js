@@ -381,7 +381,9 @@ class Note extends BaseItem {
 		if (options.bodyPattern) {
 			const pattern = options.bodyPattern.replace(/\*/g, '%');
 			options.conditions.push('body LIKE ?');
-			options.conditionsParams.push(pattern);
+			if (options.conditionsParams.indexOf(pattern) < 0) {
+				options.conditionsParams.push(pattern);
+			}
 		}
 
 		return super.search(options);
