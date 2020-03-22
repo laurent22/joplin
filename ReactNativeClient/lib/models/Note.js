@@ -267,11 +267,20 @@ class Note extends BaseItem {
 		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
+	static unescapedPreviewFields() {
+		return ['substr(body,1,120) as preview'];
+	}
+
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
 		return this.db()
 			.escapeFields(fields)
 			.join(',');
+	}
+
+	static unescapedPreviewFieldsSql(fields = null) {
+		if (fields === null) fields = this.unescapedPreviewFields();
+		return `,${fields.join(',')}`;
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -295,10 +304,8 @@ class Note extends BaseItem {
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
-		if (!options.fields) {
-			options.fields = this.previewFields();
-			options.unescapedFields = ',substr(body,1,80) as preview';
-		}
+		if (!options.fields) options.fields = this.previewFields();
+		if (!options.unescapedFields) options.unescapedFields = this.unescapedPreviewFieldsSql();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
@@ -369,8 +376,8 @@ class Note extends BaseItem {
 	}
 
 	static preview(noteId, options = null) {
-		if (!options) options = { fields: null };
-		const fields = this.previewFieldsSql(options.fields) + (options.unescapedFields ? options.unescapedFields : ',substr(body,1,80) as preview');
+		if (!options) options = { fields: null, unescapedFields: null };
+		const fields = this.previewFieldsSql(options.fields) + this.unescapedPreviewFieldsSql(options.unescapedFields);
 		return this.modelSelectOne(`SELECT ${fields} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 

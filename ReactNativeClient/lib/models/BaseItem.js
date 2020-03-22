@@ -710,7 +710,7 @@ class BaseItem extends BaseModel {
 	static displayPreview(item) {
 		if (!item || !item.preview) return '';
 		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
-		return item.preview.length == 80 ? (`${item.preview} ...`) : item.preview;
+		return item.preview;
 	}
 
 	static async markAllNonEncryptedForSync() {

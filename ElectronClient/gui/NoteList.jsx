@@ -191,8 +191,7 @@ class NoteListComponent extends React.Component {
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		const displayTitle = Note.displayTitle(item);
-		const displayBody = Note.displayPreview(item);
-		// const displayBody = item.body;
+		const displayBody = Note.defaultTitleFromBody(Note.displayPreview(item));
 		let titleComp = null;
 
 		if (highlightedWords.length) {
