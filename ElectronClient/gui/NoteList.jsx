@@ -171,7 +171,7 @@ class NoteListComponent extends React.Component {
 		const checkbox = item.is_todo ? (
 			<div style={{ display: 'flex', height: style.height, alignItems: 'center', paddingLeft: hPadding }}>
 				<input
-					style={{ margin: 0, marginBottom: 1, marginRight: 5 }}
+					style={{ margin: 0, marginBottom: 1 }}
 					type="checkbox"
 					defaultChecked={!!item.todo_completed}
 					onClick={event => {
@@ -230,6 +230,7 @@ class NoteListComponent extends React.Component {
 		// item is changed via sync.
 		return (
 			<div key={`${item.id}_${item.todo_completed}`} style={style}>
+				{checkbox}
 				<a
 					ref={ref}
 					className="list-item"
@@ -243,7 +244,6 @@ class NoteListComponent extends React.Component {
 					onDragStart={event => onDragStart(event)}
 					data-id={item.id}
 				>
-					{checkbox}
 					{watchedIcon}
 					{titleComp}
 				</a>
