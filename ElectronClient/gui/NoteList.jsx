@@ -347,6 +347,7 @@ class NoteListComponent extends React.Component {
 			this.props.dispatch({
 				type: 'NOTE_SELECT',
 				id: newSelectedNote.id,
+				historyAction: 'goto',
 			});
 
 			this.itemListRef.current.makeItemIndexVisible(noteIndex);
