@@ -99,6 +99,10 @@ class MainScreenComponent extends React.Component {
 		const createNewNote = async (template, isTodo) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
+			if (!template) {
+				const templateDef = isTodo ? Setting.value('defaultTodo') : Setting.value('defaultNote');
+				if (templateDef != 0) template = Setting.value('availableTemplates')[templateDef - 1].value;
+			}
 
 			const body = template ? TemplateUtils.render(template) : '';
 

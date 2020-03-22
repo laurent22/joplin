@@ -346,6 +346,41 @@ class Setting extends BaseModel {
 					};
 				},
 			},
+			availableTemplates: { value: [], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
+			defaultNote: {
+				value: '0',
+				type: Setting.TYPE_STRING,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Choose default template for new note:'),
+				options: () => {
+					const templates = Setting.value('availableTemplates');
+					const options = { 0: 'None' };
+					for (let i = 0; i < templates.length; i++) {
+						options[i + 1] = templates[i].label;
+					}
+					return options;
+				},
+			},
+			defaultTodo: {
+				value: '0',
+				type: Setting.TYPE_STRING,
+				section: 'note',
+				isEnum: true,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Choose default template for new todo:'),
+				options: () => {
+					const templates = Setting.value('availableTemplates');
+					const options = { 0: 'None' };
+					for (let i = 0; i < templates.length; i++) {
+						options[i + 1] = templates[i].label;
+					}
+					return options;
+				},
+			},
 
 			// Deprecated - use markdown.plugin.*
 			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
