@@ -214,7 +214,7 @@ class NoteListComponent extends React.Component {
 			// https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
 			titleComp = <span dangerouslySetInnerHTML={{ __html: titleElement.outerHTML }}></span>;
 		} else {
-			const pinStyle = item.pinned ? { fontWeight: 'bold' } : {};
+			const pinStyle = item.isPinned ? { fontWeight: 'bold' } : {};
 			titleComp = <span style={pinStyle}>{displayTitle}</span>;
 		}
 

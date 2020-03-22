@@ -132,10 +132,10 @@ class NoteListUtils {
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem({
-						label: _('Pin Item'),
+						label: _('Pin/Unpin note'),
 						click: async () => {
 							const newNote = await Note.load(noteIds[0]);
-							newNote.pinned = !newNote.pinned;
+							newNote.isPinned = !newNote.isPinned;
 							await Note.save(newNote);
 						},
 					}),

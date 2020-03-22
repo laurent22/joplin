@@ -210,8 +210,8 @@ class Note extends BaseItem {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
 
-		const notePinned = note => {
-			return note.pinned;
+		const isPinned = note => {
+			return note.isPinned;
 		};
 
 		const noteFieldComp = (f1, f2) => {
@@ -239,8 +239,8 @@ class Note extends BaseItem {
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
 			if (!noteOnTop(a) && noteOnTop(b)) return +1;
-			if (notePinned(a) && !notePinned(b)) return -1;
-			if (!notePinned(a) && notePinned(b)) return +1;
+			if (isPinned(a) && !isPinned(b)) return -1;
+			if (!isPinned(a) && isPinned(b)) return +1;
 
 			let r = 0;
 
@@ -262,7 +262,7 @@ class Note extends BaseItem {
 
 	static previewFields() {
 		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
-		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied', 'pinned'];
+		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied', 'isPinned'];
 	}
 
 	static previewFieldsSql(fields = null) {
@@ -324,12 +324,9 @@ class Note extends BaseItem {
 			}
 		}
 
-		const cond = options.conditions.slice();
-		cond.push('pinned = 1');
-		const tempOptions = Object.assign({}, options);
-		tempOptions.conditions = cond;
+		const tempOptions = Object.assign({}, options, { conditions: [...options.conditions, 'isPinned = 1'] });
 		const pinnedItems = await this.search(tempOptions);
-		options.conditions.push('pinned = 0');
+		options.conditions.push('isPinned = 0');
 
 		if (!options.showCompletedTodos) {
 			options.conditions.push('todo_completed <= 0');
@@ -356,7 +353,6 @@ class Note extends BaseItem {
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
 
-			// return uncompletedTodos.concat(theRest);
 			return uncompletedTodos.concat(pinnedItems.concat(theRest));
 		}
 
