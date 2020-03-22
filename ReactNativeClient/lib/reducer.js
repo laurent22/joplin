@@ -154,6 +154,10 @@ function folderSetCollapsed(state, action) {
 	return newState;
 }
 
+function removeAdjacentDuplicates(a) {
+	return a.filter((i, idx) => a[idx - 1] != i);
+}
+
 // When deleting a note, tag or folder
 function handleItemDelete(state, action) {
 	const map = {
@@ -222,11 +226,22 @@ function handleItemDelete(state, action) {
 		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.parent_id != action.id);
 	}
 
+	newState.backwardHistoryNotes = removeAdjacentDuplicates(newState.backwardHistoryNotes.map(a => a.id));
+	newState.forwardHistoryNotes = removeAdjacentDuplicates(newState.forwardHistoryNotes.map(a => a.id));
+
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
 	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
+
+	if (newIds.length > 0 && listKey === 'notes') {
+		if (newState.backwardHistoryNotes.length > 0 &&
+			newState.backwardHistoryNotes[newState.backwardHistoryNotes.length - 1] === newIds[0]) { newState.backwardHistoryNotes.pop(); }
+
+		if (newState.forwardHistoryNotes.length > 0 &&
+			newState.forwardHistoryNotes[newState.forwardHistoryNotes.length - 1] === newIds[0]) { newState.forwardHistoryNotes.pop(); }
+	}
 
 	if ((newIds.length == 0) && newState.notesParentType !== 'Folder') {
 		newState.notesParentType = 'Folder';
