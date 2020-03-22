@@ -239,6 +239,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		styles.linkText.borderBottomColor = theme.color;
 		styles.linkText.flex = 0;
 		styles.linkText.fontWeight = 'normal';
+		styles.linkText.fontFamily = 'Roboto';
 
 		styles.headerWrapperStyle = Object.assign({}, styles.settingContainer, theme.headerWrapperStyle);
 
@@ -253,6 +254,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 	renderHeader(key, title) {
 		const theme = themeStyle(this.props.theme);
+		theme.headerStyle.fontFamily = 'Roboto';
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle}>
 				<Text style={theme.headerStyle}>{title}</Text>
