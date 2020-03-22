@@ -1,5 +1,5 @@
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, ScrollView } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -892,57 +892,54 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
-			// Note: blurOnSubmit is necessary to get multiline to work.
-			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <MarkdownEditor
-				ref={this.markdownEditorRef}
-				textInputRefName={this.textInputRefName}
-				editorFont={editorFont(this.props.editorFont)}
-				style={this.styles().bodyTextInput}
-				previewStyles={this.styles().noteBodyViewer}
-				value={note.body}
-				saveText={text => this.body_changeText(text)}
-				blurOnSubmit={false}
-				selectionColor={theme.textSelectionColor}
-				placeholder={_('Add body')}
-				placeholderTextColor={theme.colorFaded}
-				noteBodyViewer={{
-					onJoplinLinkClick: this.onJoplinLinkClick_,
-					ref: 'noteBodyViewer',
-					style: {
-						...this.styles().noteBodyViewer,
-						...this.styles().noteBodyViewerPreview,
-					},
-					webViewStyle: theme,
-					note: note,
-					noteResources: this.state.noteResources,
-					highlightedKeywords: keywords,
-					theme: this.props.theme,
-					noteHash: this.props.noteHash,
-					onCheckboxChange: newBody => {
-						onCheckboxChange(newBody);
-					},
-					onMarkForDownload: this.onMarkForDownload,
-					onLoadEnd: () => {
-						setTimeout(() => {
-							this.setState({ HACK_webviewLoadingState: 1 });
+			bodyComponent = Setting.value('editorBeta')
+				// Note: blurOnSubmit is necessary to get multiline to work.
+				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
+				? <MarkdownEditor
+					ref={this.markdownEditorRef}
+					textInputRefName={this.textInputRefName}
+					editorFont={editorFont(this.props.editorFont)}
+					style={this.styles().bodyTextInput}
+					previewStyles={this.styles().noteBodyViewer}
+					value={note.body}
+					saveText={text => this.body_changeText(text)}
+					blurOnSubmit={false}
+					selectionColor={theme.textSelectionColor}
+					placeholder={_('Add body')}
+					placeholderTextColor={theme.colorFaded}
+					noteBodyViewer={{
+						onJoplinLinkClick: this.onJoplinLinkClick_,
+						ref: 'noteBodyViewer',
+						style: {
+							...this.styles().noteBodyViewer,
+							...this.styles().noteBodyViewerPreview,
+						},
+						webViewStyle: theme,
+						note: note,
+						noteResources: this.state.noteResources,
+						highlightedKeywords: keywords,
+						theme: this.props.theme,
+						noteHash: this.props.noteHash,
+						onCheckboxChange: newBody => {
+							onCheckboxChange(newBody);
+						},
+						onMarkForDownload: this.onMarkForDownload,
+						onLoadEnd: () => {
 							setTimeout(() => {
-								this.setState({ HACK_webviewLoadingState: 0 });
-							}, 50);
-						}, 5);
-					},
-				}}
+								this.setState({ HACK_webviewLoadingState: 1 });
+								setTimeout(() => {
+									this.setState({ HACK_webviewLoadingState: 0 });
+								}, 50);
+							}, 5);
+						},
+					}}
 
-			/>;
-
-			// Old component.
-			// Requires "const { ScrollView } = require('react-native');"
-			//
-			// bodyComponent = (
-			//		<ScrollView persistentScrollbar>
-			//		<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
-			//	</ScrollView>
-			// );
+				/>
+				: (
+					<ScrollView persistentScrollbar>
+						<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
+					</ScrollView>
+				);
 
 		}
 

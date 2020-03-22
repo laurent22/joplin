@@ -323,8 +323,8 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: ['mobile'],
-				label: () => _('Editor beta'),
-				description: () => _('Opt-in to to the beta for the new editor. If you find bugs, please report them in the Discourse forum.'),
+				label: () => _('Opt-in to the editor beta'),
+				description: () => _('This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.'),
 			},
 
 			newTodoFocus: {
