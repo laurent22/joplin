@@ -1633,7 +1633,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextHeading() {
-		this.addListItem('## ','','',true);
+		this.addListItem('## ','','', true);
 	}
 
 	commandTextHorizontalRule() {
