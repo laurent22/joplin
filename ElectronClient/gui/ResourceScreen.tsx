@@ -158,9 +158,12 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
-		return <div>
+		return <div style={theme.containerStyle}>
 			<Header style={headerStyle} />
 			<div style={{ ...style, margin: '20px', overflow: 'scroll' }}>
+				<div style={{ marginBottom: '10px' }}>{
+					_('This is an advanced tool to show the attachments that are links to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
+				}</div>
 				{this.state.isLoading && <div>{_('Please wait...')}</div>}
 				{!this.state.isLoading && <div>
 					{!this.state.resources && <div>
