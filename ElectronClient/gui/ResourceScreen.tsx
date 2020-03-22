@@ -8,9 +8,14 @@ const { Header } = require('./Header.min.js');
 const prettyBytes = require('pretty-bytes');
 const Resource = require('lib/models/Resource.js');
 
+interface Style {
+	width: number
+	height: number
+}
+
 interface Props {
-	style: any;
 	theme: any;
+	style: Style
 }
 
 interface Resource {
@@ -32,6 +37,8 @@ interface ResourceTable {
 	onResourceClick: (resource: Resource) => any
 	onResourceDelete: (resource: Resource) => any
 	onToggleSorting: (order: SortingOrder) => any
+	theme: any
+	style: Style
 }
 
 type SortingOrder = 'size' | 'name'
@@ -45,11 +52,11 @@ interface ActiveSorting {
 const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 	const sortOrderEngagedMarker = (s: SortingOrder) => {
 		return (
-			<a href="#" onClick={ () => props.onToggleSorting(s) }>{
+			<a href="#" style={{ color: props.theme.htmlLinkColor }} onClick={ () => props.onToggleSorting(s) }>{
 				(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴' }</a>
 		);
 	};
-	return <table style={{ width: '90%' }}>
+	return <table style={{ width: props.style.width - 40 }}>
 		<thead>
 			<tr>
 				<th>{_('Title')} { sortOrderEngagedMarker('name') }</th>
@@ -61,13 +68,13 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 		<tbody>
 			{props.resources.map((resource: Resource, index: number) =>
 				<tr key={index}>
-					<td>
-						<a href="#" onClick={() => props.onResourceClick(resource)}>{resource.title}</a>
+					<td style={{ maxWidth: props.style.width * .4, overflow: 'scroll' }}>
+						<a style={{ color: props.theme.htmlLinkColor }} href="#" onClick={() => props.onResourceClick(resource)}>{resource.title}</a>
 					</td>
 					<td>{prettyBytes(resource.size)}</td>
 					<td>{resource.id}</td>
 					<td>
-						<button onClick={ () => props.onResourceDelete(resource) }>{_('Delete')}</button>
+						<button style={props.theme.buttonStyle} onClick={ () => props.onResourceDelete(resource) }>{_('Delete')}</button>
 					</td>
 				</tr>
 			)}
@@ -94,6 +101,7 @@ const MAX_RESOURCES = 10000;
 
 class ResourceScreenComponent extends React.Component<Props, State> {
 	constructor(props: Props) {
+		console.log(props);
 		super(props);
 		this.state = {
 			resources: undefined,
@@ -160,8 +168,8 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 		return <div style={theme.containerStyle}>
 			<Header style={headerStyle} />
-			<div style={{ ...style, margin: '20px', overflow: 'scroll' }}>
-				<div style={{ marginBottom: '10px' }}>{
+			<div style={{ ...style, minWidth: 600, margin: '20px', overflow: 'scroll', color: theme.color, width: this.props.style.width }}>
+				<div style={{ backgroundColor: theme.warningBackgroundColor, padding: '10px', marginBottom: '10px' }}>{
 					_('This is an advanced tool to show the attachments that are links to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
 				}</div>
 				{this.state.isLoading && <div>{_('Please wait...')}</div>}
@@ -174,6 +182,8 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 						<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
 					}
 					{this.state.resources && <ResourceTable
+						theme={theme}
+						style={style}
 						resources={ this.state.resources }
 						sorting={ this.state.sorting }
 						onToggleSorting={ (order) => this.onToggleSortOrder(order) }
