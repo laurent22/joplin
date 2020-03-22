@@ -52,15 +52,17 @@ interface ActiveSorting {
 const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 	const sortOrderEngagedMarker = (s: SortingOrder) => {
 		return (
-			<a href="#" style={{ color: props.theme.htmlLinkColor }} onClick={ () => props.onToggleSorting(s) }>{
-				(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴' }</a>
+			<a href="#"
+				style={{ color: props.theme.htmlLinkColor }}
+				onClick={() => props.onToggleSorting(s)}>{
+					(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴'}</a>
 		);
 	};
 	return <table style={{ width: props.style.width - 40 }}>
 		<thead>
 			<tr>
-				<th>{_('Title')} { sortOrderEngagedMarker('name') }</th>
-				<th>{_('Size')} { sortOrderEngagedMarker('size') }</th>
+				<th>{_('Title')} {sortOrderEngagedMarker('name')}</th>
+				<th>{_('Size')} {sortOrderEngagedMarker('size')}</th>
 				<th>{_('ID')}</th>
 				<th>{_('Action')}</th>
 			</tr>
@@ -69,12 +71,16 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 			{props.resources.map((resource: Resource, index: number) =>
 				<tr key={index}>
 					<td style={{ maxWidth: props.style.width * .4, overflow: 'scroll' }}>
-						<a style={{ color: props.theme.htmlLinkColor }} href="#" onClick={() => props.onResourceClick(resource)}>{resource.title}</a>
+						<a
+							style={{ color: props.theme.htmlLinkColor }}
+							href="#"
+							onClick={() => props.onResourceClick(resource)}>{resource.title || 'Untitled'}
+						</a>
 					</td>
 					<td>{prettyBytes(resource.size)}</td>
 					<td>{resource.id}</td>
 					<td>
-						<button style={props.theme.buttonStyle} onClick={ () => props.onResourceDelete(resource) }>{_('Delete')}</button>
+						<button style={props.theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
 					</td>
 				</tr>
 			)}
@@ -101,7 +107,6 @@ const MAX_RESOURCES = 10000;
 
 class ResourceScreenComponent extends React.Component<Props, State> {
 	constructor(props: Props) {
-		console.log(props);
 		super(props);
 		this.state = {
 			resources: undefined,
@@ -131,6 +136,13 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 
 	onResourceDelete(resource: Resource) {
+		const ok = bridge().showConfirmMessageBox(_('Delete attachment "%s"?', resource.title), {
+			buttons: [_('Delete'), _('Cancel')],
+			defaultId: 1,
+		});
+		if (!ok) {
+			return;
+		}
 		Resource.delete(resource.id)
 			.catch((error: Error) => {
 				bridge().showErrorMessageBox(error.message);
@@ -166,7 +178,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
-		return <div style={theme.containerStyle}>
+		return <div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily }}>
 			<Header style={headerStyle} />
 			<div style={{ ...style, minWidth: 600, margin: '20px', overflow: 'scroll', color: theme.color, width: this.props.style.width }}>
 				<div style={{ backgroundColor: theme.warningBackgroundColor, padding: '10px', marginBottom: '10px' }}>{
@@ -184,11 +196,11 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 					{this.state.resources && <ResourceTable
 						theme={theme}
 						style={style}
-						resources={ this.state.resources }
-						sorting={ this.state.sorting }
-						onToggleSorting={ (order) => this.onToggleSortOrder(order) }
-						onResourceClick={ (resource) => this.openResource(resource) }
-						onResourceDelete={ (resource) => this.onResourceDelete(resource) }
+						resources={this.state.resources}
+						sorting={this.state.sorting}
+						onToggleSorting={(order) => this.onToggleSortOrder(order)}
+						onResourceClick={(resource) => this.openResource(resource)}
+						onResourceDelete={(resource) => this.onResourceDelete(resource)}
 					/>}
 				</div>
 				}
