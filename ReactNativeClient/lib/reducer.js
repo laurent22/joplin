@@ -235,6 +235,7 @@ function handleItemDelete(state, action) {
 	}
 	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
+	// make sure the new selected note is not also the last in history
 	if (newIds.length > 0 && listKey === 'notes') {
 		if (newState.backwardHistoryNotes.length > 0 &&
 			newState.backwardHistoryNotes[newState.backwardHistoryNotes.length - 1] === newIds[0]) { newState.backwardHistoryNotes.pop(); }
@@ -308,7 +309,7 @@ function changeSelectedFolder(state, action, options = null) {
 		const lastSeenNote = stateUtils.getLastSeenNote(state);
 		if (lastSeenNote != null && action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(Object.assign({}, lastSeenNote)).slice(-MAX_HISTORY);
+			backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
 		}
 
 		newState.backwardHistoryNotes = backwardHistoryNotes;
@@ -367,15 +368,15 @@ function changeSelectedNotes(state, action, options = null) {
 		const lastSeenNote = stateUtils.getLastSeenNote(state);
 		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(Object.assign({}, lastSeenNote)).slice(-MAX_HISTORY);
+			backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
 		} else if (action.historyAction === 'goBackward' && lastSeenNote != null) {
 			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
-				forwardHistoryNotes = forwardHistoryNotes.concat(Object.assign({}, lastSeenNote)).slice(-MAX_HISTORY);
+				forwardHistoryNotes = forwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
 			}
 			backwardHistoryNotes.pop();
 		} else if (action.historyAction === 'goForward' && lastSeenNote != null) {
 			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-				backwardHistoryNotes = backwardHistoryNotes.concat(Object.assign({}, lastSeenNote)).slice(-MAX_HISTORY);
+				backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
 			}
 			forwardHistoryNotes.pop();
 		}
@@ -821,7 +822,7 @@ const reducer = (state = defaultState, action) => {
 				if (lastSeenNote != null && (state.backwardHistoryNotes.length === 0 ||
 					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != lastSeenNote.id)) {
 					newState.forwardHistoryNotes = [];
-					newState.backwardHistoryNotes = newState.backwardHistoryNotes.concat(Object.assign({}, lastSeenNote)).slice(-MAX_HISTORY);
+					newState.backwardHistoryNotes = newState.backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
 				}
 
 				newState.selectedNoteIds = [];

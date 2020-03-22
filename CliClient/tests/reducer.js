@@ -475,8 +475,6 @@ describe('Reducer', function() {
 		state = goToNote(notes, [2], state);
 		state = goToNote(notes, [3], state);
 		state = goToNote(notes, [4], state); // last seen note is notes[4]
-
-
 		// go to second folder
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
 		state = goToNote(notes, [5], state);
@@ -492,6 +490,81 @@ describe('Reducer', function() {
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
 		expect(state.lastSelectedNotesIds.Folder[folders[1].id]).toEqual([notes[6].id]);
 
+	}));
+
+	it('should ensure that history is free of adjacent duplicates', asyncTest(async () => {
+
+		// create 1 folder
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// backward = 0 1 2 3 2 3 2 3 2 3 2
+		// forward =
+		// current = 3
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+
+
+		expect(state.backwardHistoryNotes.length).toEqual(11);
+		expect(state.forwardHistoryNotes.length).toEqual(0);
+
+		// backward = 0 1 2 3 2 3 2 3 2 3
+		// forward = 3
+		// current = 2
+		state = goBackWard(state);
+
+		// backward = 0 1 2 3 2 3 2 3 2
+		// forward = 3 2
+		// current = 3
+		state = goBackWard(state);
+
+		// backward = 0 1 2 3 2 3 2 3
+		// forward = 3 2 3
+		// current = 2
+		state = goBackWard(state);
+
+
+		// backward = 0 1 2 3 2 3 2
+		// forward = 3 2 3 2
+		// current = 3
+		state = goBackWard(state);
+
+
+		expect(state.backwardHistoryNotes.length).toEqual(7);
+		expect(state.forwardHistoryNotes.length).toEqual(4);
+
+		// delete third note
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+
+		// Expected, if adjacent duplicates not removed
+		// backward = 0 1 3 3
+		// forward = 3 3
+		// current = 3
+
+		// Expected, if adjacent duplicates ARE removed
+		// backward = 0 1 3
+		// forward = 3
+		// current = 3
+
+		// Expected, if adjacent duplicates ARE removed and latest history does not contain current note
+		// backward = 0 1
+		// forward =
+		// current = 3
+
+		expect(state.backwardHistoryNotes).toEqual([notes[0].id, notes[1].id]);
+		expect(state.forwardHistoryNotes).toEqual([]);
 	}));
 
 });
