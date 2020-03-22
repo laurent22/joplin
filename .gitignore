@@ -33,6 +33,7 @@
 /web/bundles/
 Makefile.Debug
 Makefile.Release
+Makefile
 QtClient/build-*
 TODO.md
 *.pro.user
@@ -43,6 +44,7 @@ sparse_test.php
 INFO.md
 /web/env.php
 sync_staging.sh
+*.swp
 _vieux/
 _mydocs
 .DS_Store
@@ -58,6 +60,7 @@ Clipper-source/
 Clipper/joplin-webclipper-source.zip
 joplin-webclipper-source.zip
 Tools/commit_hook.txt
+*.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/editors/PlainEditor.js
