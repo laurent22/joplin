@@ -190,6 +190,29 @@ class Folder extends BaseItem {
 		return output;
 	}
 
+	static async sortLocale(folders, orderDir = 'ASC') {
+
+		orderDir = orderDir.toUpperCase();
+
+		const output = folders.slice();
+
+		const mod = orderDir === 'ASC' ? +1 : -1;
+
+		const collator = new Intl.Collator(undefined, {
+			numeric: true,
+			sensitivity: 'base',
+		});
+
+		//  By passing the numeric: true option, it will smartly recognize numbers.
+		//  sensitivity: 'base' makes sorting CASE-INSENSITIVE
+
+		output.sort(function(a, b) {
+			return collator.compare(a.title, b.title) * mod;
+		});
+
+		return output;
+	}
+
 	static async all(options = null) {
 		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
