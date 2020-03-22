@@ -364,7 +364,8 @@ class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		return pinnedItems.concat(this.search(options));
+		const theRest = await this.search(options);
+		return pinnedItems.concat(theRest);
 	}
 
 	static preview(noteId, options = null) {
