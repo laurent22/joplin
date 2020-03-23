@@ -45,12 +45,12 @@ msgstr "Seçili defter yok."
 msgid "No notebook has been specified."
 msgstr "Hiçbir not defteri belirtilmedi."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
 msgstr "E"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "n"
 msgstr "e"
@@ -86,7 +86,7 @@ msgstr "Şifrelenmiş öğe değiştirilemiyor"
 msgid "Missing required argument: %s"
 msgstr "Gerekli argüman eksik gözüküyor: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
 #, javascript-format
 msgid "%s: %s"
@@ -105,31 +105,31 @@ msgstr "Yanlış cevap: %s"
 msgid "Attaches the given file to the note."
 msgstr "Verilen dosyayı nota ekler."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
 #, javascript-format
@@ -194,23 +194,23 @@ msgstr ""
 "E2EE ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`, `status`, "
 "`decrypt-file` and `target-status`."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
 msgid "Enter master password:"
 msgstr "Ana parolayı girin:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
 msgid "Operation cancelled"
 msgstr "İşlem iptal edildi"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:162
 msgid "Confirm password:"
 msgstr "Parolayı doğrula:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
 msgstr "Parolalar eşleşmiyor!"
@@ -227,14 +227,14 @@ msgstr ""
 msgid "Completed decryption."
 msgstr "Şifre çözümü tamamlandı."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 msgid "Enabled"
 msgstr "Etkin"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
@@ -243,7 +243,7 @@ msgstr "Etkin"
 msgid "Disabled"
 msgstr "Pasif"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 #, javascript-format
 msgid "Encryption is: %s"
@@ -382,37 +382,37 @@ msgstr "Kaynak biçimi: %s"
 msgid "Do not ask for confirmation."
 msgstr "Onay için sorma."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Found: %d."
 msgstr "Bulundu: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
 msgstr "Yaratıldı: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Güncellenme: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Atlandı: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Kaynaklar: %d."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
@@ -422,7 +422,7 @@ msgstr "Etiketlenen: %d."
 msgid "Importing notes..."
 msgstr "Notlar içe aktarılıyor..."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Either \"text\" or \"json\""
 msgstr "\"metin\" ya da \"json\""
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
@@ -486,7 +486,7 @@ msgstr "Yeni bir not defteri oluşturur."
 msgid "Creates a new note."
 msgstr "Yeni bir not oluşturur."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
 msgid "Notes can only be created within a notebook."
 msgstr "Notlar yalnızca bir not defterinde oluşturulabilir."
@@ -511,7 +511,7 @@ msgstr "Verilen not defterini siler."
 msgid "Deletes the notebook without asking for confirmation."
 msgstr "Onay istemeden not defterini siler."
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
@@ -533,7 +533,7 @@ msgstr "Onay istemeden notları siler."
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d not eşleşti. Silinsin mi?"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:350
 msgid "Delete note?"
 msgstr "Notu sil?"
@@ -561,7 +561,7 @@ msgstr "Sunucu zaten %d portunda çalışıyor"
 msgid "Server is running on port %d"
 msgstr "Sunucu %d portunda çalışıyor"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
 msgstr "Sunucu çalışmıyor."
@@ -593,14 +593,14 @@ msgstr ""
 "Sağlanan hedefe senkronize et (varsayılan olarak sync.target değeri "
 "kullanılır)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Yetkilendirme tamamlanmadı (yetkilendirme anahtarı karşılanmadı)"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
@@ -610,14 +610,14 @@ msgstr ""
 "Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen "
 "aşağıdaki adımları izleyin:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'yi tarayıcınızda açın:"
 
-#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89 
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
@@ -801,36 +801,36 @@ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:469 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:469
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
 msgid "PDF File"
 msgstr "PDF Dosyası"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:489 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:489
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "Senkronizasyon Durumu"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:499 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:499
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:621
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "Yeni not"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:511 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:511
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:630
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "Yeni yapılacak"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:523 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:523
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:639
 msgid "New notebook"
 msgstr "Yeni not defteri"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:534 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:534
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
 msgid "New sub-notebook"
 msgstr "Yeni alt not defteri"
@@ -859,12 +859,12 @@ msgstr "Taslak dizinini aç"
 msgid "Refresh templates"
 msgstr "Taslakları güncelle"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:615 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:615
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "Seçenekler"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
 msgid "Resources"
 msgstr "Kaynaklar"
@@ -895,17 +895,17 @@ msgstr "Yeni sürüm: %s"
 msgid "Profile Version: %s"
 msgstr "Profil sürümü: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:797
 msgid "Copy"
 msgstr "Kopyala"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:126 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:126
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:139
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:180
@@ -926,12 +926,12 @@ msgstr "Kopyala"
 msgid "OK"
 msgstr "OK"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:766
 msgid "&File"
 msgstr "&Dosya"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:689 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:689
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1088
 msgid "About Joplin"
 msgstr "Joplin hakkında"
@@ -940,31 +940,31 @@ msgstr "Joplin hakkında"
 msgid "Preferences..."
 msgstr "Tercihler..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:706 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:706
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
 msgid "Check for updates..."
 msgstr "Güncellemeleri kontrol et..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:720 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:720
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:780
 msgid "Templates"
 msgstr "Şablonlar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "İçe aktar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:731 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:788 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:731
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:788
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
 msgid "Export"
 msgstr "Dışa aktar"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:737 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:737
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:723
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
@@ -1000,12 +1000,12 @@ msgstr "Yapıştır"
 msgid "Select all"
 msgstr "Tümünü seç"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1679
 msgid "Bold"
 msgstr "Kalın"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:848 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:848
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1687
 msgid "Italic"
 msgstr "İtalik"
@@ -1014,24 +1014,24 @@ msgstr "İtalik"
 msgid "Link"
 msgstr "Bağlantı"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:870 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:870
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1707
 msgid "Code"
 msgstr "Kod"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:884 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:884
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1767
 msgid "Insert Date Time"
 msgstr "Tarih Ekle"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:898 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:898
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1790
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
 msgid "Edit in external editor"
 msgstr "Harici editörde düzenle"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:909 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:909
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1608
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1799
@@ -1058,7 +1058,7 @@ msgstr "Mevcut notta ara"
 msgid "&View"
 msgstr "&Görüntüle"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:603
 msgid "Toggle sidebar"
 msgstr "Kenar çubuğunu aç / kapat"
@@ -1067,7 +1067,7 @@ msgstr "Kenar çubuğunu aç / kapat"
 msgid "Layout button sequence"
 msgstr "Düzen butonu sıralaması"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:612
 msgid "Toggle note list"
 msgstr "Not listesini aç/kapat"
@@ -1108,7 +1108,7 @@ msgstr "Web sitesi ve dökümanlar"
 msgid "Joplin Forum"
 msgstr "Joplin Forum"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:493
 msgid "Make a donation"
 msgstr "Bağış yapın"
@@ -1126,8 +1126,8 @@ msgstr "Aç %s"
 msgid "Exit"
 msgstr "Çıkış"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
@@ -1349,7 +1349,7 @@ msgstr "Düzenle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
 #:  
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:279 
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:279
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
 #:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1644
