@@ -13,6 +13,7 @@ const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const KvStore = require('lib/services/KvStore');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -287,6 +288,23 @@ class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
+	static async getUpdatedPreview(noteId) {
+		return await KvStore.instance().value(noteId);
+	}
+
+	static previewFromHtml(html) {
+		if (!html) return;
+		const tempElement = document.createElement('div');
+		tempElement.innerHtml = html;
+		const paragraphs = tempElement.getElementsByTagName('p');
+		let preview = '';
+		for (let i = 0; i < paragraphs.length && preview.length < 100; i++) {
+			preview += paragraphs[i].innerText;
+		}
+
+		return preview.substr(0,100);
+	}
+
 	static async previews(parentId, options = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
@@ -362,12 +380,17 @@ class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
-		return this.search(options);
+		const items = await this.search(options);
+
+		for (const item of items) {
+			item.preview = await KvStore.instance().value(item.id);
+		}
+		return items;
 	}
 
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null, unescapedFields: null };
-		const fields = this.previewFieldsSql(options.fields) + this.unescapedPreviewFieldsSql(options.unescapedFields);
+		const fields = this.previewFieldsSql(options.fields);
 		return this.modelSelectOne(`SELECT ${fields} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
 	}
 
