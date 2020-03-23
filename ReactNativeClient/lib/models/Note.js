@@ -267,20 +267,11 @@ class Note extends BaseItem {
 		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
 	}
 
-	static unescapedPreviewFields() {
-		return ['substr(body,1,120) as preview'];
-	}
-
 	static previewFieldsSql(fields = null) {
 		if (fields === null) fields = this.previewFields();
 		return this.db()
 			.escapeFields(fields)
 			.join(',');
-	}
-
-	static unescapedPreviewFieldsSql(fields = null) {
-		if (fields === null) fields = this.unescapedPreviewFields();
-		return `,${fields.join(',')}`;
 	}
 
 	static async loadFolderNoteByField(folderId, field, value) {
@@ -305,7 +296,6 @@ class Note extends BaseItem {
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
-		if (!options.unescapedFields) options.unescapedFields = this.unescapedPreviewFieldsSql();
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
