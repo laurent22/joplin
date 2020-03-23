@@ -29,6 +29,17 @@ const styles = StyleSheet.create({
 	},
 });
 
+const MarkdownPreviewButton = (props) =>
+	<TouchableOpacity
+		onPress={props.convertMarkdown}
+		style={{ padding: 8, borderRightWidth: 1, borderColor: FOREGROUND_COLOR }}>
+		<Image
+			style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
+			source={require('./static/visibility.png')}
+			resizeMode="cover"
+		/>
+	</TouchableOpacity>;
+
 export default class MarkdownEditor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -95,6 +106,7 @@ export default class MarkdownEditor extends React.Component {
 				}
 			}
 		}
+		// Hide Markdown preview on text change
 		this.setState({ text: result, showPreview: false });
 		this.props.saveText(result);
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
@@ -107,8 +119,6 @@ export default class MarkdownEditor extends React.Component {
 	focus = () => this.textAreaRef.current.focus()
 
 	convertMarkdown = () => this.setState({ showPreview: !this.state.showPreview })
-
-	renderPreview = () => <NoteBodyViewer {...this.props.noteBodyViewer} />
 
 	render() {
 		const WrapperView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
@@ -127,21 +137,15 @@ export default class MarkdownEditor extends React.Component {
 					ref={this.textAreaRef}
 					selection={selection}
 				/>
-				{showPreview ? this.renderPreview() : null}
+				{showPreview && <NoteBodyViewer {...this.props.noteBodyViewer} />}
 				<View style={styles.buttonContainer}>
-					<TouchableOpacity
-						onPress={this.convertMarkdown}
-						style={{ padding: 8, borderRightWidth: 1, borderColor: FOREGROUND_COLOR }}>
-						<Image
-							style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
-							source={require('./static/visibility.png')}
-							resizeMode="cover"
-						/>
-					</TouchableOpacity>
+					<MarkdownPreviewButton convertMarkdown={this.convertMarkdown} />
 					{renderFormatButtons(
 						{
 							getState: () => this.state,
 							setState: (state, callback) => {
+								// Hide Markdown preview on text change
+								this.setState({ showPreview: false });
 								this.setState(state, callback);
 							},
 						},
