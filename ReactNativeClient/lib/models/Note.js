@@ -368,8 +368,13 @@ class Note extends BaseItem {
 			tempOptions.conditions = cond;
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
+			const items = uncompletedTodos.concat(theRest);
 
-			return uncompletedTodos.concat(theRest);
+			for (const item of items) {
+				item.preview = await KvStore.instance().value(item.id);
+			}
+
+			return items;
 		}
 
 		if (hasNotes && hasTodos) {
