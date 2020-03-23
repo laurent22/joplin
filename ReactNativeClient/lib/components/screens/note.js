@@ -834,7 +834,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view') {
+		if (this.state.mode == 'view' && !Setting.value('editor.beta')) {
 			const onCheckboxChange = newBody => {
 				this.saveOneProperty('body', newBody);
 			};
@@ -984,7 +984,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{!Setting.value('editor.beta') && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
