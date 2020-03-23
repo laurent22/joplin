@@ -35,7 +35,8 @@ export default class MarkdownEditor extends React.Component {
 		this.state = {
 			text: props.value,
 			selection: { start: 0, end: 0 },
-			showPreview: props.showPreview ? props.showPreview : false,
+			// Show preview by default
+			showPreview: props.showPreview ? props.showPreview : true,
 		};
 		this.textAreaRef = React.createRef(); // For focusing the textarea
 	}
@@ -94,7 +95,7 @@ export default class MarkdownEditor extends React.Component {
 				}
 			}
 		}
-		this.setState({ text: result });
+		this.setState({ text: result, showPreview: false });
 		this.props.saveText(result);
 		if (this.props.onMarkdownChange) this.props.onMarkdownChange(input);
 	};
