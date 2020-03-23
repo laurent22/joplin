@@ -229,16 +229,13 @@ msgstr "Şifre çözümü tamamlandı."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 msgid "Enabled"
 msgstr "Etkin"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 msgid "Disabled"
 msgstr "Pasif"
@@ -602,7 +599,6 @@ msgstr "Yetkilendirme tamamlanmadı (yetkilendirme anahtarı karşılanmadı)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
@@ -612,14 +608,12 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'yi tarayıcınızda açın:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Adım 2: Dropbox tarafından sağlanan kodu girin:"
@@ -813,14 +807,12 @@ msgstr "Senkronizasyon Durumu"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:499
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:621
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "Yeni not"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:511
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:630
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "Yeni yapılacak"
@@ -907,21 +899,13 @@ msgstr "Kopyala"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:126
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:139
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:180
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:749
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:30
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:234
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
 msgid "OK"
 msgstr "OK"
@@ -959,14 +943,12 @@ msgstr "İçe aktar"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:731
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:788
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
 msgid "Export"
 msgstr "Dışa aktar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:737
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:723
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "Senkronize"
@@ -1026,22 +1008,16 @@ msgstr "Tarih Ekle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:898
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1790
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
 msgid "Edit in external editor"
 msgstr "Harici editörde düzenle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:909
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1608
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1799
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:778
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "Etiketler"
@@ -1129,33 +1105,19 @@ msgstr "Çıkış"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:241
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:318
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:723
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:156
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:183
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
 msgid "Cancel"
 msgstr "İptal et"
@@ -1290,7 +1252,6 @@ msgid "Notes and settings are stored in: %s"
 msgstr "Notlar ve ayarlar şu konumda saklanır: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:165
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
 msgid "Check synchronisation configuration"
 msgstr "Senkronizasyon yapılandırmasını kontrol et"
@@ -1304,7 +1265,6 @@ msgid "Checking..."
 msgstr "Kontrol ediliyor..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:182
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
 msgid "Error"
 msgstr "Hata"
@@ -1342,16 +1302,13 @@ msgid "Browse..."
 msgstr "Gözat..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:879
 msgid "Edit"
 msgstr "Düzenle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:279
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1644
 msgid "Back"
 msgstr "Geri"
@@ -1361,13 +1318,11 @@ msgid "Apply"
 msgstr "Uygula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
 msgid "Submit"
 msgstr "Gönder"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:95
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
 msgid "Save"
 msgstr "Kaydet"
@@ -1387,11 +1342,8 @@ msgstr ""
 "gibi verinizi şifreleme ve şifre çözmede kullanılacaktır."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:26
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
 msgid "ID"
 msgstr "Kimlik"
@@ -1453,9 +1405,7 @@ msgstr ""
 "Önemli: Bu işlemi cihaz başına SADECE BİR KERE yapmanız yeterlidir."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
 msgid "Status"
 msgstr "Durum"
@@ -1537,9 +1487,7 @@ msgid "Some items cannot be synchronised."
 msgstr "Bazı öğeler senkronize edilemiyor."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:518
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:530
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:554
 msgid "View them now"
 msgstr "Şimdi görüntüle"
@@ -1575,7 +1523,6 @@ msgid "More info"
 msgstr "Daha fazla bilgi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:647
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1075
 msgid "Layout"
 msgstr "Düzen"
@@ -1605,7 +1552,6 @@ msgid "Content properties"
 msgstr "İçerik özellikleri"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
 msgstr "Kapat"
@@ -1642,7 +1588,6 @@ msgid "URL"
 msgstr "URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:997
 msgid "Note History"
 msgstr "Not Geçmişi"
@@ -1656,7 +1601,6 @@ msgid "Previous versions of this note"
 msgstr "Bu notun önceki versiyonları"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1823
 msgid "Note properties"
 msgstr "Not özellikleri"
@@ -1671,7 +1615,6 @@ msgid "This note has no history"
 msgstr "Bu not değiştirildi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:855
 #, javascript-format
 msgid "Unsupported link or message: %s"
@@ -1742,9 +1685,7 @@ msgid "emphasized text"
 msgstr "vurgulanan metin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1565
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1569
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1578
 msgid "List item"
 msgstr "Öğeyi listele"
@@ -1754,15 +1695,12 @@ msgid "Insert Hyperlink"
 msgstr "Köprü Link ekle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1601
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1715
 msgid "Attach file"
 msgstr "Dosya ekle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1616
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1817
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:686
 msgid "Set alarm"
 msgstr "Alarm kur"
@@ -1846,17 +1784,11 @@ msgid "Action"
 msgstr "İşlem"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:185
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:325
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:728
 msgid "Delete"
 msgstr "Sil"
@@ -1918,7 +1850,6 @@ msgid "Remove"
 msgstr "Sil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:285
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -1940,36 +1871,29 @@ msgid "Remove this search from the sidebar?"
 msgstr "Bu aramayı kenar çubuğundan kaldır?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:338
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:388
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
 msgid "Rename"
 msgstr "Yeniden adlandır"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:756
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:359
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
 msgid "All notes"
 msgstr "Tüm notlar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:761
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:363
 msgid "Notebooks"
 msgstr "Not defterleri"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:796
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "Şifresi çözülenler: %d/%d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:801
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -1980,7 +1904,6 @@ msgid "Please select where the sync status should be exported to"
 msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:87
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
 msgid "Retry"
 msgstr "Yeniden dene"
@@ -1990,7 +1913,6 @@ msgid "Add or remove tags"
 msgstr "Etiket ekle veya kaldır"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
 msgid "Duplicate"
 msgstr "Çoğalt"
@@ -2017,7 +1939,6 @@ msgid "Switch to to-do type"
 msgstr "Yapılacaklar tipine dönüştür"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Copy Markdown link"
 msgstr "Markdown bağlantısını kopyala"
@@ -2054,9 +1975,7 @@ msgid "Goto Anything..."
 msgstr "Şuraya Git..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:136
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:149
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:180
 #, javascript-format
 msgid "Usage: %s"
@@ -2147,11 +2066,8 @@ msgstr ""
 "tekrar başlatmak sorunu çözebilir."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:707
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
 msgid "Untitled"
 msgstr "Başlıksız"
@@ -2243,13 +2159,11 @@ msgid "Encrypted items cannot be modified"
 msgstr "Şifrelenmiş öğeler değiştirilemez"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
 msgid "title"
 msgstr "başlık"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
 msgid "updated date"
 msgstr "güncelleme zamanı"
@@ -2443,25 +2357,19 @@ msgid "Show note counts"
 msgstr "Not sayacını göster"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
 msgid "Editor"
 msgstr "Düzenleyici"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Viewer"
 msgstr "Görünteleyici"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Split View"
 msgstr "Görünümü böl"
@@ -2472,11 +2380,8 @@ msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
 #, javascript-format
 msgid "%s / %s"
@@ -2504,7 +2409,6 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:299
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
 msgid "Reverse sort order"
 msgstr "Sıralamayı değiştir"
@@ -2522,13 +2426,11 @@ msgid "When creating a new to-do:"
 msgstr "Yeni bir yapılacak oluşturulurken:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
 msgid "Focus title"
 msgstr "Başlığa odaklan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:330
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:345
 msgid "Focus body"
 msgstr "Gövde kısmına odaklan"
@@ -2663,9 +2565,7 @@ msgid "Synchronisation interval"
 msgstr "Senkronizasyon aralığı"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:496
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
 #, javascript-format
 msgid "%d minutes"
@@ -2677,7 +2577,6 @@ msgid "%d hour"
 msgstr "%d saat"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
 #, javascript-format
 msgid "%d hours"
@@ -2832,19 +2731,16 @@ msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "\"%s\" etiketi mevcut. Lütfen başka isim seçin."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
 msgid "Joplin Export File"
 msgstr "Joplin Dışa Aktarım Dosyası"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
 msgid "Markdown"
 msgstr "Markdown"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
 msgid "Joplin Export Directory"
 msgstr "Joplin Dışa Aktarım Dizini"
@@ -2955,9 +2851,7 @@ msgid "Downloaded and decrypted"
 msgstr "İndirildi ve şifresi çözüldü"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
 #, javascript-format
 msgid "%s: %d"
@@ -3089,7 +2983,6 @@ msgid "New Notebook"
 msgstr "Yeni Not Defteri"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
 msgid "Configuration"
 msgstr "Yapılandırma"
@@ -3172,7 +3065,6 @@ msgid "Warning"
 msgstr "Uyarı"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
 msgid ""
 "In order to use file system synchronisation your permission to write to "
@@ -3186,7 +3078,6 @@ msgid "Information"
 msgstr "Bilgi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:262
 msgid "Encryption Config"
 msgstr "Yapılandırmayı şifrele"
@@ -3200,7 +3091,6 @@ msgid "Sync Status"
 msgstr "Senkronizasyon Durumu"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:437
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
 msgid "Log"
 msgstr "Log"
@@ -3299,14 +3189,12 @@ msgid "Master Key %s"
 msgstr "Ana Anahtar %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:633
 #, javascript-format
 msgid "Created: %s"
 msgstr "Oluşturulma: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:151
 msgid "Password:"
 msgstr "Parola:"
@@ -3380,9 +3268,7 @@ msgid "Enter notebook title"
 msgstr "Not defteri başlığını girin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
-#:  
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
 msgid "Refresh"
 msgstr "Yenile"
