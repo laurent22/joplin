@@ -1,4 +1,4 @@
-class UndoRedoService {
+export class UndoRedoService {
 	totalKeyEventCount:any;
 	totalClickEventCount:any;
 	textHistory:string[];
@@ -46,5 +46,3 @@ class UndoRedoService {
 		this.text = this.textHistory[this.textHistory.length - this.totalClickEventCount];
 	}
 }
-
-module.exports = UndoRedoService;
