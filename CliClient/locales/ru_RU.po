@@ -7,15 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Artyom Karlov <artyom.karlov@gmail.com>\n"
-"Language-Team: \n"
+"Last-Translator: Sergey Segeda <thesermanarm@gmail.com>\n"
+"Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -774,9 +776,8 @@ msgid "Sidebar"
 msgstr "Боковая панель"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:372
-#, fuzzy
 msgid "Note list"
-msgstr "История заметок"
+msgstr "Список заметок"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:378
 msgid "Note title"
@@ -854,9 +855,8 @@ msgstr "Настройки"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "Ресурсов: %d."
+msgstr "Ресурсы: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:650
 #, javascript-format
@@ -869,19 +869,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Завершено: %s"
+msgstr "Идентификатор клиента: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:660
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Новая версия: %s"
+msgstr "Синхронизированная версия: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:661
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Новая версия: %s"
+msgstr "Версия профиля: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
@@ -1054,15 +1054,15 @@ msgstr "Фокус"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1031
 msgid "Actual Size"
-msgstr ""
+msgstr "Фактический размер"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1037
 msgid "Zoom In"
-msgstr ""
+msgstr "Приблизить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1043
 msgid "Zoom Out"
-msgstr ""
+msgstr "Отдалить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1051
 msgid "&Tools"
@@ -1087,7 +1087,7 @@ msgstr "Пожертвовать"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1076
 msgid "Toggle development tools"
-msgstr "Включить средства разработки"
+msgstr "Включить инструменты разработки"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1211
 #, javascript-format
@@ -1324,7 +1324,7 @@ msgstr "Сохранить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Мастер-ключи, которые нуждаются в обновлении"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1332,6 +1332,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Следующие мастер-ключи используют устаревший алгоритм шифрования, "
+"рекомендуется их обновить. Обновленный мастер ключ по-прежнему сможет "
+"расшифровывать и шифровать ваши данные, как обычно."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1342,24 +1345,28 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Обновить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "Выбрать дату"
+msgstr "Повторно зашифровать данные"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Метод шифрования по умолчанию был изменен на более безопасный, рекомендуется "
+"применять его к своим данным."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Вы можете использовать инструмент ниже для повторного шифрования ваших "
+"данных, например, если вы знаете, что некоторые из ваших заметок зашифрованы "
+"с использованием устаревшего метода шифрования."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1378,6 +1385,19 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"Для этого весь ваш набор данных должен быть зашифрован и синхронизирован, "
+"поэтому лучше всего запускать процесс на ночь.\n"
+"\n"
+"Для начала, пожалуйста, следуйте этим инструкциям:\n"
+"\n"
+"1. Синхронизируйте все ваши устройства.\n"
+"2. Нажмите “%s”.\n"
+"3. Ждите завершения. Во время работы избегайте изменения заметок на других "
+"устройствах, чтобы избежать конфликтов.\n"
+"4. После завершения синхронизации на этом устройстве синхронизируйте все "
+"остальные устройства и ждите завершения.\n"
+"\n"
+"Важно: вам нужно запустить процесс ОДИН РАЗ на одном устройстве."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1403,16 +1423,15 @@ msgstr "Загрузить сейчас:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Иконка"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "Свойства заметки"
+msgstr "Свойства блокнота"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1480,18 +1499,18 @@ msgid "Set the password"
 msgstr "Установить пароль"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Для одного или нескольких мастер-ключей требуется пароль."
+msgstr "Один из ваших мастер-ключей использует устаревший метод шифрования."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"Метод шифрования по умолчанию был изменен, вы должны повторно зашифровать "
+"свои данные."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
 msgid "More info"
 msgstr "Дополнительная информация"
 
@@ -1506,24 +1525,23 @@ msgstr "Поиск..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Cлова"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Символы"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Символы за исключением пробелов"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Строки"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "Свойства заметки"
+msgstr "Свойства контента"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
@@ -1548,9 +1566,8 @@ msgid "Updated"
 msgstr "Обновлен"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Завершено: %s"
+msgstr "Завершено"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1645,10 +1662,8 @@ msgstr ""
 "отредактировать ее."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1311
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr ""
-"Только одна заметка может быть напечатана или экспортирована в PDF за раз."
+msgstr "Только одна заметка может быть напечатана за раз."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1521
 msgid "strong text"
@@ -1685,8 +1700,9 @@ msgid "In: %s"
 msgstr "В: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
+#, fuzzy
 msgid "Front"
-msgstr ""
+msgstr "Перед"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
 msgid "Hyperlink"
@@ -1721,9 +1737,8 @@ msgid "Watching..."
 msgstr "Наблюдение..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1841
-#, fuzzy
 msgid "Content Properties"
-msgstr "Свойства заметки"
+msgstr "Свойства контента"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2109
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:416
@@ -1746,18 +1761,16 @@ msgid "Clear"
 msgstr "Очистить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
-msgstr "заголовок"
+msgstr "Заглавие"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Размер"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
-#, fuzzy
 msgid "Action"
-msgstr "Местоположение"
+msgstr "Действие"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
@@ -1770,18 +1783,20 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "Проверка... Пожалуйста, подождите."
+msgstr "Пожалуйста, подождите…"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
+#, fuzzy
 msgid "No resources!"
-msgstr ""
+msgstr "Нет данных!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Предупреждение: не все данные показаны по соображениям производительности "
+"(ограничение:%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -2332,9 +2347,8 @@ msgid "Nord"
 msgstr "Север"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Тёмная"
+msgstr "OLED Тёмная"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
@@ -2372,7 +2386,6 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
-#, fuzzy
 msgid "Split"
 msgstr "Раздельный вид"
 
@@ -2482,7 +2495,7 @@ msgstr "Включить поддержку синтаксиса Fountain"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:369
 #, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Включить поддержку typographer"
+msgstr "Включить поддержку Mermaid диаграм"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
 msgid "Show tray icon"
@@ -3016,25 +3029,29 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Пожалуйста, подтвердите, что вы хотели бы повторно зашифровать вашу полную "
+"базу данных."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Ваши данные будут повторно зашифрованы и синхронизированы снова."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Пожалуйста, введите ваш пароль в список мастер-ключей ниже перед обновлением "
+"ключа."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Мастер-ключ был успешно обновлен!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "Невозможно экспортировать заметки: %s"
+msgstr "Не удалось обновить мастер-ключ: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
