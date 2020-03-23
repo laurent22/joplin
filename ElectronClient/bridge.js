@@ -140,6 +140,10 @@ class Bridge {
 		return require('electron').MenuItem;
 	}
 
+	showItemInFolder(fullPath) {
+		require('electron').shell.showItemInFolder(fullPath);
+	}
+
 	openExternal(url) {
 		return require('electron').shell.openExternal(url);
 	}

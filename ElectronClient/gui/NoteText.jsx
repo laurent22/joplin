@@ -791,6 +791,15 @@ class NoteTextComponent extends React.Component {
 
 				menu.append(
 					new MenuItem({
+						label: _('Open containing directory'),
+						click: async () => {
+							bridge().showItemInFolder(resourcePath);
+						},
+					})
+				);
+
+				menu.append(
+					new MenuItem({
 						label: _('Save as...'),
 						click: async () => {
 							const filePath = bridge().showSaveDialog({
