@@ -19,12 +19,14 @@ export default ({ getState, item, setState }) => {
 	}
 
 	const isNewLine = text.substring(selection.start - 1, selection.start) === '\n';
-	if (isNewLine) {
-		// We're at the start of a line
+	if (isNewLine) { // We're at the start of a line
 		newText = replaceBetween(text, selection, `${item.prefix} `);
 		newSelection = { start: selection.start + 2, end: selection.start + 2 };
-	} else {
-		// We're in the middle of a line
+	} else { // We're in the middle of a line
+		// NOTE: It may be more natural for the prefix (e.g. '-', '1.', '#', '##')
+		// to be prepended at the beginning of the line where the selection is,
+		// rather than creating a new line (which is the behavior implemented here).
+		// If the other way is more natural, that's fine by me!
 		newText = replaceBetween(text, selection, `\n${item.prefix} `);
 		newSelection = { start: selection.start + 3, end: selection.start + 3 };
 	}
