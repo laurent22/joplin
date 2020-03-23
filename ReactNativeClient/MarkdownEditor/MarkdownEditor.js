@@ -100,29 +100,14 @@ export default class MarkdownEditor extends React.Component {
 	};
 
 	onSelectionChange = event => {
-		// console.log('selection change:', {event});
-		this.setState({
-			selection: event.nativeEvent.selection,
-		});
+		this.setState({ selection: event.nativeEvent.selection });
 	};
 
-	focus = () => {
-		this.textAreaRef.current.focus();
-	}
+	focus = () => this.textAreaRef.current.focus()
 
-	getState = () => {
-		return this.state;
-	};
+	convertMarkdown = () => this.setState({ showPreview: !this.state.showPreview })
 
-	convertMarkdown = () => {
-		this.setState({ showPreview: !this.state.showPreview });
-	};
-
-	renderPreview = () => {
-		return (
-			<NoteBodyViewer {...this.props.noteBodyViewer} />
-		);
-	};
+	renderPreview = () => <NoteBodyViewer {...this.props.noteBodyViewer} />
 
 	render() {
 		const WrapperView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
@@ -154,7 +139,7 @@ export default class MarkdownEditor extends React.Component {
 					</TouchableOpacity>
 					{renderFormatButtons(
 						{
-							getState: this.getState,
+							getState: () => this.state,
 							setState: (state, callback) => {
 								this.setState(state, callback);
 							},
