@@ -1,5 +1,5 @@
 const React = require('react');
-const { Text, Modal, View, StyleSheet, Button } = require('react-native');
+const { Platform, Text, Modal, View, StyleSheet, Button } = require('react-native');
 const { themeStyle } = require('lib/components/global-style.js');
 const { _ } = require('lib/locale');
 
@@ -22,12 +22,12 @@ class ModalDialog extends React.Component {
 				justifyContent: 'center',
 			},
 			modalContentWrapper: {
-				flex: 1,
+				height: '90%',
+				...Platform.select({ ios: { marginVertical: 40, marginHorizontal: 20 }, android: { margin: 20 } }),
 				flexDirection: 'column',
 				backgroundColor: theme.backgroundColor,
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
-				margin: 20,
 				padding: 10,
 				borderRadius: 5,
 			},
