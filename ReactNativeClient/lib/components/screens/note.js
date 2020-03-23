@@ -33,10 +33,14 @@ const ImageResizer = require('react-native-image-resizer').default;
 const shared = require('lib/components/shared/note-screen-shared.js');
 const ImagePicker = require('react-native-image-picker');
 const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog.js');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const ReactNativeActionButton = require('react-native-action-button').default;
 // const ShareExtension = require('react-native-share-extension').default;
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
+
+Icon.loadFont();
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -194,6 +198,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
+		this.copyToClipboardButton = this.copyToClipboardButton.bind(this);
 	}
 
 	styles() {
@@ -229,6 +234,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingLeft: theme.marginLeft,
 				paddingTop: 10, // Added for iOS (Not needed for Android??)
 				paddingBottom: 10, // Added for iOS (Not needed for Android??)
+			},
+			actionButtonIcon: {
+				fontSize: 25,
+				height: 24,
+				color: 'white',
 			},
 		};
 
@@ -802,6 +812,24 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return this.folderPickerOptions_;
 	}
 
+	handleCopyToClipboard = () => {
+		const note = this.state.note;
+		Clipboard.setString(note.body);
+	}
+
+	copyToClipboardButton = ()=>{
+		if (this.state.mode == 'edit') return null;
+		return (
+			<ReactNativeActionButton
+				position="left"
+				buttonColor="#9c27b0"
+				title='copy to clipboard'
+				onPress={ ()=> this.handleCopyToClipboard() }
+				icon={<Icon name={'md-copy'} style={this.styles().actionButtonIcon}  />}
+			/>
+		);
+	};
+
 	render() {
 		if (this.state.isLoading) {
 			return (
@@ -887,6 +915,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		const actionButtonComp = renderActionButton();
+		const copyToClipboardComp = this.copyToClipboardButton();
 
 		const showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = !this.isModified();
@@ -912,7 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{titleComp}
 				{bodyComponent}
 				{actionButtonComp}
-
+				{copyToClipboardComp}
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				<DialogBox
