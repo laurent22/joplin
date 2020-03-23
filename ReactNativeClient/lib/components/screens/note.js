@@ -72,8 +72,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			HACK_webviewLoadingState: 0,
 		};
 
-		this.markdownEditorRef = React.createRef();
-		this.textInputRefName = 'textInputRef';
+		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
 		this.doFocusUpdate_ = false;
 
@@ -778,8 +777,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.refs.titleTextField.focus();
 		}
 		if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
-			if (this.markdownEditorRef.current[this.textInputRefName].current) {
-				this.markdownEditorRef.current[this.textInputRefName].current.focus();
+			if (this.markdownEditorRef.current) {
+				this.markdownEditorRef.current.focus();
 			}
 		}
 	}
@@ -896,8 +895,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				// Note: blurOnSubmit is necessary to get multiline to work.
 				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 				? <MarkdownEditor
-					ref={this.markdownEditorRef}
-					textInputRefName={this.textInputRefName}
+					ref={this.markdownEditorRef} // For focusing the Markdown editor
 					editorFont={editorFont(this.props.editorFont)}
 					style={this.styles().bodyTextInput}
 					previewStyles={this.styles().noteBodyViewer}

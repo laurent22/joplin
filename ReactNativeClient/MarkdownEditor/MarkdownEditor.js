@@ -37,7 +37,7 @@ export default class MarkdownEditor extends React.Component {
 			selection: { start: 0, end: 0 },
 			showPreview: props.showPreview ? props.showPreview : false,
 		};
-		this[this.props.textInputRefName] = React.createRef();
+		this.textAreaRef = React.createRef(); // For focusing the textarea
 	}
 	textInput: TextInput;
 
@@ -106,6 +106,10 @@ export default class MarkdownEditor extends React.Component {
 		});
 	};
 
+	focus = () => {
+		this.textAreaRef.current.focus();
+	}
+
 	getState = () => {
 		return this.state;
 	};
@@ -134,7 +138,7 @@ export default class MarkdownEditor extends React.Component {
 					onChangeText={this.changeText(selection)}
 					onSelectionChange={this.onSelectionChange}
 					value={text}
-					ref={this[this.props.textInputRefName]}
+					ref={this.textAreaRef}
 					selection={selection}
 				/>
 				{showPreview ? this.renderPreview() : null}
