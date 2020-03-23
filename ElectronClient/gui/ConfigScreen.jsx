@@ -19,6 +19,10 @@ class ConfigScreenComponent extends React.Component {
 
 		this.state.selectedSectionName = 'general';
 		this.state.screenName = '';
+		this.state.activeTheme = Setting.value('theme');
+		this.state.activePreferredDarkTheme = Setting.THEME_DARK;
+		this.state.activePreferredLightTheme = Setting.THEME_LIGHT;
+
 
 		this.checkSyncConfig_ = async () => {
 			await shared.checkSyncConfig(this, this.state.settings);
@@ -66,8 +70,8 @@ class ConfigScreenComponent extends React.Component {
 	}
 
 	screenFromName(screenName) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme}/>;
-		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen theme={this.props.theme} />;
+		if (screenName === 'server') return <ClipperConfigScreen theme={this.props.theme} />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
 	}
@@ -270,8 +274,39 @@ class ConfigScreenComponent extends React.Component {
 			borderRadius: 4,
 		});
 
+		const toggleAutoDetect = (value) => {
+			this.setState({
+				activeTheme: Setting.value('theme'),
+				activePreferredDarkTheme: Setting.value('preferredDarkTheme'),
+				activePreferredLightTheme: Setting.value('preferredLightTheme'),
+			});
+
+			if (value == true) {
+
+				if (Setting.value('isDarkMode')) {
+					Setting.setValue('preferredDarkTheme', this.state.activePreferredDarkTheme); // setting theme for theme button
+					Setting.setValue('theme', this.state.activePreferredDarkTheme); // setting current theme to detected theme
+				} else {
+					Setting.setValue('preferredLightTheme', this.state.activePreferredLightTheme); // setting theme for theme button
+					Setting.setValue('theme', this.state.activePreferredLightTheme); // setting current theme to detected theme
+				}
+
+			} else {
+				Setting.setValue('theme', this.state.activeTheme);
+			}
+
+			// Setting Visiblity
+			const md = Setting.metadata_;
+			md.theme.public = !value;
+			md.preferredDarkTheme.public = value;
+			md.preferredLightTheme.public = value;
+		};
+
 		const updateSettingValue = (key, value) => {
 			// console.info(key + ' = ' + value);
+			if (key == 'themeAutoDetect') {
+				toggleAutoDetect(value);
+			}
 			return shared.updateSettingValue(this, key, value);
 		};
 
@@ -599,7 +634,7 @@ class ConfigScreenComponent extends React.Component {
 						<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
 						{hasChanges && !screenComp ? _('Cancel') : _('Back')}
 					</button>
-					{ !screenComp && (
+					{!screenComp && (
 						<div>
 							<button disabled={!hasChanges} onClick={() => { this.onSaveClick(); }} style={buttonStyleApprove}>{_('OK')}</button>
 							<button disabled={!hasChanges} onClick={() => { this.onApplyClick(); }} style={buttonStyleApprove}>{_('Apply')}</button>

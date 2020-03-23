@@ -230,6 +230,17 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
+			themeAutoDetect: {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				section: 'appearance',
+				appTypes: ['mobile', 'desktop'],
+				public: true,
+				label: () => _('Auto Detect'),
+				description: () =>
+					_('Enable to detect your system theme and more options for Theme button'),
+			},
+
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: Setting.TYPE_INT,
@@ -237,6 +248,56 @@ class Setting extends BaseModel {
 				appTypes: ['mobile', 'desktop'],
 				isEnum: true,
 				label: () => _('Theme'),
+				section: 'appearance',
+				options: () => {
+					const output = {};
+					output[Setting.THEME_LIGHT] = _('Light');
+					output[Setting.THEME_DARK] = _('Dark');
+					if (platform !== mobilePlatform) {
+						output[Setting.THEME_DRACULA] = _('Dracula');
+						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+						output[Setting.THEME_NORD] = _('Nord');
+					} else {
+						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
+					}
+					return output;
+				},
+			},
+			preferredLightTheme: {
+				value: Setting.THEME_LIGHT,
+				type: Setting.TYPE_INT,
+				public: true,
+				appTypes: ['mobile', 'desktop'],
+				isEnum: true,
+				label: () => _('Preferred Light Theme'),
+				description: () =>
+					_('Applicable for Theme button and Light System Theme'),
+				section: 'appearance',
+				options: () => {
+					const output = {};
+					output[Setting.THEME_LIGHT] = _('Light');
+					output[Setting.THEME_DARK] = _('Dark');
+					if (platform !== mobilePlatform) {
+						output[Setting.THEME_DRACULA] = _('Dracula');
+						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+						output[Setting.THEME_NORD] = _('Nord');
+					} else {
+						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
+					}
+					return output;
+				},
+			},
+			preferredDarkTheme: {
+				value: Setting.THEME_LIGHT,
+				type: Setting.TYPE_INT,
+				public: true,
+				appTypes: ['mobile', 'desktop'],
+				isEnum: true,
+				label: () => _('Preferred Dark Theme'),
+				description: () =>
+					_('Applicable for Theme button and Dark System Theme'),
 				section: 'appearance',
 				options: () => {
 					const output = {};
@@ -647,6 +708,7 @@ class Setting extends BaseModel {
 	}
 
 	static load() {
+
 		this.cancelScheduleSave();
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
@@ -663,7 +725,18 @@ class Setting extends BaseModel {
 			}
 
 			this.dispatchUpdateAll();
+			this.initTheme(); // required to maintain visiblity
 		});
+	}
+
+	static initTheme() {
+
+		// Setting Visiblity
+		const md = this.metadata_;
+		md.theme.public = !this.value('themeAutoDetect');
+		md.preferredDarkTheme.public = this.value('themeAutoDetect');
+		md.preferredLightTheme.public = this.value('themeAutoDetect');
+
 	}
 
 	static toPlainObject() {
@@ -687,15 +760,146 @@ class Setting extends BaseModel {
 		this.constants_[key] = value;
 	}
 
+
+	static setTheme(key, value) {
+		if (!this.cache_) throw new Error('Settings have not been initialized!');
+		const isAutoDetected = Setting.value('themeAutoDetect');
+		const isDarkMode = Setting.value('isDarkMode');
+
+		for (let i = 0; i < this.cache_.length; i++) {
+			const c = this.cache_[i];
+			if (c.key == key) {
+				const md = this.settingMetadata(key);
+
+				if (md.isEnum === true) {
+					if (!this.isAllowedEnumOption(key, value)) {
+						throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
+					}
+				}
+
+				if (c.value === value) return;
+
+				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
+				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+
+				c.value = value;
+
+				switch (key) {
+				case 'preferredDarkTheme':
+					if (isAutoDetected) {
+						// setting value for both keys
+						this.dispatch({
+							type: 'SETTING_UPDATE_ONE',
+							key: key,
+							value: c.value,
+						});
+
+						if (isDarkMode) {
+							this.dispatch({
+								type: 'SETTING_UPDATE_ONE',
+								key: 'theme',
+								value: c.value,
+							});
+						}
+					} else {
+						this.dispatch({
+							type: 'SETTING_UPDATE_ONE',
+							key: key,
+							value: c.value,
+						});
+					}
+					this.scheduleSave();
+					return;
+
+				case 'preferredLightTheme':
+					if (isAutoDetected) {
+						// setting value for both keys
+						this.dispatch({
+							type: 'SETTING_UPDATE_ONE',
+							key: key,
+							value: c.value,
+						});
+
+						if (!isDarkMode) {
+							this.dispatch({
+								type: 'SETTING_UPDATE_ONE',
+								key: 'theme',
+								value: c.value,
+							});
+						}
+					} else {
+						this.dispatch({
+							type: 'SETTING_UPDATE_ONE',
+							key: key,
+							value: c.value,
+						});
+					}
+
+					this.scheduleSave();
+					return;
+
+				case 'themeAutoDetect':
+					this.dispatch({
+						type: 'SETTING_UPDATE_ONE',
+						key: key,
+						value: c.value,
+					});
+					if (c.value) {
+						if (isDarkMode) {
+							this.dispatch({
+								type: 'SETTING_UPDATE_ONE',
+								key: 'theme',
+								value: Setting.value('preferredDarkTheme'),
+							});
+						} else {
+							this.dispatch({
+								type: 'SETTING_UPDATE_ONE',
+								key: 'theme',
+								value: Setting.value('preferredLightTheme'),
+							});
+						}
+					} else {
+						this.dispatch({
+							type: 'SETTING_UPDATE_ONE',
+							key: 'theme',
+							value: Setting.value('theme'),
+						});
+					}
+					this.scheduleSave();
+					return;
+				}
+			}
+		}
+
+		this.cache_.push({
+			key: key,
+			value: this.formatValue(key, value),
+		});
+
+		this.dispatch({
+			type: 'SETTING_UPDATE_ONE',
+			key: key,
+			value: this.formatValue(key, value),
+		});
+
+		this.scheduleSave();
+	}
+
 	static setValue(key, value) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
 		value = this.filterValue(key, value);
-
 		for (let i = 0; i < this.cache_.length; i++) {
 			const c = this.cache_[i];
 			if (c.key == key) {
+
+				//  to change theme based on 'preferredDarkTheme' and 'preferredLightTheme' options with validations
+				if (key === 'preferredDarkTheme' || key === 'preferredLightTheme' || key === 'themeAutoDetect') {
+					this.setTheme(key, value);
+					return;
+				}
+
 				const md = this.settingMetadata(key);
 
 				if (md.isEnum === true) {
@@ -1018,6 +1222,7 @@ class Setting extends BaseModel {
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
 	}
+
 }
 
 Setting.TYPE_INT = 1;
@@ -1067,7 +1272,6 @@ Setting.custom_css_files = {
 	RENDERED_MARKDOWN: 'userstyle.css',
 };
 
-
 // Contains constants that are set by the application and
 // cannot be modified by the user:
 Setting.constants_ = {
@@ -1083,6 +1287,7 @@ Setting.constants_ = {
 	tempDir: '',
 	flagOpenDevTools: false,
 	syncVersion: 1,
+	isDarkMode: false, // system detected theme by Electron, return false for Light system theme and true for Dark system theme
 };
 
 Setting.autoSaveEnabled = true;

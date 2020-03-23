@@ -76,6 +76,7 @@ BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplin-desktop');
 Setting.setConstant('appType', 'desktop');
+Setting.setConstant('isDarkMode', bridge().systemTheme());
 
 shimInit();
 

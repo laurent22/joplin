@@ -75,6 +75,12 @@ class MainScreenComponent extends React.Component {
 		}
 	}
 
+	toggleTheme() {
+		this.props.dispatch({
+			type: 'THEME_TOGGLE',
+		});
+	}
+
 	toggleVisiblePanes() {
 		this.props.dispatch({
 			type: 'NOTE_VISIBLE_PANES_TOGGLE',
@@ -308,6 +314,8 @@ class MainScreenComponent extends React.Component {
 			this.toggleSidebar();
 		} else if (command.name === 'toggleNoteList') {
 			this.toggleNoteList();
+		} else if (command.name === 'toggleTheme') {
+			this.toggleTheme();
 		} else if (command.name === 'showModalMessage') {
 			this.setState({
 				modalLayer: {
@@ -626,6 +634,14 @@ class MainScreenComponent extends React.Component {
 			enabled: !!notes.length,
 			onClick: () => {
 				this.doCommand({ name: 'toggleVisiblePanes' });
+			},
+		});
+
+		headerItems.push({
+			title: _('Theme'),
+			iconName: 'fa-tint',
+			onClick: () => {
+				this.doCommand({ name: 'toggleTheme' });
 			},
 		});
 

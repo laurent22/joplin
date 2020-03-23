@@ -51,6 +51,8 @@ const appDefaultState = Object.assign({}, defaultState, {
 	watchedNoteFiles: [],
 	lastEditorScrollPercents: {},
 	devToolsVisible: false,
+	isdarkMode: false,
+
 });
 
 class Application extends BaseApplication {
@@ -118,6 +120,13 @@ class Application extends BaseApplication {
 					const command = Object.assign({}, action);
 					delete command.type;
 					newState.windowCommand = command.name ? command : null;
+				}
+				break;
+
+			case 'THEME_TOGGLE':
+				{
+					newState = Object.assign({}, state);
+					newState.isdarkMode = !state.isdarkMode;
 				}
 				break;
 
@@ -305,6 +314,24 @@ class Application extends BaseApplication {
 			this.updateMenuItemStates(newState);
 		}
 
+		if (['THEME_TOGGLE'].indexOf(action.type) >= 0) {
+			// check for Auto Detect option
+			if (Setting.value('themeAutoDetect')) {
+				// setting preferred theme
+				if (newState.isdarkMode) {
+					Setting.setValue('theme', Setting.value('preferredDarkTheme'));
+				} else {
+					Setting.setValue('theme', Setting.value('preferredLightTheme'));
+				}
+			} else {
+				// setting default Ligth & Dark theme
+				if (newState.isdarkMode) {
+					Setting.setValue('theme', Setting.THEME_DARK);
+				} else {
+					Setting.setValue('theme', Setting.THEME_LIGHT);
+				}
+			}
+		}
 		return result;
 	}
 

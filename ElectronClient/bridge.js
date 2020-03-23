@@ -1,6 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, nativeTheme } = require('electron');
 
 class Bridge {
 
@@ -9,6 +9,7 @@ class Bridge {
 		this.autoUpdateLogger_ = null;
 		this.lastSelectedPath_ = null;
 	}
+
 
 	electronApp() {
 		return this.electronWrapper_;
@@ -161,6 +162,11 @@ class Bridge {
 		return require('electron').screen;
 	}
 
+	// Detect system theme
+	systemTheme() {
+		return nativeTheme.shouldUseDarkColors; // return true for system dark theme
+	}
+
 }
 
 let bridge_ = null;
@@ -175,5 +181,6 @@ function bridge() {
 	if (!bridge_) throw new Error('Bridge not initialized');
 	return bridge_;
 }
+
 
 module.exports = { bridge, initBridge };
