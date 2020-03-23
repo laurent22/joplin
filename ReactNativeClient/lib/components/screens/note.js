@@ -96,8 +96,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = async () => {
-			const r = await saveDialog();
-			if (r) return r;
+
+			if (this.isModified()) {
+				await this.saveNoteButton_press();
+			}
 
 			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
 
