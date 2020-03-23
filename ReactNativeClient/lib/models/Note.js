@@ -295,7 +295,7 @@ class Note extends BaseItem {
 	static previewFromHtml(html) {
 		if (!html) return;
 		const tempElement = document.createElement('div');
-		tempElement.innerHtml = html;
+		tempElement.innerHTML = html;
 		const paragraphs = tempElement.getElementsByTagName('p');
 		let preview = '';
 		for (let i = 0; i < paragraphs.length && preview.length < 100; i++) {

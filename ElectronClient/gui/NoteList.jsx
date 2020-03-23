@@ -116,6 +116,16 @@ class NoteListComponent extends React.Component {
 					id: item.id,
 				});
 			} else {
+				if (this.props.selectedNoteIds.length == 1) {
+					const noteId = this.props.selectedNoteIds[0];
+					this.props.dispatch({
+						type: 'NOTE_UPDATE_ONE',
+						note: {
+							id: noteId,
+							preview: await Note.getUpdatedPreview(noteId),
+						},
+					});
+				}
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
@@ -191,7 +201,7 @@ class NoteListComponent extends React.Component {
 		if (item.is_todo && !!item.todo_completed) listItemTitleStyle = Object.assign(listItemTitleStyle, this.style().listItemTitleCompleted);
 
 		const displayTitle = Note.displayTitle(item);
-		const displayBody = Note.defaultTitleFromBody(Note.displayPreview(item));
+		const displayBody = Note.displayPreview(item);
 		let titleComp = null;
 
 		if (highlightedWords.length) {
