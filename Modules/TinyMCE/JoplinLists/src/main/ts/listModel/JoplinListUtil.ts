@@ -23,17 +23,21 @@ export function findContainerListTypeFromElement(element) {
   return 'regular';
 }
 
+export function isJoplinChecklistItem(element) {
+  if (element.nodeName !== 'LI') return false;
+  const listType = findContainerListTypeFromElement(element);
+  return listType === 'joplinChecklist';
+}
+
 export function addJoplinChecklistCommands(editor, ToggleList) {
   editor.addCommand('ToggleJoplinChecklistItem', function (ui, detail) {
     const element = detail.element;
-    if (element.nodeName !== 'LI') return;
-    const listType = findContainerListTypeFromElement(element);
-    if (listType === 'joplinChecklist') {
-      if (!element.classList || !element.classList.contains('checked')) {
-        element.classList.add('checked');
-      } else {
-        element.classList.remove('checked');
-      }
+    if (!isJoplinChecklistItem(element)) return;
+
+    if (!element.classList || !element.classList.contains('checked')) {
+      element.classList.add('checked');
+    } else {
+      element.classList.remove('checked');
     }
   });
 

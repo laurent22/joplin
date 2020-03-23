@@ -46,7 +46,8 @@
 				"ElectronClient/gui/utils/NoteText.js",
 				"ElectronClient/gui/editors/TinyMCE/plugins/lists.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js",
-				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js"
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js",
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js"
 			],
 			"folder_exclude_patterns":
 			[

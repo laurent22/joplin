@@ -9,7 +9,7 @@ import Tools from 'tinymce/core/api/util/Tools';
 import * as NodeType from '../core/NodeType';
 import Editor from 'tinymce/core/api/Editor';
 import { isCustomList } from '../core/Util';
-import { findContainerListTypeFromEvent } from '../listModel/JoplinListUtil';
+import { findContainerListTypeFromEvent, isJoplinChecklistItem } from '../listModel/JoplinListUtil';
 
 const findIndex = function (list, predicate) {
   for (let index = 0; index < list.length; index++) {
@@ -38,6 +38,7 @@ const listState = function (editor: Editor, listName, options:any = {}) {
     };
 
     const editorClickHandler = (event) => {
+      if (!isJoplinChecklistItem(event.target)) return;
       editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
     }
 

@@ -1485,7 +1485,7 @@
     };
 
     var isCustomList = function (list) {
-      return /\btox\-/.test(list.className) || /joplinChecklist/.test(list.className);
+      return /\btox\-/.test(list.className);
     };
 
     var listToggleActionFromListName = function (listName) {
@@ -1521,18 +1521,21 @@
       }
       return 'regular';
     }
+    function isJoplinChecklistItem(element) {
+      if (element.nodeName !== 'LI')
+        return false;
+      var listType = findContainerListTypeFromElement(element);
+      return listType === 'joplinChecklist';
+    }
     function addJoplinChecklistCommands(editor, ToggleList) {
       editor.addCommand('ToggleJoplinChecklistItem', function (ui, detail) {
         var element = detail.element;
-        if (element.nodeName !== 'LI')
+        if (!isJoplinChecklistItem(element))
           return;
-        var listType = findContainerListTypeFromElement(element);
-        if (listType === 'joplinChecklist') {
-          if (!element.classList || !element.classList.contains('checked')) {
-            element.classList.add('checked');
-          } else {
-            element.classList.remove('checked');
-          }
+        if (!element.classList || !element.classList.contains('checked')) {
+          element.classList.add('checked');
+        } else {
+          element.classList.remove('checked');
         }
       });
       editor.addCommand('InsertJoplinChecklist', function (ui, detail) {
@@ -1643,7 +1646,6 @@
       if (detail === void 0) {
         detail = {};
       }
-      console.info('applyList', listName, detail);
       var rng = editor.selection.getRng(true);
       var bookmark;
       var listItemName = 'LI';
@@ -1661,12 +1663,10 @@
         var listBlock, sibling;
         sibling = block.previousSibling;
         if (sibling && isListNode(sibling) && sibling.nodeName === listName && hasCompatibleStyle(dom, sibling, detail)) {
-          console.info('applyList 1');
           listBlock = sibling;
           block = dom.rename(block, listItemName);
           sibling.appendChild(block);
         } else {
-          console.info('applyList 2');
           listBlock = dom.create(listName);
           if (detail.listType === 'joplinChecklist') {
             listBlock.classList.add('joplin-checklist');
@@ -1727,18 +1727,15 @@
     };
     var updateList = function (editor, list, listName, detail) {
       if (list.nodeName !== listName) {
-        console.info('updateList 1', list, listName, detail);
         var newList = editor.dom.rename(list, listName);
         updateListWithDetails(editor.dom, newList, detail);
         fireListEvent(editor, listToggleActionFromListName(listName), newList);
       } else {
-        console.info('updateList 2', list, listName, detail);
         updateListWithDetails(editor.dom, list, detail);
         fireListEvent(editor, listToggleActionFromListName(listName), list);
       }
     };
     var toggleMultipleLists = function (editor, parentList, lists, listName, detail) {
-      console.info('-- toggleMultipleLists', lists, listName, detail);
       if (parentList.nodeName === listName && !hasListStyleDetail(detail)) {
         flattenListSelection(editor);
       } else {
@@ -1753,19 +1750,14 @@
       return 'list-style-type' in detail;
     };
     var toggleSingleList = function (editor, parentList, listName, detail) {
-      console.info('-- toggleSingleList', listName, detail);
       if (parentList === editor.getBody()) {
         return;
       }
       if (parentList) {
-        console.info('toggleSingleList 1');
         var listType = findContainerListTypeFromElement(parentList);
-        console.info('List type', listType, '(detail)', detail);
         if (parentList.nodeName === listName && !hasListStyleDetail(detail) && !isCustomList(parentList) && listType === detail.listType) {
-          console.info('toggleSingleList 2');
           flattenListSelection(editor);
         } else {
-          console.info('toggleSingleList 3');
           var bookmark = createBookmark(editor.selection.getRng(true));
           updateListWithDetails(editor.dom, parentList, detail);
           var newList = editor.dom.rename(parentList, listName);
@@ -1774,13 +1766,11 @@
           fireListEvent(editor, listToggleActionFromListName(listName), newList);
         }
       } else {
-        console.info('toggleSingleList 4');
         applyList(editor, listName, detail);
         fireListEvent(editor, listToggleActionFromListName(listName), parentList);
       }
     };
     var toggleList = function (editor, listName, detail) {
-      console.info('==== TOGGLE LIST', listName, detail);
       var parentList = getParentList(editor);
       var selectedSubLists = getSelectedSubLists(editor);
       detail = __assign({ listType: 'regular' }, detail);
@@ -2092,9 +2082,6 @@
       }
       return -1;
     };
-    var editorListMutationHandler = function (event) {
-      console.info('editorListMutationHandler', event);
-    };
     var listState = function (editor, listName, options) {
       if (options === void 0) {
         options = {};
@@ -2109,17 +2096,17 @@
           buttonApi.setActive(listType === options.listType && lists.length > 0 && lists[0].nodeName === listName && !isCustomList(lists[0]));
         };
         var editorClickHandler = function (event) {
+          if (!isJoplinChecklistItem(event.target))
+            return;
           editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
         };
         if (options.listType === 'joplinChecklist') {
           editor.on('click', editorClickHandler);
-          editor.on('ListMutation', editorListMutationHandler);
         }
         editor.on('NodeChange', nodeChangeHandler);
         return function () {
           if (options.listType === 'joplinChecklist') {
             editor.off('click', editorClickHandler);
-            editor.off('ListMutation', editorListMutationHandler);
           }
           editor.off('NodeChange', nodeChangeHandler);
         };
