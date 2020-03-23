@@ -317,14 +317,14 @@ class Setting extends BaseModel {
 			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			trackLocation: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
 
-			editorBeta: {
+			'editor.beta': {
 				value: false,
 				type: Setting.TYPE_BOOL,
 				section: 'note',
 				public: true,
 				appTypes: ['mobile'],
-				label: () => _('Opt-in to the editor beta'),
-				description: () => _('This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.'),
+				label: () => 'Opt-in to the editor beta',
+				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
 			},
 
 			newTodoFocus: {
@@ -570,7 +570,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'sync',
 				label: () => _('Fail-safe'),
-				description: () => _('Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)'),
+				description: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)'),
 			},
 
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },

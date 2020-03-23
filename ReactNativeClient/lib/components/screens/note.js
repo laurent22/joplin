@@ -892,7 +892,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.saveOneProperty('body', newBody);
 			};
 
-			bodyComponent = Setting.value('editorBeta')
+			bodyComponent = Setting.value('editor.beta')
 				// Note: blurOnSubmit is necessary to get multiline to work.
 				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
 				? <MarkdownEditor
