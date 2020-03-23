@@ -43,7 +43,10 @@
 				"ElectronClient/gui/editors/PlainEditor.js",
 				"ElectronClient/gui/MultiNoteActions.js",
 				"ElectronClient/gui/NoteContentPropertiesDialog.js",
-				"ElectronClient/gui/utils/NoteText.js"
+				"ElectronClient/gui/utils/NoteText.js",
+				"ElectronClient/gui/editors/TinyMCE/plugins/lists.js",
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js",
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js"
 			],
 			"folder_exclude_patterns":
 			[
@@ -89,7 +92,10 @@
 				"ReactNativeClient/ios/Joplin.xcodeproj/project.xcworkspace",
 				"ReactNativeClient/ios/Joplin.xcworkspace/xcuserdata",
 				"ReactNativeClient/ios/Joplin.xcodeproj/xcuserdata",
-				"ElectronClient/pluginAssets"
+				"ElectronClient/pluginAssets",
+				"Modules/TinyMCE/JoplinLists/dist",
+				"Modules/TinyMCE/JoplinLists/lib",
+				"Modules/TinyMCE/JoplinLists/scratch"
 			],
 			"path": "."
 		}

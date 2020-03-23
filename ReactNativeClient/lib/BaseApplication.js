@@ -40,6 +40,7 @@ const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
+const { toSystemSlashes } = require('lib/path-utils.js');
 
 class BaseApplication {
 	constructor() {
@@ -580,7 +581,7 @@ class BaseApplication {
 
 		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 
-		return `${os.homedir()}/.config/${Setting.value('appName')}`;
+		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
 	}
 
 	async start(argv) {

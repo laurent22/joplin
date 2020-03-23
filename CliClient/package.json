@@ -55,7 +55,7 @@
     "htmlparser2": "^4.1.0",
     "image-data-uri": "^2.0.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.23",
+    "joplin-turndown": "^4.0.24",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.0",

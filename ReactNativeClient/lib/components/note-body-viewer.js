@@ -55,14 +55,21 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
 
-		const result = await this.markupToHtml_.render(note.markup_language, bodyToRender, this.props.webViewStyle, mdOptions);
+		const result = await this.markupToHtml_.render(
+			note.markup_language,
+			bodyToRender,
+			{
+				bodyPaddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+				...this.props.webViewStyle,
+			},
+			mdOptions
+		);
 		let html = result.html;
 
 		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');

@@ -7,7 +7,7 @@
     "dist": "node_modules/.bin/electron-builder",
     "build": "patch-package --patch-dir ../patches && gulp build",
     "postinstall": "npm run build && gulp electronRebuild",
-    "start": "gulp build -L && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
+    "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools"
   },
   "repository": {
     "type": "git",
@@ -75,6 +75,7 @@
     "electron": "^7.1.12",
     "electron-builder": "22.3.2",
     "electron-rebuild": "^1.8.8",
+    "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "patch-package": "^6.2.0"
   },
@@ -109,7 +110,7 @@
     "html-minifier": "^4.0.0",
     "htmlparser2": "^4.1.0",
     "image-type": "^3.0.0",
-    "joplin-turndown": "^4.0.23",
+    "joplin-turndown": "^4.0.24",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "json-stringify-safe": "^5.0.1",
     "jssha": "^2.3.1",

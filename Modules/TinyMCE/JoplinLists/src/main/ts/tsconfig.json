@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+		"module": "amd",
+		"target": "es6",
+		"sourceMap": true,
+		"outFile": "list.js"
+	},
+    "include": [
+        "./**/*.ts"
+	],
+	"exclude": [
+		"**/node_modules"
+	]
+}

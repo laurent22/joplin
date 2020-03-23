@@ -40,6 +40,10 @@ class HtmlToHtml {
 		};
 	}
 
+	async allAssets(/* theme*/) {
+		return []; // TODO
+	}
+
 	async render(markup, theme, options) {
 		options = Object.assign({}, {
 			splitted: false,
@@ -80,7 +84,7 @@ class HtmlToHtml {
 			};
 		}
 
-		let cssStrings = noteStyle(theme, options);
+		let cssStrings = noteStyle(theme);
 
 		if (options.splitted) {
 			const splitted = this.splitHtml(html);
