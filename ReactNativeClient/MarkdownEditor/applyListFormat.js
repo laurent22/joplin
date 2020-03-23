@@ -6,20 +6,25 @@ export default ({ getState, item, setState }) => {
 	text = text || '';
 	let newText;
 	let newSelection;
+
+	// Ignore multi-character selections.
+	// NOTE: I was on the fence about whether more appropriate behavior would be
+	// to add the list prefix (e.g. '-', '1.', '#', '##', '###') at the
+	// beginning of the line where the selection begins, but for now I think
+	// it's more natural to just ignore it in this case. If after using this
+	// editor for a while it turns out the other way is more natural, that's
+	// fine by me!
 	if (selection.start !== selection.end) {
-		newText = replaceBetween(
-			text,
-			selection,
-			`${item.prefix} ${text.substring(selection.start, selection.end)}\n`,
-		);
-		newSelection = { start: selection.end + 3, end: selection.end + 3 };
-	} else if (
-		selection.start === selection.end &&
-    text.substring(selection.end - 1, selection.end) === '\n'
-	) {
+		return;
+	}
+
+	const isNewLine = text.substring(selection.start - 1, selection.start) === '\n';
+	if (isNewLine) {
+		// We're at the start of a line
 		newText = replaceBetween(text, selection, `${item.prefix} `);
 		newSelection = { start: selection.start + 2, end: selection.start + 2 };
 	} else {
+		// We're in the middle of a line
 		newText = replaceBetween(text, selection, `\n${item.prefix} `);
 		newSelection = { start: selection.start + 3, end: selection.start + 3 };
 	}
