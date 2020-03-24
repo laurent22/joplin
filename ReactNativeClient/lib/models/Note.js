@@ -663,6 +663,8 @@ class Note extends BaseItem {
 					type: 'NOTE_DELETE',
 					id: id,
 				});
+
+				KvStore.instance().deleteValue(id);
 			}
 		}
 	}
