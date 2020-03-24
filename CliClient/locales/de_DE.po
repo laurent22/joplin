@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -1368,13 +1370,12 @@ msgid "Re-encrypt data"
 msgstr "Daten neu verschlüsseln"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
-#, fuzzy
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
 "Die Standardverschlüsselungsmethode wurde in eine sicherere geändert, und es "
-"wird empfohlen, sie auf Ihre Daten anzuwenden."
+"wird empfohlen, sie auf deine Daten anzuwenden."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
@@ -1386,7 +1387,7 @@ msgstr ""
 "Verschlüsselungsmethode verschlüsselt sein sollten."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1403,18 +1404,18 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 "Dazu muss dein gesamter Datensatz verschlüsselt und erneut synchronisiert "
-"werden. Starte diese Prozedur daher am besten Nachts.\n"
+"werden. Starte diese Prozedur daher am besten nachts.\n"
 "\n"
 "Beachte dazu folgende Hinweise:\n"
 "\n"
 "1. Synchronisiere alle deine Geräte.\n"
-"2. klicke auf \"%s\".\n"
+"2. Klicke auf \"%s\".\n"
 "3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern "
-"von Notizen auf anderen Geräten, um Konflikte zu vermeiden\n"
+"von Notizen auf anderen Geräten, um Konflikte zu vermeiden.\n"
 "4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, "
 "synchronisiere alle anderen Geräte und lass es komplett durch laufen.\n"
 "\n"
-"Wichtig: Du darfst dies nur EINMAL auf einem Gerät starten."
+"Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1531,7 +1532,6 @@ msgstr ""
 "erneut verschlüsseln."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
 msgid "More info"
 msgstr "Weitere Information"
 
@@ -1728,7 +1728,6 @@ msgid "In: %s"
 msgstr "In: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
-#, fuzzy
 msgid "Front"
 msgstr "Vorderseite"
 
