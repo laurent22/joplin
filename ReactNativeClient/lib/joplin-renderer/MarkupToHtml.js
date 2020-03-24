@@ -36,6 +36,10 @@ class MarkupToHtml {
 	async render(markupLanguage, markup, theme, options) {
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
+
+	async allAssets(markupLanguage, theme) {
+		return this.renderer(markupLanguage).allAssets(theme);
+	}
 }
 
 MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN = 1;

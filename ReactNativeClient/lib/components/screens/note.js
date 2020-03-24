@@ -1,5 +1,5 @@
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, ScrollView } = require('react-native');
+const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const RNFS = require('react-native-fs');
@@ -96,8 +96,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = async () => {
-			const r = await saveDialog();
-			if (r) return r;
+
+			if (this.isModified()) {
+				await this.saveNoteButton_press();
+			}
 
 			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
 
@@ -865,11 +867,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			// Note: blurOnSubmit is necessary to get multiline to work.
 			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = (
-				<ScrollView persistentScrollbar>
-					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
-				</ScrollView>
-			);
+			bodyComponent = <TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />;
 		}
 
 		const renderActionButton = () => {

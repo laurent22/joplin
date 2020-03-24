@@ -14,7 +14,9 @@ interface TinyMCEProps {
 	onWillChange(event:any): void,
 	defaultEditorState: DefaultEditorState,
 	markupToHtml: Function,
+	allAssets: Function,
 	attachResources: Function,
+	joplinHtml: Function,
 	disabled: boolean,
 }
 
@@ -106,6 +108,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
+	const joplinHtml = useRef(null);
+	joplinHtml.current = props.joplinHtml;
+
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 
 	const dispatchDidUpdate = (editor:any) => {
@@ -166,21 +171,69 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// module would not load these extra files.
 	// -----------------------------------------------------------------------------------------
 
+	const loadScript = async (script:any) => {
+		return new Promise((resolve) => {
+			let element:any = document.createElement('script');
+			if (script.src.indexOf('.css') >= 0) {
+				element = document.createElement('link');
+				element.rel = 'stylesheet';
+				element.href = script.src;
+			} else {
+				element.src = script.src;
+
+				if (script.attrs) {
+					for (const attr in script.attrs) {
+						element[attr] = script.attrs[attr];
+					}
+				}
+			}
+
+			element.id = script.id;
+
+			element.onload = () => {
+				resolve();
+			};
+
+			document.getElementsByTagName('head')[0].appendChild(element);
+		});
+	};
+
 	useEffect(() => {
-		if (document.getElementById('tinyMceScript')) {
+		let cancelled = false;
+
+		async function loadScripts() {
+			const scriptsToLoad:any[] = [
+				{
+					src: 'node_modules/tinymce/tinymce.min.js',
+					id: 'tinyMceScript',
+					loaded: false,
+				},
+				{
+					src: 'gui/editors/TinyMCE/plugins/lists.js',
+					id: 'tinyMceListsPluginScript',
+					loaded: false,
+				},
+			];
+
+			for (const s of scriptsToLoad) {
+				if (document.getElementById(s.id)) {
+					s.loaded = true;
+					continue;
+				}
+
+				console.info('Loading script', s.src);
+
+				await loadScript(s);
+				if (cancelled) return;
+
+				s.loaded = true;
+			}
+
 			setScriptLoaded(true);
-			return () => {};
 		}
 
-		let cancelled = false;
-		const script = document.createElement('script');
-		script.src = 'node_modules/tinymce/tinymce.min.js';
-		script.id = 'tinyMceScript';
-		script.onload = () => {
-			if (cancelled) return;
-			setScriptLoaded(true);
-		};
-		document.getElementsByTagName('head')[0].appendChild(script);
+		loadScripts();
+
 		return () => {
 			cancelled = true;
 		};
@@ -210,12 +263,12 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				width: '100%',
 				height: '100%',
 				resize: false,
-				plugins: 'noneditable link lists hr searchreplace',
+				plugins: 'noneditable link joplinLists hr searchreplace codesample',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				branding: false,
-				toolbar: 'bold italic | link codeformat customAttach | numlist bullist h1 h2 h3 hr blockquote',
+				toolbar: 'bold italic | link codeformat codesample joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote',
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
@@ -266,7 +319,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 						});
 					}
 
-					editor.ui.registry.addButton('customAttach', {
+					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: 'Attach...',
 						icon: 'upload',
 						onAction: async function() {
@@ -310,43 +363,55 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
+	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
+		const cssFiles = ['css/fork-awesome.min.css'].concat(pluginAssets
+			.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
+			.map((a:any) => a.path));
+
+		const jsFiles = pluginAssets
+			.filter((a:any) => a.mime === 'application/javascript' && !loadedAssetFiles_.includes(a.path))
+			.map((a:any) => a.path);
+
+		for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
+		for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
+
+		console.info('loadDocumentAssets: files to load', cssFiles, jsFiles);
+
+		if (cssFiles.length) editor.dom.loadCSS(cssFiles.join(','));
+
+		if (jsFiles.length) {
+			const editorElementId = editor.dom.uniqueId();
+
+			for (const jsFile of jsFiles) {
+				const script = editor.dom.create('script', {
+					id: editorElementId,
+					type: 'text/javascript',
+					src: jsFile,
+				});
+
+				editor.getDoc().getElementsByTagName('head')[0].appendChild(script);
+			}
+		}
+	};
+
 	useEffect(() => {
 		if (!editor) return () => {};
 
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value);
+			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, {
+				plugins: {
+					checkbox: {
+						renderingType: 2,
+					},
+				},
+			});
 			if (cancelled) return;
 
 			editor.setContent(result.html);
 
-			const cssFiles = result.pluginAssets
-				.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
-				.map((a:any) => a.path);
-
-			const jsFiles = result.pluginAssets
-				.filter((a:any) => a.mime === 'application/javascript' && !loadedAssetFiles_.includes(a.path))
-				.map((a:any) => a.path);
-
-			for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
-			for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
-
-			if (cssFiles.length) editor.dom.loadCSS(cssFiles.join(','));
-
-			if (jsFiles.length) {
-				const editorElementId = editor.dom.uniqueId();
-
-				for (const jsFile of jsFiles) {
-					const script = editor.dom.create('script', {
-						id: editorElementId,
-						type: 'text/javascript',
-						src: jsFile,
-					});
-
-					editor.getDoc().getElementsByTagName('head')[0].appendChild(script);
-				}
-			}
+			await loadDocumentAssets(editor, await props.allAssets(props.defaultEditorState.markupLanguage));
 
 			editor.getDoc().addEventListener('click', onEditorContentClick);
 
@@ -359,7 +424,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markupToHtml, props.defaultEditorState, onEditorContentClick]);
+	}, [editor, props.markupToHtml, props.allAssets, props.defaultEditorState, onEditorContentClick]);
 
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
@@ -410,7 +475,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			//
 			// Any maybe others, so to catch them all we only check the prefix
 
-			const changeCommands = ['mceBlockQuote'];
+			const changeCommands = ['mceBlockQuote', 'ToggleJoplinChecklistItem'];
 
 			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
 				onChangeHandler();
