@@ -238,6 +238,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingTop: 10, // Added for iOS (Not needed for Android??)
 				paddingBottom: 10, // Added for iOS (Not needed for Android??)
 			},
+			markdownButtons: {
+				borderColor: theme.dividerColor,
+			},
 		};
 
 		styles.titleContainer = {
@@ -900,6 +903,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					style={this.styles().bodyTextInput}
 					previewStyles={this.styles().noteBodyViewer}
 					value={note.body}
+					borderColor={this.styles().markdownButtons.borderColor}
 					saveText={text => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}

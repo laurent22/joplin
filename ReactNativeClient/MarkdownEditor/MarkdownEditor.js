@@ -16,7 +16,7 @@ import { renderFormatButtons } from './renderButtons';
 import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
 
 // TODO: Support custom themes
-const FOREGROUND_COLOR = 'rgba(82, 194, 175, 1)';
+const FOREGROUND_COLOR = 'rgb(100, 182, 253)';
 const styles = StyleSheet.create({
 	buttonContainer: {
 		flex: 0,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 const MarkdownPreviewButton = (props) =>
 	<TouchableOpacity
 		onPress={props.convertMarkdown}
-		style={{ padding: 8, borderRightWidth: 1, borderColor: FOREGROUND_COLOR }}>
+		style={{ padding: 8, borderRightWidth: 1, borderColor: props.borderColor }}>
 		<Image
 			style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
 			source={require('./static/visibility.png')}
@@ -139,7 +139,10 @@ export default class MarkdownEditor extends React.Component {
 				/>
 				{showPreview && <NoteBodyViewer {...this.props.noteBodyViewer} />}
 				<View style={styles.buttonContainer}>
-					<MarkdownPreviewButton convertMarkdown={this.convertMarkdown} />
+					<MarkdownPreviewButton
+						convertMarkdown={this.convertMarkdown}
+						borderColor={this.props.borderColor}
+					/>
 					{renderFormatButtons(
 						{
 							getState: () => this.state,
