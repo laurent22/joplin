@@ -15,8 +15,6 @@ import {
 import { renderFormatButtons } from './renderButtons';
 import { NoteBodyViewer } from 'lib/components/note-body-viewer.js';
 
-// TODO: Support custom themes
-const FOREGROUND_COLOR = 'rgb(100, 182, 253)';
 const styles = StyleSheet.create({
 	buttonContainer: {
 		flex: 0,
@@ -34,7 +32,7 @@ const MarkdownPreviewButton = (props) =>
 		onPress={props.convertMarkdown}
 		style={{ padding: 8, borderRightWidth: 1, borderColor: props.borderColor }}>
 		<Image
-			style={[styles.button, { tintColor: FOREGROUND_COLOR, padding: 8 }]}
+			style={{ tintColor: props.color, padding: 8 }}
 			source={require('./static/visibility.png')}
 			resizeMode="cover"
 		/>
@@ -142,9 +140,11 @@ export default class MarkdownEditor extends React.Component {
 					<MarkdownPreviewButton
 						convertMarkdown={this.convertMarkdown}
 						borderColor={this.props.borderColor}
+						color={this.props.markdownButtonsColor}
 					/>
 					{renderFormatButtons(
 						{
+							color: this.props.markdownButtonsColor,
 							getState: () => this.state,
 							setState: (state, callback) => {
 								// Hide Markdown preview on text change

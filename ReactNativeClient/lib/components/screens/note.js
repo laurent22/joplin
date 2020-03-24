@@ -240,6 +240,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 			markdownButtons: {
 				borderColor: theme.dividerColor,
+				color: theme.htmlLinkColor,
 			},
 		};
 
@@ -904,6 +905,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					previewStyles={this.styles().noteBodyViewer}
 					value={note.body}
 					borderColor={this.styles().markdownButtons.borderColor}
+					markdownButtonsColor={this.styles().markdownButtons.color}
 					saveText={text => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}

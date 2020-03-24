@@ -3,21 +3,19 @@ import { FlatList, TouchableOpacity, Text } from 'react-native';
 
 import Formats from './Formats';
 
-// TODO: Support custom themes
-const FOREGROUND_COLOR = 'rgb(100, 182, 253)';
-const defaultStyles = { padding: 8, color: FOREGROUND_COLOR, fontSize: 16 };
+const defaultStyles = { padding: 8, fontSize: 16 };
 
-const defaultMarkdownButton = ({ item, getState, setState }) => {
+const defaultMarkdownButton = ({ item, getState, setState, color }) => {
 	return (
 		<TouchableOpacity onPress={() => item.onPress({ getState, setState, item })}>
-			<Text style={[defaultStyles, item.style]}>
+			<Text style={[defaultStyles, item.style, { color: color }]}>
 				{item.title}
 			</Text>
 		</TouchableOpacity>
 	);
 };
 
-export const renderFormatButtons = ({ getState, setState }, formats, markdownButton) => {
+export const renderFormatButtons = ({ getState, setState, color }, formats, markdownButton) => {
 	const list = (
 		<FlatList
 			data={formats ? formats : Formats}
@@ -26,7 +24,7 @@ export const renderFormatButtons = ({ getState, setState }, formats, markdownBut
 			renderItem={({ item, index }) =>
 				markdownButton
 					? markdownButton({ item, getState, setState })
-					: defaultMarkdownButton({ item, getState, setState })}
+					: defaultMarkdownButton({ item, getState, setState, color })}
 			horizontal
 		/>
 	);
