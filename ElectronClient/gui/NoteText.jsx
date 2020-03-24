@@ -2132,7 +2132,7 @@ class NoteTextComponent extends React.Component {
 				};
 				this.webviewRef_.current.wrappedInstance.send('setHtml', html, options);
 				this.lastSetHtml_ = html;
-				if (this.state.note && KvStore.instance().db()) {
+				if (this.state.note && KvStore.instance().db_) {
 					KvStore.instance().setValue(this.state.note.id, Note.previewFromHtml(html));
 				}
 			}
