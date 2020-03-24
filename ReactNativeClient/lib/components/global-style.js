@@ -24,6 +24,8 @@ const globalStyle = {
 	raisedColor: '#003363',
 	raisedHighlightedColor: '#ffffff',
 
+	barStyle: 'dark-content',
+
 	warningBackgroundColor: '#FFD08D',
 
 	// For WebView - must correspond to the properties above
@@ -139,6 +141,8 @@ function themeStyle(theme) {
 		output.raisedColor = '#788BC3';
 		output.raisedHighlightedColor = '#ffffff';
 
+		output.barStyle = 'light-content';
+
 		output.htmlColor = 'rgb(220,220,220)';
 		output.htmlBackgroundColor = 'rgb(0,0,0)';
 		output.htmlLinkColor = 'rgb(166,166,255)';
@@ -169,6 +173,8 @@ function themeStyle(theme) {
 	output.raisedBackgroundColor = '#0F2051';
 	output.raisedColor = '#788BC3';
 	output.raisedHighlightedColor = '#ffffff';
+
+	output.barStyle = 'light-content';
 
 	output.htmlColor = 'rgb(220,220,220)';
 	output.htmlBackgroundColor = 'rgb(29,32,36)';

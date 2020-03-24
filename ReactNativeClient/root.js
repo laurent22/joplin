@@ -751,7 +751,7 @@ class AppComponent extends React.Component {
 					});
 				}}
 			>
-				<StatusBar barStyle="dark-content" />
+				<StatusBar barStyle={theme.barStyle} backgroundColor={theme.backgroundColor} />
 				<MenuContext style={{ flex: 1 }}>
 					<SafeAreaView style={{ flex: 1 }}>
 						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
