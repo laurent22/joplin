@@ -420,7 +420,7 @@ class MainScreenComponent extends React.Component {
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
-		this.styles_.verticalResizer = {
+		this.styles_.verticalResizerSidebar = {
 			width: 5,
 			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
 			// making the whole window scroll vertically. So we remove 10 extra pixels here.
@@ -428,8 +428,10 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
+
 		this.styles_.sideBar = {
-			width: sidebarWidth - this.styles_.verticalResizer.width,
+			width: sidebarWidth - this.styles_.verticalResizerSidebar.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -438,10 +440,11 @@ class MainScreenComponent extends React.Component {
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
 			this.styles_.sideBar.display = 'none';
+			this.styles_.verticalResizerSidebar.display = 'none';
 		}
 
 		this.styles_.noteList = {
-			width: noteListWidth - this.styles_.verticalResizer.width,
+			width: noteListWidth - this.styles_.verticalResizerNotelist.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -450,7 +453,7 @@ class MainScreenComponent extends React.Component {
 		if (isNoteListVisible === false) {
 			this.styles_.noteList.width = 0;
 			this.styles_.noteList.display = 'none';
-			this.styles_.verticalResizer.display = 'none';
+			this.styles_.verticalResizerNotelist.display = 'none';
 		}
 
 		this.styles_.noteText = {
@@ -565,7 +568,7 @@ class MainScreenComponent extends React.Component {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 			},
-			this.props.style
+			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
@@ -676,9 +679,9 @@ class MainScreenComponent extends React.Component {
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
+				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
+				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
 				{noteTextComp}
 				{pluginDialog}
 			</div>
