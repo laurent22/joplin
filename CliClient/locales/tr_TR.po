@@ -3382,3 +3382,125 @@ msgstr "OneDrive ile giriş yapın"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
 msgstr "Arama"
+
+#~ msgid ""
+#~ "Disabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Şifrelemeyi devre dışı bırakmak *tüm* notlarınızın ve eklerinizin yeniden "
+#~ "senkronize edileceği ve senkronizasyon hedefine şifrelenmemiş olarak "
+#~ "gönderileceği anlamına gelir. Devam etmek istiyor musunuz?"
+
+#~ msgid "Master Keys"
+#~ msgstr "Ana Anahtarlar"
+
+#~ msgid "Active"
+#~ msgstr "Aktif"
+
+#~ msgid "Source"
+#~ msgstr "Kaynak"
+
+#~ msgid "Password"
+#~ msgstr "Şifre"
+
+#~ msgid "Password OK"
+#~ msgstr "Şifre OK"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Not: Şifreleme için yalnızca bir ana anahtar kullanılacaktır (\"etkin\" "
+#~ "olarak işaretlenmiş olan). Notların veya not defterlerinin orijinal "
+#~ "olarak nasıl şifrelendiğine bağlı olarak, anahtarlardan herhangi biri "
+#~ "şifre çözme amacıyla kullanılabilir."
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "vurgulanan metin"
+
+#~ msgid "Global zoom percentage"
+#~ msgstr "Global yakınlaştırma yüzdesi"
+
+#~ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+#~ msgstr "\"%s\" den \"%s\" biçiminde dışa aktarılıyor. Lütfen bekleyin..."
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr ""
+#~ "Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Senkronizasyon zaten devam ediyor. Durum: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Ana şifreyi girin:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Ana şifreyi girin:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Gerekli argüman eksik gözüküyor: %s"
+
+#~ msgid "Note has been saved."
+#~ msgstr "Not kaydedildi."
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Senkronizasyon durumu"
+
+#~ msgid "General Options"
+#~ msgstr "Genel seçenekler"
+
+#~ msgid "Encryption options"
+#~ msgstr "Şifreleme seçenekleri"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Şifreleme Seçenekleri"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Alıntılama Seçenekleri"
+
+#, fuzzy
+#~ msgid "Permission to write to external storage"
+#~ msgstr "Kamera kullanımı için izin"
+
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Senkronizasyonu iptal et"
+
+#~ msgid "Hide metadata"
+#~ msgstr "Metadata'yı gizle"
+
+#~ msgid "Show metadata"
+#~ msgstr "Metadata'yı göster"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Not defterini sil"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Yeni bir not veya not defteri oluşturmak için (+) düğmesine tıklayın. "
+#~ "Mevcut not defterlerinize erişmek için yandaki menüye tıklayın."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Şu anda not defteriniz yok. (+) butonuna tıklayarak bir tane oluşturun."
+
+#~ msgid "Welcome"
+#~ msgstr "Hoşgeldiniz"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Her etiketi virgülle ayırın."
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Dosya sistemi senkronizasyonu etkinleştirildiğinde senkronize edilecek "
+#~ "yol. Bakınız `sync.target`."
