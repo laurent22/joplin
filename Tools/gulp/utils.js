@@ -34,14 +34,14 @@ utils.execCommand = function(command) {
 
 utils.dirname = function(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	s.pop();
 	return s.join('/');
 };
 
 utils.basename = function(path) {
 	if (!path) throw new Error('Path is empty');
-	let s = path.split(/\/|\\/);
+	const s = path.split(/\/|\\/);
 	return s[s.length - 1];
 };
 
@@ -63,7 +63,7 @@ utils.toSystemSlashes = function(path) {
 utils.fileExtension = function(path) {
 	if (!path) throw new Error('Path is empty');
 
-	let output = path.split('.');
+	const output = path.split('.');
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
 };
@@ -80,6 +80,7 @@ utils.copyDir = async function(src, dest, options) {
 
 	options = Object.assign({}, {
 		excluded: [],
+		delete: true,
 	}, options);
 
 	src = utils.toSystemSlashes(src);
@@ -96,7 +97,9 @@ utils.copyDir = async function(src, dest, options) {
 			excludedFlag = `/EXCLUDE:${tempFile}`;
 		}
 
-		await utils.execCommand(`xcopy /C /I /H /R /Y /S ${excludedFlag} "${src}" ${dest}`);
+		// TODO: add support for delete flag
+
+		await utils.execCommand(`xcopy /C /I /H /R /Y /S ${excludedFlag} "${src}" "${dest}"`);
 
 		if (tempFile) await fs.remove(tempFile);
 	} else {
@@ -107,7 +110,10 @@ utils.copyDir = async function(src, dest, options) {
 			}).join(' ');
 		}
 
-		await utils.execCommand(`rsync -a --delete ${excludedFlag} "${src}/" "${dest}/"`);
+		let deleteFlag = '';
+		if (options.delete) deleteFlag = '--delete';
+
+		await utils.execCommand(`rsync -a ${deleteFlag} ${excludedFlag} "${src}/" "${dest}/"`);
 	}
 };
 

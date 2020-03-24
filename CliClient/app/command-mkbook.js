@@ -13,7 +13,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let folder = await Folder.save({ title: args['new-notebook'] }, { userSideValidation: true });
+		const folder = await Folder.save({ title: args['new-notebook'] }, { userSideValidation: true });
 		app().switchCurrentFolder(folder);
 	}
 }

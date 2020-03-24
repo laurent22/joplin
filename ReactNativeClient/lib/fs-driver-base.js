@@ -1,5 +1,7 @@
 const { filename, fileExtension } = require('lib/path-utils');
 const { time } = require('lib/time-utils.js');
+const Setting = require('lib/models/Setting');
+const md5 = require('md5');
 
 class FsDriverBase {
 	async isDirectory(path) {
@@ -27,7 +29,7 @@ class FsDriverBase {
 		}
 		let counter = 1;
 
-		let nameNoExt = filename(name, true);
+		const nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
@@ -66,6 +68,21 @@ class FsDriverBase {
 			if (Date.now() - startTime > timeout) return false;
 			await time.msleep(100);
 		}
+	}
+
+	// TODO: move out of here and make it part of joplin-renderer
+	// or assign to option using .bind(fsDriver())
+	async cacheCssToFile(cssStrings) {
+		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
+		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
+		if (!(await this.exists(cssFilePath))) {
+			await this.writeFile(cssFilePath, cssString, 'utf8');
+		}
+
+		return {
+			path: cssFilePath,
+			mime: 'text/css',
+		};
 	}
 }
 

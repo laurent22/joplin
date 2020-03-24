@@ -1,3 +1,5 @@
+/* eslint prefer-const: 0*/
+
 // Based on https://github.com/waylonflinn/markdown-it-katex
 
 'use strict';
@@ -12,10 +14,18 @@ const stringifySafe = require('json-stringify-safe');
 
 katex = mhchemModule(katex);
 
+function katexStyle() {
+	return [
+		{ name: 'katex.css' },
+		// Note: Katex also requires a number of fonts but they don't need to be specified here
+		// since they will be loaded as needed from the CSS.
+	];
+}
+
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]
 function isValidDelim(state, pos) {
-	var prevChar,
+	let prevChar,
 		nextChar,
 		max = state.posMax,
 		can_open = true,
@@ -40,7 +50,7 @@ function isValidDelim(state, pos) {
 }
 
 function math_inline(state, silent) {
-	var start, match, token, res, pos;
+	let start, match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
 		return false;
@@ -115,7 +125,7 @@ function math_inline(state, silent) {
 }
 
 function math_block(state, start, end, silent) {
-	var firstLine,
+	let firstLine,
 		lastLine,
 		next,
 		lastPos,
@@ -180,99 +190,80 @@ function math_block(state, start, end, silent) {
 	return true;
 }
 
-let cache_ = {};
+const cache_ = {};
 
-module.exports = function(context) {
-	// Keep macros that persist across Katex blocks to allow defining a macro
-	// in one block and re-using it later in other blocks.
-	// https://github.com/laurent22/joplin/issues/1105
-	context.__katex = { macros: {} };
+module.exports = {
+	install: function(context) {
+		// Keep macros that persist across Katex blocks to allow defining a macro
+		// in one block and re-using it later in other blocks.
+		// https://github.com/laurent22/joplin/issues/1105
+		context.__katex = { macros: {} };
 
-	const addContextAssets = () => {
-		context.pluginAssets['katex'] = [
-			{ name: 'katex.css' },
-			{ name: 'fonts/KaTeX_Main-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Main-Bold.woff2' },
-			{ name: 'fonts/KaTeX_Main-BoldItalic.woff2' },
-			{ name: 'fonts/KaTeX_Main-Italic.woff2' },
-			{ name: 'fonts/KaTeX_Math-Italic.woff2' },
-			{ name: 'fonts/KaTeX_Math-BoldItalic.woff2' },
-			{ name: 'fonts/KaTeX_Size1-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Size2-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Size3-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Size4-Regular.woff2' },
-			{ name: 'fonts/KaTeX_AMS-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Caligraphic-Bold.woff2' },
-			{ name: 'fonts/KaTeX_Caligraphic-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Fraktur-Bold.woff2' },
-			{ name: 'fonts/KaTeX_Fraktur-Regular.woff2' },
-			{ name: 'fonts/KaTeX_SansSerif-Bold.woff2' },
-			{ name: 'fonts/KaTeX_SansSerif-Italic.woff2' },
-			{ name: 'fonts/KaTeX_SansSerif-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Script-Regular.woff2' },
-			{ name: 'fonts/KaTeX_Typewriter-Regular.woff2' },
-		];
-	};
+		const addContextAssets = () => {
+			context.pluginAssets['katex'] = katexStyle();
+		};
 
-	function renderToStringWithCache(latex, options) {
-		const cacheKey = md5(escape(latex) + escape(stringifySafe(options)));
-		if (cacheKey in cache_) {
-			return cache_[cacheKey];
-		} else {
-			const beforeMacros = stringifySafe(options.macros);
-			const output = katex.renderToString(latex, options);
-			const afterMacros = stringifySafe(options.macros);
+		function renderToStringWithCache(latex, options) {
+			const cacheKey = md5(escape(latex) + escape(stringifySafe(options)));
+			if (cacheKey in cache_) {
+				return cache_[cacheKey];
+			} else {
+				const beforeMacros = stringifySafe(options.macros);
+				const output = katex.renderToString(latex, options);
+				const afterMacros = stringifySafe(options.macros);
 
-			// Don't cache the formulas that add macros, otherwise
-			// they won't be added on second run.
-			if (beforeMacros === afterMacros) cache_[cacheKey] = output;
-			return output;
+				// Don't cache the formulas that add macros, otherwise
+				// they won't be added on second run.
+				if (beforeMacros === afterMacros) cache_[cacheKey] = output;
+				return output;
+			}
 		}
-	}
 
-	return function(md, options) {
-		// Default options
+		return function(md, options) {
+			// Default options
 
-		options = options || {};
-		options.macros = context.__katex.macros;
-		options.trust = true;
+			options = options || {};
+			options.macros = context.__katex.macros;
+			options.trust = true;
 
-		// set KaTeX as the renderer for markdown-it-simplemath
-		var katexInline = function(latex) {
-			options.displayMode = false;
-			try {
-				return renderToStringWithCache(latex, options);
-			} catch (error) {
-				console.error('Katex error for:', latex, error);
-				return latex;
-			}
+			// set KaTeX as the renderer for markdown-it-simplemath
+			const katexInline = function(latex) {
+				options.displayMode = false;
+				try {
+					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-source-open="$" data-joplin-source-close="$">${latex}</span>${renderToStringWithCache(latex, options)}</span>`;
+				} catch (error) {
+					console.error('Katex error for:', latex, error);
+					return latex;
+				}
+			};
+
+			const inlineRenderer = function(tokens, idx) {
+				addContextAssets();
+				return katexInline(tokens[idx].content);
+			};
+
+			const katexBlock = function(latex) {
+				options.displayMode = true;
+				try {
+					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
+				} catch (error) {
+					console.error('Katex error for:', latex, error);
+					return latex;
+				}
+			};
+
+			const blockRenderer = function(tokens, idx) {
+				addContextAssets();
+				return `${katexBlock(tokens[idx].content)}\n`;
+			};
+
+			md.inline.ruler.after('escape', 'math_inline', math_inline);
+			md.block.ruler.after('blockquote', 'math_block', math_block, {
+				alt: ['paragraph', 'reference', 'blockquote', 'list'],
+			});
+			md.renderer.rules.math_inline = inlineRenderer;
+			md.renderer.rules.math_block = blockRenderer;
 		};
-
-		var inlineRenderer = function(tokens, idx) {
-			addContextAssets();
-			return katexInline(tokens[idx].content);
-		};
-
-		var katexBlock = function(latex) {
-			options.displayMode = true;
-			try {
-				return `<p>${renderToStringWithCache(latex, options)}</p>`;
-			} catch (error) {
-				console.error('Katex error for:', latex, error);
-				return latex;
-			}
-		};
-
-		var blockRenderer = function(tokens, idx) {
-			addContextAssets();
-			return `${katexBlock(tokens[idx].content)}\n`;
-		};
-
-		md.inline.ruler.after('escape', 'math_inline', math_inline);
-		md.block.ruler.after('blockquote', 'math_block', math_block, {
-			alt: ['paragraph', 'reference', 'blockquote', 'list'],
-		});
-		md.renderer.rules.math_inline = inlineRenderer;
-		md.renderer.rules.math_block = blockRenderer;
-	};
+	},
+	style: katexStyle,
 };

@@ -19,7 +19,7 @@ class NoteSearchBarComponent extends React.Component {
 	style() {
 		const theme = themeStyle(this.props.theme);
 
-		let style = {
+		const style = {
 			root: Object.assign({}, theme.textStyle, {
 				backgroundColor: theme.backgroundColor,
 				color: theme.colorFaded,
@@ -130,7 +130,7 @@ class NoteSearchBarComponent extends React.Component {
 		if (this.backgroundColor === undefined) {
 			this.backgroundColor = theme.backgroundColor;
 		}
-		let buttonEnabled = (this.backgroundColor === theme.backgroundColor);
+		const buttonEnabled = (this.backgroundColor === theme.backgroundColor);
 
 		const closeButton = this.buttonIconComponent('fa-times', this.closeButton_click, true);
 		const previousButton = this.buttonIconComponent('fa-chevron-up', this.previousButton_click, buttonEnabled);

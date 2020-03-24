@@ -42,7 +42,7 @@ class DatabaseDriverReactNative {
 
 	selectAll(sql, params = null) {
 		return this.exec(sql, params).then(r => {
-			let output = [];
+			const output = [];
 			for (let i = 0; i < r.rows.length; i++) {
 				output.push(r.rows.item(i));
 			}

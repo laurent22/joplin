@@ -46,7 +46,7 @@ Skills Required: JavaScript; React; React Native (for mobile)
 
 Potential Mentor(s): [Roeland Jago Douma](mailto:roeland.douma@nextcloud.com), [laurent22](https://github.com/laurent22/)
 
-More info: [Forum thread about Joplin Web API for Nextcloud](https://discourse.joplinapp.org/t/joplin-api-in-nextcloud-prototype/)
+More info: [Forum thread about Joplin Web API for Nextcloud](https://discourse.joplinapp.org/t/joplin-web-api-for-nextcloud/4491)
 
 ## 3. Hierarchical Tags
 
@@ -101,7 +101,7 @@ Potential Mentor(s): [Roeland Jago Douma](mailto:roeland.douma@nextcloud.com), [
 
 More info: [GitHub: Nextcloud notes integration (Web client)](https://github.com/laurent22/joplin/issues/228)
 
-## 5. OCR support
+## 6. OCR support
 
 It is possible to add support for OCR content in Joplin via the [Tesseract library](http://tesseract.projectnaptha.com/). A first step would be to assess the feasibility of this project by integrating the lib in the desktop app and trying to OCR an image. OCR support should be implemented as a service of the desktop app. It would extract the text from the images, and append the content as plain text to the notes.
 
@@ -113,7 +113,7 @@ Skills Required: JavaScript
 
 Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
 
-## 6. Password-protected notes
+## 7. Password-protected notes
 
 We would like to add an option to allow encrypting a note or a notebook with a password. When opening the note, the password must be provided to reveal the content.
 
@@ -125,7 +125,7 @@ Skills Required: JavaScript; React
 
 Potential Mentor(s): [PackElend](https://github.com/PackElend), [laurent22](https://github.com/laurent22/)
 
-## 7. Search
+## 8. Search
 
 The current search engine is built on top of SQLite FTS. An index of the notes is built and this is what is used by FTS when searching.
 
@@ -151,7 +151,7 @@ Potential Mentor(s): [laurent22](https://github.com/laurent22/)
 
 More info: [Search engine improvements](https://github.com/laurent22/joplin/issues/1877)
 
-## 8. WYSIWYG Editor
+## 9. WYSIWYG Editor
 
 The current editor shows the Markdown text on the left side and the rendered HTML on the right side (a split view). We would like to add another editor option, which would be a WYSIWYG editor, where the user can directly edit formatted text. This would not replace the split view but rather be an alternative editor and the user can choose either split view or WYSIWYG.
 
@@ -165,7 +165,7 @@ Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [PackElend](htt
 
 More info: [WYSIWYG thread on the forum](https://discourse.joplinapp.org/t/wysiwyg-editor-in-joplin/2253)
 
-# 9. Custom keyboard shortcuts
+# 10. Custom keyboard shortcuts
 
 The CLI application allows setting custom keyboard shortcuts, however this feature is currently missing from the desktop application. We would like to let the user set shortcuts for the menu items in particular, but also potentially any other Joplin action. There should be a shortcut editor in the Config panel to do this.
 

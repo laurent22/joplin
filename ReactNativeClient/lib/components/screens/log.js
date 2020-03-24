@@ -31,7 +31,7 @@ class LogScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			row: {
 				flexDirection: 'row',
 				paddingLeft: 1,
@@ -81,7 +81,7 @@ class LogScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		let renderRow = ({ item }) => {
+		const renderRow = ({ item }) => {
 			let textStyle = this.styles().rowText;
 			if (item.level == Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
 			if (item.level == Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;

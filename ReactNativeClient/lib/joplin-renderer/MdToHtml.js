@@ -3,9 +3,13 @@ const md5 = require('md5');
 const noteStyle = require('./noteStyle');
 const { fileExtension } = require('./pathUtils');
 const memoryCache = require('memory-cache');
+
+// /!\/!\ Note: the order of rules is important!! /!\/!\
 const rules = {
+	fence: require('./MdToHtml/rules/fence').default,
+	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image'),
-	checkbox: require('./MdToHtml/rules/checkbox'),
+	checkbox: require('./MdToHtml/rules/checkbox').default,
 	katex: require('./MdToHtml/rules/katex'),
 	link_open: require('./MdToHtml/rules/link_open'),
 	html_image: require('./MdToHtml/rules/html_image'),
@@ -13,8 +17,8 @@ const rules = {
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
-	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 };
+
 const setupLinkify = require('./MdToHtml/setupLinkify');
 const hljs = require('highlight.js');
 const uslug = require('uslug');
@@ -53,6 +57,34 @@ class MdToHtml {
 		this.ResourceModel_ = options.ResourceModel;
 		this.pluginOptions_ = options.pluginOptions ? options.pluginOptions : {};
 		this.contextCache_ = new memoryCache.Cache();
+
+		this.tempDir_ = options.tempDir;
+		this.fsDriver_ = {
+			writeFile: (/* path, content, encoding = 'base64'*/) => { throw new Error('writeFile not set'); },
+			exists: (/* path*/) => { throw new Error('exists not set'); },
+			cacheCssToFile: (/* cssStrings*/) => { throw new Error('cacheCssToFile not set'); },
+		};
+
+		if (options.fsDriver) {
+			if (options.fsDriver.writeFile) this.fsDriver_.writeFile = options.fsDriver.writeFile;
+			if (options.fsDriver.exists) this.fsDriver_.exists = options.fsDriver.exists;
+			if (options.fsDriver.cacheCssToFile) this.fsDriver_.cacheCssToFile = options.fsDriver.cacheCssToFile;
+		}
+	}
+
+	fsDriver() {
+		return this.fsDriver_;
+	}
+
+	tempDir() {
+		return this.tempDir_;
+	}
+
+	static pluginNames() {
+		const output = [];
+		for (const n in rules) output.push(n);
+		for (const n in plugins) output.push(n);
+		return output;
 	}
 
 	pluginOptions(name) {
@@ -93,8 +125,10 @@ class MdToHtml {
 						throw new Error(`Unsupported inline mime type: ${mime}`);
 					}
 				} else {
+					const name = `${pluginName}/${asset.name}`;
 					files.push(Object.assign({}, asset, {
-						name: `${pluginName}/${asset.name}`,
+						name: name,
+						path: `pluginAssets/${name}`,
 						mime: mime,
 					}));
 				}
@@ -102,20 +136,53 @@ class MdToHtml {
 		}
 
 		return {
-			files: files,
+			pluginAssets: files,
 			cssStrings: cssStrings,
 		};
 	}
 
-	async render(body, style = null, options = null) {
-		if (!options) options = {};
-		if (!('bodyOnly' in options)) options.bodyOnly = false;
-		if (!options.postMessageSyntax) options.postMessageSyntax = 'postMessage';
-		if (!options.paddingBottom) options.paddingBottom = '0';
-		if (!options.highlightedKeywords) options.highlightedKeywords = [];
-		if (!options.codeTheme) options.codeTheme = 'atom-one-light.css';
+	async allAssets(theme) {
+		const assets = {};
+		for (const key in rules) {
+			if (!this.pluginEnabled(key)) continue;
+			const rule = rules[key];
 
-		if (!style) style = Object.assign({}, defaultNoteStyle);
+			if (rule.style) {
+				assets[key] = rule.style(theme);
+			}
+		}
+
+		const processedAssets = this.processPluginAssets(assets);
+		processedAssets.cssStrings.splice(0, 0, noteStyle(theme));
+		const output = await this.outputAssetsToExternalAssets_(processedAssets);
+		return output.pluginAssets;
+	}
+
+	async outputAssetsToExternalAssets_(output) {
+		for (const cssString of output.cssStrings) {
+			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
+		}
+		delete output.cssStrings;
+		return output;
+	}
+
+	// "style" here is really the theme, as returned by themeStyle()
+	async render(body, theme = null, options = null) {
+		options = Object.assign({}, {
+			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
+			bodyOnly: false,
+			// In splitted mode, the CSS and HTML will be returned in separate properties.
+			// In non-splitted mode, CSS and HTML will be merged in the same document.
+			splitted: false,
+			// When this is true, all assets such as CSS or JS are returned as external
+			// files. Otherwise some of them might be in the cssStrings property.
+			externalAssetsOnly: false,
+			postMessageSyntax: 'postMessage',
+			highlightedKeywords: [],
+			codeTheme: 'atom-one-light.css',
+			theme: Object.assign({}, defaultNoteStyle, theme),
+			plugins: {},
+		}, options);
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
 		// associated with this particular Markdown body. It is only used to allow us to
@@ -126,7 +193,7 @@ class MdToHtml {
 			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
 		}
 
-		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(style)));
+		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(options.theme)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
@@ -147,6 +214,13 @@ class MdToHtml {
 			linkify: true,
 			html: true,
 			highlight: (str, lang) => {
+				let outputCodeHtml = '';
+
+				// The strings includes the last \n that is part of the fence,
+				// so we remove it because we need the exact code in the source block
+				const trimmedStr = str.replace(/(.*)\n$/, '$1');
+				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
+
 				try {
 					let hlCode = '';
 
@@ -156,9 +230,9 @@ class MdToHtml {
 						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
 						if (lang && hljs.getLanguage(lang)) {
-							hlCode = hljs.highlight(lang, str, true).value;
+							hlCode = hljs.highlight(lang, trimmedStr, true).value;
 						} else {
-							hlCode = hljs.highlightAuto(str).value;
+							hlCode = hljs.highlightAuto(trimmedStr).value;
 						}
 						this.cachedHighlightedCode_[cacheKey] = hlCode;
 					}
@@ -167,10 +241,15 @@ class MdToHtml {
 						{ name: options.codeTheme },
 					];
 
-					return `<pre class="hljs"><code>${hlCode}</code></pre>`;
+					outputCodeHtml = hlCode;
 				} catch (error) {
-					return `<pre class="hljs"><code>${markdownIt.utils.escapeHtml(str)}</code></pre>`;
+					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
+
+				return {
+					wrapCode: false,
+					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
+				};
 			},
 		});
 
@@ -201,19 +280,16 @@ class MdToHtml {
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.
 		// The calling application will need to handle loading these assets.
 
-		markdownIt.use(rules.image(context, ruleOptions));
-		markdownIt.use(rules.checkbox(context, ruleOptions));
-		markdownIt.use(rules.link_open(context, ruleOptions));
-		markdownIt.use(rules.html_image(context, ruleOptions));
-		if (this.pluginEnabled('katex')) markdownIt.use(rules.katex(context, ruleOptions));
-		if (this.pluginEnabled('fountain')) markdownIt.use(rules.fountain(context, ruleOptions));
-		if (this.pluginEnabled('mermaid')) markdownIt.use(rules.mermaid(context, ruleOptions));
-		markdownIt.use(rules.sanitize_html(context, ruleOptions));
-		markdownIt.use(rules.highlight_keywords(context, ruleOptions));
-		markdownIt.use(rules.code_inline(context, ruleOptions));
+		for (const key in rules) {
+			if (!this.pluginEnabled(key)) continue;
+			const rule = rules[key];
+			const ruleInstall = rule.install ? rule.install : rule;
+			markdownIt.use(ruleInstall(context, { ...ruleOptions }));
+		}
+
 		markdownIt.use(markdownItAnchor, { slugify: uslugify });
 
-		for (let key in plugins) {
+		for (const key in plugins) {
 			if (this.pluginEnabled(key)) markdownIt.use(plugins[key].module, plugins[key].options);
 		}
 
@@ -221,31 +297,27 @@ class MdToHtml {
 
 		const renderedBody = markdownIt.render(body);
 
-		let cssStrings = noteStyle(style, options);
+		let cssStrings = noteStyle(options.theme);
 
-		const pluginAssets = this.processPluginAssets(context.pluginAssets);
-		cssStrings = cssStrings.concat(pluginAssets.cssStrings);
-
-		const output = {
-			pluginAssets: pluginAssets.files.map(f => {
-				return Object.assign({}, f, {
-					path: `pluginAssets/${f.name}`,
-				});
-			}),
-		};
-
-		if (options.bodyOnly) {
-			output.html = renderedBody;
-			return output;
-		}
+		let output = this.processPluginAssets(context.pluginAssets);
+		cssStrings = cssStrings.concat(output.cssStrings);
 
 		if (options.userCss) cssStrings.push(options.userCss);
 
-		const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
+		if (options.bodyOnly) {
+			output.html = renderedBody;
+			output.cssStrings = cssStrings;
+		} else {
+			const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
+			output.html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
 
-		const html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
+			if (options.splitted) {
+				output.cssStrings = cssStrings;
+				output.html = `<div id="rendered-md">${renderedBody}</div>`;
+			}
+		}
 
-		output.html = html;
+		if (options.externalAssetsOnly) output = await this.outputAssetsToExternalAssets_(output);
 
 		// Fow now, we keep only the last entry in the cache
 		this.cachedOutputs_ = {};

@@ -35,7 +35,7 @@ class Command extends BaseCommand {
 			// Load note or create it if it doesn't exist
 			// -------------------------------------------------------------------------
 
-			let title = args['note'];
+			const title = args['note'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
 			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
@@ -91,7 +91,7 @@ class Command extends BaseCommand {
 
 			const updatedContent = await fs.readFile(tempFilePath, 'utf8');
 			if (updatedContent !== originalContent) {
-				let updatedNote = await Note.unserializeForEdit(updatedContent);
+				const updatedNote = await Note.unserializeForEdit(updatedContent);
 				updatedNote.id = note.id;
 				await Note.save(updatedNote);
 				this.stdout(_('Note has been saved.'));

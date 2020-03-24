@@ -20,7 +20,7 @@ class SideMenuContentNoteComponent extends Component {
 		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			menu: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
@@ -73,7 +73,7 @@ class SideMenuContentNoteComponent extends Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		let items = [];
+		const items = [];
 
 		const options = this.props.options ? this.props.options : [];
 		let dividerIndex = 0;
@@ -86,7 +86,7 @@ class SideMenuContentNoteComponent extends Component {
 			}
 		}
 
-		let style = {
+		const style = {
 			flex: 1,
 			borderRightWidth: 1,
 			borderRightColor: globalStyle.dividerColor,

@@ -14,20 +14,20 @@ class Command extends BaseCommand {
 	}
 
 	async action() {
-		let service = new ReportService();
-		let report = await service.status(Setting.value('sync.target'));
+		const service = new ReportService();
+		const report = await service.status(Setting.value('sync.target'));
 
 		for (let i = 0; i < report.length; i++) {
-			let section = report[i];
+			const section = report[i];
 
 			if (i > 0) this.stdout('');
 
 			this.stdout(`# ${section.title}`);
 			this.stdout('');
 
-			for (let n in section.body) {
+			for (const n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				let line = section.body[n];
+				const line = section.body[n];
 				this.stdout(line);
 			}
 		}
