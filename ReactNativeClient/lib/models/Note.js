@@ -289,7 +289,8 @@ class Note extends BaseItem {
 	}
 
 	static async getUpdatedPreview(noteId) {
-		return await KvStore.instance().value(noteId);
+		const preview = KvStore.instance().db() ? await KvStore.instance().value(noteId) : '';
+		return preview;
 	}
 
 	static previewFromHtml(html) {
@@ -371,7 +372,7 @@ class Note extends BaseItem {
 			const items = uncompletedTodos.concat(theRest);
 
 			for (const item of items) {
-				item.preview = await KvStore.instance().value(item.id);
+				item.preview = KvStore.instance().db() ? await KvStore.instance().value(item.id) : '';
 			}
 
 			return items;
@@ -388,7 +389,7 @@ class Note extends BaseItem {
 		const items = await this.search(options);
 
 		for (const item of items) {
-			item.preview = await KvStore.instance().value(item.id);
+			item.preview = KvStore.instance().db() ? await KvStore.instance().value(item.id) : '';
 		}
 		return items;
 	}
