@@ -182,7 +182,7 @@ class MdToHtml {
 			paddingBottom: '0',
 			highlightedKeywords: [],
 			codeTheme: 'atom-one-light.css',
-			theme: Object.assign({}, defaultNoteStyle, theme),
+			theme: Object.assign({ paddingTop: '16px' }, defaultNoteStyle, theme),
 			plugins: {},
 		}, options);
 
