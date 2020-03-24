@@ -968,6 +968,7 @@ class NoteTextComponent extends React.Component {
 				cancelledKeys.push(`Ctrl+${l}`);
 				cancelledKeys.push(`Command+${l}`);
 			}
+			cancelledKeys.push('Alt+E');
 
 			for (let i = 0; i < cancelledKeys.length; i++) {
 				const k = cancelledKeys[i];
@@ -2025,7 +2026,7 @@ class NoteTextComponent extends React.Component {
 		};
 
 		const toolbarStyle = {
-			marginTop: 3,
+			marginTop: 4,
 			marginBottom: 0,
 		};
 

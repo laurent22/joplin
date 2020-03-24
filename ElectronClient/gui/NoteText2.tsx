@@ -348,6 +348,32 @@ function NoteText2(props:NoteTextProps) {
 		return result;
 	}, [props.theme]);
 
+	const allAssets = useCallback(async (markupLanguage:number):Promise<any[]> => {
+		const theme = themeStyle(props.theme);
+
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml({
+			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+		});
+
+		return markupToHtml.allAssets(markupLanguage, theme);
+	}, [props.theme]);
+
+	const joplinHtml = useCallback(async (type:string) => {
+		if (type === 'checkbox') {
+			const result = await markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, '- [ ] xxxxxREMOVExxxxx', {
+				bodyOnly: true,
+				externalAssetsOnly: true,
+			});
+			const html = result.html
+				.replace(/xxxxxREMOVExxxxx/m, ' ')
+				.replace(/<ul.*?>/, '')
+				.replace(/<\/ul>/, '');
+			return { ...result, html: html };
+		}
+
+		throw new Error(`Invalid type:${type}`);
+	}, [markupToHtml]);
+
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
 			props.dispatch({
@@ -501,8 +527,10 @@ function NoteText2(props:NoteTextProps) {
 		onWillChange: onBodyWillChange,
 		defaultEditorState: defaultEditorState,
 		markupToHtml: markupToHtml,
+		allAssets: allAssets,
 		attachResources: attachResources,
 		disabled: waitingToSaveNote,
+		joplinHtml: joplinHtml,
 	};
 
 	let editor = null;

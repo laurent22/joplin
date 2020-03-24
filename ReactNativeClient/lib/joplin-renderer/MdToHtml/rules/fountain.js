@@ -1,99 +1,106 @@
 const fountain = require('../../vendor/fountain.min.js');
 
-const fountainCss = `
-.fountain {
-	font-family: monospace;
-	line-height: 107%;
-	max-width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
-}
+const fountainCss = function() {
+	return [
+		{
+			inline: true,
+			mime: 'text/css',
+			text: `
+				.fountain {
+					font-family: monospace;
+					line-height: 107%;
+					max-width: 1000px;
+					margin-left: auto;
+					margin-right: auto;
+				}
 
-.fountain .title-page,
-.fountain .page { 
-	box-shadow: 0 0 5px rgba(0,0,0,0.1);
-	border: 1px solid #d2d2d2;
-	padding: 10%;
-	margin-bottom: 2em;
-}
+				.fountain .title-page,
+				.fountain .page { 
+					box-shadow: 0 0 5px rgba(0,0,0,0.1);
+					border: 1px solid #d2d2d2;
+					padding: 10%;
+					margin-bottom: 2em;
+				}
 
-.fountain h1,
-.fountain h2,
-.fountain h3,
-.fountain h4,
-.fountain p {
-	font-weight: normal;
-	line-height: 107%;
-	margin: 1em 0;
-	border: none;
-	font-size: 1em;
-}
+				.fountain h1,
+				.fountain h2,
+				.fountain h3,
+				.fountain h4,
+				.fountain p {
+					font-weight: normal;
+					line-height: 107%;
+					margin: 1em 0;
+					border: none;
+					font-size: 1em;
+				}
 
-.fountain .bold {
-	font-weight: bold;
-}
+				.fountain .bold {
+					font-weight: bold;
+				}
 
-.fountain .underline {
-	text-decoration: underline;
-}
+				.fountain .underline {
+					text-decoration: underline;
+				}
 
-.fountain .centered {
-	text-align: center;
-}
+				.fountain .centered {
+					text-align: center;
+				}
 
-.fountain h2 {
-	text-align: right;
-}
+				.fountain h2 {
+					text-align: right;
+				}
 
-.fountain .dialogue p.parenthetical {
-	margin-left: 11%;
-}
+				.fountain .dialogue p.parenthetical {
+					margin-left: 11%;
+				}
 
-.fountain .title-page .credit,
-.fountain .title-page .authors,
-.fountain .title-page .source {
-	text-align: center;
-}
+				.fountain .title-page .credit,
+				.fountain .title-page .authors,
+				.fountain .title-page .source {
+					text-align: center;
+				}
 
-.fountain .title-page h1 {
-	margin-bottom: 1.5em;
-	text-align: center;
-}
+				.fountain .title-page h1 {
+					margin-bottom: 1.5em;
+					text-align: center;
+				}
 
-.fountain .title-page .source {
-	margin-top: 1.5em;
-}
+				.fountain .title-page .source {
+					margin-top: 1.5em;
+				}
 
-.fountain .title-page .notes {
-	text-align: right;
-	margin: 3em 0;
-}
+				.fountain .title-page .notes {
+					text-align: right;
+					margin: 3em 0;
+				}
 
-.fountain .title-page h1 {
-	margin-bottom: 1.5em;
-	text-align: center;
-}
+				.fountain .title-page h1 {
+					margin-bottom: 1.5em;
+					text-align: center;
+				}
 
-.fountain .dialogue {
-	margin-left: 3em;
-	margin-right: 3em;
-}
+				.fountain .dialogue {
+					margin-left: 3em;
+					margin-right: 3em;
+				}
 
-.fountain .dialogue p,
-.fountain .dialogue h1,
-.fountain .dialogue h2,
-.fountain .dialogue h3,
-.fountain .dialogue h4 {
-	margin: 0;
-}
+				.fountain .dialogue p,
+				.fountain .dialogue h1,
+				.fountain .dialogue h2,
+				.fountain .dialogue h3,
+				.fountain .dialogue h4 {
+					margin: 0;
+				}
 
-.fountain .dialogue h1,
-.fountain .dialogue h2,
-.fountain .dialogue h3,
-.fountain .dialogue h4 {
-	text-align: center;
-}
-`;
+				.fountain .dialogue h1,
+				.fountain .dialogue h2,
+				.fountain .dialogue h3,
+				.fountain .dialogue h4 {
+					text-align: center;
+				}`,
+		},
+	];
+};
 
 function renderFountainScript(markdownIt, content) {
 	const result = fountain.parse(content);
@@ -114,13 +121,7 @@ function renderFountainScript(markdownIt, content) {
 function addContextAssets(context) {
 	if ('fountain' in context.pluginAssets) return;
 
-	context.pluginAssets['fountain'] = [
-		{
-			inline: true,
-			text: fountainCss,
-			mime: 'text/css',
-		},
-	];
+	context.pluginAssets['fountain'] = fountainCss();
 }
 
 function installRule(markdownIt, mdOptions, ruleOptions, context) {
@@ -136,8 +137,11 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 	};
 }
 
-module.exports = function(context, ruleOptions) {
-	return function(md, mdOptions) {
-		installRule(md, mdOptions, ruleOptions, context);
-	};
+module.exports = {
+	install: function(context, ruleOptions) {
+		return function(md, mdOptions) {
+			installRule(md, mdOptions, ruleOptions, context);
+		};
+	},
+	style: fountainCss,
 };
