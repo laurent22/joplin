@@ -21,15 +21,15 @@ If you get a node-gyp related error, you might need to manually install it: `npm
 
 If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
-#Mobile application
+# Mobile application
 
-##IOS
-If you there is an error `/joplin/ReactNativeClient/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run following commands:
+## iOS
+
+If you there is an error `/joplin/ReactNativeClient/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
 
     cd ios
     pod deintegrate
     pod install
-
 
 ## Other issues
 
