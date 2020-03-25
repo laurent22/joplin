@@ -232,7 +232,7 @@ class PromptDialog extends React.Component {
 		const buttonComps = [];
 		if (buttonTypes.indexOf('ok') >= 0) {
 			buttonComps.push(
-				<button key="ok" style={styles.button} onClick={() => onClose(true, 'ok')}>
+				<button key="ok" disabled={!this.state.answer} style={styles.button} onClick={() => onClose(true, 'ok')}>
 					{_('OK')}
 				</button>
 			);
