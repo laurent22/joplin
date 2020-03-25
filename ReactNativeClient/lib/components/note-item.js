@@ -1,7 +1,7 @@
 const React = require('react');
 const Component = React.Component;
 const { connect } = require('react-redux');
-const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
+const { Text, TouchableOpacity, View, StyleSheet, Dimensions } = require('react-native');
 const { Checkbox } = require('lib/components/checkbox.js');
 const Note = require('lib/models/Note.js');
 const { time } = require('lib/time-utils.js');
@@ -105,6 +105,17 @@ class NoteItemComponent extends Component {
 
 	render() {
 		const note = this.props.note ? this.props.note : {};
+
+		// this is to show only limited characters of title on note-list according to screen size
+		// the number 2 which is used to divide the height is here by testing screen sizes in different
+		// screen sizes emulator
+
+		const height = Dimensions.get('window').height;
+		const allowedLength = Math.round(height / 2);
+		if (note.title && note.title.length > allowedLength) {
+			note.title = `${note.title.substr(0,allowedLength)}...`;
+		}
+
 		const isTodo = !!Number(note.is_todo);
 
 		const theme = themeStyle(this.props.theme);

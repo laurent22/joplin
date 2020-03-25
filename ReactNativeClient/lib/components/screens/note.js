@@ -1,5 +1,5 @@
 const React = require('react');
-const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, Dimensions } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -758,7 +758,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	titleTextInput_contentSizeChange(event) {
 		if (!this.enableMultilineTitle_) return;
 
-		const height = event.nativeEvent.contentSize.height;
+		let height = event.nativeEvent.contentSize.height;
+
+		// this is to limit the size of text input, so that it can't cover full screen
+		const heightOfDevice = Dimensions.get('window').height;
+		const allowedLength = Math.round(heightOfDevice / 6);
+		height = height > allowedLength ? allowedLength : height;
+
 		this.setState({ titleTextInputHeight: height });
 	}
 
