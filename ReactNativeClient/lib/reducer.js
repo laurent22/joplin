@@ -108,7 +108,7 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	return output ? output : [];
 };
 
-stateUtils.getLastSeenNote = function(state) {
+stateUtils.getCurrentNote = function(state) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
 	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
@@ -306,10 +306,10 @@ function changeSelectedFolder(state, action, options = null) {
 		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 
 		// Don't update history if going to the same note again.
-		const lastSeenNote = stateUtils.getLastSeenNote(state);
-		if (lastSeenNote != null && action.id != lastSeenNote.id) {
+		const currentNote = stateUtils.getCurrentNote(state);
+		if (currentNote != null && action.id != currentNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
 		newState.backwardHistoryNotes = backwardHistoryNotes;
@@ -365,18 +365,18 @@ function changeSelectedNotes(state, action, options = null) {
 		// - "goto": When going to a note, but not via the back/forward arrows.
 		// - "goBackward": When clicking on the Back arrow
 		// - "goForward": When clicking on the Forward arrow
-		const lastSeenNote = stateUtils.getLastSeenNote(state);
-		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
+		const currentNote = stateUtils.getCurrentNote(state);
+		if (action.historyAction == 'goto' && currentNote != null &&  action.id != currentNote.id) {
 			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
-		} else if (action.historyAction === 'goBackward' && lastSeenNote != null) {
-			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
-				forwardHistoryNotes = forwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		} else if (action.historyAction === 'goBackward' && currentNote != null) {
+			if (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
+				forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 			}
 			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'goForward' && lastSeenNote != null) {
-			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-				backwardHistoryNotes = backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
+		} else if (action.historyAction === 'goForward' && currentNote != null) {
+			if (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+				backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 			}
 			forwardHistoryNotes.pop();
 		}
@@ -818,11 +818,11 @@ const reducer = (state = defaultState, action) => {
 				}
 
 				// Update history when searching
-				const lastSeenNote = stateUtils.getLastSeenNote(state);
-				if (lastSeenNote != null && (state.backwardHistoryNotes.length === 0 ||
-					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != lastSeenNote.id)) {
+				const currentNote = stateUtils.getCurrentNote(state);
+				if (currentNote != null && (state.backwardHistoryNotes.length === 0 ||
+					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != currentNote.id)) {
 					newState.forwardHistoryNotes = [];
-					newState.backwardHistoryNotes = newState.backwardHistoryNotes.concat(lastSeenNote).slice(-MAX_HISTORY);
+					newState.backwardHistoryNotes = newState.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 				}
 
 				newState.selectedNoteIds = [];
