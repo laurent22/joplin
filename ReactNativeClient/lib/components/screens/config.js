@@ -190,8 +190,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				paddingRight: 5,
 			},
 			descriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 			},
 			sliderUnits: {
@@ -200,8 +200,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				marginRight: 10,
 			},
 			settingDescriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -341,6 +341,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const md = Setting.settingMetadata(key);
 		const settingDescription = md.description ? md.description() : '';
 
+		const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
+		const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+
 		if (md.isEnum) {
 			value = value.toString();
 
@@ -350,9 +353,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				if (!settingOptions.hasOwnProperty(k)) continue;
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
-
-			const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
-			const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
 
 			return (
 				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
@@ -386,11 +386,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
 			return (
-				<View key={key} style={this.styles().switchSettingContainer}>
-					<Text key="label" style={this.styles().switchSettingText}>
-						{md.label()}
-					</Text>
-					<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+				<View key={key}>
+					<View style={containerStyle}>
+						<Text key="label" style={this.styles().switchSettingText}>
+							{md.label()}
+						</Text>
+						<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
