@@ -45,8 +45,13 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
+		const rootStyle = {
+			flex: 1,
+			backgroundColor: theme.backgroundColor,
+		};
 
 		return (
+			<View style={rootStyle}>
 			<View style={this.styles().screen}>
 				<ScreenHeader title={_('Login with Dropbox')} />
 
