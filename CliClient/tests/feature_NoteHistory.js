@@ -3,22 +3,6 @@ const { asyncTest, id, ids, createNTestFolders, createNTestNotes, TestApp } = re
 const BaseModel = require('lib/BaseModel.js');
 const { uuid } = require('lib/uuid.js');
 
-
-
-//
-// The integration tests are to test the integration of the core system, comprising the
-// base application with middleware, reducer and models in response to dispatched events.
-//
-// The general strategy for each integration test is:
-//  - create a starting application state,
-//  - inject the event to be tested
-//  - check the resulting application state
-//
-// Important: TestApp.wait() must be used after TestApp dispatch to allow the async
-// processing to complete
-//
-
-
 let testApp = null;
 
 const goBackWard = (state) => {
@@ -32,7 +16,6 @@ const goForward = (state) => {
 };
 
 describe('integration_ForwardBackwardNoteHistory', function() {
-
 	beforeEach(async (done) => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
@@ -100,8 +83,6 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		state = testApp.store().getState();
 		expect(ids(state.backwardHistoryNotes)).toEqual(ids([notes0[4], notes0[3], notes0[2], notes0[1]]));
 		expect(ids(state.forwardHistoryNotes)).toEqual([]);
-
-
 	}));
 
 
@@ -181,25 +162,16 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 				type: BaseModel.TYPE_SEARCH,
 			},
 		});
-
 		await testApp.wait();
 
 		testApp.dispatch({
 			type: 'SEARCH_SELECT',
 			id: searchId,
 		});
-
 		await testApp.wait();
 
 		state = testApp.store().getState();
 		expect(ids(state.backwardHistoryNotes)).toEqual(ids([notes0[4], notes1[4]]));
 		expect(ids(state.forwardHistoryNotes)).toEqual([]);
-
-
-
 	}));
-
-
-
-
 });
