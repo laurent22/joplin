@@ -5,8 +5,8 @@ const aritimStyle = {
 	color: '#d1ccbd', // For regular text (everything except notebooks)
 	colorError: 'yellow',
 	colorWarn: 'yellow',
-	colorFaded: '#d6d1c2', // For less important text (e.g. not selected menu in settings)
-	colorBright: '#ff9d47', // For important text; (e.g. bold)
+	colorFaded: '#747169', // For less important text (e.g. not selected menu in settings)
+	colorBright: '#d1ccbd', // For important text; (e.g. bold)
 	dividerColor: '#222d3a', // Borders, I wish I could remove them
 	selectedColor: '#2b3948', // Selected note
 	urlColor: '#35b4d9', // Links to external sites (e.g. in settings)
@@ -30,10 +30,12 @@ const aritimStyle = {
 	htmlTableBackgroundColor: '#141a21', // Table (even) background color
 	htmlCodeBackgroundColor: '#0d1014', // Single line code bg
 	htmlCodeBorderColor: '#0d1014', // Single line code border, and tables 
-	htmlCodeColor: '#ff9d47', // Single line code text
+	htmlCodeColor: '#f06246', // Single line code text
 
 	editorTheme: 'aritim-dark',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
+
+	highlightedColor: '#d1ccbd',
 };
 
 module.exports = aritimStyle;
