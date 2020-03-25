@@ -755,7 +755,8 @@ const reducer = (state = defaultState, action) => {
 		case 'SEARCH_ADD':
 			{
 				newState = Object.assign({}, state);
-				const searches = newState.searches.slice();
+				let searches = newState.searches.slice();
+        searches = searches.filter(s => s.title !== action.search.title);
 				searches.push(action.search);
 				newState.searches = searches;
 			}
