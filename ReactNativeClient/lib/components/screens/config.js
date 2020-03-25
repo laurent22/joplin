@@ -254,7 +254,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 	renderHeader(key, title) {
 		const theme = themeStyle(this.props.theme);
-		theme.headerStyle.fontFamily = 'Roboto';
 		return (
 			<View key={key} style={this.styles().headerWrapperStyle}>
 				<Text style={theme.headerStyle}>{title}</Text>
