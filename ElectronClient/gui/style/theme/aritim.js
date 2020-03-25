@@ -32,7 +32,7 @@ const aritimStyle = {
 	htmlCodeBorderColor: '#0d1014', // Single line code border, and tables 
 	htmlCodeColor: '#f06246', // Single line code text
 
-	editorTheme: 'aritim-dark',
+	editorTheme: 'chaos',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 
 	highlightedColor: '#d1ccbd',

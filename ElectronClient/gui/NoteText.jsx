@@ -51,7 +51,7 @@ require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
 require('brace/theme/chaos');
-require('brace/theme/aritim-dark');
+// require('brace/theme/aritim-dark');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
 
