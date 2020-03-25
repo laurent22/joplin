@@ -587,12 +587,14 @@ class Note extends BaseItem {
 
 		const preview = await KvStore.instance().value(originalNote.id);
 		const savedNote = await this.save(newNote);
-		KvStore.instance().setValue(savedNote.id, preview);
-		savedNote.preview = preview;
-		this.dispatch({
-			type: 'NOTE_UPDATE_ONE',
-			note: savedNote,
-		});
+		if (preview) {
+			KvStore.instance().setValue(savedNote.id, preview);
+			savedNote.preview = preview;
+			this.dispatch({
+				type: 'NOTE_UPDATE_ONE',
+				note: savedNote,
+			});
+		}
 
 		return savedNote;
 	}

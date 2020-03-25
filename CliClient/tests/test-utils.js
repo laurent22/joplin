@@ -138,6 +138,7 @@ async function switchClient(id) {
 
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
+	KvStore.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
@@ -191,6 +192,7 @@ async function setupDatabase(id = null) {
 
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
+		KvStore.instance().setDb(databases_[id]);
 		await clearDatabase(id);
 		await Setting.load();
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
