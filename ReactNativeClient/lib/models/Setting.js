@@ -359,7 +359,7 @@ class Setting extends BaseModel {
 					const templates = Setting.value('availableTemplates');
 					const options = { 0: 'None' };
 					for (let i = 0; i < templates.length; i++) {
-						options[templates[i].value] = templates[i].label;
+						options[templates[i].label] = templates[i].label;
 					}
 					return options;
 				},
@@ -376,7 +376,7 @@ class Setting extends BaseModel {
 					const templates = Setting.value('availableTemplates');
 					const options = { 0: 'None' };
 					for (let i = 0; i < templates.length; i++) {
-						options[templates[i].value] = templates[i].label;
+						options[templates[i].label] = templates[i].label;
 					}
 					return options;
 				},

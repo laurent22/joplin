@@ -101,12 +101,13 @@ class MainScreenComponent extends React.Component {
 			if (!folderId) return;
 			if (!template) {
 				const templateType = isTodo ? 'defaultTodo' : 'defaultNote';
-				const defaultTemplate = Setting.value(templateType);
-				if (defaultTemplate != 0) {
-					if (!this.props.templates.find(i => i.value == defaultTemplate)) {
+				const settingsLabel = Setting.value(templateType);
+				if (settingsLabel != 0) {
+					const matchLabel = this.props.templates.find(i => i.label == settingsLabel);
+					if (!matchLabel) {
 						Setting.setValue(templateType, '0');
 					} else {
-						template = defaultTemplate;
+						template = matchLabel.value;
 					}
 				}
 			}
