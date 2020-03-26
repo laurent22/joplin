@@ -153,7 +153,7 @@ function themeStyle(theme) {
 
 		output.colorUrl = '#7B81FF';
 
-		output.strongTextColor = 'rgb(220,220,220)';
+		output.colorBright = 'rgb(220,220,220)';
 
 		themeCache_[theme] = output;
 		return addExtraStyles(themeCache_[theme]);
@@ -186,7 +186,7 @@ function themeStyle(theme) {
 
 	output.colorUrl = '#7B81FF';
 
-	output.strongTextColor = 'rgb(220,220,220)';
+	output.colorBright = 'rgb(220,220,220)';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);
