@@ -48,6 +48,22 @@ print "            |_|"
 print ""
 print "Linux Installer and Updater"
 
+# Architecture check
+if ! [[ -x "$(command -v uname)" ]] ; then
+	print "Can't get system architecture, skipping check"
+else
+  ## this actually gives more information than needed, but it contains all architectures (hardware and software)
+	ARCHITECTURE=$(uname -a)
+
+	if [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
+		echo "${COLOR_RED}Arm systems are not officially supported by Joplin,${COLOR_RESET} please search the forum (https://discourse.joplinapp.org/) for more information"
+		exit 1
+	elif [[ $ARCHITECTURE =~ .*i.86.* ]] ; then
+		echo "${COLOR_RED}32-bit systems are not supported by Joplin,${COLOR_RESET} please search the forum (https://discourse.joplinapp.org/) for more information"
+		exit 1
+	fi
+fi
+
 #-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
