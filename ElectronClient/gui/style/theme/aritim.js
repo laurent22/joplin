@@ -1,41 +1,41 @@
 const aritimStyle = {
-	backgroundColor: '#0f141a', // Main background color
-	backgroundColorTransparent: 'yellow', // 
+	backgroundColor: '#10151a', // Main background color
+	backgroundColorTransparent: 'yellow', //
 	oddBackgroundColor: 'yellow',
-	color: '#d1ccbd', // For regular text (everything except notebooks)
+	color: '#d3dae3', // For regular text (everything except notebooks)
 	colorError: 'yellow',
 	colorWarn: 'yellow',
-	colorFaded: '#747169', // For less important text (e.g. not selected menu in settings)
-	colorBright: '#d1ccbd', // For important text; (e.g. bold)
-	dividerColor: '#222d3a', // Borders, I wish I could remove them
-	selectedColor: '#2b3948', // Selected note
-	urlColor: '#35b4d9', // Links to external sites (e.g. in settings)
+	colorFaded: '#666a73', // For less important text (e.g. not selected menu in settings)
+	colorBright: '#005b47', // For important text; (e.g. bold)
+	dividerColor: '#141a21', // Borders, I wish I could remove them
+	selectedColor: '#2b5278', // Selected note
+	urlColor: '#356693', // Links to external sites (e.g. in settings)
 
 	backgroundColor2: '#141a21', // Notebooks main background
 	depthColor: '#141a21',	// Notebooks background color
-	color2: '#d1ccbd', // Notebook sidebar text color
-	selectedColor2: '#2b3948', // Selected notebook (or settings icon in settings)
+	color2: '#d3dae3', // Notebook sidebar text color
+	selectedColor2: '#10151a', // Selected notebook (or settings icon in settings)
 	colorError2: 'yellow',
 
-	raisedBackgroundColor: '#2b3948', // Table, hover
+	raisedBackgroundColor: '#2b5278', // Table, hover
 	raisedColor: 'yellow',
 
-	warningBackgroundColor: '#f06246', // Info / Warning boxes bg color
+	warningBackgroundColor: '#9a2f2f', // Info / Warning boxes bg color
 
 	// Markdown rendered
-	htmlColor: '#d1ccbd', // Text color
-	htmlBackgroundColor: '#0f141a', // BG Color
-	htmlDividerColor: '#d1ccbd', // Lines e.g. ---
-	htmlLinkColor: '#307dd5', // Normal links
+	htmlColor: '#d3dae3', // Text color
+	htmlBackgroundColor: '#10151a', // BG Color
+	htmlDividerColor: '#d3dae3', // Lines e.g. ---
+	htmlLinkColor: '#356693', // Normal links
 	htmlTableBackgroundColor: '#141a21', // Table (even) background color
-	htmlCodeBackgroundColor: '#0d1014', // Single line code bg
-	htmlCodeBorderColor: '#0d1014', // Single line code border, and tables 
-	htmlCodeColor: '#f06246', // Single line code text
+	htmlCodeBackgroundColor: '#141a21', // Single line code bg
+	htmlCodeBorderColor: '#141a21', // Single line code border, and tables
+	htmlCodeColor: '#005b47', // Single line code text
 
 	editorTheme: 'chaos',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 
-	highlightedColor: '#d1ccbd',
+	highlightedColor: '#d3dae3',
 };
 
 module.exports = aritimStyle;
