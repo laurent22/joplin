@@ -415,6 +415,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 			editor.getDoc().addEventListener('click', onEditorContentClick);
 
+			// Need to clear UndoManager to avoid this problem:
+			// - Load note 1
+			// - Make a change
+			// - Load note 2
+			// - Undo => content is that of note 1
+			editor.undoManager.clear();
+
 			dispatchDidUpdate(editor);
 		};
 
