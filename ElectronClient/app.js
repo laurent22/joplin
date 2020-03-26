@@ -601,11 +601,6 @@ class Application extends BaseApplication {
 				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
 				Setting.setValue('availableTemplates', templates);
 
-				setTimeout(() => {
-					if (!templates.filter(i => i.value == Setting.value('defaultNote')).length) Setting.setValue('defaultNote', '0');
-					if (!templates.filter(i => i.value == Setting.value('defaultTodo')).length) Setting.setValue('defaultTodo', '0');
-				}, 2000);
-
 				this.store().dispatch({
 					type: 'TEMPLATE_UPDATE_ALL',
 					templates: templates,
@@ -1354,11 +1349,6 @@ class Application extends BaseApplication {
 
 		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
 		Setting.setValue('availableTemplates', templates);
-
-		setTimeout(() => {
-			if (!templates.filter(i => i.value == Setting.value('defaultNote')).length) Setting.setValue('defaultNote', '0');
-			if (!templates.filter(i => i.value == Setting.value('defaultTodo')).length) Setting.setValue('defaultTodo', '0');
-		}, 2000);
 
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',
