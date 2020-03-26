@@ -8,7 +8,6 @@ const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
-const keytar = require('keytar');
 
 class Setting extends BaseModel {
 	static tableName() {
@@ -656,34 +655,24 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
 			this.cache_ = [];
+			const secureItems = [];
 
 			for (let i = 0; i < rows.length; i++) {
 				const c = rows[i];
 
 				if (!this.keyExists(c.key)) continue;
+
+				if (this.isSecureKey(c.key)) {
+					secureItems.push(c);
+					continue;
+				}
+
 				c.value = this.formatValue(c.key, c.value);
 				c.value = this.filterValue(c.key, c.value);
 
 				this.cache_.push(c);
 			}
-			if (this.constants_.appType !== 'mobile') this.loadSecureKeys();
-			this.dispatchUpdateAll();
-		});
-	}
-
-	static loadSecureKeys() {
-		return keytar.findCredentials(this.constants_.appId).then(items => {
-			for (let i = 0; i < items.length; i++) {
-				const key = items[i].account;
-				let value = items[i].password;
-				value = this.formatValue(key, value);
-				value = this.filterValue(key, value);
-
-				this.cache_.push({
-					key: key,
-					value: value,
-				});
-			}
+			shim.loadSecureItems(this, secureItems);
 			this.dispatchUpdateAll();
 		});
 	}
@@ -936,17 +925,19 @@ class Setting extends BaseModel {
 		this.saveTimeoutId_ = null;
 
 		const queries = [];
+		const secureItems = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
-			if (this.constants_.appType !== 'mobile' && this.isSecureKey(s.key)) {
-				keytar.setPassword(this.constants_.appId, s.key, s.value);
-			} else {
-				queries.push(Database.insertQuery(this.tableName(), s));
+			if (this.isSecureKey(s.key)) {
+				secureItems.push(s);
+				continue;
 			}
+			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
+		shim.saveSecureItems(this, secureItems);
 		await BaseModel.db().transactionExecBatch(queries);
 
 		this.logger().info('Settings have been saved.');

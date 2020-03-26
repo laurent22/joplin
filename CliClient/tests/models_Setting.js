@@ -31,4 +31,19 @@ describe('models_Setting', function() {
 		expect('username' in output).toBe(false);
 	}));
 
+	it('should save values', asyncTest(async () => {
+		await setupDatabase();
+
+		let key = 'sync.5.username';
+		let value = 'testUser';
+		await Setting.setValue(key, value);
+		let savedValue = Setting.value(key);
+		expect(savedValue).toBe(value);
+
+		key = 'sync.5.password';
+		value = 'Test$123';
+		await Setting.setValue(key, value);
+		savedValue = Setting.value(key);
+		expect(savedValue).toBe(value);
+	}));
 });
