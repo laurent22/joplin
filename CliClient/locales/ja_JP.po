@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -1306,7 +1308,7 @@ msgstr "保存"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "アップグレードが必要なマスターキー"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1314,6 +1316,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"以下のマスターキーは旧式の暗号化アルゴリズムを使用しているため、アップグレー"
+"ドをおすすめします。マスターキーをアップグレードしても既存データはこれまでど"
+"おり復号化/暗号化が可能です。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1324,24 +1329,28 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "アップグレード"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "日付の選択"
+msgstr "データを再暗号化する"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"デフォルトの暗号化方式がより安全なものに変更されました。既存データにも新方式"
+"を適用することをおすすめします。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"ここでは既存データの再暗号化を行えます。たとえば、旧式のアルゴリズムで暗号化"
+"されたノートがあるとわかっているような場合に新しいアルゴリズムで暗号化しなお"
+"すことが可能です。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1360,6 +1369,18 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、"
+"夜間等の実行をおすすめします。\n"
+"\n"
+"データを再暗号化するには以下の手順にしたがってください。\n"
+"\n"
+"1. すべてのデバイスで同期を取ります。\n"
+"2. \"%s\" をクリックします。\n"
+"3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他の"
+"デバイスでノートを変更しないように気をつけてください。\n"
+"4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n"
+"\n"
+"重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1462,18 +1483,18 @@ msgid "Set the password"
 msgstr "パスワードの設定"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "パスワードに1つ以上のマスターキーが必要です"
+msgstr "古い暗号化方式を使っているマスターキーがあります。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"デフォルトの暗号化方式が変更されています。既存データを暗号化しなおすことをお"
+"すすめします。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
 msgid "More info"
 msgstr "詳細情報"
 
@@ -1664,7 +1685,7 @@ msgstr "内: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
 msgid "Front"
-msgstr ""
+msgstr "進む"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
 msgid "Hyperlink"
@@ -2337,7 +2358,6 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
-#, fuzzy
 msgid "Split"
 msgstr "分割ビュー"
 
@@ -2970,26 +2990,28 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "データベース全体を暗号化しなおしてもよろしいですか。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "既存データを暗号化しなおし、再同期します。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"下記マスターキーをアップグレードするには、マスターキーのパスワードを入力して"
+"ください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "マスターキーのアップグレードに成功しました!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "ノートをエクスポートできませんでした: %s"
+msgstr "マスターキーをアップグレードできませんでした: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
