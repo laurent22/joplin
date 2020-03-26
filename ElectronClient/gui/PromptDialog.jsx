@@ -49,6 +49,7 @@ class PromptDialog extends React.Component {
 		this.styles_ = {};
 
 		const paddingTop = 20;
+		const indentDepthWidth = 30;
 
 		this.styles_.modalLayer = {
 			zIndex: 9999,
@@ -117,10 +118,11 @@ class PromptDialog extends React.Component {
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
 				}),
-			option: provided =>
+			option: (provided, state) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
+					paddingLeft: `${10 + (state.data.indentDepth || 0) * indentDepthWidth}px`,
 				}),
 			multiValueLabel: provided =>
 				Object.assign(provided, {

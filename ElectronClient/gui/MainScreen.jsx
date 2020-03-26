@@ -209,15 +209,21 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'moveToFolder') {
-			const folderItems = this.props.folders;
-			const startFolders = folderItems
-				.map(a => {
-					return { key: a.id, value: a.id, label: a.title };
-				});
+			const startFolders = [];
+			const maxDepth = 15;
+
+			const addOptions = (folders, depth) => {
+				for (let i = 0; i < folders.length; i++) {
+					const folder = folders[i];
+					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
+					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
+				}
+			};
+			addOptions(await Folder.allAsTree(), 0);
 
 			this.setState({
 				promptOptions: {
-					label: _('move to notebook:'),
+					label: _('Move to notebook:'),
 					inputType: 'dropdown',
 					value: '',
 					autocomplete: startFolders,
