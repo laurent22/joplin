@@ -22,7 +22,7 @@ module.exports = function(theme) {
 			padding-top: ${theme.paddingTop};
 		}
 		strong {
-			color: ${theme.colorBright};
+			color: ${theme.strongTextColor ? theme.strongTextColor : theme.colorBright};
 		}
 		kbd {
 			border: 1px solid ${theme.htmlCodeBorderColor};
