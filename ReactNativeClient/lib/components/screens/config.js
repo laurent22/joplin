@@ -450,7 +450,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer}>
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{ marginRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<TextInput style={{ paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);
