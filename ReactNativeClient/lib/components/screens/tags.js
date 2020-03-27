@@ -27,9 +27,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 
 	styles() {
 		if (this.styles_) return this.styles_;
-
 		const theme = themeStyle(this.props.theme);
-
 		this.styles_ = StyleSheet.create({
 			listItem: {
 				flexDirection: 'row',
@@ -40,6 +38,15 @@ class TagsScreenComponent extends BaseScreenComponent {
 				paddingRight: theme.marginRight,
 				paddingTop: theme.itemMarginTop,
 				paddingBottom: theme.itemMarginBottom,
+			},
+			AddTagMessage: {
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				paddingTop: theme.marginTop,
+				paddingBottom: theme.marginBottom,
+				fontSize: theme.fontSize,
+				color: theme.color,
+				textAlign: 'center',
 			},
 			listItemText: {
 				flex: 1,
@@ -89,8 +96,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	}
 
 	render() {
-		const theme = themeStyle(this.props.theme);
-
+		const theme = themeStyle(this.props.theme); 
 		const rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
@@ -99,6 +105,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={rootStyle}>
 				<ScreenHeader title={_('Tags')} parentComponent={this} showSearchButton={false} />
+				<Text style={this.styles().AddTagMessage}>{'Create a tag by going on notes and clicking on options'}</Text>
 				<FlatList style={{ flex: 1 }} data={this.state.tags} renderItem={this.tagList_renderItem} keyExtractor={this.tagList_keyExtractor} />
 			</View>
 		);
