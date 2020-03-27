@@ -391,7 +391,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						<Text key="label" style={this.styles().switchSettingText}>
 							{md.label()}
 						</Text>
-						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: '#969696' }} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.settingComponentTintColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 					{descriptionComp}
 				</View>
@@ -409,7 +409,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} maximumTrackTintColor="#969696" step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} maximumTrackTintColor={theme.settingComponentTintColor} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);

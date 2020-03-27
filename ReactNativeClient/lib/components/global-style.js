@@ -39,6 +39,7 @@ const globalStyle = {
 	htmlCodeColor: 'rgb(0,0,0)',
 
 	codeThemeCss: 'atom-one-light.css',
+	settingComponentTintColor: '#969696',
 };
 
 globalStyle.marginRight = globalStyle.margin;
