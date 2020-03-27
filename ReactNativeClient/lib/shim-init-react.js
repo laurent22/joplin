@@ -11,7 +11,6 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const { basename, fileExtension } = require('lib/path-utils.js');
 const { uuid } = require('lib/uuid.js');
 const Resource = require('lib/models/Resource');
-const { Database } = require('lib/database.js');
 
 const injectedJs = {
 	webviewLib: require('lib/rnInjectedJs/webviewLib'),
@@ -191,26 +190,6 @@ function shimInit() {
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name];
-	};
-
-	shim.loadSecureItems = (Setting, items) => {
-		for (let i = 0; i < items.length; i++) {
-			const c = items[i];
-
-			c.value = Setting.formatValue(c.key, c.value);
-			c.value = Setting.filterValue(c.key, c.value);
-
-			Setting.cache_.push(c);
-		}
-		Setting.dispatchUpdateAll();
-	};
-
-	shim.saveSecureItems = async (Setting, items) => {
-		const queries = [];
-		for (let i = 0; i < items.length; i++) {
-			queries.push(Database.insertQuery(Setting.tableName(), items[i]));
-		}
-		await Setting.db().transactionExecBatch(queries);
 	};
 }
 

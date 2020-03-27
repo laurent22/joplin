@@ -12,7 +12,6 @@ const { _ } = require('lib/locale.js');
 const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
-const { Database } = require('lib/database.js');
 
 let keytar;
 try {
@@ -421,47 +420,22 @@ function shimInit() {
 		return toRelative(process.cwd(), path);
 	};
 
-	shim.loadSecureItems = (Setting, items) => {
-		if (shim.isElectron() && !shim.isPortable() && keytar) {
-			return keytar.findCredentials(Setting.constants_.appId).then(credentials => {
-				for (let i = 0; i < credentials.length; i++) {
-					const key = credentials[i].account;
-					let value = credentials[i].password;
-					value = Setting.formatValue(key, value);
-					value = Setting.filterValue(key, value);
-
-					Setting.cache_.push({
-						key: key,
-						value: value,
-					});
-				}
-				Setting.dispatchUpdateAll();
-			});
-		} else {
-			for (let i = 0; i < items.length; i++) {
-				const c = items[i];
-
-				c.value = Setting.formatValue(c.key, c.value);
-				c.value = Setting.filterValue(c.key, c.value);
-
-				Setting.cache_.push(c);
-			}
-			Setting.dispatchUpdateAll();
-		}
+	shim.isKeytarAvailable = () => {
+		return shim.isElectron() && !shim.isPortable() && keytar;
 	};
 
-	shim.saveSecureItems = async (Setting, items) => {
-		if (shim.isElectron() && !shim.isPortable() && keytar) {
-			for (let i = 0; i < items.length; i++) {
-				keytar.setPassword(Setting.constants_.appId, items[i].key, items[i].value);
-			}
-		} else {
-			const queries = [];
-			for (let i = 0; i < items.length; i++) {
-				queries.push(Database.insertQuery(Setting.tableName(), items[i]));
-			}
-			await Setting.db().transactionExecBatch(queries);
+	shim.loadSecureItems = (appId) => {
+		if (shim.isKeytarAvailable()) {
+			return keytar.findCredentials(appId);
 		}
+		return Promise.resolve([]);
+	};
+
+	shim.saveSecureItem = (appId, item) => {
+		if (shim.isKeytarAvailable()) {
+			return keytar.setPassword(appId, item.key, item.value);
+		}
+		return false;
 	};
 }
 

@@ -655,25 +655,33 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
 			this.cache_ = [];
-			const secureItems = [];
 
-			for (let i = 0; i < rows.length; i++) {
-				const c = rows[i];
+			const pushItemsToCache = (items) => {
+				for (let i = 0; i < items.length; i++) {
+					const c = items[i];
 
-				if (!this.keyExists(c.key)) continue;
+					if (!this.keyExists(c.key)) continue;
 
-				if (this.isSecureKey(c.key)) {
-					secureItems.push(c);
-					continue;
+					c.value = this.formatValue(c.key, c.value);
+					c.value = this.filterValue(c.key, c.value);
+
+					this.cache_.push(c);
 				}
+			};
 
-				c.value = this.formatValue(c.key, c.value);
-				c.value = this.filterValue(c.key, c.value);
+			pushItemsToCache(rows);
 
-				this.cache_.push(c);
-			}
-			shim.loadSecureItems(this, secureItems);
-			this.dispatchUpdateAll();
+			shim.loadSecureItems(this.constants_.appId).then(secureItems => {
+				// secureItems is an array of { account: 'foo', password: 'bar' }
+				// but each item should be in the form of { key: 'foo', value: 'bar' }
+				// https://stackoverflow.com/a/50101979
+				for (const item of secureItems) {
+					delete Object.assign(item, { ['key']: item['account'] })['account'];
+					delete Object.assign(item, { ['value']: item['password'] })['password'];
+				}
+				pushItemsToCache(secureItems);
+				this.dispatchUpdateAll();
+			});
 		});
 	}
 
@@ -925,19 +933,18 @@ class Setting extends BaseModel {
 		this.saveTimeoutId_ = null;
 
 		const queries = [];
-		const secureItems = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
+
 			if (this.isSecureKey(s.key)) {
-				secureItems.push(s);
-				continue;
+				if (shim.saveSecureItem(this.constants_.appId, s)) continue;
 			}
+
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 
-		shim.saveSecureItems(this, secureItems);
 		await BaseModel.db().transactionExecBatch(queries);
 
 		this.logger().info('Settings have been saved.');

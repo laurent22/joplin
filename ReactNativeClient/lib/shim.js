@@ -220,12 +220,16 @@ shim.pathRelativeToCwd = (path) => {
 	throw new Error('Not implemented');
 };
 
-shim.loadSecureItems = (Setting, items) => {
-	throw new Error('Not implemented');
+shim.isKeytarAvailable = () => {
+	return false;
 };
 
-shim.saveSecureItems = async (Setting, item) => {
-	throw new Error('Not implemented');
+shim.loadSecureItems = (appId) => {
+	return Promise.resolve([]);
+};
+
+shim.saveSecureItem = (appId, item) => {
+	return false;
 };
 
 module.exports = { shim };
