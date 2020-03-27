@@ -24,6 +24,7 @@ const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const TemplateUtils = require('lib/TemplateUtils');
 const { bridge } = require('electron').remote.require('./bridge');
+const { urlDecode } = require('lib/string-utils');
 
 interface NoteTextProps {
 	style: any,
@@ -521,6 +522,132 @@ function NoteText2(props:NoteTextProps) {
 		});
 	}, [formNote, handleProvisionalFlag]);
 
+	const onMessage = useCallback((event:any) => {
+		const msg = event.name;
+		const args = event.args;
+
+		console.info('onMessage', msg, args);
+
+		if (msg === 'setMarkerCount') {
+			// const ls = Object.assign({}, this.state.localSearch);
+			// ls.resultCount = arg0;
+			// ls.searching = false;
+			// this.setState({ localSearch: ls });
+		} else if (msg.indexOf('markForDownload:') === 0) {
+			// const s = msg.split(':');
+			// if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
+			// ResourceFetcher.instance().markForDownload(s[1]);
+		} else if (msg === 'percentScroll') {
+			// this.ignoreNextEditorScroll_ = true;
+			// this.setEditorPercentScroll(arg0);
+		} else if (msg === 'contextMenu') {
+			// const itemType = arg0 && arg0.type;
+
+			// const menu = new Menu();
+
+			// if (itemType === 'image' || itemType === 'resource') {
+			// 	const resource = await Resource.load(arg0.resourceId);
+			// 	const resourcePath = Resource.fullPath(resource);
+
+			// 	menu.append(
+			// 		new MenuItem({
+			// 			label: _('Open...'),
+			// 			click: async () => {
+			// 				const ok = bridge().openExternal(`file://${resourcePath}`);
+			// 				if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
+			// 			},
+			// 		})
+			// 	);
+
+			// 	menu.append(
+			// 		new MenuItem({
+			// 			label: _('Save as...'),
+			// 			click: async () => {
+			// 				const filePath = bridge().showSaveDialog({
+			// 					defaultPath: resource.filename ? resource.filename : resource.title,
+			// 				});
+			// 				if (!filePath) return;
+			// 				await fs.copy(resourcePath, filePath);
+			// 			},
+			// 		})
+			// 	);
+
+			// 	menu.append(
+			// 		new MenuItem({
+			// 			label: _('Copy path to clipboard'),
+			// 			click: async () => {
+			// 				clipboard.writeText(toSystemSlashes(resourcePath));
+			// 			},
+			// 		})
+			// 	);
+			// } else if (itemType === 'text') {
+			// 	menu.append(
+			// 		new MenuItem({
+			// 			label: _('Copy'),
+			// 			click: async () => {
+			// 				clipboard.writeText(arg0.textToCopy);
+			// 			},
+			// 		})
+			// 	);
+			// } else if (itemType === 'link') {
+			// 	menu.append(
+			// 		new MenuItem({
+			// 			label: _('Copy Link Address'),
+			// 			click: async () => {
+			// 				clipboard.writeText(arg0.textToCopy);
+			// 			},
+			// 		})
+			// 	);
+			// } else {
+			// 	reg.logger().error(`Unhandled item type: ${itemType}`);
+			// 	return;
+			// }
+
+			// menu.popup(bridge().window());
+		} else if (msg.indexOf('joplin://') === 0) {
+			// const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+			// const itemId = resourceUrlInfo.itemId;
+			// const item = await BaseItem.loadItemById(itemId);
+
+			// if (!item) throw new Error(`No item with ID ${itemId}`);
+
+			// if (item.type_ === BaseModel.TYPE_RESOURCE) {
+			// 	const localState = await Resource.localState(item);
+			// 	if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+			// 		if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+			// 			bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+			// 		} else {
+			// 			bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+			// 		}
+			// 		return;
+			// 	}
+			// 	const filePath = Resource.fullPath(item);
+			// 	bridge().openItem(filePath);
+			// } else if (item.type_ === BaseModel.TYPE_NOTE) {
+			// 	this.props.dispatch({
+			// 		type: 'FOLDER_AND_NOTE_SELECT',
+			// 		folderId: item.parent_id,
+			// 		noteId: item.id,
+			// 		hash: resourceUrlInfo.hash,
+			// 		historyAction: 'goto',
+			// 	});
+			// } else {
+			// 	throw new Error(`Unsupported item type: ${item.type_}`);
+			// }
+		} else if (msg.indexOf('#') === 0) {
+			// This is an internal anchor, which is handled by the WebView so skip this case
+		} else if (msg === 'openExternal') {
+			if (args.url.indexOf('file://') === 0) {
+				// When using the file:// protocol, openExternal doesn't work (does nothing) with URL-encoded paths
+				bridge().openExternal(urlDecode(args.url));
+			} else {
+				bridge().openExternal(args.url);
+			}
+		} else {
+			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
+		}
+	}, []);
+
 	const introductionPostLinkClick = useCallback(() => {
 		bridge().openExternal('https://www.patreon.com/posts/34246624');
 	}, []);
@@ -541,6 +668,7 @@ function NoteText2(props:NoteTextProps) {
 		style: styles.tinyMCE,
 		onChange: onBodyChange,
 		onWillChange: onBodyWillChange,
+		onMessage: onMessage,
 		defaultEditorState: defaultEditorState,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
