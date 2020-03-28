@@ -60,7 +60,7 @@ ArrayUtils.contentEquals = function(array1, array2) {
 
 // Merges multiple overlapping intervals into a single interval
 // e.g. [0, 25], [20, 50], [75, 100] --> [0, 50], [75, 100]
-ArrayUtils.mergeOverlappingIntervals = function(intervals, limit = intervals.length) {
+ArrayUtils.mergeOverlappingIntervals = function(intervals, limit) {
 	intervals.sort((a, b) => a[0] - b[0]);
 
 	const stack = [];
