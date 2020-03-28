@@ -12,6 +12,7 @@ interface TinyMCEProps {
 	style: any,
 	onChange(event: OnChangeEvent): void,
 	onWillChange(event:any): void,
+	onMessage(event:any): void,
 	defaultEditorState: DefaultEditorState,
 	markupToHtml: Function,
 	allAssets: Function,
@@ -122,11 +123,34 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	};
 
 	const onEditorContentClick = useCallback((event:any) => {
-		if (event.target && event.target.nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
+		const nodeName = event.target ? event.target.nodeName : '';
+
+		if (nodeName === 'INPUT' && event.target.getAttribute('type') === 'checkbox') {
 			editor.fire('joplinChange');
 			dispatchDidUpdate(editor);
 		}
-	}, [editor]);
+
+		if (nodeName === 'A' && event.ctrlKey) {
+			const href = event.target.getAttribute('href');
+
+			if (href.indexOf('#') === 0) {
+				const anchorName = href.substr(1);
+				const anchor = editor.getDoc().getElementById(anchorName);
+				if (anchor) {
+					anchor.scrollIntoView();
+				} else {
+					reg.logger().warn('TinyMce: could not find anchor with ID ', anchorName);
+				}
+			} else {
+				props.onMessage({
+					name: 'openExternal',
+					args: {
+						url: href,
+					},
+				});
+			}
+		}
+	}, [editor, props.onMessage]);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -368,9 +392,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
 			.map((a:any) => a.path));
 
-		const jsFiles = pluginAssets
+		const jsFiles = ['gui/editors/TinyMCE/content_script.js'].concat(pluginAssets
 			.filter((a:any) => a.mime === 'application/javascript' && !loadedAssetFiles_.includes(a.path))
-			.map((a:any) => a.path);
+			.map((a:any) => a.path));
 
 		for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
 		for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
@@ -405,6 +429,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 					checkbox: {
 						renderingType: 2,
 					},
+					link_open: {
+						linkRenderingType: 2,
+					},
 				},
 			});
 			if (cancelled) return;
@@ -414,6 +441,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			await loadDocumentAssets(editor, await props.allAssets(props.defaultEditorState.markupLanguage));
 
 			editor.getDoc().addEventListener('click', onEditorContentClick);
+
+			// Need to clear UndoManager to avoid this problem:
+			// - Load note 1
+			// - Make a change
+			// - Load note 2
+			// - Undo => content is that of note 1
+			editor.undoManager.clear();
 
 			dispatchDidUpdate(editor);
 		};
