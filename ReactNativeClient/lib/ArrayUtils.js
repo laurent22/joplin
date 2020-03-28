@@ -58,4 +58,26 @@ ArrayUtils.contentEquals = function(array1, array2) {
 	return true;
 };
 
+// Merges multiple overlapping intervals into a single interval
+// e.g. [0, 25], [20, 50], [75, 100] --> [0, 50], [75, 100]
+ArrayUtils.mergeOverlappingIntervals = function(intervals, limit) {
+	intervals.sort((a, b) => a[0] - b[0]);
+
+	const stack = [];
+	if (intervals.length) {
+		stack.push(intervals[0]);
+		for (let i = 1; i < intervals.length && stack.length < limit; i++) {
+			const top = stack[stack.length - 1];
+			if (top[1] < intervals[i][0]) {
+				stack.push(intervals[i]);
+			} else if (top[1] < intervals[i][1]) {
+				top[1] = intervals[i][1];
+				stack.pop();
+				stack.push(top);
+			}
+		}
+	}
+	return stack;
+};
+
 module.exports = ArrayUtils;
