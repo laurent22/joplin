@@ -78,7 +78,7 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 			if (fileExtension(stat.path).toLowerCase() !== 'md') continue;
 
 			const content = await shim.fsDriver().readFile(`${this.sourcePath_}/${stat.path}`);
-			let item = await BaseItem.unserialize(content);
+			const item = await BaseItem.unserialize(content);
 			const itemType = item.type_;
 			const ItemClass = BaseItem.itemClass(item);
 

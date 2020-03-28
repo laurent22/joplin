@@ -6,6 +6,7 @@ set -e
 #-----------------------------------------------------
 COLOR_RED=`tput setaf 1`
 COLOR_GREEN=`tput setaf 2`
+COLOR_YELLOW=`tput setaf 3`
 COLOR_BLUE=`tput setaf 4`
 COLOR_RESET=`tput sgr0`
 SILENT=false
@@ -81,6 +82,23 @@ fi
 # START
 #-----------------------------------------------------
 showLogo
+
+print "Checking architecture..."
+# Architecture check
+if ! [[ -x "$(command -v uname)" ]] ; then
+	print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
+else
+  ## this actually gives more information than needed, but it contains all architectures (hardware and software)
+	ARCHITECTURE=$(uname -a)
+
+	if [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
+		showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+		exit 1
+	elif [[ $ARCHITECTURE =~ .*i.86.* ]] ; then
+		showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+		exit 1
+	fi
+fi
 
 #-----------------------------------------------------
 print "Checking latest version..."

@@ -47,7 +47,7 @@ globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
-let themeCache_ = {};
+const themeCache_ = {};
 
 function addExtraStyles(style) {
 	style.icon = {
@@ -122,9 +122,10 @@ function themeStyle(theme) {
 
 	if (themeCache_[theme]) return themeCache_[theme];
 
-	let output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
-	else if (theme == Setting.THEME_OLED_DARK) {
+	const output = Object.assign({}, globalStyle);
+	if (theme == Setting.THEME_LIGHT) {
+		return addExtraStyles(output);
+	} else if (theme == Setting.THEME_OLED_DARK) {
 		output.backgroundColor = '#000000';
 		output.color = '#dddddd';
 		output.colorFaded = '#777777';
@@ -139,7 +140,7 @@ function themeStyle(theme) {
 		output.raisedHighlightedColor = '#ffffff';
 
 		output.htmlColor = 'rgb(220,220,220)';
-		output.htmlBackgroundColor = 'rgb(29,32,36)';
+		output.htmlBackgroundColor = 'rgb(0,0,0)';
 		output.htmlLinkColor = 'rgb(166,166,255)';
 
 		output.htmlDividerColor = '#3D444E';
@@ -148,9 +149,11 @@ function themeStyle(theme) {
 		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
-		output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+		output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 		output.colorUrl = '#7B81FF';
+
+		output.colorBright = 'rgb(220,220,220)';
 
 		themeCache_[theme] = output;
 		return addExtraStyles(themeCache_[theme]);
@@ -182,6 +185,8 @@ function themeStyle(theme) {
 	output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
+
+	output.colorBright = 'rgb(220,220,220)';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);

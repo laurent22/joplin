@@ -30,9 +30,10 @@ class DropboxLoginScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			container: {
 				padding: theme.margin,
+				backgroundColor: theme.backgroundColor,
 			},
 			stepText: Object.assign({}, theme.normalText, { marginBottom: theme.margin }),
 			urlText: Object.assign({}, theme.urlText, { marginBottom: theme.margin }),

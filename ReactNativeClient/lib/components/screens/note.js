@@ -1,7 +1,8 @@
 const React = require('react');
-const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
+const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
 const Note = require('lib/models/Note.js');
 const BaseItem = require('lib/models/BaseItem.js');
@@ -71,6 +72,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			HACK_webviewLoadingState: 0,
 		};
 
+		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
+
 		this.doFocusUpdate_ = false;
 
 		// iOS doesn't support multiline text fields properly so disable it
@@ -82,7 +85,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
-				let buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
+				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
 
 				if (buttonId == 'cancel') return true;
 				if (buttonId == 'save') await this.saveNoteButton_press();
@@ -96,8 +99,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		};
 
 		this.backHandler = async () => {
-			const r = await saveDialog();
-			if (r) return r;
+
+			if (this.isModified()) {
+				await this.saveNoteButton_press();
+			}
 
 			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
 
@@ -184,6 +189,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
 		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
@@ -204,7 +210,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		let styles = {
+		// TODO: Clean up these style names and nesting
+		const styles = {
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
@@ -219,8 +226,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				paddingTop: theme.marginTop,
-				paddingBottom: theme.marginBottom,
+			},
+			noteBodyViewerPreview: {
+				borderTopColor: theme.dividerColor,
+				borderTopWidth: 1,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
 			},
 			checkbox: {
 				color: theme.color,
@@ -228,6 +239,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 				paddingLeft: theme.marginLeft,
 				paddingTop: 10, // Added for iOS (Not needed for Android??)
 				paddingBottom: 10, // Added for iOS (Not needed for Android??)
+			},
+			markdownButtons: {
+				borderColor: theme.dividerColor,
+				color: theme.htmlLinkColor,
 			},
 		};
 
@@ -343,13 +358,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async deleteNote_onPress() {
-		let note = this.state.note;
+		const note = this.state.note;
 		if (!note.id) return;
 
-		let ok = await dialogs.confirm(this, _('Delete note?'));
+		const ok = await dialogs.confirm(this, _('Delete note?'));
 		if (!ok) return;
 
-		let folderId = note.parent_id;
+		const folderId = note.parent_id;
 
 		await Note.delete(note.id);
 
@@ -401,7 +416,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async resizeImage(localFilePath, targetPath, mimeType) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
 
-		let dimensions = await this.imageDimensions(localFilePath);
+		const dimensions = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
 		if (dimensions.width > maxSize || dimensions.height > maxSize) {
@@ -475,7 +490,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (!resource.mime) resource.mime = 'application/octet-stream';
 
-		let targetPath = Resource.fullPath(resource);
+		const targetPath = Resource.fullPath(resource);
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
@@ -579,7 +594,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async onAlarmDialogAccept(date) {
-		let newNote = Object.assign({}, this.state.note);
+		const newNote = Object.assign({}, this.state.note);
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
@@ -594,11 +609,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async showOnMap_onPress() {
 		if (!this.state.note.id) return;
 
-		let note = await Note.load(this.state.note.id);
+		const note = await Note.load(this.state.note.id);
 		try {
 			const url = Note.geolocationUrl(note);
 			Linking.openURL(url);
 		} catch (error) {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			await dialogs.error(this, error.message);
 		}
 	}
@@ -606,7 +622,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	async showSource_onPress() {
 		if (!this.state.note.id) return;
 
-		let note = await Note.load(this.state.note.id);
+		const note = await Note.load(this.state.note.id);
 		try {
 			Linking.openURL(note.source_url);
 		} catch (error) {
@@ -638,13 +654,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.showOnMap_onPress();
 			},
 		});
-		if (note.source_url)
+		if (note.source_url) {
 			output.push({
 				title: _('Go to source URL'),
 				onPress: () => {
 					this.showSource_onPress();
 				},
 			});
+		}
 
 		return output;
 	}
@@ -659,7 +676,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		let output = [];
+		const output = [];
 
 		// The file attachement modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
@@ -693,26 +710,28 @@ class NoteScreenComponent extends BaseScreenComponent {
 				this.share_onPress();
 			},
 		});
-		if (isSaved)
+		if (isSaved) {
 			output.push({
 				title: _('Tags'),
 				onPress: () => {
 					this.tags_onPress();
 				},
 			});
+		}
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
 		});
-		if (isSaved)
+		if (isSaved) {
 			output.push({
 				title: _('Copy Markdown link'),
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
 				},
 			});
+		}
 		output.push({
 			title: _('Properties'),
 			onPress: () => {
@@ -739,7 +758,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	titleTextInput_contentSizeChange(event) {
 		if (!this.enableMultilineTitle_) return;
 
-		let height = event.nativeEvent.contentSize.height;
+		const height = event.nativeEvent.contentSize.height;
 		this.setState({ titleTextInputHeight: height });
 	}
 
@@ -760,8 +779,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 		if (this.state.mode === 'view') fieldToFocus = '';
 
-		if (fieldToFocus === 'title' && this.refs.titleTextField) this.refs.titleTextField.focus();
-		if (fieldToFocus === 'body' && this.refs.noteBodyTextField) this.refs.noteBodyTextField.focus();
+		if (fieldToFocus === 'title' && this.refs.titleTextField) {
+			this.refs.titleTextField.focus();
+		}
+		if (fieldToFocus === 'body' && this.markdownEditorRef.current) {
+			if (this.markdownEditorRef.current) {
+				this.markdownEditorRef.current.focus();
+			}
+		}
 	}
 
 	async folderPickerOptions_valueChanged(itemValue) {
@@ -815,7 +840,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view') {
+		if (this.state.mode == 'view' && !Setting.value('editor.beta')) {
 			const onCheckboxChange = newBody => {
 				this.saveOneProperty('body', newBody);
 			};
@@ -836,6 +861,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						ref="noteBodyViewer"
 						style={this.styles().noteBodyViewer}
 						webViewStyle={theme}
+						// Extra bottom padding to make it possible to scroll past the
+						// action button (so that it doesn't overlap the text)
+						paddingBottom='3.8em'
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
@@ -858,13 +886,70 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			// autoFocus={fieldToFocus === 'body'}
 
-			// Note: blurOnSubmit is necessary to get multiline to work.
-			// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			bodyComponent = <TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />;
+			// Currently keyword highlighting is supported only when FTS is available.
+			let keywords = [];
+			if (this.props.searchQuery && !!this.props.ftsEnabled) {
+				const parsedQuery = SearchEngine.instance().parseQuery(this.props.searchQuery);
+				keywords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			}
+
+			const onCheckboxChange = newBody => {
+				this.saveOneProperty('body', newBody);
+			};
+
+			bodyComponent = Setting.value('editor.beta')
+				// Note: blurOnSubmit is necessary to get multiline to work.
+				// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
+				? <MarkdownEditor
+					ref={this.markdownEditorRef} // For focusing the Markdown editor
+					editorFont={editorFont(this.props.editorFont)}
+					style={this.styles().bodyTextInput}
+					previewStyles={this.styles().noteBodyViewer}
+					value={note.body}
+					borderColor={this.styles().markdownButtons.borderColor}
+					markdownButtonsColor={this.styles().markdownButtons.color}
+					saveText={text => this.body_changeText(text)}
+					blurOnSubmit={false}
+					selectionColor={theme.textSelectionColor}
+					placeholder={_('Add body')}
+					placeholderTextColor={theme.colorFaded}
+					noteBodyViewer={{
+						onJoplinLinkClick: this.onJoplinLinkClick_,
+						ref: 'noteBodyViewer',
+						style: {
+							...this.styles().noteBodyViewer,
+							...this.styles().noteBodyViewerPreview,
+						},
+						webViewStyle: theme,
+						note: note,
+						noteResources: this.state.noteResources,
+						highlightedKeywords: keywords,
+						theme: this.props.theme,
+						noteHash: this.props.noteHash,
+						onCheckboxChange: newBody => {
+							onCheckboxChange(newBody);
+						},
+						onMarkForDownload: this.onMarkForDownload,
+						onLoadEnd: () => {
+							setTimeout(() => {
+								this.setState({ HACK_webviewLoadingState: 1 });
+								setTimeout(() => {
+									this.setState({ HACK_webviewLoadingState: 0 });
+								}, 50);
+							}, 5);
+						},
+					}}
+
+				/>
+				: (
+					<ScrollView persistentScrollbar>
+						<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
+					</ScrollView>
+				);
 		}
 
 		const renderActionButton = () => {
-			let buttons = [];
+			const buttons = [];
 
 			buttons.push({
 				title: _('Edit'),
@@ -883,8 +968,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const actionButtonComp = renderActionButton();
 
-		let showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		let saveButtonDisabled = !this.isModified();
+		const showSaveButton = this.state.mode == 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
+		const saveButtonDisabled = !this.isModified();
 
 		if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
@@ -906,7 +991,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
 				{titleComp}
 				{bodyComponent}
-				{actionButtonComp}
+				{!Setting.value('editor.beta') && actionButtonComp}
 
 				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 

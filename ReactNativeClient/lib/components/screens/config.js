@@ -166,7 +166,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			body: {
 				flex: 1,
 				justifyContent: 'flex-start',
@@ -190,8 +190,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				paddingRight: 5,
 			},
 			descriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 			},
 			sliderUnits: {
@@ -200,8 +200,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				marginRight: 10,
 			},
 			settingDescriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -332,7 +332,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	settingToComponent(key, value) {
 		const themeId = this.props.theme;
 		const theme = themeStyle(themeId);
-		let output = null;
+		const output = null;
 
 		const updateSettingValue = (key, value) => {
 			return shared.updateSettingValue(this, key, value);
@@ -341,18 +341,18 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const md = Setting.settingMetadata(key);
 		const settingDescription = md.description ? md.description() : '';
 
+		const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
+		const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+
 		if (md.isEnum) {
 			value = value.toString();
 
-			let items = [];
+			const items = [];
 			const settingOptions = md.options();
-			for (let k in settingOptions) {
+			for (const k in settingOptions) {
 				if (!settingOptions.hasOwnProperty(k)) continue;
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
-
-			const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
-			const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
 
 			return (
 				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
@@ -386,15 +386,22 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
 			return (
-				<View key={key} style={this.styles().switchSettingContainer}>
-					<Text key="label" style={this.styles().switchSettingText}>
-						{md.label()}
-					</Text>
-					<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+				<View key={key}>
+					<View style={containerStyle}>
+						<Text key="label" style={this.styles().switchSettingText}>
+							{md.label()}
+						</Text>
+						<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
 			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
+			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
+			// on the Slider as they are buggy and can crash the app on certain devices.
+			// https://github.com/laurent22/joplin/issues/2733
+			// https://github.com/react-native-community/react-native-slider/issues/161
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>
@@ -402,7 +409,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" minimumTrackTintColor={theme.color} maximumTrackTintColor={theme.color} style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={md.minimum} maximumValue={md.maximum} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 				</View>
 			);
@@ -431,7 +438,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
 		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
-		settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
+		if (Platform.OS === 'android') {
+			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
+		}
 		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
 
 		if (shim.mobilePlatform() === 'android') {
@@ -441,7 +450,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer}>
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{ marginRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<TextInput style={{ paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);

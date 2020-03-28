@@ -55,14 +55,23 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+			paddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+			paddingBottom: this.props.paddingBottom || '0',
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
 
-		let result = await this.markupToHtml_.render(note.markup_language, bodyToRender, this.props.webViewStyle, mdOptions);
+		const result = await this.markupToHtml_.render(
+			note.markup_language,
+			bodyToRender,
+			{
+				bodyPaddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+				...this.props.webViewStyle,
+			},
+			mdOptions
+		);
 		let html = result.html;
 
 		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
@@ -188,7 +197,7 @@ class NoteBodyViewer extends Component {
 		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-503754654
 
 
-		let webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
+		const webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).

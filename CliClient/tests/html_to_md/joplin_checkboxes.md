@@ -1,3 +1,0 @@
-- [x] one
-- [ ] two
-- [ ] with **bold** text

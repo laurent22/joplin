@@ -100,7 +100,7 @@ app().start(bridge().processArgv()).then(() => {
 	} else {
 		// If something goes wrong at this stage we don't have a console or a log file
 		// so display the error in a message box.
-		let msg = ['Fatal error:', error.message];
+		const msg = ['Fatal error:', error.message];
 		if (error.fileName) msg.push(error.fileName);
 		if (error.lineNumber) msg.push(error.lineNumber);
 		if (error.stack) msg.push(error.stack);

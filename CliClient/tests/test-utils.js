@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseApplication }= require('lib/BaseApplication.js');
+const { BaseApplication } = require('lib/BaseApplication.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -41,13 +41,13 @@ const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
 
-let databases_ = [];
-let synchronizers_ = [];
-let encryptionServices_ = [];
-let revisionServices_ = [];
-let decryptionWorkers_ = [];
-let resourceServices_ = [];
-let kvStores_ = [];
+const databases_ = [];
+const synchronizers_ = [];
+const encryptionServices_ = [];
+const revisionServices_ = [];
+const decryptionWorkers_ = [];
+const resourceServices_ = [];
+const kvStores_ = [];
 let fileApi_ = null;
 let currentClient_ = 1;
 
@@ -126,6 +126,10 @@ function sleep(n) {
 	});
 }
 
+function currentClientId() {
+	return currentClient_;
+}
+
 async function switchClient(id) {
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
 
@@ -133,12 +137,7 @@ async function switchClient(id) {
 	await Setting.saveAll();
 
 	currentClient_ = id;
-	BaseModel.db_ = databases_[id];
-	Folder.db_ = databases_[id];
-	Note.db_ = databases_[id];
-	BaseItem.db_ = databases_[id];
-	Setting.db_ = databases_[id];
-	Resource.db_ = databases_[id];
+	BaseModel.setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
@@ -190,6 +189,7 @@ async function setupDatabase(id = null) {
 	Setting.cache_ = null;
 
 	if (databases_[id]) {
+		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
 		await Setting.load();
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
@@ -208,7 +208,7 @@ async function setupDatabase(id = null) {
 	databases_[id].setLogger(dbLogger);
 	await databases_[id].open({ name: filePath });
 
-	BaseModel.db_ = databases_[id];
+	BaseModel.setDb(databases_[id]);
 	await Setting.load();
 	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 }
@@ -220,6 +220,8 @@ function resourceDir(id = null) {
 
 async function setupDatabaseAndSynchronizer(id = null) {
 	if (id === null) id = currentClient_;
+
+	BaseService.logger_ = logger;
 
 	await setupDatabase(id);
 
@@ -341,7 +343,7 @@ function fileApi() {
 
 function objectsEqual(o1, o2) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
-	for (let n in o1) {
+	for (const n in o1) {
 		if (!o1.hasOwnProperty(n)) continue;
 		if (o1[n] !== o2[n]) return false;
 	}
@@ -427,7 +429,7 @@ function sortedIds(a) {
 }
 
 function at(a, indexes) {
-	let out = [];
+	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
 		out.push(a[indexes[i]]);
 	}
@@ -435,53 +437,74 @@ function at(a, indexes) {
 }
 
 async function createNTestFolders(n) {
-	let folders = [];
+	const folders = [];
 	for (let i = 0; i < n; i++) {
-		let folder = await Folder.save({ title: 'folder' });
+		const folder = await Folder.save({ title: 'folder' });
 		folders.push(folder);
+		await time.msleep(10);
 	}
 	return folders;
 }
 
 async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
-	let notes = [];
+	const notes = [];
 	for (let i = 0; i < n; i++) {
-		let title_ = n > 1 ? `${title}${i}` : title;
-		let note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const title_ = n > 1 ? `${title}${i}` : title;
+		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
 		notes.push(note);
+		await time.msleep(10);
 	}
 	if (tagIds) {
 		for (let i = 0; i < notes.length; i++) {
 			await Tag.setNoteTagsByIds(notes[i].id, tagIds);
+			await time.msleep(10);
 		}
 	}
 	return notes;
 }
 
 async function createNTestTags(n) {
-	let tags = [];
+	const tags = [];
 	for (let i = 0; i < n; i++) {
-		let tag = await Tag.save({ title: 'tag' });
+		const tag = await Tag.save({ title: 'tag' });
 		tags.push(tag);
+		await time.msleep(10);
 	}
 	return tags;
 }
 
-// Integration test application
+// Application for feature integration testing
 class TestApp extends BaseApplication {
-	constructor() {
+	constructor(hasGui = true) {
 		super();
+		this.hasGui_ = hasGui;
 		this.middlewareCalls_ = [];
+		this.logger_ = super.logger();
+	}
+
+	hasGui() {
+		return this.hasGui_;
 	}
 
 	async start(argv) {
-		await clearDatabase(); // not sure why we need this as we use our own database
+		this.logger_.info('Test app starting...');
 
-		argv = argv.concat(['--profile', `tests-build/profile-${uuid.create()}`]);
+		if (!argv.includes('--profile')) {
+			argv = argv.concat(['--profile', `tests-build/profile/${uuid.create()}`]);
+		}
 		argv = await super.start(['',''].concat(argv));
+
+		// For now, disable sync and encryption to avoid spurious intermittent failures
+		// caused by them interupting processing and causing delays.
+		Setting.setValue('sync.interval', 0);
+		Setting.setValue('encryption.enabled', false);
+
 		this.initRedux();
 		Setting.dispatchUpdateAll();
-		await time.msleep(100);
+		await ItemChange.waitForAllSaved();
+		await this.wait();
+
+		this.logger_.info('Test app started...');
 	}
 
 	async generalMiddleware(store, next, action) {
@@ -493,7 +516,7 @@ class TestApp extends BaseApplication {
 		}
 	}
 
-	async waitForMiddleware_() {
+	async wait() {
 		return new Promise((resolve) => {
 			const iid = setInterval(() => {
 				if (!this.middlewareCalls_.length) {
@@ -504,13 +527,18 @@ class TestApp extends BaseApplication {
 		});
 	}
 
+	async profileDir() {
+		return await Setting.value('profileDir');
+	}
+
 	async destroy() {
-		await this.waitForMiddleware_();
+		this.logger_.info('Test app stopping...');
+		await this.wait();
+		await ItemChange.waitForAllSaved();
 		this.deinitRedux();
 		await super.destroy();
+		await time.msleep(100);
 	}
 }
 
-
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
-
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

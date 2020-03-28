@@ -1,6 +1,10 @@
+22:24:32 Profile directory: /Users/laurent/Temp/TestNotes2
+22:24:32 Trying to load 1 master keys...
+22:24:32 Loaded master keys: 0
+22:24:32 ResourceFetcher: Auto-add resources: Mode: always
+22:24:32 ResourceFetcher: Auto-added resources: 0
 # Joplin API
 
-When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin's data and to create, modify or delete notes, notebooks, resources or tags.
 
 In order to use it, you'll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:
 
