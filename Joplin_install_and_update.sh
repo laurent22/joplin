@@ -83,6 +83,7 @@ fi
 #-----------------------------------------------------
 showLogo
 
+#-----------------------------------------------------
 print "Checking architecture..."
 ## uname actually gives more information than needed, but it contains all architectures (hardware and software)
 ARCHITECTURE=$(uname -a || echo "NO CHECK")
