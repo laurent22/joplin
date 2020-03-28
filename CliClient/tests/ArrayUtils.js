@@ -81,7 +81,7 @@ describe('ArrayUtils', function() {
 			const intervals = t[0];
 			const expected = t[1];
 
-			const actual = ArrayUtils.mergeOverlappingIntervals(intervals);
+			const actual = ArrayUtils.mergeOverlappingIntervals(intervals, intervals.length);
 			expect(actual).toEqual(expected, `Test case ${i}`);
 		});
 	}));
