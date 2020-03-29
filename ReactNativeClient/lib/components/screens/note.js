@@ -61,6 +61,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			dueDateShown: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -189,6 +190,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.dueDate_onPress = this.dueDate_onPress.bind(this);
+		this.onDueDateReject = this.onDueDateReject.bind(this);
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
@@ -589,7 +592,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
+	async dueDate_onPress(date) {
+		const newNote = Object.assign({}, this.state.note);
+		newNote.due_date = date ? date.getTime() : 0;
+
+		await this.saveOneProperty('due_date', date ? date.getTime() : 0);
+
+		this.setState({ dueDateShown: false });
+	}
+
+	onDueDateReject() {
+		this.setState({ dueDateShown: false });
+	}
+
 	setAlarm_onPress() {
+		// this will make sure due date popup is closed before opening alarm popup
+		this.setState({ dueDateShown: false });
 		this.setState({ alarmDialogShown: true });
 	}
 
@@ -699,6 +717,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Set alarm'),
 				onPress: () => {
+					// this wil make sure due date popup is closed before alarm popup
+					this.setState({ dueDateShown: false });
 					this.setState({ alarmDialogShown: true });
 				},
 			});
@@ -729,6 +749,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 				title: _('Copy Markdown link'),
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
+				},
+			});
+		}
+		if (isTodo) {
+			output.push({
+				title: _('Choose a Due Date'),
+				onPress: () => {
+					this.setState({ alarmDialogShown: false });
+					this.setState({ dueDateShown: true });
 				},
 			});
 		}
@@ -975,7 +1004,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
+		// this due date if for alarm of todos, has nothing to do with their expire
 		const dueDate = Note.dueDateObject(note);
+
+		// this is the date for their expire and has nothing to do with alarm time.
+		const expireDate = Note.dueDateObjectForExpire(note);
 
 		const titleComp = (
 			<View style={titleContainerStyle}>
@@ -986,6 +1019,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		// this wil shown if user chooses to set an alarm
+		const alarmDatePopup = (
+			<SelectDateTimeDialog type='alarm' shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+		);
+
+		// this will be shown if user chooses to set a due date (expire date) for note.
+		const dueDatePopup = (
+			<SelectDateTimeDialog type='expire_date' shown={this.state.dueDateShown} date={expireDate} onAccept={this.dueDate_onPress} onReject={this.onDueDateReject} />
+		);
+
+		const DateComp = this.state.alarmDialogShown ? alarmDatePopup : dueDatePopup;
+
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader folderPickerOptions={this.folderPickerOptions()} menuOptions={this.menuOptions()} showSaveButton={showSaveButton} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={this.saveNoteButton_press} showSideMenuButton={false} showSearchButton={false} />
@@ -993,7 +1038,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				{bodyComponent}
 				{!Setting.value('editor.beta') && actionButtonComp}
 
-				<SelectDateTimeDialog shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				{DateComp}
 
 				<DialogBox
 					ref={dialogbox => {

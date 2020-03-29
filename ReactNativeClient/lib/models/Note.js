@@ -24,6 +24,8 @@ class Note extends BaseItem {
 			title: _('title'),
 			user_updated_time: _('updated date'),
 			user_created_time: _('created date'),
+			// it is expire date of notes and not the alarm date
+			due_date: _('Due Date'),
 		};
 
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
@@ -73,6 +75,7 @@ class Note extends BaseItem {
 		lodash.pull(fieldNames, 'created_time');
 		lodash.pull(fieldNames, 'updated_time');
 		lodash.pull(fieldNames, 'order');
+		lodash.pull(fieldNames, 'due_date');
 
 		return super.serialize(n, fieldNames);
 	}
@@ -210,6 +213,10 @@ class Note extends BaseItem {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
 
+		const dueDateSet = note => {
+			return !(note.due_date == 0 || note.due_date == null);
+		};
+
 		const noteFieldComp = (f1, f2) => {
 			if (f1 === f2) return 0;
 			return f1 < f2 ? -1 : +1;
@@ -231,6 +238,42 @@ class Note extends BaseItem {
 
 			return noteFieldComp(a.id, b.id);
 		};
+
+		const res = orders.find(order => order.by == 'due_date');
+		if (res) {
+			const sortedNotes = notes.sort((a, b) =>{
+				if (a.is_todo && !b.is_todo) return -1;
+				if (!a.is_todo && b.is_todo) return +1;
+				if (!a.is_todo && !b.is_todo) return sortIdenticalNotes(a, b);
+
+				if (a.todo_completed && !b.todo_completed) return +1;
+				if (!a.todo_completed && b.todo_completed) return -1;
+
+				if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
+				if (dueDateSet(a) && !dueDateSet(b)) return -1;
+				if (!dueDateSet(a) && dueDateSet(b)) return +1;
+
+				return sortIdenticalNotes(a, b);
+			});
+
+			// const reversedSortedNotes = notes.sort((a, b) =>{
+			// 	if (a.is_todo && !b.is_todo) return -1;
+			// 	if (!a.is_todo && b.is_todo) return +1;
+			// 	if (!a.is_todo && !b.is_todo) return sortIdenticalNotes(a, b);
+
+			// 	if (a.todo_completed && !b.todo_completed) return +1;
+			// 	if (!a.todo_completed && b.todo_completed) return -1;
+
+			// 	if (dueDateSet(a) && !dueDateSet(b)) return -1;
+			// 	if (!dueDateSet(a) && dueDateSet(b)) return +1;
+			// 	if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
+
+			// 	return sortIdenticalNotes(a, b);
+			// });
+
+			if (res.dir == 'DESC') return sortedNotes;
+			if (res.dir == 'ASC') return sortedNotes;
+		}
 
 		return notes.sort((a, b) => {
 			if (noteOnTop(a) && !noteOnTop(b)) return -1;
@@ -256,7 +299,7 @@ class Note extends BaseItem {
 
 	static previewFields() {
 		// return ['id', 'title', 'body', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
-		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied'];
+		return ['id', 'title', 'is_todo', 'todo_completed', 'parent_id', 'updated_time', 'user_updated_time', 'user_created_time', 'encryption_applied','due_date'];
 	}
 
 	static previewFieldsSql(fields = null) {
@@ -282,9 +325,8 @@ class Note extends BaseItem {
 	static async previews(parentId, options = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
-
 		if (!options) options = {};
-		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
+		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }, { by: 'due_date', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
 		if (!options.conditionsParams) options.conditionsParams = [];
 		if (!options.fields) options.fields = this.previewFields();
@@ -320,6 +362,63 @@ class Note extends BaseItem {
 
 		if (!options.showCompletedTodos) {
 			options.conditions.push('todo_completed <= 0');
+		}
+
+		const sortByDueDate = options.order.find(order => order.by == 'due_date');
+
+		if (sortByDueDate && hasTodos) {
+			let conditions = options.conditions.slice();
+			conditions.push('is_todo = 1');
+			conditions.push('(todo_completed <= 0 OR todo_completed IS NULL)');
+			conditions.push('(due_date != 0 AND due_date IS NOT NULL)');
+			let tempOptions = Object.assign({}, options);
+			tempOptions.conditions = conditions;
+
+			const todosWithDueDateNotCompleted = await this.search(tempOptions);
+
+			conditions = options.conditions.slice();
+			conditions.push('is_todo = 1');
+			conditions.push('(todo_completed <= 0 OR todo_completed IS NULL)');
+			conditions.push('(due_date == 0 OR due_date IS NULL)');
+			tempOptions = Object.assign({}, options);
+			tempOptions.conditions = conditions;
+
+			const todosWithoutDueDateNotCompleted = await this.search(tempOptions);
+
+			const todosNotCompleted = todosWithDueDateNotCompleted.concat(todosWithoutDueDateNotCompleted);
+
+			conditions = options.conditions.slice();
+			conditions.push('(is_todo = 1 AND todo_completed > 0)');
+			conditions.push('(due_date != 0 AND due_date IS NOT NULL)');
+			tempOptions = Object.assign({}, options);
+			tempOptions.conditions = conditions;
+
+			const todosWithDueDateCompleted = await this.search(tempOptions);
+
+			conditions = options.conditions.slice();
+			conditions.push('(is_todo = 1 AND todo_completed > 0)');
+			conditions.push('(due_date == 0 OR due_date IS NULL)');
+			tempOptions = Object.assign({}, options);
+			tempOptions.conditions = conditions;
+
+			const todosWithoutDueDateCompleted = await this.search(tempOptions);
+
+			const todosCompleted = todosWithDueDateCompleted.concat(todosWithoutDueDateCompleted);
+
+			const totalTodos = todosNotCompleted.concat(todosCompleted);
+
+			if (hasTodos && hasNotes) {
+				conditions = options.conditions.slice();
+				conditions.push('is_todo == 0');
+				tempOptions = Object.assign({}, options);
+				tempOptions.conditions = conditions;
+
+				const totalNotes = await this.search(tempOptions);
+
+				return totalTodos.concat(totalNotes);
+			}
+
+			return totalTodos;
 		}
 
 		if (options.uncompletedTodosOnTop && hasTodos) {
@@ -628,12 +727,33 @@ class Note extends BaseItem {
 		return note.is_todo && !note.todo_completed && note.todo_due >= time.unixMs() && !note.is_conflict;
 	}
 
+	// this will return alarm time of todos, it has nothing to do with expire date
 	static dueDateObject(note) {
 		if (!!note.is_todo && note.todo_due) {
 			if (!this.dueDateObjects_) this.dueDateObjects_ = {};
 			if (this.dueDateObjects_[note.todo_due]) return this.dueDateObjects_[note.todo_due];
 			this.dueDateObjects_[note.todo_due] = new Date(note.todo_due);
 			return this.dueDateObjects_[note.todo_due];
+		}
+
+		return null;
+	}
+
+	// this will return date of due date of todos (here due date means expire and not for alarms)
+	static dueDateObjectForExpire(note) {
+		if (!!note.is_todo && note.due_date) {
+			// if the object is not present, it will make an empty object
+			if (!this.dueDateObjects) {
+				this.dueDateObjects = {};
+			}
+
+			// if the object is already present, it will return that object
+			if (this.dueDateObjects[note.due_date]) {
+				return this.dueDateObjects[note.due_date];
+			}
+			// otherwise it will assign the object the due date (expire date) of the note and will return it
+			this.dueDateObjects[note.due_date] = new Date(note.due_date);
+			return this.dueDateObjects[note.due_date];
 		}
 
 		return null;

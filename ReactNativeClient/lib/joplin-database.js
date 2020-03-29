@@ -4,6 +4,9 @@ const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim.js');
 
+// todo_due is due time of alarms in notes and due_date is for their
+// expire. It is used to sort them on the basis of their expire date
+
 const structureSql = `
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
@@ -34,7 +37,8 @@ CREATE TABLE notes (
 	source TEXT NOT NULL DEFAULT "",
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
-	\`order\` INT NOT NULL DEFAULT 0
+	\`order\` INT NOT NULL DEFAULT 0,
+	due_date INT DEFAULT 0
 );
 
 CREATE INDEX notes_title ON notes (title);

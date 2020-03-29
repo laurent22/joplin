@@ -64,16 +64,32 @@ class SelectDateTimeDialog extends React.PureComponent {
 	render() {
 		const clearAlarmText = _('Clear alarm'); // For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
 
-		const popupActions = [
+		// these are the popup actions which will be used for alarm time popup
+
+		const popupActionsForAlarm = [
 			<DialogButton text={_('Save alarm')} align="center" onPress={() => this.onAccept()} key="saveButton" />,
 			<DialogButton text={clearAlarmText} align="center" onPress={() => this.onClear()} key="clearButton" />,
 			<DialogButton text={_('Cancel')} align="center" onPress={() => this.onReject()} key="cancelButton" />,
 		];
 
+		// these are the popup actions which will be used for due date (expire date of todos) popup
+
+		const popupActionsForDueDate = [
+			<DialogButton text={_('Set Due Date')} align="center" onPress={() => this.onAccept()} key="saveButton" />,
+			<DialogButton text={_('Clear Due Date')} align="center" onPress={() => this.onClear()} key="clearButton" />,
+			<DialogButton text={_('Cancel')} align="center" onPress={() => this.onReject()} key="cancelButton" />,
+		];
+
+		const type = this.props.type;
+
+		const popupActions = type === 'alarm' ? popupActionsForAlarm : popupActionsForDueDate;
+
+		const title = type === 'alarm' ? _('Set alarm') : _('Set due date');
+
 		return (
 			<PopupDialog
 				ref={(dialog) => { this.dialog_ = dialog; }}
-				dialogTitle={<DialogTitle title={_('Set alarm')} />}
+				dialogTitle={<DialogTitle title={title} />}
 				actions={popupActions}
 				dismissOnTouchOutside={false}
 				width={0.9}
