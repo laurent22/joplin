@@ -388,13 +388,17 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// -----------------------------------------------------------------------------------------
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
-		const cssFiles = ['css/fork-awesome.min.css'].concat(pluginAssets
-			.filter((a:any) => a.mime === 'text/css' && !loadedAssetFiles_.includes(a.path))
-			.map((a:any) => a.path));
+		const cssFiles = ['css/fork-awesome.min.css'].concat(
+			pluginAssets
+				.filter((a:any) => a.mime === 'text/css')
+				.map((a:any) => a.path)
+		).filter((path:string) => !loadedAssetFiles_.includes(path));
 
-		const jsFiles = ['gui/editors/TinyMCE/content_script.js'].concat(pluginAssets
-			.filter((a:any) => a.mime === 'application/javascript' && !loadedAssetFiles_.includes(a.path))
-			.map((a:any) => a.path));
+		const jsFiles = ['gui/editors/TinyMCE/content_script.js'].concat(
+			pluginAssets
+				.filter((a:any) => a.mime === 'application/javascript')
+				.map((a:any) => a.path)
+		).filter((path:string) => !loadedAssetFiles_.includes(path));
 
 		for (const cssFile of cssFiles) loadedAssetFiles_.push(cssFile);
 		for (const jsFile of jsFiles) loadedAssetFiles_.push(jsFile);
