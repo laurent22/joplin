@@ -1,6 +1,6 @@
 # Desktop application
 
-## Windows
+## On Windows
 
 If `yarn dist` fails, it may need administrative rights.
 
@@ -21,16 +21,6 @@ If you get a node-gyp related error, you might need to manually install it: `npm
 
 If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
-# Mobile application
-
-## iOS
-
-If you there is an error `/joplin/ReactNativeClient/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
-
-    cd ios
-    pod deintegrate
-    pod install
-
 ## Other issues
 
 > The application window doesn't open or is white
@@ -47,3 +37,13 @@ This is an indication that there's an early initialisation error. Try this:
 **You should not use WSL at all** because this is a GUI app that lives outside of WSL, and the WSL layer can cause all kind of very hard to debug issues. It can also lock files in node_modules that cannot be unlocked when the app crashes. (You need to restart your computer.) Likewise, don't run the TypeScript watch command from WSL.
 
 So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator. All build and start commands are designed to work cross-platform, including on Windows.
+
+# Mobile application
+
+## iOS
+
+If there is an error `/joplin/ReactNativeClient/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
+
+    cd ios
+    pod deintegrate
+    pod install
