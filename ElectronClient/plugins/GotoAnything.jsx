@@ -6,10 +6,11 @@ const SearchEngine = require('lib/services/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
 const Folder = require('lib/models/Folder');
+const Note = require('lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords } = require('lib/string-utils.js');
-
+const { surroundKeywords, nextWhitespaceIndex } = require('lib/string-utils.js');
+const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
 const itemHeight = 60;
 
@@ -76,13 +77,20 @@ class Dialog extends React.PureComponent {
 
 		const rowTitleStyle = Object.assign({}, rowTextStyle, {
 			fontSize: rowTextStyle.fontSize * 1.4,
-			marginBottom: 5,
+			marginBottom: 4,
+			color: theme.colorFaded,
+		});
+
+		const rowFragmentsStyle = Object.assign({}, rowTextStyle, {
+			fontSize: rowTextStyle.fontSize * 1.2,
+			marginBottom: 4,
 			color: theme.colorFaded,
 		});
 
 		this.styles_[this.props.theme].rowSelected = Object.assign({}, this.styles_[this.props.theme].row, { backgroundColor: theme.selectedColor });
 		this.styles_[this.props.theme].rowPath = rowTextStyle;
 		this.styles_[this.props.theme].rowTitle = rowTitleStyle;
+		this.styles_[this.props.theme].rowFragments = rowFragmentsStyle;
 
 		return this.styles_[this.props.theme];
 	}
@@ -125,14 +133,17 @@ class Dialog extends React.PureComponent {
 		}, 10);
 	}
 
-	makeSearchQuery(query) {
-		const splitted = query.split(' ');
+	makeSearchQuery(query, field) {
 		const output = [];
+		const splitted = (field === 'title')
+			? query.split(' ')
+			: query.substr(1).trim().split(' '); // body
+
 		for (let i = 0; i < splitted.length; i++) {
 			const s = splitted[i].trim();
 			if (!s) continue;
 
-			output.push(`title:${s}*`);
+			output.push(field === 'title' ? `title:${s}*` : `body:${s}*`);
 		}
 
 		return output.join(' ');
@@ -165,9 +176,49 @@ class Dialog extends React.PureComponent {
 					const path = Folder.folderPathString(this.props.folders, row.parent_id);
 					results[i] = Object.assign({}, row, { path: path ? path : '/' });
 				}
-			} else { // NOTES
+			} else if (this.state.query.indexOf('/') === 0) { // BODY
 				listType = BaseModel.TYPE_NOTE;
-				searchQuery = this.makeSearchQuery(this.state.query);
+				searchQuery = this.makeSearchQuery(this.state.query, 'body');
+				results = await SearchEngine.instance().search(searchQuery);
+
+				const limit = 20;
+				const searchKeywords = this.keywords(searchQuery);
+				const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body'] });
+				const notesById = notes.reduce((obj, { id, body }) => ((obj[[id]] = body), obj), {});
+
+				for (let i = 0; i < results.length; i++) {
+					const row = results[i];
+					let fragments = '...';
+
+					if (i < limit) { // Display note fragments of search keyword matches
+						const indices = [];
+						const body = notesById[row.id];
+
+						// Iterate over all matches in the body for each search keyword
+						for (const { valueRegex } of searchKeywords) {
+							for (const match of body.matchAll(new RegExp(valueRegex, 'ig'))) {
+								// Populate 'indices' with [begin index, end index] of each note fragment
+								// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
+								indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+								if (indices.length > 20) break;
+							}
+						}
+
+						// Merge multiple overlapping fragments into a single fragment to prevent repeated content
+						// e.g. 'Joplin is a free, open source' and 'open source note taking application'
+						// will result in 'Joplin is a free, open source note taking application'
+						const mergedIndices = mergeOverlappingIntervals(indices, 3);
+						fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+						// Add trailing ellipsis if the final fragment doesn't end where the note is ending
+						if (mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+					}
+
+					const path = Folder.folderPathString(this.props.folders, row.parent_id);
+					results[i] = Object.assign({}, row, { path, fragments });
+				}
+			} else { // TITLE
+				listType = BaseModel.TYPE_NOTE;
+				searchQuery = this.makeSearchQuery(this.state.query, 'title');
 				results = await SearchEngine.instance().search(searchQuery);
 
 				for (let i = 0; i < results.length; i++) {
@@ -248,13 +299,17 @@ class Dialog extends React.PureComponent {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
-		const titleHtml = surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+		const titleHtml = item.fragments
+			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
+			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
 
+		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
+				<div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: fragmentsHtml }}></div>
 				{pathComp}
 			</div>
 		);
@@ -327,7 +382,7 @@ class Dialog extends React.PureComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name, or / followed by note content.')}</div>;
 
 		return (
 			<div style={theme.dialogModalLayer}>
