@@ -213,6 +213,7 @@ class Note extends BaseItem {
 			return uncompletedTodosOnTop && note.is_todo && !note.todo_completed;
 		};
 
+		// this function will return true if the due date is set by the user for the todo, otherwise false
 		const dueDateSet = note => {
 			return !(note.due_date == 0 || note.due_date == null);
 		};
@@ -239,40 +240,34 @@ class Note extends BaseItem {
 			return noteFieldComp(a.id, b.id);
 		};
 
+		// this is to check if sorted order is based on due_date
 		const res = orders.find(order => order.by == 'due_date');
+
 		if (res) {
+			// if sorting is based on due_date, then follow these rules
 			const sortedNotes = notes.sort((a, b) =>{
+				// todos have to be above notes
 				if (a.is_todo && !b.is_todo) return -1;
 				if (!a.is_todo && b.is_todo) return +1;
+
+				// notes can be sorted on basis of sortIdenticalNotes function (which is updated and created_time)
 				if (!a.is_todo && !b.is_todo) return sortIdenticalNotes(a, b);
 
+				// in todos incomplete todos have to be above completed todos
 				if (a.todo_completed && !b.todo_completed) return +1;
 				if (!a.todo_completed && b.todo_completed) return -1;
 
+				// in all incomplete todos, the one with due dates set by user have to be on top
 				if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
+
+				// if one note has due date set and one hasn't, then the one with due date will be on top
 				if (dueDateSet(a) && !dueDateSet(b)) return -1;
 				if (!dueDateSet(a) && dueDateSet(b)) return +1;
 
 				return sortIdenticalNotes(a, b);
 			});
 
-			// const reversedSortedNotes = notes.sort((a, b) =>{
-			// 	if (a.is_todo && !b.is_todo) return -1;
-			// 	if (!a.is_todo && b.is_todo) return +1;
-			// 	if (!a.is_todo && !b.is_todo) return sortIdenticalNotes(a, b);
-
-			// 	if (a.todo_completed && !b.todo_completed) return +1;
-			// 	if (!a.todo_completed && b.todo_completed) return -1;
-
-			// 	if (dueDateSet(a) && !dueDateSet(b)) return -1;
-			// 	if (!dueDateSet(a) && dueDateSet(b)) return +1;
-			// 	if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
-
-			// 	return sortIdenticalNotes(a, b);
-			// });
-
-			if (res.dir == 'DESC') return sortedNotes;
-			if (res.dir == 'ASC') return sortedNotes;
+			return sortedNotes;
 		}
 
 		return notes.sort((a, b) => {
@@ -325,6 +320,7 @@ class Note extends BaseItem {
 	static async previews(parentId, options = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
+
 		if (!options) options = {};
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }, { by: 'due_date', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
@@ -364,8 +360,16 @@ class Note extends BaseItem {
 			options.conditions.push('todo_completed <= 0');
 		}
 
+		// this is to check if we have to sort by due_date, if yes, then we will use if condition written below
 		const sortByDueDate = options.order.find(order => order.by == 'due_date');
 
+		// these will be cases to sort on basis of due_date:
+		// 1 incomplete todos with less due date will be on top
+		// 2 incomplete todos with more due date afterwards
+		// 3 completes todos with less due date
+		// 4 complete todos with more due date
+		// 5 complete todos with no due dates
+		// 6 notes ( sorted on their updated time, created time, id )
 		if (sortByDueDate && hasTodos) {
 			let conditions = options.conditions.slice();
 			conditions.push('is_todo = 1');

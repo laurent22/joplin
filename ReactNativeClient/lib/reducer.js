@@ -571,6 +571,7 @@ const reducer = (state = defaultState, action) => {
 				newNotes = Note.sortNotes(newNotes, stateUtils.notesOrder(state.settings), newState.settings.uncompletedTodosOnTop);
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
+
 				if (noteFolderHasChanged) {
 					let newIndex = movedNotePreviousIndex;
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
