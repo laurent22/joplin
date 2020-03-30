@@ -97,13 +97,25 @@ class InteropServiceHelper {
 
 	static async defaultFilename(noteIds, fileExtension) {
 		const note = await Note.load(noteIds[0]);
+		// In a rare case the passed not will be null, use the id for filename
+		if (note === null) {
+			const filename = friendlySafeFilename(noteIds[0], 100);
+
+			return `${filename}.${fileExtension}`;
+		}
 		const folder = await Folder.load(note.parent_id);
 
-		const foldername = friendlySafeFilename(folder.title, 100);
 		const filename = friendlySafeFilename(note.title, 100);
 
+		// In a less rare case the folder will be null, just ignore it
+		if (folder === null) {
+			return `${filename}.${fileExtension}`;
+		}
+
+		const foldername = friendlySafeFilename(folder.title, 100);
+
 		// friendlySafeFilename assumes that the file extension is added after
-		return `${foldername}-${filename}.${fileExtension}`;
+		return `${foldername} - ${filename}.${fileExtension}`;
 	}
 
 	static async export(dispatch, module, options = null) {
