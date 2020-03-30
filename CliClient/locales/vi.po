@@ -1,0 +1,3276 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Language: vi\n"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
+msgid "To delete a tag, untag the associated notes."
+msgstr "Để xóa tag, hãy bỏ tags khỏi các notes đã được gắn."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:455
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Vui lòng chọn note hoặc notebook cần phải xóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:719
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Vui lòng nhấn Ctrl+D hoặc gõ \"exit\" để thoát khỏi ứng dụng"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"Nhiều hơn một mục được tìm thấy với \"%s\". Hãy truy vấn chính xác hơn nữa."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
+msgid "No notebook selected."
+msgstr "Chưa có notebook nào được lựa chọn."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr "Chưa có notebook nào được chỉ định."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "Y"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
+msgid "n"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "N"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
+msgid "y"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Hủy đồng bộ hóa đang chạy dưới nền… Vui lòng chờ."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Không có lệnh: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Lệnh \"%s\" chỉ có thể sử dụng trong chế độ GUI"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Không thể thay đổi những mục đã được mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Thiếu đối số cho hàm: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
+msgid "Your choice: "
+msgstr "Lựa chọn của bạn "
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Câu trả lời không hợp lệ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Đính kèm file được lựa chọn vào note."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:24
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:34
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:38
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:20
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:66
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:30
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:22
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:23
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:25
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:27
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:32
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:33
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:36
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:42
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:81
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:87
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:21
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:21
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Không tìm thấy \"%s\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:13
+msgid "Displays the given note."
+msgstr "Hiển thị note được lựa chọn."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:17
+msgid "Displays the complete information about note."
+msgstr "Hiển thị toàn bộ thông tin của note."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Lấy hoặc thiết lập giá trị của tập tin cấu hình. Nếu [giá trị] không được "
+"cung cấp, [tên] sẽ được cung cấp. Nếu [tên] lẫn [giá trị] không được cung "
+"cấp, tập tin cấu hình hiện tại sẽ được hiển thị."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Biến chưa được đặt và biến ẩn của cấu hình cũng sẽ được hiển thị."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Sao chép những note trùng với <note> tới [notebook]. Nếu không có notebook "
+"nào được chỉ định, note sẽ được sao chép tới notebook hiện tại."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Đánh dấu to-do đã hoàn thành."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Note này không phải là to-do: \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Quản lý cấu hình E2EE. Câu lệnh bao gồm `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
+msgid "Enter master password:"
+msgstr "Điền mật khẩu master:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
+msgid "Operation cancelled"
+msgstr "Thi hành đã được hủy"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:165
+msgid "Confirm password:"
+msgstr "Xác nhận mật khẩu:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:143
+msgid "Passwords do not match!"
+msgstr "Mật khẩu không trùng!"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Bắt đầu giải mã… Vui lòng chờ, quá trình có thể mất vài phút tùy vào số "
+"lượng cần giải mã."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
+msgid "Completed decryption."
+msgstr "Giải mã đã hoàn thành."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Enabled"
+msgstr "Đã bật"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:489
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+msgid "Disabled"
+msgstr "Đã tắt"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:281
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Mã hóa là: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Chỉnh sửa note."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Chưa có trình biên tập văn bản nào được lựa chon. Vui lòng lựa chọn trình "
+"biên tập văn bản sử dụng `config editor <editor-path>`"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Không có notebook nào đang được sử dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Không có note: \"%s\". Tạo lập nó?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Thoát ứng dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Export dữ liệu Joplin tới một đường dẫn được được xác định. Theo mặc định, "
+"ứng dụng sẽ export toàn bộ dữ liệu bao gồm notebooks, notes, tags, và tài "
+"nguyên."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Định dạng của điểm đến: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Exports duy nhất note hiện tại."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Export duy nhất notebook hiện tại."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Hiển thị đường dẫn định vị địa lý của note."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "HIển thị thông tin sử dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+"Để có được thông tin về hướng dẫn tùy chỉnh phím tắt vui lòng truy cập %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Phím tắt không thể sử dụng trong chế độ CLI."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Gõ `help [command]` để tìm hiểu thông tin về lệnh đó; hoặc gõ `help all` để "
+"tìm hiểu thông tin hướng dẫn sử dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Những câu lệnh phụ hợp có thể là:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Với bất kỳ câu lệnh, một note hoặc notebook có thể được dẫn tới bằng cách sử "
+"dụng tiêu đề hoặc ID, hoặc sử dụng cụm `$n` hoặc `$b`, theo thứ tự, dành cho "
+"note hoặc notebook đã được lựa chọn. `$c` có thể sử dụng để dẫn tới mục đang "
+"được lựa chọn."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Để chuyển từ trang này sang trang khác, ấn Tab hoặc Shift+Tab."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Sử dụng phím mũi tên và page up/down để di chuyển lên xuống trong một danh "
+"sách hoặc trang chữ (bao gồm cả console)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Để phóng to/thu nhỏ console, ấn \"tc\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Để truy cập chế độ giao điện dòng lệnh, ấn \":\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Để thoát khỏi giao diện dòng lệnh, ấn phím ESCAPE"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "Để truy cập danh sách phím tắt và cấu hình, ấn `help keymap`"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Imports dữ liệu vào Joplin."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Định dạng từ nguồn: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
+msgid "Do not ask for confirmation."
+msgstr "Không cần xác nhận."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "Tìm thấy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:44
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "Đã tạo: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Đã cập nhật: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:46
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Đã bỏ qua: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Tài nguyên: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Đã gắn: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
+msgid "Importing notes..."
+msgstr "Đang import notes..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:66
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Những notes đã được import: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Hiển thị notes trong notebook hiện tại. Sử dụng `ls /` để hiển thị danh mục "
+"các notebook."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Hiển thị duy nhất <số lượng> notes đầu tiên."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Sắp xếp những mục theo <trường> (ví dụ, tiêu đề, thời điểm cập nhật, thời "
+"điểm tạo)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Đảo ngược thứ tự sắp xếp."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Chỉ hiển thị những mục theo phân loại đã được xác định. Có thể sử dụng `n` "
+"cho notes, `t` cho to-do, hoặc `nt` cho notes và to-dos (ví dụ `-tt` sẽ chỉ "
+"hiển thị to-dos, trong khi đó `-ttd` sẽ chỉ hiển thị notes và to-dos)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "\"text\" hoặc \"json\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:32
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Sử dụng định dạng danh mục dài. Định dạng là ID, NOTE_COUNT (cho notebook), "
+"DATE, TODO_CHECKED (cho to-dos), TITLE"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Hãy chọn một notebook trước."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Tạo một notebook mới."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Tạo một note mới."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mknote.js:16
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Notes chỉ có thể được tạo ra bên trong một notebook."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Tạo một to-do mới."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Di chuyển những notes trùng với <note> tới [notebook]."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Đổi tên <item> (note hoặc notebook) được lựa chọn thành <name>."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Xóa notebook được lựa chọn."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Xóa notebook mà không cần xác nhận."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Xóa notebook? Tất cả notes và sub-notebooks bên trong notebook này sẽ bị xóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Xóa những notes trùng với <note-pattern>."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Xóa notes mà không cần xác nhận."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "Có %d notes trùng với chuỗi này. Xóa chúng?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:349
+msgid "Delete note?"
+msgstr "Xóa note?"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Tìm <pattern> trong tất cả các notes."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Bắt đầu, dừng, hoặc kiểm tra server API. Để chỉ định port mà ứng dụng sẽ "
+"chạy, đặt giá trị cho biến cấu hình api.port. Những câu lệnh bao gồm (%s)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Server đang hoạt động trên port %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Server đang khởi động trên port %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
+msgid "Server is not running."
+msgstr "Server chưa chạy."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Thay đổi đặc tính <name> của note hiện tại thành giá trị [value]. Những đặc "
+"tính có thể thay đổi là:\n"
+"\n"
+"%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Hiển thị thông tin sơ lược của notes và notebooks."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
+msgid "Synchronises with remote storage."
+msgstr "Đồng bộ hóa với hệ thống lưu trữ từ xa."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Đồng bộ với mục tiêu được cung cấp (mặc định thoe giá trị của sync.target)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/OneDriveLoginScreen.min.js:40
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Quy trình xác nhận chưa hoàn thành (chưa nhận được mã xác nhận)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Để cho phép Joplin đồng bộ với Dropbox, vui lòng làm theo những bước dưới "
+"đây:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Bước 1: Mở đường dẫn URL này trong trình duyệt web để ủy quyền ứng dụng:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Bước 2: Điền mã được cung cấp bởi Dropbox:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Chưa được ủy quyền với %s. Vui lòng cung cấp thông tin chưa được cung cấp."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
+msgid "Synchronisation is already in progress."
+msgstr "Quy trình đồng bộ đang diễn ra."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Tập tin bị khóa hiện đang dừng hoạt động. Nếu không có quy trình đồng bộ nào "
+"đang hoạt đông, bạn có thể xóa file bị khóa tại \"%s\" và tiếp tục sử dung."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Mục tiêu đồng bộ hóa: %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:177
+msgid "Cannot initialize synchroniser."
+msgstr "Không thể khởi động đồng bộ hóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "Bắt đầu đồng bộ hóa..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "Đang tải về tài nguyên..."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "Đang hủy… Vui lòng chờ."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> có thể là \"add\", \"remove\", \"list\", hoặc \"notetags\" để "
+"gắn hoặc gõ bỏ [tag] khỏi [note], để liệt kê note được gắn với [tag], hoặc "
+"để liệt kê tag gắn với [note]. Câu lệnh `tag list` có thể sử dụng để liệt kê "
+"tất cả tags (sử dụng -l để liệt kê chi tiết)."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Câu lệnh sai: \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> có thể là \"toggle\" hoặc là \"clear\". Sử dụng \"toggle\" để "
+"lưu chuyển giữa các to-do đã hoàn thành và chưa hoàn thành (nếu mục tiêu là "
+"một note bình thường, note sẽ được chuyển đổi thành to-do). Sử dụng \"clear"
+"\" dể chuyển đổi to-do trở lại một note bình thường."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Đánh dấu to-do chưa hoàn thành."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Chuyển tới [notebook] - tất cả những hoạt động tiếp theo sẽ được hoàn thành "
+"ở trên notebook này."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Hiện thị thông tin phiên bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Dạng: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Những giá trị có thể sử dụng là: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Mặc định: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Từ khóa/giá trị có thể sử dụng:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
+msgid "Type `joplin help` for usage information."
+msgstr "Ấn `Joplin help` để hiển thị thông tin sử dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:79
+msgid "Fatal error:"
+msgstr "Lỗi nghiêm trọng:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Tìm kiếm:"
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Xin chào tới Joplin!\n"
+"\n"
+"Ấn `:help shortcuts` để xem danh mục bàn phím tắt, hoặc `:help` để xem thông "
+"tin sử dụng.\n"
+"\n"
+"Ví dụ, để tạo một notebook ấn `mb`; để tạo một note ấn `mn`."
+
+#: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Một hoặc nhiều mục đã được mã hóa và bạn có thể cần cung cấp mật khẩu "
+"master. Để mở vui lòng ấn `e2ee decrypt`. Nếu bạn đã cung cấp mật khẩu, "
+"nhưng mục đã bị mã hóa đang được giải mã trong nền và sẽ có thể sử dụng sớm."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:364
+msgid "Sidebar"
+msgstr "Thanh bên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:370
+msgid "Note list"
+msgstr "Danh mục note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:376
+msgid "Note title"
+msgstr "Tiêu đề note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:382
+msgid "Note body"
+msgstr "Thân note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:434
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Đang import từ \"%s\" dưới định dạng \"%s\". Vui lòng chờ..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:467
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
+msgid "PDF File"
+msgstr "PDF File"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:487
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
+msgid "Synchronisation Status"
+msgstr "Trạng thái đồng bộ hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:497
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
+msgid "New note"
+msgstr "Note mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:509
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:530
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
+msgid "New to-do"
+msgstr "To-do mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:539
+msgid "New notebook"
+msgstr "Notebook mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:532
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
+msgid "New sub-notebook"
+msgstr "Sub-notebook mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:544
+msgid "Print"
+msgstr "In"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:563
+msgid "Create note from template"
+msgstr "Tạo note từ một mẫu có sẵn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:573
+msgid "Create to-do from template"
+msgstr "Tạo to-do từ một mẫu có sẵn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:583
+msgid "Insert template"
+msgstr "Chèn mẫu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:593
+msgid "Open template directory"
+msgstr "Mở thư mục có các mẫu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:600
+msgid "Refresh templates"
+msgstr "Làm mới mẫu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:613
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
+msgid "Options"
+msgstr "Lựa chọn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:626
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
+msgid "Resources"
+msgstr "Tài nguyên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:648
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Duyệt lại: %s (%s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:655
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Client ID: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Phiên bản đồng bộ hóa: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Phiên bản thông tin: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:673
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
+msgid "&File"
+msgstr "&Tập tin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:679
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1079
+msgid "About Joplin"
+msgstr "Về Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
+msgid "Preferences..."
+msgstr "Ưu tiên..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
+msgid "Check for updates..."
+msgstr "Đang kiểm tra cập nhật..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:710
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
+msgid "Templates"
+msgstr "Mẫu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:775
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
+msgid "Import"
+msgstr "Import"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:721
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:778
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
+msgid "Export"
+msgstr "Export"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+msgid "Synchronise"
+msgstr "Đồng bộ hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:742
+#, javascript-format
+msgid "Hide %s"
+msgstr "Ẩn %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
+msgid "Quit"
+msgstr "Thoát"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
+msgid "Close Window"
+msgstr "Đóng cửa sổ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:801
+msgid "&Edit"
+msgstr "&Chỉnh sửa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:804
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:789
+msgid "Copy"
+msgstr "Sao chép"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:809
+msgid "Cut"
+msgstr "Cắt"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
+msgid "Paste"
+msgstr "Dán"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:819
+msgid "Select all"
+msgstr "Chọn tất cả"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:827
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1631
+msgid "Bold"
+msgstr "In đậm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:838
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1639
+msgid "Italic"
+msgstr "In nghiêng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:849
+msgid "Link"
+msgstr "Đường link"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:860
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1659
+msgid "Code"
+msgstr "Mã"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:874
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1719
+msgid "Insert Date Time"
+msgstr "Chèn ngày tháng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:888
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1742
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
+msgid "Edit in external editor"
+msgstr "Chỉnh sửa trên trình chỉnh sửa văn bản khác"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:899
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1576
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1751
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:777
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:698
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
+msgid "Tags"
+msgstr "Thẻ gắn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:915
+msgid "Search in all the notes"
+msgstr "Tìm kiếm trong tất cả các notes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:926
+msgid "Search in current note"
+msgstr "Tìm kiếm trong note hiện tại"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:938
+msgid "&View"
+msgstr "&Giao diện"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:940
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:503
+msgid "Toggle sidebar"
+msgstr "Ẩn/hiện thanh bên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:953
+msgid "Layout button sequence"
+msgstr "Tuần tự của nút hệ thống sắp xếp"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:957
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:512
+msgid "Toggle note list"
+msgstr "Ẩn/hiện danh mục note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967
+msgid "Toggle editor layout"
+msgstr "Ẩn/hiện trình chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1015
+msgid "Focus"
+msgstr "Đặt con trỏ tới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1022
+msgid "Actual Size"
+msgstr "Kích thước chuẩn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
+msgid "Zoom In"
+msgstr "Phóng to"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
+msgid "Zoom Out"
+msgstr "Thu nhỏ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1042
+msgid "&Tools"
+msgstr "&Công cụ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1046
+msgid "&Help"
+msgstr "&Trợ giúp"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
+msgid "Website and documentation"
+msgstr "Trang web và tài liệu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
+msgid "Joplin Forum"
+msgstr "Diễn đàn Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1055
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:487
+msgid "Make a donation"
+msgstr "Quyên góp"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
+msgid "Toggle development tools"
+msgstr "Ẩn/hiện công cụ phát triển"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1204
+#, javascript-format
+msgid "Open %s"
+msgstr "Mở %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1206
+msgid "Exit"
+msgstr "Thoát"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:113
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:138
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:749
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:30
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:153
+msgid "OK"
+msgstr "OK"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:238
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:318
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:722
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:156
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Cancel"
+msgstr "Hủy"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:137
+msgid "Current version is up-to-date."
+msgstr "Phiên bản hiện tại đã được cập nhật mới nhất."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:146
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (chưa xuất bản)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+msgid "An update is available, do you want to download it now?"
+msgstr "Có bản cập nhật mới, bạn có muốn cập nhật không?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Phiên bản hiện tại: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:150
+#, javascript-format
+msgid "New version: %s"
+msgstr "Phiên bản mới: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "Yes"
+msgstr "Có"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "No"
+msgstr "Không"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:151
+msgid "Full Release Notes"
+msgstr "Thông báo phiên bản mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Dữ liệu đã được sao chép tới clipboard!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr "Dịch vụ web clipper đã được bật và tự động khởi động."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Trạng thái: bắt đầu trên port %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "Trạng thái: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "Vô hiệu hóa dịch vụ Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr "Dịch vụ web clipper chưa được bật."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "Bật dịch vụ Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:122
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Joplin Web Clipper cho phép lưu lại các trang web và screenshots trên trình "
+"duyệt web tới Joplin."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Để có thể sử dụng web clipper, bạn cần làm theo các bước sau:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "Bước 1: Bật dịch vụ clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:140
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"Dịch vụ này cho phép tiện ích mở rộng của trình duyệt web trao đổi với "
+"Joplin. Khi bật nó, tường lửa của bạn có thể hỏi bạn cho phép Joplin sử dụng "
+"một port nào đó."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "Bước 2: Cài đặt tiện ích mở rộng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr "Tải về và cài đặt tiện ích liên quan tới trình duyệt web của bạn:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "Chức năng nâng cao"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Mã ủy quyền:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "Sao chép mã"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:195
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Mã ủy quyền này chỉ cần sử dụng để cho phép ứng dụng bên thứ ba truy cập "
+"Joplin."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Cửa sổ mới sẽ được mở. Lưu lại những thay đổi gần nhất?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:139
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:165
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
+msgid "Check synchronisation configuration"
+msgstr "Kiểm tra cài đặt đồng bộ hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:174
+msgid "Unknown"
+msgstr "Không biết"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:178
+msgid "Checking..."
+msgstr "Đang kiểm tra..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:182
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
+msgid "Error"
+msgstr "Lỗi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:193
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Ứng dụng Joplin Nextcloud chưa được cài đặt hoặc cài đặt sai. Vui lòng xem "
+"ghi chú lỗi bên dưới:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:206
+msgid "Show Log"
+msgstr "Hiển thị nhật ký"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:219
+msgid "Joplin Nextcloud App status:"
+msgstr "Trạng thái ứng dụng Joplin Nextcloud:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:233
+msgid "Check Status"
+msgstr "Đang kiểm tra trạng thái"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:240
+msgid "Help"
+msgstr "Trợ giúp"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:259
+msgid "Show Advanced Settings"
+msgstr "Hiển thị cài đặt nâng cao"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:516
+msgid "Browse..."
+msgstr "Xem thêm..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:870
+msgid "Edit"
+msgstr "Chỉnh sửa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:278
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1612
+msgid "Back"
+msgstr "Quay lại"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:756
+msgid "Apply"
+msgstr "Áp dụng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
+msgid "Submit"
+msgstr "Hoàn thành"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:104
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:128
+msgid "Save"
+msgstr "Lưu lại"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:141
+msgid ""
+"Disabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent unencrypted to the sync target. Do you wish to "
+"continue?"
+msgstr ""
+"Tắt chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
+"được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái không mã "
+"hóa. Bạn có muốn tiếp tục không?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:143
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:153
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Tắt chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
+"được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái mã hóa. "
+"Đừng để mất mật khẩu, vì lí do bảo mật, mật khẩu là thứ duy nhất để mở khóa "
+"dữ liệu! Để bật chức năng mã hóa, vui lòng điền mật khẩu vào bên dưới."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+msgid "Disable encryption"
+msgstr "Tắt chức năng mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:259
+msgid "Enable encryption"
+msgstr "Bật chức năng mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:184
+msgid "Master Keys"
+msgstr "Master Keys"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:198
+msgid "Active"
+msgstr "Đang hoạt động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:203
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:284
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
+msgid "ID"
+msgstr "ID"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:208
+msgid "Source"
+msgstr "Nguồn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:213
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "Đã được tạo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "Đã được cập nhật"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:223
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:228
+msgid "Password OK"
+msgstr "Mật khẩu chấp nhận"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:237
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Ghi chú: Chỉ một master keys sẽ được sử dụng để mã hóa (master key được đánh "
+"dấu \"active\"). Tất cả các keys đều có thể sử dụng để mở mã, tùy thuộc vào "
+"việc notes hoặc notebooks đã được mã hóa thế nào."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid "Missing Master Keys"
+msgstr "Không tìm thấy Master Keys"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:270
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:250
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Master keys của những IDs được sử dụng để mã hóa một số mục của bạn, nhưng "
+"ứng dụng hiện tại không thể truy cập được chúng. Những master keys này có "
+"thể sẽ được tải về trong quá trình đồng bộ hóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:308
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:269
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Để tìm hiểu thêm về End-To-End Encryption (E2EE) và những gợi ý về việc sử "
+"dụng E2EE vui lòng xem documentation:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:327
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:280
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
+msgid "Status"
+msgstr "Trạng thái"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:332
+msgid "Encryption is:"
+msgstr "Mã hóa là:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefox Extension"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Đặt mua ngay bây giờ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "Tên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "Icon"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "Đặc tính của Notebook"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
+msgid "Usage"
+msgstr "Sử dụng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Notebook \"%s\" sẽ được tạo mới và tập tin \"%s\" sẽ được import vào "
+"notebook đó"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:119
+msgid "Please create a notebook first."
+msgstr "Vui lòng tạo một notebook trước."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:125
+msgid "Please create a notebook first"
+msgstr "Vui lòng tạo một notebook trước"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:132
+msgid "Notebook title:"
+msgstr "Tiêu đề notebook:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:175
+msgid "Add or remove tags:"
+msgstr "Gắn hoặc gỡ tags:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:215
+msgid "Rename notebook:"
+msgstr "Đổi tên notebook:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:236
+msgid "Rename tag:"
+msgstr "Đổi tên tag:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:337
+msgid "Set alarm:"
+msgstr "Đặt ghi nhớ:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:368
+msgid "Template file:"
+msgstr "Tập tin mẫu:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:547
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
+msgid "Layout"
+msgstr "Dàn trang"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:556
+msgid "Search..."
+msgstr "Tìm kiếm..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:595
+msgid "Some items cannot be synchronised."
+msgstr "Một số mục không thể đồng bộ hóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:605
+msgid "View them now"
+msgstr "Xem chúng bây giờ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:612
+msgid "One or more master keys need a password."
+msgstr "Một hoặc hơn một master keys cần mật khẩu."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
+msgid "Set the password"
+msgstr "Đặt mật khẩu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
+msgid "Words"
+msgstr "Số từ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
+msgid "Characters"
+msgstr "Số chữ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
+msgid "Characters excluding spaces"
+msgstr "Số chữ ngoại trừ dấu cách"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
+msgid "Lines"
+msgstr "Số dòng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
+msgid "Content properties"
+msgstr "Đặc tính của nội dung"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:180
+msgid "Close"
+msgstr "Đóng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr "Không có notes ở đây. Tạo một note bang cách ấn \"Note mới\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:451
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Hiện tại chưa có notebook nào. Tạo một cái bang cách ấn \"Notebook mới\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr "Hoàn thành"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
+msgid "Location"
+msgstr "Vị trí"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:991
+msgid "Note History"
+msgstr "Lịch sử của note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Đánh dấu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
+msgid "Previous versions of this note"
+msgstr "Phiên bản trước của note này"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1775
+msgid "Note properties"
+msgstr "Đặc tính của note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Note \"%s\" đã được hồi phục tại notebook \"%s\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Note này không có lịch sử"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:850
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Đường dẫn hoặc tin nhắn không được hỗ trợ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Hồi phục"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Ấn \"%s\" để hồi phục note. Thao tác này sẽ sao chép notebook có tên \"%s\". "
+"Phiên bản hiện tại của note sẽ không bị mất đi hay thay đổi."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:763
+msgid "Open..."
+msgstr "Mở..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:766
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "File này không thể mở :%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:771
+msgid "Save as..."
+msgstr "Lưu lại thành..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:782
+msgid "Copy path to clipboard"
+msgstr "Sao chép đường dẫn tới clipboard"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:796
+msgid "Copy Link Address"
+msgstr "Sao chép địa chỉ đường dẫn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:818
+msgid "There was an error downloading this attachment:"
+msgstr "Chương trình gặp phải lỗi khi tải về đính kèm:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:820
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Đính kèm này chưa được tải về hoặc chưa được giải mã"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1043
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Note này không chứa nội dung. Ấn \"%s\" để ẩn hiện trình chỉnh sửa văn bản "
+"và chỉnh sửa note."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1279
+msgid "Only one note can be printed at a time."
+msgstr "Chỉ một note có thể được tải về tại một thời điểm."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1489
+msgid "strong text"
+msgstr "strong text"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1493
+msgid "emphasized text"
+msgstr "emphasized text"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1533
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1537
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1546
+msgid "List item"
+msgstr "Danh mục"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1558
+msgid "Insert Hyperlink"
+msgstr "Chèn hyperlink"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1569
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1667
+msgid "Attach file"
+msgstr "Đính kèm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1584
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1769
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:683
+msgid "Set alarm"
+msgstr "Đặt nhắc hẹn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1598
+#, javascript-format
+msgid "In: %s"
+msgstr "Trong: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1651
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1679
+msgid "Numbered List"
+msgstr "Danh mục thứ tự"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1687
+msgid "Bulleted List"
+msgstr "Danh mục không thứ tự"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1695
+msgid "Checkbox"
+msgstr "Ô dấu check"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1703
+msgid "Heading"
+msgstr "Tiêu đề"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1711
+msgid "Horizontal Rule"
+msgstr "Kẻ ngang"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1733
+msgid "Click to stop external editing"
+msgstr "Ấn vào đây để ngừng sử dụng trình chỉnh sửa văn bản khác"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1734
+msgid "Watching..."
+msgstr "Đang theo dõi..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1793
+msgid "Content Properties"
+msgstr "Đặc tính của nội dung"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2061
+msgid "to-do"
+msgstr "to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2061
+msgid "note"
+msgstr "note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2061
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Tạo mới %s..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:243
+msgid "Clear"
+msgstr "Xóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
+msgid "Size"
+msgstr "Kích thước"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
+msgid "Action"
+msgstr "Hành động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:185
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:311
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:723
+msgid "Delete"
+msgstr "Xóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
+msgid "Please wait..."
+msgstr "Vui lòng chờ..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
+msgid "No resources!"
+msgstr "Không có tài nguyên!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
+#, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr ""
+"Lưu ý: không phải tất cả tài nguyên được hiển thị vì lí do năng suất (giới "
+"hạn: %s)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "Đăng nhập OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "Đăng nhập Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:163
+msgid "Synchronising..."
+msgstr "Đang đồng bộ hóa..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Đang tạo đường dẫn..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:167
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Đường dẫn đã được sao chép tới clipboard!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Lưu ý: Khi note được chia sẻ, nó sẽ không còn được mã hóa trên server nữa."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
+msgid "Share Notes"
+msgstr "Chia sẻ note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:177
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Sao chép link chia sẻ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:282
+msgid "Remove"
+msgstr "Xóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:285
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Có xóa notebook \"%s\" không?\n"
+"\n"
+"Tất cả notes và sub-notebooks trong notebook này sẽ bị xóa."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:289
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Gỡ bỏ tag \"%s\" khỏi tất cả các notes?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:291
+msgid "Remove this search from the sidebar?"
+msgstr "Bỏ kết quả tìm kiếm từ thanh bên?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:338
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:388
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Đổi tên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:755
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:358
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:177
+msgid "All notes"
+msgstr "Tất cả các notes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:760
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:362
+msgid "Notebooks"
+msgstr "Notebooks"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:795
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:324
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Số mục được giải mã: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:800
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:329
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Đang lấy tài nguyên: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr "Vui lòng chọn điểm đến mà trạng thái đồng bộ sẽ được export tới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:87
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
+msgid "Retry"
+msgstr "Thử lại"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:27
+msgid "Add or remove tags"
+msgstr "Gắn hoặc bỏ tags"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:317
+msgid "Duplicate"
+msgstr "Sao chép"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:45
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Sao chép"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:65
+msgid "Stop external editing"
+msgstr "Dừng sử dụng trình chỉnh sửa văn bản khác"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:77
+msgid "Switch between note and to-do type"
+msgstr "Chuyển đổi giữa dạng note và to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:100
+msgid "Switch to note type"
+msgstr "Chuyển tới dạng note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:109
+msgid "Switch to to-do type"
+msgstr "Chuyển tới dạng to-do"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:711
+msgid "Copy Markdown link"
+msgstr "Sao chép markdown link"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:134
+msgid "Share note..."
+msgstr "Chia sẻ note..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:202
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Xóa note \"%s\"?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Xóa số note này %d?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Lỗi khi mở note trong trình chỉnh sửa: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:339
+msgid ""
+"Type a note title to jump to it. Or type # followed by a tag name, or @ "
+"followed by a notebook name."
+msgstr ""
+"Ấn tiêu đề note để đi tới note đó. Hoặc ấn # theo sau bởi tên của một tag, "
+"hoặc @ theo sau bởi tên của notebook."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:377
+msgid "Goto Anything..."
+msgstr "Đi tới bất kỳ điểm nào..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:123
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:136
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:167
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Sử dụng: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:202
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Không tìm thấy flag này: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Không thể kết nối tới ứng dụng Joplin Nextcloud. Vui lòng kiểm tra cài đặt "
+"Đồng bộ hóa trong phần cài đặt. Toàn bộ lỗi:\n"
+"\n"
+"%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Tập tin hệ thống"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (dành cho testing)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:176
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Không tìm thấy log level: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/logger.js:185
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Không tìm thấy level ID: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+"Ứng dụng đã được ủy quyền - bây giờ bạn có thể đóng tab của trình duyệt."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "Ứng dụng đã được ủy quyền thành công."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Vui lòng mở URL này trong trình duyệt web của bạn để ủy quyền cho ứng dụng. "
+"Ứng dụng sẽ tạo một đường dẫn \"Apps/Joplin\" và sẽ chỉ đọc và ghi tập tin "
+"tại đường dẫn này. Ứng dụng sẽ không thể truy cập bất kỳ file nào ngoài "
+"đường dẫn này cũng như các dữ liệu cá nhân. Không có dữ liệu nào sẽ được "
+"chia sẻ với bên thứ ba."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/onedrive-api.js:270
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Không thể tạo mới token: dữ liệu ủy quyền đã mất. Bắt đầu lại quá trình đồng "
+"bộ hóa có thể giải quyết vấn đề này."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:101
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:701
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:100
+msgid "Untitled"
+msgstr "Chưa có tên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/registry.js:137
+msgid ""
+"Could not synchronize with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Không thể đồng bộ hóa với OneDrive.\n"
+"\n"
+"Lỗi này thường gặp phải khi sử dụng OneDrive cho doanh nghiệp, và không được "
+"hỗ trợ.\n"
+"\n"
+"Vui lòng sử dụng tài khoản OneDrive phổ thông."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:128
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Không thể truy cập %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Số mục được tạo trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Số mục được cập nhật trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Số mục không được tạo ở trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Số mục được cặp nhật không ở trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Số mục đã xóa ở trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Số mục đã xóa không ở trên máy: %d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Số mục đã được lấy: %d/%d."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "Hủy..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Đã hoàn thành: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Lỗi gần nhất; %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:204
+msgid "Idle"
+msgstr "Không hoạt động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "Đang hoạt động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:700
+msgid "Encrypted"
+msgstr "Đã mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/BaseItem.js:760
+msgid "Encrypted items cannot be modified"
+msgstr "Các mục đã mã hóa không thể chỉnh sửa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:27
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:24
+msgid "title"
+msgstr "tiêu đề"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:28
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:25
+msgid "updated date"
+msgstr "ngày cập nhật"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:90
+msgid "Conflicts"
+msgstr "Xung đột"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:345
+msgid "Cannot move notebook to this location"
+msgstr "Không thể di chuyển notebook tới vị trí này"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Folder.js:393
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "Notesbook không thể đặt tên \"%s\", tên này đã được dành riêng."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
+msgid "created date"
+msgstr "ngày tạo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:105
+msgid "This note does not have geolocation information."
+msgstr "Note này không có thông tin vị trí."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:432
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Không thể sao chép note tới notebook \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:443
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Không thể di chuyển note tới notebook \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
+msgid "Not downloaded"
+msgstr "Không thể tải"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
+msgid "Downloading"
+msgstr "Đang tải"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
+msgid "Downloaded"
+msgstr "Đã tải"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Lưu ý: Nếu bạn thay đổi vị trí này, hay chắc chắn rang bạn đã sao chép tất "
+"cả nội dung của mình trước khi đồng bộ, nếu không tất cả các files sẽ bị "
+"xóa! Xem chi tiết tại FAQ: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
+msgid "Keyboard Mode"
+msgstr "Ché độ bàn phím"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
+msgid "Default"
+msgstr "Mặc định"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:49
+msgid "Emacs"
+msgstr "Emacs"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:50
+msgid "Vim"
+msgstr "Vim"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:60
+msgid "Synchronisation target"
+msgstr "Điểm đến của quá trình đồng bộ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:62
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."
+"NAME` (xem bên dưới)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:84
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Đường dẫn để đồng bộ tới (absolute path)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:96
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:107
+msgid "Nextcloud username"
+msgstr "Tên sử dụng Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:117
+msgid "Nextcloud password"
+msgstr "Mật khẩu Nextcloud"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:129
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:140
+msgid "WebDAV username"
+msgstr "Tên sử dụng WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:150
+msgid "WebDAV password"
+msgstr "Mật khẩu WebDAV"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
+msgid "Attachment download behaviour"
+msgstr "Hành vi tải về đính kèm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Trong chế độ \"Manual\", đính kèm được tải về chỉ khi bạn click vào chúng. "
+"Trong chế độ \"Auto\", chúng có thể được tải về khi bạn mở note. Trong chế "
+"độ \"Always\", tất cả đính kèm luôn được tải về bất kể bạn có mở note hay "
+"không."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
+msgid "Always"
+msgstr "Always"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
+msgid "Manual"
+msgstr "Manual"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
+msgid "Auto"
+msgstr "Auto"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
+msgid "Max concurrent connections"
+msgstr "Số lượng kết nối tối đa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:205
+msgid "Date format"
+msgstr "Định dạng ngày"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:224
+msgid "Time format"
+msgstr "Định dạng thời gian"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:239
+msgid "Theme"
+msgstr "Thême"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:243
+msgid "Light"
+msgstr "Light"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:244
+msgid "Dark"
+msgstr "Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
+msgid "Dracula"
+msgstr "Dracul"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:247
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:248
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:249
+msgid "Nord"
+msgstr "Nord"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
+msgid "Show note counts"
+msgstr "Hiển thị số lượng note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+msgid "Editor"
+msgstr "Trình chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Viewer"
+msgstr "Viewer"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+msgid "Split View"
+msgstr "Chia đôi màn hình"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:270
+msgid "Uncompleted to-dos on top"
+msgstr "HIển thị to-dos chưa hoàn thành lên đầu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
+msgid "Show completed to-dos"
+msgstr "Hiển thị to-dos đã hoàn thành"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
+msgid "Sort notes by"
+msgstr "Sắp xếp notes theo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:296
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:298
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:316
+msgid "Reverse sort order"
+msgstr "Đảo ngược thứ tự sắp xếp"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
+msgid "Sort notebooks by"
+msgstr "Sắp xếp notebooks theo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
+msgid "Save geo-location with notes"
+msgstr "Lưu dữ liệu định vị của notes này"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
+msgid "When creating a new to-do:"
+msgstr "Khi tạo một to-do mới:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:328
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:343
+msgid "Focus title"
+msgstr "Đặt dấu trỏ tại tiêu đề"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
+msgid "Focus body"
+msgstr "Đặt dấu trỏ tại phần thân"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+msgid "When creating a new note:"
+msgstr "Khi tạo note mới:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:354
+msgid "Enable soft breaks"
+msgstr "Bật tự động xuống trang"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+msgid "Enable typographer support"
+msgstr "Bật hỗ trợ cá nhân làm thuật in máy"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
+msgid "Enable math expressions"
+msgstr "Bật hỗ trợ toán học"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
+msgid "Enable ==mark== syntax"
+msgstr "Bật ==mark== syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+msgid "Enable footnotes"
+msgstr "Bật footnotes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+msgid "Enable table of contents extension"
+msgstr "Bật ứng dụng mở rộng mục lục"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+msgid "Enable ~sub~ syntax"
+msgstr "Bật ~sub~ syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
+msgid "Enable ^sup^ syntax"
+msgstr "Bật ^sup^ syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
+msgid "Enable deflist syntax"
+msgstr "Bật deflist syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+msgid "Enable abbreviation syntax"
+msgstr "Bật abbreviation syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+msgid "Enable markdown emoji"
+msgstr "Bật markdown emoji"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
+msgid "Enable ++insert++ syntax"
+msgstr "Bật ++insert++ syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
+msgid "Enable multimarkdown table extension"
+msgstr "Bật multimarkdown table extension"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
+msgid "Enable Fountain syntax support"
+msgstr "Bật hỗ trợ Fountain syntax"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
+msgid "Enable Mermaid diagrams support"
+msgstr "Bật Mermaid diagrams support"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
+msgid "Show tray icon"
+msgstr "Hiển thị biểu tượng ở tray"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+msgid "Note: Does not work in all desktop environments."
+msgstr "Lưu ý: Không hoạt động trong tất cả môi trường desktop."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:382
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Điều này cho phép Joplin chạy trong nền. Khuyến cáo sử dụng chức năng này để "
+"notes có thể liên tục đồng bộ hóa, giảm thiểu số lần xung đột."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:386
+msgid "Start application minimised in the tray icon"
+msgstr ""
+"Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:398
+msgid "Editor font size"
+msgstr "Kích thước font của trình chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:406
+msgid "Editor font"
+msgstr "Font của trình chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:430
+msgid "Editor font family"
+msgstr "Font family của trình chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:432
+msgid ""
+"This must be *monospace* font or it will not work properly. If the font is "
+"incorrect or empty, it will default to a generic monospace font."
+msgstr ""
+"Đây phải là *monospace* font hoặc sẽ không hiển thị được. Nếu font không "
+"đúng hoặc không có, ứng dung sẽ mặc định sử dụng monospace cơ bản."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:471
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:477
+msgid "Automatically update the application"
+msgstr "Tự động cập nhật ứng dụng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
+msgid "Get pre-releases when checking for updates"
+msgstr "Cập nhật bản trước phát hành khi kiểm tra cập nhật"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:478
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Xem trang phát hành trước để có thêm thông tin chi tiết: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:486
+msgid "Synchronisation interval"
+msgstr "Tần suất đồng bộ hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:490
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:491
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d phút"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:493
+#, javascript-format
+msgid "%d hour"
+msgstr "%d giờ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
+#, javascript-format
+msgid "%d hours"
+msgstr "%d giờ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+msgid "Text editor command"
+msgstr "Câu lệnh trình duyệt chỉnh sửa văn bản"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:504
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Câu lệnh trình duyệt văn bản (có thể bao gồm đối số) được sử dụng để mở "
+"note. Nếu không được cung cấp, câu lệnh trình duyệt văn bản sẽ tự động tìm "
+"trình duyệt chỉnh sửa văn bản mặc định."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:505
+msgid "Page size for PDF export"
+msgstr "Kích thước của trang để export dạng PDF"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+msgid "A4"
+msgstr "A4"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+msgid "Letter"
+msgstr "Letter"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
+msgid "A3"
+msgstr "A3"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
+msgid "A5"
+msgstr "A5"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
+msgid "Legal"
+msgstr "Legal"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+msgid "Page orientation for PDF export"
+msgstr "Định hướng trang để export PDF"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
+msgid "Portrait"
+msgstr "Portrait"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
+msgid "Landscape"
+msgstr "Landscape"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
+msgid "Custom TLS certificates"
+msgstr "Tùy chỉnh TLS certicates"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Sử dụng list đường dẫn định dạng phân cách bằng dấu phẩy để tải các "
+"certificates, đường đường dẫn tới các certificates. Ví dụ: /my/cert_dir, /"
+"other/custom.pem. Lưu ý, nếu bnaj thay đổi cấu hình TLS, bnaj phải lưu những "
+"thay đổi đó trước khi ấn \"Kiểm tra cấu hình đồng bộ hóa\"."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:546
+msgid "Ignore TLS certificate errors"
+msgstr "Bỏ qua các lỗi TLS certificate"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:549
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống "
+"(thường là kết quả của bug hoặc cấu hình sai)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Chỉ định port nên được sử dụng bởi server API. Nếu không được chỉ định, cấu "
+"hình mặc định sẽ được sử dụng."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:560
+msgid "Enable note history"
+msgstr "Bật lịch sử note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
+msgid "days"
+msgstr "ngày"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:570
+#, javascript-format
+msgid "%d days"
+msgstr "%d ngày"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
+msgid "Keep note history for"
+msgstr "Lưu giữ lịch sử note để"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:697
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:985
+msgid "General"
+msgstr "Chung"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:986
+msgid "Synchronisation"
+msgstr "Đồng bộ hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:987
+msgid "Appearance"
+msgstr "Bề ngoài"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:988
+msgid "Note"
+msgstr "Note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:989
+msgid "Plugins"
+msgstr "Phần mềm mở rộng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:990
+msgid "Application"
+msgstr "Ứng dụng"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:992
+msgid "Encryption"
+msgstr "Mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:993
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Tag.js:183
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Tag \"%s\" đã được sử dụng. Vui lòng chọn tên khác."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:29
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:67
+msgid "Joplin Export File"
+msgstr "Joplin Export File"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:36
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:82
+msgid "Markdown"
+msgstr "Markdown"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:41
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:72
+msgid "Joplin Export Directory"
+msgstr "Joplin Export Directory"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Export File (dạng Markdown)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Export File (dạng HTML)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:77
+msgid "Json Export Directory"
+msgstr "Json Export Directory"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
+msgid "HTML File"
+msgstr "HTML File"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
+msgid "HTML Directory"
+msgstr "HTML Directory"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "File"
+msgstr "File"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
+msgid "Directory"
+msgstr "Directory"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:174
+#, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\""
+msgstr "Không thể tải module \"%s\" dưới định dạng \"%s\""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Vui lòng chỉ định định dạng import cho %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Mục hiện tại đang được mã hóa: %s \"%s\". Vui lòng chờ cho tất cả các mục "
+"được giải mã và thử lại."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+msgid "There is no data to export."
+msgstr "Không có dữ liệu để export."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Vui lòng chỉ định notebook mà các notes sẽ được import tới."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:211
+msgid "Restored Notes"
+msgstr "Hồi phục Notes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Những mục không thể đồng bộ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Những mục này sẽ được duy trì trên thiết bị những sẽ không được tải lên điểm "
+"đồng bộ. Để tìm những mục này, tìm tiêu đề hoặc ID (được hiển thị trong "
+"ngoặc kép ở trên)."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) không thể tỉa lên: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Mục \"%s\" không thể tải về: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "Những mục không thể giả mã"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Joplin đã nhiều lần giải mã thất bại những mục này, có thể bởi vì chúng bị "
+"hỏng hoặc quá nặng. Những mục này sẽ được duy trì ở trên thiết bị nhưng "
+"Joplin sẽ không giải mã chúng nữa."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+msgid "Attachments"
+msgstr "Đính kèm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+msgid "Downloaded and decrypted"
+msgstr "Đã tải về và giải mã"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+msgid "Downloaded and encrypted"
+msgstr "Đã tải về và đã mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+msgid "Attachments that could not be downloaded"
+msgstr "Không thể tải về được những đính kèm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
+msgid "Sync status (synced items / total items)"
+msgstr "Trạng thái đồng bộ (số mục đã được đồng bộ/ tổng số mục)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Tổng cộng: %d/%d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Mâu thuẫn; %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Xóa: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
+msgid "Folders"
+msgstr "Thư mục"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d notes"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
+msgid "Coming alarms"
+msgstr "Báo động sắp gần"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
+#, javascript-format
+msgid "On %s: %s"
+msgstr "On %s: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "Quyền sử dụng camera"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr "Bạn cần phải có phép sử dụng camera."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Bạn hiện tai không có notebook nào."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Tạo một notebook"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "Hiện tại chưa có notes. Tạo một note bằng cách nút (+)"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:180
+msgid "Delete these notes?"
+msgstr "Xóa những note này?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:347
+msgid "Move to notebook..."
+msgstr "Chuyển tới notebook..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:386
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Di chuyển %d notes tới notebook \"%s\"?"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:404
+msgid "Press to set the decryption password."
+msgstr "Ấn để đặt mật khẩu giải mã."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:405
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "Bỏ báo động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
+msgid "Save alarm"
+msgstr "Lưu báo động"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "Chọn ngày"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Notebook: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Notebooks đã được mã hóa không thể đổi tên"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:311
+msgid "New Notebook"
+msgstr "Notebook mới"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Đang kiểm tra… Vui lòng chờ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Thành công! Cấu hình mã hóa đã đúng."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Lỗi. Vui lòng kiểm tra URL, tên sử dụng, mật khẩu, v.v... đã đúng và điểm "
+"đồng bộ hóa có thể truy cập được. Lỗi là:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Ứng dụng đã được cho phép!"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Không thể ủy quyền ứng dụng:\n"
+"\n"
+"%s\n"
+"\n"
+"Vui lòng thử lại."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:71
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Những mục đã được giải mã: %s / %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Tags mới:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/NoteTagsDialog.js:177
+msgid "Type new tags or select from list"
+msgstr "Điền tags mới hoặc chọn từ danh mục"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Để sử dụng đồng bộ hóa tệp tin hệ thống, bạn cần cho phép ghi vào hệ thống "
+"lưu trữ bên ngoài."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
+msgid "Information"
+msgstr "Thông tin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:265
+msgid "Encryption Config"
+msgstr "Cấu hình mã hóa"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:430
+msgid "Tools"
+msgstr "Công cụ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:432
+msgid "Sync Status"
+msgstr "Trạng thái đồng bộ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:433
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
+msgid "Log"
+msgstr "Nhật ký"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+msgid "Creating report..."
+msgstr "Tạo báo cáo..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+msgid "Export Debug Report"
+msgstr "Export báo cáo debug"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fixing search index..."
+msgstr "Sửa index tìm kiếm..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid "Fix search index"
+msgstr "Sửa index tìm kiếm"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:435
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Sử dụng cái này để dựng lại index tìm kiếm nếu bạn gập vấn đề với công cụ "
+"tìm kiếm. Việc này có thể mất thời gian tùy thuộc vào số lượng notes."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "Exporting profile..."
+msgstr "Export hồ sơ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "Export profile"
+msgstr "Export hồ sơ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:438
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "Dành riêng cho mục đích debugging: export hồ sơ của bạn tới thẻ SD."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:453
+msgid "More information"
+msgstr "Các thông tin khác"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:463
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Để hoạt động hoàn hảo, ứng dụng cần những quyền sau. Thay đổi tịa Apps > "
+"Joplin > Permisisons để trao quyền"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Lưu trữ: để cho phép đính kèm files tới notes và cho phép đồng bộ hóa tệp "
+"tin hệ thống."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- Camera: cho phép chụp ảnh và đính kèm vào note."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- VỊ trí: cho phép đính thông tin vị trí vào note."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:501
+msgid "Joplin website"
+msgstr "Website của Joplin"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:529
+#, javascript-format
+msgid "Database v%s"
+msgstr "Database v%s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS đã bật: %d"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
+msgid "Login with Dropbox"
+msgstr "Đăng nhập với Dropbox"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+msgid "Enter code here"
+msgstr "Ấn mã vào đây"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:122
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Master Key %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:123
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:631
+#, javascript-format
+msgid "Created: %s"
+msgstr "Đã tạo lúc: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:125
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:154
+msgid "Password:"
+msgstr "Mật khẩu:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
+msgid "Password cannot be empty"
+msgstr "Không thể để trống mật khẩu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:142
+msgid "Confirm password cannot be empty"
+msgstr "Xác nhận không thể để trống mật khẩu"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:178
+msgid "Enable"
+msgstr "Bật"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Không thể lưu lại notebook: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Chỉnh sửa notebook"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Điền tiêu đề notebook"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+msgid "Refresh"
+msgstr "Tải lại"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Hiển thị tất cả"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Chỉ hiển thị lỗi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "This note has been modified:"
+msgstr "Note này đã được chỉnh sửa:"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Save changes"
+msgstr "Lưu thay đổi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+msgid "Discard changes"
+msgstr "Bỏ thay đổi"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:132
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Không có mục nào có ID %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:151
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Đính kèm này chưa được tải về và giải mã."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:155
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "Ứng dụng di động Joplin hiện tại không hỗ trỡ link này: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:159
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Links sử dụng protocol \"%s\" không được hỗ trợ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:485
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Không hỗ trợ định dạng ảnh này: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:632
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Đã cập nhật lúc: %s"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:636
+msgid "View on map"
+msgstr "Xem trên bản đồ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:643
+msgid "Go to source URL"
+msgstr "Đi tới URL nguồn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:670
+msgid "Attach..."
+msgstr "Đính kèm."
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
+msgid "Choose an option"
+msgstr "Chọn một lựa chọn"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
+msgid "Take photo"
+msgstr "Chụp ảnh"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
+msgid "Attach photo"
+msgstr "Đính kèmanhr"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:672
+msgid "Attach any file"
+msgstr "Đính kèm bất kể tập tin nào"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:691
+msgid "Share"
+msgstr "Chia sẻ"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
+msgid "Convert to note"
+msgstr "Chuyển thành note"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:704
+msgid "Convert to todo"
+msgstr "Chuyển thành todo"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:717
+msgid "Properties"
+msgstr "Tính chất"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:863
+msgid "Add body"
+msgstr "Điền phần thân"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:898
+msgid "Add title"
+msgstr "Điền tiêu đề"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:98
+msgid "Login with OneDrive"
+msgstr "Đăng nhập với OneDrive"
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Tìm kiếm"
