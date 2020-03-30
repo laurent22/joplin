@@ -480,7 +480,6 @@ describe('Reducer', function() {
 		state = goToNote(notes, [5], state);
 		state = goToNote(notes, [6], state);
 
-
 		// return to first folder
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[0].id, historyAction: 'goto' });
 
@@ -515,9 +514,6 @@ describe('Reducer', function() {
 		state = goToNote(notes, [2], state);
 		state = goToNote(notes, [3], state);
 
-		expect(state.backwardHistoryNotes.length).toEqual(11);
-		expect(state.forwardHistoryNotes.length).toEqual(0);
-
 		// backward = 0 1 2 3 2 3 2 3 2 3
 		// forward = 3
 		// current = 2
@@ -538,8 +534,8 @@ describe('Reducer', function() {
 		// current = 3
 		state = goBackWard(state);
 
-		expect(state.backwardHistoryNotes.length).toEqual(7);
-		expect(state.forwardHistoryNotes.length).toEqual(4);
+		expect(state.backwardHistoryNotes.map(n=>n.id)).toEqual([notes[0], notes[1], notes[2], notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
+		expect(state.forwardHistoryNotes.map(n=>n.id)).toEqual([notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
 
 		// delete third note
 		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
