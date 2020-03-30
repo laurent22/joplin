@@ -48,6 +48,7 @@ class Dialog extends React.PureComponent {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
+		this.modalLayer_onClick = this.dialogModalLayer_onClick.bind(this);
 		this.listItemRenderer = this.listItemRenderer.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
@@ -112,6 +113,14 @@ class Dialog extends React.PureComponent {
 				open: false,
 			});
 		}
+	}
+
+	modalLayer_onClick() {
+		this.props.dispatch({
+			pluginName: PLUGIN_NAME,
+			type: 'PLUGIN_DIALOG_SET',
+			open: false,
+		});
 	}
 
 	helpButton_onClick() {
@@ -385,7 +394,7 @@ class Dialog extends React.PureComponent {
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name, or / followed by note content.')}</div>;
 
 		return (
-			<div style={theme.dialogModalLayer}>
+			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
