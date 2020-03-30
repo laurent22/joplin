@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+trap 'exception $LINENO' err
+trap 'cleanup' exit
+
 
 #-----------------------------------------------------
 # Variables
@@ -12,11 +15,20 @@ COLOR_RESET=`tput sgr0`
 SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
+FORCE_VERSION=${INSTALL_VERSION}
+TEMP_DIR=
 
 print() {
     if [[ "${SILENT}" == false ]] ; then
         echo -e "$@"
     fi
+}
+
+latestVersion() {
+  if [[ -z $LATEST_VERSION ]]; then
+      LATEST_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+  fi
+  echo ${LATEST_VERSION}
 }
 
 showLogo() {
@@ -33,20 +45,36 @@ showLogo() {
 }
 
 showHelp() {
-    showLogo
+    LATEST_VERSION=$(latestVersion)
     print "Available Arguments:"
-    print "\t" "--help" "\t" "Show this help information" "\n"
-    print "\t" "--allow-root" "\t" "Allow the install to be run as root"
-    print "\t" "--changelog" "\t" "Show the changelog after installation"
-    print "\t" "--force" "\t" "Always download the latest version"
-
-    if [[ ! -z $1 ]]; then
-        print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
-    else
-        exit 0
-    fi
-
+    print "\t" "--help" "\t\t" "Show this help information" "\n"
+    print "\t" "--allow-root" "\t\t" "Allow the install to be run as root"
+    print "\t" "--changelog" "\t\t" "Show the changelog after installation"
+    print "\t" "--force" "\t\t" "Always download the latest version"
+    print "\t" "--version=${LATEST_VERSION}" "\t" "Download a specific version. (Environment variable INSTALL_VERSION can also be specified.)"
 }
+
+showError() {
+  print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
+}
+
+cleanup() {
+    print "Cleaning up..."
+    if [[ -d $TEMP_DIR ]]; then
+        rm -rf $TEMP_DIR
+    fi
+    print "${COLOR_GREEN}OK${COLOR_RESET}"
+}
+
+exception() {
+    showError "There was an error on line ${1}!"
+    exit 1
+}
+
+#-----------------------------------------------------
+# START
+#-----------------------------------------------------
+showLogo
 
 #-----------------------------------------------------
 # PARSE ARGUMENTS
@@ -61,27 +89,25 @@ while getopts "${optspec}" OPT; do
     OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
   fi
   case "${OPT}" in
-    h | help )     showHelp ;;
+    h | help )     showHelp; exit 0 ;;
     allow-root )   ALLOW_ROOT=true ;;
     silent )       SILENT=true ;;
     force )        FORCE=true ;;
     changelog )    SHOW_CHANGELOG=true ;;
-    [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
-    \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
+    version )      FORCE_VERSION=${OPTARG} ;;
+    [^\?]* )       showHelp; showError "Illegal option --${OPT}"; exit 2 ;;
+    \? )           showHelp; showError "Illegal option -${OPTARG}"; exit 2 ;;
   esac
 done
 shift $((OPTIND-1)) # remove parsed options and args from $@ list
 
+#-----------------------------------------------------
+
 ## Check and warn if running as root.
 if [[ $EUID = 0 ]] && [[ "${ALLOW_ROOT}" != true ]]; then
-    showHelp "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
+    showError "It is not recommended (nor necessary) to run this script as root. To do so anyway, please use '--allow-root'"
     exit 1
 fi
-
-#-----------------------------------------------------
-# START
-#-----------------------------------------------------
-showLogo
 
 print "Checking architecture..."
 # Architecture check
@@ -92,10 +118,10 @@ else
 	ARCHITECTURE=$(uname -a)
 
 	if [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
-		showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+		showError "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
 		exit 1
 	elif [[ $ARCHITECTURE =~ .*i.86.* ]] ; then
-		showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+		showError "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
 		exit 1
 	fi
 fi
@@ -104,22 +130,31 @@ fi
 # Download Joplin
 #-----------------------------------------------------
 
-# Get the latest version to download
-RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+# Get the desired version to download
+DESIRED_VERSION=$(latestVersion)
+
+if [[ ! -z $FORCE_VERSION ]]; then
+    print "Latest version${COLOR_GREEN} ${DESIRED_VERSION} ${COLOR_RESET}is available, but version${COLOR_YELLOW} ${FORCE_VERSION} ${COLOR_RESET}was requested."
+    DESIRED_VERSION=${FORCE_VERSION}
+    if ! wget -q "https://api.github.com/repos/laurent22/joplin/releases/tags/v${DESIRED_VERSION}" > /dev/null ; then
+        showError "Invalid version requested. Check available releases at https://github.com/laurent22/joplin/releases"
+        exit 1;
+    fi
+fi
 
 # Check if it's in the latest version
-if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
-    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
+if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${DESIRED_VERSION}" ]]; then
+    print "${COLOR_GREEN}You already have version${COLOR_RESET} ${DESIRED_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
     ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
     [[ -e ~/.joplin/VERSION ]] && CURRENT_VERSION=$(< ~/.joplin/VERSION)
-    print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
+    print "${COLOR_GREEN}Installing version${COLOR_RESET} ${DESIRED_VERSION} ${COLOR_GREEN}since you have${COLOR_RESET} ${CURRENT_VERSION:-no version} ${COLOR_GREEN}installed.${COLOR_RESET}"
 fi
 
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
+wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${DESIRED_VERSION}/Joplin-${DESIRED_VERSION}.AppImage
 wget -qnv --show-progress -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
@@ -181,10 +216,10 @@ fi
 #-----------------------------------------------------
 
 # Informs the user that it has been installed
-print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
+print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${DESIRED_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo $RELEASE_VERSION > ~/.joplin/VERSION
+echo $DESIRED_VERSION > ~/.joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
@@ -193,6 +228,5 @@ if [[ "$SHOW_CHANGELOG" == true ]]; then
 fi
 
 #-----------------------------------------------------
-print "Cleaning up..."
-rm -rf $TEMP_DIR
-print "${COLOR_GREEN}OK${COLOR_RESET}"
+# cleanup called by trap
+exit 0
