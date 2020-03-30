@@ -365,7 +365,7 @@ class Note extends BaseItem {
 
 		// these will be cases to sort on basis of due_date:
 		// 1 incomplete todos with less due date will be on top
-		// 2 incomplete todos with more due date afterwards
+		// 2 incomplete todos with more due date afterwards and then incomplete todos with no due dates.
 		// 3 completes todos with less due date
 		// 4 complete todos with more due date
 		// 5 complete todos with no due dates
