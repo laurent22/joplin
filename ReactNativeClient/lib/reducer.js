@@ -307,7 +307,7 @@ function changeSelectedFolder(state, action, options = null) {
 
 		// Don't update history if going to the same note again.
 		const currentNote = stateUtils.getCurrentNote(state);
-		if (currentNote != null && action.id != currentNote.id) {
+		if (currentNote != null) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
@@ -597,12 +597,36 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 
+				let backwardHistoryNotes = state.backwardHistoryNotes;
+				let forwardHistoryNotes = state.forwardHistoryNotes;
+
 				if (noteFolderHasChanged) {
 					let newIndex = movedNotePreviousIndex;
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 					if (!newNotes.length) newIndex = -1;
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
+
+					// Update history
+					backwardHistoryNotes = backwardHistoryNotes.map(n => {
+						if (n.id === modNote.id) {
+							return { id: modNote.id, parent_id: modNote.parent_id };
+						}
+						return n;
+					});
+
+					forwardHistoryNotes = forwardHistoryNotes.map(n => {
+						if (n.id === modNote.id) {
+							return { id: modNote.id, parent_id: modNote.parent_id };
+						}
+						return n;
+					});
+
+					// If the note moved is the currently selected one.
+					backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
 				}
+
+				newState.backwardHistoryNotes = backwardHistoryNotes;
+				newState.forwardHistoryNotes = forwardHistoryNotes;
 
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
