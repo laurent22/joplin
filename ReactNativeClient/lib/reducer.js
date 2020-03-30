@@ -381,6 +381,12 @@ function changeSelectedNotes(state, action, options = null) {
 			forwardHistoryNotes.pop();
 		}
 
+
+		if (backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
+			newState.selectedNoteIds[0] === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+			backwardHistoryNotes.pop();
+		}
+
 		newState.backwardHistoryNotes = backwardHistoryNotes;
 		newState.forwardHistoryNotes = forwardHistoryNotes;
 
