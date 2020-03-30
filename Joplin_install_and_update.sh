@@ -188,7 +188,7 @@ echo $RELEASE_VERSION > ~/.joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
-    NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
+    NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": ?"\K.*(?=")')
     print "${COLOR_BLUE}Changelog:${COLOR_RESET}\n${NOTES}"
 fi
 
