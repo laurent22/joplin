@@ -217,32 +217,11 @@ function handleItemDelete(state, action) {
 	const newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
-	if (listKey === 'notes') {
-		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.id != action.id);
-		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.id != action.id);
-	}
-	if (listKey === 'folders') {
-		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.parent_id != action.id);
-		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.parent_id != action.id);
-	}
-
-	newState.backwardHistoryNotes = removeAdjacentDuplicates(newState.backwardHistoryNotes.map(a => a.id));
-	newState.forwardHistoryNotes = removeAdjacentDuplicates(newState.forwardHistoryNotes.map(a => a.id));
-
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
 	}
 	newState[selectedItemKey] = isSingular ? newIds[0] : newIds;
-
-	// make sure the new selected note is not also the last in history
-	if (newIds.length > 0 && listKey === 'notes') {
-		if (newState.backwardHistoryNotes.length > 0 &&
-			newState.backwardHistoryNotes[newState.backwardHistoryNotes.length - 1] === newIds[0]) { newState.backwardHistoryNotes.pop(); }
-
-		if (newState.forwardHistoryNotes.length > 0 &&
-			newState.forwardHistoryNotes[newState.forwardHistoryNotes.length - 1] === newIds[0]) { newState.forwardHistoryNotes.pop(); }
-	}
 
 	if ((newIds.length == 0) && newState.notesParentType !== 'Folder') {
 		newState.notesParentType = 'Folder';
@@ -297,25 +276,7 @@ function defaultNotesParentType(state, exclusion) {
 
 function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
-
 	const newState = Object.assign({}, state);
-
-	// Save the last seen note so that back will return to it.
-	if (action.type === 'FOLDER_SELECT' && action.historyAction == 'goto') {
-		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-
-		// Don't update history if going to the same note again.
-		const currentNote = stateUtils.getCurrentNote(state);
-		if (currentNote != null) {
-			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-		}
-
-		newState.backwardHistoryNotes = backwardHistoryNotes;
-		newState.forwardHistoryNotes = forwardHistoryNotes;
-	}
-
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
 		newState.notesParentType = defaultNotesParentType(state, 'Folder');
@@ -355,41 +316,6 @@ function changeSelectedNotes(state, action, options = null) {
 	if (action.type === 'NOTE_SELECT') {
 		newState.selectedNoteIds = noteIds;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
-
-		let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-
-		// The historyAction property is only used for user-initiated actions and tells how
-		// the history stack should be handled. That property should not be present for
-		// programmatic navigation. Possible values are:
-		// - "goto": When going to a note, but not via the back/forward arrows.
-		// - "goBackward": When clicking on the Back arrow
-		// - "goForward": When clicking on the Forward arrow
-		const currentNote = stateUtils.getCurrentNote(state);
-		if (action.historyAction == 'goto' && currentNote != null &&  action.id != currentNote.id) {
-			forwardHistoryNotes = [];
-			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-		} else if (action.historyAction === 'goBackward' && currentNote != null) {
-			if (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
-				forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-			}
-			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'goForward' && currentNote != null) {
-			if (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-				backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-			}
-			forwardHistoryNotes.pop();
-		}
-
-
-		if (backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
-			newState.selectedNoteIds[0] === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-			backwardHistoryNotes.pop();
-		}
-
-		newState.backwardHistoryNotes = backwardHistoryNotes;
-		newState.forwardHistoryNotes = forwardHistoryNotes;
-
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -432,6 +358,114 @@ function removeItemFromArray(array, property, value) {
 	return array;
 }
 
+
+
+
+function handleHistory(state, action) {
+	// The historyAction property is only used for user-initiated actions and tells how
+	// the history stack should be handled. That property should not be present for
+	// programmatic navigation. Possible values are:
+	// - "goto": When going to a note, but not via the back/forward arrows.
+	// - "goBackward": When clicking on the Back arrow
+	// - "goForward": When clicking on the Forward arrow
+	const newState = Object.assign({}, state);
+	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
+	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
+	const currentNote = stateUtils.getCurrentNote(state);
+	switch (action.type) {
+	case 'NOTE_SELECT':
+		if (action.historyAction == 'goto' && currentNote != null &&  action.id != currentNote.id) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		} else if (action.historyAction === 'goBackward' && currentNote != null) {
+			if (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
+				forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+			}
+			backwardHistoryNotes.pop();
+		} else if (action.historyAction === 'goForward' && currentNote != null) {
+			if (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+				backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+			}
+			forwardHistoryNotes.pop();
+		}
+
+		// Programmatic navigation
+		if (typeof action.historyAction == 'undefined' && backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
+						action.id === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
+			backwardHistoryNotes.pop();
+		}
+		break;
+	case 'FOLDER_SELECT':
+		if (currentNote != null && action.historyAction == 'goto') {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		break;
+	case 'NOTE_UPDATE_ONE': {
+		const modNote = action.note;
+		backwardHistoryNotes = backwardHistoryNotes.map(n => {
+			if (n.id === modNote.id) {
+				return { id: modNote.id, parent_id: modNote.parent_id };
+			}
+			return n;
+		});
+
+		forwardHistoryNotes = forwardHistoryNotes.map(n => {
+			if (n.id === modNote.id) {
+				return { id: modNote.id, parent_id: modNote.parent_id };
+			}
+			return n;
+		});
+
+		// If the note moved is the currently selected one.
+		backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
+		break;
+	}
+	case 'SEARCH_SELECT':
+		if (currentNote != null && (backwardHistoryNotes.length === 0 ||
+						backwardHistoryNotes[backwardHistoryNotes.length - 1].id != currentNote.id)) {
+			forwardHistoryNotes = [];
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		break;
+
+	case 'FOLDER_DELETE':
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.parent_id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.parent_id != action.id);
+
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes.map(a => a.id));
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes.map(a => a.id));
+		break;
+	case 'NOTE_DELETE': {
+		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.id != action.id);
+		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.id != action.id);
+
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes.map(a => a.id));
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes.map(a => a.id));
+
+		// make sure the new selected note is not the last in history
+		const selectedNoteIds = newState.selectedNoteIds;
+		if (selectedNoteIds.length > 0) {
+			if (backwardHistoryNotes.length > 0 &&
+							backwardHistoryNotes[backwardHistoryNotes.length - 1] === selectedNoteIds[0]) { backwardHistoryNotes.pop(); }
+
+			if (forwardHistoryNotes.length > 0 &&
+							forwardHistoryNotes[forwardHistoryNotes.length - 1] === selectedNoteIds[0]) { forwardHistoryNotes.pop(); }
+		}
+		break;
+	}
+	default:
+		console.log('Unknown action in history reducer.' ,action.type);
+	}
+
+	newState.backwardHistoryNotes = backwardHistoryNotes;
+	newState.forwardHistoryNotes = forwardHistoryNotes;
+	return newState;
+}
+
+
+
+
 const reducer = (state = defaultState, action) => {
 	let newState = state;
 
@@ -441,9 +475,9 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_SELECT_ADD':
 		case 'NOTE_SELECT_REMOVE':
 		case 'NOTE_SELECT_TOGGLE':
-			newState = changeSelectedNotes(state, action);
+			newState = handleHistory(newState, action);
+			newState = changeSelectedNotes(newState, action);
 			break;
-
 		case 'NOTE_SELECT_EXTEND':
 			{
 				newState = Object.assign({}, state);
@@ -501,13 +535,19 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_SELECT':
-			newState = changeSelectedFolder(state, action, { clearSelectedNoteIds: true });
+			newState = handleHistory(state, action);
+			newState = changeSelectedFolder(newState, action, { clearSelectedNoteIds: true });
+
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action);
+				const folderSelectAction = Object.assign({}, action, { type: 'FOLDER_SELECT' });
+				newState = handleHistory(state, folderSelectAction);
+				newState = changeSelectedFolder(newState, action);
+
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
+				newState = handleHistory(newState, noteSelectAction);
 				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
@@ -597,36 +637,14 @@ const reducer = (state = defaultState, action) => {
 				newState = Object.assign({}, state);
 				newState.notes = newNotes;
 
-				let backwardHistoryNotes = state.backwardHistoryNotes;
-				let forwardHistoryNotes = state.forwardHistoryNotes;
-
 				if (noteFolderHasChanged) {
 					let newIndex = movedNotePreviousIndex;
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 					if (!newNotes.length) newIndex = -1;
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
-
-					// Update history
-					backwardHistoryNotes = backwardHistoryNotes.map(n => {
-						if (n.id === modNote.id) {
-							return { id: modNote.id, parent_id: modNote.parent_id };
-						}
-						return n;
-					});
-
-					forwardHistoryNotes = forwardHistoryNotes.map(n => {
-						if (n.id === modNote.id) {
-							return { id: modNote.id, parent_id: modNote.parent_id };
-						}
-						return n;
-					});
-
-					// If the note moved is the currently selected one.
-					backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
+					newState = handleHistory(newState, action);
 				}
 
-				newState.backwardHistoryNotes = backwardHistoryNotes;
-				newState.forwardHistoryNotes = forwardHistoryNotes;
 
 				if (action.provisional) {
 					newState.provisionalNoteIds.push(modNote.id);
@@ -645,6 +663,7 @@ const reducer = (state = defaultState, action) => {
 
 			{
 				newState = handleItemDelete(state, action);
+				newState = handleHistory(newState, action);
 
 				const idx = newState.provisionalNoteIds.indexOf(action.id);
 				if (idx >= 0) {
@@ -739,7 +758,8 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_DELETE':
-			newState = handleItemDelete(state, action);
+			newState = handleHistory(state, action);
+			newState = handleItemDelete(newState, action);
 			break;
 
 		case 'MASTERKEY_UPDATE_ALL':
@@ -846,15 +866,7 @@ const reducer = (state = defaultState, action) => {
 				} else {
 					newState.notesParentType = 'Search';
 				}
-
-				// Update history when searching
-				const currentNote = stateUtils.getCurrentNote(state);
-				if (currentNote != null && (state.backwardHistoryNotes.length === 0 ||
-					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != currentNote.id)) {
-					newState.forwardHistoryNotes = [];
-					newState.backwardHistoryNotes = newState.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-				}
-
+				newState = handleHistory(newState, action);
 				newState.selectedNoteIds = [];
 			}
 			break;
