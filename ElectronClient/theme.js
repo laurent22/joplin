@@ -1,6 +1,5 @@
 const Setting = require('lib/models/Setting.js');
 const nordStyle = require('./gui/style/theme/nord');
-const aritimStyle = require('./gui/style/theme/aritim');
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
@@ -431,8 +430,6 @@ function themeStyle(theme) {
 		output = Object.assign({}, output, draculaStyle); break;
 	case Setting.THEME_NORD :
 		output = Object.assign({}, output, nordStyle); break;
-	case Setting.THEME_ARITIM :
-		output = Object.assign({}, output, aritimStyle); break;
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles
