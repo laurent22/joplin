@@ -87,10 +87,7 @@ class Note extends BaseItem {
 			let output = lines[0].trim();
 			const mdLinkRegex = /!?\[(.+)\]\(.+\)/;
 			if (output.match(mdLinkRegex)) {
-				// const start = output.indexOf('[') + 1;
-				// const stop = output.indexOf(']');
 				output = output.replace(mdLinkRegex, '$1');
-				// output = output.substring(start, stop);
 			} else {
 				// Remove the first #, *, etc.
 				while (output.length) {
