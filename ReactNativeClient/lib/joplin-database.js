@@ -37,8 +37,7 @@ CREATE TABLE notes (
 	source TEXT NOT NULL DEFAULT "",
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
-	\`order\` INT NOT NULL DEFAULT 0,
-	due_date INT DEFAULT 0
+	\`order\` INT NOT NULL DEFAULT 0
 );
 
 CREATE INDEX notes_title ON notes (title);
@@ -312,7 +311,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -678,6 +677,10 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 28) {
 				queries.push('CREATE INDEX resources_size ON resources(size)');
+			}
+
+			if (targetVersion == 29) {
+				queries.push('ALTER TABLE notes ADD COLUMN `due_date` INT DEFAULT 0');
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });

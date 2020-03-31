@@ -706,6 +706,7 @@ class Synchronizer {
 							// Let's leave these two lines for 6 months, by which time all the clients should have been synced.
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
+							if (!content.due_date) content.due_date = 0;
 
 							const options = {
 								autoTimestamp: false,
