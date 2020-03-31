@@ -96,7 +96,8 @@
 				"ElectronClient/pluginAssets",
 				"Modules/TinyMCE/JoplinLists/dist",
 				"Modules/TinyMCE/JoplinLists/lib",
-				"Modules/TinyMCE/JoplinLists/scratch"
+				"Modules/TinyMCE/JoplinLists/scratch",
+				"CliClient/tests/tmp"
 			],
 			"path": "."
 		}

@@ -18,7 +18,8 @@ module.exports = function(theme) {
 			line-height: ${theme.htmlLineHeight};
 			background-color: ${theme.htmlBackgroundColor};
 			font-family: ${fontFamily};
-			padding-bottom: ${theme.bodyPaddingBottom};
+			padding-bottom: ${theme.paddingBottom};
+			padding-top: ${theme.paddingTop};
 		}
 		strong {
 			color: ${theme.colorBright};
@@ -270,9 +271,13 @@ module.exports = function(theme) {
 			display: none;
 		}
 
+		/* =============================================== */
 		/* For TinyMCE */
+		/* =============================================== */
+
 		.mce-content-body {
-			padding: 5px 10px 10px 10px;
+			/* Note: we give a bit more padding at the bottom, to allow scrolling past the end of the document */
+			padding: 5px 10px 10em 10px;
 		}
 
 		.mce-content-body code {
@@ -290,6 +295,10 @@ module.exports = function(theme) {
 		.mce-content-body.mce-content-readonly {
 			opacity: 0.5;
 		}
+
+		/* =============================================== */
+		/* For TinyMCE */
+		/* =============================================== */
 
 		@media print {
 			body {
