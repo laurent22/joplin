@@ -237,25 +237,7 @@ function themeStyle(theme) {
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = Object.assign({}, globalStyle, fontSizes, themes[Setting.THEME_LIGHT]);
-
-	switch (theme) {
-	case Setting.THEME_DARK :
-		output = Object.assign({}, output, themes[Setting.THEME_DARK]); 
-		break;
-	case Setting.THEME_SOLARIZED_LIGHT :
-		output = Object.assign({}, output, themes[Setting.THEME_SOLARIZED_LIGHT]); 
-		break;
-	case Setting.THEME_SOLARIZED_DARK :
-		output = Object.assign({}, output, themes[Setting.THEME_SOLARIZED_DARK]); 
-		break;
-	case Setting.THEME_DRACULA :
-		output = Object.assign({}, output, themes[Setting.THEME_DRACULA]); 
-		break;
-	case Setting.THEME_NORD :
-		output = Object.assign({}, output, themes[Setting.THEME_NORD]); 
-		break;
-	}
+	output = Object.assign({}, globalStyle, fontSizes, themes[Setting.THEME_LIGHT], themes[theme]);
 
 	// Note: All the theme specific things should go in addExtraStyles
 	// so that their definition is not split between here and the
