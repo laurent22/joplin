@@ -2,7 +2,7 @@
 
 module.exports = function installRule(markdownIt) {
 
-    const defaultRender = markdownIt.renderer.rules.link_open;
+	const defaultRender = markdownIt.renderer.rules.link_open;
 	const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
 	// videoIDRegex extracts the unique 11 alpha-numeric code which is unique to every youtube video
 
@@ -14,12 +14,9 @@ module.exports = function installRule(markdownIt) {
 		if (!videoID) return defaultRender(tokens, idx, options, env, self);
 
 		if (videoID[2]) {
-			const embedStart = `<div><iframe  width="560" height="315" src="https://www.youtube.com/embed/`;
-			const embedEnd = `" frameborder="0" allowfullscreen></iframe></div>`;
-			return embedStart + videoID[2] + embedEnd;
+			return `<div><iframe  width="560" height="315" src="https://www.youtube.com/embed/${videoID[2]}" frameborder="0" allowfullscreen></iframe></div>`;
 		}
 
 		return defaultRender(tokens, idx, options, env, self);
-
 	};
 };
