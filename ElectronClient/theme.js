@@ -1,11 +1,13 @@
 const Setting = require('lib/models/Setting.js');
-const lightStyle = require('./gui/style/theme/light'); // Default theme
-const darkStyle = require('./gui/style/theme/dark');
-const draculaStyle = require('./gui/style/theme/dracula');
-const solarizedLightStyle = require('./gui/style/theme/solarizedLight');
-const solarizedDarkStyle = require('./gui/style/theme/solarizedDark');
-const nordStyle = require('./gui/style/theme/nord');
 
+const themes = {
+	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
+	[Setting.THEME_DARK]: require('./gui/style/theme/dark'),
+	[Setting.THEME_DRACULA]: require('./gui/style/theme/dracula'),
+	[Setting.THEME_SOLARIZED_LIGHT]: require('./gui/style/theme/solarizedLight'),
+	[Setting.THEME_SOLARIZED_DARK]: require('./gui/style/theme/solarizedDark'),
+	[Setting.THEME_NORD]: require('./gui/style/theme/nord'),
+};
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
@@ -235,19 +237,24 @@ function themeStyle(theme) {
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
+	output = Object.assign({}, globalStyle, fontSizes, themes[Setting.THEME_LIGHT]);
 
 	switch (theme) {
 	case Setting.THEME_DARK :
-		output = Object.assign({}, output, darkStyle); break;
+		output = Object.assign({}, output, themes[Setting.THEME_DARK]); 
+		break;
 	case Setting.THEME_SOLARIZED_LIGHT :
-		output = Object.assign({}, output, solarizedLightStyle); break;
+		output = Object.assign({}, output, themes[Setting.THEME_SOLARIZED_LIGHT]); 
+		break;
 	case Setting.THEME_SOLARIZED_DARK :
-		output = Object.assign({}, output, solarizedDarkStyle); break;
+		output = Object.assign({}, output, themes[Setting.THEME_SOLARIZED_DARK]); 
+		break;
 	case Setting.THEME_DRACULA :
-		output = Object.assign({}, output, draculaStyle); break;
+		output = Object.assign({}, output, themes[Setting.THEME_DRACULA]); 
+		break;
 	case Setting.THEME_NORD :
-		output = Object.assign({}, output, nordStyle); break;
+		output = Object.assign({}, output, themes[Setting.THEME_NORD]); 
+		break;
 	}
 
 	// Note: All the theme specific things should go in addExtraStyles
