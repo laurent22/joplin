@@ -178,9 +178,11 @@ class MdToHtml {
 			// files. Otherwise some of them might be in the cssStrings property.
 			externalAssetsOnly: false,
 			postMessageSyntax: 'postMessage',
+			paddingTop: '0',
+			paddingBottom: '0',
 			highlightedKeywords: [],
 			codeTheme: 'atom-one-light.css',
-			theme: Object.assign({}, defaultNoteStyle, theme),
+			theme: Object.assign({ paddingTop: '16px' }, defaultNoteStyle, theme),
 			plugins: {},
 		}, options);
 

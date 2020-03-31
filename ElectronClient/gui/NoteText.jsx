@@ -2024,6 +2024,7 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+			overflow: 'hidden',
 		};
 
 		const toolbarStyle = {

@@ -153,6 +153,8 @@ function themeStyle(theme) {
 
 		output.colorUrl = '#7B81FF';
 
+		output.colorBright = 'rgb(220,220,220)';
+
 		themeCache_[theme] = output;
 		return addExtraStyles(themeCache_[theme]);
 	}
@@ -183,6 +185,8 @@ function themeStyle(theme) {
 	output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
+
+	output.colorBright = 'rgb(220,220,220)';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);

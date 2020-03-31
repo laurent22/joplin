@@ -55,6 +55,8 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
+			paddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+			paddingBottom: this.props.paddingBottom || '0',
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
