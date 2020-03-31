@@ -49,24 +49,16 @@ function goToNote(notes, selectedNoteIndexes, state) {
 
 function goBackWard(state) {
 	if (!state.backwardHistoryNotes.length)	return state;
-	const lastItem = state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1];
 	state = reducer(state, {
-		type: 'FOLDER_AND_NOTE_SELECT',
-		noteId: lastItem.id ,
-		folderId: lastItem.parent_id ,
-		historyAction: 'goBackward',
+		type: 'HISTORY_BACKWARD',
 	});
 	return state;
 }
 
 function goForward(state) {
 	if (!state.forwardHistoryNotes.length)	return state;
-	const nextItem = state.forwardHistoryNotes[state.forwardHistoryNotes.length - 1];
 	state = reducer(state, {
-		type: 'FOLDER_AND_NOTE_SELECT',
-		noteId: nextItem.id ,
-		folderId: nextItem.parent_id ,
-		historyAction: 'goForward',
+		type: 'HISTORY_FORWARD',
 	});
 	return state;
 }

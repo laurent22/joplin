@@ -1675,12 +1675,12 @@ class NoteTextComponent extends React.Component {
 			enabled: (this.props.backwardHistoryNotes.length > 0),
 			onClick: () => {
 				if (!this.props.backwardHistoryNotes.length) return;
-				const lastItem = this.props.backwardHistoryNotes[this.props.backwardHistoryNotes.length - 1];
+				// const lastItem = this.props.backwardHistoryNotes[this.props.backwardHistoryNotes.length - 1];
 				this.props.dispatch({
-					type: 'FOLDER_AND_NOTE_SELECT',
-					folderId: lastItem.parent_id,
-					noteId: lastItem.id,
-					historyAction: 'goBackward',
+					type: 'HISTORY_BACKWARD',
+					// folderId: lastItem.parent_id,
+					// noteId: lastItem.id,
+					// historyAction: 'goBackward',
 				});
 			},
 		});
@@ -1691,12 +1691,12 @@ class NoteTextComponent extends React.Component {
 			enabled: (this.props.forwardHistoryNotes.length > 0),
 			onClick: () => {
 				if (!this.props.forwardHistoryNotes.length) return;
-				const nextItem = this.props.forwardHistoryNotes[this.props.forwardHistoryNotes.length - 1];
+				// const nextItem = this.props.forwardHistoryNotes[this.props.forwardHistoryNotes.length - 1];
 				this.props.dispatch({
-					type: 'FOLDER_AND_NOTE_SELECT',
-					folderId: nextItem.parent_id,
-					noteId: nextItem.id,
-					historyAction: 'goForward',
+					type: 'HISTORY_FORWARD',
+					// folderId: nextItem.parent_id,
+					// noteId: nextItem.id,
+					// historyAction: 'goForward',
 				});
 			},
 		});

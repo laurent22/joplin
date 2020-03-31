@@ -7,14 +7,12 @@ let testApp = null;
 
 const goBackWard = (state) => {
 	if (!state.backwardHistoryNotes.length)	return;
-	const lastItem = state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1];
-	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'goBackward' });
+	testApp.dispatch({ type: 'HISTORY_BACKWARD' });
 };
 
 const goForward = (state) => {
-	if (!state.forwardHistoryNotes.length)	return;
-	const lastItem = state.forwardHistoryNotes[state.forwardHistoryNotes.length - 1];
-	testApp.dispatch({ type: 'FOLDER_AND_NOTE_SELECT', noteId: lastItem.id, folderId: lastItem.parent_id, historyAction: 'goForward' });
+	if (!state.forwardHistoryNotes.length) return;
+	testApp.dispatch({ type: 'HISTORY_FORWARD' });
 };
 
 const goToNote = (testApp, note) => {

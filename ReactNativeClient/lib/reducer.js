@@ -108,6 +108,26 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	return output ? output : [];
 };
 
+
+
+// let parentType = state.notesParentType;
+
+
+// if (parentType === 'Folder') {
+// 	parentId = state.selectedFolderId;
+// 	parentType = BaseModel.TYPE_FOLDER;
+// } else if (parentType === 'Tag') {
+// 	parentId = state.selectedTagId;
+// 	parentType = BaseModel.TYPE_TAG;
+// } else if (parentType === 'Search') {
+// 	parentId = state.selectedSearchId;
+// 	parentType = BaseModel.TYPE_SEARCH;
+// } else if (parentType === 'SmartFilter') {
+// 	parentId = state.selectedSmartFilterId;
+// 	parentType = BaseModel.TYPE_SMART_FILTER;
+// }
+
+// state.searches??
 stateUtils.getCurrentNote = function(state) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
@@ -117,6 +137,12 @@ stateUtils.getCurrentNote = function(state) {
 			return {
 				id: currNote.id,
 				parent_id: currNote.parent_id,
+
+				notesParentType: state.notesParentType,
+				selectedFolderId: state.selectedFolderId,
+				selectedTagId: state.selectedTagId,
+				selectedSearchId: state.selectedSearchId,
+				selectedSmartFilterId: state.selectedSmartFilterId,
 			};
 		}
 	}
@@ -359,6 +385,29 @@ function removeItemFromArray(array, property, value) {
 }
 
 
+// newState.notesParentType = 'SmartFilter';
+// newState.selectedSmartFilterId = action.id;
+
+// let parentType = state.notesParentType;
+
+
+// if (parentType === 'Folder') {
+// 	parentId = state.selectedFolderId;
+// 	parentType = BaseModel.TYPE_FOLDER;
+// } else if (parentType === 'Tag') {
+// 	parentId = state.selectedTagId;
+// 	parentType = BaseModel.TYPE_TAG;
+// } else if (parentType === 'Search') {
+// 	parentId = state.selectedSearchId;
+// 	parentType = BaseModel.TYPE_SEARCH;
+// } else if (parentType === 'SmartFilter') {
+// 	parentId = state.selectedSmartFilterId;
+// 	parentType = BaseModel.TYPE_SMART_FILTER;
+// }
+
+// state.searches??
+
+
 
 
 function handleHistory(state, action) {
@@ -368,28 +417,46 @@ function handleHistory(state, action) {
 	// - "goto": When going to a note, but not via the back/forward arrows.
 	// - "goBackward": When clicking on the Back arrow
 	// - "goForward": When clicking on the Forward arrow
-	const newState = Object.assign({}, state);
+	let newState = Object.assign({}, state);
 	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
 	const currentNote = stateUtils.getCurrentNote(state);
 	switch (action.type) {
+	case 'HISTORY_BACKWARD': {
+		const note = backwardHistoryNotes[backwardHistoryNotes.length - 1];
+		if (currentNote != null && (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id)) {
+			forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+
+		// change notes like in NOTE_FOLDER_SELECT
+
+		// newState = changeSelectedFolder(newState, Object.assign({}, action, {type: 'FOLDER_SELECT', id: note.parent_id,  clearSelectedNoteIds: true}));
+		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		backwardHistoryNotes.pop();
+
+		// CREATE CONTEXT
+		break;
+	}
+	case 'HISTORY_FORWARD': {
+		const note = forwardHistoryNotes[forwardHistoryNotes.length - 1];
+
+		if (currentNote != null && (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id)) {
+			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
+		}
+		forwardHistoryNotes.pop();
+
+		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
+		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+		break;
+	}
 	case 'NOTE_SELECT':
+		// User navigation
 		if (action.historyAction == 'goto' && currentNote != null &&  action.id != currentNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-		} else if (action.historyAction === 'goBackward' && currentNote != null) {
-			if (forwardHistoryNotes.length === 0 || currentNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
-				forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-			}
-			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'goForward' && currentNote != null) {
-			if (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-				backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
-			}
-			forwardHistoryNotes.pop();
 		}
-
-		// Programmatic navigation
+		// Make sure programmatic navigation doesn't introduce history corruption
 		if (typeof action.historyAction == 'undefined' && backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
 						action.id === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
 			backwardHistoryNotes.pop();
@@ -403,6 +470,7 @@ function handleHistory(state, action) {
 		break;
 	case 'NOTE_UPDATE_ONE': {
 		const modNote = action.note;
+		// TO change to include context
 		backwardHistoryNotes = backwardHistoryNotes.map(n => {
 			if (n.id === modNote.id) {
 				return { id: modNote.id, parent_id: modNote.parent_id };
@@ -542,12 +610,8 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				const folderSelectAction = Object.assign({}, action, { type: 'FOLDER_SELECT' });
-				newState = handleHistory(state, folderSelectAction);
-				newState = changeSelectedFolder(newState, action);
-
+				newState = changeSelectedFolder(state, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = handleHistory(newState, noteSelectAction);
 				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
@@ -943,6 +1007,10 @@ const reducer = (state = defaultState, action) => {
 				newState.plugins = newPlugins;
 			}
 			break;
+		case 'HISTORY_BACKWARD':
+		case 'HISTORY_FORWARD':
+			// newState = Object.assign({}, state);
+			newState = handleHistory(newState, action);
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
