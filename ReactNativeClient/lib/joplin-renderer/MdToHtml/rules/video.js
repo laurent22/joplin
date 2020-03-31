@@ -1,0 +1,25 @@
+// LOGIC: Extract the & UUID of the youtube video and render iframe
+
+module.exports = function installRule(markdownIt) {
+
+    const defaultRender = markdownIt.renderer.rules.link_open;
+	const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+	// videoIDRegex extracts the unique 11 alpha-numeric code which is unique to every youtube video
+
+	markdownIt.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+		const token = tokens[idx];
+		const link = token.attrGet('href');
+		const videoID = link.match(videoIDRegex);
+
+		if (!videoID) return defaultRender(tokens, idx, options, env, self);
+
+		if (videoID[2]) {
+			const embedStart = `<div><iframe  width="560" height="315" src="https://www.youtube.com/embed/`;
+			const embedEnd = `" frameborder="0" allowfullscreen></iframe></div>`;
+			return embedStart + videoID[2] + embedEnd;
+		}
+
+		return defaultRender(tokens, idx, options, env, self);
+
+	};
+};
