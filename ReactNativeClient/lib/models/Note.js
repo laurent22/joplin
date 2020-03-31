@@ -85,13 +85,19 @@ class Note extends BaseItem {
 		if (body && body.length) {
 			const lines = body.trim().split('\n');
 			let output = lines[0].trim();
-			// Remove the first #, *, etc.
-			while (output.length) {
-				const c = output[0];
-				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
-					output = output.substr(1);
-				} else {
-					break;
+			if (output.match(/\[.+\]\(.+\)/)) {
+				const start = output.indexOf('[') + 1;
+				const stop = output.indexOf(']') - 1;
+				output = output.substr(start, stop);
+			} else {
+				// Remove the first #, *, etc.
+				while (output.length) {
+					const c = output[0];
+					if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
+						output = output.substr(1);
+					} else {
+						break;
+					}
 				}
 			}
 			return output.substr(0, 80).trim();
