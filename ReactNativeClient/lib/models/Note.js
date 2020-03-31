@@ -85,10 +85,12 @@ class Note extends BaseItem {
 		if (body && body.length) {
 			const lines = body.trim().split('\n');
 			let output = lines[0].trim();
-			if (output.match(/\[.+\]\(.+\)/)) {
-				const start = output.indexOf('[') + 1;
-				const stop = output.indexOf(']') - 1;
-				output = output.substr(start, stop);
+			const mdLinkRegex = /!?\[(.+)\]\(.+\)/;
+			if (output.match(mdLinkRegex)) {
+				// const start = output.indexOf('[') + 1;
+				// const stop = output.indexOf(']');
+				output = output.replace(mdLinkRegex, '$1');
+				// output = output.substring(start, stop);
 			} else {
 				// Remove the first #, *, etc.
 				while (output.length) {
