@@ -79,25 +79,9 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitle(note) {
-		return this.defaultTitleFromBody(note.body);
-	}
-
-	static defaultTitleFromBody(body) {
-		if (body && body.length) {
-			const lines = body.trim().split('\n');
-			let output = lines[0].trim();
-			// Remove the first #, *, etc.
-			while (output.length) {
-				const c = output[0];
-				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
-					output = output.substr(1);
-				} else {
-					break;
-				}
-			}
-			return mdUtils.filterLink(output).substr(0, 80).trim();
+		if (note.body && note.body.length) {
+			return mdUtils.titleFromBody(note.body);
 		}
-
 		return _('Untitled');
 	}
 

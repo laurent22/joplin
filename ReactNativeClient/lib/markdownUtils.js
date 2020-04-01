@@ -92,13 +92,20 @@ const markdownUtils = {
 		return output.join('\n');
 	},
 
-	filterLink(mdLink) {
-		const mdLinkRegex = /!?\[(.+)\]\(.+\)/g;
-		let mdDesc = mdLink;
-		if (mdLink.match(mdLinkRegex)) {
-			mdDesc = mdLink.replace(mdLinkRegex, '$1');
+	titleFromBody(body) {
+		const mdLinkRegex = /!?\[(.+?)\]\(.+?\)/g;
+		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
+		const filterRegex = /^[# \n\t*`-]*/;
+		const lines = body.trim().split('\n');
+		let title = lines[0].trim();
+		title = title.replace(filterRegex, '');
+		while (title.match(mdLinkRegex)) {
+			title = title.replace(mdLinkRegex, '$1');
 		}
-		return mdDesc;
+		while (title.match(emptyMdLinkRegex)) {
+			title = title.replace(emptyMdLinkRegex, '$1');
+		}
+		return title.substring(0,80);
 	},
 };
 
