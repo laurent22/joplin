@@ -93,19 +93,12 @@ const markdownUtils = {
 	},
 
 	titleFromBody(body) {
-		const mdLinkRegex = /!?\[(.+?)\]\(.+?\)/g;
+		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
 		const filterRegex = /^[# \n\t*`-]*/;
 		const lines = body.trim().split('\n');
-		let title = lines[0].trim();
-		title = title.replace(filterRegex, '');
-		while (title.match(mdLinkRegex)) {
-			title = title.replace(mdLinkRegex, '$1');
-		}
-		while (title.match(emptyMdLinkRegex)) {
-			title = title.replace(emptyMdLinkRegex, '$1');
-		}
-		return title.substring(0,80);
+		const title = lines[0].trim();
+		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
 	},
 };
 
