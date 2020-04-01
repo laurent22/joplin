@@ -2026,10 +2026,7 @@ class NoteTextComponent extends React.Component {
 			overflow: 'hidden',
 		};
 
-		const toolbarStyle = {
-			marginTop: 4,
-			marginBottom: 0,
-		};
+		const toolbarStyle = process.platform === 'darwin' ? { marginTop: 4, marginBottom: 0 } : { marginTop: 3, marginBottom: 0 };
 
 		const tagStyle = {
 			marginBottom: 10,
