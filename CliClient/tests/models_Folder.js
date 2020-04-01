@@ -151,8 +151,8 @@ describe('models_Folder', function() {
 		folders.forEach((f) => { foldersById[f.id] = f; });
 
 		expect(folders.length).toBe(4);
-		expect(foldersById[f1.id].note_count).toBe(3);
-		expect(foldersById[f2.id].note_count).toBe(2);
+		expect(foldersById[f1.id].note_count).toBe(1);
+		expect(foldersById[f2.id].note_count).toBe(0);
 		expect(foldersById[f3.id].note_count).toBe(2);
 		expect(foldersById[f4.id].note_count).toBe(0);
 	}));
@@ -178,8 +178,8 @@ describe('models_Folder', function() {
 		folders.forEach((f) => { foldersById[f.id] = f; });
 
 		expect(folders.length).toBe(4);
-		expect(foldersById[f1.id].note_count).toBe(4);
-		expect(foldersById[f2.id].note_count).toBe(3);
+		expect(foldersById[f1.id].note_count).toBe(1);
+		expect(foldersById[f2.id].note_count).toBe(0);
 		expect(foldersById[f3.id].note_count).toBe(3);
 		expect(foldersById[f4.id].note_count).toBe(0);
 	}));
