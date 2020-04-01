@@ -66,4 +66,19 @@ describe('markdownUtils', function() {
 		}
 	}));
 
+	it('replace markdown link with description', asyncTest(async () => {
+
+		const testCases = [
+			['Test case [one](link)', 'Test case one'],
+			['Test case ![two](imagelink)', 'Test case two'],
+			['Test case three', 'Test case three'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.filterLink(md)).toBe(expected);
+		}
+	}));
+
 });
