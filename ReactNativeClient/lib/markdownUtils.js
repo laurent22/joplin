@@ -91,6 +91,15 @@ const markdownUtils = {
 
 		return output.join('\n');
 	},
+
+	filterLink(mdLink) {
+		const mdLinkRegex = /!?\[(.+)\]\(.+\)/g;
+		let mdDesc = mdLink;
+		if (mdLink.match(mdLinkRegex)) {
+			mdDesc = mdLink.replace(mdLinkRegex, '$1');
+		}
+		return mdDesc;
+	},
 };
 
 module.exports = markdownUtils;

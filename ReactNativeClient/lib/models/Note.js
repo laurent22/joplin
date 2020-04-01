@@ -11,6 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
+const mdUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
@@ -85,7 +86,6 @@ class Note extends BaseItem {
 		if (body && body.length) {
 			const lines = body.trim().split('\n');
 			let output = lines[0].trim();
-			const mdLinkRegex = /!?\[(.+)\]\(.+\)/;
 			// Remove the first #, *, etc.
 			while (output.length) {
 				const c = output[0];
@@ -95,10 +95,7 @@ class Note extends BaseItem {
 					break;
 				}
 			}
-			if (output.match(mdLinkRegex)) {
-				output = output.replace(mdLinkRegex, '$1');
-			}
-			return output.substr(0, 80).trim();
+			return mdUtils.filterLink(output).substr(0, 80).trim();
 		}
 
 		return _('Untitled');
