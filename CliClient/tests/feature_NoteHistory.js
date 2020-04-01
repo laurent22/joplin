@@ -16,7 +16,7 @@ const goForward = (state) => {
 };
 
 const goToNote = (testApp, note) => {
-	testApp.dispatch({ type: 'NOTE_SELECT', id: note.id, historyAction: 'goto' });
+	testApp.dispatch({ type: 'NOTE_SELECT', id: note.id });
 };
 
 describe('integration_ForwardBackwardNoteHistory', function() {
@@ -43,13 +43,13 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
 		await testApp.wait();
 
-		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[3].id, historyAction: 'goto' });
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[3].id });
 		await testApp.wait();
-		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[2].id, historyAction: 'goto' });
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[2].id });
 		await testApp.wait();
-		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[1].id, historyAction: 'goto' });
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[1].id });
 		await testApp.wait();
-		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id, historyAction: 'goto' });
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
 		await testApp.wait();
 
 		let state = testApp.store().getState();
@@ -75,7 +75,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		expect(state.selectedNoteIds).toEqual([notes0[1].id]);
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 
-		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[4].id, historyAction: 'goto' });
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[4].id });
 		await testApp.wait();
 
 		state = testApp.store().getState();
@@ -94,14 +94,14 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
 		await testApp.wait();
 
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]), historyAction: 'goto' });
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]) });
 		await testApp.wait();
 
 		let state = testApp.store().getState();
 		expect(state.selectedNoteIds).toEqual([notes1[4].id]);
 		expect(state.selectedFolderId).toEqual(folders[1].id);
 
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]), historyAction: 'goto' });
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
 		await testApp.wait();
 
 		state = testApp.store().getState();
@@ -134,7 +134,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
 		await testApp.wait();
 
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]), historyAction: 'goto' });
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]) });
 		await testApp.wait();
 
 		let state = testApp.store().getState();

@@ -629,7 +629,6 @@ function NoteText2(props:NoteTextProps) {
 			// 		folderId: item.parent_id,
 			// 		noteId: item.id,
 			// 		hash: resourceUrlInfo.hash,
-			// 		historyAction: 'goto',
 			// 	});
 			// } else {
 			// 	throw new Error(`Unsupported item type: ${item.type_}`);

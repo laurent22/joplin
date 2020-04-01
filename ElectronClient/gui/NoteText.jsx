@@ -859,7 +859,6 @@ class NoteTextComponent extends React.Component {
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyAction: 'goto',
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
@@ -1675,12 +1674,8 @@ class NoteTextComponent extends React.Component {
 			enabled: (this.props.backwardHistoryNotes.length > 0),
 			onClick: () => {
 				if (!this.props.backwardHistoryNotes.length) return;
-				// const lastItem = this.props.backwardHistoryNotes[this.props.backwardHistoryNotes.length - 1];
 				this.props.dispatch({
 					type: 'HISTORY_BACKWARD',
-					// folderId: lastItem.parent_id,
-					// noteId: lastItem.id,
-					// historyAction: 'goBackward',
 				});
 			},
 		});
@@ -1691,12 +1686,8 @@ class NoteTextComponent extends React.Component {
 			enabled: (this.props.forwardHistoryNotes.length > 0),
 			onClick: () => {
 				if (!this.props.forwardHistoryNotes.length) return;
-				// const nextItem = this.props.forwardHistoryNotes[this.props.forwardHistoryNotes.length - 1];
 				this.props.dispatch({
 					type: 'HISTORY_FORWARD',
-					// folderId: nextItem.parent_id,
-					// noteId: nextItem.id,
-					// historyAction: 'goForward',
 				});
 			},
 		});

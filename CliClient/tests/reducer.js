@@ -42,7 +42,7 @@ function goToNote(notes, selectedNoteIndexes, state) {
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
-		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds, historyAction: 'goto' });
+		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
 	}
 	return state;
 }
@@ -412,7 +412,7 @@ describe('Reducer', function() {
 
 
 		// go to second folder
-		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
 		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 3)));
 
 		// delete the first folder
@@ -468,17 +468,17 @@ describe('Reducer', function() {
 		state = goToNote(notes, [3], state);
 		state = goToNote(notes, [4], state); // last seen note is notes[4]
 		// go to second folder
-		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
 		state = goToNote(notes, [5], state);
 		state = goToNote(notes, [6], state);
 
 		// return to first folder
-		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[0].id, historyAction: 'goto' });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[0].id });
 
 		expect(state.lastSelectedNotesIds.Folder[folders[0].id]).toEqual([notes[4].id]);
 
 		// return to second folder
-		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id, historyAction: 'goto' });
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
 		expect(state.lastSelectedNotesIds.Folder[folders[1].id]).toEqual([notes[6].id]);
 
 	}));

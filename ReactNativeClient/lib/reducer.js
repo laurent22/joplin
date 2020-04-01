@@ -428,7 +428,6 @@ const getContextFromHistory = (ctx) => {
 
 
 function handleHistory(state, action) {
-	// The historyAction property is only used for user-initiated actions.
 	let newState = Object.assign({}, state);
 	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
@@ -472,19 +471,19 @@ function handleHistory(state, action) {
 	}
 	case 'NOTE_SELECT':
 		// User navigation
-		if (action.historyAction == 'goto' && currentNote != null &&  action.id != currentNote.id) {
+		if (currentNote != null &&  action.id != currentNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
-		// Make sure programmatic navigation doesn't introduce history corruption
-		if (typeof action.historyAction == 'undefined' && backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
+		// Make sure navigating to empty note does not introduce history corruption
+		if (backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
 						action.id === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
 			backwardHistoryNotes.pop();
 		}
 		break;
 	case 'TAG_SELECT':
 	case 'FOLDER_SELECT':
-		if (currentNote != null && action.historyAction == 'goto') {
+		if (currentNote != null) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
