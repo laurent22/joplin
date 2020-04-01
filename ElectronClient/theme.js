@@ -1,11 +1,13 @@
 const Setting = require('lib/models/Setting.js');
-const lightStyle = require('./gui/style/theme/light'); // Default theme
-const darkStyle = require('./gui/style/theme/dark');
-const draculaStyle = require('./gui/style/theme/dracula');
-const solarizedLightStyle = require('./gui/style/theme/solarizedLight');
-const solarizedDarkStyle = require('./gui/style/theme/solarizedDark');
-const nordStyle = require('./gui/style/theme/nord');
-const aritimStyle = require('./gui/style/theme/aritim');
+
+const themes = {
+	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
+	[Setting.THEME_DARK]: require('./gui/style/theme/dark'),
+	[Setting.THEME_DRACULA]: require('./gui/style/theme/dracula'),
+	[Setting.THEME_SOLARIZED_LIGHT]: require('./gui/style/theme/solarizedLight'),
+	[Setting.THEME_SOLARIZED_DARK]: require('./gui/style/theme/solarizedDark'),
+	[Setting.THEME_NORD]: require('./gui/style/theme/nord'),
+};
 
 // globalStyle should be used for properties that do not change across themes
 // i.e. should not be used for colors
@@ -235,22 +237,7 @@ function themeStyle(theme) {
 
 	// All theme are based on the light style, and just override the
 	// relevant properties
-	output = Object.assign({}, globalStyle, fontSizes, lightStyle);
-
-	switch (theme) {
-	case Setting.THEME_DARK :
-		output = Object.assign({}, output, darkStyle); break;
-	case Setting.THEME_SOLARIZED_LIGHT :
-		output = Object.assign({}, output, solarizedLightStyle); break;
-	case Setting.THEME_SOLARIZED_DARK :
-		output = Object.assign({}, output, solarizedDarkStyle); break;
-	case Setting.THEME_DRACULA :
-		output = Object.assign({}, output, draculaStyle); break;
-	case Setting.THEME_NORD :
-		output = Object.assign({}, output, nordStyle); break;
-	case Setting.THEME_ARITIM :
-		output = Object.assign({}, output, aritimStyle); break;
-	}
+	output = Object.assign({}, globalStyle, fontSizes, themes[Setting.THEME_LIGHT], themes[theme]);
 
 	// Note: All the theme specific things should go in addExtraStyles
 	// so that their definition is not split between here and the
