@@ -109,7 +109,10 @@ class Folder extends BaseItem {
 		const foldersById = {};
 		folders.forEach((f) => {
 			foldersById[f.id] = f;
+			// note_count is the count of notes present only in this folder
 			f.note_count = 0;
+			// note_count_all is the count of all notes present in this folder and also in all the subfolders
+			f.note_count_all = 0;
 		});
 
 		const where = !includeCompletedTodos ? 'WHERE (notes.is_todo = 0 OR notes.todo_completed = 0)' : '';
@@ -119,12 +122,23 @@ class Folder extends BaseItem {
 			${where} GROUP BY folders.id`;
 
 		const noteCounts = await this.db().selectAll(sql);
+
+		// this function is to get the note_count
+		noteCounts.forEach((noteCount) => {
+			const parentId = noteCount.folder_id;
+			const folder = foldersById[parentId];
+			if (folder) {
+				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
+			}
+		});
+
+		// this function is to get the note_count_all (count of notes in this and subfolders)
 		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
 			do {
 				const folder = foldersById[parentId];
 				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
-				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
+				folder.note_count_all = (folder.note_count_all || 0) + noteCount.note_count;
 				parentId = folder.parent_id;
 			} while (parentId);
 		});
