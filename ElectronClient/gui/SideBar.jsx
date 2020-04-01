@@ -475,9 +475,18 @@ class SideBarComponent extends React.Component {
 		) : (
 			<span style={expandLinkStyle}>{expandIcon}</span>
 		);
-
 		const anchorRef = this.anchorItemRef('folder', folder.id);
-		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
+
+		// isExpanded is the boolean which will check if the folder is in open state or closed in sidebar
+		const isExpanded = this.props.collapsedFolderIds.find(id => id === folder.id);
+
+		let noteCount;
+		// if the folder is in open state, we will show note_count and if it is in closed state, we will show note_count_all
+		if (!isExpanded) {
+			noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
+		} else {
+			noteCount = folder.note_count_all ? this.noteCountElement(folder.note_count_all) : '';
+		}
 
 		return (
 			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
