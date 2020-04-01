@@ -69,7 +69,7 @@ const nordStyle = {
 	warningBackgroundColor: nord[13],
 
 	htmlColor: nord[4],
-	htmlBackgroundColor: nord[1],
+	htmlBackgroundColor: nord[0],
 	htmlDividerColor: nord[2],
 	htmlLinkColor: nord[10],
 	htmlTableBackgroundColor: nord[0],
