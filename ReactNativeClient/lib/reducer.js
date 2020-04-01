@@ -428,12 +428,7 @@ const getContextFromHistory = (ctx) => {
 
 
 function handleHistory(state, action) {
-	// The historyAction property is only used for user-initiated actions and tells how
-	// the history stack should be handled. That property should not be present for
-	// programmatic navigation. Possible values are:
-	// - "goto": When going to a note, but not via the back/forward arrows.
-	// - "goBackward": When clicking on the Back arrow
-	// - "goForward": When clicking on the Forward arrow
+	// The historyAction property is only used for user-initiated actions.
 	let newState = Object.assign({}, state);
 	let backwardHistoryNotes = newState.backwardHistoryNotes.slice();
 	let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
@@ -496,23 +491,23 @@ function handleHistory(state, action) {
 		break;
 	case 'NOTE_UPDATE_ONE': {
 		const modNote = action.note;
-		// TO change to include context
-		backwardHistoryNotes = backwardHistoryNotes.map(n => {
-			if (n.id === modNote.id) {
-				return { id: modNote.id, parent_id: modNote.parent_id };
+
+		backwardHistoryNotes = backwardHistoryNotes.map(note => {
+			if (note.id === modNote.id) {
+				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
-			return n;
+			return note;
 		});
 
-		forwardHistoryNotes = forwardHistoryNotes.map(n => {
-			if (n.id === modNote.id) {
-				return { id: modNote.id, parent_id: modNote.parent_id };
+		forwardHistoryNotes = forwardHistoryNotes.map(note => {
+			if (note.id === modNote.id) {
+				return Object.assign(note, { parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id });
 			}
-			return n;
+			return note;
 		});
 
 		// If the note moved is the currently selected one.
-		backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
+		// backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
 		break;
 	}
 	case 'SEARCH_SELECT':
