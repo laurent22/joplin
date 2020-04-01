@@ -419,27 +419,47 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const dimensions = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
-		if (dimensions.width > maxSize || dimensions.height > maxSize) {
+
+		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
+
+		if (mustResize) {
+			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
+				{ text: _('Yes'), id: 'yes' },
+				{ text: _('No'), id: 'no' },
+				{ text: _('Cancel'), id: 'cancel' },
+			]);
+
+			if (buttonId === 'cancel') return false;
+
+			mustResize = buttonId === 'yes';
+		}
+
+		if (mustResize) {
 			dimensions.width = maxSize;
 			dimensions.height = maxSize;
+
+			reg.logger().info('New dimensions ', dimensions);
+
+			const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+			reg.logger().info(`Resizing image ${localFilePath}`);
+			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
+
+			const resizedImagePath = resizedImage.uri;
+			reg.logger().info('Resized image ', resizedImagePath);
+			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
+
+			await RNFS.copyFile(resizedImagePath, targetPath);
+
+			try {
+				await RNFS.unlink(resizedImagePath);
+			} catch (error) {
+				reg.logger().warn('Error when unlinking cached file: ', error);
+			}
+		} else {
+			await RNFS.copyFile(localFilePath, targetPath);
 		}
-		reg.logger().info('New dimensions ', dimensions);
 
-		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
-		reg.logger().info(`Resizing image ${localFilePath}`);
-		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
-
-		const resizedImagePath = resizedImage.uri;
-		reg.logger().info('Resized image ', resizedImagePath);
-		reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
-
-		await RNFS.copyFile(resizedImagePath, targetPath);
-
-		try {
-			await RNFS.unlink(resizedImagePath);
-		} catch (error) {
-			reg.logger().warn('Error when unlinking cached file: ', error);
-		}
+		return true;
 	}
 
 	async attachFile(pickerResponse, fileType) {
@@ -494,7 +514,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
-				await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				const done = await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				if (!done) return;
 			} else {
 				if (fileType === 'image') {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));

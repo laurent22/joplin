@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v1.0.197](https://github.com/laurent22/joplin/releases/tag/v1.0.197) - 2020-03-30T17:21:22Z
+
+- New: Added support for checkboxes and fixed various issues with WYSIWYG editor
+- New: Added Vietnamese translation
+- Improved: Go To Anything by body ([#2686](https://github.com/laurent22/joplin/issues/2686)) ([#2683](https://github.com/laurent22/joplin/issues/2683) by Anjula Karunarathne)
+- Improved: Cleaning up the install / update script ([#2719](https://github.com/laurent22/joplin/issues/2719) by Brandon Wulf)
+- Fixed: MD importer handle special chars in linked image name ([#2346](https://github.com/laurent22/joplin/issues/2346)) ([#2334](https://github.com/laurent22/joplin/issues/2334) by [@bart](https://github.com/bart))
+- Fixed: Prevent title overflow on small windows ([#2918](https://github.com/laurent22/joplin/issues/2918)) ([#2917](https://github.com/laurent22/joplin/issues/2917) by anirudh murali)
+- Fixed: Fixed top margin of toolbar ([#2828](https://github.com/laurent22/joplin/issues/2828)) ([#2824](https://github.com/laurent22/joplin/issues/2824) by Siddhant Sehgal)
+
 ## [v1.0.195](https://github.com/laurent22/joplin/releases/tag/v1.0.195) - 2020-03-22T19:56:12Z
 
 - New: Added experimental WYSIWYG editor ([#2556](https://github.com/laurent22/joplin/issues/2556)) ([#176](https://github.com/laurent22/joplin/issues/176))

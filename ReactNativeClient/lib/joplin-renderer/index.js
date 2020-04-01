@@ -4,4 +4,5 @@ module.exports = {
 	HtmlToHtml: require('./HtmlToHtml'),
 	setupLinkify: require('./MdToHtml/setupLinkify'),
 	assetsToHeaders: require('./assetsToHeaders'),
+	utils: require('./utils'),
 };

@@ -1225,7 +1225,14 @@ class NoteTextComponent extends React.Component {
 			const filePath = filePaths[i];
 			try {
 				reg.logger().info(`Attaching ${filePath}`);
-				note = await shim.attachFileToNote(note, filePath, position, createFileURL);
+				note = await shim.attachFileToNote(note, filePath, position, {
+					createFileURL: createFileURL,
+					resizeLargeImages: 'ask',
+				});
+				if (!note) {
+					reg.logger().info('File attachment was cancelled');
+					continue;
+				}
 				reg.logger().info('File was attached.');
 				this.setState({
 					note: Object.assign({}, note),
@@ -2023,6 +2030,7 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+			overflow: 'hidden',
 		};
 
 		const toolbarStyle = {
