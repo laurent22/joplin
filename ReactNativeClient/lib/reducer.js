@@ -108,26 +108,6 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	return output ? output : [];
 };
 
-
-
-// let parentType = state.notesParentType;
-
-
-// if (parentType === 'Folder') {
-// 	parentId = state.selectedFolderId;
-// 	parentType = BaseModel.TYPE_FOLDER;
-// } else if (parentType === 'Tag') {
-// 	parentId = state.selectedTagId;
-// 	parentType = BaseModel.TYPE_TAG;
-// } else if (parentType === 'Search') {
-// 	parentId = state.selectedSearchId;
-// 	parentType = BaseModel.TYPE_SEARCH;
-// } else if (parentType === 'SmartFilter') {
-// 	parentId = state.selectedSmartFilterId;
-// 	parentType = BaseModel.TYPE_SMART_FILTER;
-// }
-
-// state.searches??
 stateUtils.getCurrentNote = function(state) {
 	const selectedNoteIds = state.selectedNoteIds;
 	const notes = state.notes;
@@ -439,13 +419,9 @@ function handleHistory(state, action) {
 			forwardHistoryNotes = forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		// change notes like in NOTE_FOLDER_SELECT
-
-		// newState = changeSelectedFolder(newState, Object.assign({}, action, {type: 'FOLDER_SELECT', id: note.parent_id,  clearSelectedNoteIds: true}));
 		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
 		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
 
-		// CREATE CONTEXT
 		const ctx = backwardHistoryNotes[backwardHistoryNotes.length - 1];
 		newState = Object.assign(newState, getContextFromHistory(ctx));
 
@@ -470,12 +446,11 @@ function handleHistory(state, action) {
 		break;
 	}
 	case 'NOTE_SELECT':
-		// User navigation
 		if (currentNote != null &&  action.id != currentNote.id) {
 			forwardHistoryNotes = [];
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
-		// Make sure navigating to empty note does not introduce history corruption
+		// History should be free from duplicates.
 		if (backwardHistoryNotes != null && backwardHistoryNotes.length > 0 &&
 						action.id === backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
 			backwardHistoryNotes.pop();
@@ -1030,7 +1005,6 @@ const reducer = (state = defaultState, action) => {
 			break;
 		case 'HISTORY_BACKWARD':
 		case 'HISTORY_FORWARD':
-			// newState = Object.assign({}, state);
 			newState = handleHistory(newState, action);
 		}
 	} catch (error) {
