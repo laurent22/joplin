@@ -421,6 +421,7 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'TAG_SELECT',
 			id: tag ? tag.id : null,
+			historyAction: 'goto',
 		});
 	}
 

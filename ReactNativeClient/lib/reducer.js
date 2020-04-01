@@ -142,6 +142,7 @@ stateUtils.getCurrentNote = function(state) {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
 				selectedSearchId: state.selectedSearchId,
+				searches: state.searches,
 				selectedSmartFilterId: state.selectedSmartFilterId,
 			};
 		}
@@ -408,6 +409,22 @@ function removeItemFromArray(array, property, value) {
 // state.searches??
 
 
+const getContextFromHistory = (ctx) => {
+	const result = {};
+	result.notesParentType = ctx.notesParentType;
+	if (result.notesParentType === 'Folder') {
+		result.selectedFolderId = ctx.selectedFolderId;
+	} else if (result.notesParentType === 'Tag') {
+		result.selectedTagId = ctx.selectedTagId;
+	} else if (result.notesParentType === 'Search') {
+		result.selectedSearchId = ctx.selectedSearchId;
+		result.searches = ctx.searches;
+	} else if (result.notesParentType === 'SmartFilter') {
+		result.selectedSmartFilterId = ctx.selectedSmartFilterId;
+	}
+	return result;
+};
+
 
 
 function handleHistory(state, action) {
@@ -433,9 +450,12 @@ function handleHistory(state, action) {
 		// newState = changeSelectedFolder(newState, Object.assign({}, action, {type: 'FOLDER_SELECT', id: note.parent_id,  clearSelectedNoteIds: true}));
 		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
 		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
-		backwardHistoryNotes.pop();
 
 		// CREATE CONTEXT
+		const ctx = backwardHistoryNotes[backwardHistoryNotes.length - 1];
+		newState = Object.assign(newState, getContextFromHistory(ctx));
+
+		backwardHistoryNotes.pop();
 		break;
 	}
 	case 'HISTORY_FORWARD': {
@@ -444,10 +464,15 @@ function handleHistory(state, action) {
 		if (currentNote != null && (backwardHistoryNotes.length === 0 || currentNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id)) {
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
-		forwardHistoryNotes.pop();
 
 		newState = changeSelectedFolder(newState, Object.assign({}, action, { type: 'FOLDER_SELECT', folderId: note.parent_id }));
 		newState = changeSelectedNotes(newState, Object.assign({}, action, { type: 'NOTE_SELECT', noteId: note.id }));
+
+		const ctx = forwardHistoryNotes[forwardHistoryNotes.length - 1];
+		newState = Object.assign(newState, getContextFromHistory(ctx));
+
+
+		forwardHistoryNotes.pop();
 		break;
 	}
 	case 'NOTE_SELECT':
@@ -462,6 +487,7 @@ function handleHistory(state, action) {
 			backwardHistoryNotes.pop();
 		}
 		break;
+	case 'TAG_SELECT':
 	case 'FOLDER_SELECT':
 		if (currentNote != null && action.historyAction == 'goto') {
 			forwardHistoryNotes = [];
@@ -771,7 +797,8 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_SELECT':
-			newState = Object.assign({}, state);
+			newState = handleHistory(state, action);
+			newState = Object.assign({}, newState);
 			newState.selectedTagId = action.id;
 			if (!action.id) {
 				newState.notesParentType = defaultNotesParentType(state, 'Tag');
