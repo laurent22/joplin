@@ -13,6 +13,7 @@ module.exports = {
 	raisedBackgroundColor: '#e5e5e5',
 	htmlCodeColor: 'rgb(0,0,0)',
 	htmlCodeFontSize: '.9em',
+	bodyPaddingBottom: '0',
 
 	editorTheme: 'chrome',
 	codeThemeCss: 'atom-one-light.css',

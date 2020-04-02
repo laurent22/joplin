@@ -64,7 +64,16 @@ function shimInit() {
 		}
 	};
 
-	const resizeImage_ = async function(filePath, targetPath, mime) {
+	shim.showMessageBox = (message, options = null) => {
+		if (shim.isElectron()) {
+			const { bridge } = require('electron').remote.require('./bridge');
+			return bridge().showMessageBox(message, options);
+		} else {
+			throw new Error('Not implemented');
+		}
+	};
+
+	const handleResizeImage_ = async function(filePath, targetPath, mime, resizeLargeImages) {
 		const maxDim = Resource.IMAGE_MAX_DIMENSION;
 
 		if (shim.isElectron()) {
@@ -75,9 +84,21 @@ function shimInit() {
 
 			const size = image.getSize();
 
-			if (size.width <= maxDim && size.height <= maxDim) {
+			let mustResize = size.width > maxDim || size.height > maxDim;
+
+			if (mustResize && resizeLargeImages === 'ask') {
+				const answer = shim.showMessageBox(_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', size.width, size.height, maxDim), {
+					buttons: [_('Yes'), _('No'), _('Cancel')],
+				});
+
+				if (answer === 2) return false;
+
+				mustResize = answer === 0;
+			}
+
+			if (!mustResize) {
 				shim.fsDriver().copy(filePath, targetPath);
-				return;
+				return true;
 			}
 
 			const options = {};
@@ -99,7 +120,7 @@ function shimInit() {
 
 			if (md.width <= maxDim && md.height <= maxDim) {
 				shim.fsDriver().copy(filePath, targetPath);
-				return;
+				return true;
 			}
 
 			return new Promise((resolve, reject) => {
@@ -117,9 +138,15 @@ function shimInit() {
 					});
 			});
 		}
+
+		return true;
 	};
 
-	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
+	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
+		options = Object.assign({
+			resizeLargeImages: 'always', // 'always' or 'ask'
+		}, options);
+
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
@@ -155,8 +182,9 @@ function shimInit() {
 
 		const targetPath = Resource.fullPath(resource);
 
-		if (resource.mime == 'image/jpeg' || resource.mime == 'image/jpg' || resource.mime == 'image/png') {
-			await resizeImage_(filePath, targetPath, resource.mime);
+		if (['image/jpeg', 'image/jpg', 'image/png'].includes(resource.mime)) {
+			const ok = await handleResizeImage_(filePath, targetPath, resource.mime, options.resizeLargeImages);
+			if (!ok) return null;
 		} else {
 			// const stat = await shim.fsDriver().stat(filePath);
 			// if (stat.size >= 10000000) throw new Error('Resources larger than 10 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
@@ -177,15 +205,21 @@ function shimInit() {
 		return Resource.save(resource, { isNew: true });
 	};
 
-	shim.attachFileToNote = async function(note, filePath, position = null, createFileURL = false) {
+	shim.attachFileToNote = async function(note, filePath, position = null, options = null) {
+		options = Object.assign({}, {
+			createFileURL: false,
+		}, options);
+
 		const { basename } = require('path');
 		const { escapeLinkText } = require('lib/markdownUtils');
 		const { toFileProtocolPath } = require('lib/path-utils');
 
-		let resource = [];
-		if (!createFileURL) {
-			resource = await shim.createResourceFromPath(filePath);
+		let resource = null;
+		if (!options.createFileURL) {
+			resource = await shim.createResourceFromPath(filePath, null, options);
 		}
+
+		if (!resource) return null;
 
 		const newBody = [];
 
@@ -195,7 +229,7 @@ function shimInit() {
 
 		if (note.body && position) newBody.push(note.body.substr(0, position));
 
-		if (!createFileURL) {
+		if (!options.createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
 		} else {
 			const filename = escapeLinkText(basename(filePath)); // to get same filename as standard drag and drop

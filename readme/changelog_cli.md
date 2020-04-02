@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.162](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162) - 2020-04-01T17:16:14Z
+
+- New: Compatibility with new master key and sync target encryption
+
 ## [cli-v1.0.161](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161) - 2020-03-07T01:20:04Z
 
 - New: Add more context to encryption errors
