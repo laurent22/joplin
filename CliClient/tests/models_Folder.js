@@ -155,6 +155,11 @@ describe('models_Folder', function() {
 		expect(foldersById[f2.id].note_count).toBe(0);
 		expect(foldersById[f3.id].note_count).toBe(2);
 		expect(foldersById[f4.id].note_count).toBe(0);
+
+		expect(foldersById[f1.id].note_count_all).toBe(3);
+		expect(foldersById[f2.id].note_count_all).toBe(2);
+		expect(foldersById[f3.id].note_count_all).toBe(2);
+		expect(foldersById[f4.id].note_count_all).toBe(0);
 	}));
 
 	it('should not count completed to-dos', asyncTest(async () => {
@@ -182,6 +187,11 @@ describe('models_Folder', function() {
 		expect(foldersById[f2.id].note_count).toBe(0);
 		expect(foldersById[f3.id].note_count).toBe(3);
 		expect(foldersById[f4.id].note_count).toBe(0);
+
+		expect(foldersById[f1.id].note_count_all).toBe(4);
+		expect(foldersById[f2.id].note_count_all).toBe(3);
+		expect(foldersById[f3.id].note_count_all).toBe(3);
+		expect(foldersById[f4.id].note_count_all).toBe(0);
 	}));
 
 	it('should recursively find folder path', asyncTest(async () => {
