@@ -30,6 +30,11 @@ class Resource extends BaseItem {
 		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
+	static isSupportedAudioMimeType(type) {
+		const audioMimeTypes = ['audio/wav', 'audio/mpeg', 'audio/aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac'];
+		return audioMimeTypes.indexOf(type.toLowerCase()) >= 0;
+	}
+
 	static fetchStatuses(resourceIds) {
 		if (!resourceIds.length) return [];
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
