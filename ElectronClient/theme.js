@@ -304,6 +304,13 @@ function addExtraStyles(style) {
 		{ color: style.color2 }
 	);
 
+	style.textStyleMinor = Object.assign({}, style.textStyle,
+		{
+			color: style.colorFaded,
+			fontSize: style.fontSize * 0.8,
+		},
+	);
+
 	style.urlStyle = Object.assign({}, style.textStyle,
 		{
 			textDecoration: 'underline',

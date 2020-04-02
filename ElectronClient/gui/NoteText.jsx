@@ -427,6 +427,9 @@ class NoteTextComponent extends React.Component {
 		if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
 			noteTags = this.props.noteTags || [];
+			await this.handleResourceDownloadMode(note);
+		} else {
+			console.warn('Trying to load a note with no ID - should no longer be possible');
 		}
 
 		const folder = note ? Folder.byId(this.props.folders, note.parent_id) : null;
@@ -612,10 +615,7 @@ class NoteTextComponent extends React.Component {
 				}, 10);
 			}
 
-			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
-				const resourceIds = await Note.linkedResourceIds(note.body);
-				await ResourceFetcher.instance().markForDownload(resourceIds);
-			}
+			await this.handleResourceDownloadMode(note);
 		}
 
 		if (note) {
@@ -653,6 +653,13 @@ class NoteTextComponent extends React.Component {
 		await this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
 
 		defer();
+	}
+
+	async handleResourceDownloadMode(note) {
+		if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			const resourceIds = await Note.linkedResourceIds(note.body);
+			await ResourceFetcher.instance().markForDownload(resourceIds);
+		}
 	}
 
 	async UNSAFE_componentWillReceiveProps(nextProps) {

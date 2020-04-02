@@ -2,14 +2,17 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand } from '../utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand, resourcesStatus } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale');
+const { themeStyle, buildStyle } = require('../../theme.js');
 
 interface TinyMCEProps {
 	style: any,
+	theme: number,
 	onChange(event: OnChangeEvent): void,
 	onWillChange(event:any): void,
 	onMessage(event:any): void,
@@ -95,6 +98,30 @@ const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 };
 
+function styles_(props:TinyMCEProps) {
+	return buildStyle('TinyMCE', props.theme, (/* theme:any */) => {
+		return {
+			disabledOverlay: {
+				zIndex: 10,
+				position: 'absolute',
+				backgroundColor: 'white',
+				opacity: 0.7,
+				height: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				padding: 20,
+				paddingTop: 50,
+				textAlign: 'center',
+			},
+			rootStyle: {
+				position: 'relative',
+				...props.style,
+			},
+		};
+	});
+}
+
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
@@ -113,6 +140,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	joplinHtml.current = props.joplinHtml;
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
+
+	const styles = styles_(props);
+	const theme = themeStyle(props.theme);
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
@@ -425,6 +455,11 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	useEffect(() => {
 		if (!editor) return () => {};
 
+		if (resourcesStatus(props.defaultEditorState.resourceInfos) !== 'ready') {
+			editor.setContent('');
+			return () => {};
+		}
+
 		let cancelled = false;
 
 		const loadContent = async () => {
@@ -561,7 +596,25 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 	}, [props.onWillChange, props.onChange, editor]);
 
-	return <div style={props.style} id={rootIdRef.current}/>;
+	function renderDisabledOverlay() {
+		const status = resourcesStatus(props.defaultEditorState.resourceInfos);
+		if (status === 'ready') return null;
+
+		const message = _('Please wait for all attachments to be downloaded and decrypted. You may also switch the layout and edit the note in Markdown mode.');
+		return (
+			<div style={styles.disabledOverlay}>
+				<p style={theme.textStyle}>{message}</p>
+				<p style={theme.textStyleMinor}>{`Status: ${status}`}</p>
+			</div>
+		);
+	}
+
+	return (
+		<div style={styles.rootStyle}>
+			{renderDisabledOverlay()}
+			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
+		</div>
+	);
 };
 
 export default forwardRef(TinyMCE);
