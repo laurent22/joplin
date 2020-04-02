@@ -18,8 +18,8 @@ module.exports = function(theme) {
 			line-height: ${theme.htmlLineHeight};
 			background-color: ${theme.htmlBackgroundColor};
 			font-family: ${fontFamily};
-			padding-bottom: ${theme.paddingBottom};
-			padding-top: ${theme.paddingTop};
+			padding-bottom: ${theme.bodyPaddingBottom}px;
+			padding-top: ${theme.bodyPaddingTop}px;
 		}
 		strong {
 			color: ${theme.colorBright};
