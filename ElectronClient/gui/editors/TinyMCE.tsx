@@ -160,7 +160,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			dispatchDidUpdate(editor);
 		}
 
-		if (nodeName === 'A' && event.ctrlKey) {
+		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
 
 			if (href.indexOf('#') === 0) {

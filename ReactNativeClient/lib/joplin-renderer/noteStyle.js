@@ -296,6 +296,11 @@ module.exports = function(theme) {
 			opacity: 0.5;
 		}
 
+		/* We need that to make sure click events have the A has a target */
+		.katex a span {
+			pointer-events: none;
+		}
+
 		/* =============================================== */
 		/* For TinyMCE */
 		/* =============================================== */
