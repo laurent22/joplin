@@ -25,7 +25,7 @@ class Resource extends BaseItem {
 		return this.encryptionService_;
 	}
 
-	static isSupportedMimeType(type) {
+	static isSupportedImageMimeType(type) {
 		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp', 'audio/wav', 'audio/mpeg', 'audio/aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac'];
 		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
