@@ -384,6 +384,9 @@ function addExtraStyles(style) {
 
 	style.dropdownList = Object.assign({}, style.inputStyle);
 
+	style.colorHover = style.color;
+	style.backgroundHover = `${style.selectedColor2}44`;
+
 	// In general the highlighted color, used to highlight text or icons, should be the same as selectedColor2
 	// but some times, depending on the theme, it might be too dark or too light, so it can be
 	// specified directly by the theme too.
