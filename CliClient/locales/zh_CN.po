@@ -795,7 +795,7 @@ msgstr "从模版创建笔记"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr "从模版创建TODO列表"
+msgstr "从模版创建To-Do列表"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
 msgid "Insert template"
