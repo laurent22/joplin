@@ -23,7 +23,12 @@ const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
-
+const createGlobalProxyAgent = require('global-agent').createGlobalProxyAgent;
+const globalProxyAgent = createGlobalProxyAgent({
+	socketConnectionTimeout: 10000,
+	forceGlobalAgent: true,
+	environmentVariableNamespace: 'GLOBAL_AGENT_',
+});
 class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
@@ -33,6 +38,7 @@ class MainScreenComponent extends React.Component {
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
+		globalProxyAgent.HTTP_PROXY = Setting.value('proxy');
 	}
 
 	sidebar_onDrag(event) {

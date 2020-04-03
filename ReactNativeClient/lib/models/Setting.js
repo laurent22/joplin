@@ -51,6 +51,13 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
+			'proxy': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: true,
+				appTypes: ['desktop'],
+				label: () => _('Proxy address'),
+			},
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
 				type: Setting.TYPE_INT,
