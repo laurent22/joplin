@@ -2,10 +2,10 @@
 const htmlUtils = require('../../htmlUtils.js');
 const utils = require('../../utils');
 
-function renderImageHtml(before, src, after, ruleOptions) {
+function renderImageHtml(type, before, src, after, ruleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 	if (typeof r === 'string') return r;
-	if (r) return `<img ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
+	if (r) return `<${type} ${before} ${htmlUtils.attributesHtml(r)} ${after}/>`;
 	return `[Image: ${src}]`;
 }
 
@@ -25,17 +25,21 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		};
 
 	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)>/gi;
+	const audioRegex = /<source(.*?)src=["'](.*?)["'](.*?)>/gi;
 
 	const handleImageTags = function(defaultRender) {
 		return function(tokens, idx, options, env, self) {
 			const token = tokens[idx];
 			const content = token.content;
 
-			if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
+			if (!content.match(imageRegex) && !content.match(audioRegex)) return defaultRender(tokens, idx, options, env, self);
 
-			return content.replace(imageRegex, (v, before, src, after) => {
-				if (!Resource.isResourceUrl(src)) return `<img${before}src="${src}"${after}>`;
-				return renderImageHtml(before, src, after, ruleOptions);
+			const tagType = content.match(imageRegex) ? 'img' : 'source';
+			const tagRegex = content.match(imageRegex) ? imageRegex : audioRegex;
+
+			return content.replace(tagRegex, (v, before, src, after) => {
+				if (!Resource.isResourceUrl(src)) return `<${tagType}${before}src="${src}"${after}>`;
+				return renderImageHtml(tagType, before, src, after, ruleOptions);
 			});
 		};
 	};

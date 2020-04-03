@@ -13,7 +13,6 @@ const rules = {
 	katex: require('./MdToHtml/rules/katex'),
 	link_open: require('./MdToHtml/rules/link_open'),
 	html_image: require('./MdToHtml/rules/html_image'),
-	html_audio: require('./MdToHtml/rules/html_audio'),
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords'),
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),

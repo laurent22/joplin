@@ -25,14 +25,9 @@ class Resource extends BaseItem {
 		return this.encryptionService_;
 	}
 
-	static isSupportedImageMimeType(type) {
-		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
-		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
-	}
-
-	static isSupportedAudioMimeType(type) {
-		const audioMimeTypes = ['audio/wav', 'audio/mpeg', 'audio/aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac'];
-		return audioMimeTypes.indexOf(type.toLowerCase()) >= 0;
+	static isSupportedMimeType(type) {
+		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp', 'audio/wav', 'audio/mpeg', 'audio/aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac'];
+		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
 
 	static fetchStatuses(resourceIds) {
