@@ -117,10 +117,11 @@ class PromptDialog extends React.Component {
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
 				}),
-			option: provided =>
+			option: (provided, state) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
+					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				}),
 			multiValueLabel: provided =>
 				Object.assign(provided, {
