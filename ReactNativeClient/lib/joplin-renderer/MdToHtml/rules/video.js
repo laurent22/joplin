@@ -4,7 +4,7 @@ module.exports = function installRule(markdownIt) {
 
 	const defaultRender = markdownIt.renderer.rules.link_open;
 	const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-	// videoIDRegex extracts the unique 11 alpha-numeric code which is unique to every youtube video
+	// videoIDRegex extracts the unique 11 digit code which is unique to every youtube video
 
 	markdownIt.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 		const token = tokens[idx];
