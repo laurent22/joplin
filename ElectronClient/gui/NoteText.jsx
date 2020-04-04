@@ -34,7 +34,7 @@ const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const { toSystemSlashes, safeFilename } = require('lib/path-utils');
+const { toSystemSlashes } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
@@ -1303,10 +1303,6 @@ class NoteTextComponent extends React.Component {
 		this.isPrinting_ = false;
 	}
 
-	pdfFileName_(note, folder) {
-		return safeFilename(`${note.title} - ${folder.title}.pdf`, 255, true);
-	}
-
 	async commandSavePdf(args) {
 		try {
 			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
@@ -1315,12 +1311,9 @@ class NoteTextComponent extends React.Component {
 
 			let path = null;
 			if (noteIds.length === 1) {
-				const note = await Note.load(noteIds[0]);
-				const folder = Folder.byId(this.props.folders, note.parent_id);
-
 				path = bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: this.pdfFileName_(note, folder),
+					defaultPath: await InteropServiceHelper.defaultFilename(noteIds, 'pdf'),
 				});
 
 			} else {

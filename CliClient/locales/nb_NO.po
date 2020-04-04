@@ -763,9 +763,8 @@ msgid "Sidebar"
 msgstr "Sidepanel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:369
-#, fuzzy
 msgid "Note list"
-msgstr "Notathistorikk"
+msgstr "Notatlist"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:375
 msgid "Note title"
@@ -817,13 +816,12 @@ msgid "Print"
 msgstr "Skriv ut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:562
-#, fuzzy
 msgid "Create note from template"
-msgstr "Legg inn mal"
+msgstr "Opprett notat fra mal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Opprett et gjøremål fra mal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
 msgid "Insert template"
@@ -831,12 +829,11 @@ msgstr "Legg inn mal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:592
 msgid "Open template directory"
-msgstr "Åpne malkatalog"
+msgstr "Åpne maler"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:599
-#, fuzzy
 msgid "Refresh templates"
-msgstr "Legg inn mal"
+msgstr "Oppdater maler"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:612
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
@@ -845,9 +842,8 @@ msgstr "Generelle innstillinger"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "Ressurser: %d."
+msgstr "Ressurser"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
@@ -860,19 +856,19 @@ msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Ferdig: %s"
+msgstr "Klient-ID: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Ny versjon: %s"
+msgstr "Synkroniser versjon: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Ny versjon: %s"
+msgstr "Profilversjon: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
@@ -1045,15 +1041,15 @@ msgstr "Fokuser"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Actual Size"
-msgstr ""
+msgstr "Faktisk størrelse"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom In"
-msgstr ""
+msgstr "Zoom inn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zoom ut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 msgid "&Tools"
@@ -1243,50 +1239,45 @@ msgid "Check synchronisation configuration"
 msgstr "Sjekk synkroniseringskonfigurasjon"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:174
-#, fuzzy
 msgid "Unknown"
-msgstr "Ukjent flagg: %s"
+msgstr "Ukjent"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:178
-#, fuzzy
 msgid "Checking..."
-msgstr "Avbryter…"
+msgstr "Sjekker...…"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:289
-#, fuzzy
 msgid "Error"
-msgstr "Kun feilmeldinger"
+msgstr "Feil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:193
 msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Joplins Nextcloud-app er enten ikke installert eller feilkonfigurert. Vennligst "
+"se den fulle feilmeldingen under:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:206
-#, fuzzy
 msgid "Show Log"
-msgstr "Vis alle"
+msgstr "Vis logg"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:219
 msgid "Joplin Nextcloud App status:"
-msgstr ""
+msgstr "Joplin Nextcloud-appstatus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:233
-#, fuzzy
 msgid "Check Status"
-msgstr "Synkroniseringsstatus"
+msgstr "Sjekk status"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:240
-#, fuzzy
 msgid "Help"
-msgstr "&Hjelp"
+msgstr "Hjelp"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:259
-#, fuzzy
 msgid "Show Advanced Settings"
-msgstr "Avanserte innstillinger"
+msgstr "Vis avanserte innstillinger"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:516
 msgid "Browse..."
@@ -1320,7 +1311,7 @@ msgstr "Lagre"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Mesternøkler som må oppgraderes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1328,6 +1319,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"De følgende mesternøklene bruker en utdatert krypteringsalgoritme og det "
+"er anbefalt å oppgradere dem. Den oppgraderte mesternøkkelen vil fortsatt la "
+"deg dekryptere og kryptere ditt innhold som vanlig."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1338,24 +1332,27 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Oppgrader"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "Velg dato"
+msgstr "Rekrypter data"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Standard krypteringsmetode har blitt endret til en mer sikker en og det er "
+"anbefalt at du velger den for ditt innhold."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Du kan bruke verktøyet under for å rekryptere ditt innhold, for eksempel  hvis "
+"du vet at noen av dine notater er kryptert med en utdatert krypteringsmetode."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1399,16 +1396,15 @@ msgstr "Få den nå:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "Notategenskaper"
+msgstr "Notatbokegenskaper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1477,18 +1473,17 @@ msgid "Set the password"
 msgstr "Sett passord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "En eller flere masternøkler trenger et passord."
+msgstr "En eller flere masternøkler bruker en utdatert krypteringsmetode."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"Standard krypteringsmetode har blitt endret. Du bør rekryptere ditt innhold."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
 msgid "More info"
 msgstr "Mer informasjon"
 
@@ -1503,29 +1498,28 @@ msgstr "Søk..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Ord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Tegn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Tegn uten mellomrom"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Linjer"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "Notategenskaper"
+msgstr "Innholdsegenskaper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
-msgstr ""
+msgstr "Lukk"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:456
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1546,9 +1540,8 @@ msgid "Updated"
 msgstr "Oppdatert"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Ferdig: %s"
+msgstr "Fullført"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1629,12 +1622,11 @@ msgstr "Kopier linkadresse"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:826
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Det oppstod en feil ved nedlastingen av dette vedlegget:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:828
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Dette vedlegget er enda ikke lastet ned eller dekryptert."
+msgstr "Dette vedlegget er ikke lastet ned eller dekryptert enda."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1075
 #, javascript-format
@@ -1645,9 +1637,8 @@ msgstr ""
 "Dette notatet har ikke noe innhold. Klikk på \"%s\" for å redigere notatet."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1311
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "Kun ett notat kan bli printet eller eksportert som PDF om gangen."
+msgstr "Kun ett notat kan bli printet om gangen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1521
 msgid "strong text"
@@ -1685,7 +1676,7 @@ msgstr "I: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
 msgid "Front"
-msgstr ""
+msgstr "Front"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
 msgid "Hyperlink"
@@ -1720,9 +1711,8 @@ msgid "Watching..."
 msgstr "Observerer..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1841
-#, fuzzy
 msgid "Content Properties"
-msgstr "Notategenskaper"
+msgstr "Innholdsegenskaper"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2110
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:582
@@ -1745,18 +1735,16 @@ msgid "Clear"
 msgstr "Nullstill"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
-msgstr "tittel"
+msgstr "Tittel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Størrelse"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
-#, fuzzy
 msgid "Action"
-msgstr "Lokasjon"
+msgstr "Handling"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
@@ -1769,18 +1757,17 @@ msgid "Delete"
 msgstr "Slett"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "Sjekker… Vennligst vent."
+msgstr "Vennligst vent..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "Ingen ressurser!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "Advarsel: ikke alle ressurser vist av ytelseshensyn (grense: %s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1791,40 +1778,36 @@ msgid "Dropbox Login"
 msgstr "Innlogging med Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
-#, fuzzy
 msgid "Synchronising..."
-msgstr "Synkronisering"
+msgstr "Synkroniserer..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:160
-#, fuzzy
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Oppretter nytt %s..."
-msgstr[1] "Oppretter nytt %s..."
+msgstr[0] "Genererer link..."
+msgstr[1] "Genererer linker..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:162
-#, fuzzy
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Bevis har blitt kopiert til utklippstavlen!"
-msgstr[1] "Bevis har blitt kopiert til utklippstavlen!"
+msgstr[0] "Linken har blitt kopiert til utklippstavlen!"
+msgstr[1] "Linkene har blitt kopiert til utklippstavlen!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:165
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Merk: Når et notat blir delt vil det ikke lenger være kryptert på serveren."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
-#, fuzzy
 msgid "Share Notes"
-msgstr "Gjenopprettede notater"
+msgstr "Del notater"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:172
-#, fuzzy
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Del"
-msgstr[1] "Del"
+msgstr[0] "Kopier delbar link"
+msgstr[1] "Kopier delbare linker"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:282
 msgid "Remove"
@@ -1905,9 +1888,8 @@ msgid "%s - Copy"
 msgstr "%s - Kopier"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:65
-#, fuzzy
 msgid "Stop external editing"
-msgstr "Klikk for å stoppe ekstern redigering"
+msgstr "Stopp ekstern redigering"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:77
 msgid "Switch between note and to-do type"
@@ -1927,9 +1909,8 @@ msgid "Copy Markdown link"
 msgstr "Kopier Markdown-link"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:134
-#, fuzzy
 msgid "Share note..."
-msgstr "Gjenopprettede notater"
+msgstr "Del notat..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:202
 #, javascript-format
@@ -1947,13 +1928,13 @@ msgid "Error opening note in editor: %s"
 msgstr "Feil ved åpning av notat i editor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:394
-#, fuzzy
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name, or / followed by note content."
 msgstr ""
 "Skriv inn tittelen på et notat for å hoppe til det. Eller skriv # etterfulgt "
-"av en merkelapp, eller @ etterfulgt av tittelen på en notatbok."
+"av en merkelapp, eller @ etterfulgt av tittelen på en notatbok, eller / etterfulgt ."
+"av notatinnhold."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:432
 msgid "Goto Anything..."
@@ -1979,6 +1960,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Kunne ikke koble til Joplins Nextcloud-app. Vennligst sjekk at "
+"konfigurasjonen i synkroniseringsinnstillingene. Full feilmelding var:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2183,13 +2168,12 @@ msgid "Not downloaded"
 msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
-#, fuzzy
 msgid "Downloading"
-msgstr "Laster ned ressurser..."
+msgstr "Laster ned"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Nedlastet"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2329,13 +2313,12 @@ msgid "Nord"
 msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Mørk"
+msgstr "OLED mørk"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Show note counts"
-msgstr "Vis notatantall"
+msgstr "Vis antall notater"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:265
@@ -2369,9 +2352,8 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
-#, fuzzy
 msgid "Split"
-msgstr "Splitvisning"
+msgstr "Splitt"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
 msgid "Uncompleted to-dos on top"
@@ -2387,7 +2369,7 @@ msgstr "Sorter notater etter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:297
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Automatisk lukk klammer, paranteser, fnutter, etc."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:299
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
@@ -2477,9 +2459,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Aktiver Fountain syntaksstøtte"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Aktiver typografsupport"
+msgstr "Aktiver Mermaid-diagramsupport"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:392
 msgid "Show tray icon"
@@ -2526,7 +2507,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr ""
+msgstr "Eget stilark for Joplin sin appstil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Automatically update the application"
@@ -2637,7 +2618,7 @@ msgstr "Ignorer TLS-sertifikatfeil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
 msgid "Fail-safe"
-msgstr ""
+msgstr "Feilsikker"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:573
 msgid ""
@@ -2742,14 +2723,12 @@ msgid "Json Export Directory"
 msgstr "Json-eksportert katalog"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:89
-#, fuzzy
 msgid "HTML File"
-msgstr "Fil"
+msgstr "HTML-fil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:94
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Katalog"
+msgstr "HTML-katalog"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:130
 msgid "File"
@@ -2829,29 +2808,27 @@ msgstr ""
 "Joplin vil ikke lenger forsøke å dekryptere de."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
-#, fuzzy
 msgid "Attachments"
-msgstr "Legg ved fil"
+msgstr "Vedlegg"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Nedlastet og dekryptert"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "%s: %s"
+msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Nedlastet og kryptert"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Element \"%s\" ble ikke nedlastet: %s"
+msgstr "Vedlegg som ikke kunne lastes ned"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 #, javascript-format
@@ -2938,9 +2915,8 @@ msgid "Press to set the decryption password."
 msgstr "Trykk for å sette dekrypteringspassordet."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:419
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Noen elementer kan ikke synkroniseres."
+msgstr "Noen elementer kan ikke synkroniseres. Press for mer info."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -3015,25 +2991,28 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Vennligst bekreft at du vil forsøke å rekryptere hele din database."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Ditt innhold vil bli rekryptert og synkronisert igjen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Vennligst skriv inn ditt passor i mesternøkkellisten under før du opppgraderer "
+"nøkkelen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Mesternøkkelen har blitt oppgradert!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr "Kunne ikke eksportere notater: %s"
+msgstr "Kunne ikke oppgradere mesternøkler: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3108,18 +3087,16 @@ msgstr ""
 "Det kan ta lang tid avhengig av antall notater."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
-#, fuzzy
 msgid "Exporting profile..."
-msgstr "Importer notater..."
+msgstr "Eksporterer profil..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
-#, fuzzy
 msgid "Export profile"
-msgstr "Joplin-eksportert fil"
+msgstr "Eksporter profil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "For debugginghensyn: eksporter din profil til et eksternt SD-kort"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:462
 msgid "More information"
@@ -3404,9 +3381,8 @@ msgstr "Søk"
 #~ "som \"aktiv\"). Hvilken som helst av nøklene kan brukes til dekryptering, "
 #~ "avhengig av hvordan notatene eller notatbøkene opprinnelig ble kryptert."
 
-#, fuzzy
 #~ msgid "marked text"
-#~ msgstr "kursiv tekst"
+#~ msgstr "markert tekst"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "Global forstørrelse"
@@ -3417,17 +3393,14 @@ msgstr "Søk"
 #~ msgid "Synchronisation is already in progress. State: %s"
 #~ msgstr "Synkronisering pågår allerede. Status: %s"
 
-#, fuzzy
 #~ msgid "Confirm master password:"
-#~ msgstr "Skriv inn masterpassordet:"
+#~ msgstr "Bekreft masterpassordet:"
 
-#, fuzzy
 #~ msgid "Confirm password"
-#~ msgstr "Skriv inn masterpassordet:"
+#~ msgstr "Bekreft passord"
 
-#, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "Mangler nødvendig argument: %s"
+#~ msgstr "Mangler nødvendig argument: note"
 
 #~ msgid "Starting to edit note. Close the editor to get back to the prompt."
 #~ msgstr ""
