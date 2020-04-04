@@ -217,9 +217,8 @@ function shimInit() {
 		let resource = null;
 		if (!options.createFileURL) {
 			resource = await shim.createResourceFromPath(filePath, null, options);
+			if (!resource) return null;
 		}
-
-		if (!resource) return null;
 
 		const newBody = [];
 
