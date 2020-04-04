@@ -37,6 +37,19 @@ class NoteListUtils {
 
 			menu.append(
 				new MenuItem({
+					label: _('Move to notebook'),
+					click: () => {
+						props.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'moveToFolder',
+							noteIds: noteIds,
+						});
+					},
+				})
+			);
+
+			menu.append(
+				new MenuItem({
 					label: _('Duplicate'),
 					click: async () => {
 						for (let i = 0; i < noteIds.length; i++) {

@@ -208,6 +208,35 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
+		} else if (command.name === 'moveToFolder') {
+			const startFolders = [];
+			const maxDepth = 15;
+
+			const addOptions = (folders, depth) => {
+				for (let i = 0; i < folders.length; i++) {
+					const folder = folders[i];
+					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
+					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
+				}
+			};
+			addOptions(await Folder.allAsTree(), 0);
+
+			this.setState({
+				promptOptions: {
+					label: _('Move to notebook:'),
+					inputType: 'dropdown',
+					value: '',
+					autocomplete: startFolders,
+					onClose: async answer => {
+						if (answer != null) {
+							for (let i = 0; i < command.noteIds.length; i++) {
+								await Note.moveToFolder(command.noteIds[i], answer.value);
+							}
+						}
+						this.setState({ promptOptions: null });
+					},
+				},
+			});
 		} else if (command.name === 'renameFolder') {
 			const folder = await Folder.load(command.id);
 
