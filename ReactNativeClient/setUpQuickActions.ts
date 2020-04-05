@@ -19,6 +19,8 @@ export default (dispatch: Function, folderId: string) => {
 	]);
 
 	const handleQuickAction = (data: TData) => {
+		if (!data) return;
+
 		// This dispatch is to momentarily go back to reset state, similar to what
 		// happens in onJoplinLinkClick_(). Easier to just go back, then go to the
 		// note since the Note screen doesn't handle reloading a different note.
