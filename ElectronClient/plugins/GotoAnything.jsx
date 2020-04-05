@@ -48,7 +48,7 @@ class Dialog extends React.PureComponent {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
-		this.modalLayer_onClick = this.dialogModalLayer_onClick.bind(this);
+		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
 		this.listItemRenderer = this.listItemRenderer.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
