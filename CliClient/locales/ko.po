@@ -1769,7 +1769,7 @@ msgstr "리소스가 없습니다."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "경고 : 성능상의 문제로 모든 리소스를 표시하지 않습니다.(제한 : %S)"
+msgstr "경고 : 성능상의 문제로 모든 리소스를 표시하지 않습니다.(제한 : %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
