@@ -239,6 +239,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		styles.linkText.borderBottomColor = theme.color;
 		styles.linkText.flex = 0;
 		styles.linkText.fontWeight = 'normal';
+		styles.linkText.fontFamily = 'Roboto';
 
 		styles.headerWrapperStyle = Object.assign({}, styles.settingContainer, theme.headerWrapperStyle);
 
