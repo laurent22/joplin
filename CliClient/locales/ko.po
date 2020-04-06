@@ -1305,7 +1305,7 @@ msgstr "저장"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "마스터키 업그레이드가 필요합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1323,24 +1323,26 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "업그레이드"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
 #, fuzzy
 msgid "Re-encrypt data"
-msgstr "날짜 선택"
+msgstr "재 암호화 데이타"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"기본 암호화 구문이 변경 되었습니다 데이타에 적용 하는 것 을 권장 합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
-msgstr ""
+msgstr "일부 노트가 이전 암호로 암호화 되어있을때,"
+"아래 도구를 이용해서 데이타를 재 암호화 할 수 있습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1358,7 +1360,15 @@ msgid ""
 "run to completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
-msgstr ""
+msgstr "전체 데이터가 암호되고, 동기화가 되므로, 충분한시간을 가지고 실행하는게 좋습니다.\n"
+"시작하기위해 아래 방법으로 할 수 있습니다.\n"
+"\n"
+"1. 모든디바이스를 동기화.\n"
+"2. Click \"%s\".\n"
+"3. 충돌을  방지하기위해, 암호화가 진행되는동안 다른장치에서 메모를 변경하지 마십시요."
+"4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화 하세요."
+"\n"
+"중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1384,16 +1394,16 @@ msgstr "설치하기:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
 #, fuzzy
 msgid "Notebook properties"
-msgstr "노트 속성"
+msgstr "노트북 속성"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1468,7 +1478,7 @@ msgstr "하나 혹은 그 이상의 마스터 키 비밀번호를 입력해주�
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
+msgstr "기본 암호과 구문이 변경 되었습니다. 데이타를 재암호화 해야합니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
 #, fuzzy
@@ -1664,7 +1674,7 @@ msgstr "내부: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
 msgid "Front"
-msgstr ""
+msgstr "글꼴"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
 msgid "Hyperlink"
@@ -1706,7 +1716,7 @@ msgstr "노트 속성"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2110
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:582
 msgid "to-do"
-msgstr "할 일"
+msgstr "할일"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2110
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:582
@@ -1730,7 +1740,7 @@ msgstr "제목"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "크기"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
 #, fuzzy
@@ -1754,12 +1764,12 @@ msgstr "확인 중입니다... 잠시만 기다리세요."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "리소스가 없습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "경고 : 성능상의 문제로 모든 리소스를 표시하지 않습니다.(제한 : %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -2611,7 +2621,7 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"안전 장치: 동기화 목표가 비어 있을시 로컬 데이터를 지우시지 마세요 (종종 잘못"
+"안전 장치: 동기화 목표가 비어 있을시 로컬 데이타를 지우시지 마세요 (종종 잘못"
 "된 설정이나 버그로 인해 발생됩니다)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
@@ -2977,21 +2987,21 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "전체 데이터베이스를 다시 암호화 할것입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "데이터가 재 암호화 되고, 다시 동기화 될 것입니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
+msgstr "키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "마스터 키가 성공적으로 업그레이드되었습니다."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, fuzzy, javascript-format
