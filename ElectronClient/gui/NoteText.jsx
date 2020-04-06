@@ -513,6 +513,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	scheduleSave() {
+		if (this.state.note && this.props.provisionalNoteIds.includes(this.state.note.id)) {
+			this.props.dispatch({
+				type: 'NOTE_PROVISIONAL_FLAG_CLEAR',
+				id: this.state.note.id,
+			});
+		}
+
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
 		this.scheduleSaveTimeout_ = setTimeout(() => {
 			this.saveIfNeeded();
