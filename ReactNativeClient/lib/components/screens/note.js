@@ -377,7 +377,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async pickDocument() {
 		return new Promise((resolve) => {
-			DocumentPicker.show({ filetype: [DocumentPickerUtil.allFiles()], noData: true }, (error, res) => {
+			DocumentPicker.show({ filetype: [DocumentPickerUtil.allFiles()] }, (error, res) => {
 				if (error) {
 					// Also returns an error if the user doesn't pick a file
 					// so just resolve with null.
