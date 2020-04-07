@@ -653,7 +653,7 @@ class Setting extends BaseModel {
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
-		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
+		return this.modelSelectAll('SELECT * FROM settings').then(async (rows) => {
 			this.cache_ = [];
 
 			const pushItemsToCache = (items) => {
@@ -669,19 +669,12 @@ class Setting extends BaseModel {
 				}
 			};
 
-			pushItemsToCache(rows);
+			const secureItems = await shim.loadSecureItems(this.constants_.appId);
 
-			shim.loadSecureItems(this.constants_.appId).then(secureItems => {
-				// secureItems is an array of { account: 'foo', password: 'bar' }
-				// but each item should be in the form of { key: 'foo', value: 'bar' }
-				// https://stackoverflow.com/a/50101979
-				for (const item of secureItems) {
-					delete Object.assign(item, { ['key']: item['account'] })['account'];
-					delete Object.assign(item, { ['value']: item['password'] })['password'];
-				}
-				pushItemsToCache(secureItems);
-				this.dispatchUpdateAll();
-			});
+			pushItemsToCache(rows);
+			pushItemsToCache(secureItems);
+
+			this.dispatchUpdateAll();
 		});
 	}
 
@@ -939,7 +932,7 @@ class Setting extends BaseModel {
 			s.value = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
-				if (shim.saveSecureItem(this.constants_.appId, s)) continue;
+				if (await shim.saveSecureItem(this.constants_.appId, s)) continue;
 			}
 
 			queries.push(Database.insertQuery(this.tableName(), s));

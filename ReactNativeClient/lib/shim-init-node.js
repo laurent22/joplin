@@ -13,6 +13,9 @@ const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
 
+// keytar throws an error when system keychain is not present;
+// even when keytar itself is installed.
+// try/catch to ensure system keychain is present and no error is thrown.
 let keytar;
 try {
 	keytar = require('keytar');
@@ -420,20 +423,29 @@ function shimInit() {
 		return toRelative(process.cwd(), path);
 	};
 
-	shim.isKeytarAvailable = () => {
+	function isKeytarAvailable() {
 		return shim.isElectron() && !shim.isPortable() && keytar;
-	};
+	}
 
-	shim.loadSecureItems = (appId) => {
-		if (shim.isKeytarAvailable()) {
-			return keytar.findCredentials(appId);
+	shim.loadSecureItems = async (appId) => {
+		if (isKeytarAvailable()) {
+			const secureItems = await keytar.findCredentials(appId);
+			// secureItems is an array of { account: 'foo', password: 'bar' }
+			// but it should be an array of { key: 'foo', value: 'bar' }
+			// https://stackoverflow.com/a/50101979
+			for (const item of secureItems) {
+				delete Object.assign(item, { ['key']: item['account'] })['account'];
+				delete Object.assign(item, { ['value']: item['password'] })['password'];
+			}
+			return secureItems;
 		}
-		return Promise.resolve([]);
+		return [];
 	};
 
-	shim.saveSecureItem = (appId, item) => {
-		if (shim.isKeytarAvailable()) {
-			return keytar.setPassword(appId, item.key, item.value);
+	shim.saveSecureItem = async (appId, item) => {
+		if (isKeytarAvailable()) {
+			await keytar.setPassword(appId, item.key, item.value);
+			return true;
 		}
 		return false;
 	};
