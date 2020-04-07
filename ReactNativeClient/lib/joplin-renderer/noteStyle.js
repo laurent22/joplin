@@ -18,8 +18,8 @@ module.exports = function(theme) {
 			line-height: ${theme.htmlLineHeight};
 			background-color: ${theme.htmlBackgroundColor};
 			font-family: ${fontFamily};
-			padding-bottom: ${theme.paddingBottom};
-			padding-top: ${theme.paddingTop};
+			padding-bottom: ${theme.bodyPaddingBottom}px;
+			padding-top: ${theme.bodyPaddingTop}px;
 		}
 		strong {
 			color: ${theme.colorBright};
@@ -294,6 +294,11 @@ module.exports = function(theme) {
 
 		.mce-content-body.mce-content-readonly {
 			opacity: 0.5;
+		}
+
+		/* We need that to make sure click events have the A has a target */
+		.katex a span {
+			pointer-events: none;
 		}
 
 		/* =============================================== */

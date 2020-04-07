@@ -124,6 +124,13 @@ function addExtraStyles(style) {
 		{ color: style.color2 }
 	);
 
+	style.textStyleMinor = Object.assign({}, style.textStyle,
+		{
+			color: style.colorFaded,
+			fontSize: style.fontSize * 0.8,
+		},
+	);
+
 	style.urlStyle = Object.assign({}, style.textStyle,
 		{
 			textDecoration: 'underline',
@@ -196,6 +203,9 @@ function addExtraStyles(style) {
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
 	style.dropdownList = Object.assign({}, style.inputStyle);
+
+	style.colorHover = style.color;
+	style.backgroundHover = `${style.selectedColor2}44`;
 
 	// In general the highlighted color, used to highlight text or icons, should be the same as selectedColor2
 	// but some times, depending on the theme, it might be too dark or too light, so it can be

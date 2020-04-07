@@ -217,6 +217,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				color: theme.color,
 				flex: 1,
 			},
+			textInput: {
+				color: theme.color,
+			},
 		};
 
 		styles.settingContainerNoBottomBorder = Object.assign({}, styles.settingContainer, {
@@ -239,6 +242,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		styles.linkText.borderBottomColor = theme.color;
 		styles.linkText.flex = 0;
 		styles.linkText.fontWeight = 'normal';
+		styles.linkText.fontFamily = 'Roboto';
 
 		styles.headerWrapperStyle = Object.assign({}, styles.settingContainer, theme.headerWrapperStyle);
 
@@ -450,7 +454,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer}>
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{ paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<TextInput style={{ ...this.styles().textInput, paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);
