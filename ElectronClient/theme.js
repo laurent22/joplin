@@ -7,6 +7,7 @@ const themes = {
 	[Setting.THEME_SOLARIZED_LIGHT]: require('./gui/style/theme/solarizedLight'),
 	[Setting.THEME_SOLARIZED_DARK]: require('./gui/style/theme/solarizedDark'),
 	[Setting.THEME_NORD]: require('./gui/style/theme/nord'),
+	[Setting.THEME_ARITIM_DARK]: require('./gui/style/theme/aritimDark'),
 };
 
 // globalStyle should be used for properties that do not change across themes
