@@ -30,7 +30,7 @@ class Resource extends BaseItem {
 		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
 		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
 	}
-	
+
 	static isSupportedAudioMimeType(type) {
 		const mimeTypes = ['audio/wav', 'audio/x-wav', 'audio/mp4','audio/mpeg', 'audio/x-aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac', 'audio/x-flac'];
 		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
