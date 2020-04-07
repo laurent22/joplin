@@ -59,6 +59,7 @@ ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/utils/NoteText.js
 ReactNativeClient/lib/AsyncActionQueue.js
+ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js
 ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/sanitize_html.js

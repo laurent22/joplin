@@ -34,7 +34,7 @@ const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const { toSystemSlashes, safeFilename } = require('lib/path-utils');
+const { toSystemSlashes } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
@@ -427,6 +427,9 @@ class NoteTextComponent extends React.Component {
 		if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
 			noteTags = this.props.noteTags || [];
+			await this.handleResourceDownloadMode(note);
+		} else {
+			console.warn('Trying to load a note with no ID - should no longer be possible');
 		}
 
 		const folder = note ? Folder.byId(this.props.folders, note.parent_id) : null;
@@ -510,6 +513,13 @@ class NoteTextComponent extends React.Component {
 	}
 
 	scheduleSave() {
+		if (this.state.note && this.props.provisionalNoteIds.includes(this.state.note.id)) {
+			this.props.dispatch({
+				type: 'NOTE_PROVISIONAL_FLAG_CLEAR',
+				id: this.state.note.id,
+			});
+		}
+
 		if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
 		this.scheduleSaveTimeout_ = setTimeout(() => {
 			this.saveIfNeeded();
@@ -612,10 +622,7 @@ class NoteTextComponent extends React.Component {
 				}, 10);
 			}
 
-			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
-				const resourceIds = await Note.linkedResourceIds(note.body);
-				await ResourceFetcher.instance().markForDownload(resourceIds);
-			}
+			await this.handleResourceDownloadMode(note);
 		}
 
 		if (note) {
@@ -653,6 +660,13 @@ class NoteTextComponent extends React.Component {
 		await this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
 
 		defer();
+	}
+
+	async handleResourceDownloadMode(note) {
+		if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			const resourceIds = await Note.linkedResourceIds(note.body);
+			await ResourceFetcher.instance().markForDownload(resourceIds);
+		}
 	}
 
 	async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -1225,7 +1239,14 @@ class NoteTextComponent extends React.Component {
 			const filePath = filePaths[i];
 			try {
 				reg.logger().info(`Attaching ${filePath}`);
-				note = await shim.attachFileToNote(note, filePath, position, createFileURL);
+				note = await shim.attachFileToNote(note, filePath, position, {
+					createFileURL: createFileURL,
+					resizeLargeImages: 'ask',
+				});
+				if (!note) {
+					reg.logger().info('File attachment was cancelled');
+					continue;
+				}
 				reg.logger().info('File was attached.');
 				this.setState({
 					note: Object.assign({}, note),
@@ -1289,10 +1310,6 @@ class NoteTextComponent extends React.Component {
 		this.isPrinting_ = false;
 	}
 
-	pdfFileName_(note, folder) {
-		return safeFilename(`${note.title} - ${folder.title}.pdf`, 255, true);
-	}
-
 	async commandSavePdf(args) {
 		try {
 			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
@@ -1301,12 +1318,9 @@ class NoteTextComponent extends React.Component {
 
 			let path = null;
 			if (noteIds.length === 1) {
-				const note = await Note.load(noteIds[0]);
-				const folder = Folder.byId(this.props.folders, note.parent_id);
-
 				path = bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: this.pdfFileName_(note, folder),
+					defaultPath: await InteropServiceHelper.defaultFilename(noteIds, 'pdf'),
 				});
 
 			} else {
@@ -2023,10 +2037,11 @@ class NoteTextComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+			overflow: 'hidden',
 		};
 
 		const toolbarStyle = {
-			marginTop: 3,
+			marginTop: 4,
 			marginBottom: 0,
 		};
 

@@ -228,4 +228,8 @@ shim.saveSecureItem = async (appId, item) => {
 	return false;
 };
 
+shim.showMessageBox = (message, options = null) => {
+	throw new Error('Not implemented');
+};
+
 module.exports = { shim };

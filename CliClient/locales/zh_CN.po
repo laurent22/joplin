@@ -1,14 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Yukio Usuzumi <anohigisavay@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: paventyang@gmail.com\n"
+"Language-Team: paventyang@gmail.com\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -228,7 +227,7 @@ msgstr "已启用"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 msgid "Disabled"
 msgstr "已禁用"
@@ -505,7 +504,7 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "有 %d 条笔记匹配。是否删除？"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:350
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:364
 msgid "Delete note?"
 msgstr "是否删除笔记？"
 
@@ -570,20 +569,20 @@ msgstr "认证未完成（未收到认证令牌）。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:86
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:42
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:53
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:54
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:60
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "步骤二：输入 Dropbox 提供的代码："
 
@@ -733,126 +732,125 @@ msgstr ""
 "一个或多个项目当前已加密，您可能需要提供主密码。若需进行此操作请输入 `e2ee "
 "decrypt` 。若您已提供密码，此时加密文件正在后台解密，解锁之后即可使用。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:366
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
 msgstr "边栏"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:372
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:369
 msgid "Note list"
 msgstr "笔记列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:378
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:375
 msgid "Note title"
 msgstr "笔记标题"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:384
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:381
 msgid "Note body"
 msgstr "笔记正文"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:436
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:433
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "从“%s”导入，导入格式为“%s”。请稍等..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:469
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:167
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:466
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:180
 msgid "PDF File"
 msgstr "PDF 文件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:489
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:486
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:94
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:499
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:621
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:496
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:650
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:73
 msgid "New note"
 msgstr "新建笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:511
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:630
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:659
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/action-button.js:64
 msgid "New to-do"
 msgstr "新建待办事项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:523
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:639
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:520
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:668
 msgid "New notebook"
 msgstr "新建笔记本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:534
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:531
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:303
 msgid "New sub-notebook"
 msgstr "新的子笔记本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:546
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:543
 msgid "Print"
 msgstr "打印"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:565
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:562
 msgid "Create note from template"
 msgstr "从模版创建笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:575
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr "从模版创建TODO列表"
+msgstr "从模版创建To-Do列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:585
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
 msgid "Insert template"
 msgstr "插入模版"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:595
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:592
 msgid "Open template directory"
 msgstr "打开模版目录"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:602
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:599
 msgid "Refresh templates"
 msgstr "刷新模版"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:615
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:612
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
 msgid "Options"
 msgstr "选项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:628
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Resources"
-msgstr "资源：%d。"
+msgstr "资源"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:650
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
 msgid "Revision: %s (%s)"
 msgstr "调整： %s (%s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:659
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
 #, javascript-format
 msgid "Client ID: %s"
 msgstr "客户端 ID：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:660
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
 #, javascript-format
 msgid "Sync Version: %s"
 msgstr "同步版本：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:661
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
 #, javascript-format
 msgid "Profile Version: %s"
 msgstr "最新版本：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:814
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:797
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:804
 msgid "Copy"
 msgstr "复制"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:671
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:92
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:103
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
@@ -861,7 +859,7 @@ msgstr "复制"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:180
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:749
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:30
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:234
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:235
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:182
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:67
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:150
@@ -869,195 +867,195 @@ msgstr "复制"
 msgid "OK"
 msgstr "确认"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:683
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:766
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:680
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
 msgid "&File"
 msgstr "文件 (&F)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:689
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1088
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1085
 msgid "About Joplin"
 msgstr "关于 Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:696
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
 msgid "Preferences..."
 msgstr "偏好..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:706
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1067
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:703
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
 msgid "Check for updates..."
 msgstr "检查更新..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:720
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:780
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:777
 msgid "Templates"
 msgstr "模版"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:727
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:782
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:91
 msgid "Import"
 msgstr "导入"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:731
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:788
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:728
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:785
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:381
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:178
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:191
 msgid "Export"
 msgstr "导出"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:737
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:734
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:723
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
 msgstr "同步"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:752
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
 #, javascript-format
 msgid "Hide %s"
 msgstr "隐藏 %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
 msgid "Quit"
 msgstr "退出"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:773
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
 msgid "Close Window"
 msgstr "关闭窗口"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:808
 msgid "&Edit"
 msgstr "编辑 (&E)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:819
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
 msgid "Cut"
 msgstr "剪切"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:824
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:821
 msgid "Paste"
 msgstr "粘贴"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:829
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:826
 msgid "Select all"
 msgstr "全选"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:837
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1679
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:834
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1686
 msgid "Bold"
 msgstr "加粗"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:848
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1687
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:845
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1694
 msgid "Italic"
 msgstr "斜体"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:859
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:856
 msgid "Link"
 msgstr "链接"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:870
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1707
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:867
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1714
 msgid "Code"
 msgstr "代码"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:884
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1767
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:881
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1774
 msgid "Insert Date Time"
 msgstr "插入时间"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:898
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1790
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:55
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:895
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1797
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:68
 msgid "Edit in external editor"
 msgstr "在外部编辑器中打开"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:909
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1608
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1799
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:906
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1615
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1806
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:778
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:313
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:701
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:736
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/tags.js:101
 msgid "Tags"
 msgstr "标签"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:925
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:922
 msgid "Search in all the notes"
 msgstr "在所有笔记内搜索"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:936
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:933
 msgid "Search in current note"
 msgstr "在当前笔记内搜索"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:948
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:945
 msgid "&View"
 msgstr "界面 (&V)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:950
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:603
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:947
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:632
 msgid "Toggle sidebar"
 msgstr "切换边栏"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:963
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:960
 msgid "Layout button sequence"
 msgstr "布局按钮顺序"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:967
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:612
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:964
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:641
 msgid "Toggle note list"
 msgstr "切换笔记列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:976
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:973
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1024
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1021
 msgid "Focus"
 msgstr "聚焦于"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1031
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Actual Size"
 msgstr "实际大小"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1037
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom In"
 msgstr "放大"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1043
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1051
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 msgid "&Tools"
 msgstr "工具 (&T)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1055
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1052
 msgid "&Help"
 msgstr "帮助 (&H)"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1057
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1054
 msgid "Website and documentation"
 msgstr "网站与文档"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1061
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1058
 msgid "Joplin Forum"
 msgstr "Joplin 论坛"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:493
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1061
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:500
 msgid "Make a donation"
 msgstr "捐赠"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1076
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1073
 msgid "Toggle development tools"
 msgstr "切换开发者工具"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1211
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1207
 #, javascript-format
 msgid "Open %s"
 msgstr "打开 %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1213
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1209
 msgid "Exit"
 msgstr "退出"
 
@@ -1065,10 +1063,11 @@ msgstr "退出"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/bridge.js:116
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DialogButtonRow.min.js:38
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:241
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:242
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:318
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:723
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/CameraView.js:183
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/ModalDialog.js:70
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:70
@@ -1077,7 +1076,8 @@ msgstr "退出"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:165
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:183
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:429
 msgid "Cancel"
 msgstr "取消"
 
@@ -1105,10 +1105,14 @@ msgid "New version: %s"
 msgstr "最新版本：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:427
 msgid "Yes"
 msgstr "是"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:91
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:428
 msgid "No"
 msgstr "否"
 
@@ -1205,7 +1209,7 @@ msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置文件储存在：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:165
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:310
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:314
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
 
@@ -1254,14 +1258,14 @@ msgid "Browse..."
 msgstr "浏览..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:637
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:879
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:976
 msgid "Edit"
 msgstr "编辑"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:739
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:279
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:187
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1644
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1651
 msgid "Back"
 msgstr "返回"
 
@@ -1270,7 +1274,7 @@ msgid "Apply"
 msgstr "应用"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:67
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:63
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:64
 msgid "Submit"
 msgstr "提交"
 
@@ -1281,7 +1285,7 @@ msgstr "保存"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "需要升级的主密钥"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1289,6 +1293,8 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"以下主密钥使用了过时的加密算法，建议对其进行升级。 升级后的主密钥仍将能够照常"
+"解密和加密您的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1299,24 +1305,25 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "升级"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "选择日期"
+msgstr "重新加密数据"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
-msgstr ""
+msgstr "默认的加密方法已更改为一种更安全的方法，建议您将其应用于您的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"您可以使用下面的工具重新加密您的数据，例如，您已知的使用过时的加密方法进行加"
+"密的数据。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1335,10 +1342,20 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"为此，必须对整个数据集进行加密和同步，因此最好将其整夜运行。\n"
+"\n"
+"首先，请按照以下说明进行操作：\n"
+"\n"
+"1.同步您的所有设备。\n"
+"2.单击\"%s\"。\n"
+"3.让它运行完成。 在运行时，请避免在其他设备上更改任何笔记，以免发生冲突。\n"
+"4.在此设备上完成同步后，同步其他所有设备，并使其同步完成。\n"
+"\n"
+"重要提示：您只需要在一台设备上运行此ONCE一次。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:129
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:139
 msgid "Status"
 msgstr "状态"
 
@@ -1360,16 +1377,15 @@ msgstr "立即获取："
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "图标"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "笔记属性"
+msgstr "笔记本属性"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1397,89 +1413,91 @@ msgstr "笔记本标题："
 msgid "Add or remove tags:"
 msgstr "添加或删除标签："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:218
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:227
+#, fuzzy
+msgid "Move to notebook:"
+msgstr "移动到笔记本..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:247
 msgid "Rename notebook:"
 msgstr "重命名笔记本："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:239
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:268
 msgid "Rename tag:"
 msgstr "重命名标签："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:340
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:369
 msgid "Set alarm:"
 msgstr "设置提醒："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:371
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:400
 msgid "Template file:"
 msgstr "模版文件："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:513
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:542
 msgid "Some items cannot be synchronised."
 msgstr "一些项目无法被同步。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:518
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:530
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:554
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:547
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:559
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:583
 msgid "View them now"
 msgstr "立刻查看"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:525
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:554
 msgid "Some items cannot be decrypted."
 msgstr "一些项目无法被解密。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:537
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
 msgid "One or more master keys need a password."
 msgstr "一个或多个主密钥需要密码。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:542
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:571
 msgid "Set the password"
 msgstr "设置密码"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:549
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:578
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "一个或多个主密钥需要密码。"
+msgstr "您的主密钥之一使用了过时的加密方法。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:561
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:590
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
+msgstr "默认的加密方法已更改，您应该重新加密数据。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:566
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:595
 msgid "More info"
 msgstr "更多信息"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:647
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1075
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:676
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1082
 msgid "Layout"
 msgstr "布局"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:656
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:685
 msgid "Search..."
 msgstr "搜索..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "字数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "字符数"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "字符数（不计空格）"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "行"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "笔记属性"
+msgstr "内容属性"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
@@ -1516,7 +1534,7 @@ msgid "URL"
 msgstr "URL"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:32
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:997
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1016
 msgid "Note History"
 msgstr "笔记历史"
 
@@ -1529,7 +1547,7 @@ msgid "Previous versions of this note"
 msgstr "此笔记的早期版本"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1823
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1830
 msgid "Note properties"
 msgstr "笔记属性"
 
@@ -1543,7 +1561,8 @@ msgid "This note has no history"
 msgstr "此笔记没有历史记录"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:855
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:862
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:614
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "不被支持的链接或信息：%s"
@@ -1561,149 +1580,147 @@ msgstr ""
 "单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
 "换或修改。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:771
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:778
 msgid "Open..."
 msgstr "打开..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:774
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:781
 #, javascript-format
 msgid "This file could not be opened: %s"
 msgstr "该笔记本无法打开：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:779
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:786
 msgid "Save as..."
 msgstr "另存为..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:790
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:797
 msgid "Copy path to clipboard"
 msgstr "复制路径到剪切板"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:804
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:811
 msgid "Copy Link Address"
 msgstr "复制链接地址"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:826
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
 msgstr "下载此附件时出错："
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:828
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "该附件没有下载或者尚未解密"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1075
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1082
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1311
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1318
 msgid "Only one note can be printed at a time."
 msgstr "一次只能导出一个笔记。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1521
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1528
 msgid "strong text"
 msgstr "加粗文本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1525
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1532
 msgid "emphasized text"
 msgstr "强调文本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1565
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1569
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1578
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1572
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1576
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1585
 msgid "List item"
 msgstr "项目列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1590
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1597
 msgid "Insert Hyperlink"
 msgstr "插入超链接"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1601
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1608
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1722
 msgid "Attach file"
 msgstr "附加文件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1616
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1817
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:686
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1623
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1824
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:721
 msgid "Set alarm"
 msgstr "设置提醒"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1630
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1637
 #, javascript-format
 msgid "In: %s"
 msgstr "在: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1661
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1668
 msgid "Front"
 msgstr ""
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1699
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1706
 msgid "Hyperlink"
 msgstr "超链接"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1727
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1734
 msgid "Numbered List"
 msgstr "有序列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1735
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1742
 msgid "Bulleted List"
 msgstr "无序列表"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1743
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1750
 msgid "Checkbox"
 msgstr "复选框"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1751
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1758
 msgid "Heading"
 msgstr "标题"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1759
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1766
 msgid "Horizontal Rule"
 msgstr "水平线"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1781
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1788
 msgid "Click to stop external editing"
 msgstr "单击以取消外部编辑"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1782
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1789
 msgid "Watching..."
 msgstr "正在监控变化..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1841
-#, fuzzy
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1848
 msgid "Content Properties"
-msgstr "笔记属性"
+msgstr "内容属性"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2109
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:416
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2117
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:656
 msgid "to-do"
 msgstr "待办事项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2109
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:416
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2117
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:656
 msgid "note"
 msgstr "笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2109
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:416
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2117
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:656
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "新建 %s..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:248
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "清除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:28
-#, fuzzy
 msgid "Title"
 msgstr "标题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "大小"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
 #, fuzzy
@@ -1712,27 +1729,26 @@ msgstr "位置"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:286
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:185
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:208
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:198
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:325
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:146
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:728
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:763
 msgid "Delete"
 msgstr "删除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:126
-#, fuzzy
 msgid "Please wait..."
-msgstr "正在检查... 请稍候。"
+msgstr "请稍后..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "没有资源！"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
+msgstr "由于性能原因并未显示出所有资源 (范围: %s)。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1828,8 +1844,14 @@ msgstr "正在获取资源：%d/%d"
 msgid "Please select where the sync status should be exported to"
 msgstr "请选择同步状态的导出位置"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:87
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:106
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
+#, fuzzy
+msgid "Retry All"
+msgstr "重试"
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
 msgid "Retry"
 msgstr "重试"
 
@@ -1838,75 +1860,81 @@ msgid "Add or remove tags"
 msgstr "添加或删除标签"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
+#, fuzzy
+msgid "Move to notebook"
+msgstr "移动到笔记本..."
+
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
 msgid "Duplicate"
 msgstr "创建副本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:45
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:58
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - 副本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:65
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:78
 msgid "Stop external editing"
 msgstr "取消外部编辑"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:77
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:90
 msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:100
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:113
 msgid "Switch to note type"
 msgstr "切换到笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:109
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:122
 msgid "Switch to to-do type"
 msgstr "切换到待办事项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:119
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:132
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:750
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:134
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:147
 msgid "Share note..."
 msgstr "分享笔记..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:202
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:215
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "是否删除笔记“%s”？"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:204
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:217
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "是否删除这 %d 条笔记？"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:221
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:234
 #, javascript-format
 msgid "Error opening note in editor: %s"
 msgstr "打开以下笔记时出现错误：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:341
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:403
+#, fuzzy
 msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
-"followed by a notebook name."
+"followed by a notebook name, or / followed by note content."
 msgstr ""
 "输入笔记标题以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟着一个笔"
 "记本名字。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:379
+#: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:441
 msgid "Goto Anything..."
 msgstr "转到某处..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:136
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:149
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:180
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:137
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:150
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:181
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:215
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/BaseApplication.js:216
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "未知标记：%s"
@@ -2007,7 +2035,15 @@ msgstr ""
 "\n"
 "请考虑使用 OneDrive 个人版。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:129
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:90
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:426
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "无法访问 %s"
@@ -2337,93 +2373,93 @@ msgstr "笔记本排序依据"
 msgid "Save geo-location with notes"
 msgstr "保存地理定位信息到笔记中"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:326
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:337
 msgid "When creating a new to-do:"
 msgstr "当新建待办事项时："
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:329
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:344
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:340
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
 msgid "Focus title"
 msgstr "聚焦标题"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:330
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:345
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
 msgid "Focus body"
 msgstr "聚焦正文"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:341
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:352
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:355
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
 msgid "Enable soft breaks"
 msgstr "启动软中断"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:356
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
 msgid "Enable typographer support"
 msgstr "启用 typographer 支持"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:357
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
 msgid "Enable math expressions"
 msgstr "启用数学表达式"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:358
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:369
 msgid "Enable ==mark== syntax"
 msgstr "启用 ==mark== 句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:359
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:370
 msgid "Enable footnotes"
 msgstr "启用脚注"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:360
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:371
 msgid "Enable table of contents extension"
 msgstr "启用目录扩展"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:361
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:372
 msgid "Enable ~sub~ syntax"
 msgstr "启用 ~sub~ 句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:362
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:373
 msgid "Enable ^sup^ syntax"
 msgstr "启用 ^sup^ 句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:363
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:374
 msgid "Enable deflist syntax"
 msgstr "启用术语表句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:364
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:375
 msgid "Enable abbreviation syntax"
 msgstr "启用缩写句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:365
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:376
 msgid "Enable markdown emoji"
 msgstr "启用 markdown emoji"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:377
 msgid "Enable ++insert++ syntax"
 msgstr "启用 ++insert++ 句法"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
 msgid "Enable multimarkdown table extension"
 msgstr "启用 multimarkdown 表格扩展"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:379
 msgid "Enable Fountain syntax support"
 msgstr "启用 Fountain 语法支持"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:369
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Enable Mermaid diagrams support"
 msgstr "启用 Mermaid 流程图支持"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:381
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:392
 msgid "Show tray icon"
 msgstr "显示托盘图标"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:383
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:394
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意：某些桌面环境下无效。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:383
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:394
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2432,23 +2468,23 @@ msgstr ""
 "该选项允许 Joplin 在后台运行，如果你经常修改和同步笔记，推荐启用该设置来减少"
 "可能的冲突。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:387
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:398
 msgid "Start application minimised in the tray icon"
 msgstr "应用程序启动时最小化到托盘"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:404
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:415
 msgid "Editor font size"
 msgstr "编辑器字体大小"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:412
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:423
 msgid "Editor font"
 msgstr "编辑器字体"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:436
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:447
 msgid "Editor font family"
 msgstr "编辑器字体"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:438
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:449
 msgid ""
 "This must be *monospace* font or it will not work properly. If the font is "
 "incorrect or empty, it will default to a generic monospace font."
@@ -2456,50 +2492,50 @@ msgstr ""
 "必须是 *等宽* 字体，否则将无法正常工作。若字体无效或留空，该处将会设置成一款"
 "通用的等宽字体。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:477
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:488
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "自定义样式表，适用于整个Joplin"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:483
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:494
 msgid "Automatically update the application"
 msgstr "自动更新程序"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 msgid "Get pre-releases when checking for updates"
 msgstr "检查更新时获取预发布版本"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:484
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:495
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "预发布版本的详细信息，请参阅页面: %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:492
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:503
 msgid "Synchronisation interval"
 msgstr "同步间隔"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:496
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:498
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:507
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:508
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:509
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分钟"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:499
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 小时"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:500
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:501
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 小时"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:521
 msgid "Text editor command"
 msgstr "文本编辑器命令"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:510
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:521
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2507,51 +2543,51 @@ msgstr ""
 "该文本编辑器命令（可能包括参数）将会被用于打开笔记。若未提供将尝试自动检测默"
 "认编辑器。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:511
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:522
 msgid "Page size for PDF export"
 msgstr "PDF导出时的页面规格"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:513
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
 msgid "A4"
 msgstr "A4"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:514
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:525
 msgid "Letter"
 msgstr "信件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:515
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:526
 msgid "A3"
 msgstr "A3"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:516
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:527
 msgid "A5"
 msgstr "A5"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:528
 msgid "Tabloid"
 msgstr "小报"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:518
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:529
 msgid "Legal"
 msgstr "法律"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:521
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:532
 msgid "Page orientation for PDF export"
 msgstr "PDF导出的页面方向"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:523
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
 msgid "Portrait"
 msgstr "肖像"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:535
 msgid "Landscape"
 msgstr "景观"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:539
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:540
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:551
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2562,73 +2598,77 @@ msgstr ""
 "my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存更"
 "改，之后再点击“检查同步配置”。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:552
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:563
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:555
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
+msgid "Fail-safe"
+msgstr ""
+
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:573
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr "注意：当同步目标为空时（通常是配置错误或bug），请勿删除本地数据"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:558
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr "请指定API服务应使用的端口。 如果未设置，将使用默认值。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:566
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:585
 msgid "Enable note history"
 msgstr "启用笔记历史"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:595
 msgid "days"
 msgstr "天"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:576
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:595
 #, javascript-format
 msgid "%d days"
 msgstr "%d天"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:578
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:597
 msgid "Keep note history for"
 msgstr "保留笔记历史记录"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:703
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:722
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值：“%s”。可用值有：%s。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:991
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1010
 msgid "General"
 msgstr "通用选项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:992
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1011
 msgid "Synchronisation"
 msgstr "同步"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:993
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1012
 msgid "Appearance"
 msgstr "外观"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:994
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1013
 msgid "Note"
 msgstr "笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:995
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1014
 msgid "Plugins"
 msgstr "插件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:996
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1015
 msgid "Application"
 msgstr "应用程序"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:998
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1017
 msgid "Encryption"
 msgstr "加密"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:999
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1018
 msgid "Web Clipper"
 msgstr "网页剪藏"
 
@@ -2745,72 +2785,72 @@ msgstr ""
 "Joplin 多次解密这些项目均已失败，可能是它们太大或已经损坏导致的。这些项目会保"
 "留在设备上，但 Joplin 不会再尝试对它们进行解密。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:164
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:181
 msgid "Attachments"
 msgstr "附加文件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:189
 msgid "Downloaded and decrypted"
 msgstr "下载并解密"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:172
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:176
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:189
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:193
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:173
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and encrypted"
 msgstr "下载并加密"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:186
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
 msgid "Attachments that could not be downloaded"
 msgstr "无法下载的附件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:208
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:220
 msgid "Sync status (synced items / total items)"
 msgstr "同步状态（已同步项目/项目总数）"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:207
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:224
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s：%d/%d 条"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:210
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:227
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "总数：%d/%d 条"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:212
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:229
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "有冲突：%d 条"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:213
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:230
 #, javascript-format
 msgid "To delete: %d"
 msgstr "将删除：%d 条"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:217
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:234
 msgid "Folders"
 msgstr "文件夹"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:225
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:242
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s：%d 条笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:233
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:250
 msgid "Coming alarms"
 msgstr "临近提醒"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:238
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:255
 #, javascript-format
 msgid "On %s: %s"
 msgstr "%s：%s"
@@ -2886,7 +2926,7 @@ msgid "New Notebook"
 msgstr "新笔记本"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:315
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:547
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:554
 msgid "Configuration"
 msgstr "配置"
 
@@ -2928,26 +2968,26 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "请确认您要重新加密整个数据库。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "您的数据将被重新加密并再次同步。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
+msgstr "在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "主密钥已成功升级！"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "无法升级主密钥：%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -2977,64 +3017,64 @@ msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
 msgid "Information"
 msgstr "说明"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:319
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:323
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:262
 msgid "Encryption Config"
 msgstr "加密配置"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:434
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:441
 msgid "Tools"
 msgstr "工具"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:436
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:443
 msgid "Sync Status"
 msgstr "同步的状态"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:437
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:100
 msgid "Log"
 msgstr "日志"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:439
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:446
 msgid "Creating report..."
 msgstr "新建报告..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:439
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:446
 msgid "Export Debug Report"
 msgstr "导出调试报告"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:441
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:448
 msgid "Fixing search index..."
 msgstr "正在修复搜索索引..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:441
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:448
 msgid "Fix search index"
 msgstr "修复搜索索引"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:441
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:448
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 "如果搜索功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:451
 msgid "Exporting profile..."
 msgstr "正在导出配置文件..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:451
 msgid "Export profile"
 msgstr "导出配置文件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:444
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:451
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "仅用于调试目的：将您的配置文件导出到外部SD卡。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:459
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
 msgid "More information"
 msgstr "更多信息"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:469
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:476
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -3042,39 +3082,39 @@ msgstr ""
 "本应用程序需要下列权限才能正常运作。请在你的手机设置（应用 > Joplin > 权限）"
 "中启用它们"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:472
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:479
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr "- 存储：允许将文件附加到笔记中并启用文件系统同步。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:475
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:482
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- 相机：允许拍照并将照片添加到一条笔记中。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:478
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:485
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:507
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:514
 msgid "Joplin website"
 msgstr "Joplin 官网"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:535
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:542
 #, javascript-format
 msgid "Database v%s"
 msgstr "数据库 v%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:541
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:548
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "FTS 已开启：%d"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:50
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:51
 msgid "Login with Dropbox"
 msgstr "通过 Dropbox 登录"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:62
 msgid "Enter code here"
 msgstr "在此输入代码"
 
@@ -3084,7 +3124,7 @@ msgid "Master Key %s"
 msgstr "主密钥 %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:120
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:633
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:668
 #, javascript-format
 msgid "Created: %s"
 msgstr "创建于：%s"
@@ -3159,7 +3199,7 @@ msgstr "输入笔记本标题"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/log.js:109
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/onedrive-login.js:109
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:131
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:141
 msgid "Refresh"
 msgstr "刷新"
 
@@ -3171,96 +3211,97 @@ msgstr "显示全部"
 msgid "Errors only"
 msgstr "仅显示错误"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
 msgid "This note has been modified:"
 msgstr "该笔记已被修改："
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
 msgid "Save changes"
 msgstr "保存更改"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:85
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:88
 msgid "Discard changes"
 msgstr "放弃更改"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:132
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:137
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "没有 ID 为 %s 的项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:151
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:156
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "该附件没有下载或者尚未解密。"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:155
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:160
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 手机应用目前不支持这种类型的链接：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:159
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:164
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "不支持“%s”协议链接"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:486
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:521
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支持的图片格式：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:634
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:669
 #, javascript-format
 msgid "Updated: %s"
 msgstr "已更新：%s"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:638
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:673
 msgid "View on map"
 msgstr "查看地图"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:645
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:680
 msgid "Go to source URL"
 msgstr "定位到源 URL"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:673
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:708
 msgid "Attach..."
 msgstr "附加..."
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:675
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:710
 msgid "Choose an option"
 msgstr "选择一个选项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:675
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:710
 msgid "Take photo"
 msgstr "拍照"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:675
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:710
 msgid "Attach photo"
 msgstr "附加照片"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:675
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:710
 msgid "Attach any file"
 msgstr "附加任何文件"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:694
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:729
 msgid "Share"
 msgstr "分享"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:708
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:743
 msgid "Convert to note"
 msgstr "转换为笔记"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:708
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:743
 msgid "Convert to todo"
 msgstr "转换为待办事项"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:722
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:757
 msgid "Properties"
 msgstr "笔记属性"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:870
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:935
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:967
 msgid "Add body"
 msgstr "添加内容"
 
-#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:907
+#: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:1004
 msgid "Add title"
 msgstr "添加标题"
 

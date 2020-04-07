@@ -99,7 +99,7 @@ utils.copyDir = async function(src, dest, options) {
 
 		// TODO: add support for delete flag
 
-		await utils.execCommand(`xcopy /C /I /H /R /Y /S ${excludedFlag} "${src}" ${dest}`);
+		await utils.execCommand(`xcopy /C /I /H /R /Y /S ${excludedFlag} "${src}" "${dest}"`);
 
 		if (tempFile) await fs.remove(tempFile);
 	} else {
