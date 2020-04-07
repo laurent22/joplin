@@ -1187,7 +1187,6 @@ class NoteTextComponent extends React.Component {
 
 		if (command.name === 'focusElement' && command.target === 'noteBody') {
 			const layout = this.props.visiblePanes[0];
-			
 			if (layout === 'viewer') {
 				this.webviewRef_ ? this.webView_focus() : null;
 			} else {
