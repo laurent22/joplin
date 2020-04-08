@@ -89,6 +89,10 @@ class DecryptionWorker {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
+	async clearDisabledItems() {
+		await this.kvStore().deleteByPrefix('decrypt:');
+	}
+
 	dispatchReport(report) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
