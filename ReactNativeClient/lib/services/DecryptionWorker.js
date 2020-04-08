@@ -1,4 +1,5 @@
 const BaseItem = require('lib/models/BaseItem');
+const BaseModel = require('lib/BaseModel');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
@@ -164,7 +165,7 @@ class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().debug(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
+							this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(item.type_)} ${item.id}: Decryption has failed more than 2 times - skipping it`);
 							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
 							excludedIds.push(item.id);
 							continue;
@@ -231,7 +232,7 @@ class DecryptionWorker {
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 
-		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount(excludedIds);
 
 		this.state_ = 'idle';
 
