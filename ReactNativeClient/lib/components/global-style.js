@@ -89,7 +89,6 @@ function addExtraStyles(style) {
 		color: style.color,
 		fontSize: style.fontSize * 1.2,
 		fontWeight: 'bold',
-		fontFamily: 'Roboto',
 	};
 
 	style.headerWrapperStyle = {
