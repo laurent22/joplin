@@ -201,6 +201,14 @@ function addExtraStyles(style) {
 		marginRight: 6,
 	};
 
+	style.notificationBox = {
+		backgroundColor: style.warningBackgroundColor,
+		display: 'flex',
+		alignItems: 'center',
+		padding: 10,
+		fontSize: style.fontSize,
+	};
+
 	style.dialogTitle = Object.assign({}, style.h1Style, { marginBottom: '1.2em' });
 
 	style.dropdownList = Object.assign({}, style.inputStyle);
@@ -299,6 +307,7 @@ function themeStyle(theme) {
 			color: output.color,
 			backgroundColor: output.backgroundColor,
 			borderColor: output.dividerColor,
+			userSelect: 'none',
 		}
 	);
 

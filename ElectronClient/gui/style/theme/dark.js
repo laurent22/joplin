@@ -5,7 +5,7 @@ const darkStyle = {
 	color: '#dddddd',
 	colorError: 'red',
 	colorWarn: '#9A5B00',
-	colorFaded: '#777777', // For less important text
+	colorFaded: '#999999', // For less important text
 	colorBright: '#ffffff', // For important text
 	dividerColor: '#555555',
 	selectedColor: '#333333',
