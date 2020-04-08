@@ -1069,11 +1069,11 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom In"
-msgstr ""
+msgstr "Zooma in"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zooma ut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 #, fuzzy
