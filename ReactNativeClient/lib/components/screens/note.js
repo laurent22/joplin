@@ -1,5 +1,5 @@
 const React = require('react');
-const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, Dimensions } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -210,12 +210,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
+		const dimensions = Dimensions.get('window');
+
 		// TODO: Clean up these style names and nesting
 		const styles = {
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+				// Add extra space to allow scrolling past end of document, and also to fix this:
+				// https://github.com/laurent22/joplin/issues/1437
+				paddingBottom: Math.round(dimensions.height / 4),
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
@@ -884,7 +889,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						webViewStyle={theme}
 						// Extra bottom padding to make it possible to scroll past the
 						// action button (so that it doesn't overlap the text)
-						paddingBottom='3.8em'
+						paddingBottom="150"
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}

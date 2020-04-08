@@ -1,3 +1,10 @@
+function formatCssSize(v) {
+	if (typeof v === 'string') {
+		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
+	}
+	return `${v}px`;
+}
+
 module.exports = function(theme) {
 	theme = theme ? theme : {};
 
@@ -18,8 +25,8 @@ module.exports = function(theme) {
 			line-height: ${theme.htmlLineHeight};
 			background-color: ${theme.htmlBackgroundColor};
 			font-family: ${fontFamily};
-			padding-bottom: ${theme.bodyPaddingBottom}px;
-			padding-top: ${theme.bodyPaddingTop}px;
+			padding-bottom: ${formatCssSize(theme.bodyPaddingBottom)};
+			padding-top: ${formatCssSize(theme.bodyPaddingTop)};
 		}
 		strong {
 			color: ${theme.colorBright};
