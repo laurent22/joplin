@@ -2,23 +2,21 @@ package net.cozic.joplin;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.CursorWindow;
 import android.os.Build;
 import android.webkit.WebView;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import net.cozic.joplin.share.SharePackage;
+
 import java.lang.reflect.Field;
-// import com.alinz.parkerdan.shareextension.SharePackage;
-import java.util.Arrays;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import android.database.CursorWindow;
-import com.reactNativeQuickActions.AppShortcutsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,10 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          packages.add(new SharePackage());
           return packages;
         }
 
