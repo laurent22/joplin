@@ -16,7 +16,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		const r = utils.resourceReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 		if (typeof r === 'string') return r;
-		if (r) return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}/>`;
+		if (r && r.type === 'image') return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}/>`;
 
 		return defaultRender(tokens, idx, options, env, self);
 	};

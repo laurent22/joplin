@@ -14,7 +14,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 
 		const r = utils.resourceReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 		if (typeof r === 'string') return r;
-		if (r) return `<audio controls><source src='${r.src}'></audio><a href=# onclick=ipcProxySendToHost('joplin://${src.substring(2)}')>`;
+		if (r && r.type === 'audio') return `<audio controls><source src='${r.src}'></audio><a href=# onclick=ipcProxySendToHost('joplin://${src.substring(2)}')>`;
 
 		return defaultRender(tokens, idx, options, env, self);
 	};
