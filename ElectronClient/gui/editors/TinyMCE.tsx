@@ -2,14 +2,17 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand } from '../utils/NoteText';
+import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand, resourcesStatus } from '../utils/NoteText';
 
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale');
+const { themeStyle, buildStyle } = require('../../theme.js');
 
 interface TinyMCEProps {
 	style: any,
+	theme: number,
 	onChange(event: OnChangeEvent): void,
 	onWillChange(event:any): void,
 	onMessage(event:any): void,
@@ -95,6 +98,30 @@ const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 };
 
+function styles_(props:TinyMCEProps) {
+	return buildStyle('TinyMCE', props.theme, (/* theme:any */) => {
+		return {
+			disabledOverlay: {
+				zIndex: 10,
+				position: 'absolute',
+				backgroundColor: 'white',
+				opacity: 0.7,
+				height: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				padding: 20,
+				paddingTop: 50,
+				textAlign: 'center',
+			},
+			rootStyle: {
+				position: 'relative',
+				...props.style,
+			},
+		};
+	});
+}
+
 let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
@@ -102,6 +129,7 @@ let changeId_:number = 1;
 const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
+	const [editorReady, setEditorReady] = useState(false);
 
 	const attachResources = useRef(null);
 	attachResources.current = props.attachResources;
@@ -113,6 +141,11 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	joplinHtml.current = props.joplinHtml;
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
+	const editorRef = useRef<any>(null);
+	editorRef.current = editor;
+
+	const styles = styles_(props);
+	const theme = themeStyle(props.theme);
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
@@ -130,7 +163,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			dispatchDidUpdate(editor);
 		}
 
-		if (nodeName === 'A' && event.ctrlKey) {
+		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
 
 			if (href.indexOf('#') === 0) {
@@ -263,6 +296,70 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (!editorReady) return () => {};
+
+		const element = document.createElement('style');
+		element.setAttribute('id', 'tinyMceStyle');
+		document.head.appendChild(element);
+		element.appendChild(document.createTextNode(`
+			.tox .tox-toolbar,
+			.tox .tox-toolbar__overflow,
+			.tox .tox-toolbar__primary,
+			.tox-editor-header .tox-toolbar__primary,
+			.tox .tox-toolbar-overlord,
+			.tox.tox-tinymce-aux .tox-toolbar__overflow,
+			.tox .tox-statusbar {
+				background-color: ${theme.backgroundColor};
+			}
+
+			.tox .tox-editor-header {
+				border-bottom: 1px solid ${theme.dividerColor};
+			}
+
+			.tox .tox-tbtn,
+			.tox .tox-tbtn svg {
+				color: ${theme.color};
+				fill: ${theme.color} !important;
+			}
+
+			.tox .tox-statusbar a,
+			.tox .tox-statusbar__path-item,
+			.tox .tox-statusbar__wordcount,
+			.tox .tox-statusbar__path-divider {
+				color: ${theme.color};
+				fill: ${theme.color};
+				opacity: 0.7;
+			}
+
+			.tox .tox-tbtn--enabled,
+			.tox .tox-tbtn--enabled:hover {
+				background-color: ${theme.selectedColor};
+			}
+
+			.tox .tox-tbtn:hover {
+				background-color: ${theme.backgroundHover};
+				color: ${theme.colorHover};
+				fill: ${theme.colorHover};
+			}
+
+			.tox .tox-toolbar__primary,
+			.tox .tox-toolbar__overflow {
+				background: none;
+			}
+
+			.tox-tinymce,
+			.tox .tox-toolbar__group,
+			.tox.tox-tinymce-aux .tox-toolbar__overflow {
+				border-color: ${theme.dividerColor} !important;
+			}
+		`));
+
+		return () => {
+			document.head.removeChild(element);
+		};
+	}, [editorReady]);
+
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
 	// -----------------------------------------------------------------------------------------
@@ -374,6 +471,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							dispatchDidUpdate(editor);
 						}
 					});
+
+					editor.on('init', () => {
+						setEditorReady(true);
+					});
 				},
 			});
 
@@ -424,6 +525,11 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	useEffect(() => {
 		if (!editor) return () => {};
+
+		if (resourcesStatus(props.defaultEditorState.resourceInfos) !== 'ready') {
+			editor.setContent('');
+			return () => {};
+		}
 
 		let cancelled = false;
 
@@ -561,7 +667,37 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 	}, [props.onWillChange, props.onChange, editor]);
 
-	return <div style={props.style} id={rootIdRef.current}/>;
+	// -----------------------------------------------------------------------------------------
+	// Destroy the editor when unmounting
+	// Note that this effect must always be last, otherwise other effects that access the
+	// editor in their clean up function will get an invalid reference.
+	// -----------------------------------------------------------------------------------------
+
+	useEffect(() => {
+		return () => {
+			if (editorRef.current) editorRef.current.remove();
+		};
+	}, []);
+
+	function renderDisabledOverlay() {
+		const status = resourcesStatus(props.defaultEditorState.resourceInfos);
+		if (status === 'ready') return null;
+
+		const message = _('Please wait for all attachments to be downloaded and decrypted. You may also switch the layout and edit the note in Markdown mode.');
+		return (
+			<div style={styles.disabledOverlay}>
+				<p style={theme.textStyle}>{message}</p>
+				<p style={theme.textStyleMinor}>{`Status: ${status}`}</p>
+			</div>
+		);
+	}
+
+	return (
+		<div style={styles.rootStyle}>
+			{renderDisabledOverlay()}
+			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
+		</div>
+	);
 };
 
 export default forwardRef(TinyMCE);

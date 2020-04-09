@@ -622,7 +622,7 @@ class Application extends BaseApplication {
 
 		// the following menu items will be available for all OS under Tools
 		const toolsItemsAll = [{
-			label: _('Resources'),
+			label: _('Note attachments...'),
 			click: () => {
 				this.dispatch({
 					type: 'NAV_GO',

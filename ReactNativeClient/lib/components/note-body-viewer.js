@@ -21,11 +21,14 @@ class NoteBodyViewer extends Component {
 			bodyHtml: '',
 		};
 
+		this.forceUpdate_ = false;
+
 		this.isMounted_ = false;
 
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 
 		this.reloadNote = this.reloadNote.bind(this);
+		this.watchFn = this.watchFn.bind(this);
 	}
 
 	componentDidMount() {
@@ -38,6 +41,8 @@ class NoteBodyViewer extends Component {
 	}
 
 	async reloadNote() {
+		this.forceUpdate_ = false;
+
 		const note = this.props.note;
 		const theme = themeStyle(this.props.theme);
 
@@ -55,8 +60,6 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			paddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
-			paddingBottom: this.props.paddingBottom || '0',
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
@@ -67,7 +70,8 @@ class NoteBodyViewer extends Component {
 			note.markup_language,
 			bodyToRender,
 			{
-				bodyPaddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+				bodyPaddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+				bodyPaddingBottom: this.props.paddingBottom, // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 				...this.props.webViewStyle,
 			},
 			mdOptions
@@ -184,7 +188,16 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
+		this.forceUpdate_ = true;
 		this.forceUpdate();
+	}
+
+	watchFn() {
+		// react-async will not fetch the data again after the first render
+		// so we use this watchFn function to force it to reload in certain
+		// cases. It is used in particular when re-rendering the note when
+		// a resource has been downloaded in auto mode.
+		return this.forceUpdate_;
 	}
 
 	render() {
@@ -207,7 +220,7 @@ class NoteBodyViewer extends Component {
 
 		return (
 			<View style={this.props.style}>
-				<Async promiseFn={this.reloadNote}>
+				<Async promiseFn={this.reloadNote} watchFn={this.watchFn}>
 					{({ data, error, isPending }) => {
 						if (error) {
 							console.error(error);

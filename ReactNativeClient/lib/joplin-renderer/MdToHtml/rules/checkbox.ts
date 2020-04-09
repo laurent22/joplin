@@ -12,10 +12,12 @@ pluginAssets[1] = function() {
 				   (otherwise they are too far right), but keep it for their children to allow
 				   nested lists. Make sure this value matches the UL margin. */
 
+				/*
 				.md-checkbox .checkbox-wrapper {
 					display: flex;
 					align-items: center;
 				}
+				*/
 
 				li.md-checkbox {
 					list-style-type: none;

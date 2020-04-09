@@ -2,6 +2,9 @@ const { _ } = require('lib/locale');
 const { bridge } = require('electron').remote.require('./bridge');
 const InteropService = require('lib/services/InteropService');
 const Setting = require('lib/models/Setting');
+const Note = require('lib/models/Note.js');
+const Folder = require('lib/models/Folder.js');
+const { friendlySafeFilename } = require('lib/path-utils');
 const md5 = require('md5');
 const url = require('url');
 const { shim } = require('lib/shim');
@@ -92,6 +95,29 @@ class InteropServiceHelper {
 		return this.exportNoteTo_('printer', noteId, options);
 	}
 
+	static async defaultFilename(noteIds, fileExtension) {
+		const note = await Note.load(noteIds[0]);
+		// In a rare case the passed not will be null, use the id for filename
+		if (note === null) {
+			const filename = friendlySafeFilename(noteIds[0], 100);
+
+			return `${filename}.${fileExtension}`;
+		}
+		const folder = await Folder.load(note.parent_id);
+
+		const filename = friendlySafeFilename(note.title, 100);
+
+		// In a less rare case the folder will be null, just ignore it
+		if (folder === null) {
+			return `${filename}.${fileExtension}`;
+		}
+
+		const foldername = friendlySafeFilename(folder.title, 100);
+
+		// friendlySafeFilename assumes that the file extension is added after
+		return `${foldername} - ${filename}.${fileExtension}`;
+	}
+
 	static async export(dispatch, module, options = null) {
 		if (!options) options = {};
 
@@ -100,6 +126,7 @@ class InteropServiceHelper {
 		if (module.target === 'file') {
 			path = bridge().showSaveDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
+				defaultPath: await this.defaultFilename(options.sourceNoteIds, module.fileExtensions[0]),
 			});
 		} else {
 			path = bridge().showOpenDialog({
