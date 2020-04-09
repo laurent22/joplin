@@ -34,6 +34,19 @@ function findBlockSource(node:any) {
 		closeCharacters: source.getAttribute('data-joplin-source-close'),
 		content: source.textContent,
 		node: source,
+		language: source.getAttribute('data-joplin-language') || '',
+	};
+}
+
+function newBlockSource(language:string = '', content:string = ''):any {
+	const fence = language === 'katex' ? '$$' : '```';
+
+	return {
+		openCharacters: `\n${fence}${language}\n`,
+		closeCharacters: `\n${fence}\n`,
+		content: content,
+		node: null,
+		language: language,
 	};
 }
 
@@ -309,8 +322,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			.tox-editor-header .tox-toolbar__primary,
 			.tox .tox-toolbar-overlord,
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
-			.tox .tox-statusbar {
-				background-color: ${theme.backgroundColor};
+			.tox .tox-statusbar,
+			.tox .tox-dialog__header,
+			.tox .tox-dialog,
+			.tox textarea,
+			.tox input,
+			.tox .tox-dialog__footer {
+				background-color: ${theme.backgroundColor} !important;
 			}
 
 			.tox .tox-editor-header {
@@ -318,8 +336,15 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			}
 
 			.tox .tox-tbtn,
-			.tox .tox-tbtn svg {
-				color: ${theme.color};
+			.tox .tox-tbtn svg,
+			.tox .tox-dialog__header,
+			.tox .tox-button--icon .tox-icon svg,
+			.tox .tox-button.tox-button--icon .tox-icon svg,
+			.tox textarea,
+			.tox input,
+			.tox .tox-label,
+			.tox .tox-toolbar-label {
+				color: ${theme.color} !important;
 				fill: ${theme.color} !important;
 			}
 
@@ -337,6 +362,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				background-color: ${theme.selectedColor};
 			}
 
+			.tox .tox-button--naked:hover:not(:disabled) {
+				background-color: ${theme.backgroundColor} !important;
+			}
+
 			.tox .tox-tbtn:hover {
 				background-color: ${theme.backgroundHover};
 				color: ${theme.colorHover};
@@ -350,7 +379,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 			.tox-tinymce,
 			.tox .tox-toolbar__group,
-			.tox.tox-tinymce-aux .tox-toolbar__overflow {
+			.tox.tox-tinymce-aux .tox-toolbar__overflow,
+			.tox .tox-dialog__footer {
 				border-color: ${theme.dividerColor} !important;
 			}
 		`));
@@ -389,27 +419,34 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				branding: false,
-				toolbar: 'bold italic | link codeformat codesample joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote',
+				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote',
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
-						const source = findBlockSource(editable);
+						const source = editable ? findBlockSource(editable) : newBlockSource();
 
 						editor.windowManager.open({
 							title: 'Edit',
 							size: 'large',
 							initialData: {
 								codeTextArea: source.content,
+								languageInput: source.language,
 							},
 							onSubmit: async (dialogApi:any) => {
-								const newSource = dialogApi.getData().codeTextArea;
-								const md = `${source.openCharacters}${newSource.trim()}${source.closeCharacters}`;
+								const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea);
+								const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
 
 								// markupToHtml will return the complete editable HTML, but we only
 								// want to update the inner HTML, so as not to break additional props that
 								// are added by TinyMCE on the main node.
-								editable.innerHTML = editableInnerHtml(result.html);
+
+								if (editable) {
+									editable.innerHTML = editableInnerHtml(result.html);
+								} else {
+									editor.insertContent(result.html);
+								}
+
 								dialogApi.close();
 								editor.fire('joplinChange');
 								dispatchDidUpdate(editor);
@@ -420,6 +457,14 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							body: {
 								type: 'panel',
 								items: [
+									{
+										type: 'input',
+										name: 'languageInput',
+										label: 'Language',
+										// Katex is a special case with special opening/closing tags
+										// and we don't currently handle switching the language in this case.
+										disabled: source.language === 'katex',
+									},
 									{
 										type: 'textarea',
 										name: 'codeTextArea',
@@ -459,6 +504,30 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 						},
 					});
 
+					editor.ui.registry.addButton('joplinCodeBlock', {
+						tooltip: 'Code Block',
+						icon: 'code-sample',
+						onAction: async function() {
+							openEditDialog(null);
+						},
+					});
+
+					editor.ui.registry.addToggleButton('joplinInlineCode', {
+						tooltip: 'Inline Code',
+						icon: 'sourcecode',
+						onAction: function() {
+							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
+						},
+						onSetup: function(api:any) {
+							api.setActive(editor.formatter.match('code'));
+							const unbind = editor.formatter.formatChanged('code', api.setActive).unbind;
+
+							return function() {
+								if (unbind) unbind();
+							};
+						},
+					});
+
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event:any) => {
 						const editable = findEditableContainer(event.target);
@@ -489,7 +558,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// -----------------------------------------------------------------------------------------
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
-		const cssFiles = ['css/fork-awesome.min.css'].concat(
+		const cssFiles = [
+			'css/fork-awesome.min.css',
+			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
+		].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'text/css')
 				.map((a:any) => a.path)

@@ -222,7 +222,9 @@ module.exports = function(theme) {
 			max-width: 100%;
 			height: auto;
 		}
-		.inline-code {
+		
+		.inline-code,
+		.tox :not(.joplin-editable) code {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlCodeBackgroundColor};
 			padding-right: .2em;
