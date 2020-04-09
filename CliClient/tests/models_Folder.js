@@ -61,6 +61,67 @@ describe('models_Folder', function() {
 		expect(all.length).toBe(0);
 	}));
 
+	it('should implement locale based sorting', asyncTest(async () => {
+		let folders;
+
+		const f1 = await Folder.save({ title: 'äbc' }); await sleep(0.1);
+		const f2 = await Folder.save({ title: 'bbc' }); await sleep(0.1);
+		const f3 = await Folder.save({ title: 'čbc' }); await sleep(0.1);
+
+		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		expect(folders.length).toBe(3);
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f2.id);
+		expect(folders[2].id).toBe(f3.id);
+
+		const f4 = await Folder.save({ title: 'ebc`' });
+
+		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f2.id);
+		expect(folders[2].id).toBe(f3.id);
+		expect(folders[3].id).toBe(f4.id);
+
+		folders = await Folder.sortLocale(await Folder.all(), 'desc');
+		expect(folders[0].id).toBe(f4.id);
+		expect(folders[1].id).toBe(f3.id);
+		expect(folders[2].id).toBe(f2.id);
+		expect(folders[3].id).toBe(f1.id);
+	}));
+
+	it('should should implement locale based sorting(sub-folders too)', asyncTest(async () => {
+		let folders;
+
+		const f1 = await Folder.save({ title: 'äbc' }); await sleep(0.1);
+		const f2 = await Folder.save({ title: 'bbc' }); await sleep(0.1);
+		const f3 = await Folder.save({ title: 'čbc' }); await sleep(0.1);
+
+		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		expect(folders.length).toBe(3);
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f2.id);
+		expect(folders[2].id).toBe(f3.id);
+
+		const f4 = await Folder.save({ title: 'ebc', parent_id: f1.id }); await sleep(0.1);
+		const f5 = await Folder.save({ title: 'óbc', parent_id: f1.id }); await sleep(0.1);
+
+		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		expect(folders.length).toBe(5);
+		expect(folders[0].id).toBe(f1.id);
+		expect(folders[1].id).toBe(f2.id);
+		expect(folders[2].id).toBe(f3.id);
+		expect(folders[3].id).toBe(f4.id);
+		expect(folders[4].id).toBe(f5.id);
+
+		folders = await Folder.sortLocale(await Folder.all(), 'desc');
+		expect(folders.length).toBe(5);
+		expect(folders[0].id).toBe(f5.id);
+		expect(folders[1].id).toBe(f4.id);
+		expect(folders[2].id).toBe(f3.id);
+		expect(folders[3].id).toBe(f2.id);
+		expect(folders[4].id).toBe(f1.id);
+	}));
+
 	it('should sort by last modified, based on content', asyncTest(async () => {
 		let folders;
 

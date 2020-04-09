@@ -190,7 +190,7 @@ class Folder extends BaseItem {
 		return output;
 	}
 
-	static async sortLocale(folders, orderDir = 'ASC') {
+	static async sortLocale(folders, orderDir) {
 
 		orderDir = orderDir.toUpperCase();
 
@@ -214,10 +214,13 @@ class Folder extends BaseItem {
 	}
 
 	static async all(options = null) {
-		const output = await super.all(options);
+		let output = await super.all(options);
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
 			if (conflictCount) output.push(this.conflictFolder());
+		}
+		if (options && options.order[0].dir) {
+			output = await this.sortLocale(output, options.order[0].dir);
 		}
 		return output;
 	}
