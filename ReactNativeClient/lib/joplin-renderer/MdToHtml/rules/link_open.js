@@ -5,6 +5,8 @@ const urlUtils = require('../../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 function installRule(markdownIt, mdOptions, ruleOptions) {
+	const pluginOptions = { linkRenderingType: 1, ...ruleOptions.plugins['link_open'] };
+
 	markdownIt.renderer.rules.link_open = function(tokens, idx) {
 		const token = tokens[idx];
 		let href = utils.getAttr(token.attrs, 'href');
@@ -58,7 +60,7 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		let js = `${ruleOptions.postMessageSyntax}(${JSON.stringify(href)}); return false;`;
 		if (hrefAttr.indexOf('#') === 0 && href.indexOf('#') === 0) js = ''; // If it's an internal anchor, don't add any JS since the webview is going to handle navigating to the right place
 
-		if (ruleOptions.plainResourceRendering) {
+		if (ruleOptions.plainResourceRendering || pluginOptions.linkRenderingType === 2) {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' type='${htmlentities(mime)}'>`;
 		} else {
 			return `<a data-from-md ${resourceIdAttr} title='${htmlentities(title)}' href='${hrefAttr}' onclick='${js}' type='${htmlentities(mime)}'>${icon}`;

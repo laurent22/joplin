@@ -63,18 +63,38 @@ utils.loaderImage = function() {
 	`;
 };
 
-utils.resourceStatusImage = function(state) {
-	if (state === 'notDownloaded') return utils.notDownloadedResource();
-	return utils.resourceStatusFile(state);
+utils.resourceStatusImage = function(status) {
+	if (status === 'notDownloaded') return utils.notDownloadedResource();
+	return utils.resourceStatusFile(status);
 };
 
-utils.resourceStatusFile = function(state) {
-	if (state === 'notDownloaded') return utils.notDownloadedResource();
-	if (state === 'downloading') return utils.loaderImage();
-	if (state === 'encrypted') return utils.loaderImage();
-	if (state === 'error') return utils.errorImage();
+utils.resourceStatusFile = function(status) {
+	if (status === 'notDownloaded') return utils.notDownloadedResource();
+	if (status === 'downloading') return utils.loaderImage();
+	if (status === 'encrypted') return utils.loaderImage();
+	if (status === 'error') return utils.errorImage();
 
-	throw new Error(`Unknown state: ${state}`);
+	throw new Error(`Unknown status: ${status}`);
+};
+
+utils.resourceStatusIndex = function(status) {
+	if (status === 'error') return -1;
+	if (status === 'notDownloaded') return 0;
+	if (status === 'downloading') return 1;
+	if (status === 'encrypted') return 2;
+	if (status === 'ready') return 10;
+
+	throw new Error(`Unknown status: ${status}`);
+};
+
+utils.resourceStatusName = function(index) {
+	if (index === -1) return 'error';
+	if (index === 0) return 'notDownloaded';
+	if (index === 1) return 'downloading';
+	if (index === 2) return 'encrypted';
+	if (index === 10) return 'ready';
+
+	throw new Error(`Unknown index: ${index}`);
 };
 
 utils.resourceStatus = function(ResourceModel, resourceInfo) {

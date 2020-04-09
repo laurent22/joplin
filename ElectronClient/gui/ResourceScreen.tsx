@@ -8,9 +8,14 @@ const { Header } = require('./Header.min.js');
 const prettyBytes = require('pretty-bytes');
 const Resource = require('lib/models/Resource.js');
 
+interface Style {
+	width: number
+	height: number
+}
+
 interface Props {
-	style: any;
 	theme: any;
+	style: Style
 }
 
 interface Resource {
@@ -32,6 +37,8 @@ interface ResourceTable {
 	onResourceClick: (resource: Resource) => any
 	onResourceDelete: (resource: Resource) => any
 	onToggleSorting: (order: SortingOrder) => any
+	theme: any
+	style: Style
 }
 
 type SortingOrder = 'size' | 'name'
@@ -45,34 +52,65 @@ interface ActiveSorting {
 const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 	const sortOrderEngagedMarker = (s: SortingOrder) => {
 		return (
-			<a href="#" onClick={ () => props.onToggleSorting(s) }>{
-				(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴' }</a>
+			<a href="#"
+				style={{ color: props.theme.htmlLinkColor }}
+				onClick={() => props.onToggleSorting(s)}>{
+					(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴'}</a>
 		);
 	};
-	return <table style={{ width: '90%' }}>
-		<thead>
-			<tr>
-				<th>{_('Title')} { sortOrderEngagedMarker('name') }</th>
-				<th>{_('Size')} { sortOrderEngagedMarker('size') }</th>
-				<th>{_('ID')}</th>
-				<th>{_('Action')}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{props.resources.map((resource: Resource, index: number) =>
-				<tr key={index}>
-					<td>
-						<a href="#" onClick={() => props.onResourceClick(resource)}>{resource.title}</a>
-					</td>
-					<td>{prettyBytes(resource.size)}</td>
-					<td>{resource.id}</td>
-					<td>
-						<button onClick={ () => props.onResourceDelete(resource) }>{_('Delete')}</button>
-					</td>
+
+	const titleCellStyle = {
+		...props.theme.textStyle,
+		textOverflow: 'ellipsis',
+		overflowX: 'hidden',
+		maxWidth: 1,
+		width: '100%',
+		whiteSpace: 'nowrap',
+	};
+
+	const cellStyle = {
+		...props.theme.textStyleMinor,
+		whiteSpace: 'nowrap',
+		width: 1,
+	};
+
+	const headerStyle = {
+		...props.theme.textStyle,
+		whiteSpace: 'nowrap',
+		width: 1,
+		fontWeight: 'bold',
+	};
+
+	return (
+		<table style={{ width: '100%' }}>
+			<thead>
+				<tr>
+					<th style={headerStyle}>{_('Title')} {sortOrderEngagedMarker('name')}</th>
+					<th style={headerStyle}>{_('Size')} {sortOrderEngagedMarker('size')}</th>
+					<th style={headerStyle}>{_('ID')}</th>
+					<th style={headerStyle}>{_('Action')}</th>
 				</tr>
-			)}
-		</tbody>
-	</table>;
+			</thead>
+			<tbody>
+				{props.resources.map((resource: Resource, index: number) =>
+					<tr key={index}>
+						<td style={titleCellStyle} className="titleCell">
+							<a
+								style={{ color: props.theme.htmlLinkColor }}
+								href="#"
+								onClick={() => props.onResourceClick(resource)}>{resource.title || `(${_('Untitled')})`}
+							</a>
+						</td>
+						<td style={cellStyle} className="dataCell">{prettyBytes(resource.size)}</td>
+						<td style={cellStyle} className="dataCell">{resource.id}</td>
+						<td style={cellStyle} className="dataCell">
+							<button style={props.theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
+						</td>
+					</tr>
+				)}
+			</tbody>
+		</table>
+	);
 };
 
 const getSortingOrderColumn = (s: SortingOrder): string => {
@@ -123,6 +161,13 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 
 	onResourceDelete(resource: Resource) {
+		const ok = bridge().showConfirmMessageBox(_('Delete attachment "%s"?', resource.title), {
+			buttons: [_('Delete'), _('Cancel')],
+			defaultId: 1,
+		});
+		if (!ok) {
+			return;
+		}
 		Resource.delete(resource.id)
 			.catch((error: Error) => {
 				bridge().showErrorMessageBox(error.message);
@@ -158,29 +203,47 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.theme);
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
-		return <div>
-			<Header style={headerStyle} />
-			<div style={{ ...style, margin: '20px', overflow: 'scroll' }}>
-				{this.state.isLoading && <div>{_('Please wait...')}</div>}
-				{!this.state.isLoading && <div>
-					{!this.state.resources && <div>
-						{_('No resources!')}
+
+		const rootStyle:any = {
+			...style,
+			overflowY: 'scroll',
+			color: theme.color,
+			padding: 20,
+			boxSizing: 'border-box',
+		};
+		rootStyle.height = style.height - 35; // Minus the header height
+		delete rootStyle.width;
+
+		return (
+			<div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily }}>
+				<Header style={headerStyle} />
+				<div style={rootStyle}>
+					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
+						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
+					}</div>
+					{this.state.isLoading && <div>{_('Please wait...')}</div>}
+					{!this.state.isLoading && <div>
+						{!this.state.resources && <div>
+							{_('No resources!')}
+						</div>
+						}
+						{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
+							<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
+						}
+						{this.state.resources && <ResourceTable
+							theme={theme}
+							style={style}
+							resources={this.state.resources}
+							sorting={this.state.sorting}
+							onToggleSorting={(order) => this.onToggleSortOrder(order)}
+							onResourceClick={(resource) => this.openResource(resource)}
+							onResourceDelete={(resource) => this.onResourceDelete(resource)}
+						/>}
 					</div>
 					}
-					{this.state.resources && this.state.resources.length === MAX_RESOURCES &&
-						<div>{_('Warning: not all resources shown for performance reasons (limit: %s).', MAX_RESOURCES)}</div>
-					}
-					{this.state.resources && <ResourceTable
-						resources={ this.state.resources }
-						sorting={ this.state.sorting }
-						onToggleSorting={ (order) => this.onToggleSortOrder(order) }
-						onResourceClick={ (resource) => this.openResource(resource) }
-						onResourceDelete={ (resource) => this.onResourceDelete(resource) }
-					/>}
 				</div>
-				}
 			</div>
-		</div>;
+		);
 	}
 }
 

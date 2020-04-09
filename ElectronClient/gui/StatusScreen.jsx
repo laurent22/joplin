@@ -47,6 +47,7 @@ class StatusScreenComponent extends React.Component {
 
 		const headerStyle = Object.assign({}, theme.headerStyle, { width: style.width });
 		const retryStyle = Object.assign({}, theme.urlStyle, { marginLeft: 5 });
+		const retryAllStyle = Object.assign({}, theme.urlStyle, { marginTop: 5, display: 'inline-block' });
 
 		const containerPadding = 10;
 
@@ -60,6 +61,14 @@ class StatusScreenComponent extends React.Component {
 				<h2 key={`section_${key}`} style={theme.h2Style}>
 					{title}
 				</h2>
+			);
+		}
+
+		function renderSectionRetryAllHtml(key, retryAllHandler) {
+			return (
+				<a key={`retry_all_${key}`} href="#" onClick={retryAllHandler} style={retryAllStyle}>
+					{_('Retry All')}
+				</a>
 			);
 		}
 
@@ -100,6 +109,10 @@ class StatusScreenComponent extends React.Component {
 						{retryLink}
 					</div>
 				);
+			}
+
+			if (section.canRetryAll) {
+				itemsHtml.push(renderSectionRetryAllHtml(section.title, section.retryAllHandler));
 			}
 
 			return <div key={key}>{itemsHtml}</div>;
