@@ -26,14 +26,17 @@ class Resource extends BaseItem {
 		return this.encryptionService_;
 	}
 
-	static isSupportedImageMimeType(type) {
-		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
-		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
-	}
-
-	static isSupportedAudioMimeType(type) {
-		const mimeTypes = ['audio/wav', 'audio/x-wav', 'audio/mp4','audio/mpeg', 'audio/x-aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac', 'audio/x-flac'];
-		return mimeTypes.indexOf(type.toLowerCase()) >= 0;
+	static isSupportedMimeType(type) {
+		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp','audio/wav', 'audio/x-wav', 'audio/mp4','audio/mpeg', 'audio/x-aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac', 'audio/x-flac'];
+		if (mimeTypes.indexOf(type.toLowerCase()) >= 0) {
+			if (type.startsWith('image')) {
+				return 'image';
+			} else if (type.startsWith('audio')) {
+				return 'audio';
+			}
+		} else {
+			return 'unknown';
+		}
 	}
 
 	static fetchStatuses(resourceIds) {
@@ -210,7 +213,7 @@ class Resource extends BaseItem {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
-		if (Resource.isSupportedImageMimeType(resource.mime)) {
+		if (Resource.isSupportedMimeType(resource.mime) === 'image') {
 			lines.push('![');
 			lines.push(markdownUtils.escapeTitleText(tagAlt));
 			lines.push(`](:/${resource.id})`);
