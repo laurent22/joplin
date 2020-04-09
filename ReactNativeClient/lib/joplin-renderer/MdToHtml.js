@@ -17,6 +17,7 @@ const rules = {
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	video: require('./MdToHtml/rules/video'),
 };
 
 const setupLinkify = require('./MdToHtml/setupLinkify');
@@ -36,7 +37,6 @@ const plugins = {
 	multitable: { module: require('markdown-it-multimd-table'), options: { multiline: true, rowspan: true, headerless: true } },
 	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: uslugify } },
 	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
-	video: { module: require('./MdToHtml/rules/video') },
 };
 const defaultNoteStyle = require('./defaultNoteStyle');
 
@@ -179,11 +179,11 @@ class MdToHtml {
 			// files. Otherwise some of them might be in the cssStrings property.
 			externalAssetsOnly: false,
 			postMessageSyntax: 'postMessage',
-			paddingTop: '0',
-			paddingBottom: '0',
+			// paddingTop: '0',
+			// paddingBottom: '0',
 			highlightedKeywords: [],
 			codeTheme: 'atom-one-light.css',
-			theme: Object.assign({ paddingTop: '16px' }, defaultNoteStyle, theme),
+			theme: Object.assign({}, defaultNoteStyle, theme),
 			plugins: {},
 		}, options);
 

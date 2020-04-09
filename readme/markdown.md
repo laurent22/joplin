@@ -154,3 +154,4 @@ Note that the functionality added by these plugins is not part of the CommonMark
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
 | [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
+| [Video](https://github.com/laurent22/joplin/pull/2747) | A valid youtube URL. Eg:https://www.youtube.com/watch?v=uZClGt1xS1A| Adds support for embedding youtube video in Joplin's markdown editor. See [this](https://github.com/laurent22/joplin/pull/2747) for demonstration  | no |
