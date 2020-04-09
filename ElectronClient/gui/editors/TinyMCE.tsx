@@ -414,6 +414,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				width: '100%',
 				height: '100%',
 				resize: false,
+				icons: 'Joplin',
+				icons_url: 'gui/editors/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
@@ -487,7 +489,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: 'Attach...',
-						icon: 'upload',
+						icon: 'paperclip',
 						onAction: async function() {
 							const resources = await attachResources.current();
 							if (!resources.length) return;

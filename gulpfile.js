@@ -18,6 +18,7 @@ const updateIgnoredTypeScriptBuildTask = async function() {
 			'**/CliClient/tests-build/lib/**',
 			'**/ElectronClient/dist/**',
 			'**/Modules/TinyMCE/JoplinLists/**',
+			'**/Modules/TinyMCE/IconPack/**',
 		],
 	}).map(f => f.substr(__dirname.length + 1));
 
