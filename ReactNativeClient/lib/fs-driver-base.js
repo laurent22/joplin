@@ -73,7 +73,7 @@ class FsDriverBase {
 	// TODO: move out of here and make it part of joplin-renderer
 	// or assign to option using .bind(fsDriver())
 	async cacheCssToFile(cssStrings) {
-		const cssString = cssStrings.join('\n');
+		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
 		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
 		if (!(await this.exists(cssFilePath))) {
 			await this.writeFile(cssFilePath, cssString, 'utf8');

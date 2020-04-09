@@ -63,7 +63,8 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async importLocalImages(filePath, md) {
 		let updated = md;
 		const imageLinks = unique(extractImageUrls(md));
-		await Promise.all(imageLinks.map(async (link) => {
+		await Promise.all(imageLinks.map(async (encodedLink) => {
+			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);

@@ -24,12 +24,11 @@ class Command extends BaseCommand {
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
 			['-v, --verbose', 'More verbose output for the `target-status` command'],
 			['-o, --output <directory>', 'Output directory'],
+			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
 		];
 	}
 
 	async action(args) {
-		// change-password
-
 		const options = args.options;
 
 		const askForMasterKey = async error => {
@@ -42,6 +41,27 @@ class Command extends BaseCommand {
 			Setting.setObjectKey('encryption.passwordCache', masterKeyId, password);
 			await EncryptionService.instance().loadMasterKeysFromSettings();
 			return true;
+		};
+
+		const startDecryption = async () => {
+			this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
+
+			while (true) {
+				try {
+					await DecryptionWorker.instance().start();
+					break;
+				} catch (error) {
+					if (error.code === 'masterKeyNotLoaded') {
+						const ok = await askForMasterKey(error);
+						if (!ok) return;
+						continue;
+					}
+
+					throw error;
+				}
+			}
+
+			this.stdout(_('Completed decryption.'));
 		};
 
 		if (args.command === 'enable') {
@@ -73,24 +93,8 @@ class Command extends BaseCommand {
 				const plainText = await EncryptionService.instance().decryptString(args.path);
 				this.stdout(plainText);
 			} else {
-				this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
-
-				while (true) {
-					try {
-						await DecryptionWorker.instance().start();
-						break;
-					} catch (error) {
-						if (error.code === 'masterKeyNotLoaded') {
-							const ok = await askForMasterKey(error);
-							if (!ok) return;
-							continue;
-						}
-
-						throw error;
-					}
-				}
-
-				this.stdout(_('Completed decryption.'));
+				if (args.options['retry-failed-items']) await DecryptionWorker.instance().clearDisabledItems();
+				await startDecryption();
 			}
 
 			return;

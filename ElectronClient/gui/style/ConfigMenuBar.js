@@ -16,6 +16,7 @@ const style = createSelector(
 				alignItems: 'center',
 				padding: 9,
 				backgroundColor: theme.backgroundColor,
+				userSelect: 'none',
 			},
 			buttonIcon: {
 				fontSize: 24,

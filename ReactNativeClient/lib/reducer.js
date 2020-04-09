@@ -89,6 +89,13 @@ stateUtils.foldersOrder = function(stateSettings) {
 	]);
 };
 
+stateUtils.hasNotesBeingSaved = function(state) {
+	for (const id in state.editorNoteStatuses) {
+		if (state.editorNoteStatuses[id] === 'saving') return true;
+	}
+	return false;
+};
+
 stateUtils.parentItem = function(state) {
 	const t = state.notesParentType;
 	let id = null;
@@ -524,9 +531,10 @@ const reducer = (state = defaultState, action) => {
 			{
 				const modNote = action.note;
 				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+				const isViewingConflictFolder = state.notesParentType === 'Folder' && state.selectedFolderId === Folder.conflictFolderId();
 
 				const noteIsInFolder = function(note, folderId) {
-					if (note.is_conflict) return folderId === Folder.conflictFolderId();
+					if (note.is_conflict && isViewingConflictFolder) return true;
 					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
 					return false;
 				};

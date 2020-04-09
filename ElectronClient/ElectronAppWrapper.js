@@ -4,6 +4,7 @@ const url = require('url');
 const path = require('path');
 const { dirname } = require('lib/path-utils');
 const fs = require('fs-extra');
+const { ipcMain } = require('electron');
 
 class ElectronAppWrapper {
 
@@ -15,6 +16,7 @@ class ElectronAppWrapper {
 		this.willQuitApp_ = false;
 		this.tray_ = null;
 		this.buildDir_ = null;
+		this.rendererProcessQuitReply_ = null;
 	}
 
 	electronApp() {
@@ -112,9 +114,11 @@ class ElectronAppWrapper {
 			// On Windows and Linux, the app is closed when the window is closed *except* if the tray icon is used. In which
 			// case the app must be explicitly closed with Ctrl+Q or by right-clicking on the tray icon and selecting "Exit".
 
+			let isGoingToExit = false;
+
 			if (process.platform === 'darwin') {
 				if (this.willQuitApp_) {
-					this.win_ = null;
+					isGoingToExit = true;
 				} else {
 					event.preventDefault();
 					this.hide();
@@ -124,8 +128,38 @@ class ElectronAppWrapper {
 					event.preventDefault();
 					this.win_.hide();
 				} else {
-					this.win_ = null;
+					isGoingToExit = true;
 				}
+			}
+
+			if (isGoingToExit) {
+				if (!this.rendererProcessQuitReply_) {
+					// If we haven't notified the renderer process yet, do it now
+					// so that it can tell us if we can really close the app or not.
+					// Search for "appClose" event for closing logic on renderer side.
+					event.preventDefault();
+					this.win_.webContents.send('appClose');
+				} else {
+					// If the renderer process has responded, check if we can close or not
+					if (this.rendererProcessQuitReply_.canClose) {
+						// Really quit the app
+						this.rendererProcessQuitReply_ = null;
+						this.win_ = null;
+					} else {
+						// Wait for renderer to finish task
+						event.preventDefault();
+						this.rendererProcessQuitReply_ = null;
+					}
+				}
+			}
+		});
+
+		ipcMain.on('asynchronous-message', (event, message, args) => {
+			if (message === 'appCloseReply') {
+				// We got the response from the renderer process:
+				// save the response and try quit again.
+				this.rendererProcessQuitReply_ = args;
+				this.electronApp_.quit();
 			}
 		});
 

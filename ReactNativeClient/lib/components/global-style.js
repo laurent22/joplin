@@ -149,9 +149,11 @@ function themeStyle(theme) {
 		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
-		output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+		output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 		output.colorUrl = '#7B81FF';
+
+		output.colorBright = 'rgb(220,220,220)';
 
 		themeCache_[theme] = output;
 		return addExtraStyles(themeCache_[theme]);
@@ -183,6 +185,8 @@ function themeStyle(theme) {
 	output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
+
+	output.colorBright = 'rgb(220,220,220)';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);
