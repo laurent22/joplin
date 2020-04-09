@@ -92,7 +92,7 @@ class RootComponent extends React.Component {
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
-			Resources: { screen: ResourceScreen, title: () => _('Resources') },
+			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 

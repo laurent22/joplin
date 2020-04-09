@@ -58,6 +58,10 @@ class KvStore extends BaseService {
 		await this.db().exec('DELETE FROM key_values WHERE `key` = ?', [key]);
 	}
 
+	async deleteByPrefix(prefix) {
+		await this.db().exec('DELETE FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
+	}
+
 	async clear() {
 		await this.db().exec('DELETE FROM key_values');
 	}
