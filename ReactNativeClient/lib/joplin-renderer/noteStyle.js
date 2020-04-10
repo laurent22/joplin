@@ -273,7 +273,7 @@ module.exports = function(theme) {
 		}
 
 		.md-checkbox input[type=checkbox]:checked {
-			opacity: 0.7;
+			opacity: 1;
 		}
 
 		.md-checkbox .checkbox-label-checked {
