@@ -1,5 +1,5 @@
 const React = require('react');
-const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, Dimensions } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -40,6 +40,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
 
 import FileViewer from 'react-native-file-viewer';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -210,12 +211,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
+		const dimensions = Dimensions.get('window');
+
 		// TODO: Clean up these style names and nesting
 		const styles = {
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+				// Add extra space to allow scrolling past end of document, and also to fix this:
+				// https://github.com/laurent22/joplin/issues/1437
+				paddingBottom: Math.round(dimensions.height / 4),
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
@@ -564,6 +570,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: true });
 	}
 
+	async recordAudio_onPress() {
+		//TODO brg record audio
+	}
+
 	cameraView_onPhoto(data) {
 		this.attachFile(
 			{
@@ -707,14 +717,22 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }, { text: +('Record audio'), id: 'recordAudio' }]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
 					if (buttonId === 'attachFile') this.attachFile_onPress();
+					if (buttonId === 'recordAudio') this.recordAudio_onPress();
 				},
 			});
 		}
+
+		output.push({
+			title: _('Record Audio'),
+			onPress: () => {
+				this.recordAudio_onPress();
+			}
+		})
 
 		if (isTodo) {
 			output.push({
@@ -884,7 +902,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						webViewStyle={theme}
 						// Extra bottom padding to make it possible to scroll past the
 						// action button (so that it doesn't overlap the text)
-						paddingBottom='3.8em'
+						paddingBottom="3.8em"
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
