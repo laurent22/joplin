@@ -149,11 +149,13 @@ class HeaderComponent extends React.Component {
 		}
 
 		const isEnabled = !('enabled' in options) || options.enabled;
+		const isHighlighted = options.highlight;
 		const classes = ['button'];
 		if (!isEnabled) classes.push('disabled');
 
 		const finalStyle = Object.assign({}, style, {
 			opacity: isEnabled ? 1 : 0.4,
+			borderBottom: isHighlighted ? 'solid' : 'inherit',
 		});
 
 		const title = options.title ? options.title : '';
