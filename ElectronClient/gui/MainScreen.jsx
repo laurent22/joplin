@@ -664,6 +664,7 @@ class MainScreenComponent extends React.Component {
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
 			},
+			highlight: true,
 		});
 
 		headerItems.push({
