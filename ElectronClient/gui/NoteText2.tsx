@@ -375,6 +375,7 @@ function NoteText2(props:NoteTextProps) {
 	const titleInputRef = useRef<any>();
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
+	const isMountedRef = useRef(true);
 
 	useWindowCommand(props.windowCommand, props.dispatch, formNote, titleInputRef, editorRef);
 
@@ -471,6 +472,7 @@ function NoteText2(props:NoteTextProps) {
 		// formNote in the dependency array or that effect will run every time the note changes. We only
 		// want to run it once on unmount. So because of that we need to use that formNoteRef.
 		return () => {
+			isMountedRef.current = false;
 			saveNoteIfWillChange(formNoteRef.current, editorRef, props.dispatch);
 		};
 	}, []);
@@ -556,6 +558,15 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.noteId, props.isProvisional, formNote, waitingToSaveNote]);
 
 	const onFieldChange = useCallback((field:string, value:any, changeId: number = 0) => {
+		if (!isMountedRef.current) {
+			// When the component is unmounted, various actions can happen which can
+			// trigger onChange events, for example the textarea might be cleared.
+			// We need to ignore these events, otherwise the note is going to be saved
+			// with an invalid body.
+			reg.logger().debug('Skipping change event because the component is unmounted');
+			return;
+		}
+
 		handleProvisionalFlag();
 
 		const change = field === 'body' ? {

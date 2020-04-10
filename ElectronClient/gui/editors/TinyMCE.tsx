@@ -164,7 +164,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
 		dispatchDidUpdateIID_ = setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
-			editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
 	};
 
