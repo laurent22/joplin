@@ -8,6 +8,7 @@ const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
+const BaseItem = require('lib/models/BaseItem');
 const { themeStyle, buildStyle } = require('../../theme.js');
 
 interface TinyMCEProps {
@@ -22,6 +23,20 @@ interface TinyMCEProps {
 	attachResources: Function,
 	joplinHtml: Function,
 	disabled: boolean,
+}
+
+function markupRenderOptions(override:any = null) {
+	return {
+		plugins: {
+			checkbox: {
+				renderingType: 2,
+			},
+			link_open: {
+				linkRenderingType: 2,
+			},
+		},
+		...override,
+	};
 }
 
 function findBlockSource(node:any) {
@@ -178,8 +193,16 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
+			const joplinUrl = href.indexOf('joplin://') === 0 ? href : null;
 
-			if (href.indexOf('#') === 0) {
+			if (joplinUrl) {
+				props.onMessage({
+					name: 'openInternal',
+					args: {
+						url: joplinUrl,
+					},
+				});
+			} else if (href.indexOf('#') === 0) {
 				const anchorName = href.substr(1);
 				const anchor = editor.getDoc().getElementById(anchorName);
 				if (anchor) {
@@ -609,16 +632,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, {
-				plugins: {
-					checkbox: {
-						renderingType: 2,
-					},
-					link_open: {
-						linkRenderingType: 2,
-					},
-				},
-			});
+			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, markupRenderOptions());
 			if (cancelled) return;
 
 			editor.setContent(result.html);
@@ -660,7 +674,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		let onChangeHandlerIID:any = null;
 
-		const onChangeHandler = () => {
+		function onChangeHandler() {
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
@@ -678,9 +692,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 				dispatchDidUpdate(editor);
 			}, 1000);
-		};
+		}
 
-		const onExecCommand = (event:any) => {
+		function onExecCommand(event:any) {
 			const c:string = event.command;
 			if (!c) return;
 
@@ -699,13 +713,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
 				onChangeHandler();
 			}
-		};
+		}
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
-		const onKeypress = () => {
+		function onKeypress() {
 			onChangeHandler();
-		};
+		}
 
 		// KeyUp is triggered for any keypress, including Control, Shift, etc.
 		// so most of the time we don't want to trigger onChange. We trigger
@@ -715,15 +729,26 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		// onChange even though nothing is changed. The alternative would be to
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
-		const onKeyUp = (event:any) => {
+		function onKeyUp(event:any) {
 			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
 				onChangeHandler();
 			}
-		};
+		}
+
+		async function onPaste(event:any) {
+			const pastedText = event.clipboardData.getData('text');
+			if (BaseItem.isMarkdownTag(pastedText)) {
+				event.preventDefault();
+				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+				editor.insertContent(result.html);
+			} else {
+				onChangeHandler();
+			}
+		}
 
 		editor.on('keyup', onKeyUp);
 		editor.on('keypress', onKeypress);
-		editor.on('paste', onChangeHandler);
+		editor.on('paste', onPaste);
 		editor.on('cut', onChangeHandler);
 		editor.on('joplinChange', onChangeHandler);
 		editor.on('ExecCommand', onExecCommand);
@@ -732,7 +757,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			try {
 				editor.off('keyup', onKeyUp);
 				editor.off('keypress', onKeypress);
-				editor.off('paste', onChangeHandler);
+				editor.off('paste', onPaste);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);
 				editor.off('ExecCommand', onExecCommand);

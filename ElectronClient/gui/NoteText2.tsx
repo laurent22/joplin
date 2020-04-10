@@ -16,6 +16,7 @@ const { time } = require('lib/time-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const Setting = require('lib/models/Setting');
+const BaseItem = require('lib/models/BaseItem');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const HtmlToMd = require('lib/HtmlToMd');
 const { _ } = require('lib/locale');
@@ -26,6 +27,7 @@ const { shim } = require('lib/shim');
 const TemplateUtils = require('lib/TemplateUtils');
 const { bridge } = require('electron').remote.require('./bridge');
 const { urlDecode } = require('lib/string-utils');
+const urlUtils = require('lib/urlUtils');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
 const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 
@@ -614,7 +616,7 @@ function NoteText2(props:NoteTextProps) {
 		});
 	}, [formNote, handleProvisionalFlag]);
 
-	const onMessage = useCallback((event:any) => {
+	const onMessage = useCallback(async (event:any) => {
 		const msg = event.name;
 		const args = event.args;
 
@@ -696,36 +698,36 @@ function NoteText2(props:NoteTextProps) {
 			// }
 
 			// menu.popup(bridge().window());
-		} else if (msg.indexOf('joplin://') === 0) {
-			// const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
-			// const itemId = resourceUrlInfo.itemId;
-			// const item = await BaseItem.loadItemById(itemId);
+		} else if (msg === 'openInternal') {
+			const resourceUrlInfo = urlUtils.parseResourceUrl(args.url);
+			const itemId = resourceUrlInfo.itemId;
+			const item = await BaseItem.loadItemById(itemId);
 
-			// if (!item) throw new Error(`No item with ID ${itemId}`);
+			if (!item) throw new Error(`No item with ID ${itemId}`);
 
-			// if (item.type_ === BaseModel.TYPE_RESOURCE) {
-			// 	const localState = await Resource.localState(item);
-			// 	if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
-			// 		if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
-			// 			bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
-			// 		} else {
-			// 			bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
-			// 		}
-			// 		return;
-			// 	}
-			// 	const filePath = Resource.fullPath(item);
-			// 	bridge().openItem(filePath);
-			// } else if (item.type_ === BaseModel.TYPE_NOTE) {
-			// 	this.props.dispatch({
-			// 		type: 'FOLDER_AND_NOTE_SELECT',
-			// 		folderId: item.parent_id,
-			// 		noteId: item.id,
-			// 		hash: resourceUrlInfo.hash,
-			// 		historyAction: 'goto',
-			// 	});
-			// } else {
-			// 	throw new Error(`Unsupported item type: ${item.type_}`);
-			// }
+			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				const localState = await Resource.localState(item);
+				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+					if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+						bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+					} else {
+						bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+					}
+					return;
+				}
+				const filePath = Resource.fullPath(item);
+				bridge().openItem(filePath);
+			} else if (item.type_ === BaseModel.TYPE_NOTE) {
+				props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: item.parent_id,
+					noteId: item.id,
+					hash: resourceUrlInfo.hash,
+					historyAction: 'goto',
+				});
+			} else {
+				throw new Error(`Unsupported item type: ${item.type_}`);
+			}
 		} else if (msg.indexOf('#') === 0) {
 			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else if (msg === 'openExternal') {
