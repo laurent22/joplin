@@ -28,7 +28,7 @@
     "win": {
       "asar": true,
       "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
-      "icon": "../../Assets/Joplin.ico",
+      "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
           "target": "nsis",
