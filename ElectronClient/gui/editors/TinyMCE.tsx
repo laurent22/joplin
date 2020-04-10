@@ -435,17 +435,19 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
+				body_class: 'jop-tinymce',
 				height: '100%',
 				resize: false,
 				icons: 'Joplin',
 				icons_url: 'gui/editors/TinyMCE/icons.js',
-				plugins: 'noneditable link joplinLists hr searchreplace codesample',
+				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				branding: false,
 				target_list: false,
-				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote',
+				table_resize_bars: false,
+				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table',
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
