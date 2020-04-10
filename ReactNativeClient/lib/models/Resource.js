@@ -27,12 +27,14 @@ class Resource extends BaseItem {
 	}
 
 	static isSupportedMimeType(type) {
-		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp','audio/wav', 'audio/x-wav', 'audio/mp4','audio/mpeg', 'audio/x-aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac', 'audio/x-flac'];
+		const mimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp','audio/wav', 'audio/x-wav', 'audio/mp4','audio/mpeg', 'audio/x-aac', 'audio/aacp', 'audio/ogg', 'audio/webm', 'audio/flac', 'audio/x-flac', 'video/mp4', 'video/webm', 'video/ogg'];
 		if (mimeTypes.indexOf(type.toLowerCase()) >= 0) {
 			if (type.startsWith('image')) {
 				return 'image';
 			} else if (type.startsWith('audio')) {
 				return 'audio';
+			} else if (type.startsWith('video')) {
+				return 'video';
 			}
 		} else {
 			return 'unknown';

@@ -15,7 +15,8 @@ function installRule(markdownIt, mdOptions, ruleOptions) {
 		const r = utils.resourceReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl);
 		if (typeof r === 'string') return r;
 		if (r && r.type === 'audio') return `<audio controls><source src='${r.src}'></audio><a href=# onclick=ipcProxySendToHost('joplin://${src.substring(2)}')>`;
-
+		if (r && r.type === 'video') return `<video style="width:100%" controls><source src='${r.src}'></video>`;
+		
 		return defaultRender(tokens, idx, options, env, self);
 	};
 }
