@@ -17,6 +17,7 @@ const rules = {
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	copy_to_clipboard: require('./MdToHtml/rules/copy_to_clipboard'),
 };
 
 const setupLinkify = require('./MdToHtml/setupLinkify');
@@ -247,7 +248,7 @@ class MdToHtml {
 				} catch (error) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
-
+				// ! chaging the below order markup could effect to copy to clipboard plugin
 				return {
 					wrapCode: false,
 					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,

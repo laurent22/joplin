@@ -114,6 +114,9 @@ module.exports = function(theme) {
 			margin-top: 0.2em;
 			margin-bottom: 0;
 		}
+		.hljs{
+			position: relative;
+		}
 		.resource-icon {
 			display: inline-block;
 			position: relative;
