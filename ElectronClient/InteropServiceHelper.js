@@ -96,8 +96,7 @@ class InteropServiceHelper {
 	}
 
 	static async defaultFilename(noteIds, fileExtension) {
-		// Use of == here is because noteIds is potentiall undefined
-		if (noteIds == null) {
+		if (!noteIds) {
 			return '';
 		}
 
