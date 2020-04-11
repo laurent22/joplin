@@ -161,8 +161,8 @@ function folderSetCollapsed(state, action) {
 	return newState;
 }
 
-function removeAdjacentDuplicates(a) {
-	return a.filter((i, idx) => a[idx - 1] != i);
+function removeAdjacentDuplicates(items) {
+	return items.filter((item, idx) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
 }
 
 // When deleting a note, tag or folder
@@ -496,25 +496,34 @@ function handleHistory(state, action) {
 		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.parent_id != action.id);
 		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.parent_id != action.id);
 
-		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes.map(a => a.id));
-		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes.map(a => a.id));
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
 		break;
 	case 'NOTE_DELETE': {
 		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.id != action.id);
 		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.id != action.id);
 
-		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes.map(a => a.id));
-		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes.map(a => a.id));
+		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
+		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
 
-		// make sure the new selected note is not the last in history
 		const selectedNoteIds = newState.selectedNoteIds;
-		if (selectedNoteIds.length > 0) {
-			if (backwardHistoryNotes.length > 0 &&
-							backwardHistoryNotes[backwardHistoryNotes.length - 1] === selectedNoteIds[0]) { backwardHistoryNotes.pop(); }
-
-			if (forwardHistoryNotes.length > 0 &&
-							forwardHistoryNotes[forwardHistoryNotes.length - 1] === selectedNoteIds[0]) { forwardHistoryNotes.pop(); }
+		if (selectedNoteIds.length && backwardHistoryNotes.length && backwardHistoryNotes[backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+			backwardHistoryNotes = backwardHistoryNotes.slice(0, backwardHistoryNotes.length - 1);
 		}
+		if (selectedNoteIds.length && forwardHistoryNotes.length && forwardHistoryNotes[forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+			forwardHistoryNotes = forwardHistoryNotes.slice(0, forwardHistoryNotes.length - 1);
+		}
+
+		//	not working!!
+		// make sure the new selected note is not the last in history
+		// const selectedNoteIds = newState.selectedNoteIds;
+		// if (selectedNoteIds.length > 0) {
+		// 	if (backwardHistoryNotes.length > 0 &&
+		// 					backwardHistoryNotes[backwardHistoryNotes.length - 1] === selectedNoteIds[0]) { backwardHistoryNotes.pop(); }
+
+		// 	if (forwardHistoryNotes.length > 0 &&
+		// 					forwardHistoryNotes[forwardHistoryNotes.length - 1] === selectedNoteIds[0]) { forwardHistoryNotes.pop(); }
+		// }
 		break;
 	}
 	default:

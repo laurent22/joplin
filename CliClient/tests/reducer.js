@@ -528,6 +528,7 @@ describe('Reducer', function() {
 
 		expect(state.backwardHistoryNotes.map(n=>n.id)).toEqual([notes[0], notes[1], notes[2], notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
 		expect(state.forwardHistoryNotes.map(n=>n.id)).toEqual([notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
+		expect(state.selectedNoteIds).toEqual([notes[3].id]);
 
 		// delete third note
 		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
@@ -546,7 +547,9 @@ describe('Reducer', function() {
 		// backward = 0 1
 		// forward =
 		// current = 3
-		expect(state.backwardHistoryNotes).toEqual([notes[0].id, notes[1].id]);
-		expect(state.forwardHistoryNotes).toEqual([]);
+
+		expect(state.backwardHistoryNotes.map(x => x.id)).toEqual([notes[0].id, notes[1].id]);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+		expect(state.selectedNoteIds).toEqual([notes[3].id]);
 	}));
 });

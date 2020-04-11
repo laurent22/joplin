@@ -235,4 +235,118 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		expect(state.selectedNoteIds).toEqual([notes0[3].id]);
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
+
+
+	// history over deletion
+	it('should ensure history is not corrupted when notes get deleted.', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		await testApp.wait();
+		const notes0 = await createNTestNotes(5, folders[0]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
+		// goToNote(testApp, notes0[0]);
+		await testApp.wait();
+
+		goToNote(testApp, notes0[1]);
+		await testApp.wait();
+
+		goToNote(testApp, notes0[2]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[1].id });
+		await testApp.wait();
+
+		let state = testApp.store().getState();
+		goBackWard(state);
+		await testApp.wait();
+
+		state = testApp.store().getState();
+		expect(state.selectedNoteIds).toEqual([notes0[0].id]);
+		expect(state.selectedFolderId).toEqual(folders[0].id);
+	}));
+
+
+
+	// history over note creation
+	it('should ensure history is not corrupted when notes get created.', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		await testApp.wait();
+		const notes0 = await createNTestNotes(5, folders[0]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
+		await testApp.wait();
+
+		// testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
+		goToNote(testApp, notes0[0]);
+		await testApp.wait();
+
+		goToNote(testApp, notes0[1]);
+		await testApp.wait();
+
+		// create a new note noteNew
+		// you automatically go there, right?
+
+		// go to already created note.
+		// go back - check if  in new.
+		// go back - check if in old.
+
+		goToNote(testApp, notes0[2]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'NOTE_DELETE', id: notes0[1].id });
+		await testApp.wait();
+
+		let state = testApp.store().getState();
+		goBackWard(state);
+
+		state = testApp.store().getState();
+		expect(state.selectedNoteIds).toEqual([notes0[0].id]);
+		expect(state.selectedFolderId).toEqual(folders[0].id);
+	}));
+
+	// history over all notes
+	it('should ensure history works when traversing all notes', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		await testApp.wait();
+		const notes0 = await createNTestNotes(5, folders[0]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
+		await testApp.wait();
+
+		// testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
+		goToNote(testApp, notes0[0]);
+		await testApp.wait();
+
+		// set some special folder tag here?
+		// the do normal navigation and history check
+	}));
+
+	// history over conflict notes. conflict -> not conflict. conflict -> conflict
+	it('should ensure history works when traversing all notes', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		await testApp.wait();
+		const notes0 = await createNTestNotes(5, folders[0]);
+		await testApp.wait();
+
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
+		await testApp.wait();
+
+		// testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
+		goToNote(testApp, notes0[0]);
+		await testApp.wait();
+
+		// make some conflict notes.
+		// traverse between conflict and not conflict notes.
+		// travers between conflict notes.
+	}));
+
+	// history doesn't exceed max_limit (unit)
+
+
 });
