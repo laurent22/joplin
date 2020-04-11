@@ -637,14 +637,6 @@ class AppComponent extends React.Component {
 
 		if (!this.props.selectedFolderId) return;
 
-		const noteBody = sharedData.text ? sharedData.text : '';
-		const noteTitle = sharedData.title ? sharedData.title : Note.defaultTitleFromBody(noteBody);
-
-		const newNote = await Note.save({
-			title: noteTitle,
-			parent_id: this.props.selectedFolderId,
-		});
-
 		// This is a bit hacky, but the surest way to go to
 		// the needed note. We go back one screen in case there's
 		// already a note open - if we don't do this, the dispatch
@@ -655,12 +647,19 @@ class AppComponent extends React.Component {
 
 		await this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
+		const newNote = await Note.save({
+			parent_id: this.props.selectedFolderId,
+		}, { provisional: true });
+
 		setTimeout(() => {
 			this.props.dispatch({
 				type: 'NAV_GO',
 				routeName: 'Note',
 				noteId: newNote.id,
-				sharedData: { value: noteBody },
+				sharedData: {
+					title: sharedData.title,
+					body: sharedData.text,
+					resources: sharedData.resources },
 			});
 		}, 5);
 	}
