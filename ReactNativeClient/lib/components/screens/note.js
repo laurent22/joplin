@@ -38,9 +38,18 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
+import AudioRecorderPlayer, {
+	AVEncoderAudioQualityIOSType,
+	AVEncodingOption,
+	AudioEncoderAndroidType,
+	AudioSet,
+	AudioSourceAndroidType,
+} from 'react-native-audio-recorder-player';
+import {
+	PermissionsAndroid,
+} from 'react-native';
 
 import FileViewer from 'react-native-file-viewer';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -62,6 +71,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			isRecording: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -72,6 +82,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// See https://github.com/laurent22/joplin/issues/1057
 			HACK_webviewLoadingState: 0,
 		};
+		this.audioUri = '';
+		this.audioRecorderPlayer = new AudioRecorderPlayer();
 
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
@@ -505,6 +517,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 			mimeType = 'image/jpg';
 		}
 
+		if (!mimeType && fileType === 'audio') {
+			// Assume mp4 if we couldn't determine the file type. 
+			reg.logger().info('Missing file type and could not detect it - assuming audio/mp4');
+			mimeType = 'audio/mp4';
+		}
+
 		reg.logger().info(`Got file: ${localFilePath}`);
 		reg.logger().info(`Got type: ${mimeType}`);
 
@@ -608,6 +626,101 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.setState({ noteTagDialogShown: true });
 	}
+
+	recordAudio_onPress() {
+		if (!this.state.note || !this.state.note.id) return;
+
+		if (this.state.isRecording) {
+			this.setState({ isRecording: false });
+			this.onStopRecord();
+		} else {
+			this.setState({ isRecording: true });
+			this.onStartRecord();
+		}
+	}
+
+	async onStartRecord() {
+		if (Platform.OS === 'android') {
+			try {
+				const granted = await PermissionsAndroid.request(
+					PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+					{
+				  		title: 'Permissions for write access',
+				  		message: 'Give permission to your storage to write a file',
+				  		buttonPositive: 'ok',
+					},
+			  	);
+				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+					console.log('You can use the storage');
+				} else {
+					console.log('permission denied');
+					return;
+				}
+			} catch (err) {
+				console.warn(err);
+				return;
+			}
+		  }
+		  if (Platform.OS === 'android') {
+			try {
+				const granted = await PermissionsAndroid.request(
+					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+					{
+						title: 'Permissions for write access',
+						message: 'Give permission to your storage to write a file',
+						buttonPositive: 'ok',
+					},
+				);
+				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+					console.log('You can use the camera');
+				} else {
+					console.log('permission denied');
+					return;
+				}
+			} catch (err) {
+				console.warn(err);
+				return;
+			}
+		}
+		console.log('start recording');
+		const audioSet = {
+		AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+		AudioSourceAndroid: AudioSourceAndroidType.MIC,
+		AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+		AVNumberOfChannelsKeyIOS: 2,
+		AVFormatIDKeyIOS: AVEncodingOption.aac,
+		};
+		console.log('audioSet', audioSet);
+		const uri = await this.audioRecorderPlayer.startRecorder();
+		this.audioRecorderPlayer.addRecordBackListener((e) => {
+			this.setState({
+				recordSecs: e.current_position,
+				recordTime: this.audioRecorderPlayer.mmssss(
+				Math.floor(e.current_position),
+				),
+			});
+		});
+		console.log(`uri: ${uri}`);
+	};
+
+	async onStopRecord() {
+		const result = await this.audioRecorderPlayer.stopRecorder();
+		this.audioRecorderPlayer.removeRecordBackListener();
+		this.setState({
+		  recordSecs: 0,
+		});
+		this.attachFile(
+			{
+				uri: result,
+				didCancel: false,
+				error: null,
+				type: 'audio/mp4',
+				fileName: 'joplin-'+new Date().getMonth()+'.'+new Date().getDate()+'.'+new Date().getFullYear()+' - '+new Date().getHours()+'.'+new Date().getMinutes(),
+			},
+			'audio'
+		);
+		this.setState({ isrecording: false });
+	};
 
 	async share_onPress() {
 		await Share.share({
@@ -717,7 +830,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }, { text: +('Record audio'), id: 'recordAudio' }]);
+					const buttonId = await dialogs.pop(this, _('Choose an option'), [{ text: _('Take photo'), id: 'takePhoto' }, { text: _('Attach photo'), id: 'attachPhoto' }, { text: _('Attach any file'), id: 'attachFile' }, { text: _('Record audio'), id: 'recordAudio' }]);
 
 					if (buttonId === 'takePhoto') this.takePhoto_onPress();
 					if (buttonId === 'attachPhoto') this.attachPhoto_onPress();
@@ -989,6 +1102,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const renderActionButton = () => {
 			const buttons = [];
+			const stopRecordButton = [];
 
 			buttons.push({
 				title: _('Edit'),
@@ -1000,6 +1114,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 				},
 			});
 
+			stopRecordButton.push({
+				title: _('Stop'),
+				icon: 'md-square',
+				onPress: () => {
+					this.setState({ isRecording: false })
+					this.onStopRecord();
+					this.setState({ mode: 'edit' });
+					this.doFocusUpdate_ = true;
+				},
+			});
+
+			if (this.state.isRecording) return <ActionButton multiStates={true} buttons={stopRecordButton} buttonIndex={0} />;
 			if (this.state.mode == 'edit') return null;
 
 			return <ActionButton multiStates={true} buttons={buttons} buttonIndex={0} />;

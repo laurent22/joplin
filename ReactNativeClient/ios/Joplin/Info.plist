@@ -45,6 +45,8 @@
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This sample uses the microphone to record your speech and convert it to text.</string>
 	<key>UIAppFonts</key>
 	<array/>
 	<key>UILaunchStoryboardName</key>
