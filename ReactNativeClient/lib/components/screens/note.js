@@ -42,7 +42,6 @@ import AudioRecorderPlayer, {
 	AVEncoderAudioQualityIOSType,
 	AVEncodingOption,
 	AudioEncoderAndroidType,
-	AudioSet,
 	AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import {
@@ -82,7 +81,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// See https://github.com/laurent22/joplin/issues/1057
 			HACK_webviewLoadingState: 0,
 		};
-		this.audioUri = '';
 		this.audioRecorderPlayer = new AudioRecorderPlayer();
 
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
