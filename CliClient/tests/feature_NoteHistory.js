@@ -249,7 +249,6 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
-		// goToNote(testApp, notes0[0]);
 		await testApp.wait();
 
 		goToNote(testApp, notes0[1]);
@@ -331,7 +330,6 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		expect(state.selectedFolderId).toEqual(folders[0].id);
 	}));
 
-	// history over all notes
 	it('should ensure history works when traversing all notes', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
@@ -342,19 +340,16 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
 		await testApp.wait();
 
-		// testApp.dispatch({ type: 'NOTE_SELECT', id: notes0[0].id });
 		goToNote(testApp, notes0[0]);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
 		await testApp.wait();
 
-
 		let state = testApp.store().getState();
 		expect(sortedIds(state.notes)).toEqual(sortedIds(notes0.concat(notes1)));
 		expect(state.selectedNoteIds).toEqual(ids([notes0[0]]));
-		// set some special folder tag here?
-		// the do normal navigation and history check
+
 		goToNote(testApp, notes0[2]);
 		await testApp.wait();
 
@@ -393,6 +388,5 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		expect(state.selectedNoteIds).toEqual([notes0[4].id]);
 	}));
 
-	// history over conflict notes. conflict -> not conflict. conflict -> conflict
-
+	// TODO: history over conflict notes. conflict -> not conflict. conflict -> conflict
 });
