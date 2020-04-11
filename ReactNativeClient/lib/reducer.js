@@ -580,7 +580,8 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action);
+				newState = handleHistory(state, Object.assign({}, action, { type: 'FOLDER_SELECT' }));
+				newState = changeSelectedFolder(newState, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
 				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
