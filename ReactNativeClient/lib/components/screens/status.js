@@ -61,6 +61,9 @@ class StatusScreenComponent extends BaseScreenComponent {
 				style.fontWeight = 'bold';
 				if (i > 0) style.paddingTop = 20;
 				lines.push({ key: `section_${i}`, isSection: true, text: section.title });
+				if (section.canRetryAll) {
+					lines.push({ key: `retry_all_${i}`, text: '', retryAllHandler: section.retryAllHandler });
+				}
 
 				for (const n in section.body) {
 					if (!section.body.hasOwnProperty(n)) continue;
@@ -101,6 +104,12 @@ class StatusScreenComponent extends BaseScreenComponent {
 
 						style.flex = 1;
 
+						const retryAllButton = item.retryAllHandler ? (
+							<View style={{ flex: 0 }}>
+								<Button title={_('Retry All')} onPress={item.retryAllHandler} />
+							</View>
+						) : null;
+
 						const retryButton = item.retryHandler ? (
 							<View style={{ flex: 0 }}>
 								<Button title={_('Retry')} onPress={item.retryHandler} />
@@ -113,6 +122,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 							return (
 								<View style={{ flex: 1, flexDirection: 'row' }}>
 									<Text style={style}>{item.text}</Text>
+									{retryAllButton}
 									{retryButton}
 								</View>
 							);

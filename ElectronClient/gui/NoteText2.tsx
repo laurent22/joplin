@@ -16,15 +16,20 @@ const { time } = require('lib/time-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 const HtmlToHtml = require('lib/joplin-renderer/HtmlToHtml');
 const Setting = require('lib/models/Setting');
+const BaseItem = require('lib/models/BaseItem');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const HtmlToMd = require('lib/HtmlToMd');
 const { _ } = require('lib/locale');
 const Note = require('lib/models/Note.js');
+const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
 const { shim } = require('lib/shim');
 const TemplateUtils = require('lib/TemplateUtils');
 const { bridge } = require('electron').remote.require('./bridge');
 const { urlDecode } = require('lib/string-utils');
+const urlUtils = require('lib/urlUtils');
+const ResourceFetcher = require('lib/services/ResourceFetcher.js');
+const DecryptionWorker = require('lib/services/DecryptionWorker.js');
 
 interface NoteTextProps {
 	style: any,
@@ -139,7 +144,7 @@ function usePrevious(value:any):any {
 	return ref.current;
 }
 
-function initNoteState(n:any, setFormNote:Function, setDefaultEditorState:Function) {
+async function initNoteState(n:any, setFormNote:Function, setDefaultEditorState:Function) {
 	let originalCss = '';
 	if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		const htmlToHtml = new HtmlToHtml();
@@ -163,7 +168,17 @@ function initNoteState(n:any, setFormNote:Function, setDefaultEditorState:Functi
 	setDefaultEditorState({
 		value: n.body,
 		markupLanguage: n.markup_language,
+		resourceInfos: await attachedResources(n.body),
 	});
+
+	await handleResourceDownloadMode(n.body);
+}
+
+async function handleResourceDownloadMode(noteBody:string) {
+	if (noteBody && Setting.value('sync.resourceDownloadMode') === 'auto') {
+		const resourceIds = await Note.linkedResourceIds(noteBody);
+		await ResourceFetcher.instance().markForDownload(resourceIds);
+	}
 }
 
 async function htmlToMarkdown(html:string):Promise<string> {
@@ -190,6 +205,52 @@ async function formNoteToNote(formNote:FormNote):Promise<any> {
 	delete newNote.bodyEditorContent;
 
 	return newNote;
+}
+
+let resourceCache_:any = {};
+
+function clearResourceCache() {
+	resourceCache_ = {};
+}
+
+async function attachedResources(noteBody:string):Promise<any> {
+	if (!noteBody) return {};
+	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
+
+	const output:any = {};
+	for (let i = 0; i < resourceIds.length; i++) {
+		const id = resourceIds[i];
+
+		if (resourceCache_[id]) {
+			output[id] = resourceCache_[id];
+		} else {
+			const resource = await Resource.load(id);
+			const localState = await Resource.localState(resource);
+
+			const o = {
+				item: resource,
+				localState: localState,
+			};
+
+			// eslint-disable-next-line require-atomic-updates
+			resourceCache_[id] = o;
+			output[id] = o;
+		}
+	}
+
+	return output;
+}
+
+function installResourceHandling(refreshResourceHandler:Function) {
+	ResourceFetcher.instance().on('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().on('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().on('resourceDecrypted', refreshResourceHandler);
+}
+
+function uninstallResourceHandling(refreshResourceHandler:Function) {
+	ResourceFetcher.instance().off('downloadComplete', refreshResourceHandler);
+	ResourceFetcher.instance().off('downloadStarted', refreshResourceHandler);
+	DecryptionWorker.instance().off('resourceDecrypted', refreshResourceHandler);
 }
 
 async function attachResources() {
@@ -309,13 +370,14 @@ function useWindowCommand(windowCommand:any, dispatch:Function, formNote:FormNot
 
 function NoteText2(props:NoteTextProps) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultNote());
-	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ value: '', markupLanguage: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN });
+	const [defaultEditorState, setDefaultEditorState] = useState<DefaultEditorState>({ value: '', markupLanguage: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceInfos: {} });
 	const prevSyncStarted = usePrevious(props.syncStarted);
 
 	const editorRef = useRef<any>();
 	const titleInputRef = useRef<any>();
 	const formNoteRef = useRef<FormNote>();
 	formNoteRef.current = { ...formNote };
+	const isMountedRef = useRef(true);
 
 	useWindowCommand(props.windowCommand, props.dispatch, formNote, titleInputRef, editorRef);
 
@@ -384,12 +446,35 @@ function NoteText2(props:NoteTextProps) {
 		}
 	}, [props.isProvisional, formNote.id]);
 
+	const refreshResource = useCallback(async function(event) {
+		if (!defaultEditorState.value) return;
+
+		const resourceIds = await Note.linkedResourceIds(defaultEditorState.value);
+		if (resourceIds.indexOf(event.id) >= 0) {
+			clearResourceCache();
+			const e = {
+				...defaultEditorState,
+				resourceInfos: await attachedResources(defaultEditorState.value),
+			};
+			setDefaultEditorState(e);
+		}
+	}, [defaultEditorState]);
+
+	useEffect(() => {
+		installResourceHandling(refreshResource);
+
+		return () => {
+			uninstallResourceHandling(refreshResource);
+		};
+	}, [defaultEditorState]);
+
 	useEffect(() => {
 		// This is not exactly a hack but a bit ugly. If the note was changed (willChangeId > 0) but not
 		// yet saved, we need to save it now before the component is unmounted. However, we can't put
 		// formNote in the dependency array or that effect will run every time the note changes. We only
 		// want to run it once on unmount. So because of that we need to use that formNoteRef.
 		return () => {
+			isMountedRef.current = false;
 			saveNoteIfWillChange(formNoteRef.current, editorRef, props.dispatch);
 		};
 	}, []);
@@ -420,7 +505,7 @@ function NoteText2(props:NoteTextProps) {
 				return;
 			}
 
-			initNoteState(n, setFormNote, setDefaultEditorState);
+			await initNoteState(n, setFormNote, setDefaultEditorState);
 		};
 
 		loadNote();
@@ -462,7 +547,7 @@ function NoteText2(props:NoteTextProps) {
 			if (cancelled) return;
 			if (!n) throw new Error(`Cannot find note with ID: ${props.noteId}`);
 			reg.logger().debug('Loaded note:', n);
-			initNoteState(n, setFormNote, setDefaultEditorState);
+			await initNoteState(n, setFormNote, setDefaultEditorState);
 
 			handleAutoFocus(!!n.is_todo);
 		}
@@ -475,6 +560,15 @@ function NoteText2(props:NoteTextProps) {
 	}, [props.noteId, props.isProvisional, formNote, waitingToSaveNote]);
 
 	const onFieldChange = useCallback((field:string, value:any, changeId: number = 0) => {
+		if (!isMountedRef.current) {
+			// When the component is unmounted, various actions can happen which can
+			// trigger onChange events, for example the textarea might be cleared.
+			// We need to ignore these events, otherwise the note is going to be saved
+			// with an invalid body.
+			reg.logger().debug('Skipping change event because the component is unmounted');
+			return;
+		}
+
 		handleProvisionalFlag();
 
 		const change = field === 'body' ? {
@@ -522,7 +616,7 @@ function NoteText2(props:NoteTextProps) {
 		});
 	}, [formNote, handleProvisionalFlag]);
 
-	const onMessage = useCallback((event:any) => {
+	const onMessage = useCallback(async (event:any) => {
 		const msg = event.name;
 		const args = event.args;
 
@@ -604,35 +698,36 @@ function NoteText2(props:NoteTextProps) {
 			// }
 
 			// menu.popup(bridge().window());
-		} else if (msg.indexOf('joplin://') === 0) {
-			// const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
-			// const itemId = resourceUrlInfo.itemId;
-			// const item = await BaseItem.loadItemById(itemId);
+		} else if (msg === 'openInternal') {
+			const resourceUrlInfo = urlUtils.parseResourceUrl(args.url);
+			const itemId = resourceUrlInfo.itemId;
+			const item = await BaseItem.loadItemById(itemId);
 
-			// if (!item) throw new Error(`No item with ID ${itemId}`);
+			if (!item) throw new Error(`No item with ID ${itemId}`);
 
-			// if (item.type_ === BaseModel.TYPE_RESOURCE) {
-			// 	const localState = await Resource.localState(item);
-			// 	if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
-			// 		if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
-			// 			bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
-			// 		} else {
-			// 			bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
-			// 		}
-			// 		return;
-			// 	}
-			// 	const filePath = Resource.fullPath(item);
-			// 	bridge().openItem(filePath);
-			// } else if (item.type_ === BaseModel.TYPE_NOTE) {
-			// 	this.props.dispatch({
-			// 		type: 'FOLDER_AND_NOTE_SELECT',
-			// 		folderId: item.parent_id,
-			// 		noteId: item.id,
-			// 		hash: resourceUrlInfo.hash,
-			// 	});
-			// } else {
-			// 	throw new Error(`Unsupported item type: ${item.type_}`);
-			// }
+			if (item.type_ === BaseModel.TYPE_RESOURCE) {
+				const localState = await Resource.localState(item);
+				if (localState.fetch_status !== Resource.FETCH_STATUS_DONE || !!item.encryption_blob_encrypted) {
+					if (localState.fetch_status === Resource.FETCH_STATUS_ERROR) {
+						bridge().showErrorMessageBox(`${_('There was an error downloading this attachment:')}\n\n${localState.fetch_error}`);
+					} else {
+						bridge().showErrorMessageBox(_('This attachment is not downloaded or not decrypted yet'));
+					}
+					return;
+				}
+				const filePath = Resource.fullPath(item);
+				bridge().openItem(filePath);
+			} else if (item.type_ === BaseModel.TYPE_NOTE) {
+				props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: item.parent_id,
+					noteId: item.id,
+					hash: resourceUrlInfo.hash,
+					historyAction: 'goto',
+				});
+			} else {
+				throw new Error(`Unsupported item type: ${item.type_}`);
+			}
 		} else if (msg.indexOf('#') === 0) {
 			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else if (msg === 'openExternal') {
@@ -674,6 +769,7 @@ function NoteText2(props:NoteTextProps) {
 		attachResources: attachResources,
 		disabled: waitingToSaveNote,
 		joplinHtml: joplinHtml,
+		theme: props.theme,
 	};
 
 	let editor = null;

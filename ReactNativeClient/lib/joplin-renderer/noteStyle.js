@@ -1,3 +1,10 @@
+function formatCssSize(v) {
+	if (typeof v === 'string') {
+		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
+	}
+	return `${v}px`;
+}
+
 module.exports = function(theme) {
 	theme = theme ? theme : {};
 
@@ -18,8 +25,8 @@ module.exports = function(theme) {
 			line-height: ${theme.htmlLineHeight};
 			background-color: ${theme.htmlBackgroundColor};
 			font-family: ${fontFamily};
-			padding-bottom: ${theme.paddingBottom};
-			padding-top: ${theme.paddingTop};
+			padding-bottom: ${formatCssSize(theme.bodyPaddingBottom)};
+			padding-top: ${formatCssSize(theme.bodyPaddingTop)};
 		}
 		strong {
 			color: ${theme.colorBright};
@@ -181,32 +188,46 @@ module.exports = function(theme) {
 			margin-left: 0;
 			opacity: .7;
 		}
+
+		.jop-tinymce table,
 		table {
-			text-align: left-align;
+			text-align: left;
 			border-collapse: collapse;
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlBackgroundColor};
 		}
-		td, th {
+
+		.jop-tinymce table td, .jop-tinymce table th,
+		table td, th {
+			text-align: left;
 			padding: .5em 1em .5em 1em;
 			font-size: ${theme.htmlFontSize};
 			color: ${theme.htmlColor};
 			font-family: ${fontFamily};
 		}
-		td {
+
+		.jop-tinymce table td,
+		table td {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 		}
-		th {
+
+		.jop-tinymce table th,
+		table th {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			border-bottom: 2px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlTableBackgroundColor};
 		}
-		tr:nth-child(even) {
+
+		.jop-tinymce table tr:nth-child(even),
+		table tr:nth-child(even) {
 			background-color: ${theme.htmlTableBackgroundColor};
 		}
-		tr:hover {
+
+		.jop-tinymce table tr:hover,
+		table tr:hover {
 			background-color: ${theme.raisedBackgroundColor};
 		}
+
 		hr {
 			border: none;
 			border-bottom: 2px solid ${theme.htmlDividerColor};
@@ -215,7 +236,9 @@ module.exports = function(theme) {
 			max-width: 100%;
 			height: auto;
 		}
-		.inline-code {
+		
+		.inline-code,
+		.tox :not(.joplin-editable) code {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlCodeBackgroundColor};
 			padding-right: .2em;
@@ -294,6 +317,11 @@ module.exports = function(theme) {
 
 		.mce-content-body.mce-content-readonly {
 			opacity: 0.5;
+		}
+
+		/* We need that to make sure click events have the A has a target */
+		.katex a span {
+			pointer-events: none;
 		}
 
 		/* =============================================== */

@@ -267,6 +267,7 @@ class HeaderComponent extends React.Component {
 			boxSizing: 'border-box',
 			cursor: 'default',
 			whiteSpace: 'nowrap',
+			userSelect: 'none',
 		};
 
 		if (showBackButton) {

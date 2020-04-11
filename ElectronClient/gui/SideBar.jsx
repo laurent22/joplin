@@ -131,6 +131,7 @@ class SideBarComponent extends React.Component {
 				display: 'flex',
 				flex: 1,
 				alignItems: 'center',
+				userSelect: 'none',
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
@@ -160,6 +161,7 @@ class SideBarComponent extends React.Component {
 				paddingLeft: 8,
 				display: 'flex',
 				alignItems: 'center',
+				userSelect: 'none',
 			},
 			button: {
 				padding: 6,
@@ -176,6 +178,7 @@ class SideBarComponent extends React.Component {
 				marginLeft: 5,
 				marginRight: 5,
 				cursor: 'default',
+				userSelect: 'none',
 			},
 			syncReport: {
 				fontFamily: theme.fontFamily,
@@ -195,6 +198,7 @@ class SideBarComponent extends React.Component {
 			noteCount: {
 				paddingLeft: 5,
 				opacity: 0.5,
+				userSelect: 'none',
 			},
 		};
 

@@ -34,7 +34,7 @@ const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
 const ExternalEditWatcher = require('lib/services/ExternalEditWatcher');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
-const { toSystemSlashes, safeFilename } = require('lib/path-utils');
+const { toSystemSlashes } = require('lib/path-utils');
 const { clipboard } = require('electron');
 const SearchEngine = require('lib/services/SearchEngine');
 const NoteTextViewer = require('./NoteTextViewer.min');
@@ -427,6 +427,9 @@ class NoteTextComponent extends React.Component {
 		if (this.props.noteId) {
 			note = await Note.load(this.props.noteId);
 			noteTags = this.props.noteTags || [];
+			await this.handleResourceDownloadMode(note);
+		} else {
+			console.warn('Trying to load a note with no ID - should no longer be possible');
 		}
 
 		const folder = note ? Folder.byId(this.props.folders, note.parent_id) : null;
@@ -612,10 +615,7 @@ class NoteTextComponent extends React.Component {
 				}, 10);
 			}
 
-			if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
-				const resourceIds = await Note.linkedResourceIds(note.body);
-				await ResourceFetcher.instance().markForDownload(resourceIds);
-			}
+			await this.handleResourceDownloadMode(note);
 		}
 
 		if (note) {
@@ -653,6 +653,13 @@ class NoteTextComponent extends React.Component {
 		await this.updateHtml(newState.note ? newState.note.markup_language : null, newState.note ? newState.note.body : '');
 
 		defer();
+	}
+
+	async handleResourceDownloadMode(note) {
+		if (note && note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			const resourceIds = await Note.linkedResourceIds(note.body);
+			await ResourceFetcher.instance().markForDownload(resourceIds);
+		}
 	}
 
 	async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -1224,7 +1231,14 @@ class NoteTextComponent extends React.Component {
 			const filePath = filePaths[i];
 			try {
 				reg.logger().info(`Attaching ${filePath}`);
-				note = await shim.attachFileToNote(note, filePath, position, createFileURL);
+				note = await shim.attachFileToNote(note, filePath, position, {
+					createFileURL: createFileURL,
+					resizeLargeImages: 'ask',
+				});
+				if (!note) {
+					reg.logger().info('File attachment was cancelled');
+					continue;
+				}
 				reg.logger().info('File was attached.');
 				this.setState({
 					note: Object.assign({}, note),
@@ -1288,10 +1302,6 @@ class NoteTextComponent extends React.Component {
 		this.isPrinting_ = false;
 	}
 
-	pdfFileName_(note, folder) {
-		return safeFilename(`${note.title} - ${folder.title}.pdf`, 255, true);
-	}
-
 	async commandSavePdf(args) {
 		try {
 			if (!this.state.note && !args.noteIds) throw new Error('No notes selected for pdf export');
@@ -1300,12 +1310,9 @@ class NoteTextComponent extends React.Component {
 
 			let path = null;
 			if (noteIds.length === 1) {
-				const note = await Note.load(noteIds[0]);
-				const folder = Folder.byId(this.props.folders, note.parent_id);
-
 				path = bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
-					defaultPath: this.pdfFileName_(note, folder),
+					defaultPath: await InteropServiceHelper.defaultFilename(noteIds, 'pdf'),
 				});
 
 			} else {
@@ -1453,12 +1460,17 @@ class NoteTextComponent extends React.Component {
 
 			newBody = this.state.note.body.substr(0, selection.start);
 
+			let startCursorPos, endCursorPos;
+
 			for (let i = 0; i < selectedStrings.length; i++) {
 				if (byLine == false) {
 					const start = selectedStrings[i].search(/[^\s]/);
 					const end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
 					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
-					if (this.state.note.body.substr(selection.end) === '') newBody = newBody.trim();
+					// Getting position for correcting offset in highlighted text when surrounded by white spaces
+					startCursorPos = this.textOffsetToCursorPosition(selection.start + start, newBody);
+					endCursorPos = this.textOffsetToCursorPosition(selection.start + end + 1, newBody);
+
 				} else { newBody += string1 + selectedStrings[i] + string2; }
 
 			}
@@ -1472,12 +1484,24 @@ class NoteTextComponent extends React.Component {
 
 			// Add the number of newlines to the row
 			// and add the length of the final line to the column (for strings with no newlines this is the string length)
-			const newRange = {
-				start: { row: r.start.row + str1Split.length - 1,
-					column: r.start.column + str1Split[str1Split.length - 1].length },
-				end: { row: r.end.row + str1Split.length - 1,
-					column: r.end.column + str1Split[str1Split.length - 1].length },
-			};
+
+			let newRange = {};
+			if (!byLine) {
+				// Correcting offset in Highlighted text when surrounded by white spaces
+				newRange = {
+					start: { row: startCursorPos.row,
+						column: startCursorPos.column + string1.length },
+					end: { row: endCursorPos.row,
+						column: endCursorPos.column + string1.length },
+				};
+			} else {
+				newRange = {
+					start: { row: r.start.row + str1Split.length - 1,
+						column: r.start.column + str1Split[str1Split.length - 1].length },
+					end: { row: r.end.row + str1Split.length - 1,
+						column: r.end.column + str1Split[str1Split.length - 1].length },
+				};
+			}
 
 			if (replacementText !== null) {
 				const diff = replacementText.length - (selection.end - selection.start);
@@ -1615,7 +1639,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextHeading() {
-		this.addListItem('## ');
+		this.addListItem('## ','','', true);
 	}
 
 	commandTextHorizontalRule() {

@@ -18,6 +18,7 @@ const updateIgnoredTypeScriptBuildTask = async function() {
 			'**/CliClient/tests-build/lib/**',
 			'**/ElectronClient/dist/**',
 			'**/Modules/TinyMCE/JoplinLists/**',
+			'**/Modules/TinyMCE/IconPack/**',
 		],
 	}).map(f => f.substr(__dirname.length + 1));
 
@@ -44,7 +45,7 @@ gulp.task('watch', function() {
 
 	// For watching, we use the actual tsc tool because it's more robust and
 	// doesn't crash when there's an error
-	const promise = execa('node', ['node_modules/typescript/bin/tsc', '--project', 'tsconfig.json'], { cwd: `${__dirname}` });
+	const promise = execa('node', ['node_modules/typescript/bin/tsc', '--watch', '--project', 'tsconfig.json'], { cwd: `${__dirname}` });
 	promise.stdout.pipe(process.stdout);
 });
 
