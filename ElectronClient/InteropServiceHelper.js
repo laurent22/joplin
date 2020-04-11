@@ -96,6 +96,11 @@ class InteropServiceHelper {
 	}
 
 	static async defaultFilename(noteIds, fileExtension) {
+		// Use of == here is because noteIds is potentiall undefined
+		if (noteIds == null) {
+			return '';
+		}
+
 		const note = await Note.load(noteIds[0]);
 		// In a rare case the passed not will be null, use the id for filename
 		if (note === null) {
