@@ -1013,7 +1013,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						webViewStyle={theme}
 						// Extra bottom padding to make it possible to scroll past the
 						// action button (so that it doesn't overlap the text)
-						paddingBottom="3.8em"
+						paddingBottom="150"
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
