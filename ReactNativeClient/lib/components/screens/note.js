@@ -519,7 +519,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
-				const done = await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
 				if (!done) return;
 			} else {
 				if (fileType === 'image') {
