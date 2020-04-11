@@ -1461,12 +1461,17 @@ class NoteTextComponent extends React.Component {
 
 			newBody = this.state.note.body.substr(0, selection.start);
 
+			let startCursorPos, endCursorPos;
+
 			for (let i = 0; i < selectedStrings.length; i++) {
 				if (byLine == false) {
 					const start = selectedStrings[i].search(/[^\s]/);
 					const end = selectedStrings[i].search(/[^\s](?=[\s]*$)/);
 					newBody += selectedStrings[i].substr(0, start) + string1 + selectedStrings[i].substr(start, end - start + 1) + string2 + selectedStrings[i].substr(end + 1);
-					if (this.state.note.body.substr(selection.end) === '') newBody = newBody.trim();
+					// Getting position for correcting offset in highlighted text when surrounded by white spaces
+					startCursorPos = this.textOffsetToCursorPosition(selection.start + start, newBody);
+					endCursorPos = this.textOffsetToCursorPosition(selection.start + end + 1, newBody);
+
 				} else { newBody += string1 + selectedStrings[i] + string2; }
 
 			}
@@ -1480,12 +1485,24 @@ class NoteTextComponent extends React.Component {
 
 			// Add the number of newlines to the row
 			// and add the length of the final line to the column (for strings with no newlines this is the string length)
-			const newRange = {
-				start: { row: r.start.row + str1Split.length - 1,
-					column: r.start.column + str1Split[str1Split.length - 1].length },
-				end: { row: r.end.row + str1Split.length - 1,
-					column: r.end.column + str1Split[str1Split.length - 1].length },
-			};
+
+			let newRange = {};
+			if (!byLine) {
+				// Correcting offset in Highlighted text when surrounded by white spaces
+				newRange = {
+					start: { row: startCursorPos.row,
+						column: startCursorPos.column + string1.length },
+					end: { row: endCursorPos.row,
+						column: endCursorPos.column + string1.length },
+				};
+			} else {
+				newRange = {
+					start: { row: r.start.row + str1Split.length - 1,
+						column: r.start.column + str1Split[str1Split.length - 1].length },
+					end: { row: r.end.row + str1Split.length - 1,
+						column: r.end.column + str1Split[str1Split.length - 1].length },
+				};
+			}
 
 			if (replacementText !== null) {
 				const diff = replacementText.length - (selection.end - selection.start);
@@ -1623,7 +1640,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	commandTextHeading() {
-		this.addListItem('## ');
+		this.addListItem('## ','','', true);
 	}
 
 	commandTextHorizontalRule() {
