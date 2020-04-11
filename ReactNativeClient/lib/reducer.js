@@ -365,30 +365,6 @@ function removeItemFromArray(array, property, value) {
 	return array;
 }
 
-
-// newState.notesParentType = 'SmartFilter';
-// newState.selectedSmartFilterId = action.id;
-
-// let parentType = state.notesParentType;
-
-
-// if (parentType === 'Folder') {
-// 	parentId = state.selectedFolderId;
-// 	parentType = BaseModel.TYPE_FOLDER;
-// } else if (parentType === 'Tag') {
-// 	parentId = state.selectedTagId;
-// 	parentType = BaseModel.TYPE_TAG;
-// } else if (parentType === 'Search') {
-// 	parentId = state.selectedSearchId;
-// 	parentType = BaseModel.TYPE_SEARCH;
-// } else if (parentType === 'SmartFilter') {
-// 	parentId = state.selectedSmartFilterId;
-// 	parentType = BaseModel.TYPE_SMART_FILTER;
-// }
-
-// state.searches??
-
-
 const getContextFromHistory = (ctx) => {
 	const result = {};
 	result.notesParentType = ctx.notesParentType;
@@ -404,8 +380,6 @@ const getContextFromHistory = (ctx) => {
 	}
 	return result;
 };
-
-
 
 function handleHistory(state, action) {
 	let newState = Object.assign({}, state);
@@ -491,7 +465,6 @@ function handleHistory(state, action) {
 			backwardHistoryNotes = backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		break;
-
 	case 'FOLDER_DELETE':
 		backwardHistoryNotes = backwardHistoryNotes.filter(note => note.parent_id != action.id);
 		forwardHistoryNotes = forwardHistoryNotes.filter(note => note.parent_id != action.id);
@@ -513,17 +486,6 @@ function handleHistory(state, action) {
 		if (selectedNoteIds.length && forwardHistoryNotes.length && forwardHistoryNotes[forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
 			forwardHistoryNotes = forwardHistoryNotes.slice(0, forwardHistoryNotes.length - 1);
 		}
-
-		//	not working!!
-		// make sure the new selected note is not the last in history
-		// const selectedNoteIds = newState.selectedNoteIds;
-		// if (selectedNoteIds.length > 0) {
-		// 	if (backwardHistoryNotes.length > 0 &&
-		// 					backwardHistoryNotes[backwardHistoryNotes.length - 1] === selectedNoteIds[0]) { backwardHistoryNotes.pop(); }
-
-		// 	if (forwardHistoryNotes.length > 0 &&
-		// 					forwardHistoryNotes[forwardHistoryNotes.length - 1] === selectedNoteIds[0]) { forwardHistoryNotes.pop(); }
-		// }
 		break;
 	}
 	default:
@@ -534,9 +496,6 @@ function handleHistory(state, action) {
 	newState.forwardHistoryNotes = forwardHistoryNotes;
 	return newState;
 }
-
-
-
 
 const reducer = (state = defaultState, action) => {
 	let newState = state;
@@ -1029,4 +988,4 @@ const reducer = (state = defaultState, action) => {
 	return newState;
 };
 
-module.exports = { reducer, defaultState, stateUtils };
+module.exports = { reducer, defaultState, stateUtils, MAX_HISTORY };

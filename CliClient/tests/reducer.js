@@ -5,7 +5,7 @@ const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes,
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
+const { reducer, defaultState, stateUtils, MAX_HISTORY } = require('lib/reducer.js');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
@@ -547,9 +547,38 @@ describe('Reducer', function() {
 		// backward = 0 1
 		// forward =
 		// current = 3
-
 		expect(state.backwardHistoryNotes.map(x => x.id)).toEqual([notes[0].id, notes[1].id]);
 		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
 		expect(state.selectedNoteIds).toEqual([notes[3].id]);
+	}));
+
+	it('should ensure history max limit is maintained', asyncTest(async () => {
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const idx = 0;
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goToNote(notes, [i % 5], state);
+		}
+
+		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goBackWard(state);
+		}
+
+		expect(state.backwardHistoryNotes).toEqual([]);
+		expect(state.forwardHistoryNotes.length).toEqual(MAX_HISTORY);
+
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goForward(state);
+		}
+
+		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
 	}));
 });
