@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -44,20 +46,20 @@ msgstr "Ingen anteckningsbok har angivits."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:169
 msgid "Cancelling background synchronisation... Please wait."
@@ -543,21 +545,23 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"Starta, stoppa eller kontrollera API-server. För att ange vilken port den "
+"ska köra på, välj api.port konfiguration. Kommandon är (%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "Servern körs redan på port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "Servern körs på port %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
-msgstr ""
+msgstr "Servern körs inte."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
@@ -837,7 +841,7 @@ msgstr "Infoga datumtid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Skapa att göra-lista från mall"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
 #, fuzzy
@@ -915,9 +919,8 @@ msgstr "OK"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:680
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:763
-#, fuzzy
 msgid "&File"
-msgstr "Fil"
+msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:686
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1085
@@ -926,7 +929,7 @@ msgstr "Om Joplin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:693
 msgid "Preferences..."
-msgstr ""
+msgstr "Inställningar..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:703
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1064
@@ -936,7 +939,7 @@ msgstr "Sök efter uppdateringar..."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:717
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:777
 msgid "Templates"
-msgstr ""
+msgstr "Mallar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:724
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:782
@@ -968,12 +971,11 @@ msgstr "Avsluta"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:770
 msgid "Close Window"
-msgstr ""
+msgstr "Stäng fönster"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:808
-#, fuzzy
 msgid "&Edit"
-msgstr "Redigera"
+msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:816
 msgid "Cut"
@@ -1047,7 +1049,7 @@ msgstr "Växla sidofältet"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:960
 msgid "Layout button sequence"
-msgstr ""
+msgstr "Knappordning"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:964
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:641
@@ -1065,15 +1067,15 @@ msgstr "Fokus"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Actual Size"
-msgstr ""
+msgstr "Faktiskt storlek"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom In"
-msgstr ""
+msgstr "Zooma in"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zooma ut"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 #, fuzzy
@@ -1172,7 +1174,7 @@ msgstr "Nej"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/checkForUpdates.js:153
 msgid "Full Release Notes"
-msgstr ""
+msgstr "Fullständig information om denna version"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ClipperConfigScreen.min.js:39
 msgid "Token has been copied to the clipboard!"
@@ -1261,6 +1263,7 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:82
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
+"Det här kommer öppna ett nytt fönster. Vill du spara nurvarande förändringar?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:139
 #, javascript-format
@@ -1293,6 +1296,8 @@ msgid ""
 "The Joplin Nextcloud App is either not installed or misconfigured. Please "
 "see the full error message below:"
 msgstr ""
+"Joplin Nextcloud App finns antingen inte installerat eller är felinställd. "
+"Vänligen se hela felmeddelandet nedan:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ConfigScreen.min.js:206
 #, fuzzy
@@ -1350,7 +1355,7 @@ msgstr "Spara"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Huvudnycklar behöver upgraderas"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1358,6 +1363,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Följande huvudnycklar använder en utdaterad krypteringsalgoritm, det är "
+"rekommenderat att uppgradera dem. Den uppgraderade huvudnyckeln kommer "
+"fortfarande att dekryptera och kryptera din data som vanligt. "
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1368,7 +1376,7 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Uppgradera"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
 #, fuzzy
@@ -1380,12 +1388,17 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Standard krypteringsmetod har ändrats till en säkrare och det är "
+"rekommenderat att du tillämpar den på din data."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Du kan använda verktyget nedan för att omkryptera din data, exempelvis om du "
+"vill veta om vissa av dina anteckningar är krypterade med en gammal "
+"krypteringsmetod."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1404,6 +1417,19 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"För att göra detta måste all din datauppsättning vara krypterad och "
+"synkroniserad, det är bäst köra processen över natten.\n"
+"\n"
+"För att starta processen, följ dessa instruktioner:\n"
+"\n"
+"1. Synkronisera alla dina enheter.\\n\n"
+"2. Klicka \\\"%s\\\"\n"
+"3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några "
+"anteckningar på dina andra enheter för att undvika konflikter.\n"
+"4. När synkroniseringen är färdig på denna enhet, synkronisera alla dina "
+"andra enheter och låt processen köra färdigt.\n"
+"\n"
+"Viktigt: du behöver bara köra denna process EN gång på en enhet."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:277
@@ -1417,7 +1443,7 @@ msgstr "Kryptering är:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr ""
+msgstr "Firefox Tillägg"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
@@ -1425,15 +1451,15 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr ""
+msgstr "Hämta den nu:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
 #, fuzzy
@@ -1487,7 +1513,7 @@ msgstr "Ställ in alarm:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:400
 msgid "Template file:"
-msgstr ""
+msgstr "Fil för mall:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:542
 msgid "Some items cannot be synchronised."
@@ -1521,7 +1547,7 @@ msgstr "Ange huvudlösenord:"
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr ""
+msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera din data."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:595
 #, fuzzy
@@ -1539,19 +1565,19 @@ msgstr "Sök..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Ord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Tecken"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Tecken exklusive mellanslag"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Rader"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
 #, fuzzy
@@ -1561,7 +1587,7 @@ msgstr "Anteckningens egenskaper"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
 msgid "Close"
-msgstr ""
+msgstr "Stäng"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteList.min.js:456
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -1607,7 +1633,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
 msgid "Previous versions of this note"
-msgstr ""
+msgstr "Tidigare versioner av denna anteckning"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1830
@@ -1618,6 +1644,8 @@ msgstr "Anteckningens egenskaper"
 #, javascript-format
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
+"Den här anteckningen \"%s\" har framgångsrikt återställts till "
+"anteckningsboken \"%s\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
 #, fuzzy
@@ -1633,7 +1661,7 @@ msgstr "Länk eller meddelande stöds inte: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:177
 msgid "Restore"
-msgstr ""
+msgstr "Återställ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
@@ -1641,6 +1669,9 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
+"Klicka på \"%s\" för att återställa anteckningen. Den kommer kopieras till "
+"anteckningsboken som heter \"%s\". Den nuvarande versionen kommer inte att "
+"ersättas eller modifieras."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:778
 msgid "Open..."
@@ -1665,7 +1696,7 @@ msgstr "Kopiera länkadress"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr ""
+msgstr "Något blev fel vid nedladdningen av denna bilaga:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
 #, fuzzy
@@ -1789,7 +1820,7 @@ msgstr "titel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:32
 msgid "Size"
-msgstr ""
+msgstr "Storlek"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:36
 #, fuzzy
@@ -1813,12 +1844,13 @@ msgstr "Kontrollerar... vänta."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:128
 msgid "No resources!"
-msgstr ""
+msgstr "Inga resurser!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:130
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1851,6 +1883,7 @@ msgstr[1] "Token har kopierats till urklipp!"
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
+"Notera: När en anteckning delas kan den inte längre krypteras på servern."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:170
 #, fuzzy
@@ -1866,7 +1899,7 @@ msgstr[1] "Dela"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:282
 msgid "Remove"
-msgstr ""
+msgstr "Ta bort"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:285
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:148
@@ -1925,12 +1958,12 @@ msgstr "Välj vart synkroniseringstillståndet ska exporteras till"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
 msgid "Retry All"
-msgstr ""
+msgstr "Försök alla igen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
 msgid "Retry"
-msgstr ""
+msgstr "Försök igen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:27
 msgid "Add or remove tags"
@@ -2000,6 +2033,9 @@ msgid ""
 "Type a note title to jump to it. Or type # followed by a tag name, or @ "
 "followed by a notebook name, or / followed by note content."
 msgstr ""
+"Skriv titeln på en anteckning för att hoppa till den. Skriv # följt av "
+"namnet på en tagg, @ följt av namnet på en anteckningsbok eller / följt av "
+"innehåll från en anteckning."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:441
 msgid "Goto Anything..."
@@ -2025,6 +2061,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Kunde inte ansluta till Joplin Nextcloud app. Kontrollera konfigurationen i "
+"synkroniseringinställningarna. Fullständigt fel var:\n"
+"\n"
+"%s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2121,6 +2161,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Du håller på att bifoga en stor bild (%dx%d pixlar). Vill du ändra storleken "
+"till %d pixlar innan du bifogar den?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2236,7 +2278,7 @@ msgstr "Kan inte flytta anteckning till \"%s\" anteckningsbok"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:286
 msgid "Not downloaded"
-msgstr ""
+msgstr "Inte nedladdad"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:287
 #, fuzzy
@@ -2245,7 +2287,7 @@ msgstr "Laddar ned resurser..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Resource.js:288
 msgid "Downloaded"
-msgstr ""
+msgstr "Nedladdad"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:27
 #, javascript-format
@@ -2260,7 +2302,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:45
 msgid "Keyboard Mode"
-msgstr ""
+msgstr "Tangentbordsläge"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:48
 #, fuzzy
@@ -2317,7 +2359,7 @@ msgstr "WebDAV-lösenord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:175
 msgid "Attachment download behaviour"
-msgstr ""
+msgstr "Beteende för nedladdning av bilaga"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:176
 msgid ""
@@ -2325,22 +2367,25 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
+"I \"Manuellt\" läge, bilagor laddas bara ner när du klickar på dem. I "
+"\"Automatiskt\" laddas de ner när du öppnar anteckningen. I \"Alltid\" "
+"laddas alla bilagor ner oavsett om du öppnar anteckningen eller inte."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:179
 msgid "Always"
-msgstr ""
+msgstr "Alltid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:180
 msgid "Manual"
-msgstr ""
+msgstr "Manuellt"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:181
 msgid "Auto"
-msgstr ""
+msgstr "Automatiskt"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:186
 msgid "Max concurrent connections"
-msgstr ""
+msgstr "Max antal samtida anslutningar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:195
 msgid "Language"
@@ -2410,7 +2455,7 @@ msgstr "Visa"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:266
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:267
 msgid "Split View"
-msgstr ""
+msgstr "Dela vy"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 #, fuzzy, javascript-format
@@ -2427,7 +2472,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:268
 msgid "Split"
-msgstr ""
+msgstr "Delad"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:271
 msgid "Uncompleted to-dos on top"
@@ -2443,7 +2488,7 @@ msgstr "Sortera anteckningar efter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:297
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr ""
+msgstr "Para automatiskt hakparenteser, paranteser, situationstecken, etc."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:299
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:317
@@ -2479,11 +2524,11 @@ msgstr "När du skapar en ny anteckning:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:366
 msgid "Enable soft breaks"
-msgstr ""
+msgstr "Aktivera mjuk radbrytning"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:367
 msgid "Enable typographer support"
-msgstr ""
+msgstr "Aktivera fast radbrytning"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:368
 #, fuzzy
@@ -2492,15 +2537,15 @@ msgstr "Aktivera kryptering"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:369
 msgid "Enable ==mark== syntax"
-msgstr ""
+msgstr "Aktivera ==mark== syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:370
 msgid "Enable footnotes"
-msgstr ""
+msgstr "Aktivera fotnoter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:371
 msgid "Enable table of contents extension"
-msgstr ""
+msgstr "Aktivera innehållsförteckningen"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:372
 msgid "Enable ~sub~ syntax"
@@ -2636,7 +2681,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:522
 msgid "Page size for PDF export"
-msgstr ""
+msgstr "Sidstorlek för export till PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:524
 msgid "A4"
@@ -2644,7 +2689,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:525
 msgid "Letter"
-msgstr ""
+msgstr "Brev"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:526
 msgid "A3"
@@ -2664,15 +2709,15 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:532
 msgid "Page orientation for PDF export"
-msgstr ""
+msgstr "Sidorientering för export till PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:534
 msgid "Portrait"
-msgstr ""
+msgstr "Lodrätt(Porträtt)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:535
 msgid "Landscape"
-msgstr ""
+msgstr "Vågrätt(Landskap)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:550
 msgid "Custom TLS certificates"
@@ -2697,19 +2742,23 @@ msgstr "Ignorera TLS-certifikatfel"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
 msgid "Fail-safe"
-msgstr ""
+msgstr "Felsäker"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:573
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
+"Felsäkert: Rensa inte lokal data när synkroniseringsmålet är tomt (beror "
+"oftast på felkonfigurering eller en bugg)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:577
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
+"Specificera porten som ska användas av API-servern. Om det inte skrivs "
+"kommer standardport att användas."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:585
 #, fuzzy
@@ -2718,16 +2767,16 @@ msgstr "Aktivera kryptering"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:595
 msgid "days"
-msgstr ""
+msgstr "dagar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:595
 #, javascript-format
 msgid "%d days"
-msgstr ""
+msgstr "%d dagar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:597
 msgid "Keep note history for"
-msgstr ""
+msgstr "Spara anteckningshistorik i"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:722
 #, javascript-format
@@ -2850,7 +2899,7 @@ msgstr "Ange anteckningsboken som anteckningarna ska importeras till."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:215
 msgid "Restored Notes"
-msgstr ""
+msgstr "Återställda anteckningar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -2887,6 +2936,9 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
+"Joplin misslyckades att dekryptera objekt flera gånger, möjligen på grund av "
+"att de är korrupta eller för stora. Dessa objekt kommer finnas kvar på "
+"enheten men Joplin kommer inte längre försöka dekryptera dem."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:181
 #, fuzzy
@@ -2895,7 +2947,7 @@ msgstr "Bifoga fil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:189
 msgid "Downloaded and decrypted"
-msgstr ""
+msgstr "Nedladdade och dekrypterade"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:189
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
@@ -2906,7 +2958,7 @@ msgstr "%s: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and encrypted"
-msgstr ""
+msgstr "Nedladdade och krypterade"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:203
 #, fuzzy
@@ -3080,26 +3132,27 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "Bekräfta att du vill omkryptera hela din databas."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Din data kommer att omkrypteras och synkroniseras igen."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Uppge lösenordet i huvudnyckellistan nedan innan du uppgraderar nyckeln."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Huvudnyckeln har framgångsrikt uppgraderats!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "Lyckades inte uppgradera huvudnyckel: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3116,7 +3169,7 @@ msgstr "Skriv nya taggar eller välj från listan"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 msgid "Warning"
-msgstr ""
+msgstr "Varning"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:51
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:152
@@ -3124,6 +3177,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
+"För att använda filsystemsynkronisering krävs din behörighet att skriva till "
+"extern lagring."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
 #, fuzzy
@@ -3172,6 +3227,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
+"Använd detta för att återuppbygga sökindex om det finns sökproblem. Det kan "
+"ta lång tid beroende på antal anteckningar."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:451
 #, fuzzy
@@ -3185,7 +3242,7 @@ msgstr "Joplin-exporteringsfil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:451
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
+msgstr "Endast för felsökning: exportera din profil till ett externt SD-kort."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:466
 #, fuzzy
@@ -3371,7 +3428,7 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:164
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
-msgstr ""
+msgstr "Länkar med protokoll \"%s\" stöds ej"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:521
 #, javascript-format
