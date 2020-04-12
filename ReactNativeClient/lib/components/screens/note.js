@@ -619,7 +619,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async recordAudioStop_onPress() {
-		result = await RecordAudio.instance().onStopRecord();
+		const result = await RecordAudio.instance().onStopRecord();
 		this.setState({ isRecording: false });
 		this.attachFile(
 			{
@@ -627,7 +627,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				didCancel: false,
 				error: null,
 				type: 'audio/mp4',
-				fileName: 'joplin-' + new Date().getMonth() + '.' + new Date().getDate() + '.' + new Date().getFullYear() + ' - ' + new Date().getHours() + '.' + new Date().getMinutes(),
+				fileName: `joplin-${new Date().getMonth()}.${new Date().getDate()}.${new Date().getFullYear()} - ${new Date().getHours()}.${new Date().getMinutes()}`,
 			},
 			'audio'
 		);
@@ -755,8 +755,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 			title: _('Record Audio'),
 			onPress: () => {
 				this.recordAudio_onPress();
-			}
-		})
+			},
+		});
 
 		if (isTodo) {
 			output.push({

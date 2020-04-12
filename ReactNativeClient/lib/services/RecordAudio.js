@@ -1,21 +1,21 @@
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-import { PermissionsAndroid, Alert } from 'react-native';
+import { PermissionsAndroid, Alert, Platform } from 'react-native';
 
 class RecordAudio {
 	constructor() {
 		this.dispatch = () => {};
-        this.audioRecorderPlayer = new AudioRecorderPlayer();
-        this.recordSecs = 0;
-        this.recordTime = 0;
+		this.audioRecorderPlayer = new AudioRecorderPlayer();
+		this.recordSecs = 0;
+		this.recordTime = 0;
 	};
 
 	static instance() {
 		if (RecordAudio.instance_) return RecordAudio.instance_;
 		RecordAudio.instance_ = new RecordAudio();
 		return RecordAudio.instance_;
-    }
-    
-    async onStartRecord() {
+	}
+	
+	async onStartRecord() {
 		if (Platform.OS === 'android') {
 			try {
 				const granted = await PermissionsAndroid.request(
@@ -33,8 +33,8 @@ class RecordAudio {
 					return;
 				}
 			} catch (err) {
-                console.warn(err);
-                Alert.alert("Permission Needed", "Unable to get storage permission.");
+				console.warn(err);
+				Alert.alert('Permission Needed', 'Unable to get storage permission.');
 				return;
 			}
 		}
@@ -55,8 +55,8 @@ class RecordAudio {
 					return;
 				}
 			} catch (err) {
-                console.warn(err);
-                Alert.alert("Permission Needed", "Unable to get microphone permission.");
+				console.warn(err);
+				Alert.alert('Permission Needed', 'Unable to get microphone permission.');
 				return;
 			}
 		}
@@ -72,11 +72,11 @@ class RecordAudio {
 	async onStopRecord() {
 		const result = await this.audioRecorderPlayer.stopRecorder();
 		this.audioRecorderPlayer.removeRecordBackListener();
-        this.recordSecs = 0;
-        return result;
-    }
+		this.recordSecs = 0;
+		return result;
+	}
 
-    async destroy() {
+	async destroy() {
 		RecordAudio.instance_ = null;
 
 		return new Promise((resolve) => {
