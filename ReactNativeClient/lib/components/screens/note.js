@@ -660,13 +660,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 				const granted = await PermissionsAndroid.request(
 					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
 					{
-						title: 'Permissions for write access',
-						message: 'Give permission to your storage to write a file',
+						title: 'Permissions for recording audio',
+						message: 'Give permission to record audio from the mic',
 						buttonPositive: 'ok',
 					},
 				);
 				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-					console.log('You can use the camera');
+					console.log('You can record audio');
 				} else {
 					console.log('permission denied');
 					return;
