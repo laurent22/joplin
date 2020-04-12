@@ -7,14 +7,14 @@ class RecordAudio {
 		this.audioRecorderPlayer = new AudioRecorderPlayer();
 		this.recordSecs = 0;
 		this.recordTime = 0;
-	};
+	}
 
 	static instance() {
 		if (RecordAudio.instance_) return RecordAudio.instance_;
 		RecordAudio.instance_ = new RecordAudio();
 		return RecordAudio.instance_;
 	}
-	
+
 	async onStartRecord() {
 		if (Platform.OS === 'android') {
 			try {
