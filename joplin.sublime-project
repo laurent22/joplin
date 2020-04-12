@@ -48,6 +48,7 @@
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/mermaid.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/fence.js",
 				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/checkbox.js"
+				"ReactNativeClient/lib/joplin-renderer/MdToHtml/rules/wiki_links.js",
 			],
 			"folder_exclude_patterns":
 			[

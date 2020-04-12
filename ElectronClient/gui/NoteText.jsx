@@ -841,6 +841,30 @@ class NoteTextComponent extends React.Component {
 			}
 
 			menu.popup(bridge().window());
+		} else if (msg.indexOf('joplin://by_title?' === 0)) {
+			const url = new URL(msg);
+			const title = decodeURIComponent(url.search.substr(1));
+			const notes = await Note.search({
+				conditions: ['title=?'],
+				conditionsParams: [title],
+			});
+
+			if (notes && notes.length) {
+				// TODO: if length > 1 offer user a choice
+				const note = notes[0];
+				this.props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: note.parent_id,
+					noteId: note.id,
+					hash: url.hash,
+					historyAction: 'goto',
+				});
+			} else {
+				// TODO: offer user to create a new note
+				bridge().showErrorMessageBox(`${_('Note not found: ')}${title}`);
+			}
+
+			return;
 		} else if (msg.indexOf('joplin://') === 0) {
 			const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
 			const itemId = resourceUrlInfo.itemId;
