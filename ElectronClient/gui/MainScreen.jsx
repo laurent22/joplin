@@ -5,6 +5,7 @@ const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
 const { NoteText } = require('./NoteText.min.js');
 const NoteText2 = require('./NoteText2.js').default;
+const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
@@ -23,16 +24,61 @@ const VerticalResizer = require('./VerticalResizer.min');
 const PluginManager = require('lib/services/PluginManager');
 const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
+const ipcRenderer = require('electron').ipcRenderer;
 
 class MainScreenComponent extends React.Component {
 	constructor() {
 		super();
+
+		this.state = {
+			promptOptions: null,
+			modalLayer: {
+				visible: false,
+				message: '',
+			},
+			notePropertiesDialogOptions: {},
+			noteContentPropertiesDialogOptions: {},
+			shareNoteDialogOptions: {},
+		};
+
+		this.setupAppCloseHandling();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
+	}
+
+	setupAppCloseHandling() {
+		this.waitForNotesSavedIID_ = null;
+
+		// This event is dispached from the main process when the app is about
+		// to close. The renderer process must respond with the "appCloseReply"
+		// and tell the main process whether the app can really be closed or not.
+		// For example, it cannot be closed right away if a note is being saved.
+		// If a note is being saved, we wait till it is saved and then call
+		// "appCloseReply" again.
+		ipcRenderer.on('appClose', () => {
+			if (this.waitForNotesSavedIID_) clearInterval(this.waitForNotesSavedIID_);
+			this.waitForNotesSavedIID_ = null;
+
+			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
+				canClose: !this.props.hasNotesBeingSaved,
+			});
+
+			if (this.props.hasNotesBeingSaved) {
+				this.waitForNotesSavedIID_ = setInterval(() => {
+					if (!this.props.hasNotesBeingSaved) {
+						clearInterval(this.waitForNotesSavedIID_);
+						this.waitForNotesSavedIID_ = null;
+						ipcRenderer.send('asynchronous-message', 'appCloseReply', {
+							canClose: true,
+						});
+					}
+				}, 50);
+			}
+		});
 	}
 
 	sidebar_onDrag(event) {
@@ -53,19 +99,6 @@ class MainScreenComponent extends React.Component {
 
 	shareNoteDialog_close() {
 		this.setState({ shareNoteDialogOptions: {} });
-	}
-
-	UNSAFE_componentWillMount() {
-		this.setState({
-			promptOptions: null,
-			modalLayer: {
-				visible: false,
-				message: '',
-			},
-			notePropertiesDialogOptions: {},
-			noteContentPropertiesDialogOptions: {},
-			shareNoteDialogOptions: {},
-		});
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps) {
@@ -735,6 +768,7 @@ const mapStateToProps = state => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
 		templates: state.templates,
+		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 	};
 };
 

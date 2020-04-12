@@ -25,19 +25,28 @@ class Command extends BaseCommand {
 			this.stdout(`# ${section.title}`);
 			this.stdout('');
 
+			let canRetryType = '';
+
 			for (const n in section.body) {
 				if (!section.body.hasOwnProperty(n)) continue;
-				const line = section.body[n];
-				this.stdout(line);
+				const item = section.body[n];
+
+				if (typeof item === 'object') {
+					canRetryType = item.canRetryType;
+					this.stdout(item.text);
+				} else {
+					this.stdout(item);
+				}
+			}
+
+			if (canRetryType === 'e2ee') {
+				this.stdout('');
+				this.stdout(_('To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`'));
 			}
 		}
 
-		app()
-			.gui()
-			.showConsole();
-		app()
-			.gui()
-			.maximizeConsole();
+		app().gui().showConsole();
+		app().gui().maximizeConsole();
 	}
 }
 

@@ -22,19 +22,17 @@ const { bridge } = require('electron').remote.require('./bridge');
 async function initialize() {
 	this.wcsTimeoutId_ = null;
 
-	bridge()
-		.window()
-		.on('resize', function() {
-			if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
+	bridge().window().on('resize', function() {
+		if (this.wcsTimeoutId_) clearTimeout(this.wcsTimeoutId_);
 
-			this.wcsTimeoutId_ = setTimeout(() => {
-				store.dispatch({
-					type: 'WINDOW_CONTENT_SIZE_SET',
-					size: bridge().windowContentSize(),
-				});
-				this.wcsTimeoutId_ = null;
-			}, 10);
-		});
+		this.wcsTimeoutId_ = setTimeout(() => {
+			store.dispatch({
+				type: 'WINDOW_CONTENT_SIZE_SET',
+				size: bridge().windowContentSize(),
+			});
+			this.wcsTimeoutId_ = null;
+		}, 10);
+	});
 
 	// Need to dispatch this to make sure the components are
 	// displayed at the right size. The windowContentSize is
@@ -92,7 +90,7 @@ class RootComponent extends React.Component {
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
-			Resources: { screen: ResourceScreen, title: () => _('Resources') },
+			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 

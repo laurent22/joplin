@@ -8,6 +8,7 @@ const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
+const BaseItem = require('lib/models/BaseItem');
 const { themeStyle, buildStyle } = require('../../theme.js');
 
 interface TinyMCEProps {
@@ -24,6 +25,20 @@ interface TinyMCEProps {
 	disabled: boolean,
 }
 
+function markupRenderOptions(override:any = null) {
+	return {
+		plugins: {
+			checkbox: {
+				renderingType: 2,
+			},
+			link_open: {
+				linkRenderingType: 2,
+			},
+		},
+		...override,
+	};
+}
+
 function findBlockSource(node:any) {
 	const sources = node.getElementsByClassName('joplin-source');
 	if (!sources.length) throw new Error('No source for node');
@@ -34,6 +49,19 @@ function findBlockSource(node:any) {
 		closeCharacters: source.getAttribute('data-joplin-source-close'),
 		content: source.textContent,
 		node: source,
+		language: source.getAttribute('data-joplin-language') || '',
+	};
+}
+
+function newBlockSource(language:string = '', content:string = ''):any {
+	const fence = language === 'katex' ? '$$' : '```';
+
+	return {
+		openCharacters: `\n${fence}${language}\n`,
+		closeCharacters: `\n${fence}\n`,
+		content: content,
+		node: null,
+		language: language,
 	};
 }
 
@@ -151,7 +179,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
 		dispatchDidUpdateIID_ = setTimeout(() => {
 			dispatchDidUpdateIID_ = null;
-			editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+			if (editor && editor.getDoc()) editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 		}, 10);
 	};
 
@@ -165,8 +193,16 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
+			const joplinUrl = href.indexOf('joplin://') === 0 ? href : null;
 
-			if (href.indexOf('#') === 0) {
+			if (joplinUrl) {
+				props.onMessage({
+					name: 'openInternal',
+					args: {
+						url: joplinUrl,
+					},
+				});
+			} else if (href.indexOf('#') === 0) {
 				const anchorName = href.substr(1);
 				const anchor = editor.getDoc().getElementById(anchorName);
 				if (anchor) {
@@ -309,8 +345,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			.tox-editor-header .tox-toolbar__primary,
 			.tox .tox-toolbar-overlord,
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
-			.tox .tox-statusbar {
-				background-color: ${theme.backgroundColor};
+			.tox .tox-statusbar,
+			.tox .tox-dialog__header,
+			.tox .tox-dialog,
+			.tox textarea,
+			.tox input,
+			.tox .tox-dialog__footer {
+				background-color: ${theme.backgroundColor} !important;
 			}
 
 			.tox .tox-editor-header {
@@ -318,8 +359,15 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			}
 
 			.tox .tox-tbtn,
-			.tox .tox-tbtn svg {
-				color: ${theme.color};
+			.tox .tox-tbtn svg,
+			.tox .tox-dialog__header,
+			.tox .tox-button--icon .tox-icon svg,
+			.tox .tox-button.tox-button--icon .tox-icon svg,
+			.tox textarea,
+			.tox input,
+			.tox .tox-label,
+			.tox .tox-toolbar-label {
+				color: ${theme.color} !important;
 				fill: ${theme.color} !important;
 			}
 
@@ -337,6 +385,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				background-color: ${theme.selectedColor};
 			}
 
+			.tox .tox-button--naked:hover:not(:disabled) {
+				background-color: ${theme.backgroundColor} !important;
+			}
+
 			.tox .tox-tbtn:hover {
 				background-color: ${theme.backgroundHover};
 				color: ${theme.colorHover};
@@ -350,7 +402,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 			.tox-tinymce,
 			.tox .tox-toolbar__group,
-			.tox.tox-tinymce-aux .tox-toolbar__overflow {
+			.tox.tox-tinymce-aux .tox-toolbar__overflow,
+			.tox .tox-dialog__footer {
 				border-color: ${theme.dividerColor} !important;
 			}
 		`));
@@ -382,34 +435,46 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
+				body_class: 'jop-tinymce',
 				height: '100%',
 				resize: false,
-				plugins: 'noneditable link joplinLists hr searchreplace codesample',
+				icons: 'Joplin',
+				icons_url: 'gui/editors/TinyMCE/icons.js',
+				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
 				branding: false,
-				toolbar: 'bold italic | link codeformat codesample joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote',
+				target_list: false,
+				table_resize_bars: false,
+				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table',
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
-						const source = findBlockSource(editable);
+						const source = editable ? findBlockSource(editable) : newBlockSource();
 
 						editor.windowManager.open({
 							title: 'Edit',
 							size: 'large',
 							initialData: {
 								codeTextArea: source.content,
+								languageInput: source.language,
 							},
 							onSubmit: async (dialogApi:any) => {
-								const newSource = dialogApi.getData().codeTextArea;
-								const md = `${source.openCharacters}${newSource.trim()}${source.closeCharacters}`;
+								const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea);
+								const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
 								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
 
 								// markupToHtml will return the complete editable HTML, but we only
 								// want to update the inner HTML, so as not to break additional props that
 								// are added by TinyMCE on the main node.
-								editable.innerHTML = editableInnerHtml(result.html);
+
+								if (editable) {
+									editable.innerHTML = editableInnerHtml(result.html);
+								} else {
+									editor.insertContent(result.html);
+								}
+
 								dialogApi.close();
 								editor.fire('joplinChange');
 								dispatchDidUpdate(editor);
@@ -420,6 +485,14 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							body: {
 								type: 'panel',
 								items: [
+									{
+										type: 'input',
+										name: 'languageInput',
+										label: 'Language',
+										// Katex is a special case with special opening/closing tags
+										// and we don't currently handle switching the language in this case.
+										disabled: source.language === 'katex',
+									},
 									{
 										type: 'textarea',
 										name: 'codeTextArea',
@@ -442,7 +515,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: 'Attach...',
-						icon: 'upload',
+						icon: 'paperclip',
 						onAction: async function() {
 							const resources = await attachResources.current();
 							if (!resources.length) return;
@@ -456,6 +529,30 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 							editor.insertContent(html.join('\n'));
 							editor.fire('joplinChange');
 							dispatchDidUpdate(editor);
+						},
+					});
+
+					editor.ui.registry.addButton('joplinCodeBlock', {
+						tooltip: 'Code Block',
+						icon: 'code-sample',
+						onAction: async function() {
+							openEditDialog(null);
+						},
+					});
+
+					editor.ui.registry.addToggleButton('joplinInlineCode', {
+						tooltip: 'Inline Code',
+						icon: 'sourcecode',
+						onAction: function() {
+							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
+						},
+						onSetup: function(api:any) {
+							api.setActive(editor.formatter.match('code'));
+							const unbind = editor.formatter.formatChanged('code', api.setActive).unbind;
+
+							return function() {
+								if (unbind) unbind();
+							};
 						},
 					});
 
@@ -489,7 +586,10 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// -----------------------------------------------------------------------------------------
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
-		const cssFiles = ['css/fork-awesome.min.css'].concat(
+		const cssFiles = [
+			'css/fork-awesome.min.css',
+			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
+		].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'text/css')
 				.map((a:any) => a.path)
@@ -534,16 +634,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, {
-				plugins: {
-					checkbox: {
-						renderingType: 2,
-					},
-					link_open: {
-						linkRenderingType: 2,
-					},
-				},
-			});
+			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, markupRenderOptions());
 			if (cancelled) return;
 
 			editor.setContent(result.html);
@@ -585,7 +676,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		let onChangeHandlerIID:any = null;
 
-		const onChangeHandler = () => {
+		function onChangeHandler() {
 			const changeId = changeId_++;
 			props.onWillChange({ changeId: changeId });
 
@@ -603,9 +694,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 				dispatchDidUpdate(editor);
 			}, 1000);
-		};
+		}
 
-		const onExecCommand = (event:any) => {
+		function onExecCommand(event:any) {
 			const c:string = event.command;
 			if (!c) return;
 
@@ -624,13 +715,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			if (changeCommands.includes(c) || c.indexOf('Insert') === 0 || c.indexOf('mceToggle') === 0 || c.indexOf('mceInsert') === 0) {
 				onChangeHandler();
 			}
-		};
+		}
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
 		// pressed so we want to always trigger onChange in this case
-		const onKeypress = () => {
+		function onKeypress() {
 			onChangeHandler();
-		};
+		}
 
 		// KeyUp is triggered for any keypress, including Control, Shift, etc.
 		// so most of the time we don't want to trigger onChange. We trigger
@@ -640,15 +731,26 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		// onChange even though nothing is changed. The alternative would be to
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
-		const onKeyUp = (event:any) => {
+		function onKeyUp(event:any) {
 			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
 				onChangeHandler();
 			}
-		};
+		}
+
+		async function onPaste(event:any) {
+			const pastedText = event.clipboardData.getData('text');
+			if (BaseItem.isMarkdownTag(pastedText)) {
+				event.preventDefault();
+				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+				editor.insertContent(result.html);
+			} else {
+				onChangeHandler();
+			}
+		}
 
 		editor.on('keyup', onKeyUp);
 		editor.on('keypress', onKeypress);
-		editor.on('paste', onChangeHandler);
+		editor.on('paste', onPaste);
 		editor.on('cut', onChangeHandler);
 		editor.on('joplinChange', onChangeHandler);
 		editor.on('ExecCommand', onExecCommand);
@@ -657,7 +759,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			try {
 				editor.off('keyup', onKeyUp);
 				editor.off('keypress', onKeypress);
-				editor.off('paste', onChangeHandler);
+				editor.off('paste', onPaste);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);
 				editor.off('ExecCommand', onExecCommand);

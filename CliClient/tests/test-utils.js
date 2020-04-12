@@ -237,7 +237,6 @@ async function setupDatabaseAndSynchronizer(id = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
-		synchronizers_[id].autoStartDecryptionWorker_ = false; // For testing we disable this since it would make the tests non-deterministic
 	}
 
 	encryptionServices_[id] = new EncryptionService();
