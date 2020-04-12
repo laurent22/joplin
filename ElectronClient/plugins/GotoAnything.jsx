@@ -115,12 +115,14 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	modalLayer_onClick() {
-		this.props.dispatch({
-			pluginName: PLUGIN_NAME,
-			type: 'PLUGIN_DIALOG_SET',
-			open: false,
-		});
+	modalLayer_onClick(event) {
+		if (event.currentTarget == event.target) {
+			this.props.dispatch({
+				pluginName: PLUGIN_NAME,
+				type: 'PLUGIN_DIALOG_SET',
+				open: false,
+			});
+		}
 	}
 
 	helpButton_onClick() {
@@ -398,8 +400,8 @@ class Dialog extends React.PureComponent {
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown}/>
-						<HelpButton onClick={this.helpButton_onClick}/>
+						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
+						<HelpButton onClick={this.helpButton_onClick} />
 					</div>
 					{this.renderList()}
 				</div>
