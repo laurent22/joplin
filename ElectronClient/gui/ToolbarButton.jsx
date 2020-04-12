@@ -5,7 +5,7 @@ class ToolbarButton extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		const style = Object.assign({}, theme.toolbarStyle);
+		const style = Object.assign({}, theme.toolbarStyle, this.props.style);
 
 		const title = this.props.title ? this.props.title : '';
 		const tooltip = this.props.tooltip ? this.props.tooltip : title;
