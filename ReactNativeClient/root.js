@@ -1,5 +1,5 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar, ToastAndroid } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -60,6 +60,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
 const { uuid } = require('lib/uuid.js');
+const { check, request, PERMISSIONS, RESULTS } = require('react-native-permissions');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -636,6 +637,17 @@ class AppComponent extends React.Component {
 		reg.logger().info(`Received shared data: ${JSON.stringify(sharedData)}`);
 
 		if (!this.props.selectedFolderId) return;
+
+		if (!!sharedData.resources && sharedData.resources.length > 0) {
+			let granted = await check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+			if (granted !== RESULTS.GRANTED) {
+				granted = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+				if (granted !== RESULTS.GRANTED) {
+					ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
+					return;
+				}
+			}
+		}
 
 		// This is a bit hacky, but the surest way to go to
 		// the needed note. We go back one screen in case there's
