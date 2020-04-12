@@ -153,6 +153,8 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
+		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
 
@@ -179,6 +181,8 @@ class Note extends BaseItem {
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
 			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
