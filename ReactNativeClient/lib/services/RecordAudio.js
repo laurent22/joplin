@@ -1,5 +1,5 @@
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Alert } from 'react-native';
 
 class RecordAudio {
 	constructor() {
@@ -7,7 +7,6 @@ class RecordAudio {
         this.audioRecorderPlayer = new AudioRecorderPlayer();
         this.recordSecs = 0;
         this.recordTime = 0;
-        this.uri = '';
 	};
 
 	static instance() {
@@ -34,7 +33,8 @@ class RecordAudio {
 					return;
 				}
 			} catch (err) {
-				console.warn(err);
+                console.warn(err);
+                Alert.alert("Permission Needed", "Unable to get storage permission.");
 				return;
 			}
 		}
@@ -55,7 +55,8 @@ class RecordAudio {
 					return;
 				}
 			} catch (err) {
-				console.warn(err);
+                console.warn(err);
+                Alert.alert("Permission Needed", "Unable to get microphone permission.");
 				return;
 			}
 		}

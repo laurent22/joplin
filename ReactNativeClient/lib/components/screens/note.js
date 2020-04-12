@@ -62,6 +62,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			isRecording: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -111,7 +112,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return false;
 			}
 
-			if (this.state.mode == 'edit') {
+			if (this.state.mode == 'edit' || this.state.isRecording) {
 				Keyboard.dismiss();
 
 				this.setState({
@@ -619,13 +620,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async recordAudioStop_onPress() {
 		result = await RecordAudio.instance().onStopRecord();
+		this.setState({ isRecording: false });
 		this.attachFile(
 			{
 				uri: result,
 				didCancel: false,
 				error: null,
 				type: 'audio/mp4',
-				fileName: 'joplin-'+new Date().getMonth()+'.'+new Date().getDate()+'.'+new Date().getFullYear()+' - '+new Date().getHours()+'.'+new Date().getMinutes(),
+				fileName: 'joplin-' + new Date().getMonth() + '.' + new Date().getDate() + '.' + new Date().getFullYear() + ' - ' + new Date().getHours() + '.' + new Date().getMinutes(),
 			},
 			'audio'
 		);
