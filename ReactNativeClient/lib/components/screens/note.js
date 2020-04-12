@@ -38,15 +38,7 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
-import AudioRecorderPlayer, {
-	AVEncoderAudioQualityIOSType,
-	AVEncodingOption,
-	AudioEncoderAndroidType,
-	AudioSourceAndroidType,
-} from 'react-native-audio-recorder-player';
-import {
-	PermissionsAndroid,
-} from 'react-native';
+const RecordAudio = require('lib/services/RecordAudio');
 
 import FileViewer from 'react-native-file-viewer';
 
@@ -70,7 +62,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
-			isRecording: false,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -81,7 +72,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// See https://github.com/laurent22/joplin/issues/1057
 			HACK_webviewLoadingState: 0,
 		};
-		this.audioRecorderPlayer = new AudioRecorderPlayer();
 
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
@@ -621,88 +611,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ noteTagDialogShown: true });
 	}
 
-	recordAudio_onPress() {
+	async recordAudio_onPress() {
 		if (!this.state.note || !this.state.note.id) return;
-
-		if (this.state.isRecording) {
-			this.setState({ isRecording: false });
-			this.onStopRecord();
-		} else {
-			this.setState({ isRecording: true });
-			this.onStartRecord();
-		}
+		this.setState({ isRecording: true });
+		await RecordAudio.instance().onStartRecord();
 	}
 
-	async onStartRecord() {
-		if (Platform.OS === 'android') {
-			try {
-				const granted = await PermissionsAndroid.request(
-					PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-					{
-						title: 'Permissions for write access',
-						message: 'Give permission to your storage to write a file',
-						buttonPositive: 'ok',
-					},
-				);
-				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-					console.log('You can use the storage');
-				} else {
-					console.log('permission denied');
-					return;
-				}
-			} catch (err) {
-				console.warn(err);
-				return;
-			}
-		}
-		if (Platform.OS === 'android') {
-			try {
-				const granted = await PermissionsAndroid.request(
-					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-					{
-						title: 'Permissions for recording audio',
-						message: 'Give permission to record audio from the mic',
-						buttonPositive: 'ok',
-					},
-				);
-				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-					console.log('You can record audio');
-				} else {
-					console.log('permission denied');
-					return;
-				}
-			} catch (err) {
-				console.warn(err);
-				return;
-			}
-		}
-		console.log('start recording');
-		const audioSet = {
-			AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-			AudioSourceAndroid: AudioSourceAndroidType.MIC,
-			AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-			AVNumberOfChannelsKeyIOS: 2,
-			AVFormatIDKeyIOS: AVEncodingOption.aac,
-		};
-		console.log('audioSet', audioSet);
-		const uri = await this.audioRecorderPlayer.startRecorder();
-		this.audioRecorderPlayer.addRecordBackListener((e) => {
-			this.setState({
-				recordSecs: e.current_position,
-				recordTime: this.audioRecorderPlayer.mmssss(
-					Math.floor(e.current_position),
-				),
-			});
-		});
-		console.log(`uri: ${uri}`);
-	}
-
-	async onStopRecord() {
-		const result = await this.audioRecorderPlayer.stopRecorder();
-		this.audioRecorderPlayer.removeRecordBackListener();
-		this.setState({
-			recordSecs: 0,
-		});
+	async recordAudioStop_onPress() {
+		result = await RecordAudio.instance().onStopRecord();
 		this.attachFile(
 			{
 				uri: result,
@@ -713,8 +629,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			},
 			'audio'
 		);
-		this.setState({ isrecording: false });
-	};
+	}
 
 	async share_onPress() {
 		await Share.share({
@@ -1112,9 +1027,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				title: _('Stop'),
 				icon: 'md-square',
 				onPress: () => {
-					this.setState({ isRecording: false })
-					this.onStopRecord();
-					this.setState({ mode: 'edit' });
+					this.recordAudioStop_onPress();
 					this.doFocusUpdate_ = true;
 				},
 			});
