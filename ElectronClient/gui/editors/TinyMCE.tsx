@@ -55,9 +55,10 @@ function findBlockSource(node:any) {
 
 function newBlockSource(language:string = '', content:string = ''):any {
 	const fence = language === 'katex' ? '$$' : '```';
+	const fenceLanguage = language === 'katex' ? '' : language;
 
 	return {
-		openCharacters: `\n${fence}${language}\n`,
+		openCharacters: `\n${fence}${fenceLanguage}\n`,
 		closeCharacters: `\n${fence}\n`,
 		content: content,
 		node: null,
