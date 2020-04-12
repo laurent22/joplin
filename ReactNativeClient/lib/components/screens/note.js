@@ -516,7 +516,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		if (!mimeType && fileType === 'audio') {
-			// Assume mp4 if we couldn't determine the file type. 
+			// Assume mp4 if we couldn't determine the file type.
 			reg.logger().info('Missing file type and could not detect it - assuming audio/mp4');
 			mimeType = 'audio/mp4';
 		}
@@ -586,10 +586,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.setState({ showCamera: true });
 	}
 
-	async recordAudio_onPress() {
-		//TODO brg record audio
-	}
-
 	cameraView_onPhoto(data) {
 		this.attachFile(
 			{
@@ -643,11 +639,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 				const granted = await PermissionsAndroid.request(
 					PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
 					{
-				  		title: 'Permissions for write access',
-				  		message: 'Give permission to your storage to write a file',
-				  		buttonPositive: 'ok',
+						title: 'Permissions for write access',
+						message: 'Give permission to your storage to write a file',
+						buttonPositive: 'ok',
 					},
-			  	);
+				);
 				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 					console.log('You can use the storage');
 				} else {
@@ -658,8 +654,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 				console.warn(err);
 				return;
 			}
-		  }
-		  if (Platform.OS === 'android') {
+		}
+		if (Platform.OS === 'android') {
 			try {
 				const granted = await PermissionsAndroid.request(
 					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
@@ -682,11 +678,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 		console.log('start recording');
 		const audioSet = {
-		AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-		AudioSourceAndroid: AudioSourceAndroidType.MIC,
-		AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-		AVNumberOfChannelsKeyIOS: 2,
-		AVFormatIDKeyIOS: AVEncodingOption.aac,
+			AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+			AudioSourceAndroid: AudioSourceAndroidType.MIC,
+			AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+			AVNumberOfChannelsKeyIOS: 2,
+			AVFormatIDKeyIOS: AVEncodingOption.aac,
 		};
 		console.log('audioSet', audioSet);
 		const uri = await this.audioRecorderPlayer.startRecorder();
@@ -694,18 +690,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 			this.setState({
 				recordSecs: e.current_position,
 				recordTime: this.audioRecorderPlayer.mmssss(
-				Math.floor(e.current_position),
+					Math.floor(e.current_position),
 				),
 			});
 		});
 		console.log(`uri: ${uri}`);
-	};
+	}
 
 	async onStopRecord() {
 		const result = await this.audioRecorderPlayer.stopRecorder();
 		this.audioRecorderPlayer.removeRecordBackListener();
 		this.setState({
-		  recordSecs: 0,
+			recordSecs: 0,
 		});
 		this.attachFile(
 			{
