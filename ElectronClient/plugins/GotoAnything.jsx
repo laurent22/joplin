@@ -115,12 +115,14 @@ class Dialog extends React.PureComponent {
 		}
 	}
 
-	modalLayer_onClick() {
-		this.props.dispatch({
-			pluginName: PLUGIN_NAME,
-			type: 'PLUGIN_DIALOG_SET',
-			open: false,
-		});
+	modalLayer_onClick(event) {
+		if (event.currentTarget == event.target) {
+			this.props.dispatch({
+				pluginName: PLUGIN_NAME,
+				type: 'PLUGIN_DIALOG_SET',
+				open: false,
+			});
+		}
 	}
 
 	helpButton_onClick() {
