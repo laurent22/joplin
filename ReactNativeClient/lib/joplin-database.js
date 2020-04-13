@@ -124,6 +124,7 @@ class JoplinDatabase extends Database {
 		this.initialized_ = false;
 		this.tableFields_ = null;
 		this.version_ = null;
+		this.tableFieldNames_ = {};
 	}
 
 	initialized() {
@@ -136,11 +137,14 @@ class JoplinDatabase extends Database {
 	}
 
 	tableFieldNames(tableName) {
+		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName];
+
 		const tf = this.tableFields(tableName);
 		const output = [];
 		for (let i = 0; i < tf.length; i++) {
 			output.push(tf[i].name);
 		}
+		this.tableFieldNames_[tableName] = output;
 		return output;
 	}
 
