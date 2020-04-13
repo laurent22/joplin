@@ -7,18 +7,19 @@ const videoCss = () => {
 			inline: true,
 			mime: 'text/css',
 			text: `
-                .jop-video-container {
-                    position: relative;
-                    width: 100%;
-                    height: 0;
-                    padding-bottom: 56.25%;
-                }
-                .jop-video-iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
+				.jop-video-container {
+					position: relative;
+					width: 100%;
+					height: 0;
+					padding-bottom: 56.25%;
+				}
+
+				.jop-video-iframe {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
 				}`,
 		},
 	];
