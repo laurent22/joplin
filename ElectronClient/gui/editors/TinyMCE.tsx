@@ -445,6 +445,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
+				relative_urls: false,
 				branding: false,
 				target_list: false,
 				table_resize_bars: false,

@@ -162,9 +162,11 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? Resource.fullPath(resource) : Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
+
+		this.logger().info('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -176,8 +178,8 @@ class Note extends BaseItem {
 
 		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
-			pathsToTry.push(Setting.value('resourceDir'));
-			pathsToTry.push(shim.pathRelativeToCwd(Setting.value('resourceDir')));
+			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
+			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
@@ -192,6 +194,8 @@ class Note extends BaseItem {
 				return `:/${id}`;
 			});
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}
