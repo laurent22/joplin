@@ -483,6 +483,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						<Text key="perm4" style={this.styles().permissionText}>
 							{_('- Location: to allow attaching geo-location information to a note.')}
 						</Text>
+						<Text key="perm5" style={this.styles().permissionText}>
+							{_('- Microphone: to allow recording audio and attaching it to a note.')}
+						</Text>
 					</View>
 				</View>
 			);
