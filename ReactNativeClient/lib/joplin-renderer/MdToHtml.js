@@ -248,7 +248,7 @@ class MdToHtml {
 				} catch (error) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
 				}
-				// ! chaging the below order markup could effect to copy to clipboard plugin
+				// ! changing the below markup order could effect the copy to clipboard plugin
 				return {
 					wrapCode: false,
 					html: `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`,
