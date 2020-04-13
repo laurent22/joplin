@@ -5,6 +5,7 @@ const Setting = require('lib/models/Setting');
 const Note = require('lib/models/Note.js');
 const Folder = require('lib/models/Folder.js');
 const { friendlySafeFilename } = require('lib/path-utils');
+const { time } = require('lib/time-utils.js');
 const md5 = require('md5');
 const url = require('url');
 const { shim } = require('lib/shim');
@@ -97,7 +98,8 @@ class InteropServiceHelper {
 
 	static async defaultFilename(noteIds, fileExtension) {
 		if (!noteIds) {
-			return '';
+			const date = time.formatMsToLocal(new Date().getTime(), time.dateFormat());
+			return friendlySafeFilename(`${date} - ${_('Joplin')}.${fileExtension}`);
 		}
 
 		const note = await Note.load(noteIds[0]);
