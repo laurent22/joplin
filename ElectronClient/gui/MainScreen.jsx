@@ -9,6 +9,7 @@ const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
+const RecordAudioDialog = require('./RecordAudioDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
@@ -37,6 +38,7 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
+			recordAudioDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
 		};
@@ -91,6 +93,10 @@ class MainScreenComponent extends React.Component {
 
 	notePropertiesDialog_close() {
 		this.setState({ notePropertiesDialogOptions: {} });
+	}
+
+	recordAudioDialog_close() {
+		this.setState({ recordAudioDialogOptions: {} });
 	}
 
 	noteContentPropertiesDialog_close() {
@@ -348,6 +354,13 @@ class MainScreenComponent extends React.Component {
 					noteId: command.noteId,
 					visible: true,
 					onRevisionLinkClick: command.onRevisionLinkClick,
+				},
+			});
+		} else if (command.name === 'commandRecordAudio') {
+			this.setState({
+				recordAudioDialogOptions: {
+					noteId: command.noteId,
+					visible: true,
 				},
 			});
 		} else if (command.name === 'commandContentProperties') {
@@ -715,6 +728,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
+		const recordAudioDialogOptions = this.state.recordAudioDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 		const keyboardMode = Setting.value('editor.keyboardMode');
@@ -731,6 +745,7 @@ class MainScreenComponent extends React.Component {
 
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} lines={noteContentPropertiesDialogOptions.lines}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{recordAudioDialogOptions.visible && <RecordAudioDialog theme={this.props.theme} noteId={recordAudioDialogOptions.noteId} onClose={this.recordAudioDialog_close} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />

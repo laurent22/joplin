@@ -104,6 +104,7 @@ class NoteTextComponent extends React.Component {
 			noteTags: [],
 			showRevisions: false,
 			loading: false,
+			isRecording: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -1254,6 +1255,15 @@ class NoteTextComponent extends React.Component {
 		}
 	}
 
+	async commandRecordAudio() {
+		if (this.state.isRecording) {
+			// stop recording
+		} else {
+			// start recording
+		}
+
+	}
+
 	async commandSetAlarm() {
 		await this.saveIfNeeded(true);
 
@@ -1783,6 +1793,21 @@ class NoteTextComponent extends React.Component {
 				iconName: 'fa-paperclip',
 				onClick: () => {
 					return this.commandAttachFile();
+				},
+			});
+
+			toolbarItems.push({
+				tooltip: _('Record Audio'),
+				iconName: 'fa-microphone',
+				onClick: () => {
+					const n = this.state.note;
+					if (!n || !n.id) return;
+	
+					this.props.dispatch({
+						type: 'WINDOW_COMMAND',
+						name: 'commandRecordAudio',
+						noteId: n.id,
+					});
 				},
 			});
 
