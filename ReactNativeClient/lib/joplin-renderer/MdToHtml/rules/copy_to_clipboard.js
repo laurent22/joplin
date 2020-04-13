@@ -5,25 +5,23 @@ const copyButtonCss = () => {
 			inline: true,
 			mime: 'text/css',
 			text: `
-                .hljs {
-                    position: relative;
-                }
-
-                .copyButton {
+				.hljs {
+					position: relative;
+				}
+				.copyButton {
 					outline: none;
-                    position: absolute;
-                    right: 5px;
-                    top: 5px;
-                    opacity: 0.3;
-                    color: inherit;
-                    background: inherit;
-                    border: 0;
-                    cursor: pointer;
-                }
-                
-                .copyButton:hover {
-                    opacity: 1;
-                }
+					position: absolute;
+					right: 5px;
+					top: 5px;
+					opacity: 0.3;
+					color: inherit;
+					background: inherit;
+					border: 0;
+					cursor: pointer;
+				}
+				.copyButton:hover {
+					opacity: 1;
+				}
                 `,
 		},
 	];
@@ -31,6 +29,7 @@ const copyButtonCss = () => {
 
 const buttonCode_ = (text)=>  {
 	return (`
+			console.log(event);
 			const textArea = document.createElement('textarea');
 			textArea.value = \`${text}\`;
 			textArea.style.position = 'absolute';
@@ -38,7 +37,6 @@ const buttonCode_ = (text)=>  {
 			textArea.style.left = 0;
 			textArea.style.background = 'transparent';
 
-			
 			document.body.appendChild(textArea);
 			textArea.focus();
 			textArea.select();
@@ -49,16 +47,14 @@ const buttonCode_ = (text)=>  {
 			console.log(err);
 			}
 			document.body.removeChild(textArea);
-
-			document.querySelector('.copyButton').innerHTML='Copied!';
+			console.log(event.target.innerText);
+			event.target.innerHTML='Copied!';
 			setTimeout( function() {
-			document.querySelector('.copyButton').innerHTML='copy';}
-			, 1500);
-							`
+			event.target.innerHTML='copy';}
+			, 800);
+			`
 	);
 };
-
-
 
 const buttonText = 'copy';
 
@@ -101,9 +97,9 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 			'</button>',
 		];
 		// negative lookahead find the last occurance of the closring </pre> tag
-		const regex = /(<\/pre>)(?!.*(<\/pre>))/gm ;
+		const pos = renderedToken.lastIndexOf(lastTag);
 		button = button.join('');
-		const newRenderedToken = renderedToken.replace(regex, `${button}${lastTag}`);
+		const newRenderedToken = `${renderedToken.substring(0,pos)}${button}${renderedToken.substring(pos,renderedToken.length)}`;
 		return newRenderedToken;
 
 	};
