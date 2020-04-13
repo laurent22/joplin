@@ -7,6 +7,7 @@
 let katex = require('katex');
 const md5 = require('md5');
 const mhchemModule = require('./katex_mhchem.js');
+const { escapeHtml } = require('../../../string-utils');
 
 // Katex macros include circular references so we need
 // to serialize them with json-stringify-safe
@@ -230,7 +231,7 @@ module.exports = {
 			const katexInline = function(latex) {
 				options.displayMode = false;
 				try {
-					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${latex}</span>${renderToStringWithCache(latex, options)}</span>`;
+					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${escapeHtml(latex)}</span>${renderToStringWithCache(latex, options)}</span>`;
 				} catch (error) {
 					console.error('Katex error for:', latex, error);
 					return latex;
@@ -245,7 +246,7 @@ module.exports = {
 			const katexBlock = function(latex) {
 				options.displayMode = true;
 				try {
-					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
+					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${escapeHtml(latex)}</pre>${renderToStringWithCache(latex, options)}</div>`;
 				} catch (error) {
 					console.error('Katex error for:', latex, error);
 					return latex;
