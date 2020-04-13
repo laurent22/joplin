@@ -387,7 +387,7 @@ class Setting extends BaseModel {
 			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
 			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
 			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
-			'markdown.plugin.video': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['desktop'], label: () => `${_('Enable video embedding')}${wysiwygNo}` },
+			'markdown.plugin.video': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile','desktop'], label: () => `${_('Enable video embedding')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
