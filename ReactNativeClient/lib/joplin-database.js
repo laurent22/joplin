@@ -137,7 +137,7 @@ class JoplinDatabase extends Database {
 	}
 
 	tableFieldNames(tableName) {
-		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName];
+		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName].slice();
 
 		const tf = this.tableFields(tableName);
 		const output = [];
@@ -145,6 +145,7 @@ class JoplinDatabase extends Database {
 			output.push(tf[i].name);
 		}
 		this.tableFieldNames_[tableName] = output;
+
 		return output;
 	}
 
