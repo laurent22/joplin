@@ -462,7 +462,18 @@ function handleHistory(state, action) {
 		});
 
 		// If the note moved is the currently selected one.
-		// backwardHistoryNotes = backwardHistoryNotes.concat({ id: modNote.id, parent_id: modNote.parent_id }).slice(-MAX_HISTORY);
+		const newModNote = {
+			id: modNote.id,
+			parent_id: modNote.parent_id,
+			notesParentType: state.notesParentType,
+			selectedFolderId: modNote.parent_id,
+			selectedTagId: state.selectedTagId,
+			selectedSearchId: state.selectedSearchId,
+			searches: state.searches,
+			selectedSmartFilterId: state.selectedSmartFilterId,
+		};
+
+		backwardHistoryNotes = backwardHistoryNotes.concat(newModNote).slice(-MAX_HISTORY);
 		break;
 	}
 	case 'SEARCH_SELECT':
