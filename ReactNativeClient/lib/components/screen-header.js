@@ -369,7 +369,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					<Dropdown
 						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
 						itemHeight={35}
-						dropdownDisabled={disabled}
+						disabled={disabled}
 						labelTransform="trim"
 						selectedValue={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
 						itemListStyle={{
