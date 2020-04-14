@@ -52,27 +52,35 @@ class InteropServiceHelper {
 			win = bridge().newBrowserWindow(windowOptions);
 
 			return new Promise((resolve, reject) => {
-				win.webContents.on('did-finish-load', async () => {
+				win.webContents.on('did-finish-load', () => {
 
-					if (target === 'pdf') {
-						try {
-							const data = await win.webContents.printToPDF(options);
-							resolve(data);
-						} catch (error) {
-							reject(error);
-						} finally {
-							cleanup();
+					// did-finish-load will trigger when most assets are done loading, probably
+					// images, JavaScript and CSS. However it seems it might trigger *before*
+					// all fonts are loaded, which will break for example Katex rendering.
+					// So we need to add an additional timer to make sure fonts are loaded
+					// as it doesn't seem there's any easy way to figure that out.
+					setTimeout(async () => {
+						if (target === 'pdf') {
+							try {
+								const data = await win.webContents.printToPDF(options);
+								resolve(data);
+							} catch (error) {
+								reject(error);
+							} finally {
+								cleanup();
+							}
+						} else {
+							win.webContents.print(options, (success, reason) => {
+								// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
+								// It calls the callback right away with "false" even if the document hasn't be print yet.
+
+								cleanup();
+								if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
+								resolve();
+							});
 						}
-					} else {
-						win.webContents.print(options, (success, reason) => {
-							// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
-							// It calls the callback right away with "false" even if the document hasn't be print yet.
+					}, 2000);
 
-							cleanup();
-							if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
-							resolve();
-						});
-					}
 				});
 
 				win.loadURL(url.format({
