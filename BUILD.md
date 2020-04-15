@@ -34,8 +34,8 @@ First you need to setup React Native to build projects with native code. For thi
 Then:
 
 	cd ReactNativeClient
-	npm start-android
-	# Or: npm start-ios
+	npm run start-android
+	# Or: npm run start-ios
 
 To run the iOS application, it might be easier to open the file `ios/Joplin.xcworkspace` on XCode and run the app from there.
 
