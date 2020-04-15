@@ -625,11 +625,9 @@ class AppComponent extends React.Component {
 
 		AppState.addEventListener('change', this.onAppStateChange_);
 
-		if (Platform.OS === 'android') {
-			const sharedData = await ShareExtension.data();
-			if (sharedData) {
-				this.handleShared(sharedData);
-			}
+		const sharedData = Platform.OS === 'android' ? await ShareExtension.data() : null;
+		if (sharedData) {
+			this.handleShared(sharedData);
 		}
 	}
 

@@ -236,7 +236,6 @@ shared.initState = async function(comp) {
 				}, null);
 			}
 		}
-		comp.scheduleSave();
 	}
 
 	// eslint-disable-next-line require-atomic-updates
