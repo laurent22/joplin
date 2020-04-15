@@ -55,9 +55,10 @@ function findBlockSource(node:any) {
 
 function newBlockSource(language:string = '', content:string = ''):any {
 	const fence = language === 'katex' ? '$$' : '```';
+	const fenceLanguage = language === 'katex' ? '' : language;
 
 	return {
-		openCharacters: `\n${fence}${language}\n`,
+		openCharacters: `\n${fence}${fenceLanguage}\n`,
 		closeCharacters: `\n${fence}\n`,
 		content: content,
 		node: null,
@@ -444,6 +445,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
+				relative_urls: false,
 				branding: false,
 				target_list: false,
 				table_resize_bars: false,
