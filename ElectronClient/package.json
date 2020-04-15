@@ -44,6 +44,13 @@
             "ia32"
           ]
         }
+      ],
+      "extraFiles": [{
+        "from":  "build-win/Joplin.VisualElementsManifest.xml",
+        "to": "."
+        }],
+      "extraResources": [
+        "build-win/icons/*"
       ]
     },
     "nsis": {
