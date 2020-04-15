@@ -488,7 +488,7 @@ class NoteTextComponent extends React.Component {
 	}
 
 	webview_focus() {
-		return this.webviewRef_.current.wrappedInstance.webviewRef_.current.focus();
+		return this.webviewRef_.current.wrappedInstance.webview_focus();
 	}
 
 	async saveIfNeeded(saveIfNewNote = false, options = {}) {
@@ -1191,7 +1191,7 @@ class NoteTextComponent extends React.Component {
 				
 				const visiblePane = this.props.visiblePanes[0];
 				if (visiblePane === 'viewer') {
-					this.webviewRef_ ? this.webView_focus() : null;
+					this.webviewRef_ ? this.webview_focus() : null;
 				} else {
 					this.editor_.editor.focus();
 				}
