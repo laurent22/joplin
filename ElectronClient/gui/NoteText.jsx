@@ -345,7 +345,7 @@ class NoteTextComponent extends React.Component {
 		this.titleField_keyDown = this.titleField_keyDown.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_domReady = this.webview_domReady.bind(this);
-		this.webView_focus = this.webView_focus.bind(this);
+		this.webview_focus = this.webview_focus.bind(this);
 		this.noteRevisionViewer_onBack = this.noteRevisionViewer_onBack.bind(this);
 	}
 
@@ -487,7 +487,7 @@ class NoteTextComponent extends React.Component {
 		return this.webviewRef_.current.wrappedInstance;
 	}
 
-	webView_focus() {
+	webview_focus() {
 		return this.webviewRef_.current.wrappedInstance.webviewRef_.current.focus();
 	}
 
@@ -1186,11 +1186,15 @@ class NoteTextComponent extends React.Component {
 		}
 
 		if (command.name === 'focusElement' && command.target === 'noteBody') {
-			const layout = this.props.visiblePanes[0];
-			if (layout === 'viewer') {
-				this.webviewRef_ ? this.webView_focus() : null;
-			} else {
-				this.editor_.editor.focus();
+			fn = () => {
+				if (!this.editor_) return;
+				
+				const visiblePane = this.props.visiblePanes[0];
+				if (visiblePane === 'viewer') {
+					this.webviewRef_ ? this.webView_focus() : null;
+				} else {
+					this.editor_.editor.focus();
+				}
 			}
 		}
 
