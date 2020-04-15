@@ -1,0 +1,670 @@
+<!doctype html>
+<html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/markdown.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/markdown.md
+
+-->
+
+<head>
+	<title>Markdown Guide | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
+	.title-icon {
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
+	}
+	.sub-title {
+		font-weight: normal;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: 0.4em;
+		line-height: 1em;
+		text-decoration: none;
+		transition: opacity 0.3s;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container page-markdown">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1>Markdown Guide<a name="markdown-guide" href="#markdown-guide" class="heading-anchor">🔗</a></h1>
+<p>Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.</p>
+<p>Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.</p>
+<p>Joplin follows the <a href="https://spec.commonmark.org/">CommonMark</a> specification, with additional features added via plugins.</p>
+<h2>Cheat Sheet<a name="cheat-sheet" href="#cheat-sheet" class="heading-anchor">🔗</a></h2>
+<p>This is a quick summary of the Markdown syntax.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Markdown</th>
+<th>Rendered Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Heading 1</strong></td>
+<td><pre># Heading 1</pre></td>
+<td><h1>Heading 1</h1></td>
+</tr>
+<tr>
+<td><strong>Heading 2</strong></td>
+<td><pre>## Heading 2</pre></td>
+<td><h2>Heading 2</h2></td>
+</tr>
+<tr>
+<td><strong>Heading 3</strong></td>
+<td><pre>### Heading 3</pre></td>
+<td><h3>Heading 3</h3></td>
+</tr>
+<tr>
+<td><strong>Bold</strong></td>
+<td><pre>This is some <code>**bold text**</code></pre></td>
+<td>This is some <strong>bold text</strong></td>
+</tr>
+<tr>
+<td><strong>Italic</strong></td>
+<td><pre>This is some <code>*italic text*</code></pre></td>
+<td>This is some <i>italic text</i></td>
+</tr>
+<tr>
+<td><strong>Blockquotes</strong></td>
+<td><pre>&gt; Kent.<br/>&gt; Where's the king?<br/><br/>&gt; Gent.<br/>&gt; Contending with the<br/>&gt; fretful elements</pre></td>
+<td><blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote></td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td><pre>* Milk<br/>* Eggs<br/>* Beers<br/>    * Desperados<br/>    * Heineken<br/>* Ham</pre></td>
+<td><ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul></td>
+</tr>
+<tr>
+<td><strong>Ordered list</strong></td>
+<td><pre>1. Introduction<br/>2. Main topic<br/>    1. First sub-topic<br/>    2. Second sub-topic<br/>3. Conclusion</pre></td>
+<td><ol><li>Introduction</li><li>Main topic<ol><li>First sub-topic</li><li>Second sub-topic</li></ol></li><li>Conclusion</li></ol></td>
+</tr>
+<tr>
+<td><strong>Inline code</strong></td>
+<td><pre>This is `someJavaScript()`</pre></td>
+<td>This is <code>someJavaScript()</code></td>
+</tr>
+<tr>
+<td><strong>Code block</strong></td>
+<td><pre>Here's some JavaScript code:<br><br>```<br>function hello() {<br>    alert('hello');<br>}<br>```<br><br>Language is normally auto-detected,<br>but it can also be specified:<br><br>```sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>```</pre></td>
+<td>Here's some JavaScript code:<br><br><pre>function hello() {<br>    alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre></td>
+</tr>
+<tr>
+<td><strong>Unformatted text</strong></td>
+<td><pre>Indent with a tab or 4 spaces<br>for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre></td>
+<td>Indent with a tab or 4 spaces for unformatted text.<br><br><pre>This text will not be formatted:<br><br>Robert'); DROP TABLE students;--</pre></td>
+</tr>
+<tr>
+<td><strong>Link</strong></td>
+<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link anchoring text content:<br><br><code>[Joplin](https://joplinapp.org)</code><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><code>[Joplin](https://joplinapp.org &quot;Joplin project page&quot;)</code></pre></td>
+<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link anchoring text content:<br><br><a href="https://joplinapp.org">Joplin</a><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><a href="https://joplinapp.org" title="Joplin project page">Joplin</a> (<em>hint: hover over the link</em>)</td>
+</tr>
+<tr>
+<td><strong>Images</strong></td>
+<td><pre><code>![Joplin icon](https://git.io/JenGk)</code></pre></td>
+<td><img src="https://git.io/JenGk" alt="Here's Joplin icon"></td>
+</tr>
+<tr>
+<td><strong>Horizontal Rule</strong></td>
+<td><pre>One rule:<br>***<br>Another rule:<br>---</pre></td>
+<td>One rule:<hr><br>Another rule:<br><hr></td>
+</tr>
+<tr>
+<td><strong>Tables</strong></td>
+<td><a href="#tables">See below</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Tables<a name="tables" href="#tables" class="heading-anchor">🔗</a></h3>
+<p>Tables are created using pipes <code>|</code> and and hyphens <code>-</code>. This is a Markdown table:</p>
+<pre><code>| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+</code></pre>
+<p>Which is rendered as:</p>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
+<p>Note that there must be at least 3 dashes separating each header cell.</p>
+<p>Colons can be used to align columns:</p>
+<pre><code>| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+</code></pre>
+<p>Which is rendered as:</p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Are</th>
+<th style="text-align:right">Cool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
+</tbody>
+</table>
+<h2>Joplin Extras<a name="joplin-extras" href="#joplin-extras" class="heading-anchor">🔗</a></h2>
+<p>Besides the standard Markdown syntax, Joplin supports several additional features.</p>
+<h3>Links to other notes<a name="links-to-other-notes" href="#links-to-other-notes" class="heading-anchor">🔗</a></h3>
+<p>You can create a link to a note by specifying its ID in the URL. For example:</p>
+<pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
+</code></pre>
+<p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, right click on a note an select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
+<h3>Math notation<a name="math-notation" href="#math-notation" class="heading-anchor">🔗</a></h3>
+<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">KaTeX notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
+<pre><code>$$
+EXPRESSION
+$$
+</code></pre>
+<p>For example:</p>
+<pre><code>$$
+f(x) = \int_{-\infty}^\infty
+	\hat f(\xi)\,e^{2 \pi i \xi x}
+	\,d\xi
+$$
+</code></pre>
+<p>Here is an example with the Markdown and rendered result side by side:</p>
+<img src="https://joplinapp.org/images/Katex.png" height="345px">
+<h3>Chemical equations<a name="chemical-equations" href="#chemical-equations" class="heading-anchor">🔗</a></h3>
+<p>Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the <a href="https://mhchem.github.io/MathJax-mhchem/">mhchem documentation</a> for the syntax.</p>
+<img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
+<h3>Diagrams<a name="diagrams" href="#diagrams" class="heading-anchor">🔗</a></h3>
+<p>You can create diagrams in Joplin using the <a href="https://mermaidjs.github.io/">Mermaid syntax</a>. To add such a graph, wrap the Mermaid script inside a &quot;```mermaid&quot; code block like this:</p>
+<pre><code>```mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+```
+</code></pre>
+<p>This is how it would look with the Markdown on the left, and rendered graph on the right:</p>
+<p><img src="https://joplin.cozic.net/images/Mermaid.png" alt="Mermaid support in Joplin"></p>
+<p>Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.</p>
+<h3>Checkboxes<a name="checkboxes" href="#checkboxes" class="heading-anchor">🔗</a></h3>
+<p>Checkboxes can be added like so:</p>
+<pre><code>- [ ] Milk
+- [ ] Rice
+- [ ] Eggs
+</code></pre>
+<p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
+<h3>HTML support<a name="html-support" href="#html-support" class="heading-anchor">🔗</a></h3>
+<p>It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:</p>
+<pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
+</code></pre>
+<h3>Plugins<a name="plugins" href="#plugins" class="heading-anchor">🔗</a></h3>
+<p>Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.</p>
+<p>Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.</p>
+<table>
+<thead>
+<tr>
+<th>Plugin</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Enabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Soft breaks</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">breaks</a> markdown-it demo</td>
+<td>Joplin uses hard breaks by default, which means that a line break is rendered as <code>&lt;br&gt;</code>. Enable soft breaks for traditional markdown line-break behaviour.</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Typographer</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">typographer</a> markdown-it demo</td>
+<td>Does typographic replacements, (c) -&gt; © and so on</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://katex.org">Katex</a></td>
+<td><code>$$math expr$$</code> or <code>$math$</code></td>
+<td><a href="#math-notation">See above</a></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-mark">Mark</a></td>
+<td><code>==marked==</code></td>
+<td>Transforms into <code>&lt;mark&gt;marked&lt;/mark&gt;</code> (highlighted)</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-footnote">Footnote</a></td>
+<td><code>Simples inline footnote ^[I'm inline!]</code></td>
+<td>See <a href="https://github.com/markdown-it/markdown-it-footnote">plugin page</a> for full description</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nagaozen/markdown-it-toc-done-right">TOC</a></td>
+<td>Any of <code>${toc}, [[toc]], [toc], [[_toc_]]</code></td>
+<td>Adds a table of contents to the location of the toc page. Based on headings and sub-headings</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-sub">Sub</a></td>
+<td><code>X~1~</code></td>
+<td>Transforms into X<sub>1</sub></td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-sup">Sup</a></td>
+<td><code>X^2^</code></td>
+<td>Transforms into X<sup>2</sup></td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-deflist">Deflist</a></td>
+<td>See <a href="http://johnmacfarlane.net/pandoc/README.html#definition-lists">pandoc</a> page for syntax</td>
+<td>Adds the html <code>&lt;dl&gt;</code> tag accessible through markdown</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-abbr">Abbr</a></td>
+<td>*[HTML]: Hyper Text Markup Language<br/>The HTML specification</td>
+<td>Allows definition of abbreviations that can be hovered over later for a full expansion</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
+<td><code>:smile:</code></td>
+<td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-ins">Insert</a></td>
+<td><code>++inserted++</code></td>
+<td>Transforms into <code>&lt;ins&gt;inserted&lt;/ins&gt;</code> (<ins>inserted</ins>)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/RedBug312/markdown-it-multimd-table">Multitable</a></td>
+<td>See <a href="https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html">MultiMarkdown</a> page</td>
+<td>Adds more power and customization to markdown tables</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://fountain.io">Fountain</a></td>
+<td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
+<td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/markdown.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2020 Laurent Cozic
+</div>
+</body>
+</html>

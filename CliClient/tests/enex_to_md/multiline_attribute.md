@@ -1,0 +1,1 @@
+![multiple lines are possible I guess](https://joplinapp.org/images/Icon512.png)![This should \] be escaped](https://joplinapp.org/images/Icon512.png)

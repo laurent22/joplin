@@ -1,0 +1,16 @@
+<!--
+The inner table is rendered but not the outer one.
+Basically if any table contains another table, it is rendered as plain text
+-->
+<table>
+	<tr><td>
+		First column, and an inner table:
+
+		<table>
+			<tr><td>One</td><td>Two</td></tr>
+			<tr><td>One</td><td>Two</td></tr>
+		</table>
+	</td>
+	<td>Second column</td>
+	</tr>
+</table>

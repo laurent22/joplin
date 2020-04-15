@@ -1,0 +1,3 @@
+https://help.nextcloud.com/t/mobile-note-taking-with-your-private-cloud-announcing-joplin-nextcloud-integration/29239/39?u=laurent
+
+We are a small Church-Office in Germany with several employees and members of staff who have little or no affinity to working with computer. [...] There is special information of a very high intimacy and confidentiality level that should only be accessible to the owner of the information, e.g. notes about counseling. And here Joplin comes into action. When used with encryption, the notes can only be read by the owner, not even by our cloud operator. With Joplin I can guaranty my users the highest level of confidentiality possible, combined with a clear and easy to use interface.

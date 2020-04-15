@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Joplin</string>
+    <string name="default_notification_channel_id">net.cozic.joplin.notification</string>
+</resources>
