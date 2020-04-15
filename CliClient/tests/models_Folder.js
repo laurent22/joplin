@@ -68,7 +68,7 @@ describe('models_Folder', function() {
 		const f2 = await Folder.save({ title: 'bbc' }); await sleep(0.1);
 		const f3 = await Folder.save({ title: 'čbc' }); await sleep(0.1);
 
-		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		folders = await Folder.sortLocale(await Folder.all(), 'ASC');
 		expect(folders.length).toBe(3);
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f2.id);
@@ -76,13 +76,13 @@ describe('models_Folder', function() {
 
 		const f4 = await Folder.save({ title: 'ebc`' });
 
-		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		folders = await Folder.sortLocale(await Folder.all(), 'ASC');
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f2.id);
 		expect(folders[2].id).toBe(f3.id);
 		expect(folders[3].id).toBe(f4.id);
 
-		folders = await Folder.sortLocale(await Folder.all(), 'desc');
+		folders = await Folder.sortLocale(await Folder.all(), 'DESC');
 		expect(folders[0].id).toBe(f4.id);
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
@@ -96,7 +96,7 @@ describe('models_Folder', function() {
 		const f2 = await Folder.save({ title: 'bbc' }); await sleep(0.1);
 		const f3 = await Folder.save({ title: 'čbc' }); await sleep(0.1);
 
-		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		folders = await Folder.sortLocale(await Folder.all(), 'ASC');
 		expect(folders.length).toBe(3);
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f2.id);
@@ -105,7 +105,7 @@ describe('models_Folder', function() {
 		const f4 = await Folder.save({ title: 'ebc', parent_id: f1.id }); await sleep(0.1);
 		const f5 = await Folder.save({ title: 'óbc', parent_id: f1.id }); await sleep(0.1);
 
-		folders = await Folder.sortLocale(await Folder.all(), 'asc');
+		folders = await Folder.sortLocale(await Folder.all(), 'ASC');
 		expect(folders.length).toBe(5);
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f2.id);
@@ -113,7 +113,7 @@ describe('models_Folder', function() {
 		expect(folders[3].id).toBe(f4.id);
 		expect(folders[4].id).toBe(f5.id);
 
-		folders = await Folder.sortLocale(await Folder.all(), 'desc');
+		folders = await Folder.sortLocale(await Folder.all(), 'DESC');
 		expect(folders.length).toBe(5);
 		expect(folders[0].id).toBe(f5.id);
 		expect(folders[1].id).toBe(f4.id);
@@ -130,7 +130,7 @@ describe('models_Folder', function() {
 		const f3 = await Folder.save({ title: 'folder3' }); await sleep(0.1);
 		const n1 = await Note.save({ title: 'note1', parent_id: f2.id });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders.length).toBe(3);
 		expect(folders[0].id).toBe(f2.id);
 		expect(folders[1].id).toBe(f3.id);
@@ -138,19 +138,19 @@ describe('models_Folder', function() {
 
 		const n2 = await Note.save({ title: 'note1', parent_id: f1.id });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f2.id);
 		expect(folders[2].id).toBe(f3.id);
 
 		await Note.save({ id: n1.id, title: 'note1 mod' });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders[0].id).toBe(f2.id);
 		expect(folders[1].id).toBe(f1.id);
 		expect(folders[2].id).toBe(f3.id);
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'asc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'ASC');
 		expect(folders[0].id).toBe(f3.id);
 		expect(folders[1].id).toBe(f1.id);
 		expect(folders[2].id).toBe(f2.id);
@@ -164,14 +164,14 @@ describe('models_Folder', function() {
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f1.id }); await sleep(0.1);
 		const n1 = await Note.save({ title: 'note1', parent_id: f3.id });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders.length).toBe(3);
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
 
 		const n2 = await Note.save({ title: 'note2', parent_id: f2.id });
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 
 		expect(folders[0].id).toBe(f2.id);
 		expect(folders[1].id).toBe(f1.id);
@@ -179,7 +179,7 @@ describe('models_Folder', function() {
 
 		await Note.save({ id: n1.id, title: 'note1 MOD' });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f3.id);
 		expect(folders[2].id).toBe(f2.id);
@@ -187,7 +187,7 @@ describe('models_Folder', function() {
 		const f4 = await Folder.save({ title: 'folder4', parent_id: f1.id }); await sleep(0.1);
 		const n3 = await Note.save({ title: 'note3', parent_id: f4.id });
 
-		folders = await Folder.orderByLastModified(await Folder.all(), 'desc');
+		folders = await Folder.orderByLastModified(await Folder.all(), 'DESC');
 		expect(folders.length).toBe(4);
 		expect(folders[0].id).toBe(f1.id);
 		expect(folders[1].id).toBe(f4.id);

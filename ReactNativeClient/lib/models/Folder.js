@@ -191,11 +191,7 @@ class Folder extends BaseItem {
 	}
 
 	static async sortLocale(folders, orderDir) {
-
-		orderDir = orderDir.toUpperCase();
-
 		const output = folders.slice();
-
 		const mod = orderDir === 'ASC' ? +1 : -1;
 
 		const collator = new Intl.Collator(undefined, {
@@ -205,7 +201,6 @@ class Folder extends BaseItem {
 
 		//  By passing the numeric: true option, it will smartly recognize numbers.
 		//  sensitivity: 'base' makes sorting CASE-INSENSITIVE
-
 		output.sort(function(a, b) {
 			return collator.compare(a.title, b.title) * mod;
 		});
