@@ -303,10 +303,6 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 
 In the desktop application, press <kbd>Ctrl+G</kbd> or <kbd>Cmd+G</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
 
-# Global shortcut
-
-In the desktop application, press `Cmd+Opt+J` (macOS) or `Ctrl+Alt+J` (Linux, Windows) to show or hide Joplin in the current workspace.
-
 # Privacy
 
 Joplin values your privacy and security by giving you complete control over your information and digital footprint.
