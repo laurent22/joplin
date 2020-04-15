@@ -32,7 +32,7 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 				// So the sanitizeHtml function must handle this kind of non-valid HTML.
 
 				if (!sanitizedContent) {
-					sanitizedContent = htmlUtils.sanitizeHtml(token.content);
+					sanitizedContent = htmlUtils.sanitizeHtml(token.content, { addNoMdConvClass: true });
 				}
 
 				token.content = sanitizedContent;

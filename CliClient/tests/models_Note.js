@@ -6,6 +6,7 @@ const { time } = require('lib/time-utils.js');
 const { sortedIds, createNTestNotes, asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
+const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const { shim } = require('lib/shim');
@@ -216,4 +217,54 @@ describe('models_Note', function() {
 		const hasThrown = await checkThrowAsync(async () => await Folder.copyToFolder(note1.id, folder2.id));
 		expect(hasThrown).toBe(true);
 	}));
+
+	it('should convert resource paths from internal to external paths', asyncTest(async () => {
+		const resourceDirName = Setting.value('resourceDirName');
+		const resourceDir = Setting.value('resourceDir');
+		const r1 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+		const r2 = await shim.createResourceFromPath(`${__dirname}/../tests/support/photo.jpg`);
+
+		const testCases = [
+			[
+				false,
+				'',
+				'',
+			],
+			[
+				true,
+				'',
+				'',
+			],
+			[
+				false,
+				`![](:/${r1.id})`,
+				`![](${resourceDirName}/${r1.id}.jpg)`,
+			],
+			[
+				false,
+				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
+				`![](${resourceDirName}/${r1.id}.jpg) ![](${resourceDirName}/${r1.id}.jpg) ![](${resourceDirName}/${r2.id}.jpg)`,
+			],
+			[
+				true,
+				`![](:/${r1.id})`,
+				`![](file://${resourceDir}/${r1.id}.jpg)`,
+			],
+			[
+				true,
+				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
+				`![](file://${resourceDir}/${r1.id}.jpg) ![](file://${resourceDir}/${r1.id}.jpg) ![](file://${resourceDir}/${r2.id}.jpg)`,
+			],
+		];
+
+		for (const testCase of testCases) {
+			const [useAbsolutePaths, input, expected] = testCase;
+			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
+			expect(expected).toBe(internalToExternal);
+
+			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });
+			expect(externalToInternal).toBe(input);
+		}
+	}));
+
 });

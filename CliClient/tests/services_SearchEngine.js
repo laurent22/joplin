@@ -92,6 +92,32 @@ describe('services_SearchEngine', function() {
 		expect(rows[2].id).toBe(n1.id);
 	}));
 
+	it('should tell where the results are found', asyncTest(async () => {
+		const notes = [
+			await Note.save({ title: 'abcd efgh', body: 'abcd' }),
+			await Note.save({ title: 'abcd' }),
+			await Note.save({ title: 'efgh', body: 'abcd' }),
+		];
+
+		await engine.syncTables();
+
+		const testCases = [
+			['abcd', ['title', 'body'], ['title'], ['body']],
+			['efgh', ['title'], [], ['title']],
+		];
+
+		for (const testCase of testCases) {
+			const rows = await engine.search(testCase[0]);
+
+			for (let i = 0; i < notes.length; i++) {
+				const row = rows.find(row => row.id === notes[i].id);
+				const actual = row ? row.fields.sort().join(',') : '';
+				const expected = testCase[i + 1].sort().join(',');
+				expect(expected).toBe(actual);
+			}
+		}
+	}));
+
 	it('should order search results by relevance (2)', asyncTest(async () => {
 		// 1
 		const n1 = await Note.save({ title: 'abcd efgh', body: 'XX abcd XX efgh' });

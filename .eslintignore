@@ -55,6 +55,7 @@ Server/docs/
 Server/node_modules/
 Tools/node_modules
 Tools/PortableAppsLauncher
+Modules/TinyMCE/IconPack/postinstall.js
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/editors/PlainEditor.js

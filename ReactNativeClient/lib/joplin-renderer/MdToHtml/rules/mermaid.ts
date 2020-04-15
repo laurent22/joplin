@@ -32,7 +32,7 @@ function installRule(markdownIt:any, mdOptions:any, ruleOptions:any, context:any
 		const contentHtml = markdownIt.utils.escapeHtml(token.content);
 		return `
 			<div class="joplin-editable">
-				<pre class="joplin-source" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+				<pre class="joplin-source" data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
 				<div class="mermaid">${contentHtml}</div>
 			</div>
 		`;

@@ -1,8 +1,3 @@
-18:23:41 Profile directory: /Users/laurent/Temp/TestNotes2
-18:23:41 Trying to load 1 master keys...
-18:23:41 Loaded master keys: 0
-18:23:41 ResourceFetcher: Auto-add resources: Mode: always
-18:23:41 ResourceFetcher: Auto-added resources: 0
 # Joplin API
 
 

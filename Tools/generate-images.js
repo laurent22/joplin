@@ -1,6 +1,10 @@
+require('app-module-path').addPath(`${__dirname}/../ReactNativeClient`);
+
 const dirname = require('path').dirname;
 const sharp = require('sharp');
+const fs = require('fs-extra');
 const { execCommand } = require('./tool-utils.js');
+const { fileExtension } = require('lib/path-utils');
 
 const sources = [
 	{
@@ -9,15 +13,19 @@ const sources = [
 	},
 	{
 		id: 2,
-		name: 'macOS_16x16.png',
+		name: 'RoundedCorners_16x16.png',
 	},
 	{
 		id: 3,
-		name: 'macOS_64x64.png',
+		name: 'RoundedCorners_64x64.png',
 	},
 	{
 		id: 4,
-		name: 'macOS_1024x1024.png',
+		name: 'RoundedCorners_1024x1024.png',
+	},
+	{
+		id: 5,
+		name: 'Joplin.ico',
 	},
 ];
 
@@ -207,6 +215,41 @@ const operations = [
 		width: 1024,
 		height: 1024,
 	},
+
+
+
+	{
+		source: 5,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon.ico',
+	},
+	{
+		source: 2,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_16.png',
+	},
+	{
+		source: 3,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_32.png',
+		width: 32,
+		height: 32,
+	},
+	{
+		source: 4,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_75.png',
+		width: 75,
+		height: 75,
+	},
+	{
+		source: 4,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/appicon_128.png',
+		width: 128,
+		height: 128,
+	},
+	{
+		source: 4,
+		dest: 'Tools/PortableAppsLauncher/App/AppInfo/Launcher/splash.jpg',
+		width: 144,
+		height: 144,
+	},
 ];
 
 async function main() {
@@ -219,15 +262,36 @@ async function main() {
 		const sourcePath = `${sourceImageDir}/${source.name}`;
 		const destPath = `${rootDir}/${operation.dest}`;
 
-		sharp(sourcePath)
-			.resize(operation.width, operation.height, { fit: 'fill' })
-			.toFile(destPath);
+		const sourceExt = fileExtension(sourcePath).toLowerCase();
+		const destExt = fileExtension(destPath).toLowerCase();
+
+		if ((operation.width && operation.height) || (sourceExt !== destExt)) {
+			let s = sharp(sourcePath);
+
+			if (operation.width && operation.height) {
+				s = s.resize(operation.width, operation.height, { fit: 'fill' });
+			}
+
+			if (destExt === 'jpg') {
+				s.jpeg({ quality: 90 });
+			} else if (destExt === 'png') {
+				s.png();
+			} else {
+				throw new Error(`Unsupported extension: ${destExt}`);
+			}
+
+			s = s.toFile(destPath);
+		} else {
+			await fs.copyFile(sourcePath, destPath);
+		}
 	}
 
-	const icnsDest = `${rootDir}/Assets/macOs.icns`;
-	const icnsSource = `${rootDir}/Assets/macOs.iconset`;
-	console.info(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
-	await execCommand(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+	if (process && process.platform === 'darwin') {
+		const icnsDest = `${rootDir}/Assets/macOs.icns`;
+		const icnsSource = `${rootDir}/Assets/macOs.iconset`;
+		console.info(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+		await execCommand(`iconutil -c icns -o "${icnsDest}" "${icnsSource}"`);
+	}
 }
 
 main().catch((error) => {

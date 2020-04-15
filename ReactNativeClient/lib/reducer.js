@@ -89,6 +89,13 @@ stateUtils.foldersOrder = function(stateSettings) {
 	]);
 };
 
+stateUtils.hasNotesBeingSaved = function(state) {
+	for (const id in state.editorNoteStatuses) {
+		if (state.editorNoteStatuses[id] === 'saving') return true;
+	}
+	return false;
+};
+
 stateUtils.parentItem = function(state) {
 	const t = state.notesParentType;
 	let id = null;

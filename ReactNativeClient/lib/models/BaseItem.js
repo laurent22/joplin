@@ -782,6 +782,12 @@ class BaseItem extends BaseModel {
 		output.push(`(:/${item.id})`);
 		return output.join('');
 	}
+
+	static isMarkdownTag(md) {
+		if (!md) return false;
+		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);
+	}
+
 }
 
 BaseItem.encryptionService_ = null;

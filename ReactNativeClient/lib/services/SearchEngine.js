@@ -192,16 +192,17 @@ class SearchEngine {
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	columnIndexesFromOffsets_(offsets) {
+	fieldNamesFromOffsets_(offsets) {
+		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurenceCount = Math.floor(offsets.length / 4);
-		const indexes = [];
-
+		const output = [];
 		for (let i = 0; i < occurenceCount; i++) {
-			const colIndex = offsets[i * 4] - 1;
-			if (indexes.indexOf(colIndex) < 0) indexes.push(colIndex);
+			const colIndex = offsets[i * 4];
+			const fieldName = notesNormalizedFieldNames[colIndex];
+			if (!output.includes(fieldName)) output.push(fieldName);
 		}
 
-		return indexes;
+		return output;
 	}
 
 	calculateWeight_(offsets, termCount) {
@@ -234,16 +235,17 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
-	orderResults_(rows, parsedQuery) {
+	processResults_(rows, parsedQuery) {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const offsets = row.offsets.split(' ').map(o => Number(o));
 			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
-			// row.colIndexes = this.columnIndexesFromOffsets_(offsets);
-			// row.offsets = offsets;
+			row.fields = this.fieldNamesFromOffsets_(offsets);
 		}
 
 		rows.sort((a, b) => {
+			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
 			if (a.is_todo && a.todo_completed) return +1;
@@ -404,7 +406,7 @@ class SearchEngine {
 			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
-				this.orderResults_(rows, parsedQuery);
+				this.processResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
