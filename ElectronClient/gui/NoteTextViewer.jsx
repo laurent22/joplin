@@ -14,6 +14,7 @@ class NoteTextViewerComponent extends React.Component {
 		this.webview_domReady = this.webview_domReady.bind(this);
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_load = this.webview_load.bind(this);
+		this.webview_focus = this.webview_focus.bind(this);
 		this.webview_message = this.webview_message.bind(this);
 	}
 
@@ -28,6 +29,10 @@ class NoteTextViewerComponent extends React.Component {
 
 	webview_load() {
 		this.webview_domReady();
+	}
+
+	webview_focus() {
+		return this.webviewRef_.current.focus();
 	}
 
 	webview_message(event) {
@@ -177,7 +182,7 @@ const NoteTextViewer = connect(
 	mapStateToProps,
 	null,
 	null,
-	{ withRef: true }
+	{ withRef: true },
 )(NoteTextViewerComponent);
 
 module.exports = NoteTextViewer;
