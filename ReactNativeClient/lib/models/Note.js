@@ -258,7 +258,11 @@ class Note extends BaseItem {
 				if (!a.todo_completed && b.todo_completed) return -1;
 
 				// in all incomplete todos, the one with due dates set by user have to be on top
-				if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
+				if (res.dir == 'ASC') {
+					if (dueDateSet(a) && dueDateSet(b)) return new Date(a.due_date) - new Date(b.due_date);
+				} else {
+					if (dueDateSet(a) && dueDateSet(b)) return new Date(b.due_date) - new Date(a.due_date);
+				}
 
 				// if one note has due date set and one hasn't, then the one with due date will be on top
 				if (dueDateSet(a) && !dueDateSet(b)) return -1;
