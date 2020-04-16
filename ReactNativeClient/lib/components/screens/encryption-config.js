@@ -120,7 +120,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
+					<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
@@ -151,6 +151,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Password:')}</Text>
 				<TextInput
 					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}
 					value={this.state.passwordPromptAnswer}
@@ -162,6 +163,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Confirm password:')}</Text>
 				<TextInput
 					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
 					style={this.styles().normalTextInput}
 					secureTextEntry={true}
 					value={this.state.passwordPromptConfirmAnswer}

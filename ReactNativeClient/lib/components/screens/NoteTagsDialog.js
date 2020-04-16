@@ -163,6 +163,7 @@ class NoteTagsDialogComponent extends React.Component {
 					<Text style={this.styles().newTagBoxLabel}>{_('New tags:')}</Text>
 					<TextInput
 						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
 						value={this.state.newTags}
 						onChangeText={value => {
 							this.setState({ newTags: value });
