@@ -1448,7 +1448,7 @@ class NoteTextComponent extends React.Component {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null, byLine = false,toggle) {
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null, byLine = false, toggle) {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.textOffsetSelection();
@@ -1510,9 +1510,8 @@ class NoteTextComponent extends React.Component {
 				};
 			}
 
-			// we dont need to this for toggle copy-paste
+			// we dont need to do this for toggle
 			if (replacementText !== null && toggle.rule == null) {
-			// if (replacementText !== null ) {
 				const diff = replacementText.length - (selection.end - selection.start);
 				newRange.end.column += diff;
 			}
@@ -1575,13 +1574,14 @@ class NoteTextComponent extends React.Component {
 		mdRule[1] = (mdRule[1]) ? mdRule[1] : mdRule[0];
 		// if there is not alternate markdown rule then set mdRule[1]=mdRule[0]
 		const escapedMdRule = mdRule[0].replace(/\\/g,'');
-		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
 		const mdRuleOffset = escapedMdRule.length;
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+
 		const toggle = {
-			flag: false, rule: escapedMdRule };
+			flag: false,
+			rule: escapedMdRule };
 
 		if (!string.trim().startsWith(escapedMdRule)) {
-			// remove if
 			toggle.flag = true;
 			if (selection.start - mdRuleOffset) {
 				selection.start = selection.start - mdRuleOffset;
