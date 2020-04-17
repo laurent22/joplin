@@ -66,10 +66,10 @@ class RecordAudioDialog extends React.Component {
 
 	stopRecord() {
 		this.mediaRecorder.stop();
-		this.setState({ 
+		this.setState({
 			isRecording: false,
 			recordingExists: true,
-		 });
+		});
 	}
 
 	saveDialog() {
