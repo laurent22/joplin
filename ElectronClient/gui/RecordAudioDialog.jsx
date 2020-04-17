@@ -13,6 +13,7 @@ class RecordAudioDialog extends React.Component {
 		this.startRecord = this.startRecord.bind(this);
 		this.stopRecord = this.stopRecord.bind(this);
 		this.closeDialog = this.closeDialog.bind(this);
+		this.saveDialog = this.saveDialog.bind(this);
 		this.mediaRecorder = null;
 		this.audioFile = null;
 		this.recordingExists = false;
@@ -66,9 +67,17 @@ class RecordAudioDialog extends React.Component {
 		this.recordingExists = true;
 	}
 
-	closeDialog() {
+	saveDialog() {
 		if (!this.state.audio) {
 			if (this.props.onSaveClick && this.recordingExists) this.props.onSaveClick(this.audioFile);
+			if (this.props.onClose) {
+				this.props.onClose();
+			}
+		}
+	}
+
+	closeDialog() {
+		if (!this.state.audio) {
 			if (this.props.onClose) {
 				this.props.onClose();
 			}
@@ -86,8 +95,9 @@ class RecordAudioDialog extends React.Component {
 						<button onClick={this.toggleMicrophone}>
 							{this.state.audio ? 'Stop' : 'Record'}
 						</button>
+						{this.recordingExists ? <button onClick={this.saveDialog}>{'Save to Note'}</button> : ''}
 						<button onClick={this.closeDialog}>
-							{this.recordingExists ? 'Save to Note' : 'Close'}
+							{'Close'}
 						</button>
 					</div>
 					{this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ''}
