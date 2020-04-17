@@ -1448,7 +1448,7 @@ class NoteTextComponent extends React.Component {
 		return this.selectionRange_ ? this.rangeToTextOffsets(this.selectionRange_, this.state.note.body) : null;
 	}
 
-	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null, byLine = false) {
+	wrapSelectionWithStrings(string1, string2 = '', defaultText = '', replacementText = null, byLine = false,toggle) {
 		if (!this.rawEditor() || !this.state.note) return;
 
 		const selection = this.textOffsetSelection();
@@ -1456,7 +1456,7 @@ class NoteTextComponent extends React.Component {
 		let newBody = this.state.note.body;
 
 		if (selection && selection.start !== selection.end) {
-			const selectedLines = replacementText !== null ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
+			const selectedLines = (replacementText !== null) ? replacementText : this.state.note.body.substr(selection.start, selection.end - selection.start);
 			const selectedStrings = byLine ? selectedLines.split(/\r?\n/) : [selectedLines];
 
 			newBody = this.state.note.body.substr(0, selection.start);
@@ -1478,6 +1478,12 @@ class NoteTextComponent extends React.Component {
 
 			newBody += this.state.note.body.substr(selection.end);
 
+			if (replacementText === selectedStrings[0]  && toggle.flag) {
+				newBody = newBody.substr(0, selection.start - toggle.rule.length) + replacementText + newBody.substr(selection.end + toggle.rule.length);
+				startCursorPos.column -= toggle.rule.length;
+				if (startCursorPos.row == endCursorPos.row) { endCursorPos.column -= toggle.rule.length; }
+
+			}
 			const r = this.selectionRange_;
 
 			// Because some insertion strings will have newlines, we'll need to account for them
@@ -1504,7 +1510,9 @@ class NoteTextComponent extends React.Component {
 				};
 			}
 
-			if (replacementText !== null) {
+			// we dont need to this for toggle copy-paste
+			if (replacementText !== null && toggle.rule == null) {
+			// if (replacementText !== null ) {
 				const diff = replacementText.length - (selection.end - selection.start);
 				newRange.end.column += diff;
 			}
@@ -1561,29 +1569,60 @@ class NoteTextComponent extends React.Component {
 		this.scheduleSave();
 	}
 
-	toggleWrapSelection(strings1, strings2, defaultText) {
+	toggleWrapSelection(mdRule, defaultText) {
 		const selection = this.textOffsetSelection();
-		const string = this.state.note.body.substr(selection.start, selection.end - selection.start);
-		let replaced = false;
-		for (let i = 0; i < strings1.length; i++) {
-			if (string.startsWith(strings1[i]) && string.endsWith(strings1[i])) {
-				this.wrapSelectionWithStrings('', '', '', string.substr(strings1[i].length, selection.end - selection.start - (2 * strings1[i].length)));
-				replaced = true;
-				break;
+
+		mdRule[1] = (mdRule[1]) ? mdRule[1] : mdRule[0];
+		// if there is not alternate markdown rule then set mdRule[1]=mdRule[0]
+		const escapedMdRule = mdRule[0].replace(/\\/g,'');
+		let string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+		const mdRuleOffset = escapedMdRule.length;
+		const toggle = {
+			flag: false, rule: escapedMdRule };
+
+		if (!string.trim().startsWith(escapedMdRule)) {
+			// remove if
+			toggle.flag = true;
+			if (selection.start - mdRuleOffset) {
+				selection.start = selection.start - mdRuleOffset;
+				selection.end = selection.end + mdRuleOffset;
+			} else {
+				selection.start = 0;
+				selection.end = selection.end + mdRuleOffset;
 			}
 		}
-		if (!replaced) {
-			this.wrapSelectionWithStrings(strings1[0], strings2[0], defaultText);
-		}
 
+		string = this.state.note.body.substr(selection.start, selection.end - selection.start);
+
+		let stringToggle = string;
+		const regexStr = {
+			start: `(${mdRule[0]}|${mdRule[1]})`,
+			end: `(${mdRule[0]}|${mdRule[1]})(?!(${mdRule[0]}|${mdRule[1]}))`,
+		};
+
+		const regex = {
+			start: new RegExp(regexStr.start, 'm'),
+			end: new RegExp(regexStr.end, 'm'),
+		};
+		// example: regex = { start: /\*\*|__/m , end: (/\*\*|__)(?!(\*\*|__))/m }
+
+		stringToggle = stringToggle.replace(regex.start, '');
+
+		stringToggle = stringToggle.replace(regex.end, '');
+
+		if (stringToggle === string) {
+			this.wrapSelectionWithStrings(escapedMdRule, escapedMdRule, defaultText);
+		} else {
+			this.wrapSelectionWithStrings('', '', '', stringToggle, false, toggle);
+		}
 	}
 
 	commandTextBold() {
-		this.toggleWrapSelection(['**'], ['**'], _('strong text'));
+		this.toggleWrapSelection(['\\*\\*','__'], _('strong text'));
 	}
 
 	commandTextItalic() {
-		this.toggleWrapSelection(['*', '_'], ['*', '_'], _('emphasized text'));
+		this.toggleWrapSelection(['\\*', '_'],  _('emphasized text'));
 	}
 
 	commandDateTime() {
@@ -1605,7 +1644,7 @@ class NoteTextComponent extends React.Component {
 				this.wrapSelectionWithStrings(`\`\`\`${match[0]}`, `${match[0]}\`\`\``);
 			}
 		} else {
-			this.toggleWrapSelection(['`'], ['`'], '');
+			this.toggleWrapSelection(['`'], '');
 		}
 	}
 
