@@ -529,6 +529,20 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' &&
+		action.key === 'preferredLightTheme' &&
+		!Setting.value('shouldUseDarkColors') &&
+		Setting.value('themeAutoDetect')) {
+			Setting.setValue('theme', action.value);
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' &&
+		action.key === 'preferredDarkTheme' &&
+		Setting.value('shouldUseDarkColors') &&
+		Setting.value('themeAutoDetect')) {
+			Setting.setValue('theme', action.value);
+		}
 		return result;
 	}
 

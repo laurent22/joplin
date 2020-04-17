@@ -281,6 +281,9 @@ class ConfigScreenComponent extends React.Component {
 
 		const updateSettingValue = (key, value) => {
 			// console.info(key + ' = ' + value);
+			if (key == 'themeAutoDetect') {
+				updateSettingValue('shouldUseDarkColors', bridge().shouldUseDarkColors());
+			}
 			return shared.updateSettingValue(this, key, value);
 		};
 

@@ -1,6 +1,6 @@
 const { _, setLocale } = require('lib/locale.js');
 const { dirname } = require('lib/path-utils.js');
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, nativeTheme } = require('electron');
 
 class Bridge {
 
@@ -161,6 +161,9 @@ class Bridge {
 		return require('electron').screen;
 	}
 
+	shouldUseDarkColors() {
+		return nativeTheme.shouldUseDarkColors;
+	}
 }
 
 let bridge_ = null;

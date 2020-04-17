@@ -36,6 +36,20 @@ class Setting extends BaseModel {
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
+		const themeOptions = () => {
+			const output = {};
+			output[Setting.THEME_LIGHT] = _('Light');
+			output[Setting.THEME_DARK] = _('Dark');
+			if (platform !== mobilePlatform) {
+				output[Setting.THEME_DRACULA] = _('Dracula');
+				output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
+				output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
+				output[Setting.THEME_NORD] = _('Nord');
+			} else {
+				output[Setting.THEME_OLED_DARK] = _('OLED Dark');
+			}
+			return output;
+		};
 
 		this.metadata_ = {
 			'clientId': {
@@ -237,30 +251,56 @@ class Setting extends BaseModel {
 					return options;
 				},
 			},
+			themeAutoDetect: {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				section: 'appearance',
+				appTypes: ['desktop'],
+				public: true,
+				label: () => _('Auto Detect'),
+				description: () =>
+					_('Enable to detect your system theme'),
+			},
 			theme: {
 				value: Setting.THEME_LIGHT,
 				type: Setting.TYPE_INT,
 				public: true,
+				show: settings => {
+					return !settings['themeAutoDetect'];
+				},
 				appTypes: ['mobile', 'desktop'],
 				isEnum: true,
 				label: () => _('Theme'),
 				section: 'appearance',
-				options: () => {
-					const output = {};
-					output[Setting.THEME_LIGHT] = _('Light');
-					output[Setting.THEME_DARK] = _('Dark');
-					if (platform !== mobilePlatform) {
-						output[Setting.THEME_DRACULA] = _('Dracula');
-						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
-						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
-						output[Setting.THEME_NORD] = _('Nord');
-						output[Setting.THEME_ARITIM_DARK] = _('Aritim Dark');
-					} else {
-						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
-					}
-					return output;
-				},
+				options: themeOptions,
 			},
+			preferredLightTheme: {
+				value: Setting.THEME_LIGHT,
+				type: Setting.TYPE_INT,
+				public: true,
+				show: settings => {
+					return settings['themeAutoDetect'];
+				},
+				appTypes: ['desktop'],
+				isEnum: true,
+				label: () => _('Preferred Light Theme'),
+				section: 'appearance',
+				options: themeOptions,
+			},
+			preferredDarkTheme: {
+				value: Setting.THEME_DARK,
+				type: Setting.TYPE_INT,
+				public: true,
+				show: settings => {
+					return settings['themeAutoDetect'];
+				},
+				appTypes: ['desktop'],
+				isEnum: true,
+				label: () => _('Preferred Dark Theme'),
+				section: 'appearance',
+				options: themeOptions,
+			},
+			shouldUseDarkColors: { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
