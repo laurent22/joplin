@@ -88,7 +88,11 @@ class HtmlUtils {
 			return tagStack[tagStack.length - 1];
 		};
 
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object'];
+		// The BASE tag allows changing the base URL from which files are loaded, and
+		// that can break several plugins, such as Katex (which needs to load CSS
+		// files using a relative URL). For that reason it is disabled.
+		// More info: https://github.com/laurent22/joplin/issues/3021
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base'];
 
 		const parser = new htmlparser2.Parser({
 
