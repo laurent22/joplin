@@ -104,7 +104,6 @@ class NoteTextComponent extends React.Component {
 			noteTags: [],
 			showRevisions: false,
 			loading: false,
-			isRecording: false,
 
 			// If the current note was just created, and the title has never been
 			// changed by the user, this variable contains that note ID. Used
@@ -1219,6 +1218,20 @@ class NoteTextComponent extends React.Component {
 		});
 	}
 
+	async attachAudioRecording(blob) {
+		const arrayBuffer = await new Response(blob).arrayBuffer();
+		let buf = Buffer.alloc(arrayBuffer.byteLength);
+    	const view = new Uint8Array(arrayBuffer);
+    	for (let i = 0; i < buf.length; ++i) {
+        	buf[i] = view[i];
+    	}
+		const fileExt = 'oga';
+		const file = `${Setting.value('tempDir')}/joplin-${new Date().getMonth()}.${new Date().getDate()}.${new Date().getFullYear()} - ${new Date().getHours()}.${new Date().getMinutes()}.${fileExt}`;
+		await shim.fsDriver().writeFile(file, buf, 'buffer');
+		await this.commandAttachFile([file]);
+		await shim.fsDriver().remove(file);
+	}
+
 	async commandAttachFile(filePaths = null, createFileURL = false) {
 		if (!filePaths) {
 			filePaths = bridge().showOpenDialog({
@@ -1256,15 +1269,6 @@ class NoteTextComponent extends React.Component {
 				bridge().showErrorMessageBox(error.message);
 			}
 		}
-	}
-
-	async commandRecordAudio() {
-		if (this.state.isRecording) {
-			// stop recording
-		} else {
-			// start recording
-		}
-
 	}
 
 	async commandSetAlarm() {
@@ -1795,6 +1799,12 @@ class NoteTextComponent extends React.Component {
 						type: 'WINDOW_COMMAND',
 						name: 'commandRecordAudio',
 						noteId: n.id,
+						onSaveClick: (audioURL) => {
+							console.log('save clicked');
+							console.log(audioURL);
+							//attachFile(url);
+							this.attachAudioRecording(audioURL);
+						},
 					});
 				},
 			});

@@ -46,6 +46,7 @@ class MainScreenComponent extends React.Component {
 		this.setupAppCloseHandling();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
+		this.recordAudioDialog_close = this.recordAudioDialog_close.bind(this);
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
@@ -360,6 +361,7 @@ class MainScreenComponent extends React.Component {
 				recordAudioDialogOptions: {
 					noteId: command.noteId,
 					visible: true,
+					onSaveClick: command.onSaveClick,
 				},
 			});
 		} else if (command.name === 'commandContentProperties') {
@@ -744,7 +746,7 @@ class MainScreenComponent extends React.Component {
 
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} lines={noteContentPropertiesDialogOptions.lines}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{recordAudioDialogOptions.visible && <RecordAudioDialog theme={this.props.theme} noteId={recordAudioDialogOptions.noteId} onClose={this.recordAudioDialog_close} />}
+				{recordAudioDialogOptions.visible && <RecordAudioDialog theme={this.props.theme} noteId={recordAudioDialogOptions.noteId} onClose={this.recordAudioDialog_close} onSaveClick={recordAudioDialogOptions.onSaveClick} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
