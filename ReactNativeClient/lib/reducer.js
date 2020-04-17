@@ -508,6 +508,7 @@ function handleHistory(state, action) {
 	}
 	default:
 		console.log('Unknown action in history reducer.' ,action.type);
+		return state;
 	}
 
 	newState.backwardHistoryNotes = backwardHistoryNotes;
