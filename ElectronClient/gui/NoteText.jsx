@@ -1218,10 +1218,10 @@ class NoteTextComponent extends React.Component {
 	async attachAudioRecording(blob) {
 		const arrayBuffer = await new Response(blob).arrayBuffer();
 		let buf = Buffer.alloc(arrayBuffer.byteLength);
-    	const view = new Uint8Array(arrayBuffer);
-    	for (let i = 0; i < buf.length; ++i) {
-        	buf[i] = view[i];
-    	}
+		const view = new Uint8Array(arrayBuffer);
+		for (let i = 0; i < buf.length; ++i) {
+			buf[i] = view[i];
+		}
 		const fileExt = 'oga';
 		const file = `${Setting.value('tempDir')}/joplin-${new Date().getMonth()}.${new Date().getDate()}.${new Date().getFullYear()} - ${new Date().getHours()}.${new Date().getMinutes()}.${fileExt}`;
 		await shim.fsDriver().writeFile(file, buf, 'buffer');
