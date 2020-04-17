@@ -1220,7 +1220,7 @@ class NoteTextComponent extends React.Component {
 
 	async attachAudioRecording(blob) {
 		const arrayBuffer = await new Response(blob).arrayBuffer();
-		let buf = Buffer.alloc(arrayBuffer.byteLength);
+		const buf = Buffer.alloc(arrayBuffer.byteLength);
 		const view = new Uint8Array(arrayBuffer);
 		for (let i = 0; i < buf.length; ++i) {
 			buf[i] = view[i];
@@ -1794,7 +1794,7 @@ class NoteTextComponent extends React.Component {
 				onClick: () => {
 					const n = this.state.note;
 					if (!n || !n.id) return;
-	
+
 					this.props.dispatch({
 						type: 'WINDOW_COMMAND',
 						name: 'commandRecordAudio',
@@ -1802,7 +1802,6 @@ class NoteTextComponent extends React.Component {
 						onSaveClick: (audioURL) => {
 							console.log('save clicked');
 							console.log(audioURL);
-							//attachFile(url);
 							this.attachAudioRecording(audioURL);
 						},
 					});

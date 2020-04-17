@@ -7,7 +7,7 @@ class RecordAudioDialog extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			audio: null
+			audio: null,
 		};
 		this.toggleMicrophone = this.toggleMicrophone.bind(this);
 		this.startRecord = this.startRecord.bind(this);
@@ -36,7 +36,7 @@ class RecordAudioDialog extends React.Component {
 		this.recordingExists = false;
 		const audio = await navigator.mediaDevices.getUserMedia({
 			audio: true,
-			video: false
+			video: false,
 		});
 
 		this.setState({ audio });
@@ -49,15 +49,15 @@ class RecordAudioDialog extends React.Component {
 
 		let chunks = [];
 
-		this.mediaRecorder.ondataavailable = function (e) {
+		this.mediaRecorder.ondataavailable = function(e) {
 			chunks.push(e.data);
-		}
-		
-		this.mediaRecorder.onstop = function (e) {
+		};
+
+		this.mediaRecorder.onstop = function() {
 			const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
 			this.audioFile = blob;
 			chunks = [];
-		}
+		};
 		this.mediaRecorder.onstop = this.mediaRecorder.onstop.bind(this);
 	}
 
@@ -68,7 +68,7 @@ class RecordAudioDialog extends React.Component {
 
 	closeDialog() {
 		if (!this.state.audio) {
-			if (this.props.onSaveClick) this.props.onSaveClick(this.audioFile);
+			if (this.props.onSaveClick && this.recordingExists) this.props.onSaveClick(this.audioFile);
 			if (this.props.onClose) {
 				this.props.onClose();
 			}
