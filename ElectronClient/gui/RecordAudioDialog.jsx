@@ -8,6 +8,8 @@ class RecordAudioDialog extends React.Component {
 		super();
 		this.state = {
 			audio: null,
+			isRecording: false,
+			recordingExists: false,
 		};
 		this.toggleMicrophone = this.toggleMicrophone.bind(this);
 		this.startRecord = this.startRecord.bind(this);
@@ -16,7 +18,6 @@ class RecordAudioDialog extends React.Component {
 		this.saveDialog = this.saveDialog.bind(this);
 		this.mediaRecorder = null;
 		this.audioFile = null;
-		this.recordingExists = false;
 	}
 
 	toggleMicrophone() {
@@ -34,7 +35,7 @@ class RecordAudioDialog extends React.Component {
 	}
 
 	async getMicrophone() {
-		this.recordingExists = false;
+		this.setState({ recordingExists: false });
 		const audio = await navigator.mediaDevices.getUserMedia({
 			audio: true,
 			video: false,
@@ -45,6 +46,7 @@ class RecordAudioDialog extends React.Component {
 	}
 
 	startRecord() {
+		this.setState({ isRecording: true });
 		this.mediaRecorder = new MediaRecorder(this.state.audio);
 		this.mediaRecorder.start();
 
@@ -64,12 +66,15 @@ class RecordAudioDialog extends React.Component {
 
 	stopRecord() {
 		this.mediaRecorder.stop();
-		this.recordingExists = true;
+		this.setState({ 
+			isRecording: false,
+			recordingExists: true,
+		 });
 	}
 
 	saveDialog() {
 		if (!this.state.audio) {
-			if (this.props.onSaveClick && this.recordingExists) this.props.onSaveClick(this.audioFile);
+			if (this.props.onSaveClick && this.state.recordingExists) this.props.onSaveClick(this.audioFile);
 			if (this.props.onClose) {
 				this.props.onClose();
 			}
@@ -95,10 +100,8 @@ class RecordAudioDialog extends React.Component {
 						<button onClick={this.toggleMicrophone}>
 							{this.state.audio ? 'Stop' : 'Record'}
 						</button>
-						{this.recordingExists ? <button onClick={this.saveDialog}>{'Save to Note'}</button> : ''}
-						<button onClick={this.closeDialog}>
-							{'Close'}
-						</button>
+						{this.state.recordingExists ? <button onClick={this.saveDialog}>{'Save to Note'}</button> : ''}
+						{this.state.isRecording ? ' ' : <button onClick={this.closeDialog}>{'Close'}</button>}
 					</div>
 					{this.state.audio ? <AudioAnalyser audio={this.state.audio} /> : ''}
 					<section className="sound-clips">
