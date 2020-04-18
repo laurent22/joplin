@@ -270,10 +270,6 @@ class Application extends BaseApplication {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
-		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'themeAutoDetect') {
-			Setting.setValue('shouldUseDarkColors')
-		}
-
 		if (action.type == 'SETTING_UPDATE_ONE' &&
 			action.key === 'preferredLightTheme' &&
 			!bridge().shouldUseDarkColors() &&
