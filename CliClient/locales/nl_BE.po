@@ -303,7 +303,7 @@ msgstr "Toont gebruiksinformatie."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Voor informatie over hoe de snelkoppeling aan te passen, bezoek %s""
+msgstr "Voor informatie over hoe de snelkoppeling aan te passen, bezoek %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
