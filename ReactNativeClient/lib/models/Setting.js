@@ -300,7 +300,6 @@ class Setting extends BaseModel {
 				section: 'appearance',
 				options: themeOptions,
 			},
-			shouldUseDarkColors: { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,

@@ -270,6 +270,24 @@ class Application extends BaseApplication {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
 
+		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'themeAutoDetect') {
+			Setting.setValue('shouldUseDarkColors')
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' &&
+			action.key === 'preferredLightTheme' &&
+			!bridge().shouldUseDarkColors() &&
+			Setting.value('themeAutoDetect')) {
+			Setting.setValue('theme', action.value);
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' &&
+			action.key === 'preferredDarkTheme' &&
+			bridge().shouldUseDarkColors() &&
+			Setting.value('themeAutoDetect')) {
+			Setting.setValue('theme', action.value);
+		}
+
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
