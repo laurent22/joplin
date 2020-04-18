@@ -118,7 +118,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					const files = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
 
 					for (const file of files) {
-						if (file.path == "pluginAssets") continue;
+						if (file.path == 'pluginAssets') continue;
 						const source = `${Setting.value('resourceDir')}/${file.path}`;
 						const dest = `${this.state.profileExportPath}/resources/${file.path}`;
 						reg.logger().info(`Copying profile: ${source} => ${dest}`);
