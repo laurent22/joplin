@@ -32,7 +32,7 @@ msgstr "Typ Ctrl+D of \"exit\" om de applicatie te sluiten"
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"Meer dan een item voldoet aan de zoekterm \"%s\". Verfijn uw zoekterm a.u.b."
+"Meer dan één item voldoet aan de zoekterm \"%s\". Verfijn uw zoekterm a.u.b."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:91
 msgid "No notebook selected."
@@ -40,7 +40,7 @@ msgstr "Geen notitieboek geselecteerd."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:97
 msgid "No notebook has been specified."
-msgstr "Geen notitieboek is gespecifieerd"
+msgstr "Geen notitieboek is gespecifieerd."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:136
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:160
@@ -67,12 +67,12 @@ msgstr "Achtergrond synchronisatie wordt geannuleerd... Even geduld."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:254
 #, javascript-format
 msgid "No such command: %s"
-msgstr "Geen commando gevonden: \"%s\""
+msgstr "Geen commando gevonden: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app.js:302
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Het opgegeven command \"%s\" is alleen beschikbaar in de GUI versie"
+msgstr "Het opgegeven commando \"%s\" is alleen beschikbaar in de GUI versie"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -91,7 +91,7 @@ msgstr "%s: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:143
 msgid "Your choice: "
-msgstr "Uw keuze:"
+msgstr "Uw keuze: "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:150
 #, javascript-format
@@ -147,13 +147,13 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Haal een configuratie waarde op of stel een waarde in. Als [value] niet "
-"opgegeven is, zal de waarde van [name] getoond worden. Als nog de [name] of "
+"Haalt een configuratie waarde op of stelt een waarde in. Als [value] niet "
+"opgegeven is, zal de waarde van [name] getoond worden. Als noch de [name] of "
 "[waarde] opgegeven zijn, zal de huidige configuratie opgelijst worden."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
-msgstr "Toont ook niet-geconfigureerde en verborgen configuratie opties. "
+msgstr "Toont ook niet-geconfigureerde en verborgen configuratie-opties. "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-config.js:79
 #, javascript-format
@@ -170,13 +170,13 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Verveelvoudig de notities die voldoen aan <note> in [notitieboek]. Als er "
-"geen notitieboek is meegegeven, de notitie is gedupliceerd in het huidige "
-"notitieboek."
+"Dupliceert de notities die voldoen aan <note> in [notitieboek]. Als er "
+"geen notitieboek is gespecifeerd, zal de notitie gedupliceerd worden in "
+"het huidige notitieboek."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
-msgstr "Markeer een to-do als voltooid. "
+msgstr "Markeert een to-do als voltooid. "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
 #, javascript-format
@@ -195,37 +195,37 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:37
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:48
 msgid "Enter master password:"
-msgstr "Voeg hoofdsleutel in:"
+msgstr "Geef hoofdpaswoord in:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:39
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:50
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:55
 msgid "Operation cancelled"
-msgstr "Operatie geannuleerd"
+msgstr "Actie geannuleerd"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:162
 #, fuzzy
 msgid "Confirm password:"
-msgstr "Voeg hoofdsleutel in:"
+msgstr "Bevestig paswoord:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:59
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:140
 #, fuzzy
 msgid "Passwords do not match!"
-msgstr "Wachtwoord kan niet leeg zijn"
+msgstr "Wachtwoorden komen niet overeen!"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:76
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Ontsleuteling starten... Dit kan enkele minuten duren, afhankelijk van "
-"hoeveel er te ontsleutelen is. "
+"Decodering gestart... Dit kan enkele minuten duren, afhankelijk van "
+"hoeveel er te decoderen valt. "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:93
 msgid "Completed decryption."
-msgstr "Ontsleuteling voltooid"
+msgstr "Decodering voltooid."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:442
@@ -238,7 +238,7 @@ msgstr "Ingeschakeld"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:506
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
 msgid "Disabled"
-msgstr "UItgeschakeld"
+msgstr "Uitgeschakeld"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:100
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:278
@@ -254,7 +254,7 @@ msgstr "Bewerk notitie."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Geen tekst editor is ingesteld. Stel in met `config editor <editor-path>`"
+"Geen teksteditor gedefinieerd. Stel in met `config editor <editor-path>`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
@@ -276,13 +276,13 @@ msgid ""
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
 "Exporteert Joplin gegevens naar de opgegeven folder. Standaard zal het de "
-"volledige database exporteren, zoals notitieboeken, notities, tags en "
-"middelen."
+"volledige database exporteren, inclusief notitieboeken, notities, tags en "
+"bronnen."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 #, fuzzy, javascript-format
 msgid "Destination format: %s"
-msgstr "Datumnotatie"
+msgstr "Doelformaat: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given note."
@@ -303,11 +303,11 @@ msgstr "Toont gebruiksinformatie."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:36
 #, javascript-format
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr ""
+msgstr "Voor informatie over hoe de snelkoppeling aan te passen, bezoek %s""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Shortcuts zijn niet beschikbaar in command line modus."
+msgstr "Snelkoppelingen zijn niet beschikbaar in command line modus."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:71
 msgid ""
@@ -327,55 +327,56 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"In iedere commando kan een notitie of een notitieboek opgegeven worden door "
-"de title of het ID of de shortcuts `$n` of `$b` voor, respectievelijk, het "
-"huidig geslecteerde notitieboek of huidig geselecteerde notitie. `$c` kan "
-"gebruikt worden om te refereren naar het huidige geselecteerde item."
+"Bij ieder commando kan er naar een notitie of een notitieboek verwezen worden "
+"door de titel, het ID of de snelkoppelingen `$n` of `$b` te gebruiken, "
+"respectievelijk, het huidig geselecteerde notitieboek of de huidige "
+"geselecteerde notitie. `$c` kan gebruikt worden om te refereren naar "
+"het huidige geselecteerde item."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Om van het ene paneel naar het andere te gaan, duw Tab of Shift+Tab."
+msgstr "Om van het ene paneel naar het andere te gaan, gebruik Tab of Shift+Tab."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:80
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Gebruik de pijltjes en page up/down om door de lijsten en de tekstvelden te "
-"scrollen (ook deze console)."
+"Gebruik de pijltjes en page up/down om door de lijsten en de tekstvelden "
+"te scrollen (ook in deze console)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:81
 #, fuzzy
 msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Om de console te maximaliseren/minimaliseren, typ \"TC\"."
+msgstr "Om de console te maximaliseren/minimaliseren, gebruik \"TC\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "Om command line modus te gebruiken, duw \":\""
+msgstr "Om de command line modus te gebruiken, gebruik \":\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Om command line modus te verlaten, duw ESCAPE"
+msgstr "Om de command line modus te verlaten, gebruik ESCAPE"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
 #, fuzzy
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Voor de volledige lijst van beschikbare shortcuts, typ `help shortcuts`"
+"Voor de volledige lijst van beschikbare snelkoppelingen, typ `help shortcuts`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:14
 msgid "Imports data into Joplin."
-msgstr ""
+msgstr "Importeert gegevens in Joplin."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
 #, fuzzy, javascript-format
 msgid "Source format: %s"
-msgstr "Geen commando gevonden: \"%s\""
+msgstr "Bronformaat: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:24
 msgid "Do not ask for confirmation."
-msgstr "Vraag niet om bevestiging. "
+msgstr "Vraag niet om bevestiging."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:43
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:69
@@ -399,13 +400,13 @@ msgstr "Bijgewerkt: %d."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Skipped: %d."
-msgstr "Geskipt: %d."
+msgstr "Overgeslagen: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:47
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
-msgstr "Middelen: %d."
+msgstr "Bronnen: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
@@ -421,7 +422,7 @@ msgstr "Notities importeren..."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:89
 #, javascript-format
 msgid "The notes have been imported: %s"
-msgstr "Notities zijn geïmporteerd: %s"
+msgstr "De notities zijn geïmporteerd: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:18
 msgid ""
@@ -438,7 +439,7 @@ msgstr "Toont enkel de top <num> notities."
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Sorteert de items volgens <field> (vb. title, updated_time, created_time)."
+"Sorteert de items volgens <field> (bv. title, updated_time, created_time)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:29
 msgid "Reverses the sorting order."
@@ -451,7 +452,7 @@ msgid ""
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Toont enkel de items van de specifieke type(s). Kan `n` zijn voor notities, "
-"`t` voor to-do's, of `nt` voor notities en to-do's (vb. `-tt` zou alleen to-"
+"`t` voor to-do's, of `nt` voor notities en to-do's (bv. `-tt` zou alleen to-"
 "do's tonen, terwijl `-ttd` notities en to-do's zou tonen)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
@@ -464,7 +465,7 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"Gebruik volgend lijst formaat. Formaat is ID, NOTE_COUNT (voor notitieboek), "
+"Gebruik lange lijstopmaak. Opmaak is ID, NOTE_COUNT (voor notitieboek), "
 "DATE, TODO_CHECKED (voor to-do's), TITLE"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
