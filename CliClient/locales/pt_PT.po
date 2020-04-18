@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"Last-Translator: Diogo Caveiro <diogocaveiro.pro@outlook.com>\n"
 "Language-Team: \n"
+"Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2.4\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"X-Generator: Poedit 2.2.4\n"
-"Last-Translator: Diogo Caveiro <diogocaveiro.pro@outlook.com>\n"
-"Language: pt_PT\n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -405,7 +405,7 @@ msgstr "Ignorado: %d."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Resources: %d."
-msgstr "Fontes: %d."
+msgstr "Recursos: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:48
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
@@ -3433,3 +3433,44 @@ msgstr "Entrar com o OneDrive"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/search.js:163
 msgid "Search"
 msgstr "Procurar"
+
+#~ msgid ""
+#~ "Disabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Desativar a encriptação significa que *todas* as suas notas e anexos "
+#~ "serão ressincronizados e enviados não encriptados para o destino de "
+#~ "sincronização. Deseja continuar?"
+
+#~ msgid "Master Keys"
+#~ msgstr "Chaves Mestra"
+
+#~ msgid "Active"
+#~ msgstr "Ativo"
+
+#~ msgid "Source"
+#~ msgstr "Origem"
+
+#~ msgid "Password"
+#~ msgstr "Palavra-passe"
+
+#~ msgid "Password OK"
+#~ msgstr "Palavra-passe OK"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Nota: Apenas uma chave mestra será utilizada para a encriptação (a que "
+#~ "está marcada como \"ativa\"). Qualquer uma das chaves pode ser usada para "
+#~ "a desencriptação, dependendo de como as notas ou cadernos foram "
+#~ "originalmente encriptados."
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "texto realçado"
+
+#~ msgid "Global zoom percentage"
+#~ msgstr "Percentagem global de zoom"
