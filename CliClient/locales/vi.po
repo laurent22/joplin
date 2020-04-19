@@ -2584,7 +2584,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:497
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Tùy chọn stylesheet cho nhưng ứng dụng Joplin-wide"
+msgstr "Tùy chọn stylesheet cho những ứng dụng Joplin-wide"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:503
 msgid "Automatically update the application"
@@ -2601,7 +2601,7 @@ msgstr "Xem trang phát hành trước để có thêm thông tin chi tiết: %s
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:512
 msgid "Synchronisation interval"
-msgstr "Tần suất đồng bộ hóa"
+msgstr "Giản cách đồng bộ hóa"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:516
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:517
@@ -2636,7 +2636,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:531
 msgid "Page size for PDF export"
-msgstr "Kích thước của trang để export dạng PDF"
+msgstr "Kích thước của trang để xuất dạng PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:533
 msgid "A4"
@@ -2664,7 +2664,7 @@ msgstr "Legal"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:541
 msgid "Page orientation for PDF export"
-msgstr "Định hướng trang để export PDF"
+msgstr "Định hướng trang để xuất PDF"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:543
 msgid "Portrait"
@@ -2687,7 +2687,7 @@ msgid ""
 msgstr ""
 "Sử dụng list đường dẫn định dạng phân cách bằng dấu phẩy để tải các "
 "certificates, đường đường dẫn tới các certificates. Ví dụ: /my/cert_dir, /"
-"other/custom.pem. Lưu ý, nếu bnaj thay đổi cấu hình TLS, bnaj phải lưu những "
+"other/custom.pem. Lưu ý, nếu bạn thay đổi cấu hình TLS, bạn phải lưu những "
 "thay đổi đó trước khi ấn \"Kiểm tra cấu hình đồng bộ hóa\"."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:572
@@ -2696,7 +2696,7 @@ msgstr "Bỏ qua các lỗi TLS certificate"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "Fail-safe"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2778,6 +2778,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Những plugin này bổ sung thêm tính năng cho trình kết xuất Markdown. Vui "
+"lòng lưu ý rằng, các tính năng này có thể hữu dụng nhưng chúng không phải là "
+"Markdown chuẩn và vì vậy hầu hết chỉ có hể hoạt động với Joplin. Thêm nữa là "
+"một vài tính năng *không tương thích* với trình soạn thảo WYSIWYG. Nếu bạn mở "
+"một note sử dụng một trong các plugin này trong trình soạn thảo WYSIWYG, "
+"bạn sẽ bị mất định dạng của plugin đó. Ở dưới cũng có chú thích chỉ ra plugin "
+"nào tương thích hay không tương thích với trình soạn thảo WYSIWYG."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -2840,7 +2847,7 @@ msgstr "Không thể tải module \"%s\" dưới định dạng \"%s\""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:232
 #, javascript-format
 msgid "Please specify import format for %s"
-msgstr "Vui lòng chỉ định định dạng import cho %s"
+msgstr "Vui lòng chỉ định định dạng nhập cho %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService.js:364
 #, javascript-format
@@ -2853,15 +2860,15 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
 msgid "There is no data to export."
-msgstr "Không có dữ liệu để export."
+msgstr "Không có dữ liệu để xuất."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Vui lòng chỉ định notebook mà các notes sẽ được import tới."
+msgstr "Vui lòng chỉ định notebook mà các notes sẽ được nhập tới."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/RevisionService.js:215
 msgid "Restored Notes"
-msgstr "Hồi phục Notes"
+msgstr "Phục hồi Notes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:121
 msgid "Items that cannot be synchronised"
@@ -2880,7 +2887,7 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:130
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) không thể tỉa lên: %s"
+msgstr "%s (%s) không thể tải lên: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:132
 #, javascript-format
@@ -2918,7 +2925,7 @@ msgstr "%s: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:191
 msgid "Downloaded and encrypted"
-msgstr "Đã tải về và đã mã hóa"
+msgstr "Đã tải về và mã hóa"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:204
 msgid "Attachments that could not be downloaded"
@@ -2946,7 +2953,7 @@ msgstr "Tổng cộng: %d/%d"
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:231
 #, javascript-format
 msgid "Conflicted: %d"
-msgstr "Mâu thuẫn; %d"
+msgstr "Xung đột: %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:232
 #, javascript-format
@@ -2964,7 +2971,7 @@ msgstr "%s: %d notes"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:252
 msgid "Coming alarms"
-msgstr "Báo động sắp gần"
+msgstr "Âm báo sắp đến"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:257
 #, javascript-format
@@ -3010,15 +3017,15 @@ msgstr "Ấn để đặt mật khẩu giải mã."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:419
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
+msgstr "Một số mục không thể đồng bộ hóa. Ấn để xem thêm chi tiết."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
-msgstr "Bỏ báo động"
+msgstr "Bỏ âm báo"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:68
 msgid "Save alarm"
-msgstr "Lưu báo động"
+msgstr "Lưu âm báo"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:86
 msgid "Select date"
@@ -3085,25 +3092,27 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Xác nhận rằng bạn muốn tái mã hoá toàn bộ cơ sở dữ liệu."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "Dữ liệu của bạn sẽ được tái mã hoá và đồng bộ lại."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr ""
+msgstr "Nhập mật khẩu của bạn vào master key liệt kệ ở dưới trước khi nâng cấp "
+"key."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Master key đã được nâng cấp thành công!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "Không thể nâng cấp master key: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
@@ -3128,8 +3137,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Để sử dụng đồng bộ hóa tệp tin hệ thống, bạn cần cho phép ghi vào hệ thống "
-"lưu trữ bên ngoài."
+"Để sử dụng đồng bộ hóa hệ thống tập tin, bạn cần cho phép ghi vào thiết bị "
+"lưu trữ ngoại vi."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:151
 msgid "Information"
@@ -3159,7 +3168,7 @@ msgstr "Tạo báo cáo..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Export Debug Report"
-msgstr "Export báo cáo debug"
+msgstr "Xuất báo cáo debug"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
 msgid "Fixing search index..."
@@ -3179,15 +3188,15 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
 msgid "Exporting profile..."
-msgstr "Export hồ sơ"
+msgstr "Xuất hồ sơ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
 msgid "Export profile"
-msgstr "Export hồ sơ"
+msgstr "Xuất hồ sơ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "Dành riêng cho mục đích debugging: export hồ sơ của bạn tới thẻ SD."
+msgstr "Dành riêng cho mục đích debug: xuất hồ sơ của bạn tới thẻ SD."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:467
 msgid "More information"
@@ -3198,16 +3207,16 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"Để hoạt động hoàn hảo, ứng dụng cần những quyền sau. Thay đổi tịa Apps > "
-"Joplin > Permisisons để trao quyền"
+"Để hoạt động hoàn hảo, ứng dụng cần những quyền sau. Bật các quyền ở Apps > "
+"Joplin > Permisisons"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:480
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Lưu trữ: để cho phép đính kèm files tới notes và cho phép đồng bộ hóa tệp "
-"tin hệ thống."
+"- Lưu trữ: để cho phép đính kèm files tới notes và đồng bộ hóa với hệ "
+"thống tập tin."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:483
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -3215,7 +3224,7 @@ msgstr "- Camera: cho phép chụp ảnh và đính kèm vào note."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:486
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- VỊ trí: cho phép đính thông tin vị trí vào note."
+msgstr "- Vị trí: cho phép đính toạ độ địa lý của bạn vào note."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:515
 msgid "Joplin website"
@@ -3237,7 +3246,7 @@ msgstr "Đăng nhập với Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:62
 msgid "Enter code here"
-msgstr "Ấn mã vào đây"
+msgstr "Nhập mã vào đây"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:119
 #, javascript-format
@@ -3270,7 +3279,7 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Tắt chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
+"Bật chức năng mã hóa có nghĩa là tất cả các notes và đính kèm của bạn sẽ "
 "được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái mã hóa. "
 "Đừng để mất mật khẩu, vì lí do bảo mật, mật khẩu là thứ duy nhất để mở khóa "
 "dữ liệu! Để bật chức năng mã hóa, vui lòng điền mật khẩu vào bên dưới."
@@ -3355,12 +3364,12 @@ msgstr "Không có mục nào có ID %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:156
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Đính kèm này chưa được tải về và giải mã."
+msgstr "Đính kèm này chưa được tải về hay giải mã."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:160
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
-msgstr "Ứng dụng di động Joplin hiện tại không hỗ trỡ link này: %s"
+msgstr "Ứng dụng di động Joplin hiện tại không hỗ trỡ kiểu đường dẫn này: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:164
 #, javascript-format
@@ -3399,7 +3408,7 @@ msgstr "Chụp ảnh"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Attach photo"
-msgstr "Đính kèmanhr"
+msgstr "Đính kèm ảnh"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:715
 msgid "Attach any file"
