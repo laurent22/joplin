@@ -137,6 +137,7 @@ class DecryptionWorker {
 		this.state_ = 'started';
 
 		const excludedIds = [];
+		const decryptedItemCounts = {};
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
@@ -178,6 +179,10 @@ class DecryptionWorker {
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
+
+						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
+
+						decryptedItemCounts[decryptedItem.type_]++;
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
@@ -240,7 +245,10 @@ class DecryptionWorker {
 
 		this.state_ = 'idle';
 
-		this.dispatchReport({ state: 'idle' });
+		this.dispatchReport({
+			state: 'idle',
+			decryptedItemCounts: decryptedItemCounts,
+		});
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);

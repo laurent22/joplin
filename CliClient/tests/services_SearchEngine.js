@@ -344,7 +344,11 @@ describe('services_SearchEngine', function() {
 		let rows;
 
 		const testCases = [
-			['did-not-match', 'did-not-match'],
+			// "-" is considered a word delimiter so it is stripped off
+			// when indexing the notes. "did-not-match" is translated to
+			// three word "did", "not", "match"
+			['did-not-match', 'did not match'],
+			['did-not-match', '"did-not-match"'],
 			['does match', 'does match'],
 		];
 
@@ -358,8 +362,20 @@ describe('services_SearchEngine', function() {
 			rows = await engine.search(query);
 			expect(rows.length).toBe(1);
 
+
 			await Note.delete(n.id);
 		}
+	}));
+
+	it('should allow using basic search', asyncTest(async () => {
+		const n1 = await Note.save({ title: '- [ ] abcd' });
+		const n2 = await Note.save({ title: '[ ] abcd' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(0);
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
+		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
 	}));
 
 });
