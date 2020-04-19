@@ -3102,7 +3102,8 @@ msgstr "Dữ liệu của bạn sẽ được tái mã hoá và đồng bộ l�
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
-msgstr "Nhập mật khẩu của bạn vào master key liệt kệ ở dưới trước khi nâng cấp "
+msgstr ""changed or to start a new pull
+"Nhập mật khẩu của bạn vào master key liệt kệ ở dưới trước khi nâng cấp "
 "key."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
