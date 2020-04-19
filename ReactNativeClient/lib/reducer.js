@@ -45,6 +45,7 @@ const defaultState = {
 		state: 'idle',
 		itemIndex: 0,
 		itemCount: 0,
+		decryptedItemCounts: {},
 	},
 	selectedNoteTags: [],
 	resourceFetcher: {
@@ -415,6 +416,8 @@ function removeItemFromArray(array, property, value) {
 }
 
 const reducer = (state = defaultState, action) => {
+	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type);
+
 	let newState = state;
 
 	try {
