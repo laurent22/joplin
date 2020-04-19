@@ -760,7 +760,6 @@ const reducer = (state = defaultState, action) => {
 
 		case 'TAG_SELECT':
 			newState = handleHistory(state, action);
-			newState = Object.assign({}, newState);
 			newState.selectedTagId = action.id;
 			if (!action.id) {
 				newState.notesParentType = defaultNotesParentType(state, 'Tag');
