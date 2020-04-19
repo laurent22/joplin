@@ -176,12 +176,12 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
-msgstr "Markeert een to-do als voltooid. "
+msgstr "Markeert een taak als voltooid. "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Notitie is geen to-do: \"%s\""
+msgstr "Notitie is geen taak: \"%s\""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:18
 #, fuzzy
@@ -453,8 +453,8 @@ msgid ""
 "to-dos, while `-ttd` would display notes and to-dos."
 msgstr ""
 "Toont enkel de items van de specifieke type(s). Kan `n` zijn voor notities, "
-"`t` voor to-do's, of `nt` voor notities en to-do's (bv. `-tt` zou alleen to-"
-"do's tonen, terwijl `-ttd` notities en to-do's zou tonen)."
+"`t` voor taken, of `nt` voor notities en taken (bv. `-tt` zou alleen to-"
+"do's tonen, terwijl `-ttd` notities en taken zou tonen)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -467,7 +467,7 @@ msgid ""
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
 "Gebruik lange lijstopmaak. Opmaak is ID, NOTE_COUNT (voor notitieboek), "
-"DATE, TODO_CHECKED (voor to-do's), TITLE"
+"DATE, TODO_CHECKED (voor taken), TITLE"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:63
 msgid "Please select a notebook first."
@@ -488,7 +488,7 @@ msgstr "Notities kunnen enkel in een notitieboek aangemaakt worden."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr "Maakt nieuwe to-do aan."
+msgstr "Maakt nieuwe taak aan."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
@@ -504,7 +504,7 @@ msgstr "Verwijdert het opgegeven notitieboek."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "Verwijdert het notitieboek zonder te vragen om bevestiging."
+msgstr "Verwijdert het notitieboek zonder om bevestiging te vragen."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmbook.js:26
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/notes.js:143
@@ -518,16 +518,16 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Verwijder alle notities die voldoen aan <note-pattern>."
+msgstr "Verwijdert alle notities die voldoen aan <note-pattern>."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr "Verwijder de notities zonder te vragen om bevestiging. "
+msgstr "Verwijdert de notities zonder om bevestiging te vragen."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
-msgstr "%d notities voldoen aan het patroon. Items verwijderen?"
+msgstr "%d notities komen overeen met dit patroon. Items verwijderen?"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-rmnote.js:27
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/note.js:369
@@ -544,21 +544,23 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
+"Start, stop of verifieer de API-server. Bepaal de api.port configuratievariabele "
+"om te bepalen welke poort mag gebruikt worden. Commando's zijn (%s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:37
 #, javascript-format
 msgid "Server is already running on port %d"
-msgstr ""
+msgstr "De server draait al op poort %d""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #, javascript-format
 msgid "Server is running on port %d"
-msgstr ""
+msgstr "De server draait op poort %d"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:43
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-server.js:46
 msgid "Server is not running."
-msgstr ""
+msgstr "De server draait niet."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-set.js:22
 #, javascript-format
@@ -575,21 +577,23 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
-msgstr "Toon samenvatting van alle notities en notitieboeken"
+msgstr "Toont een samenvatting van alle notities en notitieboeken"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Start `e2ee decrypt --retry-failed-items` om de decodering van deze items "
+"te starten."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
-msgstr "Synchroniseert met remote opslag. "
+msgstr "Synchroniseert met externe opslag."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:32
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Synchroniseer naar opgegeven doel (standaard sync.target configuratie optie)"
+"Synchroniseer naar opgegeven doel (standaard sync.target configuratie-optie)"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:77
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:91
@@ -604,27 +608,28 @@ msgstr "Authenticatie was niet voltooid (geen authenticatietoken ontvangen)."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
+"Volg de stappen hieronder om Joplin te laten synchroniseren met Dropbox:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:87
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr ""
+msgstr "Stap 1: Open deze link in uw browser om de toepassing toestemming te geven:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:61
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr ""
+msgstr "Stap 2: Voer de door Dropbox verstrekte code in:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:101
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr ""
+msgstr "Niet geverifieerd met %s. Geef eventuele ontbrekende inloggegevens op."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:124
 msgid "Synchronisation is already in progress."
-msgstr "Synchronisatie reeds bezig."
+msgstr "De synchronisatie is al bezig."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:129
 #, javascript-format
@@ -633,9 +638,9 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Er is reeds een lockfile. Als u zeker bent dat er geen synchronisatie bezig "
-"is, kan de lock file verwijderd worden op \"%s\" en verder gegaan worden met "
-"de synchronisatie. "
+"Er is al een lockfile. Als u zeker bent dat er geen synchronisatie bezig "
+"is, dan mag u de lockfile verwijderen op \"%s\" en de synchronisatie "
+"hervatten. "
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
