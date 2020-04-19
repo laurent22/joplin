@@ -2306,7 +2306,8 @@ const mapStateToProps = state => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		customCss: state.customCss,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
-		historyNotes: state.historyNotes,
+		backwardHistoryNotes: state.backwardHistoryNotes,
+		forwardHistoryNotes: state.forwardHistoryNotes,
 		templates: state.templates,
 		provisionalNoteIds: state.provisionalNoteIds,
 	};

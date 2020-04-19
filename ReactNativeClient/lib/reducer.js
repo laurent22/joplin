@@ -51,7 +51,8 @@ const defaultState = {
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
-	historyNotes: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
@@ -300,7 +301,6 @@ function changeSelectedFolder(state, action, options = null) {
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
-	if (options.clearNoteHistory) newState.historyNotes = [];
 	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
@@ -320,7 +320,6 @@ function recordLastSelectedNoteIds(state, noteIds) {
 
 function changeSelectedNotes(state, action, options = null) {
 	if (!options) options = {};
-	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
@@ -360,8 +359,6 @@ function changeSelectedNotes(state, action, options = null) {
 	}
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
-
-	if (options.clearNoteHistory) newState.historyNotes = [];
 
 	return newState;
 }
@@ -602,22 +599,7 @@ const reducer = (state = defaultState, action) => {
 				newState = handleHistory(state, Object.assign({}, action, { type: 'FOLDER_SELECT' }));
 				newState = changeSelectedFolder(newState, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
-
-				if (action.historyNoteAction) {
-					const historyNotes = newState.historyNotes.slice();
-					if (typeof action.historyNoteAction === 'object') {
-						historyNotes.push(Object.assign({}, action.historyNoteAction));
-					} else if (action.historyNoteAction === 'pop') {
-						historyNotes.pop();
-					}
-					newState.historyNotes = historyNotes;
-				} else if (newState !== state) {
-					// Clear the note history if folder and selected note have actually been changed. For example
-					// they won't change if they are already selected. That way, the "Back" button to go to the
-					// previous note wll stay.
-					newState.historyNotes = [];
-				}
+				newState = changeSelectedNotes(newState, noteSelectAction);
 			}
 			break;
 
@@ -940,7 +922,6 @@ const reducer = (state = defaultState, action) => {
 				newState = handleHistory(newState, action);
 				newState.selectedNoteIds = [];
 			}
-			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':
