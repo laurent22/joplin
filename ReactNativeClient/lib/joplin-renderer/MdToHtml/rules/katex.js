@@ -16,11 +16,11 @@ katex = mhchemModule(katex);
 
 function katexStyle() {
 	return [
+		{ name: 'katex.css' },
 		// Note: Declaring the fonts is not needed for in-app rendering because
 		// they will be loaded automatically from katex.css.
 		// However they must be specified for exporting notes to HTML and PDF,
 		// so that they can be bundled with the other assets.
-		{ name: 'katex.css' },
 		{ name: 'fonts/KaTeX_AMS-Regular.woff2' },
 		{ name: 'fonts/KaTeX_Caligraphic-Bold.woff2' },
 		{ name: 'fonts/KaTeX_Caligraphic-Regular.woff2' },
