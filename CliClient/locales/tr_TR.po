@@ -15,8 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: en_GB\n"
-"X-Generator: Loco https://localise.biz/\n"
+"X-Generator: Poedit 2.3\n"
 "X-Loco-Parser: loco_parse_po\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -82,7 +84,7 @@ msgstr "Şifrelenmiş öğe değiştirilemiyor"
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:108
 #, javascript-format
 msgid "Missing required argument: %s"
-msgstr "Gerekli argüman eksik gözüküyor: %s"
+msgstr "Gerekli parametre eksik gözüküyor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/cli-utils.js:139
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/services/report.js:151
@@ -101,7 +103,7 @@ msgstr "Yanlış cevap: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:13
 msgid "Attaches the given file to the note."
-msgstr "Verilen dosyayı nota ekler."
+msgstr "Verilen dosyayı nota iliştirir."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-attach.js:21
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-cat.js:24
@@ -172,8 +174,8 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"<Not> ile [notebook] ile eşleşen notları çoğaltır. Not belirtilmemişse, not "
-"geçerli not defterinde çoğaltılır."
+"<Not> ile eşleşen notları [notebook] not defterine çoğaltır. Not "
+"belirtilmemişse, not geçerli not defterinde çoğaltılır."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -189,8 +191,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
 msgstr ""
-"E2EE ayarını yönetir. Komutlar `enable`, `disable`, `decrypt`, `status`, "
-"`decrypt-file` and `target-status`."
+"Uçtan Uca Şifreleme ayarını yönetir. Komutlar `enable`, `disable`, "
+"`decrypt`, `status`, `decrypt-file` and `target-status`."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:36
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-e2ee.js:68
@@ -252,8 +254,8 @@ msgstr "Notu düzenle."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Hiçbir metin editörü tanımlanmadı. Lütfen `config editor <editor-path>` ı "
-"kullanarak editörü ayarlayınız"
+"Hiçbir metin editörü tanımlanmadı. Lütfen `config editor <editor-path>` "
+"komutunu kullanarak editörü ayarlayınız"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-edit.js:40
 msgid "No active notebook."
@@ -284,15 +286,15 @@ msgstr "Hedef biçimi: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given note."
-msgstr "Yalnızca verilen notu dışa aktarır."
+msgstr "Yalnızca seçilen notu dışa aktarır."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-export.js:23
 msgid "Exports only the given notebook."
-msgstr "Yalnızca verilen not defterini dışa aktarır."
+msgstr "Yalnızca seçilen not defterini dışa aktarır."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Not için bir coğrafi konum URL'si görüntüler."
+msgstr "Not için bir coğrafi konum URL'i görüntüler."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:13
 msgid "Displays usage information."
@@ -329,7 +331,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `"
-"$n` `$b` kestirmelerini kullanalarak atfedilebilinir. Sırasıyla, güncel "
+"$n` `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel "
 "seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf "
 "yapılabilinir."
 
@@ -355,7 +357,7 @@ msgstr "Komut satırı moduna girmek için \":\" e basın"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Komut satırı modundan çıkmak için ESC tuşuna basın"
+msgstr "Komut satırı modundan çıkmak için ESCAPE tuşuna basın"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-help.js:84
 msgid ""
@@ -387,7 +389,7 @@ msgstr "Bulundu: %d."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Created: %d."
-msgstr "Yaratıldı: %d."
+msgstr "Oluşturuldu: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:45
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:71
@@ -411,7 +413,7 @@ msgstr "Kaynaklar: %d."
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ImportScreen.min.js:74
 #, javascript-format
 msgid "Tagged: %d."
-msgstr "Etiketlenen: %d."
+msgstr "Etiket: %d."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-import.js:61
 msgid "Importing notes..."
@@ -433,7 +435,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
-msgstr "Yalnızca ilk üstteki <num> notlarını görüntüler."
+msgstr "Yalnızca ilk <num> notu görüntüler."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
@@ -488,11 +490,11 @@ msgstr "Notlar yalnızca bir not defterinde oluşturulabilir."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr "Yeni bir yapılacak öğe oluşturur."
+msgstr "Yeni bir yapılacak öğe (to-do) oluşturur."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "<note> ile eşleşen tüm notları [notebook] ‘a taşı."
+msgstr "<note> ile eşleşen tüm notları [notebook] defterine taşı."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
@@ -582,6 +584,8 @@ msgstr "Notlar ve not defterleri hakkında özet görüntüler."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Bu notların şifesini çözmeyi yeniden denemek için şu kodu çalıştırın: `e2ee "
+"decrypt —retry-failed-items`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -613,7 +617,7 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:47
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/dropbox-login.js:55
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'yi tarayıcınızda açın:"
+msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'i tarayıcınızda açın:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:89
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/DropboxLoginScreen.min.js:57
@@ -637,8 +641,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"Kilit dosyası zaten tutuluyor. Eşitleme yapılmadığını biliyorsanız, kilit "
-"dosyasını \"%s\" konumunda silebilir ve işleme devam edebilirsiniz."
+"Kilit dosyası zaten tutuluyor. Senkronizasyon yapılmadığını biliyorsanız, "
+"kilit dosyasını \"%s\" konumunda silebilir ve işleme devam edebilirsiniz."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:175
 #, javascript-format
@@ -700,7 +704,7 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"[notebook] 'a geçer - daha sonraki tüm işlemler bu not defterinde "
+"[notebook] not defterine geçer - daha sonraki tüm işlemler bu not defterinde "
 "gerçekleşecektir."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-version.js:11
@@ -733,7 +737,7 @@ msgstr "Varsayılan: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/help-utils.js:77
 msgid "Possible keys/values:"
-msgstr "Mümkün tuşlar/değerler:"
+msgstr "Mümkün ayarlar/değerler:"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/main.js:77
 msgid "Type `joplin help` for usage information."
@@ -777,9 +781,8 @@ msgstr ""
 "kullanımınıza hazır olur."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Onay için sorma."
+msgstr "Daha fazla bilgi için `durum` yazabilirsiniz."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
@@ -845,7 +848,7 @@ msgstr "Taslaktan not oluştur"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr "Bir taslaktan yapılacaklar listesi oluştur"
+msgstr "Taslaktan yapılacaklar listesi oluştur"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
 msgid "Insert template"
@@ -865,9 +868,8 @@ msgid "Options"
 msgstr "Seçenekler"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Ek Dosyalar"
+msgstr "Ek Dosyalar..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
@@ -958,12 +960,12 @@ msgstr "Dışa aktar"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/SideBar.min.js:727
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/side-menu-content.js:337
 msgid "Synchronise"
-msgstr "Senkronize"
+msgstr "Senkroniza Et"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:749
 #, javascript-format
 msgid "Hide %s"
-msgstr "Gizle %s"
+msgstr "Şunu Gizle: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:756
 msgid "Quit"
@@ -1338,7 +1340,7 @@ msgstr "Kaydet"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr "Ana anahtarların güncellenmesi lazım."
+msgstr "Ana anahtarların güncellenmesi lazım"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1476,9 +1478,8 @@ msgid "Add or remove tags:"
 msgstr "Etiket ekle veya kaldır:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:260
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Not defterine taşı..."
+msgstr "Not defterine taşı:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:280
 msgid "Rename notebook:"
@@ -1508,7 +1509,7 @@ msgstr "Şimdi görüntüle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:587
 msgid "Some items cannot be decrypted."
-msgstr "Bazı öğelerin şifresi çözülemez."
+msgstr "Bazı öğelerin şifresi çözülemiyor."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:599
 msgid "One or more master keys need a password."
@@ -1521,7 +1522,7 @@ msgstr "Parola belirle"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:611
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
-"Ana şifreleme anahtarlarınızdan biri eski bir şifreleme yolunu klullanıyor."
+"Ana şifreleme anahtarlarınızdan biri eski bir şifreleme yolunu kullanıyor."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:623
 msgid ""
@@ -1532,7 +1533,6 @@ msgstr ""
 "verinizi yeniden şifrelemelisiniz."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:628
-#, fuzzy
 msgid "More info"
 msgstr "Daha fazla bilgi"
 
@@ -1555,7 +1555,7 @@ msgstr "Karakter"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr "Karakter (boşluk hariç)"
+msgstr "Karakter (boşluklar hariç)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
@@ -1612,7 +1612,7 @@ msgstr "Düzenleme"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:304
 msgid "Previous versions of this note"
-msgstr "Bu notun önceki versiyonları"
+msgstr "Bu notun önceki sürümleri"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:381
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1846
@@ -1626,7 +1626,7 @@ msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yükl
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
-msgstr "Bu not değiştirildi"
+msgstr "Bu notun hiç değişiklik geçmişi yok"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteRevisionViewer.min.js:142
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:862
@@ -1673,12 +1673,12 @@ msgstr "Bağlantı Adresini Kopyala"
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:833
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:594
 msgid "There was an error downloading this attachment:"
-msgstr "Bu eklentiyi indirirken bir hata oluştu"
+msgstr "Bu eki indirirken bir hata oluştu:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:835
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:597
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Bu ek henüz indirilmedi veya şifresi çözülmedi."
+msgstr "Bu ek henüz indirilmedi veya şifresi çözülmedi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1082
 #, javascript-format
@@ -1788,9 +1788,8 @@ msgid "Clear"
 msgstr "Temizle"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:31
-#, fuzzy
 msgid "Title"
-msgstr "başlık"
+msgstr "Başlık"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
 msgid "Size"
@@ -1820,9 +1819,9 @@ msgid "Delete"
 msgstr "Sil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "\"%s\" notu silinsin mi?"
+msgstr "\"%s\" eki silinsin mi?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1830,6 +1829,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. "
+"Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse "
+"sonrasında geri döndürülemez."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1853,7 +1855,6 @@ msgid "Dropbox Login"
 msgstr "Dropbox Girişi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
 msgstr "Ek Dosyalar"
 
@@ -1900,7 +1901,7 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"“%s” Not defterini sil ?\n"
+"“%s” not defteri silinsin mi ?\n"
 "\n"
 "Not defteri içersindeki tüm not ve alt not defterleri de silinecektir."
 
@@ -1948,9 +1949,8 @@ msgstr "Lütfen senkronizasyon durumunun nereye aktarılacağını seçin"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "Yeniden dene"
+msgstr "Tümünü yeniden dene"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1962,9 +1962,8 @@ msgid "Add or remove tags"
 msgstr "Etiket ekle veya kaldır"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Not defterine taşı..."
+msgstr "Not defterine taşı"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
@@ -2017,13 +2016,12 @@ msgid "Error opening note in editor: %s"
 msgstr "Editörde not açılırken hata oluştu: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:435
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Geçiş yapmak için bir not başlığı yazın. Ya da # ile etiket ismi ya da @ ile "
-"not defteri ismi yazın."
+"Geçiş yapmak için not başlığını veya içeriğin bir kısmın yazın. Alternatif "
+"olarak # ile etiket ismi ya da @ ile not defteri ismi yazın."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:473
 msgid "Goto Anything..."
@@ -2143,6 +2141,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Büyük (%dx%d piksel) bir resim iliştirmek üzeresiniz. Bu resmi iliştirmeden "
+"önce %d piksel ebatına yeniden boyutlandırmak ister misiniz?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2268,20 +2268,18 @@ msgid "Downloaded"
 msgstr "İndirildi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Evet"
+msgstr "evet"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(ne görürsen onu alırsın: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "e"
+msgstr "hayır"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2386,11 +2384,11 @@ msgstr "Dil"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:212
 msgid "Date format"
-msgstr "Tarih formatı"
+msgstr "Tarih biçimi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:231
 msgid "Time format"
-msgstr "Zaman formatı"
+msgstr "Zaman biçimi"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:246
 msgid "Theme"
@@ -2422,7 +2420,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
@@ -2464,9 +2462,8 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
-#, fuzzy
 msgid "Split"
-msgstr "Görünümü böl"
+msgstr "Ayrıştır"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Uncompleted to-dos on top"
@@ -2482,7 +2479,7 @@ msgstr "Notları sırala"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:305
 msgid "Auto-pair braces, parenthesis, quotations, etc."
-msgstr "Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle"
+msgstr "Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:307
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:325
@@ -2532,9 +2529,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Fountain söz dizimi desteğini etkinleştir"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Dizgi desteğini etkinleştir"
+msgstr "Mermaid flowchart tipi diagram desteğini etkinleştir"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Enable ==mark== syntax"
@@ -2591,8 +2587,8 @@ msgid ""
 "reducing the number of conflicts."
 msgstr ""
 "Bu Joplin'in arka planda çalışmasına izin verecektir. Bu ayarı "
-"etkinleştirmeniz önerilir; böylece notlarınız sürekli olarak senkronize "
-"edilir, çakışma sayısı azalır."
+"etkinleştirmeniz önerilir; böylece notlarınız sürekli olarak eşitlenir, "
+"çakışma sayısı azalır."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:407
 msgid "Start application minimised in the tray icon"
@@ -2733,7 +2729,7 @@ msgstr "TLS sertifikası hatalarını yoksay"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "Tedbir Modu"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2815,6 +2811,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Bu eklentiler Markdown tipi gösterimi ek özelliklerle iyileştirir. Bu "
+"özellikleri kullanırken unutulmamalıdır ki bu özellikler standart Markdown "
+"söz dizimine dahil değildir, ve de bunların çoğu sadece Joplin içerisinde "
+"çalışacaktır. Buna ek olarak, bu eklentilerin bazıları zengin metin editörü "
+"ile *uyumlu değildir*. Eğer zengin metin editörünüzde bu eklentiyi kullanan "
+"bir notu açmaya çalışırsanız eklentinin biçimlendirmesini kaybedersiniz. "
+"Zengin metin editörünün hangi eklentileri desteklediği altta belirtilmiştir."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -3047,7 +3050,7 @@ msgstr "Şifre çözücü parolayı belirlemek için basın."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:419
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Bazı öğeler senkronize edilemiyor. Detayları için tıklayın"
+msgstr "Bazı öğeler senkronize edilemiyor. Detayları için tıklayın."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/select-date-time-dialog.js:65
 msgid "Clear alarm"
@@ -3193,7 +3196,7 @@ msgstr "Log"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Creating report..."
-msgstr "Rapor oluşturuluyor…"
+msgstr "Rapor oluşturuluyor..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:447
 msgid "Export Debug Report"
@@ -3201,7 +3204,7 @@ msgstr "Hata Ayıklama Raporunu Dışa Aktar"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
 msgid "Fixing search index..."
-msgstr "Arama indeksi düzeltiliyor…"
+msgstr "Arama indeksi düzeltiliyor..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:449
 msgid "Fix search index"
@@ -3217,7 +3220,7 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
 msgid "Exporting profile..."
-msgstr "Profil dışa aktarılıyor"
+msgstr "Profil dışa aktarılıyor..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/config.js:452
 msgid "Export profile"
