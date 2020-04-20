@@ -64,7 +64,7 @@ class Dialog extends React.PureComponent {
 		const itemHeight = this.state.resultsInBody ? 84 : 64;
 
 		this.styles_[styleKey] = {
-			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
+			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%', maxHeight: '80%', display: 'flex', flexDirection: 'column' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
 			row: {
 				overflow: 'hidden',
