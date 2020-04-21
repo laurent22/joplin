@@ -125,7 +125,6 @@ stateUtils.getCurrentNote = function(state) {
 			return {
 				id: currNote.id,
 				parent_id: currNote.parent_id,
-
 				notesParentType: state.notesParentType,
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
@@ -910,17 +909,15 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'SEARCH_SELECT':
-			{
-				newState = Object.assign({}, state);
-				newState.selectedSearchId = action.id;
-				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Search');
-				} else {
-					newState.notesParentType = 'Search';
-				}
-				newState = handleHistory(newState, action);
-				newState.selectedNoteIds = [];
+			newState = Object.assign({}, state);
+			newState.selectedSearchId = action.id;
+			if (!action.id) {
+				newState.notesParentType = defaultNotesParentType(state, 'Search');
+			} else {
+				newState.notesParentType = 'Search';
 			}
+			newState = handleHistory(newState, action);
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':
