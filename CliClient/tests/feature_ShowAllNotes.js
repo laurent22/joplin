@@ -95,6 +95,7 @@ describe('integration_ShowAllNotes', function() {
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		await testApp.wait();
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
 		await testApp.wait();
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });
@@ -132,6 +133,7 @@ describe('integration_ShowAllNotes', function() {
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'note1', parent_id: folder2.id });
+		await testApp.wait();
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
 		await testApp.wait();
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });
@@ -149,7 +151,7 @@ describe('integration_ShowAllNotes', function() {
 		await Note.moveToFolder(note1.id, folder2.id);
 		await testApp.wait();
 
-		// check the note is duplicated and the view updated
+		// check the note is updated and remains in view
 		state = testApp.store().getState();
 		expect(state.notes.length).toEqual(2);
 		let n1 = await Note.load(note1.id);
@@ -159,7 +161,7 @@ describe('integration_ShowAllNotes', function() {
 		await Note.moveToFolder(note1.id, folder1.id);
 		await testApp.wait();
 
-		// check the note is duplicated and the view updated
+		// check the note is updated and remains in view
 		state = testApp.store().getState();
 		expect(state.notes.length).toEqual(2);
 		n1 = await Note.load(note1.id);

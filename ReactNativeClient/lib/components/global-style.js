@@ -150,6 +150,7 @@ function themeStyle(theme) {
 		output.htmlDividerColor = '#3D444E';
 		output.htmlLinkColor = 'rgb(166,166,255)';
 		output.htmlCodeColor = '#ffffff';
+		output.htmlTableBackgroundColor = 'rgb(0, 0, 0)';
 		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
@@ -184,6 +185,7 @@ function themeStyle(theme) {
 	output.htmlDividerColor = '#3D444E';
 	output.htmlLinkColor = 'rgb(166,166,255)';
 	output.htmlCodeColor = '#ffffff';
+	output.htmlTableBackgroundColor = 'rgb(40, 41, 42)';
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
