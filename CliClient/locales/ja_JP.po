@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -569,6 +571,8 @@ msgstr "ノートとノートブックのサマリを表示します。"
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"これらのアイテムの復号化を再試行するには、`e2ee decrypt --retry-failed-items`"
+"を実行してください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -758,9 +762,8 @@ msgstr ""
 "しょう。"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "確認を行ないません。"
+msgstr "`status`でさらに情報を確認できます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
@@ -846,9 +849,8 @@ msgid "Options"
 msgstr "オプション"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
-#, fuzzy
 msgid "Note attachments..."
-msgstr "添付ファイル"
+msgstr "添付ファイル一覧..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
@@ -1455,9 +1457,8 @@ msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:260
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "ノートブックへ移動..."
+msgstr "ノートブックへ移動:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:280
 msgid "Rename notebook:"
@@ -1793,9 +1794,9 @@ msgid "Delete"
 msgstr "削除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "ノート \"%s\" を削除しますか？"
+msgstr "添付ファイル \"%s\" を削除しますか？"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1803,6 +1804,8 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"ここではノートに添付されているファイルの一覧を見ることができます。添付ファイ"
+"ルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1826,9 +1829,8 @@ msgid "Dropbox Login"
 msgstr "Dropboxログイン"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "添付ファイル"
+msgstr "添付ファイル一覧"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -1919,9 +1921,8 @@ msgstr "同期状況の出力先を選択してください"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "再実行"
+msgstr "すべて再試行"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1933,9 +1934,8 @@ msgid "Add or remove tags"
 msgstr "タグの追加と削除"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "ノートブックへ移動..."
+msgstr "ノートブックへ移動"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
@@ -1988,13 +1988,13 @@ msgid "Error opening note in editor: %s"
 msgstr "次のエディターで開く際にエラー: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:435
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"ノートの題名を入力すると、そのノートに移動します。または#につづいてタグ名もし"
-"くは@につづいてノートブック名を使うこともできます。"
+"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#"
+"タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
+"移動できます。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:473
 msgid "Goto Anything..."
@@ -2112,6 +2112,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小"
+"してから添付しますか？"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2239,20 +2241,18 @@ msgid "Downloaded"
 msgstr "ダウンロード済み"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Yes"
+msgstr "はい"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(WYSIWYG対応: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "いいえ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2393,7 +2393,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
@@ -2699,7 +2699,7 @@ msgstr "TLS証明書のエラーを無視"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "フェイルセーフ"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2781,6 +2781,12 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Markdownレンダラーの機能を拡張する拡張書式プラグインの一覧です。これらの拡張"
+"書式は有用ですが、Markdown標準ではないため、Joplin上でしか動作しないことにご"
+"注意ください。また、一部の拡張書式はWYSIWYGエディターと互換性がありません。非"
+"互換の拡張書式を使用しているノートをWYSIWYGエディターで開いた場合、該当書式は"
+"失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確"
+"認ください。"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
