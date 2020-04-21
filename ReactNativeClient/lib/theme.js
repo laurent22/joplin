@@ -1,13 +1,13 @@
-const Setting = require('lib/models/Setting.js');
+const Setting = require('./models/Setting.js');
 
 const themes = {
-	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
-	[Setting.THEME_DARK]: require('./gui/style/theme/dark'),
-	[Setting.THEME_DRACULA]: require('./gui/style/theme/dracula'),
-	[Setting.THEME_SOLARIZED_LIGHT]: require('./gui/style/theme/solarizedLight'),
-	[Setting.THEME_SOLARIZED_DARK]: require('./gui/style/theme/solarizedDark'),
-	[Setting.THEME_NORD]: require('./gui/style/theme/nord'),
-	[Setting.THEME_ARITIM_DARK]: require('./gui/style/theme/aritimDark'),
+	[Setting.THEME_LIGHT]: require('./theme/light'),
+	[Setting.THEME_DARK]: require('./theme/dark'),
+	[Setting.THEME_DRACULA]: require('./theme/dracula'),
+	[Setting.THEME_SOLARIZED_LIGHT]: require('./theme/solarizedLight'),
+	[Setting.THEME_SOLARIZED_DARK]: require('./theme/solarizedDark'),
+	[Setting.THEME_NORD]: require('./theme/nord'),
+	[Setting.THEME_ARITIM_DARK]: require('./theme/aritimDark'),
 };
 
 // globalStyle should be used for properties that do not change across themes

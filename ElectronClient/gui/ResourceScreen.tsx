@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
 const { Header } = require('./Header.min.js');
 const prettyBytes = require('pretty-bytes');

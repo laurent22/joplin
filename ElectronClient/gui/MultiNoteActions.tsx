@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const { buildStyle } = require('../theme.js');
+const { buildStyle } = require('lib/theme');
 const { bridge } = require('electron').remote.require('./bridge');
 const NoteListUtils = require('./utils/NoteListUtils');
 

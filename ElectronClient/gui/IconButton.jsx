@@ -1,5 +1,5 @@
 const React = require('react');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 
 class IconButton extends React.Component {
 	render() {

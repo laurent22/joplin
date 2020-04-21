@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { time } = require('lib/time-utils.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 
 class NoteStatusBarComponent extends React.Component {
 	style() {

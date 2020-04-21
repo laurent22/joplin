@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const { _ } = require('lib/locale.js');
 const { bridge } = require('electron').remote.require('./bridge');
 

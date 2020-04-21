@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const SearchEngine = require('lib/services/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');

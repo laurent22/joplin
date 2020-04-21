@@ -1,5 +1,5 @@
 const { createSelector } = require('reselect');
-const { themeStyle } = require('../../theme.js');
+const { themeStyle } = require('lib/theme');
 
 const themeSelector = (state, props) => themeStyle(props.theme);
 

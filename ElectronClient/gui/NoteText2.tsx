@@ -10,7 +10,7 @@ import MultiNoteActions from './MultiNoteActions';
 
 // eslint-disable-next-line no-unused-vars
 import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand } from './utils/NoteText';
-const { themeStyle, buildStyle } = require('../theme.js');
+const { themeStyle, buildStyle } = require('lib/theme');
 const { reg } = require('lib/registry.js');
 const { time } = require('lib/time-utils.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');

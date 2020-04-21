@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { themeStyle } = require('../theme.js');
+const { themeStyle } = require('lib/theme');
 const TagItem = require('./TagItem.min.js');
 
 class TagListComponent extends React.Component {

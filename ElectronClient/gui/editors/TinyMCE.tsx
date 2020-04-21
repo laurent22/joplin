@@ -9,7 +9,7 @@ const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
-const { themeStyle, buildStyle } = require('../../theme.js');
+const { themeStyle, buildStyle } = require('lib/theme');
 
 interface TinyMCEProps {
 	style: any,
