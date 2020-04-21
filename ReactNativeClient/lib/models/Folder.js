@@ -323,8 +323,8 @@ class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	static async sortFolderTree() {
-		const output = await this.allAsTree();
+	static async sortFolderTree(folders) {
+		const output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders) => {
 			folders.sort((a, b) => {
