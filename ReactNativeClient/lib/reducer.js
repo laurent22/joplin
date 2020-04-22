@@ -477,7 +477,7 @@ function handleHistory(state, action) {
 		backwardHistoryNotes = backwardHistoryNotes.concat(newModNote).slice(-MAX_HISTORY);
 		break;
 	}
-	case 'SEARCH_SELECT':
+	case 'SEARCH_UPDATE':
 		if (currentNote != null && (backwardHistoryNotes.length === 0 ||
 						backwardHistoryNotes[backwardHistoryNotes.length - 1].id != currentNote.id)) {
 			forwardHistoryNotes = [];
@@ -881,7 +881,7 @@ const reducer = (state = defaultState, action) => {
 
 		case 'SEARCH_UPDATE':
 			{
-				newState = Object.assign({}, state);
+				newState = handleHistory(state, action);
 				const searches = newState.searches.slice();
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
@@ -916,7 +916,6 @@ const reducer = (state = defaultState, action) => {
 			} else {
 				newState.notesParentType = 'Search';
 			}
-			newState = handleHistory(newState, action);
 			newState.selectedNoteIds = [];
 			break;
 
