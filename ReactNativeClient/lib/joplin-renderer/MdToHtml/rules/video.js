@@ -42,16 +42,17 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 
 		const renderLink = defaultRender(tokens, idx, options, env, self);
 		const token = tokens[idx];
+
 		const link = token.attrGet('href');
 		const videoID = link.match(videoIDRegex);
 		const hostname = url.parse(link).hostname;
-		const checkHostName = validHostName.includes(hostname);
+		const isValidHostName = validHostName.includes(hostname);
 
-		if (!videoID || !checkHostName) {
+		if (!videoID || !isValidHostName) {
 			return renderLink;
 		}
 
-		if (videoID[2] && checkHostName) {
+		if (videoID[2] && isValidHostName) {
 			if (!('video' in context.pluginAssets)) {
 				addContextAssets(context);
 			}
