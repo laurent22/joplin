@@ -1,6 +1,6 @@
 // LOGIC: Extract the & UUID of the youtube video and the host name from the href link
 // and render it in iframe if both of the are valid.
-const url = require('url');
+const getVideoID = require('get-video-id');
 const videoCss = () => {
 	return [
 		{
@@ -34,8 +34,8 @@ function addContextAssets(context) {
 function installRule(markdownIt, mdOptions, ruleOptions, context) {
 	const defaultRender = markdownIt.renderer.rules.link_open;
 
-	const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-	const validHostName = ['youtu.be', 'www.youtube.com','www.youtube-nocookie.com'];
+	// const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+	// const validHostName = ['youtu.be', 'www.youtube.com','www.youtube-nocookie.com'];
 	// videoIDRegex extracts the unique 11 digit code which is unique to every youtube video
 
 	markdownIt.renderer.rules.link_open = (tokens, idx, options, env, self) => {
@@ -44,19 +44,25 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 		const token = tokens[idx];
 
 		const link = token.attrGet('href');
-		const videoID = link.match(videoIDRegex);
-		const hostname = url.parse(link).hostname;
-		const isValidHostName = validHostName.includes(hostname);
+		const parsedUrl = getVideoID(link);
+		console.log(parsedUrl);
+		// const videoID = link.match(videoIDRegex);
+		// const hostname = url.parse(link).hostname;
+		// const isValidHostName = validHostName.includes(hostname);
 
-		if (!videoID || !isValidHostName) {
-			return renderLink;
-		}
-
-		if (videoID[2] && isValidHostName) {
+		if (parsedUrl) {
 			if (!('video' in context.pluginAssets)) {
 				addContextAssets(context);
 			}
-			return `<div class="jop-video-container"><iframe class="jop-video-iframe" src="https://www.youtube.com/embed/${videoID[2]}" frameborder="0" allowfullscreen></iframe></div>${renderLink}`;
+			if (parsedUrl.service === 'youtube') {
+				return `<div class="jop-video-container"><iframe class="jop-video-iframe" src="https://www.youtube.com/embed/${parsedUrl.id}" frameborder="0" allowfullscreen></iframe></div>${renderLink}`;
+			} else if (parsedUrl.service === 'vimeo') {
+				return `<div class="jop-video-container"><iframe class="jop-video-iframe" src="https://player.vimeo.com/video/${parsedUrl.id}"></iframe></div>${renderLink}`;
+			} else {
+				return renderLink;
+			}
+		} else {
+			return renderLink;
 		}
 	};
 }
