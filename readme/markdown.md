@@ -26,7 +26,7 @@ This is a quick summary of the Markdown syntax.
 | **Link** | <pre>This is detected as a link:<br><br>`https://joplinapp.org`<br><br>And this is a link anchoring text content:<br><br>`[Joplin](https://joplinapp.org)`<br><br>And this is a link, with a title,<br>anchoring text content:<br><br>`[Joplin](https://joplinapp.org "Joplin project page")`</pre> | This is detected as a link:<br><br>https://joplinapp.org<br><br>And this is a link anchoring text content:<br><br>[Joplin](https://joplinapp.org)<br><br>And this is a link, with a title,<br>anchoring text content:<br><br>[Joplin](https://joplinapp.org "Joplin project page") (_hint: hover over the link_)
 | **Images** | <pre>`![Joplin icon](https://git.io/JenGk)`</pre> | ![Here's Joplin icon](https://git.io/JenGk)
 | **Horizontal Rule** | <pre>One rule:<br>\*\*\*<br>Another rule:<br>\-\-\-</pre> | One rule:<hr><br>Another rule:<br><hr>
-| **Tables** | [See below](#tables) | 
+| **Tables** | [See below](#tables) |
 
 ### Tables
 
@@ -154,4 +154,4 @@ Note that the functionality added by these plugins is not part of the CommonMark
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no |
 | [Fountain](https://fountain.io) | <code>\`\`\`fountain</code><br/>Your screenplay...<br/><code>\`\`\`</code> | Adds support for the Fountain markup language, a plain text markup language for screenwriting | no |
-| [Video](https://github.com/laurent22/joplin/pull/2747) | A valid youtube URL. Eg: https://www.youtube.com/watch?v=uZClGt1xS1A| Converts video URLs into a video player. Currently, only YouTube is supported. More information in [this](https://github.com/laurent22/joplin/pull/2747) post | no |
+| [Video](https://github.com/laurent22/joplin/pull/2747) | A valid youtube URL. Eg: https://www.youtube.com/watch?v=uZClGt1xS1A| Converts video URLs into a video player. Currently, only YouTube and Vimeo are supported. More information in [this](https://github.com/laurent22/joplin/pull/2747) post | no |
