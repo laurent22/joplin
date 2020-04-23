@@ -34,10 +34,6 @@ function addContextAssets(context) {
 function installRule(markdownIt, mdOptions, ruleOptions, context) {
 	const defaultRender = markdownIt.renderer.rules.link_open;
 
-	// const videoIDRegex = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-	// const validHostName = ['youtu.be', 'www.youtube.com','www.youtube-nocookie.com'];
-	// videoIDRegex extracts the unique 11 digit code which is unique to every youtube video
-
 	markdownIt.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 
 		const renderLink = defaultRender(tokens, idx, options, env, self);
@@ -45,10 +41,6 @@ function installRule(markdownIt, mdOptions, ruleOptions, context) {
 
 		const link = token.attrGet('href');
 		const parsedUrl = getVideoID(link);
-		console.log(parsedUrl);
-		// const videoID = link.match(videoIDRegex);
-		// const hostname = url.parse(link).hostname;
-		// const isValidHostName = validHostName.includes(hostname);
 
 		if (parsedUrl) {
 			if (!('video' in context.pluginAssets)) {
