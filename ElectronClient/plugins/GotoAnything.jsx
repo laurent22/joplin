@@ -249,7 +249,7 @@ class Dialog extends React.PureComponent {
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
 								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
-								if (mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 							}
 
 							results[i] = Object.assign({}, row, { path, fragments });
@@ -302,7 +302,6 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
-				historyAction: 'goto',
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -313,7 +312,6 @@ class Dialog extends React.PureComponent {
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
-				historyAction: 'goto',
 			});
 		}
 	}

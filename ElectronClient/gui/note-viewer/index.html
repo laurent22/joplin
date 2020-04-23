@@ -274,24 +274,31 @@
 			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
 		}
 
-		let markLoaded_ = false;
+		let markLoader_ = { state: 'idle', whenDone: null };
 		ipc.setMarkers = (event) => {
 			const keywords = event.keywords;
 			const options = event.options;
 
-			if (!keywords.length && !markLoaded_) return;
+			if (!keywords.length && markLoader_.state === 'idle') return;
 
-			if (!markLoaded_) {
+			if (markLoader_.state === 'idle') {
+				markLoader_ = {
+					state: 'loading',
+					whenDone: {keywords:keywords, options:options},
+				};
+
 				const script = document.createElement('script');
 				script.onload = function() {
-					setMarkers(keywords, options);
+					markLoader_.state = 'ready';
+					setMarkers(markLoader_.whenDone.keywords, markLoader_.whenDone.options);
 				};
 
 				script.src = '../../node_modules/mark.js/dist/mark.min.js';
 				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
-				markLoaded_ = true;
-			} else {
+			} else if (markLoader_.state === 'ready') {
 				setMarkers(keywords, options);
+			} else if (markLoader_.state === 'loading') {
+				markLoader_.whenDone = {keywords:keywords, options:options};
 			}
 		}
 

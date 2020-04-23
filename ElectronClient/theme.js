@@ -194,6 +194,10 @@ function addExtraStyles(style) {
 		padding: 16,
 		boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		marginTop: 20,
+		maxHeight: '80%',
+		display: 'flex',
+		flexDirection: 'column',
+		overflow: 'auto',
 	};
 
 	style.buttonIconStyle = {

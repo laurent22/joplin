@@ -19,6 +19,7 @@ const globalStyle = {
 	disabledOpacity: 0.2,
 	colorUrl: '#7B81FF',
 	textSelectionColor: '#0096FF',
+	appearance: 'light',
 
 	raisedBackgroundColor: '#0080EF',
 	raisedColor: '#003363',
@@ -95,6 +96,8 @@ function addExtraStyles(style) {
 		backgroundColor: style.headerBackgroundColor,
 	};
 
+	style.keyboardAppearance = style.appearance;
+
 	return style;
 }
 
@@ -133,6 +136,7 @@ function themeStyle(theme) {
 		output.strongDividerColor = '#888888';
 		output.selectedColor = '#333333';
 		output.textSelectionColor = '#00AEFF';
+		output.appearance = 'dark';
 		output.headerBackgroundColor = '#2D3136';
 
 		output.raisedBackgroundColor = '#0F2051';
@@ -146,6 +150,7 @@ function themeStyle(theme) {
 		output.htmlDividerColor = '#3D444E';
 		output.htmlLinkColor = 'rgb(166,166,255)';
 		output.htmlCodeColor = '#ffffff';
+		output.htmlTableBackgroundColor = 'rgb(0, 0, 0)';
 		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
@@ -166,6 +171,7 @@ function themeStyle(theme) {
 	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
+	output.appearance = 'dark';
 	output.headerBackgroundColor = '#2D3136';
 
 	output.raisedBackgroundColor = '#0F2051';
@@ -179,6 +185,7 @@ function themeStyle(theme) {
 	output.htmlDividerColor = '#3D444E';
 	output.htmlLinkColor = 'rgb(166,166,255)';
 	output.htmlCodeColor = '#ffffff';
+	output.htmlTableBackgroundColor = 'rgb(40, 41, 42)';
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 

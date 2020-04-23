@@ -47,6 +47,8 @@ function filterLogs(logs, platform) {
 	const output = [];
 	const revertedLogs = [];
 
+	let updatedTranslations = false;
+
 	for (const log of logs) {
 
 		// Save to an array any commit that has been reverted, and exclude
@@ -74,8 +76,19 @@ function filterLogs(logs, platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 
+		// Translation updates often comes in format "Translation: Update pt_PT.po"
+		// but that's not useful in a changelog especially since most people
+		// don't know country and language codes. So we catch all these and
+		// bundle them all up in a single "Updated translations" at the end.
+		if (log.message.match(/Translation: Update .*?\.po/)) {
+			updatedTranslations = true;
+			addIt = false;
+		}
+
 		if (addIt) output.push(log);
 	}
+
+	if (updatedTranslations) output.push({ message: 'Updated translations' });
 
 	return output;
 }

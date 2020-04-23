@@ -1,5 +1,5 @@
 const React = require('react');
-const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, Dimensions } = require('react-native');
+const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -210,17 +210,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
 		this.styles_ = {};
 
-		const dimensions = Dimensions.get('window');
-
 		// TODO: Clean up these style names and nesting
 		const styles = {
 			bodyTextInput: {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+
 				// Add extra space to allow scrolling past end of document, and also to fix this:
 				// https://github.com/laurent22/joplin/issues/1437
-				paddingBottom: Math.round(dimensions.height / 4),
+				// 2020-04-20: removed bottom padding because it doesn't work properly in Android
+				// Instead of being inside the scrollable area, the padding is outside thus
+				// restricting the view.
+				// See https://github.com/laurent22/joplin/issues/3041#issuecomment-616267739
+				// paddingBottom: Math.round(dimensions.height / 4),
+
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
@@ -937,6 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					saveText={text => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add body')}
 					placeholderTextColor={theme.colorFaded}
 					noteBodyViewer={{
@@ -967,10 +972,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 
 				/>
-				: (
-					<ScrollView persistentScrollbar>
-						<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
-					</ScrollView>
+				:
+				// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+				// However it causes memory or rendering issues on older Android devices, probably because
+				// the whole text input has to be in memory for the scrollview to work. So we keep it as
+				// a plain TextInput for now.
+				// See https://github.com/laurent22/joplin/issues/3041
+				(
+					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
 				);
 		}
 
@@ -1006,7 +1015,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
+				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
 			</View>
 		);
 
