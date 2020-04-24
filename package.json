@@ -42,6 +42,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
+    "@types/dom-mediacapture-record": "^1.0.4",
     "follow-redirects": "^1.11.0",
     "joplin-turndown": "^4.0.27",
     "joplin-turndown-plugin-gfm": "^1.0.12",
