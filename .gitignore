@@ -50,11 +50,14 @@ Tools/commit_hook.txt
 *.map
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+ElectronClient/gui/AudioAnalyser.js
+ElectronClient/gui/AudioVisualiser.js
 ElectronClient/gui/editors/PlainEditor.js
 ElectronClient/gui/editors/TinyMCE.js
 ElectronClient/gui/MultiNoteActions.js
 ElectronClient/gui/NoteContentPropertiesDialog.js
 ElectronClient/gui/NoteText2.js
+ElectronClient/gui/RecordAudioDialog.js
 ElectronClient/gui/ResourceScreen.js
 ElectronClient/gui/ShareNoteDialog.js
 ElectronClient/gui/utils/NoteText.js
