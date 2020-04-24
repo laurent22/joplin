@@ -13,7 +13,7 @@ export default function AudioVisualiser(props:AudioVisualiserProps) {
 	});
 
 	useEffect(() => {
-		if(audioData) {
+		if (audioData) {
 			draw();
 		}
 	},[audioData]);
@@ -37,8 +37,8 @@ export default function AudioVisualiser(props:AudioVisualiserProps) {
 			x += sliceWidth;
 		}
 		context.lineTo(x, height / 2);
-        context.stroke();
-	}
+		context.stroke();
+	};
 
 	return <canvas width="300" height="300" ref={canvasRef} />;
 }
