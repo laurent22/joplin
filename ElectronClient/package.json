@@ -160,6 +160,7 @@
     "smalltalk": "^2.5.1",
     "sprintf-js": "^1.1.1",
     "sqlite3": "^4.1.1",
+    "standardized-audio-context": "^24.1.7",
     "string-padding": "^1.0.2",
     "string-to-stream": "^1.1.1",
     "syswide-cas": "^5.1.0",
