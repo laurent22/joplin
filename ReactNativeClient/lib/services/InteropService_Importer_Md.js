@@ -4,8 +4,8 @@ const Note = require('lib/models/Note.js');
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('lib/path-utils.js');
 const { shim } = require('lib/shim');
 const { _ } = require('lib/locale');
-const {extractImageUrls} = require('lib/markdownUtils');
-const {unique} = require('lib/ArrayUtils');
+const { extractImageUrls } = require('lib/markdownUtils');
+const { unique } = require('lib/ArrayUtils');
 const { pregQuote } = require('lib/string-utils-common');
 
 class InteropService_Importer_Md extends InteropService_Importer_Base {
@@ -63,7 +63,8 @@ class InteropService_Importer_Md extends InteropService_Importer_Base {
 	async importLocalImages(filePath, md) {
 		let updated = md;
 		const imageLinks = unique(extractImageUrls(md));
-		await Promise.all(imageLinks.map(async (link) => {
+		await Promise.all(imageLinks.map(async (encodedLink) => {
+			const link = decodeURI(encodedLink);
 			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
 			const pathWithExtension =  `${attachmentPath}.${fileExtension(link)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);

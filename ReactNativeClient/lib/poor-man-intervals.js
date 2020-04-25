@@ -49,7 +49,7 @@ class PoorManIntervals {
 		if (PoorManIntervals.lastUpdateTime_ + 1000 > time.unixMs()) return;
 
 		for (let i = 0; i < PoorManIntervals.intervals_.length; i++) {
-			let interval = PoorManIntervals.intervals_[i];
+			const interval = PoorManIntervals.intervals_[i];
 			const now = time.unixMs();
 			if (now - interval.lastIntervalTime >= interval.interval) {
 				interval.lastIntervalTime = now;

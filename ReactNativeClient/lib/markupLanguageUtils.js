@@ -2,7 +2,8 @@ const markdownUtils = require('lib/markdownUtils');
 const htmlUtils = require('lib/htmlUtils');
 const Setting = require('lib/models/Setting');
 const Resource = require('lib/models/Resource');
-const { MarkupToHtml } = require('joplin-renderer');
+const { shim } = require('lib/shim');
+const { MarkupToHtml } = require('lib/joplin-renderer');
 
 class MarkupLanguageUtils {
 	lib_(language) {
@@ -27,6 +28,8 @@ class MarkupLanguageUtils {
 		options = Object.assign({
 			ResourceModel: Resource,
 			pluginOptions: pluginOptions,
+			tempDir: Setting.value('tempDir'),
+			fsDriver: shim.fsDriver(),
 		}, options);
 
 		return new MarkupToHtml(options);

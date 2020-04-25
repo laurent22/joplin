@@ -6,7 +6,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
 const { reg } = require('lib/registry.js');
 const { shim } = require('lib/shim');
-const { assetsToHeaders } = require('joplin-renderer');
+const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
 
@@ -21,11 +21,14 @@ class NoteBodyViewer extends Component {
 			bodyHtml: '',
 		};
 
+		this.forceUpdate_ = false;
+
 		this.isMounted_ = false;
 
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 
 		this.reloadNote = this.reloadNote.bind(this);
+		this.watchFn = this.watchFn.bind(this);
 	}
 
 	componentDidMount() {
@@ -38,6 +41,8 @@ class NoteBodyViewer extends Component {
 	}
 
 	async reloadNote() {
+		this.forceUpdate_ = false;
+
 		const note = this.props.note;
 		const theme = themeStyle(this.props.theme);
 
@@ -55,14 +60,22 @@ class NoteBodyViewer extends Component {
 					this.forceUpdate();
 				}, 100);
 			},
-			paddingBottom: '3.8em', // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
 			highlightedKeywords: this.props.highlightedKeywords,
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
 		};
 
-		let result = await this.markupToHtml_.render(note.markup_language, bodyToRender, this.props.webViewStyle, mdOptions);
+		const result = await this.markupToHtml_.render(
+			note.markup_language,
+			bodyToRender,
+			{
+				bodyPaddingTop: '.8em', // Extra top padding on the rendered MD so it doesn't touch the border
+				bodyPaddingBottom: this.props.paddingBottom, // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
+				...this.props.webViewStyle,
+			},
+			mdOptions
+		);
 		let html = result.html;
 
 		const resourceDownloadMode = Setting.value('sync.resourceDownloadMode');
@@ -99,7 +112,7 @@ class NoteBodyViewer extends Component {
 			<html>
 				<head>
 					<meta name="viewport" content="width=device-width, initial-scale=1">
-					${assetsToHeaders(result.pluginAssets)}
+					${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 				</head>
 				<body>
 					${html}
@@ -175,7 +188,16 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
+		this.forceUpdate_ = true;
 		this.forceUpdate();
+	}
+
+	watchFn() {
+		// react-async will not fetch the data again after the first render
+		// so we use this watchFn function to force it to reload in certain
+		// cases. It is used in particular when re-rendering the note when
+		// a resource has been downloaded in auto mode.
+		return this.forceUpdate_;
 	}
 
 	render() {
@@ -188,7 +210,7 @@ class NoteBodyViewer extends Component {
 		// https://github.com/react-native-community/react-native-webview/issues/312#issuecomment-503754654
 
 
-		let webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
+		const webViewStyle = { backgroundColor: this.props.webViewStyle.backgroundColor };
 		// On iOS, the onLoadEnd() event is never fired so always
 		// display the webview (don't do the little trick
 		// to avoid the white flash).
@@ -198,7 +220,7 @@ class NoteBodyViewer extends Component {
 
 		return (
 			<View style={this.props.style}>
-				<Async promiseFn={this.reloadNote}>
+				<Async promiseFn={this.reloadNote} watchFn={this.watchFn}>
 					{({ data, error, isPending }) => {
 						if (error) {
 							console.error(error);

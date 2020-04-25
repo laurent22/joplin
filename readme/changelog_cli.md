@@ -1,5 +1,56 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.163](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163) - 2020-04-10T18:31:50Z
+
+- Improved: Update ko.po (#2986 by [@xmlangel](https://github.com/xmlangel))
+- Improved: Update it_IT.po (#2978 by [@abonte](https://github.com/abonte))
+- Improved: Update nb_NO.po (#2973 by Mats Estensen)
+- Improved: Update zh_CN.po (#2971 by [@troilus](https://github.com/troilus))
+- Fixed: Add support for retrying decryption after it has failed multiple times (#2981)
+- Fixed: When modifying a conflicted note, it would disappear from the view (#2709)
+- Fixed: Prevent decryption loop when a resource cannot be decrypted (#2257)
+
+## [cli-v1.0.162](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162) - 2020-04-01T17:16:14Z
+
+- New: Compatibility with new master key and sync target encryption
+
+## [cli-v1.0.161](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161) - 2020-03-07T01:20:04Z
+
+- New: Add more context to encryption errors
+- Improved: Changed default encryption method to CCM
+- Improved: Change geolocation service to freegeoip.app to improve privacy (#2503 by Helmut K. C. Tessarek)
+- Fixed: Handle invalid UTF-8 data when encrypting (#2591)
+- Fixed: Fixed issue when a notebook does not have a parent (#2536)
+- Fixed: Better handling of rare error in WebDAV server (#2485)
+- Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files
+
+## [cli-v1.0.154](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154) - 2020-02-07T23:22:24Z
+
+- New: Added new date format YYYY.MM.DD (#2318 by XSAkos)
+- Improved: Reset time fields when duplicating a note (#2428 by [@tekdel](https://github.com/tekdel))
+- Improved: More info for "unknown profile version" error message (#2361 by [@mic704b](https://github.com/mic704b))
+- Improved: Handle Thai language in search (#2387) (#2279 by Kirtan Purohit)
+- Fixed: Fix escaping of title when generating a markdown link (#2456) (#2085 by Helmut K. C. Tessarek)
+- Fixed: Fix console messages being displayed in GUI (#2457 by Helmut K. C. Tessarek)
+
+## [cli-v1.0.153](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153) - 2020-01-24T23:16:32Z
+
+- New: Added new, more secure encryption methods, so that they can be switched to at a later time
+- New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)
+- New: Added more logging for resource fetching to try to debug issue
+- New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)
+- Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)
+- Improved: Upgrade sqlite (#2248 by Devon Zuegel)
+- Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)
+- Improved: Better handling of resource download errors, and added resource info to sync status screen
+- Improved: Update CliClient node dependency to 10+ (#2177 by [@joeltaylor](https://github.com/joeltaylor))
+- Improved: Allow exporting a note as HTML
+- Improved: Improved logging during sync to allow finding bugs more easily
+- Fixed: Handle WebDAV servers that do not return a last modified date (fixes mail.ru) (#2091)
+- Fixed: Restaured translations that had been accidentally deleted (#2126)
+- Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)
+- Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)
+
 ## [cli-v1.0.150](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150) - 2019-11-11T19:19:03Z
 
 - New: Add command to list all tags for a note (#2003) (#1974)

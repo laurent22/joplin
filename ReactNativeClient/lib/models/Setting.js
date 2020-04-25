@@ -5,7 +5,7 @@ const { time } = require('lib/time-utils.js');
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('lib/ObjectUtils');
 const { toTitleCase } = require('lib/string-utils.js');
-const { rtrimSlashes } = require('lib/path-utils.js');
+const { rtrimSlashes, toSystemSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
 
@@ -23,6 +23,13 @@ class Setting extends BaseModel {
 
 		const platform = shim.platformName();
 		const mobilePlatform = shim.mobilePlatform();
+
+		let wysiwygYes = '';
+		let wysiwygNo = '';
+		if (shim.isElectron()) {
+			wysiwygYes = ` ${_('(wysiwyg: %s)', _('yes'))}`;
+			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
+		}
 
 		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
 
@@ -44,7 +51,7 @@ class Setting extends BaseModel {
 				isEnum: true,
 				label: () => _('Keyboard Mode'),
 				options: () => {
-					let output = {};
+					const output = {};
 					output['default'] = _('Default');
 					output['emacs'] = _('Emacs');
 					output['vim'] = _('Vim');
@@ -62,7 +69,7 @@ class Setting extends BaseModel {
 					return appType !== 'cli' ? null : _('The target to synchonise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
-					return SyncTargetRegistry.idAndLabelPlainObject();
+					return SyncTargetRegistry.idAndLabelPlainObject(platform);
 				},
 			},
 
@@ -204,7 +211,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Date format'),
 				options: () => {
-					let options = {};
+					const options = {};
 					const now = new Date('2017-01-30T12:00:00').getTime();
 					options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
 					options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
@@ -212,6 +219,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_4] = time.formatMsToLocal(now, Setting.DATE_FORMAT_4);
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
+					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
 					return options;
 				},
 			},
@@ -222,7 +230,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Time format'),
 				options: () => {
-					let options = {};
+					const options = {};
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 					options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
@@ -238,14 +246,17 @@ class Setting extends BaseModel {
 				label: () => _('Theme'),
 				section: 'appearance',
 				options: () => {
-					let output = {};
+					const output = {};
 					output[Setting.THEME_LIGHT] = _('Light');
 					output[Setting.THEME_DARK] = _('Dark');
-					if (platform !== 'mobile') {
+					if (platform !== mobilePlatform) {
 						output[Setting.THEME_DRACULA] = _('Dracula');
 						output[Setting.THEME_SOLARIZED_LIGHT] = _('Solarised Light');
 						output[Setting.THEME_SOLARIZED_DARK] = _('Solarised Dark');
 						output[Setting.THEME_NORD] = _('Nord');
+						output[Setting.THEME_ARITIM_DARK] = _('Aritim Dark');
+					} else {
+						output[Setting.THEME_OLED_DARK] = _('OLED Dark');
 					}
 					return output;
 				},
@@ -262,6 +273,7 @@ class Setting extends BaseModel {
 					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
 					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
 					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
+					[Setting.LAYOUT_SPLIT_WYSIWYG]: _('%s / %s', _('Split'), 'WYSIWYG (Experimental)'),
 				}),
 			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
@@ -312,6 +324,17 @@ class Setting extends BaseModel {
 			},
 			'folders.sortOrder.reverse': { value: false, type: Setting.TYPE_BOOL, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
 			trackLocation: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, label: () => _('Save geo-location with notes') },
+
+			'editor.beta': {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				section: 'note',
+				public: true,
+				appTypes: ['mobile'],
+				label: () => 'Opt-in to the editor beta',
+				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
+			},
+
 			newTodoFocus: {
 				value: 'title',
 				type: Setting.TYPE_STRING,
@@ -344,24 +367,26 @@ class Setting extends BaseModel {
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
-			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop']},
+			'markdown.softbreaks': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.typographer': { value: false, type: Setting.TYPE_BOOL, public: false, appTypes: ['mobile', 'desktop'] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable soft breaks') },
-			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable typographer support') },
-			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable math expressions') },
-			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ==mark== syntax') },
-			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable footnotes') },
-			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable table of contents extension') },
-			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ~sub~ syntax') },
-			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ^sup^ syntax') },
-			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable deflist syntax') },
-			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable abbreviation syntax') },
-			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable markdown emoji') },
-			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable ++insert++ syntax') },
-			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable multimarkdown table extension') },
-			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => _('Enable Fountain syntax support') },
+			'markdown.plugin.softbreaks': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.typographer': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.katex': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
+			'markdown.plugin.fountain': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
+			'markdown.plugin.mermaid': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
+
+			'markdown.plugin.mark': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
+			'markdown.plugin.footnote': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
+			'markdown.plugin.toc': { value: true, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
+			'markdown.plugin.sub': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
+			'markdown.plugin.sup': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
+			'markdown.plugin.deflist': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
+			'markdown.plugin.abbr': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
+			'markdown.plugin.emoji': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
+			'markdown.plugin.insert': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
+			'markdown.plugin.multitable': { value: false, type: Setting.TYPE_BOOL, section: 'plugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -387,7 +412,15 @@ class Setting extends BaseModel {
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
 			'encryption.passwordCache': { value: {}, type: Setting.TYPE_OBJECT, public: false, secure: true },
-			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Global zoom percentage'), minimum: 50, maximum: 500, step: 10 },
+			'encryption.shouldReencrypt': {
+				value: -1, // will be set on app startup
+				type: Setting.TYPE_INT,
+				public: false,
+			},
+
+			// Deprecated in favour of windowContentZoomFactor
+			'style.zoom': { value: 100, type: Setting.TYPE_INT, public: false, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
+
 			'style.editor.fontSize': { value: 13, type: Setting.TYPE_INT, public: true, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
@@ -447,6 +480,7 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for rendered Markdown'),
 				section: 'appearance',
+				advanced: true,
 			},
 			'style.customCss.joplinApp': {
 				onClick: () => {
@@ -462,6 +496,8 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Custom stylesheet for Joplin-wide app styles'),
 				section: 'appearance',
+				advanced: true,
+				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
 			autoUpdateEnabled: { value: true, type: Setting.TYPE_BOOL, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Automatically update the application') },
@@ -501,13 +537,13 @@ class Setting extends BaseModel {
 					'Tabloid': _('Tabloid'),
 					'Legal': _('Legal'),
 				};
-			}},
+			} },
 			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
 				};
-			}},
+			} },
 
 
 			'net.customCertificates': {
@@ -536,7 +572,15 @@ class Setting extends BaseModel {
 				label: () => _('Ignore TLS certificate errors'),
 			},
 
-			'sync.wipeOutFailSafe': { value: true, type: Setting.TYPE_BOOL, advanced: true, public: true, section: 'sync', label: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)') },
+			'sync.wipeOutFailSafe': {
+				value: true,
+				type: Setting.TYPE_BOOL,
+				advanced: true,
+				public: true,
+				section: 'sync',
+				label: () => _('Fail-safe'),
+				description: () => _('Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)'),
+			},
 
 			'api.token': { value: null, type: Setting.TYPE_STRING, public: false },
 			'api.port': { value: null, type: Setting.TYPE_INT, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
@@ -569,6 +613,16 @@ class Setting extends BaseModel {
 
 			'camera.type': { value: 0, type: Setting.TYPE_INT, public: false, appTypes: ['mobile'] },
 			'camera.ratio': { value: '4:3', type: Setting.TYPE_STRING, public: false, appTypes: ['mobile'] },
+
+			windowContentZoomFactor: {
+				value: 100,
+				type: Setting.TYPE_INT,
+				public: false,
+				appTypes: ['desktop'],
+				minimum: 30,
+				maximum: 300,
+				step: 10,
+			},
 		};
 
 		return this.metadata_;
@@ -577,7 +631,7 @@ class Setting extends BaseModel {
 	static settingMetadata(key) {
 		const metadata = this.metadata();
 		if (!(key in metadata)) throw new Error(`Unknown key: ${key}`);
-		let output = Object.assign({}, metadata[key]);
+		const output = Object.assign({}, metadata[key]);
 		output.key = key;
 		return output;
 	}
@@ -596,14 +650,14 @@ class Setting extends BaseModel {
 		if (!this.keys_) {
 			const metadata = this.metadata();
 			this.keys_ = [];
-			for (let n in metadata) {
+			for (const n in metadata) {
 				if (!metadata.hasOwnProperty(n)) continue;
 				this.keys_.push(n);
 			}
 		}
 
 		if (appType || publicOnly) {
-			let output = [];
+			const output = [];
 			for (let i = 0; i < this.keys_.length; i++) {
 				const md = this.settingMetadata(this.keys_[i]);
 				if (publicOnly && !md.public) continue;
@@ -627,7 +681,7 @@ class Setting extends BaseModel {
 			this.cache_ = [];
 
 			for (let i = 0; i < rows.length; i++) {
-				let c = rows[i];
+				const c = rows[i];
 
 				if (!this.keyExists(c.key)) continue;
 				c.value = this.formatValue(c.key, c.value);
@@ -642,7 +696,7 @@ class Setting extends BaseModel {
 
 	static toPlainObject() {
 		const keys = this.keys();
-		let keyToValues = {};
+		const keyToValues = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
@@ -668,7 +722,7 @@ class Setting extends BaseModel {
 		value = this.filterValue(key, value);
 
 		for (let i = 0; i < this.cache_.length; i++) {
-			let c = this.cache_[i];
+			const c = this.cache_[i];
 			if (c.key == key) {
 				const md = this.settingMetadata(key);
 
@@ -711,6 +765,10 @@ class Setting extends BaseModel {
 		});
 
 		this.scheduleSave();
+	}
+
+	static incValue(key, inc) {
+		return this.setValue(key, this.value(key) + inc);
 	}
 
 	static setObjectKey(settingKey, objectKey, value) {
@@ -819,8 +877,8 @@ class Setting extends BaseModel {
 
 	static enumOptionValues(key) {
 		const options = this.enumOptions(key);
-		let output = [];
-		for (let n in options) {
+		const output = [];
+		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
 			output.push(n);
 		}
@@ -829,7 +887,7 @@ class Setting extends BaseModel {
 
 	static enumOptionLabel(key, value) {
 		const options = this.enumOptions(key);
-		for (let n in options) {
+		for (const n in options) {
 			if (n == value) return options[n];
 		}
 		return '';
@@ -845,8 +903,8 @@ class Setting extends BaseModel {
 	static enumOptionsDoc(key, templateString = null) {
 		if (templateString === null) templateString = '%s: %s';
 		const options = this.enumOptions(key);
-		let output = [];
-		for (let n in options) {
+		const output = [];
+		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
 			output.push(sprintf(templateString, n, options[n]));
 		}
@@ -865,8 +923,8 @@ class Setting extends BaseModel {
 	static subValues(baseKey, settings, options = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
-		let output = {};
-		for (let key in settings) {
+		const output = {};
+		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
 				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
@@ -883,10 +941,10 @@ class Setting extends BaseModel {
 		clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
-		let queries = [];
+		const queries = [];
 		queries.push('DELETE FROM settings');
 		for (let i = 0; i < this.cache_.length; i++) {
-			let s = Object.assign({}, this.cache_[i]);
+			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
@@ -916,10 +974,10 @@ class Setting extends BaseModel {
 
 		const metadata = this.metadata();
 
-		let output = {};
-		for (let key in metadata) {
+		const output = {};
+		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
-			let s = Object.assign({}, metadata[key]);
+			const s = Object.assign({}, metadata[key]);
 			if (!s.public) continue;
 			if (s.appTypes && s.appTypes.indexOf(appType) < 0) continue;
 			s.value = this.value(key);
@@ -937,7 +995,7 @@ class Setting extends BaseModel {
 	}
 
 	static groupMetadatasBySections(metadatas) {
-		let sections = [];
+		const sections = [];
 		const generalSection = { name: 'general', metadatas: [] };
 		const nameToSections = {};
 		nameToSections['general'] = generalSection;
@@ -970,6 +1028,12 @@ class Setting extends BaseModel {
 		return name;
 	}
 
+	static sectionDescription(name) {
+		if (name === 'plugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		return '';
+	}
+
 	static sectionNameToIcon(name) {
 		if (name === 'general') return 'fa-sliders';
 		if (name === 'sync') return 'fa-refresh';
@@ -999,10 +1063,12 @@ Setting.TYPE_BUTTON = 6;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
+Setting.THEME_OLED_DARK = 22;
 Setting.THEME_SOLARIZED_LIGHT = 3;
 Setting.THEME_SOLARIZED_DARK = 4;
 Setting.THEME_DRACULA = 5;
 Setting.THEME_NORD = 6;
+Setting.THEME_ARITIM_DARK = 7;
 
 Setting.FONT_DEFAULT = 0;
 Setting.FONT_MENLO = 1;
@@ -1014,6 +1080,7 @@ Setting.LAYOUT_ALL = 0;
 Setting.LAYOUT_EDITOR_VIEWER = 1;
 Setting.LAYOUT_EDITOR_SPLIT = 2;
 Setting.LAYOUT_VIEWER_SPLIT = 3;
+Setting.LAYOUT_SPLIT_WYSIWYG = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';
@@ -1021,9 +1088,14 @@ Setting.DATE_FORMAT_3 = 'MM/DD/YYYY';
 Setting.DATE_FORMAT_4 = 'MM/DD/YY';
 Setting.DATE_FORMAT_5 = 'YYYY-MM-DD';
 Setting.DATE_FORMAT_6 = 'DD.MM.YYYY';
+Setting.DATE_FORMAT_7 = 'YYYY.MM.DD';
 
 Setting.TIME_FORMAT_1 = 'HH:mm';
 Setting.TIME_FORMAT_2 = 'h:mm A';
+
+Setting.SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
+Setting.SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
+Setting.SHOULD_REENCRYPT_NOTIFIED = 2; // Data should be re-encrypted, and user has been notified
 
 Setting.custom_css_files = {
 	JOPLIN_APP: 'userchrome.css',

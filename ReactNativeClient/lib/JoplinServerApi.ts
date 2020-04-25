@@ -3,7 +3,7 @@ const { shim } = require('lib/shim.js');
 const JoplinError = require('lib/JoplinError');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const base64 = require('base-64');
-const {_ } = require('lib/locale');
+const { _ } = require('lib/locale');
 
 interface JoplinServerApiOptions {
 	username: Function,
@@ -83,12 +83,12 @@ export default class JoplinServerApi {
 	}
 
 	requestToCurl_(url:string, options:any) {
-		let output = [];
+		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
-			for (let n in options.headers) {
+			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
 				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
 			}
@@ -129,7 +129,7 @@ export default class JoplinServerApi {
 
 		const responseText = await response.text();
 
-		let responseJson_:any = null;
+		const responseJson_:any = null;
 		const loadResponseJson = async () => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;

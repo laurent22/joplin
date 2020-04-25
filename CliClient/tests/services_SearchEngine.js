@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint prefer-const: 0*/
 
 require('app-module-path').addPath(__dirname);
 
@@ -89,6 +90,32 @@ describe('services_SearchEngine', function() {
 		expect(rows[0].id).toBe(n2.id);
 		expect(rows[1].id).toBe(n3.id);
 		expect(rows[2].id).toBe(n1.id);
+	}));
+
+	it('should tell where the results are found', asyncTest(async () => {
+		const notes = [
+			await Note.save({ title: 'abcd efgh', body: 'abcd' }),
+			await Note.save({ title: 'abcd' }),
+			await Note.save({ title: 'efgh', body: 'abcd' }),
+		];
+
+		await engine.syncTables();
+
+		const testCases = [
+			['abcd', ['title', 'body'], ['title'], ['body']],
+			['efgh', ['title'], [], ['title']],
+		];
+
+		for (const testCase of testCases) {
+			const rows = await engine.search(testCase[0]);
+
+			for (let i = 0; i < notes.length; i++) {
+				const row = rows.find(row => row.id === notes[i].id);
+				const actual = row ? row.fields.sort().join(',') : '';
+				const expected = testCase[i + 1].sort().join(',');
+				expect(expected).toBe(actual);
+			}
+		}
 	}));
 
 	it('should order search results by relevance (2)', asyncTest(async () => {
@@ -258,6 +285,16 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('말')).length).toBe(1);
 	}));
 
+	it('should support queries with Thai characters', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'นี่คือคนไทย' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('นี่คือค')).length).toBe(1);
+		expect((await engine.search('ไทย')).length).toBe(1);
+	}));
+
 	it('should support field restricted queries with Chinese characters', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: '你好', body: '我是法国人' });
@@ -307,7 +344,11 @@ describe('services_SearchEngine', function() {
 		let rows;
 
 		const testCases = [
-			['did-not-match', 'did-not-match'],
+			// "-" is considered a word delimiter so it is stripped off
+			// when indexing the notes. "did-not-match" is translated to
+			// three word "did", "not", "match"
+			['did-not-match', 'did not match'],
+			['did-not-match', '"did-not-match"'],
 			['does match', 'does match'],
 		];
 
@@ -321,8 +362,20 @@ describe('services_SearchEngine', function() {
 			rows = await engine.search(query);
 			expect(rows.length).toBe(1);
 
+
 			await Note.delete(n.id);
 		}
+	}));
+
+	it('should allow using basic search', asyncTest(async () => {
+		const n1 = await Note.save({ title: '- [ ] abcd' });
+		const n2 = await Note.save({ title: '[ ] abcd' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(0);
+		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
+		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
 	}));
 
 });

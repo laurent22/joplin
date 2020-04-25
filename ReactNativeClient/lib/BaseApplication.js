@@ -34,18 +34,13 @@ const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const RevisionService = require('lib/services/RevisionService');
+const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
-
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
+const { toSystemSlashes } = require('lib/path-utils.js');
 
 class BaseApplication {
 	constructor() {
@@ -59,6 +54,39 @@ class BaseApplication {
 		this.currentFolder_ = null;
 
 		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = this.decryptionWorker_resourceMetadataButNotBlobDecrypted.bind(this);
+	}
+
+	async destroy() {
+		if (this.scheduleAutoAddResourcesIID_) {
+			clearTimeout(this.scheduleAutoAddResourcesIID_);
+			this.scheduleAutoAddResourcesIID_ = null;
+		}
+		await ResourceFetcher.instance().destroy();
+		await SearchEngine.instance().destroy();
+		await DecryptionWorker.instance().destroy();
+		await FoldersScreenUtils.cancelTimers();
+		await BaseItem.revisionService_.cancelTimers();
+		await ResourceService.instance().cancelTimers();
+		await reg.cancelTimers();
+
+		this.eventEmitter_.removeAllListeners();
+		KvStore.instance_ = null;
+		BaseModel.setDb(null);
+		reg.setDb(null);
+
+		BaseItem.revisionService_ = null;
+		RevisionService.instance_ = null;
+		ResourceService.instance_ = null;
+		ResourceService.isRunningInBackground = false;
+		ResourceFetcher.instance_ = null;
+		EncryptionService.instance_ = null;
+		DecryptionWorker.instance_ = null;
+
+		this.logger_.info('Base application terminated...');
+		this.logger_ = null;
+		this.dbLogger_ = null;
+		this.eventEmitter_ = null;
+		this.decryptionWorker_resourceMetadataButNotBlobDecrypted = null;
 	}
 
 	logger() {
@@ -97,13 +125,13 @@ class BaseApplication {
 	// Handles the initial flags passed to main script and
 	// returns the remaining args.
 	async handleStartFlags_(argv, setDefaults = true) {
-		let matched = {};
+		const matched = {};
 		argv = argv.slice(0);
 		argv.splice(0, 2); // First arguments are the node executable, and the node JS file
 
 		while (argv.length) {
-			let arg = argv[0];
-			let nextArg = argv.length >= 2 ? argv[1] : null;
+			const arg = argv[0];
+			const nextArg = argv.length >= 2 ? argv[1] : null;
 
 			if (arg == '--profile') {
 				if (!nextArg) throw new JoplinError(_('Usage: %s', '--profile <dir-path>'), 'flagError');
@@ -176,6 +204,14 @@ class BaseApplication {
 				continue;
 			}
 
+			if (arg === '--no-sandbox') {
+				// Electron-specific flag for running the app without chrome-sandbox
+				// Allows users to use it as a workaround for the electron+AppImage issue
+				// https://github.com/laurent22/joplin/issues/2246
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
@@ -216,11 +252,14 @@ class BaseApplication {
 		} else if (parentType === 'Search') {
 			parentId = state.selectedSearchId;
 			parentType = BaseModel.TYPE_SEARCH;
+		} else if (parentType === 'SmartFilter') {
+			parentId = state.selectedSmartFilterId;
+			parentType = BaseModel.TYPE_SMART_FILTER;
 		}
 
 		this.logger().debug('Refreshing notes:', parentType, parentId);
 
-		let options = {
+		const options = {
 			order: stateUtils.notesOrder(state.settings),
 			uncompletedTodosOnTop: Setting.value('uncompletedTodosOnTop'),
 			showCompletedTodos: Setting.value('showCompletedTodos'),
@@ -242,6 +281,8 @@ class BaseApplication {
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
 				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
+				notes = await Note.previews(parentId, options);
 			}
 		}
 
@@ -293,20 +334,11 @@ class BaseApplication {
 	}
 
 	async decryptionWorker_resourceMetadataButNotBlobDecrypted() {
-		this.scheduleAutoAddResources();
-	}
-
-	scheduleAutoAddResources() {
-		if (this.scheduleAutoAddResourcesIID_) return;
-
-		this.scheduleAutoAddResourcesIID_ = setTimeout(() => {
-			this.scheduleAutoAddResourcesIID_ = null;
-			ResourceFetcher.instance().autoAddResources();
-		}, 1000);
+		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
 	reducerActionToString(action) {
-		let o = [action.type];
+		const o = [action.type];
 		if ('id' in action) o.push(action.id);
 		if ('noteId' in action) o.push(action.noteId);
 		if ('folderId' in action) o.push(action.folderId);
@@ -434,12 +466,27 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'SMART_FILTER_SELECT') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
 			refreshNotes = true;
 		}
 
 		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {
 			refreshNotes = true;
+		}
+
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+				if (newState.notes.length === newState.selectedNoteIds.length) {
+					await this.refreshCurrentFolder();
+					refreshNotesUseSelectedNoteId = true;
+				}
+				refreshNotes = true;
+			}
 		}
 
 		if (refreshNotes) {
@@ -482,7 +529,6 @@ class BaseApplication {
 				await FoldersScreenUtils.scheduleRefreshFolders();
 			}
 		}
-
 		return result;
 	}
 
@@ -502,6 +548,16 @@ class BaseApplication {
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
+	}
+
+	deinitRedux() {
+		this.store_ = null;
+		BaseModel.dispatch = function() {};
+		FoldersScreenUtils.dispatch = function() {};
+		reg.dispatch = function() {};
+		BaseSyncTarget.dispatch = function() {};
+		DecryptionWorker.instance().dispatch = function() {};
+		ResourceFetcher.instance().dispatch = function() {};
 	}
 
 	async readFlagsFromFile(flagPath) {
@@ -525,32 +581,11 @@ class BaseApplication {
 
 		if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) return `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 
-		return `${os.homedir()}/.config/${Setting.value('appName')}`;
-	}
-
-	async testing() {
-		const markdownUtils = require('lib/markdownUtils');
-		const ClipperServer = require('lib/ClipperServer');
-		const server = new ClipperServer();
-		const HtmlToMd = require('lib/HtmlToMd');
-		const service = new HtmlToMd();
-		const html = await shim.fsDriver().readFile('/mnt/d/test.html');
-		let markdown = service.parse(html, { baseUrl: 'https://duckduckgo.com/' });
-		console.info(markdown);
-		console.info('--------------------------------------------------');
-
-		const imageUrls = markdownUtils.extractImageUrls(markdown);
-		let result = await server.downloadImages_(imageUrls);
-		result = await server.createResourcesFromPaths_(result);
-		console.info(result);
-		markdown = server.replaceImageUrlsByResources_(markdown, result);
-		console.info('--------------------------------------------------');
-		console.info(markdown);
-		console.info('--------------------------------------------------');
+		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
 	}
 
 	async start(argv) {
-		let startFlags = await this.handleStartFlags_(argv);
+		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
 		let initArgs = startFlags.matched;
@@ -572,6 +607,13 @@ class BaseApplication {
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 
+		SyncTargetRegistry.addClass(SyncTargetFilesystem);
+		SyncTargetRegistry.addClass(SyncTargetOneDrive);
+		if (Setting.value('env') === 'dev') SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+		SyncTargetRegistry.addClass(SyncTargetNextcloud);
+		SyncTargetRegistry.addClass(SyncTargetWebDAV);
+		SyncTargetRegistry.addClass(SyncTargetDropbox);
+
 		await shim.fsDriver().remove(tempDir);
 
 		await fs.mkdirp(profileDir, 0o755);
@@ -585,7 +627,7 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev') this.logger_.addTarget('console', { level: Logger.LEVEL_WARN });
+		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -608,7 +650,7 @@ class BaseApplication {
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 
 		reg.setDb(this.database_);
-		BaseModel.db_ = this.database_;
+		BaseModel.setDb(this.database_);
 
 		await Setting.load();
 
@@ -627,6 +669,15 @@ class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
+		}
+
+		if (Setting.value('encryption.shouldReencrypt') < 0) {
+			// We suggest re-encryption if the user has at least one notebook
+			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
+			// which can be set by a maintenance script for example.
+			const folderCount = await Folder.count();
+			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
@@ -666,14 +717,13 @@ class BaseApplication {
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
 
-		let currentFolderId = Setting.value('activeFolderId');
+		const currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;
 		if (currentFolderId) currentFolder = await Folder.load(currentFolderId);
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
-
 		return argv;
 	}
 }

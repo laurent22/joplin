@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/no-unused-vars: 0, no-unused-vars: ["error", { "argsIgnorePattern": ".*" }], */
 
-let shim = {};
+const shim = {};
 
 shim.isNode = () => {
 	if (typeof process === 'undefined') return false;
@@ -33,7 +33,7 @@ shim.isMac = () => {
 };
 
 shim.platformName = function() {
-	if (shim.isReactNative()) return 'mobile';
+	if (shim.isReactNative()) return shim.mobilePlatform();
 	if (shim.isMac()) return 'darwin';
 	if (shim.isWindows()) return 'win32';
 	if (shim.isLinux()) return 'linux';
@@ -190,10 +190,17 @@ shim.Buffer = null;
 shim.openUrl = () => {
 	throw new Error('Not implemented');
 };
+shim.httpAgent = () => {
+	throw new Error('Not implemented');
+};
 shim.openOrCreateFile = () => {
 	throw new Error('Not implemented');
 };
 shim.waitForFrame = () => {
+	throw new Error('Not implemented');
+};
+
+shim.appVersion = () => {
 	throw new Error('Not implemented');
 };
 
@@ -207,6 +214,14 @@ shim.isTestingEnv = () => {
 
 shim.setIsTestingEnv = (v) => {
 	isTestingEnv_ = v;
+};
+
+shim.pathRelativeToCwd = (path) => {
+	throw new Error('Not implemented');
+};
+
+shim.showMessageBox = (message, options = null) => {
+	throw new Error('Not implemented');
 };
 
 module.exports = { shim };

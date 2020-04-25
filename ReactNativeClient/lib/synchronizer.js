@@ -28,7 +28,6 @@ class Synchronizer {
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
-		this.autoStartDecryptionWorker_ = true;
 		this.maxResourceSize_ = null;
 		this.downloadQueue_ = null;
 		this.clientId_ = Setting.value('clientId');
@@ -90,7 +89,7 @@ class Synchronizer {
 	}
 
 	static reportToLines(report) {
-		let lines = [];
+		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
 		if (report.updateLocal) lines.push(_('Updated local items: %d.', report.updateLocal));
 		if (report.createRemote) lines.push(_('Created remote items: %d.', report.createRemote));
@@ -107,7 +106,7 @@ class Synchronizer {
 	}
 
 	logSyncOperation(action, local = null, remote = null, message = null, actionCount = 1) {
-		let line = ['Sync'];
+		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
 
@@ -117,13 +116,13 @@ class Synchronizer {
 		if (type) line.push(BaseItem.modelTypeToClassName(type));
 
 		if (local) {
-			let s = [];
+			const s = [];
 			s.push(local.id);
 			line.push(`(Local ${s.join(', ')})`);
 		}
 
 		if (remote) {
-			let s = [];
+			const s = [];
 			s.push(remote.id ? remote.id : remote.path);
 			line.push(`(Remote ${s.join(', ')})`);
 		}
@@ -140,7 +139,7 @@ class Synchronizer {
 
 	async logSyncSummary(report) {
 		this.logger().info('Operations completed: ');
-		for (let n in report) {
+		for (const n in report) {
 			if (!report.hasOwnProperty(n)) continue;
 			if (n == 'errors') continue;
 			if (n == 'starting') continue;
@@ -149,9 +148,9 @@ class Synchronizer {
 			if (n == 'completedTime') continue;
 			this.logger().info(`${n}: ${report[n] ? report[n] : '-'}`);
 		}
-		let folderCount = await Folder.count();
-		let noteCount = await Note.count();
-		let resourceCount = await Resource.count();
+		const folderCount = await Folder.count();
+		const noteCount = await Note.count();
+		const resourceCount = await Resource.count();
 		this.logger().info(`Total folders: ${folderCount}`);
 		this.logger().info(`Total notes: ${noteCount}`);
 		this.logger().info(`Total resources: ${resourceCount}`);
@@ -159,7 +158,7 @@ class Synchronizer {
 		if (report.errors && report.errors.length) {
 			this.logger().warn('There was some errors:');
 			for (let i = 0; i < report.errors.length; i++) {
-				let e = report.errors[i];
+				const e = report.errors[i];
 				this.logger().warn(e);
 			}
 		}
@@ -266,6 +265,10 @@ class Synchronizer {
 		}
 	}
 
+	isFullSync(steps) {
+		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
+	}
+
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -275,7 +278,7 @@ class Synchronizer {
 		if (!options) options = {};
 
 		if (this.state() != 'idle') {
-			let error = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			const error = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
 			error.code = 'alreadyStarted';
 			throw error;
 		}
@@ -299,9 +302,9 @@ class Synchronizer {
 		const masterKeysBefore = await MasterKey.count();
 		let hasAutoEnabledEncryption = false;
 
-		let synchronizationId = time.unixMs().toString();
+		const synchronizationId = time.unixMs().toString();
 
-		let outputContext = Object.assign({}, lastContext);
+		const outputContext = Object.assign({}, lastContext);
 
 		this.dispatch({ type: 'SYNC_STARTED' });
 
@@ -335,7 +338,7 @@ class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('update_remote') >= 0) {
-				let donePaths = [];
+				const donePaths = [];
 
 				const completeItemProcessing = path => {
 					donePaths.push(path);
@@ -344,15 +347,15 @@ class Synchronizer {
 				while (true) {
 					if (this.cancelling()) break;
 
-					let result = await BaseItem.itemsThatNeedSync(syncTargetId);
-					let locals = result.items;
+					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+					const locals = result.items;
 
 					for (let i = 0; i < locals.length; i++) {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
-						let ItemClass = BaseItem.itemClass(local);
-						let path = BaseItem.systemPath(local);
+						const ItemClass = BaseItem.itemClass(local);
+						const path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.
 						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
@@ -363,7 +366,7 @@ class Synchronizer {
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
 
-						let remote = await this.api().stat(path);
+						const remote = await this.api().stat(path);
 						let action = null;
 
 						let reason = '';
@@ -434,7 +437,7 @@ class Synchronizer {
 									local = result.resource;
 									const localResourceContentPath = result.path;
 
-									if (local.size >= 10 * 1000* 1000) {
+									if (local.size >= 10 * 1000 * 1000) {
 										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${local.size} bytes) which may tie up the sync process.`);
 									}
 
@@ -520,7 +523,7 @@ class Synchronizer {
 							// ------------------------------------------------------------------------------
 
 							if (mustHandleConflict) {
-								let conflictedNote = Object.assign({}, local);
+								const conflictedNote = Object.assign({}, local);
 								delete conflictedNote.id;
 								conflictedNote.is_conflict = 1;
 								await Note.save(conflictedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC });
@@ -557,12 +560,12 @@ class Synchronizer {
 			// ========================================================================
 
 			if (syncSteps.indexOf('delete_remote') >= 0) {
-				let deletedItems = await BaseItem.deletedItems(syncTargetId);
+				const deletedItems = await BaseItem.deletedItems(syncTargetId);
 				for (let i = 0; i < deletedItems.length; i++) {
 					if (this.cancelling()) break;
 
-					let item = deletedItems[i];
-					let path = BaseItem.systemPath(item.item_id);
+					const item = deletedItems[i];
+					const path = BaseItem.systemPath(item.item_id);
 					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
 					await this.api().delete(path);
 
@@ -592,14 +595,14 @@ class Synchronizer {
 
 				let context = null;
 				let newDeltaContext = null;
-				let localFoldersToDelete = [];
+				const localFoldersToDelete = [];
 				let hasCancelled = false;
 				if (lastContext.delta) context = lastContext.delta;
 
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
-					let listResult = await this.api().delta('', {
+					const listResult = await this.api().delta('', {
 						context: context,
 
 						// allItemIdsHandler() provides a way for drivers that don't have a delta API to
@@ -616,7 +619,7 @@ class Synchronizer {
 						logger: this.logger(),
 					});
 
-					let remotes = listResult.items;
+					const remotes = listResult.items;
 
 					this.logSyncOperation('fetchingTotal', null, null, 'Fetching delta items from sync target', remotes.length);
 
@@ -636,17 +639,17 @@ class Synchronizer {
 
 						this.logSyncOperation('fetchingProcessed', null, null, 'Processing fetched item');
 
-						let remote = remotes[i];
+						const remote = remotes[i];
 						if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
 						const loadContent = async () => {
-							let task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
+							const task = await this.downloadQueue_.waitForResult(path); // await this.api().get(path);
 							if (task.error) throw task.error;
 							if (!task.result) return null;
 							return await BaseItem.unserialize(task.result);
 						};
 
-						let path = remote.path;
+						const path = remote.path;
 						let action = null;
 						let reason = '';
 						let local = await BaseItem.loadItemByPath(path);
@@ -707,7 +710,7 @@ class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
-							let options = {
+							const options = {
 								autoTimestamp: false,
 								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
 								changeSource: ItemChange.SOURCE_SYNC,
@@ -746,7 +749,7 @@ class Synchronizer {
 								continue;
 							}
 
-							let ItemClass = BaseItem.itemClass(local.type_);
+							const ItemClass = BaseItem.itemClass(local.type_);
 							await ItemClass.delete(local.id, { trackDeleted: false, changeSource: ItemChange.SOURCE_SYNC });
 						}
 					}
@@ -842,7 +845,7 @@ class Synchronizer {
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};
 
-		this.dispatch({ type: 'SYNC_COMPLETED' });
+		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
 
 		this.state_ = 'idle';
 

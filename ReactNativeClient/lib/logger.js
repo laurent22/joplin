@@ -33,8 +33,8 @@ class Logger {
 	}
 
 	addTarget(type, options = null) {
-		let target = { type: type };
-		for (let n in options) {
+		const target = { type: type };
+		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
 			target[n] = options[n];
 		}
@@ -63,7 +63,7 @@ class Logger {
 	}
 
 	objectsToString(...object) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < object.length; i++) {
 			output.push(`"${this.objectToString(object[i])}"`);
 		}
@@ -71,7 +71,7 @@ class Logger {
 	}
 
 	static databaseCreateTableSql() {
-		let output = `
+		const output = `
 		CREATE TABLE IF NOT EXISTS logs (
 			id INTEGER PRIMARY KEY,
 			source TEXT,
@@ -108,10 +108,11 @@ class Logger {
 	log(level, ...object) {
 		if (!this.targets_.length) return;
 
-		let line = `${moment().format('YYYY-MM-DD HH:mm:ss')}: `;
+		const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+		const line = `${timestamp}: `;
 
 		for (let i = 0; i < this.targets_.length; i++) {
-			let target = this.targets_[i];
+			const target = this.targets_[i];
 
 			if (this.targetLevel(target) < level) continue;
 
@@ -121,18 +122,19 @@ class Logger {
 				if (level == Logger.LEVEL_WARN) fn = 'warn';
 				if (level == Logger.LEVEL_INFO) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				consoleObj[fn](line + this.objectsToString(...object));
+				const items = [moment().format('HH:mm:ss')].concat(object);
+				consoleObj[fn](...items);
 			} else if (target.type == 'file') {
-				let serializedObject = this.objectsToString(...object);
+				const serializedObject = this.objectsToString(...object);
 				try {
 					Logger.fsDriver().appendFileSync(target.path, `${line + serializedObject}\n`);
 				} catch (error) {
 					console.error('Cannot write to log file:', error);
 				}
 			} else if (target.type == 'database') {
-				let msg = this.objectsToString(...object);
+				const msg = this.objectsToString(...object);
 
-				let queries = [
+				const queries = [
 					{
 						sql: 'INSERT INTO logs (`source`, `level`, `message`, `timestamp`) VALUES (?, ?, ?, ?)',
 						params: [target.source, level, msg, time.unixMs()],
@@ -190,7 +192,7 @@ class Logger {
 	}
 
 	static levelEnum() {
-		let output = {};
+		const output = {};
 		const ids = this.levelIds();
 		for (let i = 0; i < ids.length; i++) {
 			output[ids[i]] = this.levelIdToString(ids[i]);

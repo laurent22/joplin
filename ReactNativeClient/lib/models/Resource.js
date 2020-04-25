@@ -45,7 +45,7 @@ class Resource extends BaseItem {
 	}
 
 	static needToBeFetched(resourceDownloadMode = null, limit = null) {
-		let sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
+		const sql = ['SELECT * FROM resources WHERE encryption_applied = 0 AND id IN (SELECT resource_id FROM resource_local_states WHERE fetch_status = ?)'];
 		if (resourceDownloadMode !== 'always') {
 			sql.push('AND resources.id IN (SELECT resource_id FROM resources_to_download)');
 		}
@@ -180,7 +180,7 @@ class Resource extends BaseItem {
 	static markdownTag(resource) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
-		let lines = [];
+		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
 			lines.push('![');
 			lines.push(markdownUtils.escapeLinkText(tagAlt));
@@ -262,11 +262,18 @@ class Resource extends BaseItem {
 		await this.db().exec('INSERT INTO resources_to_download (resource_id, updated_time, created_time) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM resources_to_download WHERE resource_id = ?)', [resourceId, t, t, resourceId]);
 	}
 
-	static async downloadedButEncryptedBlobCount() {
+	static async downloadedButEncryptedBlobCount(excludedIds = null) {
+		let excludedSql = '';
+		if (excludedIds && excludedIds.length) {
+			excludedSql = `AND resource_id NOT IN ("${excludedIds.join('","')}")`;
+		}
+
 		const r = await this.db().selectOne(`
 			SELECT count(*) as total
 			FROM resource_local_states
-			WHERE fetch_status = ? AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)
+			WHERE fetch_status = ?
+			AND resource_id IN (SELECT id FROM resources WHERE encryption_blob_encrypted = 1)
+			${excludedSql}
 		`, [Resource.FETCH_STATUS_DONE]);
 
 		return r ? r.total : 0;

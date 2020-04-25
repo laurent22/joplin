@@ -14,10 +14,12 @@ class Command extends BaseCommand {
 	}
 
 	options() {
-		return [['-v, --verbose', _('Also displays unset and hidden config variables.')],
-			['--export', _('Writes all settings to STDOUT as JSON including secure variables.')],
-			['--import', _('Reads in JSON formatted settings from STDIN.')],
-			['--import-file <file>', _('Reads in settings from <file>. <file> must contain valid JSON.')]];
+		return [
+			['-v, --verbose', _('Also displays unset and hidden config variables.')],
+			['--export', 'Writes all settings to STDOUT as JSON including secure variables.'],
+			['--import', 'Reads in JSON formatted settings from STDIN.'],
+			['--import-file <file>', 'Reads in settings from <file>. <file> must contain valid JSON.'],
+		];
 	}
 	async __importSettings(inputStream) {
 		return new Promise((resolve, reject) => {
@@ -33,7 +35,7 @@ class Command extends BaseCommand {
 			});
 
 			inputStream.on('end', () => {
-				let json = chunks.join('');
+				const json = chunks.join('');
 				let settingsObj;
 				try {
 					settingsObj = JSON.parse(json);
@@ -81,7 +83,7 @@ class Command extends BaseCommand {
 		};
 
 		if (isExport || (!isImport && !args.value)) {
-			let keys = Setting.keys(!verbose, 'cli');
+			const keys = Setting.keys(!verbose, 'cli');
 			keys.sort();
 
 			if (isExport) {
@@ -103,12 +105,8 @@ class Command extends BaseCommand {
 				this.stdout(renderKeyValue(args.name));
 			}
 
-			app()
-				.gui()
-				.showConsole();
-			app()
-				.gui()
-				.maximizeConsole();
+			app().gui().showConsole();
+			app().gui().maximizeConsole();
 
 			return;
 		}

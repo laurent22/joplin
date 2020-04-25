@@ -1,4 +1,5 @@
 const BaseItem = require('lib/models/BaseItem');
+const BaseModel = require('lib/BaseModel');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
@@ -16,6 +17,8 @@ class DecryptionWorker {
 		this.eventEmitter_ = new EventEmitter();
 		this.kvStore_ = null;
 		this.maxDecryptionAttempts_ = 2;
+
+		this.startCalls_ = [];
 	}
 
 	setLogger(l) {
@@ -35,9 +38,9 @@ class DecryptionWorker {
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new DecryptionWorker();
-		return this.instance_;
+		if (DecryptionWorker.instance_) return DecryptionWorker.instance_;
+		DecryptionWorker.instance_ = new DecryptionWorker();
+		return DecryptionWorker.instance_;
 	}
 
 	setEncryptionService(v) {
@@ -86,13 +89,17 @@ class DecryptionWorker {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
+	async clearDisabledItems() {
+		await this.kvStore().deleteByPrefix('decrypt:');
+	}
+
 	dispatchReport(report) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
 		this.dispatch(action);
 	}
 
-	async start(options = null) {
+	async start_(options = null) {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -129,8 +136,10 @@ class DecryptionWorker {
 
 		this.state_ = 'started';
 
-		let excludedIds = [];
+		const excludedIds = [];
+		const decryptedItemCounts = {};
 
+		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
 		try {
@@ -161,7 +170,8 @@ class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().warn(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
+							this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(item.type_)} ${item.id}: Decryption has failed more than 2 times - skipping it`);
+							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
 							excludedIds.push(item.id);
 							continue;
 						}
@@ -169,6 +179,10 @@ class DecryptionWorker {
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
+
+						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
+
+						decryptedItemCounts[decryptedItem.type_]++;
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
@@ -227,17 +241,50 @@ class DecryptionWorker {
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 
-		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount(excludedIds);
 
 		this.state_ = 'idle';
 
-		this.dispatchReport({ state: 'idle' });
+		this.dispatchReport({
+			state: 'idle',
+			decryptedItemCounts: decryptedItemCounts,
+		});
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);
 			this.scheduleStart();
 		}
 	}
+
+	async start(options) {
+		this.startCalls_.push(true);
+		try {
+			await this.start_(options);
+		} finally {
+			this.startCalls_.pop();
+		}
+	}
+
+	async destroy() {
+		this.eventEmitter_.removeAllListeners();
+		if (this.scheduleId_) {
+			clearTimeout(this.scheduleId_);
+			this.scheduleId_ = null;
+		}
+		this.eventEmitter_ = null;
+		DecryptionWorker.instance_ = null;
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.startCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
 }
+
+DecryptionWorker.instance_ = null;
 
 module.exports = DecryptionWorker;

@@ -1,6 +1,6 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated } = require('react-native');
-const { SafeAreaView } = require('react-navigation');
+const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar } = require('react-native');
+const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const NavService = require('lib/services/NavService.js');
@@ -54,7 +54,7 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
-const ShareExtension = require('react-native-share-extension').default;
+// const ShareExtension = require('react-native-share-extension').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
@@ -68,8 +68,9 @@ const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 const SyncTargetNextcloud = require('lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
+
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+if (__DEV__) SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
@@ -80,6 +81,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const EncryptionService = require('lib/services/EncryptionService');
 const MigrationService = require('lib/services/MigrationService');
 
+import setUpQuickActions from './setUpQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 
 let storeDispatch = function() {};
@@ -87,7 +89,7 @@ let storeDispatch = function() {};
 const logReducerAction = function(action) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
-	let msg = [action.type];
+	const msg = [action.type];
 	if (action.routeName) msg.push(action.routeName);
 
 	// reg.logger().debug('Reducer action', msg.join(', '));
@@ -156,7 +158,7 @@ const generalMiddleware = store => next => async (action) => {
 	return result;
 };
 
-let navHistory = [];
+const navHistory = [];
 
 function historyCanGoBackTo(route) {
 	if (route.routeName === 'Note') return false;
@@ -231,7 +233,7 @@ const appReducer = (state = appDefaultState, action) => {
 				// are loaded. Might be good enough since going back to different folders
 				// is probably not a common workflow.
 				for (let i = 0; i < navHistory.length; i++) {
-					let n = navHistory[i];
+					const n = navHistory[i];
 					if (n.routeName == action.routeName) {
 						navHistory[i] = Object.assign({}, action);
 					}
@@ -354,7 +356,7 @@ const appReducer = (state = appDefaultState, action) => {
 	return reducer(newState, action);
 };
 
-let store = createStore(appReducer, applyMiddleware(generalMiddleware));
+const store = createStore(appReducer, applyMiddleware(generalMiddleware));
 storeDispatch = store.dispatch;
 
 function resourceFetcher_downloadComplete(event) {
@@ -401,7 +403,7 @@ async function initialize(dispatch) {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
-	let db = new JoplinDatabase(new DatabaseDriverReactNative());
+	const db = new JoplinDatabase(new DatabaseDriverReactNative());
 	db.setLogger(dbLogger);
 	reg.setDb(db);
 
@@ -410,7 +412,7 @@ async function initialize(dispatch) {
 	FoldersScreenUtils.dispatch = dispatch;
 	BaseSyncTarget.dispatch = dispatch;
 	NavService.dispatch = dispatch;
-	BaseModel.db_ = db;
+	BaseModel.setDb(db);
 
 	KvStore.instance().setDb(reg.db());
 
@@ -514,7 +516,7 @@ async function initialize(dispatch) {
 			items: masterKeys,
 		});
 
-		let folderId = Setting.value('activeFolderId');
+		const folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);
 
 		if (!folder) folder = await Folder.defaultFolder();
@@ -533,6 +535,8 @@ async function initialize(dispatch) {
 				folderId: folder.id,
 			});
 		}
+
+		setUpQuickActions(dispatch, folderId);
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -611,40 +615,40 @@ class AppComponent extends React.Component {
 		}
 
 		if (Platform.OS !== 'ios') {
-			try {
-				const { type, value } = await ShareExtension.data();
+			// try {
+			// 	const { type, value } = await ShareExtension.data();
 
-				// reg.logger().info('Got share data:', type, value);
+			// 	// reg.logger().info('Got share data:', type, value);
 
-				if (type != '' && this.props.selectedFolderId) {
-					const newNote = await Note.save({
-						title: Note.defaultTitleFromBody(value),
-						body: value,
-						parent_id: this.props.selectedFolderId,
-					});
+			// 	if (type != '' && this.props.selectedFolderId) {
+			// 		const newNote = await Note.save({
+			// 			title: Note.defaultTitleFromBody(value),
+			// 			body: value,
+			// 			parent_id: this.props.selectedFolderId,
+			// 		});
 
-					// This is a bit hacky, but the surest way to go to
-					// the needed note. We go back one screen in case there's
-					// already a note open - if we don't do this, the dispatch
-					// below will do nothing (because routeName wouldn't change)
-					// Then we wait a bit for the state to be set correctly, and
-					// finally we go to the new note.
-					this.props.dispatch({
-						type: 'NAV_BACK',
-					});
+			// 		// This is a bit hacky, but the surest way to go to
+			// 		// the needed note. We go back one screen in case there's
+			// 		// already a note open - if we don't do this, the dispatch
+			// 		// below will do nothing (because routeName wouldn't change)
+			// 		// Then we wait a bit for the state to be set correctly, and
+			// 		// finally we go to the new note.
+			// 		this.props.dispatch({
+			// 			type: 'NAV_BACK',
+			// 		});
 
-					setTimeout(() => {
-						this.props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Note',
-							noteId: newNote.id,
-						});
-					}, 5);
-				}
+			// 		setTimeout(() => {
+			// 			this.props.dispatch({
+			// 				type: 'NAV_GO',
+			// 				routeName: 'Note',
+			// 				noteId: newNote.id,
+			// 			});
+			// 		}, 5);
+			// 	}
 
-			} catch (e) {
-				reg.logger().error('Error in ShareExtension.data', e);
-			}
+			// } catch (e) {
+			// 	reg.logger().error('Error in ShareExtension.data', e);
+			// }
 		}
 
 		BackButtonService.initialize(this.backButtonHandler_);
@@ -715,10 +719,10 @@ class AppComponent extends React.Component {
 		let menuPosition = 'left';
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
 			menuPosition = 'right';
 		} else {
-			sideMenuContent = <SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
 		}
 
 		const appNavInit = {
@@ -747,13 +751,15 @@ class AppComponent extends React.Component {
 					});
 				}}
 			>
-				<MenuContext style={{ flex: 1 }}>
-					<SafeAreaView style={{flex: 0, backgroundColor: theme.raisedBackgroundColor}} />
-					<SafeAreaView style={{flex: 1, backgroundColor: theme.backgroundColor}}>
-						<AppNav screens={appNavInit} />
+				<StatusBar barStyle="dark-content" />
+				<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor  }}>
+					<SafeAreaView style={{ flex: 1 }}>
+						<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+							<AppNav screens={appNavInit} />
+						</View>
+						<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
+						<Animated.View pointerEvents='none' style={{ position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '120%' }}/>
 					</SafeAreaView>
-					<DropdownAlert ref={ref => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
-					<Animated.View pointerEvents='none' style={{position: 'absolute', backgroundColor: 'black', opacity: this.state.sideMenuContentOpacity, width: '100%', height: '100%'}}/>
 				</MenuContext>
 			</SideMenu>
 		);

@@ -14,12 +14,13 @@ class SearchEngine {
 		this.logger_ = new Logger();
 		this.db_ = null;
 		this.isIndexing_ = false;
+		this.syncCalls_ = [];
 	}
 
 	static instance() {
-		if (this.instance_) return this.instance_;
-		this.instance_ = new SearchEngine();
-		return this.instance_;
+		if (SearchEngine.instance_) return SearchEngine.instance_;
+		SearchEngine.instance_ = new SearchEngine();
+		return SearchEngine.instance_;
 	}
 
 	setLogger(logger) {
@@ -95,7 +96,7 @@ class SearchEngine {
 		return this.syncTables();
 	}
 
-	async syncTables() {
+	async syncTables_() {
 		if (this.isIndexing_) return;
 
 		this.isIndexing_ = true;
@@ -176,22 +177,32 @@ class SearchEngine {
 		this.isIndexing_ = false;
 	}
 
+	async syncTables() {
+		this.syncCalls_.push(true);
+		try {
+			await this.syncTables_();
+		} finally {
+			this.syncCalls_.pop();
+		}
+	}
+
 	async countRows() {
 		const sql = 'SELECT count(*) as total FROM notes_fts';
 		const row = await this.db().selectOne(sql);
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	columnIndexesFromOffsets_(offsets) {
+	fieldNamesFromOffsets_(offsets) {
+		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurenceCount = Math.floor(offsets.length / 4);
-		const indexes = [];
-
+		const output = [];
 		for (let i = 0; i < occurenceCount; i++) {
-			const colIndex = offsets[i * 4] - 1;
-			if (indexes.indexOf(colIndex) < 0) indexes.push(colIndex);
+			const colIndex = offsets[i * 4];
+			const fieldName = notesNormalizedFieldNames[colIndex];
+			if (!output.includes(fieldName)) output.push(fieldName);
 		}
 
-		return indexes;
+		return output;
 	}
 
 	calculateWeight_(offsets, termCount) {
@@ -224,16 +235,17 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
-	orderResults_(rows, parsedQuery) {
+	processResults_(rows, parsedQuery) {
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const offsets = row.offsets.split(' ').map(o => Number(o));
 			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
-			// row.colIndexes = this.columnIndexesFromOffsets_(offsets);
-			// row.offsets = offsets;
+			row.fields = this.fieldNamesFromOffsets_(offsets);
 		}
 
 		rows.sort((a, b) => {
+			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
 			if (a.weight < b.weight) return +1;
 			if (a.weight > b.weight) return -1;
 			if (a.is_todo && a.todo_completed) return +1;
@@ -306,7 +318,7 @@ class SearchEngine {
 
 		let termCount = 0;
 		const keys = [];
-		for (let col in terms) {
+		for (const col in terms) {
 			if (!terms.hasOwnProperty(col)) continue;
 
 			if (!terms[col].length) {
@@ -346,7 +358,7 @@ class SearchEngine {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
 		let output = [];
-		for (let col in parsedQuery.terms) {
+		for (const col in parsedQuery.terms) {
 			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
 			output = output.concat(parsedQuery.terms[col]);
 		}
@@ -380,21 +392,58 @@ class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	async search(query) {
-		query = this.normalizeText_(query);
-		query = query.replace(/-/g, ' '); // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+	determineSearchType_(query, preferredSearchType) {
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
+
+		// If preferredSearchType is "fts" we auto-detect anyway
+		// because it's not always supported.
 
 		const st = scriptType(query);
 
-		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko'].indexOf(st) >= 0) {
+		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
+			return SearchEngine.SEARCH_TYPE_BASIC;
+		}
+
+		return SearchEngine.SEARCH_TYPE_FTS;
+	}
+
+	async search(query, options = null) {
+		options = Object.assign({}, {
+			searchType: SearchEngine.SEARCH_TYPE_AUTO,
+		}, options);
+
+		query = this.normalizeText_(query);
+
+		const searchType = this.determineSearchType_(query, options.searchType);
+
+		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			return this.basicSearch(query);
-		} else {
+		} else { // SEARCH_TYPE_FTS
+			// FTS will ignore all special characters, like "-" in the index. So if
+			// we search for "this-phrase" it won't find it because it will only
+			// see "this phrase" in the index. Because of this, we remove the dashes
+			// when searching.
+			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+			query = query.replace(/-/g, ' ');
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
+			const sql = `
+				SELECT
+					notes_fts.id,
+					notes_fts.title AS normalized_title,
+					offsets(notes_fts) AS offsets,
+					notes.title,
+					notes.user_updated_time,
+					notes.is_todo,
+					notes.todo_completed,
+					notes.parent_id
+				FROM notes_fts
+				LEFT JOIN notes ON notes_fts.id = notes.id
+				WHERE notes_fts MATCH ?
+			`;
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
-				this.orderResults_(rows, parsedQuery);
+				this.processResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
@@ -402,6 +451,30 @@ class SearchEngine {
 			}
 		}
 	}
+
+	async destroy() {
+		if (this.scheduleSyncTablesIID_) {
+			clearTimeout(this.scheduleSyncTablesIID_);
+			this.scheduleSyncTablesIID_ = null;
+		}
+		SearchEngine.instance_ = null;
+
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!this.syncCalls_.length) {
+					clearInterval(iid);
+					this.instance_ = null;
+					resolve();
+				}
+			}, 100);
+		});
+	}
 }
+
+SearchEngine.instance_ = null;
+
+SearchEngine.SEARCH_TYPE_AUTO = 'auto';
+SearchEngine.SEARCH_TYPE_BASIC = 'basic';
+SearchEngine.SEARCH_TYPE_FTS = 'fts';
 
 module.exports = SearchEngine;

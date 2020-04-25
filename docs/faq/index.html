@@ -332,6 +332,17 @@ https://github.com/laurent22/joplin/blob/master/readme/faq.md
 </li>
 </ul>
 </div>
+<h1>Installer gets stuck on Windows<a name="installer-gets-stuck-on-windows" href="#installer-gets-stuck-on-windows" class="heading-anchor">🔗</a></h1>
+<p>The installer may get stuck if the app was not uninstalled correctly. To fix the issue you will need to clean up the left-over entry from the Registry. To do so please follow these steps:</p>
+<ul>
+<li>Press Win + R (Windows Key + R)</li>
+<li>Type &quot;regedit.exe&quot;</li>
+<li>Navigate to <code>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall</code></li>
+<li>In there, you will see one or more folders. Open them one by one to find the one for Joplin. One of the entries in there should be &quot;DisplayName&quot; with value &quot;Joplin x.x.x&quot;.</li>
+<li>Once found, delete that folder.</li>
+</ul>
+<p>Now try to install again and it should work.</p>
+<p>More info there: <a href="https://github.com/electron-userland/electron-builder/issues/4057">https://github.com/electron-userland/electron-builder/issues/4057</a></p>
 <h1>How can I edit my note in an external text editor?<a name="how-can-i-edit-my-note-in-an-external-text-editor" href="#how-can-i-edit-my-note-in-an-external-text-editor" class="heading-anchor">🔗</a></h1>
 <p>The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -&gt; Text editor command.</p>
 <p>Some example configurations are: (comments after #)</p>
@@ -404,7 +415,7 @@ on this server.&lt;/p&gt;
 </ul>
 <p>Additionally the Windows Task Manager can be used to verify whether Joplin is still around.</p>
 <h1>Why is it named Joplin?<a name="why-is-it-named-joplin" href="#why-is-it-named-joplin" class="heading-anchor">🔗</a></h1>
-<p>The name comes from the composer and pianist <a href="https://en.wikipedia.org/wiki/Scott_Joplin">Scott Joplin</a>, which I often listen to. His name is also easy to remember and type so it fell like a good choice. And, to quote a user on Hacker News, &quot;though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized&quot;.</p>
+<p>The name comes from the composer and pianist <a href="https://en.wikipedia.org/wiki/Scott_Joplin">Scott Joplin</a>, which I often listen to. His name is also easy to remember and type so it felt like a good choice. And, to quote a user on Hacker News, &quot;though Scott Joplin's ragtime musical style has a lot in common with some very informal music, his own approach was more educated, sophisticated, and precise. Every note was in its place for a reason, and he was known to prefer his pieces to be performed exactly as written. So you could say that compared to the people who came before him, his notes were more organized&quot;.</p>
 
 		<div class="bottom-links">
 			<a href="https://github.com/laurent22/joplin/blob/master/readme/faq.md">
@@ -442,7 +453,7 @@ on this server.&lt;/p&gt;
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

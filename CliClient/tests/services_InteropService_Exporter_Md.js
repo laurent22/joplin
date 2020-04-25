@@ -49,9 +49,9 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
@@ -59,7 +59,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note1.body))[0]);
 
-		let folder2 = await Folder.save({ title: 'folder2' });
+		const folder2 = await Folder.save({ title: 'folder2' });
 		let note3 = await Note.save({ title: 'note3', parent_id: folder2.id });
 		await shim.attachFileToNote(note3, `${__dirname}/../tests/support/photo.jpg`);
 		note3 = await Note.load(note3.id);
@@ -91,9 +91,9 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		let note1_2 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note1_2 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_NOTE, note1_2);
@@ -118,8 +118,8 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 
@@ -145,29 +145,60 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note1.body))[0]);
-		let resource1 = await Resource.load(itemsToExport[2].itemOrId);
+		const resource1 = await Resource.load(itemsToExport[2].itemOrId);
 
-		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
 		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note2.body))[0]);
-		let resource2 = await Resource.load(itemsToExport[5].itemOrId);
+		const resource2 = await Resource.load(itemsToExport[5].itemOrId);
 
 		await exporter.processResource(resource1, Resource.fullPath(resource1));
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 
 		expect(await shim.fsDriver().exists(`${exportDir}/_resources/${Resource.filename(resource1)}`)).toBe(true, 'Resource file should be copied to _resources directory.');
 		expect(await shim.fsDriver().exists(`${exportDir}/_resources/${Resource.filename(resource2)}`)).toBe(true, 'Resource file should be copied to _resources directory.');
+	}));
+
+	it('should create folders in fs', asyncTest(async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir);
+
+		const itemsToExport = [];
+		const queueExportItem = (itemType, itemOrId) => {
+			itemsToExport.push({
+				type: itemType,
+				itemOrId: itemOrId,
+			});
+		};
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queueExportItem(BaseModel.TYPE_NOTE, note2);
+
+		const folder3 = await Folder.save({ title: 'folder3', parent_id: folder1.id });
+		queueExportItem(BaseModel.TYPE_FOLDER, folder3.id);
+
+		await exporter.processItem(Folder, folder2);
+		await exporter.processItem(Folder, folder3);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+		await exporter.processItem(Note, note2);
+
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1`)).toBe(true, 'Folder should be created in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder2`)).toBe(true, 'Folder should be created in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir}/folder1/folder3`)).toBe(true, 'Folder should be created in filesystem.');
 	}));
 
 	it('should save notes in fs', asyncTest(async () => {
@@ -182,24 +213,21 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
-		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 
-		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 
-		let folder3 = await Folder.save({ title: 'folder3' });
-		let note3 = await Note.save({ title: 'note3', parent_id: folder3.id });
+		const folder3 = await Folder.save({ title: 'folder3' });
+		const note3 = await Note.save({ title: 'note3', parent_id: folder3.id });
 		queueExportItem(BaseModel.TYPE_FOLDER, folder3.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 
-		await exporter.processItem(Folder, folder1);
-		await exporter.processItem(Folder, folder2);
-		await exporter.processItem(Folder, folder3);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 		await exporter.processItem(Note, note1);
 		await exporter.processItem(Note, note2);
@@ -222,24 +250,24 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${__dirname}/../tests/support/photo.jpg`);
 		note1 = await Note.load(note1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
-		let resource1 = await Resource.load((await Note.linkedResourceIds(note1.body))[0]);
+		const resource1 = await Resource.load((await Note.linkedResourceIds(note1.body))[0]);
 
-		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
 		await shim.attachFileToNote(note2, `${__dirname}/../tests/support/photo.jpg`);
 		note2 = await Note.load(note2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
-		let resource2 = await Resource.load((await Note.linkedResourceIds(note2.body))[0]);
+		const resource2 = await Resource.load((await Note.linkedResourceIds(note2.body))[0]);
 
 		await exporter.processItem(Folder, folder1);
 		await exporter.processItem(Folder, folder2);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-		let context = {
+		const context = {
 			resourcePaths: {},
 		};
 		context.resourcePaths[resource1.id] = 'resource1.jpg';
@@ -248,8 +276,8 @@ describe('services_InteropService_Exporter_Md', function() {
 		await exporter.processItem(Note, note1);
 		await exporter.processItem(Note, note2);
 
-		let note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
-		let note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
+		const note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
+		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
 
 		expect(note1_body).toContain('](../_resources/resource1.jpg)', 'Resource id should be replaced with a relative path.');
 		expect(note2_body).toContain('](../../_resources/resource2.jpg)', 'Resource id should be replaced with a relative path.');
@@ -273,13 +301,13 @@ describe('services_InteropService_Exporter_Md', function() {
 			return await Note.load(note.id);
 		};
 
-		let folder1 = await Folder.save({ title: 'folder1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 
-		let folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
 
-		let folder3 = await Folder.save({ title: 'folder3' });
+		const folder3 = await Folder.save({ title: 'folder3' });
 		let note3 = await Note.save({ title: 'note3', parent_id: folder3.id });
 
 		note1 = await changeNoteBodyAndReload(note1, `# Some text \n\n [A link to note3](:/${note3.id})`);
@@ -297,9 +325,9 @@ describe('services_InteropService_Exporter_Md', function() {
 		await exporter.processItem(Note, note2);
 		await exporter.processItem(Note, note3);
 
-		let note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
-		let note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
-		let note3_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note3.id]}`);
+		const note1_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note1.id]}`);
+		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
+		const note3_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note3.id]}`);
 
 		expect(note1_body).toContain('](../folder3/note3.md)', 'Note id should be replaced with a relative path.');
 		expect(note2_body).toContain('](../../folder3/note3.md)', 'Resource id should be replaced with a relative path.');
@@ -319,9 +347,9 @@ describe('services_InteropService_Exporter_Md', function() {
 			});
 		};
 
-		let folder1 = await Folder.save({ title: 'folder with space1' });
-		let note1 = await Note.save({ title: 'note1 name with space', parent_id: folder1.id });
-		let note2 = await Note.save({ title: 'note2', parent_id: folder1.id, body: `[link](:/${note1.id})` });
+		const folder1 = await Folder.save({ title: 'folder with space1' });
+		const note1 = await Note.save({ title: 'note1 name with space', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id, body: `[link](:/${note1.id})` });
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 
@@ -330,7 +358,7 @@ describe('services_InteropService_Exporter_Md', function() {
 		await exporter.processItem(Note, note1);
 		await exporter.processItem(Note, note2);
 
-		let note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
+		const note2_body = await shim.fsDriver().readFile(`${exportDir}/${exporter.context().notePaths[note2.id]}`);
 		expect(note2_body).toContain('[link](../folder%20with%20space1/note1%20name%20with%20space.md)', 'Whitespace in URL should be encoded');
 	}));
 });

@@ -19,6 +19,7 @@ const globalStyle = {
 	disabledOpacity: 0.2,
 	colorUrl: '#7B81FF',
 	textSelectionColor: '#0096FF',
+	appearance: 'light',
 
 	raisedBackgroundColor: '#0080EF',
 	raisedColor: '#003363',
@@ -47,7 +48,7 @@ globalStyle.marginTop = globalStyle.margin;
 globalStyle.marginBottom = globalStyle.margin;
 globalStyle.htmlMarginLeft = `${((globalStyle.marginLeft / 10) * 0.6).toFixed(2)}em`;
 
-let themeCache_ = {};
+const themeCache_ = {};
 
 function addExtraStyles(style) {
 	style.icon = {
@@ -95,6 +96,8 @@ function addExtraStyles(style) {
 		backgroundColor: style.headerBackgroundColor,
 	};
 
+	style.keyboardAppearance = style.appearance;
+
 	return style;
 }
 
@@ -122,8 +125,44 @@ function themeStyle(theme) {
 
 	if (themeCache_[theme]) return themeCache_[theme];
 
-	let output = Object.assign({}, globalStyle);
-	if (theme == Setting.THEME_LIGHT) return addExtraStyles(output);
+	const output = Object.assign({}, globalStyle);
+	if (theme == Setting.THEME_LIGHT) {
+		return addExtraStyles(output);
+	} else if (theme == Setting.THEME_OLED_DARK) {
+		output.backgroundColor = '#000000';
+		output.color = '#dddddd';
+		output.colorFaded = '#777777';
+		output.dividerColor = '#555555';
+		output.strongDividerColor = '#888888';
+		output.selectedColor = '#333333';
+		output.textSelectionColor = '#00AEFF';
+		output.appearance = 'dark';
+		output.headerBackgroundColor = '#2D3136';
+
+		output.raisedBackgroundColor = '#0F2051';
+		output.raisedColor = '#788BC3';
+		output.raisedHighlightedColor = '#ffffff';
+
+		output.htmlColor = 'rgb(220,220,220)';
+		output.htmlBackgroundColor = 'rgb(0,0,0)';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+
+		output.htmlDividerColor = '#3D444E';
+		output.htmlLinkColor = 'rgb(166,166,255)';
+		output.htmlCodeColor = '#ffffff';
+		output.htmlTableBackgroundColor = 'rgb(0, 0, 0)';
+		output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
+		output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
+
+		output.codeThemeCss = 'atom-one-dark-reasonable.css';
+
+		output.colorUrl = '#7B81FF';
+
+		output.colorBright = 'rgb(220,220,220)';
+
+		themeCache_[theme] = output;
+		return addExtraStyles(themeCache_[theme]);
+	}
 
 	output.backgroundColor = '#1D2024';
 	output.color = '#dddddd';
@@ -132,6 +171,7 @@ function themeStyle(theme) {
 	output.strongDividerColor = '#888888';
 	output.selectedColor = '#333333';
 	output.textSelectionColor = '#00AEFF';
+	output.appearance = 'dark';
 	output.headerBackgroundColor = '#2D3136';
 
 	output.raisedBackgroundColor = '#0F2051';
@@ -145,12 +185,15 @@ function themeStyle(theme) {
 	output.htmlDividerColor = '#3D444E';
 	output.htmlLinkColor = 'rgb(166,166,255)';
 	output.htmlCodeColor = '#ffffff';
+	output.htmlTableBackgroundColor = 'rgb(40, 41, 42)';
 	output.htmlCodeBackgroundColor = 'rgb(47, 48, 49)';
 	output.htmlCodeBorderColor = 'rgb(70, 70, 70)';
 
-	output.codeThemeCss = 'hljs-atom-one-dark-reasonable.css';
+	output.codeThemeCss = 'atom-one-dark-reasonable.css';
 
 	output.colorUrl = '#7B81FF';
+
+	output.colorBright = 'rgb(220,220,220)';
 
 	themeCache_[theme] = output;
 	return addExtraStyles(themeCache_[theme]);

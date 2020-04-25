@@ -25,7 +25,7 @@ class Command extends BaseCommand {
 			info: stdoutFn,
 			warn: stdoutFn,
 			error: stdoutFn,
-		}});
+		} });
 		ClipperServer.instance().setDispatch(() => {});
 		ClipperServer.instance().setLogger(clipperLogger);
 

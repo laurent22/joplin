@@ -1,0 +1,47 @@
+diff --git a/node_modules/htmlparser2/lib/Parser.js b/node_modules/htmlparser2/lib/Parser.js
+index 44b4371..bcd7cc2 100644
+--- a/node_modules/htmlparser2/lib/Parser.js
++++ b/node_modules/htmlparser2/lib/Parser.js
+@@ -212,6 +212,13 @@ var Parser = /** @class */ (function (_super) {
+         this._tagname = "";
+     };
+     Parser.prototype.onclosetag = function (name) {
++        // When this is true, the onclosetag event will always be emitted
++        // for closing tags (eg </div>) even if that tag was not previously
++        // open. This is needed because we reconstruct the HTML based on
++        // fragments that don't necessarily contain the opening tag.
++        // Without this patch, onopentagname would not be emitted, and
++        // so the closing tag would disappear from the output.
++        var alwaysClose = true;
+         this._updatePosition(1);
+         if (this._lowerCaseTagNames) {
+             name = name.toLowerCase();
+@@ -236,11 +243,15 @@ var Parser = /** @class */ (function (_super) {
+             else if (name === "p" && !this._options.xmlMode) {
+                 this.onopentagname(name);
+                 this._closeCurrentTag();
++            } else if (!this._stack.length && alwaysClose) {
++                this._cbs.onclosetag(name);
+             }
+         }
+         else if (!this._options.xmlMode && (name === "br" || name === "p")) {
+             this.onopentagname(name);
+             this._closeCurrentTag();
++        } else if (!this._stack.length && alwaysClose) {
++            this._cbs.onclosetag(name);
+         }
+     };
+     Parser.prototype.onselfclosingtag = function () {
+@@ -331,7 +342,11 @@ var Parser = /** @class */ (function (_super) {
+     };
+     Parser.prototype.onend = function () {
+         if (this._cbs.onclosetag) {
+-            for (var i = this._stack.length; i > 0; this._cbs.onclosetag(this._stack[--i]))
++            // Prevent the parser from auto-closing tags. Since we deal with fragments that
++            // maybe contain the opening tag but not the closing one, we don't want that
++            // closing tag to be auto-added.
++            //
++            // for (var i = this._stack.length; i > 0; this._cbs.onclosetag(this._stack[--i]))
+                 ;
+         }
+         if (this._cbs.onend)

@@ -11,7 +11,8 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -34,7 +35,7 @@ class Note extends BaseItem {
 
 	static async unserializeForEdit(content) {
 		content += `\n\ntype_: ${BaseModel.TYPE_NOTE}`;
-		let output = await super.unserialize(content);
+		const output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
 		output.body = await this.replaceResourceExternalToInternalLinks(output.body);
@@ -42,16 +43,16 @@ class Note extends BaseItem {
 	}
 
 	static async serializeAllProps(note) {
-		let fieldNames = this.fieldNames();
+		const fieldNames = this.fieldNames();
 		fieldNames.push('type_');
 		lodash.pull(fieldNames, 'title', 'body');
 		return super.serialize(note, fieldNames);
 	}
 
 	static minimalSerializeForDisplay(note) {
-		let n = Object.assign({}, note);
+		const n = Object.assign({}, note);
 
-		let fieldNames = this.fieldNames();
+		const fieldNames = this.fieldNames();
 
 		if (!n.is_conflict) lodash.pull(fieldNames, 'is_conflict');
 		if (!Number(n.latitude)) lodash.pull(fieldNames, 'latitude');
@@ -147,7 +148,13 @@ class Note extends BaseItem {
 		return this.linkedItemIdsByType(BaseModel.TYPE_NOTE, body);
 	}
 
-	static async replaceResourceInternalToExternalLinks(body) {
+	static async replaceResourceInternalToExternalLinks(body, options = null) {
+		options = Object.assign({}, {
+			useAbsolutePaths: false,
+		}, options);
+
+		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
 
@@ -155,31 +162,52 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
+
+		this.logger().info('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
 
-	static async replaceResourceExternalToInternalLinks(body) {
-		const reString = `${pregQuote(`${Resource.baseRelativeDirectoryPath()}/`)}[a-zA-Z0-9.]+`;
-		const re = new RegExp(reString, 'gi');
-		body = body.replace(re, match => {
-			const id = Resource.pathToId(match);
-			return `:/${id}`;
-		});
+	static async replaceResourceExternalToInternalLinks(body, options = null) {
+		options = Object.assign({}, {
+			useAbsolutePaths: false,
+		}, options);
+
+		const pathsToTry = [];
+		if (options.useAbsolutePaths) {
+			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
+			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
+		} else {
+			pathsToTry.push(Resource.baseRelativeDirectoryPath());
+		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
+
+		for (const basePath of pathsToTry) {
+			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
+			const re = new RegExp(reString, 'gi');
+			body = body.replace(re, match => {
+				const id = Resource.pathToId(match);
+				return `:/${id}`;
+			});
+		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks result', body);
+
 		return body;
 	}
 
 	static new(parentId = '') {
-		let output = super.new();
+		const output = super.new();
 		output.parent_id = parentId;
 		return output;
 	}
 
 	static newTodo(parentId = '') {
-		let output = this.new(parentId);
+		const output = this.new(parentId);
 		output.is_todo = true;
 		return output;
 	}
@@ -249,13 +277,13 @@ class Note extends BaseItem {
 	static async loadFolderNoteByField(folderId, field, value) {
 		if (!folderId) throw new Error('folderId is undefined');
 
-		let options = {
+		const options = {
 			conditions: [`\`${field}\` = ?`],
 			conditionsParams: [value],
 			fields: '*',
 		};
 
-		let results = await this.previews(folderId, options);
+		const results = await this.previews(folderId, options);
 		return results.length ? results[0] : null;
 	}
 
@@ -275,14 +303,14 @@ class Note extends BaseItem {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
-			if (parentId) {
+			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
 			}
 		}
 
 		if (options.anywherePattern) {
-			let pattern = options.anywherePattern.replace(/\*/g, '%');
+			const pattern = options.anywherePattern.replace(/\*/g, '%');
 			options.conditions.push('(title LIKE ? OR body LIKE ?)');
 			options.conditionsParams.push(pattern);
 			options.conditionsParams.push(pattern);
@@ -309,7 +337,7 @@ class Note extends BaseItem {
 			let tempOptions = Object.assign({}, options);
 			tempOptions.conditions = cond;
 
-			let uncompletedTodos = await this.search(tempOptions);
+			const uncompletedTodos = await this.search(tempOptions);
 
 			cond = options.conditions.slice();
 			if (hasNotes && hasTodos) {
@@ -321,7 +349,7 @@ class Note extends BaseItem {
 			tempOptions = Object.assign({}, options);
 			tempOptions.conditions = cond;
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
-			let theRest = await this.search(tempOptions);
+			const theRest = await this.search(tempOptions);
 
 			return uncompletedTodos.concat(theRest);
 		}
@@ -361,7 +389,7 @@ class Note extends BaseItem {
 	}
 
 	static async conflictedCount() {
-		let r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
+		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
 		return r && r.total ? r.total : 0;
 	}
 
@@ -373,7 +401,7 @@ class Note extends BaseItem {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
-		let startWait = time.unixMs();
+		const startWait = time.unixMs();
 		while (true) {
 			if (!this.geolocationUpdating_) break;
 			this.logger().info('Waiting for geolocation update...');
@@ -408,7 +436,7 @@ class Note extends BaseItem {
 
 		this.logger().info(`Updating lat/long of note ${noteId}`);
 
-		let note = await Note.load(noteId);
+		const note = await Note.load(noteId);
 		if (!note) return; // Race condition - note has been deleted in the meantime
 
 		note.longitude = geoData.coords.longitude;
@@ -420,7 +448,7 @@ class Note extends BaseItem {
 	static filter(note) {
 		if (!note) return note;
 
-		let output = super.filter(note);
+		const output = super.filter(note);
 		if ('longitude' in output) output.longitude = Number(!output.longitude ? 0 : output.longitude).toFixed(8);
 		if ('latitude' in output) output.latitude = Number(!output.latitude ? 0 : output.latitude).toFixed(8);
 		if ('altitude' in output) output.altitude = Number(!output.altitude ? 0 : output.altitude).toFixed(4);
@@ -428,7 +456,7 @@ class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -439,7 +467,7 @@ class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderIdTitle()));
+		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
@@ -510,10 +538,14 @@ class Note extends BaseItem {
 		const originalNote = await Note.load(noteId);
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
-		let newNote = Object.assign({}, originalNote);
-		delete newNote.id;
+		const newNote = Object.assign({}, originalNote);
+		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
 
-		for (let n in changes) {
+		for (const field of fieldsToReset) {
+			delete newNote[field];
+		}
+
+		for (const n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
 			newNote[n] = changes[n];
 		}
@@ -533,7 +565,8 @@ class Note extends BaseItem {
 	}
 
 	static async save(o, options = null) {
-		let isNew = this.isNew(o, options);
+		const isNew = this.isNew(o, options);
+		const isProvisional = options && !!options.provisional;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 
@@ -556,6 +589,7 @@ class Note extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_UPDATE_ONE',
 			note: note,
+			provisional: isProvisional,
 		});
 
 		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {

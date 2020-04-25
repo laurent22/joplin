@@ -333,6 +333,57 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </ul>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163">cli-v1.0.163</a> - 2020-04-10T18:31:50Z<a name="cli-v1-0-163-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-163-2020-04-10t18-31-50z" href="#cli-v1-0-163-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-163-2020-04-10t18-31-50z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Update ko.po (#2986 by <a href="https://github.com/xmlangel">@xmlangel</a>)</li>
+<li>Improved: Update it_IT.po (#2978 by <a href="https://github.com/abonte">@abonte</a>)</li>
+<li>Improved: Update nb_NO.po (#2973 by Mats Estensen)</li>
+<li>Improved: Update zh_CN.po (#2971 by <a href="https://github.com/troilus">@troilus</a>)</li>
+<li>Fixed: Add support for retrying decryption after it has failed multiple times (#2981)</li>
+<li>Fixed: When modifying a conflicted note, it would disappear from the view (#2709)</li>
+<li>Fixed: Prevent decryption loop when a resource cannot be decrypted (#2257)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162">cli-v1.0.162</a> - 2020-04-01T17:16:14Z<a name="cli-v1-0-162-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-162-2020-04-01t17-16-14z" href="#cli-v1-0-162-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-162-2020-04-01t17-16-14z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Compatibility with new master key and sync target encryption</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161">cli-v1.0.161</a> - 2020-03-07T01:20:04Z<a name="cli-v1-0-161-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-161-2020-03-07t01-20-04z" href="#cli-v1-0-161-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-161-2020-03-07t01-20-04z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add more context to encryption errors</li>
+<li>Improved: Changed default encryption method to CCM</li>
+<li>Improved: Change geolocation service to freegeoip.app to improve privacy (#2503 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Handle invalid UTF-8 data when encrypting (#2591)</li>
+<li>Fixed: Fixed issue when a notebook does not have a parent (#2536)</li>
+<li>Fixed: Better handling of rare error in WebDAV server (#2485)</li>
+<li>Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154">cli-v1.0.154</a> - 2020-02-07T23:22:24Z<a name="cli-v1-0-154-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-154-2020-02-07t23-22-24z" href="#cli-v1-0-154-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-154-2020-02-07t23-22-24z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added new date format YYYY.MM.DD (#2318 by XSAkos)</li>
+<li>Improved: Reset time fields when duplicating a note (#2428 by <a href="https://github.com/tekdel">@tekdel</a>)</li>
+<li>Improved: More info for &quot;unknown profile version&quot; error message (#2361 by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Handle Thai language in search (#2387) (#2279 by Kirtan Purohit)</li>
+<li>Fixed: Fix escaping of title when generating a markdown link (#2456) (#2085 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fix console messages being displayed in GUI (#2457 by Helmut K. C. Tessarek)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153">cli-v1.0.153</a> - 2020-01-24T23:16:32Z<a name="cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" href="#cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added new, more secure encryption methods, so that they can be switched to at a later time</li>
+<li>New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)</li>
+<li>New: Added more logging for resource fetching to try to debug issue</li>
+<li>New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)</li>
+<li>Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)</li>
+<li>Improved: Upgrade sqlite (#2248 by Devon Zuegel)</li>
+<li>Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)</li>
+<li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
+<li>Improved: Update CliClient node dependency to 10+ (#2177 by <a href="https://github.com/joeltaylor">@joeltaylor</a>)</li>
+<li>Improved: Allow exporting a note as HTML</li>
+<li>Improved: Improved logging during sync to allow finding bugs more easily</li>
+<li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (#2091)</li>
+<li>Fixed: Restaured translations that had been accidentally deleted (#2126)</li>
+<li>Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)</li>
+<li>Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150">cli-v1.0.150</a> - 2019-11-11T19:19:03Z<a name="cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" href="#cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add command to list all tags for a note (#2003) (#1974)</li>
@@ -453,7 +504,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>
