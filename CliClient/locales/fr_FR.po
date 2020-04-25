@@ -578,7 +578,7 @@ msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
 "Exécutez `e2ee decrypt --retry-failed-items` pour tenter à nouveau le "
-"décryptage"
+"déchiffrage"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
