@@ -45,13 +45,13 @@ const defaultState = {
 		state: 'idle',
 		itemIndex: 0,
 		itemCount: 0,
+		decryptedItemCounts: {},
 	},
 	selectedNoteTags: [],
 	resourceFetcher: {
 		toFetchCount: 0,
 	},
-	backwardHistoryNotes: [],
-	forwardHistoryNotes: [],
+	historyNotes: [],
 	plugins: {},
 	provisionalNoteIds: [],
 	editorNoteStatuses: {},
@@ -111,20 +111,6 @@ stateUtils.lastSelectedNoteIds = function(state) {
 	if (!parent) return [];
 	const output = state.lastSelectedNotesIds[parent.type][parent.id];
 	return output ? output : [];
-};
-
-stateUtils.getLastSeenNote = function(state) {
-	const selectedNoteIds = state.selectedNoteIds;
-	const notes = state.notes;
-	if (selectedNoteIds != null && selectedNoteIds.length > 0) {
-		const currNote = notes.find(note => note.id === selectedNoteIds[0]);
-		if (currNote != null) {
-			return {
-				id: currNote.id,
-				parent_id: currNote.parent_id,
-			};
-		}
-	}
 };
 
 function arrayHasEncryptedItems(array) {
@@ -217,15 +203,6 @@ function handleItemDelete(state, action) {
 	const newState = Object.assign({}, state);
 	newState[listKey] = newItems;
 
-	if (listKey === 'notes') {
-		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.id != action.id);
-		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.id != action.id);
-	}
-	if (listKey === 'folders') {
-		newState.backwardHistoryNotes = newState.backwardHistoryNotes.filter(note => note.parent_id != action.id);
-		newState.forwardHistoryNotes = newState.forwardHistoryNotes.filter(note => note.parent_id != action.id);
-	}
-
 	const newIds = [];
 	for (let i = 0; i < newSelectedIndexes.length; i++) {
 		newIds.push(newItems[newSelectedIndexes[i]].id);
@@ -285,25 +262,9 @@ function defaultNotesParentType(state, exclusion) {
 
 function changeSelectedFolder(state, action, options = null) {
 	if (!options) options = {};
+	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	const newState = Object.assign({}, state);
-
-	// Save the last seen note so that back will return to it.
-	if (action.type === 'FOLDER_SELECT' && action.historyAction == 'goto') {
-		const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-
-		// Don't update history if going to the same note again.
-		const lastSeenNote = stateUtils.getLastSeenNote(state);
-		if (lastSeenNote != null && action.id != lastSeenNote.id) {
-			forwardHistoryNotes = [];
-			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
-		}
-
-		newState.backwardHistoryNotes = backwardHistoryNotes;
-		newState.forwardHistoryNotes = forwardHistoryNotes;
-	}
-
 	newState.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!newState.selectedFolderId) {
 		newState.notesParentType = defaultNotesParentType(state, 'Folder');
@@ -313,6 +274,7 @@ function changeSelectedFolder(state, action, options = null) {
 
 	if (newState.selectedFolderId === state.selectedFolderId && newState.notesParentType === state.notesParentType) return state;
 
+	if (options.clearNoteHistory) newState.historyNotes = [];
 	if (options.clearSelectedNoteIds) newState.selectedNoteIds = [];
 
 	return newState;
@@ -332,6 +294,7 @@ function recordLastSelectedNoteIds(state, noteIds) {
 
 function changeSelectedNotes(state, action, options = null) {
 	if (!options) options = {};
+	if (!('clearNoteHistory' in options)) options.clearNoteHistory = true;
 
 	let noteIds = [];
 	if (action.id) noteIds = [action.id];
@@ -341,37 +304,9 @@ function changeSelectedNotes(state, action, options = null) {
 	let newState = Object.assign({}, state);
 
 	if (action.type === 'NOTE_SELECT') {
+		if (JSON.stringify(newState.selectedNoteIds) === JSON.stringify(noteIds)) return state;
 		newState.selectedNoteIds = noteIds;
 		newState.selectedNoteHash = action.hash ? action.hash : '';
-
-		const backwardHistoryNotes = newState.backwardHistoryNotes.slice();
-		let forwardHistoryNotes = newState.forwardHistoryNotes.slice();
-
-		// The historyAction property is only used for user-initiated actions and tells how
-		// the history stack should be handled. That property should not be present for
-		// programmatic navigation. Possible values are:
-		// - "goto": When going to a note, but not via the back/forward arrows.
-		// - "pop": When clicking on the Back arrow
-		// - "push": When clicking on the Forward arrow
-		const lastSeenNote = stateUtils.getLastSeenNote(state);
-		if (action.historyAction == 'goto' && lastSeenNote != null &&  action.id != lastSeenNote.id) {
-			forwardHistoryNotes = [];
-			backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
-		} else if (action.historyAction === 'pop' && lastSeenNote != null) {
-			if (forwardHistoryNotes.length === 0 || lastSeenNote.id != forwardHistoryNotes[forwardHistoryNotes.length - 1].id) {
-				forwardHistoryNotes.push(Object.assign({}, lastSeenNote));
-			}
-			backwardHistoryNotes.pop();
-		} else if (action.historyAction === 'push' && lastSeenNote != null) {
-			if (backwardHistoryNotes.length === 0 || lastSeenNote.id != backwardHistoryNotes[backwardHistoryNotes.length - 1].id) {
-				backwardHistoryNotes.push(Object.assign({}, lastSeenNote));
-			}
-			forwardHistoryNotes.pop();
-		}
-
-		newState.backwardHistoryNotes = backwardHistoryNotes;
-		newState.forwardHistoryNotes = forwardHistoryNotes;
-
 	} else if (action.type === 'NOTE_SELECT_ADD') {
 		if (!noteIds.length) return state;
 		newState.selectedNoteIds = ArrayUtils.unique(newState.selectedNoteIds.concat(noteIds));
@@ -400,6 +335,8 @@ function changeSelectedNotes(state, action, options = null) {
 
 	newState = recordLastSelectedNoteIds(newState, newState.selectedNoteIds);
 
+	if (options.clearNoteHistory) newState.historyNotes = [];
+
 	return newState;
 }
 
@@ -415,6 +352,8 @@ function removeItemFromArray(array, property, value) {
 }
 
 const reducer = (state = defaultState, action) => {
+	// if (!['SIDE_MENU_OPEN_PERCENT'].includes(action.type)) console.info('Action', action.type);
+
 	let newState = state;
 
 	try {
@@ -488,9 +427,24 @@ const reducer = (state = defaultState, action) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = changeSelectedFolder(state, action);
+				newState = changeSelectedFolder(state, action, { clearNoteHistory: false });
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				newState = changeSelectedNotes(newState, noteSelectAction);
+				newState = changeSelectedNotes(newState, noteSelectAction, { clearNoteHistory: false });
+
+				if (action.historyNoteAction) {
+					const historyNotes = newState.historyNotes.slice();
+					if (typeof action.historyNoteAction === 'object') {
+						historyNotes.push(Object.assign({}, action.historyNoteAction));
+					} else if (action.historyNoteAction === 'pop') {
+						historyNotes.pop();
+					}
+					newState.historyNotes = historyNotes;
+				} else if (newState !== state) {
+					// Clear the note history if folder and selected note have actually been changed. For example
+					// they won't change if they are already selected. That way, the "Back" button to go to the
+					// previous note wll stay.
+					newState.historyNotes = [];
+				}
 			}
 			break;
 
@@ -797,25 +751,14 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'SEARCH_SELECT':
-			{
-				newState = Object.assign({}, state);
-				newState.selectedSearchId = action.id;
-				if (!action.id) {
-					newState.notesParentType = defaultNotesParentType(state, 'Search');
-				} else {
-					newState.notesParentType = 'Search';
-				}
-
-				// Update history when searching
-				const lastSeenNote = stateUtils.getLastSeenNote(state);
-				if (lastSeenNote != null && (state.backwardHistoryNotes.length === 0 ||
-					state.backwardHistoryNotes[state.backwardHistoryNotes.length - 1].id != lastSeenNote.id)) {
-					newState.forwardHistoryNotes = [];
-					newState.backwardHistoryNotes.push(Object.assign({},lastSeenNote));
-				}
-
-				newState.selectedNoteIds = [];
+			newState = Object.assign({}, state);
+			newState.selectedSearchId = action.id;
+			if (!action.id) {
+				newState.notesParentType = defaultNotesParentType(state, 'Search');
+			} else {
+				newState.notesParentType = 'Search';
 			}
+			newState.selectedNoteIds = [];
 			break;
 
 		case 'APP_STATE_SET':

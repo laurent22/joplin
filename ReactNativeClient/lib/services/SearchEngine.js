@@ -392,18 +392,55 @@ class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	async search(query) {
-		query = this.normalizeText_(query);
-		query = query.replace(/-/g, ' '); // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+	determineSearchType_(query, preferredSearchType) {
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
+
+		// If preferredSearchType is "fts" we auto-detect anyway
+		// because it's not always supported.
 
 		const st = scriptType(query);
 
 		if (!Setting.value('db.ftsEnabled') || ['ja', 'zh', 'ko', 'th'].indexOf(st) >= 0) {
+			return SearchEngine.SEARCH_TYPE_BASIC;
+		}
+
+		return SearchEngine.SEARCH_TYPE_FTS;
+	}
+
+	async search(query, options = null) {
+		options = Object.assign({}, {
+			searchType: SearchEngine.SEARCH_TYPE_AUTO,
+		}, options);
+
+		query = this.normalizeText_(query);
+
+		const searchType = this.determineSearchType_(query, options.searchType);
+
+		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			return this.basicSearch(query);
-		} else {
+		} else { // SEARCH_TYPE_FTS
+			// FTS will ignore all special characters, like "-" in the index. So if
+			// we search for "this-phrase" it won't find it because it will only
+			// see "this phrase" in the index. Because of this, we remove the dashes
+			// when searching.
+			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+			query = query.replace(/-/g, ' ');
 			const parsedQuery = this.parseQuery(query);
-			const sql = 'SELECT notes_fts.id, notes_fts.title AS normalized_title, offsets(notes_fts) AS offsets, notes.title, notes.user_updated_time, notes.is_todo, notes.todo_completed, notes.parent_id FROM notes_fts LEFT JOIN notes ON notes_fts.id = notes.id WHERE notes_fts MATCH ?';
+			const sql = `
+				SELECT
+					notes_fts.id,
+					notes_fts.title AS normalized_title,
+					offsets(notes_fts) AS offsets,
+					notes.title,
+					notes.user_updated_time,
+					notes.is_todo,
+					notes.todo_completed,
+					notes.parent_id
+				FROM notes_fts
+				LEFT JOIN notes ON notes_fts.id = notes.id
+				WHERE notes_fts MATCH ?
+			`;
 			try {
 				const rows = await this.db().selectAll(sql, [query]);
 				this.processResults_(rows, parsedQuery);
@@ -435,5 +472,9 @@ class SearchEngine {
 }
 
 SearchEngine.instance_ = null;
+
+SearchEngine.SEARCH_TYPE_AUTO = 'auto';
+SearchEngine.SEARCH_TYPE_BASIC = 'basic';
+SearchEngine.SEARCH_TYPE_FTS = 'fts';
 
 module.exports = SearchEngine;

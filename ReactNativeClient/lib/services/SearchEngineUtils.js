@@ -5,7 +5,13 @@ class SearchEngineUtils {
 	static async notesForQuery(query, options = null) {
 		if (!options) options = {};
 
-		const results = await SearchEngine.instance().search(query);
+		let searchType = SearchEngine.SEARCH_TYPE_FTS;
+		if (query.length && query[0] === '/') {
+			query = query.substr(1);
+			searchType = SearchEngine.SEARCH_TYPE_BASIC;
+		}
+
+		const results = await SearchEngine.instance().search(query, { searchType });
 		const noteIds = results.map(n => n.id);
 
 		// We need at least the note ID to be able to sort them below so if not
@@ -18,15 +24,11 @@ class SearchEngineUtils {
 			idWasAutoAdded = true;
 		}
 
-		const previewOptions = Object.assign(
-			{},
-			{
-				order: [],
-				fields: fields,
-				conditions: [`id IN ("${noteIds.join('","')}")`],
-			},
-			options
-		);
+		const previewOptions = Object.assign({}, {
+			order: [],
+			fields: fields,
+			conditions: [`id IN ("${noteIds.join('","')}")`],
+		}, options);
 
 		const notes = await Note.previews(null, previewOptions);
 

@@ -155,7 +155,7 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
-if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.* ]]
+if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]
 then
     : "${TMPDIR:=$TEMP_DIR}"
     # This command extracts to squashfs-root by default and can't be changed...

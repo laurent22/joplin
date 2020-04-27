@@ -107,7 +107,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.theme).root}>
 				<ScreenHeader title={_('Edit notebook')} showSaveButton={true} saveButtonDisabled={saveButtonDisabled} onSaveButtonPress={() => this.saveFolderButton_press()} showSideMenuButton={false} showSearchButton={false} />
-				<TextInput placeholder={_('Enter notebook title')} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
+				<TextInput placeholder={_('Enter notebook title')} underlineColorAndroid={theme.strongDividerColor} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} style={this.styles().textInput} autoFocus={true} value={this.state.folder.title} onChangeText={text => this.title_changeText(text)} />
 				<dialogs.DialogBox
 					ref={dialogbox => {
 						this.dialogbox = dialogbox;
