@@ -666,10 +666,7 @@ class AppComponent extends React.Component {
 				type: 'NAV_GO',
 				routeName: 'Note',
 				noteId: newNote.id,
-				sharedData: {
-					title: sharedData.title,
-					body: sharedData.text,
-					resources: sharedData.resources },
+				sharedData: sharedData,
 			});
 		}, 5);
 	}

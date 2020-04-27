@@ -222,8 +222,8 @@ shared.initState = async function(comp) {
 		if (comp.props.sharedData.title) {
 			this.noteComponent_change(comp, 'title', comp.props.sharedData.title);
 		}
-		if (comp.props.sharedData.body) {
-			this.noteComponent_change(comp, 'body', comp.props.sharedData.body);
+		if (comp.props.sharedData.text) {
+			this.noteComponent_change(comp, 'body', comp.props.sharedData.text);
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {
