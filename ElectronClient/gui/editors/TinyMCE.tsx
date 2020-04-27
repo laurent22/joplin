@@ -588,7 +588,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
 		const cssFiles = [
-			'css/fork-awesome.min.css',
+			'css/fontawesome.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
@@ -804,4 +804,3 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 };
 
 export default forwardRef(TinyMCE);
-

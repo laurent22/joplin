@@ -659,7 +659,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'fa-file',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
@@ -668,7 +668,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'fa-check-square',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newTodo' });

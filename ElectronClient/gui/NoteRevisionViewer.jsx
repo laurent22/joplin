@@ -186,7 +186,7 @@ class NoteRevisionViewerComponent extends React.PureComponent {
 		const titleInput = (
 			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom: 10 }}>
 				<button onClick={this.backButton_click} style={Object.assign({}, theme.buttonStyle, { marginRight: 10, height: theme.inputStyle.height })}>
-					<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>{_('Back')}
+					<i style={theme.buttonIconStyle} className={'fas fa-chevron-left'}></i>{_('Back')}
 				</button>
 				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''} />
 				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>

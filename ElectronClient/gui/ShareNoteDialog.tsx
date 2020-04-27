@@ -167,7 +167,7 @@ export default function ShareNoteDialog(props:ShareNoteDialogProps) {
 	const renderNote = (note:any) => {
 		const removeButton = notes.length <= 1 ? null : (
 			<button onClick={() => removeNoteButton_click({ noteId: note.id })} style={styles.noteRemoveButton}>
-				<i style={styles.noteRemoveButtonIcon} className={'fa fa-times'}></i>
+				<i style={styles.noteRemoveButtonIcon} className={'fas fa-times'}></i>
 			</button>
 		);
 

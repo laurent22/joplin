@@ -21,7 +21,7 @@ class HelpButtonComponent extends React.Component {
 		if (this.props.tip) extraProps['data-tip'] = this.props.tip;
 		return (
 			<a href="#" style={style} onClick={this.onClick} {...extraProps}>
-				<i style={helpIconStyle} className={'fa fa-question-circle'}></i>
+				<i style={helpIconStyle} className={'fas fa-question-circle'}></i>
 			</a>
 		);
 	}

@@ -1035,15 +1035,15 @@ class Setting extends BaseModel {
 	}
 
 	static sectionNameToIcon(name) {
-		if (name === 'general') return 'fa-sliders';
-		if (name === 'sync') return 'fa-refresh';
-		if (name === 'appearance') return 'fa-pencil';
-		if (name === 'note') return 'fa-file-text-o';
+		if (name === 'general') return 'fa-sliders-h';
+		if (name === 'sync') return 'fa-sync-alt';
+		if (name === 'appearance') return 'fa-pencil-alt';
+		if (name === 'note') return 'fa-file-alt';
 		if (name === 'plugins') return 'fa-puzzle-piece';
 		if (name === 'application') return 'fa-cog';
-		if (name === 'revisionService') return 'fa-archive-org';
-		if (name === 'encryption') return 'fa-key-modern';
-		if (name === 'server') return 'fa-hand-scissors-o';
+		if (name === 'revisionService') return 'fa-history';
+		if (name === 'encryption') return 'fa-key';
+		if (name === 'server') return 'fa-hand-scissors';
 		return name;
 	}
 

@@ -1816,7 +1816,7 @@ class NoteTextComponent extends React.Component {
 
 			toolbarItems.push({
 				tooltip: _('Heading'),
-				iconName: 'fa-header',
+				iconName: 'fa-heading',
 				onClick: () => {
 					return this.commandTextHeading();
 				},
@@ -1832,7 +1832,7 @@ class NoteTextComponent extends React.Component {
 
 			toolbarItems.push({
 				tooltip: _('Insert Date Time'),
-				iconName: 'fa-calendar-plus-o',
+				iconName: 'fa-calendar-plus',
 				onClick: () => {
 					return this.commandDateTime();
 				},
@@ -1847,7 +1847,7 @@ class NoteTextComponent extends React.Component {
 			toolbarItems.push({
 				tooltip: _('Click to stop external editing'),
 				title: _('Watching...'),
-				iconName: 'fa-external-link',
+				iconName: 'fa-share-square',
 				onClick: () => {
 					return this.commandStopExternalEditing();
 				},
@@ -1855,7 +1855,7 @@ class NoteTextComponent extends React.Component {
 		} else {
 			toolbarItems.push({
 				tooltip: _('Edit in external editor'),
-				iconName: 'fa-external-link',
+				iconName: 'fa-share-square',
 				onClick: () => {
 					return this.commandStartExternalEditing();
 				},
@@ -1872,7 +1872,7 @@ class NoteTextComponent extends React.Component {
 
 		if (note.is_todo) {
 			const item = {
-				iconName: 'fa-clock-o',
+				iconName: 'fa-clock',
 				enabled: !note.todo_completed,
 				onClick: () => {
 					return this.commandSetAlarm();

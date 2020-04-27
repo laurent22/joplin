@@ -217,7 +217,7 @@ class ConfigScreenComponent extends React.Component {
 		const advancedSettingsSectionStyle = { display: 'none' };
 
 		if (advancedSettingComps.length) {
-			const iconName = this.state.showAdvancedSettings ? 'fa fa-toggle-up' : 'fa fa-toggle-down';
+			const iconName = this.state.showAdvancedSettings ? 'fas fa-angle-up' : 'fas fa-angle-down';
 			const advancedSettingsButtonStyle = Object.assign({}, theme.buttonStyle, { marginBottom: 10 });
 			advancedSettingsButton = <button onClick={() => shared.advancedSettingsButton_click(this)} style={advancedSettingsButtonStyle}><i style={{ fontSize: 14 }} className={iconName}></i> {_('Show Advanced Settings')}</button>;
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
@@ -605,7 +605,7 @@ class ConfigScreenComponent extends React.Component {
 						}}
 						style={buttonStyle}
 					>
-						<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>
+						<i style={theme.buttonIconStyle} className={'fas fa-chevron-left'}></i>
 						{hasChanges && !screenComp ? _('Cancel') : _('Back')}
 					</button>
 					{ !screenComp && (
