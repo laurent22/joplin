@@ -4,7 +4,7 @@
 Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.
 
 Joplin is about to make another big step to answers these demands by being an organization at Google Summer of Code 2020. 
-During the young history of the GSoC campainge it was noticed that it would be a greate help if documenation is centralized and making it a continuous read.  The current documentation tells when to do what and how clearly. In addition, the source code of Joplin is clean and well strucutred, so it is easy to understand. 
+During the young history of the GSoC campaign it was noticed that it would be a greate help if documenation is centralized and making it a continuous read.  The current documentation tells when to do what and how clearly. In addition, the source code of Joplin is clean and well strucutred, so it is easy to understand. 
 Nevertheless, there are additional and essential information scattered around on the Forum and GitHub which rely on an active community, so that are being shared with them who need them. It can be said that this happens very well but it is aggreed that this situation has to be improved to free resources for working on the source coden and lower entry barriers for new contributors.
 
 For these reasons, all students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Docs program with Joplin. Here's how.
@@ -42,15 +42,20 @@ Students who neglect active communication will be failed!
 
 First of all, please read the above referenced resources and the [GSoC FAQ](https://developers.google.com/open-source/gsoc/faq). Pay special attention to the **Eligibility** section of the FAQ.
 
+We stronly recomment to follow the recommented steps, see next section, closley. It is slightly differs from the steps given for the closed GSoC application period. 
+The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so you may compare the recommended steps and scan the change history of the [GSoC 2020 live blog](https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219).
+
 ## Recommended steps
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. `_Introducing \<username>_`.
 2. Read Student proposal guidelines and the [GSoD Student Manual](https://developers.google.com/season-of-docs/docs/tech-writer-guide)
 3. Take a look at the [list of ideas](https://joplinapp.org/gsod2020/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
-4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
+4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features) if a corresponding does not already exist.
 5. Write a first draft and get someone to review it
-6. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.
-7. Submit your proposal to the mentors writting a private message at `@mentors` in the [Joplin Forum](https://discourse.joplinapp.org) and wait for their feedback
+    1. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.  
+    1. If you want to add functionality to the codebase or documenation, have it approved  [Features category](https://discourse.joplinapp.org/c/features)
+    1. **IMPORTANT**: If you contribute to the codebase do only one contribution at a time and wait until it is approved. 
+6. Submit your proposal to the mentors writting a private message at `@mentors` in the [Joplin Forum](https://discourse.joplinapp.org) and wait for their feedback
 8. Submit proposal using [Google's web interface](https://summerofcode.withgoogle.com/) well ahead of the deadline. You can update it at anytime, even the final proposal.
 9. Submit proof of enrolment well ahead of the deadline
 
