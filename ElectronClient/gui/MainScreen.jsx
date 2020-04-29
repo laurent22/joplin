@@ -495,11 +495,11 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
+			transition: 'all 0.15s ease',
 		};
 
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
-			this.styles_.sideBar.display = 'none';
 		}
 
 		this.styles_.noteList = {
@@ -507,11 +507,11 @@ class MainScreenComponent extends React.Component {
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
+			transition: 'all 0.15s ease',
 		};
 
 		if (isNoteListVisible === false) {
 			this.styles_.noteList.width = 0;
-			this.styles_.noteList.display = 'none';
 			this.styles_.verticalResizer.display = 'none';
 		}
 
