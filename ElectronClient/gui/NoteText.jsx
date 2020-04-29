@@ -29,6 +29,7 @@ const mimeUtils = require('lib/mime-utils.js').mime;
 const ObjectUtils = require('lib/ObjectUtils');
 const urlUtils = require('lib/urlUtils');
 const dialogs = require('./dialogs');
+const { getMarkdown } = require('./MarkdownTableDialog.min.js');
 const NoteListUtils = require('./utils/NoteListUtils');
 const NoteSearchBar = require('./NoteSearchBar.min.js');
 const markdownUtils = require('lib/markdownUtils');
@@ -1655,6 +1656,12 @@ class NoteTextComponent extends React.Component {
 		this.wrapSelectionWithStrings('[', `](${url})`);
 	}
 
+	async commandTextTable() {
+		const mdTable = await getMarkdown();
+		console.log(mdTable);
+		this.wrapSelectionWithStrings('mdTable', '');
+	}
+
 	itemContextMenu() {
 		const note = this.state.note;
 		if (!note) return;
@@ -1799,6 +1806,22 @@ class NoteTextComponent extends React.Component {
 				iconName: 'fa-check-square',
 				onClick: () => {
 					return this.commandTextCheckbox();
+				},
+			});
+
+			toolbarItems.push({
+				tooltip: _('Table'),
+				iconName: 'fa-table',
+				onClick: () => {
+					const n = this.state.note;
+					if (!n || !n.id) return;
+
+					this.props.dispatch({
+						type: 'WINDOW_COMMAND',
+						name: 'commandMarkdownTable',
+						noteId: n.id,
+					});
+					this.commandTextTable();
 				},
 			});
 
