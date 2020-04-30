@@ -2233,7 +2233,8 @@ class NoteTextComponent extends React.Component {
 				// Enable/Disable the autoclosing braces
 				setOptions={{
 					behavioursEnabled: Setting.value('editor.autoMatchingBraces'),
-					useSoftTabs: false }}
+					useSoftTabs: false,
+					scrollPastEnd: '0.1' }}
 				// Disable warning: "Automatically scrolling cursor into view after
 				// selection change this will be disabled in the next version set
 				// editor.$blockScrolling = Infinity to disable this message"
