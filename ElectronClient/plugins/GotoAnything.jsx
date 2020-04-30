@@ -208,7 +208,7 @@ class Dialog extends React.PureComponent {
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery);
 
-				resultsInBody = !!results.find(row => row.fields ? row.fields.includes('body') : !row.title.includes(this.state.query));
+				resultsInBody = !!results.find(row => row.fields.includes('body'));
 
 				if (!resultsInBody) {
 					for (let i = 0; i < results.length; i++) {
@@ -226,7 +226,7 @@ class Dialog extends React.PureComponent {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
-						if (row.fields ? row.fields.includes('body') : !row.title.includes(this.state.query)) {
+						if (row.fields.includes('body')) {
 							let fragments = '...';
 
 							if (i < limit) { // Display note fragments of search keyword matches

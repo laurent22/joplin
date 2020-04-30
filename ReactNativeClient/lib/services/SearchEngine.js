@@ -7,6 +7,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
+const { map, pickBy, has, negate } = require('lodash');
 
 class SearchEngine {
 	constructor() {
@@ -235,19 +236,39 @@ class SearchEngine {
 		return occurenceCount / spread;
 	}
 
-	processResults_(rows, parsedQuery) {
+	processBasicSearchResults_(rows, parsedQuery) {
+		const valueRegexs = parsedQuery.keys.includes('_') ? map(parsedQuery.terms['_'], 'valueRegex') : [];
+
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			const offsets = row.offsets.split(' ').map(o => Number(o));
-			row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
-			row.fields = this.fieldNamesFromOffsets_(offsets);
+			const testTitle = regex => new RegExp(regex, 'ig').test(row.title);
+			const matchedFields = {
+				title: parsedQuery.keys.includes('title') || valueRegexs.some(testTitle),
+				body: parsedQuery.keys.includes('body') || valueRegexs.some(negate(testTitle)),
+			};
+
+			row.fields = Object.keys(pickBy(matchedFields, isMatched => isMatched));
 		}
+	}
+
+	processResults_(rows, parsedQuery, isBasicSearchResults = false) {
+		if (isBasicSearchResults) {
+			this.processBasicSearchResults_(rows, parsedQuery);
+		} else {
+			for (let i = 0; i < rows.length; i++) {
+				const row = rows[i];
+				const offsets = row.offsets.split(' ').map(o => Number(o));
+				row.weight = this.calculateWeight_(offsets, parsedQuery.termCount);
+				row.fields = this.fieldNamesFromOffsets_(offsets);
+			}
+		}
+
 
 		rows.sort((a, b) => {
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (a.weight < b.weight) return +1;
-			if (a.weight > b.weight) return -1;
+			if (has(a, 'weight') && has(b, 'weight') && a.weight < b.weight) return +1;
+			if (has(a, 'weight') && has(b, 'weight') && a.weight > b.weight) return -1;
 			if (a.is_todo && a.todo_completed) return +1;
 			if (b.is_todo && b.todo_completed) return -1;
 			if (a.user_updated_time < b.user_updated_time) return +1;
@@ -415,10 +436,13 @@ class SearchEngine {
 		query = this.normalizeText_(query);
 
 		const searchType = this.determineSearchType_(query, options.searchType);
+		const parsedQuery = this.parseQuery(query);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
-			return this.basicSearch(query);
+			const rows = await this.basicSearch(query);
+			this.processResults_(rows, parsedQuery, true);
+			return rows;
 		} else { // SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
 			// we search for "this-phrase" it won't find it because it will only
@@ -426,7 +450,6 @@ class SearchEngine {
 			// when searching.
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 			query = query.replace(/-/g, ' ');
-			const parsedQuery = this.parseQuery(query);
 			const sql = `
 				SELECT
 					notes_fts.id,
