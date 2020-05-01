@@ -49,7 +49,7 @@ The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so 
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. `_Introducing \<username>_`.
 2. Read Student proposal guidelines and the [GSoD Student Manual](https://developers.google.com/season-of-docs/docs/tech-writer-guide)
-3. Take a look at the [list of ideas](https://joplinapp.org/gsod2020/ideas.html). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
+3. Take a look at the [list of ideas](https://joplinapp.org/gsod2020/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features) if a corresponding does not already exist.
 5. Write a first draft and get someone to review it
     1. Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.  
@@ -128,5 +128,5 @@ Finally, know that we will never assign you to a project you do not want to work
 # Ideas
 Please see below for a list of project ideas:
 
-https://joplinapp.org/gsod2020/ideas.html
+https://joplinapp.org/gsod2020/ideas/
 

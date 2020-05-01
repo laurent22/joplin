@@ -5,16 +5,16 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/debugging.md and any manual change
+This file was auto-generated from readme/gsod2020/ideas.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/master/readme/debugging.md
+https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md
 
 -->
 
 <head>
-	<title>Debugging | Joplin</title>
+	<title>Google Season of Docs: Project Ideas | Joplin</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -272,7 +272,7 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 
 <body>
 
-<div class="container page-debugging">
+<div class="container page-ideas">
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
@@ -339,65 +339,38 @@ https://github.com/laurent22/joplin/blob/master/readme/debugging.md
 </li>
 </ul>
 </div>
-<h1>How to enable debugging<a name="how-to-enable-debugging" href="#how-to-enable-debugging" class="heading-anchor">🔗</a></h1>
-<p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
-<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
+<h1>1.Idea - create documenation hub<a name="1-idea-create-documenation-hub" href="#1-idea-create-documenation-hub" class="heading-anchor">🔗</a></h1>
 <ul>
-<li>Add a file named &quot;flags.txt&quot; in the config directory (should be <code>~/.config/joplin-desktop</code> or <code>c:\Users\YOUR_NAME\.config\joplin-desktop</code>) with the following content: <code>--open-dev-tools --log-level debug</code></li>
-<li>Restart the application</li>
-<li>The development tools should now be opened. Click the &quot;Console&quot; tab</li>
-<li>Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.</li>
-</ul>
-<h2>CLI application<a name="cli-application" href="#cli-application" class="heading-anchor">🔗</a></h2>
+<li>Make a screening of avaialbe options of how apps to be utilzed to organize documentation better and simplified access to information.<br>
+You can start with:
 <ul>
-<li>Start the app with <code>joplin --log-level debug</code></li>
-<li>Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)</li>
+<li><a href="https://readthedocs.org/">Read the Docs</a></li>
+<li><a href="https://www.gitbook.com/">GitBook</a> or ...</li>
 </ul>
-<h2>Mobile application<a name="mobile-application" href="#mobile-application" class="heading-anchor">🔗</a></h2>
+</li>
+<li>Make a screening of avaialbe tools to visualize dependencies of all Joplin components</li>
+<li>create a consistent structure to allow to have them filled easily.</li>
+<li>create a high-level visualization of all Joplin structer</li>
+<li>creating a basic documentation is minimum expectations</li>
+</ul>
+<h1>2. Idea - introduce and descripe a consisten worfklow from bug report / feature request to pull request<a name="2-idea-introduce-and-descripe-a-consisten-worfklow-from-bug-report-feature-request-to-pull-request" href="#2-idea-introduce-and-descripe-a-consisten-worfklow-from-bug-report-feature-request-to-pull-request" class="heading-anchor">🔗</a></h1>
 <ul>
-<li>In the options, enable Advanced Option</li>
-<li>Open the log in the top right hand corner menu and post a screenshot of any error/warning.</li>
-</ul>
-<h1>Creating a low-level bug report on Android<a name="creating-a-low-level-bug-report-on-android" href="#creating-a-low-level-bug-report-on-android" class="heading-anchor">🔗</a></h1>
-<p><a href="https://developer.android.com/studio/debug/bug-report">https://developer.android.com/studio/debug/bug-report</a></p>
-<p>To get a bugreport directly from your device, do the following:</p>
+<li>create <a href="">Wizards</a> for the Discourse forum</li>
+<li>create templates at GitHub</li>
+<li>optimze the bot on GitHub</li>
+<li>show and may implement how the current Bug Report and Feature Request workflow can be improved using
 <ul>
-<li>Be sure you have <a href="https://developer.android.com/studio/debug/dev-options">Developer Options</a> enabled.</li>
-<li>In Developer options, tap Take bug report.</li>
-<li>Select the type of bug report you want and tap Report.</li>
+<li><a href="https://huboard.com/pricing">HubBoard</a></li>
+<li><a href="https://help.github.com/en/github/managing-your-work-on-github/about-project-boards">GiHub Project Board</a></li>
 </ul>
-<p>After a moment you get a notification that the bug report is ready. To share the bug report, tap the notification.</p>
-<h1>Creating a low-level bug report on iOS<a name="creating-a-low-level-bug-report-on-ios" href="#creating-a-low-level-bug-report-on-ios" class="heading-anchor">🔗</a></h1>
-<p>Some crashes cannot be investigated using Joplin's own tools. In that case, it can be very helpful to provide a native iOS crash report.</p>
-<p>For this, please follow these instructions:</p>
-<p>You can send it to this address <a href="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseSupport.png">https://raw.githubusercontent.com/laurent22/joplin/master/Assets/AdresseSupport.png</a></p>
-<p><a href="https://developer.apple.com/library/content/qa/qa1747/_index.html">https://developer.apple.com/library/content/qa/qa1747/_index.html</a></p>
-<p>Getting Crash Logs Directly From a Device Without Xcode</p>
-<p>Your users can retrieve crash reports from their device and send them to you via email by following these instructions.</p>
-<p>(It is not possible to get device console logs directly from a device)</p>
-<ol>
-<li>
-<p>Open Settings app</p>
 </li>
-<li>
-<p>Go to Privacy, then Diagnostics &amp; Usage</p>
-</li>
-<li>
-<p>Select Diagnostics &amp; Usage Data</p>
-</li>
-<li>
-<p>Locate the log for the crashed app. The logs will be named in the format: <AppName><em><DateTime></em><DeviceName></p>
-</li>
-<li>
-<p>Select the desired log. Then, using the text selection UI select the entire text of the log. Once the text is selected, tap Copy</p>
-</li>
-<li>
-<p>Paste the copied text to Mail and send to an email address as desired</p>
-</li>
-</ol>
+</ul>
+<h1>3. Idea - create a tool to collect ideas and suggestion based on the content of the community forum<a name="3-idea-create-a-tool-to-collect-ideas-and-suggestion-based-on-the-content-of-the-community-forum" href="#3-idea-create-a-tool-to-collect-ideas-and-suggestion-based-on-the-content-of-the-community-forum" class="heading-anchor">🔗</a></h1>
+<p>There are many ideas in the forum and attempts to organize and streamline them.<br>
+Task is to find a toolset to structure them and make the knowledge burried in there available easily.</p>
 
 		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/master/readme/debugging.md">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsod2020/ideas.md">
 				<i class="fa fa-github"></i> Improve this doc
 			</a>
 		</div>

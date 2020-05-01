@@ -2,10 +2,6 @@
 
 * * *
 
-🌞 [Joplin is applying for Google Summer of Code 2020](https://joplinapp.org/gsoc2020/) 🌞
-
-* * *
-
 <img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/master/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
@@ -70,6 +66,11 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [How to enable debug mode](https://github.com/laurent22/joplin/blob/master/readme/debugging.md)
 	- [API documentation](https://github.com/laurent22/joplin/blob/master/readme/api.md)
 	- [FAQ](https://github.com/laurent22/joplin/blob/master/readme/faq.md)
+
+- Google Summer of Code 2020
+
+	- [Google Summer of Code 2020](https://github.com/laurent22/joplin/blob/master/readme/gsoc2020/index.md)
+	- [Project Ideas](https://github.com/laurent22/joplin/blob/master/readme/gsoc2020/ideas.md)
 
 - About
 
