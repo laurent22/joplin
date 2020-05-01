@@ -1999,6 +1999,7 @@ class NoteTextComponent extends React.Component {
 				boxSizing: 'border-box',
 				paddingLeft: 10,
 				paddingRight: 0,
+				transition: 'all 0.15s ease-in-out'
 			},
 			style
 		);
