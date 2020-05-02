@@ -1,4 +1,5 @@
 const Setting = require('lib/models/Setting.js');
+const Color = require('color');
 
 const themes = {
 	[Setting.THEME_LIGHT]: require('./gui/style/theme/light'),
@@ -29,7 +30,6 @@ const globalStyle = {
 	headerButtonHPadding: 6,
 
 	toolbarHeight: 35,
-	tagItemPadding: 3,
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -83,18 +83,21 @@ globalStyle.buttonStyle = {
 };
 
 function addExtraStyles(style) {
+	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
+
 	style.tagStyle = {
 		fontSize: style.fontSize,
 		fontFamily: style.fontFamily,
-		marginTop: style.itemMarginTop * 0.4,
-		marginBottom: style.itemMarginBottom * 0.4,
-		marginRight: style.margin * 0.3,
-		paddingTop: style.tagItemPadding,
-		paddingBottom: style.tagItemPadding,
-		paddingRight: style.tagItemPadding * 2,
-		paddingLeft: style.tagItemPadding * 2,
+		paddingTop: 3,
+		paddingBottom: 3,
+		paddingRight: 8,
+		paddingLeft: 8,
 		backgroundColor: style.raisedBackgroundColor,
 		color: style.raisedColor,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginRight: 5,
 	};
 
 	style.toolbarStyle = {

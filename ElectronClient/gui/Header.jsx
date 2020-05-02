@@ -134,6 +134,8 @@ class HeaderComponent extends React.Component {
 	}
 
 	makeButton(key, style, options) {
+		const theme = themeStyle(this.props.theme);
+
 		let icon = null;
 		if (options.iconName) {
 			const iconStyle = {
@@ -157,6 +159,20 @@ class HeaderComponent extends React.Component {
 		});
 
 		const title = options.title ? options.title : '';
+
+		if (options.type === 'checkbox' && options.checked) {
+			finalStyle.backgroundColor = theme.selectedColor;
+			finalStyle.borderWidth = 1;
+			finalStyle.borderTopColor = theme.selectedDividerColor;
+			finalStyle.borderLeftColor = theme.selectedDividerColor;
+			finalStyle.borderTopStyle = 'solid';
+			finalStyle.borderLeftStyle = 'solid';
+			finalStyle.paddingLeft++;
+			finalStyle.paddingTop++;
+			finalStyle.paddingBottom--;
+			finalStyle.paddingRight--;
+			finalStyle.boxSizing = 'border-box';
+		}
 
 		return (
 			<a
@@ -256,6 +272,8 @@ class HeaderComponent extends React.Component {
 			height: theme.headerHeight,
 			display: 'flex',
 			alignItems: 'center',
+			paddingTop: 1,
+			paddingBottom: 1,
 			paddingLeft: theme.headerButtonHPadding,
 			paddingRight: theme.headerButtonHPadding,
 			color: theme.color,

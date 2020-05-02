@@ -12,7 +12,7 @@ To donate via PayPal, please follow this link:
 
 Or follow this link to become a GitHub Sponsor:
 
-[![Sponsor on GitHub](https://joplinapp.org/images/badges/Patreon-GitHub.svg)](https://github.com/sponsors/laurent22/)
+[![Sponsor on GitHub](https://joplinapp.org/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/)
 
 ## Patreon
 

@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -590,6 +592,8 @@ msgstr "Εμφανίζει περίληψη για τις σημειώσεις �
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Για να επαναλάβετε την αποκρυπτογράφηση αυτών των στοιχείων. Τρέξτε `e2ee "
+"decrypt --retry-failed-items`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -793,33 +797,30 @@ msgstr ""
 "στοιχεία αποκρυπτογραφούνται στο παρασκήνιο και θα είναι σύντομα διαθέσιμα."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Χωρίς να ζητείται επιβεβαίωση."
+msgstr ""
+"Μπορείτε επίσης να πληκτρολογήσετε `status` για περισσότερες πληροφορίες."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
-msgstr ""
+msgstr "Πλευρική μπάρα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:369
-#, fuzzy
 msgid "Note list"
-msgstr "Ιστορικό Σημειώσεων"
+msgstr "Λίστα σημειώσεων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:375
-#, fuzzy
 msgid "Note title"
-msgstr "Τίτλος σημειωματάριου:"
+msgstr "Τίτλος σημειωματάριου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:381
-#, fuzzy
 msgid "Note body"
-msgstr "Ιστορικό Σημειώσεων"
+msgstr "Σώμα σημειώσεων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:433
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "Γίνεται εξαγωγή στο \"%s\" με μορφή \"%s\". Παρακαλώ περιμένετε..."
+msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:466
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:180
@@ -855,30 +856,27 @@ msgstr "Νέο υπο-σημειωματάριο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:543
 msgid "Print"
-msgstr ""
+msgstr "Εκτύπωση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:562
 msgid "Create note from template"
-msgstr ""
+msgstr "Δημιουργία σημείωσης από πρότυπο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:572
 msgid "Create to-do from template"
-msgstr ""
+msgstr "Δημιουργία to-do από πρότυπο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:582
-#, fuzzy
 msgid "Insert template"
-msgstr "Εισαγωγή Ημερομηνίας Ώρας"
+msgstr "Εισαγωγή προτύπου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:592
-#, fuzzy
 msgid "Open template directory"
-msgstr "Φάκελος εξαγωγής Joplin"
+msgstr "Άνοιγμα φακέλου προτύπου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:599
-#, fuzzy
 msgid "Refresh templates"
-msgstr "Πρότυπα"
+msgstr "Ανανέωση προτύπων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:612
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:92
@@ -886,34 +884,33 @@ msgid "Options"
 msgstr "Επιλογές"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Επισυναπτόμενα"
+msgstr "Επισυναπτόμενα..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
+msgstr "Αναθεώρηση: %s (%s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:654
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s)"
+msgstr "%s %s (%s, %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:656
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Client ID: %s"
-msgstr "Ολοκληρώθηκε: %s"
+msgstr "Αναγνωριστικό προγράμματος-πελάτη: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:657
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Sync Version: %s"
-msgstr "Νέα έκδοση: %s"
+msgstr "Έκδοση συγχρονισμού: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:658
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Profile Version: %s"
-msgstr "Νέα έκδοση: %s"
+msgstr "Έκδοση προφίλ: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:668
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:811
@@ -1086,15 +1083,15 @@ msgstr "Εστίαση σε"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1028
 msgid "Actual Size"
-msgstr ""
+msgstr "Πραγματικό μέγεθος"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1034
 msgid "Zoom In"
-msgstr ""
+msgstr "Μεγέθυνση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1040
 msgid "Zoom Out"
-msgstr ""
+msgstr "Σμίκρινση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:1048
 msgid "&Tools"
@@ -1363,7 +1360,7 @@ msgstr "Αποθήκευση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:144
 msgid "Master keys that need upgrading"
-msgstr ""
+msgstr "Κύρια κλειδιά που χρειάζονται αναβάθμιση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:149
 msgid ""
@@ -1371,6 +1368,10 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Τα ακόλουθα πρωτεύοντα κλειδιά χρησιμοποιούν έναν παλιό αλγόριθμο "
+"κρυπτογράφησης και συνιστάται η αναβάθμισή τους. Το αναβαθμισμένο πρωτεύον "
+"κλειδί θα εξακολουθεί να μπορεί να αποκρυπτογραφήσει και να κρυπτογραφήσει "
+"τα δεδομένα σας ως συνήθως."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1381,24 +1382,29 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Αναβάθμιση"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
-#, fuzzy
 msgid "Re-encrypt data"
-msgstr "Επιλογή ημερομηνίας"
+msgstr "Επανακρυπτογράφηση δεδομένων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει μία σε πιο ασφαλή και "
+"συνιστάται να την εφαρμόσετε στα δεδομένα σας."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Μπορείτε να χρησιμοποιήσετε το παρακάτω εργαλείο για να κρυπτογραφήσετε εκ "
+"νέου τα δεδομένα σας, για παράδειγμα, εάν γνωρίζετε ότι ορισμένες από τις "
+"σημειώσεις σας είναι κρυπτογραφημένες με μια παρωχημένη μέθοδο "
+"κρυπτογράφησης."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1417,6 +1423,21 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"Για να το κάνετε αυτό, ολόκληρο το σύνολο δεδομένων σας θα πρέπει να "
+"κρυπτογραφηθεί και να συγχρονιστεί, επομένως είναι καλύτερο να το εκτελέσετε "
+"κατά τη διάρκεια της νύχτας.\n"
+"\n"
+"Για να ξεκινήσετε, ακολουθήστε τις παρακάτω οδηγίες:\n"
+"\n"
+"1. Συγχρονίστε όλες τις συσκευές σας.\n"
+"2. Κάντε κλικ στο κουμπί \"%s\".\n"
+"3. Αφήστε το να τρέξει μέχρι να ολοκληρωθεί. Κατά την εκτέλεσή του, "
+"αποφύγετε να αλλάξετε οποιαδήποτε σημείωση στις άλλες συσκευές σας, για να "
+"αποφύγετε διενέξεις.\n"
+"4. Μόλις ολοκληρωθεί ο συγχρονισμός σε αυτήν τη συσκευή, συγχρονίστε όλες "
+"τις άλλες συσκευές σας και αφήστε τον συγχρονισμό να ολοκληρωθεί.\n"
+"\n"
+"Σημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1442,16 +1463,15 @@ msgstr "Λήψη τώρα:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:22
 msgid "Name"
-msgstr ""
+msgstr "Όνομα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:23
 msgid "Icon"
-msgstr ""
+msgstr "Εικονίδιο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:272
-#, fuzzy
 msgid "Notebook properties"
-msgstr "Ιδιότητες σημείωσης"
+msgstr "Ιδιότητες σημειωματαρίου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Header.min.js:233
 msgid "Usage"
@@ -1481,9 +1501,8 @@ msgid "Add or remove tags:"
 msgstr "Προσθήκη ή διαγραφή ετικετών:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:259
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Μετακίνηση στο σημειωματάριο..."
+msgstr "Μετακίνηση στο σημειωματάριο:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:279
 msgid "Rename notebook:"
@@ -1512,9 +1531,8 @@ msgid "View them now"
 msgstr "Προβολή τώρα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:586
-#, fuzzy
 msgid "Some items cannot be decrypted."
-msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
+msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:598
 msgid "One or more master keys need a password."
@@ -1525,18 +1543,19 @@ msgid "Set the password"
 msgstr "Ορισμός κωδικού πρόσβασης"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:610
-#, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
+msgstr ""
+"Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:622
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
+"κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:627
-#, fuzzy
 msgid "More info"
 msgstr "Περισσότερες πληροφορίες"
 
@@ -1551,24 +1570,23 @@ msgstr "Αναζήτηση..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:31
 msgid "Words"
-msgstr ""
+msgstr "Λέξεις"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:32
 msgid "Characters"
-msgstr ""
+msgstr "Χαρακτήρες"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:33
 msgid "Characters excluding spaces"
-msgstr ""
+msgstr "Χαρακτήρες χωρίς τα κενά"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:34
 msgid "Lines"
-msgstr ""
+msgstr "Γραμμές"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:56
-#, fuzzy
 msgid "Content properties"
-msgstr "Ιδιότητες σημείωσης"
+msgstr "Ιδιότητες περιεχομένου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteContentPropertiesDialog.js:58
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:175
@@ -1597,9 +1615,8 @@ msgid "Updated"
 msgstr "Ενημερώθηκε"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:29
-#, fuzzy
 msgid "Completed"
-msgstr "Ολοκληρώθηκε: %s"
+msgstr "Ολοκληρώθηκε"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NotePropertiesDialog.min.js:30
 msgid "Location"
@@ -1699,9 +1716,8 @@ msgstr ""
 "επεξεργαστείτε τη σημείωση στον editor."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1321
-#, fuzzy
 msgid "Only one note can be printed at a time."
-msgstr "Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί ή να εξαχθεί σε PDF."
+msgstr "Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1547
 msgid "strong text"
@@ -1770,9 +1786,8 @@ msgid "Watching..."
 msgstr "Παρακολούθηση..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:1852
-#, fuzzy
 msgid "Content Properties"
-msgstr "Ιδιότητες σημείωσης"
+msgstr "Ιδιότητες Περιεχομένου"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText.min.js:2121
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/NoteText2.js:672
@@ -1795,18 +1810,16 @@ msgid "Clear"
 msgstr "Καθαρισμός"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:31
-#, fuzzy
 msgid "Title"
-msgstr "τίτλος"
+msgstr "Τίτλος"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:35
 msgid "Size"
-msgstr ""
+msgstr "Μέγεθος"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:39
-#, fuzzy
 msgid "Action"
-msgstr "Τοποθεσία"
+msgstr "Ενέργεια"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:42
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/path-utils.js:65
@@ -1828,9 +1841,9 @@ msgid "Delete"
 msgstr "Διαγραφή"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Διαγραφή σημείωσης \"%s\";"
+msgstr "Διαγραφή συνημμένου \"%s\";"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1838,20 +1851,23 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Αυτό είναι ένα προηγμένο εργαλείο για την εμφάνιση των συνημμένων που "
+"συνδέονται με τις σημειώσεις σας. Να είστε προσεκτικοί όταν διαγράφετε ένα "
+"από αυτά, καθώς δεν μπορούν να αποκατασταθούν μετά."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
-#, fuzzy
 msgid "Please wait..."
-msgstr "Έλεγχος... Παρακαλώ περιμένετε."
+msgstr "Παρακαλώ περιμένετε..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:142
 msgid "No resources!"
-msgstr ""
+msgstr "Χωρίς πόρους!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:144
 #, javascript-format
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
+"Προειδοποίηση: δεν εμφανίζονται όλοι οι πόροι για λόγους απόδοσης (όριο:% s)."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:89
 msgid "OneDrive Login"
@@ -1862,9 +1878,8 @@ msgid "Dropbox Login"
 msgstr "Σύνδεση Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "Επισυναπτόμενα"
+msgstr "Επισυναπτόμενα σημειώσεων"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -1961,9 +1976,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "Δοκιμή ξανά"
+msgstr "Δοκιμή ξανά για Όλα"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1975,9 +1989,8 @@ msgid "Add or remove tags"
 msgstr "Προσθήκη ή αφαίρεση ετικετών"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Μετακίνηση στο σημειωματάριο..."
+msgstr "Μετακίνηση στο σημειωματάριο"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
@@ -2030,14 +2043,13 @@ msgid "Error opening note in editor: %s"
 msgstr "Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:433
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Πληκτρολογήστε έναν τίτλο σημείωσης για να μεταβείτε σε αυτήν. Ή "
-"πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας ή @ ακολουθούμενο από "
-"ένα σημειωματάριο."
+"Πληκτρολογήστε έναν τίτλο σημείωσης ή μέρος του περιεχομένου του  για να "
+"μεταβείτε σε αυτόν. Ή πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας "
+"ή @ ακολουθούμενο από ένα σημειωματάριο."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:471
 msgid "Goto Anything..."
@@ -2158,6 +2170,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Πρόκειται να επισυνάψετε μια μεγάλη εικόνα (%dx%d pixels). Θα θέλατε να "
+"αλλάξετε το μέγεθός της σε %d pixel πριν την επισυνάψετε;"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2285,20 +2299,18 @@ msgid "Downloaded"
 msgstr "Έχουν ληφθεί"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Ναι"
+msgstr "ναι"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "ο"
+msgstr "όχι"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2441,12 +2453,11 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
-#, fuzzy
 msgid "OLED Dark"
-msgstr "Dark"
+msgstr "OLED Dark"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:264
 msgid "Show note counts"
@@ -2484,9 +2495,8 @@ msgid "%s / %s"
 msgstr "%s / %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:276
-#, fuzzy
 msgid "Split"
-msgstr "Διαίρεση προβολής"
+msgstr "Διαχωρισμός"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:279
 msgid "Uncompleted to-dos on top"
@@ -2552,9 +2562,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:378
-#, fuzzy
 msgid "Enable Mermaid diagrams support"
-msgstr "Ενεργοποίηση υποστήριξης typographer"
+msgstr "Ενεργοποίηση υποστήριξης διαγραμμάτων Mermaid"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:380
 msgid "Enable ==mark== syntax"
@@ -2754,7 +2763,7 @@ msgstr "Παράβλεψη σφαλμάτων πιστοποιητικού TLS"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "Ασφαλής"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2837,6 +2846,14 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Αυτά τα πρόσθετα βελτιώνουν τον Markdown renderer με πρόσθετες δυνατότητες. "
+"Λάβετε υπόψη ότι, παρόλο που αυτές οι δυνατότητες μπορεί να είναι χρήσιμες, "
+"δεν είναι τυπικές Markdown και επομένως οι περισσότερες από αυτές θα "
+"λειτουργούν μόνο στο Joplin. Επιπλέον, ορισμένα από αυτά είναι *ασύμβατα* με "
+"το πρόγραμμα επεξεργασίας WYSIWYG. Εάν ανοίξετε μια σημείωση που "
+"χρησιμοποιεί ένα από αυτά τα πρόσθετα σε αυτόν τον επεξεργαστή, θα χάσετε τη "
+"μορφοποίηση της προσθήκης. Υποδεικνύεται παρακάτω ποια πρόσθετα είναι "
+"συμβατά ή όχι με τον επεξεργαστή WYSIWYG."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -3150,25 +3167,29 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
+"Επιβεβαιώστε ότι θέλετε να ξανακρυπτογραφήσετε την πλήρη βάση δεδομένων σας."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr ""
+"Τα δεδομένα σας πρόκειται να κρυπτογραφηθούν και να συγχρονιστούν ξανά."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Εισαγάγετε τον κωδικό πρόσβασής σας στη λίστα του master κλειδιού πριν "
+"αναβαθμίσετε το κλειδί."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"
-msgstr ""
+msgstr "Το κλειδί master αναβαθμίστηκε με επιτυχία!"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
 #, javascript-format
 msgid "Could not upgrade master key: %s"
-msgstr ""
+msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
 #, javascript-format
