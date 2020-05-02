@@ -134,8 +134,6 @@ class Application extends BaseApplication {
 							paneOptions = ['editor', 'both'];
 						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_VIEWER_SPLIT) {
 							paneOptions = ['viewer', 'both'];
-						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_SPLIT_WYSIWYG) {
-							paneOptions = ['both', 'wysiwyg'];
 						} else {
 							paneOptions = ['editor', 'viewer', 'both'];
 						}
@@ -547,6 +545,7 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'print',
+					noteIds: this.store().getState().selectedNoteIds,
 				});
 			},
 		};
@@ -891,33 +890,6 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
-					id: 'edit:commandStartExternalEditing',
-					label: _('Edit in external editor'),
-					screens: ['Main'],
-					accelerator: 'CommandOrControl+E',
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'commandStartExternalEditing',
-						});
-					},
-				}, {
-					id: 'edit:setTags',
-					label: _('Tags'),
-					screens: ['Main'],
-					accelerator: 'CommandOrControl+Alt+T',
-					click: () => {
-						const selectedNoteIds = this.store().getState().selectedNoteIds;
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'setTags',
-							noteIds: selectedNoteIds,
-						});
-					},
-				}, {
-					type: 'separator',
-					screens: ['Main'],
-				}, {
 					id: 'edit:focusSearch',
 					label: _('Search in all the notes'),
 					screens: ['Main'],
@@ -1056,6 +1028,46 @@ class Application extends BaseApplication {
 					accelerator: 'CommandOrControl+-',
 				}],
 			},
+			note: {
+				label: _('&Note'),
+				submenu: [{
+					id: 'edit:commandStartExternalEditing',
+					label: _('Edit in external editor'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+E',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandStartExternalEditing',
+						});
+					},
+				}, {
+					id: 'edit:setTags',
+					label: _('Tags'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+Alt+T',
+					click: () => {
+						const selectedNoteIds = this.store().getState().selectedNoteIds;
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'setTags',
+							noteIds: selectedNoteIds,
+						});
+					},
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					label: _('Statistics...'),
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandContentProperties',
+							// text: this.state.note.body,
+						});
+					},
+				}],
+			},
 			tools: {
 				label: _('&Tools'),
 				submenu: toolsItems,
@@ -1136,6 +1148,7 @@ class Application extends BaseApplication {
 			rootMenus.file,
 			rootMenus.edit,
 			rootMenus.view,
+			rootMenus.note,
 			rootMenus.tools,
 			rootMenus.help,
 		];

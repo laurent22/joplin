@@ -1,29 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-
-// eslint-disable-next-line no-unused-vars
-import { DefaultEditorState, OnChangeEvent, TextEditorUtils, EditorCommand, resourcesStatus } from '../utils/NoteText';
-
+import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
+import { resourcesStatus } from '../../utils/resourceHandling';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
-const { themeStyle, buildStyle } = require('../../theme.js');
-
-interface TinyMCEProps {
-	style: any,
-	theme: number,
-	onChange(event: OnChangeEvent): void,
-	onWillChange(event:any): void,
-	onMessage(event:any): void,
-	defaultEditorState: DefaultEditorState,
-	markupToHtml: Function,
-	allAssets: Function,
-	attachResources: Function,
-	joplinHtml: Function,
-	disabled: boolean,
-}
+const { themeStyle, buildStyle } = require('../../../../theme.js');
 
 function markupRenderOptions(override:any = null) {
 	return {
@@ -35,6 +19,7 @@ function markupRenderOptions(override:any = null) {
 				linkRenderingType: 2,
 			},
 		},
+		replaceResourceInternalToExternalLinks: true,
 		...override,
 	};
 }
@@ -104,12 +89,6 @@ function enableTextAreaTab(enable:boolean) {
 	}
 }
 
-export const utils:TextEditorUtils = {
-	editorContentToHtml(content:any):Promise<string> {
-		return content ? content : '';
-	},
-};
-
 interface TinyMceCommand {
 	name: string,
 	value?: any,
@@ -127,7 +106,7 @@ const joplinCommandToTinyMceCommands:JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 };
 
-function styles_(props:TinyMCEProps) {
+function styles_(props:NoteBodyEditorProps) {
 	return buildStyle('TinyMCE', props.theme, (/* theme:any */) => {
 		return {
 			disabledOverlay: {
@@ -155,7 +134,7 @@ let loadedAssetFiles_:string[] = [];
 let dispatchDidUpdateIID_:any = null;
 let changeId_:number = 1;
 
-const TinyMCE = (props:TinyMCEProps, ref:any) => {
+const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const [editor, setEditor] = useState(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
@@ -165,9 +144,6 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
-
-	const joplinHtml = useRef(null);
-	joplinHtml.current = props.joplinHtml;
 
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 	const editorRef = useRef<any>(null);
@@ -194,16 +170,16 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
-			const joplinUrl = href.indexOf('joplin://') === 0 ? href : null;
+			// const joplinUrl = href.indexOf('joplin://') === 0 ? href : null;
 
-			if (joplinUrl) {
-				props.onMessage({
-					name: 'openInternal',
-					args: {
-						url: joplinUrl,
-					},
-				});
-			} else if (href.indexOf('#') === 0) {
+			// if (joplinUrl) {
+			// 	props.onMessage({
+			// 		name: 'openInternal',
+			// 		args: {
+			// 			url: joplinUrl,
+			// 		},
+			// 	});
+			if (href.indexOf('#') === 0) {
 				const anchorName = href.substr(1);
 				const anchor = editor.getDoc().getElementById(anchorName);
 				if (anchor) {
@@ -213,7 +189,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				}
 			} else {
 				props.onMessage({
-					name: 'openExternal',
+					name: 'openUrl',
 					args: {
 						url: href,
 					},
@@ -224,7 +200,22 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 	useImperativeHandle(ref, () => {
 		return {
-			content: () => editor ? editor.getContent() : '',
+			content: async () => {
+				if (!editorRef.current) return '';
+				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
+			},
+			setContent: (/* body: string*/) => {
+				console.warn('TinyMCE::setContent - not implemented');
+			},
+			resetScroll: () => {
+				console.warn('TinyMCE::resetScroll - not implemented');
+			},
+			scrollTo: (/* options:ScrollOptions*/) => {
+				console.warn('TinyMCE::scrollTo - not implemented');
+			},
+			clearState: () => {
+				console.warn('TinyMCE::clearState - not implemented');
+			},
 			execCommand: async (cmd:EditorCommand) => {
 				if (!editor) return false;
 
@@ -257,7 +248,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				return true;
 			},
 		};
-	}, [editor]);
+	}, [editor, props.contentMarkupLanguage, props.contentOriginalCss]);
 
 	// -----------------------------------------------------------------------------------------
 	// Load the TinyMCE library. The lib loads additional JS and CSS files on startup
@@ -303,7 +294,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 					loaded: false,
 				},
 				{
-					src: 'gui/editors/TinyMCE/plugins/lists.js',
+					src: 'gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js',
 					id: 'tinyMceListsPluginScript',
 					loaded: false,
 				},
@@ -440,7 +431,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				height: '100%',
 				resize: false,
 				icons: 'Joplin',
-				icons_url: 'gui/editors/TinyMCE/icons.js',
+				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
@@ -524,7 +515,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 							const html = [];
 							for (const resource of resources) {
-								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resource.markdownTag, { bodyOnly: true });
+								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resource.markdownTag, markupRenderOptions({ bodyOnly: true }));
 								html.push(result.html);
 							}
 
@@ -597,7 +588,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				.map((a:any) => a.path)
 		).filter((path:string) => !loadedAssetFiles_.includes(path));
 
-		const jsFiles = ['gui/editors/TinyMCE/content_script.js'].concat(
+		const jsFiles = ['gui/NoteEditor/NoteBody/TinyMCE/content_script.js'].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'application/javascript')
 				.map((a:any) => a.path)
@@ -628,7 +619,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		if (resourcesStatus(props.defaultEditorState.resourceInfos) !== 'ready') {
+		if (resourcesStatus(props.resourceInfos) !== 'ready') {
 			editor.setContent('');
 			return () => {};
 		}
@@ -636,12 +627,12 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const result = await props.markupToHtml(props.defaultEditorState.markupLanguage, props.defaultEditorState.value, markupRenderOptions());
+			const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 			if (cancelled) return;
 
 			editor.setContent(result.html);
 
-			await loadDocumentAssets(editor, await props.allAssets(props.defaultEditorState.markupLanguage));
+			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
 
 			editor.getDoc().addEventListener('click', onEditorContentClick);
 
@@ -661,7 +652,7 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 			cancelled = true;
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markupToHtml, props.allAssets, props.defaultEditorState, onEditorContentClick]);
+	}, [editor, props.markupToHtml, props.allAssets, onEditorContentClick, props.resourceInfos]);
 
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
@@ -672,6 +663,9 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
 	const props_onChangeRef = useRef<Function>();
 	props_onChangeRef.current = props.onChange;
+
+	const prop_htmlToMarkdownRef = useRef<Function>();
+	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -684,14 +678,16 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 
 			if (onChangeHandlerIID) clearTimeout(onChangeHandlerIID);
 
-			onChangeHandlerIID = setTimeout(() => {
+			onChangeHandlerIID = setTimeout(async () => {
 				onChangeHandlerIID = null;
+
+				const contentMd = await prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editor.getContent(), props.contentOriginalCss);
 
 				if (!editor) return;
 
 				props_onChangeRef.current({
 					changeId: changeId,
-					content: editor.getContent(),
+					content: contentMd,
 				});
 
 				dispatchDidUpdate(editor);
@@ -755,6 +751,8 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		editor.on('paste', onPaste);
 		editor.on('cut', onChangeHandler);
 		editor.on('joplinChange', onChangeHandler);
+		editor.on('Undo', onChangeHandler);
+		editor.on('Redo', onChangeHandler);
 		editor.on('ExecCommand', onExecCommand);
 
 		return () => {
@@ -764,12 +762,14 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 				editor.off('paste', onPaste);
 				editor.off('cut', onChangeHandler);
 				editor.off('joplinChange', onChangeHandler);
+				editor.off('Undo', onChangeHandler);
+				editor.off('Redo', onChangeHandler);
 				editor.off('ExecCommand', onExecCommand);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
 		};
-	}, [props.onWillChange, props.onChange, editor]);
+	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
 
 	// -----------------------------------------------------------------------------------------
 	// Destroy the editor when unmounting
@@ -783,11 +783,13 @@ const TinyMCE = (props:TinyMCEProps, ref:any) => {
 		};
 	}, []);
 
+	// Currently we don't handle resource "auto" and "manual" mode with TinyMCE
+	// as it is quite complex and probably rarely used.
 	function renderDisabledOverlay() {
-		const status = resourcesStatus(props.defaultEditorState.resourceInfos);
+		const status = resourcesStatus(props.resourceInfos);
 		if (status === 'ready') return null;
 
-		const message = _('Please wait for all attachments to be downloaded and decrypted. You may also switch the layout and edit the note in Markdown mode.');
+		const message = _('Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.', _('Code View'));
 		return (
 			<div style={styles.disabledOverlay}>
 				<p style={theme.textStyle}>{message}</p>

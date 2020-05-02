@@ -10,6 +10,7 @@ const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { IconButton } = require('./IconButton.min.js');
 const { urlDecode, substrWithEllipsis } = require('lib/string-utils');
 const Toolbar = require('./Toolbar.min.js');
+const NoteToolbar = require('./NoteToolbar/NoteToolbar.js').default;
 const TagList = require('./TagList.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -346,6 +347,36 @@ class NoteTextComponent extends React.Component {
 		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
 		this.webview_domReady = this.webview_domReady.bind(this);
 		this.noteRevisionViewer_onBack = this.noteRevisionViewer_onBack.bind(this);
+		this.noteToolbar_buttonClick = this.noteToolbar_buttonClick.bind(this);
+	}
+
+	noteToolbar_buttonClick(event) {
+		const cases = {
+
+			'startExternalEditing': () => {
+				this.commandStartExternalEditing();
+			},
+
+			'stopExternalEditing': () => {
+				this.commandStopExternalEditing();
+			},
+
+			'setTags': () => {
+				this.commandSetTags();
+			},
+
+			'setAlarm': () => {
+				this.commandSetAlarm();
+			},
+
+			'showRevisions': () => {
+				this.setState({ showRevisions: true });
+			},
+		};
+
+		if (!cases[event.name]) throw new Error(`Unsupported event: ${event.name}`);
+
+		cases[event.name]();
 	}
 
 	// Note:
@@ -1831,79 +1862,6 @@ class NoteTextComponent extends React.Component {
 			});
 		}
 
-		if (note && this.props.watchedNoteFiles.indexOf(note.id) >= 0) {
-			toolbarItems.push({
-				tooltip: _('Click to stop external editing'),
-				title: _('Watching...'),
-				iconName: 'fa-external-link',
-				onClick: () => {
-					return this.commandStopExternalEditing();
-				},
-			});
-		} else {
-			toolbarItems.push({
-				tooltip: _('Edit in external editor'),
-				iconName: 'fa-external-link',
-				onClick: () => {
-					return this.commandStartExternalEditing();
-				},
-			});
-		}
-
-		toolbarItems.push({
-			tooltip: _('Tags'),
-			iconName: 'fa-tags',
-			onClick: () => {
-				return this.commandSetTags();
-			},
-		});
-
-		if (note.is_todo) {
-			const item = {
-				iconName: 'fa-clock-o',
-				enabled: !note.todo_completed,
-				onClick: () => {
-					return this.commandSetAlarm();
-				},
-			};
-			if (Note.needAlarm(note)) {
-				item.title = time.formatMsToLocal(note.todo_due);
-			} else {
-				item.tooltip = _('Set alarm');
-			}
-			toolbarItems.push(item);
-		}
-
-		toolbarItems.push({
-			tooltip: _('Note properties'),
-			iconName: 'fa-info-circle',
-			onClick: () => {
-				const n = this.state.note;
-				if (!n || !n.id) return;
-
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandNoteProperties',
-					noteId: n.id,
-					onRevisionLinkClick: () => {
-						this.setState({ showRevisions: true });
-					},
-				});
-			},
-		});
-
-		toolbarItems.push({
-			tooltip: _('Content Properties'),
-			iconName: 'fa-sticky-note',
-			onClick: () => {
-				this.props.dispatch({
-					type: 'WINDOW_COMMAND',
-					name: 'commandContentProperties',
-					text: this.state.note.body,
-				});
-			},
-		});
-
 		return toolbarItems;
 	}
 
@@ -2273,7 +2231,17 @@ class NoteTextComponent extends React.Component {
 					{titleBarDate}
 					{false ? titleBarMenuButton : null}
 				</div>
-				{toolbar}
+				<div style={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
+					{toolbar}
+					<NoteToolbar
+						theme={this.props.theme}
+						note={note}
+						dispatch={this.props.dispatch}
+						style={toolbarStyle}
+						watchedNoteFiles={[]}
+						onButtonClick={this.noteToolbar_buttonClick}
+					/>
+				</div>
 				{tagList}
 				{editor}
 				{viewer}

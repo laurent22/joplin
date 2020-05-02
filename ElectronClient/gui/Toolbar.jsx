@@ -6,7 +6,7 @@ const ToolbarSpace = require('./ToolbarSpace.min.js');
 
 class ToolbarComponent extends React.Component {
 	render() {
-		const style = this.props.style;
+		const style = Object.assign({}, this.props.style);
 		const theme = themeStyle(this.props.theme);
 		style.height = theme.toolbarHeight;
 		style.display = 'flex';

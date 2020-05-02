@@ -91,8 +91,14 @@ class NoteListUtils {
 						click: async () => {
 							for (let i = 0; i < noteIds.length; i++) {
 								const note = await Note.load(noteIds[i]);
-								await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-								eventManager.emit('noteTypeToggle', { noteId: note.id });
+								const newNote = await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
+								const eventNote = {
+									id: newNote.id,
+									is_todo: newNote.is_todo,
+									todo_due: newNote.todo_due,
+									todo_completed: newNote.todo_completed,
+								};
+								eventManager.emit('noteTypeToggle', { noteId: note.id, note: eventNote });
 							}
 						},
 					})

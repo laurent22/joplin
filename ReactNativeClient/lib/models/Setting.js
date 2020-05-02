@@ -43,20 +43,11 @@ class Setting extends BaseModel {
 				type: Setting.TYPE_STRING,
 				public: false,
 			},
-			'editor.keyboardMode': {
-				value: 'default',
-				type: Setting.TYPE_STRING,
-				public: true,
+			'editor.codeView': {
+				value: false,
+				type: Setting.TYPE_BOOL,
+				public: false,
 				appTypes: ['desktop'],
-				isEnum: true,
-				label: () => _('Keyboard Mode'),
-				options: () => {
-					const output = {};
-					output['default'] = _('Default');
-					output['emacs'] = _('Emacs');
-					output['vim'] = _('Vim');
-					return output;
-				},
 			},
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
@@ -261,7 +252,7 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
-			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
@@ -273,7 +264,6 @@ class Setting extends BaseModel {
 					[Setting.LAYOUT_EDITOR_VIEWER]: _('%s / %s', _('Editor'), _('Viewer')),
 					[Setting.LAYOUT_EDITOR_SPLIT]: _('%s / %s', _('Editor'), _('Split View')),
 					[Setting.LAYOUT_VIEWER_SPLIT]: _('%s / %s', _('Viewer'), _('Split View')),
-					[Setting.LAYOUT_SPLIT_WYSIWYG]: _('%s / %s', _('Split'), 'WYSIWYG (Experimental)'),
 				}),
 			},
 			uncompletedTodosOnTop: { value: true, type: Setting.TYPE_BOOL, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
@@ -528,7 +518,7 @@ class Setting extends BaseModel {
 			tagHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			folderHeaderIsExpanded: { value: true, type: Setting.TYPE_BOOL, public: false, appTypes: ['desktop'] },
 			editor: { value: '', type: Setting.TYPE_STRING, subType: 'file_path_and_args', public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+			'export.pdfPageSize': { value: 'A4', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
@@ -538,13 +528,29 @@ class Setting extends BaseModel {
 					'Legal': _('Legal'),
 				};
 			} },
-			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+			'export.pdfPageOrientation': { value: 'portrait', type: Setting.TYPE_STRING, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
 				};
 			} },
 
+			'editor.keyboardMode': {
+				value: '',
+				type: Setting.TYPE_STRING,
+				public: true,
+				appTypes: ['desktop'],
+				isEnum: true,
+				advanced: true,
+				label: () => _('Keyboard Mode'),
+				options: () => {
+					const output = {};
+					output[''] = _('Default');
+					output['emacs'] = _('Emacs');
+					output['vim'] = _('Vim');
+					return output;
+				},
+			},
 
 			'net.customCertificates': {
 				value: '',
@@ -769,6 +775,10 @@ class Setting extends BaseModel {
 
 	static incValue(key, inc) {
 		return this.setValue(key, this.value(key) + inc);
+	}
+
+	static toggle(key) {
+		return this.setValue(key, !this.value(key));
 	}
 
 	static setObjectKey(settingKey, objectKey, value) {
@@ -1080,7 +1090,6 @@ Setting.LAYOUT_ALL = 0;
 Setting.LAYOUT_EDITOR_VIEWER = 1;
 Setting.LAYOUT_EDITOR_SPLIT = 2;
 Setting.LAYOUT_VIEWER_SPLIT = 3;
-Setting.LAYOUT_SPLIT_WYSIWYG = 4;
 
 Setting.DATE_FORMAT_1 = 'DD/MM/YYYY';
 Setting.DATE_FORMAT_2 = 'DD/MM/YY';
