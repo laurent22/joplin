@@ -70,6 +70,8 @@ class InteropServiceHelper {
 								cleanup();
 							}
 						} else {
+							// TODO: it is crashing at this point
+
 							win.webContents.print(options, (success, reason) => {
 								// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
 								// It calls the callback right away with "false" even if the document hasn't be print yet.

@@ -62,7 +62,8 @@
   },
   "devDependencies": {
     "cra-build-watch": "^3.2.0",
-    "fs-extra": "^6.0.1"
+    "fs-extra": "^6.0.1",
+    "react-scripts": "^3.3.1"
   },
   "browserslist": [
     ">0.2%",
