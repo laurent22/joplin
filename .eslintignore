@@ -22,6 +22,7 @@ Clipper/dist
 Clipper/icons
 Clipper/popup/build
 Clipper/popup/config/webpack.config.js
+Clipper/popup/config/webpack_config_at_eject_time.js
 Clipper/popup/node_modules
 Clipper/popup/scripts/build.js
 docs/
