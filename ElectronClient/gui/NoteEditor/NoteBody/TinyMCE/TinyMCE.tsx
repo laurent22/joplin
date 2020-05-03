@@ -145,6 +145,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
+	const lastOnChangeEventContent = useRef<string>('');
+
 	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
 	const editorRef = useRef<any>(null);
 	editorRef.current = editor;
@@ -170,15 +172,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		if (nodeName === 'A' && (event.ctrlKey || event.metaKey)) {
 			const href = event.target.getAttribute('href');
-			// const joplinUrl = href.indexOf('joplin://') === 0 ? href : null;
 
-			// if (joplinUrl) {
-			// 	props.onMessage({
-			// 		name: 'openInternal',
-			// 		args: {
-			// 			url: joplinUrl,
-			// 		},
-			// 	});
 			if (href.indexOf('#') === 0) {
 				const anchorName = href.substr(1);
 				const anchor = editor.getDoc().getElementById(anchorName);
@@ -188,12 +182,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					reg.logger().warn('TinyMce: could not find anchor with ID ', anchorName);
 				}
 			} else {
-				props.onMessage({
-					name: 'openUrl',
-					args: {
-						url: href,
-					},
-				});
+				props.onMessage({ channel: href });
 			}
 		}
 	}, [editor, props.onMessage]);
@@ -215,6 +204,10 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			},
 			clearState: () => {
 				console.warn('TinyMCE::clearState - not implemented');
+			},
+			supportsCommand: (name:string) => {
+				// TODO: should also handle commands that are not in this map (insertText, focus, etc);
+				return !!joplinCommandToTinyMceCommands[name];
 			},
 			execCommand: async (cmd:EditorCommand) => {
 				if (!editor) return false;
@@ -397,6 +390,10 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox.tox-tinymce-aux .tox-toolbar__overflow,
 			.tox .tox-dialog__footer {
 				border-color: ${theme.dividerColor} !important;
+			}
+
+			.tox-tinymce {
+				border-top: none !important;
 			}
 		`));
 
@@ -627,14 +624,15 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
+			if (lastOnChangeEventContent.current === props.content) return;
+
 			const result = await props.markupToHtml(props.contentMarkupLanguage, props.content, markupRenderOptions({ resourceInfos: props.resourceInfos }));
 			if (cancelled) return;
 
+			lastOnChangeEventContent.current = props.content;
 			editor.setContent(result.html);
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
-
-			editor.getDoc().addEventListener('click', onEditorContentClick);
 
 			// Need to clear UndoManager to avoid this problem:
 			// - Load note 1
@@ -650,9 +648,17 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		return () => {
 			cancelled = true;
+		};
+	}, [editor, props.markupToHtml, props.allAssets, props.content, props.resourceInfos]);
+
+	useEffect(() => {
+		if (!editor) return () => {};
+
+		editor.getDoc().addEventListener('click', onEditorContentClick);
+		return () => {
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
-	}, [editor, props.markupToHtml, props.allAssets, onEditorContentClick, props.resourceInfos]);
+	}, [editor, onEditorContentClick]);
 
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
@@ -684,6 +690,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				const contentMd = await prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editor.getContent(), props.contentOriginalCss);
 
 				if (!editor) return;
+
+				lastOnChangeEventContent.current = contentMd;
 
 				props_onChangeRef.current({
 					changeId: changeId,

@@ -59,8 +59,12 @@ export default function useWindowCommandHandler(dependencies:HookDependencies) {
 				editorCmd.name = 'insertText',
 				editorCmd.value = time.formatMsToLocal(new Date().getTime());
 			} else if (command.name === 'showLocalSearch') {
-				setShowLocalSearch(true);
-				if (noteSearchBarRef.current) noteSearchBarRef.current.wrappedInstance.focus();
+				if (editorRef.current && editorRef.current.supportsCommand('search')) {
+					editorCmd.name = 'search';
+				} else {
+					setShowLocalSearch(true);
+					if (noteSearchBarRef.current) noteSearchBarRef.current.wrappedInstance.focus();
+				}
 			} else if (command.name === 'insertTemplate') {
 				editorCmd.name = 'insertText',
 				editorCmd.value = time.formatMsToLocal(new Date().getTime());

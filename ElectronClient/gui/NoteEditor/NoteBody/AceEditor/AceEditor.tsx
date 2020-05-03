@@ -251,6 +251,11 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				editor.clearSelection();
 				editor.moveCursorTo(0, 0);
 			},
+			supportsCommand: (/* name:string*/) => {
+				// TODO: not implemented, currently only used for "search" command
+				// which is not directly supported by Ace Editor.
+				return false;
+			},
 			execCommand: async (cmd: EditorCommand) => {
 				if (!editor) return false;
 

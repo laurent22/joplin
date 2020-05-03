@@ -1,17 +1,12 @@
 import * as React from 'react';
-
+const { connect } = require('react-redux');
 const { buildStyle } = require('../../theme.js');
 const Toolbar = require('../Toolbar.min.js');
 const Note = require('lib/models/Note');
+const Folder = require('lib/models/Folder');
 const { time } = require('lib/time-utils.js');
 const { _ } = require('lib/locale');
-
-
-
-
-// const { substrWithEllipsis } = require('lib/string-utils');
-// const Folder = require('lib/models/Folder');
-// const { MarkupToHtml } = require('lib/joplin-renderer');
+const { substrWithEllipsis } = require('lib/string-utils');
 
 interface ButtonClickEvent {
 	name: string,
@@ -20,10 +15,14 @@ interface ButtonClickEvent {
 interface NoteToolbarProps {
 	theme: number,
 	style: any,
+	selectedFolderId: string,
+	folders: any[],
 	watchedNoteFiles: string[],
+	notesParentType: string,
 	note: any,
 	dispatch: Function,
 	onButtonClick(event:ButtonClickEvent):void,
+	historyNotes: any[],
 }
 
 function styles_(props:NoteToolbarProps) {
@@ -31,50 +30,52 @@ function styles_(props:NoteToolbarProps) {
 		return {
 			root: {
 				...props.style,
-
+				borderBottom: 'none',
 			},
 		};
 	});
 }
 
-function useToolbarItems(note:any, watchedNoteFiles:string[], dispatch:Function, onButtonClick:Function) {
+function useToolbarItems(props:NoteToolbarProps) {
+	const { note, selectedFolderId, folders, watchedNoteFiles, notesParentType, dispatch, onButtonClick, historyNotes } = props;
+
 	const toolbarItems = [];
 
-	// TODO: add these two items
+	const folder = Folder.byId(folders, selectedFolderId);
 
-	// if (props.folder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
-	// 	toolbarItems.push({
-	// 		title: _('In: %s', substrWithEllipsis(props.folder.title, 0, 16)),
-	// 		iconName: 'fa-book',
-	// 		onClick: () => {
-	// 			props.dispatch({
-	// 				type: 'FOLDER_AND_NOTE_SELECT',
-	// 				folderId: props.folder.id,
-	// 				noteId: props.formNote.id,
-	// 			});
-	// 			Folder.expandTree(props.folders, props.folder.parent_id);
-	// 		},
-	// 	});
-	// }
+	if (folder && ['Search', 'Tag', 'SmartFilter'].includes(notesParentType)) {
+		toolbarItems.push({
+			title: _('In: %s', substrWithEllipsis(folder.title, 0, 16)),
+			iconName: 'fa-book',
+			onClick: () => {
+				props.dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: folder.id,
+					noteId: note.id,
+				});
+				Folder.expandTree(folders, folder.parent_id);
+			},
+		});
+	}
 
-	// if (props.historyNotes.length) {
-	// 	toolbarItems.push({
-	// 		tooltip: _('Back'),
-	// 		iconName: 'fa-arrow-left',
-	// 		onClick: () => {
-	// 			if (!props.historyNotes.length) return;
+	if (historyNotes.length) {
+		toolbarItems.push({
+			tooltip: _('Back'),
+			iconName: 'fa-arrow-left',
+			onClick: () => {
+				if (!historyNotes.length) return;
 
-	// 			const lastItem = props.historyNotes[props.historyNotes.length - 1];
+				const lastItem = historyNotes[historyNotes.length - 1];
 
-	// 			props.dispatch({
-	// 				type: 'FOLDER_AND_NOTE_SELECT',
-	// 				folderId: lastItem.parent_id,
-	// 				noteId: lastItem.id,
-	// 				historyNoteAction: 'pop',
-	// 			});
-	// 		},
-	// 	});
-	// }
+				dispatch({
+					type: 'FOLDER_AND_NOTE_SELECT',
+					folderId: lastItem.parent_id,
+					noteId: lastItem.id,
+					historyNoteAction: 'pop',
+				});
+			},
+		});
+	}
 
 	if (watchedNoteFiles.indexOf(note.id) >= 0) {
 		toolbarItems.push({
@@ -137,12 +138,20 @@ function useToolbarItems(note:any, watchedNoteFiles:string[], dispatch:Function,
 	return toolbarItems;
 }
 
-export default function NoteToolbar(props:NoteToolbarProps) {
+function NoteToolbar(props:NoteToolbarProps) {
 	const styles = styles_(props);
-
-	const toolbarItems = useToolbarItems(props.note, props.watchedNoteFiles, props.dispatch, props.onButtonClick);
-
-	return (
-		<Toolbar style={styles.root} items={toolbarItems} />
-	);
+	const toolbarItems = useToolbarItems(props);
+	return <Toolbar style={styles.root} items={toolbarItems} />;
 }
+
+const mapStateToProps = (state:any) => {
+	return {
+		selectedFolderId: state.selectedFolderId,
+		folders: state.folders,
+		watchedNoteFiles: state.watchedNoteFiles,
+		historyNotes: state.historyNotes,
+		notesParentType: state.notesParentType,
+	};
+};
+
+export default connect(mapStateToProps)(NoteToolbar);

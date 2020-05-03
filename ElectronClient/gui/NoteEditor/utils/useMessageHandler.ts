@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-
+import { FormNote } from './types';
 const BaseItem = require('lib/models/BaseItem');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
@@ -15,7 +15,7 @@ const { clipboard } = require('electron');
 const { toSystemSlashes } = require('lib/path-utils');
 const { reg } = require('lib/registry.js');
 
-export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function) {
+export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
 	return useCallback(async (event: any) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;
@@ -128,10 +128,10 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					// historyNoteAction: {
-					// 	id: this.state.note.id,
-					// 	parent_id: this.state.note.parent_id,
-					// },
+					historyNoteAction: {
+						id: formNote.id,
+						parent_id: formNote.parent_id,
+					},
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
@@ -148,5 +148,5 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 		} else {
 			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
-	}, [dispatch, setLocalSearchResultCount, scrollWhenReady]);
+	}, [dispatch, setLocalSearchResultCount, scrollWhenReady, formNote]);
 }
