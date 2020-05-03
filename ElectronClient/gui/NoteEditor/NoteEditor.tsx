@@ -417,6 +417,7 @@ function NoteEditor(props: NoteTextProps) {
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
+		locale: Setting.value('locale'),
 	};
 
 	let editor = null;

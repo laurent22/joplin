@@ -437,14 +437,16 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				branding: false,
 				target_list: false,
 				table_resize_bars: false,
-				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table',
+				language: props.locale,
+				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
+				localization_function: _,
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
 						const source = editable ? findBlockSource(editable) : newBlockSource();
 
 						editor.windowManager.open({
-							title: 'Edit',
+							title: _('Edit'),
 							size: 'large',
 							initialData: {
 								codeTextArea: source.content,
@@ -504,7 +506,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					}
 
 					editor.ui.registry.addButton('joplinAttach', {
-						tooltip: 'Attach...',
+						tooltip: _('Attach file'),
 						icon: 'paperclip',
 						onAction: async function() {
 							const resources = await attachResources.current();
@@ -523,7 +525,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					});
 
 					editor.ui.registry.addButton('joplinCodeBlock', {
-						tooltip: 'Code Block',
+						tooltip: _('Code Block'),
 						icon: 'code-sample',
 						onAction: async function() {
 							openEditDialog(null);
@@ -531,7 +533,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 					});
 
 					editor.ui.registry.addToggleButton('joplinInlineCode', {
-						tooltip: 'Inline Code',
+						tooltip: _('Inline Code'),
 						icon: 'sourcecode',
 						onAction: function() {
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' });
@@ -543,6 +545,17 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 							return function() {
 								if (unbind) unbind();
 							};
+						},
+					});
+
+					editor.ui.registry.addButton('joplinInsertDateTime', {
+						tooltip: _('Insert Date Time'),
+						icon: 'insert-time',
+						onAction: function() {
+							props.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'insertDateTime',
+							});
 						},
 					});
 

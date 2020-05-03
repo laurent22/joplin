@@ -938,6 +938,11 @@
     var getForcedRootBlockAttrs = function (editor) {
       return editor.getParam('forced_root_block_attrs', {});
     };
+    var getLocalizationFunction = function (editor) {
+      return editor.getParam('localization_function', function (s) {
+        return s;
+      });
+    };
 
     var createTextBlock = function (editor, contentNode) {
       var dom = editor.dom;
@@ -2117,6 +2122,7 @@
         var plugins = editor.settings.plugins ? editor.settings.plugins : '';
         return Tools.inArray(plugins.split(/[ ,]/), plugin) !== -1;
       };
+      var _ = getLocalizationFunction(editor);
       var exec = function (command) {
         return function () {
           return editor.execCommand(command);
@@ -2140,7 +2146,7 @@
         editor.ui.registry.addToggleButton('joplinChecklist', {
           icon: 'checklist',
           active: false,
-          tooltip: 'Checkbox list',
+          tooltip: _('Checkbox list'),
           onAction: exec('InsertJoplinChecklist'),
           onSetup: listState(editor, 'UL', { listType: 'joplinChecklist' })
         });

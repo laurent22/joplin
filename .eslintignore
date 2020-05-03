@@ -57,6 +57,7 @@ Server/node_modules/
 Tools/node_modules
 Tools/PortableAppsLauncher
 Modules/TinyMCE/IconPack/postinstall.js
+Modules/TinyMCE/langs/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 ElectronClient/gui/MultiNoteActions.js

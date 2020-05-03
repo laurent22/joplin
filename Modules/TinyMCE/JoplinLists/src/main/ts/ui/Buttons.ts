@@ -6,6 +6,7 @@
  */
 
 import Tools from 'tinymce/core/api/util/Tools';
+import * as Settings from '../api/Settings';
 import * as NodeType from '../core/NodeType';
 import Editor from 'tinymce/core/api/Editor';
 import { isCustomList } from '../core/Util';
@@ -63,6 +64,7 @@ const register = function (editor: Editor) {
     return Tools.inArray(plugins.split(/[ ,]/), plugin) !== -1;
   };
 
+  const _ = Settings.getLocalizationFunction(editor);
   const exec = (command) => () => editor.execCommand(command);
 
   if (!hasPlugin(editor, 'advlist')) {
@@ -85,7 +87,7 @@ const register = function (editor: Editor) {
     editor.ui.registry.addToggleButton('joplinChecklist', {
       icon: 'checklist',
       active: false,
-      tooltip: 'Checkbox list',
+      tooltip: _('Checkbox list'),
       onAction: exec('InsertJoplinChecklist'),
       onSetup: listState(editor, 'UL', { listType: 'joplinChecklist' })
     });

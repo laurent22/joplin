@@ -69,7 +69,8 @@
 				"ElectronClient/gui/NoteEditor/utils/useMarkupToHtml.js",
 				"ElectronClient/gui/NoteEditor/utils/useResourceRefresher.js",
 				"ElectronClient/gui/NoteEditor/utils/useFormNote.js",
-				"ElectronClient/gui/NoteEditor/utils/useResourceInfos.js"
+				"ElectronClient/gui/NoteEditor/utils/useResourceInfos.js",
+				"Modules/TinyMCE/langs/*.js"
 			],
 			"folder_exclude_patterns":
 			[

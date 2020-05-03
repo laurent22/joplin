@@ -49,6 +49,7 @@ export interface NoteBodyEditorProps {
 	visiblePanes: string[],
 	keyboardMode: string,
 	resourceInfos: ResourceInfos,
+	locale: string,
 }
 
 export interface FormNote {
