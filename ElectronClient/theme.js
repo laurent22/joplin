@@ -102,7 +102,7 @@ function addExtraStyles(style) {
 
 	style.toolbarStyle = {
 		height: style.toolbarHeight,
-		// minWidth: style.toolbarHeight,
+		minWidth: style.toolbarHeight,
 		display: 'flex',
 		alignItems: 'center',
 		paddingLeft: style.headerButtonHPadding,
