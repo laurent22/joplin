@@ -15,7 +15,7 @@ import useDropHandler from './utils/useDropHandler';
 import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
-import { NoteTextProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
 import { attachResources } from './utils/resourceHandling';
 
 const { themeStyle } = require('../../theme.js');
@@ -33,7 +33,7 @@ const eventManager = require('../../eventManager');
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const TagList = require('../TagList.min.js');
 
-function NoteEditor(props: NoteTextProps) {
+function NoteEditor(props: NoteEditorProps) {
 	const theme = themeStyle(props.theme);
 
 	const [showRevisions, setShowRevisions] = useState(false);

@@ -228,9 +228,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	useImperativeHandle(ref, () => {
 		return {
 			content: () => props.content,
-			setContent: (body: string) => {
-				aceEditor_change(body);
-			},
 			resetScroll: () => {
 				resetScroll();
 			},
@@ -245,11 +242,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 				} else {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
 				}
-			},
-			clearState: () => {
-				if (!editor) return;
-				editor.clearSelection();
-				editor.moveCursorTo(0, 0);
 			},
 			supportsCommand: (/* name:string*/) => {
 				// TODO: not implemented, currently only used for "search" command

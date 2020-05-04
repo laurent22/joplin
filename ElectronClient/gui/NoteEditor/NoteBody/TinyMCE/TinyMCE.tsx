@@ -199,9 +199,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				if (!editorRef.current) return '';
 				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
 			},
-			setContent: (/* body: string*/) => {
-				console.warn('TinyMCE::setContent - not implemented');
-			},
 			resetScroll: () => {
 				if (editor) editor.getWin().scrollTo(0,0);
 			},
@@ -220,11 +217,6 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				} else {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
 				}
-
-
-			},
-			clearState: () => {
-				console.warn('TinyMCE::clearState - not implemented');
 			},
 			supportsCommand: (name:string) => {
 				// TODO: should also handle commands that are not in this map (insertText, focus, etc);
