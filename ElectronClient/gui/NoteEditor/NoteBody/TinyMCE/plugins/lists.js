@@ -2103,6 +2103,8 @@
         var editorClickHandler = function (event) {
           if (!isJoplinChecklistItem(event.target))
             return;
+          if (event.offsetX >= 0)
+            return;
           editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
         };
         if (options.listType === 'joplinChecklist') {
