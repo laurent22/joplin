@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
-import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { resourcesStatus } from '../../utils/resourceHandling';
+import useScroll from './utils/useScroll';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
@@ -142,6 +143,9 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 	const attachResources = useRef(null);
 	attachResources.current = props.attachResources;
 
+	const props_onMessage = useRef(null);
+	props_onMessage.current = props.onMessage;
+
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
@@ -153,6 +157,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const styles = styles_(props);
 	const theme = themeStyle(props.theme);
+
+	const { scrollToPercent } = useScroll({ editor, onScroll: props.onScroll });
 
 	const dispatchDidUpdate = (editor:any) => {
 		if (dispatchDidUpdateIID_) clearTimeout(dispatchDidUpdateIID_);
@@ -197,10 +203,25 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				console.warn('TinyMCE::setContent - not implemented');
 			},
 			resetScroll: () => {
-				console.warn('TinyMCE::resetScroll - not implemented');
+				if (editor) editor.getWin().scrollTo(0,0);
 			},
-			scrollTo: (/* options:ScrollOptions*/) => {
-				console.warn('TinyMCE::scrollTo - not implemented');
+			scrollTo: (options:ScrollOptions) => {
+				if (!editor) return;
+
+				if (options.type === ScrollOptionTypes.Hash) {
+					const anchor = editor.getDoc().getElementById(options.value);
+					if (!anchor) {
+						console.warn('Cannot find hash', options);
+						return;
+					}
+					anchor.scrollIntoView();
+				} else if (options.type === ScrollOptionTypes.Percent) {
+					scrollToPercent(options.value);
+				} else {
+					throw new Error(`Unsupported scroll options: ${options.type}`);
+				}
+
+
 			},
 			clearState: () => {
 				console.warn('TinyMCE::clearState - not implemented');
@@ -574,6 +595,10 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 					editor.on('init', () => {
 						setEditorReady(true);
+					});
+
+					editor.on('SetContent', () => {
+						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
 			});
