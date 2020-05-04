@@ -328,7 +328,14 @@ class Synchronizer {
 			await this.api().mkdir(this.resourceDirName_);
 
 			await this.checkLock_();
-			await this.checkSyncTargetVersion_();
+			
+			// Ignoring *checkSyncTargetVersion_* for linux platform. This is a temporary workaround for
+			// [issue 3114](https://github.com/laurent22/joplin/issues/3114).
+			// As I see having this fixed right now outweights the bit of compliance lost until code is upgraded.
+
+			// TODO: Would be great to be more specific and check for kernel >5.5 instead.
+			// FIXME: Remove if statement after upgrading checkSyncTargetVersion code.
+			if (process.platform != 'linux') await this.checkSyncTargetVersion_();
 
 			// ========================================================================
 			// 1. UPLOAD
