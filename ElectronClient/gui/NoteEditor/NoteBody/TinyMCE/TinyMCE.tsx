@@ -616,7 +616,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				.map((a:any) => a.path)
 		).filter((path:string) => !loadedAssetFiles_.includes(path));
 
-		const jsFiles = ['gui/NoteEditor/NoteBody/TinyMCE/content_script.js'].concat(
+		const jsFiles = [].concat(
 			pluginAssets
 				.filter((a:any) => a.mime === 'application/javascript')
 				.map((a:any) => a.path)
