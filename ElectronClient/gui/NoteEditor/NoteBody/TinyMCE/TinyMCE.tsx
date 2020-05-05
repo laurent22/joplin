@@ -669,7 +669,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			// - Make a change
 			// - Load note 2
 			// - Undo => content is that of note 1
-			editor.undoManager.clear();
+
+			// The doc is not very clear what's the different between
+			// clear() and reset() but it seems reset() works best, in
+			// particular for the onPaste bug.
+			editor.undoManager.reset();
 
 			dispatchDidUpdate(editor);
 		};
@@ -780,6 +784,11 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
 			} else {
+				// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
+				// so we manually add it here. We also can't do it immediately it seems, or
+				// else nothing is added to the stack, so do it on the next frame.
+				window.requestAnimationFrame(() => editor.undoManager.add());
+
 				onChangeHandler();
 			}
 		}
