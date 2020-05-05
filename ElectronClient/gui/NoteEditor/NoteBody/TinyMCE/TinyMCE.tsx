@@ -9,6 +9,7 @@ const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const { themeStyle, buildStyle } = require('../../../../theme.js');
+const { clipboard } = require('electron');
 
 function markupRenderOptions(override:any = null) {
 	return {
@@ -779,21 +780,32 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		async function onPaste(event:any) {
 			const pastedText = event.clipboardData.getData('text');
-			if (BaseItem.isMarkdownTag(pastedText)) {
+
+			if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
 				event.preventDefault();
 				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
-			} else {
+			} else { // Paste regular text
 				// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
 				// so we manually add it here. We also can't do it immediately it seems, or
 				// else nothing is added to the stack, so do it on the next frame.
 				window.requestAnimationFrame(() => editor.undoManager.add());
-
 				onChangeHandler();
 			}
 		}
 
+		function onKeyDown(event:any) {
+			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
+			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
+			// it here and we don't need to do anything special in onPaste
+			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
+				const pastedText = clipboard.readText();
+				if (pastedText) editor.insertContent(pastedText);
+			}
+		}
+
 		editor.on('keyup', onKeyUp);
+		editor.on('keydown', onKeyDown);
 		editor.on('keypress', onKeypress);
 		editor.on('paste', onPaste);
 		editor.on('cut', onChangeHandler);
@@ -805,6 +817,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		return () => {
 			try {
 				editor.off('keyup', onKeyUp);
+				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
 				editor.off('paste', onPaste);
 				editor.off('cut', onChangeHandler);
