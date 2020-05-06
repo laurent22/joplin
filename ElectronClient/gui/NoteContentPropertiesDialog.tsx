@@ -74,7 +74,7 @@ export default function NoteContentPropertiesDialog(props:NoteContentPropertiesD
 	return (
 		<div style={theme.dialogModalLayer}>
 			<div style={theme.dialogBox}>
-				<div style={theme.dialogTitle}>{_('Content properties')}</div>
+				<div style={theme.dialogTitle}>{_('Statistics')}</div>
 				<div>{textComps}</div>
 				<DialogButtonRow theme={props.theme} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
 			</div>

@@ -257,6 +257,9 @@ class BaseItem extends BaseModel {
 		if (['title_diff', 'body_diff'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
 			propValue = JSON.parse(propValue);
+		} else if (['longitude', 'latitude', 'altitude'].indexOf(propName) >= 0) {
+			const places = (propName === 'altitude') ? 4 : 8;
+			propValue = Number(propValue).toFixed(places);
 		} else {
 			if (['created_time', 'updated_time', 'user_created_time', 'user_updated_time'].indexOf(propName) >= 0) {
 				propValue = (!propValue) ? '0' : moment(propValue, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format('x');

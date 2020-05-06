@@ -16,6 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -573,6 +575,8 @@ msgstr "Exibe sumário sobre as notas e cadernos."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Para tentar novamente decriptar estes itens, execute `e2ee decrypt --retry-"
+"failed-items`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -771,9 +775,8 @@ msgstr ""
 "background e logo estarão disponíveis."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Não pedir confirmação."
+msgstr "Você também pode digitar `status` para mais informações."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
@@ -858,9 +861,8 @@ msgid "Options"
 msgstr "Opções"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Anexos"
+msgstr "Anexos da nota..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
@@ -1802,9 +1804,9 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Apagar a nota \"%s\"?"
+msgstr "Apagar o anexo \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1812,6 +1814,8 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Essa é uma ferramenta avançada para exibir os anexos vinculados à sua nota. "
+"Por favor tenha cuidado ao apagá-los pois não poderão ser recuperados depois."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1837,9 +1841,8 @@ msgid "Dropbox Login"
 msgstr "Login no Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
-msgstr "Anexos"
+msgstr "Anexos da nota"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ShareNoteDialog.js:158
 msgid "Synchronising..."
@@ -2002,14 +2005,13 @@ msgid "Error opening note in editor: %s"
 msgstr "Erro ao abir a nota no editor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:433
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Digite um título de nota para pular pra ela. Ou digite # seguido por um nome "
-"de tag, ou @ seguido por um nome de caderno, ou / seguido do conteúdo da "
-"nota."
+"Digite um título de nota ou parte de seu conteúdo para ir direto para ela. "
+"Ou digite # seguido de um nome de etiqueta, ou @ seguido de um nome de "
+"caderno."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:471
 msgid "Goto Anything..."
@@ -2257,20 +2259,18 @@ msgid "Downloaded"
 msgstr "Baixado"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Sim"
+msgstr "sim"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "não"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2387,11 +2387,11 @@ msgstr "Tema"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:250
 msgid "Light"
-msgstr "Light"
+msgstr "Claro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:251
 msgid "Dark"
-msgstr "Dark"
+msgstr "Escuro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:253
 msgid "Dracula"
@@ -2399,11 +2399,11 @@ msgstr "Drácula"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:254
 msgid "Solarised Light"
-msgstr "Solarizado Light"
+msgstr "Solarizado Claro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:255
 msgid "Solarised Dark"
-msgstr "Solarizado Dark"
+msgstr "Solarizado Escuro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:256
 msgid "Nord"
@@ -2411,7 +2411,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Aritim Escuro"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
@@ -2803,6 +2803,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Esses plug-ins melhoram o renderizador de Markdown com funções adicionais. "
+"Por favor note que, enquanto essas funções possam ser úteis, elas não fazem "
+"parte do padrão Markdown e assim sua maioria funcionará apenas no Joplin. "
+"Adicionalmente, algumas delas são *incompatíveis* com o editor WYSIWYG. Se "
+"você abrir a nota que usa um desses plug-ins no editor, você perderá a "
+"formatação do plugin. É indicado abaixo quais plug-ins são compatíveis ou "
+"não com o editor WYSIWYG."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -3113,7 +3120,7 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
-"Por favor, confirme que gostaria de re-encriptar a base de dados completa"
+"Por favor, confirme que gostaria de re-encriptar a base de dados completa."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
