@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Joplin root package for linting",
   "scripts": {
-    "preinstall": "node build_tools_check.js",
     "linter": "./node_modules/.bin/eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-ci": "./node_modules/.bin/eslint --ext .js --ext .jsx --ext .ts --ext .tsx",
     "watch": "gulp watch",
@@ -38,9 +37,14 @@
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
-    "gulp-typescript": "^6.0.0-alpha.1",
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "follow-redirects": "^1.11.0",
+    "joplin-turndown": "^4.0.27",
+    "joplin-turndown-plugin-gfm": "^1.0.12",
+    "relative": "^3.0.2"
   }
 }

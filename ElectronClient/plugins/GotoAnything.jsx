@@ -6,12 +6,12 @@ const SearchEngine = require('lib/services/SearchEngine');
 const BaseModel = require('lib/BaseModel');
 const Tag = require('lib/models/Tag');
 const Folder = require('lib/models/Folder');
+const Note = require('lib/models/Note');
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
-const { surroundKeywords } = require('lib/string-utils.js');
-
+const { surroundKeywords, nextWhitespaceIndex } = require('lib/string-utils.js');
+const { mergeOverlappingIntervals } = require('lib/ArrayUtils.js');
 const PLUGIN_NAME = 'gotoAnything';
-const itemHeight = 60;
 
 class GotoAnything {
 
@@ -37,6 +37,7 @@ class Dialog extends React.PureComponent {
 			keywords: [],
 			listType: BaseModel.TYPE_NOTE,
 			showHelp: false,
+			resultsInBody: false,
 		};
 
 		this.styles_ = {};
@@ -47,20 +48,37 @@ class Dialog extends React.PureComponent {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
+		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
 		this.listItemRenderer = this.listItemRenderer.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
 	}
 
 	style() {
-		if (this.styles_[this.props.theme]) return this.styles_[this.props.theme];
+		const styleKey = [this.props.theme, this.state.resultsInBody ? '1' : '0'].join('-');
+
+		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
 		const theme = themeStyle(this.props.theme);
 
-		this.styles_[this.props.theme] = {
+		const itemHeight = this.state.resultsInBody ? 84 : 64;
+
+		this.styles_[styleKey] = {
 			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
-			row: { overflow: 'hidden', height: itemHeight, display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingLeft: 10, paddingRight: 10 },
+			row: {
+				overflow: 'hidden',
+				height: itemHeight,
+				display: 'flex',
+				justifyContent: 'center',
+				flexDirection: 'column',
+				paddingLeft: 10,
+				paddingRight: 10,
+				borderBottomWidth: 1,
+				borderBottomStyle: 'solid',
+				borderBottomColor: theme.dividerColor,
+				boxSizing: 'border-box',
+			},
 			help: Object.assign({}, theme.textStyle, { marginBottom: 10 }),
 			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
@@ -76,15 +94,23 @@ class Dialog extends React.PureComponent {
 
 		const rowTitleStyle = Object.assign({}, rowTextStyle, {
 			fontSize: rowTextStyle.fontSize * 1.4,
-			marginBottom: 5,
+			marginBottom: this.state.resultsInBody ? 6 : 4,
 			color: theme.colorFaded,
 		});
 
-		this.styles_[this.props.theme].rowSelected = Object.assign({}, this.styles_[this.props.theme].row, { backgroundColor: theme.selectedColor });
-		this.styles_[this.props.theme].rowPath = rowTextStyle;
-		this.styles_[this.props.theme].rowTitle = rowTitleStyle;
+		const rowFragmentsStyle = Object.assign({}, rowTextStyle, {
+			fontSize: rowTextStyle.fontSize * 1.2,
+			marginBottom: this.state.resultsInBody ? 8 : 6,
+			color: theme.colorFaded,
+		});
 
-		return this.styles_[this.props.theme];
+		this.styles_[styleKey].rowSelected = Object.assign({}, this.styles_[styleKey].row, { backgroundColor: theme.selectedColor });
+		this.styles_[styleKey].rowPath = rowTextStyle;
+		this.styles_[styleKey].rowTitle = rowTitleStyle;
+		this.styles_[styleKey].rowFragments = rowFragmentsStyle;
+		this.styles_[styleKey].itemHeight = itemHeight;
+
+		return this.styles_[styleKey];
 	}
 
 	componentDidMount() {
@@ -98,6 +124,16 @@ class Dialog extends React.PureComponent {
 
 	onKeyDown(event) {
 		if (event.keyCode === 27) { // ESCAPE
+			this.props.dispatch({
+				pluginName: PLUGIN_NAME,
+				type: 'PLUGIN_DIALOG_SET',
+				open: false,
+			});
+		}
+	}
+
+	modalLayer_onClick(event) {
+		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
 				type: 'PLUGIN_DIALOG_SET',
@@ -126,13 +162,13 @@ class Dialog extends React.PureComponent {
 	}
 
 	makeSearchQuery(query) {
-		const splitted = query.split(' ');
 		const output = [];
+		const splitted = query.split(' ');
+
 		for (let i = 0; i < splitted.length; i++) {
 			const s = splitted[i].trim();
 			if (!s) continue;
-
-			output.push(`title:${s}*`);
+			output.push(`${s}*`);
 		}
 
 		return output.join(' ');
@@ -144,6 +180,8 @@ class Dialog extends React.PureComponent {
 	}
 
 	async updateList() {
+		let resultsInBody = false;
+
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
 		} else {
@@ -165,15 +203,60 @@ class Dialog extends React.PureComponent {
 					const path = Folder.folderPathString(this.props.folders, row.parent_id);
 					results[i] = Object.assign({}, row, { path: path ? path : '/' });
 				}
-			} else { // NOTES
+			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
 				results = await SearchEngine.instance().search(searchQuery);
 
-				for (let i = 0; i < results.length; i++) {
-					const row = results[i];
-					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = Object.assign({}, row, { path: path });
+				resultsInBody = !!results.find(row => row.fields.includes('body'));
+
+				if (!resultsInBody) {
+					for (let i = 0; i < results.length; i++) {
+						const row = results[i];
+						const path = Folder.folderPathString(this.props.folders, row.parent_id);
+						results[i] = Object.assign({}, row, { path: path });
+					}
+				} else {
+					const limit = 20;
+					const searchKeywords = this.keywords(searchQuery);
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body'] });
+					const notesById = notes.reduce((obj, { id, body }) => ((obj[[id]] = body), obj), {});
+
+					for (let i = 0; i < results.length; i++) {
+						const row = results[i];
+						const path = Folder.folderPathString(this.props.folders, row.parent_id);
+
+						if (row.fields.includes('body')) {
+							let fragments = '...';
+
+							if (i < limit) { // Display note fragments of search keyword matches
+								const indices = [];
+								const body = notesById[row.id];
+
+								// Iterate over all matches in the body for each search keyword
+								for (const { valueRegex } of searchKeywords) {
+									for (const match of body.matchAll(new RegExp(valueRegex, 'ig'))) {
+										// Populate 'indices' with [begin index, end index] of each note fragment
+										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
+										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+										if (indices.length > 20) break;
+									}
+								}
+
+								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
+								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
+								// will result in 'Joplin is a free, open source note taking application'
+								const mergedIndices = mergeOverlappingIntervals(indices, 3);
+								fragments = mergedIndices.map(f => body.slice(f[0], f[1])).join(' ... ');
+								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
+								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+							}
+
+							results[i] = Object.assign({}, row, { path, fragments });
+						} else {
+							results[i] = Object.assign({}, row, { path: path, fragments: '' });
+						}
+					}
 				}
 			}
 
@@ -190,6 +273,7 @@ class Dialog extends React.PureComponent {
 				results: results,
 				keywords: this.keywords(searchQuery),
 				selectedItemId: selectedItemId,
+				resultsInBody: resultsInBody,
 			});
 		}
 	}
@@ -218,7 +302,6 @@ class Dialog extends React.PureComponent {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
-				historyAction: 'goto',
 			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
@@ -229,7 +312,6 @@ class Dialog extends React.PureComponent {
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
-				historyAction: 'goto',
 			});
 		}
 	}
@@ -248,13 +330,20 @@ class Dialog extends React.PureComponent {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
-		const titleHtml = surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+		const titleHtml = item.fragments
+			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
+			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
 
-		const pathComp = !item.path ? null : <div style={style.rowPath}>{item.path}</div>;
+		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>');
+
+		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" />;
+		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;
+		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: fragmentsHtml }}></div>;
 
 		return (
 			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
+				{fragmentComp}
 				{pathComp}
 			</div>
 		);
@@ -308,17 +397,19 @@ class Dialog extends React.PureComponent {
 	}
 
 	renderList() {
-		const style = {
+		const style = this.style();
+
+		const itemListStyle = {
 			marginTop: 5,
-			height: Math.min(itemHeight * this.state.results.length, 7 * itemHeight),
+			height: Math.min(style.itemHeight * this.state.results.length, 7 * style.itemHeight),
 		};
 
 		return (
 			<ItemList
 				ref={this.itemListRef}
-				itemHeight={itemHeight}
+				itemHeight={style.itemHeight}
 				items={this.state.results}
-				style={style}
+				style={itemListStyle}
 				itemRenderer={this.listItemRenderer}
 			/>
 		);
@@ -327,10 +418,10 @@ class Dialog extends React.PureComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name.')}</div>;
 
 		return (
-			<div style={theme.dialogModalLayer}>
+			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>

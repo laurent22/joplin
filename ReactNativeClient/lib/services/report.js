@@ -139,7 +139,7 @@ class ReportService {
 		const decryptionDisabledItems = await DecryptionWorker.instance().decryptionDisabledItems();
 
 		if (decryptionDisabledItems.length) {
-			section = { title: _('Items that cannot be decrypted'), body: [], name: 'failedDecryption' };
+			section = { title: _('Items that cannot be decrypted'), body: [], name: 'failedDecryption', canRetryAll: false, retryAllHandler: null };
 
 			section.body.push(_('Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.'));
 
@@ -150,11 +150,29 @@ class ReportService {
 				section.body.push({
 					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
 					canRetry: true,
+					canRetryType: 'e2ee',
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						DecryptionWorker.instance().scheduleStart();
 					},
 				});
+			}
+
+			const retryHandlers = [];
+
+			for (let i = 0; i < section.body.length; i++) {
+				if (section.body[i].canRetry) {
+					retryHandlers.push(section.body[i].retryHandler);
+				}
+			}
+
+			if (retryHandlers.length > 1) {
+				section.canRetryAll = true;
+				section.retryAllHandler = async () => {
+					for (const retryHandler of retryHandlers) {
+						await retryHandler();
+					}
+				};
 			}
 
 			sections.push(section);
@@ -190,6 +208,7 @@ class ReportService {
 				section.body.push({
 					text: _('%s (%s): %s', row.resource_title, row.resource_id, row.fetch_error),
 					canRetry: true,
+					canRetryType: 'resourceDownload',
 					retryHandler: async () => {
 						await Resource.resetErrorStatus(row.resource_id);
 						ResourceFetcher.instance().autoAddResources();
