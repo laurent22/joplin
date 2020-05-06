@@ -20,7 +20,7 @@ export const renderFormatButtons = ({ getState, setState, color }, formats, mark
 		<FlatList
 			data={formats ? formats : Formats}
 			keyboardShouldPersistTaps="always"
-			// eslint-disable-next-line no-unused-vars
+			// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 			renderItem={({ item, index }) =>
 				markdownButton
 					? markdownButton({ item, getState, setState })
