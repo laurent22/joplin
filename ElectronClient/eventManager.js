@@ -18,6 +18,10 @@ class EventManager {
 		return this.emitter_.removeListener(eventName, callback);
 	}
 
+	off(eventName, callback) {
+		return this.removeListener(eventName, callback);
+	}
+
 }
 
 const eventManager = new EventManager();

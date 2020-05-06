@@ -13,7 +13,7 @@ gulp.task('icon-packager', function() {
 });
 
 gulp.task('deploy', function() {
-	fs.copyFileSync(`${__dirname}/dist/icons/Joplin/icons.js`, `${__dirname}/../../../ElectronClient/gui/editors/TinyMCE/icons.js`);
+	fs.copyFileSync(`${__dirname}/dist/icons/Joplin/icons.js`, `${__dirname}/../../../ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/icons.js`);
 	return Promise.resolve();
 });
 

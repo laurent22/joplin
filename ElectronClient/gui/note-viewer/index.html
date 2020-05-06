@@ -105,8 +105,10 @@
 
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
-				if (pluginAssetsAdded_[asset.name]) continue;
-				pluginAssetsAdded_[asset.name] = true;
+
+				const assetId = asset.name ? asset.name : asset.path;
+				if (pluginAssetsAdded_[assetId]) continue;
+				pluginAssetsAdded_[assetId] = true;
 
 				if (asset.mime === 'application/javascript') {
 					const script = document.createElement('script');
@@ -143,6 +145,22 @@
 			}, 100);
 		}
 
+		// https://stackoverflow.com/a/1977898/561309
+		function isImageReady(img) {
+			if (!img.complete) return false;
+			if (!img.naturalWidth || !img.naturalHeight) return false;
+			return true;
+		}
+
+		function allImagesLoaded() {
+			for (const image of document.images) {
+				if (!isImageReady(image)) return false;
+			}
+			return true;
+		}
+
+		let checkAllImageLoadedIID_ = null;
+
 		ipc.setHtml = (event) => {
 			const html = event.html;
 
@@ -177,6 +195,15 @@
 			}
 
 			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+
+			if (checkAllImageLoadedIID_) clearInterval(checkAllImageLoadedIID_);
+
+			checkAllImageLoadedIID_ = setInterval(() => {
+				if (!allImagesLoaded()) return;
+
+				clearInterval(checkAllImageLoadedIID_);
+				ipcProxySendToHost('noteRenderComplete');
+			}, 100);
 		}
 
 		let lastScrollEventTime = 0;

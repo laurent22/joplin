@@ -64,7 +64,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
-		note.title = Note.defaultTitle(note);
+		note.title = Note.defaultTitle(note.body);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
