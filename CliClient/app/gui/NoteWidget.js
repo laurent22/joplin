@@ -46,6 +46,8 @@ class NoteWidget extends TextWidget {
 
 				if (this.note_ && this.note_.encryption_applied) {
 					this.text = _('One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.');
+					this.text += '\n\n';
+					this.text += _('You may also type `status` for more information.');
 				} else {
 					this.text = this.note_ ? `${this.note_.title}\n\n${this.note_.body}` : '';
 				}

@@ -101,8 +101,11 @@ else
 fi
 
 #-----------------------------------------------------
-print "Checking latest version..."
-RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": "v\K.*?(?=")')
+# Download Joplin
+#-----------------------------------------------------
+
+# Get the latest version to download
+RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 
 # Check if it's in the latest version
 if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
@@ -152,7 +155,7 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
-if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.* ]]
+if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]
 then
     : "${TMPDIR:=$TEMP_DIR}"
     # This command extracts to squashfs-root by default and can't be changed...
@@ -165,7 +168,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/${USER}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications
     print "${COLOR_GREEN}OK${COLOR_RESET}"
