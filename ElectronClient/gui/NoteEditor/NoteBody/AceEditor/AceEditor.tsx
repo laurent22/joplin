@@ -6,6 +6,7 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
+import useListIdent from './utils/useListIdent';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -88,7 +89,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const editorRef = useRef(null);
 	editorRef.current = editor;
 	const rootRef = useRef(null);
-	const indentOrig = useRef<any>(null);
 	const webviewRef = useRef(null);
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
@@ -104,6 +104,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	const rootWidth = useRootWidth({ rootRef });
 
 	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll } = useScrollHandler(editor, webviewRef, props.onScroll);
+
+	useListIdent({ editor, selectionRangeRef });
 
 	const aceEditor_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -446,8 +448,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		editor.indent = indentOrig.current;
-
 		const cancelledKeys = [];
 		const letters = ['F', 'T', 'P', 'Q', 'L', ',', 'G', 'K'];
 		for (let i = 0; i < letters.length; i++) {
@@ -498,36 +498,6 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			document.querySelector('#note-editor').removeEventListener('contextmenu', onEditorContextMenu);
 		};
 	}, [editor, onEditorPaste, onEditorContextMenu, lastKeys]);
-
-	useEffect(() => {
-		if (!editor) return;
-
-		// Markdown list indentation. (https://github.com/laurent22/joplin/pull/2713)
-		// If the current line starts with `markup.list` token,
-		// hitting `Tab` key indents the line instead of inserting tab at cursor.
-		indentOrig.current = editor.indent;
-		const localIndentOrig = indentOrig.current;
-		editor.indent = function() {
-			const range = selectionRangeRef.current;
-			if (range.isEmpty()) {
-				const row = range.start.row;
-				const tokens = this.session.getTokens(row);
-
-				if (tokens.length > 0 && tokens[0].type == 'markup.list') {
-					if (tokens[0].value.search(/\d+\./) != -1) {
-						// Resets numbered list to 1.
-						this.session.replace({ start: { row, column: 0 }, end: { row, column: tokens[0].value.length } },
-							tokens[0].value.replace(/\d+\./, '1.'));
-					}
-
-					this.session.indentRows(row, row, '\t');
-					return;
-				}
-			}
-
-			localIndentOrig.call(this);
-		};
-	}, [editor]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
