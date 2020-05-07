@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
-import { textOffsetToCursorPosition, useScrollHandler, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
+import { textOffsetToCursorPosition, useScrollHandler, useRootWidth, usePrevious, lineLeftSpaces, selectionRangeCurrentLine, selectionRangePreviousLine, currentTextOffset, textOffsetSelection, selectedText, useSelectionRange } from './utils';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -87,6 +87,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 
 	const editorRef = useRef(null);
 	editorRef.current = editor;
+	const rootRef = useRef(null);
 	const indentOrig = useRef<any>(null);
 	const webviewRef = useRef(null);
 	const props_onChangeRef = useRef<Function>(null);
@@ -99,6 +100,8 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	// state as it would trigger too many unecessary updates.
 	const selectionRangeRef = useRef(null);
 	selectionRangeRef.current = useSelectionRange(editor);
+
+	const rootWidth = useRootWidth({ rootRef });
 
 	const { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll } = useScrollHandler(editor, webviewRef, props.onScroll);
 
@@ -591,11 +594,18 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			// Note: Ideally we'd set the display to "none" to take the editor out
 			// of the DOM but if we do that, certain things won't work, in particular
 			// things related to scroll, which are based on the editor.
-			output.width = 1;
-			output.maxWidth = 1;
-			output.position = 'absolute';
-			output.left = -100000;
+
+			// Note that the below hack doesn't work and causes a bug in this case:
+			// - Put Ace Editor in viewer-only mode
+			// - Go to WYSIWYG editor
+			// - Create new to-do - set title only
+			// - Switch to Code View
+			// - Switch layout and type something
+			// => Text editor layout is broken and text is off-screen
+
+			output.display = 'none'; // Seems to work fine since the refactoring
 		}
+
 		return output;
 	}, [styles.cellEditor, props.visiblePanes]);
 
@@ -614,6 +624,12 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}, [styles.cellViewer, props.visiblePanes]);
 
 	function renderEditor() {
+		// Need to hard-code the editor width, otherwise various bugs pops up
+		let width = 0;
+		if (props.visiblePanes.includes('editor')) {
+			width = !props.visiblePanes.includes('viewer') ? rootWidth : Math.floor(rootWidth / 2);
+		}
+
 		return (
 			<div style={cellEditorStyle}>
 				<AceEditorReact
@@ -621,6 +637,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					mode={props.contentMarkupLanguage === Note.MARKUP_LANGUAGE_HTML ? 'text' : 'markdown'}
 					theme={styles.editor.editorTheme}
 					style={styles.editor}
+					width={`${width}px`}
 					fontSize={styles.editor.fontSize}
 					showGutter={false}
 					readOnly={props.visiblePanes.indexOf('editor') < 0}
@@ -663,7 +680,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 	}
 
 	return (
-		<div style={styles.root}>
+		<div style={styles.root} ref={rootRef}>
 			<div style={styles.rowToolbar}>
 				<Toolbar
 					theme={props.theme}
