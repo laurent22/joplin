@@ -18,11 +18,12 @@ interface NoteToolbarProps {
 	selectedFolderId: string,
 	folders: any[],
 	watchedNoteFiles: string[],
+	backwardHistoryNotes: any[],
+	forwardHistoryNotes: any[],
 	notesParentType: string,
 	note: any,
 	dispatch: Function,
 	onButtonClick(event:ButtonClickEvent):void,
-	historyNotes: any[],
 }
 
 function styles_(props:NoteToolbarProps) {
@@ -37,11 +38,36 @@ function styles_(props:NoteToolbarProps) {
 }
 
 function useToolbarItems(props:NoteToolbarProps) {
-	const { note, selectedFolderId, folders, watchedNoteFiles, notesParentType, dispatch, onButtonClick, historyNotes } = props;
+	const { note, selectedFolderId, folders, watchedNoteFiles, notesParentType, dispatch
+		, onButtonClick, backwardHistoryNotes, forwardHistoryNotes } = props;
 
 	const toolbarItems = [];
 
 	const folder = Folder.byId(folders, selectedFolderId);
+
+	toolbarItems.push({
+		tooltip: _('Back'),
+		iconName: 'fa-arrow-left',
+		enabled: (backwardHistoryNotes.length > 0),
+		onClick: () => {
+			if (!backwardHistoryNotes.length) return;
+			props.dispatch({
+				type: 'HISTORY_BACKWARD',
+			});
+		},
+	});
+
+	toolbarItems.push({
+		tooltip: _('Front'),
+		iconName: 'fa-arrow-right',
+		enabled: (forwardHistoryNotes.length > 0),
+		onClick: () => {
+			if (!forwardHistoryNotes.length) return;
+			props.dispatch({
+				type: 'HISTORY_FORWARD',
+			});
+		},
+	});
 
 	if (folder && ['Search', 'Tag', 'SmartFilter'].includes(notesParentType)) {
 		toolbarItems.push({
@@ -54,25 +80,6 @@ function useToolbarItems(props:NoteToolbarProps) {
 					noteId: note.id,
 				});
 				Folder.expandTree(folders, folder.parent_id);
-			},
-		});
-	}
-
-	if (historyNotes.length) {
-		toolbarItems.push({
-			tooltip: _('Back'),
-			iconName: 'fa-arrow-left',
-			onClick: () => {
-				if (!historyNotes.length) return;
-
-				const lastItem = historyNotes[historyNotes.length - 1];
-
-				dispatch({
-					type: 'FOLDER_AND_NOTE_SELECT',
-					folderId: lastItem.parent_id,
-					noteId: lastItem.id,
-					historyNoteAction: 'pop',
-				});
 			},
 		});
 	}
@@ -149,7 +156,8 @@ const mapStateToProps = (state:any) => {
 		selectedFolderId: state.selectedFolderId,
 		folders: state.folders,
 		watchedNoteFiles: state.watchedNoteFiles,
-		historyNotes: state.historyNotes,
+		backwardHistoryNotes: state.backwardHistoryNotes,
+		forwardHistoryNotes: state.forwardHistoryNotes,
 		notesParentType: state.notesParentType,
 	};
 };
