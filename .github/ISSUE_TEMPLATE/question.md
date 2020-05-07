@@ -2,6 +2,7 @@
 name: "🤔 Feature requests and support"
 about: For non-bug issues we recommend using the forum, where you'll be more likely to get an answer: https://discourse.joplinapp.org/
 title: ''
+labels: ''
 
 ---
 
