@@ -3,7 +3,7 @@ import { isStringWebLink, replaceBetween } from './utils';
 export const writeUrlTextHere = 'https://example.com';
 export const writeTextHereString = 'Write some text here';
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 export default ({ getState, item, setState }) => {
 	const { selection, text } = getState();
 	let newText;

@@ -69,8 +69,9 @@ const ResourceTable: React.FC<ResourceTable> = (props: ResourceTable) => {
 	};
 
 	const cellStyle = {
-		...props.theme.textStyleMinor,
+		...props.theme.textStyle,
 		whiteSpace: 'nowrap',
+		color: props.theme.colorFaded,
 		width: 1,
 	};
 

@@ -11,6 +11,9 @@ const tasks = {
 	copyPluginAssets: {
 		fn: require('./tools/copyPluginAssets.js'),
 	},
+	copyTinyMceLangs: {
+		fn: require('./tools/copyTinyMceLangs.js'),
+	},
 	electronRebuild: {
 		fn: require('./tools/electronRebuild.js'),
 	},
@@ -36,6 +39,7 @@ const buildParallel = [
 	'compileScripts',
 	'compilePackageInfo',
 	'copyPluginAssets',
+	'copyTinyMceLangs',
 ];
 
 gulp.task('build', gulp.parallel(...buildParallel));

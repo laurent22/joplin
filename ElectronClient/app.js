@@ -134,8 +134,6 @@ class Application extends BaseApplication {
 							paneOptions = ['editor', 'both'];
 						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_VIEWER_SPLIT) {
 							paneOptions = ['viewer', 'both'];
-						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_SPLIT_WYSIWYG) {
-							paneOptions = ['both', 'wysiwyg'];
 						} else {
 							paneOptions = ['editor', 'viewer', 'both'];
 						}
@@ -250,6 +248,8 @@ class Application extends BaseApplication {
 	}
 
 	async generalMiddleware(store, next, action) {
+		let mustUpdateMenuItemStates = false;
+
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
@@ -268,6 +268,10 @@ class Application extends BaseApplication {
 
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'windowContentZoomFactor' || action.type == 'SETTING_UPDATE_ALL') {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
+		}
+
+		if (action.type == 'SETTING_UPDATE_ONE' && ['editor.codeView'].includes(action.key) || action.type == 'SETTING_UPDATE_ALL') {
+			mustUpdateMenuItemStates = true;
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -293,14 +297,16 @@ class Application extends BaseApplication {
 			Setting.setValue('noteListVisibility', newState.noteListVisibility);
 		}
 
-		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0) {
-			this.updateMenuItemStates(newState);
+		if (action.type.indexOf('NOTE_SELECT') === 0 || action.type.indexOf('FOLDER_SELECT') === 0 || action.type === 'NOTE_VISIBLE_PANES_TOGGLE') {
+			mustUpdateMenuItemStates = true;
 		}
 
 		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
 			this.toggleDevTools(newState.devToolsVisible);
-			this.updateMenuItemStates(newState);
+			mustUpdateMenuItemStates = true;
 		}
+
+		if (mustUpdateMenuItemStates) this.updateMenuItemStates(newState);
 
 		return result;
 	}
@@ -547,6 +553,7 @@ class Application extends BaseApplication {
 				this.dispatch({
 					type: 'WINDOW_COMMAND',
 					name: 'print',
+					noteIds: this.store().getState().selectedNoteIds,
 				});
 			},
 		};
@@ -891,33 +898,6 @@ class Application extends BaseApplication {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
-					id: 'edit:commandStartExternalEditing',
-					label: _('Edit in external editor'),
-					screens: ['Main'],
-					accelerator: 'CommandOrControl+E',
-					click: () => {
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'commandStartExternalEditing',
-						});
-					},
-				}, {
-					id: 'edit:setTags',
-					label: _('Tags'),
-					screens: ['Main'],
-					accelerator: 'CommandOrControl+Alt+T',
-					click: () => {
-						const selectedNoteIds = this.store().getState().selectedNoteIds;
-						this.dispatch({
-							type: 'WINDOW_COMMAND',
-							name: 'setTags',
-							noteIds: selectedNoteIds,
-						});
-					},
-				}, {
-					type: 'separator',
-					screens: ['Main'],
-				}, {
 					id: 'edit:focusSearch',
 					label: _('Search in all the notes'),
 					screens: ['Main'],
@@ -1031,7 +1011,19 @@ class Application extends BaseApplication {
 					},
 					accelerator: 'CommandOrControl+0',
 				}, {
+					// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
+					// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
+					// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
+					// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
+					// Additionally it allows the use of the plus key on the numpad.
 					label: _('Zoom In'),
+					click: () => {
+						Setting.incValue('windowContentZoomFactor', 10);
+					},
+					accelerator: 'CommandOrControl+Plus',
+				}, {
+					label: _('Zoom In'),
+					visible: false,
 					click: () => {
 						Setting.incValue('windowContentZoomFactor', 10);
 					},
@@ -1042,6 +1034,46 @@ class Application extends BaseApplication {
 						Setting.incValue('windowContentZoomFactor', -10);
 					},
 					accelerator: 'CommandOrControl+-',
+				}],
+			},
+			note: {
+				label: _('&Note'),
+				submenu: [{
+					id: 'edit:commandStartExternalEditing',
+					label: _('Edit in external editor'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+E',
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandStartExternalEditing',
+						});
+					},
+				}, {
+					id: 'edit:setTags',
+					label: _('Tags'),
+					screens: ['Main'],
+					accelerator: 'CommandOrControl+Alt+T',
+					click: () => {
+						const selectedNoteIds = this.store().getState().selectedNoteIds;
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'setTags',
+							noteIds: selectedNoteIds,
+						});
+					},
+				}, {
+					type: 'separator',
+					screens: ['Main'],
+				}, {
+					id: 'note:statistics',
+					label: _('Statistics...'),
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'commandContentProperties',
+						});
+					},
 				}],
 			},
 			tools: {
@@ -1124,6 +1156,7 @@ class Application extends BaseApplication {
 			rootMenus.file,
 			rootMenus.edit,
 			rootMenus.view,
+			rootMenus.note,
 			rootMenus.tools,
 			rootMenus.help,
 		];
@@ -1184,11 +1217,40 @@ class Application extends BaseApplication {
 
 		const selectedNoteIds = state.selectedNoteIds;
 		const note = selectedNoteIds.length === 1 ? await Note.load(selectedNoteIds[0]) : null;
+		const aceEditorViewerOnly = state.settings['editor.codeView'] && state.noteVisiblePanes.length === 1 && state.noteVisiblePanes[0] === 'viewer';
 
-		for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'commandStartExternalEditing', 'showLocalSearch']) {
-			const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
+		// Only enabled when there's only one active note, and that note
+		// is a Markdown note (markup_language = MARKDOWN), and the
+		// editor is in edit mode (not viewer-only mode).
+		const singleMarkdownNoteMenuItems = [
+			'edit:bold',
+			'edit:italic',
+			'edit:link',
+			'edit:code',
+			'edit:insertDateTime',
+		];
+
+		// Only enabled when there's only one active note.
+		const singleNoteMenuItems = [
+			'edit:copy',
+			'edit:paste',
+			'edit:cut',
+			'edit:selectAll',
+			'edit:showLocalSearch',
+			'edit:commandStartExternalEditing',
+			'note:statistics',
+		];
+
+		for (const itemId of singleMarkdownNoteMenuItems) {
+			const menuItem = Menu.getApplicationMenu().getMenuItemById(itemId);
 			if (!menuItem) continue;
-			menuItem.enabled = !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+			menuItem.enabled = !aceEditorViewerOnly && !!note && note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+		}
+
+		for (const itemId of singleNoteMenuItems) {
+			const menuItem = Menu.getApplicationMenu().getMenuItemById(itemId);
+			if (!menuItem) continue;
+			menuItem.enabled = selectedNoteIds.length === 1;
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');

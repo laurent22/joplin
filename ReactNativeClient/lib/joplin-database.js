@@ -137,7 +137,7 @@ class JoplinDatabase extends Database {
 	}
 
 	tableFieldNames(tableName) {
-		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName];
+		if (this.tableFieldNames_[tableName]) return this.tableFieldNames_[tableName].slice();
 
 		const tf = this.tableFields(tableName);
 		const output = [];
@@ -145,6 +145,7 @@ class JoplinDatabase extends Database {
 			output.push(tf[i].name);
 		}
 		this.tableFieldNames_[tableName] = output;
+
 		return output;
 	}
 
@@ -250,7 +251,7 @@ class JoplinDatabase extends Database {
 		return d && d[fieldName] ? d[fieldName] : '';
 	}
 
-	refreshTableFields() {
+	refreshTableFields(newVersion) {
 		this.logger().info('Initializing tables...');
 		const queries = [];
 		queries.push(this.wrapQuery('DELETE FROM table_fields'));
@@ -288,6 +289,7 @@ class JoplinDatabase extends Database {
 				return promiseChain(chain);
 			})
 			.then(() => {
+				queries.push({ sql: 'UPDATE version SET table_fields_version = ?', params: [newVersion] });
 				return this.transactionExecBatch(queries);
 			});
 	}
@@ -312,7 +314,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -680,6 +682,10 @@ class JoplinDatabase extends Database {
 				queries.push('CREATE INDEX resources_size ON resources(size)');
 			}
 
+			if (targetVersion == 29) {
+				queries.push('ALTER TABLE version ADD COLUMN table_fields_version INT NOT NULL DEFAULT 0');
+			}
+
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
 
 			try {
@@ -733,12 +739,13 @@ class JoplinDatabase extends Database {
 		}
 
 		const version = !versionRow ? 0 : versionRow.version;
+		const tableFieldsVersion = !versionRow ? 0 : versionRow.table_fields_version;
 		this.version_ = version;
 		this.logger().info('Current database version', version);
 
 		const newVersion = await this.upgradeDatabase(version);
 		this.version_ = newVersion;
-		if (newVersion !== version) await this.refreshTableFields();
+		if (newVersion !== tableFieldsVersion) await this.refreshTableFields(newVersion);
 
 		this.tableFields_ = {};
 

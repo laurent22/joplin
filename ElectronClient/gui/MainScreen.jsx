@@ -3,18 +3,19 @@ const { connect } = require('react-redux');
 const { Header } = require('./Header.min.js');
 const { SideBar } = require('./SideBar.min.js');
 const { NoteList } = require('./NoteList.min.js');
-const { NoteText } = require('./NoteText.min.js');
-const NoteText2 = require('./NoteText2.js').default;
+const NoteEditor = require('./NoteEditor/NoteEditor.js').default;
 const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
+const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
 const BaseModel = require('lib/BaseModel.js');
 const Tag = require('lib/models/Tag.js');
 const Note = require('lib/models/Note.js');
 const { uuid } = require('lib/uuid.js');
+const { shim } = require('lib/shim');
 const Folder = require('lib/models/Folder.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
@@ -25,6 +26,7 @@ const PluginManager = require('lib/services/PluginManager');
 const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
+const { time } = require('lib/time-utils.js');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -48,6 +50,8 @@ class MainScreenComponent extends React.Component {
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
 		this.noteList_onDrag = this.noteList_onDrag.bind(this);
+		this.commandSavePdf = this.commandSavePdf.bind(this);
+		this.commandPrint = this.commandPrint.bind(this);
 	}
 
 	setupAppCloseHandling() {
@@ -149,6 +153,9 @@ class MainScreenComponent extends React.Component {
 
 		let commandProcessed = true;
 
+		let delayedFunction = null;
+		let delayedArgs = null;
+
 		if (command.name === 'newNote') {
 			if (!this.props.folders.length) {
 				bridge().showErrorMessageBox(_('Please create a notebook first.'));
@@ -179,7 +186,6 @@ class MainScreenComponent extends React.Component {
 								this.props.dispatch({
 									type: 'FOLDER_SELECT',
 									id: folder.id,
-									historyAction: 'goto',
 								});
 							}
 						}
@@ -351,13 +357,16 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'commandContentProperties') {
-			this.setState({
-				noteContentPropertiesDialogOptions: {
-					visible: true,
-					text: command.text,
-					lines: command.lines,
-				},
-			});
+			const note = await Note.load(this.props.selectedNoteId);
+			if (note) {
+				this.setState({
+					noteContentPropertiesDialogOptions: {
+						visible: true,
+						text: note.body,
+						// lines: command.lines,
+					},
+				});
+			}
 		} else if (command.name === 'commandShareNoteDialog') {
 			this.setState({
 				shareNoteDialogOptions: {
@@ -414,7 +423,7 @@ class MainScreenComponent extends React.Component {
 
 						if (newNote) {
 							await Note.save(newNote);
-							eventManager.emit('alarmChange', { noteId: note.id });
+							eventManager.emit('alarmChange', { noteId: note.id, note: newNote });
 						}
 
 						this.setState({ promptOptions: null });
@@ -445,6 +454,12 @@ class MainScreenComponent extends React.Component {
 					},
 				},
 			});
+		} else if (command.name === 'exportPdf') {
+			delayedFunction = this.commandSavePdf;
+			delayedArgs = { noteIds: command.noteIds };
+		} else if (command.name === 'print') {
+			delayedFunction = this.commandPrint;
+			delayedArgs = { noteIds: command.noteIds };
 		} else {
 			commandProcessed = false;
 		}
@@ -454,6 +469,112 @@ class MainScreenComponent extends React.Component {
 				type: 'WINDOW_COMMAND',
 				name: null,
 			});
+		}
+
+		if (delayedFunction) {
+			requestAnimationFrame(() => {
+				delayedFunction = delayedFunction.bind(this);
+				delayedFunction(delayedArgs);
+			});
+		}
+	}
+
+	async waitForNoteToSaved(noteId) {
+		while (noteId && this.props.editorNoteStatuses[noteId] === 'saving') {
+			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
+			await time.msleep(100);
+		}
+	}
+
+	async printTo_(target, options) {
+		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
+		if (this.isPrinting_) {
+			console.info(`Printing ${options.path} to ${target} disallowed, already printing.`);
+			return;
+		}
+
+		this.isPrinting_ = true;
+
+		// Need to wait for save because the interop service reloads the note from the database
+		await this.waitForNoteToSaved(options.noteId);
+
+		if (target === 'pdf') {
+			try {
+				const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
+					printBackground: true,
+					pageSize: Setting.value('export.pdfPageSize'),
+					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+					customCss: this.props.customCss,
+				});
+				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+			} catch (error) {
+				console.error(error);
+				bridge().showErrorMessageBox(error.message);
+			}
+		} else if (target === 'printer') {
+			try {
+				await InteropServiceHelper.printNote(options.noteId, {
+					printBackground: true,
+					customCss: this.props.customCss,
+				});
+			} catch (error) {
+				console.error(error);
+				bridge().showErrorMessageBox(error.message);
+			}
+		}
+		this.isPrinting_ = false;
+	}
+
+	async commandSavePdf(args) {
+		try {
+			const noteIds = args.noteIds;
+
+			if (!noteIds.length) throw new Error('No notes selected for pdf export');
+
+			let path = null;
+			if (noteIds.length === 1) {
+				path = bridge().showSaveDialog({
+					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
+					defaultPath: await InteropServiceHelper.defaultFilename(noteIds[0], 'pdf'),
+				});
+
+			} else {
+				path = bridge().showOpenDialog({
+					properties: ['openDirectory', 'createDirectory'],
+				});
+			}
+
+			if (!path) return;
+
+			for (let i = 0; i < noteIds.length; i++) {
+				const note = await Note.load(noteIds[i]);
+
+				let pdfPath = '';
+
+				if (noteIds.length === 1) {
+					pdfPath = path;
+				} else {
+					const n = await InteropServiceHelper.defaultFilename(note.id, 'pdf');
+					pdfPath = await shim.fsDriver().findUniqueFilename(`${path}/${n}`);
+				}
+
+				await this.printTo_('pdf', { path: pdfPath, noteId: note.id });
+			}
+		} catch (error) {
+			console.error(error);
+			bridge().showErrorMessageBox(error.message);
+		}
+	}
+
+	async commandPrint(args) {
+		// TODO: test
+		try {
+			const noteIds = args.noteIds;
+			if (noteIds.length !== 1) throw new Error(_('Only one note can be printed at a time.'));
+
+			await this.printTo_('printer', { noteId: noteIds[0] });
+		} catch (error) {
+			bridge().showErrorMessageBox(error.message);
 		}
 	}
 
@@ -684,13 +805,31 @@ class MainScreenComponent extends React.Component {
 		});
 
 		headerItems.push({
-			title: _('Layout'),
-			iconName: 'fa-columns',
+			title: _('Code View'),
+			iconName: 'fa-file-code-o ',
 			enabled: !!notes.length,
+			type: 'checkbox',
+			checked: this.props.settingEditorCodeView,
 			onClick: () => {
-				this.doCommand({ name: 'toggleVisiblePanes' });
+				// A bit of a hack, but for now don't allow changing code view
+				// while a note is being saved as it will cause a problem with
+				// TinyMCE because it won't have time to send its content before
+				// being switch to Ace Editor.
+				if (this.props.hasNotesBeingSaved) return;
+				Setting.toggle('editor.codeView');
 			},
 		});
+
+		if (this.props.settingEditorCodeView) {
+			headerItems.push({
+				title: _('Layout'),
+				iconName: 'fa-columns',
+				enabled: !!notes.length,
+				onClick: () => {
+					this.doCommand({ name: 'toggleVisiblePanes' });
+				},
+			});
+		}
 
 		headerItems.push({
 			title: _('Search...'),
@@ -717,13 +856,8 @@ class MainScreenComponent extends React.Component {
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
-		const keyboardMode = Setting.value('editor.keyboardMode');
 
-		const isWYSIWYG = this.props.noteVisiblePanes.length && this.props.noteVisiblePanes[0] === 'wysiwyg';
-		const noteTextComp = isWYSIWYG ?
-			<NoteText2 editor="TinyMCE" style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />
-			:
-			<NoteText style={styles.noteText} keyboardMode={keyboardMode} visiblePanes={this.props.noteVisiblePanes} />;
+		const bodyEditor = this.props.settingEditorCodeView ? 'AceEditor' : 'TinyMCE';
 
 		return (
 			<div style={style}>
@@ -741,7 +875,7 @@ class MainScreenComponent extends React.Component {
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
 				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
-				{noteTextComp}
+				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
 				{pluginDialog}
 			</div>
 		);
@@ -751,8 +885,8 @@ class MainScreenComponent extends React.Component {
 const mapStateToProps = state => {
 	return {
 		theme: state.settings.theme,
+		settingEditorCodeView: state.settings['editor.codeView'],
 		windowCommand: state.windowCommand,
-		noteVisiblePanes: state.noteVisiblePanes,
 		sidebarVisibility: state.sidebarVisibility,
 		noteListVisibility: state.noteListVisibility,
 		folders: state.folders,
@@ -768,6 +902,8 @@ const mapStateToProps = state => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		plugins: state.plugins,
 		templates: state.templates,
+		customCss: state.customCss,
+		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 	};
 };

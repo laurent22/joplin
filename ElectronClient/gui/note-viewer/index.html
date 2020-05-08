@@ -105,8 +105,10 @@
 
 			for (let i = 0; i < assets.length; i++) {
 				const asset = assets[i];
-				if (pluginAssetsAdded_[asset.name]) continue;
-				pluginAssetsAdded_[asset.name] = true;
+
+				const assetId = asset.name ? asset.name : asset.path;
+				if (pluginAssetsAdded_[assetId]) continue;
+				pluginAssetsAdded_[assetId] = true;
 
 				if (asset.mime === 'application/javascript') {
 					const script = document.createElement('script');
@@ -143,6 +145,22 @@
 			}, 100);
 		}
 
+		// https://stackoverflow.com/a/1977898/561309
+		function isImageReady(img) {
+			if (!img.complete) return false;
+			if (!img.naturalWidth || !img.naturalHeight) return false;
+			return true;
+		}
+
+		function allImagesLoaded() {
+			for (const image of document.images) {
+				if (!isImageReady(image)) return false;
+			}
+			return true;
+		}
+
+		let checkAllImageLoadedIID_ = null;
+
 		ipc.setHtml = (event) => {
 			const html = event.html;
 
@@ -177,6 +195,15 @@
 			}
 
 			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+
+			if (checkAllImageLoadedIID_) clearInterval(checkAllImageLoadedIID_);
+
+			checkAllImageLoadedIID_ = setInterval(() => {
+				if (!allImagesLoaded()) return;
+
+				clearInterval(checkAllImageLoadedIID_);
+				ipcProxySendToHost('noteRenderComplete');
+			}, 100);
 		}
 
 		let lastScrollEventTime = 0;
@@ -274,24 +301,31 @@
 			if (selectedElement && Date.now() - options.searchTimestamp <= 1000) selectedElement.scrollIntoView();
 		}
 
-		let markLoaded_ = false;
+		let markLoader_ = { state: 'idle', whenDone: null };
 		ipc.setMarkers = (event) => {
 			const keywords = event.keywords;
 			const options = event.options;
 
-			if (!keywords.length && !markLoaded_) return;
+			if (!keywords.length && markLoader_.state === 'idle') return;
 
-			if (!markLoaded_) {
+			if (markLoader_.state === 'idle') {
+				markLoader_ = {
+					state: 'loading',
+					whenDone: {keywords:keywords, options:options},
+				};
+
 				const script = document.createElement('script');
 				script.onload = function() {
-					setMarkers(keywords, options);
+					markLoader_.state = 'ready';
+					setMarkers(markLoader_.whenDone.keywords, markLoader_.whenDone.options);
 				};
 
 				script.src = '../../node_modules/mark.js/dist/mark.min.js';
 				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
-				markLoaded_ = true;
-			} else {
+			} else if (markLoader_.state === 'ready') {
 				setMarkers(keywords, options);
+			} else if (markLoader_.state === 'loading') {
+				markLoader_.whenDone = {keywords:keywords, options:options};
 			}
 		}
 

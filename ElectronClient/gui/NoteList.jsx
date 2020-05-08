@@ -114,7 +114,6 @@ class NoteListComponent extends React.Component {
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
-					historyAction: 'goto',
 				});
 			}
 		};
@@ -146,7 +145,7 @@ class NoteListComponent extends React.Component {
 				todo_completed: checked ? time.unixMs() : 0,
 			};
 			await Note.save(newNote, { userSideValidation: true });
-			eventManager.emit('todoToggle', { noteId: item.id });
+			eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
 		};
 
 		const hPadding = 10;
