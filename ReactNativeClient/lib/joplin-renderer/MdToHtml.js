@@ -17,6 +17,7 @@ const rules = {
 	code_inline: require('./MdToHtml/rules/code_inline'),
 	fountain: require('./MdToHtml/rules/fountain'),
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	image_long_press: require('./MdToHtml/rules/image-long-press'),
 };
 
 const setupLinkify = require('./MdToHtml/setupLinkify');

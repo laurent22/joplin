@@ -1,6 +1,6 @@
 const React = require('react');
 const Component = React.Component;
-const { Platform, View, Text } = require('react-native');
+const { Platform, View, Text, ToastAndroid } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
@@ -64,6 +64,8 @@ class NoteBodyViewer extends Component {
 			resources: this.props.noteResources, // await shared.attachedResources(bodyToRender),
 			codeTheme: theme.codeThemeCss,
 			postMessageSyntax: 'window.ReactNativeWebView.postMessage',
+			// onImageLongPress: 'console.log',
+			longPressDelay: 500, // TODO use system value
 		};
 
 		const result = await this.markupToHtml_.render(
@@ -119,6 +121,14 @@ class NoteBodyViewer extends Component {
 				</body>
 			</html>
 		`;
+
+		console.log('about to dump html');
+		try {
+			await shim.fsDriver().writeFile('/sdcard/joplin.html', html, 'utf8');
+			console.log('saved html to file');
+		} catch (e) {
+			console.error('Could not save html to file', e);
+		}
 
 		// On iOS scalesPageToFit work like this:
 		//
@@ -244,6 +254,9 @@ class NoteBodyViewer extends Component {
 									// Since RN 58 (or 59) messages are now escaped twice???
 									let msg = unescape(unescape(event.nativeEvent.data));
 
+									// console.log(`on web view message: ${msg}`);
+									// reg.logger().info(`on web view message: ${msg}`);
+
 									console.info('Got IPC message: ', msg);
 
 									if (msg.indexOf('checkboxclick:') === 0) {
@@ -253,8 +266,15 @@ class NoteBodyViewer extends Component {
 										msg = msg.split(':');
 										const resourceId = msg[1];
 										if (this.props.onMarkForDownload) this.props.onMarkForDownload({ resourceId: resourceId });
-									} else {
+									} else if (msg.startsWith('longclick:')) {
+										msg = msg.split(':');
+										const resourceId = msg[1];
+										console.log('about to show popup');
+										ToastAndroid.show(`Here be popup for resource ${resourceId}`, ToastAndroid.SHORT);
+									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
+									} else {
+										console.log(`unhandled message ${msg}`);
 									}
 								}}
 							/>
