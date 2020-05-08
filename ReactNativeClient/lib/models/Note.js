@@ -77,8 +77,8 @@ class Note extends BaseItem {
 		return super.serialize(n, fieldNames);
 	}
 
-	static defaultTitle(note) {
-		return this.defaultTitleFromBody(note.body);
+	static defaultTitle(noteBody) {
+		return this.defaultTitleFromBody(noteBody);
 	}
 
 	static defaultTitleFromBody(body) {

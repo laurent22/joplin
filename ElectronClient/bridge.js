@@ -7,7 +7,10 @@ class Bridge {
 	constructor(electronWrapper) {
 		this.electronWrapper_ = electronWrapper;
 		this.autoUpdateLogger_ = null;
-		this.lastSelectedPath_ = null;
+		this.lastSelectedPaths_ = {
+			file: null,
+			directory: null,
+		};
 	}
 
 	electronApp() {
@@ -58,10 +61,10 @@ class Bridge {
 	showSaveDialog(options) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
-		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const filePath = dialog.showSaveDialogSync(this.window(), options);
 		if (filePath) {
-			this.lastSelectedPath_ = filePath;
+			this.lastSelectedPaths_.file = filePath;
 		}
 		return filePath;
 	}
@@ -69,11 +72,13 @@ class Bridge {
 	showOpenDialog(options) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
-		if (!('defaultPath' in options) && this.lastSelectedPath_) options.defaultPath = this.lastSelectedPath_;
+		let fileType = 'file';
+		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
+		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
 		const filePaths = dialog.showOpenDialogSync(this.window(), options);
 		if (filePaths && filePaths.length) {
-			this.lastSelectedPath_ = dirname(filePaths[0]);
+			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
