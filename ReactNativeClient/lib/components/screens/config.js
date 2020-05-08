@@ -98,31 +98,29 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			this.setState({ profileExportStatus: 'exporting' });
 
 			const dbPath = '/data/data/net.cozic.joplin/databases';
-
+			const exportPath = this.state.profileExportPath;
+			const resourcePath = `${exportPath}/resources`;
 			try {
-				await shim.fsDriver().mkdir(this.state.profileExportPath);
-				await shim.fsDriver().mkdir(`${this.state.profileExportPath}/resources`);
 
 				{
-					const files = await shim.fsDriver().readDirStats(dbPath);
+					const copyFiles = async (source, dest) => {
+						await shim.fsDriver().mkdir(dest);
 
-					for (const file of files) {
-						const source = `${dbPath}/${file.path}`;
-						const dest = `${this.state.profileExportPath}/${file.path}`;
-						reg.logger().info(`Copying profile: ${source} => ${dest}`);
-						await shim.fsDriver().copy(source, dest);
-					}
-				}
+						const files = await shim.fsDriver().readDirStats(source);
 
-				{
-					const files = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
-
-					for (const file of files) {
-						const source = `${Setting.value('resourceDir')}/${file.path}`;
-						const dest = `${this.state.profileExportPath}/resources/${file.path}`;
-						reg.logger().info(`Copying profile: ${source} => ${dest}`);
-						await shim.fsDriver().copy(source, dest);
-					}
+						for (const file of files) {
+							const source_ = `${source}/${file.path}`;
+							const dest_ = `${dest}/${file.path}`;
+							if (!file.isDirectory()) {
+								reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
+								await shim.fsDriver().copy(source_, dest_);
+							} else {
+								await copyFiles(source_, dest_);
+							}
+						}
+					};
+					await copyFiles(dbPath, exportPath);
+					await copyFiles(Setting.value('resourceDir'), resourcePath);
 				}
 
 				alert('Profile has been exported!');
