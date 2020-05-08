@@ -7,7 +7,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
-const { map, pickBy, identity } = require('lodash');
+const { map, pickBy, identity, isEmpty } = require('lodash');
 
 class SearchEngine {
 	constructor() {
@@ -238,13 +238,15 @@ class SearchEngine {
 
 	processBasicSearchResults_(rows, parsedQuery) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? map(parsedQuery.terms['_'], 'valueRegex') : [];
+		const isTitleSearch = parsedQuery.keys.includes('title');
+		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
 			const testTitle = regex => new RegExp(regex, 'ig').test(row.title);
 			const matchedFields = {
-				title: parsedQuery.keys.includes('title') || valueRegexs.some(testTitle),
-				body: true, // always assume that keywords appear in body to attempt to highlight keyword
+				title: isTitleSearch || valueRegexs.some(testTitle),
+				body: !isOnlyTitle,
 			};
 
 			row.fields = Object.keys(pickBy(matchedFields, identity));
@@ -405,6 +407,8 @@ class SearchEngine {
 		const searchOptions = {};
 
 		for (const key of parsedQuery.keys) {
+			if (isEmpty(parsedQuery.terms[key])) continue;
+
 			const term = parsedQuery.terms[key][0].value;
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
