@@ -7,7 +7,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
-const { map, pickBy, has, negate } = require('lodash');
+const { map, pickBy, identity } = require('lodash');
 
 class SearchEngine {
 	constructor() {
@@ -244,10 +244,11 @@ class SearchEngine {
 			const testTitle = regex => new RegExp(regex, 'ig').test(row.title);
 			const matchedFields = {
 				title: parsedQuery.keys.includes('title') || valueRegexs.some(testTitle),
-				body: parsedQuery.keys.includes('body') || valueRegexs.some(negate(testTitle)),
+				body: true, // always assume that keywords appear in body to attempt to highlight keyword
 			};
 
-			row.fields = Object.keys(pickBy(matchedFields, isMatched => isMatched));
+			row.fields = Object.keys(pickBy(matchedFields, identity));
+			row.weight = 0;
 		}
 	}
 
@@ -267,8 +268,8 @@ class SearchEngine {
 		rows.sort((a, b) => {
 			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
 			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (has(a, 'weight') && has(b, 'weight') && a.weight < b.weight) return +1;
-			if (has(a, 'weight') && has(b, 'weight') && a.weight > b.weight) return -1;
+			if (a.weight < b.weight) return +1;
+			if (a.weight > b.weight) return -1;
 			if (a.is_todo && a.todo_completed) return +1;
 			if (b.is_todo && b.todo_completed) return -1;
 			if (a.user_updated_time < b.user_updated_time) return +1;
