@@ -439,6 +439,7 @@ function handleHistory(state, action) {
 		}
 		break;
 	case 'TAG_SELECT':
+	case 'FOLDER_AND_NOTE_SELECT':
 	case 'FOLDER_SELECT':
 		if (currentNote != null) {
 			forwardHistoryNotes = [];
@@ -462,19 +463,6 @@ function handleHistory(state, action) {
 			return note;
 		});
 
-		// If the note moved is the currently selected one.
-		const newModNote = {
-			id: modNote.id,
-			parent_id: modNote.parent_id,
-			notesParentType: state.notesParentType,
-			selectedFolderId: modNote.parent_id,
-			selectedTagId: state.selectedTagId,
-			selectedSearchId: state.selectedSearchId,
-			searches: state.searches,
-			selectedSmartFilterId: state.selectedSmartFilterId,
-		};
-
-		backwardHistoryNotes = backwardHistoryNotes.concat(newModNote).slice(-MAX_HISTORY);
 		break;
 	}
 	case 'SEARCH_UPDATE':
@@ -498,6 +486,7 @@ function handleHistory(state, action) {
 		backwardHistoryNotes = removeAdjacentDuplicates(backwardHistoryNotes);
 		forwardHistoryNotes = removeAdjacentDuplicates(forwardHistoryNotes);
 
+		// Fix the case where after deletion the currently selected note is also the latest in history
 		const selectedNoteIds = newState.selectedNoteIds;
 		if (selectedNoteIds.length && backwardHistoryNotes.length && backwardHistoryNotes[backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
 			backwardHistoryNotes = backwardHistoryNotes.slice(0, backwardHistoryNotes.length - 1);
@@ -508,7 +497,7 @@ function handleHistory(state, action) {
 		break;
 	}
 	default:
-		console.log('Unknown action in history reducer.' ,action.type);
+		// console.log('Unknown action in history reducer.' ,action.type);
 		return state;
 	}
 
@@ -522,13 +511,18 @@ const reducer = (state = defaultState, action) => {
 
 	let newState = state;
 
+	// NOTE_DELETE requires post processing
+	if (action.type !== 'NOTE_DELETE') {
+		newState = handleHistory(newState, action);
+	}
+
 	try {
 		switch (action.type) {
+
 		case 'NOTE_SELECT':
 		case 'NOTE_SELECT_ADD':
 		case 'NOTE_SELECT_REMOVE':
 		case 'NOTE_SELECT_TOGGLE':
-			newState = handleHistory(newState, action);
 			newState = changeSelectedNotes(newState, action);
 			break;
 		case 'NOTE_SELECT_EXTEND':
@@ -588,14 +582,11 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_SELECT':
-			newState = handleHistory(state, action);
 			newState = changeSelectedFolder(newState, action, { clearSelectedNoteIds: true });
-
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				newState = handleHistory(state, Object.assign({}, action, { type: 'FOLDER_SELECT' }));
 				newState = changeSelectedFolder(newState, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
 				newState = changeSelectedNotes(newState, noteSelectAction);
@@ -693,7 +684,6 @@ const reducer = (state = defaultState, action) => {
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 					if (!newNotes.length) newIndex = -1;
 					newState.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
-					newState = handleHistory(newState, action);
 				}
 
 
@@ -714,7 +704,6 @@ const reducer = (state = defaultState, action) => {
 
 			{
 				newState = handleItemDelete(state, action);
-				newState = handleHistory(newState, action);
 
 				const idx = newState.provisionalNoteIds.indexOf(action.id);
 				if (idx >= 0) {
@@ -758,7 +747,6 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_SELECT':
-			newState = handleHistory(state, action);
 			newState.selectedTagId = action.id;
 			if (!action.id) {
 				newState.notesParentType = defaultNotesParentType(state, 'Tag');
@@ -809,7 +797,6 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'FOLDER_DELETE':
-			newState = handleHistory(state, action);
 			newState = handleItemDelete(newState, action);
 			break;
 
@@ -991,9 +978,6 @@ const reducer = (state = defaultState, action) => {
 				newState.plugins = newPlugins;
 			}
 			break;
-		case 'HISTORY_BACKWARD':
-		case 'HISTORY_FORWARD':
-			newState = handleHistory(newState, action);
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -1003,6 +987,10 @@ const reducer = (state = defaultState, action) => {
 	if (action.type.indexOf('NOTE_UPDATE') === 0 || action.type.indexOf('FOLDER_UPDATE') === 0 || action.type.indexOf('TAG_UPDATE') === 0) {
 		newState = Object.assign({}, newState);
 		newState.hasEncryptedItems = stateHasEncryptedItems(newState);
+	}
+
+	if (action.type === 'NOTE_DELETE') {
+		newState = handleHistory(newState, action);
 	}
 
 	return newState;
