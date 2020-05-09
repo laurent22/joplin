@@ -66,4 +66,23 @@ describe('markdownUtils', function() {
 		}
 	}));
 
+	it('replace markdown link with description', asyncTest(async () => {
+
+		const testCases = [
+			['Test case [one](link)', 'Test case one'],
+			['Test case ![two](imagelink)', 'Test case two'],
+			['**# -Test case three', 'Test case three'],
+			['This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a [link](linkurl) at the end', 'This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a li'],
+			['', ''],
+			['These are [link1](one), [link2](two) and ![link3](three)', 'These are link1, link2 and link3'],
+			['No description link to [](https://joplinapp.org)', 'No description link to https://joplinapp.org'],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0];
+			const expected = testCases[i][1];
+			expect(markdownUtils.titleFromBody(md)).toBe(expected);
+		}
+	}));
+
 });
