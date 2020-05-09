@@ -978,7 +978,6 @@ class Application extends BaseApplication {
 							type: 'WINDOW_COMMAND',
 							name: 'toggleVisiblePanes',
 						});
-						this.focusElement_('noteBody');
 					},
 				}, {
 					type: 'separator',
