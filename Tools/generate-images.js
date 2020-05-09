@@ -300,9 +300,9 @@ async function main() {
 						background: { r: 0, g: 0, b: 0, alpha: 0 },
 					}).extend({
 						top: Math.floor((operation.height - operation.iconHeight) / 2),
-						bottom: Math.floor((operation.height - operation.iconHeight) / 2),
+						bottom: Math.ceil((operation.height - operation.iconHeight) / 2),
 						left: Math.floor((operation.width - operation.iconWidth) / 2),
-						right: Math.floor((operation.width - operation.iconWidth) / 2),
+						right: Math.ceil((operation.width - operation.iconWidth) / 2),
 						background: { r: 0, g: 0, b: 0, alpha: 0 },
 					});
 				} else {
