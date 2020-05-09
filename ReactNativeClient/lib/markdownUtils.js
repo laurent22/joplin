@@ -93,6 +93,7 @@ const markdownUtils = {
 	},
 
 	titleFromBody(body) {
+		if (!body) return '';
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
 		const filterRegex = /^[# \n\t*`-]*/;
