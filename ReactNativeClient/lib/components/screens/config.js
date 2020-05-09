@@ -126,7 +126,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				alert('Profile has been exported!');
 			} catch (error) {
 				alert(`Could not export files: ${error.message}`);
-			} finally  {
+			} finally {
 				this.setState({ profileExportStatus: 'idle' });
 			}
 		};
@@ -392,7 +392,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						<Text key="label" style={this.styles().switchSettingText}>
 							{md.label()}
 						</Text>
-						<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.strongDividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
 					</View>
 					{descriptionComp}
 				</View>
