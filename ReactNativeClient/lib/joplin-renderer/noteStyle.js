@@ -188,32 +188,46 @@ module.exports = function(theme) {
 			margin-left: 0;
 			opacity: .7;
 		}
+
+		.jop-tinymce table,
 		table {
-			text-align: left-align;
+			text-align: left;
 			border-collapse: collapse;
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlBackgroundColor};
 		}
-		td, th {
+
+		.jop-tinymce table td, .jop-tinymce table th,
+		table td, th {
+			text-align: left;
 			padding: .5em 1em .5em 1em;
 			font-size: ${theme.htmlFontSize};
 			color: ${theme.htmlColor};
 			font-family: ${fontFamily};
 		}
-		td {
+
+		.jop-tinymce table td,
+		table td {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 		}
-		th {
+
+		.jop-tinymce table th,
+		table th {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			border-bottom: 2px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlTableBackgroundColor};
 		}
-		tr:nth-child(even) {
+
+		.jop-tinymce table tr:nth-child(even),
+		table tr:nth-child(even) {
 			background-color: ${theme.htmlTableBackgroundColor};
 		}
-		tr:hover {
+
+		.jop-tinymce table tr:hover,
+		table tr:hover {
 			background-color: ${theme.raisedBackgroundColor};
 		}
+
 		hr {
 			border: none;
 			border-bottom: 2px solid ${theme.htmlDividerColor};
@@ -222,7 +236,9 @@ module.exports = function(theme) {
 			max-width: 100%;
 			height: auto;
 		}
-		.inline-code {
+		
+		.inline-code,
+		.mce-content-body code {
 			border: 1px solid ${theme.htmlCodeBorderColor};
 			background-color: ${theme.htmlCodeBackgroundColor};
 			padding-right: .2em;
@@ -287,9 +303,11 @@ module.exports = function(theme) {
 			padding: 5px 10px 10em 10px;
 		}
 
+		/*
 		.mce-content-body code {
 			background-color: transparent;
 		}
+		*/
 
 		.mce-content-body [data-mce-selected=inline-boundary] {
 			background-color: transparent;
@@ -306,6 +324,15 @@ module.exports = function(theme) {
 		/* We need that to make sure click events have the A has a target */
 		.katex a span {
 			pointer-events: none;
+		}
+
+		/* Clear the CODE style if the element is within a joplin-editable block */
+		.mce-content-body .joplin-editable code {
+			border: none;
+			background: none;
+			padding: 0;
+			color: inherit;
+			font-size: inherit;
 		}
 
 		/* =============================================== */

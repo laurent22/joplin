@@ -102,7 +102,7 @@ class SideBarComponent extends React.Component {
 		};
 	}
 
-	style(depth) {
+	style() {
 		const theme = themeStyle(this.props.theme);
 
 		const itemHeight = 25;
@@ -114,11 +114,8 @@ class SideBarComponent extends React.Component {
 			listItemContainer: {
 				boxSizing: 'border-box',
 				height: itemHeight,
-				// paddingLeft: 14,
 				display: 'flex',
-				alignItems: 'stretch',
-				// Allow 3 levels of color depth
-				backgroundColor: theme.depthColor.replace('OPACITY', Math.min(depth * 0.1, 0.3)),
+				flexDirection: 'row',
 			},
 			listItem: {
 				fontFamily: theme.fontFamily,
@@ -131,6 +128,7 @@ class SideBarComponent extends React.Component {
 				display: 'flex',
 				flex: 1,
 				alignItems: 'center',
+				userSelect: 'none',
 			},
 			listItemSelected: {
 				backgroundColor: theme.selectedColor2,
@@ -139,12 +137,12 @@ class SideBarComponent extends React.Component {
 				color: theme.color2,
 				cursor: 'default',
 				opacity: 0.8,
-				// fontFamily: theme.fontFamily,
 				fontSize: theme.fontSize,
 				textDecoration: 'none',
 				paddingRight: 5,
 				display: 'flex',
 				alignItems: 'center',
+				width: 12,
 			},
 			conflictFolder: {
 				color: theme.colorError2,
@@ -160,6 +158,7 @@ class SideBarComponent extends React.Component {
 				paddingLeft: 8,
 				display: 'flex',
 				alignItems: 'center',
+				userSelect: 'none',
 			},
 			button: {
 				padding: 6,
@@ -176,6 +175,7 @@ class SideBarComponent extends React.Component {
 				marginLeft: 5,
 				marginRight: 5,
 				cursor: 'default',
+				userSelect: 'none',
 			},
 			syncReport: {
 				fontFamily: theme.fontFamily,
@@ -195,6 +195,7 @@ class SideBarComponent extends React.Component {
 			noteCount: {
 				paddingLeft: 5,
 				opacity: 0.5,
+				userSelect: 'none',
 			},
 		};
 
@@ -413,7 +414,6 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'FOLDER_SELECT',
 			id: folder ? folder.id : null,
-			historyAction: 'goto',
 		});
 	}
 
@@ -457,16 +457,17 @@ class SideBarComponent extends React.Component {
 
 		const itemTitle = Folder.displayTitle(folder);
 
-		let containerStyle = Object.assign({}, this.style(depth).listItemContainer);
+		let containerStyle = Object.assign({}, this.style().listItemContainer);
 		if (selected) containerStyle = Object.assign(containerStyle, this.style().listItemSelected);
+
+		containerStyle.paddingLeft = 8 + depth * 15;
 
 		const expandLinkStyle = Object.assign({}, this.style().listItemExpandIcon);
 		const expandIconStyle = {
 			visibility: hasChildren ? 'visible' : 'hidden',
-			paddingLeft: 8 + depth * 10,
 		};
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-plus-square' : 'fa-minus-square';
+		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
 		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
@@ -480,7 +481,7 @@ class SideBarComponent extends React.Component {
 		const noteCount = folder.note_count ? this.noteCountElement(folder.note_count) : '';
 
 		return (
-			<div className="list-item-container" style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
+			<div className={`list-item-container list-item-depth-${depth}`} style={containerStyle} key={folder.id} onDragStart={this.onFolderDragStart_} onDragOver={this.onFolderDragOver_} onDrop={this.onFolderDrop_} draggable={true} folderid={folder.id}>
 				{expandLink}
 				<a
 					ref={anchorRef}

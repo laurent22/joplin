@@ -83,21 +83,19 @@ fi
 #-----------------------------------------------------
 showLogo
 
+#-----------------------------------------------------
 print "Checking architecture..."
-# Architecture check
-if ! [[ -x "$(command -v uname)" ]] ; then
-	print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
-else
-  ## this actually gives more information than needed, but it contains all architectures (hardware and software)
-	ARCHITECTURE=$(uname -a)
+## uname actually gives more information than needed, but it contains all architectures (hardware and software)
+ARCHITECTURE=$(uname -a || echo "NO CHECK")
 
-	if [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
-		showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-		exit 1
-	elif [[ $ARCHITECTURE =~ .*i.86.* ]] ; then
-		showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
-		exit 1
-	fi
+if [[ $ARCHITECTURE = "NO CHECK" ]] ; then
+  print "${COLOR_YELLOW}WARNING: Can't get system architecture, skipping check${COLOR_RESET}"
+elif [[ $ARCHITECTURE =~ .*aarch.*|.*arm.* ]] ; then
+  showHelp "Arm systems are not officially supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+  exit 1
+elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]] ; then
+  showHelp "32-bit systems are not supported by Joplin, please search the forum (https://discourse.joplinapp.org/) for more information"
+  exit 1
 fi
 
 #-----------------------------------------------------
@@ -155,7 +153,7 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
-if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.* ]]
+if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.* ]]
 then
     : "${TMPDIR:=$TEMP_DIR}"
     # This command extracts to squashfs-root by default and can't be changed...
@@ -168,7 +166,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=/home/${USER}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;\n#${APPIMAGE_VERSION}" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications
     print "${COLOR_GREEN}OK${COLOR_RESET}"

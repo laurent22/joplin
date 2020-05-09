@@ -21,11 +21,14 @@ class NoteBodyViewer extends Component {
 			bodyHtml: '',
 		};
 
+		this.forceUpdate_ = false;
+
 		this.isMounted_ = false;
 
 		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 
 		this.reloadNote = this.reloadNote.bind(this);
+		this.watchFn = this.watchFn.bind(this);
 	}
 
 	componentDidMount() {
@@ -38,6 +41,8 @@ class NoteBodyViewer extends Component {
 	}
 
 	async reloadNote() {
+		this.forceUpdate_ = false;
+
 		const note = this.props.note;
 		const theme = themeStyle(this.props.theme);
 
@@ -183,7 +188,16 @@ class NoteBodyViewer extends Component {
 	}
 
 	rebuildMd() {
+		this.forceUpdate_ = true;
 		this.forceUpdate();
+	}
+
+	watchFn() {
+		// react-async will not fetch the data again after the first render
+		// so we use this watchFn function to force it to reload in certain
+		// cases. It is used in particular when re-rendering the note when
+		// a resource has been downloaded in auto mode.
+		return this.forceUpdate_;
 	}
 
 	render() {
@@ -206,7 +220,7 @@ class NoteBodyViewer extends Component {
 
 		return (
 			<View style={this.props.style}>
-				<Async promiseFn={this.reloadNote}>
+				<Async promiseFn={this.reloadNote} watchFn={this.watchFn}>
 					{({ data, error, isPending }) => {
 						if (error) {
 							console.error(error);

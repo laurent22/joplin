@@ -150,6 +150,7 @@ class ReportService {
 				section.body.push({
 					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
 					canRetry: true,
+					canRetryType: 'e2ee',
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						DecryptionWorker.instance().scheduleStart();
@@ -207,6 +208,7 @@ class ReportService {
 				section.body.push({
 					text: _('%s (%s): %s', row.resource_title, row.resource_id, row.fetch_error),
 					canRetry: true,
+					canRetryType: 'resourceDownload',
 					retryHandler: async () => {
 						await Resource.resetErrorStatus(row.resource_id);
 						ResourceFetcher.instance().autoAddResources();
