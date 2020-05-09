@@ -31,7 +31,7 @@
 		}
 
 		ul ul, ul ol, ol ul, ol ol   {
-			margin-bottom: 0px;			
+			margin-bottom: 0px;
 		}
 	</style>
 </head>
@@ -67,7 +67,7 @@
 				ipc[callName](callData);
 			}
 		}));
-		
+
 		// Note: the scroll position source of truth is "percentScroll_". This is easier to manage than scrollTop because
 		// the scrollTop value depends on the images being loaded or not. For example, if the scrollTop is saved while
 		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
@@ -132,6 +132,13 @@
 					console.warn('Cannot find hash', hash);
 					return;
 				}
+
+				// HACK: force :target pseudo class to take effect,
+				// so that user can use :target selector in userstyle.css
+				history.pushState({}, "", `#${hash}`);
+				history.pushState({}, "", `#${hash}`);
+				history.back();
+
 				e.scrollIntoView();
 
 				// Make sure the editor pane is also scrolled
@@ -196,7 +203,7 @@
 		let markJsHackMarkerInserted_ = false;
 		function addMarkJsSpaceHack(document) {
 			if (markJsHackMarkerInserted_) return;
-			
+
 			const prepareElementsForMarkJs = (elements, type) => {
 				// const markJsHackMarker_ = '&#8203; &#8203;'
 				const markJsHackMarker_ = ' ';
@@ -246,7 +253,7 @@
 					element.classList.add('mark-selected');
 					selectedElement = element;
 				}
-				
+
 				elementIndex++;
 			}
 
@@ -332,7 +339,7 @@
 
 			const percent = currentPercentScroll();
 			setPercentScroll(percent);
-			
+
 			ipcProxySendToHost('percentScroll', percent);
 		}));
 
