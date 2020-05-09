@@ -143,6 +143,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, { opacity: theme.disabledOpacity });
 		styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, { opacity: theme.disabledOpacity });
+		styleObject.iconButtonDisabled = Object.assign({}, styleObject.iconButton, { opacity: theme.disabledOpacity });
 
 		this.styles_[themeId] = StyleSheet.create(styleObject);
 		return this.styles_[themeId];
@@ -268,20 +269,20 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		function deleteButton(styles, onPress) {
+		function deleteButton(styles, onPress, disabled) {
 			return (
-				<TouchableOpacity onPress={onPress}>
-					<View style={styles.iconButton}>
+				<TouchableOpacity onPress={onPress} disabled={disabled}>
+					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
 						<Icon name="md-trash" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
 			);
 		}
 
-		function duplicateButton(styles, onPress) {
+		function duplicateButton(styles, onPress, disabled) {
 			return (
-				<TouchableOpacity onPress={onPress}>
-					<View style={styles.iconButton}>
+				<TouchableOpacity onPress={onPress} disabled={disabled}>
+					<View style={disabled ? styles.iconButtonDisabled : styles.iconButton}>
 						<Icon name="md-copy" style={styles.topIcon} />
 					</View>
 				</TouchableOpacity>
@@ -333,7 +334,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 			);
 		}
 
-		const createTitleComponent = () => {
+		const createTitleComponent = (disabled) => {
 			const themeId = Setting.value('theme');
 			const theme = themeStyle(themeId);
 			const folderPickerOptions = this.props.folderPickerOptions;
@@ -368,6 +369,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 					<Dropdown
 						items={titlePickerItems(!!folderPickerOptions.mustSelect)}
 						itemHeight={35}
+						disabled={disabled}
 						labelTransform="trim"
 						selectedValue={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
 						itemListStyle={{
@@ -376,6 +378,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 						headerStyle={{
 							color: theme.raisedHighlightedColor,
 							fontSize: theme.fontSize,
+							opacity: disabled ? theme.disabledOpacity : 1,
 						}}
 						itemStyle={{
 							color: theme.color,
@@ -426,14 +429,15 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 		let backButtonDisabled = !this.props.historyCanGoBack;
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
+		const headerItemDisabled = !this.props.selectedNoteIds.length > 0;
 
-		const titleComp = createTitleComponent();
+		const titleComp = createTitleComponent(headerItemDisabled);
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
-		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press()) : null;
-		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press()) : null;
+		const deleteButtonComp = this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
+		const duplicateButtonComp = this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
 		const windowHeight = Dimensions.get('window').height - 50;
 
