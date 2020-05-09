@@ -461,18 +461,16 @@ function shimInit() {
 	}
 
 	shim.loadSecureItems = async (appId) => {
+		const newSecureItems = [];
+
 		if (isKeytarAvailable()) {
 			const secureItems = await keytar.findCredentials(appId);
-			// secureItems is an array of { account: 'foo', password: 'bar' }
-			// but it should be an array of { key: 'foo', value: 'bar' }
-			// https://stackoverflow.com/a/50101979
 			for (const item of secureItems) {
-				delete Object.assign(item, { ['key']: item['account'] })['account'];
-				delete Object.assign(item, { ['value']: item['password'] })['password'];
+				newSecureItems.push({ key: item['account'], value: item['password'] });
 			}
-			return secureItems;
 		}
-		return [];
+
+		return newSecureItems;
 	};
 
 	shim.saveSecureItem = async (appId, item) => {
