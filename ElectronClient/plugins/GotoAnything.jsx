@@ -234,7 +234,9 @@ class Dialog extends React.PureComponent {
 								const body = notesById[row.id];
 
 								// Iterate over all matches in the body for each search keyword
-								for (const { valueRegex } of searchKeywords) {
+								for (let { valueRegex } of searchKeywords) {
+									valueRegex = removeDiacritics(valueRegex);
+
 									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
 										// Populate 'indices' with [begin index, end index] of each note fragment
 										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
