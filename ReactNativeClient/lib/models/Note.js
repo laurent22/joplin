@@ -11,7 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
-const mdUtils = require('lib/markdownUtils.js');
+const markdownUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
@@ -83,7 +83,7 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitleFromBody(body) {
-		return mdUtils.titleFromBody(body);
+		return markdownUtils.titleFromBody(body);
 	}
 
 	static geolocationUrl(note) {
