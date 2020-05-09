@@ -40,5 +40,11 @@
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
     "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "follow-redirects": "^1.11.0",
+    "joplin-turndown": "^4.0.27",
+    "joplin-turndown-plugin-gfm": "^1.0.12",
+    "relative": "^3.0.2"
   }
 }

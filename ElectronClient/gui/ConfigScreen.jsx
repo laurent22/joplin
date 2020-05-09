@@ -104,9 +104,20 @@ class ConfigScreenComponent extends React.Component {
 		return output;
 	}
 
+	renderSectionDescription(section) {
+		const description = Setting.sectionDescription(section.name);
+		if (!description) return null;
+
+		const theme = themeStyle(this.props.theme);
+		return (
+			<div style={Object.assign({}, theme.textStyle, { marginBottom: 15 })}>
+				{description}
+			</div>
+		);
+	}
+
 	sectionToComponent(key, section, settings, selected) {
 		const theme = themeStyle(this.props.theme);
-		// const settingComps = [];
 
 		const createSettingComponents = (advanced) => {
 			const output = [];
@@ -132,8 +143,6 @@ class ConfigScreenComponent extends React.Component {
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
 		}
-
-		const noteComp = section.name !== 'general' ? null : <div style={Object.assign({}, theme.textStyle, { marginBottom: 10 })}>{_('Notes and settings are stored in: %s', pathUtils.toSystemSlashes(Setting.value('profileDir'), process.platform))}</div>;
 
 		if (section.name === 'sync') {
 			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
@@ -216,7 +225,7 @@ class ConfigScreenComponent extends React.Component {
 
 		return (
 			<div key={key} style={sectionStyle}>
-				{noteComp}
+				{this.renderSectionDescription(section)}
 				<div>{settingComps}</div>
 				{advancedSettingsButton}
 				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>

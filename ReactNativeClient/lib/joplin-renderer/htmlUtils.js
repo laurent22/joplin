@@ -70,7 +70,13 @@ class HtmlUtils {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
-	sanitizeHtml(html) {
+	sanitizeHtml(html, options = null) {
+		options = Object.assign({}, {
+			// If true, adds a "jop-noMdConv" class to all the tags.
+			// It can be used afterwards to restore HTML tags in Markdown.
+			addNoMdConvClass: false,
+		}, options);
+
 		const htmlparser2 = require('htmlparser2');
 
 		const output = [];
@@ -82,7 +88,11 @@ class HtmlUtils {
 			return tagStack[tagStack.length - 1];
 		};
 
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object'];
+		// The BASE tag allows changing the base URL from which files are loaded, and
+		// that can break several plugins, such as Katex (which needs to load CSS
+		// files using a relative URL). For that reason it is disabled.
+		// More info: https://github.com/laurent22/joplin/issues/3021
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base'];
 
 		const parser = new htmlparser2.Parser({
 
@@ -95,6 +105,15 @@ class HtmlUtils {
 				for (const eventName of JS_EVENT_NAMES) {
 					delete attrs[eventName];
 				}
+
+				if (options.addNoMdConvClass) {
+					let classAttr = attrs['class'] || '';
+					if (!classAttr.includes('jop-noMdConv')) {
+						classAttr += ' jop-noMdConv';
+						attrs['class'] = classAttr.trim();
+					}
+				}
+
 				let attrHtml = this.attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = this.isSelfClosingTag(name) ? '/>' : '>';

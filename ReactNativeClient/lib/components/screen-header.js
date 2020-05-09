@@ -409,7 +409,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				);
 			} else {
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
-				return <Text style={this.styles().titleText}>{title}</Text>;
+				return <Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>;
 			}
 		};
 

@@ -83,10 +83,16 @@ function shimInit() {
 			const output = {
 				ok: response.respInfo.status < 400,
 				path: response.data,
-				text: response.text,
-				json: response.json,
 				status: response.respInfo.status,
 				headers: response.respInfo.headers,
+				// If response type is 'path' then calling text() or json() (or base64())
+				// on RNFetchBlob response object will make it read the file on the native thread,
+				// serialize it, and send over the RN bridge.
+				// For larger files this can cause the app to crash.
+				// For these type of responses we're not using the response text anyway
+				// so can override it here to return empty values
+				text: response.type === 'path' ? () => '' : response.text,
+				json: response.type === 'path' ? () => {} : response.json,
 			};
 
 			return output;

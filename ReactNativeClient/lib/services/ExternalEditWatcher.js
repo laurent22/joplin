@@ -107,7 +107,7 @@ class ExternalEditWatcher {
 						updatedNote.id = id;
 						updatedNote.parent_id = note.parent_id;
 						await Note.save(updatedNote);
-						this.eventEmitter_.emit('noteChange', { id: updatedNote.id });
+						this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
 					}
 
 					this.skipNextChangeEvent_ = {};

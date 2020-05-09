@@ -78,11 +78,12 @@ class Note extends BaseItem {
 		return super.serialize(n, fieldNames);
 	}
 
-	static defaultTitle(note) {
-		if (note.body && note.body.length) {
-			return mdUtils.titleFromBody(note.body);
-		}
-		return _('Untitled');
+	static defaultTitle(noteBody) {
+		return this.defaultTitleFromBody(noteBody);
+	}
+
+	static defaultTitleFromBody(body) {
+		return mdUtils.titleFromBody(note.body);
 	}
 
 	static geolocationUrl(note) {
@@ -138,6 +139,8 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
+		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
 
@@ -145,9 +148,11 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? Resource.fullPath(resource) : Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
+
+		this.logger().info('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -159,11 +164,13 @@ class Note extends BaseItem {
 
 		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
-			pathsToTry.push(Setting.value('resourceDir'));
-			pathsToTry.push(shim.pathRelativeToCwd(Setting.value('resourceDir')));
+			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
+			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
 			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
@@ -173,6 +180,8 @@ class Note extends BaseItem {
 				return `:/${id}`;
 			});
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}

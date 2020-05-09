@@ -1,5 +1,5 @@
 const React = require('react');
-const { ScrollView, Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
+const { Platform, Clipboard, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share } = require('react-native');
 const { connect } = require('react-redux');
 const { uuid } = require('lib/uuid.js');
 const { MarkdownEditor } = require('../../../MarkdownEditor/index.js');
@@ -216,6 +216,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
+
+				// Add extra space to allow scrolling past end of document, and also to fix this:
+				// https://github.com/laurent22/joplin/issues/1437
+				// 2020-04-20: removed bottom padding because it doesn't work properly in Android
+				// Instead of being inside the scrollable area, the padding is outside thus
+				// restricting the view.
+				// See https://github.com/laurent22/joplin/issues/3041#issuecomment-616267739
+				// paddingBottom: Math.round(dimensions.height / 4),
+
 				textAlignVertical: 'top',
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
@@ -419,27 +428,47 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const dimensions = await this.imageDimensions(localFilePath);
 
 		reg.logger().info('Original dimensions ', dimensions);
-		if (dimensions.width > maxSize || dimensions.height > maxSize) {
+
+		let mustResize = dimensions.width > maxSize || dimensions.height > maxSize;
+
+		if (mustResize) {
+			const buttonId = await dialogs.pop(this, _('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize), [
+				{ text: _('Yes'), id: 'yes' },
+				{ text: _('No'), id: 'no' },
+				{ text: _('Cancel'), id: 'cancel' },
+			]);
+
+			if (buttonId === 'cancel') return false;
+
+			mustResize = buttonId === 'yes';
+		}
+
+		if (mustResize) {
 			dimensions.width = maxSize;
 			dimensions.height = maxSize;
+
+			reg.logger().info('New dimensions ', dimensions);
+
+			const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
+			reg.logger().info(`Resizing image ${localFilePath}`);
+			const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
+
+			const resizedImagePath = resizedImage.uri;
+			reg.logger().info('Resized image ', resizedImagePath);
+			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
+
+			await RNFS.copyFile(resizedImagePath, targetPath);
+
+			try {
+				await RNFS.unlink(resizedImagePath);
+			} catch (error) {
+				reg.logger().warn('Error when unlinking cached file: ', error);
+			}
+		} else {
+			await RNFS.copyFile(localFilePath, targetPath);
 		}
-		reg.logger().info('New dimensions ', dimensions);
 
-		const format = mimeType == 'image/png' ? 'PNG' : 'JPEG';
-		reg.logger().info(`Resizing image ${localFilePath}`);
-		const resizedImage = await ImageResizer.createResizedImage(localFilePath, dimensions.width, dimensions.height, format, 85); // , 0, targetPath);
-
-		const resizedImagePath = resizedImage.uri;
-		reg.logger().info('Resized image ', resizedImagePath);
-		reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
-
-		await RNFS.copyFile(resizedImagePath, targetPath);
-
-		try {
-			await RNFS.unlink(resizedImagePath);
-		} catch (error) {
-			reg.logger().warn('Error when unlinking cached file: ', error);
-		}
+		return true;
 	}
 
 	async attachFile(pickerResponse, fileType) {
@@ -494,7 +523,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		try {
 			if (mimeType == 'image/jpeg' || mimeType == 'image/jpg' || mimeType == 'image/png') {
-				await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				const done = await this.resizeImage(localFilePath, targetPath, pickerResponse.mime);
+				if (!done) return;
 			} else {
 				if (fileType === 'image') {
 					dialogs.error(this, _('Unsupported image type: %s', mimeType));
@@ -535,7 +565,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo' });
+		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
 		await this.attachFile(response, 'image');
 	}
 
@@ -863,7 +893,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						webViewStyle={theme}
 						// Extra bottom padding to make it possible to scroll past the
 						// action button (so that it doesn't overlap the text)
-						paddingBottom='3.8em'
+						paddingBottom="150"
 						note={note}
 						noteResources={this.state.noteResources}
 						highlightedKeywords={keywords}
@@ -911,6 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					saveText={text => this.body_changeText(text)}
 					blurOnSubmit={false}
 					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add body')}
 					placeholderTextColor={theme.colorFaded}
 					noteBodyViewer={{
@@ -941,10 +972,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 					}}
 
 				/>
-				: (
-					<ScrollView persistentScrollbar>
-						<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
-					</ScrollView>
+				:
+				// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+				// However it causes memory or rendering issues on older Android devices, probably because
+				// the whole text input has to be in memory for the scrollview to work. So we keep it as
+				// a plain TextInput for now.
+				// See https://github.com/laurent22/joplin/issues/3041
+				(
+					<TextInput autoCapitalize="sentences" style={this.styles().bodyTextInput} ref="noteBodyTextField" multiline={true} value={note.body} onChangeText={text => this.body_changeText(text)} blurOnSubmit={false} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add body')} placeholderTextColor={theme.colorFaded} />
 				);
 		}
 
@@ -980,7 +1015,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
+				<TextInput onContentSizeChange={this.titleTextInput_contentSizeChange} multiline={this.enableMultilineTitle_} ref="titleTextField" underlineColorAndroid="#ffffff00" autoCapitalize="sentences" style={this.styles().titleTextInput} value={note.title} onChangeText={this.title_changeText} selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} placeholder={_('Add title')} placeholderTextColor={theme.colorFaded} />
 			</View>
 		);
 

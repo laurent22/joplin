@@ -107,7 +107,7 @@ function renderFountainScript(markdownIt, content) {
 
 	return `
 		<div class="fountain joplin-editable">
-			<pre class="joplin-source" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
+			<pre class="joplin-source" data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
 			<div class="title-page">
 				${result.html.title_page}
 			</div>
