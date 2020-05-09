@@ -83,7 +83,7 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitleFromBody(body) {
-		return mdUtils.titleFromBody(note.body);
+		return mdUtils.titleFromBody(body);
 	}
 
 	static geolocationUrl(note) {
