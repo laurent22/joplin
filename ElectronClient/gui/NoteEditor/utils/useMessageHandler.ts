@@ -73,6 +73,15 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 
 				menu.append(
 					new MenuItem({
+						label: _('Reveal file in folder'),
+						click: async () => {
+							bridge().showItemInFolder(resourcePath);
+						},
+					})
+				);
+
+				menu.append(
+					new MenuItem({
 						label: _('Copy path to clipboard'),
 						click: async () => {
 							clipboard.writeText(toSystemSlashes(resourcePath));
