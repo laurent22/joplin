@@ -791,7 +791,7 @@ class NoteTextComponent extends React.Component {
 
 				menu.append(
 					new MenuItem({
-						label: _('Open containing directory'),
+						label: _('Reveal file in folder'),
 						click: async () => {
 							bridge().showItemInFolder(resourcePath);
 						},
