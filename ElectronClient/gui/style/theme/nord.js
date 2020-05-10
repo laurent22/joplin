@@ -77,7 +77,7 @@ const nordStyle = {
 	htmlCodeBorderColor: nord[2],
 	htmlCodeColor: nord[13],
 
-	editorTheme: 'terminal',
+	editorTheme: 'chaos',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 
