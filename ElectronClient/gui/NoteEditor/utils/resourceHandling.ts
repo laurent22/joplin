@@ -49,29 +49,6 @@ export async function attachedResources(noteBody: string): Promise<any> {
 	return output;
 }
 
-export async function attachResources() {
-	const filePaths = bridge().showOpenDialog({
-		properties: ['openFile', 'createDirectory', 'multiSelections'],
-	});
-	if (!filePaths || !filePaths.length) return [];
-
-	const output = [];
-
-	for (const filePath of filePaths) {
-		try {
-			const resource = await shim.createResourceFromPath(filePath);
-			output.push({
-				item: resource,
-				markdownTag: Resource.markdownTag(resource),
-			});
-		} catch (error) {
-			bridge().showErrorMessageBox(error.message);
-		}
-	}
-
-	return output;
-}
-
 export async function commandAttachFileToBody(body:string, filePaths:string[] = null, options:any = null) {
 	options = {
 		createFileURL: false,
