@@ -81,9 +81,9 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^7.1.12",
+    "electron": "^8.2.5",
     "electron-builder": "22.3.2",
-    "electron-rebuild": "^1.8.8",
+    "electron-rebuild": "^1.10.1",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
     "patch-package": "^6.2.0"
