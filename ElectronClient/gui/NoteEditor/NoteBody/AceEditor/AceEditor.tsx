@@ -37,6 +37,7 @@ require('brace/theme/solarized_dark');
 require('brace/theme/twilight');
 require('brace/theme/dracula');
 require('brace/theme/chaos');
+require('brace/theme/tomorrow');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
 
