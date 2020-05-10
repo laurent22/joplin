@@ -8,6 +8,7 @@ const { toTitleCase } = require('lib/string-utils.js');
 const { rtrimSlashes } = require('lib/path-utils.js');
 const { _, supportedLocalesToLanguages, defaultLocale } = require('lib/locale.js');
 const { shim } = require('lib/shim');
+const TemplateUtils = require('lib/TemplateUtils');
 
 class Setting extends BaseModel {
 	static tableName() {
@@ -346,7 +347,6 @@ class Setting extends BaseModel {
 					};
 				},
 			},
-			availableTemplates: { value: [], type: Setting.TYPE_ARRAY, public: false, appTypes: ['desktop'] },
 			defaultNote: {
 				value: '0',
 				type: Setting.TYPE_STRING,
@@ -356,7 +356,7 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Choose default template for new note:'),
 				options: () => {
-					const templates = Setting.value('availableTemplates');
+					const templates = TemplateUtils.availableTemplates();
 					const options = { 0: 'None' };
 					for (let i = 0; i < templates.length; i++) {
 						options[templates[i].label] = templates[i].label;
@@ -373,7 +373,7 @@ class Setting extends BaseModel {
 				appTypes: ['desktop'],
 				label: () => _('Choose default template for new todo:'),
 				options: () => {
-					const templates = Setting.value('availableTemplates');
+					const templates = TemplateUtils.availableTemplates();
 					const options = { 0: 'None' };
 					for (let i = 0; i < templates.length; i++) {
 						options[templates[i].label] = templates[i].label;

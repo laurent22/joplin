@@ -3,7 +3,7 @@ const { time } = require('lib/time-utils.js');
 const Mustache = require('mustache');
 
 const TemplateUtils = {};
-
+TemplateUtils.availableTemplates_ = [];
 
 // Mustache escapes strings (including /) with the html code by default
 // This isn't useful for markdown so it's disabled
@@ -62,7 +62,12 @@ TemplateUtils.loadTemplates = async function(filePath) {
 		});
 	}
 
+	TemplateUtils.availableTemplates_ = templates;
 	return templates;
+};
+
+TemplateUtils.availableTemplates = function() {
+	return TemplateUtils.availableTemplates_;
 };
 
 module.exports = TemplateUtils;

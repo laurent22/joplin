@@ -599,8 +599,6 @@ class Application extends BaseApplication {
 			label: _('Refresh templates'),
 			click: async () => {
 				const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-				Setting.setValue('availableTemplates', templates);
-
 				this.store().dispatch({
 					type: 'TEMPLATE_UPDATE_ALL',
 					templates: templates,
@@ -1348,7 +1346,6 @@ class Application extends BaseApplication {
 		});
 
 		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-		Setting.setValue('availableTemplates', templates);
 
 		this.store().dispatch({
 			type: 'TEMPLATE_UPDATE_ALL',
