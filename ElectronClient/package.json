@@ -45,10 +45,12 @@
           ]
         }
       ],
-      "extraFiles": [{
-        "from":  "build-win/Joplin.VisualElementsManifest.xml",
-        "to": "."
-        }],
+      "extraFiles": [
+        {
+          "from": "build-win/Joplin.VisualElementsManifest.xml",
+          "to": "."
+        }
+      ],
       "extraResources": [
         "build-win/icons/*"
       ]
