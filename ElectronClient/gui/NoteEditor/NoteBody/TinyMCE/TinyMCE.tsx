@@ -3,11 +3,13 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { resourcesStatus } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
+import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
 const { _ } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
+const Resource = require('lib/models/Resource');
 const { themeStyle, buildStyle } = require('../../../../theme.js');
 const { clipboard } = require('electron');
 
@@ -146,6 +148,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
+
+	const contextMenuActionOptions = useRef<ContextMenuOptions>(null);
 
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
@@ -434,7 +438,19 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 		loadedAssetFiles_ = [];
 
+		function contextMenuItemNameWithNamespace(name:string) {
+			// For unknown reasons, TinyMCE converts all context menu names to
+			// lowercase when setting them in the init method, so we need to
+			// make them lowercase too, to make sure that the update() method
+			// addContextMenu is triggered.
+			return (`joplin${name}`).toLowerCase();
+		}
+
 		const loadEditor = async () => {
+			const contextMenuItems = menuItems();
+			const contextMenuItemNames = [];
+			for (const name in contextMenuItems) contextMenuItemNames.push(contextMenuItemNameWithNamespace(name));
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -454,6 +470,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				language: props.locale,
 				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
 				localization_function: _,
+				contextmenu: contextMenuItemNames.join(' '),
 				setup: (editor:any) => {
 
 					function openEditDialog(editable:any) {
@@ -572,6 +589,43 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 							});
 						},
 					});
+
+					for (const itemName in contextMenuItems) {
+						const item = contextMenuItems[itemName];
+
+						const itemNameNS = contextMenuItemNameWithNamespace(itemName);
+
+						editor.ui.registry.addMenuItem(itemNameNS, {
+							text: item.label,
+							onAction: () => {
+								item.onAction(contextMenuActionOptions.current);
+							},
+						});
+
+						editor.ui.registry.addContextMenu(itemNameNS, {
+							update: function(element:any) {
+								let itemType:ContextMenuItemType = ContextMenuItemType.None;
+								let resourceId = '';
+								let textToCopy = '';
+
+								if (element.nodeName === 'IMG') {
+									itemType = ContextMenuItemType.Image;
+									resourceId = Resource.pathToId(element.src);
+								} else if (element.nodeName === 'A') {
+									resourceId = Resource.pathToId(element.href);
+									itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
+								} else {
+									itemType = ContextMenuItemType.Text;
+									textToCopy = editor.selection.getContent({ format: 'text' });
+								}
+
+								contextMenuActionOptions.current = { itemType, resourceId, textToCopy };
+
+
+								return item.isActive(itemType) ? itemNameNS : '';
+							},
+						});
+					}
 
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event:any) => {

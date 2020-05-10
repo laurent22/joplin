@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
+import contextMenu from './contextMenu';
 const BaseItem = require('lib/models/BaseItem');
 const { _ } = require('lib/locale');
 const BaseModel = require('lib/BaseModel.js');
@@ -8,11 +9,6 @@ const { bridge } = require('electron').remote.require('./bridge');
 const { urlDecode } = require('lib/string-utils');
 const urlUtils = require('lib/urlUtils');
 const ResourceFetcher = require('lib/services/ResourceFetcher.js');
-const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
-const fs = require('fs-extra');
-const { clipboard } = require('electron');
-const { toSystemSlashes } = require('lib/path-utils');
 const { reg } = require('lib/registry.js');
 
 export default function useMessageHandler(scrollWhenReady:any, setScrollWhenReady:Function, editorRef:any, setLocalSearchResultCount:Function, dispatch:Function, formNote:FormNote) {
@@ -40,76 +36,11 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
 			ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'contextMenu') {
-			const itemType = arg0 && arg0.type;
-
-			const menu = new Menu();
-
-			if (itemType === 'image' || itemType === 'resource') {
-				const resource = await Resource.load(arg0.resourceId);
-				const resourcePath = Resource.fullPath(resource);
-
-				menu.append(
-					new MenuItem({
-						label: _('Open...'),
-						click: async () => {
-							const ok = bridge().openExternal(`file://${resourcePath}`);
-							if (!ok) bridge().showErrorMessageBox(_('This file could not be opened: %s', resourcePath));
-						},
-					})
-				);
-
-				menu.append(
-					new MenuItem({
-						label: _('Save as...'),
-						click: async () => {
-							const filePath = bridge().showSaveDialog({
-								defaultPath: resource.filename ? resource.filename : resource.title,
-							});
-							if (!filePath) return;
-							await fs.copy(resourcePath, filePath);
-						},
-					})
-				);
-
-				menu.append(
-					new MenuItem({
-						label: _('Reveal file in folder'),
-						click: async () => {
-							bridge().showItemInFolder(resourcePath);
-						},
-					})
-				);
-
-				menu.append(
-					new MenuItem({
-						label: _('Copy path to clipboard'),
-						click: async () => {
-							clipboard.writeText(toSystemSlashes(resourcePath));
-						},
-					})
-				);
-			} else if (itemType === 'text') {
-				menu.append(
-					new MenuItem({
-						label: _('Copy'),
-						click: async () => {
-							clipboard.writeText(arg0.textToCopy);
-						},
-					})
-				);
-			} else if (itemType === 'link') {
-				menu.append(
-					new MenuItem({
-						label: _('Copy Link Address'),
-						click: async () => {
-							clipboard.writeText(arg0.textToCopy);
-						},
-					})
-				);
-			} else {
-				reg.logger().error(`Unhandled item type: ${itemType}`);
-				return;
-			}
+			const menu = await contextMenu({
+				itemType: arg0 && arg0.type,
+				resourceId: arg0.resourceId,
+				textToCopy: arg0.textToCopy,
+			});
 
 			menu.popup(bridge().window());
 		} else if (msg.indexOf('joplin://') === 0) {
