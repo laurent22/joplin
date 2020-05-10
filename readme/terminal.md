@@ -10,13 +10,47 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 # Installation
 
-Operating system | Method
------------------|----------------
-macOS            | `brew install joplin`
-Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important:** First, [install Node 10+](https://nodejs.org/en/download/package-manager/). <br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
-Arch Linux | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
+## macOS
 
-To start it, type `joplin`.
+    brew install joplin
+    
+## Linux or Windows 10 [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)
+
+**Important:** First, [install Node 10+](https://nodejs.org/en/download/package-manager/). 
+
+Then run from the prompt:
+
+    NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+    sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
+    
+By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed.
+
+Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
+
+## Arch Linux
+
+An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. 
+
+Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
+
+## Docker
+
+Create a Dockerfile with the content
+
+```
+FROM debian:stable-slim
+RUN apt update && apt -y install --upgrade nodejs npm git
+RUN npm install -g --unsafe-perm joplin
+CMD /bin/bash
+# or CMD joplin server start
+# or any other joplin command
+```
+
+You can build and run it via
+
+    docker build -t joplin .
+    docker run --name joplin joplin
+
 
 # Usage
 
