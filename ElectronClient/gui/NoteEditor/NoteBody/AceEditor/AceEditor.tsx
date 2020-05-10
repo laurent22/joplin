@@ -40,6 +40,7 @@ require('brace/theme/chaos');
 require('brace/theme/tomorrow');
 require('brace/keybinding/vim');
 require('brace/keybinding/emacs');
+require('brace/keybinding/terminal');
 
 // TODO: Could not get below code to work
 
