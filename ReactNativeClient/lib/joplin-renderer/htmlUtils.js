@@ -4,7 +4,6 @@ const htmlentities = new Entities().encode;
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-const JS_EVENT_NAMES = ['onabort', 'onafterprint', 'onbeforeprint', 'onbeforeunload', 'onblur', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu', 'oncopy', 'oncuechange', 'oncut', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'onhashchange', 'oninput', 'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata', 'onloadstart', 'onmessage', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onoffline', 'ononline', 'onpagehide', 'onpageshow', 'onpaste', 'onpause', 'onplay', 'onplaying', 'onpopstate', 'onprogress', 'onratechange', 'onreset', 'onresize', 'onscroll', 'onsearch', 'onseeked', 'onseeking', 'onselect', 'onstalled', 'onstorage', 'onsubmit', 'onsuspend', 'ontimeupdate', 'ontoggle', 'onunload', 'onvolumechange', 'onwaiting', 'onwheel'];
 
 const selfClosingElements = [
 	'area',
@@ -102,8 +101,20 @@ class HtmlUtils {
 				if (disallowedTags.includes(currentTag())) return;
 
 				attrs = Object.assign({}, attrs);
-				for (const eventName of JS_EVENT_NAMES) {
-					delete attrs[eventName];
+
+				// Remove all the attributes that start with "on", which
+				// normally should be JavaScript events. A better solution
+				// would be to blacklist known events only but it seems the
+				// list is not well defined [0] and we don't want any to slip
+				// throught the cracks. A side effect of this change is a
+				// regular harmless attribute that starts with "on" will also
+				// be removed.
+				// 0: https://developer.mozilla.org/en-US/docs/Web/Events
+				for (const name in attrs) {
+					if (!attrs.hasOwnProperty(name)) continue;
+					if (name.length <= 2) continue;
+					if (name.toLowerCase().substr(0, 2) !== 'on') continue;
+					delete attrs[name];
 				}
 
 				if (options.addNoMdConvClass) {

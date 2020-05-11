@@ -27,6 +27,10 @@ const sources = [
 		id: 5,
 		name: 'Joplin.ico',
 	},
+	{
+		id: 6,
+		name: '../JoplinLetter.png',
+	},
 ];
 
 function sourceById(id) {
@@ -250,6 +254,27 @@ const operations = [
 		width: 144,
 		height: 144,
 	},
+
+	// ============================================================================
+	// Windows tiles
+	// ============================================================================
+
+	{
+		source: 6,
+		dest: 'ElectronClient/build-win/icons/Square150x150Logo.png',
+		width: 150,
+		height: 150,
+		iconWidth: 99,
+		iconHeight: 75,
+	},
+	{
+		source: 6,
+		dest: 'ElectronClient/build-win/icons/SmallTile.png',
+		width: 70,
+		height: 70,
+		iconWidth: 46,
+		iconHeight: 46,
+	},
 ];
 
 async function main() {
@@ -269,7 +294,20 @@ async function main() {
 			let s = sharp(sourcePath);
 
 			if (operation.width && operation.height) {
-				s = s.resize(operation.width, operation.height, { fit: 'fill' });
+				if (operation.iconWidth && operation.iconHeight) {
+					s = s.resize(operation.iconWidth, operation.iconHeight, {
+						fit: 'contain',
+						background: { r: 0, g: 0, b: 0, alpha: 0 },
+					}).extend({
+						top: Math.floor((operation.height - operation.iconHeight) / 2),
+						bottom: Math.ceil((operation.height - operation.iconHeight) / 2),
+						left: Math.floor((operation.width - operation.iconWidth) / 2),
+						right: Math.ceil((operation.width - operation.iconWidth) / 2),
+						background: { r: 0, g: 0, b: 0, alpha: 0 },
+					});
+				} else {
+					s = s.resize(operation.width, operation.height, { fit: 'fill' });
+				}
 			}
 
 			if (destExt === 'jpg') {

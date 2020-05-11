@@ -26,8 +26,13 @@ const getForcedRootBlockAttrs = (editor: Editor): Record<string, string> => {
   return editor.getParam('forced_root_block_attrs', {});
 };
 
+const getLocalizationFunction = (editor:Editor):Function => {
+  return editor.getParam('localization_function', (s:string) => s);
+}
+
 export {
   shouldIndentOnTab,
   getForcedRootBlock,
-  getForcedRootBlockAttrs
+  getForcedRootBlockAttrs,
+  getLocalizationFunction,
 };

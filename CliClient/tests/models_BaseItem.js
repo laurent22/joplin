@@ -69,4 +69,39 @@ describe('models_BaseItem', function() {
 		expect(unserialized.user_created_time).toEqual(note.user_created_time);
 		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
 	}));
+
+	it('should serialize geolocation fields', asyncTest(async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		note = await Note.load(note.id);
+
+		let serialized = await Note.serialize(note);
+		let unserialized = await Note.unserialize(serialized);
+
+		expect(unserialized.latitude).toEqual('0.00000000');
+		expect(unserialized.longitude).toEqual('0.00000000');
+		expect(unserialized.altitude).toEqual('0.0000');
+
+		await Note.updateGeolocation(note.id);
+		note = await Note.load(note.id);
+
+		serialized = await Note.serialize(note);
+		unserialized = await Note.unserialize(serialized);
+
+		expect(unserialized.latitude).toEqual(note.latitude);
+		expect(unserialized.longitude).toEqual(note.longitude);
+		expect(unserialized.altitude).toEqual(note.altitude);
+	}));
+
+	it('should serialize and unserialize notes', asyncTest(async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		await Note.updateGeolocation(note.id);
+
+		const noteBefore = await Note.load(note.id);
+		const serialized = await Note.serialize(noteBefore);
+		const noteAfter = await Note.unserialize(serialized);
+
+		expect(noteAfter).toEqual(noteBefore);
+	}));
 });

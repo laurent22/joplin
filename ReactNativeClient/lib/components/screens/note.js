@@ -565,7 +565,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async attachPhoto_onPress() {
-		const response = await this.showImagePicker({ mediaType: 'photo' });
+		const response = await this.showImagePicker({ mediaType: 'photo', noData: true });
 		await this.attachFile(response, 'image');
 	}
 

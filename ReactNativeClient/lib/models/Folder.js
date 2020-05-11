@@ -323,6 +323,33 @@ class Folder extends BaseItem {
 		return rootFolders;
 	}
 
+	static async sortFolderTree(folders) {
+		const output = folders ? folders : await this.allAsTree();
+
+		const sortFoldersAlphabetically = (folders) => {
+			folders.sort((a, b) => {
+				if (a.parentId === b.parentId) {
+					return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
+				}
+			});
+			return folders;
+		};
+
+		const sortFolders = (folders) => {
+			for (let i = 0; i < folders.length; i++) {
+				const folder = folders[i];
+				if (folder.children) {
+					folder.children = sortFoldersAlphabetically(folder.children);
+					sortFolders(folder.children);
+				}
+			}
+			return folders;
+		};
+
+		sortFolders(sortFoldersAlphabetically(output));
+		return output;
+	}
+
 	static load(id) {
 		if (id == this.conflictFolderId()) return this.conflictFolder();
 		return super.load(id);

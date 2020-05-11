@@ -125,7 +125,7 @@ module.exports = function(grunt) {
 					// { src: ['changelog.txt'], dest: 'dist', expand: true },
 					{
 						src: ['dist/joplinLists.js'],
-						dest: '../../../ElectronClient/gui/editors/TinyMCE/plugins/lists.js',
+						dest: '../../../ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js',
 					},
 				],
 			},

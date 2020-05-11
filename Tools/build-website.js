@@ -290,7 +290,7 @@ https://github.com/laurent22/joplin/blob/master/{{{sourceMarkdownFile}}}
 			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc2020/" title="Google Summer of Code 2020">GSoC 2020</a></li>
+			<li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li>
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -505,7 +505,9 @@ function tocMd() {
 }
 
 function replaceGitHubByJoplinAppLinks(md) {
-	return md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
+	let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
+	output = output.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*)\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1/$2');
+	return output;
 }
 
 function tocHtml() {
@@ -541,6 +543,10 @@ function renderMdToHtml(md, targetPath, templateParams) {
 
 	templateParams.pageTitle = title.join(' | ');
 	const html = markdownToHtml(md, templateParams);
+
+	const folderPath = dirname(targetPath);
+	fs.mkdirpSync(folderPath);
+
 	fs.writeFileSync(targetPath, html);
 }
 
@@ -584,7 +590,10 @@ async function main() {
 		['readme/nextcloud_app.md', 'docs/nextcloud_app/index.html', { title: 'Joplin Web API for Nextcloud' }],
 
 		['readme/gsoc2020/index.md', 'docs/gsoc2020/index.html', { title: 'Google Summer of Code' }],
-		['readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas.html', { title: 'GSoC: Project Ideas' }],
+		['readme/gsoc2020/ideas.md', 'docs/gsoc2020/ideas/index.html', { title: 'GSoC: Project Ideas' }],
+
+		['readme/gsod2020/index.md', 'docs/gsod2020/index.html', { title: 'Google Season of Docs' }],
+		['readme/gsod2020/ideas.md', 'docs/gsod2020/ideas/index.html', { title: 'Google Season of Docs: Project Ideas' }],
 	];
 
 	const path = require('path');

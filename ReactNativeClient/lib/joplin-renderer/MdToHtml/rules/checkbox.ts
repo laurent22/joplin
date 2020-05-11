@@ -38,10 +38,13 @@ pluginAssets[2] = function(theme:any) {
 			mime: 'text/css',
 			text: `
 				/* https://stackoverflow.com/questions/7478336/only-detect-click-event-on-pseudo-element#comment39751366_7478344 */
-
+				/* Not doing this trick anymore. See Modules/TinyMCE/JoplinLists/src/main/ts/ui/Buttons.ts */
+				
+				/*
 				ul.joplin-checklist li {
 					pointer-events: none;
 				}
+				*/
 
 				ul.joplin-checklist {
 					list-style:none;
