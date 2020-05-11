@@ -221,13 +221,7 @@ class OneDriveApi {
 			let response = null;
 			try {
 				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					if (options.fileType == 'small') {
-						response = await shim.uploadBlob(url, options);
-					} else {
-						console.log(`URL: ${url}`);
-						// bigFile
-						response = await this.bigFileUpload(url, options);
-					}
+					response = options.fileType == 'small' ? await shim.uploadBlob(url, options) : await this.bigFileUpload(url, options);
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
 				} else {
