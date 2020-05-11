@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps } from '../../utils/types';
-import { resourcesStatus, commandAttachFileToBody } from '../../utils/resourceHandling';
+import { resourcesStatus, commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
 import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/contextMenu';
 const { MarkupToHtml } = require('lib/joplin-renderer');
@@ -879,18 +879,24 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 		}
 
 		async function onPaste(event:any) {
-			const pastedText = event.clipboardData.getData('text');
-
-			if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
-				event.preventDefault();
-				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+			const resourceMds = await handlePasteEvent(event);
+			if (resourceMds.length) {
+				const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMds.join('\n'), markupRenderOptions({ bodyOnly: true }));
 				editor.insertContent(result.html);
-			} else { // Paste regular text
-				// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
-				// so we manually add it here. We also can't do it immediately it seems, or
-				// else nothing is added to the stack, so do it on the next frame.
-				window.requestAnimationFrame(() => editor.undoManager.add());
-				onChangeHandler();
+			} else {
+				const pastedText = event.clipboardData.getData('text');
+
+				if (BaseItem.isMarkdownTag(pastedText)) { // Paste a link to a note
+					event.preventDefault();
+					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
+					editor.insertContent(result.html);
+				} else { // Paste regular text
+					// HACK: TinyMCE doesn't add an undo step when pasting, for unclear reasons
+					// so we manually add it here. We also can't do it immediately it seems, or
+					// else nothing is added to the stack, so do it on the next frame.
+					window.requestAnimationFrame(() => editor.undoManager.add());
+					onChangeHandler();
+				}
 			}
 		}
 
