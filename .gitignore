@@ -42,6 +42,7 @@ ReactNativeClient/lib/csstojs/
 ReactNativeClient/lib/rnInjectedJs/
 ElectronClient/gui/note-viewer/fonts/
 ElectronClient/gui/note-viewer/lib.js
+ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 Clipper-source/
 Clipper/joplin-webclipper-source.zip
 joplin-webclipper-source.zip

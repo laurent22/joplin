@@ -7,11 +7,12 @@ import { menuItems, ContextMenuOptions, ContextMenuItemType } from '../../utils/
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const taboverride = require('taboverride');
 const { reg } = require('lib/registry.js');
-const { _ } = require('lib/locale');
+const { _, closestSupportedLocale } = require('lib/locale');
 const BaseItem = require('lib/models/BaseItem');
 const Resource = require('lib/models/Resource');
 const { themeStyle, buildStyle } = require('../../../../theme.js');
 const { clipboard } = require('electron');
+const supportedLocales = require('./supportedLocales');
 
 function markupRenderOptions(override:any = null) {
 	return {
@@ -473,6 +474,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			const contextMenuItemNames = [];
 			for (const name in contextMenuItems) contextMenuItemNames.push(contextMenuItemNameWithNamespace(name));
 
+			const language = closestSupportedLocale(props.locale, true, supportedLocales);
+
 			const editors = await (window as any).tinymce.init({
 				selector: `#${rootIdRef.current}`,
 				width: '100%',
@@ -489,7 +492,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 				branding: false,
 				target_list: false,
 				table_resize_bars: false,
-				language: props.locale,
+				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
 				toolbar: 'bold italic | link joplinInlineCode joplinCodeBlock joplinAttach | numlist bullist joplinChecklist | h1 h2 h3 hr blockquote table joplinInsertDateTime',
 				localization_function: _,
 				contextmenu: contextMenuItemNames.join(' '),
