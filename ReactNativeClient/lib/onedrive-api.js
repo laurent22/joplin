@@ -3,6 +3,7 @@ const { stringify } = require('query-string');
 const { time } = require('lib/time-utils.js');
 const { Logger } = require('lib/logger.js');
 const { _ } = require('lib/locale.js');
+const fs = require('fs');
 
 class OneDriveApi {
 	// `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
@@ -130,6 +131,56 @@ class OneDriveApi {
 		}
 	}
 
+
+	async bigFileUpload(url, options) {
+		const response = await shim.fetch(url, {
+			method: 'POST',
+			headers: {
+				'Authorization': options.headers.Authorization,
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!response.ok) {
+			return response;
+		} else {
+			const data = await response.json();
+			const uploadUrl = data.uploadUrl;
+			// uploading file in 7.5 MiB-Fragments because this is the mean of 5 and 10 Mib which are the recommended lower and upper limits.
+			// https://docs.microsoft.com/de-de/onedrive/developer/rest-api/api/driveitem_createuploadsession?view=odsp-graph-online#best-practices
+			const fragSize = 7864320;
+			const numberOfFrags = Math.ceil(options.fileSize / fragSize);
+			for (let i = 0; i < numberOfFrags; i++) {
+				const startByte = i * fragSize;
+				let endByte = null;
+				let contentLength = null;
+				if (i == numberOfFrags - 1) {
+					// Last fragment. It is not ensured that the last fragment is a multiple of 327,680 bytes as recommanded in the api doc. The reasons is that the docs are out of day for this purpose: https://github.com/OneDrive/onedrive-api-docs/issues/1200#issuecomment-597281253
+					endByte = options.fileSize - 1;
+					contentLength = options.fileSize - ((numberOfFrags - 1) * fragSize);
+				} else {
+					endByte = (i + 1) * fragSize - 1;
+					contentLength = fragSize;
+				}
+				const readableStream = fs.createReadStream(options.path, { start: startByte, end: endByte });
+				this.logger().info(`${options.path}: Uploading File Fragment ${(startByte / 1048576).toFixed(2)} - ${(endByte / 1048576).toFixed(2)} from ${(options.fileSize / 1048576).toFixed(2)} Mbit ...`);
+				const response = await shim.fetch(uploadUrl, {
+					method: 'PUT',
+					headers: {
+						'Content-Length': contentLength,
+						'Content-Range': `bytes ${startByte}-${endByte}/${options.fileSize}`,
+					},
+					body: readableStream,
+				});
+				if (response.ok) {
+					this.logger().info(`${options.path}: ${(endByte / 1048576).toFixed(2)} from ${(options.fileSize / 1048576).toFixed(2)} Mbit have been uploaded`);
+				} else {
+					return response;
+				}
+			}
+			return { ok: true };
+		}
+	}
+
 	async exec(method, path, query = null, data = null, options = null) {
 		if (!path) throw new Error('Path is required');
 
@@ -170,7 +221,13 @@ class OneDriveApi {
 			let response = null;
 			try {
 				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
-					response = await shim.uploadBlob(url, options);
+					if (options.fileType == 'small') {
+						response = await shim.uploadBlob(url, options);
+					} else {
+						console.log(`URL: ${url}`);
+						// bigFile
+						response = await this.bigFileUpload(url, options);
+					}
 				} else if (options.target == 'string') {
 					response = await shim.fetch(url, options);
 				} else {

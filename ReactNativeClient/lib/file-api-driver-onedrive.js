@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { dirname, basename } = require('lib/path-utils.js');
+const fs = require('fs');
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -129,19 +130,21 @@ class FileApiDriverOneDrive {
 
 		let response = null;
 
-		try {
-			if (options.source == 'file') {
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, null, options);
+		if (options.source == 'file') {
+			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
+			const fileSize = fs.statSync(options.path)['size'];
+			if (fileSize < 4194304) {
+				path = `${this.makePath_(path)}:/content`;
+				options.fileType = 'small';
 			} else {
-				options.headers = { 'Content-Type': 'text/plain' };
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
+				path = `${this.makePath_(path)}:/createUploadSession`;
+				options.fileType = 'big';
+				options.fileSize = fileSize;
 			}
-		} catch (error) {
-			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
-				error.code = 'rejectedByTarget';
-				error.message = 'Resource exceeds OneDrive max file size (4MB)';
-			}
-			throw error;
+			response = await this.api_.exec('PUT', path, null, null, options);
+		} else {
+			options.headers = { 'Content-Type': 'text/plain' };
+			response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
 		}
 
 		return response;
