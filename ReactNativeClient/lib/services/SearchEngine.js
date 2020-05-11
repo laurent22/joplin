@@ -7,7 +7,6 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
-const { map, pickBy, identity, isEmpty } = require('lodash');
 
 class SearchEngine {
 	constructor() {
@@ -237,7 +236,7 @@ class SearchEngine {
 	}
 
 	processBasicSearchResults_(rows, parsedQuery) {
-		const valueRegexs = parsedQuery.keys.includes('_') ? map(parsedQuery.terms['_'], 'valueRegex') : [];
+		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => term.valueRegex) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
@@ -249,7 +248,7 @@ class SearchEngine {
 				body: !isOnlyTitle,
 			};
 
-			row.fields = Object.keys(pickBy(matchedFields, identity));
+			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
 			row.weight = 0;
 		}
 	}
@@ -407,7 +406,7 @@ class SearchEngine {
 		const searchOptions = {};
 
 		for (const key of parsedQuery.keys) {
-			if (isEmpty(parsedQuery.terms[key])) continue;
+			if (parsedQuery.terms[key].length === 0) continue;
 
 			const term = parsedQuery.terms[key][0].value;
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
