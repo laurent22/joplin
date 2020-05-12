@@ -293,7 +293,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async UNSAFE_componentWillMount() {
-		Object.assign({}, this.selection);
+		Object.assign(this.selection, {});
 
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
