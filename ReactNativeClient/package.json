@@ -66,6 +66,7 @@
     "react-native-image-resizer": "^1.0.0",
     "react-native-log-ios": "^1.5.0",
     "react-native-material-dropdown": "^0.5.2",
+    "react-native-permissions": "^2.1.4",
     "react-native-popup-dialog": "^0.9.35",
     "react-native-popup-menu": "^0.10.0",
     "react-native-push-notification": "git+https://github.com/laurent22/react-native-push-notification.git",

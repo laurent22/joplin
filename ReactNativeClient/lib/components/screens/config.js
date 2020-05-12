@@ -17,6 +17,7 @@ const { time } = require('lib/time-utils');
 const { shim } = require('lib/shim');
 const SearchEngine = require('lib/services/SearchEngine');
 const RNFS = require('react-native-fs');
+const { check, request, PERMISSIONS, RESULTS } = require('react-native-permissions');
 
 import { PermissionsAndroid } from 'react-native';
 import Slider from '@react-native-community/slider';
@@ -102,26 +103,34 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const resourcePath = `${exportPath}/resources`;
 			try {
 
-				{
-					const copyFiles = async (source, dest) => {
-						await shim.fsDriver().mkdir(dest);
-
-						const files = await shim.fsDriver().readDirStats(source);
-
-						for (const file of files) {
-							const source_ = `${source}/${file.path}`;
-							const dest_ = `${dest}/${file.path}`;
-							if (!file.isDirectory()) {
-								reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
-								await shim.fsDriver().copy(source_, dest_);
-							} else {
-								await copyFiles(source_, dest_);
-							}
+				if (Platform.OS === 'android') {
+					let result = await check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+					if (result !== RESULTS.GRANTED) {
+						result = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+						if (result !== RESULTS.GRANTED) {
+							throw new Error('Permission denied');
 						}
-					};
-					await copyFiles(dbPath, exportPath);
-					await copyFiles(Setting.value('resourceDir'), resourcePath);
+					}
 				}
+
+				const copyFiles = async (source, dest) => {
+					await shim.fsDriver().mkdir(dest);
+
+					const files = await shim.fsDriver().readDirStats(source);
+
+					for (const file of files) {
+						const source_ = `${source}/${file.path}`;
+						const dest_ = `${dest}/${file.path}`;
+						if (!file.isDirectory()) {
+							reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
+							await shim.fsDriver().copy(source_, dest_);
+						} else {
+							await copyFiles(source_, dest_);
+						}
+					}
+				};
+				await copyFiles(dbPath, exportPath);
+				await copyFiles(Setting.value('resourceDir'), resourcePath);
 
 				alert('Profile has been exported!');
 			} catch (error) {
