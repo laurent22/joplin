@@ -16,7 +16,7 @@ matrix:
     - os: osx
       osx_image: xcode9.0
       language: node_js
-      node_js: "8"
+      node_js: "10"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
@@ -25,7 +25,7 @@ matrix:
       sudo: required
       dist: trusty
       language: node_js
-      node_js: "8"
+      node_js: "10"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
