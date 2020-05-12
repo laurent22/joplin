@@ -18,7 +18,7 @@ const toRelative = require('relative');
 // try/catch to ensure system keychain is present and no error is thrown.
 let keytar;
 try {
-	keytar = require('keytar');
+	keytar = shim.isLinux() ? null : require('keytar');
 } catch (err) {
 	keytar = null;
 }
