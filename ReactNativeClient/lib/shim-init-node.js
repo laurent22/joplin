@@ -16,6 +16,15 @@ const toRelative = require('relative');
 // keytar throws an error when system keychain is not present;
 // even when keytar itself is installed.
 // try/catch to ensure system keychain is present and no error is thrown.
+
+// For now, keychain support is disabled on Linux because when keytar is loaded
+// it seems to cause the following error when loading Sharp:
+//
+// Something went wrong installing the "sharp" module
+// /lib/x86_64-linux-gnu/libz.so.1: version `ZLIB_1.2.9' not found (required by /home/travis/build/laurent22/joplin/CliClient/node_modules/sharp/build/Release/../../vendor/lib/libpng16.so.16)
+//
+// See: https://travis-ci.org/github/laurent22/joplin/jobs/686222036
+
 let keytar;
 try {
 	keytar = shim.isLinux() ? null : require('keytar');
