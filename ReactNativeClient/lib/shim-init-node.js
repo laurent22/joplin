@@ -13,6 +13,16 @@ const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
 
+// keytar throws an error when system keychain is not present;
+// even when keytar itself is installed.
+// try/catch to ensure system keychain is present and no error is thrown.
+let keytar;
+try {
+	keytar = require('keytar');
+} catch (err) {
+	keytar = null;
+}
+
 function shimInit() {
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -451,6 +461,31 @@ function shimInit() {
 
 	shim.pathRelativeToCwd = (path) => {
 		return toRelative(process.cwd(), path);
+	};
+
+	function isKeytarAvailable() {
+		return shim.isElectron() && !shim.isPortable() && keytar;
+	}
+
+	shim.loadSecureItems = async (appId) => {
+		const newSecureItems = [];
+
+		if (isKeytarAvailable()) {
+			const secureItems = await keytar.findCredentials(appId);
+			for (const item of secureItems) {
+				newSecureItems.push({ key: item['account'], value: item['password'] });
+			}
+		}
+
+		return newSecureItems;
+	};
+
+	shim.saveSecureItem = async (appId, item) => {
+		if (isKeytarAvailable()) {
+			await keytar.setPassword(appId, item.key, item.value);
+			return true;
+		}
+		return false;
 	};
 }
 

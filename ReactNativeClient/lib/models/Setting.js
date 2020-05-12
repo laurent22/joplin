@@ -692,6 +692,10 @@ class Setting extends BaseModel {
 		return md.description(appType);
 	}
 
+	static isSecureKey(key) {
+		return this.metadata()[key] && this.metadata()[key].secure === true;
+	}
+
 	static keys(publicOnly = false, appType = null) {
 		if (!this.keys_) {
 			const metadata = this.metadata();
@@ -723,18 +727,26 @@ class Setting extends BaseModel {
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
-		return this.modelSelectAll('SELECT * FROM settings').then(rows => {
+		return this.modelSelectAll('SELECT * FROM settings').then(async (rows) => {
 			this.cache_ = [];
 
-			for (let i = 0; i < rows.length; i++) {
-				const c = rows[i];
+			const pushItemsToCache = (items) => {
+				for (let i = 0; i < items.length; i++) {
+					const c = items[i];
 
-				if (!this.keyExists(c.key)) continue;
-				c.value = this.formatValue(c.key, c.value);
-				c.value = this.filterValue(c.key, c.value);
+					if (!this.keyExists(c.key)) continue;
 
-				this.cache_.push(c);
-			}
+					c.value = this.formatValue(c.key, c.value);
+					c.value = this.filterValue(c.key, c.value);
+
+					this.cache_.push(c);
+				}
+			};
+
+			const secureItems = await shim.loadSecureItems(this.constants_.appId);
+
+			pushItemsToCache(rows);
+			pushItemsToCache(secureItems);
 
 			this.dispatchUpdateAll();
 		});
@@ -996,6 +1008,11 @@ class Setting extends BaseModel {
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = Object.assign({}, this.cache_[i]);
 			s.value = this.valueToString(s.key, s.value);
+
+			if (this.isSecureKey(s.key)) {
+				if (await shim.saveSecureItem(this.constants_.appId, s)) continue;
+			}
+
 			queries.push(Database.insertQuery(this.tableName(), s));
 		}
 

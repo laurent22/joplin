@@ -220,6 +220,14 @@ shim.pathRelativeToCwd = (path) => {
 	throw new Error('Not implemented');
 };
 
+shim.loadSecureItems = async (appId) => {
+	return [];
+};
+
+shim.saveSecureItem = async (appId, item) => {
+	return false;
+};
+
 shim.showMessageBox = (message, options = null) => {
 	throw new Error('Not implemented');
 };
