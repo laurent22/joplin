@@ -72,7 +72,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			HACK_webviewLoadingState: 0,
 		};
 
-		this.selection = {};
+		this.selection = null;
 
 		this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
 
@@ -293,7 +293,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	async UNSAFE_componentWillMount() {
-		Object.assign(this.selection, {});
+		this.selection = null;
 
 		BackButtonService.addHandler(this.backHandler);
 		NavService.addHandler(this.navHandler);
