@@ -42,6 +42,8 @@ before_install:
 
   # Silence apt-get update errors (for example when a module doesn't exist) since
   # otherwise it will make the whole build fails, even though all we need is yarn.
+
+  # libsecret-1-dev is required for keytar - https://github.com/atom/node-keytar
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       HOMEBREW_NO_AUTO_UPDATE=1 brew install yarn
@@ -51,6 +53,7 @@ before_install:
       sudo apt-get update || true
       sudo apt-get install -y yarn
       sudo apt-get install -y gettext
+      sudo apt-get install -y libsecret-1-dev
     fi
 
 script:
