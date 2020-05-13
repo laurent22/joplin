@@ -46,6 +46,8 @@ const defaultState = {
 		itemIndex: 0,
 		itemCount: 0,
 		decryptedItemCounts: {},
+		decryptedItemCount: 0,
+		skippedItemCount: 0,
 	},
 	selectedNoteTags: [],
 	resourceFetcher: {
