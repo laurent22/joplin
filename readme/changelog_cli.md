@@ -1,5 +1,15 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.164](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164) - 2020-05-13T15:30:22Z
+
+- New: Added support for basic search
+- Improved: Improve automatic title generation (#2955) (#2915 by anirudh murali)
+- Improved: Improve handling of encrypted items
+- Improved: Made layout configurable (#3069 by [@jyuvaraj03](https://github.com/jyuvaraj03))
+- Improved: Start resource fetcher service when a note has been decrypted
+- Fixed: Better handling of missing table field bug on Linux (#3088)
+- Fixed: Fix format of geolocation data (#2673 by [@mic704b](https://github.com/mic704b))
+
 ## [cli-v1.0.163](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163) - 2020-04-10T18:31:50Z
 
 - Improved: Update ko.po (#2986 by [@xmlangel](https://github.com/xmlangel))
