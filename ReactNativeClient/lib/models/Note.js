@@ -11,6 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
+const markdownUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
@@ -82,22 +83,7 @@ class Note extends BaseItem {
 	}
 
 	static defaultTitleFromBody(body) {
-		if (body && body.length) {
-			const lines = body.trim().split('\n');
-			let output = lines[0].trim();
-			// Remove the first #, *, etc.
-			while (output.length) {
-				const c = output[0];
-				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
-					output = output.substr(1);
-				} else {
-					break;
-				}
-			}
-			return output.substr(0, 80).trim();
-		}
-
-		return _('Untitled');
+		return markdownUtils.titleFromBody(body);
 	}
 
 	static geolocationUrl(note) {

@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/app-gui.js:445
 msgid "To delete a tag, untag the associated notes."
@@ -578,6 +580,8 @@ msgstr "Mostra un sommario delle note e dei taccuini."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+"Per riprovare a decriptare questi elementi, esegui `e2ee decrypt --retry-"
+"failed-items`"
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/command-sync.js:28
 msgid "Synchronises with remote storage."
@@ -776,9 +780,8 @@ msgstr ""
 "decifrati in background e saranno presto disponibile."
 
 #: /Users/tessus/data/work/joplin/Tools/../CliClient/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Non chiedere conferma."
+msgstr "Puoi anche scrivere `status` per ulteriori informazioni."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:363
 msgid "Sidebar"
@@ -863,9 +866,8 @@ msgid "Options"
 msgstr "Opzioni"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:625
-#, fuzzy
 msgid "Note attachments..."
-msgstr "Allegati"
+msgstr "Allegati..."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/app.js:647
 #, javascript-format
@@ -1344,6 +1346,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+"Le seguenti chiavi master usano un algoritmo di criptazione obsoleto ed è "
+"consigliabile aggiornarle. Le chiavi aggiornate riusciranno comunque a "
+"criptare e decriptare i tuoi dati come al solito."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:163
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/FolderPropertiesDialog.min.js:21
@@ -1354,7 +1359,7 @@ msgstr "ID"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:168
 msgid "Upgrade"
-msgstr ""
+msgstr "Aggiorna"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:181
 msgid "Re-encrypt data"
@@ -1365,12 +1370,16 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
+"Il metodo standard di criptazione è stato cambiato con uno più sicuro ed è "
+"consigliabile che tu lo applichi ai tuoi dati."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:183
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
+"Puoi usare lo strumento qui sotto per criptare nuovamente i tuoi dati, per esempio "
+"se sai che qualcuna delle tue note è criptata con un metodo obsoleto."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:185
 #, javascript-format
@@ -1389,6 +1398,19 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
+"Per farlo, il tuo intero data set deve essere criptato e sincronizzato, "
+"quindi è consigliabile lasciarlo fare di notte.\n"
+"\n"
+"Per iniziare, segui queste indicazioni:\n"
+"\n"
+"1. Sincronizza tutti i tuoi dispositivi.\n"
+"2. Clicca \"%s\".\n"
+"3. Aspetta che l'operazione venga completata. Per evitare conflitti, evita "
+"di modificare le note durante questo lasso di tempo.\n"
+"4. Una volta che questo dispositivo è stato sincronizzato, sincronizza tutti "
+"i dispositivi rimanenti e aspetta che finisca.\n"
+"\n"
+"Importante: questa operazione va eseguita SOLO UNA VOLTA in UN dispositivo."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/EncryptionConfigScreen.min.js:432
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/encryption-config.js:279
@@ -1451,9 +1473,8 @@ msgid "Add or remove tags:"
 msgstr "Aggiungi o rimuovi etichetta:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:259
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Sposta sul Taccuino..."
+msgstr "Sposta sul Taccuino:"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:279
 msgid "Rename notebook:"
@@ -1502,6 +1523,8 @@ msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
+"Il metodo di criptazione predefinito è stato cambiato, dovresti criptare "
+"nuovamente i tuoi dati."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/MainScreen.min.js:627
 msgid "More info"
@@ -1786,9 +1809,9 @@ msgid "Delete"
 msgstr "Elimina"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:93
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Delete attachment \"%s\"?"
-msgstr "Eliminare la nota \"%s\"?"
+msgstr "Eliminare allegato \"%s\"?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:139
 msgid ""
@@ -1796,6 +1819,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
+"Questo è uno strumento avanzato che mostra gli allegati delle tue note. "
+"Presta attenzione quando ne cancelli uno perché non possono essere "
+"recuperati."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/ResourceScreen.js:140
 msgid "Please wait..."
@@ -1821,7 +1847,6 @@ msgid "Dropbox Login"
 msgstr "Login Dropbox"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/Root.min.js:93
-#, fuzzy
 msgid "Note attachments"
 msgstr "Allegati"
 
@@ -1917,9 +1942,8 @@ msgstr ""
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:71
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:109
-#, fuzzy
 msgid "Retry All"
-msgstr "Riprova"
+msgstr "Riprova tutti"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/StatusScreen.min.js:96
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screens/status.js:115
@@ -1931,9 +1955,8 @@ msgid "Add or remove tags"
 msgstr "Aggiungi o rimuovi etichette"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:40
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Sposta sul Taccuino..."
+msgstr "Sposta sul Taccuino"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/gui/utils/NoteListUtils.js:53
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/screen-header.js:331
@@ -1986,14 +2009,13 @@ msgid "Error opening note in editor: %s"
 msgstr "Errore durante l'apertura della nota nell'editor: %s"
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:433
-#, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name."
 msgstr ""
-"Scrivi il titolo di una nota per saltare ad essa. Oppure digita # seguito "
-"dal nome di una etichetta, oppure @ seguito dal nome di un taccuino, "
-"oppure / seguito dal contenuto della nota."
+"Scrivi il titolo di una nota o parte del suo contenuto per aprirla. Oppure "
+"digita # seguito dal nome di un'etichetta, oppure @ seguito dal nome di un "
+"taccuino."
 
 #: /Users/tessus/data/work/joplin/Tools/../ElectronClient/plugins/GotoAnything.min.js:471
 msgid "Goto Anything..."
@@ -2115,6 +2137,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
+"Stai per allegare un'immagine di grandi dimensioni (%dx%d pixel). Vuoi "
+"scalare l'immagine a %d pixel prima di allegarla?"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/shim-init-node.js:156
 #, javascript-format
@@ -2240,20 +2264,18 @@ msgid "Downloaded"
 msgstr "Scaricato"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
-#, fuzzy
 msgid "yes"
-msgstr "Sì"
+msgstr "sì"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:30
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
 #, javascript-format
 msgid "(wysiwyg: %s)"
-msgstr ""
+msgstr "(wysiwyg: %s)"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:31
-#, fuzzy
 msgid "no"
-msgstr "n"
+msgstr "no"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:34
 #, javascript-format
@@ -2394,7 +2416,7 @@ msgstr "Nord"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:257
 msgid "Aritim Dark"
-msgstr ""
+msgstr "Scuro Aritim"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:259
 msgid "OLED Dark"
@@ -2704,7 +2726,7 @@ msgstr "Ignora gli errori del certificato TLS"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:581
 msgid "Fail-safe"
-msgstr ""
+msgstr "Fail-safe"
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:582
 msgid ""
@@ -2786,6 +2808,13 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
+"Questi plugin migliorano il render Markdown aggiungendo funzionalità. Per "
+"favore nota che anche se sono utili non seguono lo standard Markdown e "
+"quindi la maggior parte di loro funzionerà solo con Joplin. Inoltre alcuni "
+"di essi sono *incompatibili* con l'editor WYSIWYG. Se apri una nota che "
+"utilizza questi plugin nell'editor WYSIWYG, perderai la formattazione dei "
+"plugin. Qui sotto trovi indicato quali plugin sono compatibili o meno con "
+"l'editor WYSIWYG."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Setting.js:1033
 #, javascript-format
@@ -3096,17 +3125,19 @@ msgstr ""
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
+msgstr "Per favore conferma di voler criptare nuovamente il tuo database per intero."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
+msgstr "I tuoi dati verranno criptati nuovamente e sincronizzati."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
+"Per favore inserisci la tua password nella chiave master qui sotto prima di "
+"aggiornare la chiave."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
 msgid "The master key has been upgraded successfully!"

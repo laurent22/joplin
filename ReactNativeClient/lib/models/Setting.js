@@ -629,6 +629,46 @@ class Setting extends BaseModel {
 				maximum: 300,
 				step: 10,
 			},
+
+			'layout.folderList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Notebook list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.noteList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.note.factor': {
+				value: 2,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note area growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
 		};
 
 		return this.metadata_;

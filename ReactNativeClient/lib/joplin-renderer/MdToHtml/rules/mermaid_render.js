@@ -18,7 +18,7 @@ function mermaidInit() {
 		// Resetting elements size - see mermaid.ts
 		const elements = document.getElementsByClassName('mermaid');
 		for (const element of elements) {
-			element.style.width = '100%';
+			element.style.width = 'fit-content';
 		}
 	}
 }

@@ -16,7 +16,6 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
-import { attachResources } from './utils/resourceHandling';
 
 const { themeStyle } = require('../../theme.js');
 const NoteSearchBar = require('../NoteSearchBar.min.js');
@@ -408,7 +407,6 @@ function NoteEditor(props: NoteEditorProps) {
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
-		attachResources: attachResources,
 		disabled: false,
 		theme: props.theme,
 		dispatch: props.dispatch,
@@ -418,6 +416,7 @@ function NoteEditor(props: NoteEditorProps) {
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
 		locale: Setting.value('locale'),
+		onDrop: onDrop,
 	};
 
 	let editor = null;

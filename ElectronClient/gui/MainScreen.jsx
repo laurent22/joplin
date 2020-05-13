@@ -248,6 +248,7 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'moveToFolder') {
+			const folders = await Folder.sortFolderTree();
 			const startFolders = [];
 			const maxDepth = 15;
 
@@ -258,7 +259,8 @@ class MainScreenComponent extends React.Component {
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
 			};
-			addOptions(await Folder.allAsTree(), 0);
+
+			addOptions(folders, 0);
 
 			this.setState({
 				promptOptions: {
@@ -748,7 +750,7 @@ class MainScreenComponent extends React.Component {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 			},
-			this.props.style
+			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;

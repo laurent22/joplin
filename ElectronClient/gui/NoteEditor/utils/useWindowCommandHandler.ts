@@ -62,8 +62,10 @@ export default function useWindowCommandHandler(dependencies:HookDependencies) {
 				if (editorRef.current && editorRef.current.supportsCommand('search')) {
 					editorCmd.name = 'search';
 				} else {
-					setShowLocalSearch(true);
-					if (noteSearchBarRef.current) noteSearchBarRef.current.wrappedInstance.focus();
+					fn = () => {
+						setShowLocalSearch(true);
+						if (noteSearchBarRef.current) noteSearchBarRef.current.wrappedInstance.focus();
+					};
 				}
 			} else if (command.name === 'insertTemplate') {
 				editorCmd.name = 'insertText',

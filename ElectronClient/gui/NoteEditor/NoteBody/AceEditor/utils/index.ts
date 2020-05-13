@@ -239,3 +239,16 @@ export function useScrollHandler(editor: any, webviewRef: any, onScroll: Functio
 
 	return { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll };
 }
+
+export function useRootWidth(dependencies:any) {
+	const { rootRef } = dependencies;
+
+	const [rootWidth, setRootWidth] = useState(0);
+
+	useEffect(() => {
+		if (!rootRef.current) return;
+		setRootWidth(rootRef.current.offsetWidth);
+	});
+
+	return rootWidth;
+}
