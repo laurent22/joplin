@@ -999,7 +999,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						value={note.body}
 						onChangeText={text => this.body_changeText(text)}
 						onSelectionChange={({ nativeEvent: { selection } }) => {
-							Object.assign(this.selection, selection);
+							this.selection = selection;
 						}}
 						blurOnSubmit={false}
 						selectionColor={theme.textSelectionColor}
