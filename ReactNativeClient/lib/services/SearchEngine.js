@@ -416,6 +416,8 @@ class SearchEngine {
 
 		const searchType = this.determineSearchType_(query, options.searchType);
 
+		console.info('SEARCH TYPE', searchType);
+
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
 			return this.basicSearch(query);

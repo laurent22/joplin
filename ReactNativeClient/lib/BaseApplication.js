@@ -671,6 +671,8 @@ class BaseApplication {
 			setLocale(Setting.value('locale'));
 		}
 
+		await shim.detectIfKeychainSupported(Setting);
+
 		if (Setting.value('encryption.shouldReencrypt') < 0) {
 			// We suggest re-encryption if the user has at least one notebook
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1

@@ -473,28 +473,40 @@ function shimInit() {
 	};
 
 	function isKeytarAvailable() {
-		return shim.isElectron() && !shim.isPortable() && keytar;
+		return shim.isElectron() && !shim.isPortable() && !!keytar;
 	}
 
-	shim.loadSecureItems = async (appId) => {
-		const newSecureItems = [];
+	shim.loadSecureItem = async (appId, clientId, itemKey) => {
+		if (!isKeytarAvailable()) return null;
 
-		if (isKeytarAvailable()) {
-			const secureItems = await keytar.findCredentials(appId);
-			for (const item of secureItems) {
-				newSecureItems.push({ key: item['account'], value: item['password'] });
-			}
-		}
+		console.info('LLLLLLLLLLL', appId, clientId, itemKey);
 
-		return newSecureItems;
+		const password = await keytar.getPassword(`${appId}.${itemKey}`, `${clientId}@joplin`);
+		if (password === null) return null;
+
+		return {
+			key: itemKey,
+			value: password,
+		};
+
+		// const newSecureItems = [];
+
+		// if (isKeytarAvailable()) {
+		// 	const secureItems = await keytar.findCredentials(appId);
+		// 	for (const item of secureItems) {
+		// 		newSecureItems.push({ key: item['account'], value: item['password'] });
+		// 	}
+		// }
+
+		// return newSecureItems;
 	};
 
-	shim.saveSecureItem = async (appId, item) => {
-		if (isKeytarAvailable()) {
-			await keytar.setPassword(appId, item.key, item.value);
-			return true;
-		}
-		return false;
+	shim.saveSecureItem = async (appId, clientId, item) => {
+		if (!appId || !clientId) throw new Error('appId and clientId must be specified');
+		if (!isKeytarAvailable()) return false;
+		console.info('SAVE', `${appId}.${item.key}`, `${clientId}@joplin`, item.value);
+		await keytar.setPassword(`${appId}.${item.key}`, `${clientId}@joplin`, item.value);
+		return true;
 	};
 }
 

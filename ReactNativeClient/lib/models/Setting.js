@@ -398,6 +398,7 @@ class Setting extends BaseModel {
 
 			collapsedFolderIds: { value: [], type: Setting.TYPE_ARRAY, public: false },
 
+			'keychain.supported': { value: -1, type: Setting.TYPE_INT, public: false },
 			'db.ftsEnabled': { value: -1, type: Setting.TYPE_INT, public: false },
 			'encryption.enabled': { value: false, type: Setting.TYPE_BOOL, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: Setting.TYPE_STRING, public: false },
@@ -696,7 +697,11 @@ class Setting extends BaseModel {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	static keys(publicOnly = false, appType = null) {
+	static keys(publicOnly = false, appType = null, options = null) {
+		options = Object.assign({}, {
+			secureOnly: false,
+		}, options);
+
 		if (!this.keys_) {
 			const metadata = this.metadata();
 			this.keys_ = [];
@@ -706,12 +711,13 @@ class Setting extends BaseModel {
 			}
 		}
 
-		if (appType || publicOnly) {
+		if (appType || publicOnly || options.secureOnly) {
 			const output = [];
 			for (let i = 0; i < this.keys_.length; i++) {
 				const md = this.settingMetadata(this.keys_[i]);
 				if (publicOnly && !md.public) continue;
 				if (appType && md.appTypes && md.appTypes.indexOf(appType) < 0) continue;
+				if (options.secureOnly && !md.secure) continue;
 				output.push(md.key);
 			}
 			return output;
@@ -730,6 +736,26 @@ class Setting extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM settings').then(async (rows) => {
 			this.cache_ = [];
 
+			// for (let i = 0; i < rows.length; i++) {
+			// 	const c = rows[i];
+
+			// 	if (!this.keyExists(c.key)) continue;
+
+			// 	const md = this.settingMetadata(c.key);
+
+			// 	console.info('MD', md.key, md.secure);
+
+			// 	if (md.secure) {
+			// 		const secureItem = await shim.loadSecureItem(Setting.value('appId'), Setting.value('clientId'), c.key);
+			// 		if (secureItem) c.value = secureItem.value;
+			// 	}
+
+			// 	c.value = this.formatValue(c.key, c.value);
+			// 	c.value = this.filterValue(c.key, c.value);
+
+			// 	this.cache_.push(c);
+			// }
+
 			const pushItemsToCache = (items) => {
 				for (let i = 0; i < items.length; i++) {
 					const c = items[i];
@@ -743,7 +769,12 @@ class Setting extends BaseModel {
 				}
 			};
 
-			const secureItems = await shim.loadSecureItems(this.constants_.appId);
+			const secureKeys = this.keys(false, null, { secureOnly: true });
+			const secureItems = [];
+			for (const key of secureKeys) {
+				const item = await shim.loadSecureItem(Setting.value('appId'), Setting.value('clientId'), key);
+				if (item) secureItems.push(item);
+			}
 
 			pushItemsToCache(rows);
 			pushItemsToCache(secureItems);
@@ -916,7 +947,7 @@ class Setting extends BaseModel {
 		if (key in this.constants_) {
 			const v = this.constants_[key];
 			const output = typeof v === 'function' ? v() : v;
-			if (output == 'SET_ME') throw new Error(`Setting constant has not been set: ${key}`);
+			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
 		}
 
@@ -1010,7 +1041,8 @@ class Setting extends BaseModel {
 			s.value = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
-				if (await shim.saveSecureItem(this.constants_.appId, s)) continue;
+				if (await shim.saveSecureItem(Setting.value('appId'), Setting.value('clientId'), s)) continue;
+				// if (await shim.saveSecureItem(this.constants_.appId, s)) continue;
 			}
 
 			queries.push(Database.insertQuery(this.tableName(), s));
@@ -1026,8 +1058,12 @@ class Setting extends BaseModel {
 
 		if (this.saveTimeoutId_) clearTimeout(this.saveTimeoutId_);
 
-		this.saveTimeoutId_ = setTimeout(() => {
-			this.saveAll();
+		this.saveTimeoutId_ = setTimeout(async () => {
+			try {
+				await this.saveAll();
+			} catch (error) {
+				this.logger().error('Could not save settings', error);
+			}
 		}, 500);
 	}
 

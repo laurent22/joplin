@@ -220,12 +220,36 @@ shim.pathRelativeToCwd = (path) => {
 	throw new Error('Not implemented');
 };
 
-shim.loadSecureItems = async (appId) => {
+shim.loadSecureItem = async (appId, clientId, itemKey) => {
 	return [];
 };
 
-shim.saveSecureItem = async (appId, item) => {
+shim.saveSecureItem = async (appId, clientId, item) => {
 	return false;
+};
+
+shim.detectIfKeychainSupported = async function(Setting) {
+	if (Setting.value('keychain.supported') >= 0) return;
+
+	const appId = Setting.value('appId');
+
+	const testItem = {
+		key: 'zz_testingkeychain',
+		value: 'mytest',
+	};
+
+	await shim.saveSecureItem(appId, testItem);
+
+	const allItems = await shim.loadSecureItems(appId);
+
+	for (const item of allItems) {
+		if (item.key === testItem.key && item.value === testItem.value) {
+			Setting.setValue('keychain.supported', 1);
+			return;
+		}
+	}
+
+	Setting.setValue('keychain.supported', 0);
 };
 
 shim.showMessageBox = (message, options = null) => {
