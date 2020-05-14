@@ -40,6 +40,7 @@ const RevisionService = require('lib/services/RevisionService.js');
 const KvStore = require('lib/services/KvStore.js');
 const WebDavApi = require('lib/WebDavApi');
 const DropboxApi = require('lib/DropboxApi');
+const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
 
 const databases_ = [];
 const synchronizers_ = [];
@@ -146,9 +147,8 @@ async function switchClient(id) {
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 
-	await Setting.load();
+	await loadKeychainServiceAndSettings();
 
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
 }
 
@@ -192,8 +192,7 @@ async function setupDatabase(id = null) {
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
-		await Setting.load();
-		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+		await loadKeychainServiceAndSettings();
 		return;
 	}
 
@@ -210,8 +209,7 @@ async function setupDatabase(id = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
-	await Setting.load();
-	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+	await loadKeychainServiceAndSettings();
 }
 
 function resourceDirName(id = null) {

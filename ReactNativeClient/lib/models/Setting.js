@@ -18,6 +18,15 @@ class Setting extends BaseModel {
 		return BaseModel.TYPE_SETTING;
 	}
 
+	static keychainService() {
+		if (!this.keychainService_) throw new Error('keychainService has not been set!!');
+		return this.keychainService_;
+	}
+
+	static setKeychainService(s) {
+		this.keychainService_ = s;
+	}
+
 	static metadata() {
 		if (this.metadata_) return this.metadata_;
 
@@ -730,31 +739,16 @@ class Setting extends BaseModel {
 		return this.keys(true).indexOf(key) >= 0;
 	}
 
+	// Low-level method to load a setting directly from the database. Should not be used in most cases.
+	static loadOne(key) {
+		return this.modelSelectOne('SELECT * FROM settings WHERE key = ?', [key]);
+	}
+
 	static load() {
 		this.cancelScheduleSave();
 		this.cache_ = [];
 		return this.modelSelectAll('SELECT * FROM settings').then(async (rows) => {
 			this.cache_ = [];
-
-			// for (let i = 0; i < rows.length; i++) {
-			// 	const c = rows[i];
-
-			// 	if (!this.keyExists(c.key)) continue;
-
-			// 	const md = this.settingMetadata(c.key);
-
-			// 	console.info('MD', md.key, md.secure);
-
-			// 	if (md.secure) {
-			// 		const secureItem = await shim.loadSecureItem(Setting.value('appId'), Setting.value('clientId'), c.key);
-			// 		if (secureItem) c.value = secureItem.value;
-			// 	}
-
-			// 	c.value = this.formatValue(c.key, c.value);
-			// 	c.value = this.filterValue(c.key, c.value);
-
-			// 	this.cache_.push(c);
-			// }
 
 			const pushItemsToCache = (items) => {
 				for (let i = 0; i < items.length; i++) {
@@ -772,7 +766,7 @@ class Setting extends BaseModel {
 			const secureKeys = this.keys(false, null, { secureOnly: true });
 			const secureItems = [];
 			for (const key of secureKeys) {
-				const item = await shim.loadSecureItem(Setting.value('appId'), Setting.value('clientId'), key);
+				const item = await this.keychainService().password(`setting.${key}`);
 				if (item) secureItems.push(item);
 			}
 
@@ -1041,8 +1035,7 @@ class Setting extends BaseModel {
 			s.value = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
-				if (await shim.saveSecureItem(Setting.value('appId'), Setting.value('clientId'), s)) continue;
-				// if (await shim.saveSecureItem(this.constants_.appId, s)) continue;
+				if (await this.keychainService().setPassword(`setting.${s.key}`, s.value)) continue;
 			}
 
 			queries.push(Database.insertQuery(this.tableName(), s));

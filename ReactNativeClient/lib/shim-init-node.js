@@ -13,25 +13,6 @@ const http = require('http');
 const https = require('https');
 const toRelative = require('relative');
 
-// keytar throws an error when system keychain is not present;
-// even when keytar itself is installed.
-// try/catch to ensure system keychain is present and no error is thrown.
-
-// For now, keychain support is disabled on Linux because when keytar is loaded
-// it seems to cause the following error when loading Sharp:
-//
-// Something went wrong installing the "sharp" module
-// /lib/x86_64-linux-gnu/libz.so.1: version `ZLIB_1.2.9' not found (required by /home/travis/build/laurent22/joplin/CliClient/node_modules/sharp/build/Release/../../vendor/lib/libpng16.so.16)
-//
-// See: https://travis-ci.org/github/laurent22/joplin/jobs/686222036
-
-let keytar;
-try {
-	keytar = shim.isLinux() ? null : require('keytar');
-} catch (err) {
-	keytar = null;
-}
-
 function shimInit() {
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -472,42 +453,6 @@ function shimInit() {
 		return toRelative(process.cwd(), path);
 	};
 
-	function isKeytarAvailable() {
-		return shim.isElectron() && !shim.isPortable() && !!keytar;
-	}
-
-	shim.loadSecureItem = async (appId, clientId, itemKey) => {
-		if (!isKeytarAvailable()) return null;
-
-		console.info('LLLLLLLLLLL', appId, clientId, itemKey);
-
-		const password = await keytar.getPassword(`${appId}.${itemKey}`, `${clientId}@joplin`);
-		if (password === null) return null;
-
-		return {
-			key: itemKey,
-			value: password,
-		};
-
-		// const newSecureItems = [];
-
-		// if (isKeytarAvailable()) {
-		// 	const secureItems = await keytar.findCredentials(appId);
-		// 	for (const item of secureItems) {
-		// 		newSecureItems.push({ key: item['account'], value: item['password'] });
-		// 	}
-		// }
-
-		// return newSecureItems;
-	};
-
-	shim.saveSecureItem = async (appId, clientId, item) => {
-		if (!appId || !clientId) throw new Error('appId and clientId must be specified');
-		if (!isKeytarAvailable()) return false;
-		console.info('SAVE', `${appId}.${item.key}`, `${clientId}@joplin`, item.value);
-		await keytar.setPassword(`${appId}.${item.key}`, `${clientId}@joplin`, item.value);
-		return true;
-	};
 }
 
 module.exports = { shimInit };

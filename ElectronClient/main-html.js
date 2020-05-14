@@ -74,8 +74,11 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-desktop');
+Setting.setConstant('appId', `net.cozic.joplin-desktop${bridge().env() === 'dev' ? 'dev' : ''}`);
 Setting.setConstant('appType', 'desktop');
+
+console.info(`appId: ${Setting.value('appId')}`);
+console.info(`appType: ${Setting.value('appType')}`);
 
 shimInit();
 
