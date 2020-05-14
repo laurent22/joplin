@@ -7,6 +7,8 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
+const filterParser = require('./filterParser');
+const queryBuilder = require('./queryBuilder');
 
 class SearchEngine {
 	constructor() {
@@ -432,56 +434,64 @@ class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	async search(query, options = null) {
+	async search(searchString, options = null) {
 		options = Object.assign({}, {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
 		}, options);
 
-		query = this.normalizeText_(query);
+		searchString = this.normalizeText_(searchString);
 
-		const searchType = this.determineSearchType_(query, options.searchType);
-		const parsedQuery = this.parseQuery(query);
+		const searchType = this.determineSearchType_(searchString, options.searchType);
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			// Non-alphabetical languages aren't support by SQLite FTS (except with extensions which are not available in all platforms)
-			const rows = await this.basicSearch(query);
-			this.processResults_(rows, parsedQuery, true);
-			return rows;
-		} else { // SEARCH_TYPE_FTS
-			// FTS will ignore all special characters, like "-" in the index. So if
-			// we search for "this-phrase" it won't find it because it will only
-			// see "this phrase" in the index. Because of this, we remove the dashes
-			// when searching.
-			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
-			query = query.replace(/-/g, ' ');
+			return this.basicSearch(searchString);
+		} else {
 
-			// Note that when the search engine index is somehow corrupted, it might contain
-			// references to notes that don't exist. Not clear how it can happen, but anyway
-			// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
-			// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
-			const sql = `
-				SELECT
-					notes_fts.id,
-					notes_fts.title AS normalized_title,
-					offsets(notes_fts) AS offsets,
-					notes.title,
-					notes.user_updated_time,
-					notes.is_todo,
-					notes.todo_completed,
-					notes.parent_id
-				FROM notes_fts
-				LEFT JOIN notes ON notes_fts.id = notes.id
-				WHERE notes_fts MATCH ?
-				AND notes.user_updated_time IS NOT NULL
-			`;
+			const filters = filterParser(searchString);
+			const { query, params } = queryBuilder(filters);
 			try {
-				const rows = await this.db().selectAll(sql, [query]);
-				this.processResults_(rows, parsedQuery);
+				const rows = await this.db().selectAll(query, params);
+				this.processResults_(rows);
+				console.log(`Rows returned after search for ${searchString}:`);
 				return rows;
 			} catch (error) {
-				this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
+				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				return [];
 			}
+
+
+
+			// // SEARCH_TYPE_FTS
+			// // FTS will ignore all special characters, like "-" in the index. So if
+			// // we search for "this-phrase" it won't find it because it will only
+			// // see "this phrase" in the index. Because of this, we remove the dashes
+			// // when searching.
+			// // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
+			// query = query.replace(/-/g, ' ');
+			// const parsedQuery = this.parseQuery(query);
+			// const sql = `
+			// SELECT
+			// 	notes_fts.id,
+			// 	notes_fts.title AS normalized_title,
+			// 	offsets(notes_fts) AS offsets,
+			// 	notes.title,
+			// 	notes.user_updated_time,
+			// 	notes.is_todo,
+			// 	notes.todo_completed,
+			// 	notes.parent_id
+			// FROM notes_fts
+			// LEFT JOIN notes ON notes_fts.id = notes.id
+			// WHERE notes_fts MATCH ?
+			// `;
+			// try {
+			// 	const rows = await this.db().selectAll(sql, [query]);
+			// 	this.processResults_(rows, parsedQuery);
+			// 	return rows;
+			// } catch (error) {
+			// 	this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
+			// 	return [];
+			// }
 		}
 	}
 

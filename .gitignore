@@ -166,6 +166,8 @@ ReactNativeClient/lib/services/UndoRedoService.js
 ReactNativeClient/lib/ShareExtension.js
 ReactNativeClient/lib/shareHandler.js
 ReactNativeClient/lib/versionInfo.js
+ReactNativeClient/lib/services/filterParser.js
+ReactNativeClient/lib/services/queryBuilder.js
 ReactNativeClient/PluginAssetsLoader.js
 ReactNativeClient/setUpQuickActions.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
