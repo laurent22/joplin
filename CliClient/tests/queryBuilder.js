@@ -99,11 +99,21 @@ describe('queryBuilder should give correct sql', () => {
 
 	it('when filter contains multiple text words', () => {
 		const filters = new Map([
-			['text', [{ relation: 'AND', value: 'mulitple words' }]],
+			['text', [{ relation: 'AND', value: 'multiple words' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
 			query: defaultSQL,
 			params: ['multiple words'],
+		});
+	});
+
+	it('when filter contains phrase text words', () => {
+		const filters = new Map([
+			['text', [{ relation: 'AND', value: '"multiple words"' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultSQL,
+			params: ['"multiple words"'],
 		});
 	});
 });

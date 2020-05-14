@@ -83,7 +83,7 @@ describe('filterParser should be correct filter for keyword', () => {
 	it('multi word text', () => {
 		const searchString = 'baba yaga';
 		const expected = new Map([
-			['text', [{ relation: 'AND', value: 'baba yaga' }]],
+			['text', [{ relation: 'AND', value: 'baba' }, { relation: 'AND', value: 'yaga' }]],
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});

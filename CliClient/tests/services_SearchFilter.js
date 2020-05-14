@@ -16,6 +16,8 @@ process.on('unhandledRejection', (reason, p) => {
 
 let engine = null;
 
+const ids = (array) => array.map(a => a.id);
+
 // For pretty printing.
 // See https://stackoverflow.com/questions/23676459/karma-jasmine-pretty-printing-object-comparison/26324116
 // jasmine.pp = function(obj) {
@@ -125,9 +127,9 @@ describe('services_SearchFilter', function() {
 
 	it('should return notes matching text', asyncTest(async () => {
 		let rows;
-		const n1 = await Note.save({ title: 'foo', body: 'dead beef' });
+		const n1 = await Note.save({ title: 'foo beef', body: 'dead bar' });
 		await sleep(0.1);
-		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
+		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
 		await sleep(0.1);
 		await engine.syncTables();
 
@@ -144,5 +146,32 @@ describe('services_SearchFilter', function() {
 
 		rows = await engine.search('zebra');
 		expect(rows.length).toBe(0);
+	}));
+
+	it('should support phrase search', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
+		await sleep(0.1);
+		await engine.syncTables();
+
+		rows = await engine.search('"bar dog"');
+		expect(rows.length).toBe(1);
+		expect(rows[0].id).toBe(n1.id);
+	}));
+
+	it('should support prefix search', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
+		await sleep(0.1);
+		await engine.syncTables();
+
+		rows = await engine.search('"bar*"');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
 	}));
 });

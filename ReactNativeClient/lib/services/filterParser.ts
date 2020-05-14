@@ -6,7 +6,15 @@
 // match[3] -
 // match[4] tagName
 // match[6] tagValue
-const filterRegex = /(\b(AND|OR)\s+)?(-?)([\w]+|"[^"]+")\s*(:\s*([^\s:*"]+|"[^"]+"))?/giu;
+// const filterRegex = /(\b(AND|OR)\s+)?(-?)([\w]+|"[^"]+")\s*(:\s*([^\s:*"]+|"[^"]+"))?/giu;
+const filterRegex = /(\b(AND|OR)\s+)?(-?)(([\w]+|"[^"]+")\s*(:\s*([^\s:*"]+|"[^"]+"))|(\b[^:\s"]+\b|"[^"]+"))/giu;
+// Relevant groups
+// 2 - relation
+// 3 - negation?
+// 5 - filterName?
+// 7 - filterValue
+// 8 - quoted/unquoted Text
+
 
 interface Term {
   relation: string;
@@ -22,23 +30,26 @@ module.exports = (searchString: string): any => {
 
 	let match;
 	while ((match = filterRegex.exec(searchString))) {
-		const name = match[4];
+		let filterName = match[5];
+		const text = match[8];
 		const relation = match[2] ? match[2].toUpperCase() : 'AND';
-		const value = match[6];
+		const filterValue = match[7];
 
-		if (!value) continue;
+		if (filterName && !filterValue) continue;
 
-		// support phrase search for text query by not trimming quotes
-		let term;
-		if (name === 'text') {
-			term = [{ relation: relation, value: value }];
+		let terms;
+		if (filterName) {
+			terms = trimQuotes(filterValue).split(' ').map(value => ({ relation: relation, value: value }));
 		} else {
-			term = trimQuotes(value).split(' ').map(v => ({ relation: relation, value: v }));
+			// Quotes are not trimmed to allow phrase search
+			filterName = 'text';
+			terms = [{ relation: relation, value: text }];
 		}
-		if (filters.has(name)) {
-			filters.set(name, [...filters.get(name), ...term]);
+
+		if (filters.has(filterName)) {
+			filters.set(filterName, [...filters.get(filterName), ...terms]);
 		} else {
-			filters.set(name, term);
+			filters.set(filterName, terms);
 		}
 	}
 

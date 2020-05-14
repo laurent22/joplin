@@ -13,8 +13,9 @@ const matchStmtBuilder = (
 		return `${filters
 			.get(keyword)
 			.map((term) => {
-				if (term.relation === 'AND') return `${keyword}:${term.value}`;
-				else return `${term.relation} ${keyword}:${term.value}`;
+				if (term.relation === 'AND') {
+					if (keyword !== 'text') { return `${keyword}:${term.value}`; } else { return `${term.value}`; }
+				} else { return `${term.relation} ${keyword}:${term.value}`; }
 			})
 			.join(' ')} `;
 	}
@@ -28,9 +29,10 @@ module.exports = (filters: Map<string, Array<Term>>) => {
 
 	match += matchStmtBuilder(filters, 'title');
 	match += matchStmtBuilder(filters, 'body');
-
-
+	match += matchStmtBuilder(filters, 'text');
 	const params = [match.trim()]; // TO Do: handle case where match has OR as the first word
+
+
 
 	const query = `SELECT
 	notes_fts.id,
