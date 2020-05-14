@@ -453,7 +453,7 @@ class SearchEngine {
 			try {
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows);
-				console.log(`Rows returned after search for ${searchString}:`);
+				// console.log(`Rows returned after search for ${searchString}:`);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);

@@ -4,66 +4,106 @@ require('app-module-path').addPath(__dirname);
 const queryBuilder = require('lib/services/queryBuilder.js');
 
 const defaultSQL = `SELECT
-        notes_fts.id,
-        notes_fts.title,
-        notes_fts.body,
-        offsets(notes_fts) AS offsets,
-        notes.title,
-        notes.user_updated_time,
-        notes.is_todo,
-        notes.todo_completed,
-        notes.parent_id
-    FROM notes_fts
-    LEFT JOIN notes ON notes_fts.id = notes.id
-    WHERE
-    notes_fts MATCH ?`;
+	notes_fts.id,
+	notes_fts.title AS normalized_title,
+	offsets(notes_fts) AS offsets,
+	notes.title,
+	notes.user_updated_time,
+	notes.is_todo,
+	notes.todo_completed,
+	notes.parent_id
+	FROM notes_fts
+	LEFT JOIN notes ON notes_fts.id = notes.id
+	WHERE notes_fts MATCH (?)`;
 
 describe('queryBuilder should give correct sql', () => {
-	it('when filter contains only title', () => {
-		const filters = [
-			{
-				name: 'title',
-				relation: 'AND',
-				value: 'someTitle',
-			},
-		];
+	it('when filter is just the title', () => {
+		const testTitle = 'someTitle';
+		const filters = new Map([
+			['title', [{ relation: 'AND', value: testTitle }]],
+		]);
 
 		expect(queryBuilder(filters)).toEqual({
 			query: defaultSQL,
-			params: ['AND title:someTitle'],
+			params: [`title:${testTitle}`],
 		});
 	});
 
 	it('when filter contains only body', () => {
-		const filters = [
-			{
-				name: 'body',
-				relation: 'AND',
-				value: 'someBody',
-			},
-		];
+		const testBody = 'someBody';
+		const filters = new Map([['body', [{ relation: 'AND', value: testBody }]]]);
+
 		expect(queryBuilder(filters)).toEqual({
 			query: defaultSQL,
-			params: ['AND body:someBody'],
+			params: [`body:${testBody}`],
 		});
 	});
 
-	it('when filter contains title and body', () => {
-		const filters = [
-			{
-				name: 'title',
-				relation: 'AND',
-				value: 'someTitle',
-			},
-			{
-				name: 'body',
-				relation: 'AND',
-				value: 'someBody',
-			},
-		];
+	it('when filter contains both title and body', () => {
+		const testTitle = 'someTitle';
+		const testBody = 'someBody';
+		const filters = new Map([
+			['body', [{ relation: 'AND', value: testBody }]],
+			['title', [{ relation: 'AND', value: testTitle }]],
+		]);
+
 		expect(queryBuilder(filters)).toEqual({
 			query: defaultSQL,
-			params: ['AND title:someTitle AND body:someBody'],
+			params: [`title:${testTitle} body:${testBody}`],
+		});
+	});
+
+	it('when filter contains both mulitple words in title', () => {
+		const testTitle = 'word1 word2'.split(' ');
+		const testBody = 'someBody';
+		const filters = new Map([
+			['body', [{ relation: 'AND', value: testBody }]],
+			[
+				'title',
+				[
+					{ relation: 'AND', value: testTitle[0] },
+					{ relation: 'AND', value: testTitle[1] },
+				],
+			],
+		]);
+
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultSQL,
+			params: [`title:${testTitle[0]} title:${testTitle[1]} body:${testBody}`],
+		});
+	});
+
+	it('when filter contains title or body', () => {
+		const testTitle = 'testTitle';
+		const testBody = 'bodyTitle';
+		const filters = new Map([
+			['body', [{ relation: 'OR', value: testBody }]],
+			['title', [{ relation: 'AND', value: testTitle }]],
+		]);
+
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultSQL,
+			params: [`title:${testTitle} OR body:${testBody}`],
+		});
+	});
+
+	it('when filter contains text', () => {
+		const filters = new Map([
+			['text', [{ relation: 'AND', value: 'sampletext' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultSQL,
+			params: ['sampletext'],
+		});
+	});
+
+	it('when filter contains multiple text words', () => {
+		const filters = new Map([
+			['text', [{ relation: 'AND', value: 'mulitple words' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultSQL,
+			params: ['multiple words'],
 		});
 	});
 });
