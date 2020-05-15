@@ -4,7 +4,7 @@ const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
 const DialogButtonRow = require('./DialogButtonRow.min');
 const { stripMarkdown } = require('lib/markdownUtils');
-const { countElements } = require('lib/string-utils');
+const Countable = require('countable');
 
 interface NoteContentPropertiesDialogProps {
 	theme: number,
@@ -18,6 +18,15 @@ interface TextPropertiesMap {
 
 interface KeyToLabelMap {
 	[key: string]: string;
+}
+
+function countElements(text:string, wordSetter:Function, characterSetter:Function, characterNoSpaceSetter:Function, lineSetter:Function) {
+	Countable.count(text, (counter:any) => {
+		wordSetter(counter.words);
+		characterSetter(counter.all);
+		characterNoSpaceSetter(counter.characters);
+	});
+	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
 }
 
 export default function NoteContentPropertiesDialog(props:NoteContentPropertiesDialogProps) {
