@@ -164,6 +164,7 @@
     "readability-node": "^0.1.0",
     "redux": "^3.7.2",
     "relative": "^3.0.2",
+    "remove-markdown": "^0.3.0",
     "reselect": "^4.0.0",
     "sax": "^1.2.4",
     "server-destroy": "^1.0.1",
