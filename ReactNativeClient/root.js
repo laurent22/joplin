@@ -1,5 +1,5 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, ToastAndroid } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -55,12 +55,12 @@ const { reducer, defaultState } = require('lib/reducer.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const DropdownAlert = require('react-native-dropdownalert').default;
 const ShareExtension = require('lib/share.js').default;
+const handleShared = require('lib/share-handler').default;
 const ResourceFetcher = require('lib/services/ResourceFetcher');
 const SearchEngine = require('lib/services/SearchEngine');
 const WelcomeUtils = require('lib/WelcomeUtils');
 const { themeStyle } = require('lib/components/global-style.js');
 const { uuid } = require('lib/uuid.js');
-const { check, request, PERMISSIONS, RESULTS } = require('react-native-permissions');
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -627,48 +627,13 @@ class AppComponent extends React.Component {
 
 		const sharedData = await ShareExtension.data();
 		if (sharedData) {
-			this.handleShared(sharedData);
-		}
-	}
-
-	async handleShared(sharedData) {
-		reg.logger().info(`Received shared data: ${JSON.stringify(sharedData)}`);
-
-		if (!this.props.selectedFolderId) return;
-
-		if (!!sharedData.resources && sharedData.resources.length > 0) {
-			let granted = await check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-			if (granted !== RESULTS.GRANTED) {
-				granted = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-				if (granted !== RESULTS.GRANTED) {
-					ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
-					return;
-				}
+			reg.logger().info(`Received shared data: ${JSON.stringify(sharedData)}`);
+			if (this.props.selectedFolderId) {
+				handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger.info('Cannot handle share - default folder id is not set');
 			}
 		}
-
-		// This is a bit hacky, but the surest way to go to
-		// the needed note. We go back one screen in case there's
-		// already a note open - if we don't do this, the dispatch
-		// below will do nothing (because routeName wouldn't change)
-		// Then we wait a bit for the state to be set correctly, and
-		// finally we go to the new note.
-		await this.props.dispatch({ type: 'NAV_BACK' });
-
-		await this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
-		const newNote = await Note.save({
-			parent_id: this.props.selectedFolderId,
-		}, { provisional: true });
-
-		setTimeout(() => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Note',
-				noteId: newNote.id,
-				sharedData: sharedData,
-			});
-		}, 5);
 	}
 
 	componentWillUnmount() {
