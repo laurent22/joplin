@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
+
+// For pretty printing.
+// See https://stackoverflow.com/questions/23676459/karma-jasmine-pretty-printing-object-comparison/26324116
+jasmine.pp = function(obj) {
+	return JSON.stringify(obj, undefined, 2);
+};
+
 const queryBuilder = require('lib/services/queryBuilder.js');
 
 const defaultSQL = `SELECT
@@ -13,8 +20,12 @@ const defaultSQL = `SELECT
 	notes.todo_completed,
 	notes.parent_id
 	FROM notes_fts
-	LEFT JOIN notes ON notes_fts.id = notes.id
-	WHERE notes_fts MATCH (?)`;
+	LEFT JOIN notes ON notes_fts.id = notes.id WHERE 1`;
+
+const defaultMatchSQL = `${defaultSQL} AND notes_fts MATCH (?)`;
+
+const defaultTagSQL = `${defaultSQL} AND notes.id IN (SELECT note_tags.note_id FROM note_tags WHERE 1`;
+
 
 describe('queryBuilder should give correct sql', () => {
 	it('when filter is just the title', () => {
@@ -24,7 +35,7 @@ describe('queryBuilder should give correct sql', () => {
 		]);
 
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: [`title:${testTitle}`],
 		});
 	});
@@ -34,7 +45,7 @@ describe('queryBuilder should give correct sql', () => {
 		const filters = new Map([['body', [{ relation: 'AND', value: testBody }]]]);
 
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: [`body:${testBody}`],
 		});
 	});
@@ -48,7 +59,7 @@ describe('queryBuilder should give correct sql', () => {
 		]);
 
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: [`title:${testTitle} body:${testBody}`],
 		});
 	});
@@ -68,7 +79,7 @@ describe('queryBuilder should give correct sql', () => {
 		]);
 
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: [`title:${testTitle[0]} title:${testTitle[1]} body:${testBody}`],
 		});
 	});
@@ -82,7 +93,7 @@ describe('queryBuilder should give correct sql', () => {
 		]);
 
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: [`title:${testTitle} OR body:${testBody}`],
 		});
 	});
@@ -92,7 +103,7 @@ describe('queryBuilder should give correct sql', () => {
 			['text', [{ relation: 'AND', value: 'sampletext' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: ['sampletext'],
 		});
 	});
@@ -102,7 +113,7 @@ describe('queryBuilder should give correct sql', () => {
 			['text', [{ relation: 'AND', value: 'multiple words' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: ['multiple words'],
 		});
 	});
@@ -112,8 +123,26 @@ describe('queryBuilder should give correct sql', () => {
 			['text', [{ relation: 'AND', value: '"multiple words"' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: defaultSQL,
+			query: defaultMatchSQL,
 			params: ['"multiple words"'],
+		});
+	});
+
+	it('when filter contains tags', () => {
+		let filters = new Map([
+			['tag', [{ relation: 'AND', value: 'tag123' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `${defaultTagSQL}` + ' INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?))',
+			params: ['tag123'],
+		});
+
+		filters = new Map([
+			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag345' }]],
+		]);
+		expect(queryBuilder(filters)).toEqual({
+			query: `${defaultTagSQL}` + ' INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?) INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?))',
+			params: ['tag123', 'tag345'],
 		});
 	});
 });

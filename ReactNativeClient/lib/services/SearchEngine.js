@@ -453,45 +453,12 @@ class SearchEngine {
 			try {
 				const rows = await this.db().selectAll(query, params);
 				this.processResults_(rows);
-				// console.log(`Rows returned after search for ${searchString}:`);
+				// console.log(`Rows returned after search for ${searchString}: ${rows}`);
 				return rows;
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				return [];
 			}
-
-
-
-			// // SEARCH_TYPE_FTS
-			// // FTS will ignore all special characters, like "-" in the index. So if
-			// // we search for "this-phrase" it won't find it because it will only
-			// // see "this phrase" in the index. Because of this, we remove the dashes
-			// // when searching.
-			// // https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
-			// query = query.replace(/-/g, ' ');
-			// const parsedQuery = this.parseQuery(query);
-			// const sql = `
-			// SELECT
-			// 	notes_fts.id,
-			// 	notes_fts.title AS normalized_title,
-			// 	offsets(notes_fts) AS offsets,
-			// 	notes.title,
-			// 	notes.user_updated_time,
-			// 	notes.is_todo,
-			// 	notes.todo_completed,
-			// 	notes.parent_id
-			// FROM notes_fts
-			// LEFT JOIN notes ON notes_fts.id = notes.id
-			// WHERE notes_fts MATCH ?
-			// `;
-			// try {
-			// 	const rows = await this.db().selectAll(sql, [query]);
-			// 	this.processResults_(rows, parsedQuery);
-			// 	return rows;
-			// } catch (error) {
-			// 	this.logger().warn(`Cannot execute MATCH query: ${query}: ${error.message}`);
-			// 	return [];
-			// }
 		}
 	}
 

@@ -39,7 +39,12 @@ module.exports = (searchString: string): any => {
 
 		let terms;
 		if (filterName) {
-			terms = trimQuotes(filterValue).split(' ').map(value => ({ relation: relation, value: value }));
+			// Since we don't support phrase query here we trim quotes
+			if (filterName === 'title' || filterName === 'body') {
+				terms = trimQuotes(filterValue).split(' ').map(value => ({ relation: relation, value: value }));
+			} else {
+				terms = [{ relation: relation, value: filterValue }];
+			}
 		} else {
 			// Quotes are not trimmed to allow phrase search
 			filterName = 'text';

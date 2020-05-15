@@ -95,4 +95,21 @@ describe('filterParser should be correct filter for keyword', () => {
 		]);
 		expect(filterParser(searchString)).toEqual(expected);
 	});
+
+	it('filter by tag', () => {
+		const searchString = 'tag:tag123';
+		const expected = new Map([
+			['tag', [{ relation: 'AND', value: 'tag123' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('filter by multiple tags', () => {
+		const searchString = 'tag:tag123 tag:tag456';
+		const expected = new Map([
+			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag456' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
 });

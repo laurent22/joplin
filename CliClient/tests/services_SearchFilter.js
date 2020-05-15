@@ -7,6 +7,7 @@ const { time } = require('lib/time-utils.js');
 const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
 const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
+const Tag = require('lib/models/Tag');
 const ItemChange = require('lib/models/ItemChange');
 const Setting = require('lib/models/Setting');
 
@@ -134,7 +135,7 @@ describe('services_SearchFilter', function() {
 		await engine.syncTables();
 
 		// Interpretation: Match with notes containing foo in title/body and bar in title/body
-		// Note: This is NOT saying to match notes containing foo and bar in either title/body
+		// Note: This is NOT saying to match notes containing foo bar in either title/body
 		rows = await engine.search('foo bar');
 		expect(rows.length).toBe(2);
 		expect(rows.map(r=>r.id)).toContain(n1.id);
@@ -174,4 +175,42 @@ describe('services_SearchFilter', function() {
 		expect(ids(rows)).toContain(n1.id);
 		expect(ids(rows)).toContain(n2.id);
 	}));
+
+
+	it('should support filtering by tags', asyncTest(async () => {
+		let rows;
+		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
+		await sleep(0.1);
+		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
+		await sleep(0.1);
+		const n3 = await Note.save({ title: 'storm front', body: 'wicked wizard' });
+		await sleep(0.1);
+
+		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
+		await Tag.setNoteTagsByTitles(n2.id, ['tag2', 'tag3']);
+		await Tag.setNoteTagsByTitles(n3.id, ['tag3', 'tag4']);
+		await sleep(0.1);
+
+		await engine.syncTables();
+
+		rows = await engine.search('tag:tag2');
+		expect(rows.length).toBe(2);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('tag:tag2 tag:tag3');
+		expect(rows.length).toBe(1);
+		expect(ids(rows)).toContain(n2.id);
+
+		rows = await engine.search('tag:tag1 OR tag:tag2 OR tag:tag3');
+		expect(rows.length).toBe(3);
+		expect(ids(rows)).toContain(n1.id);
+		expect(ids(rows)).toContain(n2.id);
+		expect(ids(rows)).toContain(n3.id);
+
+		rows = await engine.search('tag:tag2 tag:tag3 tag:tag4');
+		expect(rows.length).toBe(0);
+	}));
+
+
 });
