@@ -1,4 +1,5 @@
 const BaseItem = require('lib/models/BaseItem');
+const BaseModel = require('lib/BaseModel');
 const MasterKey = require('lib/models/MasterKey');
 const Resource = require('lib/models/Resource');
 const ResourceService = require('lib/services/ResourceService');
@@ -88,6 +89,10 @@ class DecryptionWorker {
 		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
 	}
 
+	async clearDisabledItems() {
+		await this.kvStore().deleteByPrefix('decrypt:');
+	}
+
 	dispatchReport(report) {
 		const action = Object.assign({}, report);
 		action.type = 'DECRYPTION_WORKER_SET';
@@ -132,6 +137,8 @@ class DecryptionWorker {
 		this.state_ = 'started';
 
 		const excludedIds = [];
+		const decryptedItemCounts = {};
+		let skippedItemCount = 0;
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
@@ -164,8 +171,9 @@ class DecryptionWorker {
 					try {
 						const decryptCounter = await this.kvStore().incValue(counterKey);
 						if (decryptCounter > this.maxDecryptionAttempts_) {
-							this.logger().debug(`DecryptionWorker: ${item.id} decryption has failed more than 2 times - skipping it`);
+							this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(item.type_)} ${item.id}: Decryption has failed more than 2 times - skipping it`);
 							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
+							skippedItemCount++;
 							excludedIds.push(item.id);
 							continue;
 						}
@@ -173,6 +181,10 @@ class DecryptionWorker {
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
+
+						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
+
+						decryptedItemCounts[decryptedItem.type_]++;
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
@@ -231,25 +243,38 @@ class DecryptionWorker {
 
 		this.logger().info('DecryptionWorker: completed decryption.');
 
-		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount();
+		const downloadedButEncryptedBlobCount = await Resource.downloadedButEncryptedBlobCount(excludedIds);
 
 		this.state_ = 'idle';
 
-		this.dispatchReport({ state: 'idle' });
+		let decryptedItemCount = 0;
+		for (const itemType in decryptedItemCounts) decryptedItemCount += decryptedItemCounts[itemType];
+
+		const finalReport = {
+			skippedItemCount: skippedItemCount,
+			decryptedItemCounts: decryptedItemCounts,
+			decryptedItemCount: decryptedItemCount,
+		};
+
+		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);
 			this.scheduleStart();
 		}
+
+		return finalReport;
 	}
 
 	async start(options) {
 		this.startCalls_.push(true);
+		let output = null;
 		try {
-			await this.start_(options);
+			output = await this.start_(options);
 		} finally {
 			this.startCalls_.pop();
 		}
+		return output;
 	}
 
 	async destroy() {

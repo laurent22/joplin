@@ -2,14 +2,24 @@
 
 Please prefix the title with the platform you are targetting:
 
+Here are some examples of good titles:
+
+- Desktop: Resolves #123: Added new setting to change font
+- Mobile, Desktop: Fixes #456: Fixed config screen error
+- All: Resolves #777: Made synchronisation faster
+
+And here's an explanation of the title format:
+
 - "Desktop" for the Windows/macOS/Linux app (Electron app)
 - "Mobile" for the mobile app (or "Android" / "iOS" if the pull request only applies to one of the mobile platforms)
 - "CLI" for the CLI app
 
+If it's two platforms, separate them with commas - "Desktop, Mobile" or if it's for all platforms, prefix with "All".
+
 If it's not related to any platform (such as a translation, change to the documentation, etc.), simply don't add a platform.
 
-For example: "Desktop: Added new setting to change font", or "Mobile: Fixed config screen error"
+Then please append the issue that you've addressed or fixed. Use "Resolves #123" for new features or improvements and "Fixes #123" for bug fixes.
 
-PLEASE READ THE GUIDE FIRST: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
+AND PLEASE READ THE GUIDE: https://github.com/laurent22/joplin/blob/master/CONTRIBUTING.md
 
 -->

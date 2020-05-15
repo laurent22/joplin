@@ -29,10 +29,10 @@ class HtmlToHtml {
 
 	splitHtml(html) {
 		const trimmedHtml = html.trimStart();
-		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, cssStrings: [], originalCssHtml: '' };
+		if (trimmedHtml.indexOf('<style>') !== 0) return { html: html, css: '' };
 
 		const closingIndex = trimmedHtml.indexOf('</style>');
-		if (closingIndex < 0) return { html: html, cssStrings: [], originalCssHtml: '' };
+		if (closingIndex < 0) return { html: html, css: '' };
 
 		return {
 			html: trimmedHtml.substr(closingIndex + 8),

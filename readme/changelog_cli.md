@@ -1,5 +1,29 @@
 # Joplin terminal app changelog
 
+## [cli-v1.0.164](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164) - 2020-05-13T15:30:22Z
+
+- New: Added support for basic search
+- Improved: Improve automatic title generation (#2955) (#2915 by anirudh murali)
+- Improved: Improve handling of encrypted items
+- Improved: Made layout configurable (#3069 by [@jyuvaraj03](https://github.com/jyuvaraj03))
+- Improved: Start resource fetcher service when a note has been decrypted
+- Fixed: Better handling of missing table field bug on Linux (#3088)
+- Fixed: Fix format of geolocation data (#2673 by [@mic704b](https://github.com/mic704b))
+
+## [cli-v1.0.163](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163) - 2020-04-10T18:31:50Z
+
+- Improved: Update ko.po (#2986 by [@xmlangel](https://github.com/xmlangel))
+- Improved: Update it_IT.po (#2978 by [@abonte](https://github.com/abonte))
+- Improved: Update nb_NO.po (#2973 by Mats Estensen)
+- Improved: Update zh_CN.po (#2971 by [@troilus](https://github.com/troilus))
+- Fixed: Add support for retrying decryption after it has failed multiple times (#2981)
+- Fixed: When modifying a conflicted note, it would disappear from the view (#2709)
+- Fixed: Prevent decryption loop when a resource cannot be decrypted (#2257)
+
+## [cli-v1.0.162](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162) - 2020-04-01T17:16:14Z
+
+- New: Compatibility with new master key and sync target encryption
+
 ## [cli-v1.0.161](https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161) - 2020-03-07T01:20:04Z
 
 - New: Add more context to encryption errors

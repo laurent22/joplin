@@ -28,6 +28,8 @@ async function main() {
 	let exePath = `${__dirname}/../node_modules/.bin/electron-rebuild`;
 	if (isWindows()) exePath += '.cmd';
 
+	process.chdir(`${__dirname}/..`);
+
 	if (isWindows()) {
 		console.info(await execCommand([`"${exePath}"`, '--arch ia32'].join(' ')));
 		console.info(await execCommand([`"${exePath}"`, '--arch x64'].join(' ')));

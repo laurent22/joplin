@@ -114,7 +114,6 @@ class NoteListComponent extends React.Component {
 				this.props.dispatch({
 					type: 'NOTE_SELECT',
 					id: item.id,
-					historyAction: 'goto',
 				});
 			}
 		};
@@ -146,7 +145,7 @@ class NoteListComponent extends React.Component {
 				todo_completed: checked ? time.unixMs() : 0,
 			};
 			await Note.save(newNote, { userSideValidation: true });
-			eventManager.emit('todoToggle', { noteId: item.id });
+			eventManager.emit('todoToggle', { noteId: item.id, note: newNote });
 		};
 
 		const hPadding = 10;
@@ -171,7 +170,7 @@ class NoteListComponent extends React.Component {
 		const checkbox = item.is_todo ? (
 			<div style={{ display: 'flex', height: style.height, alignItems: 'center', paddingLeft: hPadding }}>
 				<input
-					style={{ margin: 0, marginBottom: 1 }}
+					style={{ margin: 0, marginBottom: 1, marginRight: 5 }}
 					type="checkbox"
 					defaultChecked={!!item.todo_completed}
 					onClick={event => {
@@ -229,11 +228,10 @@ class NoteListComponent extends React.Component {
 		// Need to include "todo_completed" in key so that checkbox is updated when
 		// item is changed via sync.
 		return (
-			<div key={`${item.id}_${item.todo_completed}`} style={style}>
+			<div key={`${item.id}_${item.todo_completed}`} className="list-item-container" style={style}>
 				{checkbox}
 				<a
 					ref={ref}
-					className="list-item"
 					onContextMenu={event => this.itemContextMenu(event)}
 					href="#"
 					draggable={true}

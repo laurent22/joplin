@@ -71,7 +71,7 @@ a {
 	opacity: 0;
 }
 
-.note-list .list-item:hover {
+.note-list .list-item-container:hover {
 	background-color: rgba(0,160,255,0.1) !important;
 }
 

@@ -143,6 +143,7 @@ async function switchClient(id) {
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 
+	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 
 	await Setting.load();
@@ -213,9 +214,14 @@ async function setupDatabase(id = null) {
 	if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 }
 
+function resourceDirName(id = null) {
+	if (id === null) id = currentClient_;
+	return `resources-${id}`;
+}
+
 function resourceDir(id = null) {
 	if (id === null) id = currentClient_;
-	return `${__dirname}/data/resources-${id}`;
+	return `${__dirname}/data/${resourceDirName(id)}`;
 }
 
 async function setupDatabaseAndSynchronizer(id = null) {
@@ -237,7 +243,6 @@ async function setupDatabaseAndSynchronizer(id = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
-		synchronizers_[id].autoStartDecryptionWorker_ = false; // For testing we disable this since it would make the tests non-deterministic
 	}
 
 	encryptionServices_[id] = new EncryptionService();

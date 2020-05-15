@@ -17,8 +17,30 @@ katex = mhchemModule(katex);
 function katexStyle() {
 	return [
 		{ name: 'katex.css' },
-		// Note: Katex also requires a number of fonts but they don't need to be specified here
-		// since they will be loaded as needed from the CSS.
+		// Note: Declaring the fonts is not needed for in-app rendering because
+		// they will be loaded automatically from katex.css.
+		// However they must be specified for exporting notes to HTML and PDF,
+		// so that they can be bundled with the other assets.
+		{ name: 'fonts/KaTeX_AMS-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Caligraphic-Bold.woff2' },
+		{ name: 'fonts/KaTeX_Caligraphic-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Fraktur-Bold.woff2' },
+		{ name: 'fonts/KaTeX_Fraktur-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Main-Bold.woff2' },
+		{ name: 'fonts/KaTeX_Main-BoldItalic.woff2' },
+		{ name: 'fonts/KaTeX_Main-Italic.woff2' },
+		{ name: 'fonts/KaTeX_Main-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Math-BoldItalic.woff2' },
+		{ name: 'fonts/KaTeX_Math-Italic.woff2' },
+		{ name: 'fonts/KaTeX_SansSerif-Bold.woff2' },
+		{ name: 'fonts/KaTeX_SansSerif-Italic.woff2' },
+		{ name: 'fonts/KaTeX_SansSerif-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Script-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Size1-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Size2-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Size3-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Size4-Regular.woff2' },
+		{ name: 'fonts/KaTeX_Typewriter-Regular.woff2' },
 	];
 }
 
@@ -230,7 +252,7 @@ module.exports = {
 			const katexInline = function(latex) {
 				options.displayMode = false;
 				try {
-					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-source-open="$" data-joplin-source-close="$">${latex}</span>${renderToStringWithCache(latex, options)}</span>`;
+					return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${md.utils.escapeHtml(latex)}</span>${renderToStringWithCache(latex, options)}</span>`;
 				} catch (error) {
 					console.error('Katex error for:', latex, error);
 					return latex;
@@ -245,7 +267,7 @@ module.exports = {
 			const katexBlock = function(latex) {
 				options.displayMode = true;
 				try {
-					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${latex}</pre>${renderToStringWithCache(latex, options)}</div>`;
+					return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${md.utils.escapeHtml(latex)}</pre>${renderToStringWithCache(latex, options)}</div>`;
 				} catch (error) {
 					console.error('Katex error for:', latex, error);
 					return latex;

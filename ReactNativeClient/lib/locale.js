@@ -163,7 +163,7 @@ codeToLanguage_['sq'] = 'Shqip';
 codeToLanguage_['sr'] = 'српски језик';
 codeToLanguage_['tr'] = 'Türkçe';
 codeToLanguage_['ja'] = '日本語';
-codeToLanguage_['ko'] = '한국말';
+codeToLanguage_['ko'] = '한국어';
 codeToLanguage_['sv'] = 'Svenska';
 codeToLanguage_['el'] = 'Ελληνικά';
 codeToLanguage_['zh'] = '中文';
@@ -225,8 +225,8 @@ function supportedLocalesToLanguages(options = null) {
 	return output;
 }
 
-function closestSupportedLocale(canonicalName, defaultToEnglish = true) {
-	const locales = supportedLocales();
+function closestSupportedLocale(canonicalName, defaultToEnglish = true, locales = null) {
+	locales = locales === null ? supportedLocales() : locales;
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
 	const requiredLanguage = languageCodeOnly(canonicalName).toLowerCase();

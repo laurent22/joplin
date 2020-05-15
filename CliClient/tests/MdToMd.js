@@ -38,4 +38,9 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		expect(items.length).toBe(0);
 		expect(note.body).toContain('Unidentified vessel travelling at sub warp speed, bearing 235.7. Fluctuations in energy readings from it, Captain. All transporters off.');
 	});
+	it('should import linked image with special characters in name', async function() {
+		const note = await importer.importFile(`${__dirname}/md_to_md/sample-special-chars.md`, 'notebook');
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(1);
+	});
 });

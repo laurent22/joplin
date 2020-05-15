@@ -28,7 +28,6 @@ class Synchronizer {
 		this.logger_ = new Logger();
 		this.appType_ = appType;
 		this.cancelling_ = false;
-		this.autoStartDecryptionWorker_ = true;
 		this.maxResourceSize_ = null;
 		this.downloadQueue_ = null;
 		this.clientId_ = Setting.value('clientId');
@@ -264,6 +263,10 @@ class Synchronizer {
 				// TODO: do upgrade job
 			}
 		}
+	}
+
+	isFullSync(steps) {
+		return steps.includes('update_remote') && steps.includes('delete_remote') && steps.includes('delta');
 	}
 
 	// Synchronisation is done in three major steps:
@@ -842,7 +845,7 @@ class Synchronizer {
 		this.onProgress_ = function() {};
 		this.progressReport_ = {};
 
-		this.dispatch({ type: 'SYNC_COMPLETED' });
+		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
 
 		this.state_ = 'idle';
 

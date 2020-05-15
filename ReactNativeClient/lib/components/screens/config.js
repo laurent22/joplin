@@ -98,37 +98,35 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			this.setState({ profileExportStatus: 'exporting' });
 
 			const dbPath = '/data/data/net.cozic.joplin/databases';
-
+			const exportPath = this.state.profileExportPath;
+			const resourcePath = `${exportPath}/resources`;
 			try {
-				await shim.fsDriver().mkdir(this.state.profileExportPath);
-				await shim.fsDriver().mkdir(`${this.state.profileExportPath}/resources`);
 
 				{
-					const files = await shim.fsDriver().readDirStats(dbPath);
+					const copyFiles = async (source, dest) => {
+						await shim.fsDriver().mkdir(dest);
 
-					for (const file of files) {
-						const source = `${dbPath}/${file.path}`;
-						const dest = `${this.state.profileExportPath}/${file.path}`;
-						reg.logger().info(`Copying profile: ${source} => ${dest}`);
-						await shim.fsDriver().copy(source, dest);
-					}
-				}
+						const files = await shim.fsDriver().readDirStats(source);
 
-				{
-					const files = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
-
-					for (const file of files) {
-						const source = `${Setting.value('resourceDir')}/${file.path}`;
-						const dest = `${this.state.profileExportPath}/resources/${file.path}`;
-						reg.logger().info(`Copying profile: ${source} => ${dest}`);
-						await shim.fsDriver().copy(source, dest);
-					}
+						for (const file of files) {
+							const source_ = `${source}/${file.path}`;
+							const dest_ = `${dest}/${file.path}`;
+							if (!file.isDirectory()) {
+								reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
+								await shim.fsDriver().copy(source_, dest_);
+							} else {
+								await copyFiles(source_, dest_);
+							}
+						}
+					};
+					await copyFiles(dbPath, exportPath);
+					await copyFiles(Setting.value('resourceDir'), resourcePath);
 				}
 
 				alert('Profile has been exported!');
 			} catch (error) {
 				alert(`Could not export files: ${error.message}`);
-			} finally  {
+			} finally {
 				this.setState({ profileExportStatus: 'idle' });
 			}
 		};
@@ -190,8 +188,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				paddingRight: 5,
 			},
 			descriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 			},
 			sliderUnits: {
@@ -200,8 +198,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				marginRight: 10,
 			},
 			settingDescriptionText: {
-				color: theme.color,
-				fontSize: theme.fontSize,
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeSmaller,
 				flex: 1,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -216,6 +214,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			settingControl: {
 				color: theme.color,
 				flex: 1,
+			},
+			textInput: {
+				color: theme.color,
 			},
 		};
 
@@ -341,6 +342,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		const md = Setting.settingMetadata(key);
 		const settingDescription = md.description ? md.description() : '';
 
+		const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
+		const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
+
 		if (md.isEnum) {
 			value = value.toString();
 
@@ -350,9 +354,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				if (!settingOptions.hasOwnProperty(k)) continue;
 				items.push({ label: settingOptions[k], value: k.toString() });
 			}
-
-			const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
-			const containerStyle = !settingDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
 
 			return (
 				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
@@ -386,11 +387,14 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			);
 		} else if (md.type == Setting.TYPE_BOOL) {
 			return (
-				<View key={key} style={this.styles().switchSettingContainer}>
-					<Text key="label" style={this.styles().switchSettingText}>
-						{md.label()}
-					</Text>
-					<Switch key="control" style={this.styles().switchSettingControl} value={value} onValueChange={value => updateSettingValue(key, value)} />
+				<View key={key}>
+					<View style={containerStyle}>
+						<Text key="label" style={this.styles().switchSettingText}>
+							{md.label()}
+						</Text>
+						<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.strongDividerColor }} value={value} onValueChange={value => updateSettingValue(key, value)} />
+					</View>
+					{descriptionComp}
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_INT) {
@@ -416,7 +420,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					<Text key="label" style={this.styles().settingText}>
 						{md.label()}
 					</Text>
-					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
+					<TextInput autoCorrect={false} autoCompleteType="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={value => updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
 				</View>
 			);
 		} else {
@@ -428,6 +432,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const settings = this.state.settings;
+
+		const theme = themeStyle(this.props.theme);
 
 		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
 
@@ -447,7 +453,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				const profileExportPrompt = (
 					<View style={this.styles().settingContainer}>
 						<Text style={this.styles().settingText}>Path:</Text>
-						<TextInput style={{ marginRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard"></TextInput>
+						<TextInput style={{ ...this.styles().textInput, paddingRight: 20 }} onChange={(event) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard" keyboardAppearance={theme.keyboardAppearance}></TextInput>
 						<Button title="OK" onPress={this.exportProfileButtonPress2_}></Button>
 					</View>
 				);

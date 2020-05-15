@@ -11,6 +11,7 @@ const { _ } = require('lib/locale.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
 const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
+const markdownUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
 
@@ -77,27 +78,12 @@ class Note extends BaseItem {
 		return super.serialize(n, fieldNames);
 	}
 
-	static defaultTitle(note) {
-		return this.defaultTitleFromBody(note.body);
+	static defaultTitle(noteBody) {
+		return this.defaultTitleFromBody(noteBody);
 	}
 
 	static defaultTitleFromBody(body) {
-		if (body && body.length) {
-			const lines = body.trim().split('\n');
-			let output = lines[0].trim();
-			// Remove the first #, *, etc.
-			while (output.length) {
-				const c = output[0];
-				if (['#', ' ', '\n', '\t', '*', '`', '-'].indexOf(c) >= 0) {
-					output = output.substr(1);
-				} else {
-					break;
-				}
-			}
-			return output.substr(0, 80).trim();
-		}
-
-		return _('Untitled');
+		return markdownUtils.titleFromBody(body);
 	}
 
 	static geolocationUrl(note) {
@@ -153,6 +139,8 @@ class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
+		this.logger().info('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
+
 		const resourceIds = await this.linkedResourceIds(body);
 		const Resource = this.getClass('Resource');
 
@@ -160,9 +148,11 @@ class Note extends BaseItem {
 			const id = resourceIds[i];
 			const resource = await Resource.load(id);
 			if (!resource) continue;
-			const resourcePath = options.useAbsolutePaths ? Resource.fullPath(resource) : Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}` : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), resourcePath);
 		}
+
+		this.logger().info('replaceResourceInternalToExternalLinks result', body);
 
 		return body;
 	}
@@ -174,11 +164,13 @@ class Note extends BaseItem {
 
 		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
-			pathsToTry.push(Setting.value('resourceDir'));
-			pathsToTry.push(shim.pathRelativeToCwd(Setting.value('resourceDir')));
+			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
+			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry, 'body:', body);
 
 		for (const basePath of pathsToTry) {
 			const reString = `${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`;
@@ -188,6 +180,8 @@ class Note extends BaseItem {
 				return `:/${id}`;
 			});
 		}
+
+		this.logger().info('replaceResourceExternalToInternalLinks result', body);
 
 		return body;
 	}
