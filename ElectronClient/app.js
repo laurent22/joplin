@@ -895,6 +895,16 @@ class Application extends BaseApplication {
 						});
 					},
 				}, {
+					id: 'edit:insertMarkdownTable',
+					label: _('Insert Table'),
+					screens: ['Main'],
+					click: () => {
+						this.dispatch({
+							type: 'WINDOW_COMMAND',
+							name: 'textMarkdownTable',
+						});
+					},
+				}, {
 					type: 'separator',
 					screens: ['Main'],
 				}, {
