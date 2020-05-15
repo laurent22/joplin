@@ -11,6 +11,8 @@ import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
 
+const { getMarkdown } = require('../../../MarkdownTableDialog.min.js');
+
 const AceEditorReact = require('react-ace').default;
 const { bridge } = require('electron').remote.require('./bridge');
 const Note = require('lib/models/Note.js');
@@ -276,6 +278,15 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 					const commands: any = {
 						textBold: () => wrapSelectionWithStrings('**', '**', _('strong text')),
 						textItalic: () => wrapSelectionWithStrings('*', '*', _('emphasized text')),
+						textMarkdownTable: async () => {
+							props.dispatch({
+								type: 'WINDOW_COMMAND',
+								name: 'showMarkdownTable',
+							});
+
+							const mdTable = await getMarkdown();
+							wrapSelectionWithStrings('\n', mdTable);
+						},
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));
 							if (url) wrapSelectionWithStrings('[', `](${url})`);

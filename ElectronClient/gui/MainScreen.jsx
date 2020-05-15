@@ -8,6 +8,7 @@ const { stateUtils } = require('lib/reducer.js');
 const { PromptDialog } = require('./PromptDialog.min.js');
 const NoteContentPropertiesDialog = require('./NoteContentPropertiesDialog.js').default;
 const NotePropertiesDialog = require('./NotePropertiesDialog.min.js');
+const { MarkdownTable } = require('./MarkdownTableDialog.min.js');
 const ShareNoteDialog = require('./ShareNoteDialog.js').default;
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const Setting = require('lib/models/Setting.js');
@@ -39,6 +40,7 @@ class MainScreenComponent extends React.Component {
 				message: '',
 			},
 			notePropertiesDialogOptions: {},
+			markdownTableDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
 		};
@@ -46,6 +48,7 @@ class MainScreenComponent extends React.Component {
 		this.setupAppCloseHandling();
 
 		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
+		this.markdownTableDialog_close = this.markdownTableDialog_close.bind(this);
 		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
 		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
 		this.sidebar_onDrag = this.sidebar_onDrag.bind(this);
@@ -95,6 +98,10 @@ class MainScreenComponent extends React.Component {
 
 	notePropertiesDialog_close() {
 		this.setState({ notePropertiesDialogOptions: {} });
+	}
+
+	markdownTableDialog_close() {
+		this.setState({ markdownTableDialogOptions: {} });
 	}
 
 	noteContentPropertiesDialog_close() {
@@ -356,6 +363,13 @@ class MainScreenComponent extends React.Component {
 					noteId: command.noteId,
 					visible: true,
 					onRevisionLinkClick: command.onRevisionLinkClick,
+				},
+			});
+		} else if (command.name === 'showMarkdownTable') {
+			this.setState({
+				markdownTableDialogOptions: {
+					noteId: command.noteId,
+					visible: true,
 				},
 			});
 		} else if (command.name === 'commandContentProperties') {
@@ -856,6 +870,7 @@ class MainScreenComponent extends React.Component {
 		const modalLayerStyle = Object.assign({}, styles.modalLayer, { display: this.state.modalLayer.visible ? 'block' : 'none' });
 
 		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
+		const markdownTableDialogOptions = this.state.markdownTableDialogOptions;
 		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
 		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
 
@@ -867,6 +882,7 @@ class MainScreenComponent extends React.Component {
 
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog theme={this.props.theme} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text} lines={noteContentPropertiesDialogOptions.lines}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog theme={this.props.theme} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{markdownTableDialogOptions.visible && <MarkdownTable theme={this.props.theme} noteId={markdownTableDialogOptions.noteId} onClose={this.markdownTableDialog_close} />}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog theme={this.props.theme} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} theme={this.props.theme} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
