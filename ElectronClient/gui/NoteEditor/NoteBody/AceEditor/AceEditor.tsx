@@ -285,7 +285,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 							});
 
 							const mdTable = await getMarkdown();
-							wrapSelectionWithStrings(mdTable == '' ? '' : '/n', mdTable);
+							wrapSelectionWithStrings(mdTable == '' ? '' : '\n', mdTable);
 						},
 						textLink: async () => {
 							const url = await dialogs.prompt(_('Insert Hyperlink'));

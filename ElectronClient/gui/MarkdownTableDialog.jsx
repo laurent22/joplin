@@ -70,32 +70,31 @@ const MarkdownTable = (props) => {
 	};
 
 
-	const getMarkdownRule = () => {
-		let tableString = '',
-			i = 0,
-			j = 0;
+	const getMarkdownRule = (width, height) => {
+		let tableString = '';
+		let	i = 0;
+		let j = 0;
 
 		// Header
-		for (j = 1; j <= x; j++) {
+		for (j = 1; j <= width; j++) {
 			tableString += '|     ';
 		}
 		tableString += '|\n';
 
 		// Separator
-		for (j = 1; j <= x; j++) {
+		for (j = 1; j <= width; j++) {
 			tableString += '| --- ';
 		}
 		tableString += '|\n';
 
 		// Body
-		for (i = 1; i <= y; i++) {
-			for (j = 1; j <= x; j++) {
+		for (i = 1; i <= height; i++) {
+			for (j = 1; j <= width; j++) {
 				tableString += '|     ';
 			}
 			tableString += '|\n';
 		}
 
-		outsideResolve(tableString);
 		return tableString;
 	};
 
@@ -106,9 +105,9 @@ const MarkdownTable = (props) => {
 	};
 
 	const onClickHandler = () => {
-		getMarkdownRule();
+		const markdownTable = getMarkdownRule(x, y);
+		outsideResolve(markdownTable);
 		closeDialog();
-
 	};
 
 	const onCancelClickHandler = () => {
