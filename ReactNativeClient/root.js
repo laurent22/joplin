@@ -1,5 +1,5 @@
 const React = require('react');
-const { AppState, Keyboard, NativeModules, BackHandler, Platform, Animated, View, StatusBar, ToastAndroid } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, ToastAndroid } = require('react-native');
 const SafeAreaView = require('lib/components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -625,7 +625,7 @@ class AppComponent extends React.Component {
 
 		AppState.addEventListener('change', this.onAppStateChange_);
 
-		const sharedData = Platform.OS === 'android' ? await ShareExtension.data() : null;
+		const sharedData = await ShareExtension.data();
 		if (sharedData) {
 			this.handleShared(sharedData);
 		}

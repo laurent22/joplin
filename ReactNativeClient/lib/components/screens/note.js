@@ -121,7 +121,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				return true;
 			}
 
-			if (Platform.OS === 'android' && this.state.fromShare) {
+			if (this.state.fromShare) {
 				// effectively the same as NAV_BACK but NAV_BACK causes undesired behaviour in this case:
 				// - share to Joplin from some other app
 				// - open Joplin and open any note
@@ -342,7 +342,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		if (Platform.OS === 'android' && this.state.fromShare) {
+		if (this.state.fromShare) {
 			ShareExtension.close();
 		}
 	}
