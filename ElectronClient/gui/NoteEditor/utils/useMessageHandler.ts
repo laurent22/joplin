@@ -68,10 +68,6 @@ export default function useMessageHandler(scrollWhenReady:any, setScrollWhenRead
 					folderId: item.parent_id,
 					noteId: item.id,
 					hash: resourceUrlInfo.hash,
-					historyNoteAction: {
-						id: formNote.id,
-						parent_id: formNote.parent_id,
-					},
 				});
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);

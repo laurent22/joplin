@@ -5,7 +5,7 @@ const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestNotes,
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
-const { reducer, defaultState, stateUtils } = require('lib/reducer.js');
+const { reducer, defaultState, stateUtils, MAX_HISTORY } = require('lib/reducer.js');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
@@ -33,6 +33,33 @@ function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes,
 		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
 	}
 
+	return state;
+}
+
+function goToNote(notes, selectedNoteIndexes, state) {
+	if (selectedNoteIndexes != null) {
+		const selectedIds = [];
+		for (let i = 0; i < selectedNoteIndexes.length; i++) {
+			selectedIds.push(notes[selectedNoteIndexes[i]].id);
+		}
+		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
+	}
+	return state;
+}
+
+function goBackWard(state) {
+	if (!state.backwardHistoryNotes.length)	return state;
+	state = reducer(state, {
+		type: 'HISTORY_BACKWARD',
+	});
+	return state;
+}
+
+function goForward(state) {
+	if (!state.forwardHistoryNotes.length)	return state;
+	state = reducer(state, {
+		type: 'HISTORY_FORWARD',
+	});
 	return state;
 }
 
@@ -345,4 +372,213 @@ describe('Reducer', function() {
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
 
+	it('should remove deleted note from history', asyncTest(async () => {
+
+		// create 1 folder
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// select second note
+		state = goToNote(notes, [1], state);
+		// select third note
+		state = goToNote(notes, [2], state);
+		// select fourth note
+		state = goToNote(notes, [3], state);
+
+		// expect history to contain first, second and third note
+		expect(state.backwardHistoryNotes.length).toEqual(3);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 3)));
+
+		// delete third note
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+
+		// expect history to not contain third note
+		expect(getIds(state.backwardHistoryNotes)).not.toContain(notes[2].id);
+	}));
+
+	it('should remove all notes of a deleted notebook from history', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(3, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+
+
+		// go to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 3)));
+
+		// delete the first folder
+		state = reducer(state, { type: 'FOLDER_DELETE', id: folders[0].id });
+
+		expect(getIds(state.backwardHistoryNotes)).toEqual([]);
+	}));
+
+	it('should maintain history correctly when going backward and forward', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(5, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [4], state);
+
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0, 4)));
+
+		state = goBackWard(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,3)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds(notes.slice(4, 5)));
+
+		state = goBackWard(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,2)));
+		// because we push the last seen note to stack.
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds([notes[4], notes[3]]));
+
+		state = goForward(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,3)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual(getIds([notes[4]]));
+
+		state = goForward(state);
+		expect(getIds(state.backwardHistoryNotes)).toEqual(getIds(notes.slice(0,4)));
+		expect(getIds(state.forwardHistoryNotes)).toEqual([]);
+	}));
+
+	it('should remember the last seen note of a notebook', asyncTest(async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(5, folders[i]));
+		}
+
+		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
+
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [4], state); // last seen note is notes[4]
+		// go to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
+		state = goToNote(notes, [5], state);
+		state = goToNote(notes, [6], state);
+
+		// return to first folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[0].id });
+
+		expect(state.lastSelectedNotesIds.Folder[folders[0].id]).toEqual([notes[4].id]);
+
+		// return to second folder
+		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
+		expect(state.lastSelectedNotesIds.Folder[folders[1].id]).toEqual([notes[6].id]);
+
+	}));
+
+	it('should ensure that history is free of adjacent duplicates', asyncTest(async () => {
+		// create 1 folder
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// backward = 0 1 2 3 2 3 2 3 2 3 2
+		// forward =
+		// current = 3
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+
+		// backward = 0 1 2 3 2 3 2 3 2 3
+		// forward = 3
+		// current = 2
+		state = goBackWard(state);
+
+		// backward = 0 1 2 3 2 3 2 3 2
+		// forward = 3 2
+		// current = 3
+		state = goBackWard(state);
+
+		// backward = 0 1 2 3 2 3 2 3
+		// forward = 3 2 3
+		// current = 2
+		state = goBackWard(state);
+
+		// backward = 0 1 2 3 2 3 2
+		// forward = 3 2 3 2
+		// current = 3
+		state = goBackWard(state);
+
+		expect(state.backwardHistoryNotes.map(n=>n.id)).toEqual([notes[0], notes[1], notes[2], notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
+		expect(state.forwardHistoryNotes.map(n=>n.id)).toEqual([notes[3], notes[2], notes[3], notes[2]].map(n=>n.id));
+		expect(state.selectedNoteIds).toEqual([notes[3].id]);
+
+		// delete third note
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+
+		// if adjacent duplicates not removed
+		// backward = 0 1 3 3
+		// forward = 3 3
+		// current = 3
+
+		// if adjacent duplicates are removed
+		// backward = 0 1 3
+		// forward = 3
+		// current = 3
+
+		// Expected: adjacent duplicates are removed and latest history does not contain current note
+		// backward = 0 1
+		// forward =
+		// current = 3
+		expect(state.backwardHistoryNotes.map(x => x.id)).toEqual([notes[0].id, notes[1].id]);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+		expect(state.selectedNoteIds).toEqual([notes[3].id]);
+	}));
+
+	it('should ensure history max limit is maintained', asyncTest(async () => {
+		const folders = await createNTestFolders(1);
+		// create 5 notes
+		const notes = await createNTestNotes(5, folders[0]);
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const idx = 0;
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goToNote(notes, [i % 5], state);
+		}
+
+		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goBackWard(state);
+		}
+
+		expect(state.backwardHistoryNotes).toEqual([]);
+		expect(state.forwardHistoryNotes.length).toEqual(MAX_HISTORY);
+
+		for (let i = 0; i < 2 * MAX_HISTORY; i++) {
+			state = goForward(state);
+		}
+
+		expect(state.backwardHistoryNotes.length).toEqual(MAX_HISTORY);
+		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
+	}));
 });
