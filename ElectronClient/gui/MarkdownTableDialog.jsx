@@ -74,7 +74,6 @@ const MarkdownTable = (props) => {
 		let tableString = '',
 			i = 0,
 			j = 0;
-		// every table should have a heading
 
 		// Header
 		for (j = 1; j <= x; j++) {
@@ -127,7 +126,6 @@ const MarkdownTable = (props) => {
 					className="tableEl"
 					style={styles_.table}
 					onMouseMove={_onMouseMove}
-					// onMouseOut={this._onMouseOut}
 					ref={tableEl}
 				>
 					<tbody>

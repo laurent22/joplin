@@ -144,7 +144,7 @@ export default function Toolbar(props:ToolbarProps) {
 			},
 		});
 		toolbarItems.push({
-			tooltip: _('Table'),
+			tooltip: _('Insert Table'),
 			iconName: 'fa-table',
 			onClick: async () => {
 				props.dispatch({
