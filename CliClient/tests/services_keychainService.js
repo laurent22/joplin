@@ -20,8 +20,14 @@ function describeIfCompatible(name, fn) {
 describeIfCompatible('services_KeychainService', function() {
 
 	beforeEach(async (done) => {
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
+		await setupDatabaseAndSynchronizer(1, { keychainEnabled: true });
+		await switchClient(1, { keychainEnabled: true });
+		await Setting.deleteKeychainPasswords();
+		done();
+	});
+
+	afterEach(async (done) => {
+		await Setting.deleteKeychainPasswords();
 		done();
 	});
 

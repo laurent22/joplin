@@ -628,7 +628,6 @@ class BaseApplication {
 		initArgs = Object.assign(initArgs, extraFlags);
 
 		this.logger_.addTarget('file', { path: `${profileDir}/log.txt` });
-		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
 		this.logger_.setLevel(initArgs.logLevel);
 
 		reg.setLogger(this.logger_);
@@ -638,6 +637,11 @@ class BaseApplication {
 
 		this.dbLogger_.addTarget('file', { path: `${profileDir}/log-database.txt` });
 		this.dbLogger_.setLevel(initArgs.logLevel);
+
+		if (Setting.value('env') === 'dev' && Setting.value('appType') === 'desktop') {
+			this.logger_.addTarget('console', { level: Logger.LEVEL_DEBUG });
+			this.dbLogger_.addTarget('console', { level: Logger.LEVEL_WARN });
+		}
 
 		if (Setting.value('env') === 'dev') {
 			this.dbLogger_.setLevel(Logger.LEVEL_INFO);

@@ -763,9 +763,17 @@ class Setting extends BaseModel {
 				}
 			};
 
+			// Keys in the database takes precedence over keys in the keychain because
+			// they are more likely to be up to date (saving to keychain can fail, but
+			// saving to database shouldn't). When the keychain works, the secure keys
+			// are deleted from the database and transfered to the keychain in saveAll().
+
+			const rowKeys = rows.map(r => r.key);
 			const secureKeys = this.keys(false, null, { secureOnly: true });
 			const secureItems = [];
 			for (const key of secureKeys) {
+				if (rowKeys.includes(key)) continue;
+
 				const password = await this.keychainService().password(`setting.${key}`);
 				if (password) {
 					secureItems.push({
@@ -875,6 +883,13 @@ class Setting extends BaseModel {
 		if (typeof o !== 'object') return;
 		delete o[objectKey];
 		this.setValue(settingKey, o);
+	}
+
+	static async deleteKeychainPasswords() {
+		const secureKeys = this.keys(false, null, { secureOnly: true });
+		for (const key of secureKeys) {
+			await this.keychainService().deletePassword(`setting.${key}`);
+		}
 	}
 
 	static valueToString(key, value) {
@@ -1040,7 +1055,18 @@ class Setting extends BaseModel {
 			s.value = this.valueToString(s.key, s.value);
 
 			if (this.isSecureKey(s.key)) {
-				if (await this.keychainService().setPassword(`setting.${s.key}`, s.value)) continue;
+				// We need to be careful here because there's a bug in the macOS keychain that can
+				// make it fail to save a password. https://github.com/desktop/desktop/issues/3263
+				// So we try to set it and if it fails, we set it on the database instead. This is not
+				// ideal because they won't be crypted, but better than losing all the user's passwords.
+				// The passwords would be set again on the keychain once it starts working again (probably
+				// after the user switch their computer off and on again).
+				try {
+					const wasSet = await this.keychainService().setPassword(`setting.${s.key}`, s.value);
+					if (wasSet) continue;
+				} catch (error) {
+					this.logger().error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
+				}
 			}
 
 			queries.push(Database.insertQuery(this.tableName(), s));
