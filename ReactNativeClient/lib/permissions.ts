@@ -1,9 +1,9 @@
-const { check, request, RESULTS } = require('react-native-permissions');
+const { PermissionsAndroid } = require('react-native');
 
 export default async (permissions: string) => {
-	let granted = await check(permissions);
-	if (granted !== RESULTS.GRANTED) {
-		granted = await request(permissions);
+	let result = await PermissionsAndroid.check(permissions);
+	if (result !== PermissionsAndroid.RESULTS.GRANTED) {
+		result = await PermissionsAndroid.request(permissions);
 	}
-	return granted === RESULTS.GRANTED;
+	return result === PermissionsAndroid.RESULTS.GRANTED;
 };

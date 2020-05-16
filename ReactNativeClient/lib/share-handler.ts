@@ -1,8 +1,8 @@
 const Note = require('lib/models/Note.js');
 const checkPermissions = require('lib/permissions.js').default;
-const { PERMISSIONS } = require('react-native-permissions');
 const { ToastAndroid } = require('react-native');
 const ShareExtension = require('lib/share.js').default;
+const { PermissionsAndroid } = require('react-native');
 
 type SharedData = {
 	title: string,
@@ -13,7 +13,7 @@ type SharedData = {
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {
-		const hasPermissions = await checkPermissions(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+		const hasPermissions = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
 		if (!hasPermissions) {
 			ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
