@@ -17,9 +17,10 @@ const { time } = require('lib/time-utils');
 const { shim } = require('lib/shim');
 const SearchEngine = require('lib/services/SearchEngine');
 const RNFS = require('react-native-fs');
-const { check, request, PERMISSIONS, RESULTS } = require('react-native-permissions');
 
+const checkPermissions = require('lib/checkPermissions.js').default;
 import { PermissionsAndroid } from 'react-native';
+
 import Slider from '@react-native-community/slider';
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -102,15 +103,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			const exportPath = this.state.profileExportPath;
 			const resourcePath = `${exportPath}/resources`;
 			try {
-
-				if (Platform.OS === 'android') {
-					let result = await check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
-					if (result !== RESULTS.GRANTED) {
-						result = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
-						if (result !== RESULTS.GRANTED) {
-							throw new Error('Permission denied');
-						}
-					}
+				const hasPermissions = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+				if (!hasPermissions) {
+					throw new Error('Permission denied');
 				}
 
 				const copyFiles = async (source, dest) => {
@@ -150,16 +145,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			// Not implemented yet
 			return true;
 		}
-		const hasPermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-		if (hasPermission) {
-			return true;
-		}
-		const requestResult = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
 			title: _('Information'),
 			message: _('In order to use file system synchronisation your permission to write to external storage is required.'),
 			buttonPositive: _('OK'),
 		});
-		return requestResult === PermissionsAndroid.RESULTS.GRANTED;
 	}
 
 	UNSAFE_componentWillMount() {
