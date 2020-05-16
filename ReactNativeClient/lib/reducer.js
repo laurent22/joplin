@@ -870,7 +870,6 @@ const reducer = (state = defaultState, action) => {
 
 		case 'SEARCH_UPDATE':
 			{
-				newState = handleHistory(state, action);
 				const searches = newState.searches.slice();
 				let found = false;
 				for (let i = 0; i < searches.length; i++) {
