@@ -261,7 +261,7 @@ class Setting extends BaseModel {
 					return output;
 				},
 			},
-			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: true, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: Setting.TYPE_BOOL, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: Setting.TYPE_INT,
@@ -1061,9 +1061,18 @@ class Setting extends BaseModel {
 				// ideal because they won't be crypted, but better than losing all the user's passwords.
 				// The passwords would be set again on the keychain once it starts working again (probably
 				// after the user switch their computer off and on again).
+				//
+				// Also we don't control what happens on the keychain - the values can be edited or deleted
+				// outside the application. For that reason, we rewrite it every time the values are saved,
+				// even if, internally, they haven't changed.
+				// As an optimisation, we check if the value exists on the keychain before writing it again.
 				try {
-					const wasSet = await this.keychainService().setPassword(`setting.${s.key}`, s.value);
-					if (wasSet) continue;
+					const passwordName = `setting.${s.key}`;
+					const currentValue = await this.keychainService().password(passwordName);
+					if (currentValue !== s.value) {
+						const wasSet = await this.keychainService().setPassword(passwordName, s.value);
+						if (wasSet) continue;
+					}
 				} catch (error) {
 					this.logger().error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
 				}
