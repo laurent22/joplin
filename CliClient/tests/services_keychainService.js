@@ -48,9 +48,7 @@ describeIfCompatible('services_KeychainService', function() {
 		await Setting.saveAll();
 		await Setting.load();
 		const passwords = Setting.value('encryption.passwordCache');
-
-		console.info('PPPPPPPPPP', passwords);
-
+		expect(passwords.testing).toBe('123456');
 	}));
 
 });

@@ -18,12 +18,13 @@ export default class KeychainService extends BaseService {
 	}
 
 	async setPassword(name:string, password:string):Promise<boolean> {
-		console.info('SET', name);
+		// Due to a bug in macOS, this may throw an exception "The user name or passphrase you entered is not correct."
+		// The fix is to open Keychain Access.app. Right-click on the login keychain and try locking it and then unlocking it again.
+		// https://github.com/atom/node-keytar/issues/76
 		return this.driver.setPassword(name, password);
 	}
 
 	async password(name:string):Promise<string> {
-		console.info('GET', name);
 		return this.driver.password(name);
 	}
 

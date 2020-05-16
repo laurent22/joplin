@@ -766,8 +766,13 @@ class Setting extends BaseModel {
 			const secureKeys = this.keys(false, null, { secureOnly: true });
 			const secureItems = [];
 			for (const key of secureKeys) {
-				const item = await this.keychainService().password(`setting.${key}`);
-				if (item) secureItems.push(item);
+				const password = await this.keychainService().password(`setting.${key}`);
+				if (password) {
+					secureItems.push({
+						key: key,
+						value: password,
+					});
+				}
 			}
 
 			pushItemsToCache(rows);
@@ -1022,7 +1027,7 @@ class Setting extends BaseModel {
 	}
 
 	static async saveAll() {
-		if (!this.saveTimeoutId_) return Promise.resolve();
+		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().info('Saving settings...');
 		clearTimeout(this.saveTimeoutId_);
