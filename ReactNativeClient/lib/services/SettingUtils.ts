@@ -1,5 +1,4 @@
 import KeychainService from './keychain/KeychainService';
-import KeychainServiceDriver from './keychain/KeychainServiceDriver.node';
 const Setting = require('lib/models/Setting');
 const { uuid } = require('lib/uuid.js');
 
@@ -11,7 +10,7 @@ const { uuid } = require('lib/uuid.js');
 // In other words, it's not possible to load the settings without the KS service and it's not
 // possible to initialise the KS service without the settings.
 // The solution is to fetch just the client ID directly from the database.
-export async function loadKeychainServiceAndSettings() {
+export async function loadKeychainServiceAndSettings(KeychainServiceDriver:any) {
 	const clientIdSetting = await Setting.loadOne('clientId');
 	const clientId = clientIdSetting ? clientIdSetting.value : uuid.create();
 	KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), clientId));

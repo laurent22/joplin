@@ -38,6 +38,7 @@ const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const { loadKeychainServiceAndSettings } = require('lib/services/SettingUtils');
+const KeychainServiceDriver = require('lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
@@ -654,7 +655,9 @@ class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await loadKeychainServiceAndSettings();
+		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+
+		this.logger_.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
 			const locale = shim.detectAndSetLocale(Setting);

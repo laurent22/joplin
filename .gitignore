@@ -71,6 +71,7 @@ ElectronClient/gui/NoteEditor/utils/useDropHandler.js
 ElectronClient/gui/NoteEditor/utils/useFormNote.js
 ElectronClient/gui/NoteEditor/utils/useMarkupToHtml.js
 ElectronClient/gui/NoteEditor/utils/useMessageHandler.js
+ReactNativeClient/lib/services/keychain/KeychainServiceDriver.mobile.ts
 ElectronClient/gui/NoteEditor/utils/useNoteSearchBar.js
 ElectronClient/gui/NoteEditor/utils/useSearchMarkers.js
 ElectronClient/gui/NoteEditor/utils/useWindowCommandHandler.js

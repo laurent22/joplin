@@ -25,24 +25,6 @@ try {
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 
-	private appId_:string;
-	private clientId_:string;
-
-	constructor(appId:string, clientId:string) {
-		super();
-
-		this.appId_ = appId;
-		this.clientId_ = clientId;
-	}
-
-	get appId():string {
-		return this.appId_;
-	}
-
-	get clientId():string {
-		return this.clientId_;
-	}
-
 	async setPassword(name:string, password:string):Promise<boolean> {
 		if (!keytar) return false;
 		await keytar.setPassword(`${this.appId}.${name}`, `${this.clientId}@joplin`, password);

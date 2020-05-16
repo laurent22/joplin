@@ -25,6 +25,10 @@ describeIfCompatible('services_KeychainService', function() {
 		done();
 	});
 
+	it('should be enabled on macOS and Windows', asyncTest(async () => {
+		expect(Setting.value('keychain.supported')).toBe(1);
+	}));
+
 	it('should set, get and delete passwords', asyncTest(async () => {
 		const service = KeychainService.instance();
 
@@ -39,8 +43,14 @@ describeIfCompatible('services_KeychainService', function() {
 		expect(await service.password('zz_testunit')).toBe(null);
 	}));
 
-	it('should be enabled on macOS and Windows', asyncTest(async () => {
-		expect(Setting.value('keychain.supported')).toBe(1);
+	it('should save and load secure settings', asyncTest(async () => {
+		Setting.setObjectKey('encryption.passwordCache', 'testing', '123456');
+		await Setting.saveAll();
+		await Setting.load();
+		const passwords = Setting.value('encryption.passwordCache');
+
+		console.info('PPPPPPPPPP', passwords);
+
 	}));
 
 });

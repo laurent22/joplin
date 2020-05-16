@@ -18,10 +18,12 @@ export default class KeychainService extends BaseService {
 	}
 
 	async setPassword(name:string, password:string):Promise<boolean> {
+		console.info('SET', name);
 		return this.driver.setPassword(name, password);
 	}
 
 	async password(name:string):Promise<string> {
+		console.info('GET', name);
 		return this.driver.password(name);
 	}
 
