@@ -7,8 +7,8 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
-const filterParser = require('./filterParser');
-const queryBuilder = require('./queryBuilder');
+const { filterParser } = require('./filterParser');
+const { queryBuilder } = require('./queryBuilder');
 
 class SearchEngine {
 	constructor() {

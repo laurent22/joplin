@@ -28,7 +28,7 @@ const matchStmtBuilder = (
 };
 
 
-module.exports = (filters: Map<string, Array<Term>>) => {
+export function queryBuilder(filters: Map<string, Array<Term>>) {
 	// console.log(filters);
 	let match = '';
 	match += matchStmtBuilder(filters, 'title');
@@ -68,4 +68,4 @@ module.exports = (filters: Map<string, Array<Term>>) => {
 	}
 
 	return { query, params };
-};
+}

@@ -40,9 +40,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching title', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('title: abcd');
@@ -54,9 +52,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching body', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'body1' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh', body: 'body2' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('body: body1');
@@ -68,9 +64,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching title containing multiple words', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd xyz', body: 'body1' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh ijk', body: 'body2' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('title: "abcd xyz"');
@@ -82,9 +76,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching body containing multiple words', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('body: "foo bar"');
@@ -96,9 +88,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching title AND body', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('title: efgh body: "foo bar"');
@@ -112,9 +102,7 @@ describe('services_SearchFilter', function() {
 	it('should return note matching title OR body', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
-		await sleep(0.1);
 
 		await engine.syncTables();
 		rows = await engine.search('title: abcd OR body: "foo bar"');
@@ -129,9 +117,7 @@ describe('services_SearchFilter', function() {
 	it('should return notes matching text', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'dead bar' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
-		await sleep(0.1);
 		await engine.syncTables();
 
 		// Interpretation: Match with notes containing foo in title/body and bar in title/body
@@ -152,9 +138,7 @@ describe('services_SearchFilter', function() {
 	it('should support phrase search', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
-		await sleep(0.1);
 		await engine.syncTables();
 
 		rows = await engine.search('"bar dog"');
@@ -165,9 +149,7 @@ describe('services_SearchFilter', function() {
 	it('should support prefix search', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
-		await sleep(0.1);
 		await engine.syncTables();
 
 		rows = await engine.search('"bar*"');
@@ -180,11 +162,8 @@ describe('services_SearchFilter', function() {
 	it('should support filtering by tags', asyncTest(async () => {
 		let rows;
 		const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
-		await sleep(0.1);
 		const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
-		await sleep(0.1);
 		const n3 = await Note.save({ title: 'storm front', body: 'wicked wizard' });
-		await sleep(0.1);
 
 		await Tag.setNoteTagsByTitles(n1.id, ['tag1', 'tag2']);
 		await Tag.setNoteTagsByTitles(n2.id, ['tag2', 'tag3']);
