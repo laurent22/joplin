@@ -1,6 +1,6 @@
 const React = require('react');
 const Component = React.Component;
-const { Platform, View, Text, ToastAndroid } = require('react-native');
+const { Platform, View, Text } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { themeStyle } = require('lib/components/global-style.js');
 const Setting = require('lib/models/Setting.js');
@@ -9,6 +9,10 @@ const { shim } = require('lib/shim');
 const { assetsToHeaders } = require('lib/joplin-renderer');
 const shared = require('lib/components/shared/note-screen-shared.js');
 const markupLanguageUtils = require('lib/markupLanguageUtils');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
+const Resource = require('lib/models/Resource.js');
+const Share = require('react-native-share').default;
 
 import Async from 'react-async';
 
@@ -122,14 +126,6 @@ class NoteBodyViewer extends Component {
 			</html>
 		`;
 
-		console.log('about to dump html');
-		try {
-			await shim.fsDriver().writeFile('/sdcard/joplin.html', html, 'utf8');
-			console.log('saved html to file');
-		} catch (e) {
-			console.error('Could not save html to file', e);
-		}
-
 		// On iOS scalesPageToFit work like this:
 		//
 		// Find the widest image, resize it *and everything else* by x% so that
@@ -210,6 +206,29 @@ class NoteBodyViewer extends Component {
 		return this.forceUpdate_;
 	}
 
+	async onResourceLongPress(resourceId) {
+		const resource = await Resource.load(resourceId);
+
+		reg.logger().info(`resource: ${JSON.stringify(resource)}`);
+		reg.logger().info(`resource path: ${Resource.fullPath(resource)}`);
+
+		const name = resource.title ? resource.title : resource.file_name;
+
+		// TODO back handler to deal with this dialog
+		const action = await dialogs.pop(this, name, [
+			{ text: 'Share', id: 'share' },
+		]);
+
+		if (action === 'share') {
+			Share.open({
+				type: resource.mime,
+				filename: resource.title,
+				url: `file://${Resource.fullPath(resource)}`,
+				failOnCancel: false,
+			});
+		}
+	}
+
 	render() {
 		// Note: useWebKit={false} is needed to go around this bug:
 		// https://github.com/react-native-community/react-native-webview/issues/376
@@ -269,8 +288,7 @@ class NoteBodyViewer extends Component {
 									} else if (msg.startsWith('longclick:')) {
 										msg = msg.split(':');
 										const resourceId = msg[1];
-										console.log('about to show popup');
-										ToastAndroid.show(`Here be popup for resource ${resourceId}`, ToastAndroid.SHORT);
+										this.onResourceLongPress(resourceId);
 									} else if (msg.startsWith('joplin:')) {
 										this.props.onJoplinLinkClick(msg);
 									} else {
@@ -281,6 +299,11 @@ class NoteBodyViewer extends Component {
 						);
 					}}
 				</Async>
+				<DialogBox
+					ref={dialogbox => {
+						this.dialogbox = dialogbox;
+					}}
+				/>
 			</View>
 		);
 	}
