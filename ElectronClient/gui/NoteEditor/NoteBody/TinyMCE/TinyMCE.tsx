@@ -394,8 +394,8 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			.tox input,
 			.tox .tox-label,
 			.tox .tox-toolbar-label {
-				color: ${theme.color} !important;
-				fill: ${theme.color} !important;
+				color: ${theme.iconColor} !important;
+				fill: ${theme.iconColor} !important;
 			}
 
 			.tox .tox-statusbar a,
@@ -682,7 +682,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 
 	const loadDocumentAssets = (editor:any, pluginAssets:any[]) => {
 		const cssFiles = [
-			'css/fork-awesome.min.css',
+			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets

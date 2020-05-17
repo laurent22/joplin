@@ -126,7 +126,7 @@ export default function Toolbar(props:ToolbarProps) {
 
 		toolbarItems.push({
 			tooltip: _('Heading'),
-			iconName: 'fa-header',
+			iconName: 'fa-heading',
 			onClick: () => {
 				props.dispatch({
 					type: 'WINDOW_COMMAND',
@@ -148,7 +148,7 @@ export default function Toolbar(props:ToolbarProps) {
 
 		toolbarItems.push({
 			tooltip: _('Insert Date Time'),
-			iconName: 'fa-calendar-plus-o',
+			iconName: 'fa-calendar-plus',
 			onClick: () => {
 				props.dispatch({
 					type: 'WINDOW_COMMAND',

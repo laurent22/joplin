@@ -103,7 +103,7 @@ function useToolbarItems(props:NoteToolbarProps) {
 		// toolbarItems.push({
 		// 	tooltip: _('Click to stop external editing'),
 		// 	title: _('Watching...'),
-		// 	iconName: 'fa-external-link',
+		// 	iconName: 'fa-share-square',
 		// 	onClick: () => {
 		// 		onButtonClick({ name: 'stopExternalEditing' });
 		// 	},
@@ -111,7 +111,7 @@ function useToolbarItems(props:NoteToolbarProps) {
 	} else {
 		// toolbarItems.push({
 		// 	tooltip: _('Edit in external editor'),
-		// 	iconName: 'fa-external-link',
+		// 	iconName: 'fa-share-square',
 		// 	onClick: () => {
 		// 		onButtonClick({ name: 'startExternalEditing' });
 		// 	},
@@ -120,7 +120,7 @@ function useToolbarItems(props:NoteToolbarProps) {
 
 	if (note.is_todo) {
 		const item:any = {
-			iconName: 'fa-clock-o',
+			iconName: 'fa-clock',
 			enabled: !note.todo_completed,
 			onClick: () => {
 				onButtonClick({ name: 'setAlarm' });

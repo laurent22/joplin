@@ -9,7 +9,7 @@ class IconButton extends React.Component {
 			color: theme.color,
 			fontSize: theme.fontSize * 1.4,
 		};
-		const icon = <i style={iconStyle} className={`fa ${this.props.iconName}`}></i>;
+		const icon = <i style={iconStyle} className={`fas ${this.props.iconName}`}></i>;
 
 		const rootStyle = Object.assign(
 			{

@@ -220,7 +220,7 @@ class NoteListComponent extends React.Component {
 			paddingRight: 4,
 			color: theme.color,
 		};
-		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : <i style={watchedIconStyle} className={'fa fa-external-link'}></i>;
+		const watchedIcon = this.props.watchedNoteFiles.indexOf(item.id) < 0 ? null : <i style={watchedIconStyle} className={'fa fa-share-square'}></i>;
 
 		if (!this.itemAnchorRefs_[item.id]) this.itemAnchorRefs_[item.id] = React.createRef();
 		const ref = this.itemAnchorRefs_[item.id];

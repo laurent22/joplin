@@ -1,4 +1,6 @@
 const solarizedDarkStyle = {
+	appearance: 'dark',
+
 	backgroundColor: '#002b36',
 	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
 	oddBackgroundColor: '#073642',

@@ -154,14 +154,14 @@ class HeaderComponent extends React.Component {
 		if (options.iconName) {
 			const iconStyle = {
 				fontSize: Math.round(style.fontSize * 1.1),
-				color: style.color,
+				color: theme.iconColor,
 			};
 			if (options.title) iconStyle.marginRight = 5;
 			if ('undefined' != typeof options.iconRotation) {
 				iconStyle.transition = 'transform 0.15s ease-in-out';
 				iconStyle.transform = `rotate(${options.iconRotation}deg)`;
 			}
-			icon = <i style={iconStyle} className={`fa ${options.iconName}`}></i>;
+			icon = <i style={iconStyle} className={`fas ${options.iconName}`}></i>;
 		}
 
 		const isEnabled = !('enabled' in options) || options.enabled;
@@ -250,7 +250,7 @@ class HeaderComponent extends React.Component {
 		};
 
 		const iconName = state.searchQuery ? 'fa-times' : 'fa-search';
-		const icon = <i style={iconStyle} className={`fa ${iconName}`}></i>;
+		const icon = <i style={iconStyle} className={`fas ${iconName}`}></i>;
 		if (options.onQuery) this.searchOnQuery_ = options.onQuery;
 
 		const usageLink = !this.state.showSearchUsageLink ? null : (

@@ -30,6 +30,8 @@ const globalStyle = {
 	headerButtonHPadding: 6,
 
 	toolbarHeight: 35,
+
+	appearance: 'light',
 };
 
 globalStyle.marginRight = globalStyle.margin;
@@ -84,6 +86,7 @@ globalStyle.buttonStyle = {
 
 function addExtraStyles(style) {
 	style.selectedDividerColor = Color(style.dividerColor).darken(0.2).hex();
+	style.iconColor = Color(style.color).alpha(0.8);
 
 	style.tagStyle = {
 		fontSize: style.fontSize,
@@ -204,7 +207,7 @@ function addExtraStyles(style) {
 	};
 
 	style.buttonIconStyle = {
-		color: style.color,
+		color: style.iconColor,
 		marginRight: 6,
 	};
 
