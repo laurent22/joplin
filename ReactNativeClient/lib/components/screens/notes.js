@@ -15,6 +15,7 @@ const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { BackButtonService } = require('lib/services/back-button.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -68,6 +69,14 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 			Setting.setValue(r.name, r.value);
 		};
+
+		this.backHandler = () => {
+			if (this.dialogbox.state.isVisible) {
+				this.dialogbox.close();
+				return true;
+			}
+			return false;
+		};
 	}
 
 	styles() {
@@ -91,10 +100,12 @@ class NotesScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		await this.refreshNotes();
 		AppState.addEventListener('change', this.onAppStateChange_);
+		BackButtonService.addHandler(this.backHandler);
 	}
 
 	async componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		BackButtonService.removeHandler(this.backHandler);
 	}
 
 	async componentDidUpdate(prevProps) {

@@ -554,7 +554,6 @@ const mapStateToProps = (state: any) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		windowCommand: state.windowCommand,
 		notesParentType: state.notesParentType,
-		historyNotes: state.historyNotes,
 		selectedNoteTags: state.selectedNoteTags,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		selectedNoteHash: state.selectedNoteHash,

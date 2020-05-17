@@ -403,6 +403,14 @@ Current translations:
 
 # Contributors
 
+Thank you to our top sponsors!
+
+|     |     |     |
+| :---: | :---: | :---: |
+| <img width="50" src="https://avatars3.githubusercontent.com/u/59133880?s=96&v=4"/></br>[Brandon D](https://github.com/bedwardly-down) | <img width="50" src="https://avatars0.githubusercontent.com/u/6979755?s=96&v=4"/></br>[Devon Zuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[小西　孝宗](https://github.com/konishi-t)
+
+Thank you to everyone who've contributed to Joplin's source code!
+
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
 |     |     |     |     |     |
 | :---: | :---: | :---: | :---: | :---: |
