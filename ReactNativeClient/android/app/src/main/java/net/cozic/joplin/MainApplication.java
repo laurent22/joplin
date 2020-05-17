@@ -6,6 +6,8 @@ import android.os.Build;
 import android.webkit.WebView;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import cl.json.ShareApplication;
+
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -20,7 +22,7 @@ import java.util.List;
 import android.database.CursorWindow;
 import com.reactNativeQuickActions.AppShortcutsPackage;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication, ShareApplication {
 
 	private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -99,4 +101,9 @@ public class MainApplication extends Application implements ReactApplication {
       }
     }
   }
+
+    @Override
+    public String getFileProviderAuthority() {
+        return BuildConfig.APPLICATION_ID + ".provider";
+    }
 }

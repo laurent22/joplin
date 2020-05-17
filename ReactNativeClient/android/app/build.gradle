@@ -180,6 +180,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-share')
 	implementation "org.webkit:android-jsc:r241213"
     compile project(':react-native-push-notification')
     // implementation (project(':react-native-camera')) {

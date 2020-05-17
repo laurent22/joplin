@@ -28,9 +28,7 @@
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-	<uses-sdk
-		android:minSdkVersion="16"
-		android:targetSdkVersion="26" />
+	<uses-sdk android:targetSdkVersion="26" />
 
 	<application
 		android:name=".MainApplication"
@@ -108,6 +106,16 @@
 				<data android:mimeType="text/plain" />
 			</intent-filter>
 		</activity>
+
+<!--		<provider-->
+<!--			android:name="androidx.core.content.FileProvider"-->
+<!--			android:authorities="${applicationId}.provider"-->
+<!--			android:grantUriPermissions="true"-->
+<!--			android:exported="false">-->
+<!--			<meta-data-->
+<!--				android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--				android:resource="@xml/filepaths" />-->
+<!--		</provider>-->
 	</application>
 
 </manifest>

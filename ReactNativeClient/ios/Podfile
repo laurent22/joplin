@@ -32,6 +32,8 @@ target 'Joplin' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
   use_native_modules!
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
 end
 
 # target 'Joplin-tvOS' do
