@@ -6,6 +6,7 @@ const Setting = require('lib/models/Setting.js');
 const { shim } = require('lib/shim.js');
 const MasterKey = require('lib/models/MasterKey');
 const Note = require('lib/models/Note');
+const Folder = require('lib/models/Folder');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { _, setLocale } = require('lib/locale.js');
 const { Logger } = require('lib/logger.js');
@@ -304,6 +305,10 @@ class Application extends BaseApplication {
 		if (['NOTE_DEVTOOLS_TOGGLE', 'NOTE_DEVTOOLS_SET'].indexOf(action.type) >= 0) {
 			this.toggleDevTools(newState.devToolsVisible);
 			mustUpdateMenuItemStates = true;
+		}
+
+		if (action.type === 'FOLDER_AND_NOTE_SELECT') {
+			await Folder.expandTree(newState.folders, action.folderId);
 		}
 
 		if (mustUpdateMenuItemStates) this.updateMenuItemStates(newState);
