@@ -2,6 +2,7 @@ const BaseModel = require('lib/BaseModel.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const NoteTag = require('lib/models/NoteTag.js');
 const Note = require('lib/models/Note.js');
+const { nestedPath } = require('lib/nested-utils.js');
 const { _ } = require('lib/locale');
 
 class Tag extends BaseItem {
@@ -14,16 +15,17 @@ class Tag extends BaseItem {
 	}
 
 	static async noteIds(tagId) {
-		// Get NoteIds of that are tagged with current tag or its descendants
-		const rows = await this.db().selectAll(`WITH RECURSIVE
-												parent_of(id, child_id) AS 
-												(SELECT id, id FROM tags where id=?
-												UNION ALL
-												SELECT parent_of.id, tags2.id FROM parent_of JOIN tags AS tags2 ON parent_of.child_id=tags2.parent_id)
-												SELECT note_id FROM note_tags WHERE tag_id IN (SELECT child_id from parent_of)`, [tagId]);
+		const nestedTagIds = await Tag.descendantTagIds(tagId);
+		nestedTagIds.push(tagId);
+
+		const rows = await this.db().selectAll(`SELECT note_id FROM note_tags WHERE tag_id IN ("${nestedTagIds.join('","')}")`);
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
-			output.push(rows[i].note_id);
+			const noteId = rows[i].note_id;
+			if (output.includes(noteId)) {
+				continue;
+			}
+			output.push(noteId);
 		}
 		return output;
 	}
@@ -47,6 +49,17 @@ class Tag extends BaseItem {
 		return rows.map(r => r.id);
 	}
 
+	static async descendantTagIds(parentId) {
+		const descendantIds = [];
+		let childrenIds = await Tag.childrenTagIds(parentId);
+		for (let i = 0; i < childrenIds.length; i++) {
+			const childId = childrenIds[i];
+			descendantIds.push(childId);
+			childrenIds = childrenIds.concat(await Tag.childrenTagIds(childId));
+		}
+		return descendantIds;
+	}
+
 	// Untag all the notes and delete tag
 	static async untagAll(tagId, options = null) {
 		if (!options) options = {};
@@ -67,17 +80,18 @@ class Tag extends BaseItem {
 			await NoteTag.delete(noteTags[i].id);
 		}
 
-		// We're recursing over all children already, so this call doesn't have to be recursive.
-		await Tag.delete(tagId, { deleteChildren: false });
+		await Tag.delete(tagId);
 	}
 
 	static async delete(id, options = null) {
 		if (!options) options = {};
 		if (!('deleteChildren' in options)) options.deleteChildren = true;
+		if (!('deleteNotelessParents' in options)) options.deleteNotelessParents = true;
 
 		const tag = await Tag.load(id);
 		if (!tag) return; // noop
 
+		// Delete children tags
 		if (options.deleteChildren) {
 			const childrenTagIds = await Tag.childrenTagIds(id);
 			for (let i = 0; i < childrenTagIds.length; i++) {
@@ -86,6 +100,14 @@ class Tag extends BaseItem {
 		}
 
 		await super.delete(id, options);
+
+		// Delete ancestor tags that do not have any associated notes left
+		if (options.deleteNotelessParents && tag.parent_id) {
+			const parent = await Tag.loadWithCount(tag.parent_id);
+			if (!parent) {
+				await Tag.delete(tag.parent_id, options);
+			}
+		}
 
 		this.dispatch({
 			type: 'TAG_DELETE',
@@ -122,9 +144,25 @@ class Tag extends BaseItem {
 		});
 	}
 
-	static loadWithCount(tagId) {
-		const sql = 'SELECT * FROM tags_with_note_count WHERE id = ?';
-		return this.modelSelectOne(sql, [tagId]);
+	static async addNoteCounts(tags) {
+		for (const tag of tags) {
+			const noteIds = await Tag.noteIds(tag.id);
+			// Make sure the notes exist
+			const notes = await Note.byIds(noteIds);
+			tag.note_count = notes.length;
+		}
+	}
+
+	static async loadWithCount(tagId) {
+		const tag = await Tag.load(tagId);
+		if (!tag) return;
+
+		const noteIds = await Tag.noteIds(tagId);
+		// Make sure the notes exist
+		tag.note_count = (await Note.byIds(noteIds)).length;
+		if (tag.note_count === 0) return;
+
+		return tag;
 	}
 
 	static async hasNote(tagId, noteId) {
@@ -133,14 +171,19 @@ class Tag extends BaseItem {
 	}
 
 	static async allWithNotes() {
-		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
+		let tags = await Tag.all();
+		await Tag.addNoteCounts(tags);
+
+		tags = tags.filter((tag) => tag.note_count > 0);
+		return tags;
 	}
 
 	static async searchAllWithNotes(options) {
-		if (!options) options = {};
-		if (!options.conditions) options.conditions = [];
-		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
-		return this.search(options);
+		const tags = this.search(options);
+		await Tag.addNoteCounts(tags);
+
+		tags.filter((tag) => tag.note_count > 0);
+		return tags;
 	}
 
 	static async tagsByNoteId(noteId) {
@@ -169,7 +212,7 @@ class Tag extends BaseItem {
 
 	static async addNoteTagByTitle(noteId, tagTitle) {
 		let tag = await this.loadByTitle(tagTitle);
-		if (!tag) tag = await Tag.save({ title: tagTitle }, { userSideValidation: true });
+		if (!tag) tag = await Tag.saveNested({ title: tagTitle }, { userSideValidation: true });
 		return await this.addNote(tag.id, noteId);
 	}
 
@@ -181,7 +224,7 @@ class Tag extends BaseItem {
 			const title = tagTitles[i].trim().toLowerCase();
 			if (!title) continue;
 			let tag = await this.loadByTitle(title);
-			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
+			if (!tag) tag = await Tag.saveNested({ title: title }, { userSideValidation: true  });
 			await this.addNote(tag.id, noteId);
 			addedTitles.push(title);
 		}
@@ -211,22 +254,7 @@ class Tag extends BaseItem {
 	}
 
 	static tagPath(tags, tagId) {
-		const idToTags = {};
-		for (let i = 0; i < tags.length; i++) {
-			idToTags[tags[i].id] = tags[i];
-		}
-
-		const path = [];
-		while (tagId) {
-			const tag = idToTags[tagId];
-			if (!tag) break; // Shouldn't happen
-			path.push(tag);
-			tagId = tag.parent_id;
-		}
-
-		path.reverse();
-
-		return path;
+		return nestedPath(tags, tagId);
 	}
 
 	static displayTitle(item) {
@@ -245,35 +273,36 @@ class Tag extends BaseItem {
 			const childName = `${parentPrefix}/${await Tag.displayTitle(childItem)}`;
 			childItem.title = childName;
 			// Change the child title
-			await Tag.save(childItem, { selectNoteTag: false, createParents: false });
+			await Tag.save(childItem, { fields: ['title'] });
 			// Change descendant titles
 			await Tag.changeDescendantPrefix(childItem, childName);
 		}
 	}
 
 	static async rename(tag, newTitle) {
-		tag.title = newTitle;
-		let oldParentId = tag.parent_id;
+		const oldParentId = tag.parent_id;
 
-		tag = await Tag.save(tag, { fields: ['title', 'parent_id'], userSideValidation: true });
+		tag.title = newTitle;
+		tag = await Tag.saveNested(tag, { fields: ['title', 'parent_id'], userSideValidation: true });
 		await Tag.changeDescendantPrefix(tag, newTitle);
 
 		if (oldParentId !== tag.parent_id) {
 			// If the parent tag has changed, and the ancestor doesn't
 			// have notes attached, then remove it
-			while (oldParentId) {
-				const oldParent = await Tag.load(oldParentId);
-				const oldParentWithCount = await Tag.loadWithCount(oldParentId);
-				if (!oldParentWithCount) {
-					await Tag.delete(oldParentId, { deleteChildren: false });
-				}
-				oldParentId = oldParent.parent_id;
+			const oldParentWithCount = await Tag.loadWithCount(oldParentId);
+			if (!oldParentWithCount) {
+				await Tag.delete(oldParentId, { deleteChildren: false, deleteNotelessParents: true });
 			}
 		}
 		return tag;
 	}
 
 	static async moveTag(tagId, parentTagId) {
+		if (tagId === parentTagId
+				|| (await Tag.descendantTagIds(tagId)).includes(parentTagId)) {
+			throw new Error(_('Cannot move tag to this location'));
+		}
+
 		const tag = await Tag.load(tagId);
 		if (!tag) return;
 		let tagTitle = await Tag.displayTitle(tag);
@@ -286,45 +315,50 @@ class Tag extends BaseItem {
 		return await Tag.rename(tag, tagTitle);
 	}
 
-	static async save(o, options = null) {
+	static async saveNested(tag, options) {
 		if (!options) options = {};
-		if (!('createParents' in options)) options.createParents = true;
-		if (!('selectNoteTag' in options)) options.selectNoteTag = true;
+		// The following option is used to prevent loops in the tag hierarchy
+		if (!('mainTagId' in options) && tag.id) options.mainTagId = tag.id;
 
-		if ('title' in o) {
-			o.title = o.title.trim().toLowerCase();
-			const existingTagByTitle = await Tag.loadByTitle(o.title);
+		let parentId = '';
+		// Check if the tag is nested using `/` as separator
+		const separator = '/';
+		const i = tag.title.lastIndexOf(separator);
+		if (i !== -1) {
+			const parentTitle = tag.title.slice(0,i);
 
-			if (options && options.userSideValidation && existingTagByTitle && existingTagByTitle.id !== o.id) {
-				throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
-			}
-
-			let parentId = '';
-			let parentTitle = '';
-			// Check if the tag is nested using `/` as separator
-			const separator = '/';
-			const i = o.title.lastIndexOf(separator);
-			if (i !== -1) {
-				parentTitle = o.title.slice(0,i);
-
-				// Try to get the parent tag
-				const parentTag = await Tag.loadByTitle(parentTitle);
-				if (parentTag) parentId = parentTag.id;
-			}
-
-			if (options && options.createParents && parentTitle && !parentId) {
+			// Try to get the parent tag
+			const parentTag = await Tag.loadByTitle(parentTitle);
+			// The second part of the conditions ensures that we do not create a loop
+			// in the tag hierarchy
+			if (parentTag &&
+				!('mainTagId' in options
+					&& (options.mainTagId === parentTag.id
+						|| (await Tag.descendantTagIds(options.mainTagId)).includes(parentTag.id)))
+			) {
+				parentId = parentTag.id;
+			} else {
 				// Create the parent tag if it doesn't exist
-				const parent = {
-					title: parentTitle,
-				};
-				// Do not select the parent note_tags
 				const parentOpts = {};
-				parentOpts.selectNoteTag = false;
-				const parentTag = await Tag.save(parent, parentOpts);
+				if ('mainTagId' in options) parentOpts.mainTagId = options.mainTagId;
+				const parentTag = await Tag.saveNested({ title: parentTitle }, parentOpts);
 				parentId = parentTag.id;
 			}
-			// Set parent_id
-			o.parent_id = parentId;
+		}
+
+		// Set parent_id
+		tag.parent_id = parentId;
+		return await Tag.save(tag, options);
+	}
+
+	static async save(o, options = null) {
+		if (options && options.userSideValidation) {
+			if ('title' in o) {
+				o.title = o.title.trim().toLowerCase();
+
+				const existingTag = await Tag.loadByTitle(o.title);
+				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+			}
 		}
 
 		return super.save(o, options).then(tag => {
