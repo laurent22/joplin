@@ -134,6 +134,20 @@ class HeaderComponent extends React.Component {
 	}
 
 	makeButton(key, style, options) {
+		// TODO: "tab" type is not finished
+		if (options.type === 'tab') {
+			const buttons = [];
+			for (let i = 0; i < options.items.length; i++) {
+				const item = options.items[i];
+				buttons.push(this.makeButton(key + item.title, style, Object.assign({}, options, {
+					title: item.title,
+					type: 'button',
+				})));
+			}
+
+			return <span style={{ display: 'flex', flexDirection: 'row' }}>{buttons}</span>;
+		}
+
 		const theme = themeStyle(this.props.theme);
 
 		let icon = null;

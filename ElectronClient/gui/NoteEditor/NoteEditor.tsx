@@ -33,8 +33,6 @@ const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 const TagList = require('../TagList.min.js');
 
 function NoteEditor(props: NoteEditorProps) {
-	const theme = themeStyle(props.theme);
-
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions>(null);
@@ -391,6 +389,28 @@ function NoteEditor(props: NoteEditorProps) {
 		/>;
 	}
 
+	function renderTagBar() {
+		return props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
+	}
+
+	function renderTitleBar() {
+		const titleBarDate = <span style={styles.titleDate}>{time.formatMsToLocal(formNote.user_updated_time)}</span>;
+		return (
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<input
+					type="text"
+					ref={titleInputRef}
+					placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
+					style={styles.titleInput}
+					onChange={onTitleChange}
+					onKeyDown={onTitleKeydown}
+					value={formNote.title}
+				/>
+				{titleBarDate}
+			</div>
+		);
+	}
+
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId);
 
 	const editorProps:NoteBodyEditorProps = {
@@ -439,12 +459,6 @@ function NoteEditor(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, []);
 
-	const tagStyle = {
-		marginBottom: 10,
-	};
-
-	const tagList = props.selectedNoteTags.length ? <TagList style={tagStyle} items={props.selectedNoteTags} /> : null;
-
 	if (showRevisions) {
 		const theme = themeStyle(props.theme);
 
@@ -474,8 +488,6 @@ function NoteEditor(props: NoteEditorProps) {
 			style={props.style}
 		/>;
 	}
-
-	const titleBarDate = <span style={styles.titleDate}>{time.formatMsToLocal(formNote.user_updated_time)}</span>;
 
 	function renderSearchBar() {
 		if (!showLocalSearch) return false;
@@ -509,19 +521,9 @@ function NoteEditor(props: NoteEditorProps) {
 	return (
 		<div style={styles.root} onDrop={onDrop}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-				{tagList}
-				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingBottom: 5, borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
-					{renderNoteToolbar()}
-					<input
-						type="text"
-						ref={titleInputRef}
-						placeholder={props.isProvisional ? _('Creating new %s...', formNote.is_todo ? _('to-do') : _('note')) : ''}
-						style={styles.titleInput}
-						onChange={onTitleChange}
-						onKeyDown={onTitleKeydown}
-						value={formNote.title}
-					/>
-					{titleBarDate}
+				{renderTitleBar()}
+				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+					{renderNoteToolbar()}{renderTagBar()}
 				</div>
 				<div style={{ display: 'flex', flex: 1 }}>
 					{editor}

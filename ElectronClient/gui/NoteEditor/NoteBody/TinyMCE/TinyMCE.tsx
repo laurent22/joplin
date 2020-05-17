@@ -381,6 +381,7 @@ const TinyMCE = (props:NoteBodyEditorProps, ref:any) => {
 			}
 
 			.tox .tox-editor-header {
+				border-top: 1px solid ${theme.dividerColor};
 				border-bottom: 1px solid ${theme.dividerColor};
 			}
 
