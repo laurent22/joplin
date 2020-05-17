@@ -1,10 +1,12 @@
 const BaseModel = require('lib/BaseModel.js');
 const { time } = require('lib/time-utils.js');
 const Note = require('lib/models/Note.js');
+const NoteTag = require('lib/models/NoteTag.js');
 const { Database } = require('lib/database.js');
 const { _ } = require('lib/locale.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const { substrWithEllipsis } = require('lib/string-utils.js');
+const { ORPHANS_FOLDER_ID, CONFLICT_FOLDER_ID, TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class Folder extends BaseItem {
 	static tableName() {
@@ -31,9 +33,17 @@ class Folder extends BaseItem {
 		return field in fieldsToLabels ? fieldsToLabels[field] : field;
 	}
 
-	static noteIds(parentId) {
+	static async noteIds(parentId, options = null) {
+		let sqlQuery = 'SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?';
+		const sqlParams = [parentId];
+
+		if (!options || !options.includeTrash) {
+			sqlQuery += ' AND id NOT IN (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)';
+			sqlParams.push(TRASH_TAG_ID);
+		}
+
 		return this.db()
-			.selectAll('SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId])
+			.selectAll(sqlQuery, sqlParams)
 			.then(rows => {
 				const output = [];
 				for (let i = 0; i < rows.length; i++) {
@@ -44,13 +54,34 @@ class Folder extends BaseItem {
 			});
 	}
 
-	static async subFolderIds(parentId) {
+	static async subFolderIds(parentId, options = null) {
+		if (!options || !options.includeTrash) { throw new Error('Unimplemented option'); }
+
 		const rows = await this.db().selectAll('SELECT id FROM folders WHERE parent_id = ?', [parentId]);
 		return rows.map(r => r.id);
 	}
 
-	static async noteCount(parentId) {
-		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
+	static async allSubFolderIds(parentId, options = null) {
+		if (!options || !options.includeTrash) { throw new Error('Unimplemented option'); }
+
+		const ids = await Folder.subFolderIds(parentId, options);
+		let subIds = [];
+		for (let i = 0; i < ids.length; i++) {
+			subIds = subIds.concat(await Folder.allSubFolderIds(ids[i], options));
+		}
+		return ids.concat(subIds);
+	}
+
+	static async noteCount(parentId, options = null) {
+		let sqlQuery = 'SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?';
+		const sqlParams = [parentId];
+
+		if (!options || !options.includeTrash) {
+			sqlQuery += ' AND id NOT IN (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)';
+			sqlParams.push(TRASH_TAG_ID);
+		}
+
+		const r = await this.db().selectOne(sqlQuery, sqlParams);
 		return r ? r.total : 0;
 	}
 
@@ -59,43 +90,103 @@ class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
+	static async hasTrash(folderId) {
+		let folderIds = [folderId];
+
+		folderIds = folderIds.concat(
+			await Folder.allSubFolderIds(folderId, { includeTrash: true }));
+
+		for (let i = 0; i < folderIds.length; i++) {
+			const noteIds = await Folder.noteIds(folderIds[i], { includeTrash: true });
+			for (let j = 0; j < noteIds.length; j++) {
+				const isTrash = await NoteTag.exists(noteIds[j], TRASH_TAG_ID);
+				if (isTrash) return true;
+			}
+		}
+		return false;
+	}
+
+	// Returns top most parent id, which should be empty string if top of tree.
+	static async restoreTree(folderId) {
+		if (!folderId) return true;
+
+		// Find the parent folders that are in trash
+		const folderIds = []; // folders to restore
+		while (folderId && folderId !== '') {
+			const inTrash = await this.getClass('Tag').hasFolder(TRASH_TAG_ID, folderId);
+			if (inTrash) folderIds.push(folderId);
+			const folder = await Folder.load(folderId);
+			if (!folder) break;
+			folderId = folder.parent_id;
+		}
+
+		// Restore the folders
+		if (folderIds.length > 0 && folderId === '') {
+			for (let i = folderIds.length - 1; i >= 0; i--) {
+				await this.getClass('Tag').removeFolder(TRASH_TAG_ID, folderIds[i]);
+			}
+		}
+		return folderId;
+	}
+
+	// This method works on all folders, including those in trash
 	static async delete(folderId, options = null) {
 		if (!options) options = {};
+		if (!('permanent' in options)) options.permanent = true;
 		if (!('deleteChildren' in options)) options.deleteChildren = true;
 
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
 
 		if (options.deleteChildren) {
-			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds);
+			const noteIds = await Folder.noteIds(folderId, { includeTrash: false });
+			await Note.batchDelete(noteIds, { permanent: options.permanent });
 
-			const subFolderIds = await Folder.subFolderIds(folderId);
+			const subFolderIds = await Folder.subFolderIds(folderId, { includeTrash: true });
 			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i]);
+				await Folder.delete(subFolderIds[i], options);
 			}
 		}
 
-		await super.delete(folderId, options);
+		// Note ghosts of trashed notes may remaining in the table so some folders
+		// may be kept in trash unnecessarily.
+		if (await Folder.hasTrash(folderId)) {
+			await this.getClass('Tag').addFolder(TRASH_TAG_ID, folderId);
+		} else {
+			// For now we always delete the folder if it has no children in
+			// trash as there is no way to restore it from trash otherwise
+			await super.delete(folderId, options);
 
-		this.dispatch({
-			type: 'FOLDER_DELETE',
-			id: folderId,
-		});
+			this.dispatch({
+				type: 'FOLDER_DELETE',
+				id: folderId,
+			});
+		}
+	}
+
+	static orphansFolderTitle() {
+		return _('Orphans');
+	}
+
+	static orphansFolder() {
+		return {
+			type_: this.TYPE_FOLDER,
+			id: ORPHANS_FOLDER_ID,
+			parent_id: '',
+			title: this.orphansFolderTitle(),
+			updated_time: time.unixMs(),
+			user_updated_time: time.unixMs(),
+		};
 	}
 
 	static conflictFolderTitle() {
 		return _('Conflicts');
 	}
 
-	static conflictFolderId() {
-		return 'c04f1c7c04f1c7c04f1c7c04f1c7c04f';
-	}
-
 	static conflictFolder() {
 		return {
 			type_: this.TYPE_FOLDER,
-			id: this.conflictFolderId(),
+			id: CONFLICT_FOLDER_ID,
 			parent_id: '',
 			title: this.conflictFolderTitle(),
 			updated_time: time.unixMs(),
@@ -104,7 +195,8 @@ class Folder extends BaseItem {
 	}
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
-	// Note: this only calculates the overall number of nodes for this folder and all its descendants
+	// Note: this only calculates the overall number of notes for this folder and all its descendants
+	// Excludes child notes in trash
 	static async addNoteCounts(folders, includeCompletedTodos = true) {
 		const foldersById = {};
 		folders.forEach((f) => {
@@ -112,13 +204,16 @@ class Folder extends BaseItem {
 			f.note_count = 0;
 		});
 
-		const where = !includeCompletedTodos ? 'WHERE (notes.is_todo = 0 OR notes.todo_completed = 0)' : '';
+		const where = !includeCompletedTodos ?
+			'WHERE ((notes.is_todo = 0 OR notes.todo_completed = 0) AND notes.id NOT IN (SELECT note_id AS id FROM note_tags WHERE tag_id = ?))' :
+			'WHERE (notes.id NOT IN (SELECT note_id AS id FROM note_tags WHERE tag_id = ?))';
+		const sqlParams = [TRASH_TAG_ID];
 
 		const sql = `SELECT folders.id as folder_id, count(notes.parent_id) as note_count 
 			FROM folders LEFT JOIN notes ON notes.parent_id = folders.id
 			${where} GROUP BY folders.id`;
 
-		const noteCounts = await this.db().selectAll(sql);
+		const noteCounts = await this.db().selectAll(sql, sqlParams);
 		noteCounts.forEach((noteCount) => {
 			let parentId = noteCount.folder_id;
 			do {
@@ -191,10 +286,21 @@ class Folder extends BaseItem {
 	}
 
 	static async all(options = null) {
+		if (!options) options = { };
+
+		if (!options.includeTrash) {
+			if (!!options.where || !!options.whereParams) throw new Error('Unimplemented options');
+			options.where = ' id NOT IN (SELECT folder_id AS id FROM folder_tags WHERE tag_id = ?)';
+			options.whereParams = [TRASH_TAG_ID];
+		}
 		const output = await super.all(options);
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
 			if (conflictCount) output.push(this.conflictFolder());
+
+			// if we can show conflicts, then we can show orphans
+			const orphansCount = await Note.orphansCount({ includeTrash: false });
+			if (orphansCount) output.push(this.orphansFolder());
 		}
 		return output;
 	}
@@ -351,7 +457,8 @@ class Folder extends BaseItem {
 	}
 
 	static load(id) {
-		if (id == this.conflictFolderId()) return this.conflictFolder();
+		if (id === ORPHANS_FOLDER_ID) return this.orphansFolder();
+		if (id === CONFLICT_FOLDER_ID) return this.conflictFolder();
 		return super.load(id);
 	}
 
@@ -362,8 +469,8 @@ class Folder extends BaseItem {
 	static async canNestUnder(folderId, targetFolderId) {
 		if (folderId === targetFolderId) return false;
 
-		const conflictFolderId = Folder.conflictFolderId();
-		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;
+		if (folderId === ORPHANS_FOLDER_ID || targetFolderId === ORPHANS_FOLDER_ID) return false;
+		if (folderId === CONFLICT_FOLDER_ID || targetFolderId === CONFLICT_FOLDER_ID) return false;
 
 		if (!targetFolderId) return true;
 

@@ -241,7 +241,7 @@ class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
+			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id, { includeTrash: false })));
 		}
 
 		sections.push(section);

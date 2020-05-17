@@ -375,7 +375,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const folderId = note.parent_id;
 
-		await Note.delete(note.id);
+		await Note.delete(note.id, { permanet: true });
 
 		this.props.dispatch({
 			type: 'NAV_GO',

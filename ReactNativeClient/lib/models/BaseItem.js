@@ -8,6 +8,7 @@ const { sprintf } = require('sprintf-js');
 const { _ } = require('lib/locale.js');
 const moment = require('moment');
 const markdownUtils = require('lib/markdownUtils');
+const { TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class BaseItem extends BaseModel {
 	static useUuid() {
@@ -535,6 +536,7 @@ class BaseItem extends BaseModel {
 
 			let extraWhere = [];
 			if (className == 'Note') extraWhere.push('is_conflict = 0');
+			if (className == 'Tag') extraWhere.push(`items.id <> "${TRASH_TAG_ID}"`);
 			if (className == 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
 
@@ -800,7 +802,7 @@ BaseItem.revisionService_ = null;
 // - itemsThatNeedSync()
 // - syncedItems()
 
-BaseItem.syncItemDefinitions_ = [{ type: BaseModel.TYPE_NOTE, className: 'Note' }, { type: BaseModel.TYPE_FOLDER, className: 'Folder' }, { type: BaseModel.TYPE_RESOURCE, className: 'Resource' }, { type: BaseModel.TYPE_TAG, className: 'Tag' }, { type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' }, { type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' }, { type: BaseModel.TYPE_REVISION, className: 'Revision' }];
+BaseItem.syncItemDefinitions_ = [{ type: BaseModel.TYPE_NOTE, className: 'Note' }, { type: BaseModel.TYPE_FOLDER, className: 'Folder' }, { type: BaseModel.TYPE_RESOURCE, className: 'Resource' }, { type: BaseModel.TYPE_TAG, className: 'Tag' }, { type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' }, { type: BaseModel.TYPE_FOLDER_TAG, className: 'FolderTag' }, { type: BaseModel.TYPE_MASTER_KEY, className: 'MasterKey' }, { type: BaseModel.TYPE_REVISION, className: 'Revision' }];
 
 BaseItem.SYNC_ITEM_LOCATION_LOCAL = 1;
 BaseItem.SYNC_ITEM_LOCATION_REMOTE = 2;

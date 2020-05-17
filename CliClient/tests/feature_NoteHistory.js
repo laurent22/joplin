@@ -1,11 +1,11 @@
 require('app-module-path').addPath(__dirname);
-const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('test-utils.js');
+const { asyncTest, id, ids, createNTestFolders, sortedIds, createNTestNotes } = require('test-utils.js');
+const { TestApp } = require('test-feature-utils.js');
 const BaseModel = require('lib/BaseModel.js');
 const { uuid } = require('lib/uuid.js');
 const Note = require('lib/models/Note.js');
-const Folder = require('lib/models/Folder.js');
 
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
+const { ALL_NOTES_FILTER_ID, CONFLICT_FOLDER_ID } = require('lib/reserved-ids.js');
 
 let testApp = null;
 
@@ -23,7 +23,7 @@ const goToNote = (testApp, note) => {
 	testApp.dispatch({ type: 'NOTE_SELECT', id: note.id });
 };
 
-describe('integration_ForwardBackwardNoteHistory', function() {
+describe('feature_NavigationHistory', function() {
 	beforeEach(async (done) => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
@@ -40,8 +40,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		// setup
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
-		// let notes1 = await createNTestNotes(5, folders[1]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -91,8 +90,8 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should save history when navigating through notebooks', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
-		const notes1 = await createNTestNotes(5, folders[1]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
+		const notes1 = await createNTestNotes(5, folders[1].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -131,8 +130,8 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should save history when searching for a note', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
-		const notes1 = await createNTestNotes(5, folders[1]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
+		const notes1 = await createNTestNotes(5, folders[1].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -173,7 +172,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should ensure no adjacent duplicates', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -243,7 +242,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should ensure history is not corrupted when notes get deleted.', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -273,7 +272,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should ensure history is not corrupted when notes get created.', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -334,8 +333,8 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should ensure history works when traversing all notes', asyncTest(async () => {
 		const folders = await createNTestFolders(2);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
-		const notes1 = await createNTestNotes(5, folders[1]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
+		const notes1 = await createNTestNotes(5, folders[1].id);
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[0]) });
@@ -392,7 +391,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 	it('should ensure history works when traversing through conflict notes', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
 		await testApp.wait();
-		const notes0 = await createNTestNotes(5, folders[0]);
+		const notes0 = await createNTestNotes(5, folders[0].id);
 		await testApp.wait();
 
 		// create two conflict notes with parent_id folder 1
@@ -402,7 +401,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		await testApp.wait();
 
 		// Testing history between conflict notes
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: Folder.conflictFolderId() });
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: CONFLICT_FOLDER_ID });
 		await testApp.wait();
 
 		goToNote(testApp, note1);
@@ -412,21 +411,21 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		await testApp.wait();
 
 		let state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note2.id);
 
 		goBackWard(state);
 		await testApp.wait();
 
 		state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note1.id);
 
 		goForward(state);
 		await testApp.wait();
 
 		state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note2.id);
 
 		// Testing history between conflict and non conflict notes.
@@ -441,7 +440,7 @@ describe('integration_ForwardBackwardNoteHistory', function() {
 		await testApp.wait();
 
 		state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note2.id);
 
 		goForward(state);

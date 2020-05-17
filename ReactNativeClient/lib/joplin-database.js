@@ -3,6 +3,7 @@ const { Database } = require('lib/database.js');
 const { sprintf } = require('sprintf-js');
 const Resource = require('lib/models/Resource');
 const { shim } = require('lib/shim.js');
+const { TRASH_TAG_ID } = require('lib/reserved-ids');
 
 const structureSql = `
 CREATE TABLE folders (
@@ -172,6 +173,7 @@ class JoplinDatabase extends Database {
 			'resources',
 			'tags',
 			'note_tags',
+			'folder_tags',
 			// 'master_keys',
 			'item_changes',
 			'note_resources',
@@ -314,7 +316,7 @@ class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -684,6 +686,39 @@ class JoplinDatabase extends Database {
 
 			if (targetVersion == 29) {
 				queries.push('ALTER TABLE version ADD COLUMN table_fields_version INT NOT NULL DEFAULT 0');
+
+			}
+
+			if (targetVersion == 30) {
+				const newTableSql = `
+					CREATE TABLE folder_tags (
+						id TEXT PRIMARY KEY,
+						folder_id TEXT NOT NULL,
+						tag_id TEXT NOT NULL,
+						created_time INT NOT NULL,
+						updated_time INT NOT NULL,
+						user_created_time INT NOT NULL DEFAULT 0,
+						user_updated_time INT NOT NULL DEFAULT 0,
+						encryption_cipher_text TEXT NOT NULL DEFAULT "",
+						encryption_applied INT NOT NULL DEFAULT 0,
+						is_shared INT NOT NULL DEFAULT 0
+					);
+				`;
+				queries.push(this.sqlStringToLines(newTableSql)[0]);
+
+				queries.push('CREATE INDEX folder_tags_note_id ON folder_tags (folder_id)');
+				queries.push('CREATE INDEX folder_tags_tag_id ON folder_tags (tag_id)');
+				queries.push('CREATE INDEX folder_tags_updated_time ON folder_tags (updated_time)');
+				queries.push('CREATE INDEX folder_tags_user_updated_time ON folder_tags (user_updated_time)');
+				queries.push('CREATE INDEX folder_tags_encryption_applied ON folder_tags (encryption_applied)');
+
+				queries.push(`CREATE VIEW tags_with_note_count_exclude_trash AS 
+						SELECT tags.id as id, tags.title as title, tags.created_time as created_time, tags.updated_time as updated_time, COUNT(notes.id) as note_count 
+						FROM tags 
+							LEFT JOIN note_tags nt on nt.tag_id = tags.id 
+							LEFT JOIN notes on notes.id = nt.note_id 
+						WHERE notes.id IS NOT NULL AND notes.id NOT IN (SELECT note_id AS id from note_tags WHERE tag_id = "${TRASH_TAG_ID}")
+						GROUP BY tags.id`);
 			}
 
 			queries.push({ sql: 'UPDATE version SET version = ?', params: [targetVersion] });
@@ -705,6 +740,7 @@ class JoplinDatabase extends Database {
 
 		return latestVersion;
 	}
+
 
 	async ftsEnabled() {
 		try {

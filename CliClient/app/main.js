@@ -20,6 +20,7 @@ const BaseItem = require('lib/models/BaseItem.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const MasterKey = require('lib/models/MasterKey');
 const Setting = require('lib/models/Setting.js');
 const Revision = require('lib/models/Revision.js');
@@ -43,6 +44,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
+BaseItem.loadClass('FolderTag', FolderTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 

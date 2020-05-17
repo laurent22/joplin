@@ -3,7 +3,6 @@
 const fs = require('fs-extra');
 const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
-const { BaseApplication } = require('lib/BaseApplication.js');
 const BaseModel = require('lib/BaseModel.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -11,6 +10,7 @@ const ItemChange = require('lib/models/ItemChange.js');
 const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const Revision = require('lib/models/Revision.js');
 const { Logger } = require('lib/logger.js');
 const Setting = require('lib/models/Setting.js');
@@ -103,6 +103,7 @@ BaseItem.loadClass('Folder', Folder);
 BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
+BaseItem.loadClass('FolderTag', FolderTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
@@ -164,6 +165,7 @@ async function clearDatabase(id = null) {
 		'resources',
 		'tags',
 		'note_tags',
+		'folder_tags',
 		'master_keys',
 		'item_changes',
 		'note_resources',
@@ -441,21 +443,34 @@ function at(a, indexes) {
 	return out;
 }
 
-async function createNTestFolders(n) {
+async function createNTestFolders(n, title = 'folder') {
 	const folders = [];
 	for (let i = 0; i < n; i++) {
-		const folder = await Folder.save({ title: 'folder' });
+		await time.msleep(5);
+		const title_ = n > 1 ? `${title}${i}` : title;
+		const folder = await Folder.save({ title: title_ });
 		folders.push(folder);
 		await time.msleep(10);
 	}
 	return folders;
 }
 
-async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
-	const notes = [];
+async function createNTestTags(n, title = 'tag') {
+	const tags = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
-		const note = await Note.save({ title: title_, parent_id: folder.id, is_conflict: 0 });
+		const tag = await Tag.save({ title: title_ });
+		tags.push(tag);
+		await time.msleep(10);
+	}
+	return tags;
+}
+
+async function createNTestNotes_(n, options, tagIds = null, title = 'item') {
+	const notes = [];
+	for (let i = 0; i < n; i++) {
+		options['title'] = n > 1 ? `${title}${i}` : title;
+		const note = await Note.save(options);
 		notes.push(note);
 		await time.msleep(10);
 	}
@@ -468,82 +483,15 @@ async function createNTestNotes(n, folder, tagIds = null, title = 'note') {
 	return notes;
 }
 
-async function createNTestTags(n) {
-	const tags = [];
-	for (let i = 0; i < n; i++) {
-		const tag = await Tag.save({ title: 'tag' });
-		tags.push(tag);
-		await time.msleep(10);
-	}
-	return tags;
+async function createNTestNotes(n, folderId, tagIds = null, title = 'note', is_conflict = 0) {
+	const options = { parent_id: folderId, is_conflict: is_conflict };
+	return createNTestNotes_(n, options, tagIds, title);
 }
 
-// Application for feature integration testing
-class TestApp extends BaseApplication {
-	constructor(hasGui = true) {
-		super();
-		this.hasGui_ = hasGui;
-		this.middlewareCalls_ = [];
-		this.logger_ = super.logger();
-	}
-
-	hasGui() {
-		return this.hasGui_;
-	}
-
-	async start(argv) {
-		this.logger_.info('Test app starting...');
-
-		if (!argv.includes('--profile')) {
-			argv = argv.concat(['--profile', `tests-build/profile/${uuid.create()}`]);
-		}
-		argv = await super.start(['',''].concat(argv));
-
-		// For now, disable sync and encryption to avoid spurious intermittent failures
-		// caused by them interupting processing and causing delays.
-		Setting.setValue('sync.interval', 0);
-		Setting.setValue('encryption.enabled', false);
-
-		this.initRedux();
-		Setting.dispatchUpdateAll();
-		await ItemChange.waitForAllSaved();
-		await this.wait();
-
-		this.logger_.info('Test app started...');
-	}
-
-	async generalMiddleware(store, next, action) {
-		this.middlewareCalls_.push(true);
-		try {
-			await super.generalMiddleware(store, next, action);
-		} finally {
-			this.middlewareCalls_.pop();
-		}
-	}
-
-	async wait() {
-		return new Promise((resolve) => {
-			const iid = setInterval(() => {
-				if (!this.middlewareCalls_.length) {
-					clearInterval(iid);
-					resolve();
-				}
-			}, 100);
-		});
-	}
-
-	async profileDir() {
-		return await Setting.value('profileDir');
-	}
-
-	async destroy() {
-		this.logger_.info('Test app stopping...');
-		await this.wait();
-		await ItemChange.waitForAllSaved();
-		this.deinitRedux();
-		await super.destroy();
-		await time.msleep(100);
-	}
+async function createNTestTodos(n, folderId, completed = false, tagIds = null, title = 'todo') {
+	const options = { parent_id: folderId, is_conflict: 0, is_todo: 1 };
+	options['todo_completed'] = completed ? 1 : 0 ;
+	return createNTestNotes_(n, options, tagIds, title);
 }
 
-module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };
+module.exports = { kvStore, resourceService, allSyncTargetItemsEncrypted, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, currentClientId, syncTargetId, objectsEqual, checkThrowAsync, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, asyncTest, id, ids, sortedIds, at, createNTestFolders, createNTestTags, createNTestNotes, createNTestTodos };

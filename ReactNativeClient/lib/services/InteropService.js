@@ -3,6 +3,7 @@ const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const Note = require('lib/models/Note.js');
 const ArrayUtils = require('lib/ArrayUtils');
 const { sprintf } = require('sprintf-js');
@@ -277,6 +278,7 @@ class InteropService {
 			});
 		};
 
+		const exportedFolderIds = [];
 		const exportedNoteIds = [];
 		let resourceIds = [];
 		const folderIds = await Folder.allIds();
@@ -293,9 +295,12 @@ class InteropService {
 			const folderId = folderIds[folderIndex];
 			if (sourceFolderIds.length && sourceFolderIds.indexOf(folderId) < 0) continue;
 
-			if (!sourceNoteIds.length) await queueExportItem(BaseModel.TYPE_FOLDER, folderId);
+			if (!sourceNoteIds.length) {
+				await queueExportItem(BaseModel.TYPE_FOLDER, folderId);
+				exportedFolderIds.push(folderId);
+			}
 
-			const noteIds = await Folder.noteIds(folderId);
+			const noteIds = await Folder.noteIds(folderId, { includeTrash: true });
 
 			for (let noteIndex = 0; noteIndex < noteIds.length; noteIndex++) {
 				const noteId = noteIds[noteIndex];
@@ -315,16 +320,24 @@ class InteropService {
 			await queueExportItem(BaseModel.TYPE_RESOURCE, resourceIds[i]);
 		}
 
-		const noteTags = await NoteTag.all();
+		const queueExportItems_ = async function(itemTagClass, item_id, exportedItemIds, baseModelType) {
+			const exportedTagIds = [];
+			const itemTags = await itemTagClass.all();
+			for (let i = 0; i < itemTags.length; i++) {
+				const itemTag = itemTags[i];
+				if (exportedItemIds.indexOf(itemTag[item_id]) < 0) continue;
+				await queueExportItem(baseModelType, itemTag.id);
+				exportedTagIds.push(itemTag.tag_id);
+			}
+			return exportedTagIds;
+		};
 
-		const exportedTagIds = [];
+		let exportedTagIds = [];
+		exportedTagIds = exportedTagIds.concat(
+			await queueExportItems_(NoteTag, 'note_id', exportedNoteIds, BaseModel.TYPE_NOTE_TAG));
 
-		for (let i = 0; i < noteTags.length; i++) {
-			const noteTag = noteTags[i];
-			if (exportedNoteIds.indexOf(noteTag.note_id) < 0) continue;
-			await queueExportItem(BaseModel.TYPE_NOTE_TAG, noteTag.id);
-			exportedTagIds.push(noteTag.tag_id);
-		}
+		exportedTagIds = exportedTagIds.concat(
+			await queueExportItems_(FolderTag, 'folder_id', exportedFolderIds, BaseModel.TYPE_FOLDER_TAG));
 
 		for (let i = 0; i < exportedTagIds.length; i++) {
 			await queueExportItem(BaseModel.TYPE_TAG, exportedTagIds[i]);
@@ -333,7 +346,7 @@ class InteropService {
 		const exporter = this.newModuleFromPath_('exporter', options);// this.newModuleByFormat_('exporter', exportFormat);
 		await exporter.init(exportPath, options);
 
-		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
+		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG, BaseModel.TYPE_FOLDER_TAG];
 		const context = {
 			resourcePaths: {},
 		};

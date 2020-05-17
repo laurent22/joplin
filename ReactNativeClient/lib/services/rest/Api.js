@@ -24,6 +24,7 @@ const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('lib/joplin-renderer');
 const { uuid } = require('lib/uuid');
+const { TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class ApiError extends Error {
 	constructor(message, httpCode = 400) {
@@ -202,6 +203,7 @@ class Api {
 				const options = {};
 				const fields = this.fields_(request, []);
 				if (fields.length) options.fields = fields;
+				options.includeTrash = false;
 				return await ModelClass.all(options);
 			}
 		}
@@ -265,6 +267,8 @@ class Api {
 	}
 
 	async action_folders(request, id = null, link = null) {
+		if (id && await Tag.hasFolder(TRASH_TAG_ID, id)) throw new ErrorNotFound();
+
 		if (request.method === 'GET' && !id) {
 			const folders = await FoldersScreenUtils.allForDisplay({ fields: this.fields_(request, ['id', 'parent_id', 'title']) });
 			const output = await Folder.allAsTree(folders);
@@ -284,6 +288,8 @@ class Api {
 	}
 
 	async action_tags(request, id = null, link = null) {
+		if (id === TRASH_TAG_ID) throw new ErrorForbidden('Trash support is unavailable');
+
 		if (link === 'notes') {
 			const tag = await Tag.load(id);
 			if (!tag) throw new ErrorNotFound();
@@ -378,6 +384,8 @@ class Api {
 	}
 
 	async action_notes(request, id = null, link = null) {
+		if (id && await Tag.hasNote(TRASH_TAG_ID, id)) throw new ErrorNotFound();
+
 		this.checkToken_(request);
 
 		if (request.method === 'GET') {

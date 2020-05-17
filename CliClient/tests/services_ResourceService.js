@@ -18,6 +18,8 @@ const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
 const SearchEngine = require('lib/services/SearchEngine');
+const { TRASH_TAG_ID, TRASH_TAG_NAME } = require('lib/reserved-ids');
+
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -98,6 +100,44 @@ describe('services_ResourceService', function() {
 		await service.deleteOrphanResources(0);
 
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
+	}));
+
+	it('should not delete resource if associated with a note in trash', asyncTest(async () => {
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+		const service = new ResourceService();
+
+		const folder = await Folder.save({ title: 'folder1' });
+		let note = await Note.save({ title: 'ma note', parent_id: folder.id });
+		note = await shim.attachFileToNote(note, `${__dirname}/../tests/support/photo.jpg`);
+		const resource = (await Resource.all())[0];
+		const resourcePath = Resource.fullPath(resource);
+		await service.indexNoteResources();
+		await service.deleteOrphanResources(0);
+
+		// check setup is as expected
+		expect(!!(await Resource.load(resource.id))).toBe(true);
+		expect(await shim.fsDriver().exists(resourcePath)).toBe(true);
+		expect((await NoteResource.all()).length).toEqual(1);
+
+		// move note to trash
+		await Note.batchDelete([note.id], { permanent: false });
+		await service.indexNoteResources();
+		await service.deleteOrphanResources(0);
+
+		// check the resource is not deleted
+		expect(!!(await Resource.load(resource.id))).toBe(true);
+		expect(await shim.fsDriver().exists(resourcePath)).toBe(true);
+		expect((await NoteResource.all()).length).toEqual(1);
+
+		// delete the note
+		await Note.delete(note.id);
+		await service.indexNoteResources();
+		await service.deleteOrphanResources(0);
+
+		// check the resource is deleted
+		expect(!!(await Resource.load(resource.id))).toBe(false);
+		expect(await shim.fsDriver().exists(resourcePath)).toBe(false);
+		expect((await NoteResource.all()).length).toEqual(0);
 	}));
 
 	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', asyncTest(async () => {

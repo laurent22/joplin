@@ -9,11 +9,13 @@ const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const Resource = require('lib/models/Resource.js');
 const fs = require('fs-extra');
 const ArrayUtils = require('lib/ArrayUtils');
 const ObjectUtils = require('lib/ObjectUtils');
 const { shim } = require('lib/shim.js');
+const { TRASH_TAG_NAME, TRASH_TAG_ID } = require('lib/reserved-ids');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -59,7 +61,7 @@ describe('services_InteropService', function() {
 		// Check that a new folder, with a new ID, has been created
 
 		expect(await Folder.count()).toBe(1);
-		const folder2 = (await Folder.all())[0];
+		const folder2 = (await Folder.all({ includeTrash: true }))[0];
 		expect(folder2.id).not.toBe(folder1.id);
 		expect(folder2.title).toBe(folder1.title);
 
@@ -68,7 +70,7 @@ describe('services_InteropService', function() {
 		// As there was already a folder with the same title, check that the new one has been renamed
 
 		await Folder.delete(folder2.id);
-		const folder3 = (await Folder.all())[0];
+		const folder3 = (await Folder.all({ includeTrash: true }))[0];
 		expect(await Folder.count()).toBe(1);
 		expect(folder3.title).not.toBe(folder2.title);
 
@@ -94,8 +96,8 @@ describe('services_InteropService', function() {
 		await service.import({ path: filePath });
 
 		expect(await Note.count()).toBe(1);
-		let note2 = (await Note.all())[0];
-		const folder2 = (await Folder.all())[0];
+		let note2 = (await Note.all({ includeTrash: true }))[0];
+		const folder2 = (await Folder.all({ includeTrash: true }))[0];
 
 		expect(note1.parent_id).not.toBe(note2.parent_id);
 		expect(note1.id).not.toBe(note2.id);
@@ -109,8 +111,8 @@ describe('services_InteropService', function() {
 
 		await service.import({ path: filePath });
 
-		note2 = (await Note.all())[0];
-		const note3 = (await Note.all())[1];
+		note2 = (await Note.all({ includeTrash: true }))[0];
+		const note3 = (await Note.all({ includeTrash: true }))[1];
 
 		expect(note2.id).not.toBe(note3.id);
 		expect(note2.parent_id).not.toBe(note3.parent_id);
@@ -156,7 +158,7 @@ describe('services_InteropService', function() {
 
 		expect(await Tag.count()).toBe(1);
 		const tag2 = (await Tag.all())[0];
-		const note2 = (await Note.all())[0];
+		const note2 = (await Note.all({ includeTrash: true }))[0];
 		expect(tag1.id).not.toBe(tag2.id);
 
 		let fieldNames = Note.fieldNames();
@@ -177,6 +179,162 @@ describe('services_InteropService', function() {
 		expect(noteIds.length).toBe(2);
 	}));
 
+	it('should export and import folder tags', asyncTest(async () => {
+		const service = new InteropService();
+		const filePath = `${exportDir()}/test.jex`;
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const folder3 = await Folder.save({ title: 'folder3' });
+		const note1 = await Note.save({ title: 'ma note1', parent_id: folder2.id });
+		const note2 = await Note.save({ title: 'ma note2', parent_id: folder2.id });
+		const tag1 = await Tag.save({ title: 'mon tag1' });
+		const tag2 = await Tag.save({ title: 'mon tag2' });
+		const tag3 = await Tag.save({ title: 'mon tag3' });
+		await Tag.addNote(tag1.id, note1.id);
+		await Tag.addNote(tag2.id, note2.id);
+		await Tag.addFolder(tag2.id, folder2.id);
+		await Tag.addFolder(tag3.id, folder3.id);
+
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder2.id);
+		await Folder.delete(folder3.id);
+		await Note.delete(note1.id);
+		await Note.delete(note2.id);
+		await Tag.delete(tag1.id);
+		await Tag.delete(tag2.id);
+		await Tag.delete(tag3.id);
+
+		await service.import({ path: filePath });
+
+		// check
+		expect(await Tag.count()).toBe(3);
+
+		const newFolder2 = await Folder.loadByField('title', 'folder2');
+		expect(!!newFolder2).toBe(true);
+		const newFolder3 = await Folder.loadByField('title', 'folder3');
+		expect(!!newFolder3).toBe(true);
+		const newNote1 = await Note.loadByField('title', 'ma note1');
+		expect(!!newNote1).toBe(true);
+		const newNote2 = await Note.loadByField('title', 'ma note2');
+		expect(!!newNote2).toBe(true);
+		const newTag1 = await Tag.loadByField('title', 'mon tag1');
+		expect(!!newTag1).toBe(true);
+		const newTag2 = await Tag.loadByField('title', 'mon tag2');
+		expect(!!newTag2).toBe(true);
+		const newTag3 = await Tag.loadByField('title', 'mon tag3');
+		expect(!!newTag2).toBe(true);
+
+		let noteTagExists = await NoteTag.exists(newNote1.id, newTag1.id);
+		expect(noteTagExists).toBe(true);
+		noteTagExists = await NoteTag.exists(newNote1.id, newTag2.id);
+		expect(noteTagExists).toBe(false);
+		noteTagExists = await NoteTag.exists(newNote1.id, newTag3.id);
+		expect(noteTagExists).toBe(false);
+
+		noteTagExists = await NoteTag.exists(newNote2.id, newTag1.id);
+		expect(noteTagExists).toBe(false);
+		noteTagExists = await NoteTag.exists(newNote2.id, newTag2.id);
+		expect(noteTagExists).toBe(true);
+		noteTagExists = await NoteTag.exists(newNote2.id, newTag3.id);
+		expect(noteTagExists).toBe(false);
+
+		let folderTagExists = await FolderTag.exists(newFolder2.id, newTag1.id);
+		expect(folderTagExists).toBe(false);
+		folderTagExists = await FolderTag.exists(newFolder2.id, newTag2.id);
+		expect(folderTagExists).toBe(true);
+		folderTagExists = await FolderTag.exists(newFolder2.id, newTag3.id);
+		expect(folderTagExists).toBe(false);
+
+		folderTagExists = await FolderTag.exists(newFolder3.id, newTag1.id);
+		expect(folderTagExists).toBe(false);
+		folderTagExists = await FolderTag.exists(newFolder3.id, newTag2.id);
+		expect(folderTagExists).toBe(false);
+		folderTagExists = await FolderTag.exists(newFolder3.id, newTag3.id);
+		expect(folderTagExists).toBe(true);
+	}));
+
+	it('should not export and import the trash tag itself', asyncTest(async () => {
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const service = new InteropService();
+		const filePath = `${exportDir()}/test.jex`;
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'ma note1', parent_id: folder1.id });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+		await Tag.addFolder(TRASH_TAG_ID, folder2.id);
+
+		await service.export({ path: filePath });
+
+		// setup
+		await Note.delete(note1.id);
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+		await Tag.delete(TRASH_TAG_ID, { forceDeleteTrashTag: true });
+
+		const tag = await Tag.load(TRASH_TAG_ID);
+		expect(!!tag).toBe(false);
+		const newFolder = await Folder.loadByField('title', 'folder1');
+		expect(!!newFolder).toBe(false);
+
+		// setup
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		// TEST ACTION import
+		await service.import({ path: filePath });
+
+		// check
+		expect(await Tag.count()).toBe(1);
+		const newFolder1 = await Folder.loadByField('title', 'folder1');
+		expect(!!newFolder1).toBe(true);
+		const newFolder2 = await Folder.loadByField('title', 'folder2');
+		expect(!!newFolder2).toBe(true);
+		const newNote1 = await Note.loadByField('title', 'ma note1');
+		expect(!!newNote1).toBe(true);
+		let newTrashTag = await Tag.loadByTitle(TRASH_TAG_NAME);
+		expect(!!newTrashTag).toBe(true);
+		newTrashTag = await Tag.load(TRASH_TAG_ID);
+		expect(!!newTrashTag).toBe(true);
+
+		const noteTagExists = await NoteTag.exists(newNote1.id, TRASH_TAG_ID);
+		expect(noteTagExists).toBe(true);
+		let folderTagExists = await FolderTag.exists(newFolder1.id, TRASH_TAG_ID);
+		expect(folderTagExists).toBe(false);
+		folderTagExists = await FolderTag.exists(newFolder2.id, TRASH_TAG_ID);
+		expect(folderTagExists).toBe(true);
+	}));
+
+	it('should not import if the system trash tag is missing', asyncTest(async () => {
+		// setup
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const service = new InteropService();
+		const filePath = `${exportDir()}/test.jex`;
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'ma note1', parent_id: folder1.id });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+		await Tag.addFolder(TRASH_TAG_ID, folder2.id);
+
+		await service.export({ path: filePath });
+
+		await Folder.delete(folder1.id);
+		await Folder.delete(folder2.id);
+		await Note.delete(note1.id);
+		await Tag.delete(TRASH_TAG_ID, { forceDeleteTrashTag: true });
+
+		const tag = await Tag.load(TRASH_TAG_ID);
+		expect(!!tag).toBe(false);
+
+		// TEST ACTION import without system trash tag
+		// This is never expected to happen but should fail gracefully.
+		const hasThrown = await checkThrowAsync(
+			async () => await service.import({ path: filePath }));
+		expect(hasThrown).toBe(true);
+	}));
+
+
 	it('should export and import resources', asyncTest(async () => {
 		const service = new InteropService();
 		const filePath = `${exportDir()}/test.jex`;
@@ -195,7 +353,7 @@ describe('services_InteropService', function() {
 
 		expect(await Resource.count()).toBe(2);
 
-		const note2 = (await Note.all())[0];
+		const note2 = (await Note.all({ includeTrash: true }))[0];
 		expect(note2.body).not.toBe(note1.body);
 		resourceIds = await Note.linkedResourceIds(note2.body);
 		expect(resourceIds.length).toBe(1);
@@ -229,7 +387,7 @@ describe('services_InteropService', function() {
 		expect(await Note.count()).toBe(1);
 		expect(await Folder.count()).toBe(1);
 
-		const folder2 = (await Folder.all())[0];
+		const folder2 = (await Folder.all({ includeTrash: true }))[0];
 		expect(folder2.title).toBe('test');
 	}));
 
@@ -249,7 +407,7 @@ describe('services_InteropService', function() {
 		expect(await Note.count()).toBe(1);
 		expect(await Folder.count()).toBe(1);
 
-		const folder2 = (await Folder.all())[0];
+		const folder2 = (await Folder.all({ includeTrash: true }))[0];
 		expect(folder2.title).toBe('folder1');
 	}));
 
@@ -387,5 +545,4 @@ describe('services_InteropService', function() {
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));
-
 });

@@ -20,6 +20,7 @@ const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const Resource = require('lib/models/Resource.js');
 const Tag = require('lib/models/Tag.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const BaseItem = require('lib/models/BaseItem.js');
 const MasterKey = require('lib/models/MasterKey.js');
 const Revision = require('lib/models/Revision.js');
@@ -421,6 +422,7 @@ async function initialize(dispatch) {
 	BaseItem.loadClass('Resource', Resource);
 	BaseItem.loadClass('Tag', Tag);
 	BaseItem.loadClass('NoteTag', NoteTag);
+	BaseItem.loadClass('FolderTag', FolderTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 

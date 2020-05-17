@@ -7,6 +7,7 @@ const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const { pregQuote, scriptType } = require('lib/string-utils.js');
 const removeDiacritics = require('diacritics').remove;
 const { sprintf } = require('sprintf-js');
+const { TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class SearchEngine {
 	constructor() {
@@ -439,10 +440,12 @@ class SearchEngine {
 					notes.parent_id
 				FROM notes_fts
 				LEFT JOIN notes ON notes_fts.id = notes.id
-				WHERE notes_fts MATCH ?
+				WHERE 
+                    notes_fts MATCH ? AND 
+                    notes_fts.id NOT IN (SELECT note_id FROM note_tags WHERE tag_id = ?)
 			`;
 			try {
-				const rows = await this.db().selectAll(sql, [query]);
+				const rows = await this.db().selectAll(sql, [query, TRASH_TAG_ID]);
 				this.processResults_(rows, parsedQuery);
 				return rows;
 			} catch (error) {

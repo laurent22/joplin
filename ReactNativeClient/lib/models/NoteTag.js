@@ -10,11 +10,13 @@ class NoteTag extends BaseItem {
 		return BaseModel.TYPE_NOTE_TAG;
 	}
 
+	// This method works for all notes including those in trash
 	static async byNoteIds(noteIds) {
 		if (!noteIds.length) return [];
 		return this.modelSelectAll(`SELECT * FROM note_tags WHERE note_id IN ("${noteIds.join('","')}")`);
 	}
 
+	// This method works for all notes including those in trash
 	static async tagIdsByNoteId(noteId) {
 		const rows = await this.db().selectAll('SELECT tag_id FROM note_tags WHERE note_id = ?', [noteId]);
 		const output = [];
@@ -22,6 +24,12 @@ class NoteTag extends BaseItem {
 			output.push(rows[i].tag_id);
 		}
 		return output;
+	}
+
+	// This method works for all notes including those in trash
+	static async exists(noteId, tagId) {
+		const r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
+		return !!r;
 	}
 }
 

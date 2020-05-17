@@ -10,6 +10,7 @@ const Note = require('lib/models/Note');
 const Tag = require('lib/models/Tag');
 const NoteTag = require('lib/models/NoteTag');
 const { shim } = require('lib/shim');
+const { TRASH_TAG_NAME, TRASH_TAG_ID } = require('lib/reserved-ids');
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -67,7 +68,7 @@ describe('services_rest_Api', function() {
 
 		expect(!!response.id).toBe(true);
 
-		const f = await Folder.all();
+		const f = await Folder.all({ includeTrash: true });
 		expect(f.length).toBe(1);
 		expect(f[0].title).toBe('from api');
 	}));
@@ -406,5 +407,415 @@ describe('services_rest_Api', function() {
 		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
 		expect(response.tags === '').toBe(true);
 		expect(tagIds.length === 0).toBe(true);
+	}));
+
+	it('should not get a note in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const response = await api.route('GET', 'notes');
+		expect(response.length).toBe(0);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `notes/${note1.id}`));
+
+		expect(hasThrown).toBe(true);
+
+		const notes = await api.route('GET', `folders/${folder1.id}/notes`);
+		expect(notes).toEqual([]);
+	}));
+
+	it('should not get a note resources of a note in trash', asyncTest(async () => {
+		// TBD
+	}));
+
+	it('should not get note tags when note is in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const note1 = await Note.save({ title: 'note1' });
+		await Tag.addNote(tag1.id, note1.id);
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `notes/${note1.id}/tags`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not get trash tag notes', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `tags/${TRASH_TAG_ID}/notes`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not get tagged notes if the note is in the trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.addNote(tag1.id, note1.id);
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const response = await api.route('GET', `tags/${tag1.id}/notes`);
+		expect(response.length).toBe(0);
+	}));
+
+	it('should permanently delete a note', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		await api.route('DELETE', `notes/${note1.id}`);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(false);
+
+		const isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should not permanently delete a note in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('DELETE', `notes/${note1.id}`));
+
+		expect(hasThrown).toBe(true);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(true);
+
+		const isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(true);
+	}));
+
+	it('should not move a note to trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const note1 = await Note.save({ title: 'note1' });
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${TRASH_TAG_ID}/notes/`, null, JSON.stringify({
+				id: note1.id })));
+
+		expect(hasThrown).toBe(true);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(true);
+
+		const isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should not restore a note from trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const note1 = await Note.save({ title: 'note1' });
+		await Tag.addNote(TRASH_TAG_ID, note1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('DELETE', `tags/${TRASH_TAG_ID}/notes/${note1.id}`));
+
+		expect(hasThrown).toBe(true);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(true);
+
+		const isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(true);
+	}));
+
+	it('should not tag a folder', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${tag1.id}/folders`, null, JSON.stringify({
+				id: folder1.id })));
+
+		expect(hasThrown).toBe(true);
+
+		const hasTag = await Tag.hasFolder(tag1.id, folder1.id);
+		expect(hasTag).toBe(false);
+	}));
+
+	it('should not untag a folder', asyncTest(async () => {
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Tag.addFolder(tag1.id, folder1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${tag1.id}/folders`, null, JSON.stringify({
+				id: folder1.id })));
+
+		expect(hasThrown).toBe(true);
+
+		const hasTag = await Tag.hasFolder(tag1.id, folder1.id);
+		expect(hasTag).toBe(true);
+	}));
+
+	it('should not get a folder in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Tag.addFolder(TRASH_TAG_ID, folder1.id);
+
+		const response = await api.route('GET', 'folders');
+		expect(!!response).toBe(true);
+		expect(response.length).toEqual(0);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `folders/${folder1.id}`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not get folders with the trash tag', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Tag.addFolder(TRASH_TAG_ID, folder1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `tags/${TRASH_TAG_ID}/folders`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not get a folders tags when folder is in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const tag1 = await Tag.save({ title: 'tag1' });
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Tag.addFolder(tag1.id, folder1.id);
+		await Tag.addFolder(TRASH_TAG_ID, folder1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `folders/${folder1.id}/tags`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should permanently delete a folder (1)', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		await api.route('DELETE', `folders/${folder1.id}`);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(false);
+
+		const isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should permanently delete a folder (2)', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		await api.route('DELETE', `folders/${folder1.id}`);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(false);
+
+		let isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(false);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(false);
+
+		isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should not permanently delete a folder in trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		await Tag.addFolder(TRASH_TAG_ID, folder1.id);
+		await Tag.addNote(TRASH_TAG_ID, note2.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('DELETE', `folders/${folder1.id}`));
+
+		expect(hasThrown).toBe(true);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(true);
+
+		let isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(true);
+
+		let note = await Note.load(note1.id);
+		expect(!!note).toBe(true);
+
+		isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(false);
+
+		note = await Note.load(note2.id);
+		expect(!!note).toBe(true);
+
+		isInTrash = await Tag.hasNote(TRASH_TAG_ID, note2.id);
+		expect(isInTrash).toBe(true);
+	}));
+
+	it('should not move a folder to trash (1)', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${TRASH_TAG_ID}/folders`, null, JSON.stringify({
+				id: folder1.id })));
+
+		expect(hasThrown).toBe(true);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(true);
+
+		const isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should not move a folder to trash (2)', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${TRASH_TAG_ID}/folders`, null, JSON.stringify({
+				id: folder1.id })));
+
+		expect(hasThrown).toBe(true);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(true);
+
+		let isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(false);
+
+		const note = await Note.load(note1.id);
+		expect(!!note).toBe(true);
+
+		isInTrash = await Tag.hasNote(TRASH_TAG_ID, note1.id);
+		expect(isInTrash).toBe(false);
+	}));
+
+	it('should not restore a folder from trash', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Tag.addFolder(TRASH_TAG_ID, folder1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('DELETE', `tags/${TRASH_TAG_ID}/folder/${folder1.id}`));
+
+		expect(hasThrown).toBe(true);
+
+		const folder = await Folder.load(folder1.id);
+		expect(!!folder).toBe(true);
+
+		const isInTrash = await Tag.hasFolder(TRASH_TAG_ID, folder1.id);
+		expect(isInTrash).toBe(true);
+	}));
+
+	it('should not include trash tag in all tags list', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const response = await api.route('GET', 'tags');
+		expect(!!response).toBe(true);
+		expect(response.length).toBe(0);
+	}));
+
+	it('should not get the trash tag by id', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('GET', `tags/${TRASH_TAG_ID}`));
+
+		expect(hasThrown).toBe(true);
+	}));
+
+	it('should not create a tag with trash tag name', asyncTest(async () => {
+		let tag1 = await Tag.save({ title: 'tag1' });
+		tag1 = await Tag.load(tag1.id);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('POST', `tags/${tag1.id}`, null, JSON.stringify({
+				title: TRASH_TAG_NAME })));
+
+		expect(hasThrown).toBe(true);
+
+		const tag = await Tag.load(tag1.id);
+		expect(tag).toEqual(tag1);
+	}));
+
+	it('should not change name of trash tag', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+		const trashTag = await Tag.load(TRASH_TAG_ID);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('PUT', `tags/${TRASH_TAG_ID}`, null, JSON.stringify({
+				title: 'anotherName' })));
+
+		expect(hasThrown).toBe(true);
+		const tag = await Tag.load(TRASH_TAG_ID);
+		expect(tag).toEqual(trashTag);
+	}));
+
+	it('should not delete the trash tag', asyncTest(async () => {
+		// create the system trash tag
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+		const trashTag = await Tag.load(TRASH_TAG_ID);
+
+		const hasThrown = await checkThrowAsync(
+			async () => await api.route('DELETE', `tags/${TRASH_TAG_ID}`));
+
+		expect(hasThrown).toBe(true);
+		const tag = await Tag.load(TRASH_TAG_ID);
+		expect(tag).toEqual(trashTag);
 	}));
 });

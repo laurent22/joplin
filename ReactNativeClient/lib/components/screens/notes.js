@@ -16,6 +16,7 @@ const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('lib/components/base-screen.js');
 const { BackButtonService } = require('lib/services/back-button.js');
+const { CONFLICT_FOLDER_ID } = require('lib/reserved-ids');
 
 class NotesScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -227,7 +228,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
-		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != Folder.conflictFolderId();
+		const addFolderNoteButtons = this.props.selectedFolderId && this.props.selectedFolderId != CONFLICT_FOLDER_ID;
 		const thisComp = this;
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : <ActionButton addFolderNoteButtons={addFolderNoteButtons} parentFolderId={this.props.selectedFolderId}></ActionButton>;
 

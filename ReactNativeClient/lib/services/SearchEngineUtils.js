@@ -35,12 +35,13 @@ class SearchEngineUtils {
 		// By default, the notes will be returned in reverse order
 		// or maybe random order so sort them here in the correct order
 		// (search engine returns the results in order of relevance).
-		const sortedNotes = [];
+		let sortedNotes = [];
 		for (let i = 0; i < notes.length; i++) {
 			const idx = noteIds.indexOf(notes[i].id);
 			sortedNotes[idx] = notes[i];
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
 		}
+		sortedNotes = sortedNotes.filter(function(a) { return a != null; });
 
 		return sortedNotes;
 	}

@@ -4,18 +4,21 @@ const BaseModel = require('lib/BaseModel.js');
 const Resource = require('lib/models/Resource.js');
 const Folder = require('lib/models/Folder.js');
 const NoteTag = require('lib/models/NoteTag.js');
+const FolderTag = require('lib/models/FolderTag.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { sprintf } = require('sprintf-js');
 const { shim } = require('lib/shim');
 const { fileExtension } = require('lib/path-utils');
 const { uuid } = require('lib/uuid.js');
+const { TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	async exec(result) {
 		const itemIdMap = {};
 		const createdResources = {};
 		const noteTagsToCreate = [];
+		const folderTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
 		const replaceLinkedItemIds = async noteBody => {
@@ -111,40 +114,51 @@ class InteropService_Importer_Raw extends InteropService_Importer_Base {
 				if (tag) {
 					itemIdMap[item.id] = tag.id;
 					continue;
+				} else {
+					if (item.id === TRASH_TAG_ID) {
+						throw new Error('System trash tag is missing');
+					}
 				}
-
 				const tagId = uuid.create();
 				itemIdMap[item.id] = tagId;
 				item.id = tagId;
 			} else if (itemType === BaseModel.TYPE_NOTE_TAG) {
 				noteTagsToCreate.push(item);
 				continue;
+			} else if (itemType === BaseModel.TYPE_FOLDER_TAG) {
+				folderTagsToCreate.push(item);
+				continue;
 			}
 
 			await ItemClass.save(item, { isNew: true, autoTimestamp: false });
 		}
 
-		for (let i = 0; i < noteTagsToCreate.length; i++) {
-			const noteTag = noteTagsToCreate[i];
-			const newNoteId = itemIdMap[noteTag.note_id];
-			const newTagId = itemIdMap[noteTag.tag_id];
+		const saveItemTags = async function(itemTagsToCreate, item_id, ItemTag) {
+			for (let i = 0; i < itemTagsToCreate.length; i++) {
+				const itemTag = itemTagsToCreate[i];
+				const newItemId = itemIdMap[itemTag[item_id]];
+				const newTagId = itemIdMap[itemTag['tag_id']];
 
-			if (!newNoteId) {
-				result.warnings.push(sprintf('Non-existent note %s referenced in tag %s', noteTag.note_id, noteTag.tag_id));
-				continue;
+				if (!newItemId) {
+					result.warnings.push(sprintf('Non-existent item %s referenced in tag %s', itemTag[item_id], itemTag['tag_id']));
+					continue;
+				}
+
+				if (!newTagId) {
+					result.warnings.push(sprintf('Non-existent tag %s for item %s', itemTag['tag_id'], itemTag[item_id]));
+					continue;
+				}
+
+				itemTag['id'] = uuid.create();
+				itemTag[item_id] = newItemId;
+				itemTag['tag_id'] = newTagId;
+
+				await ItemTag.save(itemTag, { isNew: true });
 			}
+		};
 
-			if (!newTagId) {
-				result.warnings.push(sprintf('Non-existent tag %s for note %s', noteTag.tag_id, noteTag.note_id));
-				continue;
-			}
-
-			noteTag.id = uuid.create();
-			noteTag.note_id = newNoteId;
-			noteTag.tag_id = newTagId;
-
-			await NoteTag.save(noteTag, { isNew: true });
-		}
+		saveItemTags(noteTagsToCreate, 'note_id', NoteTag);
+		saveItemTags(folderTagsToCreate, 'folder_id', FolderTag);
 
 		if (await shim.fsDriver().isDirectory(`${this.sourcePath_}/resources`)) {
 			const resourceStats = await shim.fsDriver().readDirStats(`${this.sourcePath_}/resources`);

@@ -13,6 +13,7 @@ const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
 const NoteListUtils = require('./utils/NoteListUtils');
 const { replaceRegexDiacritics, pregQuote } = require('lib/string-utils');
+const { stateUtils } = require('lib/reducer.js');
 
 class NoteListComponent extends React.Component {
 	constructor() {
@@ -88,6 +89,7 @@ class NoteListComponent extends React.Component {
 			notes: this.props.notes,
 			dispatch: this.props.dispatch,
 			watchedNoteFiles: this.props.watchedNoteFiles,
+			isViewingTrash: stateUtils.isViewingTrash(this.props),
 		});
 
 		menu.popup(bridge().window());
@@ -354,8 +356,16 @@ class NoteListComponent extends React.Component {
 			event.preventDefault();
 		}
 
-		if (noteIds.length && (keyCode === 46 || (keyCode === 8 && event.metaKey))) {
-			// DELETE / CMD+Backspace
+		if (noteIds.length && ((keyCode === 46 && !event.shiftKey) || (keyCode === 8 && !event.metaKey))) {
+			// Delete / Backspace
+			event.preventDefault();
+			if (stateUtils.isViewingTrash(this.props)) {
+				await NoteListUtils.confirmDeleteNotes(noteIds);
+			} else {
+				await Note.batchDelete(noteIds, { permanent: false });
+			}
+		} else if (noteIds.length && ((keyCode === 46 && event.shiftKey) || (keyCode === 8 && event.metaKey))) {
+			// SHIFT+Delete / CMD+Backspace
 			event.preventDefault();
 			await NoteListUtils.confirmDeleteNotes(noteIds);
 		}
@@ -466,6 +476,7 @@ const mapStateToProps = state => {
 		notesParentType: state.notesParentType,
 		searches: state.searches,
 		selectedSearchId: state.selectedSearchId,
+		selectedSmartFilterId: state.selectedSmartFilterId,
 		watchedNoteFiles: state.watchedNoteFiles,
 		windowCommand: state.windowCommand,
 		provisionalNoteIds: state.provisionalNoteIds,

@@ -27,6 +27,8 @@ const TemplateUtils = require('lib/TemplateUtils');
 const EncryptionService = require('lib/services/EncryptionService');
 const ipcRenderer = require('electron').ipcRenderer;
 const { time } = require('lib/time-utils.js');
+const { applyTagDiff } = require('lib/TagUtils.js');
+const { TRASH_TAG_ID, CONFLICT_FOLDER_ID } = require('lib/reserved-ids');
 
 class MainScreenComponent extends React.Component {
 	constructor() {
@@ -197,9 +199,8 @@ class MainScreenComponent extends React.Component {
 		} else if (command.name === 'setTags') {
 			const tags = await Tag.commonTagsByNoteIds(command.noteIds);
 			const startTags = tags
-				.map(a => {
-					return { value: a.id, label: a.title };
-				})
+				.filter(a => a.id !== TRASH_TAG_ID)
+				.map(a => { return { value: a.id, label: a.title }; })
 				.sort((a, b) => {
 					// sensitivity accent will treat accented characters as differemt
 					// but treats caps as equal
@@ -223,25 +224,9 @@ class MainScreenComponent extends React.Component {
 					autocomplete: tagSuggestions,
 					onClose: async answer => {
 						if (answer !== null) {
-							const endTagTitles = answer.map(a => {
-								return a.label.trim();
-							});
-							if (command.noteIds.length === 1) {
-								await Tag.setNoteTagsByTitles(command.noteIds[0], endTagTitles);
-							} else {
-								const startTagTitles = startTags.map(a => { return a.label.trim(); });
-								const addTags = endTagTitles.filter(value => !startTagTitles.includes(value));
-								const delTags = startTagTitles.filter(value => !endTagTitles.includes(value));
-
-								// apply the tag additions and deletions to each selected note
-								for (let i = 0; i < command.noteIds.length; i++) {
-									const tags = await Tag.tagsByNoteId(command.noteIds[i]);
-									let tagTitles = tags.map(a => { return a.title; });
-									tagTitles = tagTitles.concat(addTags);
-									tagTitles = tagTitles.filter(value => !delTags.includes(value));
-									await Tag.setNoteTagsByTitles(command.noteIds[i], tagTitles);
-								}
-							}
+							const endTagTitles = answer.map(a => { return a.label.trim(); });
+							const startTagTitles = startTags.map(a => { return a.label.trim(); });
+							await applyTagDiff(command.noteIds, startTagTitles, endTagTitles);
 						}
 						this.setState({ promptOptions: null });
 					},
@@ -761,7 +746,7 @@ class MainScreenComponent extends React.Component {
 		const sidebarVisibility = this.props.sidebarVisibility;
 		const noteListVisibility = this.props.noteListVisibility;
 		const styles = this.styles(this.props.theme, style.width, style.height, this.messageBoxVisible(), sidebarVisibility, noteListVisibility, this.props.sidebarWidth, this.props.noteListWidth);
-		const onConflictFolder = this.props.selectedFolderId === Folder.conflictFolderId();
+		const onConflictFolder = this.props.selectedFolderId === CONFLICT_FOLDER_ID;
 
 		const headerItems = [];
 

@@ -588,7 +588,6 @@ class Synchronizer {
 			if (this.downloadQueue_) await this.downloadQueue_.stop();
 			this.downloadQueue_ = new TaskQueue('syncDownload');
 			this.downloadQueue_.logger_ = this.logger();
-
 			if (syncSteps.indexOf('delta') >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
 				// or handled as conflicts, so no conflict is possible after this.
@@ -790,7 +789,7 @@ class Synchronizer {
 				if (!this.cancelling()) {
 					for (let i = 0; i < localFoldersToDelete.length; i++) {
 						const item = localFoldersToDelete[i];
-						const noteIds = await Folder.noteIds(item.id);
+						const noteIds = await Folder.noteIds(item.id, { includeTrash: true });
 						if (noteIds.length) {
 							// CONFLICT
 							await Folder.markNotesAsConflict(item.id);

@@ -80,19 +80,19 @@ const testUnits = {};
 testUnits.testFolders = async () => {
 	await execCommand(client, 'mkbook nb1');
 
-	let folders = await Folder.all();
+	let folders = await Folder.all({ includeTrash: true });
 	assertEquals(1, folders.length);
 	assertEquals('nb1', folders[0].title);
 
 	await execCommand(client, 'mkbook nb1');
 
-	folders = await Folder.all();
+	folders = await Folder.all({ includeTrash: true });
 	assertEquals(1, folders.length);
 	assertEquals('nb1', folders[0].title);
 
 	await execCommand(client, 'rm -r -f nb1');
 
-	folders = await Folder.all();
+	folders = await Folder.all({ includeTrash: true });
 	assertEquals(0, folders.length);
 };
 
@@ -100,12 +100,12 @@ testUnits.testNotes = async () => {
 	await execCommand(client, 'mkbook nb1');
 	await execCommand(client, 'mknote n1');
 
-	let notes = await Note.all();
+	let notes = await Note.all({ includeTrash: true });
 	assertEquals(1, notes.length);
 	assertEquals('n1', notes[0].title);
 
 	await execCommand(client, 'rm -f n1');
-	notes = await Note.all();
+	notes = await Note.all({ includeTrash: true });
 	assertEquals(0, notes.length);
 
 	await execCommand(client, 'mknote n1');
@@ -116,12 +116,12 @@ testUnits.testNotes = async () => {
 
 	await execCommand(client, 'rm -f \'blabla*\'');
 
-	notes = await Note.all();
+	notes = await Note.all({ includeTrash: true });
 	assertEquals(2, notes.length);
 
 	await execCommand(client, 'rm -f \'n*\'');
 
-	notes = await Note.all();
+	notes = await Note.all({ includeTrash: true });
 	assertEquals(0, notes.length);
 };
 

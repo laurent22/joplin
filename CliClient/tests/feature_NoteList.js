@@ -1,15 +1,17 @@
 /* eslint-disable no-unused-vars */
 require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, createNTestFolders, createNTestNotes, createNTestTags } = require('test-utils.js');
+const { TestApp } = require('test-feature-utils.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
 const Tag = require('lib/models/Tag.js');
 const { time } = require('lib/time-utils.js');
+const { CONFLICT_FOLDER_ID } = require('lib/reserved-ids.js');
 
 let testApp = null;
 
-describe('integration_NoteList', function() {
+describe('feature_NoteList', function() {
 
 	beforeEach(async (done) => {
 		testApp = new TestApp();
@@ -29,7 +31,7 @@ describe('integration_NoteList', function() {
 		const note = await Note.save({ title: 'note 1', parent_id: folder.id, is_conflict: 1 });
 		await testApp.wait();
 
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: Folder.conflictFolderId() });
+		testApp.dispatch({ type: 'FOLDER_SELECT', id: CONFLICT_FOLDER_ID });
 		await testApp.wait();
 
 		testApp.dispatch({ type: 'NOTE_SELECT',	id: note.id });
@@ -37,7 +39,7 @@ describe('integration_NoteList', function() {
 
 		// Check that the conflict folder is selected and that the conflict note is inside
 		let state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note.id);
 
 		await Note.save({ id: note.id, title: 'note 1 mod', is_conflict: 1 });
@@ -45,7 +47,7 @@ describe('integration_NoteList', function() {
 
 		// Check that the conflict folder is still selected with the note still inside
 		state = testApp.store().getState();
-		expect(state.selectedFolderId).toBe(Folder.conflictFolderId());
+		expect(state.selectedFolderId).toBe(CONFLICT_FOLDER_ID);
 		expect(state.selectedNoteIds[0]).toBe(note.id);
 	}));
 

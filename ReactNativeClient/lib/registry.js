@@ -232,6 +232,7 @@ reg.cancelTimers = async () => {
 		setInterval(() => {
 			// ensure processing complete
 			if (!reg.setupRecurrentCalls_.length && !reg.schedSyncCalls_.length && !reg.timerCallbackCalls_.length && !reg.waitForReSyncCalls_.length) {
+
 				reg.cancelTimers_();
 				resolve();
 			}

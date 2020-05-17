@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 require('app-module-path').addPath(__dirname);
-const { setupDatabaseAndSynchronizer, switchClient, asyncTest, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, asyncTest, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags } = require('test-utils.js');
+const { TestApp, actions } = require('test-feature-utils.js');
 const Setting = require('lib/models/Setting.js');
 const Folder = require('lib/models/Folder.js');
 const Note = require('lib/models/Note.js');
@@ -17,21 +18,23 @@ const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids.js');
 //  - inject the event to be tested
 //  - check the resulting application state
 //
-// Important: TestApp.wait() must be used after TestApp dispatch to allow the async
-// processing to complete
+// Important: TestApp.wait() must be used after TestApp.dispatch to allow the async
+// processing to complete.
 //
 
 let testApp = null;
 
-describe('integration_ShowAllNotes', function() {
+describe('feature_ShowAllNotes', function() {
 
 	beforeEach(async (done) => {
 		testApp = new TestApp();
 		await testApp.start(['--no-welcome']);
+		actions.setApp(testApp);
 		done();
 	});
 
 	afterEach(async (done) => {
+		actions.setApp(null);
 		if (testApp !== null) await testApp.destroy();
 		testApp = null;
 		done();
@@ -42,14 +45,13 @@ describe('integration_ShowAllNotes', function() {
 		const folders = await createNTestFolders(3);
 		Folder.moveToFolder(id(folders[2]), id(folders[1])); // subfolder
 		await testApp.wait();
-		const notes0 = await createNTestNotes(3, folders[0]);
-		const notes1 = await createNTestNotes(3, folders[1]);
-		const notes2 = await createNTestNotes(3, folders[2]);
+		const notes0 = await createNTestNotes(3, folders[0].id);
+		const notes1 = await createNTestNotes(3, folders[1].id);
+		const notes2 = await createNTestNotes(3, folders[2].id);
 		await testApp.wait();
 
-		// TEST ACTION: View all-notes
-		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await testApp.wait();
+		// TEST ACTION
+		await actions.viewFilter(ALL_NOTES_FILTER_ID);
 
 		// check: all the notes are shown
 		const state = testApp.store().getState();
@@ -61,14 +63,12 @@ describe('integration_ShowAllNotes', function() {
 	it('should show retain note selection when going from a folder to all-notes', asyncTest(async () => {
 		// setup
 		const folders = await createNTestFolders(2);
-		const notes0 = await createNTestNotes(3, folders[0]);
-		const notes1 = await createNTestNotes(3, folders[1]);
+		const notes0 = await createNTestNotes(3, folders[0].id);
+		const notes1 = await createNTestNotes(3, folders[1].id);
 		await testApp.wait();
 
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: id(folders[1]) });
-		await testApp.wait();
-		testApp.dispatch({ type: 'NOTE_SELECT',	id: id(notes1[1]) });
-		await testApp.wait();
+		await actions.viewFolder(folders[1].id);
+		await actions.selectNotes([notes1[1].id]);
 
 		// check the state is set up as expected
 		let state = testApp.store().getState();
@@ -77,9 +77,8 @@ describe('integration_ShowAllNotes', function() {
 		expect(sortedIds(state.notes)).toEqual(sortedIds(notes1));
 		expect(state.selectedNoteIds).toEqual(ids([notes1[1]]));
 
-		// TEST ACTION: View all-notes
-		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await testApp.wait();
+		// TEST ACTION
+		await actions.viewFilter(ALL_NOTES_FILTER_ID);
 
 		// check: all the notes are shown
 		state = testApp.store().getState();
@@ -94,13 +93,13 @@ describe('integration_ShowAllNotes', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await time.msleep(10);
 		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
-		await time.msleep(100);
-		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });
-		await time.msleep(100);
-		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await time.msleep(100);
+		await time.msleep(10);
+
+		await actions.viewFolder(folder1.id);
+		await actions.selectNotes([note1.id]);
+		await actions.viewFilter(ALL_NOTES_FILTER_ID);
 
 		// check the state is set up as expected
 		let state = testApp.store().getState();
@@ -131,13 +130,12 @@ describe('integration_ShowAllNotes', function() {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const folder2 = await Folder.save({ title: 'folder2' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await time.msleep(10);
 		const note2 = await Note.save({ title: 'note1', parent_id: folder2.id });
-		testApp.dispatch({ type: 'FOLDER_SELECT', id: folder1.id }); // active folder
-		await time.msleep(100);
-		testApp.dispatch({ type: 'NOTE_SELECT',	id: note1.id });
-		await time.msleep(100);
-		testApp.dispatch({ type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
-		await time.msleep(100);
+		await time.msleep(10);
+		await actions.viewFolder(folder1.id);
+		await actions.selectNotes([note1.id]);
+		await actions.viewFilter(ALL_NOTES_FILTER_ID);
 
 		// check the state is set up as expected
 		let state = testApp.store().getState();
@@ -146,23 +144,22 @@ describe('integration_ShowAllNotes', function() {
 		expect(note1.parent_id).toEqual(folder1.id);
 
 		// TEST ACTION: change the notes parent
-		await Note.moveToFolder(note1.id, folder2.id);
-		await time.msleep(100);
+		await actions.moveSelectedNotesToFolder(folder2.id);
 
-		// check the note is duplicated and the view updated
+		// check the view is updated and note is reparented
 		state = testApp.store().getState();
 		expect(state.notes.length).toEqual(2);
-		let n1 = await Note.load(note1.id);
-		expect(n1.parent_id).toEqual(folder2.id);
+		expect(state.selectedNoteIds).toEqual([note1.id]);
+		let note = await Note.load(note1.id);
+		expect(note.parent_id).toEqual(folder2.id);
 
-		// TEST ACTION: change the notes parent
-		await Note.moveToFolder(note1.id, folder1.id);
-		await time.msleep(100);
+		// TEST ACTION: change the notes parent again
+		await actions.moveSelectedNotesToFolder(folder1.id);
 
-		// check the note is duplicated and the view updated
+		// check the view is updated
 		state = testApp.store().getState();
 		expect(state.notes.length).toEqual(2);
-		n1 = await Note.load(note1.id);
-		expect(n1.parent_id).toEqual(folder1.id);
+		note = await Note.load(note1.id);
+		expect(note.parent_id).toEqual(folder1.id);
 	}));
 });

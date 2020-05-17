@@ -16,8 +16,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 async function allItems() {
-	const folders = await Folder.all();
-	const notes = await Note.all();
+	const folders = await Folder.all({ includeTrash: true });
+	const notes = await Note.all({ includeTrash: true });
 	return folders.concat(notes);
 }
 

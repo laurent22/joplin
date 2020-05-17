@@ -4,11 +4,13 @@
 require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
-const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, asyncTest, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, ids } = require('test-utils.js');
 const SearchEngine = require('lib/services/SearchEngine');
+const Tag = require('lib/models/Tag.js');
 const Note = require('lib/models/Note');
 const ItemChange = require('lib/models/ItemChange');
 const Setting = require('lib/models/Setting');
+const { TRASH_TAG_ID, TRASH_TAG_NAME } = require('lib/reserved-ids.js');
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -376,6 +378,23 @@ describe('services_SearchEngine', function() {
 		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(0);
 		expect((await engine.search('"- [ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(1);
 		expect((await engine.search('"[ ]"', { searchType: SearchEngine.SEARCH_TYPE_BASIC })).length).toBe(2);
+	}));
+
+	it('should not include trash notes in search results', asyncTest(async () => {
+		// this system tag is assumed to exist
+		await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+
+		const n1 = await Note.save({ title: 'abcd', body: 'aaaa bbbb' });
+
+		await engine.syncTables();
+
+		let rows = await engine.search('abcd');
+		expect(ids(rows)).toEqual([n1.id]);
+
+		await Tag.addNote(TRASH_TAG_ID, n1.id);
+
+		rows = await engine.search('abcd');
+		expect(ids(rows)).toEqual([]);
 	}));
 
 });

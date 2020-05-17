@@ -27,8 +27,8 @@ process.on('unhandledRejection', (reason, p) => {
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000 + 30000; // The first test is slow because the database needs to be built
 
 async function allNotesFolders() {
-	const folders = await Folder.all();
-	const notes = await Note.all();
+	const folders = await Folder.all({ includeTrash: true });
+	const notes = await Note.all({ includeTrash: true });
 	return folders.concat(notes);
 }
 
@@ -586,8 +586,8 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		const notes = await Note.all();
-		const folders = await Folder.all();
+		const notes = await Note.all({ includeTrash: true });
+		const folders = await Folder.all({ includeTrash: true });
 		expect(notes.length).toBe(0);
 		expect(folders.length).toBe(1);
 	}));
@@ -649,7 +649,7 @@ describe('synchronizer', function() {
 			const conflictedNotes = await Note.conflictedNotes();
 			expect(conflictedNotes.length).toBe(0);
 
-			const notes = await Note.all();
+			const notes = await Note.all({ includeTrash: true });
 			expect(notes.length).toBe(1);
 			expect(notes[0].id).toBe(note1.id);
 			expect(notes[0].todo_completed).toBe(note2.todo_completed);
@@ -661,7 +661,7 @@ describe('synchronizer', function() {
 			const conflictedNotes = await Note.conflictedNotes();
 			expect(conflictedNotes.length).toBe(1);
 
-			const notes = await Note.all();
+			const notes = await Note.all({ includeTrash: true });
 			expect(notes.length).toBe(2);
 		}
 	}
@@ -683,12 +683,12 @@ describe('synchronizer', function() {
 
 		synchronizer().testingHooks_ = ['cancelDeltaLoop2'];
 		const context = await synchronizer().start();
-		let notes = await Note.all();
+		let notes = await Note.all({ includeTrash: true });
 		expect(notes.length).toBe(0);
 
 		synchronizer().testingHooks_ = [];
 		await synchronizer().start({ context: context });
-		notes = await Note.all();
+		notes = await Note.all({ includeTrash: true });
 		expect(notes.length).toBe(1);
 	}));
 
@@ -708,7 +708,7 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		const notes = await Note.all();
+		const notes = await Note.all({ includeTrash: true });
 		expect(notes.length).toBe(1);
 		expect(notes[0].title).toBe('un');
 
@@ -1150,22 +1150,22 @@ describe('synchronizer', function() {
 		await switchClient(2);
 
 		await WelcomeUtils.createWelcomeItems();
-		const beforeFolderCount = (await Folder.all()).length;
-		const beforeNoteCount = (await Note.all()).length;
+		const beforeFolderCount = (await Folder.all({ includeTrash: true })).length;
+		const beforeNoteCount = (await Note.all({ includeTrash: true })).length;
 		expect(beforeFolderCount === 1).toBe(true);
 		expect(beforeNoteCount > 1).toBe(true);
 
 		await synchronizer().start();
 
-		const afterFolderCount = (await Folder.all()).length;
-		const afterNoteCount = (await Note.all()).length;
+		const afterFolderCount = (await Folder.all({ includeTrash: true })).length;
+		const afterNoteCount = (await Note.all({ includeTrash: true })).length;
 
 		expect(afterFolderCount).toBe(beforeFolderCount * 2);
 		expect(afterNoteCount).toBe(beforeNoteCount * 2);
 
 		// Changes to the Welcome items should be synced to all clients
 
-		const f1 = (await Folder.all())[0];
+		const f1 = (await Folder.all({ includeTrash: true }))[0];
 		await Folder.save({ id: f1.id, title: 'Welcome MOD' });
 
 		await synchronizer().start();
@@ -1227,7 +1227,7 @@ describe('synchronizer', function() {
 			expect(allRevs.length).toBe(1);
 		}
 
-		const notes = await Note.all();
+		const notes = await Note.all({ includeTrash: true });
 		expect(notes.length).toBe(0);
 	}));
 
@@ -1489,11 +1489,11 @@ describe('synchronizer', function() {
 		await synchronizer().start();
 		await fileApi().clearRoot(); // oops
 		await synchronizer().start();
-		expect((await Note.all()).length).toBe(10); // but since the fail-safe if on, the notes have not been deleted
+		expect((await Note.all({ includeTrash: true })).length).toBe(10); // but since the fail-safe if on, the notes have not been deleted
 
 		Setting.setValue('sync.wipeOutFailSafe', false); // Now switch it off
 		await synchronizer().start();
-		expect((await Note.all()).length).toBe(0); // Since the fail-safe was off, the data has been cleared
+		expect((await Note.all({ includeTrash: true })).length).toBe(0); // Since the fail-safe was off, the data has been cleared
 
 		// Handle case where the sync target has been wiped out, then the user creates one note and sync.
 
@@ -1503,7 +1503,7 @@ describe('synchronizer', function() {
 		await fileApi().clearRoot();
 		await Note.save({ title: 'ma note encore' });
 		await synchronizer().start();
-		expect((await Note.all()).length).toBe(11);
+		expect((await Note.all({ includeTrash: true })).length).toBe(11);
 	}));
 
 	it('should not sync if client sync version is lower than target', asyncTest(async () => {

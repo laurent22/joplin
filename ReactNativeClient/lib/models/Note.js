@@ -13,7 +13,7 @@ const lodash = require('lodash');
 const urlUtils = require('lib/urlUtils.js');
 const markdownUtils = require('lib/markdownUtils.js');
 const { MarkupToHtml } = require('lib/joplin-renderer');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { ALL_NOTES_FILTER_ID, ORPHANS_FOLDER_ID, CONFLICT_FOLDER_ID, TRASH_FILTER_ID, TRASH_TAG_ID } = require('lib/reserved-ids');
 
 class Note extends BaseItem {
 	static tableName() {
@@ -273,10 +273,54 @@ class Note extends BaseItem {
 		return results.length ? results[0] : null;
 	}
 
+	// Previews options for incomplete todos, when incomplete todos displayed on top
+	// Excludes notes in trash when not viewing trash or conflicts
+	static optionsIncompleteTodos_(options, isShowingConflicts, isShowingTrash) {
+		const conds = options.conditions.slice();
+		const params = options.conditionsParams.slice();
+
+		conds.push('is_todo = 1');
+		conds.push('(todo_completed <= 0 OR todo_completed IS NULL)');
+
+		if (!isShowingConflicts) {
+			const inclusion = isShowingTrash ? 'IN' : 'NOT IN';
+			conds.push(`id ${inclusion} (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)`);
+			params.push(TRASH_TAG_ID);
+		}
+
+		const tempOptions = Object.assign({}, options);
+		tempOptions.conditions = conds;
+		tempOptions.conditionsParams = params;
+		return tempOptions;
+	}
+
+	// Previews options for notes and complete todos, when incomplete todos displayed on top
+	// Excludes notes in trash when not viewing trash or conclicts
+	static optionsNotesAndCompleteTodos_(options, hasNotes, hasTodos, isShowingConflicts, isShowingTrash) {
+		const conds = options.conditions.slice();
+		const params = options.conditionsParams.slice();
+
+		if (hasNotes && hasTodos) {
+			conds.push('(is_todo = 0 OR (is_todo = 1 AND todo_completed > 0))');
+		} else {
+			conds.push('(is_todo = 1 AND todo_completed > 0)');
+		}
+
+		if (!isShowingConflicts) {
+			const inclusion = isShowingTrash ? 'IN' : 'NOT IN';
+			conds.push(`id ${inclusion} (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)`);
+			params.push(TRASH_TAG_ID);
+		}
+		const tempOptions = Object.assign({}, options);
+		tempOptions.conditions = conds;
+		tempOptions.conditionsParams = params;
+		return tempOptions;
+	}
+
+	// Excludes notes in trash when not viewing trash
 	static async previews(parentId, options = null) {
 		// Note: ordering logic must be duplicated in sortNotes(), which
 		// is used to sort already loaded notes.
-
 		if (!options) options = {};
 		if (!('order' in options)) options.order = [{ by: 'user_updated_time', dir: 'DESC' }, { by: 'user_created_time', dir: 'DESC' }, { by: 'title', dir: 'DESC' }, { by: 'id', dir: 'DESC' }];
 		if (!options.conditions) options.conditions = [];
@@ -285,11 +329,13 @@ class Note extends BaseItem {
 		if (!options.uncompletedTodosOnTop) options.uncompletedTodosOnTop = false;
 		if (!('showCompletedTodos' in options)) options.showCompletedTodos = true;
 
-		if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
+		const isShowingConflicts = parentId == CONFLICT_FOLDER_ID;
+		if (isShowingConflicts) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
-			if (parentId && parentId !== ALL_NOTES_FILTER_ID) {
+
+			if (parentId && parentId !== ALL_NOTES_FILTER_ID && parentId !== TRASH_FILTER_ID) {
 				options.conditions.push('parent_id = ?');
 				options.conditionsParams.push(parentId);
 			}
@@ -312,28 +358,17 @@ class Note extends BaseItem {
 			}
 		}
 
-		if (!options.showCompletedTodos) {
+		const isShowingTrash = parentId === TRASH_FILTER_ID;
+
+		if (!options.showCompletedTodos && !isShowingTrash) {
 			options.conditions.push('todo_completed <= 0');
 		}
 
 		if (options.uncompletedTodosOnTop && hasTodos) {
-			let cond = options.conditions.slice();
-			cond.push('is_todo = 1');
-			cond.push('(todo_completed <= 0 OR todo_completed IS NULL)');
-			let tempOptions = Object.assign({}, options);
-			tempOptions.conditions = cond;
-
+			let tempOptions = Note.optionsIncompleteTodos_(options, isShowingConflicts, isShowingTrash);
 			const uncompletedTodos = await this.search(tempOptions);
 
-			cond = options.conditions.slice();
-			if (hasNotes && hasTodos) {
-				cond.push('(is_todo = 0 OR (is_todo = 1 AND todo_completed > 0))');
-			} else {
-				cond.push('(is_todo = 1 AND todo_completed > 0)');
-			}
-
-			tempOptions = Object.assign({}, options);
-			tempOptions.conditions = cond;
+			tempOptions = Note.optionsNotesAndCompleteTodos_(options, hasNotes, hasTodos, isShowingConflicts, isShowingTrash);
 			if ('limit' in tempOptions) tempOptions.limit -= uncompletedTodos.length;
 			const theRest = await this.search(tempOptions);
 
@@ -348,9 +383,15 @@ class Note extends BaseItem {
 			options.conditions.push('is_todo = 1');
 		}
 
+		if (!isShowingConflicts) {
+			const inclusion = isShowingTrash ? 'IN' : 'NOT IN';
+			options.conditions.push(`id ${inclusion} (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)`);
+			options.conditionsParams.push(TRASH_TAG_ID);
+		}
 		return this.search(options);
 	}
 
+	// This method works for all notes including those in trash
 	static preview(noteId, options = null) {
 		if (!options) options = { fields: null };
 		return this.modelSelectOne(`SELECT ${this.previewFieldsSql(options.fields)} FROM notes WHERE is_conflict = 0 AND id = ?`, [noteId]);
@@ -366,19 +407,35 @@ class Note extends BaseItem {
 			options.conditions.push('body LIKE ?');
 			options.conditionsParams.push(pattern);
 		}
-
 		return super.search(options);
 	}
 
+	// This method works for all notes including those in trash
+	static async orphansCount(options = null) {
+		let sqlQuery = 'SELECT count(*) as total FROM notes WHERE parent_id = ?';
+		const sqlParams = [ORPHANS_FOLDER_ID];
+
+		if (!options || !options.includeTrash) {
+			sqlQuery += ' AND id NOT IN (SELECT note_id AS id FROM note_tags WHERE tag_id = ?)';
+			sqlParams.push(TRASH_TAG_ID);
+		}
+
+		const r = await this.db().selectOne(sqlQuery, sqlParams);
+		return r && r.total ? r.total : 0;
+	}
+
+	// This method works for all notes including those in trash
 	static conflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
 	}
 
+	// This method works for all notes including those in trash
 	static async conflictedCount() {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 1');
 		return r && r.total ? r.total : 0;
 	}
 
+	// This method works for all notes including those in trash
 	static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
@@ -442,7 +499,7 @@ class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId === CONFLICT_FOLDER_ID) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -453,7 +510,11 @@ class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId, folderId) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId == CONFLICT_FOLDER_ID) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+
+		if (this.getClass('NoteTag').exists(noteId, TRASH_TAG_ID)) {
+			this.getClass('Tag').removeNote(TRASH_TAG_ID, noteId);
+		}
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.
@@ -465,7 +526,7 @@ class Note extends BaseItem {
 			updated_time: time.unixMs(),
 		};
 
-		return Note.save(modifiedNote, { autoTimestamp: false });
+		await Note.save(modifiedNote, { autoTimestamp: false });
 	}
 
 	static changeNoteType(note, type) {
@@ -550,6 +611,12 @@ class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
+	static async all(options = null) {
+		if (!options) options = { };
+		if (!options.includeTrash) throw new Error('Unimplemented option'); // option not tested
+		return await super.all(options);
+	}
+
 	static async save(o, options = null) {
 		const isNew = this.isNew(o, options);
 		const isProvisional = options && !!options.provisional;
@@ -588,7 +655,56 @@ class Note extends BaseItem {
 		return note;
 	}
 
+	static async undelete(ids) {
+		const tag = await this.getClass('Tag').load(TRASH_TAG_ID);
+		if (!tag) throw new Error('Trash does not exist. Restart Joplin and try again.');
+
+		ids = ids.slice();
+		while (ids.length) {
+			const batchIds = ids.splice(0, 50);
+			const notes = await Note.byIds(batchIds);
+			let base = null;
+			let parentId = null;
+			for (const note of notes) {
+				if (note.parent_id !== parentId) {
+					base = await this.getClass('Folder').restoreTree(note.parent_id);
+					parentId = note.parent_id;
+				}
+				await this.getClass('Tag').removeNote(TRASH_TAG_ID, note.id);
+
+				if (!['', CONFLICT_FOLDER_ID, ORPHANS_FOLDER_ID].includes(base)) {
+					await Note.moveToFolder(note.id, ORPHANS_FOLDER_ID);
+				}
+			}
+		}
+	}
+
+	static async batchMoveToTrash_(ids) {
+		const tag = await this.getClass('Tag').load(TRASH_TAG_ID);
+		if (!tag) throw new Error('Trash does not exist. Restart Joplin and try again.');
+		ids = ids.slice();
+		while (ids.length) {
+			const batchIds = ids.splice(0, 50);
+			const notes = await Note.byIds(batchIds);
+			for (const note of notes) {
+				if (note.is_conflict) {
+					// Moving a conflict to trash means it is no longer a conflict
+					await Note.moveToFolder(note.id, note.parent_id);
+				}
+				await this.getClass('Tag').addNote(TRASH_TAG_ID, note.id);
+			}
+		}
+	}
+
 	static async batchDelete(ids, options = null) {
+		if (!options) options = {};
+		if (!('permanent' in options)) options.permanent = true;
+
+		if (!options.permanent) {
+			await Note.batchMoveToTrash_(ids);
+			return;
+		}
+
 		ids = ids.slice();
 
 		while (ids.length) {

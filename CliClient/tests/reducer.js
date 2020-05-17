@@ -105,7 +105,7 @@ describe('Reducer', function() {
 		// create 1 folder
 		const folders = await createNTestFolders(1);
 		// create 5 notes
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		// select the 1st folder and the 3rd note
 		let state = initTestState(folders, 0, notes, [2]);
 
@@ -124,7 +124,7 @@ describe('Reducer', function() {
 
 	it('should delete selected note at top', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [1]);
 
 		// test action
@@ -138,7 +138,7 @@ describe('Reducer', function() {
 
 	it('should delete last remaining note', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(1, folders[0]);
+		const notes = await createNTestNotes(1, folders[0].id);
 		let state = initTestState(folders, 0, notes, [0]);
 
 		// test action
@@ -152,7 +152,7 @@ describe('Reducer', function() {
 
 	it('should delete selected note at bottom', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [4]);
 
 		// test action
@@ -166,7 +166,7 @@ describe('Reducer', function() {
 
 	it('should delete note when a note below is selected', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [3]);
 
 		// test action
@@ -180,7 +180,7 @@ describe('Reducer', function() {
 
 	it('should delete note when a note above is selected', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [1]);
 
 		// test action
@@ -194,7 +194,7 @@ describe('Reducer', function() {
 
 	it('should delete selected notes', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [1,2]);
 
 		// test action
@@ -209,7 +209,7 @@ describe('Reducer', function() {
 
 	it('should delete note when a notes below it are selected', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [3,4]);
 
 		// test action
@@ -223,7 +223,7 @@ describe('Reducer', function() {
 
 	it('should delete note when a notes above it are selected', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [1,2]);
 
 		// test action
@@ -237,7 +237,7 @@ describe('Reducer', function() {
 
 	it('should delete notes at end', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [3,4]);
 
 		// test action
@@ -252,7 +252,7 @@ describe('Reducer', function() {
 
 	it('should delete notes when non-contiguous selection', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 0, notes, [0,2,4]);
 
 		// test action
@@ -269,7 +269,7 @@ describe('Reducer', function() {
 	// tests for FOLDER_DELETE
 	it('should delete selected notebook', asyncTest(async () => {
 		const folders = await createNTestFolders(5);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 2, notes, [2]);
 
 		// test action
@@ -283,7 +283,7 @@ describe('Reducer', function() {
 
 	it('should delete notebook when a book above is selected', asyncTest(async () => {
 		const folders = await createNTestFolders(5);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 1, notes, [2]);
 
 		// test action
@@ -297,7 +297,7 @@ describe('Reducer', function() {
 
 	it('should delete notebook when a book below is selected', asyncTest(async () => {
 		const folders = await createNTestFolders(5);
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		let state = initTestState(folders, 4, notes, [2]);
 
 		// test action
@@ -353,7 +353,7 @@ describe('Reducer', function() {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(3, folders[i]));
+			notes.push(...await createNTestNotes(3, folders[i].id));
 		}
 
 		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
@@ -377,7 +377,7 @@ describe('Reducer', function() {
 		// create 1 folder
 		const folders = await createNTestFolders(1);
 		// create 5 notes
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		// select the 1st folder and the 1st note
 		let state = initTestState(folders, 0, notes, [0]);
 
@@ -403,7 +403,7 @@ describe('Reducer', function() {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(3, folders[i]));
+			notes.push(...await createNTestNotes(3, folders[i].id));
 		}
 
 		let state = initTestState(folders, 0, notes.slice(0,3), [0]);
@@ -425,7 +425,7 @@ describe('Reducer', function() {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(5, folders[i]));
+			notes.push(...await createNTestNotes(5, folders[i].id));
 		}
 
 		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
@@ -458,7 +458,7 @@ describe('Reducer', function() {
 		const folders = await createNTestFolders(2);
 		const notes = [];
 		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(5, folders[i]));
+			notes.push(...await createNTestNotes(5, folders[i].id));
 		}
 
 		let state = initTestState(folders, 0, notes.slice(0,5), [0]);
@@ -469,6 +469,7 @@ describe('Reducer', function() {
 		state = goToNote(notes, [4], state); // last seen note is notes[4]
 		// go to second folder
 		state = reducer(state, { type: 'FOLDER_SELECT', id: folders[1].id });
+
 		state = goToNote(notes, [5], state);
 		state = goToNote(notes, [6], state);
 
@@ -487,7 +488,7 @@ describe('Reducer', function() {
 		// create 1 folder
 		const folders = await createNTestFolders(1);
 		// create 5 notes
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		// select the 1st folder and the 1st note
 		let state = initTestState(folders, 0, notes, [0]);
 
@@ -555,7 +556,7 @@ describe('Reducer', function() {
 	it('should ensure history max limit is maintained', asyncTest(async () => {
 		const folders = await createNTestFolders(1);
 		// create 5 notes
-		const notes = await createNTestNotes(5, folders[0]);
+		const notes = await createNTestNotes(5, folders[0].id);
 		// select the 1st folder and the 1st note
 		let state = initTestState(folders, 0, notes, [0]);
 

@@ -32,15 +32,16 @@ const SyncTargetWebDAV = require('lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('lib/SyncTargetDropbox.js');
 const EncryptionService = require('lib/services/EncryptionService');
 const ResourceFetcher = require('lib/services/ResourceFetcher');
+const ResourceService = require('lib/services/ResourceService');
 const SearchEngineUtils = require('lib/services/SearchEngineUtils');
 const RevisionService = require('lib/services/RevisionService');
-const ResourceService = require('lib/services/RevisionService');
 const DecryptionWorker = require('lib/services/DecryptionWorker');
 const BaseService = require('lib/services/BaseService');
 const SearchEngine = require('lib/services/SearchEngine');
 const KvStore = require('lib/services/KvStore');
 const MigrationService = require('lib/services/MigrationService');
 const { toSystemSlashes } = require('lib/path-utils.js');
+const { ALL_NOTES_FILTER_ID, TRASH_TAG_ID, TRASH_TAG_NAME } = require('lib/reserved-ids');
 
 class BaseApplication {
 	constructor() {
@@ -337,6 +338,17 @@ class BaseApplication {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
+	async waitForAutoAddResourcesFinished() {
+		return new Promise((resolve) => {
+			const iid = setInterval(() => {
+				if (!ResourceFetcher.instance().autoAddResourcesCalls_.length) {
+					clearInterval(iid);
+					resolve();
+				}
+			}, 100);
+		});
+	}
+
 	reducerActionToString(action) {
 		const o = [action.type];
 		if ('id' in action) o.push(action.id);
@@ -472,8 +484,12 @@ class BaseApplication {
 		}
 
 		if (action.type == 'SMART_FILTER_SELECT') {
+			if (action.id === ALL_NOTES_FILTER_ID &&
+				newState.selectedNoteIds.length > 0) {
+
+				refreshNotesUseSelectedNoteId = true;
+			}
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
 		}
 
 		if (action.type == 'TAG_SELECT' || action.type === 'TAG_DELETE') {
@@ -484,12 +500,21 @@ class BaseApplication {
 			refreshNotes = true;
 		}
 
+		if (action.type == 'TAG_UPDATE_ONE') {
+			if (action.item.id === TRASH_TAG_ID) {
+				refreshNotes = true;
+			}
+		}
+
 		if (action.type == 'NOTE_TAG_REMOVE') {
-			if (newState.notesParentType === 'Tag' && newState.selectedTagId === action.item.id) {
+			if (newState.notesParentType  === 'Tag' && newState.selectedTagId === action.tag_id) {
 				if (newState.notes.length === newState.selectedNoteIds.length) {
 					await this.refreshCurrentFolder();
 					refreshNotesUseSelectedNoteId = true;
 				}
+				refreshNotes = true;
+
+			} else if (stateUtils.isViewingTrash(newState) && action.tag_id === TRASH_TAG_ID) {
 				refreshNotes = true;
 			}
 		}
@@ -525,6 +550,24 @@ class BaseApplication {
 			await this.applySettingsSideEffects(action);
 		} else if (action.type == 'SETTING_UPDATE_ALL') {
 			await this.applySettingsSideEffects();
+		}
+
+		if (action.type == 'TAG_UPDATE_ONE') {
+			if (action.item.id === TRASH_TAG_ID) {
+				refreshFolders = true;
+			}
+		}
+
+		if (action.type == 'NOTE_TAG_REMOVE') {
+			if (action.tag_id === TRASH_TAG_ID) {
+				refreshFolders = true;
+			}
+		}
+
+		if (action.type == 'FOLDER_TAG_REMOVE') {
+			if (action.tagId === TRASH_TAG_ID) {
+				refreshFolders = true;
+			}
 		}
 
 		if (refreshFolders) {
@@ -589,6 +632,23 @@ class BaseApplication {
 		return toSystemSlashes(`${os.homedir()}/.config/${Setting.value('appName')}`, 'linux');
 	}
 
+	async initialiseTrash_() {
+		// renove any imposters
+		let tag =  await Tag.loadByTitle(TRASH_TAG_NAME);
+		if (!!tag && tag.id !== TRASH_TAG_ID) {
+			this.logger_.info(`Renaming user ${TRASH_TAG_NAME} tag: ${tag.id}`);
+			tag.title = `${TRASH_TAG_NAME}0`;
+			await Tag.save(tag, { fields: ['title'], userSideValidation: false });
+		}
+
+		// create the trash tag
+		tag = await Tag.load(TRASH_TAG_ID);
+		if (!tag) {
+			this.logger_.info('Initialising trash');
+			tag = await Tag.save({ title: TRASH_TAG_NAME, id: TRASH_TAG_ID }, { isNew: true });
+		}
+	}
+
 	async start(argv) {
 		const startFlags = await this.handleStartFlags_(argv);
 
@@ -646,7 +706,6 @@ class BaseApplication {
 		}
 
 		this.logger_.info(`Profile directory: ${profileDir}`);
-
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(this.dbLogger_);
@@ -729,6 +788,9 @@ class BaseApplication {
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
 		await MigrationService.instance().run();
+
+		await this.initialiseTrash_();
+
 		return argv;
 	}
 }

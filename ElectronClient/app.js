@@ -30,6 +30,7 @@ const RevisionService = require('lib/services/RevisionService');
 const MigrationService = require('lib/services/MigrationService');
 const TemplateUtils = require('lib/TemplateUtils');
 const CssUtils = require('lib/CssUtils');
+const { stateUtils } = require('lib/reducer.js');
 
 const pluginClasses = [
 	require('./plugins/GotoAnything.min'),
@@ -1252,6 +1253,16 @@ class Application extends BaseApplication {
 			const menuItem = Menu.getApplicationMenu().getMenuItemById(itemId);
 			if (!menuItem) continue;
 			menuItem.enabled = selectedNoteIds.length === 1;
+		}
+
+		if (stateUtils.isViewingTrash(state)) {
+			for (const itemId of ['copy', 'paste', 'cut', 'selectAll', 'bold', 'italic', 'link', 'code', 'insertDateTime', 'setTags']) {
+				const menuItem = Menu.getApplicationMenu().getMenuItemById(`edit:${itemId}`);
+				if (menuItem) menuItem.enabled = false;
+			}
+		} else {
+			const menuItem = Menu.getApplicationMenu().getMenuItemById('edit:setTags');
+			if (menuItem) menuItem.enabled = true;
 		}
 
 		const menuItem = Menu.getApplicationMenu().getMenuItemById('help:toggleDevTools');

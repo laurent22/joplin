@@ -1,7 +1,6 @@
 const Note = require('lib/models/Note.js');
-const Folder = require('lib/models/Folder.js');
 const ArrayUtils = require('lib/ArrayUtils.js');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const { CONFLICT_FOLDER_ID, ALL_NOTES_FILTER_ID, TRASH_FILTER_ID, TRASH_TAG_ID } = require('lib/reserved-ids');
 
 const defaultState = {
 	notes: [],
@@ -137,6 +136,21 @@ stateUtils.getCurrentNote = function(state) {
 		}
 	}
 	return null;
+};
+
+stateUtils.isViewingAllNotes = function(state) {
+	return state.notesParentType === 'SmartFilter' &&
+		state.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+};
+
+stateUtils.isViewingTrash = function(state) {
+	return state.notesParentType === 'SmartFilter' &&
+		state.selectedSmartFilterId === TRASH_FILTER_ID;
+};
+
+stateUtils.isViewingConflicts = function(state) {
+	return state.notesParentType === 'Folder' &&
+		state.selectedFolderId === CONFLICT_FOLDER_ID;
 };
 
 function arrayHasEncryptedItems(array) {
@@ -581,6 +595,10 @@ const reducer = (state = defaultState, action) => {
 			newState = Object.assign({}, state);
 			newState.notesParentType = 'SmartFilter';
 			newState.selectedSmartFilterId = action.id;
+
+			if (action.id !== ALL_NOTES_FILTER_ID || stateUtils.isViewingTrash(state) || stateUtils.isViewingConflicts(state)) {
+				newState.selectedNoteIds = [];
+			}
 			break;
 
 		case 'FOLDER_SELECT':
@@ -624,6 +642,9 @@ const reducer = (state = defaultState, action) => {
 			newState = Object.assign({}, state);
 			newState.notes = action.notes;
 			newState.notesSource = action.notesSource;
+			if (newState.notes.length === 0) {
+				newState.selectedNoteIds = [];
+			}
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -631,13 +652,16 @@ const reducer = (state = defaultState, action) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote = action.note;
-				const isViewingAllNotes = (state.notesParentType === 'SmartFilter' && state.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
-				const isViewingConflictFolder = state.notesParentType === 'Folder' && state.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note, folderId) {
-					if (note.is_conflict && isViewingConflictFolder) return true;
-					if (!('parent_id' in modNote) || note.parent_id == folderId) return true;
-					return false;
+				const noteIsInFolder = function(note, folderId, state) {
+					if (stateUtils.isViewingAllNotes(state)) {
+						return !note.is_conflict;
+					} else if (stateUtils.isViewingTrash(state)) {
+						return !note.is_conflict;
+					} else if (stateUtils.isViewingConflicts(state)) {
+						return note.is_conflict;
+					}
+					return (!('parent_id' in note) || note.parent_id == folderId);
 				};
 
 				let movedNotePreviousIndex = 0;
@@ -648,14 +672,14 @@ const reducer = (state = defaultState, action) => {
 					const n = newNotes[i];
 					if (n.id == modNote.id) {
 						// Note is still in the same folder
-						if (isViewingAllNotes || noteIsInFolder(modNote, n.parent_id)) {
+						if (noteIsInFolder(modNote, n.parent_id, state)) {
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
 							newNotes[i] = Object.assign({}, newNotes[i]);
 
-							for (const n in modNote) {
-								if (!modNote.hasOwnProperty(n)) continue;
-								newNotes[i][n] = modNote[n];
+							for (const p in modNote) {
+								if (!modNote.hasOwnProperty(p)) continue;
+								newNotes[i][p] = modNote[p];
 							}
 						} else {
 							// Note has moved to a different folder
@@ -671,7 +695,7 @@ const reducer = (state = defaultState, action) => {
 				// Note was not found - if the current folder is the same as the note folder,
 				// add it to it.
 				if (!found) {
-					if (isViewingAllNotes || noteIsInFolder(modNote, state.selectedFolderId)) {
+					if (noteIsInFolder(modNote, state.selectedFolderId, state)) {
 						newNotes.push(modNote);
 					}
 				}
@@ -745,7 +769,7 @@ const reducer = (state = defaultState, action) => {
 
 		case 'TAG_UPDATE_ALL':
 			newState = Object.assign({}, state);
-			newState.tags = action.items;
+			newState.tags = removeItemFromArray(action.items.slice(0), 'id', TRASH_TAG_ID);
 			break;
 
 		case 'TAG_SELECT':
@@ -759,19 +783,20 @@ const reducer = (state = defaultState, action) => {
 			break;
 
 		case 'TAG_UPDATE_ONE':
-			{
+			if (action.item.id === TRASH_TAG_ID) {
+				newState.selectedNoteIds = [];
+			} else {
+				newState = updateOneItem(state, action);
+
 				// We only want to update the selected note tags if the tag belongs to the currently open note
 				const selectedNoteHasTag = !!state.selectedNoteTags.find(tag => tag.id === action.item.id);
-				newState = updateOneItem(state, action);
 				if (selectedNoteHasTag) newState = updateOneItem(newState, action, 'selectedNoteTags');
 			}
 			break;
 
 		case 'NOTE_TAG_REMOVE':
-			{
-				newState = updateOneItem(state, action, 'tags');
-				const tagRemoved = action.item;
-				newState.selectedNoteTags = removeItemFromArray(newState.selectedNoteTags.splice(0), 'id', tagRemoved.id);
+			if (action.tag_id === TRASH_TAG_ID && stateUtils.isViewingTrash(state)) {
+				newState.selectedNoteIds = newState.selectedNoteIds.filter(id => id !== action.note_id);
 			}
 			break;
 
@@ -965,7 +990,11 @@ const reducer = (state = defaultState, action) => {
 
 		case 'SET_NOTE_TAGS':
 			newState = Object.assign({}, state);
-			newState.selectedNoteTags = action.items;
+			if (stateUtils.isViewingConflicts(newState)) {
+				newState.selectedNoteTags = action.items.splice(0);
+			} else {
+				newState.selectedNoteTags = removeItemFromArray(action.items.splice(0), 'id', TRASH_TAG_ID);
+			}
 			break;
 
 		case 'PLUGIN_DIALOG_SET':

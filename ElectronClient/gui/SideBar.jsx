@@ -14,7 +14,10 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const InteropServiceHelper = require('../InteropServiceHelper.js');
 const { substrWithEllipsis } = require('lib/string-utils');
-const { ALL_NOTES_FILTER_ID } = require('lib/reserved-ids');
+const SideBarUtils = require('./utils/SideBarUtils');
+const { stateUtils } = require('lib/reducer.js');
+const { ALL_NOTES_FILTER_ID, TRASH_FILTER_ID, ORPHANS_FOLDER_ID, CONFLICT_FOLDER_ID } = require('lib/reserved-ids');
+
 
 class SideBarComponent extends React.Component {
 	constructor() {
@@ -47,8 +50,8 @@ class SideBarComponent extends React.Component {
 				event.preventDefault();
 
 				if (!folderId) return;
-
 				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+
 				for (let i = 0; i < noteIds.length; i++) {
 					await Note.moveToFolder(noteIds[i], folderId);
 				}
@@ -91,6 +94,7 @@ class SideBarComponent extends React.Component {
 
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.onAllNotesClick_ = this.onAllNotesClick_.bind(this);
+		this.onTrashClick_ = this.onTrashClick_.bind(this);
 
 		this.rootRef = React.createRef();
 
@@ -272,7 +276,8 @@ class SideBarComponent extends React.Component {
 
 	async itemContextMenu(event) {
 		const itemId = event.currentTarget.getAttribute('data-id');
-		if (itemId === Folder.conflictFolderId()) return;
+		if (itemId === ORPHANS_FOLDER_ID) return;
+		if (itemId === CONFLICT_FOLDER_ID) return;
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
@@ -311,30 +316,6 @@ class SideBarComponent extends React.Component {
 				})
 			);
 		}
-
-		menu.append(
-			new MenuItem({
-				label: buttonLabel,
-				click: async () => {
-					const ok = bridge().showConfirmMessageBox(deleteMessage, {
-						buttons: [buttonLabel, _('Cancel')],
-						defaultId: 1,
-					});
-					if (!ok) return;
-
-					if (itemType === BaseModel.TYPE_FOLDER) {
-						await Folder.delete(itemId);
-					} else if (itemType === BaseModel.TYPE_TAG) {
-						await Tag.untagAll(itemId);
-					} else if (itemType === BaseModel.TYPE_SEARCH) {
-						this.props.dispatch({
-							type: 'SEARCH_DELETE',
-							id: itemId,
-						});
-					}
-				},
-			})
-		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 			menu.append(
@@ -407,6 +388,30 @@ class SideBarComponent extends React.Component {
 			);
 		}
 
+		menu.append(
+			new MenuItem({
+				label: buttonLabel,
+				click: async () => {
+					const ok = bridge().showConfirmMessageBox(deleteMessage, {
+						buttons: [buttonLabel, _('Cancel')],
+						defaultId: 1,
+					});
+					if (!ok) return;
+
+					if (itemType === BaseModel.TYPE_FOLDER) {
+						await Folder.delete(itemId, { permanent: false });
+					} else if (itemType === BaseModel.TYPE_TAG) {
+						await Tag.untagAll(itemId);
+					} else if (itemType === BaseModel.TYPE_SEARCH) {
+						this.props.dispatch({
+							type: 'SEARCH_DELETE',
+							id: itemId,
+						});
+					}
+				},
+			})
+		);
+
 		menu.popup(bridge().window());
 	}
 
@@ -453,7 +458,8 @@ class SideBarComponent extends React.Component {
 
 	folderItem(folder, selected, hasChildren, depth) {
 		let style = Object.assign({}, this.style().listItem);
-		if (folder.id === Folder.conflictFolderId()) style = Object.assign(style, this.style().conflictFolder);
+		if (folder.id === ORPHANS_FOLDER_ID) style = Object.assign(style, this.style().conflictFolder);
+		if (folder.id === CONFLICT_FOLDER_ID) style = Object.assign(style, this.style().conflictFolder);
 
 		const itemTitle = Folder.displayTitle(folder);
 
@@ -611,7 +617,7 @@ class SideBarComponent extends React.Component {
 		return null;
 	}
 
-	onKeyDown(event) {
+	async onKeyDown(event) {
 		const keyCode = event.keyCode;
 		const selectedItem = this.selectedItem();
 
@@ -676,19 +682,32 @@ class SideBarComponent extends React.Component {
 			}
 		}
 
-		if (selectedItem && selectedItem.type === 'folder' && keyCode === 32) {
-			// SPACE
-			event.preventDefault();
-
-			this.props.dispatch({
-				type: 'FOLDER_TOGGLE',
-				id: selectedItem.id,
-			});
-		}
-
 		if (keyCode === 65 && (event.ctrlKey || event.metaKey)) {
 			// Ctrl+A key
 			event.preventDefault();
+		}
+
+		if (selectedItem && selectedItem.type === 'folder') {
+
+			if (keyCode === 32) {
+				// SPACE
+				event.preventDefault();
+
+				this.props.dispatch({
+					type: 'FOLDER_TOGGLE',
+					id: selectedItem.id,
+				});
+
+			} else if ((keyCode === 46 && !event.shiftKey) || (keyCode === 8 && !event.metaKey)) {
+				// Delete / Backspace
+				event.preventDefault();
+				await SideBarUtils.confirmDeleteFolder(selectedItem.id, false);
+
+			} else if ((keyCode === 46 && event.shiftKey) || (keyCode === 8 && event.metaKey)) {
+				// SHIFT+Delete / CMD+Backspace
+				event.preventDefault();
+				await SideBarUtils.confirmDeleteFolder(selectedItem.id, true);
+			}
 		}
 	}
 
@@ -707,6 +726,13 @@ class SideBarComponent extends React.Component {
 		this.props.dispatch({
 			type: 'SMART_FILTER_SELECT',
 			id: ALL_NOTES_FILTER_ID,
+		});
+	}
+
+	onTrashClick_() {
+		this.props.dispatch({
+			type: 'SMART_FILTER_SELECT',
+			id: TRASH_FILTER_ID,
 		});
 	}
 
@@ -749,7 +775,7 @@ class SideBarComponent extends React.Component {
 		items.push(
 			this.makeHeader('allNotesHeader', _('All notes'), 'fa-clone', {
 				onClick: this.onAllNotesClick_,
-				selected: this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID,
+				selected: stateUtils.isViewingAllNotes(this.props),
 			})
 		);
 
@@ -789,6 +815,13 @@ class SideBarComponent extends React.Component {
 				</div>
 			);
 		}
+
+		items.push(
+			this.makeHeader('trashHeader', _('Trash'), 'fa-trash', {
+				onClick: this.onTrashClick_,
+				selected: stateUtils.isViewingTrash(this.props),
+			})
+		);
 
 		let decryptionReportText = '';
 		if (this.props.decryptionWorker && this.props.decryptionWorker.state !== 'idle' && this.props.decryptionWorker.itemCount) {

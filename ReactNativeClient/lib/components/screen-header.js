@@ -14,6 +14,7 @@ const { themeStyle } = require('lib/components/global-style.js');
 const { Dropdown } = require('lib/components/Dropdown.js');
 const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+const { CONFLICT_FOLDER_ID } = require('lib/reserved-ids');
 
 Icon.loadFont();
 
@@ -357,7 +358,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 				};
 
 				const titlePickerItems = mustSelect => {
-					const folders = this.props.folders.filter(f => f.id !== Folder.conflictFolderId());
+					const folders = this.props.folders.filter(f => f.id !== CONFLICT_FOLDER_ID);
 					let output = [];
 					if (mustSelect) output.push({ label: _('Move to notebook...'), value: null });
 					const folderTree = Folder.buildTree(folders);

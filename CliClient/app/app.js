@@ -14,6 +14,7 @@ const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('lib/Cache');
 const RevisionService = require('lib/services/RevisionService');
+const { CONFLICT_FOLDER_ID } = require('lib/reserved-ids.js');
 
 class Application extends BaseApplication {
 	constructor() {
@@ -79,7 +80,7 @@ class Application extends BaseApplication {
 
 		pattern = pattern ? pattern.toString() : '';
 
-		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == Folder.conflictFolderId())) return [Folder.conflictFolder()];
+		if (type == BaseModel.TYPE_FOLDER && (pattern == Folder.conflictFolderTitle() || pattern == CONFLICT_FOLDER_ID)) return [Folder.conflictFolder()];
 
 		if (!options) options = {};
 
