@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 require('app-module-path').addPath(__dirname);
-const { filterParser } = require('lib/services/filterParser.js');
-// import filterParser from 'lib/services/filterParser.js';
+const { filterParser } = require('lib/services/searchengine/filterParser.js');
+// import filterParser from 'lib/services/searchengine/filterParser.js';
 
 describe('filterParser should be correct filter for keyword', () => {
 	it('title', () => {

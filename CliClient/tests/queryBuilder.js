@@ -8,7 +8,7 @@ jasmine.pp = function(obj) {
 	return JSON.stringify(obj, undefined, 2);
 };
 
-const { queryBuilder } = require('lib/services/queryBuilder.js');
+const { queryBuilder } = require('lib/services/searchengine/queryBuilder.js');
 
 const defaultSQL = `SELECT
 	notes_fts.id,
