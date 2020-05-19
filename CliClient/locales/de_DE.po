@@ -2255,7 +2255,7 @@ msgstr "Kann Notizbuch nicht an diesen Ort verschieben"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
-"Notizbuch kann nicht \"%s\" genannt werden. Dieser Name ist reserviert.."
+"Notizbuch kann nicht \"%s\" genannt werden. Dieser Name ist reserviert."
 
 #: /Users/tessus/data/work/joplin/Tools/../ReactNativeClient/lib/models/Note.js:26
 msgid "created date"

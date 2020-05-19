@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const ToolbarBase = require('../../../Toolbar.min.js');
 const { _ } = require('lib/locale');
-const { buildStyle } = require('../../../../theme.js');
+const { buildStyle, themeStyle } = require('../../../../theme.js');
 
 interface ToolbarProps {
 	theme: number,
@@ -11,10 +11,12 @@ interface ToolbarProps {
 
 function styles_(props:ToolbarProps) {
 	return buildStyle('AceEditorToolbar', props.theme, (/* theme:any*/) => {
+		const theme = themeStyle(props.theme);
 		return {
 			root: {
 				flex: 1,
 				marginBottom: 0,
+				borderTop: `1px solid ${theme.dividerColor}`,
 			},
 		};
 	});
@@ -124,7 +126,7 @@ export default function Toolbar(props:ToolbarProps) {
 
 		toolbarItems.push({
 			tooltip: _('Heading'),
-			iconName: 'fa-header',
+			iconName: 'fa-heading',
 			onClick: () => {
 				props.dispatch({
 					type: 'WINDOW_COMMAND',
@@ -146,7 +148,7 @@ export default function Toolbar(props:ToolbarProps) {
 
 		toolbarItems.push({
 			tooltip: _('Insert Date Time'),
-			iconName: 'fa-calendar-plus-o',
+			iconName: 'fa-calendar-plus',
 			onClick: () => {
 				props.dispatch({
 					type: 'WINDOW_COMMAND',

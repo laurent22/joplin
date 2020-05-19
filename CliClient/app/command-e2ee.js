@@ -48,7 +48,11 @@ class Command extends BaseCommand {
 
 			while (true) {
 				try {
-					await DecryptionWorker.instance().start();
+					const result = await DecryptionWorker.instance().start();
+					const line = [];
+					line.push(_('Decrypted items: %d', result.decryptedItemCount));
+					if (result.skippedItemCount) line.push(_('Skipped items: %d (use --retry-failed-items to retry decrypting them)', result.skippedItemCount));
+					this.stdout(line.join('\n'));
 					break;
 				} catch (error) {
 					if (error.code === 'masterKeyNotLoaded') {

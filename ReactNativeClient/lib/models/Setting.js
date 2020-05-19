@@ -629,6 +629,46 @@ class Setting extends BaseModel {
 				maximum: 300,
 				step: 10,
 			},
+
+			'layout.folderList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Notebook list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.noteList.factor': {
+				value: 1,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note list growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
+			'layout.note.factor': {
+				value: 2,
+				type: Setting.TYPE_INT,
+				section: 'appearance',
+				public: true,
+				appTypes: ['cli'],
+				label: () => _('Note area growth factor'),
+				description: () =>
+					_('The factor property sets how the item will grow or shrink ' +
+				'to fit the available space in its container with respect to the other items. ' +
+				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
+				'Restart app to see changes.'),
+			},
 		};
 
 		return this.metadata_;
@@ -1045,15 +1085,15 @@ class Setting extends BaseModel {
 	}
 
 	static sectionNameToIcon(name) {
-		if (name === 'general') return 'fa-sliders';
-		if (name === 'sync') return 'fa-refresh';
-		if (name === 'appearance') return 'fa-pencil';
-		if (name === 'note') return 'fa-file-text-o';
-		if (name === 'plugins') return 'fa-puzzle-piece';
-		if (name === 'application') return 'fa-cog';
-		if (name === 'revisionService') return 'fa-archive-org';
-		if (name === 'encryption') return 'fa-key-modern';
-		if (name === 'server') return 'fa-hand-scissors-o';
+		if (name === 'general') return 'fas fa-sliders-h';
+		if (name === 'sync') return 'fas fa-sync-alt';
+		if (name === 'appearance') return 'fas fa-pencil-alt';
+		if (name === 'note') return 'far fa-file-alt';
+		if (name === 'plugins') return 'fas fa-puzzle-piece';
+		if (name === 'application') return 'fas fa-cog';
+		if (name === 'revisionService') return 'fas fa-history';
+		if (name === 'encryption') return 'fas fa-key';
+		if (name === 'server') return 'far fa-hand-scissors';
 		return name;
 	}
 

@@ -248,6 +248,7 @@ class MainScreenComponent extends React.Component {
 				},
 			});
 		} else if (command.name === 'moveToFolder') {
+			const folders = await Folder.sortFolderTree();
 			const startFolders = [];
 			const maxDepth = 15;
 
@@ -258,7 +259,8 @@ class MainScreenComponent extends React.Component {
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
 			};
-			addOptions(await Folder.allAsTree(), 0);
+
+			addOptions(folders, 0);
 
 			this.setState({
 				promptOptions: {
@@ -603,7 +605,7 @@ class MainScreenComponent extends React.Component {
 
 		const rowHeight = height - theme.headerHeight - (messageBoxVisible ? this.styles_.messageBox.height : 0);
 
-		this.styles_.verticalResizer = {
+		this.styles_.verticalResizerSidebar = {
 			width: 5,
 			// HACK: For unknown reasons, the resizers are just a little bit taller than the other elements,
 			// making the whole window scroll vertically. So we remove 10 extra pixels here.
@@ -611,8 +613,10 @@ class MainScreenComponent extends React.Component {
 			display: 'inline-block',
 		};
 
+		this.styles_.verticalResizerNotelist = Object.assign({}, this.styles_.verticalResizerSidebar);
+
 		this.styles_.sideBar = {
-			width: sidebarWidth - this.styles_.verticalResizer.width,
+			width: sidebarWidth - this.styles_.verticalResizerSidebar.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -621,10 +625,11 @@ class MainScreenComponent extends React.Component {
 		if (isSidebarVisible === false) {
 			this.styles_.sideBar.width = 0;
 			this.styles_.sideBar.display = 'none';
+			this.styles_.verticalResizerSidebar.display = 'none';
 		}
 
 		this.styles_.noteList = {
-			width: noteListWidth - this.styles_.verticalResizer.width,
+			width: noteListWidth - this.styles_.verticalResizerNotelist.width,
 			height: rowHeight,
 			display: 'inline-block',
 			verticalAlign: 'top',
@@ -633,7 +638,7 @@ class MainScreenComponent extends React.Component {
 		if (isNoteListVisible === false) {
 			this.styles_.noteList.width = 0;
 			this.styles_.noteList.display = 'none';
-			this.styles_.verticalResizer.display = 'none';
+			this.styles_.verticalResizerNotelist.display = 'none';
 		}
 
 		this.styles_.noteText = {
@@ -748,7 +753,7 @@ class MainScreenComponent extends React.Component {
 				color: theme.color,
 				backgroundColor: theme.backgroundColor,
 			},
-			this.props.style
+			this.props.style,
 		);
 		const promptOptions = this.state.promptOptions;
 		const folders = this.props.folders;
@@ -780,7 +785,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New note'),
-			iconName: 'fa-file-o',
+			iconName: 'fa-file',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newNote' });
@@ -789,7 +794,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('New to-do'),
-			iconName: 'fa-check-square-o',
+			iconName: 'fa-check-square',
 			enabled: !!folders.length && !onConflictFolder,
 			onClick: () => {
 				this.doCommand({ name: 'newTodo' });
@@ -806,7 +811,7 @@ class MainScreenComponent extends React.Component {
 
 		headerItems.push({
 			title: _('Code View'),
-			iconName: 'fa-file-code-o ',
+			iconName: 'fa-file-code ',
 			enabled: !!notes.length,
 			type: 'checkbox',
 			checked: this.props.settingEditorCodeView,
@@ -872,9 +877,9 @@ class MainScreenComponent extends React.Component {
 				<Header style={styles.header} showBackButton={false} items={headerItems} />
 				{messageComp}
 				<SideBar style={styles.sideBar} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.sidebar_onDrag} />
+				<VerticalResizer style={styles.verticalResizerSidebar} onDrag={this.sidebar_onDrag} />
 				<NoteList style={styles.noteList} />
-				<VerticalResizer style={styles.verticalResizer} onDrag={this.noteList_onDrag} />
+				<VerticalResizer style={styles.verticalResizerNotelist} onDrag={this.noteList_onDrag} />
 				<NoteEditor bodyEditor={bodyEditor} style={styles.noteText} />
 				{pluginDialog}
 			</div>

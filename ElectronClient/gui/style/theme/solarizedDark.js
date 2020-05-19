@@ -1,4 +1,6 @@
 const solarizedDarkStyle = {
+	appearance: 'dark',
+
 	backgroundColor: '#002b36',
 	backgroundColorTransparent: 'rgba(0, 43, 54, 0.9)',
 	oddBackgroundColor: '#073642',
@@ -31,7 +33,7 @@ const solarizedDarkStyle = {
 	htmlCodeBorderColor: '#696969',
 	htmlCodeColor: '#fdf6e3',
 
-	editorTheme: 'solarized_dark',
+	editorTheme: 'twilight',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
 };
 

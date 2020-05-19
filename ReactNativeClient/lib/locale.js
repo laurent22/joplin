@@ -225,8 +225,8 @@ function supportedLocalesToLanguages(options = null) {
 	return output;
 }
 
-function closestSupportedLocale(canonicalName, defaultToEnglish = true) {
-	const locales = supportedLocales();
+function closestSupportedLocale(canonicalName, defaultToEnglish = true, locales = null) {
+	locales = locales === null ? supportedLocales() : locales;
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
 	const requiredLanguage = languageCodeOnly(canonicalName).toLowerCase();

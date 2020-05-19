@@ -468,7 +468,7 @@ class SideBarComponent extends React.Component {
 		};
 
 		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'fa-chevron-right' : 'fa-chevron-down';
-		const expandIcon = <i style={expandIconStyle} className={`fa ${iconName}`}></i>;
+		const expandIcon = <i style={expandIconStyle} className={`fas ${iconName}`}></i>;
 		const expandLink = hasChildren ? (
 			<a style={expandLinkStyle} href="#" folderid={folder.id} onClick={this.onFolderToggleClick_}>
 				{expandIcon}
@@ -558,7 +558,7 @@ class SideBarComponent extends React.Component {
 
 	makeHeader(key, label, iconName, extraProps = {}) {
 		const style = this.style().header;
-		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fa ${iconName}`} />;
+		const icon = <i style={{ fontSize: style.fontSize, marginRight: 5 }} className={`fas ${iconName}`} />;
 
 		if (extraProps.toggleblock || extraProps.onClick) {
 			style.cursor = 'pointer';
@@ -572,7 +572,7 @@ class SideBarComponent extends React.Component {
 		const toggleKey = `${key}IsExpanded`;
 		if (extraProps.toggleblock) {
 			const isExpanded = this.state[toggleKey];
-			toggleIcon = <i className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
+			toggleIcon = <i className={`fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}`} style={{ fontSize: style.fontSize * 0.75, marginRight: 12, marginLeft: 5, marginTop: style.fontSize * 0.125 }}></i>;
 		}
 		if (extraProps.selected) {
 			style.backgroundColor = this.style().listItemSelected.backgroundColor;
@@ -712,7 +712,7 @@ class SideBarComponent extends React.Component {
 
 	synchronizeButton(type) {
 		const style = Object.assign({}, this.style().button, { marginBottom: 5 });
-		const iconName = 'fa-refresh';
+		const iconName = 'fa-sync-alt';
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
 		const iconStyle = { fontSize: style.fontSize, marginRight: 5 };
 
@@ -720,7 +720,7 @@ class SideBarComponent extends React.Component {
 			iconStyle.animation = 'icon-infinite-rotation 1s linear infinite';
 		}
 
-		const icon = <i style={iconStyle} className={`fa ${iconName}`} />;
+		const icon = <i style={iconStyle} className={`fas ${iconName}`} />;
 		return (
 			<a
 				className="synchronize-button"

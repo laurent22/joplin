@@ -29,6 +29,10 @@ class Bridge {
 		return this.electronWrapper_.window();
 	}
 
+	showItemInFolder(fullPath) {
+		return require('electron').shell.showItemInFolder(fullPath);
+	}
+
 	newBrowserWindow(options) {
 		return new BrowserWindow(options);
 	}

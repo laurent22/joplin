@@ -138,6 +138,7 @@ class DecryptionWorker {
 
 		const excludedIds = [];
 		const decryptedItemCounts = {};
+		let skippedItemCount = 0;
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
@@ -172,6 +173,7 @@ class DecryptionWorker {
 						if (decryptCounter > this.maxDecryptionAttempts_) {
 							this.logger().debug(`DecryptionWorker: ${BaseModel.modelTypeToName(item.type_)} ${item.id}: Decryption has failed more than 2 times - skipping it`);
 							this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: true });
+							skippedItemCount++;
 							excludedIds.push(item.id);
 							continue;
 						}
@@ -245,24 +247,34 @@ class DecryptionWorker {
 
 		this.state_ = 'idle';
 
-		this.dispatchReport({
-			state: 'idle',
+		let decryptedItemCount = 0;
+		for (const itemType in decryptedItemCounts) decryptedItemCount += decryptedItemCounts[itemType];
+
+		const finalReport = {
+			skippedItemCount: skippedItemCount,
 			decryptedItemCounts: decryptedItemCounts,
-		});
+			decryptedItemCount: decryptedItemCount,
+		};
+
+		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
 
 		if (downloadedButEncryptedBlobCount) {
 			this.logger().info(`DecryptionWorker: Some resources have been downloaded but are not decrypted yet. Scheduling another decryption. Resource count: ${downloadedButEncryptedBlobCount}`);
 			this.scheduleStart();
 		}
+
+		return finalReport;
 	}
 
 	async start(options) {
 		this.startCalls_.push(true);
+		let output = null;
 		try {
-			await this.start_(options);
+			output = await this.start_(options);
 		} finally {
 			this.startCalls_.pop();
 		}
+		return output;
 	}
 
 	async destroy() {

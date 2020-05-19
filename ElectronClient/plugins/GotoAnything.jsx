@@ -303,6 +303,12 @@ class Dialog extends React.PureComponent {
 				folderId: item.parent_id,
 				noteId: item.id,
 			});
+
+			this.props.dispatch({
+				type: 'WINDOW_COMMAND',
+				name: 'focusElement',
+				target: 'noteBody',
+			});
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
 			this.props.dispatch({
 				type: 'TAG_SELECT',
