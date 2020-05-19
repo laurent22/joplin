@@ -554,10 +554,10 @@ class Note extends BaseItem {
 	static async save(o, options = null) {
 		const isNew = this.isNew(o, options);
 		const isProvisional = options && !!options.provisional;
+		const dispatchUpdateAction = options ? options.dispatchUpdateAction !== false : true;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
 		if (isNew && !('order' in o)) o.order = Date.now();
-		if (!('dispatchUpdateAction' in options)) options.dispatchUpdateAction = true;
 
 		// We only keep the previous note content for "old notes" (see Revision Service for more info)
 		// In theory, we could simply save all the previous note contents, and let the revision service
@@ -575,7 +575,7 @@ class Note extends BaseItem {
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
-		if (options.dispatchUpdateAction) {
+		if (dispatchUpdateAction) {
 			this.dispatch({
 				type: 'NOTE_UPDATE_ONE',
 				note: note,
