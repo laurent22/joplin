@@ -42,6 +42,21 @@ export function selectedText(selectionRange: any, body: string) {
 	return body.substr(selection.start, selection.end - selection.start);
 }
 
+function selectionRangesEqual(s1:any, s2:any) {
+	if (s1 === s2) return true;
+	if (!s1 && !s2) return true;
+
+	if (s1 && !s2) return false;
+	if (!s1 && s2) return false;
+
+	if (s1.start.row !== s2.start.row) return false;
+	if (s1.start.column !== s2.start.column) return false;
+	if (s1.end.row !== s2.end.row) return false;
+	if (s1.end.column !== s2.end.column) return false;
+
+	return true;
+}
+
 export function useSelectionRange(editor: any) {
 	const [selectionRange, setSelectionRange] = useState(null);
 
@@ -51,7 +66,16 @@ export function useSelectionRange(editor: any) {
 		function updateSelection() {
 			const ranges = editor.getSelection().getAllRanges();
 			const firstRange = ranges && ranges.length ? ranges[0] : null;
-			setSelectionRange(firstRange);
+
+			// Ace Editor might sometimes send multiple "changeSelection" events
+			// with the same selection range, which triggers unecessary updates
+			// and even infinite rendering loops. So before setting it on the state
+			// we deep compare the previous and new selection.
+			// https://github.com/laurent22/joplin/issues/3200
+			setSelectionRange(prev => {
+				if (selectionRangesEqual(prev, firstRange)) return prev;
+				return firstRange;
+			});
 
 			// if (process.platform === 'linux') {
 			// 	const textRange = this.textOffsetSelection();
@@ -247,7 +271,8 @@ export function useRootWidth(dependencies:any) {
 
 	useEffect(() => {
 		if (!rootRef.current) return;
-		setRootWidth(rootRef.current.offsetWidth);
+
+		if (rootWidth !== rootRef.current.offsetWidth) setRootWidth(rootRef.current.offsetWidth);
 	});
 
 	return rootWidth;
