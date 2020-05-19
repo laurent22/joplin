@@ -38,7 +38,7 @@ const { SelectDateTimeDialog } = require('lib/components/select-date-time-dialog
 const CameraView = require('lib/components/CameraView');
 const SearchEngine = require('lib/services/SearchEngine');
 const urlUtils = require('lib/urlUtils');
-const RecordAudio = require('lib/services/RecordAudio');
+import RecordAudio from '../../../services/RecordAudio';
 
 import FileViewer from 'react-native-file-viewer';
 
