@@ -1,4 +1,3 @@
-
 interface Filter {
 	relation: string,
 	name: string,
@@ -13,6 +12,7 @@ interface Term {
 const parseQuery = (query: string): Array<Filter> => {
 	const terms = [];
 
+	// tag:123 tag:234 or some query -> [["tag", "123"], ["tag", "234"], ["_", "or"], ["_", "some"], ["_", "query"]]
 	let inQuote = false;
 	let currentCol = '_';
 	let currentTerm = '';
@@ -49,8 +49,6 @@ const parseQuery = (query: string): Array<Filter> => {
 	}
 	if (currentTerm) terms.push([currentCol, currentTerm]);
 
-	// [["tag", "123"], ["tag", "234"], ["_", "some"], ["_", "text"]]  tag:123 tag:234 some text
-	// terms is like an array
 
 	let relation = 'AND'; // default relation
 	const result: Array<Filter> = [];
@@ -61,7 +59,7 @@ const parseQuery = (query: string): Array<Filter> => {
 			result.push({ relation: relation, name: terms[i][0], value: terms[i][1] });
 			relation = 'AND'; // reset to default
 		} else {
-			// could be AND OR, else text to fts search
+			// could be AND or OR or text to fts search
 			if (terms[i][1].toUpperCase() !== 'AND' && terms[i][1].toUpperCase() !== 'OR') {
 				// this is text
 				result.push({ relation: relation, name: 'text', value: terms[i][1] });
@@ -76,31 +74,7 @@ const parseQuery = (query: string): Array<Filter> => {
 	return result;
 };
 
-
 const trimQuotes = (str: string): string => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
-
-// const filterParser = (searchString: string): Map<string, Array<Term>> => {
-// 	searchString = searchString.trim();
-// 	const filters: Map<string, Array<Term>> = new Map();
-
-// 	const matches = parseQuery(searchString);
-// 	let terms: Array<Term>;
-// 	for (const match of matches) {
-// 		const { name, relation, value } = match;
-// 		if (!value) continue;
-
-// 		if (name === 'title' || name === 'body') {
-// 			// Trim quotes since we don't support phrase query here
-// 			// eg. Split title:"hello world" to title:hello title:world with relation
-// 			terms = trimQuotes(match.value).split(' ').map(value => ({ relation, value }));
-// 		} else {
-// 			terms = [{ relation, value }];
-// 		}
-// 		filters.set(name, filters.get(name) ? [...filters.get(name), ...terms] : terms);
-// 	}
-
-// 	return filters;
-// };
 
 export function filterParser(searchString: string) {
 	searchString = searchString.trim();

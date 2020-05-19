@@ -4,28 +4,27 @@ require('app-module-path').addPath(__dirname);
 
 // For pretty printing.
 // See https://stackoverflow.com/questions/23676459/karma-jasmine-pretty-printing-object-comparison/26324116
-jasmine.pp = function(obj) {
-	return JSON.stringify(obj, undefined, 2);
-};
+// jasmine.pp = function(obj) {
+// 	return JSON.stringify(obj, undefined, 2);
+// };
 
 const { queryBuilder } = require('lib/services/searchengine/queryBuilder.js');
+
+const tagSQL = 'tag_filter as (SELECT note_tags.note_id as id FROM note_tags WHERE 1 INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?))';
+
+const tagDoubleSQL = 'tag_filter as (SELECT note_tags.note_id as id FROM note_tags WHERE 1 INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?) INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?))';
 
 const defaultSQL = `SELECT
 	notes_fts.id,
 	notes_fts.title AS normalized_title,
-	offsets(notes_fts) AS offsets,
-	notes.title,
-	notes.user_updated_time,
-	notes.is_todo,
-	notes.todo_completed,
-	notes.parent_id
-	FROM notes_fts
-	LEFT JOIN notes ON notes_fts.id = notes.id WHERE 1`;
+	notes_fts.created_time,
+	notes_fts.updated_time,
+	notes_fts.is_todo,
+	notes_fts.todo_completed,
+	notes_fts.parent_id
+	FROM notes_fts WHERE 1`;
 
-const defaultMatchSQL = `${defaultSQL} AND notes_fts MATCH (?)`;
-
-const defaultTagSQL = `${defaultSQL} AND notes.id IN (SELECT note_tags.note_id FROM note_tags WHERE 1`;
-
+const defaultMatchSQL = `${defaultSQL} AND notes_fts MATCH ?`;
 
 describe('queryBuilder should give correct sql', () => {
 	it('when filter is just the title', () => {
@@ -64,7 +63,7 @@ describe('queryBuilder should give correct sql', () => {
 		});
 	});
 
-	it('when filter contains both mulitple words in title', () => {
+	it('when filter contains mulitple words in title', () => {
 		const testTitle = 'word1 word2'.split(' ');
 		const testBody = 'someBody';
 		const filters = new Map([
@@ -81,6 +80,26 @@ describe('queryBuilder should give correct sql', () => {
 		expect(queryBuilder(filters)).toEqual({
 			query: defaultMatchSQL,
 			params: [`title:${testTitle[0]} title:${testTitle[1]} body:${testBody}`],
+		});
+	});
+
+	it('when filter contains multiple words in body', () => {
+		const testTitle = 'testTitle';
+		const testBody = ['foo', 'bar'];
+		const filters = new Map([
+			['title', [{ relation: 'AND', value: testTitle }]],
+			[
+				'body',
+				[
+					{ relation: 'AND', value: testBody[0] },
+					{ relation: 'AND', value: testBody[1] },
+				],
+			],
+		]);
+
+		expect(queryBuilder(filters)).toEqual({
+			query: defaultMatchSQL,
+			params: [`title:${testTitle} body:${testBody[0]} body:${testBody[1]}`],
 		});
 	});
 
@@ -133,7 +152,7 @@ describe('queryBuilder should give correct sql', () => {
 			['tag', [{ relation: 'AND', value: 'tag123' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: `${defaultTagSQL}` + ' INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?))',
+			query: `WITH ${tagSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
 			params: ['tag123'],
 		});
 
@@ -141,7 +160,7 @@ describe('queryBuilder should give correct sql', () => {
 			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag345' }]],
 		]);
 		expect(queryBuilder(filters)).toEqual({
-			query: `${defaultTagSQL}` + ' INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?) INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?))',
+			query: `WITH ${tagDoubleSQL} ${defaultSQL} AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)`,
 			params: ['tag123', 'tag345'],
 		});
 	});

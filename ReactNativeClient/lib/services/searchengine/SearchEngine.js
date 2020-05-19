@@ -450,8 +450,19 @@ class SearchEngine {
 
 			const filters = filterParser(searchString);
 			const { query, params } = queryBuilder(filters);
+			// console.log(query);
+			// console.log(params);
 			try {
+
+				const startTime = Date.now();
+
 				const rows = await this.db().selectAll(query, params);
+
+				const timeTaken = Date.now() - startTime;
+				console.log(`Time taken for query '${searchString}': ${timeTaken}ms`);
+				console.log(`Rows returned ${rows.length}`);
+
+				// const
 				this.processResults_(rows);
 				// console.log(`Rows returned after search for ${searchString}: ${rows}`);
 				return rows;

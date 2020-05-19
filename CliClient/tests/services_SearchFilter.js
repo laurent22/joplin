@@ -121,7 +121,7 @@ describe('services_SearchFilter', function() {
 		await engine.syncTables();
 
 		// Interpretation: Match with notes containing foo in title/body and bar in title/body
-		// Note: This is NOT saying to match notes containing foo bar in either title/body
+		// Note: This is NOT saying to match notes containing foo bar in title/body
 		rows = await engine.search('foo bar');
 		expect(rows.length).toBe(2);
 		expect(rows.map(r=>r.id)).toContain(n1.id);

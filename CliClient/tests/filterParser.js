@@ -97,7 +97,7 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('filter by tag', () => {
+	it('tag', () => {
 		const searchString = 'tag:tag123';
 		const expected = new Map([
 			['tag', [{ relation: 'AND', value: 'tag123' }]],
@@ -105,7 +105,7 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
-	it('filter by multiple tags', () => {
+	it('multiple tags', () => {
 		const searchString = 'tag:tag123 tag:tag456';
 		const expected = new Map([
 			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'AND', value: 'tag456' }]],
@@ -113,4 +113,19 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toEqual(expected);
 	});
 
+	it('tag or tag', () => {
+		const searchString = 'tag:tag123 or tag:tag456';
+		const expected = new Map([
+			['tag', [{ relation: 'AND', value: 'tag123' }, { relation: 'OR', value: 'tag456' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
+
+	it('multi word body', () => {
+		const searchString = 'body:"foo bar"';
+		const expected = new Map([
+			['body', [{ relation: 'AND', value: 'foo' }, { relation: 'AND', value: 'bar' }]],
+		]);
+		expect(filterParser(searchString)).toEqual(expected);
+	});
 });

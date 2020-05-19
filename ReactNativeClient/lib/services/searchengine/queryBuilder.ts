@@ -3,68 +3,71 @@ interface Term {
   value: string;
 }
 
-// Note: we might need to escape query for making it sql compatible
-const matchStmtBuilder = (
-	filters: Map<string, Array<Term>>,
-	keyword: string
-): string => {
-	if (filters.has(keyword)) {
-		return `${filters
-			.get(keyword)
-			.map((term) => {
-				if (term.relation === 'AND') {
-					if (keyword !== 'text') {
-						return `${keyword}:${term.value}`;
-					} else {
-						return `${term.value}`;
-					}
-				} else {
-					return `${term.relation} ${keyword}:${term.value}`;
-				}
-			})
-			.join(' ')} `;
-	}
-	return '';
+const tagFilter = (tags: Array<Term>) => {
+	const noteIdsFromTag = 'SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (SELECT tags.id from tags WHERE tags.title LIKE ?)';
+	let result = tags.map(tag => `${tag.relation == 'AND' ? 'INTERSECT' : 'UNION'} ${noteIdsFromTag}`).join(' ');
+	result = `SELECT note_tags.note_id as id FROM note_tags WHERE 1 ${result}`;
+	result = `tag_filter as (${result})`;
+	return result;
 };
 
+// The query we want to construct is this:
+// with tag_filter as
+// (
+// select note_tags.note_id as id from note_tags
+// where 1
+// (intersect/union/except)
+// select note_tags.note_id from note_tags where note_tags.tag_id IN (select tags.id from tags where tags.title like ?)
+// )
+// SELECT
+// FROM notes_fts
+// WHERE 1 AND rowid IN (select notes.ROWID from tag_filter join notes on tag_filter.id=notes.id) AND notes_fts MATCH ?;
 
 export function queryBuilder(filters: Map<string, Array<Term>>) {
-	// console.log(filters);
-	let match = '';
-	match += matchStmtBuilder(filters, 'title');
-	match += matchStmtBuilder(filters, 'body');
-	match += matchStmtBuilder(filters, 'text');
+	let query;
+	const queryParts = [];
+	const params = [];
+	const withs = [];
 
-	let query = `SELECT
+	queryParts.push(`SELECT
 	notes_fts.id,
 	notes_fts.title AS normalized_title,
-	offsets(notes_fts) AS offsets,
-	notes.title,
-	notes.user_updated_time,
-	notes.is_todo,
-	notes.todo_completed,
-	notes.parent_id
-	FROM notes_fts
-	LEFT JOIN notes ON notes_fts.id = notes.id WHERE 1`;
-
-	const params = [];
-
-	if (match !== '') {
-		// there is something to fts search
-		query += ' AND notes_fts MATCH (?)';
-		params.push(match.trim());
-	}
+	notes_fts.created_time,
+	notes_fts.updated_time,
+	notes_fts.is_todo,
+	notes_fts.todo_completed,
+	notes_fts.parent_id
+	FROM notes_fts WHERE 1`);
 
 	// create a tag filter
 	if (filters.has('tag')) {
-		query += ' AND notes.id IN (SELECT note_tags.note_id FROM note_tags WHERE 1';
+		queryParts.push('AND ROWID IN (SELECT notes.ROWID from (tag_filter) JOIN notes on tag_filter.id=notes.id)');
+		withs.push(tagFilter(filters.get('tag')));
+		filters.get('tag').forEach((term) => params.push(term.value));
+	}
 
-		filters.get('tag').forEach((term) => {
-			if (term.relation === 'AND') query += ' INTERSECT SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?)';
-			else if (term.relation === 'OR') query += ' UNION SELECT note_tags.note_id FROM note_tags WHERE note_tags.tag_id IN (select tags.id from tags WHERE tags.title LIKE ?)';
-			params.push(term.value);
-		});
-		query += ')';
+	if (filters.has('title') || filters.has('body') || filters.has('text')) {
+		// there is something to fts search
+		queryParts.push('AND notes_fts MATCH ?');
+		let match: Array<string> = [];
+
+		if (filters.has('title')) {
+			match = match.concat(filters.get('title').map(term => `${term.relation === 'AND' ? '' : `${term.relation} `}title:${term.value}`));
+		}
+		if (filters.has('body')) {
+			match = match.concat(filters.get('body').map(term => `${term.relation === 'AND' ? '' : `${term.relation} `}body:${term.value}`));
+		}
+		if (filters.has('text')) {
+			match = match.concat(filters.get('text').map(term => `${term.relation === 'AND' ? '' : `${term.relation} `}${term.value}`));
+		}
+
+		params.push(match.join(' ').trim()); // Fix: OR at front?
+	}
+
+	if (withs.length > 0) {
+		query = ['WITH' , withs.join(',') ,queryParts.join(' ')].join(' ');
+	} else {
+		query = queryParts.join(' ');
 	}
 
 	return { query, params };
