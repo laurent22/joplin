@@ -459,6 +459,10 @@ class BaseApplication {
 			}
 		}
 
+		if (this.hasGui() && (action.type == 'NOTE_IS_INSERTING_NOTES' && !action.value)) {
+			refreshNotes = true;
+		}
+
 		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && action.key == 'uncompletedTodosOnTop') || action.type == 'SETTING_UPDATE_ALL')) {
 			refreshNotes = true;
 		}
