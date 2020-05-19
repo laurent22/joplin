@@ -9,6 +9,7 @@ const { bridge } = require('electron').remote.require('./bridge');
 const eventManager = require('../eventManager');
 const SearchEngine = require('lib/services/SearchEngine');
 const Note = require('lib/models/Note');
+const Setting = require('lib/models/Setting');
 const NoteListUtils = require('./utils/NoteListUtils');
 const NoteListItem = require('./NoteListItem').default;
 
@@ -125,6 +126,8 @@ class NoteListComponent extends React.Component {
 	}
 
 	noteItem_noteDragOver(event) {
+		if (this.props.notesParentType !== 'Folder') return;
+
 		const dt = event.dataTransfer;
 
 		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
@@ -136,7 +139,19 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
-	noteItem_noteDrop(event) {
+	async noteItem_noteDrop(event) {
+		if (this.props.notesParentType !== 'Folder') return;
+
+		if (this.props.noteSortOrder !== 'order') {
+			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
+				buttons: [_('Do it now'), _('Cancel')],
+			});
+			if (!doIt) return;
+
+			Setting.setValue('notes.sortOrder.field', 'order');
+			return;
+		}
+
 		// TODO: check that parent type is folder
 
 		const dt = event.dataTransfer;
@@ -468,6 +483,7 @@ const mapStateToProps = state => {
 		windowCommand: state.windowCommand,
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
+		noteSortOrder: state.settings['notes.sortOrder.field'],
 	};
 };
 
