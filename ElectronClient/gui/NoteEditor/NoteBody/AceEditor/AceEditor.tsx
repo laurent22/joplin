@@ -515,7 +515,7 @@ function AceEditor(props: NoteBodyEditorProps, ref: any) {
 			cancelled = true;
 			clearTimeout(timeoutId);
 		};
-	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos]);
+	}, [props.content, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
