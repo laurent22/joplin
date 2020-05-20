@@ -59,6 +59,8 @@ class Application extends BaseApplication {
 	constructor() {
 		super();
 		this.lastMenuScreen_ = null;
+
+		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 	}
 
 	hasGui() {
@@ -311,9 +313,23 @@ class Application extends BaseApplication {
 			await Folder.expandTree(newState.folders, action.folderId);
 		}
 
+		if (this.hasGui() && ((action.type == 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type == 'SETTING_UPDATE_ALL')) {
+			this.handleThemeAutoDetect();
+		}
+
 		if (mustUpdateMenuItemStates) this.updateMenuItemStates(newState);
 
 		return result;
+	}
+
+	handleThemeAutoDetect() {
+		if (!Setting.value('themeAutoDetect')) return;
+
+		if (bridge().shouldUseDarkColors()) {
+			Setting.setValue('theme', Setting.value('preferredDarkTheme'));
+		} else {
+			Setting.setValue('theme', Setting.value('preferredLightTheme'));
+		}
 	}
 
 	async refreshMenu() {
@@ -1263,6 +1279,10 @@ class Application extends BaseApplication {
 		menuItem.checked = state.devToolsVisible;
 	}
 
+	bridge_nativeThemeUpdated() {
+		this.handleThemeAutoDetect();
+	}
+
 	updateTray() {
 		const app = bridge().electronApp();
 
@@ -1489,6 +1509,8 @@ class Application extends BaseApplication {
 		window.revisionService = RevisionService.instance();
 		window.migrationService = MigrationService.instance();
 		window.decryptionWorker = DecryptionWorker.instance();
+
+		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 	}
 
 }
